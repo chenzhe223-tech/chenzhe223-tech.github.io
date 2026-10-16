@@ -1,18 +1,24 @@
 # Davy Radar · Daily
 
-Daily AI news and popular public Skill repositories for DAVYLAB.
+Daily AI news, a public GitHub Skill shortlist, and an optional Horizon-powered Chinese AI briefing for DAVYLAB.
 
 ## Schedule
-GitHub Actions is configured for 01:00 UTC daily (09:00 Asia/Shanghai), with manual workflow dispatch. GitHub's scheduled start can be delayed during busy periods; 09:00 is the target, not an exact-time guarantee.
+GitHub Actions is configured for 01:00 UTC daily (09:00 Asia/Shanghai), with manual workflow dispatch. GitHub may delay scheduled starts during busy periods; 09:00 is the target, not an exact-time guarantee.
 
-## Data
+## Data pipeline
 - `scripts/build_daily.py` collects public RSS feeds and public GitHub repository search results.
-- News retains source, timestamp and original URL. It filters AI-related titles/summaries and deduplicates headlines.
+- News retains source, timestamp and original URL; AI-related headlines are filtered and deduplicated.
 - The Skill list ranks public repositories by stars with a modest freshness adjustment. Stars are not downloads or actual usage.
-- Daily JSON is published at `data/latest.json`; dated snapshots are stored under `data/archive/`.
+- `scripts/run_horizon.py` runs the upstream MIT-licensed [Horizon](https://github.com/Thysrael/Horizon) project with DeepSeek, then attaches its Chinese daily digest to `data/latest.json`.
+- `config/horizon.json` contains only non-secret runtime configuration. The API key is read from the GitHub Actions secret `DEEPSEEK_API_KEY`; never commit the key itself.
+- Horizon webhook, email, and WeChat delivery are disabled. Results are published only to the website; no active notifications are sent.
+- If AI analysis fails, the public RSS/GitHub report remains available and the page shows a non-sensitive status message.
 
-## Horizon integration
-This first version keeps the existing DAVYLAB GitHub Pages deployment and follows Horizon's daily-briefing pattern. It does not yet invoke Horizon's AI synthesis stage because that requires a model API key. The RSS/GitHub data pipeline can run without a model key. To enable Horizon summaries later, add a supported model key as a GitHub Actions repository secret (for example `DEEPSEEK_API_KEY` or `OPENAI_API_KEY`) and configure a private, non-notifying Horizon run. Never put keys in repository files.
+## Published data
+- Latest report: `data/latest.json`
+- Daily snapshots: `data/archive/`
+- Horizon runtime summaries: `data/horizon-data/summaries/` (generated in Actions; not required to be committed)
+- Public page: https://chenzhe223-tech.github.io/radar/daily/
 
-## Verify
-Run `python radar/scripts/build_daily.py`, then open `radar/daily/index.html` through a local static server. The hosted page reads `../data/latest.json`.
+## Verification
+The workflow logs show whether Horizon completed and whether the Chinese summary was attached. Public source links remain the basis for checking claims; model-generated analysis is editorial assistance, not independent verification.
