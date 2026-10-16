@@ -71,7 +71,7 @@ def parse_feed(source: str, url: str) -> list[dict]:
     for item in root.findall(".//item"):
         title = clean(item.findtext("title", ""))
         link = clean(item.findtext("link", ""))
-        summary = clean(item.findtext("description", "") or item.findtext("content:encoded", ""))
+        summary = clean(item.findtext("description", "") or item.findtext("{http://purl.org/rss/1.0/modules/content/}encoded", ""))
         published = parse_date(item.findtext("pubDate") or item.findtext("{http://purl.org/dc/elements/1.1/}date"))
         if title and link:
             entries.append({"title": title, "url": link, "summary": summary[:360], "published": published, "source": source})
