@@ -31,7 +31,7 @@ jobs:
       - name: Test the live website and app links
         run: node scripts/qa-smoke.cjs
       - name: One-time FormSubmit activation test
-        if: hashFiles('.github/formsubmit-activation-test-once.flag') != ''
+        if: hashFiles('FORM_SUBMIT_ACTIVATION_TEST_ONCE.txt') != ''
         run: node scripts/formsubmit-activation-test.cjs
       - name: Upload screenshots and QA report
         if: always()
