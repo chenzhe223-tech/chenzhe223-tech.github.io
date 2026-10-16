@@ -1,0 +1,40 @@
+name: DAVYLAB Browser QA
+
+on:
+  workflow_run:
+    workflows: ["Deploy DAVYLAB to GitHub Pages"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  browser-smoke:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out DAVYLAB source
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright and Chromium
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Test the live website and app links
+        run: node scripts/qa-smoke.cjs
+      - name: Upload screenshots and QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: davylab-browser-qa
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 14
