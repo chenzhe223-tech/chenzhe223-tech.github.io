@@ -69,6 +69,38 @@ const mark = (status, name, detail = '') => {
     const detailLinks = await desktop.locator('#modalActions a[href]').evaluateAll(as => as.map(a => ({ text: a.innerText.trim(), href: a.href })));
     mark(detailLinks.some(a => a.href.includes('niantou-box-app')) ? 'PASS' : 'FAIL', '详情中的真实应用链接', JSON.stringify(detailLinks));
     await desktop.locator('#closeModal').click();
+
+    // Contact intake UI and QR asset are checked without sending a real email.
+    await desktop.locator('#contact').scrollIntoViewIfNeeded();
+    const formExists = await desktop.locator('#leadForm').count();
+    mark(formExists === 1 ? 'PASS' : 'FAIL', '需求表单渲染', '表单数量=' + formExists);
+    const contactHeading = await desktop.locator('#contact h2').innerText();
+    mark(contactHeading.includes('聊聊') ? 'PASS' : 'FAIL', '需求联系区标题', contactHeading);
+    const qr = desktop.locator('.wechat-qr');
+    try {
+      await qr.waitFor({ state: 'visible', timeout: 5000 });
+      await desktop.waitForFunction(() => {
+        const img = document.querySelector('.wechat-qr');
+        return img && img.complete && img.naturalWidth > 0 && img.naturalHeight > 0;
+      }, null, { timeout: 8000 });
+      const qrDim = await qr.evaluate(img => ({ width: img.naturalWidth, height: img.naturalHeight, src: img.currentSrc }));
+      mark('PASS', '微信二维码素材加载', JSON.stringify(qrDim));
+    } catch (e) {
+      mark('FAIL', '微信二维码素材加载', e.message);
+    }
+    await desktop.locator('[data-project-type="AI 应用"]').click();
+    const selectedType = await desktop.locator('#projectType').inputValue();
+    mark(selectedType === 'AI 应用' ? 'PASS' : 'FAIL', '需求类型快捷选择', selectedType);
+    const contactValidity = await desktop.locator('#leadForm').evaluate(form => ({
+      emptyFormIsBlocked: !form.checkValidity(),
+      hasRequiredDescription: !!form.querySelector('[name="需求描述"][required]'),
+      hasRequiredContact: !!form.querySelector('[name="联系方式"][required]'),
+      hasRequiredConsent: !!form.querySelector('[name="联系授权"][required]')
+    }));
+    mark(contactValidity.emptyFormIsBlocked && contactValidity.hasRequiredDescription && contactValidity.hasRequiredContact && contactValidity.hasRequiredConsent ? 'PASS' : 'FAIL', '表单必填校验', JSON.stringify(contactValidity));
+    const mailto = await desktop.locator('.contact-email').getAttribute('href');
+    mark(mailto === 'mailto:chenzhe223@gamil.com' ? 'PASS' : 'FAIL', '备用邮箱入口', mailto || 'missing');
+
     mark(errors.length === 0 ? 'PASS' : 'FAIL', '桌面端 JavaScript 异常', errors.length ? JSON.stringify(errors) : '未发现 pageerror');
 
     const mobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
