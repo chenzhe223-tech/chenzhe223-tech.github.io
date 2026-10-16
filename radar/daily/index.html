@@ -216,6 +216,33 @@ section{scroll-margin-top:18px;margin-bottom:38px}
  .more-news summary span{font-size:10px}
 }
 
+
+/* Readability correction: ensure text contrast on light cards */
+:root{--ink:#17243a;--muted:#596779;--cyan:#245b8c}
+body{color:#17243a}
+.section-intro,.sub{color:#4f5e70}
+.item h3,.top5-card h3{color:#17243a}
+.item p,.top5-card p,.explain{color:#46566a}
+.story-label{color:#254f78!important;background:#eaf0f5!important;border-color:#d8e1e9!important}
+.pill{color:#40546b!important;background:#f2f5f7!important;border-color:#d7dfe7!important}
+.meta,.meta span{color:#58677a!important}
+.meta a,.item h3 a{color:#245b8c!important}
+.num,.top5-rank{color:#244f78!important;background:#e8eef4!important}
+.dimension span{color:#536276!important}
+.dimension b{color:#234f79!important}
+.action-box p{color:#263e57!important}
+.hero-kicker{color:#315c82!important}
+.date span{color:#59697c!important}
+.metric span{color:#58677a!important}
+.status{color:#596779!important}
+.more-news summary{color:#234f79!important}
+@media(max-width:620px){
+ .item p,.top5-card p,.explain{font-size:14px;line-height:1.8}
+ .story-label,.pill,.meta{font-size:11px}
+ .item{padding:14px}
+ .top5-card{padding:15px}
+}
+
 </style>
 </head>
 <body><div class="wrap">
