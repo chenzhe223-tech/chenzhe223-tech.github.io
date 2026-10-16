@@ -99,14 +99,14 @@ const mark = (status, name, detail = '') => {
     }));
     mark(contactValidity.emptyFormIsBlocked && contactValidity.hasRequiredDescription && contactValidity.hasRequiredContact && contactValidity.hasRequiredConsent ? 'PASS' : 'FAIL', '表单必填校验', JSON.stringify(contactValidity));
     const mailto = await desktop.locator('.contact-email').getAttribute('href');
-    mark(mailto === 'mailto:chenzhe223@gamil.com' ? 'PASS' : 'FAIL', '备用邮箱入口', mailto || 'missing');
+    mark(mailto === 'mailto:chenzhe223@gmail.com' ? 'PASS' : 'FAIL', '备用邮箱入口', mailto || 'missing');
     const formConfig = await desktop.locator('#leadForm').evaluate(form => ({
       action: form.action,
       method: form.method.toUpperCase(),
       next: form.querySelector('[name="_next"]')?.value || '',
       url: form.querySelector('[name="_url"]')?.value || ''
     }));
-    mark(formConfig.action === 'https://formsubmit.co/chenzhe223@gamil.com' && formConfig.method === 'POST' ? 'PASS' : 'FAIL', '原生邮件表单提交配置', JSON.stringify(formConfig));
+    mark(formConfig.action === 'https://formsubmit.co/chenzhe223@gmail.com' && formConfig.method === 'POST' ? 'PASS' : 'FAIL', '原生邮件表单提交配置', JSON.stringify(formConfig));
     mark(formConfig.next.includes('contact=submitted') && formConfig.url === 'https://chenzhe223-tech.github.io/#contact' ? 'PASS' : 'FAIL', '提交后返回链接', JSON.stringify({ next: formConfig.next, url: formConfig.url }));
     // Simulate the provider's success redirect without sending another email.
     const returnResponse = await desktop.goto(base + '?contact=submitted#contact', { waitUntil: 'domcontentloaded', timeout: 45000 });
