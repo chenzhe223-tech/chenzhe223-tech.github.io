@@ -15,14 +15,47 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  qa:
+    name: Test AI daily brief before publishing
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/radar-http.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/radar/daily/ >/dev/null && exit 0; sleep 1; done
+          cat /tmp/radar-http.log
+          exit 1
+      - name: Test daily briefing on desktop and mobile
+        run: node scripts/qa-radar.cjs
+      - name: Upload daily briefing screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-daily-brief-qa
+          path: test-results/radar/
+          if-no-files-found: warn
+          retention-days: 14
+
   build:
     runs-on: ubuntu-latest
+    needs: qa
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: .
+
   deploy:
     environment:
       name: github-pages
