@@ -134,6 +134,7 @@ def main():
         except subprocess.TimeoutExpired: report['ai_analysis']={'status':'unavailable','message':'AI 分析运行超时，基础新闻与 Skill 榜单已保留。'}
         except Exception as exc: report['ai_analysis']={'status':'unavailable','message':'AI 分析暂时不可用，基础新闻与 Skill 榜单已保留。'}; print(f'[horizon-warning] {type(exc).__name__}')
     localize(report)
+    ensure_story_fallback(report)
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return 0
 if __name__=='__main__': raise SystemExit(main())
