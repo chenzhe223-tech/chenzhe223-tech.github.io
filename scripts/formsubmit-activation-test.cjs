@@ -33,7 +33,7 @@ fs.mkdirSync(OUT, { recursive: true });
     await page.locator('#leadForm').scrollIntoViewIfNeeded();
 
     // Use an explicitly labeled test submission with no real customer's details.
-    await page.locator('input[name="_subject"]').fill('[DAVYLAB 系统测试] FormSubmit 激活后提交链路验证（请忽略）');
+    await page.locator('input[name="_subject"]').evaluate(el => { el.value = '[DAVYLAB 系统测试] FormSubmit 激活后提交链路验证（请忽略）'; });
     await page.locator('[data-project-type="小型应用 / 工具"]').click();
     await page.locator('#ideaDescription').fill('【系统测试，请忽略】DAVYLAB 站点所有者已完成 FormSubmit 邮箱激活。本条用于验证激活后的邮件转发链路，不是客户需求，无需回复。');
     await page.locator('#leadName').fill('DAVYLAB 系统测试（无需回复）');
