@@ -35,7 +35,7 @@ en:{back:"← Back to Davy Radar",kicker:"DAILY AI FIELD NOTES · EXPLORE",heroT
 function t(key){return (copy[currentLang]&&copy[currentLang][key])||copy.zh[key]||key}
 function dateFmt(s){if(!s)return t("dateUnknown");const d=new Date(s);return isNaN(d)?t("dateUnknown"):d.toLocaleString(currentLang==="zh"?"zh-CN":"en-US",{timeZone:"Asia/Shanghai",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:currentLang==="en"})}
 function setLang(lang){currentLang=lang==="en"?"en":"zh";document.documentElement.lang=currentLang==="zh"?"zh-CN":"en";$("langZh").classList.toggle("active",currentLang==="zh");$("langEn").classList.toggle("active",currentLang==="en");document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});if(reportData)renderAll(reportData)}
-function renderAI(ai){const root=$("aiList");if(!ai||ai.status!=="ok"||!ai.summary_markdown){root.innerHTML='<div class="empty">'+esc(ai?.message||t("aiWaiting"))+'</div>';return}const summary=currentLang==="en"?(ai.summary_markdown_en||ai.summary_markdown):ai.summary_markdown;root.innerHTML='<article class="item ai-feature"><div class="num">✦</div><div><div class="story-label">'+esc(t("aiAnalysis"))+'</div><h3 style="font-size:20px;margin-top:10px">'+esc(t("aiTitle"))+'</h3><div class="ai-state">'+esc(ai.provider||"Horizon")+' · '+esc(dateFmt(ai.generated_at))+'</div><p class="ai-body">'+esc(summary)+'</p></div></article>'}
+function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
 function renderTop5(items){
  const root=$("top5List");if(!root)return;const data=(items||[]).slice(0,5);
  if(!data.length){root.innerHTML='<div class="empty">'+esc(t("top5Empty"))+'</div>';return}
