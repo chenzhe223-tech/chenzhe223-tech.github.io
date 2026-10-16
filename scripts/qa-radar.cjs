@@ -29,6 +29,13 @@ function check(ok, name, detail = '') {
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
       check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': editorial imagery present');
       check(await page.locator('#top5List a[href^="http"]').count() === 5, viewport.name + ': each story has source link');
+      check(await page.locator('#featureTitle').innerText().then(x => x.trim().length > 0), viewport.name + ': lead feature has a headline');
+      const storyLabel = await page.locator('#top5List .story-label').first().innerText();
+      if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
+        const cardsText = await cards.allInnerTexts();
+        check(cardsText.every(x => !x.includes('/50') && !x.includes('/10')), viewport.name + ': source fallback does not display fabricated scores');
+        check(await page.locator('#editorialCore').isVisible(), viewport.name + ': editorial fallback explains missing AI synthesis');
+      }
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
       const bodyColor = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
