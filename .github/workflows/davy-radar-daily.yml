@@ -1,4 +1,5 @@
 name: Build Davy Radar Daily
+# Runs a private-key-safe Horizon + DeepSeek analysis before publishing the public daily JSON.
 
 on:
   push:
