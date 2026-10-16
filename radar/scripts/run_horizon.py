@@ -35,6 +35,9 @@ def localize(report):
         for item,trans in zip(skills,localized.get('skills',[])):
             for field in ('description_zh','description_en'):
                 if isinstance(trans.get(field),str) and trans[field].strip():item[field]=trans[field].strip()
+        editorial=localized.get('editorial') or {}
+        if editorial:
+            report['editorial']={k:v for k,v in editorial.items() if isinstance(v,str) and v.strip()}
         top5=[]
         for entry in localized.get('top5',[])[:5]:
             try:
