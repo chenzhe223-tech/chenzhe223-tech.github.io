@@ -74,8 +74,7 @@ def ensure_story_fallback(report):
 def localize(report):
     key=os.environ.get('DEEPSEEK_API_KEY')
     if not key:
-        ensure_story_fallback(report)
-    report['localization']={'status':'unavailable','message':'DEEPSEEK_API_KEY is not configured.'}
+        report['localization']={'status':'unavailable','message':'DEEPSEEK_API_KEY is not configured.'}
         ensure_story_fallback(report)
         return
     news=report.get('news',[])[:12]; skills=report.get('skills',[])[:6]
