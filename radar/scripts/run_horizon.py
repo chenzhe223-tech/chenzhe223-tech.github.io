@@ -31,14 +31,54 @@ def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens:
     )
     with urllib.request.urlopen(req,timeout=100) as response:
         result=json.loads(response.read().decode())
-    return json.loads(result['choices'][0]['message']['content'])
+    content=result['choices'][0]['message']['content']
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        # Recover valid JSON when a provider wraps the object in prose/fences.
+        left=content.find('{'); right=content.rfind('}')
+        if left >= 0 and right > left:
+            return json.loads(content[left:right+1])
+        raise
+
+def ensure_story_fallback(report):
+    """Populate source-linked cards without pretending fallback stories are AI-scored."""
+    current=report.get('top5')
+    if isinstance(current,list) and len(current)>=5:
+        return
+    cards=list(current) if isinstance(current,list) else []
+    seen={x.get('source_url') for x in cards}
+    for item in report.get('news',[]):
+        url=item.get('url') or item.get('link') or ''
+        if not url or url in seen:
+            continue
+        cards.append({
+            'title_zh':item.get('title_zh') or item.get('title') or '',
+            'title_en':item.get('title_en') or item.get('title') or '',
+            'what_zh':item.get('summary_zh') or item.get('summary') or '',
+            'what_en':item.get('summary_en') or item.get('summary') or '',
+            'why_zh':item.get('why_it_matters_zh') or '',
+            'why_en':item.get('why_it_matters_en') or '',
+            'source_url':url,
+            'source':item.get('source') or '',
+            'published':item.get('published') or '',
+            'original_title':item.get('title') or '',
+            'fallback':True,
+        })
+        seen.add(url)
+        if len(cards)>=5:
+            break
+    report['top5']=cards[:5]
+    report['top5_status']='ai_curated' if all(not x.get('fallback') for x in cards[:5]) and len(cards)>=5 else ('source_fallback' if cards else 'unavailable')
 
 def localize(report):
     key=os.environ.get('DEEPSEEK_API_KEY')
     if not key:
-        report['localization']={'status':'unavailable','message':'DEEPSEEK_API_KEY is not configured.'}
+        ensure_story_fallback(report)
+    report['localization']={'status':'unavailable','message':'DEEPSEEK_API_KEY is not configured.'}
+        ensure_story_fallback(report)
         return
-    news=report.get('news',[])[:20]; skills=report.get('skills',[])[:10]
+    news=report.get('news',[])[:12]; skills=report.get('skills',[])[:6]
     cfg=json.loads(CONFIG.read_text(encoding='utf-8')) if CONFIG.exists() else {}
     model=(cfg.get('ai') or {}).get('model') or 'deepseek-chat'
     payload={
@@ -115,6 +155,7 @@ def main():
     report=json.loads(REPORT.read_text(encoding='utf-8'))
     if not os.environ.get('DEEPSEEK_API_KEY'):
         report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；基础新闻与 Skill 榜单仍可正常更新。'}
+        ensure_story_fallback(report)
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8'); return 0
     if not (HORIZON_DIR/'src'/'main.py').exists():
         report['ai_analysis']={'status':'unavailable','message':'Horizon 运行目录未就绪；基础日报已保留。'}
