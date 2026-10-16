@@ -11,7 +11,7 @@
 .chat-bubble{margin:18px 0 12px;max-width:610px;padding:13px 15px;background:#ffffff08;border:1px solid #c0d3ff16;border-radius:4px 15px 15px 15px;color:#c5d3e9;font-size:12px;line-height:1.8}
 .project-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:21px}.project-chip{border:1px solid #c0d3ff24;background:#ffffff04;color:#a9b9d7;border-radius:999px;padding:8px 11px;font-size:10px;cursor:pointer;transition:background .15s,border-color .15s,color .15s}.project-chip:hover{border-color:#d7ff7470;color:#fff}.project-chip.active{background:#d7ff7417;border-color:#d7ff74;color:#e5ffb2;font-weight:800}
 .lead-form{display:flex;flex-direction:column;gap:12px}.field-label{display:flex;align-items:center;gap:8px;color:#dfe8fa;font-size:11px;font-weight:800;margin-bottom:7px}.field-label span{font-size:9px;color:#ffb8d7;font-weight:650}.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{width:100%;min-width:0;border:1px solid #c0d3ff22;background:#091429;color:#f3f6ff;border-radius:11px;padding:11px 12px;font:inherit;font-size:12px;line-height:1.5;outline:none;transition:border-color .15s,box-shadow .15s}.lead-form textarea{resize:vertical;min-height:94px}.lead-form input::placeholder,.lead-form textarea::placeholder{color:#6f82a8}.lead-form select{appearance:auto}.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:#8be6ff95;box-shadow:0 0 0 3px #8be6ff10}
-.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 11px}.form-full{grid-column:1/-1}.form-field{min-width:0}.consent-row{display:flex;align-items:flex-start;gap:9px;color:#8fa2c6;font-size:10px;line-height:1.7;cursor:pointer;margin-top:3px}.consent-row input{accent-color:#d7ff74;margin-top:3px;flex:0 0 auto}.submit-lead{width:100%;padding:13px 18px;justify-content:space-between;border-radius:12px;font-size:12px}.submit-lead:disabled{opacity:.62;cursor:wait;transform:none;box-shadow:none}.form-status{display:none;border-radius:11px;padding:11px 12px;font-size:11px;line-height:1.8}.form-status.show{display:block}.form-status.success{background:#bfff7512;border:1px solid #d7ff743b;color:#dcffb4}.form-status.error{background:#ff7ba812;border:1px solid #ff9bc344;color:#ffd0e1}.form-privacy{margin:0;color:#7488ad;font-size:9px;line-height:1.8}.honey-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px 11px}.form-full{grid-column:1/-1}.form-field{min-width:0}.consent-row{display:flex;align-items:flex-start;gap:9px;color:#8fa2c6;font-size:10px;line-height:1.7;cursor:pointer;margin-top:3px}.consent-row input{accent-color:#d7ff74;margin-top:3px;flex:0 0 auto}.submit-lead{width:100%;padding:13px 18px;justify-content:space-between;border-radius:12px;font-size:12px}.submit-lead:disabled{opacity:.62;cursor:wait;transform:none;box-shadow:none}.form-status{display:none;border-radius:11px;padding:11px 12px;font-size:11px;line-height:1.8}.form-status.show{display:block}.form-status.success{background:#bfff7512;border:1px solid #d7ff743b;color:#dcffb4}.form-status.error{background:#ff7ba812;border:1px solid #ff9bc344;color:#ffd0e1}.email-fallback-link{display:inline-flex;margin-top:7px;padding:5px 9px;border:1px solid #ff9bc366;border-radius:999px;color:#fff0f6;font-size:10px;font-weight:800;text-decoration:underline;text-underline-offset:3px}.email-fallback-link:hover{background:#ffffff12}.form-privacy{margin:0;color:#7488ad;font-size:9px;line-height:1.8}.honey-field{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
 .contact-wechat-card{position:relative;background:radial-gradient(ellipse at 82% 5%,#a48dff22,transparent 40%),linear-gradient(145deg,#121f3a,#0b1529);padding:25px;display:flex;flex-direction:column;align-items:flex-start}.wechat-kicker{font-size:9px;letter-spacing:.18em;color:#8be6ff;font-weight:900}.contact-wechat-card h3{font-size:clamp(23px,2.5vw,30px);line-height:1.35;letter-spacing:-.05em;margin:12px 0 8px}.contact-wechat-card>p{color:#9eafd0;font-size:11px;line-height:1.8;margin:0 0 17px;max-width:380px}
 .wechat-qr-link{display:flex;align-self:center;justify-content:center;align-items:center;background:#fff;border-radius:17px;padding:12px;width:min(100%,292px);max-width:292px;box-shadow:0 14px 45px #03091666;transition:transform .18s}.wechat-qr-link:hover{transform:translateY(-2px)}.wechat-qr{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:contain}
 .wechat-name{display:flex;align-items:center;gap:10px;align-self:center;font-size:15px;font-weight:850;margin-top:15px}.wechat-name span{font-size:10px;color:#92a5ca;font-weight:500}.wechat-qr-hint{align-self:center;font-size:10px;color:#aebedd;margin-top:5px}.contact-wechat-card.is-ready{border-color:#d7ff7465;box-shadow:0 0 0 1px #d7ff7413,0 20px 60px #0002}.contact-wechat-card.is-ready .wechat-qr-hint{color:#d7ff74;font-weight:800}
@@ -225,9 +225,18 @@ contactForm.addEventListener('submit',async(event)=>{
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify(Object.fromEntries(new FormData(contactForm).entries()))
     });
+    const responseText=await response.text();
     let result={};
-    try{result=await response.json()}catch(parseError){throw new Error('邮件服务返回了无法识别的结果，请改用微信联系。')}
-    if(!response.ok||result.success===false||result.success==='false')throw new Error(result.message||'邮件服务暂时没有接受提交，请改用微信继续沟通。');
+    try{result=JSON.parse(responseText)}catch(parseError){result={}}
+    if(!response.ok){
+      throw new Error('邮件服务返回 HTTP '+response.status+'，当前未确认提交被接收。');
+    }
+    if(result.success===false||result.success==='false'){
+      throw new Error(result.message||'邮件服务没有接受本次提交。');
+    }
+    if(result.success!==true&&result.success!=='true'){
+      throw new Error('邮件服务返回了无法确认的结果，未能确认需求已经提交。');
+    }
     status.className='form-status show success';
     status.textContent='需求提交请求已被邮件服务接收。如果这是首次启用，请查看收件邮箱并完成服务激活；同时可以扫码添加微信，继续具体沟通。';
     button.innerHTML='<span>提交请求已发送</span><span aria-hidden="true">✓</span>';
@@ -236,7 +245,25 @@ contactForm.addEventListener('submit',async(event)=>{
     panel.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
   }catch(error){
     status.className='form-status show error';
-    status.textContent=(error&&error.message?error.message:'暂时无法确认邮件是否发出。')+' 你仍可以直接扫码添加微信，或点击邮箱地址发邮件。';
+    status.textContent=(error&&error.message?error.message:'暂时无法确认邮件是否发出。')+' ';
+    const values=Object.fromEntries(new FormData(contactForm).entries());
+    const lines=[
+      '需求类型：'+(values['需求类型']||'未填写'),
+      '需求描述：'+(values['需求描述']||'未填写'),
+      '称呼：'+(values['称呼']||'未填写'),
+      '联系方式类型：'+(values['联系方式类型']||'未填写'),
+      '联系方式：'+(values['联系方式']||'未填写'),
+      '预算：'+(values['预算']||'暂不确定'),
+      '期望时间：'+(values['期望时间']||'灵活'),
+      '',
+      '以上内容由 DAVYLAB 官网需求表单整理。'
+    ];
+    const fallback=document.createElement('a');
+    fallback.className='email-fallback-link';
+    fallback.href='mailto:chenzhe223@gamil.com?subject='+encodeURIComponent('[DAVYLAB 需求咨询] '+(values['需求类型']||'小应用'))+'&body='+encodeURIComponent(lines.join('\n'));
+    fallback.textContent='用邮件客户端发送已填写的需求';
+    status.appendChild(fallback);
+    status.appendChild(document.createTextNode('。也可以扫码添加微信继续沟通。'));
     button.disabled=false;
     button.innerHTML=original;
   }
