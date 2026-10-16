@@ -95,9 +95,14 @@ const mark = (status, name, detail = '') => {
       emptyFormIsBlocked: !form.checkValidity(),
       hasRequiredDescription: !!form.querySelector('[name="需求描述"][required]'),
       hasRequiredContact: !!form.querySelector('[name="联系方式"][required]'),
+      hasRequiredReplyEmail: !!form.querySelector('input[name="email"][type="email"][required]'),
       hasRequiredConsent: !!form.querySelector('[name="联系授权"][required]')
     }));
-    mark(contactValidity.emptyFormIsBlocked && contactValidity.hasRequiredDescription && contactValidity.hasRequiredContact && contactValidity.hasRequiredConsent ? 'PASS' : 'FAIL', '表单必填校验', JSON.stringify(contactValidity));
+    mark(contactValidity.emptyFormIsBlocked && contactValidity.hasRequiredDescription && contactValidity.hasRequiredContact && contactValidity.hasRequiredReplyEmail && contactValidity.hasRequiredConsent ? 'PASS' : 'FAIL', '表单必填校验（含回执邮箱）', JSON.stringify(contactValidity));
+    const autoReply = await desktop.locator('#leadForm [name="_autoresponse"]').inputValue();
+    mark(autoReply.includes('感谢联系 DAVYLAB') && autoReply.includes('自动确认邮件') && autoReply.includes('DavyChen') ? 'PASS' : 'FAIL', '自动回复邮件内容配置', autoReply.slice(0, 180));
+    const replyEmailField = await desktop.locator('#leadForm input[name="email"]').evaluate(el => ({type:el.type,required:el.required,autocomplete:el.autocomplete}));
+    mark(replyEmailField.type === 'email' && replyEmailField.required ? 'PASS' : 'FAIL', '自动回复目标邮箱字段', JSON.stringify(replyEmailField));
     const mailto = await desktop.locator('.contact-email').getAttribute('href');
     mark(mailto === 'mailto:chenzhe223@gmail.com' ? 'PASS' : 'FAIL', '备用邮箱入口', mailto || 'missing');
     const formConfig = await desktop.locator('#leadForm').evaluate(form => ({
