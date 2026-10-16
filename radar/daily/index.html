@@ -316,7 +316,21 @@ function t(key){return (copy[currentLang]&&copy[currentLang][key])||copy.zh[key]
 function dateFmt(s){if(!s)return t("dateUnknown");const d=new Date(s);return isNaN(d)?t("dateUnknown"):d.toLocaleString(currentLang==="zh"?"zh-CN":"en-US",{timeZone:"Asia/Shanghai",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:currentLang==="en"})}
 function setLang(lang){currentLang=lang==="en"?"en":"zh";document.documentElement.lang=currentLang==="zh"?"zh-CN":"en";$("langZh").classList.toggle("active",currentLang==="zh");$("langEn").classList.toggle("active",currentLang==="en");document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});if(reportData)renderAll(reportData)}
 function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
-function renderEditorial(data){const root=$("editorialCore");if(!root)return;const e=data?.editorial;if(!e){root.hidden=true;return}const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");if(!core&&!trend&&!next){root.hidden=true;return}root.hidden=false;root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'')}
+function renderEditorial(data){
+ const root=$("editorialCore");if(!root)return;
+ const e=data?.editorial;
+ if(!e){
+   root.hidden=false;
+   root.innerHTML='<strong>'+esc(currentLang==="en"?"EDITORIAL NOTE":"编辑说明")+'</strong><p>'+esc(currentLang==="en"?"The source stories are available, but the AI trend synthesis is not ready for this edition. We are showing verifiable headlines and original links rather than inventing a trend.":"本期原始新闻线索可用，但 AI 趋势研判暂未生成。页面优先展示可核验的新闻标题与原文链接，不用未经验证的观点填充趋势结论。")+'</p>';
+   return;
+ }
+ const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
+ const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
+ const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
+ if(!core&&!trend&&!next){root.hidden=true;return}
+ root.hidden=false;
+ root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
+}
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
  const data=(items||[]).slice(0,5);
