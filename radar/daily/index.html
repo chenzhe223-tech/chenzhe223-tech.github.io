@@ -243,11 +243,59 @@ body{color:#17243a}
  .top5-card{padding:15px}
 }
 
+
+/* Editorial magazine redesign v3 — photo-led feature, restrained paper palette */
+:root{--paper:#f4f2ed;--ink:#17263d;--muted:#667184;--cyan:#275d91;--line:#d9dce0}
+body{background:var(--paper);color:var(--ink)}
+.wrap{width:min(1120px,calc(100% - 48px))}
+.nav{height:62px;border-bottom:1px solid #d8dce1}
+header{padding:18px 0 8px}
+.hero-panel{min-height:350px;padding:clamp(24px,4vw,46px);border:0;border-radius:2px;background:linear-gradient(90deg,rgba(9,20,36,.94) 0%,rgba(9,20,36,.82) 42%,rgba(9,20,36,.08) 100%),url('https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=85') center 48%/cover no-repeat;box-shadow:none;color:#fff}
+.hero-panel:before{display:none}
+.hero-kicker{display:inline-flex;color:#f4d9bd;background:#f4d9bd20;padding:5px 10px;border-radius:2px;letter-spacing:.08em}
+.hero-kicker i{background:#f4d9bd}
+.hero{margin-top:28px;align-items:end}
+.hero>div:first-child{max-width:650px}
+h1{font-family:Georgia,'Songti SC','Noto Serif SC',serif;font-size:clamp(36px,5.6vw,64px);font-weight:750;line-height:1.16;letter-spacing:-.035em;color:#fff}
+.sub{max-width:580px;color:#f0eee9;font-size:16px;line-height:1.85}
+.hero-actions a{background:#f2ddc8;color:#1b2a3e;border-radius:3px}
+.hero-actions a.secondary{background:#ffffff12;border-color:#ffffff65;color:#fff}
+.date{background:#ffffff15;border:1px solid #ffffff40;color:#f3eee8;border-radius:2px;backdrop-filter:blur(8px)}
+.date strong{color:#fff;font-family:Georgia,serif}
+.date span{color:#eee6dc}
+.tabs{gap:18px;margin:20px 0 15px}
+.summary{margin:12px 0 32px;background:#fff;border-color:#e1e3e5}
+.metric{background:#fff}
+section{margin-bottom:40px}
+.section-head{border-bottom:1px solid #d8dce1}
+.section-head h2{font-family:Georgia,'Songti SC','Noto Serif SC',serif;font-size:clamp(23px,3vw,31px)}
+.section-head h2 span:last-child{letter-spacing:-.025em}
+.top5-grid{grid-template-columns:repeat(6,minmax(0,1fr));gap:16px}
+.top5-card{grid-column:span 2;display:flex;flex-direction:column;gap:0;padding:0;overflow:hidden;border:1px solid #e0e1e2;border-radius:4px;box-shadow:0 5px 18px #1b2b3d0a}
+.top5-card:nth-child(4),.top5-card:nth-child(5){grid-column:span 3}
+.story-image{width:100%;height:160px;overflow:hidden;background:#dce2e8}
+.story-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+.top5-card:hover .story-image img{transform:scale(1.035)}
+.top5-content{padding:15px 17px 18px;min-width:0}
+.top5-rank{position:absolute;z-index:1;margin:12px;background:#14253cdb;color:#fff!important;border-radius:2px}
+.top5-card{position:relative}
+.top5-card .story-label{display:inline-flex;align-self:flex-start;margin:0 0 7px}
+.top5-card h3{font-family:Georgia,'Songti SC','Noto Serif SC',serif;font-size:19px;margin:0 0 8px}
+.top5-card p{font-size:13px;line-height:1.8}
+.top5-card .dimension-grid{margin:9px 0}
+.top5-card .dimension{background:#f6f7f7}
+.top5-card .action-box{margin-top:7px}
+.top5-card .meta{margin-top:10px}
+.editorial-core{background:#e9eff4;border-left-color:#285f92}
+#aiList:empty{display:none}
+@media(max-width:760px){.wrap{width:calc(100% - 32px)}.hero-panel{min-height:380px;background-position:58% center;padding:24px 20px}.hero{margin-top:24px}.hero>div:first-child{max-width:100%}.date{margin-top:22px}.top5-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.top5-card,.top5-card:nth-child(4),.top5-card:nth-child(5){grid-column:span 1}.top5-card:nth-child(5){grid-column:1/-1}.story-image{height:125px}.top5-content{padding:12px}.top5-card h3{font-size:16px}.top5-card p{font-size:12px}.dimension-grid{grid-template-columns:repeat(5,minmax(0,1fr))}.dimension span{font-size:8px}}
+@media(max-width:430px){.top5-grid{grid-template-columns:1fr}.top5-card,.top5-card:nth-child(4),.top5-card:nth-child(5){grid-column:1/-1}.story-image{height:175px}.top5-content{padding:14px}.top5-card h3{font-size:18px}.top5-card p{font-size:13px}.hero-panel{min-height:410px}.hero h1{font-size:35px}}
+
 </style>
 </head>
 <body><div class="wrap">
 <nav class="nav"><a class="brand" href="../">AI <span>前沿简报</span> <small style="font-weight:500;color:#7b8798"> / DAVYLAB</small></a><div class="nav-right"><div class="lang-switch" aria-label="Language"><button class="lang-btn active" id="langZh" type="button" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEn" type="button" onclick="setLang('en')">EN</button></div><a href="../" data-i18n="back">← 返回 Davy Radar</a></div></nav>
-<header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">DAILY AI BRIEFING · 看见趋势，发现机会</span></div><div class="hero"><div><h1 data-i18n="heroTitle">看见趋势 · 发现机会 · 打开新可能</h1><p class="sub" data-i18n="heroSub">每日精选真正值得关注的 AI 进展。用事实理解变化，用判断发现机会。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div><div class="date"><strong id="reportDate">正在读取日报…</strong><span id="updatedAt">每日更新 · 北京时间 09:00</span></div></div></div>
+<header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">DAILY AI BRIEFING · 看见趋势，发现机会</span></div><div class="hero"><div><h1 id="featureTitle" data-i18n="heroTitle">AI 前沿简报</h1><p class="sub" id="featureSub" data-i18n="heroSub">看见趋势 · 发现机会 · 打开新可能。每日精选真正值得关注的 AI 进展。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div><div class="date"><strong id="reportDate">正在读取日报…</strong><span id="updatedAt">每日更新 · 北京时间 09:00</span></div></div></div>
 <div class="tabs"><a class="tab active" href="#ai" data-i18n="tabInsights">✨ 今日观察</a><a class="tab" href="#news" data-i18n="tabNews">📰 更多新闻线索</a><a class="tab" href="#skills" data-i18n="tabSkills">🧰 创作工具箱</a><a class="tab" href="#method" data-i18n="tabMethod">🔎 数据说明</a></div>
 <div class="summary"><div class="metric"><span data-i18n="metricNews">📰 已采集线索</span><strong id="newsCount">—</strong></div><div class="metric"><span data-i18n="metricSkills">🧰 可探索 Skill</span><strong id="skillCount">—</strong></div><div class="metric"><span data-i18n="metricRule">🧭 阅读原则</span><strong style="font-size:19px;color:var(--cyan)" data-i18n="traceable">有据可查</strong></div></div></header>
 <section id="ai"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><p class="section-intro" data-i18n="aiIntro">先看重点，再决定要不要深入。AI 解读用于辅助理解，关键事实请以原始来源为准。</p><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><div id="editorialCore" class="editorial-core" hidden></div><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
@@ -268,21 +316,46 @@ function t(key){return (copy[currentLang]&&copy[currentLang][key])||copy.zh[key]
 function dateFmt(s){if(!s)return t("dateUnknown");const d=new Date(s);return isNaN(d)?t("dateUnknown"):d.toLocaleString(currentLang==="zh"?"zh-CN":"en-US",{timeZone:"Asia/Shanghai",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:currentLang==="en"})}
 function setLang(lang){currentLang=lang==="en"?"en":"zh";document.documentElement.lang=currentLang==="zh"?"zh-CN":"en";$("langZh").classList.toggle("active",currentLang==="zh");$("langEn").classList.toggle("active",currentLang==="en");document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});if(reportData)renderAll(reportData)}
 function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
-function renderEditorial(data){const root=$("editorialCore");if(!root)return;const e=data?.editorial;if(!e){root.hidden=true;return}const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");if(!core&&!trend&&!next){root.hidden=true;return}root.hidden=false;root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'')}
+function renderEditorial(data){
+ const root=$("editorialCore");if(!root)return;
+ const e=data?.editorial;
+ if(!e){
+   root.hidden=false;
+   root.innerHTML='<strong>'+esc(currentLang==="en"?"EDITORIAL NOTE":"编辑说明")+'</strong><p>'+esc(currentLang==="en"?"The source stories are available, but the AI trend synthesis is not ready for this edition. We are showing verifiable headlines and original links rather than inventing a trend.":"本期原始新闻线索可用，但 AI 趋势研判暂未生成。页面优先展示可核验的新闻标题与原文链接，不用未经验证的观点填充趋势结论。")+'</p>';
+   return;
+ }
+ const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
+ const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
+ const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
+ if(!core&&!trend&&!next){root.hidden=true;return}
+ root.hidden=false;
+ root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
+}
 function renderTop5(items){
- const root=$("top5List");if(!root)return;const data=(items||[]).slice(0,5);
- if(!data.length){root.innerHTML='<div class="empty">'+esc(t("top5Empty"))+'</div>';return}
+ const root=$("top5List");if(!root)return;
+ const data=(items||[]).slice(0,5);
  const dims=[["innovation","dimInnovation"],["practicality","dimPracticality"],["feasibility","dimFeasibility"],["impact","dimImpact"],["opportunity","dimOpportunity"]];
+ const visuals=["https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=80"];
+ if(data.length<5||data.some(x=>x.fallback||!x.scores||!x.source_url)){
+   const fallback=(reportData?.news||[]).slice(0,5);
+   if(!fallback.length){root.innerHTML='<div class="empty">'+esc(t("top5Empty"))+'</div>';return}
+   root.innerHTML=fallback.map((x,i)=>{
+     const title=currentLang==="en"?(x.title_en||x.title):(x.title_zh||x.title);
+     const summary=currentLang==="en"?(x.why_it_matters_en||x.summary_en||x.summary):(x.why_it_matters_zh||x.summary_zh||x.summary);
+     return '<article class="top5-card"><div class="story-image"><img src="'+visuals[i]+'" alt="" loading="lazy"></div><div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(currentLang==="en"?"SOURCE STORY · AI EDITORIAL UNAVAILABLE":"新闻线索 · AI 精选暂不可用")+'</div><h3>'+esc(title||"Untitled story")+'</h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span>'+esc(x.source||t("source"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
+   }).join("");
+   return;
+ }
  root.innerHTML=data.map((x,i)=>{
- const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh):(x.title_zh||x.original_title||x.title_en);
- const category=currentLang==="en"?(x.category_en||"AI signal"):(x.category_zh||"AI 情报");
- const what=currentLang==="en"?(x.what_en||""):(x.what_zh||"");const why=currentLang==="en"?(x.why_en||""):(x.why_zh||"");const action=currentLang==="en"?(x.action_en||""):(x.action_zh||"");
- const scores=x.scores||{};
- return '<article class="top5-card"><div class="top5-rank">0'+(i+1)+'</div><div><div class="story-label">'+esc(category)+' · '+esc(t("scoreLabel"))+' '+Number(x.total_score||0)+'/50</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="dimension-grid">'+dims.map(([k,l])=>'<div class="dimension"><b>'+Number(scores[k]||0)+'/10</b><span>'+esc(t(l))+'</span></div>').join("")+'</div><div class="action-box"><strong>↗ '+esc(t("actionLabel"))+'</strong><p>'+esc(action)+'</p></div><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(x.confidence||"medium")+'</span><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
+   const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh):(x.title_zh||x.original_title||x.title_en);
+   const category=currentLang==="en"?(x.category_en||"AI signal"):(x.category_zh||"AI 情报");
+   const what=currentLang==="en"?(x.what_en||""):(x.what_zh||"");const why=currentLang==="en"?(x.why_en||""):(x.why_zh||"");const action=currentLang==="en"?(x.action_en||""):(x.action_zh||"");
+   const scores=x.scores||{};
+   return '<article class="top5-card"><div class="story-image"><img src="'+visuals[i]+'" alt="" loading="lazy"></div><div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(category)+' · '+esc(t("scoreLabel"))+' '+Number(x.total_score||0)+'/50</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="dimension-grid">'+dims.map(([k,l])=>'<div class="dimension"><b>'+Number(scores[k]||0)+'/10</b><span>'+esc(t(l))+'</span></div>').join("")+'</div><div class="action-box"><strong>↗ '+esc(t("actionLabel"))+'</strong><p>'+esc(action)+'</p></div><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(x.confidence||"medium")+'</span><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
  }).join("");
 }
 function renderNews(items){$("newsCount").textContent=items.length;const root=$("newsList");root.innerHTML=items.length?items.map((x,i)=>{const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title);const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary);const why=currentLang==="zh"?(x.why_it_matters_zh||""):(x.why_it_matters_en||"");return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">✦ '+esc(x.source||t("source"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p>'+(why?'<div class="why"><strong>'+esc(t("why"))+' · </strong>'+esc(why)+'</div>':'')+'<div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>'}).join(""):'<div class="empty">'+esc(t("newsEmpty"))+'</div>'}
 function renderSkills(items){$("skillCount").textContent=items.length;const root=$("skillList");root.innerHTML=items.length?items.slice(0,10).map((x,i)=>{const description=currentLang==="zh"?(x.description_zh||x.description):(x.description_en||x.description);return '<article class="item skill"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="skill-badge">✦ '+esc(t("skillType"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"Community Skill")+'</a></h3><p class="explain">'+esc(description||t("fallbackSummary"))+'</p><div class="meta"><span class="pill">'+esc(x.language||"Multi-language")+'</span><span>'+esc(t("updated"))+' '+esc((x.updated||"").slice(0,10)||t("dateUnknown"))+'</span></div></div><div class="stars">★ '+Number(x.stars||0).toLocaleString("en-US")+'<div style="font-size:9px;color:var(--muted);font-weight:400;margin-top:3px">'+esc(t("rank"))+'</div></div></article>'}).join(""):'<div class="empty">'+esc(t("skillEmpty"))+'</div>'}
-function renderAll(data){renderAI(data.ai_analysis);renderEditorial(data);renderTop5(data.top5||[]);renderNews(data.news||[]);renderSkills(data.skills||[]);$("reportDate").textContent=data.report_date||t("headline");$("updatedAt").textContent=data.generated_at?t("updated")+" "+dateFmt(data.generated_at)+" · "+t("plan"):t("plan");$("status").textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
+function renderFeatured(items){const x=(items||[])[0];const fallback=(reportData?.news||[])[0];const sourceBacked=!!x;const story=x||fallback;if(!story)return;const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");if(title)$("featureTitle").textContent=title;if(summary)$("featureSub").textContent=summary;const a=document.querySelector(".hero-actions a");const url=story.source_url||story.url;if(a&&url){a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=currentLang==="en"?"↗ Read the lead story":"↗ 阅读本期焦点原文"}const kicker=document.querySelector(".hero-kicker span");if(kicker&&!sourceBacked)kicker.textContent=currentLang==="en"?"DAILY AI FIELD NOTES · SOURCE STORY":"AI 前沿简报 · 本期焦点新闻线索"}function renderAll(data){renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderSkills(data.skills||[]);$("reportDate").textContent=data.report_date||t("headline");$("updatedAt").textContent=data.generated_at?t("updated")+" "+dateFmt(data.generated_at)+" · "+t("plan"):t("plan");$("status").textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
 fetch("../data/latest.json?ts="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Report not generated yet");return r.json()}).then(data=>{reportData=data;renderAll(data)}).catch(err=>{$("reportDate").textContent=t("headline");$("status").textContent=err.message;renderAI(null);renderNews([]);renderSkills([])});
 </script></body></html>
