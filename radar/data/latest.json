@@ -1,0 +1,15 @@
+{
+  "product": "Davy Radar",
+  "report_date": "等待首次采集",
+  "timezone": "Asia/Shanghai",
+  "generated_at": null,
+  "status": "waiting_for_first_run",
+  "sources_ok": 0,
+  "sources_total": 7,
+  "news": [],
+  "skills": [],
+  "method": {
+    "news_sources": "公开 RSS / 官方博客",
+    "skill_ranking": "公开 GitHub 仓库 stars 与更新时间；不代表安装量"
+  }
+}
