@@ -107,7 +107,7 @@ const mark = (status, name, detail = '') => {
       url: form.querySelector('[name="_url"]')?.value || ''
     }));
     mark(formConfig.action === 'https://formsubmit.co/chenzhe223@gmail.com' && formConfig.method === 'POST' ? 'PASS' : 'FAIL', '原生邮件表单提交配置', JSON.stringify(formConfig));
-    mark(formConfig.next.includes('contact=submitted') && formConfig.url === 'https://chenzhe223-tech.github.io/#contact' ? 'PASS' : 'FAIL', '提交后返回链接', JSON.stringify({ next: formConfig.next, url: formConfig.url }));
+    mark(formConfig.next.includes('contact=submitted') && formConfig.url === 'https://chenzhe223-tech.github.io/' ? 'PASS' : 'FAIL', '提交后返回链接', JSON.stringify({ next: formConfig.next, url: formConfig.url }));
     // Simulate the provider's success redirect without sending another email.
     const returnResponse = await desktop.goto(base + '?contact=submitted#contact', { waitUntil: 'domcontentloaded', timeout: 45000 });
     await desktop.waitForFunction(() => document.querySelector('#leadStatus')?.classList.contains('success'), null, { timeout: 5000 });
