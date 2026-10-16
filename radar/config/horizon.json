@@ -1,0 +1,107 @@
+{
+  "ai": {
+    "provider": "deepseek",
+    "model": "deepseek-v4-flash",
+    "base_url": "https://api.deepseek.com",
+    "api_key_env": "DEEPSEEK_API_KEY",
+    "temperature": 0.3,
+    "max_tokens": 4096,
+    "throttle_sec": 0.5,
+    "languages": [
+      "zh"
+    ],
+    "analysis_concurrency": 2,
+    "enrichment_concurrency": 2
+  },
+  "processing": {
+    "profiles_dir": "profiles",
+    "default_profile": "tech-news",
+    "profile_settings": {
+      "tech-news": {
+        "threshold": 5.5,
+        "topic_dedup": true
+      }
+    }
+  },
+  "sources": {
+    "github": [
+      {
+        "type": "repo_releases",
+        "owner": "vllm-project",
+        "repo": "vllm",
+        "enabled": true,
+        "profile": "tech-news"
+      },
+      {
+        "type": "repo_releases",
+        "owner": "sgl-project",
+        "repo": "sglang",
+        "enabled": true,
+        "profile": "tech-news"
+      }
+    ],
+    "hackernews": {
+      "enabled": true,
+      "fetch_top_stories": 25,
+      "min_score": 100,
+      "profile": "tech-news"
+    },
+    "rss": [
+      {
+        "name": "Simon Willison",
+        "url": "https://simonwillison.net/atom/everything/",
+        "enabled": true,
+        "category": "ai-tools",
+        "profile": "tech-news"
+      },
+      {
+        "name": "Hugging Face",
+        "url": "https://huggingface.co/blog/feed.xml",
+        "enabled": true,
+        "category": "open-source-ai",
+        "profile": "tech-news"
+      },
+      {
+        "name": "vLLM Blog",
+        "url": "https://vllm.ai/blog/rss.xml",
+        "enabled": true,
+        "category": "llm-inference",
+        "profile": "tech-news"
+      },
+      {
+        "name": "TechCrunch AI",
+        "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+        "enabled": true,
+        "category": "ai-industry",
+        "profile": "tech-news"
+      },
+      {
+        "name": "GitHub Blog",
+        "url": "https://github.blog/feed/",
+        "enabled": true,
+        "category": "developer-tools",
+        "profile": "tech-news"
+      }
+    ]
+  },
+  "collection": {
+    "time_window_hours": 24
+  },
+  "digest": {
+    "max_items": 12,
+    "profile_order": [
+      "tech-news"
+    ],
+    "category_groups": {},
+    "default_group": "other"
+  },
+  "display": {
+    "icon_style": "ascii"
+  },
+  "webhook": {
+    "enabled": false
+  },
+  "wechat": {
+    "enabled": false
+  }
+}
