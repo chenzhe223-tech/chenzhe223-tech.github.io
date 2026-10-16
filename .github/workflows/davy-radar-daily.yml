@@ -1,7 +1,7 @@
 name: Build Davy Radar Daily
 
 on:
-  schedule:
+  push:\n    branches: [main]\n    paths:\n      - "radar/scripts/build_daily.py"\n      - ".github/workflows/davy-radar-daily.yml"\n  schedule:
     # 01:00 UTC = 09:00 Beijing time (UTC+8)
     - cron: "0 1 * * *"
   workflow_dispatch:
