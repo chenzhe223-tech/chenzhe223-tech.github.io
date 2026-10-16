@@ -43,10 +43,10 @@ jobs:
         with:
           repository: Thysrael/Horizon
           ref: main
-          path: /tmp/Horizon
+          path: horizon-src
 
       - name: Install Horizon dependencies
-        working-directory: /tmp/Horizon
+        working-directory: horizon-src
         run: |
           python -m pip install --upgrade pip
           python -m pip install .
@@ -54,7 +54,7 @@ jobs:
       - name: Run Horizon AI analysis (no notifications)
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          HORIZON_DIR: /tmp/Horizon
+          HORIZON_DIR: ${{ github.workspace }}/horizon-src
         run: python radar/scripts/run_horizon.py
 
       - name: Commit daily data
