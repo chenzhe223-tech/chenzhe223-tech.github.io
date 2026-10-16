@@ -24,6 +24,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate daily brief data contract
+        run: |
+          python -m py_compile radar/scripts/run_horizon.py
+          python -m unittest radar.scripts.test_daily_brief
       - name: Install Playwright
         run: |
           npm init -y
