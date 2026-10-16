@@ -18,7 +18,7 @@ jobs:
       - name: Check out DAVYLAB source
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ github.event.workflow_run.head_sha }}
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
@@ -30,6 +30,9 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Test the live website and app links
         run: node scripts/qa-smoke.cjs
+      - name: One-time FormSubmit activation test
+        if: hashFiles('.github/formsubmit-activation-test-once.flag') != ''
+        run: node scripts/formsubmit-activation-test.cjs
       - name: Upload screenshots and QA report
         if: always()
         uses: actions/upload-artifact@v4
