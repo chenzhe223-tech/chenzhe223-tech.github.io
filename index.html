@@ -39,8 +39,8 @@
 <div class="project-chips" role="group" aria-label="选择需求类型">
 <button type="button" class="project-chip active" data-project-type="轻量网页 / H5">网页 / H5</button><button type="button" class="project-chip" data-project-type="小型应用 / 工具">小型应用</button><button type="button" class="project-chip" data-project-type="AI 应用">AI 应用</button><button type="button" class="project-chip" data-project-type="现有项目修改">修改 / 修复</button><button type="button" class="project-chip" data-project-type="暂时不确定">还没想清楚</button>
 </div>
-<form id="leadForm" class="lead-form">
-<input type="hidden" name="_subject" value="DAVYLAB 官网收到一条新需求"><input type="hidden" name="_template" value="table">
+<form id="leadForm" class="lead-form" action="https://formsubmit.co/chenzhe223@gamil.com" method="POST">
+<input type="hidden" name="_subject" value="DAVYLAB 官网收到一条新需求"><input type="hidden" name="_template" value="table"><input type="hidden" name="_next" value="https://chenzhe223-tech.github.io/?contact=submitted#contact"><input type="hidden" name="_url" value="https://chenzhe223-tech.github.io/#contact">
 <input type="text" name="_honey" class="honey-field" tabindex="-1" autocomplete="off" aria-hidden="true">
 <input type="hidden" id="projectType" name="需求类型" value="轻量网页 / H5">
 <label class="field-label" for="ideaDescription">你想解决什么问题？<span>必填</span></label>
@@ -55,7 +55,7 @@
 <label class="consent-row"><input type="checkbox" name="联系授权" required><span>我同意 DAVYLAB 使用以上信息，仅用于回复本次需求。</span></label>
 <button class="btn btn-primary submit-lead" id="submitLead" type="submit"><span>提交需求</span><span aria-hidden="true">↗</span></button>
 <div class="form-status" id="leadStatus" role="status" aria-live="polite"></div>
-<p class="form-privacy">表单通过邮件转发服务发送。首次启用可能需要先在收件邮箱确认授权；提交后也可以直接扫码添加微信继续沟通。</p>
+<p class="form-privacy">需求将通过 FormSubmit 官方表单通道提交，成功处理后自动返回本页并提示你继续扫码添加微信。若服务提示激活或提交失败，请按提示操作；也可直接使用右侧邮箱和微信入口。</p>
 </form>
 </div>
 <aside class="contact-wechat-card" id="wechatPanel">
@@ -207,66 +207,28 @@ document.querySelectorAll('[data-project-type]').forEach(btn=>btn.addEventListen
   projectType.value=btn.dataset.projectType;
   document.querySelectorAll('[data-project-type]').forEach(item=>item.classList.toggle('active',item===btn));
 }));
-contactForm.addEventListener('submit',async(event)=>{
-  event.preventDefault();
-  if(!contactForm.reportValidity())return;
+contactForm.addEventListener('submit',()=>{
+  // Use a native POST to FormSubmit; this avoids needing JavaScript to read a cross-origin response.
   const button=document.getElementById('submitLead');
+  const status=document.getElementById('leadStatus');
+  button.disabled=true;
+  button.innerHTML='<span>正在提交需求…</span><span aria-hidden="true">↗</span>';
+  status.className='form-status show';
+  status.textContent='正在将需求提交给邮件服务，成功处理后会自动返回本页。';
+});
+function showSubmittedNotice(){
+  const params=new URLSearchParams(window.location.search);
+  if(params.get('contact')!=='submitted')return;
   const status=document.getElementById('leadStatus');
   const panel=document.getElementById('wechatPanel');
   const hint=document.getElementById('wechatHint');
-  const original=button.innerHTML;
-  button.disabled=true;
-  button.innerHTML='<span>正在发送需求…</span><span aria-hidden="true">↗</span>';
-  status.className='form-status show';
-  status.textContent='正在提交需求，请稍候…';
-  try{
-    const response=await fetch('https://formsubmit.co/ajax/chenzhe223@gamil.com',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','Accept':'application/json'},
-      body:JSON.stringify(Object.fromEntries(new FormData(contactForm).entries()))
-    });
-    const responseText=await response.text();
-    let result={};
-    try{result=JSON.parse(responseText)}catch(parseError){result={}}
-    if(!response.ok){
-      throw new Error('邮件服务返回 HTTP '+response.status+'，当前未确认提交被接收。');
-    }
-    if(result.success===false||result.success==='false'){
-      throw new Error(result.message||'邮件服务没有接受本次提交。');
-    }
-    if(result.success!==true&&result.success!=='true'){
-      throw new Error('邮件服务返回了无法确认的结果，未能确认需求已经提交。');
-    }
-    status.className='form-status show success';
-    status.textContent='需求提交请求已被邮件服务接收。如果这是首次启用，请查看收件邮箱并完成服务激活；同时可以扫码添加微信，继续具体沟通。';
-    button.innerHTML='<span>提交请求已发送</span><span aria-hidden="true">✓</span>';
-    panel.classList.add('is-ready');
-    hint.textContent='下一步：微信扫一扫，备注“DAVYLAB 需求”';
-    panel.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
-  }catch(error){
-    status.className='form-status show error';
-    status.textContent=(error&&error.message?error.message:'暂时无法确认邮件是否发出。')+' ';
-    const values=Object.fromEntries(new FormData(contactForm).entries());
-    const lines=[
-      '需求类型：'+(values['需求类型']||'未填写'),
-      '需求描述：'+(values['需求描述']||'未填写'),
-      '称呼：'+(values['称呼']||'未填写'),
-      '联系方式类型：'+(values['联系方式类型']||'未填写'),
-      '联系方式：'+(values['联系方式']||'未填写'),
-      '预算：'+(values['预算']||'暂不确定'),
-      '期望时间：'+(values['期望时间']||'灵活'),
-      '',
-      '以上内容由 DAVYLAB 官网需求表单整理。'
-    ];
-    const fallback=document.createElement('a');
-    fallback.className='email-fallback-link';
-    fallback.href='mailto:chenzhe223@gamil.com?subject='+encodeURIComponent('[DAVYLAB 需求咨询] '+(values['需求类型']||'小应用'))+'&body='+encodeURIComponent(lines.join('\n'));
-    fallback.textContent='用邮件客户端发送已填写的需求';
-    status.appendChild(fallback);
-    status.appendChild(document.createTextNode('。也可以扫码添加微信继续沟通。'));
-    button.disabled=false;
-    button.innerHTML=original;
-  }
-});
-function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1900)}render();
+  status.className='form-status show success';
+  status.textContent='需求已由邮件服务处理并返回本页。请检查收件箱和垃圾邮件文件夹；也可以扫码添加微信，继续具体沟通。';
+  panel.classList.add('is-ready');
+  hint.textContent='需求已提交 · 微信扫一扫继续沟通';
+  const url=new URL(window.location.href);
+  url.searchParams.delete('contact');
+  window.history.replaceState(null,'',url.pathname+(url.search?url.search:'')+url.hash);
+}
+function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1900)}render();showSubmittedNotice();
 </script></body></html>
