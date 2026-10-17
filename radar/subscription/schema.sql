@@ -31,3 +31,13 @@ CREATE TABLE IF NOT EXISTS send_log (
 
 CREATE INDEX IF NOT EXISTS idx_send_log_date ON send_log(report_date);
 CREATE UNIQUE INDEX IF NOT EXISTS idx_send_log_daily_once ON send_log(report_date, subscriber_id);
+
+
+-- Keep older email unsubscribe links valid until the subscriber opts out.
+CREATE TABLE IF NOT EXISTS unsubscribe_tokens (
+  token_hash TEXT PRIMARY KEY,
+  subscriber_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  FOREIGN KEY (subscriber_id) REFERENCES subscribers(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_unsubscribe_tokens_subscriber ON unsubscribe_tokens(subscriber_id);
