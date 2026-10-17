@@ -24,9 +24,10 @@ Create a D1 database named `davy-radar-subscriptions`, then execute `schema.sql`
 - Var `MAIL_FROM_NAME`: `DAVYLAB · AI 前沿简报`
 - Var `REPORT_URL`: `https://chenzhe223-tech.github.io/radar/data/latest.json`
 - Var `PUBLIC_SUBSCRIBE_URL`: `https://chenzhe223-tech.github.io/radar/subscribe/`
+- Var `WORKER_PUBLIC_URL`: the deployed Worker origin, e.g. `https://davy-radar-subscriptions.<your-subdomain>.workers.dev`
 - Cron trigger `30 23 * * *`
 
-Set the actual Worker URL in `radar/subscribe/index.html` by replacing the placeholder `API_BASE`.
+Set the actual Worker URL in `radar/subscribe/index.html` by replacing the placeholder `API_BASE`. Confirmation and unsubscribe links must point to the Worker origin, not the static GitHub Pages URL.
 
 ## Deploy and test
 
