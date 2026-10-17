@@ -307,6 +307,24 @@ section{margin-bottom:40px}
 .editorial-core small{display:block;font-size:12px;line-height:1.8;color:#586a7f;margin-top:8px}
 @media(max-width:620px){.more-news summary,.more-skills summary{padding:13px 12px;font-size:12px}.more-news summary span,.more-skills summary span{font-size:10px}.editorial-core{padding:16px}.editorial-core strong{font-size:17px}}
 
+
+/* Readability fix: editorial cards use a solid light surface and dark, high-contrast text. */
+.top5-card{background:#fff!important;color:#17243a!important;border:1px solid #d8dee8!important;box-shadow:0 5px 18px rgba(22,42,68,.06)}
+.top5-card .top5-rank{background:#e8eef5!important;color:#244d77!important;border:1px solid #d5dfea}
+.top5-card .story-label{background:#edf2f7!important;color:#294968!important;border:1px solid #dce4ed!important}
+.top5-card h3{color:#174f7e!important}
+.top5-card p{color:#34465e!important}
+.top5-card .meta,.top5-card .meta span{color:#536579!important}
+.top5-card .meta a,.top5-card a{color:#155f9a!important;text-decoration:underline;text-underline-offset:3px}
+.top5-card .dimension{background:#f3f6fa!important;border-color:#dce3eb!important}
+.top5-card .dimension b{color:#174f7e!important}
+.top5-card .dimension span{color:#52647a!important}
+.top5-card .action-box{background:#f1f6eb!important;border:1px solid #d6e4c9!important}
+.top5-card .action-box strong,.top5-card .action-box p{color:#314c2b!important}
+.top5-card .story-image{background:#e9eef4}
+.top5-card .story-image img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:620px){.top5-card{padding:13px!important}.top5-card p{font-size:14px;line-height:1.8}.top5-card .dimension span{font-size:9px}}
+
 </style>
 </head>
 <body><div class="wrap">
@@ -335,15 +353,12 @@ function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
 function renderEditorial(data){
  const root=$("editorialCore");if(!root)return;
  const e=data?.editorial;
- if(!e){
-   root.hidden=false;
-   root.innerHTML='<strong>'+esc(currentLang==="en"?"EDITORIAL NOTE":"编辑说明")+'</strong><p>'+esc(currentLang==="en"?"The source stories are available, but the AI trend synthesis is not ready for this edition. We are showing verifiable headlines and original links rather than inventing a trend.":"本期原始新闻线索可用，但 AI 趋势研判暂未生成。页面优先展示可核验的新闻标题与原文链接，不用未经验证的观点填充趋势结论。")+'</p>';
-   return;
- }
+ // Missing AI synthesis is an operational status, not reader-facing editorial content.
+ if(!e){root.hidden=true;root.innerHTML="";return}
  const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
  const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
  const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
- if(!core&&!trend&&!next){root.hidden=true;return}
+ if(!core&&!trend&&!next){root.hidden=true;root.innerHTML="";return}
  root.hidden=false;
  root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
