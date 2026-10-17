@@ -1,0 +1,18 @@
+name = "davy-radar-subscriptions"
+main = "worker.js"
+compatibility_date = "2026-10-17"
+
+[triggers]
+crons = ["30 23 * * *"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "davy-radar-subscriptions"
+database_id = "REPLACE_WITH_CREATED_D1_DATABASE_ID"
+
+[vars]
+MAIL_FROM = "chenzhe223@gmail.com"
+MAIL_FROM_NAME = "DAVYLAB · AI 前沿简报"
+REPORT_URL = "https://chenzhe223-tech.github.io/radar/data/latest.json"
+PUBLIC_SUBSCRIBE_URL = "https://chenzhe223-tech.github.io/radar/subscribe/"
+WORKER_PUBLIC_URL = "https://REPLACE-WITH-WORKER-URL"
