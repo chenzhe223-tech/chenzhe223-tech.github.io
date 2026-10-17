@@ -9,7 +9,7 @@
 <label class="topic"><input type="checkbox" name="interests" value="creation"><span><b>AI 创作与生产力</b><small>内容创作、设计、效率提升</small></span></label>
 <label class="topic"><input type="checkbox" name="topic" value="life"><span><b>AI 生活与未来趋势</b><small>日常生活、教育、未来信号</small></span></label>
 </div></section><section class="panel"><label class="field" for="email">接收邮箱</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="you@example.com"><label class="consent"><input id="consent" type="checkbox" required><span>我同意 DAVYLAB 将此邮箱用于发送 AI 前沿简报。我可以随时取消订阅。点击订阅后，我会收到一封确认邮件；确认前不会开始发送。</span></label><button id="submit" class="btn" type="submit">确认兴趣并发送验证邮件　→</button><div id="status" class="status" role="status" aria-live="polite"></div></section></form><footer class="foot">由 <b>DAVYLAB · SPARK &amp; PULSE</b> 提供的个人产品服务。每日 07:30（北京时间）运行；只有通过质量检查的日报才会发送。<br><a href="../daily/">先阅读今日简报</a> · 不出售或公开你的邮箱。<br><span>正式开放前需完成邮件与后台部署配置。</span></footer></main><script>
-const API_BASE = "https://YOUR-SUBDOMAIN.workers.dev";
+const API_BASE = "https://davy-radar-subscriptions.chenzhe223.workers.dev";
 const form=document.querySelector("#subscribeForm"),statusEl=document.querySelector("#status"),button=document.querySelector("#submit");
 const qs=new URLSearchParams(location.search);
 if(qs.has("confirm")){location.replace(API_BASE+"/confirm?token="+encodeURIComponent(qs.get("confirm")))}
