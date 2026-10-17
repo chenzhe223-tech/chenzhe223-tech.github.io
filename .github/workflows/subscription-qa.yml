@@ -1,0 +1,27 @@
+name: Test DAVYLAB AI Radar Subscription
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "worker/**"
+      - "radar/subscribe/**"
+      - "tests/test_subscription.py"
+      - ".github/workflows/subscription-qa.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  subscription-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Check Worker JavaScript syntax
+        run: node --check worker/src/index.js
+      - name: Validate subscription contract and schedule
+        run: python -m unittest tests.test_subscription
