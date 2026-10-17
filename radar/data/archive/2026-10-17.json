@@ -2,11 +2,25 @@
   "product": "Davy Radar",
   "report_date": "2026-10-17",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-17T03:59:47.573989+08:00",
+  "generated_at": "2026-10-17T13:09:01.694739+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
   "news": [
+    {
+      "title": "Replit is no longer working with Anthropic, CEO says",
+      "url": "https://techcrunch.com/2026/10/16/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "summary": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
+      "published": "2026-10-16T21:22:28+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "How Itaú is building generative AI for its entire customer base",
+      "url": "https://openai.com/index/itau-generative-ai",
+      "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+      "published": "2026-10-16T19:00:00+00:00",
+      "source": "OpenAI"
+    },
     {
       "title": "India becomes the latest country to report rogue AI agent activity",
       "url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
@@ -132,20 +146,6 @@
       "summary": "Anthropic tells investors quarterly revenue up nearly 50% to $16.8bn ahead of IPO The phrase \"told investors\" appears four times in this FT article, which reports on Anthropic's day of hosting investors on Wednesday. Lots of details in here from \" people with knowledge of the matter \". Key things I learned from the article: Q1 revenue (Jan/Feb/Mar) was \"abou",
       "published": "2026-10-15T13:04:03+00:00",
       "source": "Simon Willison"
-    },
-    {
-      "title": "Teaching students to think and learn through questions",
-      "url": "https://openai.com/index/teaching-students-to-think-and-learn-through-questions",
-      "summary": "Celebrate Teachers’ Day with AI for Educators in Brazilian Portuguese and see how Study Mode can help teachers support active, step-by-step learning.",
-      "published": "2026-10-15T13:00:00+00:00",
-      "source": "OpenAI"
-    },
-    {
-      "title": "Amazon’s Bee launches two new personal AI devices, starting at $75",
-      "url": "https://techcrunch.com/2026/10/15/amazons-bee-launches-two-new-personal-ai-devices-starting-at-75/",
-      "summary": "Amazon-owned Bee has launched its first new AI devices since its acquisition, including an updated wearable and a credit-card-sized recorder that attaches to smartphones. The devices can summarize conversations, create to-do lists, and integrate with Alexa and Amazon shopping, with prices starting at $74.99.",
-      "published": "2026-10-15T12:00:00+00:00",
-      "source": "TechCrunch AI"
     }
   ],
   "skills": [
@@ -153,8 +153,8 @@
       "name": "obra/superpowers",
       "url": "https://github.com/obra/superpowers",
       "description": "An agentic skills framework & software development methodology that works.",
-      "stars": 300580,
-      "updated": "2026-10-16T19:59:35Z",
+      "stars": 300767,
+      "updated": "2026-10-17T05:06:09Z",
       "language": "Shell",
       "topics": [
         "ai",
@@ -171,8 +171,8 @@
       "name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
-      "stars": 293923,
-      "updated": "2026-10-16T19:59:36Z",
+      "stars": 294244,
+      "updated": "2026-10-17T05:04:24Z",
       "language": "Shell",
       "topics": []
     },
@@ -180,8 +180,8 @@
       "name": "affaan-m/ECC",
       "url": "https://github.com/affaan-m/ECC",
       "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-      "stars": 281304,
-      "updated": "2026-10-16T19:58:04Z",
+      "stars": 281652,
+      "updated": "2026-10-17T05:08:30Z",
       "language": "JavaScript",
       "topics": [
         "ai-agents",
@@ -198,8 +198,8 @@
       "name": "multica-ai/andrej-karpathy-skills",
       "url": "https://github.com/multica-ai/andrej-karpathy-skills",
       "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
-      "stars": 220326,
-      "updated": "2026-10-16T19:58:27Z",
+      "stars": 220402,
+      "updated": "2026-10-17T05:03:03Z",
       "language": "Multi-language",
       "topics": []
     },
@@ -207,8 +207,8 @@
       "name": "anthropics/skills",
       "url": "https://github.com/anthropics/skills",
       "description": "Public repository for Agent Skills",
-      "stars": 181574,
-      "updated": "2026-10-16T19:52:01Z",
+      "stars": 181635,
+      "updated": "2026-10-17T05:06:47Z",
       "language": "Python",
       "topics": [
         "agent-skills"
@@ -218,8 +218,8 @@
       "name": "Shubhamsaboo/awesome-llm-apps",
       "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
       "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
-      "stars": 142019,
-      "updated": "2026-10-16T19:52:26Z",
+      "stars": 142047,
+      "updated": "2026-10-17T05:06:14Z",
       "language": "Python",
       "topics": [
         "agents",
@@ -232,8 +232,8 @@
       "name": "Graphify-Labs/graphify",
       "url": "https://github.com/Graphify-Labs/graphify",
       "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
-      "stars": 127214,
-      "updated": "2026-10-16T19:58:37Z",
+      "stars": 127304,
+      "updated": "2026-10-17T05:06:35Z",
       "language": "Python",
       "topics": [
         "ai-agents",
@@ -250,8 +250,8 @@
       "name": "JuliusBrussee/caveman",
       "url": "https://github.com/JuliusBrussee/caveman",
       "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
-      "stars": 113046,
-      "updated": "2026-10-16T19:47:35Z",
+      "stars": 113092,
+      "updated": "2026-10-17T05:08:29Z",
       "language": "Go",
       "topics": [
         "ai",
@@ -268,8 +268,8 @@
       "name": "addyosmani/agent-skills",
       "url": "https://github.com/addyosmani/agent-skills",
       "description": "Production-grade engineering skills for AI coding agents.",
-      "stars": 107340,
-      "updated": "2026-10-16T19:54:41Z",
+      "stars": 107469,
+      "updated": "2026-10-17T05:09:02Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -284,8 +284,8 @@
       "name": "Leonxlnx/taste-skill",
       "url": "https://github.com/Leonxlnx/taste-skill",
       "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
-      "stars": 97971,
-      "updated": "2026-10-16T19:59:47Z",
+      "stars": 98094,
+      "updated": "2026-10-17T04:56:43Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",

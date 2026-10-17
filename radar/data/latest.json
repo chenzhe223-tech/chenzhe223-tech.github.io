@@ -2,11 +2,25 @@
   "product": "Davy Radar",
   "report_date": "2026-10-17",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-17T03:59:47.573989+08:00",
+  "generated_at": "2026-10-17T13:09:01.694739+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
   "news": [
+    {
+      "title": "Replit is no longer working with Anthropic, CEO says",
+      "url": "https://techcrunch.com/2026/10/16/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "summary": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
+      "published": "2026-10-16T21:22:28+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "How Itaú is building generative AI for its entire customer base",
+      "url": "https://openai.com/index/itau-generative-ai",
+      "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+      "published": "2026-10-16T19:00:00+00:00",
+      "source": "OpenAI"
+    },
     {
       "title": "India becomes the latest country to report rogue AI agent activity",
       "url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
@@ -132,20 +146,6 @@
       "summary": "Anthropic tells investors quarterly revenue up nearly 50% to $16.8bn ahead of IPO The phrase \"told investors\" appears four times in this FT article, which reports on Anthropic's day of hosting investors on Wednesday. Lots of details in here from \" people with knowledge of the matter \". Key things I learned from the article: Q1 revenue (Jan/Feb/Mar) was \"abou",
       "published": "2026-10-15T13:04:03+00:00",
       "source": "Simon Willison"
-    },
-    {
-      "title": "Teaching students to think and learn through questions",
-      "url": "https://openai.com/index/teaching-students-to-think-and-learn-through-questions",
-      "summary": "Celebrate Teachers’ Day with AI for Educators in Brazilian Portuguese and see how Study Mode can help teachers support active, step-by-step learning.",
-      "published": "2026-10-15T13:00:00+00:00",
-      "source": "OpenAI"
-    },
-    {
-      "title": "Amazon’s Bee launches two new personal AI devices, starting at $75",
-      "url": "https://techcrunch.com/2026/10/15/amazons-bee-launches-two-new-personal-ai-devices-starting-at-75/",
-      "summary": "Amazon-owned Bee has launched its first new AI devices since its acquisition, including an updated wearable and a credit-card-sized recorder that attaches to smartphones. The devices can summarize conversations, create to-do lists, and integrate with Alexa and Amazon shopping, with prices starting at $74.99.",
-      "published": "2026-10-15T12:00:00+00:00",
-      "source": "TechCrunch AI"
     }
   ],
   "skills": [
@@ -153,8 +153,8 @@
       "name": "obra/superpowers",
       "url": "https://github.com/obra/superpowers",
       "description": "An agentic skills framework & software development methodology that works.",
-      "stars": 300580,
-      "updated": "2026-10-16T19:59:35Z",
+      "stars": 300767,
+      "updated": "2026-10-17T05:06:09Z",
       "language": "Shell",
       "topics": [
         "ai",
@@ -171,8 +171,8 @@
       "name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
-      "stars": 293923,
-      "updated": "2026-10-16T19:59:36Z",
+      "stars": 294244,
+      "updated": "2026-10-17T05:04:24Z",
       "language": "Shell",
       "topics": []
     },
@@ -180,8 +180,8 @@
       "name": "affaan-m/ECC",
       "url": "https://github.com/affaan-m/ECC",
       "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-      "stars": 281304,
-      "updated": "2026-10-16T19:58:04Z",
+      "stars": 281652,
+      "updated": "2026-10-17T05:08:30Z",
       "language": "JavaScript",
       "topics": [
         "ai-agents",
@@ -198,8 +198,8 @@
       "name": "multica-ai/andrej-karpathy-skills",
       "url": "https://github.com/multica-ai/andrej-karpathy-skills",
       "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
-      "stars": 220326,
-      "updated": "2026-10-16T19:58:27Z",
+      "stars": 220402,
+      "updated": "2026-10-17T05:03:03Z",
       "language": "Multi-language",
       "topics": []
     },
@@ -207,8 +207,8 @@
       "name": "anthropics/skills",
       "url": "https://github.com/anthropics/skills",
       "description": "Public repository for Agent Skills",
-      "stars": 181574,
-      "updated": "2026-10-16T19:52:01Z",
+      "stars": 181635,
+      "updated": "2026-10-17T05:06:47Z",
       "language": "Python",
       "topics": [
         "agent-skills"
@@ -218,8 +218,8 @@
       "name": "Shubhamsaboo/awesome-llm-apps",
       "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
       "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
-      "stars": 142019,
-      "updated": "2026-10-16T19:52:26Z",
+      "stars": 142047,
+      "updated": "2026-10-17T05:06:14Z",
       "language": "Python",
       "topics": [
         "agents",
@@ -232,8 +232,8 @@
       "name": "Graphify-Labs/graphify",
       "url": "https://github.com/Graphify-Labs/graphify",
       "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
-      "stars": 127214,
-      "updated": "2026-10-16T19:58:37Z",
+      "stars": 127304,
+      "updated": "2026-10-17T05:06:35Z",
       "language": "Python",
       "topics": [
         "ai-agents",
@@ -250,8 +250,8 @@
       "name": "JuliusBrussee/caveman",
       "url": "https://github.com/JuliusBrussee/caveman",
       "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
-      "stars": 113046,
-      "updated": "2026-10-16T19:47:35Z",
+      "stars": 113092,
+      "updated": "2026-10-17T05:08:29Z",
       "language": "Go",
       "topics": [
         "ai",
@@ -268,8 +268,8 @@
       "name": "addyosmani/agent-skills",
       "url": "https://github.com/addyosmani/agent-skills",
       "description": "Production-grade engineering skills for AI coding agents.",
-      "stars": 107340,
-      "updated": "2026-10-16T19:54:41Z",
+      "stars": 107469,
+      "updated": "2026-10-17T05:09:02Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -284,8 +284,8 @@
       "name": "Leonxlnx/taste-skill",
       "url": "https://github.com/Leonxlnx/taste-skill",
       "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
-      "stars": 97971,
-      "updated": "2026-10-16T19:59:47Z",
+      "stars": 98094,
+      "updated": "2026-10-17T04:56:43Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -306,8 +306,8 @@
   "ai_analysis": {
     "status": "ok",
     "provider": "DeepSeek via Horizon",
-    "generated_at": "2026-10-17T04:06:05.711369+08:00",
-    "summary_markdown": "# Horizon 每日速递 - 2026-10-16\n\n> 从 25 条内容中筛选出 12 条重要资讯。\n\n---\n\n**科技新闻**\n1. [Claude 找出 NIST ECDSA 曲线种子生成方式](#item-tech-news-1) ⭐️ 8.0/10\n2. [Big Fish：利用 OpenBSD 37 年前内核漏洞](#item-tech-news-2) ⭐️ 8.0/10\n3. [Indic 预训练扩展至 2.8 万亿 token，并开放数据生成流水线](#item-tech-news-3) ⭐️ 8.0/10\n4. [Hugging Face 发布 501B 开源模型 Beam](#item-tech-news-4) ⭐️ 8.0/10\n5. [vLLM 首日支持 Reflection Beam-1.0，称解码延迟降低 2.71 倍](#item-tech-news-5) ⭐️ 8.0/10\n6. [JPEG XL 与 AVIF 的 Web 用例对比](#item-tech-news-6) ⭐️ 7.0/10\n7. [Mercor 研究：美国 90% 工作时间缺乏 AI 基准覆盖](#item-tech-news-7) ⭐️ 7.0/10\n8. [Apple MLX 在 Mac Studio 集群上分布式运行 Muse Spark Open](#item-tech-news-8) ⭐️ 7.0/10\n9. [StarSkirmish Bench v0.2：LLM 写代码玩《星际争霸》](#item-tech-news-9) ⭐️ 7.0/10\n10. [Kimi K3 在 AMD MI355X 上扩展，宣称 AgentX 吞吐比肩 B300](#item-tech-news-10) ⭐️ 7.0/10\n11. [Waymo 发布多伦多公告，HN 讨论自动驾驶部署](#item-tech-news-11) ⭐️ 6.0/10\n12. [《I Love Software Rendering》一文引发软件渲染定义之争](#item-tech-news-12) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [Claude 找出 NIST ECDSA 曲线种子生成方式](https://www.anthropic.com/research/ecdsa-curve-origins) ⭐️ 8.0/10\n\nAnthropic 的研究称，Claude 在不到半小时内找出了 NIST P-192、P-224、P-256、P-384 和 P-521 曲线种子的来源：它们并非任何哈希算法的输出，而是 C 标准库 lrand48 随机数生成器以 Unix 时间戳为种子产生的结果。这意味着这五个种子的产生过程是可复现的，但正如分析所指出，该结果只确认了生成方式，并不能证明这些曲线当初的挑选过程是善意的。此外，第五个二进制种子 B-163 仍无法用同样方法解释，来源依旧不明。\n\nhackernews · ahlCVA · 10月16日 18:55 · [社区讨论](https://news.ycombinator.com/item?id=50122800)\n\n**「背景」** NIST 的 P-192、P-224、P-256、P-384 和 P-521 等 ECDSA 曲线在标准中公开了用于生成参数的种子（seed），但种子的来源长期未获解释。对于这类标准，公布并验证种子生成过程是证明参数没有通过“挑选后门”方式构造的关键；种子来源不明会让这种可验证性留下缺口。\n\n**「影响」** 对依赖 NIST 曲线的开发者和审计者来说，这五个种子现在可以用时间戳搜索独立复核，但不应据此认定曲线选择过程已被证明无害：生成时被丢弃的候选值无法看到，B-163 也仍无解释，因此这套种子的来源说明并未完全闭合。\n\n**「社区讨论」** Hacker News 评论者 fidotron 提醒，这只证实了生成方法，由于种子是数月间陆续产生的、被丢弃的候选项不可见，仍无法排除曲线是按某种特定性质挑选出来的；teddyh 则认为 B-163 无法解释的最简单原因是发布过程中有人打错了一位数字。slowin 提出更大的争议在于访问权：Anthropic 及其合作方能借助 Claude 做这类工作，普通人却会被拦截，要弥合这道鸿沟只能靠开源模型持续进步。\n\n**标签**: `#cryptography`, `#elliptic-curve cryptography`, `#NIST standards`, `#AI-assisted research`, `#open-source AI`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [Big Fish：利用 OpenBSD 37 年前内核漏洞](https://calif.io/research/big-fish) ⭐️ 8.0/10\n\n《Big Fish》是一篇详细的内核漏洞研究文章，说明如何利用 OpenBSD 中一个已存在 37 年的内核漏洞。文章还围绕该漏洞为何能在长期受审计的代码库中存活展开讨论，指出代码审查本身难以发现某些类型的内核缺陷。现有材料没有给出受影响版本、补丁状态或复现条件。\n\nhackernews · rs\\_rs\\_rs\\_rs\\_rs · 10月16日 14:44 · [社区讨论](https://news.ycombinator.com/item?id=50118977)\n\n**「背景」** 据 Cybersecurity News、The Hacker News 等报道，该研究展示的是一条本地提权链：Calif 把约 37 年前就存在于原始 BSD 源码中的整数溢出（共享内存计数器溢出）与另一个内核缺陷串联，从而在 OpenBSD 7.9 上取得 root shell，并绕过 OpenBSD 的 KARL 内核地址随机化以及 SMAP、SMEP 硬件防护。报道指出，OpenBSD 已在漏洞利用公开之前通过 errata 修复了底层问题。社区评论中另有说法称，同类代码在 1999 年 8 月 NetBSD 的一次相关重写中被顺带修掉，这一说法来自评论者而非独立核实。\n\n**「影响」** 对 OpenBSD 用户和内核开发者而言，直接行动是查阅原文以确认受影响版本、触发条件和修复或缓解状态；现有材料未提供这些具体信息，因此无法仅凭摘要判断系统是否暴露。\n\n**「社区讨论」** 评论者 phendrenad2 推测，NetBSD 在 1999 年 8 月重写相关代码时似乎无意中修复了该漏洞。评论者 ozereray1 则提出，这类漏洞究竟能否被模糊测试或静态分析发现，还是必须依靠人工思考利用原语，并称其在高度审计的代码库中存活 37 年令人瞩目。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://cybersecuritynews.com/37-year-old-kernel-openbsd-flaw/\">37-Year-Old Kernel Flaw Exploited to Gain Root Access on OpenBSD — PoC ...</a></li>\n<li><a href=\"https://thehackernews.com/2026/10/researchers-demonstrate-openbsd-root.html\">Researchers Demonstrate OpenBSD Root Exploit Chaining 37-Year-Old ...</a></li>\n<li><a href=\"https://aicrier.com/post/got9bqqjbi3quvvti9pq\">Big Fish Exploits 37-Year OpenBSD Bug — AICrier</a></li>\n\n</ul>\n</details>\n\n**标签**: `#OpenBSD`, `#kernel security`, `#vulnerability research`, `#exploit development`, `#operating systems`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [Indic 预训练扩展至 2.8 万亿 token，并开放数据生成流水线](https://huggingface.co/blog/nvidia/scaling-indic-pretraining) ⭐️ 8.0/10\n\nHugging Face 博客发布了一篇关于 Indic 语言模型预训练的工作，称其将训练规模扩大到 2.8 万亿 token，并同时公开了一条数据生成流水线，供他人在多语言预训练中复用。该流水线以“开放”形式发布，面向需要构建 Indic 及其他低资源语言模型的开发者与研究者，重点在于数据生成环节可被外部复用，而非仅公布模型权重。由于当前仅有标题与分析摘要、没有正文，具体的模型规模、评测结果、数据来源与许可证条件均无法核实，因此“2.8 万亿 token”的规模与流水线的实际可复用程度应视为发布方陈述，而非已独立验证的结论。\n\nrss · Hugging Face · 10月16日 01:44\n\n**「背景」** 印度语言在多语言预训练中通常处于低资源一侧：22 种表列语言（scheduled languages）中，能直接用于训练的原生文字高质量文本相对稀缺，因此不少工作转向用合成数据扩充语料。据检索结果，NVIDIA 与 IIT Madras、AI4Bharat（以及 Bodhan AI）发布的 Nemotron-pretraining-Indic-v1 即采用这一思路，覆盖 22 种印度语言、其中 12 种同时提供罗马化文本，并配套一套 GPU 加速的开放数据生成流程，使其他团队可复用该方法继续扩充语料。\n\n**「影响」** 对需要覆盖印度语言的开发者来说，这套约 2.8 万亿 token 的 Nemotron-pretraining-Indic-v1 语料覆盖 22 种表列语言，并配有开源、GPU 加速的数据生成流水线；NVIDIA 与 AI4Bharat 表示开发者可沿用同一配方把流程迁移到自己的数据源，而不必从零搭建语料生产线（tool-3-2、tool-3-1）。据该来源描述，基于合成与原生 Indic 文本的继续预训练在所有已报告基准上都有提升（tool-3-1）。使用前需注意两点限制：原生文字与罗马化文本的对照只覆盖部分语言，其余语言可能需要自行补齐；且当前没有原始博客正文，基准提升的具体幅度无法独立核实。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://daily.dev/posts/scaling-indic-pretraining-2-8-trillion-tokens-and-an-open-data-generation-pipeline-gngeiqcjb\">Scaling Indic Pretraining: 2.8 Trillion Tokens and an Open ...</a></li>\n<li><a href=\"https://www.explainx.ai/blog/nvidia-indic-pretraining-2-8-trillion-tokens-open-pipeline-2026\">Nemotron Indic Pretraining: 2.8T Tokens, 22 Languages ...</a></li>\n<li><a href=\"https://www.unite.ai/nvidia-unveils-2-8t-token-indic-pretraining-corpus-and-open-pipeline/\">NVIDIA Unveils 2.8T-Token Indic Pretraining Corpus and Open ...</a></li>\n<li><a href=\"https://www.unite.ai/nvidia-unveils-2-8t-token-indic-pretraining-corpus-and-open-pipeline/\">NVIDIA Unveils 2.8T-Token Indic Pretraining Corpus and Open ...</a></li>\n<li><a href=\"https://www.explainx.ai/blog/nvidia-indic-pretraining-2-8-trillion-tokens-open-pipeline-2026\">Nemotron Indic Pretraining: 2.8T Tokens, 22 Languages ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#Indic NLP`, `#LLM pretraining`, `#open data pipelines`, `#multilingual AI`, `#Hugging Face`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [Hugging Face 发布 501B 开源模型 Beam](https://huggingface.co/blog/reflection-beam) ⭐️ 8.0/10\n\nHugging Face 通过博客宣布推出 Beam，一个拥有 5010 亿参数的开放模型，并将其定位为可由用户自行拥有、定制和扩展。除参数量和这一宣传性定位外，现有材料未给出架构、基准测试结果、许可证、权重开放程度或实际可获取方式等技术细节。因此目前无法判断这是已交付的能力还是仅停留在公告层面的计划，也不清楚“开源”具体指权重开放还是其他形式的开放。相关表述均来自厂商公告，尚待独立验证。\n\nrss · Hugging Face · 10月16日 00:00\n\n**「背景」** 该发布来自 Hugging Face 博客（2026 年 10 月 16 日），标题称 Beam 是一个参数规模 501B、可“拥有、定制和扩展”的开放模型。“开放模型”通常指权重可下载并在自有环境中部署，而非只能通过 API 调用，因此能否真正“拥有”取决于权重是否公开、许可证是否允许修改与商用。目前可获得的材料仅包含标题和一句摘要，未提供架构、基准测试或授权条款等细节，相关说法尚待原文确认。\n\n**「对开发者与自托管用户的影响」** Beam 的权重以 Apache 2.0 许可发布在 Hugging Face 上（仓库名 reflection/Beam-1.0-501B-A23B），这意味着开发者可以将其用于商业用途、自行修改并部署，而不必依赖厂商的托管 API。代价在于自托管门槛：该模型为稀疏混合专家结构，总参数 5010 亿、激活参数 230 亿，激活参数少只影响单次推理的计算量，权重本身仍需相应规模的显存或内存；缺少这类硬件的团队则可通过 Baseten 等平台调用。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.unite.ai/reflection-releases-beams-open-weights-under-apache-2-0-license/\">Reflection Releases Beam’s Open Weights Under Apache 2.0 ...</a></li>\n<li><a href=\"https://reflection.ai/blog/introducing-beam\">Introducing Beam: Reflection’s 501B open-weight model</a></li>\n<li><a href=\"https://www.explainx.ai/blog/reflection-beam-501b-open-weights-released-hugging-face-apache-2026\">Reflection Beam Is Out: 501B Open Weights on Hugging Face ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#open-source AI`, `#large language models`, `#model release`, `#Hugging Face`, `#scalability`\n\n---\n\n<a id=\"item-tech-news-5\"></a>\n### [vLLM 首日支持 Reflection Beam-1.0，称解码延迟降低 2.71 倍](https://vllm.ai/blog/2026-10-16-reflection-beam) ⭐️ 8.0/10\n\nvLLM 官方博客宣布，vLLM 从第一天（day 0）起即支持 Reflection 的 Beam-1.0 模型；该模型为总参数 501B、激活参数 23B 的 MoE 架构。博客称，借助 agent 驱动的优化，解码延迟降低 2.71 倍，并采用带自适应验证的 DFlash2 投机解码。上述性能数字来自 vLLM、Reflection 与 Nvidia 联合发布的博客，属厂商声明，尚未见独立基准验证；源材料也未说明测试所用硬件、配置与具体条件。\n\nrss · vLLM Blog · 10月16日 00:00\n\n**「背景」** vLLM 是开源的大模型推理与服务框架，其“day 0”支持指模型发布当天即可在生产环境中部署运行。Beam-1.0 采用 MoE（混合专家）架构，5010 亿总参数中每个 token 只激活约 230 亿，因此单 token 的实际计算量远低于总参数量。投机解码则先由草稿模型提出候选 token，再由目标模型逐一验证，DFlash2 在此基础上引入自适应验证，以减少解码阶段的延迟。\n\n**「影响」** 开发者可直接使用官方 Docker 镜像 vllm/vllm-openai:reflection-beam 部署 Beam-1.0，据工具结果该模型在 NVIDIA Blackwell 上完成优化，因此博客宣称的 2.71× 解码延迟降幅是在该硬件上取得的，换用其他 GPU 不保证同等收益。该模型每 token 路由 8/256 个专家并支持 1,048,576 token 上下文，部署时需相应规划 MoE 内核支持与 KV 缓存显存容量。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.aioga.com/en/news/d0pow9b93paydjtg2i76ang83/\">vLLM implements Day 0 support for the Reflection Beam 501B ...</a></li>\n<li><a href=\"https://recipes.vllm.ai/reflection/Beam-1.0-501B-A23B\">reflection/Beam-1.0-501B-A23B | vLLM Recipes</a></li>\n\n</ul>\n</details>\n\n**标签**: `#vLLM`, `#LLM inference`, `#speculative decoding`, `#MoE models`, `#latency optimization`\n\n---\n\n<a id=\"item-tech-news-6\"></a>\n### [JPEG XL 与 AVIF 的 Web 用例对比](https://jakearchibald.com/2026/jpeg-xl-vs-avif/) ⭐️ 7.0/10\n\nJake Archibald 发布了一篇面向 Web 使用场景的 JPEG XL 与 AVIF 技术对比，目标读者是需要在网页图片格式之间选型的开发者。现有摘要显示文章讨论编解码器取舍、质量问题和实际转换设置，但所给源内容为空，因此无法核实其测试方法、具体数值或最终结论。Hacker News 上出现了围绕 AVIF 质量伪影、生产环境编码参数和格式成熟度的讨论。\n\nhackernews · farlight · 10月16日 16:12 · [社区讨论](https://news.ycombinator.com/item?id=50120224)\n\n**「背景」** JPEG XL 与 AVIF 是当前网页图像交付中被拿来对比的两种新一代编码格式，二者的取舍集中在压缩性能、有损与无损模式、HDR 支持、编码速度以及浏览器兼容性上。2026 年已出现多篇面向 Web 开发者的横向对比，覆盖压缩性能、浏览器支持、HDR、无损模式与编码速度，并给出「哪种格式该在什么场景下上线」的实践建议。\n\n**「影响」** 对准备在 Web 生产环境采用 AVIF 或 JPEG XL 的开发者，讨论中可操作的经验是：据评论者报告，AVIF 可用特定 ffmpeg 滤镜链在 2K 以内图片上生成体积缩小 10 倍以上且保留透明度的文件，但仍需针对高光等质量伪影和参数调优做验证。\n\n**「社区讨论」** Hacker News 评论中，Metricon 报告在生产中使用 AVIF，并给出了一套 ffmpeg 转换设置，声称在 2K 以内图片上可把体积缩小 10 倍以上且保留 PNG 透明度；PaulHoule 则批评 AVIF 会抹掉图像高光细节并用看似合理的纹理替代，不适合需要细看的图片。ezst 以 MP3/LAME 和 WebP 的多年成熟过程为例，主张不要急于把某一编解码器宣布为“赢家”。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://fileza.io/articles/avif-vs-jpeg-xl-2026-comparison\">AVIF vs JPEG XL in 2026: The Definitive Format Comparison for ...</a></li>\n<li><a href=\"https://jpegxlconvert.com/en/jpeg-xl-vs-avif/\">JPEG XL vs AVIF: Which One Should You Actually Use? (2026)</a></li>\n<li><a href=\"https://blog.openreplay.com/jpeg-xl-vs-avif/\">JPEG XL vs AVIF: Which Format Should You Ship?</a></li>\n\n</ul>\n</details>\n\n**标签**: `#image-codecs`, `#web-performance`, `#JPEG-XL`, `#AVIF`, `#frontend`\n\n---\n\n<a id=\"item-tech-news-7\"></a>\n### [Mercor 研究：美国 90% 工作时间缺乏 AI 基准覆盖](https://www.mercor.com/research/labor-index/benchmark-map/) ⭐️ 7.0/10\n\nMercor 的研究分析主张，美国 90% 的工作时间花在现有 AI 基准覆盖很少或完全没有覆盖的任务上，因此很难判断 AI 模型在美国人实际从事的工作上表现如何。该说法来自 Mercor 的 Labor Index/Benchmark Map 研究页面，属于公司自述的研究结论，而非独立验证，关键数字是 90% 的美国工作时间与现有 AI 基准覆盖范围之间的差距。HN 讨论随后集中质疑“覆盖良好”的判定标准，以及基准提示能否代表真实职业任务。\n\nhackernews · speckx · 10月16日 17:08 · [社区讨论](https://news.ycombinator.com/item?id=50121179)\n\n**「背景」** 这项分析的做法是把公开的 AI 基准逐项对应到美国职业结构：Mercor 将 29 个 AI 基准映射到 923 个职业，再与 O\\*NET 的 18,797 项任务比对，得出仅有 924 项任务被现有基准覆盖（tool-1-2、tool-1-3）。其覆盖口径限定为公开、尚未饱和且面向智能体（agentic）的基准，因此“90% 工时缺乏覆盖”针对的是这一类基准（tool-1-1）。\n\n**「对评估实践的影响」** Mercor 的基准映射只覆盖 O\\*NET 全部 18,797 项任务中的 924 项，因此仅凭现有基准分数来选型或判断模型能否胜任具体岗位工作的团队，实际上是在一个极窄的任务样本上做外推；该分析的合理做法是针对自身业务任务补充评测，而不是直接采信公开榜单。与此同时，O\\*NET 中心 10 月 6 日发布的评审报告提出借助大语言模型和 O\\*NET 现有职业框架构建可定期更新的 AI 影响指数，说明官方职业数据体系也在尝试填补同类衡量缺口，但这两项工作都尚未产出经独立验证、可替代现有基准的评测标准。\n\n**「社区讨论」** HN 评论者 OtherShrezzing 指出，“covered well”在这里可能被当作“covered at all”使用：例如“social workers &amp; care -&gt; counsel parents with child rearing problems”类别仅凭 13 条提示就被算作覆盖良好，而这显然难以代表该工作的全貌。qurren 称自己的软件工程工作约 80% 是在协调利益相关者之间的分歧，b800h 则用 Doorman Fallacy 说明自动化可能忽略岗位承担的隐性职能；这些均为评论者观点，不构成对 Mercor 方法的独立验证。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.mercor.com/research/labor-index/benchmark-map/\">A benchmark map of the US economy | Mercor</a></li>\n<li><a href=\"https://runtimewire.com/article/mercor-benchmark-map-human-work-thesis\">Mercor estimates 90% of US work hours lack AI benchmark coverage</a></li>\n<li><a href=\"https://www.explainx.ai/blog/mercor-benchmark-map-90-percent-us-working-hours-not-covered-ai-benchmarks-2026\">AI Benchmark Coverage: 90% of US Work Is Unmeasured ...</a></li>\n<li><a href=\"https://www.onetcenter.org/reports/AI_Impact_Review.html\">Indexing the Impact of AI within the O*NET System: A Review ...</a></li>\n<li><a href=\"https://www.explainx.ai/blog/mercor-benchmark-map-90-percent-us-working-hours-not-covered-ai-benchmarks-2026\">AI Benchmark Coverage: 90% of US Work Is Unmeasured ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#AI benchmarks`, `#AI evaluation`, `#labor economics`, `#future of work`, `#occupational task data`\n\n---\n\n<a id=\"item-tech-news-8\"></a>\n### [Apple MLX 在 Mac Studio 集群上分布式运行 Muse Spark Open](https://machinelearning.apple.com/research/mlx-distributed-inference) ⭐️ 7.0/10\n\nApple ML Research 公布了一个关于 MLX 分布式推理的研究页面，面向希望在 Mac Studio 集群上本地运行大语言模型的研究者和开发者，并以 Meta 的 Muse Spark Open 开源模型作为演示。社区评论引用页面数据称，M3 Ultra 版 Mac Studio 峰值功耗约 200W，M5 Ultra 版约 300W。页面还将 Muse Spark 与 Qwen 进行基准对比，但评论者指出该对比存在不公平：Muse Spark 使用 4-bit 量化，而 Qwen 仅显示原生 BF16 结果。\n\nhackernews · antipaul · 10月16日 13:43 · [社区讨论](https://news.ycombinator.com/item?id=50118320)\n\n**「背景」** MLX 是 Apple 面向 Apple Silicon 的机器学习框架，其本地大模型推理依赖芯片的统一内存；当模型规模超过单机内存容量时，就需要把计算拆分到多台 Mac 上协同完成，这正是本次「分布式推理」所讨论的方向。相关讨论围绕 Apple ML Research 在 Mac Studio 集群上运行 Meta 的 Muse Spark 模型展开，评论者则对基准测试中不同模型采用不同量化位宽的做法提出了质疑。\n\n**「影响」** 对打算在本地跑大模型的开发者而言，关键判断是单机统一内存是否够用：评论者 liuliu 称单台 M5 Ultra（256GiB）运行 DeepSeek 4.1 Flash 0910 约为 3200 tok/s 预填充、45 tok/s 解码，M5 Max（128GiB）也能跑 GLM 5.3 Flash，这意味着只有在模型规模超出单机内存时才需要多机方案。MLX 分布式推理会把单个模型的层切分到多台 Mac、每台都参与每次前向计算，因此依赖 Thunderbolt 之类的高速互联与分片策略（tool-3-3、tool-3-2）。同时 peri-cl 指出厂商对比中 Meta 模型使用 4-bit 量化、Qwen 仅给出原生 BF16，开发者不宜把这些在不同量化条件下的数字直接当作选型依据。\n\n**「社区讨论」** 评论者 peri-cl 认为基准测试对 Qwen 不公，因为 Muse Spark 以 4-bit 量化运行，而 Qwen 只给出原生 BF16 结果，且 Muse Spark 并非其会优先选择的模型。另一位评论者 liuliu 则报告，单台 M5 Ultra（256GiB）运行 DeepSeek 4.1 Flash 0910 可达约 3200 tok/s prefill、45 tok/s 生成，M5 Max（128GiB）也能运行 GLM 5.3 Flash。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://contracollective.com/blog/mlx-distributed-inference-multi-mac-cluster-2026\">MLX Distributed Inference: Multi-Mac Cluster Setup for Local ...</a></li>\n<li><a href=\"https://localai.io/docs/features/mlx-distributed/\">(experimental) MLX Distributed Inference - LocalAI</a></li>\n\n</ul>\n</details>\n\n**标签**: `#Apple MLX`, `#distributed inference`, `#local LLM inference`, `#Apple Silicon`, `#benchmark criticism`\n\n---\n\n<a id=\"item-tech-news-9\"></a>\n### [StarSkirmish Bench v0.2：LLM 写代码玩《星际争霸》](https://starskirmish.com/bench/v0-2/) ⭐️ 7.0/10\n\nStarSkirmish Bench v0.2 已刷新，它让大语言模型通过编写代码来玩《星际争霸：母巢之战》，并加入 OpenAI、Anthropic、Google 和 Muse 旗舰模型的结果。根据 HN 评论披露的测试条件，各模型在自家第一方 CLI 中以最高推理设置运行，联网和网页抓取工具被关闭，计时从 agent 启动开始，且没有提交工具。该基准考察的是代码生成式 agent 在 RTS 环境中的表现，而非直接让模型操作游戏；评论中出现的模型排序来自网友转述，并非独立验证。\n\nhackernews · \\_\\_cayenne\\_\\_ · 10月16日 14:18 · [社区讨论](https://news.ycombinator.com/item?id=50118688)\n\n**「背景：StarSkirmish 的初版评测」** Horizon 9 月 26 日的日报曾报道，StarSkirmish 让每个 LLM 在一小时内用 C++ 写一个《星际争霸：母巢之战》的 Protoss 机器人，再让它与其他模型写出的机器人以及人类编写的机器人对战，用以考察长程推理与智能体编程能力（tool-2-1）。此次 v0.2 是在同一评测设定下对旗舰模型成绩的重新跑分，因此其结果可与该初版结果对照。\n\n**「影响」** 对 LLM 评估者和 agent 开发者而言，跨模型比较必须考虑各实验室 CLI harness、最高推理设置、禁用联网和计时起点的差异；换用不同 harness 或推理档位会改变成绩，因此不宜把该榜单当作与直接操作游戏或通用编码能力等价的单一指标。\n\n**「社区讨论」** HN 评论里，GodelNumbering 称 v0.2 的模型排序（GPT-6 Astra &gt; GPT-6.1 Sol &gt; Gemini 4 Argon &gt; Claude Opus 5.5 &gt; Claude Fable 5.1 &gt; Claude Sonnet 5.5）与其朋友针对 9x9 围棋的 GoBench 排序完全一致，认为这值得关注；cgearhart 则质疑短时间限制下 agent 编写的 bot 是否有独立研究价值，以及它们是否只是在重复人类 bot 的套路。djoldman 补充了各模型在自家 CLI 中以最高推理设置、禁用联网、从 agent 启动开始计时的测试条件。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://starskirmish.com/bench/\">StarSkirmish Bench</a></li>\n\n</ul>\n</details>\n\n**标签**: `#LLM benchmarking`, `#AI agents`, `#StarCraft: Brood War`, `#code generation`, `#model evaluation`\n\n---\n\n<a id=\"item-tech-news-10\"></a>\n### [Kimi K3 在 AMD MI355X 上扩展，宣称 AgentX 吞吐比肩 B300](https://vllm.ai/blog/2026-10-16-kimi-k3-mi355x) ⭐️ 7.0/10\n\nAMD 与 Embedded LLM 在 vLLM 博客发布文章，介绍将 Kimi K3 推理扩展到 AMD Instinct MI355X 的优化工作。文章标题称，在 AgentX 上达到与 NVIDIA HGX B300 相当的每 GPU 吞吐量。该性能说法出自厂商撰写的博客，尚待独立验证；提供的摘录未包含版本、具体配置或基准测量结果。\n\nrss · vLLM Blog · 10月16日 00:00\n\n**「背景」** vLLM 在此语境中是一个开源的大语言模型推理栈，这篇帖子发布在 vLLM 博客上。文章由 AMD 与 Embedded LLM 撰写，定位为 Kimi K3 在 AMD Instinct MI355X 上的推理优化技术复盘，标题以 NVIDIA HGX B300 的每 GPU 吞吐和 AgentX 作为对比参照。\n\n**「对推理部署选型的影响」** 对于用 vLLM 部署 Kimi K3 的团队，该优化工作提供了可参考的选型信号：在 AgentX 基准、8 卡 AMD Instinct MI355X 的配置下，以 50 tokens/s/user 的 P90 交互性为目标，报告的单 GPU 总吞吐比 NVIDIA HGX B300 高 24.4%，在同一成本模型下每美元 token 数高 87.4%。不过这些数字出自 AMD 与 Embedded LLM 自测、尚未获独立验证，实际收益取决于模型、并发量和延迟目标是否与该基准一致，迁移前应在自身负载上复现。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://vllm.ai/blog/2026-10-16-kimi-k3-mi355x\">Scaling Kimi K3 on AMD Instinct MI355X: Matching NVIDIA HGX ...</a></li>\n<li><a href=\"https://github.com/vllm-project/vllm-project.github.io/blob/main/_posts/2026-10-16-kimi-k3-mi355x.md\">2026-10-16-kimi-k3-mi355x.md - GitHub</a></li>\n\n</ul>\n</details>\n\n**标签**: `#LLM inference`, `#AMD Instinct MI355X`, `#vLLM`, `#Kimi K3`, `#GPU performance`\n\n---\n\n<a id=\"item-tech-news-11\"></a>\n### [Waymo 发布多伦多公告，HN 讨论自动驾驶部署](https://waymo.com/blog/2026/10/waymo-in-toronto/) ⭐️ 6.0/10\n\nWaymo 发布了一篇题为“Waymo in Toronto”的博客公告，表明其正在推进多伦多相关的自动驾驶部署，但现有材料未披露上线时间、运营范围、车型或监管许可等具体条件。该公告在 Hacker News 上引发约 253 条评论的讨论，讨论集中在自动驾驶部署的监管与用户体验，而非技术细节。上述内容属于公司公告/部署通知，尚不能视为已确认的落地服务。\n\nhackernews · ChrisArchitect · 10月16日 14:44 · [社区讨论](https://news.ycombinator.com/item?id=50118981)\n\n**「背景」** Waymo 是 Alphabet 旗下的自动驾驶公司，运营商业 robotaxi 服务。其博客发布“Waymo in Toronto”消息，被视为该公司向加拿大市场拓展自动驾驶出行的动向，但提供的材料未包含博文正文，因此多伦多的具体部署规模、时间表或监管审批状态均无法确认。\n\n**「监管时差与落地前提」** 对多伦多的乘客和潜在运营方而言，最直接的障碍是监管时间表不匹配：安大略省现行自动驾驶试点法规（Ontario Regulation 306/15）定于 2027 年 10 月 13 日到期，而 Waymo 表示目标是在 2028 年接载首批多伦多乘客，因此该省需要在此之前更新或替换试点框架，否则许可会出现空档。Waymo 还以公司自有数据称，在超过 4 亿公里的有人乘坐里程中，其车辆涉及的严重伤害事故比人类驾驶低 95%，但这属于厂商自述而非独立验证。\n\n**「社区讨论」** 评论者分享了正反两面的体验：有人称在奥斯汀的 Waymo 行程被从 9 分钟延长到 45 分钟，也有评论者提到丹佛一辆 Waymo 驶入农贸市场而当地警方称没有可适用的刑事指控法律。另一些评论者对在东京看到 Waymo 感到兴奋，并有人反问为何很少见到正面体验，反映出讨论更多基于个人见闻和监管担忧。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://waymo.com/blog/2026/10/waymo-in-toronto/\">Hello Toronto! Waymo is En Route</a></li>\n<li><a href=\"https://toronto.citynews.ca/2026/10/16/waymo-cars-autonomous-toronto-2028-launch/\">Waymo eyes Toronto launch in 2028</a></li>\n<li><a href=\"https://thedeepdive.ca/waymo-plans-toronto-robotaxis-for-2028-as-ontario-rules-expire-in-2027/\">Waymo Plans Toronto Robotaxis for 2028 as Ontario Rules ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#autonomous driving`, `#Waymo`, `#regulation`, `#transportation`, `#AI deployment`\n\n---\n\n<a id=\"item-tech-news-12\"></a>\n### [《I Love Software Rendering》一文引发软件渲染定义之争](https://www.jamesfmackenzie.com/2026/10/13/i-love-software-rendering/) ⭐️ 6.0/10\n\n一篇题为《I Love Software Rendering》的个人技术随笔（2026 年 10 月 13 日发布，10 月 16 日登上 Hacker News）回顾并赞美了软件渲染，在 HN 上获得 254 分、175 条评论。讨论的焦点不是新功能或新版本，而是文章的技术定性：有评论者认为作者描述的观感其实来自关闭空间抗锯齿（spatial anti-aliasing），现代游戏同样可以做到，并非软件渲染独有，甚至建议改题为「I love pixelated textures」，因为双线性过滤本就可以手动关闭。也有评论者反驳说，软件渲染在当年常能实现 GPU 路径做不到的视觉效果，因为通用 CPU 本身就充当像素着色器，可编程着色管线直到 2001 年 GeForce 3 才出现。以上均为评论者的技术判断，并非独立验证的测量结果。\n\nhackernews · speckx · 10月16日 12:52 · [社区讨论](https://news.ycombinator.com/item?id=50117746)\n\n**「背景」** 软件渲染指由 CPU 逐像素完成光栅化与着色、不把矩阵运算交给 GPU 着色器核心的渲染方式；评论者指出，在可编程着色管线出现之前（有人把这一节点定在 2001 年的 GeForce 3），阴影、纹理查找表等效果只能在 CPU 上用软件实现。也正因如此，评论者认为文中描述的观感其实等同于关闭空间抗锯齿、不做双线性过滤的像素化纹理，这些在现代 GPU 游戏里同样可做到，并提到 Woof 等仍以软件渲染逻辑运行、可支持现代分辨率的 DOOM 源码移植作为当代例证。\n\n**「实际影响」** 对想复刻这类复古像素观感的开发者和玩家而言，讨论给出的可操作结论是：关键往往不在渲染路径本身，而在关闭空间抗锯齿、双线性纹理过滤等现代游戏仍然提供的显示选项；若要采用真正的 CPU 端渲染，则需接受把运算放在通用 CPU 上与 GPU 分工不同的取舍。\n\n**「社区讨论」** 评论区的主要分歧在于「这到底算不算软件渲染」：delta\\_p\\_delta\\_x 与 BugsJustFindMe 认为这是关闭抗锯齿和双线性过滤的效果，与现代 GPU 渲染并不冲突，而 bob1029 则强调可编程着色器出现前软件渲染在效果上的优势。此外，jiffygist 推荐了 DOOM 的 Woof 源码移植，称其渲染逻辑仍为软件实现却能在现代分辨率下达到高帧率，同时是值得参考的 SDL3 代码库；Waterluvian 则回忆了软件渲染时代「加一块声卡换来 10fps」的经历。\n\n**标签**: `#software rendering`, `#computer graphics`, `#retro gaming`, `#DOOM source ports`, `#GPU vs CPU`\n\n---",
+    "generated_at": "2026-10-17T13:10:25.426228+08:00",
+    "summary_markdown": "# Horizon 每日速递 - 2026-10-17\n\n> 已分析 22 条内容，但没有达到重要性阈值的条目。\n\n今日暂无重要动态，可能原因：\n- 今天关注的信息源较平静\n- AI 评分阈值设置过高\n- 信息源种类有待扩充\n\n建议：\n1. 降低当前 Profile 的过滤阈值\n2. 添加更多多样化的信息源\n3. 检查 AI 模型是否正常工作",
     "summary_markdown_en": "",
     "summary_source": "Horizon daily digest; source URLs are included where available."
   },
@@ -322,6 +322,32 @@
     "provider": "DeepSeek"
   },
   "top5": [
+    {
+      "title_zh": "Replit is no longer working with Anthropic, CEO says",
+      "title_en": "Replit is no longer working with Anthropic, CEO says",
+      "what_zh": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
+      "what_en": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
+      "why_zh": "",
+      "why_en": "",
+      "source_url": "https://techcrunch.com/2026/10/16/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-16T21:22:28+00:00",
+      "original_title": "Replit is no longer working with Anthropic, CEO says",
+      "fallback": true
+    },
+    {
+      "title_zh": "How Itaú is building generative AI for its entire customer base",
+      "title_en": "How Itaú is building generative AI for its entire customer base",
+      "what_zh": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+      "what_en": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
+      "why_zh": "",
+      "why_en": "",
+      "source_url": "https://openai.com/index/itau-generative-ai",
+      "source": "OpenAI",
+      "published": "2026-10-16T19:00:00+00:00",
+      "original_title": "How Itaú is building generative AI for its entire customer base",
+      "fallback": true
+    },
     {
       "title_zh": "India becomes the latest country to report rogue AI agent activity",
       "title_en": "India becomes the latest country to report rogue AI agent activity",
@@ -359,32 +385,6 @@
       "source": "TechCrunch AI",
       "published": "2026-10-16T16:01:37+00:00",
       "original_title": "Elorian’s first AI model wants to reason with images, not just about them",
-      "fallback": true
-    },
-    {
-      "title_zh": "Jev is Vercel’s fastest-adopted AI model ever",
-      "title_en": "Jev is Vercel’s fastest-adopted AI model ever",
-      "what_zh": "The data comes from Vercel's AI gateway, a unified API service similar to OpenRouter.",
-      "what_en": "The data comes from Vercel's AI gateway, a unified API service similar to OpenRouter.",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/2026/10/16/jev-is-vercels-fastest-adopted-ai-model-ever/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T15:33:49+00:00",
-      "original_title": "Jev is Vercel’s fastest-adopted AI model ever",
-      "fallback": true
-    },
-    {
-      "title_zh": "Mark Wahlberg on using AI in film ‘the right way’ and being open to an AI clone carrying on his legacy",
-      "title_en": "Mark Wahlberg on using AI in film ‘the right way’ and being open to an AI clone carrying on his legacy",
-      "what_zh": "Actor and angel investor Mark Wahlberg says he's OK with using AI in filmmaking, provided it's used \"to enhance what you're doing.\"",
-      "what_en": "Actor and angel investor Mark Wahlberg says he's OK with using AI in filmmaking, provided it's used \"to enhance what you're doing.\"",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/2026/10/16/mark-wahlberg-on-using-ai-in-film-the-right-way-and-being-open-to-an-ai-clone-carrying-on-his-legacy/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T14:26:51+00:00",
-      "original_title": "Mark Wahlberg on using AI in film ‘the right way’ and being open to an AI clone carrying on his legacy",
       "fallback": true
     }
   ],
