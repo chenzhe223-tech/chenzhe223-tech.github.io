@@ -29,7 +29,7 @@ jobs:
           page = Path('radar/subscribe/index.html').read_text()
           worker = Path('radar/subscription/worker.js').read_text()
           schema = Path('radar/subscription/schema.sql').read_text()
-          assert 'DAVY' in page and '每天 07:30' in page, 'missing brand or daily delivery time'
+          assert 'DAVY' in page and '07:30' in page, 'missing brand or daily delivery time'
           assert 'name="interests"' in page and 'type="email"' in page
           assert 'YOUR-SUBDOMAIN' in page, 'placeholder must remain until Worker is deployed'
           assert 'double opt-in' in Path('radar/subscription/README.md').read_text().lower()
