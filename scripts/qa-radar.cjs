@@ -29,12 +29,22 @@ function check(ok, name, detail = '') {
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
       check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': editorial imagery present');
       check(await page.locator('#top5List a[href^="http"]').count() === 5, viewport.name + ': each story has source link');
+      const firstCard = page.locator('#top5List .top5-card').first();
+      const cardStyles = await firstCard.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, text: getComputedStyle(el.querySelector('p')).color, title: getComputedStyle(el.querySelector('h3')).color }));
+      check(cardStyles.background === 'rgb(255, 255, 255)', viewport.name + ': story card has solid light background', JSON.stringify(cardStyles));
+      check(cardStyles.text === 'rgb(52, 70, 94)' && cardStyles.title === 'rgb(23, 79, 126)', viewport.name + ': story text has high-contrast colors', JSON.stringify(cardStyles));
+      const editorial = page.locator('#editorialCore');
+      if (await editorial.count()) {
+        const isVisible = await editorial.isVisible();
+        const hasSynthesis = await page.evaluate(() => !!document.querySelector('#editorialCore strong'));
+        if (!hasSynthesis) check(!isVisible, viewport.name + ': internal missing-analysis status is hidden from readers');
+      }
       check(await page.locator('#featureTitle').innerText().then(x => x.trim().length > 0), viewport.name + ': lead feature has a headline');
       const storyLabel = await page.locator('#top5List .story-label').first().innerText();
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
         check(cardsText.every(x => !x.includes('/50') && !x.includes('/10')), viewport.name + ': source fallback does not display fabricated scores');
-        check(await page.locator('#editorialCore').isVisible(), viewport.name + ': editorial fallback explains missing AI synthesis');
+        check(!(await page.locator('#editorialCore').isVisible()), viewport.name + ': internal AI-unavailable note stays hidden');
       }
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));

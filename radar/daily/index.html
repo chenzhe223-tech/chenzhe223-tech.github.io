@@ -307,6 +307,24 @@ section{margin-bottom:40px}
 .editorial-core small{display:block;font-size:12px;line-height:1.8;color:#586a7f;margin-top:8px}
 @media(max-width:620px){.more-news summary,.more-skills summary{padding:13px 12px;font-size:12px}.more-news summary span,.more-skills summary span{font-size:10px}.editorial-core{padding:16px}.editorial-core strong{font-size:17px}}
 
+
+/* Readability fix: editorial cards use a solid light surface and dark, high-contrast text. */
+.top5-card{background:#fff!important;color:#17243a!important;border:1px solid #d8dee8!important;box-shadow:0 5px 18px rgba(22,42,68,.06)}
+.top5-card .top5-rank{background:#e8eef5!important;color:#244d77!important;border:1px solid #d5dfea}
+.top5-card .story-label{background:#edf2f7!important;color:#294968!important;border:1px solid #dce4ed!important}
+.top5-card h3{color:#174f7e!important}
+.top5-card p{color:#34465e!important}
+.top5-card .meta,.top5-card .meta span{color:#536579!important}
+.top5-card .meta a,.top5-card a{color:#155f9a!important;text-decoration:underline;text-underline-offset:3px}
+.top5-card .dimension{background:#f3f6fa!important;border-color:#dce3eb!important}
+.top5-card .dimension b{color:#174f7e!important}
+.top5-card .dimension span{color:#52647a!important}
+.top5-card .action-box{background:#f1f6eb!important;border:1px solid #d6e4c9!important}
+.top5-card .action-box strong,.top5-card .action-box p{color:#314c2b!important}
+.top5-card .story-image{background:#e9eef4}
+.top5-card .story-image img{display:block;width:100%;height:100%;object-fit:cover}
+@media(max-width:620px){.top5-card{padding:13px!important}.top5-card p{font-size:14px;line-height:1.8}.top5-card .dimension span{font-size:9px}}
+
 </style>
 </head>
 <body><div class="wrap">
@@ -314,7 +332,7 @@ section{margin-bottom:40px}
 <header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">DAILY AI BRIEFING · 看见趋势，发现机会</span></div><div class="hero"><div><h1 id="featureTitle" data-i18n="heroTitle">AI 前沿简报</h1><p class="sub" id="featureSub" data-i18n="heroSub">看见趋势 · 发现机会 · 打开新可能。每日精选真正值得关注的 AI 进展。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div><div class="date"><strong id="reportDate">正在读取日报…</strong><span id="updatedAt">每日更新 · 北京时间 09:00</span></div></div></div>
 <div class="tabs"><a class="tab active" href="#ai" data-i18n="tabInsights">✨ 今日观察</a><a class="tab" href="#news" data-i18n="tabNews">📰 更多新闻线索</a><a class="tab" href="#skills" data-i18n="tabSkills">🧰 创作工具箱</a><a class="tab" href="#method" data-i18n="tabMethod">🔎 数据说明</a></div>
 <div class="summary"><div class="metric"><span data-i18n="metricNews">📰 已采集线索</span><strong id="newsCount">—</strong></div><div class="metric"><span data-i18n="metricSkills">🧰 可探索 Skill</span><strong id="skillCount">—</strong></div><div class="metric"><span data-i18n="metricSources">✓ 可用信息源</span><strong id="sourcesCount">—</strong></div></div></header>
-<section id="ai"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><p class="section-intro" data-i18n="aiIntro">先看重点，再决定要不要深入。AI 解读用于辅助理解，关键事实请以原始来源为准。</p><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><div id="editorialCore" class="editorial-core" hidden></div><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
+<section id="ai"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><div id="editorialCore" class="editorial-core" hidden></div><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
 <section id="news"><div class="section-head"><h2><span class="section-icon">📰</span><span data-i18n="newsHeading">AI 新鲜事</span></h2><p data-i18n="newsSub">完整来源列表 · 按需展开</p></div><p class="section-intro" data-i18n="newsIntro">以下为采集到的其他新闻线索，作为补充核查，不与每日五大热点争夺注意力。</p><details class="more-news"><summary>展开其他新闻线索 <span>补充阅读 · 不计入五大热点</span></summary><div id="newsList" class="list"><div class="empty">正在读取最新情报…</div></div></details></section>
 <section id="skills"><div class="section-head"><h2><span class="section-icon">🧰</span><span data-i18n="skillsHeading">创作工具箱 · 热门 Skill</span></h2><p data-i18n="skillsSub">从别人做好的工具开始</p></div><p class="section-intro" data-i18n="skillsIntro">Skill 可以理解为给 AI 的一套可复用工作方法或能力说明。点开项目，看看它能否帮你少走几步。</p><details class="more-skills"><summary><span data-i18n="expandSkills">展开热门 Skill 榜单</span><span data-i18n="skillsHint">公开仓库 · 可直接查看原项目</span></summary><div id="skillList" class="list"><div class="empty">正在读取 Skill 榜单…</div></div></details></section>
 <section id="method"><div class="section-head"><h2><span class="section-icon">🔎</span><span data-i18n="methodHeading">数据说明 · 透明比热闹重要</span></h2></div><div class="item"><div class="num">i</div><div><h3 data-i18n="methodTitle">公开数据，不伪造结论</h3><p data-i18n="methodBody">新闻来自公开 RSS / 官方博客与技术社区，展示来源与原文链接。Skill 榜单依据公开 GitHub 仓库的 Star 数、最近更新时间及与 Skill 主题的相关性整理；Star 不是安装量，也不等同于真实使用人数。网络源可能临时不可用，页面会显示最近一次成功生成的日报。</p><div class="meta"><span class="pill">RSS / Official blogs</span><span class="pill">GitHub API</span><span class="pill">09:00 Asia/Shanghai</span></div></div></div><p class="status" id="status"></p></section>
@@ -335,15 +353,12 @@ function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
 function renderEditorial(data){
  const root=$("editorialCore");if(!root)return;
  const e=data?.editorial;
- if(!e){
-   root.hidden=false;
-   root.innerHTML='<strong>'+esc(currentLang==="en"?"EDITORIAL NOTE":"编辑说明")+'</strong><p>'+esc(currentLang==="en"?"The source stories are available, but the AI trend synthesis is not ready for this edition. We are showing verifiable headlines and original links rather than inventing a trend.":"本期原始新闻线索可用，但 AI 趋势研判暂未生成。页面优先展示可核验的新闻标题与原文链接，不用未经验证的观点填充趋势结论。")+'</p>';
-   return;
- }
+ // Missing AI synthesis is an operational status, not reader-facing editorial content.
+ if(!e){root.hidden=true;root.innerHTML="";return}
  const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
  const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
  const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
- if(!core&&!trend&&!next){root.hidden=true;return}
+ if(!core&&!trend&&!next){root.hidden=true;root.innerHTML="";return}
  root.hidden=false;
  root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
