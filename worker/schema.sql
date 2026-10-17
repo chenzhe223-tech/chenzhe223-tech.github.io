@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS subscribers (
  topics_json TEXT NOT NULL,
  status TEXT NOT NULL CHECK(status IN ('pending','active','unsubscribed','bounced')),
  confirm_hash TEXT,
- unsubscribe_hash TEXT NOT NULL DEFAULT (lower(hex(randomblob(32)))),
+ unsubscribe_hash TEXT NOT NULL,
  consent_at TEXT,
  confirmed_at TEXT,
  created_at TEXT NOT NULL,
