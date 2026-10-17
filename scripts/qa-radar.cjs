@@ -44,7 +44,7 @@ function check(ok, name, detail = '') {
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
         check(cardsText.every(x => !x.includes('/50') && !x.includes('/10')), viewport.name + ': source fallback does not display fabricated scores');
-        check(await page.locator('#editorialCore').isVisible(), viewport.name + ': editorial fallback explains missing AI synthesis');
+        check(!(await page.locator('#editorialCore').isVisible()), viewport.name + ': internal AI-unavailable note stays hidden');
       }
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
