@@ -1,0 +1,16 @@
+name = "davy-radar-subscriptions"
+main = "src/index.js"
+compatibility_date = "2026-10-17"
+
+[vars]
+PUBLIC_BASE_URL = "https://chenzhe223-tech.github.io/radar/subscribe/"
+SENDER_NAME = "DAVYLAB · AI 前沿简报"
+SENDER_EMAIL = "chenzhe223@gmail.com"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "davy-radar-subscriptions"
+database_id = "REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID"
+
+[triggers]
+crons = ["30 23 * * *"]
