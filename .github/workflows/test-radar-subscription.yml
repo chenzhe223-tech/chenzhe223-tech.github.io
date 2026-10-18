@@ -1,0 +1,47 @@
+name: Test AI Brief Subscription
+on:
+  pull_request:
+    paths:
+      - "radar/subscribe/**"
+      - "radar/subscription/**"
+      - ".github/workflows/test-radar-subscription.yml"
+  push:
+    branches: [feature/ai-news-subscription]
+    paths:
+      - "radar/subscribe/**"
+      - "radar/subscription/**"
+      - ".github/workflows/test-radar-subscription.yml"
+jobs:
+  static-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate Worker syntax
+        run: node --check radar/subscription/worker.js
+      - name: Validate subscription page scripts and essential UI
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          page = Path('radar/subscribe/index.html').read_text()
+          worker = Path('radar/subscription/worker.js').read_text()
+          schema = Path('radar/subscription/schema.sql').read_text()
+          assert 'DAVY' in page and '07:30' in page, 'missing brand or daily delivery time'
+          assert 'name="interests"' in page and 'type="email"' in page
+          assert 'https://davy-radar-subscriptions.chenzhe223.workers.dev' in page, 'deployed Worker endpoint must be configured'
+          assert 'double opt-in' in Path('radar/subscription/README.md').read_text().lower()
+          for endpoint in ['/api/subscribe','/confirm','/unsubscribe','/health']:
+              assert endpoint in worker, f'missing endpoint: {endpoint}'
+          for guard in ['qualityCheck(report)','source_fallback','fallback===true','last_sent_date','confirmation_token_hash','unsubscribe_token_hash']:
+              assert guard in worker, f'missing safety guard: {guard}'
+          assert 'CREATE TABLE IF NOT EXISTS subscribers' in schema
+          assert 'CREATE TABLE IF NOT EXISTS send_log' in schema
+          inline = re.findall(r'<script>(.*?)</script>', page, re.S)
+          assert inline, 'missing page script'
+          Path('/tmp/subscription-page.js').write_text('\n'.join(inline))
+          print('Subscription static checks passed')
+          PY
+          node --check /tmp/subscription-page.js
