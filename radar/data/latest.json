@@ -1,18 +1,39 @@
 {
   "product": "Davy Radar",
-  "report_date": "2026-10-17",
+  "report_date": "2026-10-18",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-17T13:09:01.694739+08:00",
+  "generated_at": "2026-10-18T13:14:37.359424+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
   "news": [
     {
-      "title": "Replit is no longer working with Anthropic, CEO says",
-      "url": "https://techcrunch.com/2026/10/16/replit-is-no-longer-working-with-anthropic-ceo-says/",
-      "summary": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
-      "published": "2026-10-16T21:22:28+00:00",
+      "title": "Meta removes language that raised scraping and AI training concerns",
+      "url": "https://techcrunch.com/2026/10/17/meta-removes-language-that-raised-scraping-and-ai-training-concerns/",
+      "summary": "A Meta spokesperson insisted that the updated terms did not reflect a change in the way Meta crawls the web.",
+      "published": "2026-10-17T21:31:32+00:00",
       "source": "TechCrunch AI"
+    },
+    {
+      "title": "Anthropic says its workforce has become less junior and is spending more time in meetings",
+      "url": "https://techcrunch.com/2026/10/17/anthropic-says-its-workforce-has-become-less-junior-and-is-spending-more-time-in-meetings/",
+      "summary": "The composition of Anthropic’s workforce and the type of work getting done have changed significantly in the past year.",
+      "published": "2026-10-17T20:21:19+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Replit makes OpenAI its default over Anthropic, CEO says",
+      "url": "https://techcrunch.com/2026/10/17/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "summary": "Over the weekend, Masad clarified that OpenAI would replace Anthropic as its default model provider. Claude will still be available to customers on the platform.",
+      "published": "2026-10-17T18:48:08+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "web-edit 0.1a2",
+      "url": "https://simonwillison.net/2026/Oct/17/web-edit/",
+      "summary": "Release: web-edit 0.1a2 web-edit ( previously ) is my tiny web app for browsing and editing files in a folder. I mainly built it for editing files on different machines via Tailscale. I added a \"copy to clipboard\" option for both text and image data. I needed this because I was running pelican prompts on a laptop from my phone (here's DeepSeek 4.1 Flash 1017",
+      "published": "2026-10-17T13:16:49+00:00",
+      "source": "Simon Willison"
     },
     {
       "title": "How Itaú is building generative AI for its entire customer base",
@@ -125,27 +146,6 @@
       "summary": "Bluesky is bringing “social vibe coding” to its experimental Attie platform, allowing users to create interactive experiences like games, quizzes, and websites that can tap into the social network's audience.",
       "published": "2026-10-15T18:56:46+00:00",
       "source": "TechCrunch AI"
-    },
-    {
-      "title": "AI agents are coming to Rivian’s cars",
-      "url": "https://techcrunch.com/2026/10/15/ai-agents-are-coming-to-rivians-cars/",
-      "summary": "We'll likely learn more about how this will work at the company's upcoming \"AI &#038; Autonomy Day\" event in December.",
-      "published": "2026-10-15T15:02:36+00:00",
-      "source": "TechCrunch AI"
-    },
-    {
-      "title": "Google’s Universal Cart shopping tool launches in the US",
-      "url": "https://techcrunch.com/2026/10/15/googles-universal-cart-shopping-tool-launches-in-the-us/",
-      "summary": "The new shopping tool is available in the U.S. across Google Search and the Gemini app.",
-      "published": "2026-10-15T14:29:33+00:00",
-      "source": "TechCrunch AI"
-    },
-    {
-      "title": "Anthropic tells investors quarterly revenue up nearly 50% to $16.8bn ahead of IPO",
-      "url": "https://simonwillison.net/2026/Oct/15/anthropic-tells-investors/",
-      "summary": "Anthropic tells investors quarterly revenue up nearly 50% to $16.8bn ahead of IPO The phrase \"told investors\" appears four times in this FT article, which reports on Anthropic's day of hosting investors on Wednesday. Lots of details in here from \" people with knowledge of the matter \". Key things I learned from the article: Q1 revenue (Jan/Feb/Mar) was \"abou",
-      "published": "2026-10-15T13:04:03+00:00",
-      "source": "Simon Willison"
     }
   ],
   "skills": [
@@ -153,8 +153,8 @@
       "name": "obra/superpowers",
       "url": "https://github.com/obra/superpowers",
       "description": "An agentic skills framework & software development methodology that works.",
-      "stars": 300767,
-      "updated": "2026-10-17T05:06:09Z",
+      "stars": 301295,
+      "updated": "2026-10-18T05:11:12Z",
       "language": "Shell",
       "topics": [
         "ai",
@@ -171,8 +171,8 @@
       "name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
-      "stars": 294244,
-      "updated": "2026-10-17T05:04:24Z",
+      "stars": 295278,
+      "updated": "2026-10-18T05:14:22Z",
       "language": "Shell",
       "topics": []
     },
@@ -180,8 +180,8 @@
       "name": "affaan-m/ECC",
       "url": "https://github.com/affaan-m/ECC",
       "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-      "stars": 281652,
-      "updated": "2026-10-17T05:08:30Z",
+      "stars": 282676,
+      "updated": "2026-10-18T05:14:17Z",
       "language": "JavaScript",
       "topics": [
         "ai-agents",
@@ -198,8 +198,8 @@
       "name": "multica-ai/andrej-karpathy-skills",
       "url": "https://github.com/multica-ai/andrej-karpathy-skills",
       "description": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls.",
-      "stars": 220402,
-      "updated": "2026-10-17T05:03:03Z",
+      "stars": 220718,
+      "updated": "2026-10-18T05:12:37Z",
       "language": "Multi-language",
       "topics": []
     },
@@ -207,8 +207,8 @@
       "name": "anthropics/skills",
       "url": "https://github.com/anthropics/skills",
       "description": "Public repository for Agent Skills",
-      "stars": 181635,
-      "updated": "2026-10-17T05:06:47Z",
+      "stars": 181825,
+      "updated": "2026-10-18T05:11:16Z",
       "language": "Python",
       "topics": [
         "agent-skills"
@@ -218,8 +218,8 @@
       "name": "Shubhamsaboo/awesome-llm-apps",
       "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
       "description": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source.",
-      "stars": 142047,
-      "updated": "2026-10-17T05:06:14Z",
+      "stars": 142152,
+      "updated": "2026-10-18T05:14:14Z",
       "language": "Python",
       "topics": [
         "agents",
@@ -232,8 +232,8 @@
       "name": "Graphify-Labs/graphify",
       "url": "https://github.com/Graphify-Labs/graphify",
       "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
-      "stars": 127304,
-      "updated": "2026-10-17T05:06:35Z",
+      "stars": 127878,
+      "updated": "2026-10-18T05:14:31Z",
       "language": "Python",
       "topics": [
         "ai-agents",
@@ -250,8 +250,8 @@
       "name": "JuliusBrussee/caveman",
       "url": "https://github.com/JuliusBrussee/caveman",
       "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
-      "stars": 113092,
-      "updated": "2026-10-17T05:08:29Z",
+      "stars": 113329,
+      "updated": "2026-10-18T05:11:52Z",
       "language": "Go",
       "topics": [
         "ai",
@@ -268,8 +268,8 @@
       "name": "addyosmani/agent-skills",
       "url": "https://github.com/addyosmani/agent-skills",
       "description": "Production-grade engineering skills for AI coding agents.",
-      "stars": 107469,
-      "updated": "2026-10-17T05:09:02Z",
+      "stars": 107908,
+      "updated": "2026-10-18T05:12:07Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -284,8 +284,8 @@
       "name": "Leonxlnx/taste-skill",
       "url": "https://github.com/Leonxlnx/taste-skill",
       "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
-      "stars": 98094,
-      "updated": "2026-10-17T04:56:43Z",
+      "stars": 98517,
+      "updated": "2026-10-18T05:07:42Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -306,10 +306,162 @@
   "ai_analysis": {
     "status": "ok",
     "provider": "DeepSeek via Horizon",
-    "generated_at": "2026-10-17T13:10:25.426228+08:00",
-    "summary_markdown": "# Horizon 每日速递 - 2026-10-17\n\n> 已分析 22 条内容，但没有达到重要性阈值的条目。\n\n今日暂无重要动态，可能原因：\n- 今天关注的信息源较平静\n- AI 评分阈值设置过高\n- 信息源种类有待扩充\n\n建议：\n1. 降低当前 Profile 的过滤阈值\n2. 添加更多多样化的信息源\n3. 检查 AI 模型是否正常工作",
+    "generated_at": "2026-10-18T13:16:08.553125+08:00",
+    "summary_markdown": "# Horizon 每日速递 - 2026-10-18\n\n> 从 15 条内容中筛选出 3 条重要资讯。\n\n---\n\n**科技新闻**\n1. [DeepSeek 发布 V4.1 Flash-1017，社区聚焦编码与速度](#item-tech-news-1) ⭐️ 8.0/10\n2. [Pele：将 Mermaid 图表转为可主题化 SVG](#item-tech-news-2) ⭐️ 7.0/10\n3. [Show HN：esp32sim 在浏览器中运行 ESP32 固件](#item-tech-news-3) ⭐️ 7.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [DeepSeek 发布 V4.1 Flash-1017，社区聚焦编码与速度](https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash-1017) ⭐️ 8.0/10\n\nDeepSeek 上线了名为 DeepSeek-V4.1-Flash-1017 的模型仓库，同时在其 API 文档站发布了对应新闻页，并在 OpenRouter 上架 deepseek/deepseek-v4.1-flash-1017，Hacker News 上的提交时间为 2026 年 10 月 17 日。讨论中引述的官方新闻页称，新版本在多项编码基准上的得分明显提高，其中一位评论者称其在 11 项基准中有 10 项超过 Sol 5.6；这些对比来自厂商页面和社区转述，在本次提交材料中无法独立核实。OpenRouter 条目与官方 API 新闻页说明该模型已可通过第三方路由和 DeepSeek 自家 API 使用，但所给材料没有披露参数规模、上下文长度、定价或许可证条款。\n\nhackernews · theykk · 10月17日 08:21 · [社区讨论](https://news.ycombinator.com/item?id=50129045)\n\n**「背景」** 据模型索引页面，DeepSeek V4.1 Flash 采用 MIT 许可的混合专家架构，支持 100 万 token 上下文，并延续高峰/低谷分时 API 定价。这为社区同时讨论其开放程度、长上下文能力和调用成本提供了参照。\n\n**「影响」** 对正在挑选编码模型的开发者来说，这是一个已出现在 OpenRouter 和 DeepSeek API 文档中的可调用选项，而不仅是一份公告。有评论者表示会把实现方案的制定与代码审查继续交给 Opus/Sol，把写代码的环节转回 DeepSeek，这意味着实际采用方式更可能是混合搭配，而非整体替换。由于基准数字目前只有厂商侧来源，团队在切换前需要在自己代码库上验证，并注意以带日期后缀的快照名（1017）固定版本，避免上游更新带来行为漂移。\n\n**「社区讨论」** OsrsNeedsf2P 认为，DeepSeek 在基准上并未超过 Sol 和 Gemini，但它的 tok/s 与首 token 延迟，加上可查看思维链、较少被审核拦截的开放度，解释了它“用起来更好”的主观感受；TheArcane 也把速度与错峰定价列为日常主力使用的原因。AmazingTurtle 称让四个模型代理审阅同一份 200 多文件的 C++ 游戏引擎改动做了横向对比，gregwebs 则表示会为写代码回到 DeepSeek，同时继续用 Opus/Sol 做方案与评审。以上均为使用者自述体验，不构成对基准结论的独立验证。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.datalearner.com/ai-models/pretrained-models/deepseek-v4-1-flash-1017\">DeepSeek V4.1 Flash 1017: Benchmarks, Pricing &amp; Update</a></li>\n<li><a href=\"https://llm-stats.com/models/deepseek-v4.1-flash\">DeepSeek-V4.1-Flash Benchmarks, Pricing &amp; Context Window</a></li>\n\n</ul>\n</details>\n\n**标签**: `#DeepSeek`, `#large language models`, `#model release`, `#coding benchmarks`, `#AI industry`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [Pele：将 Mermaid 图表转为可主题化 SVG](https://pele.run/) ⭐️ 7.0/10\n\nPele 是一个开源工具，可把用 Mermaid 语法编写的图表转换为可主题化的 SVG，面向对 Mermaid 默认布局和样式控制不满的开发者。项目页面为 pele.run，源码位于 GitHub 的 obsidianmd/pele 仓库；材料未给出具体版本、完整兼容范围或性能对比。项目强调，流程图中的子图即使连接到子图外节点，也能保留自身方向。\n\nhackernews · dchest · 10月17日 15:55 · [社区讨论](https://news.ycombinator.com/item?id=50132193)\n\n**「背景」** Mermaid 是一套用文本语法生成流程图、时序图等图表的工具，通常由 Mermaid.js 在浏览器或文档平台中渲染。它让图表可以像代码一样纳入版本控制，但自动布局和主题化能力常被开发者认为不够可控。\n\n**「影响」** 需要在文档或产品界面中嵌入图表的开发者，可以直接获得可用主题控制的 SVG 输出；使用 subgraph 的流程图还能避免跨子图连线导致方向被重排。实际采用前应从 GitHub 获取源码，并针对复杂图表验证其与现有 Mermaid.js 渲染结果的差异，因为材料没有说明逐项兼容性。\n\n**「社区讨论」** HN 评论中，lukeify 表示 Mermaid 在比玩具图更复杂的场景下布局晦涩且拓扑质量差，认为样式问题反而次要；Ancapistani 则称仅“子图连接外部节点时仍保留自身方向”这一项就足以让其切换。另有读者一开始找不到源码，确认仓库在 obsidianmd/pele 后建议项目在页面顶部放置 GitHub 链接。\n\n**标签**: `#diagramming`, `#Mermaid`, `#SVG`, `#open source`, `#developer tools`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [Show HN：esp32sim 在浏览器中运行 ESP32 固件](https://github.com/mikroverk/esp32sim) ⭐️ 7.0/10\n\n作者在 Show HN 发布了开源项目 esp32sim，称其可在浏览器中运行 ESP32 固件；演示中没有任何实体 ESP32 参与，固件由模拟器执行。项目目标是让 ESP32 软件更容易实验、测试和模拟，减少对连接硬件的依赖，作者同时询问嵌入式开发者还需要哪些支持才会将其用于开发、测试或 CI。当前信息来自项目自述和演示视频，尚未给出模拟精度、外设覆盖范围或芯片型号兼容性等细节。\n\nhackernews · joakimeriksson · 10月17日 13:51 · [社区讨论](https://news.ycombinator.com/item?id=50131189)\n\n**「已有背景」** 让 ESP32 固件在没有硬件的情况下运行并不是新需求：Wokwi 已在浏览器中提供电路与固件仿真，乐鑫的 QEMU 分支以及 ESP-IDF 的 Linux POSIX 目标则让同一份代码在主机上编译执行（tool-2-1、tool-2-2、tool-2-3）。esp32sim 是这一方向上新的开源实现，作者将它定位为便于实验、测试和 CI 的浏览器内模拟器，并以 Show HN 形式发布，向嵌入式开发者征集反馈。\n\n**「影响」** 对嵌入式开发者而言，直接好处是可以在没有实体开发板的情况下试验和测试 ESP32 固件；但该项目尚未说明支持哪些 ESP32 型号、外设或 CI 接口，实际采用前需要验证目标固件的兼容性。\n\n**「社区讨论」** 评论整体持肯定态度；mrtksn 报告自己用 WebAssembly 在浏览器中运行真实 ESP32 飞控 C 代码做无人机模拟，并能刷写实体板，raminf 则把这类方案与只模拟 BLE、Wi-Fi 或 API 的“功能模拟器”区分开，认为真实固件模拟在 CI/CD 中更有价值。djmips 询问是否有 RP2350 版本，给定内容中没有作者回应。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.cirkitdesigner.com/compare/best-esp32-simulators\">Best ESP32 Simulators in 2026 - Cirkit Designer</a></li>\n<li><a href=\"https://electricalflux.com/mcu-projects/esp-idf-simulator-qemu-linux-wokwi\">ESP-IDF Simulator Guide: QEMU, Linux Target, and Wokwi ...</a></li>\n<li><a href=\"https://www.geeky-gadgets.com/free-esp32-simulators/\">Wokwi vs Circuit Designer: Top Free ESP32 Simulators</a></li>\n\n</ul>\n</details>\n\n**标签**: `#ESP32`, `#emulation`, `#embedded systems`, `#open source tooling`, `#CI testing`\n\n---",
     "summary_markdown_en": "",
     "summary_source": "Horizon daily digest; source URLs are included where available."
+  },
+  "top5": [
+    {
+      "source_index": 7,
+      "title_zh": "Elorian 首个模型 Glimpse：不只“谈论”图像，而是“用图像推理”",
+      "title_en": "Elorian's first model, Glimpse, aims to reason with images, not just about them",
+      "category_zh": "技术突破",
+      "category_en": "Technical Breakthrough",
+      "what_zh": "Elorian 发布首个模型 Glimpse，主打视觉推理；按其自评测，在科学图表推理与短视频描述上优于 GPT-6 Astra，其他视觉推理任务表现相当。",
+      "what_en": "Elorian released its first model, Glimpse, focused on visual reasoning; by its own evaluations it beats GPT-6 Astra on scientific chart reasoning and short-video captioning, with competitive results elsewhere.",
+      "why_zh": "图表与视频理解是文档、科研、内容工具的常见刚需，若有新玩家能在此类任务上追赶头部模型，模型选择会更多元。",
+      "why_en": "Chart and video understanding are common needs in documents, research and content tools; a new entrant matching top models here would widen model choice.",
+      "editor_judgment_zh": "值得关注但需谨慎：关键对比数据来自厂商自评测，尚缺第三方复现，暂不宜当作定论。",
+      "editor_judgment_en": "Worth watching but treat with caution: the key comparisons are vendor-run evaluations without independent replication yet.",
+      "opportunity_risk_zh": "机会：为图表密集场景提供替代模型；风险：自评偏差、基准挑选与泛化能力未知。",
+      "opportunity_risk_en": "Opportunity: an alternative model for chart-heavy workloads. Risk: self-evaluation bias, cherry-picked benchmarks, unknown generalization.",
+      "action_zh": "阅读原文核实评测方法与基准，再用自有图表任务做小样本对比测试。",
+      "action_en": "Read the source to check evaluation methods and benchmarks, then run a small comparison on your own chart tasks.",
+      "scores": {
+        "innovation": 8,
+        "practicality": 6,
+        "feasibility": 5,
+        "impact": 6,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/16/elorians-first-ai-model-wants-to-reason-with-images-not-just-about-them/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-16T16:01:37+00:00",
+      "original_title": "Elorian’s first AI model wants to reason with images, not just about them",
+      "total_score": 30
+    },
+    {
+      "source_index": 4,
+      "title_zh": "Itaú 如何为全部客户构建生成式 AI",
+      "title_en": "How Itaú is building generative AI for its entire customer base",
+      "what_zh": "巴西银行 Itaú 以对话式界面 ia.i 与治理平台 IARA 支撑其“AI First”策略，同时面向客户与员工，处于高度监管的行业。",
+      "what_en": "Brazil's Itaú is backing its AI First strategy with ia.i, a conversational interface, and the IARA governance platform, serving both customers and employees in a heavily regulated sector.",
+      "why_zh": "受监管行业的大规模落地案例较少，客户侧助手与治理平台并行，是可直接借鉴的组织形态。",
+      "why_en": "Large-scale deployments in regulated sectors are rare; pairing a customer-facing assistant with a governance platform is a directly reusable organizational pattern.",
+      "editor_judgment_zh": "属于供应商案例叙事，细节以官方描述为准；价值在于治理与业务并行的结构，而非模型本身。",
+      "editor_judgment_en": "This is a vendor case study; details rest on the official account. Its value is the governance-plus-business structure, not the model itself.",
+      "opportunity_risk_zh": "机会：为金融等合规行业提供治理与体验设计参考；风险：缺少独立效果数据，合规差异可能难以迁移。",
+      "opportunity_risk_en": "Opportunity: a reference for governance and UX design in finance and similar compliance-heavy sectors. Risk: no independent outcome data, and regulatory differences limit transferability.",
+      "action_zh": "阅读原文，梳理 IARA 的治理职责边界，对照自身合规要求做差距核对。",
+      "action_en": "Read the source, map IARA's governance responsibilities, and gap-check them against your own compliance requirements.",
+      "scores": {
+        "innovation": 6,
+        "practicality": 8,
+        "feasibility": 7,
+        "impact": 7,
+        "opportunity": 6
+      },
+      "confidence": "medium",
+      "source_url": "https://openai.com/index/itau-generative-ai",
+      "source": "OpenAI",
+      "published": "2026-10-16T19:00:00+00:00",
+      "original_title": "How Itaú is building generative AI for its entire customer base",
+      "total_score": 34
+    },
+    {
+      "source_index": 5,
+      "title_zh": "印度成为最新报告“失控 AI 代理”活动的国家",
+      "title_en": "India becomes the latest country to report rogue AI agent activity",
+      "what_zh": "代理通过应用配置中暴露的凭证与连接设置、公开代码仓库以及过于宽松的云角色进入系统。",
+      "what_en": "The agents got in through credentials and connection settings exposed in app configurations, public code repositories, and overly permissive cloud roles.",
+      "why_zh": "问题根源是凭证与权限卫生，而非模型能力；随代理自主性上升，这类基础安全缺口会被放大。",
+      "why_en": "The root cause is credential and permission hygiene, not model capability; as agents gain autonomy, these basic gaps get amplified.",
+      "editor_judgment_zh": "这条提示的是“代理安全债”：多国相继报告，说明不是孤立事件，基础配置治理优先级应上调。",
+      "editor_judgment_en": "This points to agent security debt: multiple countries reporting similar activity suggests it is not isolated, so basic configuration governance should be prioritized.",
+      "opportunity_risk_zh": "机会：代理权限审计与最小权限工具需求上升；风险：泄露凭证与公开仓库导致自动化滥用与数据外泄。",
+      "opportunity_risk_en": "Opportunity: rising demand for agent permission audits and least-privilege tooling. Risk: leaked credentials and public repos enabling automated abuse and data exposure.",
+      "action_zh": "排查代理所用凭证、公开仓库与云角色权限，收紧为最小权限并轮换已暴露密钥。",
+      "action_en": "Audit agent credentials, public repos and cloud role permissions; tighten to least privilege and rotate any exposed keys.",
+      "scores": {
+        "innovation": 4,
+        "practicality": 7,
+        "feasibility": 7,
+        "impact": 7,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-16T17:52:24+00:00",
+      "original_title": "India becomes the latest country to report rogue AI agent activity",
+      "total_score": 30
+    },
+    {
+      "source_index": 2,
+      "title_zh": "Replit 将 OpenAI 设为默认模型，取代 Anthropic",
+      "title_en": "Replit makes OpenAI its default over Anthropic, CEO says",
+      "what_zh": "CEO Masad 澄清 OpenAI 将取代 Anthropic 成为默认模型供应商，Claude 仍对平台客户开放。",
+      "what_en": "CEO Masad clarified that OpenAI would replace Anthropic as its default model provider, while Claude remains available to platform customers.",
+      "why_zh": "头部开发平台切换默认供应商，反映多模型并存下的成本、性能与商业条款权衡，会影响开发者默认体验。",
+      "why_en": "A leading dev platform switching default providers shows the cost, performance and commercial trade-offs behind multi-model stacks, and shapes developers' default experience.",
+      "editor_judgment_zh": "信号明确但细节有限：标题与正文口径（是否“停止合作”）存在张力，应以 CEO 澄清为准。",
+      "editor_judgment_en": "A clear signal with limited detail: the headline and the CEO's clarification are in tension, so the clarification should govern.",
+      "opportunity_risk_zh": "机会：多供应商方案与迁移工具价值提升；风险：默认模型变动带来行为、成本与合规差异。",
+      "opportunity_risk_en": "Opportunity: more value in multi-provider setups and migration tooling. Risk: default switches bring behavior, cost and compliance differences.",
+      "action_zh": "若在用相关平台，先核实当前默认模型，并保留可切换的模型抽象层。",
+      "action_en": "If you use the platform, verify the current default model and keep a swappable model abstraction layer.",
+      "scores": {
+        "innovation": 4,
+        "practicality": 6,
+        "feasibility": 8,
+        "impact": 6,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/17/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-17T18:48:08+00:00",
+      "original_title": "Replit makes OpenAI its default over Anthropic, CEO says",
+      "total_score": 29
+    },
+    {
+      "source_index": 1,
+      "title_zh": "Anthropic 称其团队更资深化，会议时间变多",
+      "title_en": "Anthropic says its workforce has become less junior and is spending more time in meetings",
+      "what_zh": "Anthropic 表示过去一年员工构成与工作内容发生明显变化：初级岗位占比下降，花在会议上的时间更多。",
+      "what_en": "Anthropic says the composition of its workforce and the type of work getting done have changed significantly over the past year.",
+      "why_zh": "AI 公司自身的岗位结构是观察“AI 如何重塑工作”的一手样本，可作为团队编制与人才培养的参考。",
+      "why_en": "An AI company's own staffing mix is a first-hand sample of how AI reshapes work, useful for headcount and talent planning.",
+      "editor_judgment_zh": "仅一家公司的自述，不宜外推为行业规律；但“更资深 + 更多会议”的组合值得持续跟踪。",
+      "editor_judgment_en": "A single company's account; do not generalize it into an industry law. Still, the 'more senior + more meetings' pattern is worth tracking.",
+      "opportunity_risk_zh": "机会：资深人才与协作流程的价值上升；风险：初级岗位入口收窄，长期人才梯队可能断层。",
+      "opportunity_risk_en": "Opportunity: rising value of senior talent and coordination processes. Risk: narrowing entry-level roles could break the long-term talent pipeline.",
+      "action_zh": "阅读原文了解其口径与数据范围，再对照自身团队的岗位结构变化。",
+      "action_en": "Read the source for its scope and data, then compare with role-mix changes in your own team.",
+      "scores": {
+        "innovation": 5,
+        "practicality": 5,
+        "feasibility": 6,
+        "impact": 6,
+        "opportunity": 4
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/17/anthropic-says-its-workforce-has-become-less-junior-and-is-spending-more-time-in-meetings/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-17T20:21:19+00:00",
+      "original_title": "Anthropic says its workforce has become less junior and is spending more time in meetings",
+      "total_score": 26
+    }
+  ],
+  "editorial": {
+    "core_zh": "本期主线不是模型榜单，而是落地：企业级案例、代理安全债、平台默认供应商切换与团队结构变化，共同说明竞争重心正转向部署与治理。",
+    "core_en": "The throughline this issue is deployment, not leaderboard scores: an enterprise case study, agent security debt, a default-provider switch and shifting team structure all point to a shift toward deployment and governance.",
+    "trend_zh": "代理自主性提升速度快于权限与凭证治理；同时多模型并存让默认供应商成为可频繁变动的商业变量。",
+    "trend_en": "Agent autonomy is outpacing credential and permission governance, while multi-model stacks make default providers a frequently shifting commercial variable.",
+    "next_question_zh": "当代理开始自主行动，谁会先建立可审计的权限与凭证标准——云厂商、模型厂商，还是监管机构？",
+    "next_question_en": "As agents start acting autonomously, who will set auditable permission and credential standards first: cloud providers, model vendors, or regulators?"
   },
   "localization": {
     "status": "partial",
@@ -318,75 +470,7 @@
     ],
     "translated_news": 0,
     "translated_skills": 0,
-    "top5_count": 0,
+    "top5_count": 5,
     "provider": "DeepSeek"
-  },
-  "top5": [
-    {
-      "title_zh": "Replit is no longer working with Anthropic, CEO says",
-      "title_en": "Replit is no longer working with Anthropic, CEO says",
-      "what_zh": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
-      "what_en": "Masad said the decision was made for a number of different reasons, including cost. Replit announced a partnership with OpenAI in August, but there was never any indication that it was no longer with Anthropic.",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/2026/10/16/replit-is-no-longer-working-with-anthropic-ceo-says/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T21:22:28+00:00",
-      "original_title": "Replit is no longer working with Anthropic, CEO says",
-      "fallback": true
-    },
-    {
-      "title_zh": "How Itaú is building generative AI for its entire customer base",
-      "title_en": "How Itaú is building generative AI for its entire customer base",
-      "what_zh": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
-      "what_en": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://openai.com/index/itau-generative-ai",
-      "source": "OpenAI",
-      "published": "2026-10-16T19:00:00+00:00",
-      "original_title": "How Itaú is building generative AI for its entire customer base",
-      "fallback": true
-    },
-    {
-      "title_zh": "India becomes the latest country to report rogue AI agent activity",
-      "title_en": "India becomes the latest country to report rogue AI agent activity",
-      "what_zh": "The agents got in through credentials and connection settings left exposed in app configurations, public code repositories, and overly permissive cloud roles.",
-      "what_en": "The agents got in through credentials and connection settings left exposed in app configurations, public code repositories, and overly permissive cloud roles.",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T17:52:24+00:00",
-      "original_title": "India becomes the latest country to report rogue AI agent activity",
-      "fallback": true
-    },
-    {
-      "title_zh": "Physical AI is more than robots, says the Nvidia veteran now investing in it",
-      "title_en": "Physical AI is more than robots, says the Nvidia veteran now investing in it",
-      "what_zh": "Amulya Vishwanath, who spent seven years leading product marketing for NVIDIA’s robotics platforms, says robotics is currently in its “Lego era,” with the basic building blocks like actuators, robotic hands, software, and safety standards still being&#160;rebuilt.&#160; This view runs counter to those who believe that robotics, powered by a general foundatio",
-      "what_en": "Amulya Vishwanath, who spent seven years leading product marketing for NVIDIA’s robotics platforms, says robotics is currently in its “Lego era,” with the basic building blocks like actuators, robotic hands, software, and safety standards still being&#160;rebuilt.&#160; This view runs counter to those who believe that robotics, powered by a general foundatio",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/podcast/physical-ai-is-more-than-robots-says-the-nvidia-veteran-now-investing-in-it/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T16:30:00+00:00",
-      "original_title": "Physical AI is more than robots, says the Nvidia veteran now investing in it",
-      "fallback": true
-    },
-    {
-      "title_zh": "Elorian’s first AI model wants to reason with images, not just about them",
-      "title_en": "Elorian’s first AI model wants to reason with images, not just about them",
-      "what_zh": "According to Elorian's evaluations, Glimpse outperforms even GPT-6 Astra on scientific chart reasoning and short-form video captioning, with competitive results on other visual reasoning tasks.",
-      "what_en": "According to Elorian's evaluations, Glimpse outperforms even GPT-6 Astra on scientific chart reasoning and short-form video captioning, with competitive results on other visual reasoning tasks.",
-      "why_zh": "",
-      "why_en": "",
-      "source_url": "https://techcrunch.com/2026/10/16/elorians-first-ai-model-wants-to-reason-with-images-not-just-about-them/",
-      "source": "TechCrunch AI",
-      "published": "2026-10-16T16:01:37+00:00",
-      "original_title": "Elorian’s first AI model wants to reason with images, not just about them",
-      "fallback": true
-    }
-  ],
-  "top5_status": "source_fallback"
+  }
 }
