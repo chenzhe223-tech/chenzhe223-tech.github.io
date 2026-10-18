@@ -2,7 +2,7 @@
 
 ## Current status
 
-The public subscription page and Worker source are prepared, but the subscription service is **not live until deployment/configuration is completed**. The GitHub Pages site is static; a separate Cloudflare Worker + D1 database is required. Cloudflare API creation was attempted but returned authentication error 10000, so no database or Worker was created by that attempt.
+The Cloudflare D1 database and Worker are now deployed, and the cron trigger is configured. The subscription service is **not production-ready yet**: the Brevo `BREVO_API_KEY` secret is not configured, the public health endpoint has not been externally verified in this run, and end-to-end email tests remain pending. The GitHub Pages subscription page change is still on feature branch `feature/ai-news-subscription` and must not be treated as published until the PR is reviewed and merged.
 
 ## Architecture
 
@@ -43,4 +43,4 @@ Set the actual Worker URL in `radar/subscribe/index.html` by replacing the place
 
 ## Important limitation
 
-This first implementation deliberately does not send if the report lacks exactly five curated stories or fails source checks. The current daily JSON has reported five top stories and 6/7 sources in the latest observed data, but each edition is rechecked at send time. Interest matching currently filters the five curated stories by keyword; it is not yet a separate AI-generated per-subscriber report. Never advertise the feature as live until backend deployment and end-to-end tests pass.
+This first implementation deliberately does not send if the report lacks exactly five curated stories or fails source checks. The latest observed JSON (2026-10-17) uses `top5_status: source_fallback`, with all five stories marked `fallback: true`; the Worker quality gate explicitly blocks this edition. Each edition is rechecked at send time. Interest matching currently filters the five curated stories by keyword; it is not yet a separate AI-generated per-subscriber report. Never advertise the feature as live until backend deployment and end-to-end tests pass.
