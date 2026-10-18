@@ -31,11 +31,11 @@ jobs:
           schema = Path('radar/subscription/schema.sql').read_text()
           assert 'DAVY' in page and '07:30' in page, 'missing brand or daily delivery time'
           assert 'name="interests"' in page and 'type="email"' in page
-          assert 'YOUR-SUBDOMAIN' in page, 'placeholder must remain until Worker is deployed'
+          assert 'https://davy-radar-subscriptions.chenzhe223.workers.dev' in page, 'deployed Worker endpoint must be configured'
           assert 'double opt-in' in Path('radar/subscription/README.md').read_text().lower()
           for endpoint in ['/api/subscribe','/confirm','/unsubscribe','/health']:
               assert endpoint in worker, f'missing endpoint: {endpoint}'
-          for guard in ['qualityCheck(report)','last_sent_date','confirmation_token_hash','unsubscribe_token_hash']:
+          for guard in ['qualityCheck(report)','source_fallback','fallback===true','last_sent_date','confirmation_token_hash','unsubscribe_token_hash']:
               assert guard in worker, f'missing safety guard: {guard}'
           assert 'CREATE TABLE IF NOT EXISTS subscribers' in schema
           assert 'CREATE TABLE IF NOT EXISTS send_log' in schema
