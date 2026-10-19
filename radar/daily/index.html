@@ -498,8 +498,10 @@ function applyDailyHeroTheme(date){
   {left:"rgba(255,247,235,.97)",mid:"rgba(255,226,214,.82)",right:"rgba(222,220,255,.16)",a:"#e76c7c",b:"#625de8"},
   {left:"rgba(255,249,236,.97)",mid:"rgba(255,237,219,.82)",right:"rgba(220,236,230,.16)",a:"#dc8250",b:"#4d83df"}
  ];
- const key=String(date||new Date().toISOString().slice(0,10)).replace(/\D/g,"");
- const slot=Number(key||0)%photos.length;
+ const key=String(date||new Date().toISOString().slice(0,10));
+ const parsedDate=new Date(key+"T00:00:00Z");
+ const dayIndex=Number.isFinite(parsedDate.getTime())?Math.floor(parsedDate.getTime()/86400000):Math.floor(Date.now()/86400000);
+ const slot=((dayIndex%photos.length)+photos.length)%photos.length;
  const theme=themes[slot];
  root.style.setProperty("--hero-photo",'url("https://images.unsplash.com/'+photos[slot]+'?auto=format&fit=crop&w=1800&q=85")');
  root.style.setProperty("--hero-wash-left",theme.left);
