@@ -94,6 +94,43 @@ jobs:
           exit 1
       - name: Test daily briefing on desktop and mobile
         run: node scripts/qa-radar.cjs
+      - name: Commit refreshed report and daily archive
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add radar/data/latest.json radar/data/history.json radar/data/archive/
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(radar): refresh daily AI brief'
+            git push origin HEAD:main
+          else
+            echo 'No report data changes to commit.'
+          fi
+      - name: Upload daily briefing screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-daily-brief-qa
+          path: test-results/radar/
+          if-no-files-found: warn
+          retention-days: 14
+
+  build:
+    runs-on: ubuntu-latest
+    needs: qa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+  deploy:
+    environment:
+      name: github-pages
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/deploy-pages@v4
       - name: Verify live daily brief after deployment
         shell: bash
         run: |
@@ -126,29 +163,3 @@ jobs:
           else:
               raise SystemExit('Post-deploy verification failed: ' + last_error)
           PY
-      - name: Upload daily briefing screenshots and report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ai-daily-brief-qa
-          path: test-results/radar/
-          if-no-files-found: warn
-          retention-days: 14
-
-  build:
-    runs-on: ubuntu-latest
-    needs: qa
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-  deploy:
-    environment:
-      name: github-pages
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/deploy-pages@v4
