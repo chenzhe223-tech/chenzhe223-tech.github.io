@@ -367,14 +367,21 @@ function renderTop5(items){
  const root=$("top5List");if(!root)return;
  const data=(items||[]).slice(0,5);
  const dims=[["innovation","dimInnovation"],["practicality","dimPracticality"],["feasibility","dimFeasibility"],["impact","dimImpact"],["opportunity","dimOpportunity"]];
- const visuals=["https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80","https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=80"];
+ const visuals=[
+  {terms:/robot|agent|智能体|机器人|automation|自动化/i,url:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80"},
+  {terms:/model|gpt|claude|gemini|llm|模型|大模型|deepseek/i,url:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80"},
+  {terms:/phone|mobile|app|手机|应用|产品/i,url:"https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=80"},
+  {terms:/business|company|market|商业|企业|行业|投资/i,url:"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80"},
+  {terms:/image|video|design|creative|图像|视频|设计|创作|生成/i,url:"https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=80"}
+];
+const storyImage=(x,i)=>{const title=[x.title_zh,x.title_en,x.original_title,x.title].filter(Boolean).join(" ");const match=visuals.find(v=>v.terms.test(title));return (match||visuals[i%visuals.length]).url};
  if(data.length<5||data.some(x=>x.fallback||!x.scores||!x.source_url)){
    const fallback=(reportData?.news||[]).slice(0,5);
    if(!fallback.length){root.innerHTML='<div class="empty">'+esc(t("top5Empty"))+'</div>';return}
    root.innerHTML=fallback.map((x,i)=>{
      const title=currentLang==="en"?(x.title_en||x.title):(x.title_zh||x.title);
      const summary=currentLang==="en"?(x.why_it_matters_en||x.summary_en||x.summary):(x.why_it_matters_zh||x.summary_zh||x.summary);
-     return '<article class="top5-card"><div class="story-image"><img src="'+visuals[i]+'" alt="" loading="lazy"></div><div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(currentLang==="en"?"SOURCE STORY · AI EDITORIAL UNAVAILABLE":"新闻线索 · AI 精选暂不可用")+'</div><h3>'+esc(title||"Untitled story")+'</h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span>'+esc(x.source||t("source"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
+     return '<article class="top5-card"><div class="story-image"><img src="'+storyImage(x,i)+'" alt="" loading="lazy"></div><div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(currentLang==="en"?"SOURCE STORY · AI EDITORIAL UNAVAILABLE":"新闻线索 · AI 精选暂不可用")+'</div><h3>'+esc(title||"Untitled story")+'</h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span>'+esc(x.source||t("source"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
    }).join("");
    return;
  }
