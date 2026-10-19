@@ -94,7 +94,8 @@ jobs:
           manifest=json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
           image=cv2.imread(manifest['poster'])
           if image is None: raise SystemExit('Poster PNG cannot be opened')
-          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(image)
+          qr_crop = image[1600:1790, 25:220]
+          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(qr_crop)
           if decoded != manifest['qr_url']: raise SystemExit(f'QR mismatch: {decoded!r} != {manifest[\"qr_url\"]!r}')
           print(f'PASS: poster image and QR verified: {decoded}')
           PY
