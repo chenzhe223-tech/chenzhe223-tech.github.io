@@ -35,18 +35,27 @@ jobs:
           python-version: "3.12"
       - name: Refresh today's AI news and Skill shortlist
         run: python radar/scripts/build_daily.py
-      - name: Run optional Horizon enrichment
+      - name: Run optional Horizon enrichment (bounded, non-blocking)
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         shell: bash
         run: |
-          if [ ! -d /tmp/Horizon ]; then
-            git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon
+          # Horizon enriches the report, but must never block the validated RSS/GitHub baseline.
+          if [ ! -f /tmp/Horizon/src/main.py ]; then
+            if ! timeout 45s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
+              echo "::warning::Horizon clone unavailable or timed out; publishing will continue with source-backed baseline data."
+              exit 0
+            fi
           fi
           if [ -f /tmp/Horizon/requirements.txt ]; then
-            python -m pip install -r /tmp/Horizon/requirements.txt
+            if ! timeout 90s python -m pip install -r /tmp/Horizon/requirements.txt; then
+              echo "::warning::Horizon dependency installation failed or timed out; publishing will continue with source-backed baseline data."
+              exit 0
+            fi
           fi
-          python radar/scripts/run_horizon.py
+          if ! timeout 240s python radar/scripts/run_horizon.py; then
+            echo "::warning::Horizon/AI enrichment failed or exceeded 240 seconds; publishing will continue only if subsequent date, source, poster, QR and browser QA checks pass."
+          fi
       - name: Validate today's date, fresh news and data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py
