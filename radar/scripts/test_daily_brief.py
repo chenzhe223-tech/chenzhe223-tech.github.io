@@ -1,6 +1,8 @@
+import datetime as dt
 import json
 import unittest
 from pathlib import Path
+from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items
 
 class DailyBriefContractTests(unittest.TestCase):
     def test_latest_data_has_enough_source_stories(self):
@@ -12,6 +14,10 @@ class DailyBriefContractTests(unittest.TestCase):
         stories=data.get("china_ai_news", [])
         self.assertIsInstance(stories, list)
         self.assertGreaterEqual(data.get("china_sources_total", 0), 1)
+        self.assertGreaterEqual(len(stories), CHINA_NEWS_MIN, "The China AI module must publish at least six source-backed stories")
+        now = dt.datetime.now(dt.timezone.utc)
+        cutoff = now - dt.timedelta(days=7)
+        fresh_count = 0
         seen=set()
         for story in stories:
             self.assertTrue(story.get("url", "").startswith("https://"))
@@ -19,9 +25,54 @@ class DailyBriefContractTests(unittest.TestCase):
             self.assertTrue(story.get("source"))
             self.assertTrue(story.get("category"))
             self.assertTrue(story.get("published"))
+            published = dt.datetime.fromisoformat(story["published"].replace("Z", "+00:00"))
+            if published.tzinfo is None:
+                published = published.replace(tzinfo=dt.timezone.utc)
+            self.assertGreaterEqual(published, cutoff, f"China AI story is older than seven days: {story.get('title')}")
+            self.assertLessEqual(published, now + dt.timedelta(hours=6))
+            fresh_count += 1
             self.assertEqual(story.get("region"), "China")
             self.assertNotIn(story["url"], seen)
             seen.add(story["url"])
+        self.assertGreaterEqual(fresh_count, CHINA_NEWS_MIN)
+
+    def test_china_news_ranking_uses_multiple_publishers_before_relaxing_caps(self):
+        base = dt.datetime.now(dt.timezone.utc)
+        candidates = []
+        publishers = [
+            ("量子位", "qbitai.com", 4),
+            ("36氪", "36kr.com", 3),
+            ("雷峰网", "leiphone.com", 3),
+            ("极客公园", "geekpark.net", 2),
+        ]
+        index = 0
+        for source, domain, count in publishers:
+            for _ in range(count):
+                stamp = (base - dt.timedelta(minutes=index)).isoformat()
+                candidates.append({
+                    "title": f"中国 AI 产业新闻样例 {index}",
+                    "url": f"https://{domain}/news/{index}",
+                    "source": source,
+                    "published": stamp,
+                })
+                index += 1
+        selected = rank_diverse_china_items(candidates)
+        self.assertGreaterEqual(len(selected), CHINA_NEWS_MIN)
+        self.assertLessEqual(len(selected), 10)
+        per_domain = {}
+        for story in selected:
+            domain = story["url"].split("/")[2]
+            per_domain[domain] = per_domain.get(domain, 0) + 1
+        self.assertLessEqual(max(per_domain.values()), 2, "The initial source mix should cap each publisher at two stories")
+
+    def test_china_news_ranking_deduplicates_identical_titles_across_sources(self):
+        now = dt.datetime.now(dt.timezone.utc).isoformat()
+        candidates = [
+            {"title": "同一条中国 AI 新闻", "url": "https://qbitai.com/news/1", "source": "量子位", "published": now},
+            {"title": "同一条中国 AI 新闻", "url": "https://36kr.com/news/2", "source": "36氪", "published": now},
+            {"title": "另一条中国 AI 新闻", "url": "https://36kr.com/news/3", "source": "36氪", "published": now},
+        ]
+        self.assertEqual(len(rank_diverse_china_items(candidates)), 2)
 
     def test_top5_is_source_backed_when_present(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))

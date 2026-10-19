@@ -27,3 +27,8 @@ The workflow logs show whether Horizon completed and whether the Chinese summary
 ## News Image Match Skill
 
 The daily build runs radar/scripts/news_image_match.py after Horizon selection and before publication. It prefers RSS/article editorial images, then searches Openverse and Wikimedia Commons. The per-story image_match_status, image landing page, creator and license details are retained. Unmatched stories use a neutral placeholder instead of a random stock photo. Skill rules: radar/skills/news-image-match/SKILL.md.
+
+
+## China AI coverage floor
+
+The China AI module targets 8 stories and publishes up to 10, with a hard minimum of 6. Collection uses multiple Chinese technology news feeds (QbitAI, 机器之心, 极客公园, 36氪, 雷峰网 AI/robotics/chips, 爱范儿 and AI圈报), filters for China-related AI entities and seven-day timestamps, deduplicates identical headlines/URLs, and limits any single publisher to two stories before relaxing the cap. Both daily publishing workflows block publication if fewer than six fresh, source-linked stories are available; they never fill gaps with invented stories or stale items.

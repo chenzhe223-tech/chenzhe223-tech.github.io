@@ -55,6 +55,11 @@ jobs:
       - name: Match story-specific images (free sources first)
         run: python radar/scripts/news_image_match.py
 
+      - name: Enforce China AI minimum and data contract
+        run: |
+          python -m py_compile radar/scripts/build_daily.py
+          python -m unittest radar.scripts.test_daily_brief
+
       - name: Commit daily data
         run: |
           git config user.name "github-actions[bot]"

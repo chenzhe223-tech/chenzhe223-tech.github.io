@@ -31,20 +31,37 @@ FEEDS = [
 ]
 # Chinese-language sources for a separately curated China AI development stream.
 CHINA_FEEDS = [
+    # Core Chinese AI media
     ("量子位", "https://www.qbitai.com/feed"),
     ("机器之心", "https://www.jiqizhixin.com/rss"),
     ("极客公园", "https://www.geekpark.net/rss"),
+    # Additional independent publishers to reduce one-source concentration
+    ("36氪", "https://36kr.com/feed"),
+    ("雷峰网·人工智能", "https://www.leiphone.com/feed/categoryRss/name/ai"),
+    ("雷峰网·机器人", "https://www.leiphone.com/feed/categoryRss/name/robot"),
+    ("雷峰网·芯片", "https://www.leiphone.com/feed/categoryRss/name/chips"),
+    ("爱范儿", "https://www.ifanr.com/feed"),
+    # Curated Chinese AI feed used as a supplementary discovery source
+    ("AI圈报", "https://chenqiyuan.cn/rss.xml"),
 ]
+CHINA_NEWS_MIN = 6
+CHINA_NEWS_TARGET = 8
+CHINA_NEWS_MAX = 10
+CHINA_NEWS_WINDOW_DAYS = 7
+
 CHINA_AI_TERMS = re.compile(
-    r"(人工智能|生成式|大模型|智能体|AI|LLM|模型|机器人|具身智能|算力|芯片|智驾|"
-    r"DeepSeek|Qwen|Kimi|GLM|MiniMax|AI应用|AI产品)", re.I
+    r"(人工智能|生成式|大模型|大语言模型|智能体|AI|LLM|模型|机器人|具身智能|算力|芯片|智驾|"
+    r"DeepSeek|Qwen|Kimi|GLM|MiniMax|AIGC|多模态|世界模型|AI应用|AI产品|AI手机|AI眼镜|AI PC)", re.I
 )
 CHINA_ENTITY_TERMS = re.compile(
-    r"(中国|国内|国产|DeepSeek|深度求索|通义|千问|Qwen|阿里云|腾讯混元|混元|豆包|"
+    r"(中国|国内|国产|本土|DeepSeek|深度求索|通义|千问|Qwen|阿里云|阿里巴巴|腾讯混元|混元|豆包|"
     r"字节跳动|火山引擎|智谱|GLM|Kimi|月之暗面|MiniMax|稀宇|阶跃星辰|StepFun|"
     r"百川智能|百度文心|文心一言|昆仑芯|华为盘古|昇腾|寒武纪|沐曦|摩尔线程|壁仞|"
     r"天数智芯|讯飞星火|科大讯飞|智源研究院|中国人工智能|国产大模型|中国大模型|"
-    r"国产芯片|清华|北大|中科院|商汤|燧原|元宝|元器|人形机器人|智驾)",
+    r"国产芯片|清华|北大|中科院|商汤|燧原|元宝|元器|人形机器人|智驾|小米|荣耀|联想|"
+    r"OPPO|vivo|蚂蚁集团|面壁智能|生数科技|零一万物|硅基流动|云知声|银河通用|"
+    r"智平方|星动纪元|宇树科技|傅利叶|松延动力|智元机器人|追觅|"
+    r"中国团队|中国研究员|中国科学家|中国企业|国产AI)",
     re.I
 )
 AI_TERMS = re.compile(r"\b(ai|artificial intelligence|llm|large language model|agent|agents|skill|model|openai|anthropic|claude|gpt|gemini|deepseek|hugging face|machine learning|生成式|人工智能|大模型|智能体|开源模型)\b", re.I)
@@ -170,9 +187,9 @@ def parse_feed(source: str, url: str, timeout: int = 18) -> list[dict]:
 
 def classify_china_topic(text: str) -> str:
     value = text.lower()
-    if re.search(r"(芯片|算力|昇腾|寒武纪|摩尔线程|沐曦|昆仑芯|数据中心)", value, re.I):
+    if re.search(r"(芯片|算力|昇腾|寒武纪|摩尔线程|沐曦|昆仑芯|数据中心|GPU|光模块)", value, re.I):
         return "芯片与算力"
-    if re.search(r"(机器人|具身智能|人形|智驾|自动驾驶|智能汽车)", value, re.I):
+    if re.search(r"(机器人|具身智能|人形|智驾|自动驾驶|智能汽车|智能眼镜|AI手机|智能终端)", value, re.I):
         return "具身智能与智能终端"
     if re.search(r"(发布|开源|模型|推理|多模态|训练|参数|基准|benchmark)", value, re.I):
         return "模型与技术进展"
@@ -180,11 +197,63 @@ def classify_china_topic(text: str) -> str:
         return "产品与产业应用"
     return "产业与生态"
 
+def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
+    """Deduplicate source-backed stories and prefer source diversity before relaxing caps."""
+    unique: list[dict] = []
+    seen_urls: set[str] = set()
+    seen_titles: set[str] = set()
+    for item in candidates:
+        raw_url = str(item.get("url") or "")
+        url = raw_url.split("#", 1)[0].rstrip("/")
+        title_key = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", str(item.get("title") or "").lower())
+        if not url or url in seen_urls or (title_key and title_key in seen_titles):
+            continue
+        item = {**item, "url": url}
+        unique.append(item)
+        seen_urls.add(url)
+        if title_key:
+            seen_titles.add(title_key)
+
+    ranked = sorted(unique, key=lambda x: x.get("published", ""), reverse=True)
+    if not ranked:
+        return []
+
+    def publisher_key(item: dict) -> str:
+        host = (urllib.parse.urlparse(str(item.get("url") or "")).hostname or "").lower()
+        host = host.removeprefix("www.")
+        return host or str(item.get("source") or "unknown")
+
+    selected: list[dict] = []
+    selected_urls: set[str] = set()
+    # Aim for eight stories, with at most two per publisher initially. Relax to three,
+    # then fill from all verified candidates only if the source mix is too small.
+    for cap in (2, 3, len(ranked)):
+        counts: dict[str, int] = {}
+        for item in selected:
+            key = publisher_key(item)
+            counts[key] = counts.get(key, 0) + 1
+        for item in ranked:
+            url = item["url"]
+            if url in selected_urls:
+                continue
+            publisher = publisher_key(item)
+            if counts.get(publisher, 0) >= cap:
+                continue
+            selected.append(item)
+            selected_urls.add(url)
+            counts[publisher] = counts.get(publisher, 0) + 1
+            if len(selected) >= CHINA_NEWS_TARGET or len(selected) >= CHINA_NEWS_MAX:
+                break
+        if len(selected) >= CHINA_NEWS_TARGET or len(selected) >= CHINA_NEWS_MAX:
+            break
+    return selected[:CHINA_NEWS_MAX]
+
+
 def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
     """Collect recent, source-linked China AI developments; do not synthesize missing stories."""
     candidates: list[dict] = []
     sources_ok = 0
-    cutoff = now.astimezone(dt.timezone.utc) - dt.timedelta(days=7)
+    cutoff = now.astimezone(dt.timezone.utc) - dt.timedelta(days=CHINA_NEWS_WINDOW_DAYS)
     for source, url in CHINA_FEEDS:
         items = parse_feed(source, url, timeout=12)
         if items:
@@ -212,15 +281,13 @@ def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
             item["region"] = "China"
             candidates.append(item)
 
-    unique: dict[str, dict] = {}
-    for item in candidates:
-        url = item["url"].split("#", 1)[0].rstrip("/")
-        title_key = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", item["title"].lower())
-        key = url or title_key
-        if key and key not in unique:
-            unique[key] = item
-    ranked = sorted(unique.values(), key=lambda x: x.get("published", ""), reverse=True)
-    return ranked[:8], sources_ok
+    ranked = rank_diverse_china_items(candidates)
+    if len(ranked) < CHINA_NEWS_MIN:
+        print(
+            f"[china-warning] Only {len(ranked)} verified China AI stories found; "
+            f"minimum required is {CHINA_NEWS_MIN}. Add or restore sources rather than inventing stories."
+        )
+    return ranked, sources_ok
 
 def github_search(query: str) -> list[dict]:
     url = "https://api.github.com/search/repositories?" + urllib.parse.urlencode({
@@ -352,7 +419,10 @@ def main() -> None:
         "skills": skills,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
-            "china_ai_news_sources": "QbitAI, 36Kr and GeekPark public RSS; filtered for China-related AI entities and timestamps within seven days",
+            "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr and AIquanbao public RSS; filtered for China-related AI entities and timestamps within seven days",
+            "china_ai_news_minimum": CHINA_NEWS_MIN,
+            "china_ai_news_target": CHINA_NEWS_TARGET,
+            "china_ai_news_window_days": CHINA_NEWS_WINDOW_DAYS,
             "skill_ranking": "public GitHub repository stars with a modest freshness adjustment; not install counts",
         },
     }
@@ -364,7 +434,7 @@ def main() -> None:
     archive_file.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     history = sorted((p.name for p in ARCHIVE.glob("*.json")), reverse=True)[:30]
     (DATA / "history.json").write_text(json.dumps({"days": history}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Built Davy Radar: {len(recent[:20])} global news, {len(china_ai_news)} China AI news, {len(skills)} skills; feeds {source_success}/{len(FEEDS)} global, {china_sources_ok}/{len(CHINA_FEEDS)} China")
+    print(f"Built Davy Radar: {len(recent[:20])} global news, {len(china_ai_news)} China AI news (minimum {CHINA_NEWS_MIN}, target {CHINA_NEWS_TARGET}), {len(skills)} skills; feeds {source_success}/{len(FEEDS)} global, {china_sources_ok}/{len(CHINA_FEEDS)} China")
 
 if __name__ == "__main__":
     main()

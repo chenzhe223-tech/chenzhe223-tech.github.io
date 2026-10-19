@@ -27,10 +27,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Refresh source-backed report for contract tests
+        run: python radar/scripts/build_daily.py
       - name: Validate daily brief data contract
         run: |
-          python -m py_compile radar/scripts/run_horizon.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py
           python -m unittest radar.scripts.test_daily_brief
+          python -m unittest radar.scripts.test_news_image_match -v
       - name: Install Playwright
         run: |
           npm init -y

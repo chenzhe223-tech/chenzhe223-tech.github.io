@@ -75,7 +75,28 @@ jobs:
           news = d.get('news', [])
           if len(news) < 5 or int(d.get('sources_ok', 0)) < 1:
               raise SystemExit(f"Insufficient source data: news={len(news)} sources_ok={d.get('sources_ok')}")
+          china = d.get('china_ai_news', [])
+          if len(china) < 6:
+              raise SystemExit(f"Insufficient China AI data: found {len(china)} source-backed stories, minimum required is 6; refusing to publish a short module")
           now = dt.datetime.now(dt.timezone.utc)
+          china_cutoff = now - dt.timedelta(days=7)
+          fresh_china = []
+          seen_china_urls = set()
+          for item in china:
+              if not item.get('title') or not item.get('source') or not item.get('url', '').startswith('https://'):
+                  continue
+              url = item['url'].split('#', 1)[0].rstrip('/')
+              if url in seen_china_urls:
+                  continue
+              try:
+                  published = dt.datetime.fromisoformat(item.get('published', '').replace('Z', '+00:00'))
+                  if published.tzinfo is None: published = published.replace(tzinfo=dt.timezone.utc)
+                  if china_cutoff <= published <= now + dt.timedelta(hours=6):
+                      fresh_china.append(item)
+                      seen_china_urls.add(url)
+              except Exception: pass
+          if len(fresh_china) < 6:
+              raise SystemExit(f"Insufficient fresh China AI stories: {len(fresh_china)}; need at least 6 published within seven days")
           fresh = []
           for item in news:
               try:
@@ -92,7 +113,7 @@ jobs:
           archive.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           history = sorted([x.name for x in Path('radar/data/archive').glob('*.json')], reverse=True)[:30]
           Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-          print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; sources={d.get('sources_ok')}/{d.get('sources_total')}")
+          print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; China AI={len(fresh_china)} (minimum 6); sources={d.get('sources_ok')}/{d.get('sources_total')}")
           PY
       - name: Generate daily infographic poster
         run: |
