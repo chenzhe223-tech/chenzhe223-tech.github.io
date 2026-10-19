@@ -136,7 +136,48 @@ def collect_skills() -> list[dict]:
         # Star count is the strongest public proxy; freshness modestly breaks ties.
         return item["stars"] + max(0, 180 - days) * 0.6
     ranked = sorted(repos.values(), key=score, reverse=True)
-    return ranked[:10]
+    if ranked:
+        return ranked[:10]
+
+    # Search API can be rate-limited independently of the repository API. Fall
+    # back to a small curated list and query each repo's live metadata directly.
+    print("[skill-warning] Repository search returned no results; trying curated repository metadata.")
+    fallback_names = ("anthropics/skills", "obra/superpowers", "github/awesome-copilot")
+    fallback_items = []
+    for full_name in fallback_names:
+        try:
+            payload = json.loads(http_get(
+                "https://api.github.com/repos/" + full_name,
+                "application/vnd.github+json",
+                timeout=8,
+            ))
+            if payload.get("full_name", "").lower() != full_name.lower() or payload.get("archived") or payload.get("fork"):
+                continue
+            fallback_items.append({
+                "name": payload["full_name"],
+                "url": payload["html_url"],
+                "description": clean(payload.get("description") or "Public open-source Agent Skill project"),
+                "stars": int(payload.get("stargazers_count") or 0),
+                "updated": payload.get("updated_at", ""),
+                "language": payload.get("language") or "Multi-language",
+                "topics": (payload.get("topics") or ["agent-skills"])[:8],
+            })
+        except Exception as exc:
+            print(f"[skill-warning] curated metadata {full_name}: {type(exc).__name__}")
+    if fallback_items:
+        return sorted(fallback_items, key=score, reverse=True)[:10]
+
+    # Last resort: one known public repository, with unverified metrics omitted.
+    # Do not fabricate popularity or activity numbers when GitHub is unavailable.
+    return [{
+        "name": "anthropics/skills",
+        "url": "https://github.com/anthropics/skills",
+        "description": "Public repository for Agent Skills. GitHub API was unavailable, so current popularity and update metadata were not verified.",
+        "stars": None,
+        "updated": "",
+        "language": "Python",
+        "topics": ["agent-skills"],
+    }]
 
 def main() -> None:
     now = dt.datetime.now(TZ)
