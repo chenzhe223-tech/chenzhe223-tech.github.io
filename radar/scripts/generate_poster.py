@@ -170,6 +170,7 @@ def main():
     POSTERS.mkdir(parents=True, exist_ok=True)
     out = POSTERS / f"{date}.png"
     canvas.save(out, format="PNG", optimize=True)
+    canvas.save(POSTERS / "latest.png", format="PNG", optimize=True)
     manifest = {"report_date": date, "poster": f"posters/{date}.png", "qr_url": PUBLIC_URL, "news_count": 5, "skill": skill_name, "generated_at": dt.datetime.now(TZ).isoformat()}
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
