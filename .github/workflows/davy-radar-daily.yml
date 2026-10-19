@@ -7,11 +7,14 @@ on:
     paths:
       - "radar/scripts/build_daily.py"
       - "radar/scripts/run_horizon.py"
+      - "radar/scripts/news_image_match.py"
+      - "radar/scripts/test_news_image_match.py"
+      - "radar/skills/news-image-match/SKILL.md"
       - "radar/config/horizon.json"
       - ".github/workflows/davy-radar-daily.yml"
   schedule:
-    # 01:00 UTC = 09:00 Beijing time (UTC+8)
-    - cron: "0 1 * * *"
+    # 23:30 UTC = 07:30 Beijing time (UTC+8)
+    - cron: "30 23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -36,6 +39,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Test news image matching rules
+        run: python -m unittest radar/scripts/test_news_image_match.py -v
+
       - name: Collect public AI news and rank Skills
         run: python radar/scripts/build_daily.py
 
@@ -58,11 +64,14 @@ jobs:
           HORIZON_DIR: ${{ github.workspace }}/horizon-src
         run: python radar/scripts/run_horizon.py
 
+      - name: Match story-specific images (free sources first)
+        run: python radar/scripts/news_image_match.py
+
       - name: Commit daily data
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add radar/data/latest.json radar/data/history.json radar/data/archive/
+          git add radar/data/latest.json radar/data/history.json radar/data/archive/ radar/data/image-cache.json
           if git diff --cached --quiet; then
             echo "No daily data changes to commit."
           else

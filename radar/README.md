@@ -22,3 +22,8 @@ GitHub Actions refreshes and publishes the report daily at 23:30 UTC (07:30 Asia
 
 ## Verification
 The workflow logs show whether Horizon completed and whether the Chinese summary was attached. Public source links remain the basis for checking claims; model-generated analysis is editorial assistance, not independent verification.
+
+
+## News Image Match Skill
+
+The daily build runs radar/scripts/news_image_match.py after Horizon selection and before publication. It prefers RSS/article editorial images, then searches Openverse and Wikimedia Commons. The per-story image_match_status, image landing page, creator and license details are retained. Unmatched stories use a neutral placeholder instead of a random stock photo. Skill rules: radar/skills/news-image-match/SKILL.md.
