@@ -192,48 +192,44 @@ jobs:
           if-no-files-found: warn
           retention-days: 14
 
-  build:
+  verify-live:
+    name: Verify automatic GitHub Pages deployment
     runs-on: ubuntu-latest
     needs: qa
+    timeout-minutes: 6
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: main
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: .
-
-  deploy:
-    environment:
-      name: github-pages
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/deploy-pages@v4
-      - name: Verify live daily brief after deployment
+      - name: Wait for the branch-triggered Pages build and verify live assets
         shell: bash
         run: |
           python - <<'PY'
           import datetime as dt, json, time, urllib.request
           from zoneinfo import ZoneInfo
+
           base = 'https://chenzhe223-tech.github.io/radar/'
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
           last_error = 'not checked'
-          for attempt in range(24):
+          headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
+          for attempt in range(30):
               try:
                   stamp = str(time.time())
-                  headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
                   with urllib.request.urlopen(urllib.request.Request(base + 'daily/?verify=' + stamp, headers=headers), timeout=15) as response:
                       page = response.read().decode('utf-8', 'replace')
                       assert response.status == 200
+                  assert 'id="chinaAI"' in page, 'China AI developments section missing from live page'
+                  assert 'china-news-grid' in page, 'China AI card grid styling missing from live page'
                   with urllib.request.urlopen(urllib.request.Request(base + 'data/latest.json?verify=' + stamp, headers=headers), timeout=15) as response:
                       data = json.loads(response.read().decode('utf-8'))
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
-                  assert len(data.get('news', [])) >= 5, 'fewer than five news items'
-                  assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'source links missing'
-                  assert 'latest.json' in page, 'daily page data loader missing'
+                  assert len(data.get('news', [])) >= 5, 'fewer than five general news items'
+                  assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'general news source links missing'
+                  china_news = data.get('china_ai_news', [])
+                  assert isinstance(china_news, list), 'China AI stories field missing'
+                  for story in china_news:
+                      assert story.get('url', '').startswith('https://'), 'China AI story source URL missing'
+                      assert story.get('image_url', '').startswith('https://'), 'China AI story image missing'
+                      assert story.get('category'), 'China AI story category missing'
+                      assert story.get('published'), 'China AI story publication date missing'
                   poster_req = urllib.request.Request(base + 'posters/' + today + '.png?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
                       assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), 'poster PNG missing'
@@ -249,11 +245,11 @@ jobs:
                       with urllib.request.urlopen(urllib.request.Request(old_url,headers=headers),timeout=15) as old_response:
                           old_data = json.loads(old_response.read().decode('utf-8'))
                       assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
-                  print(f"PASS: live page and JSON verified; date={today}; news={len(data['news'])}; generated_at={data['generated_at']}")
+                  print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
                   break
               except Exception as exc:
                   last_error = f'{type(exc).__name__}: {exc}'
-                  print(f'Attempt {attempt + 1}/24: {last_error}')
+                  print(f'Attempt {attempt + 1}/30: {last_error}')
                   time.sleep(10)
           else:
               raise SystemExit('Post-deploy verification failed: ' + last_error)
