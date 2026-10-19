@@ -121,8 +121,8 @@ def feed_image(item: ET.Element, raw_html: str = "") -> str:
     # Some RSS feeds only include HTML in description/content:encoded.
     html = raw_html or ""
     patterns = [
-        r"""<img[^>]+(?:src|data-src)=['"](https?://[^'"]+)['"]""",
-        r"""<img[^>]+(?:src|data-src)=['"](//[^'"]+)['"]""",
+        r"<img[^>]+(?:src|data-src)=[\"'](https?://[^\"']+)[\"']",
+        r"<img[^>]+(?:src|data-src)=[\"'](//[^\"']+)[\"']",
     ]
     for pattern in patterns:
         match = re.search(pattern, html, re.I)
