@@ -243,7 +243,7 @@ def story_fallback_topic(story: dict) -> str:
         return "robot"
     if re.search(r"(chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|大模型|模型|推理)", value):
         return "compute"
-    if re.search(r"(image|video|design|creative|visual|图像|视频|设计|创作|生成)", value):
+    if re.search(r"(image|video|design|creative|visual|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频)", value):
         return "creative"
     if re.search(r"(phone|mobile|app|software|product|platform|应用|手机|软件|产品|开源)", value):
         return "product"
@@ -416,6 +416,12 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     # Version 2 deliberately retries cached "none" results with expanded web/image search.
     if isinstance(cached, dict) and cached.get("cache_version") == CACHE_VERSION and _fresh(cached, 72):
         if cached.get("image_url") and cached.get("image_url") not in used:
+            if cached.get("image_match_status") == "thematic_fallback":
+                # Refresh topic artwork if taxonomy improves; don't repeat remote searches.
+                result = _thematic_fallback(story, used)
+                if key:
+                    cache[key] = {**result, "checked_at": _now().isoformat(), "cache_version": CACHE_VERSION}
+                return result
             return {k: v for k, v in cached.items() if k not in {"checked_at", "cache_version"}}
 
     article_url = normalize_url(key)

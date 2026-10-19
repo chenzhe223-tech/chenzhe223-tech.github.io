@@ -67,7 +67,7 @@ def image_for_story(story, idx):
         (r"chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|模型|推理", "photo-1518770660439-4636190af475"),
         (r"phone|mobile|app|software|product|platform|应用|手机|软件|产品", "photo-1512941937669-90a1b58e7e9c"),
         (r"business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司", "photo-1519389950473-47ba0277781c"),
-        (r"image|video|design|creative|图像|视频|设计|创作|生成", "photo-1470252649378-9c29740c9fa8"),
+        (r"image|video|design|creative|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频", "photo-1470252649378-9c29740c9fa8"),
     ]
     for pattern, photo_id in patterns:
         if re.search(pattern, title):
