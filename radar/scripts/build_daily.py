@@ -32,7 +32,7 @@ FEEDS = [
 # Chinese-language sources for a separately curated China AI development stream.
 CHINA_FEEDS = [
     ("量子位", "https://www.qbitai.com/feed"),
-    ("36氪", "https://36kr.com/feed"),
+    ("机器之心", "https://www.jiqizhixin.com/rss"),
     ("极客公园", "https://www.geekpark.net/rss"),
 ]
 CHINA_AI_TERMS = re.compile(
