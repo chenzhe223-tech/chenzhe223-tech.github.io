@@ -133,6 +133,8 @@ jobs:
           git add radar/data/latest.json radar/data/history.json radar/data/archive/ radar/posters/
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
+            # Other code fixes may land while QA runs; replay only generated-data changes on current main.
+            git pull --rebase origin main
             git push origin HEAD:main
           else
             echo 'No report data changes to commit.'
