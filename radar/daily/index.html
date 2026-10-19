@@ -125,7 +125,14 @@ h1{font-size:clamp(34px,5.2vw,54px);line-height:1.2;letter-spacing:-.055em;max-w
 .hero-actions a{border-radius:3px;padding:10px 15px;background:#1e3b5e;color:#fff;font-size:12px}
 .hero-actions a.secondary{border:1px solid #cbd3dd;background:#fff;color:#283d57}
 .date{border-radius:3px;background:#f5f6f7;border:1px solid #e1e5e9;color:#657387;padding:13px 15px}
-.date strong{color:#1c4f7c;font-size:15px}.archive-picker{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#59697c}.archive-picker a{color:#245f96;text-decoration:underline;font-weight:700}.archive-picker select{max-width:190px;padding:6px 9px;border:1px solid #cbd5df;border-radius:3px;background:#fff;color:#244f78;font:inherit}.featured-skill{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;padding:22px;background:#fff;border:1px solid #dce2e8;border-radius:4px}.featured-skill h3{font-size:25px;line-height:1.35;margin:5px 0 10px;color:#172a43}.featured-skill p{color:#4f5e70;font-size:14px;line-height:1.85;margin:8px 0}.featured-skill .skill-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.featured-skill .skill-tags span{background:#edf3f7;color:#285b86;padding:4px 9px;font-size:11px;border-radius:2px}.featured-skill .skill-cta{display:inline-block;margin-top:8px;padding:9px 13px;background:#1e3b5e;color:white!important;border-radius:3px;font-size:12px}@media(max-width:620px){.featured-skill{grid-template-columns:1fr;padding:16px}.featured-skill h3{font-size:21px}}
+.date strong{color:#1c4f7c;font-size:15px}.archive-picker{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:11px;color:#59697c}.archive-picker a{color:#245f96;text-decoration:underline;font-weight:700}.archive-picker select{max-width:190px;padding:6px 9px;border:1px solid #cbd5df;border-radius:3px;background:#fff;color:#244f78;font:inherit}.featured-skill{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:22px;padding:22px;background:#fff;border:1px solid #dce2e8;border-radius:4px}.featured-skill h3{font-size:25px;line-height:1.35;margin:5px 0 10px;color:#172a43}.featured-skill p{color:#4f5e70;font-size:14px;line-height:1.85;margin:8px 0}.featured-skill .skill-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}.featured-skill .skill-tags span{background:#edf3f7;color:#285b86;padding:4px 9px;font-size:11px;border-radius:2px}.featured-skill .skill-cta{display:inline-block;margin-top:0;padding:9px 13px;background:#1e3b5e;color:white!important;border-radius:3px;font-size:12px}
+.skill-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.skill-actions--list{margin-top:10px}
+.skill-save-cta{display:inline-flex;align-items:center;justify-content:center;padding:9px 12px;border:1px solid #bfd0df;background:#f4f8fb;color:#245f96!important;border-radius:3px;font-size:12px;line-height:1.35;font-weight:700;text-decoration:none;white-space:normal}
+.skill-save-cta:hover{background:#e7f0f7;border-color:#90aec6}
+.radar-toast{position:fixed;z-index:9999;left:50%;bottom:22px;transform:translate(-50%,14px);max-width:min(92vw,520px);padding:11px 16px;border-radius:8px;background:#183653;color:#fff;box-shadow:0 8px 28px #182d452e;font-size:13px;line-height:1.55;opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+.radar-toast.is-visible{opacity:1;transform:translate(-50%,0)}
+@media(max-width:620px){.skill-actions{gap:7px}.skill-save-cta{font-size:11px;padding:9px 10px}.radar-toast{bottom:16px}}@media(max-width:620px){.featured-skill{grid-template-columns:1fr;padding:16px}.featured-skill h3{font-size:21px}}
 .tabs{gap:18px;border-bottom:1px solid var(--line);padding-bottom:12px;margin:19px 0 16px}
 .tab{border:0;border-radius:0;background:transparent;color:#69768a;padding:7px 0;font-size:12px}
 .tab.active,.tab:hover{background:transparent;border-color:transparent;color:#1d5688;box-shadow:inset 0 -2px #285f92}
@@ -632,7 +639,7 @@ function renderFeaturedSkill(items){
  const topics=(x.topics||[]).slice(0,4);
  const useCase=topics.length?topics.join(" · "):(x.language||"AI 工作流与创作辅助");
  const reason=currentLang==="en"?"Selected from public repositories by topic relevance, activity and community stars; inspect the README before installing.":"依据公开仓库的主题相关性、近期活跃度与社区 Star 信号推荐；安装前请先阅读项目说明并检查权限。";
- root.innerHTML='<div><div class="story-label">✦ '+esc(currentLang==="en"?"TODAY\'S SKILL PICK":"今日开源工具推荐")+'</div><h3>'+esc(name)+'</h3><p>'+esc(desc||"打开项目了解功能与使用方法。")+'</p><div class="skill-tags">'+topics.map(t=>'<span>'+esc(t)+'</span>').join("")+'</div></div><div><p><strong>'+esc(currentLang==="en"?"Why recommend it":"推荐理由")+' · </strong>'+esc(reason)+'</p><p><strong>'+esc(currentLang==="en"?"Use cases":"应用范围")+' · </strong>'+esc(useCase)+'</p><p><strong>'+esc(currentLang==="en"?"Project activity":"项目活跃度")+' · </strong>'+(x.stars != null && x.stars !== "" ? Number(x.stars).toLocaleString("en-US")+' ★' : (currentLang==="en"?"Popularity unverified":"热度未核实"))+' · '+esc((x.updated||"").slice(0,10)||(currentLang==="en"?"update date unverified":"更新时间未核实"))+'</p><a class="skill-cta" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Open GitHub project ↗":"查看 GitHub 项目 ↗")+'</a></div>';
+ root.innerHTML='<div><div class="story-label">✦ '+esc(currentLang==="en"?"TODAY\\'S SKILL PICK":"今日开源工具推荐")+'</div><h3>'+esc(name)+'</h3><p>'+esc(desc||"打开项目了解功能与使用方法。")+'</p><div class="skill-tags">'+topics.map(t=>'<span>'+esc(t)+'</span>').join("")+'</div></div><div><p><strong>'+esc(currentLang==="en"?"Why recommend it":"推荐理由")+' · </strong>'+esc(reason)+'</p><p><strong>'+esc(currentLang==="en"?"Use cases":"应用范围")+' · </strong>'+esc(useCase)+'</p><p><strong>'+esc(currentLang==="en"?"Project activity":"项目活跃度")+' · </strong>'+(x.stars != null && x.stars !== "" ? Number(x.stars).toLocaleString("en-US")+' ★' : (currentLang==="en"?"Popularity unverified":"热度未核实"))+' · '+esc((x.updated||"").slice(0,10)||(currentLang==="en"?"update date unverified":"更新时间未核实"))+'</p><div class="skill-actions"><a class="skill-cta" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Open GitHub project ↗":"查看 GitHub 项目 ↗")+'</a>'+skillSaveLink(x)+'</div></div>';
 }
 async function loadArchiveOptions(selectedDate){
  const select=$("archiveDate");if(!select)return;
@@ -653,7 +660,65 @@ function renderChinaAINews(items){
  }).join(""):'<div class="empty">'+esc(Array.isArray(reportData?.china_ai_news)?t("chinaEmpty"):t("chinaArchiveEmpty"))+'</div>';
 }
 function renderNews(items){$("newsCount").textContent=items.length;const root=$("newsList");root.innerHTML=items.length?items.map((x,i)=>{const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title);const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary);const why=currentLang==="zh"?(x.why_it_matters_zh||""):(x.why_it_matters_en||"");return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">✦ '+esc(x.source||t("source"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p>'+(why?'<div class="why"><strong>'+esc(t("why"))+' · </strong>'+esc(why)+'</div>':'')+'<div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>'}).join(""):'<div class="empty">'+esc(t("newsEmpty"))+'</div>'}
-function renderSkills(items){$("skillCount").textContent=items.length;$("sourcesCount").textContent=(reportData?.sources_ok??"—")+"/"+(reportData?.sources_total??"—");const root=$("skillList");root.innerHTML=items.length?items.slice(0,10).map((x,i)=>{const description=currentLang==="zh"?(x.description_zh||x.description):(x.description_en||x.description);return '<article class="item skill"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="skill-badge">✦ '+esc(t("skillType"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"Community Skill")+'</a></h3><p class="explain">'+esc(description||t("fallbackSummary"))+'</p><div class="meta"><span class="pill">'+esc(x.language||"Multi-language")+'</span><span>'+esc(t("updated"))+' '+esc((x.updated||"").slice(0,10)||t("dateUnknown"))+'</span></div></div><div class="stars">'+(x.stars != null && x.stars !== "" ? "★ "+Number(x.stars).toLocaleString("en-US") : (currentLang==="en"?"Popularity unverified":"热度未核实"))+'<div style="font-size:9px;color:var(--muted);font-weight:400;margin-top:3px">'+esc(t("rank"))+'</div></div></article>'}).join(""):'<div class="empty">'+esc(t("skillEmpty"))+'</div>'}
+const NIANBOX_APP_URL="https://chenzhe223-tech.github.io/niantou-box-app/#/";
+const NIANBOX_PENDING_SKILL_KEY="nb.radar.pending-skill.v1";
+function skillSaveLink(x){
+ const name=x.name||"Community Skill";
+ const description=currentLang==="en"?(x.description_en||x.description||""):(x.description_zh||x.description||"");
+ const topics=(x.topics||[]).slice(0,8).join(" · ");
+ return '<a class="skill-save-cta" href="'+NIANBOX_APP_URL+'" target="_blank" rel="noopener noreferrer" data-nb-skill-save="1" data-skill-name="'+esc(name)+'" data-skill-url="'+esc(x.url||"")+'" data-skill-description="'+esc(description)+'" data-skill-topics="'+esc(topics)+'" data-report-date="'+esc(reportData?.report_date||"")+'">'+esc(currentLang==="en"?"Save to NianBox ↗":"收进念头盒 ↗")+'</a>';
+}
+function renderSkills(items){
+ $("skillCount").textContent=items.length;
+ $("sourcesCount").textContent=(reportData?.sources_ok??"—")+"/"+(reportData?.sources_total??"—");
+ const root=$("skillList");
+ root.innerHTML=items.length?items.slice(0,10).map((x,i)=>{
+  const description=currentLang==="en"?(x.description_en||x.description):(x.description_zh||x.description);
+  return '<article class="item skill"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="skill-badge">✦ '+esc(t("skillType"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"Community Skill")+'</a></h3><p class="explain">'+esc(description||t("fallbackSummary"))+'</p><div class="meta"><span class="pill">'+esc(x.language||"Multi-language")+'</span><span>'+esc(t("updated"))+' '+esc((x.updated||"").slice(0,10)||t("dateUnknown"))+'</span></div><div class="skill-actions skill-actions--list">'+skillSaveLink(x)+'</div></div><div class="stars">'+(x.stars != null && x.stars !== "" ? "★ "+Number(x.stars).toLocaleString("en-US") : (currentLang==="en"?"Popularity unverified":"热度未核实"))+'<div style="font-size:9px;color:var(--muted);font-weight:400;margin-top:3px">'+esc(t("rank"))+'</div></div></article>';
+ }).join(""):'<div class="empty">'+esc(t("skillEmpty"))+'</div>';
+}
 function renderFeatured(items){const x=(items||[])[0];const fallback=(reportData?.news||[])[0];const sourceBacked=!!x;const story=x||fallback;if(!story)return;const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");if(title)$("featureTitle").textContent=title;if(summary)$("featureSub").textContent=summary;const a=document.querySelector(".hero-actions a");const url=story.source_url||story.url;if(a&&url){a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=currentLang==="en"?"↗ Read the lead story":"↗ 阅读本期焦点原文"}const kicker=document.querySelector(".hero-kicker span");if(kicker&&!sourceBacked)kicker.textContent=currentLang==="en"?"DAILY AI FIELD NOTES · SOURCE STORY":"AI 前沿简报 · 本期焦点新闻线索"}function renderAll(data){applyDailyHeroTheme(data.report_date);renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderChinaAINews(data.china_ai_news||[]);renderSkills(data.skills||[]);renderFeaturedSkill(data.skills||[]);$("reportDate").textContent=data.report_date||t("headline");$("updatedAt").textContent=data.generated_at?t("updated")+" "+dateFmt(data.generated_at)+" · "+t("plan"):t("plan");$("status").textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
 const requestedDate=new URLSearchParams(location.search).get("date");const reportUrl=requestedDate?"../data/archive/"+encodeURIComponent(requestedDate)+".json":"../data/latest.json";fetch(reportUrl+"?ts="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Report not generated yet");return r.json()}).then(async data=>{reportData=data;if(!requestedDate)latestReportDate=data.report_date;renderAll(data);await loadArchiveOptions(requestedDate||data.report_date)}).catch(err=>{$("reportDate").textContent=t("headline");$("status").textContent=err.message;renderAI(null);renderNews([]);renderSkills([]);renderFeaturedSkill([]);loadArchiveOptions("")});
+
+// A same-origin localStorage hand-off; nothing is written until the reader explicitly clicks Save to NianBox.
+let radarToastTimer=null;
+function showRadarToast(message){
+ let node=document.getElementById("radarToast");
+ if(!node){node=document.createElement("div");node.id="radarToast";node.className="radar-toast";node.setAttribute("role","status");node.setAttribute("aria-live","polite");document.body.appendChild(node)}
+ node.textContent=message;node.classList.add("is-visible");
+ if(radarToastTimer)window.clearTimeout(radarToastTimer);
+ radarToastTimer=window.setTimeout(()=>node.classList.remove("is-visible"),3200);
+}
+function stableSkillCaptureHash(value){
+ let h=2166136261;
+ for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}
+ return (h>>>0).toString(36);
+}
+document.addEventListener("click",event=>{
+ const target=event.target instanceof Element?event.target.closest("[data-nb-skill-save]"):null;
+ if(!target)return;
+ const name=(target.dataset.skillName||"").trim();
+ const url=(target.dataset.skillUrl||"").trim();
+ let parsed;
+ try{parsed=new URL(url)}catch{parsed=null}
+ if(!name||!parsed||parsed.protocol!=="https:"||parsed.hostname!=="github.com"){
+  event.preventDefault();showRadarToast(currentLang==="en"?"This Skill has no valid GitHub project link, so it was not sent to NianBox.":"这个 Skill 暂无有效的 GitHub 项目链接，未写入念头盒。");return;
+ }
+ const reportDate=/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(target.dataset.reportDate||"")?target.dataset.reportDate:"";
+ const id="davy-radar-"+(reportDate||"undated")+"-"+stableSkillCaptureHash(url);
+ const payload={id,source:"davy-radar",createdAt:Date.now(),reportDate,name:name.slice(0,180),url,
+  description:(target.dataset.skillDescription||"").slice(0,2400),topics:(target.dataset.skillTopics||"").slice(0,500),
+  sourcePage:window.location.origin+window.location.pathname+(reportDate?"?date="+encodeURIComponent(reportDate):"")};
+ try{
+  let queue=[];
+  const stored=window.localStorage.getItem(NIANBOX_PENDING_SKILL_KEY);
+  if(stored){const parsedQueue=JSON.parse(stored);if(Array.isArray(parsedQueue))queue=parsedQueue.filter(item=>item&&typeof item.id==="string")}
+  if(!queue.some(item=>item.id===id))queue.push(payload);
+  if(queue.length>100){event.preventDefault();showRadarToast(currentLang==="en"?"There are too many Skills waiting to be saved. Open NianBox and finish the pending items first.":"待收录 Skill 太多了，请先打开念头盒处理已有记录。");return}
+  window.localStorage.setItem(NIANBOX_PENDING_SKILL_KEY,JSON.stringify(queue));
+  showRadarToast(currentLang==="en"?"Sent to NianBox. It will import the Skill when opened.":"已交给念头盒，打开后会自动收录到本机收件箱。");
+ }catch(error){
+  event.preventDefault();showRadarToast(currentLang==="en"?"Browser storage is unavailable. Nothing was sent; allow site storage and try again.":"浏览器本机存储不可用，未保存。请允许此网站使用本机存储后重试。");
+ }
+});
 </script></body></html>
