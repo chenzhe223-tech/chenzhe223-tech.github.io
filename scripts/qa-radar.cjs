@@ -29,6 +29,23 @@ function check(ok, name, detail = '') {
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
       check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': editorial imagery present');
       check(await page.locator('#top5List a[href^="http"]').count() === 5, viewport.name + ': each story has source link');
+      check(await page.locator('#featuredSkill h3').count() === 1, viewport.name + ': daily Skill recommendation is rendered');
+      check((await page.locator('#featuredSkill').innerText()).includes('推荐理由') || (await page.locator('#featuredSkill').innerText()).toLowerCase().includes('why recommend'), viewport.name + ': Skill recommendation explains why');
+      check((await page.locator('#featuredSkill').innerText()).includes('应用范围') || (await page.locator('#featuredSkill').innerText()).toLowerCase().includes('use cases'), viewport.name + ': Skill use cases shown');
+      check(await page.locator('#archiveDate option').count() >= 2, viewport.name + ': history date options loaded');
+      check(await page.locator('#posterLink').count() === 1, viewport.name + ': poster link is visible');
+      const posterHref = await page.locator('#posterLink').getAttribute('href');
+      check(!!posterHref && posterHref.includes('posters/'), viewport.name + ': poster link points to generated asset', posterHref);
+      const archiveOption = await page.locator('#archiveDate option').nth(1).getAttribute('value');
+      if (archiveOption) {
+        await page.locator('#archiveDate').selectOption(archiveOption);
+        await page.waitForTimeout(500);
+        check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
+        check((await page.locator('#posterLink').getAttribute('href') || '').includes(archiveOption), viewport.name + ': historical poster link matches selected date');
+        await page.goto(base, { waitUntil: 'networkidle', timeout: 30000 });
+        await page.waitForTimeout(500);
+      }
+
       const firstCard = page.locator('#top5List .top5-card').first();
       const cardStyles = await firstCard.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, text: getComputedStyle(el.querySelector('p')).color, title: getComputedStyle(el.querySelector('h3')).color }));
       check(cardStyles.background === 'rgb(255, 255, 255)', viewport.name + ': story card has solid light background', JSON.stringify(cardStyles));
