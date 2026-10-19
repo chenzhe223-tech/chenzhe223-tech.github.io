@@ -79,6 +79,59 @@ def parse_date(raw: str | None) -> str:
         except Exception:
             return ""
 
+def normalize_image_url(value: str) -> str:
+    value = (value or "").strip()
+    if value.startswith("//"):
+        value = "https:" + value
+    if value.startswith("http://"):
+        value = "https://" + value[len("http://"):]
+    try:
+        parsed = urllib.parse.urlparse(value)
+        if parsed.scheme == "https" and parsed.netloc and not any(ch in value for ch in ('"', "'", "<", ">", "\\n")):
+            return value
+    except Exception:
+        pass
+    return ""
+
+def feed_image(item: ET.Element, raw_html: str = "") -> str:
+    # Prefer editorial thumbnails/enclosures provided by the source feed.
+    thumbnails: list[str] = []
+    media_images: list[str] = []
+    for node in item.iter():
+        local = node.tag.rsplit("}", 1)[-1].lower() if isinstance(node.tag, str) else ""
+        candidate = node.attrib.get("url") or node.attrib.get("href") or ""
+        if local == "enclosure":
+            mime = node.attrib.get("type", "").lower()
+            if mime.startswith("image/") and candidate:
+                thumbnails.append(candidate)
+        elif local == "thumbnail" and candidate:
+            thumbnails.append(candidate)
+        elif local == "content" and candidate:
+            mime = node.attrib.get("type", "").lower()
+            medium = node.attrib.get("medium", "").lower()
+            if medium == "image" or mime.startswith("image/") or re.search(r"\\.(?:png|jpe?g|webp|avif)(?:[?#]|$)", candidate, re.I):
+                media_images.append(candidate)
+        elif local == "image" and candidate:
+            thumbnails.append(candidate)
+    for candidate in thumbnails + media_images:
+        normalized = normalize_image_url(candidate)
+        if normalized:
+            return normalized
+
+    # Some RSS feeds only include HTML in description/content:encoded.
+    html = raw_html or ""
+    patterns = [
+        r'<img[^>]+(?:src|data-src)=["\\'](https?://[^"\\']+)["\\']',
+        r'<img[^>]+(?:src|data-src)=["\\'](//[^"\\']+)["\\']',
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, html, re.I)
+        if match:
+            normalized = normalize_image_url(match.group(1))
+            if normalized:
+                return normalized
+    return ""
+
 def parse_feed(source: str, url: str, timeout: int = 18) -> list[dict]:
     try:
         root = ET.fromstring(http_get(url, "application/rss+xml, application/atom+xml, application/xml, text/xml", timeout=timeout))
@@ -89,20 +142,30 @@ def parse_feed(source: str, url: str, timeout: int = 18) -> list[dict]:
     for item in root.findall(".//item"):
         title = clean(item.findtext("title", ""))
         link = clean(item.findtext("link", ""))
-        summary = clean(item.findtext("description", "") or item.findtext("{http://purl.org/rss/1.0/modules/content/}encoded", ""))
+        raw_summary = item.findtext("description", "") or item.findtext("{http://purl.org/rss/1.0/modules/content/}encoded", "")
+        image_url = feed_image(item, raw_summary)
+        summary = clean(raw_summary)
         published = parse_date(item.findtext("pubDate") or item.findtext("{http://purl.org/dc/elements/1.1/}date"))
         if title and link:
-            entries.append({"title": title, "url": link, "summary": summary[:360], "published": published, "source": source})
+            entry = {"title": title, "url": link, "summary": summary[:360], "published": published, "source": source}
+            if image_url:
+                entry["image_url"] = image_url
+            entries.append(entry)
     ns = {"atom": "http://www.w3.org/2005/Atom"}
     if not entries:
         for item in root.findall(".//atom:entry", ns):
             title = clean(item.findtext("atom:title", "", ns))
             link_el = item.find("atom:link", ns)
             link = link_el.attrib.get("href", "") if link_el is not None else ""
-            summary = clean(item.findtext("atom:summary", "", ns) or item.findtext("atom:content", "", ns))
+            raw_summary = item.findtext("atom:summary", "", ns) or item.findtext("atom:content", "", ns)
+            image_url = feed_image(item, raw_summary)
+            summary = clean(raw_summary)
             published = parse_date(item.findtext("atom:published", "", ns) or item.findtext("atom:updated", "", ns))
             if title and link:
-                entries.append({"title": title, "url": link, "summary": summary[:360], "published": published, "source": source})
+                entry = {"title": title, "url": link, "summary": summary[:360], "published": published, "source": source}
+                if image_url:
+                    entry["image_url"] = image_url
+                entries.append(entry)
     return entries
 
 def classify_china_topic(text: str) -> str:
