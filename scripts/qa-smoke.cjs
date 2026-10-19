@@ -158,6 +158,42 @@ const mark = (status, name, detail = '') => {
       }
     }));
     await request.dispose();
+
+    // End-to-end Skill save: the brief writes the hand-off queue, then the real
+    // NianBox app imports it into IndexedDB. Each smoke run uses a fresh browser
+    // context, so the test does not touch a user's persistent browser data.
+    try {
+      const radarPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      const radarResponse = await radarPage.goto('https://chenzhe223-tech.github.io/radar/daily/', {
+        waitUntil: 'domcontentloaded',
+        timeout: 45000
+      });
+      await radarPage.waitForSelector('#featuredSkill [data-nb-skill-save]', { timeout: 20000 });
+      const saveButton = radarPage.locator('#featuredSkill [data-nb-skill-save]').first();
+      const savedSkillName = await saveButton.getAttribute('data-skill-name');
+      const popupPromise = radarPage.waitForEvent('popup', { timeout: 20000 });
+      await saveButton.click();
+      const nianboxPopup = await popupPromise;
+      await nianboxPopup.waitForLoadState('domcontentloaded', { timeout: 45000 });
+      const importToast = nianboxPopup.locator('.nb-toast--success').filter({ hasText: '已从 AI 简报收录' });
+      await importToast.waitFor({ state: 'visible', timeout: 20000 });
+      mark(
+        radarResponse && radarResponse.status() < 400 ? 'PASS' : 'FAIL',
+        'AI 简报 → 念头盒一键收录',
+        '打开念头盒并成功收录：' + (savedSkillName || '今日推荐 Skill')
+      );
+      const queueCleared = await radarPage.evaluate(() => window.localStorage.getItem('nb.radar.pending-skill.v1') === null);
+      mark(queueCleared ? 'PASS' : 'FAIL', 'Skill 交接队列清理', queueCleared ? '成功写入后清除待导入项' : '队列仍存在');
+      await nianboxPopup.locator('.nb-tabbar__link[href="#/inbox"]').click();
+      const importedTitle = 'Skill：' + (savedSkillName || '');
+      await nianboxPopup.locator('.nb-list .nb-idea__title').filter({ hasText: importedTitle }).waitFor({ state: 'visible', timeout: 12000 });
+      mark('PASS', 'Skill 出现在念头盒收件箱', importedTitle);
+      await nianboxPopup.close();
+      await radarPage.close();
+    } catch (e) {
+      mark('FAIL', 'AI 简报 → 念头盒一键收录', e.stack || e.message || e);
+    }
+
     report.externalLinks = links;
     report.summary = {
       passed: checks.filter(c => c.status === 'PASS').length,
