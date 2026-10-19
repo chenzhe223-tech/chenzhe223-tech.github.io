@@ -12,7 +12,7 @@ from zoneinfo import ZoneInfo
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import qrcode
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path.cwd().resolve() if (Path.cwd() / "radar" / "data" / "latest.json").exists() else Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
 POSTERS = ROOT / "radar" / "posters"
 TZ = ZoneInfo("Asia/Shanghai")
@@ -171,7 +171,7 @@ def main():
     out = POSTERS / f"{date}.png"
     canvas.save(out, format="PNG", optimize=True)
     canvas.save(POSTERS / "latest.png", format="PNG", optimize=True)
-    manifest = {"report_date": date, "poster": f"posters/{date}.png", "qr_url": PUBLIC_URL, "news_count": 5, "skill": skill_name, "generated_at": dt.datetime.now(TZ).isoformat()}
+    manifest = {"report_date": date, "poster": str(out.relative_to(ROOT)), "qr_url": PUBLIC_URL, "news_count": 5, "skill": skill_name, "generated_at": dt.datetime.now(TZ).isoformat()}
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     print(f"Generated {out} ({W}x{H}); QR target: {PUBLIC_URL}")
