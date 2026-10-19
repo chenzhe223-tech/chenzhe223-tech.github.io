@@ -36,12 +36,20 @@ function check(ok, name, detail = '') {
       check(await page.locator('#posterLink').count() === 1, viewport.name + ': poster link is visible');
       const posterHref = await page.locator('#posterLink').getAttribute('href');
       check(!!posterHref && posterHref.includes('posters/'), viewport.name + ': poster link points to generated asset', posterHref);
-      const archiveOption = await page.locator('#archiveDate option').nth(1).getAttribute('value');
+      const currentReportDate = (await page.locator('#reportDate').innerText()).trim();
+      const archiveOptionCount = await page.locator('#archiveDate option').count();
+      const archiveOption = await page.locator('#archiveDate option').nth(archiveOptionCount > 2 ? 2 : 1).getAttribute('value');
       if (archiveOption) {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
-        check((await page.locator('#posterLink').getAttribute('href') || '').includes(archiveOption), viewport.name + ': historical poster link matches selected date');
+        const selectedPosterHref = await page.locator('#posterLink').getAttribute('href') || '';
+        const selectedPosterVisible = await page.locator('#posterLink').isVisible();
+        if (archiveOption === currentReportDate) {
+          check(selectedPosterVisible && selectedPosterHref === '../posters/latest.png', viewport.name + ': latest-date selection uses latest poster', selectedPosterHref);
+        } else {
+          check(!selectedPosterVisible, viewport.name + ': historical poster link stays hidden for archived date', selectedPosterHref);
+        }
         await page.goto(base, { waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForTimeout(500);
       }
