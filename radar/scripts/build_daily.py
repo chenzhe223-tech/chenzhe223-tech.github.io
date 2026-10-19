@@ -29,6 +29,24 @@ FEEDS = [
     ("Simon Willison", "https://simonwillison.net/atom/everything/"),
     ("TechCrunch AI", "https://techcrunch.com/category/artificial-intelligence/feed/"),
 ]
+# Chinese-language sources for a separately curated China AI development stream.
+CHINA_FEEDS = [
+    ("量子位", "https://www.qbitai.com/feed"),
+    ("36氪", "https://36kr.com/feed"),
+    ("极客公园", "https://www.geekpark.net/rss"),
+]
+CHINA_AI_TERMS = re.compile(
+    r"(人工智能|生成式|大模型|智能体|AI|LLM|模型|机器人|具身智能|算力|芯片|智驾|"
+    r"DeepSeek|Qwen|Kimi|GLM|MiniMax|AI应用|AI产品)", re.I
+)
+CHINA_ENTITY_TERMS = re.compile(
+    r"(中国|国内|国产|DeepSeek|深度求索|通义|千问|Qwen|阿里云|腾讯混元|混元|豆包|"
+    r"字节跳动|火山引擎|智谱|GLM|Kimi|月之暗面|MiniMax|稀宇|阶跃星辰|StepFun|"
+    r"百川智能|百度文心|文心一言|昆仑芯|华为盘古|昇腾|寒武纪|沐曦|摩尔线程|壁仞|"
+    r"天数智芯|讯飞星火|科大讯飞|智源研究院|中国人工智能|国产大模型|中国大模型|"
+    r"国产芯片|清华|北大|中科院|商汤|燧原|元宝|元器|人形机器人|智驾)",
+    re.I
+)
 AI_TERMS = re.compile(r"\b(ai|artificial intelligence|llm|large language model|agent|agents|skill|model|openai|anthropic|claude|gpt|gemini|deepseek|hugging face|machine learning|生成式|人工智能|大模型|智能体|开源模型)\b", re.I)
 TAG_RE = re.compile(r"<[^>]+>")
 WS_RE = re.compile(r"\s+")
@@ -61,9 +79,9 @@ def parse_date(raw: str | None) -> str:
         except Exception:
             return ""
 
-def parse_feed(source: str, url: str) -> list[dict]:
+def parse_feed(source: str, url: str, timeout: int = 18) -> list[dict]:
     try:
-        root = ET.fromstring(http_get(url, "application/rss+xml, application/atom+xml, application/xml, text/xml"))
+        root = ET.fromstring(http_get(url, "application/rss+xml, application/atom+xml, application/xml, text/xml", timeout=timeout))
     except Exception as exc:
         print(f"[feed-warning] {source}: {type(exc).__name__}")
         return []
@@ -86,6 +104,60 @@ def parse_feed(source: str, url: str) -> list[dict]:
             if title and link:
                 entries.append({"title": title, "url": link, "summary": summary[:360], "published": published, "source": source})
     return entries
+
+def classify_china_topic(text: str) -> str:
+    value = text.lower()
+    if re.search(r"(芯片|算力|昇腾|寒武纪|摩尔线程|沐曦|昆仑芯|数据中心)", value, re.I):
+        return "芯片与算力"
+    if re.search(r"(机器人|具身智能|人形|智驾|自动驾驶|智能汽车)", value, re.I):
+        return "具身智能与智能终端"
+    if re.search(r"(发布|开源|模型|推理|多模态|训练|参数|基准|benchmark)", value, re.I):
+        return "模型与技术进展"
+    if re.search(r"(落地|应用|上线|办公|教育|医疗|制造|电商|企业)", value, re.I):
+        return "产品与产业应用"
+    return "产业与生态"
+
+def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
+    """Collect recent, source-linked China AI developments; do not synthesize missing stories."""
+    candidates: list[dict] = []
+    sources_ok = 0
+    cutoff = now.astimezone(dt.timezone.utc) - dt.timedelta(days=7)
+    for source, url in CHINA_FEEDS:
+        items = parse_feed(source, url, timeout=12)
+        if items:
+            sources_ok += 1
+        for item in items:
+            title = item.get("title", "")
+            summary = item.get("summary", "")
+            combined = title + " " + summary
+            if not CHINA_AI_TERMS.search(combined) or not CHINA_ENTITY_TERMS.search(combined):
+                continue
+            published = item.get("published", "")
+            try:
+                stamp = dt.datetime.fromisoformat(published.replace("Z", "+00:00"))
+                if stamp.tzinfo is None:
+                    stamp = stamp.replace(tzinfo=dt.timezone.utc)
+                if stamp < cutoff or stamp > now.astimezone(dt.timezone.utc) + dt.timedelta(hours=6):
+                    continue
+            except Exception:
+                # Unknown timestamps are omitted from this time-sensitive module.
+                continue
+            if not item.get("url", "").startswith("https://"):
+                continue
+            item["category"] = classify_china_topic(combined)
+            item["published"] = stamp.astimezone(dt.timezone.utc).isoformat()
+            item["region"] = "China"
+            candidates.append(item)
+
+    unique: dict[str, dict] = {}
+    for item in candidates:
+        url = item["url"].split("#", 1)[0].rstrip("/")
+        title_key = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", item["title"].lower())
+        key = url or title_key
+        if key and key not in unique:
+            unique[key] = item
+    ranked = sorted(unique.values(), key=lambda x: x.get("published", ""), reverse=True)
+    return ranked[:8], sources_ok
 
 def github_search(query: str) -> list[dict]:
     url = "https://api.github.com/search/repositories?" + urllib.parse.urlencode({
@@ -201,6 +273,7 @@ def main() -> None:
     recent = [x for x in items if not x["published"] or dt.datetime.fromisoformat(x["published"].replace("Z", "+00:00")) >= cutoff]
     recent.sort(key=lambda x: x.get("published") or "", reverse=True)
     skills = collect_skills()
+    china_ai_news, china_sources_ok = collect_china_ai_news(now)
     report = {
         "product": "Davy Radar",
         "report_date": now.strftime("%Y-%m-%d"),
@@ -210,9 +283,13 @@ def main() -> None:
         "sources_ok": source_success,
         "sources_total": len(FEEDS),
         "news": recent[:20],
+        "china_ai_news": china_ai_news,
+        "china_sources_ok": china_sources_ok,
+        "china_sources_total": len(CHINA_FEEDS),
         "skills": skills,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
+            "china_ai_news_sources": "QbitAI, 36Kr and GeekPark public RSS; filtered for China-related AI entities and timestamps within seven days",
             "skill_ranking": "public GitHub repository stars with a modest freshness adjustment; not install counts",
         },
     }
@@ -224,7 +301,7 @@ def main() -> None:
     archive_file.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     history = sorted((p.name for p in ARCHIVE.glob("*.json")), reverse=True)[:30]
     (DATA / "history.json").write_text(json.dumps({"days": history}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Built Davy Radar: {len(recent[:20])} news, {len(skills)} skills, feeds {source_success}/{len(FEEDS)}")
+    print(f"Built Davy Radar: {len(recent[:20])} global news, {len(china_ai_news)} China AI news, {len(skills)} skills; feeds {source_success}/{len(FEEDS)} global, {china_sources_ok}/{len(CHINA_FEEDS)} China")
 
 if __name__ == "__main__":
     main()
