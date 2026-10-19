@@ -171,7 +171,7 @@ const mark = (status, name, detail = '') => {
       await radarPage.waitForSelector('#featuredSkill [data-nb-skill-save]', { timeout: 20000 });
       const saveButton = radarPage.locator('#featuredSkill [data-nb-skill-save]').first();
       const savedSkillName = await saveButton.getAttribute('data-skill-name');
-      const popupPromise = radarPage.waitForEvent('popup', { timeout: 20000 });
+      const popupPromise = radarPage.context().waitForEvent('page', { timeout: 20000 });
       await saveButton.click();
       const nianboxPopup = await popupPromise;
       await nianboxPopup.waitForLoadState('domcontentloaded', { timeout: 45000 });
