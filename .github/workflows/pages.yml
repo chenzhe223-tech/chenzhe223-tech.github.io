@@ -35,6 +35,17 @@ jobs:
           python-version: "3.12"
       - name: Refresh today's AI news and Skill shortlist
         run: python radar/scripts/build_daily.py
+      - name: Diagnose AI enrichment configuration (without exposing secrets)
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          cfg=json.loads(Path('radar/config/horizon.json').read_text(encoding='utf-8'))
+          print('DeepSeek API key configured:', bool(os.environ.get('DEEPSEEK_API_KEY')))
+          print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
+          PY
       - name: Run optional Horizon enrichment (bounded, non-blocking)
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
