@@ -56,10 +56,13 @@ jobs:
           if ! timeout 240s python radar/scripts/run_horizon.py; then
             echo "::warning::Horizon/AI enrichment failed or exceeded 240 seconds; publishing will continue only if subsequent date, source, poster, QR and browser QA checks pass."
           fi
+      - name: Match story-specific images (free sources first)
+        run: python radar/scripts/news_image_match.py
       - name: Validate today's date, fresh news and data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py
           python -m unittest radar.scripts.test_daily_brief
+          python -m unittest radar.scripts.test_news_image_match -v
           python - <<'PY'
           import datetime as dt, json
           from pathlib import Path
@@ -138,6 +141,7 @@ jobs:
           # Snapshot generated outputs before switching to the latest main, which
           # may already contain another run's files for the same date.
           cp radar/data/latest.json "$SNAPSHOT/latest.json"
+          cp radar/data/image-cache.json "$SNAPSHOT/image-cache.json"
           cp "radar/data/archive/$TODAY.json" "$SNAPSHOT/today.json"
           cp "radar/posters/$TODAY.png" "$SNAPSHOT/today.png"
           cp "radar/posters/$TODAY.json" "$SNAPSHOT/today-poster.json"
@@ -150,6 +154,7 @@ jobs:
           git clean -fd -e test-results/
           git checkout -B main origin/main
           cp "$SNAPSHOT/latest.json" radar/data/latest.json
+          cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
           cp "$SNAPSHOT/today.json" "radar/data/archive/$TODAY.json"
           cp "$SNAPSHOT/today.png" "radar/posters/$TODAY.png"
           cp "$SNAPSHOT/today-poster.json" "radar/posters/$TODAY.json"
@@ -171,7 +176,7 @@ jobs:
           days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
           Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           PY
-          git add radar/data/latest.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" radar/posters/latest.png radar/posters/latest.json
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" radar/posters/latest.png radar/posters/latest.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
