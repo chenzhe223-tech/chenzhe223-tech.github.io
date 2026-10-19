@@ -109,7 +109,7 @@ def feed_image(item: ET.Element, raw_html: str = "") -> str:
         elif local == "content" and candidate:
             mime = node.attrib.get("type", "").lower()
             medium = node.attrib.get("medium", "").lower()
-            if medium == "image" or mime.startswith("image/") or re.search(r"\\.(?:png|jpe?g|webp|avif)(?:[?#]|$)", candidate, re.I):
+            if medium == "image" or mime.startswith("image/") or re.search(r"\.(?:png|jpe?g|webp|avif)(?:[?#]|$)", candidate, re.I):
                 media_images.append(candidate)
         elif local == "image" and candidate:
             thumbnails.append(candidate)
