@@ -24,6 +24,16 @@ function check(ok, name, detail = '') {
       await page.waitForTimeout(700);
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
       check(await page.locator('#newsCount').innerText().then(x => Number(x) > 0), viewport.name + ': source news rendered', await page.locator('#newsCount').innerText());
+      check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
+      check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
+      const chinaCards = page.locator('#chinaAINewsList .item');
+      const chinaCount = await chinaCards.count();
+      if (chinaCount > 0) {
+        check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
+        check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
+      } else {
+        check((await page.locator('#chinaAINewsList').innerText()).length > 0, viewport.name + ': empty China AI state explains no qualifying stories');
+      }
       const cards = page.locator('#top5List .top5-card');
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
@@ -78,6 +88,7 @@ function check(ok, name, detail = '') {
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': language switch works');
+      check((await page.locator('#chinaAI h2').innerText()).includes('China AI'), viewport.name + ': China AI module localizes to English');
       await page.getByRole('button', { name: '中文' }).click();
       check(await page.locator('html').getAttribute('lang') === 'zh-CN', viewport.name + ': language switches back');
       check(errors.length === 0, viewport.name + ': no JavaScript errors', errors.join('; '));
