@@ -63,7 +63,7 @@ class NewsImageMatchTests(unittest.TestCase):
 
     def test_ai_story_context_maps_to_topic_fallback(self):
         self.assertEqual(story_fallback_topic({"title_en":"New AI robot agent automation release"}), "robot")
-        self.assertEqual(story_fallback_topic({"title_zh":"银行与客户生成式AI服务"}), "business")
+        self.assertEqual(story_fallback_topic({"title_zh":"银行企业客户金融服务"}), "business")
 
 
 if __name__ == "__main__":
