@@ -475,6 +475,34 @@ section{margin-bottom:40px}
 }
 @media(prefers-reduced-motion:reduce){.hero-actions a{transition:none}}
 
+
+/* China AI story wall: balanced editorial cards, independent from the five-card layout */
+.china-news-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  align-items:stretch;
+}
+.china-news-grid>.china-ai-card,
+.china-news-grid>.china-ai-card:nth-child(4),
+.china-news-grid>.china-ai-card:nth-child(5){
+  grid-column:auto;
+  min-width:0;
+  height:100%;
+}
+.china-news-grid .story-image{height:174px;flex-shrink:0}
+.china-news-grid .top5-content{display:flex;flex-direction:column;flex:1;min-width:0}
+.china-news-grid .china-story-source{margin-top:auto;padding-top:8px}
+@media(max-width:760px){
+  .china-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .china-news-grid>.china-ai-card,
+  .china-news-grid>.china-ai-card:nth-child(4),
+  .china-news-grid>.china-ai-card:nth-child(5){grid-column:auto}
+  .china-news-grid .story-image{height:144px}
+}
+@media(max-width:430px){
+  .china-news-grid{grid-template-columns:minmax(0,1fr)}
+  .china-news-grid .story-image{height:185px}
+}
+
 </style>
 </head>
 <body><div class="wrap">
