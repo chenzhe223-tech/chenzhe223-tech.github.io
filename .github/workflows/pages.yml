@@ -88,12 +88,17 @@ jobs:
           sudo apt-get install -y fonts-noto-cjk
           python -m pip install --upgrade pillow 'qrcode[pil]' opencv-python-headless
           python radar/scripts/generate_poster.py
+          test -s radar/posters/latest.png
+          test -s radar/posters/latest.json
+          test -s "radar/posters/$(python -c "import json; print(json.load(open('radar/posters/latest.json'))['report_date'])").png"
           python - <<'PY'
           import cv2, json
           from pathlib import Path
           manifest=json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
-          image=cv2.imread(manifest['poster'])
-          if image is None: raise SystemExit('Poster PNG cannot be opened')
+          poster=Path(manifest['poster'])
+          if not poster.is_file(): raise SystemExit(f"Poster path missing: {poster}")
+          image=cv2.imread(str(poster))
+          if image is None: raise SystemExit(f"Poster PNG cannot be opened: {poster}")
           qr_crop = image[1600:1790, 25:220]
           decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(qr_crop)
           if decoded != manifest['qr_url']: raise SystemExit('QR mismatch: decoded={!r}, expected={!r}'.format(decoded, manifest['qr_url']))
