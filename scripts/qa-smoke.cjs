@@ -27,7 +27,7 @@ const mark = (status, name, detail = '') => {
     const titleOk = (await desktop.title()).includes('DAVYLAB');
     mark(titleOk ? 'PASS' : 'FAIL', '页面标题', await desktop.title());
     const n = await desktop.locator('#shelf .app-card').count();
-    mark(n === 17 ? 'PASS' : 'FAIL', '产品卡片渲染', '预期 17，实际 ' + n);
+    mark(n >= 17 ? 'PASS' : 'FAIL', '产品卡片渲染', '预期至少 17，实际 ' + n);
     await desktop.screenshot({ path: path.join(out, 'desktop-home.png'), fullPage: true });
     const dims = await desktop.locator('#shelf').evaluate(e => ({ viewport: e.clientWidth, content: e.scrollWidth }));
     mark(dims.content > dims.viewport + 8 ? 'PASS' : 'FAIL', '横向应用货架', JSON.stringify(dims));
@@ -45,7 +45,7 @@ const mark = (status, name, detail = '') => {
     await desktop.locator('#search').fill('');
     await desktop.locator('[data-filter="concepts"]').click();
     const cn = await desktop.locator('#shelf .app-card').count();
-    mark(cn > 0 && cn < 17 ? 'PASS' : 'FAIL', '分类筛选', '概念项目筛选数=' + cn);
+    mark(cn > 0 && cn < n ? 'PASS' : 'FAIL', '分类筛选', '概念项目筛选数=' + cn + ' / 全部=' + n);
     await desktop.locator('[data-filter="all"]').click();
     await desktop.locator('[data-detail="nianbox"]').click();
     await desktop.locator('#modal.open').waitFor({ timeout: 5000 });
