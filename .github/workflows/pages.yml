@@ -3,6 +3,9 @@ name: Deploy DAVYLAB to GitHub Pages
 on:
   push:
     branches: ["main"]
+  schedule:
+    # 07:30 Asia/Shanghai; GitHub may delay scheduled starts.
+    - cron: "30 23 * * *"
   workflow_dispatch:
 
 permissions:
@@ -27,10 +30,55 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate daily brief data contract
+      - name: Refresh today's AI news and Skill shortlist
+        run: python radar/scripts/build_daily.py
+      - name: Run optional Horizon enrichment
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        shell: bash
         run: |
-          python -m py_compile radar/scripts/run_horizon.py
+          if [ ! -d /tmp/Horizon ]; then
+            git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon
+          fi
+          if [ -f /tmp/Horizon/requirements.txt ]; then
+            python -m pip install -r /tmp/Horizon/requirements.txt
+          fi
+          python radar/scripts/run_horizon.py
+      - name: Validate today's date, fresh news and data contract
+        run: |
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py
           python -m unittest radar.scripts.test_daily_brief
+          python - <<'PY'
+          import datetime as dt, json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          p = Path('radar/data/latest.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          if d.get('report_date') != today or not d.get('generated_at', '').startswith(today):
+              raise SystemExit(f"Stale date: report={d.get('report_date')} generated={d.get('generated_at')} expected={today}")
+          news = d.get('news', [])
+          if len(news) < 5 or int(d.get('sources_ok', 0)) < 1:
+              raise SystemExit(f"Insufficient source data: news={len(news)} sources_ok={d.get('sources_ok')}")
+          now = dt.datetime.now(dt.timezone.utc)
+          fresh = []
+          for item in news:
+              try:
+                  published = dt.datetime.fromisoformat(item.get('published', '').replace('Z', '+00:00'))
+                  if published.tzinfo is None: published = published.replace(tzinfo=dt.timezone.utc)
+                  if (now - published).total_seconds() <= 72 * 3600: fresh.append(item)
+              except Exception: pass
+          if len(fresh) < 3:
+              raise SystemExit(f"Refusing stale report: only {len(fresh)} stories within 72 hours")
+          if any(not x.get('url', '').startswith('https://') for x in news[:5]):
+              raise SystemExit('One of the first five stories has no HTTPS source URL')
+          archive = Path('radar/data/archive') / f'{today}.json'
+          archive.parent.mkdir(parents=True, exist_ok=True)
+          archive.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+          history = sorted([x.name for x in Path('radar/data/archive').glob('*.json')], reverse=True)[:30]
+          Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+          print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; sources={d.get('sources_ok')}/{d.get('sources_total')}")
+          PY
       - name: Install Playwright
         run: |
           npm init -y
