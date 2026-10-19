@@ -2,7 +2,7 @@
   "product": "Davy Radar",
   "report_date": "2026-10-19",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-19T13:15:49.529939+08:00",
+  "generated_at": "2026-10-19T13:18:24.383998+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
@@ -12,156 +12,84 @@
       "url": "https://simonwillison.net/2026/Oct/18/llm-tools-datasette/",
       "summary": "Release: llm-tools-datasette 0.1.1 When I switched LLM over to httpx2 in LLM 0.33 I forget that this would break any plugins which used httpx without directly depending on it. llm-tools-datasette was one of those plugins, now fixed. Tags: datasette , llm",
       "published": "2026-10-18T23:43:09+00:00",
-      "source": "Simon Willison",
-      "title_zh": "llm-tools-datasette 0.1.1",
-      "summary_zh": "llm-tools-datasette 发布 0.1.1，修复了因 LLM 0.33 改用 httpx2 而导致依赖 httpx 但未直接声明依赖的插件出现的问题。",
-      "why_it_matters_zh": "该版本恢复了该插件在 LLM 0.33 环境下的可用性。",
-      "title_en": "llm-tools-datasette 0.1.1",
-      "summary_en": "llm-tools-datasette 0.1.1 fixes the plugin after LLM 0.33 switched to httpx2, which broke plugins that used httpx without depending on it directly.",
-      "why_it_matters_en": "The release restores the plugin's compatibility with LLM 0.33."
+      "source": "Simon Willison"
     },
     {
       "title": "llm-echo 0.5",
       "url": "https://simonwillison.net/2026/Oct/18/llm-echo/",
       "summary": "Release: llm-echo 0.5 I'm working towards a new LLM release, and testing PRs caused me to revisit the llm-echo debug plugin. This plugin provides a \"model\" which doesn't involve an LLM at all - it just repeats back the prompts that have been fed to it. The new release now updates the simulated token usage counts to take tool calls, system prompts, and reason",
       "published": "2026-10-18T23:16:16+00:00",
-      "source": "Simon Willison",
-      "title_zh": "llm-echo 0.5",
-      "summary_zh": "llm-echo 0.5 发布，作者在筹备新版 LLM 时重新审视了这个调试插件；该插件提供一个不涉及真实 LLM、只回显提示词的“模型”。新版本更新了模拟 token 用量统计，以计入工具调用、系统提示和推理等因素。",
-      "why_it_matters_zh": "这有助于在没有真实模型调用时，更准确地模拟和测试 LLM 的 token 使用情况。",
-      "title_en": "llm-echo 0.5",
-      "summary_en": "llm-echo 0.5 revisits the debug plugin as the author works toward a new LLM release; the plugin provides a “model” that repeats prompts without using an LLM. The release updates simulated token usage counts to account for tool calls, system prompts, and reasoning.",
-      "why_it_matters_en": "This helps make simulated token accounting more realistic when testing LLM behavior without a real model."
+      "source": "Simon Willison"
     },
     {
       "title": "Anthropic says it’s committing 5% of its shares to a ‘public benefit fund’",
       "url": "https://techcrunch.com/2026/10/18/anthropic-says-its-committing-5-of-its-shares-to-a-public-benefit-fund/",
       "summary": "Anthropic said that it will commit 5% of its shares to the fund.",
       "published": "2026-10-18T20:37:40+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "Anthropic 称将把 5% 股份投入“公共利益基金”",
-      "summary_zh": "Anthropic 表示，将把公司 5% 的股份投入该基金。",
-      "why_it_matters_zh": "该承诺将公司部分股权用于公共利益基金，是 AI 公司治理与利益分配的一项值得关注的安排。",
-      "title_en": "Anthropic says it’s committing 5% of its shares to a ‘public benefit fund’",
-      "summary_en": "Anthropic said it will commit 5% of its shares to the fund.",
-      "why_it_matters_en": "The commitment allocates a portion of company equity to a public benefit fund, a notable governance arrangement for an AI company."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Disney agrees to hire the majority of Character.AI’s workforce",
       "url": "https://techcrunch.com/2026/10/18/disney-agrees-to-hire-the-majority-of-character-ais-workforce/",
       "summary": "The filing also says that the “vast majority” of Character.AI employees who were offered jobs at Disney accepted them. However, this is a stalking horse bid, so another company could come forward with a higher offer.",
       "published": "2026-10-18T16:30:00+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "迪士尼同意聘用 Character.AI 的大部分员工",
-      "summary_zh": "文件还称，在获得迪士尼工作邀请的 Character.AI 员工中，“绝大多数”已接受。不过这是一项 stalking horse 竞标，其他公司可能提出更高报价。",
-      "why_it_matters_zh": "由于这是 stalking horse 竞标，交易尚未最终确定，可能被其他更高报价取代。",
-      "title_en": "Disney agrees to hire the majority of Character.AI’s workforce",
-      "summary_en": "The filing also says that the “vast majority” of Character.AI employees who were offered jobs at Disney accepted them. However, this is a stalking horse bid, so another company could come forward with a higher offer.",
-      "why_it_matters_en": "Because it is a stalking horse bid, the deal is not final and could be topped by another offer."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Meta removes language that raised scraping and AI training concerns",
       "url": "https://techcrunch.com/2026/10/17/meta-removes-language-that-raised-scraping-and-ai-training-concerns/",
       "summary": "A Meta spokesperson insisted that the updated terms did not reflect a change in the way Meta crawls the web.",
       "published": "2026-10-17T21:31:32+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "Meta 删除引发抓取与 AI 训练担忧的措辞",
-      "summary_zh": "Meta 发言人坚称，条款更新并不反映 Meta 爬取网页方式的改变。",
-      "why_it_matters_zh": "措辞调整引发了对网页抓取和 AI 训练的担忧，但 Meta 否认其爬取行为发生变化。",
-      "title_en": "Meta removes language that raised scraping and AI training concerns",
-      "summary_en": "A Meta spokesperson insisted that the updated terms did not reflect a change in the way Meta crawls the web.",
-      "why_it_matters_en": "The wording change drew attention to scraping and AI training, though Meta says its crawling behavior is unchanged."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Anthropic says its workforce has become less junior and is spending more time in meetings",
       "url": "https://techcrunch.com/2026/10/17/anthropic-says-its-workforce-has-become-less-junior-and-is-spending-more-time-in-meetings/",
       "summary": "The composition of Anthropic’s workforce and the type of work getting done have changed significantly in the past year.",
       "published": "2026-10-17T20:21:19+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "Anthropic 称员工结构变得更资深，会议时间增加",
-      "summary_zh": "Anthropic 表示，过去一年公司员工构成和所完成工作的类型发生了显著变化。",
-      "why_it_matters_zh": "公司称人员构成与工作方式的变化在过去一年十分明显。",
-      "title_en": "Anthropic says its workforce has become less junior and is spending more time in meetings",
-      "summary_en": "The composition of Anthropic’s workforce and the type of work getting done have changed significantly in the past year.",
-      "why_it_matters_en": "Anthropic says the shift in workforce composition and work patterns has been significant over the past year."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Replit makes OpenAI its default over Anthropic, CEO says",
       "url": "https://techcrunch.com/2026/10/17/replit-is-no-longer-working-with-anthropic-ceo-says/",
       "summary": "Over the weekend, Masad clarified that OpenAI would replace Anthropic as its default model provider. Claude will still be available to customers on the platform.",
       "published": "2026-10-17T18:48:08+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "Replit CEO 称已将 OpenAI 设为默认模型供应商，取代 Anthropic",
-      "summary_zh": "Masad 周末澄清，OpenAI 将取代 Anthropic 成为其默认模型供应商；Claude 仍会向平台客户提供。",
-      "why_it_matters_zh": "默认供应商变更会改变 Replit 用户的默认模型体验，但 Claude 仍可使用。",
-      "title_en": "Replit makes OpenAI its default over Anthropic, CEO says",
-      "summary_en": "Over the weekend, Masad clarified that OpenAI would replace Anthropic as its default model provider. Claude will still be available to customers on the platform.",
-      "why_it_matters_en": "The default-provider switch changes the primary model experience for Replit users, while Claude remains available."
+      "source": "TechCrunch AI"
     },
     {
       "title": "web-edit 0.1a2",
       "url": "https://simonwillison.net/2026/Oct/17/web-edit/",
       "summary": "Release: web-edit 0.1a2 web-edit ( previously ) is my tiny web app for browsing and editing files in a folder. I mainly built it for editing files on different machines via Tailscale. I added a \"copy to clipboard\" option for both text and image data. I needed this because I was running pelican prompts on a laptop from my phone (here's DeepSeek 4.1 Flash 1017",
       "published": "2026-10-17T13:16:49+00:00",
-      "source": "Simon Willison",
-      "title_zh": "web-edit 0.1a2",
-      "summary_zh": "web-edit 是一个用于浏览和编辑文件夹中文件的小型 Web 应用，主要用来通过 Tailscale 编辑不同机器上的文件。新版本为文本和图像数据增加了“复制到剪贴板”选项。",
-      "why_it_matters_zh": "新增功能服务于从手机操作远程文件的场景，便于传递文本和图像数据。",
-      "title_en": "web-edit 0.1a2",
-      "summary_en": "web-edit is a tiny web app for browsing and editing files in a folder, mainly built for editing files on different machines via Tailscale. The new release adds a “copy to clipboard” option for text and image data.",
-      "why_it_matters_en": "The clipboard option makes it easier to move text and image data when editing remote files from a phone."
+      "source": "Simon Willison"
     },
     {
       "title": "How Itaú is building generative AI for its entire customer base",
       "url": "https://openai.com/index/itau-generative-ai",
       "summary": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees — in one of Brazil’s most regulated sectors.",
       "published": "2026-10-16T19:00:00+00:00",
-      "source": "OpenAI",
-      "title_zh": "Itaú 如何为其全部客户构建生成式 AI",
-      "summary_zh": "Itaú 通过对话式界面 ia.i 和治理平台 IARA，将 AI First 战略应用于客户和员工，覆盖巴西监管最严格的行业之一。",
-      "why_it_matters_zh": "这展示了受监管行业中面向客户与员工的生成式 AI 落地及治理实践。",
-      "title_en": "How Itaú is building generative AI for its entire customer base",
-      "summary_en": "With ia.i, a conversational interface, and the IARA governance platform, Itaú is applying its AI First strategy to customers and employees in one of Brazil’s most regulated sectors.",
-      "why_it_matters_en": "It illustrates generative AI deployment and governance for customers and employees in a heavily regulated sector."
+      "source": "OpenAI"
     },
     {
       "title": "India becomes the latest country to report rogue AI agent activity",
       "url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
       "summary": "The agents got in through credentials and connection settings left exposed in app configurations, public code repositories, and overly permissive cloud roles.",
       "published": "2026-10-16T17:52:24+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "印度成为最新报告 rogue AI 智能体活动的国家",
-      "summary_zh": "这些智能体通过应用配置、公共代码仓库中暴露的凭据和连接设置，以及权限过宽的云角色进入。",
-      "why_it_matters_zh": "暴露的凭据、配置和过宽云权限成为入口，凸显配置安全风险。",
-      "title_en": "India becomes the latest country to report rogue AI agent activity",
-      "summary_en": "The agents got in through credentials and connection settings left exposed in app configurations, public code repositories, and overly permissive cloud roles.",
-      "why_it_matters_en": "Exposed credentials, configuration settings, and overly broad cloud roles were the entry points, highlighting configuration security risks."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Physical AI is more than robots, says the Nvidia veteran now investing in it",
       "url": "https://techcrunch.com/podcast/physical-ai-is-more-than-robots-says-the-nvidia-veteran-now-investing-in-it/",
       "summary": "Amulya Vishwanath, who spent seven years leading product marketing for NVIDIA’s robotics platforms, says robotics is currently in its “Lego era,” with the basic building blocks like actuators, robotic hands, software, and safety standards still being&#160;rebuilt.&#160; This view runs counter to those who believe that robotics, powered by a general foundatio",
       "published": "2026-10-16T16:30:00+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "投资物理 AI 的 Nvidia 资深人士称，物理 AI 不止是机器人",
-      "summary_zh": "曾领导 Nvidia 机器人平台产品营销七年的 Amulya Vishwanath 表示，机器人目前处于“乐高时代”，执行器、机械手、软件和安全标准等基础模块仍在重建；这与认为通用基础模型将驱动机器人的观点不同。",
-      "why_it_matters_zh": "这强调物理 AI 的进展不仅取决于机器人本体，还依赖基础组件与标准的成熟。",
-      "title_en": "Physical AI is more than robots, says the Nvidia veteran now investing in it",
-      "summary_en": "Amulya Vishwanath, who spent seven years leading product marketing for NVIDIA’s robotics platforms, says robotics is currently in its “Lego era,” with basic building blocks like actuators, robotic hands, software, and safety standards still being rebuilt. This view runs counter to those who believe robotics will be powered by a general foundation model.",
-      "why_it_matters_en": "It stresses that physical AI progress depends on maturing components and standards, not just robots or foundation models."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Elorian’s first AI model wants to reason with images, not just about them",
       "url": "https://techcrunch.com/2026/10/16/elorians-first-ai-model-wants-to-reason-with-images-not-just-about-them/",
       "summary": "According to Elorian's evaluations, Glimpse outperforms even GPT-6 Astra on scientific chart reasoning and short-form video captioning, with competitive results on other visual reasoning tasks.",
       "published": "2026-10-16T16:01:37+00:00",
-      "source": "TechCrunch AI",
-      "title_zh": "Elorian 的首个 AI 模型希望借助图像进行推理，而不只是对图像进行推理",
-      "summary_zh": "根据 Elorian 的评估，Glimpse 在科学图表推理和短视频字幕生成上优于 GPT-6 Astra，并在其他视觉推理任务上取得有竞争力的结果。",
-      "why_it_matters_zh": "若 Elorian 的自评结果成立，Glimpse 将在视觉推理任务上具备竞争力；相关结果来自公司自身评估。",
-      "title_en": "Elorian’s first AI model wants to reason with images, not just about them",
-      "summary_en": "According to Elorian's evaluations, Glimpse outperforms even GPT-6 Astra on scientific chart reasoning and short-form video captioning, with competitive results on other visual reasoning tasks.",
-      "why_it_matters_en": "If Elorian's own evaluations hold, Glimpse would be competitive on visual reasoning tasks; the results are company-reported."
+      "source": "TechCrunch AI"
     },
     {
       "title": "Jev is Vercel’s fastest-adopted AI model ever",
@@ -277,20 +205,16 @@
         "skills",
         "subagent-driven-development",
         "superpowers"
-      ],
-      "description_zh": "一个可用的智能体技能框架与软件开发方法论。",
-      "description_en": "An agentic skills framework & software development methodology that works."
+      ]
     },
     {
       "name": "mattpocock/skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
-      "stars": 296447,
-      "updated": "2026-10-19T05:14:15Z",
+      "stars": 296450,
+      "updated": "2026-10-19T05:18:15Z",
       "language": "Shell",
-      "topics": [],
-      "description_zh": "面向真实工程师的技能，直接来自作者的 .agents 目录。",
-      "description_en": "Skills for Real Engineers. Straight from my .agents directory."
+      "topics": []
     },
     {
       "name": "affaan-m/ECC",
@@ -308,9 +232,7 @@
         "llm",
         "mcp",
         "productivity"
-      ],
-      "description_zh": "智能体运行框架性能优化系统，为 Claude Code、Codex、Opencode、Cursor 等提供技能、直觉、记忆、安全和研究优先的开发支持。",
-      "description_en": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond."
+      ]
     },
     {
       "name": "multica-ai/andrej-karpathy-skills",
@@ -319,22 +241,18 @@
       "stars": 221012,
       "updated": "2026-10-19T05:10:50Z",
       "language": "Multi-language",
-      "topics": [],
-      "description_zh": "一个用于改善 Claude Code 行为的单一 CLAUDE.md 文件，源自 Andrej Karpathy 对 LLM 编程陷阱的观察。",
-      "description_en": "A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls."
+      "topics": []
     },
     {
       "name": "anthropics/skills",
       "url": "https://github.com/anthropics/skills",
       "description": "Public repository for Agent Skills",
-      "stars": 182043,
-      "updated": "2026-10-19T05:10:12Z",
+      "stars": 182044,
+      "updated": "2026-10-19T05:18:13Z",
       "language": "Python",
       "topics": [
         "agent-skills"
-      ],
-      "description_zh": "Agent Skills 的公共仓库。",
-      "description_en": "Public repository for Agent Skills"
+      ]
     },
     {
       "name": "Shubhamsaboo/awesome-llm-apps",
@@ -348,16 +266,14 @@
         "llms",
         "python",
         "rag"
-      ],
-      "description_zh": "100 多个 AI 智能体、智能体技能和 RAG 应用，免费且开源。",
-      "description_en": "100+ AI Agents, Agent Skills and RAG Apps - Free and Open Source."
+      ]
     },
     {
       "name": "Graphify-Labs/graphify",
       "url": "https://github.com/Graphify-Labs/graphify",
       "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
-      "stars": 128539,
-      "updated": "2026-10-19T05:15:34Z",
+      "stars": 128540,
+      "updated": "2026-10-19T05:16:13Z",
       "language": "Python",
       "topics": [
         "ai-agents",
@@ -374,8 +290,8 @@
       "name": "JuliusBrussee/caveman",
       "url": "https://github.com/JuliusBrussee/caveman",
       "description": "🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.",
-      "stars": 113509,
-      "updated": "2026-10-19T05:14:54Z",
+      "stars": 113510,
+      "updated": "2026-10-19T05:16:43Z",
       "language": "Go",
       "topics": [
         "ai",
@@ -408,8 +324,8 @@
       "name": "Leonxlnx/taste-skill",
       "url": "https://github.com/Leonxlnx/taste-skill",
       "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
-      "stars": 98948,
-      "updated": "2026-10-19T05:14:45Z",
+      "stars": 98949,
+      "updated": "2026-10-19T05:17:54Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -432,83 +348,174 @@
     "status": "unavailable",
     "message": "AI 分析本次未完成，基础新闻与 Skill 榜单仍正常展示。"
   },
-  "localization": {
-    "status": "partial",
-    "languages": [
-      "zh",
-      "en"
-    ],
-    "translated_news": 12,
-    "translated_skills": 6,
-    "top5_count": 0,
-    "provider": "DeepSeek"
-  },
   "top5": [
     {
-      "title_zh": "llm-tools-datasette 0.1.1",
-      "title_en": "llm-tools-datasette 0.1.1",
-      "what_zh": "llm-tools-datasette 发布 0.1.1，修复了因 LLM 0.33 改用 httpx2 而导致依赖 httpx 但未直接声明依赖的插件出现的问题。",
-      "what_en": "llm-tools-datasette 0.1.1 fixes the plugin after LLM 0.33 switched to httpx2, which broke plugins that used httpx without depending on it directly.",
-      "why_zh": "该版本恢复了该插件在 LLM 0.33 环境下的可用性。",
-      "why_en": "The release restores the plugin's compatibility with LLM 0.33.",
-      "source_url": "https://simonwillison.net/2026/Oct/18/llm-tools-datasette/",
-      "source": "Simon Willison",
-      "published": "2026-10-18T23:43:09+00:00",
-      "original_title": "llm-tools-datasette 0.1.1",
-      "fallback": true
-    },
-    {
-      "title_zh": "llm-echo 0.5",
-      "title_en": "llm-echo 0.5",
-      "what_zh": "llm-echo 0.5 发布，作者在筹备新版 LLM 时重新审视了这个调试插件；该插件提供一个不涉及真实 LLM、只回显提示词的“模型”。新版本更新了模拟 token 用量统计，以计入工具调用、系统提示和推理等因素。",
-      "what_en": "llm-echo 0.5 revisits the debug plugin as the author works toward a new LLM release; the plugin provides a “model” that repeats prompts without using an LLM. The release updates simulated token usage counts to account for tool calls, system prompts, and reasoning.",
-      "why_zh": "这有助于在没有真实模型调用时，更准确地模拟和测试 LLM 的 token 使用情况。",
-      "why_en": "This helps make simulated token accounting more realistic when testing LLM behavior without a real model.",
-      "source_url": "https://simonwillison.net/2026/Oct/18/llm-echo/",
-      "source": "Simon Willison",
-      "published": "2026-10-18T23:16:16+00:00",
-      "original_title": "llm-echo 0.5",
-      "fallback": true
-    },
-    {
-      "title_zh": "Anthropic 称将把 5% 股份投入“公共利益基金”",
-      "title_en": "Anthropic says it’s committing 5% of its shares to a ‘public benefit fund’",
-      "what_zh": "Anthropic 表示，将把公司 5% 的股份投入该基金。",
-      "what_en": "Anthropic said it will commit 5% of its shares to the fund.",
-      "why_zh": "该承诺将公司部分股权用于公共利益基金，是 AI 公司治理与利益分配的一项值得关注的安排。",
-      "why_en": "The commitment allocates a portion of company equity to a public benefit fund, a notable governance arrangement for an AI company.",
-      "source_url": "https://techcrunch.com/2026/10/18/anthropic-says-its-committing-5-of-its-shares-to-a-public-benefit-fund/",
+      "source_index": 11,
+      "title_zh": "Elorian 首个 AI 模型 Glimpse 主打“用图像推理”",
+      "title_en": "Elorian's first AI model wants to reason with images, not just about them",
+      "category_zh": "技术突破",
+      "category_en": "Technical Breakthrough",
+      "what_zh": "Elorian 发布首个模型 Glimpse，称其在科学图表推理和短视频描述上优于 GPT-6 Astra，并在其他视觉推理任务上有竞争力；结果来自公司自评。",
+      "what_en": "Elorian released its first model, Glimpse, claiming it outperforms GPT-6 Astra on scientific chart reasoning and short-video captioning, with competitive results on other visual reasoning tasks; results are from the company's own evaluations.",
+      "why_zh": "视觉推理是多模态应用的关键能力；若能被独立复现，可能推动图表分析、视频理解等工具。",
+      "why_en": "Visual reasoning is key for multimodal applications; if independently reproduced, it could advance chart analysis and video understanding tools.",
+      "editor_judgment_zh": "值得关注，但需独立验证；公司自评不能等同于第三方基准。",
+      "editor_judgment_en": "Worth watching but needs independent verification; company evaluations are not third-party benchmarks.",
+      "opportunity_risk_zh": "机会在于更专业的视觉分析产品；风险是夸大宣传和基准不可比。",
+      "opportunity_risk_en": "Opportunity in more specialized visual analysis products; risk of hype and non-comparable benchmarks.",
+      "action_zh": "阅读来源并等待独立评测或公开基准结果。",
+      "action_en": "Read the source and wait for independent evaluations or public benchmark results.",
+      "scores": {
+        "innovation": 8,
+        "practicality": 6,
+        "feasibility": 6,
+        "impact": 7,
+        "opportunity": 7
+      },
+      "confidence": "low",
+      "source_url": "https://techcrunch.com/2026/10/16/elorians-first-ai-model-wants-to-reason-with-images-not-just-about-them/",
       "source": "TechCrunch AI",
-      "published": "2026-10-18T20:37:40+00:00",
-      "original_title": "Anthropic says it’s committing 5% of its shares to a ‘public benefit fund’",
-      "fallback": true
+      "published": "2026-10-16T16:01:37+00:00",
+      "original_title": "Elorian’s first AI model wants to reason with images, not just about them",
+      "total_score": 34
     },
     {
-      "title_zh": "迪士尼同意聘用 Character.AI 的大部分员工",
-      "title_en": "Disney agrees to hire the majority of Character.AI’s workforce",
-      "what_zh": "文件还称，在获得迪士尼工作邀请的 Character.AI 员工中，“绝大多数”已接受。不过这是一项 stalking horse 竞标，其他公司可能提出更高报价。",
-      "what_en": "The filing also says that the “vast majority” of Character.AI employees who were offered jobs at Disney accepted them. However, this is a stalking horse bid, so another company could come forward with a higher offer.",
-      "why_zh": "由于这是 stalking horse 竞标，交易尚未最终确定，可能被其他更高报价取代。",
-      "why_en": "Because it is a stalking horse bid, the deal is not final and could be topped by another offer.",
+      "source_index": 6,
+      "title_zh": "Replit 将 OpenAI 设为默认模型，Claude 仍可用",
+      "title_en": "Replit makes OpenAI its default over Anthropic, CEO says",
+      "category_zh": "产品应用",
+      "category_en": "Product & Application",
+      "what_zh": "Replit CEO 表示 OpenAI 将取代 Anthropic 成为平台默认模型提供商，Claude 仍向客户开放。",
+      "what_en": "Replit's CEO said OpenAI will replace Anthropic as the platform's default model provider; Claude remains available to customers.",
+      "why_zh": "默认模型变化会影响大量开发者的成本、延迟和输出质量体验，也反映平台对模型供应商的选择。",
+      "why_en": "Default model changes affect cost, latency and output quality for many developers, and signal platform supplier choices.",
+      "editor_judgment_zh": "对 Replit 用户是实际变化；但应等待官方文档确认迁移时间和范围。",
+      "editor_judgment_en": "A practical change for Replit users; wait for official docs to confirm timing and scope.",
+      "opportunity_risk_zh": "机会是测试新默认模型并比较工作流；风险是行为差异和锁定。",
+      "opportunity_risk_en": "Opportunity to test the new default and compare workflows; risk of behavior differences and lock-in.",
+      "action_zh": "查看 Replit 官方说明，并在非关键项目中对比新旧模型输出。",
+      "action_en": "Check Replit's official announcement and compare old/new model outputs in non-critical projects.",
+      "scores": {
+        "innovation": 3,
+        "practicality": 8,
+        "feasibility": 8,
+        "impact": 6,
+        "opportunity": 6
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/17/replit-is-no-longer-working-with-anthropic-ceo-says/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-17T18:48:08+00:00",
+      "original_title": "Replit makes OpenAI its default over Anthropic, CEO says",
+      "total_score": 31
+    },
+    {
+      "source_index": 3,
+      "title_zh": "迪士尼同意聘用 Character.AI 大部分员工",
+      "title_en": "Disney agrees to hire the majority of Character.AI's workforce",
+      "category_zh": "行业影响",
+      "category_en": "Industry Impact",
+      "what_zh": "提交文件显示，迪士尼同意聘用 Character.AI 多数员工，且“绝大多数”收到录用的人已接受；该交易为 stalking horse 竞标，可能有更高报价。",
+      "what_en": "A filing says Disney agreed to hire most of Character.AI's staff, with the \"vast majority\" of those offered jobs accepting; it is a stalking horse bid, so a higher offer could emerge.",
+      "why_zh": "显示 AI 人才和团队可能通过并购/聘用整体转移，影响消费级 AI 角色产品竞争格局。",
+      "why_en": "Shows AI talent and teams may move en masse via acquisitions/hiring, affecting competition in consumer AI character products.",
+      "editor_judgment_zh": "重要行业信号，但交易未最终落定；需关注竞标和监管。",
+      "editor_judgment_en": "Important industry signal, but the deal is not final; watch bidding and regulatory review.",
+      "opportunity_risk_zh": "机会是观察人才流动和产品整合；风险是交易变数和对用户服务的连续性。",
+      "opportunity_risk_en": "Opportunity to watch talent flows and product integration; risk of deal uncertainty and service continuity.",
+      "action_zh": "阅读来源并跟踪后续竞标/监管文件。",
+      "action_en": "Read the source and track subsequent bidding/regulatory filings.",
+      "scores": {
+        "innovation": 3,
+        "practicality": 4,
+        "feasibility": 5,
+        "impact": 8,
+        "opportunity": 6
+      },
+      "confidence": "medium",
       "source_url": "https://techcrunch.com/2026/10/18/disney-agrees-to-hire-the-majority-of-character-ais-workforce/",
       "source": "TechCrunch AI",
       "published": "2026-10-18T16:30:00+00:00",
       "original_title": "Disney agrees to hire the majority of Character.AI’s workforce",
-      "fallback": true
+      "total_score": 26
     },
     {
-      "title_zh": "Meta 删除引发抓取与 AI 训练担忧的措辞",
-      "title_en": "Meta removes language that raised scraping and AI training concerns",
-      "what_zh": "Meta 发言人坚称，条款更新并不反映 Meta 爬取网页方式的改变。",
-      "what_en": "A Meta spokesperson insisted that the updated terms did not reflect a change in the way Meta crawls the web.",
-      "why_zh": "措辞调整引发了对网页抓取和 AI 训练的担忧，但 Meta 否认其爬取行为发生变化。",
-      "why_en": "The wording change drew attention to scraping and AI training, though Meta says its crawling behavior is unchanged.",
-      "source_url": "https://techcrunch.com/2026/10/17/meta-removes-language-that-raised-scraping-and-ai-training-concerns/",
+      "source_index": 2,
+      "title_zh": "Anthropic 承诺将 5% 股份投入“公共利益基金”",
+      "title_en": "Anthropic says it's committing 5% of its shares to a 'public benefit fund'",
+      "category_zh": "商业动态",
+      "category_en": "Business & Market",
+      "what_zh": "Anthropic 表示将把 5% 的股份投入公共利益基金。",
+      "what_en": "Anthropic said it will commit 5% of its shares to a public benefit fund.",
+      "why_zh": "前沿 AI 公司的治理和利益分配安排可能成为行业先例，影响公众对 AI 收益分配的预期。",
+      "why_en": "Governance and benefit-sharing at a frontier AI company could set a precedent and shape public expectations about AI value distribution.",
+      "editor_judgment_zh": "信号意义大于短期产品影响；治理、投票和时间表等细节尚不充分。",
+      "editor_judgment_en": "Signaling value outweighs short-term product impact; details on governance, voting and timeline are limited.",
+      "opportunity_risk_zh": "机会是关注基金结构和透明度；风险是承诺执行与治理复杂度。",
+      "opportunity_risk_en": "Opportunity to watch fund structure and transparency; risk in execution and governance complexity.",
+      "action_zh": "阅读来源并查找基金治理细节的后续披露。",
+      "action_en": "Read the source and look for follow-up disclosures on fund governance.",
+      "scores": {
+        "innovation": 5,
+        "practicality": 4,
+        "feasibility": 5,
+        "impact": 7,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/18/anthropic-says-its-committing-5-of-its-shares-to-a-public-benefit-fund/",
       "source": "TechCrunch AI",
-      "published": "2026-10-17T21:31:32+00:00",
-      "original_title": "Meta removes language that raised scraping and AI training concerns",
-      "fallback": true
+      "published": "2026-10-18T20:37:40+00:00",
+      "original_title": "Anthropic says it’s committing 5% of its shares to a ‘public benefit fund’",
+      "total_score": 26
+    },
+    {
+      "source_index": 9,
+      "title_zh": "印度报告失控 AI agent 活动",
+      "title_en": "India becomes the latest country to report rogue AI agent activity",
+      "category_zh": "值得关注",
+      "category_en": "Signals to Watch",
+      "what_zh": "代理通过应用配置、公共代码库和过度宽松的云角色中暴露的凭据与连接设置进入系统。",
+      "what_en": "The agents got in through credentials and connection settings exposed in app configurations, public code repositories, and overly permissive cloud roles.",
+      "why_zh": "说明 AI agent 安全风险已从理论走向实际事件，常见配置错误是主要入口。",
+      "why_en": "Shows AI agent security risks are moving from theory to real incidents, with common misconfigurations as a main entry point.",
+      "editor_judgment_zh": "对构建者是直接提醒；但事件范围和影响细节有限，需谨慎解读。",
+      "editor_judgment_en": "A direct reminder for builders; incident scope and impact details are limited, so interpret cautiously.",
+      "opportunity_risk_zh": "机会是加强密钥管理和最小权限；风险是自动化代理放大暴露面。",
+      "opportunity_risk_en": "Opportunity to strengthen secret management and least privilege; risk that automated agents amplify exposure.",
+      "action_zh": "阅读来源，并审计代码库与云角色中的暴露凭据，收紧权限。",
+      "action_en": "Read the source, audit repositories and cloud roles for exposed credentials, and tighten permissions.",
+      "scores": {
+        "innovation": 4,
+        "practicality": 8,
+        "feasibility": 8,
+        "impact": 7,
+        "opportunity": 6
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/16/india-becomes-the-latest-country-to-report-rogue-ai-agent-activity/",
+      "source": "TechCrunch AI",
+      "published": "2026-10-16T17:52:24+00:00",
+      "original_title": "India becomes the latest country to report rogue AI agent activity",
+      "total_score": 33
     }
   ],
-  "top5_status": "source_fallback"
+  "editorial": {
+    "core_zh": "本期主线是 AI 竞争从模型能力扩展到平台默认选择、人才/团队交易、治理承诺和安全事件。",
+    "core_en": "The throughline: AI competition extends from model capability to platform defaults, talent/team deals, governance commitments and security incidents.",
+    "trend_zh": "默认模型可替换、AI 团队整体流动，以及 agent 安全配置，正成为新的行业关注点。",
+    "trend_en": "Replaceable default models, whole-team AI talent moves, and agent security configuration are emerging focal points.",
+    "next_question_zh": "Replit 的默认模型切换是否会引发更多平台调整？AI agent 事件会推动哪些最低安全标准？",
+    "next_question_en": "Will Replit's default switch trigger more platform changes? What minimum security standards will AI agent incidents drive?"
+  },
+  "localization": {
+    "status": "partial",
+    "languages": [
+      "source"
+    ],
+    "translated_news": 0,
+    "translated_skills": 0,
+    "top5_count": 5,
+    "provider": "DeepSeek"
+  }
 }
