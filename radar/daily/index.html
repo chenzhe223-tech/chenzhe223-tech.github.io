@@ -293,13 +293,21 @@ section{margin-bottom:40px}
 
 
 /* China AI briefing: a separate, source-grounded editorial stream */
-.china-news-list{gap:12px}
-.china-news-list .item{border-left:3px solid #df8966;background:linear-gradient(115deg,#fff 0%,#fff9f4 100%)}
-.china-news-list .num{background:#fff0e8;color:#a64e32}
-.china-news-list .story-label{display:inline-flex;align-items:center;gap:7px}
-.china-news-list .china-category{display:inline-flex;align-items:center;padding:3px 8px;margin:0 0 7px;border-radius:999px;background:#fff0e8;color:#a64e32;border:1px solid #f3d3c2;font-size:10px;font-weight:750}
-.china-news-list .china-category:before{content:"";width:5px;height:5px;border-radius:50%;background:#df8966}
-@media(max-width:620px){.china-news-list .item{padding:14px}.china-news-list .china-category{font-size:10px}}
+.china-news-grid{gap:16px;margin-top:17px}
+.china-news-grid .top5-card{border-color:#f0d9cf;background:linear-gradient(145deg,#fff 0%,#fff9f4 100%)!important}
+.china-news-grid .story-image{position:relative;background:#f8e7dc}
+.china-news-grid .story-image:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(24,36,56,0) 48%,rgba(24,36,56,.14) 100%)}
+.china-news-grid .story-image img{display:block;width:100%;height:100%;object-fit:cover}
+.china-news-grid .top5-rank{background:rgba(255,247,241,.92)!important;color:#9c4f37!important;border:1px solid rgba(255,255,255,.9);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+.china-news-grid .china-category{display:inline-flex;align-items:center;gap:6px;padding:4px 9px;margin:0 0 9px;border-radius:999px;background:#fff0e8;color:#a64e32;border:1px solid #f3d3c2;font-size:10px;font-weight:750}
+.china-news-grid .china-category:before{content:"";width:5px;height:5px;border-radius:50%;background:#df8966}
+.china-news-grid .top5-card h3{margin-top:0}
+.china-news-grid .top5-card p{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;margin-bottom:8px}
+.china-news-grid .china-story-source{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center}
+.china-news-grid .china-story-source .pill{background:#fff1e7!important;border-color:#f1d8c7!important;color:#8d523d!important}
+.china-news-grid .top5-content{padding:16px 17px 18px}
+@media(max-width:760px){.china-news-grid{gap:11px}.china-news-grid .story-image{height:145px}.china-news-grid .top5-content{padding:12px}}
+@media(max-width:430px){.china-news-grid{grid-template-columns:1fr}.china-news-grid .top5-card,.china-news-grid .top5-card:nth-child(4),.china-news-grid .top5-card:nth-child(5){grid-column:1/-1}.china-news-grid .story-image{height:185px}.china-news-grid .top5-content{padding:15px}.china-news-grid .top5-card p{-webkit-line-clamp:5}}
 /* Secondary content stays available without competing with the daily editorial */
 .more-news,.more-skills{margin-top:12px;border:1px solid #d9dde3;border-radius:5px;background:#fff;overflow:hidden}
 .more-news summary,.more-skills summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;color:#203650;font-size:13px;font-weight:700}
@@ -472,7 +480,7 @@ section{margin-bottom:40px}
 <section id="ai"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><div id="editorialCore" class="editorial-core" hidden></div><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
 <section id="dailySkill"><div class="section-head"><h2><span class="section-icon">✦</span><span>今日推荐 · 值得尝试的 Skill</span></h2><p>功能 · 推荐理由 · 应用范围</p></div><div id="featuredSkill" class="featured-skill"><div class="empty">正在读取今日推荐…</div></div></section>
 <section id="news"><div class="section-head"><h2><span class="section-icon">📰</span><span data-i18n="newsHeading">AI 新鲜事</span></h2><p data-i18n="newsSub">完整来源列表 · 按需展开</p></div><p class="section-intro" data-i18n="newsIntro">以下为采集到的其他新闻线索，作为补充核查，不与每日五大热点争夺注意力。</p><details class="more-news"><summary>展开其他新闻线索 <span>补充阅读 · 不计入五大热点</span></summary><div id="newsList" class="list"><div class="empty">正在读取最新情报…</div></div></details></section>
-<section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><p class="section-intro" data-i18n="chinaIntro">聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。</p><div id="chinaAINewsList" class="list china-news-list"><div class="empty">正在读取中国 AI 动态…</div></div></section>
+<section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><p class="section-intro" data-i18n="chinaIntro">聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。</p><div id="chinaAINewsList" class="top5-grid china-news-grid"><div class="empty">正在读取中国 AI 动态…</div></div></section>
 <section id="skills"><div class="section-head"><h2><span class="section-icon">🧰</span><span data-i18n="skillsHeading">创作工具箱 · 热门 Skill</span></h2><p data-i18n="skillsSub">从别人做好的工具开始</p></div><p class="section-intro" data-i18n="skillsIntro">Skill 可以理解为给 AI 的一套可复用工作方法或能力说明。点开项目，看看它能否帮你少走几步。</p><details class="more-skills"><summary><span data-i18n="expandSkills">展开热门 Skill 榜单</span><span data-i18n="skillsHint">公开仓库 · 可直接查看原项目</span></summary><div id="skillList" class="list"><div class="empty">正在读取 Skill 榜单…</div></div></details></section>
 <section id="method"><div class="section-head"><h2><span class="section-icon">🔎</span><span data-i18n="methodHeading">数据说明 · 透明比热闹重要</span></h2></div><div class="item"><div class="num">i</div><div><h3 data-i18n="methodTitle">公开数据，不伪造结论</h3><p data-i18n="methodBody">新闻来自公开 RSS / 官方博客与技术社区，展示来源与原文链接。Skill 榜单依据公开 GitHub 仓库的 Star 数、最近更新时间及与 Skill 主题的相关性整理；Star 不是安装量，也不等同于真实使用人数。网络源可能临时不可用，页面会显示最近一次成功生成的日报。</p><div class="meta"><span class="pill">RSS / Official blogs</span><span class="pill">GitHub API</span><span class="pill">09:00 Asia/Shanghai</span></div></div></div><p class="status" id="status"></p></section>
 <footer class="footer"><span data-i18n="footerLine">AI 前沿简报 · DAVYLAB</span><br><span data-i18n="footerFlow">看见趋势 · 发现机会 · 打开新可能。</span><br><a href="https://github.com/Thysrael/Horizon" data-i18n="horizonLink">基于 Horizon 开源项目的采集理念</a> · <a href="https://chenzhe223-tech.github.io/">DAVYLAB</a></footer>
@@ -586,12 +594,22 @@ function renderChinaAINews(items){
  const labels=currentLang==="en"?
   {"模型与技术进展":"Models & Research","产品与产业应用":"Products & Adoption","芯片与算力":"Chips & Compute","具身智能与智能终端":"Embodied AI & Devices","产业与生态":"Industry & Ecosystem"}:
   {"模型与技术进展":"模型与技术进展","产品与产业应用":"产品与产业应用","芯片与算力":"芯片与算力","具身智能与智能终端":"具身智能与智能终端","产业与生态":"产业与生态"};
+ const visuals={
+  "芯片与算力":"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=80",
+  "具身智能与智能终端":"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=80",
+  "产品与产业应用":"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=80",
+  "模型与技术进展":"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=80",
+  "产业与生态":"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80"
+ };
  const stories=Array.isArray(items)?items.filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&x.title):[];
  root.innerHTML=stories.length?stories.map((x,i)=>{
   const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title_zh||x.title);
   const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary_zh||x.summary);
-  const category=labels[x.category]|| (currentLang==="en"?"China AI":"中国 AI");
-  return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><span class="china-category">'+esc(category)+'</span><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span class="pill">'+esc(x.source||t("chinaSource"))+'</span><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>';
+  const category=labels[x.category]||(currentLang==="en"?"China AI":"中国 AI");
+  const fallback=visuals[x.category]||visuals["产业与生态"];
+  const supplied=(typeof x.image_url==="string"&&x.image_url.startsWith("https://"))?x.image_url:fallback;
+  const alt=currentLang==="en"?"Editorial image for "+category:"中国 AI 发展动态配图："+category;
+  return '<article class="top5-card china-ai-card"><div class="story-image"><img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" onerror="this.onerror=null;this.src=\''+fallback+'\'"></div><div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><span class="china-category">'+esc(category)+'</span><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta china-story-source"><span class="pill">'+esc(x.source||t("chinaSource"))+'</span><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+' ↗</a></div></div></article>';
  }).join(""):'<div class="empty">'+esc(Array.isArray(reportData?.china_ai_news)?t("chinaEmpty"):t("chinaArchiveEmpty"))+'</div>';
 }
 function renderNews(items){$("newsCount").textContent=items.length;const root=$("newsList");root.innerHTML=items.length?items.map((x,i)=>{const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title);const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary);const why=currentLang==="zh"?(x.why_it_matters_zh||""):(x.why_it_matters_en||"");return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">✦ '+esc(x.source||t("source"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p>'+(why?'<div class="why"><strong>'+esc(t("why"))+' · </strong>'+esc(why)+'</div>':'')+'<div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>'}).join(""):'<div class="empty">'+esc(t("newsEmpty"))+'</div>'}
