@@ -31,11 +31,9 @@ function check(ok, name, detail = '') {
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
-        check(await page.locator('#chinaAINewsList .story-image').count() === chinaCount, viewport.name + ': every China AI card has an image container');
-        const chinaVerifiedImages = await page.locator('#chinaAINewsList .story-image img[src^="https://"]').count();
-        const chinaNoImagePlaceholders = await page.locator('#chinaAINewsList .story-image.image-placeholder').count();
-        check(chinaVerifiedImages + chinaNoImagePlaceholders === chinaCount, viewport.name + ': each China AI card has a verified HTTPS image or an honest no-image placeholder');
-        check(await page.locator('#chinaAINewsList .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': China AI images never use non-HTTPS URLs');
+        check(await page.locator('#chinaAINewsList .story-image img').count() === chinaCount, viewport.name + ': every China AI card shows a picture');
+        check(await page.locator('#chinaAINewsList .story-image img[src^="https://"]').count() === chinaCount, viewport.name + ': every China AI picture uses an HTTPS image source');
+        check(await page.locator('#chinaAINewsList .image-placeholder').count() === 0, viewport.name + ': no China AI card displays a no-image placeholder');
         check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
       } else {
         check((await page.locator('#chinaAINewsList').innerText()).length > 0, viewport.name + ': empty China AI state explains no qualifying stories');
@@ -43,11 +41,9 @@ function check(ok, name, detail = '') {
       const cards = page.locator('#top5List .top5-card');
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
-      check(await page.locator('#top5List .story-image').count() === 5, viewport.name + ': every story has an image container');
-      const top5VerifiedImages = await page.locator('#top5List .story-image img[src^="https://"]').count();
-      const top5NoImagePlaceholders = await page.locator('#top5List .story-image.image-placeholder').count();
-      check(top5VerifiedImages + top5NoImagePlaceholders === 5, viewport.name + ': each story has a verified HTTPS image or an honest no-image placeholder');
-      check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': editorial images never use non-HTTPS URLs');
+      check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': all five stories show a picture');
+      check(await page.locator('#top5List .story-image img[src^="https://"]').count() === 5, viewport.name + ': every story picture uses an HTTPS image source');
+      check(await page.locator('#top5List .image-placeholder').count() === 0, viewport.name + ': no top story displays a no-image placeholder');
       check(await page.locator('#top5List a[href^="http"]').count() >= 5, viewport.name + ': each story has source link');
       check(await page.locator('#featuredSkill h3').count() === 1, viewport.name + ': daily Skill recommendation is rendered');
       check((await page.locator('#featuredSkill').innerText()).includes('推荐理由') || (await page.locator('#featuredSkill').innerText()).toLowerCase().includes('why recommend'), viewport.name + ': Skill recommendation explains why');

@@ -548,15 +548,29 @@ function renderEditorial(data){
  root.hidden=false;
  root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
+function themeFallbackUrl(x){
+ const title=[x?.title_zh,x?.title_en,x?.original_title,x?.title,x?.what_zh,x?.what_en,x?.summary].filter(Boolean).join(" ").toLowerCase();
+ const rules=[
+  {terms:/robot|agent|智能体|机器人|具身智能|automation|自动驾驶/,url:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82"},
+  {terms:/chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|大模型|模型|推理/,url:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"},
+  {terms:/phone|mobile|app|software|product|platform|应用|手机|软件|产品|开源/,url:"https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82"},
+  {terms:/image|video|design|creative|visual|图像|视频|设计|创作|生成/,url:"https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=82"},
+  {terms:/bank|business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司/,url:"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82"}
+ ];
+ return (rules.find(v=>v.terms.test(title))||{url:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82"}).url;
+}
 function storyImageMarkup(x){
- const usable=typeof x.image_url==="string"&&x.image_url.startsWith("https://")&&x.image_match_status!=="none";
- if(!usable)return '<div class="story-image image-placeholder" role="img" aria-label="'+esc(currentLang==="en"?"No verified image":"暂无可靠配图")+'"><span>'+esc(currentLang==="en"?"No verified image":"暂无可靠配图")+'</span></div>';
  const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
- const alt=x.image_alt||title|| (currentLang==="en"?"News image":"新闻配图");
- const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"";
- const credit=x.image_credit||x.image_source||(currentLang==="en"?"Image source":"图片来源");
- const creditLink=page?'<a class="image-credit" href="'+esc(page)+'" target="_blank" rel="noopener noreferrer">'+esc((currentLang==="en"?"Image: ":"图片来源：")+credit)+'</a>':'';
- return '<div class="story-image"><img src="'+esc(x.image_url)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.parentNode.classList.add(&quot;image-placeholder&quot;);this.parentNode.textContent=&quot;'+esc(currentLang==="en"?"Image unavailable":"配图暂不可用")+'&quot;">'+creditLink+'</div>';
+ const themeFallback=themeFallbackUrl(x);
+ const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:themeFallback;
+ const storedFallback=typeof x.image_fallback_url==="string"&&x.image_fallback_url.startsWith("https://")?x.image_fallback_url:"";
+ const fallback=storedFallback&&storedFallback!==supplied?storedFallback:(themeFallback!==supplied?themeFallback:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82");
+ const isIllustration=!x.image_url||x.image_match_status==="thematic_fallback";
+ const alt=x.image_alt||(isIllustration?(currentLang==="en"?"Topic illustration: ":"主题示意图：")+(title||"AI news"):(title|| (currentLang==="en"?"News image":"新闻配图")));
+ const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"https://unsplash.com/s/photos/artificial-intelligence";
+ const credit=isIllustration?(currentLang==="en"?"Topic illustration · Unsplash":"主题示意图 · Unsplash"):(x.image_credit||x.image_source||(currentLang==="en"?"Image source":"图片来源"));
+ const creditLink='<a class="image-credit" href="'+esc(page)+'" target="_blank" rel="noopener noreferrer">'+esc(credit)+'</a>';
+ return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}" >'+creditLink+'</div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;

@@ -2,10 +2,11 @@ import sys
 import unittest
 from pathlib import Path
 
-# Make the sibling implementation importable when invoked via `python -m unittest` from the repository root.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-
-from news_image_match import candidate_relevance, extract_image_candidates, normalize_url
+from news_image_match import (
+    _BingImageParser, candidate_relevance, derive_visual_search_queries,
+    extract_image_candidates, normalize_url, story_fallback_topic,
+)
 
 
 class NewsImageMatchTests(unittest.TestCase):
@@ -25,23 +26,44 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertEqual(normalize_url("https://localhost/a.jpg"), "")
 
     def test_disney_candidate_passes_for_disney_character_ai_story(self):
-        ok, score = candidate_relevance(
-            "Disney agrees to hire majority of Character.AI workforce",
-            "Disney Character.AI logo",
-        )
+        ok, score = candidate_relevance("Disney agrees to hire majority of Character.AI workforce", "Disney Character.AI logo")
         self.assertTrue(ok)
         self.assertGreater(score, 0)
 
     def test_unrelated_phone_photo_is_rejected_for_disney_story(self):
-        ok, _ = candidate_relevance(
-            "Disney agrees to hire majority of Character.AI workforce",
-            "Modern iPhone mobile apps screen",
-        )
+        ok, _ = candidate_relevance("Disney agrees to hire majority of Character.AI workforce", "Modern iPhone mobile apps screen")
         self.assertFalse(ok)
 
     def test_story_specific_chinese_keywords_overlap(self):
         ok, _ = candidate_relevance("清华开源智能体操作系统", "清华智能体操作系统项目")
         self.assertTrue(ok)
+
+    def test_horizon_analysis_expands_chinese_story_into_visual_search_terms(self):
+        story = {"title_zh":"智谱新模型，懂法方面全球第一了","summary_zh":"智谱发布法律推理能力更强的 GLM 模型。","category":"模型与技术进展"}
+        queries = derive_visual_search_queries(story)
+        self.assertTrue(any("Zhipu" in q or "GLM" in q for q in queries))
+        self.assertLessEqual(len(queries), 4)
+
+    def test_context_fields_expand_visual_search(self):
+        story = {"original_title":"How Itaú is building generative AI for its entire customer base",
+                 "what_en":"The bank is adding AI services throughout customer support.",
+                 "category_en":"Products & Adoption"}
+        queries = derive_visual_search_queries(story)
+        self.assertTrue(any("Itaú" in q or "Itau" in q for q in queries))
+
+    def test_bing_image_parser_extracts_actual_image_and_landing_page(self):
+        import json
+        meta = {"murl":"https://cdn.example.com/character-ai.jpg","purl":"https://example.com/disney-character-ai",
+                "t":"Disney Character.AI","desc":"Disney Character AI image"}
+        encoded = json.dumps(meta).replace("&","&amp;").replace('"',"&quot;")
+        parser = _BingImageParser()
+        parser.feed('<a class="iusc" m="' + encoded + '"></a>')
+        self.assertEqual(parser.results[0]["url"], "https://cdn.example.com/character-ai.jpg")
+        self.assertEqual(parser.results[0]["page_url"], "https://example.com/disney-character-ai")
+
+    def test_ai_story_context_maps_to_topic_fallback(self):
+        self.assertEqual(story_fallback_topic({"title_en":"New AI robot agent automation release"}), "robot")
+        self.assertEqual(story_fallback_topic({"title_zh":"银行与客户生成式AI服务"}), "business")
 
 
 if __name__ == "__main__":

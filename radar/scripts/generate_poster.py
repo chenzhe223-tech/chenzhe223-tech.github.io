@@ -58,25 +58,42 @@ def paragraph(draw, text, xy, fnt, fill, width, max_lines=3, line_gap=5):
     return y
 
 def image_for_story(story, idx):
-    """Use only a vetted story image; never make a category stock photo look factual."""
-    url = str(story.get("image_url") or "").strip()
-    if url.startswith("https://"):
+    """Try matched image, saved backup, then story-category web illustration."""
+    candidates = [str(story.get("image_url") or "").strip(), str(story.get("image_fallback_url") or "").strip()]
+    title = " ".join(str(story.get(k) or "") for k in ("title_zh", "title_en", "original_title", "title")).lower()
+    photo_ids = []
+    patterns = [
+        (r"robot|agent|智能体|机器人|具身智能|automation|自动驾驶", "photo-1485827404703-89b55fcc595e"),
+        (r"chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|模型|推理", "photo-1518770660439-4636190af475"),
+        (r"phone|mobile|app|software|product|platform|应用|手机|软件|产品", "photo-1512941937669-90a1b58e7e9c"),
+        (r"business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司", "photo-1519389950473-47ba0277781c"),
+        (r"image|video|design|creative|图像|视频|设计|创作|生成", "photo-1470252649378-9c29740c9fa8"),
+    ]
+    for pattern, photo_id in patterns:
+        if re.search(pattern, title):
+            photo_ids.append(photo_id)
+    photo_ids.extend(["photo-1531297484001-80022131f5a1", "photo-1498050108023-c5249f4df085"])
+    candidates.extend(f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&w=700&q=82" for photo_id in photo_ids)
+    seen = set()
+    for url in candidates:
+        if not url.startswith("https://") or url in seen:
+            continue
+        seen.add(url)
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
             with urllib.request.urlopen(req, timeout=8) as r:
                 raw = r.read(16 * 1024 * 1024)
-            img = Image.open(BytesIO(raw)).convert("RGB")
-            return img
+            return Image.open(BytesIO(raw)).convert("RGB")
         except Exception:
-            pass
-    # An editorial placeholder is more trustworthy than a random image.
+            continue
+    # Keep a polished editorial composition when network images are unavailable.
     img = Image.new("RGB", (700, 380), (232, 237, 239))
     d = ImageDraw.Draw(img)
     d.rounded_rectangle((20, 20, 680, 360), radius=22, outline=(194, 205, 213), width=3)
-    d.text((42, 48), "DAVYLAB  /  NEWS IMAGE", font=font(25, True), fill=(58, 79, 99))
-    title = str(story.get("title_zh") or story.get("original_title") or story.get("title_en") or "No verified image")
-    paragraph(d, title, (42, 112), font(24, True), (36, 55, 73), 600, 4, 8)
-    d.text((42, 310), "NO VERIFIED IMAGE · OPEN SOURCE ARTICLE", font=font(14), fill=(99, 117, 131))
+    d.text((42, 48), "DAVYLAB  /  AI TOPIC VISUAL", font=font(25, True), fill=(58, 79, 99))
+    title_text = str(story.get("title_zh") or story.get("original_title") or story.get("title_en") or "AI topic illustration")
+    paragraph(d, title_text, (42, 112), font(24, True), (36, 55, 73), 600, 4, 8)
+    d.text((42, 310), "TOPIC ILLUSTRATION  ·  OPEN SOURCE ARTICLE", font=font(14), fill=(99, 117, 131))
     return img
 
 def crop_cover(img, size):

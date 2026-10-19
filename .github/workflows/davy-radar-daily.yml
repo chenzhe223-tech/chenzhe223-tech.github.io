@@ -2,19 +2,7 @@ name: Build Davy Radar Daily
 # Runs a private-key-safe Horizon + DeepSeek analysis before publishing the public daily JSON.
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - "radar/scripts/build_daily.py"
-      - "radar/scripts/run_horizon.py"
-      - "radar/scripts/news_image_match.py"
-      - "radar/scripts/test_news_image_match.py"
-      - "radar/skills/news-image-match/SKILL.md"
-      - "radar/config/horizon.json"
-      - ".github/workflows/davy-radar-daily.yml"
-  schedule:
-    # 23:30 UTC = 07:30 Beijing time (UTC+8)
-    - cron: "30 23 * * *"
+  # Manual emergency refresh only. The Pages workflow is the single scheduled production pipeline.
   workflow_dispatch:
 
 permissions:
