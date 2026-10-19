@@ -26,11 +26,14 @@ function check(ok, name, detail = '') {
       check(await page.locator('#newsCount').innerText().then(x => Number(x) > 0), viewport.name + ': source news rendered', await page.locator('#newsCount').innerText());
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
-      const chinaCards = page.locator('#chinaAINewsList .item');
+      const chinaCards = page.locator('#chinaAINewsList .china-ai-card');
       const chinaCount = await chinaCards.count();
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
+        check(await page.locator('#chinaAINewsList .story-image img').count() === chinaCount, viewport.name + ': every China AI card has an image');
+        check(await page.locator('#chinaAINewsList .story-image img[src^="https://"]').count() === chinaCount, viewport.name + ': China AI images have HTTPS sources or HTTPS fallbacks');
+        check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
       } else {
         check((await page.locator('#chinaAINewsList').innerText()).length > 0, viewport.name + ': empty China AI state explains no qualifying stories');
       }
