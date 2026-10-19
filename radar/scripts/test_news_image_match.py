@@ -1,4 +1,9 @@
+import sys
 import unittest
+from pathlib import Path
+
+# Make the sibling implementation importable when invoked via `python -m unittest` from the repository root.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from news_image_match import candidate_relevance, extract_image_candidates, normalize_url
 
