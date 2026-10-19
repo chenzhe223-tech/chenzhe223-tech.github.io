@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
-    extract_image_candidates, normalize_url, story_fallback_topic,
+    extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
 )
 
 
@@ -24,6 +24,11 @@ class NewsImageMatchTests(unittest.TestCase):
     def test_normalize_rejects_localhost_and_upgrades_http(self):
         self.assertEqual(normalize_url("http://images.example/a.jpg"), "https://images.example/a.jpg")
         self.assertEqual(normalize_url("https://localhost/a.jpg"), "")
+
+    def test_rejects_publisher_logo_as_an_editorial_hero_image(self):
+        self.assertTrue(is_generic_brand_asset("https://www.qbitai.com/wp-content/uploads/imgs/qbitai-logo-1.png"))
+        self.assertTrue(is_generic_brand_asset("https://example.com/assets/site-icon.svg"))
+        self.assertFalse(is_generic_brand_asset("https://example.com/news/ai-model-release.jpg"))
 
     def test_disney_candidate_passes_for_disney_character_ai_story(self):
         ok, score = candidate_relevance("Disney agrees to hire majority of Character.AI workforce", "Disney Character.AI logo")

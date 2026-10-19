@@ -149,6 +149,11 @@ def valid_image_url(url: str) -> bool:
     except Exception:
         return False
 
+def is_generic_brand_asset(url: str) -> bool:
+    """Avoid mistaking a publisher/site logo for the news story's actual visual."""
+    path = urllib.parse.urlparse(url or "").path.lower()
+    return bool(re.search(r"(?:^|[/_.-])(logo|logos|favicon|avatar|site-icon|brandmark|wordmark)(?:$|[/_.-])", path))
+
 def _story_title(story: dict) -> str:
     return " ".join(str(story.get(k) or "") for k in ("original_title", "title_en", "title_zh", "title"))
 
@@ -415,7 +420,7 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     cached = cache.get(key) if key else None
     # Version 2 deliberately retries cached "none" results with expanded web/image search.
     if isinstance(cached, dict) and cached.get("cache_version") == CACHE_VERSION and _fresh(cached, 72):
-        if cached.get("image_url") and cached.get("image_url") not in used:
+        if cached.get("image_url") and cached.get("image_url") not in used and not is_generic_brand_asset(cached.get("image_url", "")):
             if cached.get("image_match_status") == "thematic_fallback":
                 # Refresh topic artwork if taxonomy improves; don't repeat remote searches.
                 result = _thematic_fallback(story, used)
@@ -427,14 +432,14 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     article_url = normalize_url(key)
     existing = normalize_url(story.get("image_url") or "")
     result = {}
-    if existing and existing not in used and valid_image_url(existing):
+    if existing and existing not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
         result = _metadata_result(existing, story)
         result["image_match_status"] = "feed_image"
     else:
         if article_url:
             document = fetch_article_html(article_url)
             for candidate_url in extract_image_candidates(document, article_url):
-                if candidate_url not in used and valid_image_url(candidate_url):
+                if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
                     result = _metadata_result(candidate_url, story)
                     break
         if not result:
