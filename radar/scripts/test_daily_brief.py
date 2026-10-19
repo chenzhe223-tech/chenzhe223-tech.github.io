@@ -7,6 +7,22 @@ class DailyBriefContractTests(unittest.TestCase):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
         self.assertGreaterEqual(len(data.get("news", [])), 5)
 
+    def test_china_ai_news_contract_and_provenance(self):
+        data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
+        stories=data.get("china_ai_news", [])
+        self.assertIsInstance(stories, list)
+        self.assertGreaterEqual(data.get("china_sources_total", 0), 1)
+        seen=set()
+        for story in stories:
+            self.assertTrue(story.get("url", "").startswith("https://"))
+            self.assertTrue(story.get("title"))
+            self.assertTrue(story.get("source"))
+            self.assertTrue(story.get("category"))
+            self.assertTrue(story.get("published"))
+            self.assertEqual(story.get("region"), "China")
+            self.assertNotIn(story["url"], seen)
+            seen.add(story["url"])
+
     def test_top5_is_source_backed_when_present(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
         urls={x.get("url") for x in data.get("news", [])}
