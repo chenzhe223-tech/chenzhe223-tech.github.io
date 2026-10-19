@@ -81,6 +81,22 @@ jobs:
           Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; sources={d.get('sources_ok')}/{d.get('sources_total')}")
           PY
+      - name: Generate daily infographic poster
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install --upgrade pillow 'qrcode[pil]' opencv-python-headless
+          python radar/scripts/generate_poster.py
+          python - <<'PY'
+          import cv2, json
+          from pathlib import Path
+          manifest=json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+          image=cv2.imread(manifest['poster'])
+          if image is None: raise SystemExit('Poster PNG cannot be opened')
+          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(image)
+          if decoded != manifest['qr_url']: raise SystemExit(f'QR mismatch: {decoded!r} != {manifest[\"qr_url\"]!r}')
+          print(f'PASS: poster image and QR verified: {decoded}')
+          PY
       - name: Install Playwright
         run: |
           npm init -y
@@ -98,7 +114,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add radar/data/latest.json radar/data/history.json radar/data/archive/
+          git add radar/data/latest.json radar/data/history.json radar/data/archive/ radar/posters/
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
@@ -156,6 +172,21 @@ jobs:
                   assert len(data.get('news', [])) >= 5, 'fewer than five news items'
                   assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'source links missing'
                   assert 'latest.json' in page, 'daily page data loader missing'
+                  poster_req = urllib.request.Request(base + 'posters/' + today + '.png?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
+                      assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), 'poster PNG missing'
+                  history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(history_req, timeout=15) as history_response:
+                      history = json.loads(history_response.read().decode('utf-8'))
+                  assert today + '.json' in history.get('days', []), 'today is missing from history index'
+                  skill = (data.get('skills') or [{}])[0]
+                  assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
+                  old_days = [x for x in history.get('days',[]) if x != today + '.json']
+                  if old_days:
+                      old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
+                      with urllib.request.urlopen(urllib.request.Request(old_url,headers=headers),timeout=15) as old_response:
+                          old_data = json.loads(old_response.read().decode('utf-8'))
+                      assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
                   print(f"PASS: live page and JSON verified; date={today}; news={len(data['news'])}; generated_at={data['generated_at']}")
                   break
               except Exception as exc:
