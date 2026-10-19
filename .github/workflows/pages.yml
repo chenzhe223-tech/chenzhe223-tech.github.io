@@ -3,13 +3,15 @@ name: Deploy DAVYLAB to GitHub Pages
 on:
   push:
     branches: ["main"]
+    paths-ignore:
+      - "radar/data/**"
   schedule:
     # 07:30 Asia/Shanghai; GitHub may delay scheduled starts.
     - cron: "30 23 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -74,9 +76,9 @@ jobs:
               raise SystemExit('One of the first five stories has no HTTPS source URL')
           archive = Path('radar/data/archive') / f'{today}.json'
           archive.parent.mkdir(parents=True, exist_ok=True)
-          archive.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+          archive.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           history = sorted([x.name for x in Path('radar/data/archive').glob('*.json')], reverse=True)[:30]
-          Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+          Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; sources={d.get('sources_ok')}/{d.get('sources_total')}")
           PY
       - name: Install Playwright
@@ -92,6 +94,38 @@ jobs:
           exit 1
       - name: Test daily briefing on desktop and mobile
         run: node scripts/qa-radar.cjs
+      - name: Verify live daily brief after deployment
+        shell: bash
+        run: |
+          python - <<'PY'
+          import datetime as dt, json, time, urllib.request
+          from zoneinfo import ZoneInfo
+          base = 'https://chenzhe223-tech.github.io/radar/'
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          last_error = 'not checked'
+          for attempt in range(24):
+              try:
+                  stamp = str(time.time())
+                  headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
+                  with urllib.request.urlopen(urllib.request.Request(base + 'daily/?verify=' + stamp, headers=headers), timeout=15) as response:
+                      page = response.read().decode('utf-8', 'replace')
+                      assert response.status == 200
+                  with urllib.request.urlopen(urllib.request.Request(base + 'data/latest.json?verify=' + stamp, headers=headers), timeout=15) as response:
+                      data = json.loads(response.read().decode('utf-8'))
+                  assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
+                  assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
+                  assert len(data.get('news', [])) >= 5, 'fewer than five news items'
+                  assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'source links missing'
+                  assert 'latest.json' in page, 'daily page data loader missing'
+                  print(f"PASS: live page and JSON verified; date={today}; news={len(data['news'])}; generated_at={data['generated_at']}")
+                  break
+              except Exception as exc:
+                  last_error = f'{type(exc).__name__}: {exc}'
+                  print(f'Attempt {attempt + 1}/24: {last_error}')
+                  time.sleep(10)
+          else:
+              raise SystemExit('Post-deploy verification failed: ' + last_error)
+          PY
       - name: Upload daily briefing screenshots and report
         if: always()
         uses: actions/upload-artifact@v4
