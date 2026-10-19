@@ -155,7 +155,10 @@ def main():
     yy = paragraph(draw, "应用范围：" + topics, (60, yy+9), font(16, True), MUTED, 700, 2, 5)
     reason = "依据公开项目主题、社区关注度与近期维护情况筛选；安装前请检查 README、权限和运行环境。"
     paragraph(draw, "推荐理由：" + reason, (60, yy+8), font(15), MUTED, 700, 3, 4)
-    draw.text((60, 1510), f"★ {int(skill.get('stars') or 0):,}  ·  最近更新 {(skill.get('updated') or '')[:10] or '—'}", font=font(15, True), fill=(60, 85, 110))
+    star_value = skill.get("stars")
+    star_label = f"★ {int(star_value):,}" if isinstance(star_value, (int, float)) else "热度未核实"
+    updated_label = (skill.get("updated") or "")[:10] or "—"
+    draw.text((60, 1510), f"{star_label}  ·  最近更新 {updated_label}", font=font(15, True), fill=(60, 85, 110))
     # Stable URL QR; image and target URL are also saved as a manifest.
     qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=8, border=3)
     qr.add_data(PUBLIC_URL); qr.make(fit=True)
