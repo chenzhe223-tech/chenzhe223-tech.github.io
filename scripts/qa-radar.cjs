@@ -22,6 +22,7 @@ function check(ok, name, detail = '') {
       check(!!response && response.status() < 400, viewport.name + ': daily page loads', 'HTTP ' + (response && response.status()));
       await page.waitForSelector('#reportDate', { timeout: 10000 });
       await page.waitForTimeout(700);
+      await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
       check(await page.locator('#newsCount').innerText().then(x => Number(x) > 0), viewport.name + ': source news rendered', await page.locator('#newsCount').innerText());
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
@@ -78,7 +79,7 @@ function check(ok, name, detail = '') {
       const firstCard = page.locator('#top5List .top5-card').first();
       const cardStyles = await firstCard.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, text: getComputedStyle(el.querySelector('p')).color, title: getComputedStyle(el.querySelector('h3')).color }));
       check(cardStyles.background === 'rgb(255, 255, 255)', viewport.name + ': story card has solid light background', JSON.stringify(cardStyles));
-      check(cardStyles.text === 'rgb(52, 70, 94)' && cardStyles.title === 'rgb(23, 79, 126)', viewport.name + ': story text has high-contrast colors', JSON.stringify(cardStyles));
+      check(cardStyles.text === 'rgb(71, 85, 105)' && cardStyles.title === 'rgb(31, 41, 55)', viewport.name + ': story text uses the shared contrast tokens', JSON.stringify(cardStyles));
       const editorial = page.locator('#editorialCore');
       if (await editorial.count()) {
         const isVisible = await editorial.isVisible();
@@ -92,6 +93,107 @@ function check(ok, name, detail = '') {
         check(cardsText.every(x => !x.includes('/50') && !x.includes('/10')), viewport.name + ': source fallback does not display fabricated scores');
         check(!(await page.locator('#editorialCore').isVisible()), viewport.name + ': internal AI-unavailable note stays hidden');
       }
+      const contrastAudit = await page.evaluate(() => {
+        const parseColor = value => {
+          if (!value) return null;
+          const s = String(value).trim().toLowerCase();
+          if (s === 'transparent') return {r:0,g:0,b:0,a:0};
+          const hex = s.match(/^#([0-9a-f]{3,8})$/i);
+          if (hex) {
+            let h=hex[1];
+            if (h.length===3 || h.length===4) h=[...h].map(ch=>ch+ch).join('');
+            if (h.length===6 || h.length===8) return {r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16),a:h.length===8?parseInt(h.slice(6,8),16)/255:1};
+          }
+          const rgb=s.match(/rgba?\(([^)]+)\)/i);
+          if (!rgb) return null;
+          const values=rgb[1].replace(/\s*\/\s*/g,',').split(/[\s,]+/).filter(Boolean);
+          const channel=v=>v.endsWith('%')?Math.round(parseFloat(v)*2.55):parseFloat(v);
+          return {r:channel(values[0]),g:channel(values[1]),b:channel(values[2]),a:values[3]===undefined?1:(values[3].endsWith('%')?parseFloat(values[3])/100:parseFloat(values[3]))};
+        };
+        const composite=(top,bottom,overrideAlpha) => {
+          const a=overrideAlpha===undefined?top.a:overrideAlpha;
+          return {r:top.r*a+bottom.r*(1-a),g:top.g*a+bottom.g*(1-a),b:top.b*a+bottom.b*(1-a),a:1};
+        };
+        const luminance=c=>{
+          const f=v=>{v=v/255;return v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)};
+          return .2126*f(c.r)+.7152*f(c.g)+.0722*f(c.b);
+        };
+        const contrast=(a,b)=>{const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+        const unique=colors=>{
+          const seen=new Set();return colors.filter(c=>{const k=[Math.round(c.r),Math.round(c.g),Math.round(c.b)].join(',');if(seen.has(k))return false;seen.add(k);return true;});
+        };
+        const backgroundColors=el=>{
+          const chain=[];for(let n=el;n&&n.nodeType===1;n=n.parentElement)chain.unshift(n);
+          let candidates=[parseColor(getComputedStyle(document.body).backgroundColor)||parseColor('#F5F6F8')];
+          for(const node of chain){
+            const st=getComputedStyle(node);
+            const parentCandidates=candidates;
+            const bg=parseColor(st.backgroundColor);
+            const bases=parentCandidates.map(old=>bg&&bg.a>0?composite(bg,old):old);
+            if(st.backgroundImage&&st.backgroundImage!=='none'){
+              const stopStrings=st.backgroundImage.match(/rgba?\([^)]+\)|#[0-9a-f]{3,8}|transparent/gi)||[];
+              const stops=stopStrings.map(parseColor).filter(Boolean);
+              if(stops.length){
+                const imageCandidates=[];
+                for(const stop of stops){
+                  const basesForStop=stop.a<.999?bases:parentCandidates;
+                  for(const base of basesForStop) imageCandidates.push(composite(stop,base));
+                }
+                candidates=stops.every(x=>x.a>=.999)?imageCandidates:[...bases,...imageCandidates];
+              }else candidates=bases;
+            }else candidates=bases;
+            const opacity=parseFloat(st.opacity);
+            if(Number.isFinite(opacity)&&opacity<.999&&opacity>=0){
+              candidates=candidates.map((bg,i)=>composite(bg,parentCandidates[Math.min(i,parentCandidates.length-1)]||bg,opacity));
+            }
+            candidates=unique(candidates);
+          }
+          return candidates;
+        };
+        const visible=el=>{
+          if(!el||!el.getClientRects().length)return false;
+          for(let n=el;n&&n.nodeType===1;n=n.parentElement){
+            const s=getComputedStyle(n);
+            if(s.display==='none'||s.visibility==='hidden'||s.visibility==='collapse')return false;
+            if(n.tagName==='DETAILS'&&!n.open&&el!==n)return false;
+          }
+          return true;
+        };
+        const results=[];
+        const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+        while(walker.nextNode()){
+          const node=walker.currentNode;
+          const text=node.nodeValue.replace(/\s+/g,' ').trim();
+          const el=node.parentElement;
+          if(!text||!visible(el)||el.closest('script,style,svg,canvas,noscript,template,[aria-hidden="true"]'))continue;
+          const st=getComputedStyle(el);
+          let fg=parseColor(st.webkitTextFillColor)||parseColor(st.color);
+          if(!fg||fg.a<.01)continue; // transparent gradient text is audited by its stop colors separately
+          let opacity=1;
+          for(let n=el;n&&n.nodeType===1;n=n.parentElement){
+            const o=parseFloat(getComputedStyle(n).opacity);
+            if(Number.isFinite(o))opacity*=o;
+          }
+          if(opacity<.01)continue;
+          const bgs=backgroundColors(el);
+          let worst={ratio:Infinity,foreground:fg,background:bgs[0]};
+          for(const bg of bgs){
+            const renderedFg=composite(fg,bg,fg.a*opacity);
+            const ratio=contrast(renderedFg,bg);
+            if(ratio<worst.ratio)worst={ratio,foreground:renderedFg,background:bg};
+          }
+          const size=parseFloat(st.fontSize)||16,weight=parseInt(st.fontWeight,10)||400;
+          const large=size>=24||(size>=18.66&&weight>=700);
+          const minimum=large?3:4.5;
+          results.push({text:text.slice(0,90),selector:el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(el.classList.length?'.'+[...el.classList].slice(0,3).join('.'):''),
+            ratio:Number(worst.ratio.toFixed(2)),minimum,foreground:[Math.round(worst.foreground.r),Math.round(worst.foreground.g),Math.round(worst.foreground.b)].join(','),
+            background:[Math.round(worst.background.r),Math.round(worst.background.g),Math.round(worst.background.b)].join(','),opacity:Number(opacity.toFixed(3))});
+        }
+        const failures=results.filter(x=>x.ratio+0.01<x.minimum);
+        return {checked:results.length,failures:failures.slice(0,40),failureCount:failures.length,minimumRatio:results.length?Math.min(...results.map(x=>x.ratio)):null};
+      });
+      check(contrastAudit.checked > 50, viewport.name + ': contrast audit checked rendered text', 'checked=' + contrastAudit.checked);
+      check(contrastAudit.failureCount === 0, viewport.name + ': WCAG AA text contrast passes for all visible text (4.5:1 normal, 3:1 large)', JSON.stringify({checked:contrastAudit.checked,minimumRatio:contrastAudit.minimumRatio,failureCount:contrastAudit.failureCount,failures:contrastAudit.failures.slice(0,12)}));
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
       const bodyColor = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
