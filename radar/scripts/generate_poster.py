@@ -175,3 +175,6 @@ def main():
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
     print(f"Generated {out} ({W}x{H}); QR target: {PUBLIC_URL}")
+
+if __name__ == "__main__":
+    main()
