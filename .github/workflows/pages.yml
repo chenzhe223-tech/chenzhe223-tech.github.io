@@ -40,8 +40,8 @@ jobs:
         id: preflight
         shell: bash
         run: |
-          python - <<'PY' >> "$GITHUB_OUTPUT"
-          import datetime as dt, json
+          python - <<'PY'
+          import datetime as dt, json, os
           from pathlib import Path
           from zoneinfo import ZoneInfo
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
@@ -58,7 +58,8 @@ jobs:
               )
           except Exception:
               complete = False
-          print('skip=' + ('true' if complete else 'false'))
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('skip=' + ('true' if complete else 'false') + '\\n')
           print(f"Today's complete AI-curated report already published: {complete}")
           PY
       - name: Refresh today's AI news and Skill shortlist
@@ -104,6 +105,21 @@ jobs:
             if [ "$attempt" = "1" ]; then sleep 8; fi
           done
         if: steps.preflight.outputs.skip != 'true'
+      - name: Record AI selection health for recovery scheduling
+        if: steps.preflight.outputs.skip != 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          print('report_date:', report.get('report_date'))
+          print('ai_analysis.status:', (report.get('ai_analysis') or {}).get('status'))
+          print('localization.status:', (report.get('localization') or {}).get('status'))
+          print('top5_status:', report.get('top5_status'))
+          print('top5_count:', len(report.get('top5') or []))
+          if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
+              print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
+          PY
       - name: Match story-specific images (free sources first)
         run: python radar/scripts/news_image_match.py
         if: steps.preflight.outputs.skip != 'true'
