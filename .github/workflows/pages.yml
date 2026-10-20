@@ -193,6 +193,7 @@ jobs:
           PY
         if: steps.preflight.outputs.skip != 'true'
       - name: Generate daily infographic poster
+        if: steps.preflight.outputs.skip != 'true'
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk
