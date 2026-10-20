@@ -54,6 +54,7 @@ jobs:
           try:
               report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+              qr_check = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
               complete = (
                   report.get('report_date') == today
                   and report.get('generated_at', '').startswith(today)
@@ -61,6 +62,10 @@ jobs:
                   and len(report.get('top5', [])) == 5
                   and report.get('localization', {}).get('status') == 'ok'
                   and poster.get('report_date') == today
+                  and poster.get('qr_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
+                  and qr_check.get('report_date') == today
+                  and qr_check.get('status') == 'PASS'
+                  and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
               )
           except Exception:
               complete = False
@@ -131,7 +136,7 @@ jobs:
         if: steps.preflight.outputs.skip != 'true'
       - name: Validate today's date, fresh news and data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_news_image_match -v
           python - <<'PY'
@@ -191,24 +196,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-noto-cjk
-          python -m pip install --upgrade pillow 'qrcode[pil]' opencv-python-headless
+          python -m pip install --upgrade pillow 'qrcode[pil]' opencv-python-headless numpy
           python radar/scripts/generate_poster.py
           test -s radar/posters/latest.png
           test -s radar/posters/latest.json
           test -s "radar/posters/$(python -c "import json; print(json.load(open('radar/posters/latest.json'))['report_date'])").png"
-          python - <<'PY'
-          import cv2, json
-          from pathlib import Path
-          manifest=json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
-          poster=Path(manifest['poster'])
-          if not poster.is_file(): raise SystemExit(f"Poster path missing: {poster}")
-          image=cv2.imread(str(poster))
-          if image is None: raise SystemExit(f"Poster PNG cannot be opened: {poster}")
-          qr_crop = image[1600:1790, 25:220]
-          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(qr_crop)
-          if decoded != manifest['qr_url']: raise SystemExit('QR mismatch: decoded={!r}, expected={!r}'.format(decoded, manifest['qr_url']))
-          print(f'PASS: poster image and QR verified: {decoded}')
-          PY
+      - name: Mandatory final-image QR and destination gate
+        run: python radar/scripts/verify_poster.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Install Playwright
         run: |
@@ -242,8 +236,10 @@ jobs:
           cp "radar/data/archive/$TODAY.json" "$SNAPSHOT/today.json"
           cp "radar/posters/$TODAY.png" "$SNAPSHOT/today.png"
           cp "radar/posters/$TODAY.json" "$SNAPSHOT/today-poster.json"
+          cp "radar/posters/$TODAY.qr-verification.json" "$SNAPSHOT/today-qr-verification.json"
           cp radar/posters/latest.png "$SNAPSHOT/latest.png"
           cp radar/posters/latest.json "$SNAPSHOT/latest-poster.json"
+          cp radar/posters/latest.qr-verification.json "$SNAPSHOT/latest-qr-verification.json"
 
           git fetch origin main
           git reset --hard HEAD
@@ -255,8 +251,10 @@ jobs:
           cp "$SNAPSHOT/today.json" "radar/data/archive/$TODAY.json"
           cp "$SNAPSHOT/today.png" "radar/posters/$TODAY.png"
           cp "$SNAPSHOT/today-poster.json" "radar/posters/$TODAY.json"
+          cp "$SNAPSHOT/today-qr-verification.json" "radar/posters/$TODAY.qr-verification.json"
           cp "$SNAPSHOT/latest.png" radar/posters/latest.png
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
+          cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
 
           # Rebuild the history index from the merged archive directory so
           # this run cannot delete history added by another run.
@@ -273,7 +271,7 @@ jobs:
           days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
           Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           PY
-          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" radar/posters/latest.png radar/posters/latest.json
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
@@ -296,11 +294,16 @@ jobs:
     needs: qa
     timeout-minutes: 6
     steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install final-image QR decoder
+        run: python -m pip install --upgrade opencv-python-headless numpy
       - name: Wait for the branch-triggered Pages build and verify live assets
         shell: bash
         run: |
           python - <<'PY'
-          import datetime as dt, json, time, urllib.request
+          import datetime as dt, json, time, urllib.request, cv2, numpy as np
           from zoneinfo import ZoneInfo
 
           base = 'https://chenzhe223-tech.github.io/radar/'
@@ -328,9 +331,25 @@ jobs:
                       assert story.get('image_url', '').startswith('https://'), 'China AI story image missing'
                       assert story.get('category'), 'China AI story category missing'
                       assert story.get('published'), 'China AI story publication date missing'
-                  poster_req = urllib.request.Request(base + 'posters/' + today + '.png?verify=' + stamp, headers=headers)
-                  with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
-                      assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), 'poster PNG missing'
+                  qr_target = 'https://chenzhe223-tech.github.io/radar/daily/'
+                  for poster_name in (today + '.png', 'latest.png'):
+                      poster_req = urllib.request.Request(base + 'posters/' + poster_name + '?verify=' + stamp, headers=headers)
+                      with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
+                          assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), f'{poster_name} missing'
+                          poster_bytes = poster_response.read()
+                      poster_image = cv2.imdecode(np.frombuffer(poster_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
+                      assert poster_image is not None, f'{poster_name} is not a valid PNG'
+                      decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image)
+                      if not decoded:
+                          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image[1600:1790, 25:240])
+                      assert decoded == qr_target, f'{poster_name} QR decode/URL mismatch: {decoded!r}'
+                      assert points is not None and len(points), f'{poster_name} QR geometry not detected'
+                  verification_req = urllib.request.Request(base + 'posters/' + today + '.qr-verification.json?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(verification_req, timeout=15) as verification_response:
+                      verification = json.loads(verification_response.read().decode('utf-8'))
+                  assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
+                  assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
+                  assert verification.get('report_date') == today, 'QR verification date mismatch'
                   history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(history_req, timeout=15) as history_response:
                       history = json.loads(history_response.read().decode('utf-8'))
