@@ -7,8 +7,11 @@ on:
       - "radar/data/**"
       - "radar/posters/**"
   schedule:
-    # 07:30 Asia/Shanghai; GitHub may delay scheduled starts.
-    - cron: "30 23 * * *"
+    # Beijing time: primary run at 08:50, then recovery attempts at 09:20 and 09:50.
+    # GitHub Actions cron uses UTC and scheduled starts may be delayed.
+    - cron: "50 0 * * *"
+    - cron: "20 1 * * *"
+    - cron: "50 1 * * *"
   workflow_dispatch:
 
 permissions:
@@ -24,7 +27,7 @@ jobs:
   qa:
     name: Test AI daily brief before publishing
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -46,27 +49,33 @@ jobs:
           print('DeepSeek API key configured:', bool(os.environ.get('DEEPSEEK_API_KEY')))
           print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
           PY
-      - name: Run optional Horizon enrichment (bounded, non-blocking)
+      - name: Run Horizon and DeepSeek enrichment with bounded retries
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         shell: bash
         run: |
           # Horizon enriches the report, but must never block the validated RSS/GitHub baseline.
           if [ ! -f /tmp/Horizon/src/main.py ]; then
-            if ! timeout 45s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
+            if ! timeout 90s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
               echo "::warning::Horizon clone unavailable or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
           fi
           if [ -f /tmp/Horizon/requirements.txt ]; then
-            if ! timeout 90s python -m pip install -r /tmp/Horizon/requirements.txt; then
+            if ! timeout 180s python -m pip install -r /tmp/Horizon/requirements.txt; then
               echo "::warning::Horizon dependency installation failed or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
           fi
-          if ! timeout 240s python radar/scripts/run_horizon.py; then
-            echo "::warning::Horizon/AI enrichment failed or exceeded 240 seconds; publishing will continue only if subsequent date, source, poster, QR and browser QA checks pass."
-          fi
+          # The Python runner retries each DeepSeek JSON request up to three times.
+          # Retry the whole enrichment once more for transient Horizon/model failures.
+          for attempt in 1 2; do
+            if timeout 600s python radar/scripts/run_horizon.py; then
+              break
+            fi
+            echo "::warning::Horizon/AI enrichment attempt $attempt failed."
+            if [ "$attempt" = "1" ]; then sleep 8; fi
+          done
       - name: Match story-specific images (free sources first)
         run: python radar/scripts/news_image_match.py
       - name: Validate today's date, fresh news and data contract
