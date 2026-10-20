@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "timezone": "Asia/Shanghai",
+  "default_window_days": 7,
+  "feeds": [
+    {
+      "name": "OpenAI News",
+      "url": "https://openai.com/news/rss.xml",
+      "type": "news",
+      "region": "global",
+      "enabled": true
+    },
+    {
+      "name": "Anthropic News",
+      "url": "https://www.anthropic.com/news/rss.xml",
+      "type": "news",
+      "region": "global",
+      "enabled": true
+    },
+    {
+      "name": "Google AI Blog",
+      "url": "https://blog.google/technology/ai/rss/",
+      "type": "news",
+      "region": "global",
+      "enabled": true
+    },
+    {
+      "name": "Hugging Face Blog",
+      "url": "https://huggingface.co/blog/feed.xml",
+      "type": "news",
+      "region": "global",
+      "enabled": true
+    },
+    {
+      "name": "TechCrunch AI",
+      "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+      "type": "news",
+      "region": "global",
+      "enabled": true
+    },
+    {
+      "name": "量子位",
+      "url": "https://www.qbitai.com/feed",
+      "type": "news",
+      "region": "china",
+      "enabled": true
+    },
+    {
+      "name": "机器之心",
+      "url": "https://www.jiqizhixin.com/rss",
+      "type": "news",
+      "region": "china",
+      "enabled": true
+    },
+    {
+      "name": "极客公园",
+      "url": "https://www.geekpark.net/rss",
+      "type": "news",
+      "region": "china",
+      "enabled": true
+    }
+  ],
+  "youtube_channel_feed_template": "https://www.youtube.com/feeds/videos.xml?channel_id={CHANNEL_ID}",
+  "podcast_feed_policy": "Add verified public RSS feed URLs for individual shows; do not guess feed URLs. Podcast feeds may use RSS enclosure metadata.",
+  "notes": [
+    "This starter configuration includes public AI news feeds. Add verified YouTube channel IDs and podcast RSS URLs after testing reachability.",
+    "Google Trends is a discovery/interest signal, not a news source; this script does not currently scrape Google Trends.",
+    "Do not treat feed presence as proof of popularity."
+  ]
+}
