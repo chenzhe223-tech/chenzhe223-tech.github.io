@@ -259,7 +259,7 @@ def main():
         "design": "editorial-magazine-three-column",
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
-    (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
     print(f"Generated editorial poster {out} ({W}x{H}); QR target: {PUBLIC_URL}")
 
