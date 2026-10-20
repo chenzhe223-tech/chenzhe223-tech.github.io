@@ -26,8 +26,8 @@ def _safe_error_detail(exc: Exception) -> str:
             body=exc.read().decode('utf-8','replace')
         except Exception:
             body=''
-        body=re.sub(r'(?i)(authorization|api[_-]?key|token)(\\s*[:=]\\s*)[^,\\s}]+',r'\\1\\2[REDACTED]',body)
-        body=re.sub(r'(?i)Bearer\\s+[^\\s"\\']+', 'Bearer [REDACTED]', body)
+        body=re.sub(r'(?i)(authorization|api[_-]?key|token)(\s*[:=]\s*)[^,\s}]+',r'\1\2[REDACTED]',body)
+        body=re.sub(r'''(?i)Bearer\s+[^\s"']+''', 'Bearer [REDACTED]', body)
         return f'HTTP {exc.code}: {body[:280]}'
     if isinstance(exc, urllib.error.URLError):
         return f'network error: {str(exc.reason)[:180]}'
@@ -211,9 +211,9 @@ def main():
             cmd=[sys.executable,'-m','src.main','--config',str(CONFIG),'--data-dir',str(DATA_DIR),'--hours','24','--log-level','WARNING']
             result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=480,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
             if result.returncode!=0:
-                tail='\\n'.join((result.stdout or '').splitlines()[-35:])
-                tail=re.sub(r'(?i)Bearer\\s+[^\\s"\\']+', 'Bearer [REDACTED]', tail)
-                tail=re.sub(r'(?i)(DEEPSEEK_API_KEY|api[_-]?key)(\\s*[:=]\\s*)[^\\s]+',r'\\1\\2[REDACTED]',tail)
+                tail='\n'.join((result.stdout or '').splitlines()[-35:])
+                tail=re.sub(r'''(?i)Bearer\s+[^\s"']+''', 'Bearer [REDACTED]', tail)
+                tail=re.sub(r'(?i)(DEEPSEEK_API_KEY|api[_-]?key)(\s*[:=]\s*)[^\s]+',r'\1\2[REDACTED]',tail)
                 print(f'[horizon-error] exit_code={result.returncode}; last_output_begin')
                 print(tail[:6000])
                 print('[horizon-error] last_output_end')
