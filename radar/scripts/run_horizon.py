@@ -79,6 +79,10 @@ def ensure_story_fallback(report):
     """Populate source-linked cards without pretending fallback stories are AI-scored."""
     current=report.get('top5')
     if isinstance(current,list) and len(current)>=5:
+        # Keep the quality marker in sync with the actual cards. Without this,
+        # successful AI selections could be published without top5_status and
+        # the scheduled recovery guard would rerun the pipeline indefinitely.
+        report['top5_status']='source_fallback' if any(x.get('fallback') for x in current[:5]) else 'ai_curated'
         return
     cards=list(current) if isinstance(current,list) else []
     seen={x.get('source_url') for x in cards}
