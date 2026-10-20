@@ -36,8 +36,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Skip recovery run when today's AI-curated report is already published
+        id: preflight
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import datetime as dt, json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          try:
+              report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+              poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+              complete = (
+                  report.get('report_date') == today
+                  and report.get('generated_at', '').startswith(today)
+                  and report.get('top5_status') == 'ai_curated'
+                  and len(report.get('top5', [])) == 5
+                  and report.get('localization', {}).get('status') == 'ok'
+                  and poster.get('report_date') == today
+              )
+          except Exception:
+              complete = False
+          print('skip=' + ('true' if complete else 'false'))
+          print(f"Today's complete AI-curated report already published: {complete}")
+          PY
       - name: Refresh today's AI news and Skill shortlist
         run: python radar/scripts/build_daily.py
+        if: steps.preflight.outputs.skip != 'true'
       - name: Diagnose AI enrichment configuration (without exposing secrets)
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
@@ -49,6 +75,7 @@ jobs:
           print('DeepSeek API key configured:', bool(os.environ.get('DEEPSEEK_API_KEY')))
           print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
           PY
+        if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
@@ -76,8 +103,10 @@ jobs:
             echo "::warning::Horizon/AI enrichment attempt $attempt failed."
             if [ "$attempt" = "1" ]; then sleep 8; fi
           done
+        if: steps.preflight.outputs.skip != 'true'
       - name: Match story-specific images (free sources first)
         run: python radar/scripts/news_image_match.py
+        if: steps.preflight.outputs.skip != 'true'
       - name: Validate today's date, fresh news and data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py
@@ -135,6 +164,7 @@ jobs:
           Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; China AI={len(fresh_china)} (minimum 6); sources={d.get('sources_ok')}/{d.get('sources_total')}")
           PY
+        if: steps.preflight.outputs.skip != 'true'
       - name: Generate daily infographic poster
         run: |
           sudo apt-get update
@@ -157,19 +187,23 @@ jobs:
           if decoded != manifest['qr_url']: raise SystemExit('QR mismatch: decoded={!r}, expected={!r}'.format(decoded, manifest['qr_url']))
           print(f'PASS: poster image and QR verified: {decoded}')
           PY
+        if: steps.preflight.outputs.skip != 'true'
       - name: Install Playwright
         run: |
           npm init -y
           npm install --no-save playwright
           npx playwright install --with-deps chromium
+        if: steps.preflight.outputs.skip != 'true'
       - name: Start local static server
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/radar-http.log 2>&1 &
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/radar/daily/ >/dev/null && exit 0; sleep 1; done
           cat /tmp/radar-http.log
           exit 1
+        if: steps.preflight.outputs.skip != 'true'
       - name: Test daily briefing on desktop and mobile
         run: node scripts/qa-radar.cjs
+        if: steps.preflight.outputs.skip != 'true'
       - name: Commit refreshed report and daily archive
         shell: bash
         run: |
@@ -224,8 +258,9 @@ jobs:
           else
             echo 'No report data changes to commit.'
           fi
+        if: steps.preflight.outputs.skip != 'true'
       - name: Upload daily briefing screenshots and report
-        if: always()
+        if: always() && steps.preflight.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
         with:
           name: ai-daily-brief-qa
