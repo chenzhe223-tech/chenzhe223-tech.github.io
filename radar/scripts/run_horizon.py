@@ -6,6 +6,7 @@ import json
 import os
 import subprocess
 import sys
+import time
 import urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -20,6 +21,7 @@ def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens:
     body=json.dumps({
         'model':model,'temperature':0.2,'max_tokens':max_tokens,
         'response_format':{'type':'json_object'},
+        'thinking':{'type':'disabled'},
         'messages':[
             {'role':'system','content':'Return only valid JSON. Be accurate, restrained, and source-faithful. Never invent facts.'},
             {'role':'user','content':prompt+json.dumps(payload,ensure_ascii=False)}
@@ -29,17 +31,33 @@ def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens:
         'https://api.deepseek.com/chat/completions',data=body,
         headers={'Authorization':'Bearer '+key,'Content-Type':'application/json'},method='POST'
     )
-    with urllib.request.urlopen(req,timeout=100) as response:
-        result=json.loads(response.read().decode())
-    content=result['choices'][0]['message']['content']
-    try:
-        return json.loads(content)
-    except json.JSONDecodeError:
-        # Recover valid JSON when a provider wraps the object in prose/fences.
-        left=content.find('{'); right=content.rfind('}')
-        if left >= 0 and right > left:
-            return json.loads(content[left:right+1])
-        raise
+    last_error=None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req,timeout=60) as response:
+                result=json.loads(response.read().decode())
+            choices=result.get('choices') or []
+            content=(choices[0].get('message') or {}).get('content') if choices else None
+            if not isinstance(content,str) or not content.strip():
+                raise ValueError('DeepSeek returned empty JSON content')
+            try:
+                parsed=json.loads(content)
+            except json.JSONDecodeError:
+                # Recover valid JSON when a provider wraps the object in prose/fences.
+                left=content.find('{'); right=content.rfind('}')
+                if left >= 0 and right > left:
+                    parsed=json.loads(content[left:right+1])
+                else:
+                    raise
+            if not isinstance(parsed,dict):
+                raise ValueError('DeepSeek JSON response was not an object')
+            return parsed
+        except Exception as exc:
+            last_error=exc
+            print(f'[deepseek-retry] attempt {attempt+1}/3 failed: {type(exc).__name__}')
+            if attempt < 2:
+                time.sleep(2 ** (attempt+1))
+    raise RuntimeError(f'DeepSeek JSON request failed after 3 attempts ({type(last_error).__name__})') from last_error
 
 def ensure_story_fallback(report):
     """Populate source-linked cards without pretending fallback stories are AI-scored."""
@@ -129,14 +147,14 @@ def localize(report):
                 normalized={k:max(1,min(10,int(scores.get(k,5)))) for k in ('innovation','practicality','feasibility','impact','opportunity')}
                 top5.append({**entry,'source_url':news[idx].get('url',''),'source':news[idx].get('source',''),'published':news[idx].get('published',''),'original_title':news[idx].get('title',''),'scores':normalized,'total_score':sum(normalized.values())})
             except (TypeError,ValueError): continue
-        if top5:
+        if len(top5) == 5:
             report['top5']=top5
             editorial=selected.get('editorial') or {}
             if editorial: report['editorial']={k:v for k,v in editorial.items() if isinstance(v,str) and v.strip()}
             selection_ok=True
         else:
             report.pop('top5',None)
-            print('[localize-warning] selection returned no valid source-backed stories.')
+            print(f'[localize-warning] selection returned {len(top5)} valid source-backed stories; exactly five required.')
     except Exception as exc:
         report.pop('top5',None)
         print(f'[localize-warning] selection {type(exc).__name__}; UI will show source-backed fallback stories.')
