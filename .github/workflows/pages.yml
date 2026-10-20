@@ -7,11 +7,13 @@ on:
       - "radar/data/**"
       - "radar/posters/**"
   schedule:
-    # Beijing time: primary run at 08:50, then recovery attempts at 09:20 and 09:50.
+    # Beijing time: start at 07:30 to leave QA/deploy time before 09:00.
+    # Recovery runs at 08:15, 09:00 and 09:45 if a complete AI-curated report is still missing.
     # GitHub Actions cron uses UTC and scheduled starts may be delayed.
-    - cron: "50 0 * * *"
-    - cron: "20 1 * * *"
-    - cron: "50 1 * * *"
+    - cron: "30 23 * * *"
+    - cron: "15 0 * * *"
+    - cron: "0 1 * * *"
+    - cron: "45 1 * * *"
   workflow_dispatch:
 
 permissions:
