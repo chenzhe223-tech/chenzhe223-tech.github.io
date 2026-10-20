@@ -1,88 +1,75 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1620" viewBox="0 0 1080 1620" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1350" viewBox="0 0 1080 1350" role="img" aria-labelledby="title desc">
 <title id="title">DAVYLAB AI 前沿简报 · 2026年10月20日</title>
-<desc id="desc">每日 AI 前沿简报。三条新闻：Anthropic 公益基金、OpenAI 融资报道、NVIDIA GTC Berlin。二维码链接到正式简报网页。</desc>
+<desc id="desc">每日 AI 前沿简报，今日观察与三条 AI 动态。二维码直接编码官方简报网址。</desc>
 <defs>
- <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8f5ee"/><stop offset=".55" stop-color="#e8eff5"/><stop offset="1" stop-color="#f5e2c7"/></linearGradient>
- <linearGradient id="mountain" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#102746"/><stop offset="1" stop-color="#426c91"/></linearGradient>
- <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#1754b8"/><stop offset="1" stop-color="#5f92d6"/></linearGradient>
- <pattern id="grain" width="7" height="7" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".5" fill="#12233d" opacity=".08"/></pattern>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbf8f1"/><stop offset=".58" stop-color="#edf2f5"/><stop offset="1" stop-color="#f5e5d1"/></linearGradient>
+ <linearGradient id="hero" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#122642"/><stop offset="1" stop-color="#315c82"/></linearGradient>
+ <pattern id="grain" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".45" fill="#142640" opacity=".08"/></pattern>
 </defs>
-<rect width="1080" height="1620" fill="#f8f6f0"/>
-<rect width="1080" height="660" fill="url(#sky)"/>
-<path d="M0 495 L130 418 208 460 344 350 430 423 540 292 640 398 736 255 834 376 920 300 1080 402V660H0Z" fill="#cad7e2" opacity=".72"/>
-<path d="M0 560 L160 468 260 520 380 410 492 502 620 345 700 433 825 300 925 438 1080 360V660H0Z" fill="url(#mountain)"/>
-<path d="M580 375 L620 345 660 410 690 397 735 255 772 327 805 305 825 300 850 362 886 380 925 438 870 422 830 448 790 420 744 458 700 436 665 455 630 420Z" fill="#f4f7f8" opacity=".88"/>
-<path d="M735 255 L772 327 751 310 735 326 724 306Z" fill="#fff" opacity=".92"/>
-<path d="M0 590 C170 560 250 608 390 578 S680 594 800 563 S980 580 1080 548V660H0Z" fill="#f8f6f0"/>
-<rect x="54" y="48" width="7" height="45" fill="#1754b8"/>
-<text x="80" y="77" font-family="Arial,Helvetica,sans-serif" font-size="34" letter-spacing="4" fill="#10213b" font-weight="700">DAVYLAB</text>
-<text x="80" y="112" font-family="Arial,Helvetica,sans-serif" font-size="14" letter-spacing="5" fill="#43556c">AI FRONTIER BRIEF</text>
-<text x="1020" y="70" text-anchor="end" font-family="Arial,sans-serif" font-size="17" letter-spacing="2" fill="#263c58">每天一分钟</text>
-<text x="1020" y="98" text-anchor="end" font-family="Arial,sans-serif" font-size="17" letter-spacing="2" fill="#263c58">看懂 AI 新变化</text>
-<text x="52" y="224" font-family="Georgia,'Noto Serif CJK SC',serif" font-size="108" font-weight="700" fill="#10213b">AI 前沿简报</text>
-<text x="58" y="266" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" letter-spacing="6" fill="#31465f">全球视野　｜　深度精选　｜　实用洞察</text>
-<text x="54" y="390" font-family="Georgia,serif" font-size="92" font-weight="700" fill="#1754b8">10.20</text>
-<text x="362" y="360" font-family="Arial,sans-serif" font-size="22" letter-spacing="3" fill="#10213b">TUESDAY</text>
-<text x="362" y="392" font-family="Arial,sans-serif" font-size="20" letter-spacing="3" fill="#10213b">2026</text>
-<text x="58" y="430" font-family="Arial,sans-serif" font-size="14" letter-spacing="4" fill="#42566e">TECHNOLOGY SHAPES</text>
-<text x="58" y="455" font-family="Arial,sans-serif" font-size="14" letter-spacing="4" fill="#42566e">A MORE HUMAN FUTURE</text>
-<rect x="54" y="485" width="68" height="6" fill="#e56b4b"/>
-<text x="54" y="618" font-family="Georgia,'Noto Serif CJK SC',serif" font-size="43" font-weight="700" fill="#10213b">AI 的下一场竞争：从模型能力，到真实世界的执行力</text>
-<text x="57" y="650" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="20" fill="#43556c">真正的价值，不只在于回答得更好，更在于能否可靠地完成任务。</text>
-<rect x="0" y="680" width="1080" height="940" fill="#f8f6f0"/>
-<text x="56" y="738" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="16" letter-spacing="4" fill="#1754b8" font-weight="700">TODAY'S SIGNALS / 今日观察</text>
-<path d="M56 760H1024" stroke="#aeb8c2" stroke-width="2"/>
+<rect width="1080" height="1350" fill="url(#bg)"/>
+<rect x="0" y="0" width="1080" height="410" fill="url(#hero)"/>
+<circle cx="900" cy="80" r="230" fill="#527ca1" opacity=".22"/>
+<circle cx="1000" cy="335" r="190" fill="#d9e6ee" opacity=".08"/>
+<path d="M0 340L140 270 245 315 390 205 505 290 650 155 760 270 860 190 980 265 1080 220V410H0Z" fill="#8ba5b8" opacity=".4"/>
+<path d="M0 370L160 300 270 345 420 255 540 325 680 210 800 320 930 245 1080 300V410H0Z" fill="#dfe8ed" opacity=".28"/>
+<rect x="54" y="48" width="7" height="42" fill="#f1a17d"/>
+<text x="80" y="77" font-family="Arial,Helvetica,sans-serif" font-size="32" letter-spacing="4" fill="#fff" font-weight="700">DAVYLAB</text>
+<text x="80" y="108" font-family="Arial,Helvetica,sans-serif" font-size="13" letter-spacing="4" fill="#d6e0e9">AI FRONTIER BRIEF</text>
+<text x="1024" y="72" text-anchor="end" font-family="Arial,sans-serif" font-size="16" letter-spacing="2" fill="#e1e9ef">2026 · 10 · 20</text>
+<text x="54" y="192" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="72" font-weight="700" fill="#fff">AI 前沿简报</text>
+<text x="58" y="235" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="22" fill="#dce6ee">看见趋势 · 发现机会 · 打开新可能</text>
+<rect x="58" y="265" width="66" height="5" fill="#f1a17d"/>
+<text x="58" y="315" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="29" font-weight="700" fill="#fff">AI 的竞争，正从“能回答”走向“能执行”</text>
+<text x="58" y="352" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#e0e8ee">真正的价值，在于可靠地完成任务，并创造可衡量的成果。</text>
+<text x="56" y="465" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="16" letter-spacing="3" fill="#1754b8" font-weight="700">TODAY'S SIGNALS / 今日观察</text>
+<path d="M56 485H1024" stroke="#b7c2cc" stroke-width="2"/>
 <g>
- <text x="58" y="824" font-family="Georgia,serif" font-size="52" fill="#1754b8">01</text>
- <text x="145" y="808" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="27" fill="#10213b" font-weight="700">Anthropic</text>
- <text x="145" y="846" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">计划将 5% 股份</text>
- <text x="145" y="880" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">投入公益基金</text>
- <text x="58" y="929" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">方案仍需股东批准。</text>
- <text x="58" y="960" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">关注 AI 价值如何回馈社会。</text>
- <rect x="58" y="988" width="294" height="4" fill="#d7e2eb"/>
- <rect x="58" y="988" width="78" height="4" fill="#1754b8"/>
+ <rect x="56" y="512" width="300" height="310" rx="14" fill="#fff" opacity=".92"/>
+ <text x="80" y="555" font-family="Georgia,serif" font-size="40" fill="#1754b8">01</text>
+ <text x="80" y="598" font-family="Arial,sans-serif" font-size="24" fill="#10213b" font-weight="700">Anthropic</text>
+ <text x="80" y="636" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">拟将部分股份价值</text>
+ <text x="80" y="666" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">投入公益基金</text>
+ <text x="80" y="720" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">方案仍需相关批准。</text>
+ <text x="80" y="749" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">关注 AI 价值如何回馈社会。</text>
+ <rect x="80" y="780" width="244" height="4" fill="#d8e3ec"/><rect x="80" y="780" width="72" height="4" fill="#1754b8"/>
 </g>
-<path d="M386 785V1008" stroke="#c7ced5" stroke-width="2"/>
 <g>
- <text x="414" y="824" font-family="Georgia,serif" font-size="52" fill="#1754b8">02</text>
- <text x="500" y="808" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="27" fill="#10213b" font-weight="700">OpenAI</text>
- <text x="500" y="846" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">据 Reuters 报道</text>
- <text x="500" y="880" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">加快新一轮融资</text>
- <text x="414" y="929" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">融资规模与估值仍在讨论。</text>
- <text x="414" y="960" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">市场持续关注 AI 投资回报。</text>
- <rect x="414" y="988" width="294" height="4" fill="#d7e2eb"/>
- <rect x="414" y="988" width="78" height="4" fill="#1754b8"/>
+ <rect x="390" y="512" width="300" height="310" rx="14" fill="#fff" opacity=".92"/>
+ <text x="414" y="555" font-family="Georgia,serif" font-size="40" fill="#1754b8">02</text>
+ <text x="414" y="598" font-family="Arial,sans-serif" font-size="24" fill="#10213b" font-weight="700">OpenAI</text>
+ <text x="414" y="636" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">新一轮融资进展</text>
+ <text x="414" y="666" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">持续受到关注</text>
+ <text x="414" y="720" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">融资规模与估值仍需</text>
+ <text x="414" y="749" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">以正式报道为准。</text>
+ <rect x="414" y="780" width="244" height="4" fill="#d8e3ec"/><rect x="414" y="780" width="72" height="4" fill="#1754b8"/>
 </g>
-<path d="M742 785V1008" stroke="#c7ced5" stroke-width="2"/>
 <g>
- <text x="770" y="824" font-family="Georgia,serif" font-size="52" fill="#1754b8">03</text>
- <text x="856" y="808" font-family="Arial,sans-serif" font-size="26" fill="#10213b" font-weight="700">NVIDIA GTC</text>
- <text x="856" y="846" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">柏林大会开启</text>
- <text x="856" y="880" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" fill="#10213b" font-weight="700">聚焦智能体与基础设施</text>
- <text x="770" y="929" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">10 月 20—22 日举行。</text>
- <text x="770" y="960" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#4b5e73">主题涵盖计算、机器人与物理 AI。</text>
- <rect x="770" y="988" width="254" height="4" fill="#d7e2eb"/>
- <rect x="770" y="988" width="78" height="4" fill="#1754b8"/>
+ <rect x="724" y="512" width="300" height="310" rx="14" fill="#fff" opacity=".92"/>
+ <text x="748" y="555" font-family="Georgia,serif" font-size="40" fill="#1754b8">03</text>
+ <text x="748" y="598" font-family="Arial,sans-serif" font-size="24" fill="#10213b" font-weight="700">NVIDIA GTC</text>
+ <text x="748" y="636" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">柏林大会聚焦</text>
+ <text x="748" y="666" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#10213b" font-weight="700">AI 基础设施与智能体</text>
+ <text x="748" y="720" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">关注计算平台、机器人</text>
+ <text x="748" y="749" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#506175">与物理 AI 的产业机会。</text>
+ <rect x="748" y="780" width="244" height="4" fill="#d8e3ec"/><rect x="748" y="780" width="72" height="4" fill="#1754b8"/>
 </g>
-<rect x="56" y="1042" width="968" height="290" rx="18" fill="#eaf0f4"/>
-<path d="M56 1042H1024V1332H56Z" fill="url(#grain)" opacity=".6"/>
-<rect x="82" y="1070" width="150" height="36" rx="4" fill="#1754b8"/>
-<text x="157" y="1095" text-anchor="middle" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="18" font-weight="700" fill="#fff">今日观察</text>
-<text x="254" y="1096" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="27" font-weight="700" fill="#10213b">AI 价值正从“能回答”走向“能完成任务”</text>
-<text x="82" y="1150" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#43566d">从技术突破到产业落地，竞争正转向可靠执行、</text>
-<text x="82" y="1187" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="21" fill="#43566d">可衡量的成果，以及人类可控的协作方式。</text>
-<path d="M80 1244H600" stroke="#aebdca" stroke-width="2"/>
-<text x="82" y="1284" font-family="Arial,sans-serif" font-size="15" letter-spacing="3" fill="#4b5e73">REAL SOURCES · USEFUL INSIGHTS · NEW POSSIBILITIES</text>
-<rect x="742" y="1350" width="282" height="220" rx="12" fill="#fff" stroke="#c6d0da" stroke-width="2"/>
-<text x="883" y="1382" text-anchor="middle" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" fill="#10213b" font-weight="700">扫码阅读完整简报</text>
-<g transform="translate(796 1390)">
- <rect x="0" y="0" width="196" height="196" fill="#fff"/>
- <image href="https://quickchart.io/qr?text=https%3A%2F%2Fchenzhe223-tech.github.io%2Fradar%2Fdaily%2F&size=196&margin=4&ecLevel=H" x="0" y="0" width="196" height="196" preserveAspectRatio="none"/>
+<rect x="56" y="850" width="968" height="205" rx="18" fill="#e8eef2"/>
+<rect x="56" y="850" width="968" height="205" rx="18" fill="url(#grain)"/>
+<rect x="82" y="878" width="128" height="34" rx="4" fill="#1754b8"/>
+<text x="146" y="901" text-anchor="middle" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="17" font-weight="700" fill="#fff">今日观察</text>
+<text x="82" y="951" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="25" font-weight="700" fill="#10213b">AI 价值从“回答问题”走向“完成任务”</text>
+<text x="82" y="991" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="19" fill="#43566d">下一阶段的关键，是可靠执行、清晰边界与可衡量的结果。</text>
+<text x="82" y="1024" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#43566d">REAL SOURCES · USEFUL INSIGHTS · NEW POSSIBILITIES</text>
+<text x="56" y="1115" font-family="Georgia,serif" font-size="31" font-weight="700" fill="#10213b">每天发现一个新可能。</text>
+<text x="56" y="1150" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="18" fill="#506175">把变化看清楚，把机会带回现实。</text>
+<path d="M56 1180H680" stroke="#b3bec8" stroke-width="2"/>
+<text x="56" y="1217" font-family="Arial,sans-serif" font-size="15" letter-spacing="2" fill="#10213b">DAVYLAB · AI FRONTIER BRIEF</text>
+<text x="56" y="1246" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="14" fill="#506175">2026.10.20  |  真实来源 · 趋势观察 · 创作机会</text>
+<rect x="780" y="1080" width="244" height="244" rx="12" fill="#fff" stroke="#c5d0d9" stroke-width="2"/>
+<text x="902" y="1107" text-anchor="middle" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="16" font-weight="700" fill="#10213b">扫码阅读完整简报</text>
+<g transform="translate(882 1120) scale(3.5)">
+ <rect x="-4" y="-4" width="49" height="49" fill="#fff"/>
+ <path d="M0 0h7v1h-7zM8 0h1v1h-1zM10 0h1v1h-1zM12 0h3v1h-3zM16 0h1v1h-1zM18 0h2v1h-2zM23 0h1v1h-1zM26 0h2v1h-2zM29 0h1v1h-1zM31 0h1v1h-1zM34 0h7v1h-7zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM11 1h1v1h-1zM13 1h3v1h-3zM18 1h1v1h-1zM21 1h1v1h-1zM23 1h1v1h-1zM27 1h1v1h-1zM30 1h1v1h-1zM32 1h1v1h-1zM34 1h1v1h-1zM40 1h1v1h-1zM0 2h1v1h-1zM2 2h3v1h-3zM6 2h1v1h-1zM14 2h1v1h-1zM16 2h1v1h-1zM18 2h4v1h-4zM23 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM30 2h1v1h-1zM34 2h1v1h-1zM36 2h3v1h-3zM40 2h1v1h-1zM0 3h1v1h-1zM2 3h3v1h-3zM6 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h2v1h-2zM16 3h1v1h-1zM19 3h1v1h-1zM22 3h4v1h-4zM28 3h4v1h-4zM34 3h1v1h-1zM36 3h3v1h-3zM40 3h1v1h-1zM0 4h1v1h-1zM2 4h3v1h-3zM6 4h1v1h-1zM8 4h1v1h-1zM12 4h1v1h-1zM14 4h1v1h-1zM16 4h3v1h-3zM21 4h1v1h-1zM25 4h1v1h-1zM27 4h2v1h-2zM30 4h1v1h-1zM32 4h1v1h-1zM34 4h1v1h-1zM36 4h3v1h-3zM40 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM11 5h1v1h-1zM16 5h2v1h-2zM21 5h2v1h-2zM26 5h2v1h-2zM29 5h1v1h-1zM31 5h2v1h-2zM34 5h1v1h-1zM40 5h1v1h-1zM0 6h7v1h-7zM8 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM28 6h1v1h-1zM30 6h1v1h-1zM32 6h1v1h-1zM34 6h7v1h-7zM9 7h2v1h-2zM13 7h1v1h-1zM17 7h1v1h-1zM19 7h1v1h-1zM22 7h4v1h-4zM27 7h4v1h-4zM3 8h1v1h-1zM6 8h1v1h-1zM10 8h1v1h-1zM14 8h2v1h-2zM17 8h2v1h-2zM24 8h1v1h-1zM27 8h2v1h-2zM31 8h1v1h-1zM35 8h3v1h-3zM39 8h2v1h-2zM1 9h2v1h-2zM4 9h2v1h-2zM7 9h1v1h-1zM9 9h4v1h-4zM14 9h3v1h-3zM18 9h1v1h-1zM20 9h1v1h-1zM22 9h2v1h-2zM25 9h2v1h-2zM28 9h1v1h-1zM32 9h1v1h-1zM34 9h1v1h-1zM37 9h4v1h-4zM2 10h2v1h-2zM5 10h3v1h-3zM10 10h1v1h-1zM12 10h1v1h-1zM18 10h1v1h-1zM21 10h5v1h-5zM29 10h1v1h-1zM31 10h1v1h-1zM33 10h3v1h-3zM37 10h2v1h-2zM2 11h1v1h-1zM5 11h1v1h-1zM8 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM21 11h1v1h-1zM23 11h4v1h-4zM33 11h4v1h-4zM38 11h1v1h-1zM0 12h1v1h-1zM2 12h3v1h-3zM6 12h1v1h-1zM8 12h5v1h-5zM16 12h1v1h-1zM21 12h2v1h-2zM26 12h4v1h-4zM31 12h1v1h-1zM33 12h1v1h-1zM35 12h1v1h-1zM37 12h1v1h-1zM1 13h2v1h-2zM7 13h1v1h-1zM10 13h1v1h-1zM14 13h1v1h-1zM18 13h1v1h-1zM21 13h2v1h-2zM25 13h3v1h-3zM29 13h1v1h-1zM33 13h2v1h-2zM39 13h1v1h-1zM3 14h2v1h-2zM6 14h3v1h-3zM13 14h1v1h-1zM15 14h2v1h-2zM18 14h1v1h-1zM21 14h2v1h-2zM24 14h2v1h-2zM27 14h2v1h-2zM30 14h1v1h-1zM32 14h1v1h-1zM34 14h1v1h-1zM36 14h1v1h-1zM38 14h1v1h-1zM40 14h1v1h-1zM3 15h1v1h-1zM5 15h1v1h-1zM8 15h1v1h-1zM10 15h1v1h-1zM12 15h2v1h-2zM15 15h1v1h-1zM18 15h3v1h-3zM23 15h4v1h-4zM28 15h2v1h-2zM31 15h1v1h-1zM34 15h1v1h-1zM36 15h2v1h-2zM39 15h2v1h-2zM1 16h1v1h-1zM3 16h2v1h-2zM6 16h2v1h-2zM9 16h2v1h-2zM12 16h2v1h-2zM16 16h1v1h-1zM18 16h1v1h-1zM23 16h1v1h-1zM27 16h1v1h-1zM29 16h4v1h-4zM35 16h1v1h-1zM3 17h1v1h-1zM5 17h1v1h-1zM12 17h3v1h-3zM16 17h3v1h-3zM24 17h1v1h-1zM28 17h1v1h-1zM34 17h2v1h-2zM40 17h1v1h-1zM0 18h1v1h-1zM2 18h6v1h-6zM9 18h7v1h-7zM17 18h3v1h-3zM21 18h2v1h-2zM24 18h1v1h-1zM26 18h1v1h-1zM30 18h1v1h-1zM32 18h3v1h-3zM36 18h1v1h-1zM40 18h1v1h-1zM0 19h1v1h-1zM2 19h1v1h-1zM4 19h2v1h-2zM7 19h1v1h-1zM12 19h1v1h-1zM17 19h5v1h-5zM23 19h8v1h-8zM32 19h4v1h-4zM37 19h1v1h-1zM40 19h1v1h-1zM1 20h1v1h-1zM5 20h4v1h-4zM12 20h6v1h-6zM24 20h2v1h-2zM28 20h3v1h-3zM33 20h2v1h-2zM36 20h1v1h-1zM38 20h3v1h-3zM0 21h1v1h-1zM3 21h3v1h-3zM7 21h4v1h-4zM12 21h1v1h-1zM14 21h2v1h-2zM17 21h1v1h-1zM19 21h3v1h-3zM28 21h1v1h-1zM30 21h1v1h-1zM32 21h4v1h-4zM38 21h3v1h-3zM0 22h4v1h-4zM5 22h4v1h-4zM12 22h2v1h-2zM16 22h1v1h-1zM19 22h1v1h-1zM21 22h1v1h-1zM23 22h1v1h-1zM25 22h1v1h-1zM30 22h2v1h-2zM35 22h2v1h-2zM39 22h1v1h-1zM0 23h1v1h-1zM5 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM14 23h2v1h-2zM17 23h2v1h-2zM21 23h1v1h-1zM25 23h1v1h-1zM27 23h2v1h-2zM32 23h3v1h-3zM37 23h4v1h-4zM0 24h3v1h-3zM4 24h1v1h-1zM6 24h1v1h-1zM10 24h6v1h-6zM20 24h5v1h-5zM26 24h1v1h-1zM29 24h1v1h-1zM32 24h3v1h-3zM38 24h2v1h-2zM8 25h1v1h-1zM11 25h1v1h-1zM14 25h1v1h-1zM19 25h1v1h-1zM22 25h3v1h-3zM26 25h1v1h-1zM29 25h1v1h-1zM31 25h1v1h-1zM33 25h1v1h-1zM35 25h1v1h-1zM37 25h1v1h-1zM0 26h7v1h-7zM10 26h1v1h-1zM12 26h5v1h-5zM18 26h1v1h-1zM20 26h3v1h-3zM28 26h1v1h-1zM32 26h1v1h-1zM34 26h1v1h-1zM39 26h2v1h-2zM0 27h4v1h-4zM11 27h7v1h-7zM26 27h1v1h-1zM28 27h3v1h-3zM32 27h1v1h-1zM36 27h1v1h-1zM39 27h1v1h-1zM0 28h2v1h-2zM4 28h1v1h-1zM6 28h1v1h-1zM8 28h3v1h-3zM17 28h1v1h-1zM19 28h3v1h-3zM24 28h1v1h-1zM26 28h4v1h-4zM32 28h1v1h-1zM39 28h2v1h-2zM1 29h3v1h-3zM5 29h1v1h-1zM16 29h1v1h-1zM19 29h1v1h-1zM22 29h4v1h-4zM27 29h1v1h-1zM29 29h1v1h-1zM31 29h1v1h-1zM37 29h4v1h-4zM0 30h1v1h-1zM2 30h2v1h-2zM5 30h4v1h-4zM10 30h1v1h-1zM17 30h2v1h-2zM25 30h1v1h-1zM29 30h1v1h-1zM31 30h2v1h-2zM35 30h1v1h-1zM39 30h2v1h-2zM5 31h1v1h-1zM7 31h1v1h-1zM10 31h2v1h-2zM14 31h1v1h-1zM16 31h2v1h-2zM19 31h2v1h-2zM23 31h1v1h-1zM26 31h8v1h-8zM35 31h1v1h-1zM40 31h1v1h-1zM0 32h1v1h-1zM2 32h1v1h-1zM4 32h3v1h-3zM8 32h2v1h-2zM11 32h1v1h-1zM14 32h2v1h-2zM18 32h4v1h-4zM23 32h1v1h-1zM25 32h2v1h-2zM28 32h1v1h-1zM31 32h10v1h-10zM8 33h2v1h-2zM12 33h2v1h-2zM16 33h2v1h-2zM19 33h1v1h-1zM23 33h2v1h-2zM28 33h1v1h-1zM31 33h2v1h-2zM36 33h5v1h-5zM0 34h7v1h-7zM10 34h3v1h-3zM14 34h1v1h-1zM18 34h1v1h-1zM20 34h1v1h-1zM29 34h1v1h-1zM32 34h1v1h-1zM34 34h1v1h-1zM36 34h1v1h-1zM38 34h2v1h-2zM0 35h1v1h-1zM6 35h1v1h-1zM16 35h1v1h-1zM18 35h1v1h-1zM22 35h2v1h-2zM27 35h3v1h-3zM32 35h1v1h-1zM36 35h1v1h-1zM38 35h2v1h-2zM0 36h1v1h-1zM2 36h3v1h-3zM6 36h1v1h-1zM9 36h1v1h-1zM13 36h1v1h-1zM16 36h1v1h-1zM19 36h1v1h-1zM21 36h1v1h-1zM23 36h2v1h-2zM32 36h5v1h-5zM0 37h1v1h-1zM2 37h3v1h-3zM6 37h1v1h-1zM8 37h4v1h-4zM13 37h3v1h-3zM18 37h1v1h-1zM20 37h1v1h-1zM22 37h4v1h-4zM29 37h1v1h-1zM31 37h1v1h-1zM33 37h2v1h-2zM36 37h4v1h-4zM0 38h1v1h-1zM2 38h3v1h-3zM6 38h1v1h-1zM9 38h6v1h-6zM17 38h1v1h-1zM19 38h1v1h-1zM21 38h1v1h-1zM23 38h1v1h-1zM26 38h1v1h-1zM29 38h1v1h-1zM36 38h1v1h-1zM38 38h1v1h-1zM40 38h1v1h-1zM0 39h1v1h-1zM6 39h1v1h-1zM12 39h3v1h-3zM17 39h3v1h-3zM22 39h1v1h-1zM24 39h1v1h-1zM26 39h2v1h-2zM29 39h4v1h-4zM35 39h1v1h-1zM38 39h2v1h-2zM0 40h7v1h-7zM9 40h1v1h-1zM11 40h2v1h-2zM18 40h3v1h-3zM22 40h6v1h-6zM29 40h1v1h-1zM32 40h2v1h-2zM35 40h5v1h-5z" fill="#10213b"/>
 </g>
-<text x="883" y="1550" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" letter-spacing="1.5" fill="#43566c">DAVYLAB · DAILY AI BRIEF</text>
-<text x="56" y="1412" font-family="Georgia,serif" font-size="32" fill="#10213b" font-weight="700">每天发现一个新可能。</text>
-<text x="56" y="1452" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="20" fill="#43566c">把变化看清楚，把机会带回现实。</text>
-<path d="M56 1490H680" stroke="#9baaba" stroke-width="2"/>
-<text x="56" y="1530" font-family="Arial,sans-serif" font-size="16" letter-spacing="3" fill="#10213b">DAVYLAB  ·  AI FRONTIER BRIEF</text>
-<text x="56" y="1564" font-family="Arial,'Noto Sans CJK SC',sans-serif" font-size="15" letter-spacing="2" fill="#43566c">2026.10.20　|　真实来源　趋势观察　创作机会</text>
+<text x="902" y="1307" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="1" fill="#43566c">DAVYLAB · DAILY AI BRIEF</text>
 </svg>
