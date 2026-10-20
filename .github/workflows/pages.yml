@@ -59,7 +59,7 @@ jobs:
           except Exception:
               complete = False
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
-              output.write('skip=' + ('true' if complete else 'false') + '\\n')
+          output.write('skip=' + ('true' if complete else 'false') + '\n')
           print(f"Today's complete AI-curated report already published: {complete}")
           PY
       - name: Refresh today's AI news and Skill shortlist
