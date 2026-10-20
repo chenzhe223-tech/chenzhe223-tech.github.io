@@ -4,9 +4,11 @@ from __future__ import annotations
 import datetime as dt
 import json
 import os
+import re
 import subprocess
 import sys
 import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -16,6 +18,20 @@ CONFIG=ROOT/'radar/config/horizon.json'
 DATA_DIR=ROOT/'radar/horizon-data'
 HORIZON_DIR=Path(os.environ.get('HORIZON_DIR','/tmp/Horizon'))
 TZ=ZoneInfo('Asia/Shanghai')
+
+def _safe_error_detail(exc: Exception) -> str:
+    """Return actionable provider diagnostics without exposing credentials."""
+    if isinstance(exc, urllib.error.HTTPError):
+        try:
+            body=exc.read().decode('utf-8','replace')
+        except Exception:
+            body=''
+        body=re.sub(r'(?i)(authorization|api[_-]?key|token)(\\s*[:=]\\s*)[^,\\s}]+',r'\\1\\2[REDACTED]',body)
+        body=re.sub(r'(?i)Bearer\\s+[^\\s"\\']+', 'Bearer [REDACTED]', body)
+        return f'HTTP {exc.code}: {body[:280]}'
+    if isinstance(exc, urllib.error.URLError):
+        return f'network error: {str(exc.reason)[:180]}'
+    return f'{type(exc).__name__}: {str(exc)[:220]}'
 
 def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens: int = 6000) -> dict:
     body=json.dumps({
@@ -54,7 +70,7 @@ def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens:
             return parsed
         except Exception as exc:
             last_error=exc
-            print(f'[deepseek-retry] attempt {attempt+1}/3 failed: {type(exc).__name__}')
+            print(f'[deepseek-retry] attempt {attempt+1}/3 failed: {_safe_error_detail(exc)}')
             if attempt < 2:
                 time.sleep(2 ** (attempt+1))
     raise RuntimeError(f'DeepSeek JSON request failed after 3 attempts ({type(last_error).__name__})') from last_error
@@ -194,8 +210,17 @@ def main():
             DATA_DIR.mkdir(parents=True,exist_ok=True)
             cmd=[sys.executable,'-m','src.main','--config',str(CONFIG),'--data-dir',str(DATA_DIR),'--hours','24','--log-level','WARNING']
             result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=480,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
-            if result.returncode!=0: report['ai_analysis']={'status':'unavailable','message':'AI 分析本次未完成，基础新闻与 Skill 榜单仍正常展示。'}
-            elif not summary_path.exists(): report['ai_analysis']={'status':'empty','message':'Horizon 本次没有生成可发布的中文摘要；基础日报已保留。'}
+            if result.returncode!=0:
+                tail='\\n'.join((result.stdout or '').splitlines()[-35:])
+                tail=re.sub(r'(?i)Bearer\\s+[^\\s"\\']+', 'Bearer [REDACTED]', tail)
+                tail=re.sub(r'(?i)(DEEPSEEK_API_KEY|api[_-]?key)(\\s*[:=]\\s*)[^\\s]+',r'\\1\\2[REDACTED]',tail)
+                print(f'[horizon-error] exit_code={result.returncode}; last_output_begin')
+                print(tail[:6000])
+                print('[horizon-error] last_output_end')
+                report['ai_analysis']={'status':'unavailable','message':'Horizon 分析失败；已记录脱敏后的运行日志，基础新闻仍可发布。'}
+            elif not summary_path.exists():
+                print(f'[horizon-warning] process returned 0 but expected summary is missing: {summary_path}')
+                report['ai_analysis']={'status':'empty','message':'Horizon 本次没有生成可发布的中文摘要；基础日报已保留。'}
             else:
                 summary=summary_path.read_text(encoding='utf-8').strip()
                 report['ai_analysis']={'status':'ok','provider':'DeepSeek via Horizon','generated_at':dt.datetime.now(TZ).isoformat(),'summary_markdown':summary[:30000],'summary_markdown_en':summary_en_path.read_text(encoding='utf-8').strip()[:30000] if summary_en_path.exists() else '','summary_source':'Horizon daily digest; source URLs are included where available.'}
