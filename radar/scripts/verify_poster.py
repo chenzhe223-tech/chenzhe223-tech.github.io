@@ -51,7 +51,7 @@ def decode_poster(path: Path, expected_url: str) -> dict:
 
     # The generator reserves a 150 x 150 px, lower-left QR tile in a 1200 x 1800
     # poster. Check the actual final image region for contrast and quiet zone.
-    qr_x, qr_y, qr_size = 48, height - 178, 150
+    qr_x, qr_y, qr_size = 48, height - 190, 180
     if qr_y < 0 or qr_x + qr_size > width or qr_y + qr_size > height:
         fail(f"Expected QR tile lies outside the final poster: {path}")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
