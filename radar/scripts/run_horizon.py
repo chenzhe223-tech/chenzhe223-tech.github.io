@@ -136,29 +136,39 @@ def localize(report):
         'Keep each story field concise. Return JSON only, schema: {"top5":[{"source_index":0,"title_zh":"","title_en":"","category_zh":"","category_en":"","what_zh":"","what_en":"","why_zh":"","why_en":"","editor_judgment_zh":"","editor_judgment_en":"","opportunity_risk_zh":"","opportunity_risk_en":"","action_zh":"","action_en":"","scores":{"innovation":7,"practicality":7,"feasibility":7,"impact":7,"opportunity":7},"confidence":"medium"}],"editorial":{"core_zh":"","core_en":"","trend_zh":"","trend_en":"","next_question_zh":"","next_question_en":""}}. Input: '
     )
     selection_ok=False
-    try:
-        selected=_deepseek_json(key,model,selection_prompt,selection_payload,6000)
-        top5=[]
-        for entry in selected.get('top5',[])[:5]:
-            try:
-                idx=int(entry.get('source_index',-1))
-                if idx<0 or idx>=len(news) or any(x.get('url')==news[idx].get('url') for x in top5): continue
-                scores=entry.get('scores') or {}
-                normalized={k:max(1,min(10,int(scores.get(k,5)))) for k in ('innovation','practicality','feasibility','impact','opportunity')}
-                top5.append({**entry,'source_url':news[idx].get('url',''),'source':news[idx].get('source',''),'published':news[idx].get('published',''),'original_title':news[idx].get('title',''),'scores':normalized,'total_score':sum(normalized.values())})
-            except (TypeError,ValueError): continue
-        if len(top5) == 5:
-            report['top5']=top5
-            editorial=selected.get('editorial') or {}
-            if editorial: report['editorial']={k:v for k,v in editorial.items() if isinstance(v,str) and v.strip()}
-            selection_ok=True
-        else:
-            report.pop('top5',None)
-            print(f'[localize-warning] selection returned {len(top5)} valid source-backed stories; exactly five required.')
-    except Exception as exc:
+    last_selection_count=0
+    for selection_attempt in range(3):
+        try:
+            retry_prompt=selection_prompt
+            if selection_attempt:
+                retry_prompt += (
+                    ' IMPORTANT RETRY: Your previous output did not contain exactly five valid distinct source-backed stories. '
+                    'Return exactly five objects, source_index must be an integer from 0 to 11 matching the input, '
+                    'keep every text field to one concise sentence, and do not omit any required field. Input: '
+                )
+            selected=_deepseek_json(key,model,retry_prompt,selection_payload,10000)
+            top5=[]
+            for entry in selected.get('top5',[])[:5]:
+                try:
+                    idx=int(entry.get('source_index',-1))
+                    if idx<0 or idx>=len(news) or any(x.get('source_url')==news[idx].get('url') for x in top5): continue
+                    scores=entry.get('scores') or {}
+                    normalized={k:max(1,min(10,int(scores.get(k,5)))) for k in ('innovation','practicality','feasibility','impact','opportunity')}
+                    top5.append({**entry,'source_url':news[idx].get('url',''),'source':news[idx].get('source',''),'published':news[idx].get('published',''),'original_title':news[idx].get('title',''),'scores':normalized,'total_score':sum(normalized.values())})
+                except (TypeError,ValueError): continue
+            last_selection_count=len(top5)
+            if len(top5)==5:
+                report['top5']=top5
+                editorial=selected.get('editorial') or {}
+                if editorial: report['editorial']={k:v for k,v in editorial.items() if isinstance(v,str) and v.strip()}
+                selection_ok=True
+                break
+            print(f'[localize-warning] selection attempt {selection_attempt+1}/3 returned {len(top5)} valid source-backed stories; exactly five required.')
+        except Exception as exc:
+            print(f'[localize-warning] selection attempt {selection_attempt+1}/3 failed: {type(exc).__name__}.')
+    if not selection_ok:
         report.pop('top5',None)
-        print(f'[localize-warning] selection {type(exc).__name__}; UI will show source-backed fallback stories.')
-
+        print(f'[localize-warning] no complete five-story AI selection after 3 attempts; last valid count={last_selection_count}.')
     report['localization']={
         'status':'ok' if translated_news and selection_ok else 'partial',
         'languages':['zh','en'] if translated_news else ['source'],
