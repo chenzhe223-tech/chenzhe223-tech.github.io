@@ -324,7 +324,8 @@ def main():
     draw.text((64, 224), "看见趋势  ·  发现机会  ·  打开新可能", font=font(23), fill=(227, 236, 240))
     draw.rounded_rectangle((62, 276, 220, 313), radius=6, fill=orange)
     draw.text((80, 282), "TODAY'S SIGNALS", font=font(15, True), fill=dark)
-    draw.text((64, 329), "AI 代理走向生产：安全、算力与评估可信度成为关键", font=font(24, True), fill=(255, 253, 248))
+    hero_signal = str((report.get("editorial") or {}).get("trend_zh") or (top[0].get("title_zh") if top else "") or "从最新 AI 新闻中发现值得关注的变化。")
+    paragraph(draw, hero_signal, (64, 329), font(22, True), (255, 253, 248), 1070, 2, 3)
 
     # Today's observation is the editorial synthesis of the source-linked shortlist.
     draw.rounded_rectangle((48, 450, 1152, 575), radius=18, fill=(237, 239, 235), outline=(221, 225, 220), width=2)
