@@ -50,8 +50,9 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .image-placeholder').count() === 0, viewport.name + ': no top story displays a no-image placeholder');
       check(await page.locator('#top5List a[href^="http"]').count() >= 5, viewport.name + ': each story has source link');
       check(await page.locator('#featuredSkill h3').count() === 1, viewport.name + ': daily Skill recommendation is rendered');
-      check((await page.locator('#featuredSkill').innerText()).includes('推荐理由') || (await page.locator('#featuredSkill').innerText()).toLowerCase().includes('why recommend'), viewport.name + ': Skill recommendation explains why');
-      check((await page.locator('#featuredSkill').innerText()).includes('应用范围') || (await page.locator('#featuredSkill').innerText()).toLowerCase().includes('use cases'), viewport.name + ': Skill use cases shown');
+      const featuredSkillText = await page.locator('#featuredSkill').innerText();
+      check(featuredSkillText.includes('为什么值得一试') || featuredSkillText.toLowerCase().includes('why recommend') || featuredSkillText.toLowerCase().includes('why recommend it'), viewport.name + ': Skill recommendation explains why');
+      check(featuredSkillText.includes('今天可以这样试') || featuredSkillText.toLowerCase().includes('try it today'), viewport.name + ': Skill use cases shown');
       check(await page.locator('#featuredSkill [data-nb-skill-save]').count() === 1, viewport.name + ': featured Skill has one-click NianBox save action');
       check(await page.locator('#skillList [data-nb-skill-save]').count() > 0, viewport.name + ': ranked Skills have NianBox save actions');
       check((await page.locator('#featuredSkill [data-nb-skill-save]').getAttribute('href') || '').includes('/niantou-box-app/'), viewport.name + ': NianBox action points to the real app URL');
