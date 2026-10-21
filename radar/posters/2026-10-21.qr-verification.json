@@ -1,0 +1,82 @@
+{
+  "report_date": "2026-10-21",
+  "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "checked_at": "2026-10-21T08:27:49.899459+08:00",
+  "checks": [
+    {
+      "name": "destination_reachable",
+      "status": "PASS"
+    },
+    {
+      "name": "dated_poster_final_image_qr_decode",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_poster_final_image_qr_decode",
+      "status": "PASS"
+    },
+    {
+      "name": "exact_url_match",
+      "status": "PASS"
+    },
+    {
+      "name": "qr_size_contrast_quiet_zone",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "destination": {
+    "requested_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "http_status": 200,
+    "status": "PASS"
+  },
+  "images": [
+    {
+      "path": "radar/posters/2026-10-21.png",
+      "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+      "url_matches": true,
+      "width": 1200,
+      "height": 1800,
+      "qr_tile_px": [
+        180,
+        180
+      ],
+      "detected_qr_px": [
+        143.0,
+        143.0
+      ],
+      "contrast_percentile_range": 255,
+      "quiet_zone_px": {
+        "top_px": 18,
+        "bottom_px": 18,
+        "left_px": 18,
+        "right_px": 18
+      },
+      "status": "PASS"
+    },
+    {
+      "path": "radar/posters/latest.png",
+      "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+      "url_matches": true,
+      "width": 1200,
+      "height": 1800,
+      "qr_tile_px": [
+        180,
+        180
+      ],
+      "detected_qr_px": [
+        143.0,
+        143.0
+      ],
+      "contrast_percentile_range": 255,
+      "quiet_zone_px": {
+        "top_px": 18,
+        "bottom_px": 18,
+        "left_px": 18,
+        "right_px": 18
+      },
+      "status": "PASS"
+    }
+  ]
+}
