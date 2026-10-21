@@ -126,7 +126,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     if hero is not None:
         canvas.paste(crop_cover(hero, (W, 520)), (0, 0))
         # Light editorial veil behind copy; keep the mountain visible on the right.
-        veil = Image.new("RGBA", (W, 520), (255, 255, 255, 0))
+        veil = Image.new("RGBA", canvas.size, (255, 255, 255, 0))
         vd = ImageDraw.Draw(veil)
         for xx in range(0, 780, 8):
             alpha = int(236 * (1 - xx / 940))
