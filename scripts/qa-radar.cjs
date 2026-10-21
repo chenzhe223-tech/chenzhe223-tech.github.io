@@ -29,7 +29,7 @@ function check(ok, name, detail = '') {
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-      check(chinaGridColumns === (viewport.mobile ? 1 : 3), viewport.name + ': China AI card grid uses balanced columns', 'columns=' + chinaGridColumns);
+      check(chinaGridColumns === (viewport.mobile ? 1 : 2), viewport.name + ': China AI card grid uses balanced columns', 'columns=' + chinaGridColumns);
       const chinaCards = page.locator('#chinaAINewsList .china-ai-card');
       const chinaCount = await chinaCards.count();
       if (chinaCount > 0) {
