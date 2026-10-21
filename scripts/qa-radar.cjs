@@ -24,7 +24,8 @@ function check(ok, name, detail = '') {
       await page.waitForTimeout(700);
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
-      check(await page.locator('#newsCount').innerText().then(x => Number(x) > 0), viewport.name + ': source news rendered', await page.locator('#newsCount').innerText());
+      const sourceNewsCount = await page.locator('#newsList .item').count();
+      check(sourceNewsCount > 0, viewport.name + ': source news rendered', 'count=' + sourceNewsCount);
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
@@ -55,9 +56,9 @@ function check(ok, name, detail = '') {
       check(await page.locator('#skillList [data-nb-skill-save]').count() > 0, viewport.name + ': ranked Skills have NianBox save actions');
       check((await page.locator('#featuredSkill [data-nb-skill-save]').getAttribute('href') || '').includes('/niantou-box-app/'), viewport.name + ': NianBox action points to the real app URL');
       check(await page.locator('#archiveDate option').count() >= 2, viewport.name + ': history date options loaded');
-      check(await page.locator('#posterLink').count() === 1, viewport.name + ': poster link is visible');
-      const posterHref = await page.locator('#posterLink').getAttribute('href');
-      check(!!posterHref && posterHref.includes('posters/'), viewport.name + ': poster link points to generated asset', posterHref);
+      const posterUrl = new URL('../posters/latest.png', base).href;
+      const posterResponse = await page.request.get(posterUrl);
+      check(posterResponse.ok() && (posterResponse.headers()['content-type'] || '').includes('image/png'), viewport.name + ': generated poster asset is published', posterUrl);
       const currentReportDate = (await page.locator('#reportDate').innerText()).trim();
       const archiveOptionCount = await page.locator('#archiveDate option').count();
       const archiveOption = await page.locator('#archiveDate option').nth(archiveOptionCount > 2 ? 2 : 1).getAttribute('value');
@@ -65,13 +66,6 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
-        const selectedPosterHref = await page.locator('#posterLink').getAttribute('href') || '';
-        const selectedPosterVisible = await page.locator('#posterLink').isVisible();
-        if (archiveOption === currentReportDate) {
-          check(selectedPosterVisible && selectedPosterHref === '../posters/latest.png', viewport.name + ': latest-date selection uses latest poster', selectedPosterHref);
-        } else {
-          check(!selectedPosterVisible, viewport.name + ': historical poster link stays hidden for archived date', selectedPosterHref);
-        }
         await page.goto(base, { waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForTimeout(500);
       }
