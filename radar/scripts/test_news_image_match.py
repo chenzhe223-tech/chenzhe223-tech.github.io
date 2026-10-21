@@ -6,6 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
+    build_illustration_prompt, firecrawl_enabled,
 )
 
 
@@ -70,6 +71,33 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertEqual(story_fallback_topic({"title_en":"New AI robot agent automation release"}), "robot")
         self.assertEqual(story_fallback_topic({"title_zh":"银行企业客户金融服务"}), "business")
         self.assertEqual(story_fallback_topic({"title_zh":"Itaú 为全部客户构建生成式 AI 服务","original_title":"How Itaú is building generative AI for its customer base"}), "business")
+
+    def test_rejects_private_hosts_and_nonstandard_ports(self):
+        self.assertEqual(normalize_url("https://192.168.1.8/image.jpg"), "")
+        self.assertEqual(normalize_url("https://10.0.0.12/image.jpg"), "")
+        self.assertEqual(normalize_url("https://service.local/image.jpg"), "")
+        self.assertEqual(normalize_url("https://example.com:8443/image.jpg"), "")
+        self.assertEqual(normalize_url("https://user:password@example.com/image.jpg"), "")
+
+    def test_illustration_prompt_is_story_specific_and_clear_about_fiction(self):
+        prompt = build_illustration_prompt({
+            "title_zh": "智谱发布新的 GLM 模型",
+            "summary_zh": "模型提升了法律推理能力",
+        })
+        self.assertIn("智谱发布新的 GLM 模型", prompt)
+        self.assertIn("not event photography", prompt)
+        self.assertIn("Do not invent documentary evidence", prompt)
+
+    def test_firecrawl_requires_explicit_opt_in_and_key(self):
+        from unittest.mock import patch
+        with patch.dict("os.environ", {}, clear=True):
+            self.assertFalse(firecrawl_enabled())
+        with patch.dict("os.environ", {"FIRECRAWL_API_KEY":"test-key"}, clear=True):
+            self.assertFalse(firecrawl_enabled())
+        with patch.dict("os.environ", {
+            "FIRECRAWL_API_KEY":"test-key", "RADAR_USE_FIRECRAWL":"true"
+        }, clear=True):
+            self.assertTrue(firecrawl_enabled())
 
 
 if __name__ == "__main__":

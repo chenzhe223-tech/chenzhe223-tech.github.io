@@ -26,7 +26,7 @@ The workflow logs show whether Horizon completed and whether the Chinese summary
 
 ## News Image Match Skill
 
-The daily build runs radar/scripts/news_image_match.py after Horizon selection and before publication. It prefers RSS/article editorial images, then searches Openverse and Wikimedia Commons. The per-story image_match_status, image landing page, creator and license details are retained. Unmatched stories use a neutral placeholder instead of a random stock photo. Skill rules: radar/skills/news-image-match/SKILL.md.
+The daily build runs radar/scripts/news_image_match.py after Horizon selection and before publication. It prefers RSS/article editorial images, then searches Openverse and Wikimedia Commons, followed by relevant public-web image results and a labeled topic illustration fallback. Per-story source, creator, license, landing page and match status are retained. The pipeline also stores an `image_generation_prompt` handoff for agent-based illustration; this is not a generated image. Optional Firecrawl extraction is off by default; it requires the Actions secret `FIRECRAWL_API_KEY` and the Actions variable `RADAR_USE_FIRECRAWL=true`. Use `python radar/scripts/reverse_image_search.py --help` for on-demand Google Lens Pro search. Full project-level skills live under `.agents/skills/`. Skill rules: radar/skills/news-image-match/SKILL.md.
 
 
 ## China AI coverage floor

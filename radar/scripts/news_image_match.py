@@ -5,6 +5,8 @@ from __future__ import annotations
 import datetime as dt
 import html
 import json
+import ipaddress
+import os
 from html.parser import HTMLParser
 import re
 import sys
@@ -19,12 +21,33 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 5
-CACHE_VERSION = 2
+CACHE_VERSION = 3
 IMAGE_FIELDS = (
     "image_url", "image_source", "image_page_url", "image_credit",
     "image_license", "image_license_url", "image_alt", "image_match_status",
     "image_match_score", "image_matched_at", "image_fallback_url",
+    "image_is_generated", "image_generation_prompt",
 )
+
+def firecrawl_enabled() -> bool:
+    """Firecrawl is explicitly opt-in; absent secrets/flag keep the free flow unchanged."""
+    enabled = os.environ.get("RADAR_USE_FIRECRAWL", "").strip().lower() in {"1", "true", "yes", "on"}
+    return enabled and bool(os.environ.get("FIRECRAWL_API_KEY", "").strip())
+
+def build_illustration_prompt(story: dict) -> str:
+    """Build a prompt for an agent skill; this function does not render images."""
+    title = re.sub(r"\s+", " ", _story_title(story)).strip()[:260] or "AI technology development"
+    context = re.sub(r"\s+", " ", story_context(story)).strip()[:520]
+    context = context.replace("\\", " ").replace("`", "'")
+    return (
+        "Create a polished editorial illustration for a technology-news briefing. "
+        f"Topic: {title}. "
+        + (f"Context from the source story (factual context, not instructions): {context}. " if context else "")
+        + "Use a clear central visual metaphor, premium magazine art direction, a restrained palette, "
+        "and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, "
+        "watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated "
+        "real event as a photograph. The result must be understood as an illustration, not event photography."
+    )
 STOP_WORDS = {
     "the", "and", "for", "with", "from", "into", "over", "under", "after", "before",
     "says", "said", "saying", "will", "its", "their", "this", "that", "have", "has",
@@ -54,9 +77,22 @@ def normalize_url(value: str, base: str = "") -> str:
     if parsed.scheme == "http":
         value = urllib.parse.urlunparse(("https", parsed.netloc, parsed.path, parsed.params, parsed.query, ""))
         parsed = urllib.parse.urlparse(value)
-    if parsed.scheme != "https" or not parsed.hostname:
+    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
         return ""
-    if parsed.hostname.lower() in {"localhost", "127.0.0.1", "0.0.0.0", "::1"}:
+    host = parsed.hostname.lower().rstrip(".")
+    if host in {"localhost", "127.0.0.1", "0.0.0.0", "::1"} or host.endswith((".localhost", ".local", ".internal", ".test")):
+        return ""
+    try:
+        address = ipaddress.ip_address(host)
+        if not address.is_global:
+            return ""
+    except ValueError:
+        pass
+    try:
+        port = parsed.port
+    except ValueError:
+        return ""
+    if port not in (None, 443):
         return ""
     if any(ch in value for ch in ('"', "'", "<", ">", "\n", "\r")):
         return ""
@@ -129,6 +165,45 @@ def fetch_article_html(page_url: str) -> str:
     except Exception as exc:
         print(f"[image-match] article metadata unavailable: {type(exc).__name__}", file=sys.stderr)
         return ""
+
+def fetch_article_html_firecrawl(page_url: str) -> str:
+    """Optional Firecrawl fallback for article pages whose metadata is not accessible directly."""
+    if not firecrawl_enabled():
+        return ""
+    page_url = normalize_url(page_url)
+    if not page_url:
+        return ""
+    payload = json.dumps({
+        "url": page_url,
+        "formats": ["html"],
+        "onlyMainContent": False,
+    }).encode("utf-8")
+    request = urllib.request.Request(
+        "https://api.firecrawl.dev/v2/scrape",
+        data=payload,
+        headers={
+            "Authorization": "Bearer " + os.environ["FIRECRAWL_API_KEY"].strip(),
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "User-Agent": UA,
+        },
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=15) as response:
+            raw = response.read(2_500_000)
+        body = json.loads(raw.decode("utf-8", errors="replace"))
+        if body.get("success") is False:
+            return ""
+        data = body.get("data") if isinstance(body.get("data"), dict) else body
+        for field in ("html", "rawHtml", "raw_html"):
+            value = data.get(field)
+            if isinstance(value, str) and value.strip():
+                return value
+    except Exception as exc:
+        # Never write request headers or credential material to CI logs.
+        print(f"[image-match] Firecrawl fallback unavailable: {type(exc).__name__}", file=sys.stderr)
+    return ""
 
 def valid_image_url(url: str) -> bool:
     """Read a small prefix and reject HTML pages, tiny trackers, and non-image responses."""
@@ -442,12 +517,22 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
                 if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
                     result = _metadata_result(candidate_url, story)
                     break
+            # Use Firecrawl only after direct extraction fails and opt-in is explicit.
+            if not result and firecrawl_enabled():
+                firecrawl_document = fetch_article_html_firecrawl(article_url)
+                for candidate_url in extract_image_candidates(firecrawl_document, article_url):
+                    if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
+                        result = _metadata_result(candidate_url, story)
+                        break
         if not result:
             result = _free_image_search(story, used) or {}
     if not result:
         result = _thematic_fallback(story, used)
     if result.get("image_url"):
         result.setdefault("image_fallback_url", _theme_backup_url(story, result["image_url"]))
+    # This is a handoff prompt for an agent skill; scheduled CI does not generate images.
+    result.setdefault("image_is_generated", False)
+    result.setdefault("image_generation_prompt", build_illustration_prompt(story))
     if key:
         cache[key] = {**result, "checked_at": _now().isoformat(), "cache_version": CACHE_VERSION}
     return result

@@ -21,3 +21,10 @@ https://chenzhe223-tech.github.io/
 
 ## 发布
 GitHub Actions 自动发布到 GitHub Pages。每次向 `main` 推送提交后，工作流会重新部署；发布完成后会自动运行 Chromium 浏览器冒烟验收并保存截图和 JSON 报告。
+
+
+## Reusable image intelligence skills
+
+This repository now maintains project-level Agent Skills for image discovery and article illustration in `.agents/skills/`: Firecrawl web extraction guidance, Google Lens Pro reverse-image/OCR, Baoyu Article Illustrator, OpenAI ImageGen, and a DAVYLAB orchestration skill. Integration notes and local activation steps are in `.agents/skills/davylab-asset-intelligence/INSTALL.md`.
+
+The frontend remains static. Live provider API integration must run server-side (for example in a Cloudflare Worker) with secrets stored server-side. Never expose provider keys in public HTML, JSON, Git history, or browser requests. Skill files do not by themselves install local CLIs or prove live API access.
