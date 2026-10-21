@@ -132,12 +132,15 @@ jobs:
           if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
               print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
           PY
-      - name: Match story-specific images (free sources first)
+      - name: Match story-specific images (free sources first; optional Firecrawl fallback)
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
         run: python radar/scripts/news_image_match.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Validate today's date, fresh news and data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_news_image_match -v
           python - <<'PY'
