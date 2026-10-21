@@ -99,6 +99,158 @@ def image_for_story(story, idx):
 def crop_cover(img, size):
     return ImageOps.fit(img, size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
 
+
+def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: dict) -> None:
+    """Second fixed brand template: warm-white editorial cover with a mountain hero.
+    The daily data changes, while the layout, type hierarchy and restrained navy/blue
+    palette remain fixed. All QR data is encoded locally to the stable public URL.
+    """
+    canvas = Image.new("RGB", (W, H), (252, 250, 245))
+    draw = ImageDraw.Draw(canvas)
+    ink = (12, 31, 61)
+    blue = (28, 83, 160)
+    muted = (78, 91, 110)
+    line = (202, 207, 211)
+    orange = (229, 91, 68)
+    paper = (252, 250, 245)
+
+    # Mountain photo is decorative only; fallback stays coherent if image hosting is down.
+    hero = None
+    try:
+        url = "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1400&q=85"
+        req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
+        with urllib.request.urlopen(req, timeout=8) as response:
+            hero = Image.open(BytesIO(response.read(12 * 1024 * 1024))).convert("RGB")
+    except Exception:
+        hero = None
+    if hero is not None:
+        canvas.paste(crop_cover(hero, (W, 520)), (0, 0))
+        # Light editorial veil behind copy; keep the mountain visible on the right.
+        veil = Image.new("RGBA", (W, 520), (255, 255, 255, 0))
+        vd = ImageDraw.Draw(veil)
+        for xx in range(0, 780, 8):
+            alpha = int(236 * (1 - xx / 940))
+            vd.rectangle((xx, 0, xx + 8, 520), fill=(255, 253, 248, max(0, alpha)))
+        canvas = Image.alpha_composite(canvas.convert("RGBA"), veil).convert("RGB")
+        draw = ImageDraw.Draw(canvas)
+    else:
+        draw.rectangle((0, 0, W, 520), fill=(239, 244, 247))
+        draw.polygon([(0, 380), (170, 210), (320, 345), (520, 135), (700, 320), (860, 180), (1050, 300), (1200, 220), (1200, 520), (0, 520)], fill=(181, 202, 215))
+        draw.polygon([(0, 430), (210, 315), (390, 410), (590, 270), (770, 420), (960, 300), (1200, 390), (1200, 520), (0, 520)], fill=(116, 150, 177))
+
+    # Stable masthead and date lockup.
+    draw.text((48, 36), "DAVYLAB", font=font(33, True), fill=ink)
+    draw.line((48, 82, 118, 82), fill=blue, width=5)
+    draw.text((48, 91), "A I   F R O N T I E R   B R I E F", font=font(13, True), fill=ink)
+    date_obj = dt.date.fromisoformat(date)
+    draw.text((1150, 42), date_obj.strftime("%m.%d"), font=font(46, True), fill=blue, anchor="ra")
+    draw.text((1150, 92), date_obj.strftime("%a").upper() + "  /  " + date_obj.strftime("%Y"), font=font(15, True), fill=ink, anchor="ra")
+    draw.text((48, 145), "AI 前沿简报", font=font(69, True), fill=ink)
+    draw.text((54, 226), "全球视野  |  深度精选  |  实用洞察", font=font(21), fill=ink)
+
+    editorial = report.get("editorial") or {}
+    headline = str(editorial.get("core_zh") or (top[0].get("title_zh") if top else "") or "AI 的新机会，正在真实场景中发生。")
+    headline_lines = wrap(draw, headline, font(28, True), 1040)[:2]
+    yy = 304
+    for line_text in headline_lines:
+        draw.text((52, yy), line_text, font=font(28, True), fill=ink)
+        yy += 39
+    subline = str(editorial.get("trend_zh") or (top[0].get("why_zh") if top else "") or "从新闻事实出发，寻找值得继续验证的变化。")
+    paragraph(draw, subline, (54, 390), font(17), ink, 840, 3, 4)
+    draw.rectangle((50, 486, 118, 491), fill=orange)
+
+    # Daily observation and story cards.
+    draw.text((48, 548), "今日精选", font=font(31, True), fill=ink)
+    draw.text((240, 560), "THE SIGNALS  /  5 STORIES WORTH YOUR ATTENTION", font=font(14, True), fill=muted)
+    draw.line((48, 594, 1152, 594), fill=line, width=2)
+    card_y, card_h, card_w, gap = 618, 400, 350, 26
+    xs = [48, 48 + card_w + gap, 48 + 2 * (card_w + gap)]
+    for i, story in enumerate(top[:3]):
+        x = xs[i]
+        draw.rounded_rectangle((x, card_y, x + card_w, card_y + card_h), radius=8, fill=(255, 255, 253), outline=line, width=2)
+        photo = crop_cover(image_for_story(story, i), (card_w - 4, 142))
+        canvas.paste(photo, (x + 2, card_y + 2))
+        draw.rectangle((x + 14, card_y + 12, x + 58, card_y + 49), fill=blue)
+        draw.text((x + 23, card_y + 16), f"{i+1:02d}", font=font(19, True), fill=WHITE)
+        title = str(story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻")
+        ty = paragraph(draw, title, (x + 15, card_y + 157), font(20, True), ink, card_w - 30, 4, 3)
+        summary = str(story.get("what_zh") or story.get("summary_zh") or story.get("summary") or "")
+        paragraph(draw, summary, (x + 15, ty + 5), font(15), muted, card_w - 30, 4, 4)
+        draw.line((x + 15, card_y + card_h - 42, x + card_w - 15, card_y + card_h - 42), fill=line, width=1)
+        draw.text((x + 15, card_y + card_h - 31), str(story.get("source") or "公开来源")[:23], font=font(12, True), fill=blue)
+
+    # Two additional headlines in the same compact editorial rhythm.
+    mini_y, mini_h, mini_w = 1040, 142, 538
+    for idx, story in enumerate(top[3:5]):
+        x = 48 + idx * (mini_w + 28)
+        draw.rounded_rectangle((x, mini_y, x + mini_w, mini_y + mini_h), radius=8, fill=(255, 255, 253), outline=line, width=2)
+        thumb = crop_cover(image_for_story(story, idx + 3), (112, 110))
+        canvas.paste(thumb, (x + 12, mini_y + 16))
+        draw.text((x + 138, mini_y + 12), f"0{idx+4}  /  {str(story.get('source') or '公开来源')[:20]}", font=font(12, True), fill=blue)
+        title = str(story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻")
+        ty = paragraph(draw, title, (x + 138, mini_y + 37), font(17, True), ink, mini_w - 154, 2, 2)
+        paragraph(draw, str(story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""), (x + 138, ty + 3), font(13), muted, mini_w - 154, 2, 2)
+
+    # Fixed Skill recommendation panel. Keep recommendation wording consistent across both templates.
+    draw.rounded_rectangle((48, 1210, 1152, 1475), radius=10, fill=(246, 239, 222), outline=(225, 215, 194), width=2)
+    draw.rectangle((48, 1210, 57, 1475), fill=orange)
+    draw.text((78, 1234), "今日推荐  /  OPEN-SOURCE SKILL", font=font(19, True), fill=blue)
+    skill_name = str(skill.get("name") or "Open-source AI Skill")
+    draw.text((78, 1275), skill_name[:48], font=font(30, True), fill=ink)
+    desc = str(skill.get("description_zh") or skill.get("description") or "一个可尝试的开源 AI 工作流工具。")
+    paragraph(draw, desc, (80, 1320), font(17), ink, 720, 2, 5)
+    topics = " · ".join((skill.get("topics") or [])[:5]) or str(skill.get("daily_theme") or skill.get("language") or "AI 工作流")
+    paragraph(draw, "适用方向：" + topics, (80, 1380), font(14, True), muted, 720, 2, 3)
+    draw.text((850, 1292), f"★ {int(skill['stars']):,}" if isinstance(skill.get("stars"), (int, float)) else "热度未核实", font=font(23, True), fill=blue)
+    draw.text((850, 1335), "最近更新", font=font(13), fill=muted)
+    draw.text((850, 1357), str(skill.get("updated") or "—")[:10], font=font(17, True), fill=ink)
+    draw.text((850, 1400), str(skill.get("daily_theme") or "开源实用工具"), font=font(15, True), fill=blue)
+    draw.text((850, 1432), "使用前查看 README 与权限", font=font(12), fill=muted)
+
+    # Stable QR footer, verified later from the final composed image.
+    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+    qr.add_data(PUBLIC_URL)
+    qr.make(fit=True)
+    qr_img = qr.make_image(fill_color="black", back_color="white").convert("RGB")
+    qr_img = qr_img.resize((180, 180), Image.Resampling.NEAREST)
+    draw.rectangle((0, 1510, W, H), fill=(14, 34, 60))
+    canvas.paste(qr_img, (48, 1570))
+    draw.text((260, 1577), "扫码阅读完整简报", font=font(29, True), fill=WHITE)
+    draw.text((262, 1625), PUBLIC_URL.replace("https://", ""), font=font(17), fill=(211, 225, 235))
+    draw.line((260, 1663, 775, 1663), fill=orange, width=3)
+    draw.text((260, 1680), "在每天的变化中，看见更多可能。", font=font(19), fill=(225, 233, 238))
+    draw.text((1145, 1640), "DAVYLAB", font=font(25, True), fill=WHITE, anchor="ra")
+    draw.text((1145, 1680), "SPARK & PULSE", font=font(12, True), fill=(211, 225, 235), anchor="ra")
+    draw.text((1145, 1730), "真实来源 · 有用洞察 · 新的可能", font=font(12), fill=(174, 196, 208), anchor="ra")
+
+    out = POSTERS / f"{date}.png"
+    canvas.save(out, format="PNG", optimize=True)
+    canvas.save(POSTERS / "latest.png", format="PNG", optimize=True)
+    manifest = {
+        "report_date": date,
+        "poster": str(out.relative_to(ROOT)),
+        "qr_url": PUBLIC_URL,
+        "news_count": 5,
+        "skill": skill_name,
+        "design": "mountain-editorial-cover",
+        "design_variant": "mountain-editorial",
+        "generated_at": dt.datetime.now(TZ).isoformat(),
+    }
+    (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    print(f"Generated mountain editorial poster {out} ({W}x{H}); QR target: {PUBLIC_URL}")
+
+
+def render_alternating_template(report: dict, date: str, top: list[dict], skill: dict) -> bool:
+    """Return True when the mountain-editorial template was rendered for this date."""
+    date_obj = dt.date.fromisoformat(date)
+    # Alternate daily between the established geometric-navy and mountain-editorial designs.
+    # The existing geometric template is retained below; odd/even date parity is deterministic.
+    if date_obj.toordinal() % 2 == 0:
+        render_mountain_editorial(report, date, top, skill)
+        return True
+    return False
+
 def main():
     report = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
     date = report.get("report_date", "")
@@ -138,6 +290,9 @@ def main():
         raise SystemExit("Poster needs one repository-backed Skill recommendation")
     skill = skills[0]
 
+    if render_alternating_template(report, date, top, skill):
+        return
+
     # Premium editorial palette: warm paper, deep navy, and restrained orange.
     canvas = Image.new("RGB", (W, H), (250, 247, 239))
     draw = ImageDraw.Draw(canvas)
@@ -174,8 +329,8 @@ def main():
     # Today's observation is the editorial synthesis of the source-linked shortlist.
     draw.rounded_rectangle((48, 450, 1152, 575), radius=18, fill=(237, 239, 235), outline=(221, 225, 220), width=2)
     draw.rounded_rectangle((48, 450, 58, 575), radius=4, fill=orange)
-    draw.text((82, 472), "今日观察", font=font(25, True), fill=blue)
-    observation = "AI 代理正从演示走向生产。算力与硬件生态的竞争加剧，企业也必须同步解决密钥安全、可信评估与运行治理。"
+    draw.text((82, 472), "今日推荐", font=font(25, True), fill=blue)
+    observation = str((report.get("editorial") or {}).get("core_zh") or (top[0].get("why_zh") if top else "") or "从今日新闻中寻找可验证、可实践的 AI 机会。")
     paragraph(draw, observation, (250, 469), font(21), ink, 850, 3, 7)
 
     draw.text((50, 608), "今日精选", font=font(31, True), fill=ink)
@@ -256,7 +411,8 @@ def main():
         "qr_url": PUBLIC_URL,
         "news_count": 5,
         "skill": skill_name,
-        "design": "editorial-magazine-three-column",
+        "design": "geometric-navy-mountain",
+        "design_variant": "geometric-navy",
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
