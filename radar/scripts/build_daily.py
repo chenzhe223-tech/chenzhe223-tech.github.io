@@ -301,11 +301,35 @@ def github_search(query: str) -> list[dict]:
         return []
 
 def collect_skills() -> list[dict]:
+    """Collect a broad Skill candidate pool and rotate the featured pick by daily theme.
+
+    The first item is the site's featured Skill, so it must not be a popularity-only
+    leaderboard. We deliberately vary editorial dimensions and avoid repeating a
+    featured repository from the previous seven archived reports where possible.
+    """
+    daily_themes = [
+        ("开发提效", ("coding", "development", "debug", "testing", "refactor", "engineering", "workflow")),
+        ("设计与前端", ("design", "ui", "ux", "frontend", "web", "visual", "accessibility")),
+        ("数据与看板", ("data", "analytics", "dashboard", "visualization", "spreadsheet", "sql", "chart")),
+        ("研究与资讯", ("research", "search", "news", "browser", "sources", "summarize", "web")),
+        ("内容与表达", ("writing", "content", "documentation", "marketing", "copywriting", "presentation")),
+        ("自动化与浏览器", ("automation", "browser", "playwright", "workflow", "computer-use", "scraping")),
+        ("产品创意与原型", ("product", "prototype", "idea", "planning", "prd", "productivity", "startup")),
+    ]
+    # Use the local report date, not UTC, so the editorial theme changes at Beijing midnight.
+    today = dt.datetime.now(TZ).date()
+    theme_name, theme_terms = daily_themes[today.toordinal() % len(daily_themes)]
     queries = [
-        "skills AI agent in:name,description",
+        "agent skills AI in:name,description",
         "claude skills in:name,description",
         "agent-skills in:name,description",
         "awesome-copilot in:name,description",
+        "AI coding agent skill design UI UX",
+        "AI agent skill data analytics dashboard",
+        "AI agent skill research news search",
+        "AI agent skill writing documentation marketing",
+        "AI agent skill browser automation testing",
+        "AI agent skill product planning prototype",
     ]
     repos: dict[str, dict] = {}
     for query in queries:
@@ -314,72 +338,113 @@ def collect_skills() -> list[dict]:
             description = clean(r.get("description") or "")
             topics = r.get("topics") or []
             combined = (name + " " + description + " " + " ".join(topics)).lower()
-            if not name or not any(k in combined for k in ("skill", "skills", "agent", "copilot")):
+            if not name or not any(k in combined for k in ("skill", "skills", "agent", "copilot", "workflow")):
                 continue
             if r.get("fork") or r.get("archived"):
                 continue
-            repos[name] = {
-                "name": name,
+            repos[name.lower()] = {
+                "name": r.get("full_name", name),
                 "url": r.get("html_url", ""),
                 "description": description[:360],
                 "stars": int(r.get("stargazers_count") or 0),
                 "updated": r.get("updated_at", ""),
                 "language": r.get("language") or "Multi-language",
                 "topics": topics[:8],
+                "daily_theme": theme_name,
             }
-        time.sleep(0.25)
+        time.sleep(0.2)
+
     now = dt.datetime.now(dt.timezone.utc)
     def score(item: dict) -> float:
         try:
-            updated = dt.datetime.fromisoformat(item["updated"].replace("Z", "+00:00"))
+            updated = dt.datetime.fromisoformat(item.get("updated", "").replace("Z", "+00:00"))
             days = max(0, (now - updated).total_seconds() / 86400)
         except Exception:
             days = 365
-        # Star count is the strongest public proxy; freshness modestly breaks ties.
-        return item["stars"] + max(0, 180 - days) * 0.6
+        combined = (item.get("name", "") + " " + item.get("description", "") + " " +
+                    " ".join(item.get("topics") or [])).lower()
+        theme_hits = sum(1 for term in theme_terms if term in combined)
+        # Theme relevance has real weight; stars are only a modest quality signal.
+        return theme_hits * 1800 + min(int(item.get("stars") or 0), 100000) * 0.015 + max(0, 120 - days) * 0.8
+
     ranked = sorted(repos.values(), key=score, reverse=True)
-    if ranked:
+
+    # Read recent archive picks so the featured Skill doesn't repeat every day.
+    recent_picks: list[str] = []
+    try:
+        archive_files = sorted(ARCHIVE.glob("*.json"), reverse=True)
+        for archive_path in archive_files[:8]:
+            if archive_path.stem == today.isoformat():
+                continue
+            try:
+                previous = json.loads(archive_path.read_text(encoding="utf-8"))
+                previous_skills = previous.get("skills") or []
+                if previous_skills and previous_skills[0].get("name"):
+                    recent_picks.append(previous_skills[0]["name"].lower())
+            except Exception:
+                continue
+    except Exception:
+        pass
+
+    theme_ranked = [
+        item for item in ranked
+        if any(term in (item.get("name", "") + " " + item.get("description", "") + " " +
+                        " ".join(item.get("topics") or [])).lower() for term in theme_terms)
+    ]
+    # Prefer a theme-relevant project not featured in the previous week.
+    featured = next((item for item in theme_ranked if item["name"].lower() not in recent_picks), None)
+    if featured is None:
+        featured = next((item for item in ranked if item["name"].lower() not in recent_picks), None)
+
+    if featured is None:
+        # Search API may be rate-limited. Verify curated candidates live rather than
+        # inventing metrics or describing unverified repositories as current.
+        fallback_names = (
+            "obra/superpowers", "anthropics/skills", "github/awesome-copilot",
+            "browser-use/browser-use", "microsoft/playwright-mcp",
+            "openai/openai-cookbook", "nextlevelbuilder/ui-ux-pro-max-skill",
+        )
+        fallback_items = []
+        for full_name in fallback_names:
+            try:
+                payload = json.loads(http_get(
+                    "https://api.github.com/repos/" + full_name,
+                    "application/vnd.github+json",
+                    timeout=8,
+                ))
+                actual_name = payload.get("full_name", "")
+                if not actual_name or payload.get("archived") or payload.get("fork"):
+                    continue
+                if actual_name.lower() in recent_picks and len(fallback_names) > len(recent_picks):
+                    continue
+                fallback_items.append({
+                    "name": actual_name,
+                    "url": payload.get("html_url", ""),
+                    "description": clean(payload.get("description") or "Open-source AI workflow project"),
+                    "stars": int(payload.get("stargazers_count") or 0),
+                    "updated": payload.get("updated_at", ""),
+                    "language": payload.get("language") or "Multi-language",
+                    "topics": (payload.get("topics") or ["agent-skills"])[:8],
+                    "daily_theme": theme_name,
+                })
+            except Exception as exc:
+                print(f"[skill-warning] curated metadata {full_name}: {type(exc).__name__}")
+        ranked = sorted(fallback_items, key=score, reverse=True)
+        featured = next((item for item in ranked if item["name"].lower() not in recent_picks), None)
+
+    if featured is None:
+        # No current project could be verified. Return only verified search results
+        # and expose a warning; never claim that a repeated pick is new.
+        print(f"[skill-warning] no fresh featured Skill found for theme {theme_name}; candidate pool={len(ranked)}")
         return ranked[:10]
 
-    # Search API can be rate-limited independently of the repository API. Fall
-    # back to a small curated list and query each repo's live metadata directly.
-    print("[skill-warning] Repository search returned no results; trying curated repository metadata.")
-    fallback_names = ("anthropics/skills", "obra/superpowers", "github/awesome-copilot")
-    fallback_items = []
-    for full_name in fallback_names:
-        try:
-            payload = json.loads(http_get(
-                "https://api.github.com/repos/" + full_name,
-                "application/vnd.github+json",
-                timeout=8,
-            ))
-            if payload.get("full_name", "").lower() != full_name.lower() or payload.get("archived") or payload.get("fork"):
-                continue
-            fallback_items.append({
-                "name": payload["full_name"],
-                "url": payload["html_url"],
-                "description": clean(payload.get("description") or "Public open-source Agent Skill project"),
-                "stars": int(payload.get("stargazers_count") or 0),
-                "updated": payload.get("updated_at", ""),
-                "language": payload.get("language") or "Multi-language",
-                "topics": (payload.get("topics") or ["agent-skills"])[:8],
-            })
-        except Exception as exc:
-            print(f"[skill-warning] curated metadata {full_name}: {type(exc).__name__}")
-    if fallback_items:
-        return sorted(fallback_items, key=score, reverse=True)[:10]
-
-    # Last resort: one known public repository, with unverified metrics omitted.
-    # Do not fabricate popularity or activity numbers when GitHub is unavailable.
-    return [{
-        "name": "anthropics/skills",
-        "url": "https://github.com/anthropics/skills",
-        "description": "Public repository for Agent Skills. GitHub API was unavailable, so current popularity and update metadata were not verified.",
-        "stars": None,
-        "updated": "",
-        "language": "Python",
-        "topics": ["agent-skills"],
-    }]
+    featured["daily_theme"] = theme_name
+    # Keep the featured pick first for the current page contract; remaining entries
+    # are a useful popularity/activity shortlist, with the featured project removed.
+    remaining = [item for item in ranked if item["name"].lower() != featured["name"].lower()]
+    result = [featured] + remaining[:9]
+    print(f"[skill-pick] date={today.isoformat()} theme={theme_name} featured={featured['name']} recent_exclusions={len(recent_picks)} candidates={len(ranked)}")
+    return result
 
 def main() -> None:
     now = dt.datetime.now(TZ)
