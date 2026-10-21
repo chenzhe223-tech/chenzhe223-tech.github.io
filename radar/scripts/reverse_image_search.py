@@ -60,17 +60,14 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Reverse-search an image or extract its text with Google Lens Pro.")
     parser.add_argument("image", help="Public HTTPS image URL or local image path")
     parser.add_argument("--ocr-only", action="store_true", help="Run OCR only without browser-backed visual matching")
-    parser.add_argument("--max-results", type=int, default=8, help="Maximum visual matches to request (1-20)")
     args = parser.parse_args()
-    if not 1 <= args.max_results <= 20:
-        parser.error("--max-results must be from 1 to 20")
     try:
         source = prepare_image_source(args.image)
     except ValueError as exc:
         print(f"Input validation failed: {exc}", file=sys.stderr)
         return 2
     binary = os.environ.get("GOOGLE_LENS_BIN", "google-lens")
-    command = [binary, "search", source, "--json-output", "--max-results", str(args.max_results)]
+    command = [binary, "search", source, "--json-output"]
     if args.ocr_only:
         command.append("--ocr-only")
     try:

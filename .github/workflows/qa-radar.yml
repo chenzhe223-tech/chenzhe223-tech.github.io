@@ -31,7 +31,7 @@ jobs:
         run: python radar/scripts/build_daily.py
       - name: Validate daily brief data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_news_image_match -v
       - name: Install Playwright

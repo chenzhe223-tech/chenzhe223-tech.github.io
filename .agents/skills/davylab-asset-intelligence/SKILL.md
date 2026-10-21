@@ -32,4 +32,4 @@ Use a same-origin API / Cloudflare Worker; never expose provider credentials in 
 Return normalized results and provenance. Enforce URL safety, auth, rate limits, quotas, caching and licensing metadata server-side. Do not call a provider integrated until an end-to-end test passes.
 
 ## Davy Radar handoff
-The scheduled pipeline matches feed/article images and available-license images. It attaches an \`image_generation_prompt\` for agent use, but does not generate imagery itself. Firecrawl is disabled unless explicitly enabled. Google Lens is an on-demand utility.
+The scheduled pipeline matches feed/article images and available-license images. It attaches an `image_generation_prompt` for agent use, but does not generate imagery itself. Firecrawl is disabled unless explicitly enabled. Google Lens is an on-demand utility.
