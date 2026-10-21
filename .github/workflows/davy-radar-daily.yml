@@ -52,7 +52,10 @@ jobs:
           HORIZON_DIR: ${{ github.workspace }}/horizon-src
         run: python radar/scripts/run_horizon.py
 
-      - name: Match story-specific images (free sources first)
+      - name: Match story-specific images (free sources first; optional Firecrawl fallback)
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
         run: python radar/scripts/news_image_match.py
 
       - name: Enforce China AI minimum and data contract

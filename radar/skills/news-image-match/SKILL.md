@@ -38,3 +38,11 @@ Run python radar/scripts/news_image_match.py after python radar/scripts/run_hori
 - web_search_topic: a text-relevance-gated public-web result.
 - thematic_fallback: a topic illustration, not event evidence.
 - Normal daily cards should show an image or an illustration, never the old empty-image placeholder.
+
+
+## Optional provider handoff
+
+- **Firecrawl**: use as a secondary article-page HTML extraction fallback only after direct metadata extraction fails. It is disabled unless both \`RADAR_USE_FIRECRAWL=true\` (repository Actions variable) and \`FIRECRAWL_API_KEY\` (repository Actions secret) are configured. It may consume plan quota; never put the key in browser code or source code.
+- **Google Lens Pro**: use the on-demand \`radar/scripts/reverse_image_search.py\` utility for reverse-image lookup/OCR when investigating a source image; never invoke it for every daily story by default.
+- **Baoyu Article Illustrator** and **OpenAI ImageGen**: these are agent-runtime skills, not background generation APIs. The daily build stores an \`image_generation_prompt\` for each story as a handoff. An agent may generate a clearly labeled illustration when no appropriate reusable source image exists. A prompt is not a generated image and must not be reported as one.
+- Preserve upstream licenses. Google Lens Pro is dual-licensed: the Community Core is MIT, while specific Pro modules named in its upstream LICENSE have separate proprietary terms. Review commercial permissions before calling those modules.
