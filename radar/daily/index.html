@@ -780,6 +780,34 @@ header{padding-top:4px}
  .tabs{gap:13px}
 }
 
+
+/* Mobile P0: reduce the language header and date/archive bar footprint */
+@media(max-width:600px){
+  .nav{height:46px!important;min-height:46px;gap:6px;padding:0 0 5px}
+  .brand{font-size:12px!important;letter-spacing:-.045em;line-height:1.2}
+  .brand small{font-size:10px!important}
+  .nav-right{gap:4px}
+  .lang-switch{padding:2px!important;gap:0!important;border-radius:999px}
+  .lang-btn{min-width:34px;padding:5px 8px!important;font-size:10px!important;line-height:1.15}
+  .brief-date-bar{gap:8px!important;margin:5px 0 7px!important;padding:7px 0!important}
+  .brief-date-copy{gap:1px}
+  .brief-eyebrow{font-size:8px!important;letter-spacing:.1em}
+  .brief-date-line{font-size:13px!important;line-height:1.3;gap:5px}
+  .brief-date-line strong{font-size:16px!important;letter-spacing:-.02em}
+  .brief-date-copy .date-full{font-size:10px!important;line-height:1.25}
+  .brief-date-actions{width:94px!important;gap:2px}
+  .archive-button{min-height:32px!important;padding:5px 6px!important;font-size:10px!important;gap:4px;border-radius:6px}
+  .brief-date-actions select{height:32px!important}
+  .brief-date-actions #posterLink{font-size:9px!important;line-height:1.2}
+}
+@media(max-width:360px){
+  .brand{font-size:11px!important}
+  .brand small{font-size:9px!important}
+  .lang-btn{min-width:30px;padding:5px 6px!important}
+  .brief-date-actions{width:86px!important}
+  .brief-date-line{font-size:12px!important}
+  .brief-date-line strong{font-size:15px!important}
+}
 </style>
 </head>
 <body><div class="wrap">
