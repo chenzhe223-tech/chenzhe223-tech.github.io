@@ -236,8 +236,8 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         "design_variant": "mountain-editorial",
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
-    (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
-    (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\\n", encoding="utf-8")
+    (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (POSTERS / "latest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Generated mountain editorial poster {out} ({W}x{H}); QR target: {PUBLIC_URL}")
 
 
