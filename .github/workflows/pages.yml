@@ -63,6 +63,7 @@ jobs:
                   and report.get('localization', {}).get('status') == 'ok'
                   and poster.get('report_date') == today
                   and poster.get('qr_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
+                  and poster.get('design_variant') == ('mountain-editorial' if dt.date.fromisoformat(today).toordinal() % 2 == 0 else 'geometric-navy')
                   and qr_check.get('report_date') == today
                   and qr_check.get('status') == 'PASS'
                   and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
