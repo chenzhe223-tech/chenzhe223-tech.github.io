@@ -1,0 +1,378 @@
+name: Deploy DAVYLAB to GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+    paths-ignore:
+      - "radar/data/**"
+      - "radar/posters/**"
+  schedule:
+    # Beijing time: start at 07:30 to leave QA/deploy time before 09:00.
+    # Recovery runs at 08:15, 09:00 and 09:45 if a complete AI-curated report is still missing.
+    # GitHub Actions cron uses UTC and scheduled starts may be delayed.
+    - cron: "30 23 * * *"
+    - cron: "15 0 * * *"
+    - cron: "0 1 * * *"
+    - cron: "45 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  qa:
+    name: Test AI daily brief before publishing
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync latest main before deciding whether recovery is needed
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Skip recovery run when today's AI-curated report is already published
+        id: preflight
+        shell: bash
+        run: |
+          python - <<'PY'
+          import datetime as dt, json, os
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          try:
+              report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+              poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+              qr_check = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+              complete = (
+                  report.get('report_date') == today
+                  and report.get('generated_at', '').startswith(today)
+                  and report.get('top5_status') == 'ai_curated'
+                  and len(report.get('top5', [])) == 5
+                  and report.get('localization', {}).get('status') == 'ok'
+                  and poster.get('report_date') == today
+                  and poster.get('qr_url') == 'https://davylab.github.io/radar/daily/'
+                  and poster.get('design_variant') == ('mountain-editorial' if dt.date.fromisoformat(today).toordinal() % 2 == 0 else 'geometric-navy')
+                  and qr_check.get('report_date') == today
+                  and qr_check.get('status') == 'PASS'
+                  and qr_check.get('expected_url') == 'https://davylab.github.io/radar/daily/'
+              )
+          except Exception:
+              complete = False
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
+              output.write('skip=' + ('true' if complete else 'false') + '\n')
+          print(f"Today's complete AI-curated report already published: {complete}")
+          PY
+      - name: Refresh today's AI news and Skill shortlist
+        run: python radar/scripts/build_daily.py
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Diagnose AI enrichment configuration (without exposing secrets)
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          cfg=json.loads(Path('radar/config/horizon.json').read_text(encoding='utf-8'))
+          print('DeepSeek API key configured:', bool(os.environ.get('DEEPSEEK_API_KEY')))
+          print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
+          PY
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Run Horizon and DeepSeek enrichment with bounded retries
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        shell: bash
+        run: |
+          # Horizon enriches the report, but must never block the validated RSS/GitHub baseline.
+          if [ ! -f /tmp/Horizon/src/main.py ]; then
+            if ! timeout 90s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
+              echo "::warning::Horizon clone unavailable or timed out; publishing will continue with source-backed baseline data."
+              exit 0
+            fi
+          fi
+          if [ -f /tmp/Horizon/requirements.txt ]; then
+            if ! timeout 180s python -m pip install -r /tmp/Horizon/requirements.txt; then
+              echo "::warning::Horizon dependency installation failed or timed out; publishing will continue with source-backed baseline data."
+              exit 0
+            fi
+          fi
+          # The Python runner retries each DeepSeek JSON request up to three times.
+          # Retry the whole enrichment once more for transient Horizon/model failures.
+          for attempt in 1 2; do
+            if timeout 600s python radar/scripts/run_horizon.py; then
+              break
+            fi
+            echo "::warning::Horizon/AI enrichment attempt $attempt failed."
+            if [ "$attempt" = "1" ]; then sleep 8; fi
+          done
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Record AI selection health for recovery scheduling
+        if: steps.preflight.outputs.skip != 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          print('report_date:', report.get('report_date'))
+          print('ai_analysis.status:', (report.get('ai_analysis') or {}).get('status'))
+          print('localization.status:', (report.get('localization') or {}).get('status'))
+          print('top5_status:', report.get('top5_status'))
+          print('top5_count:', len(report.get('top5') or []))
+          if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
+              print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
+          PY
+      - name: Match story-specific images (free sources first; optional Firecrawl fallback)
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
+        run: python radar/scripts/news_image_match.py
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Validate today's date, fresh news and data contract
+        run: |
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py
+          python -m unittest radar.scripts.test_daily_brief
+          python -m unittest radar.scripts.test_news_image_match -v
+          python - <<'PY'
+          import datetime as dt, json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          p = Path('radar/data/latest.json')
+          d = json.loads(p.read_text(encoding='utf-8'))
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          if d.get('report_date') != today or not d.get('generated_at', '').startswith(today):
+              raise SystemExit(f"Stale date: report={d.get('report_date')} generated={d.get('generated_at')} expected={today}")
+          news = d.get('news', [])
+          if len(news) < 5 or int(d.get('sources_ok', 0)) < 1:
+              raise SystemExit(f"Insufficient source data: news={len(news)} sources_ok={d.get('sources_ok')}")
+          china = d.get('china_ai_news', [])
+          if len(china) < 6:
+              raise SystemExit(f"Insufficient China AI data: found {len(china)} source-backed stories, minimum required is 6; refusing to publish a short module")
+          now = dt.datetime.now(dt.timezone.utc)
+          china_cutoff = now - dt.timedelta(days=7)
+          fresh_china = []
+          seen_china_urls = set()
+          for item in china:
+              if not item.get('title') or not item.get('source') or not item.get('url', '').startswith('https://'):
+                  continue
+              url = item['url'].split('#', 1)[0].rstrip('/')
+              if url in seen_china_urls:
+                  continue
+              try:
+                  published = dt.datetime.fromisoformat(item.get('published', '').replace('Z', '+00:00'))
+                  if published.tzinfo is None: published = published.replace(tzinfo=dt.timezone.utc)
+                  if china_cutoff <= published <= now + dt.timedelta(hours=6):
+                      fresh_china.append(item)
+                      seen_china_urls.add(url)
+              except Exception: pass
+          if len(fresh_china) < 6:
+              raise SystemExit(f"Insufficient fresh China AI stories: {len(fresh_china)}; need at least 6 published within seven days")
+          fresh = []
+          for item in news:
+              try:
+                  published = dt.datetime.fromisoformat(item.get('published', '').replace('Z', '+00:00'))
+                  if published.tzinfo is None: published = published.replace(tzinfo=dt.timezone.utc)
+                  if (now - published).total_seconds() <= 72 * 3600: fresh.append(item)
+              except Exception: pass
+          if len(fresh) < 3:
+              raise SystemExit(f"Refusing stale report: only {len(fresh)} stories within 72 hours")
+          if any(not x.get('url', '').startswith('https://') for x in news[:5]):
+              raise SystemExit('One of the first five stories has no HTTPS source URL')
+          archive = Path('radar/data/archive') / f'{today}.json'
+          archive.parent.mkdir(parents=True, exist_ok=True)
+          archive.write_text(json.dumps(d, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          history = sorted([x.name for x in Path('radar/data/archive').glob('*.json')], reverse=True)[:30]
+          Path('radar/data/history.json').write_text(json.dumps({'days': history}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; China AI={len(fresh_china)} (minimum 6); sources={d.get('sources_ok')}/{d.get('sources_total')}")
+          PY
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Generate daily infographic poster
+        if: steps.preflight.outputs.skip != 'true'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          python -m pip install --upgrade pillow 'qrcode[pil]' opencv-python-headless numpy
+          python radar/scripts/generate_poster.py
+          test -s radar/posters/latest.png
+          test -s radar/posters/latest.json
+          test -s "radar/posters/$(python -c "import json; print(json.load(open('radar/posters/latest.json'))['report_date'])").png"
+      - name: Mandatory final-image QR and destination gate
+        run: python radar/scripts/verify_poster.py
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Start local static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/radar-http.log 2>&1 &
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:4173/radar/daily/ >/dev/null && exit 0; sleep 1; done
+          cat /tmp/radar-http.log
+          exit 1
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Test daily briefing on desktop and mobile
+        run: node scripts/qa-radar.cjs
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Commit refreshed report and daily archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          TODAY="$(TZ=Asia/Shanghai date +%F)"
+          SNAPSHOT=/tmp/davy-radar-refresh
+          mkdir -p "$SNAPSHOT"
+          # Snapshot generated outputs before switching to the latest main, which
+          # may already contain another run's files for the same date.
+          cp radar/data/latest.json "$SNAPSHOT/latest.json"
+          cp radar/data/image-cache.json "$SNAPSHOT/image-cache.json"
+          cp "radar/data/archive/$TODAY.json" "$SNAPSHOT/today.json"
+          cp "radar/posters/$TODAY.png" "$SNAPSHOT/today.png"
+          cp "radar/posters/$TODAY.json" "$SNAPSHOT/today-poster.json"
+          cp "radar/posters/$TODAY.qr-verification.json" "$SNAPSHOT/today-qr-verification.json"
+          cp radar/posters/latest.png "$SNAPSHOT/latest.png"
+          cp radar/posters/latest.json "$SNAPSHOT/latest-poster.json"
+          cp radar/posters/latest.qr-verification.json "$SNAPSHOT/latest-qr-verification.json"
+
+          git fetch origin main
+          git reset --hard HEAD
+          # Remove generated untracked files from this old checkout but retain QA artifacts.
+          git clean -fd -e test-results/
+          git checkout -B main origin/main
+          cp "$SNAPSHOT/latest.json" radar/data/latest.json
+          cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
+          cp "$SNAPSHOT/today.json" "radar/data/archive/$TODAY.json"
+          cp "$SNAPSHOT/today.png" "radar/posters/$TODAY.png"
+          cp "$SNAPSHOT/today-poster.json" "radar/posters/$TODAY.json"
+          cp "$SNAPSHOT/today-qr-verification.json" "radar/posters/$TODAY.qr-verification.json"
+          cp "$SNAPSHOT/latest.png" radar/posters/latest.png
+          cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
+          cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
+
+          # Rebuild the history index from the merged archive directory so
+          # this run cannot delete history added by another run.
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          import datetime as dt
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          archives = Path('radar/data/archive')
+          archives.mkdir(parents=True, exist_ok=True)
+          if not (archives / f'{today}.json').is_file():
+              raise SystemExit(f'Missing archive after sync: {today}.json')
+          days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
+          Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          PY
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'chore(radar): refresh daily AI brief'
+            git push origin HEAD:main
+          else
+            echo 'No report data changes to commit.'
+          fi
+        if: steps.preflight.outputs.skip != 'true'
+      - name: Upload daily briefing screenshots and report
+        if: always() && steps.preflight.outputs.skip != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-daily-brief-qa
+          path: test-results/radar/
+          if-no-files-found: warn
+          retention-days: 14
+
+  verify-live:
+    name: Verify automatic GitHub Pages deployment
+    runs-on: ubuntu-latest
+    needs: qa
+    timeout-minutes: 6
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install final-image QR decoder
+        run: python -m pip install --upgrade opencv-python-headless numpy
+      - name: Wait for the branch-triggered Pages build and verify live assets
+        shell: bash
+        run: |
+          python - <<'PY'
+          import datetime as dt, json, time, urllib.request, cv2, numpy as np
+          from zoneinfo import ZoneInfo
+
+          base = 'https://davylab.github.io/radar/'
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          last_error = 'not checked'
+          headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
+          for attempt in range(30):
+              try:
+                  stamp = str(time.time())
+                  with urllib.request.urlopen(urllib.request.Request(base + 'daily/?verify=' + stamp, headers=headers), timeout=15) as response:
+                      page = response.read().decode('utf-8', 'replace')
+                      assert response.status == 200
+                  assert 'id="chinaAI"' in page, 'China AI developments section missing from live page'
+                  assert 'china-news-grid' in page, 'China AI card grid styling missing from live page'
+                  with urllib.request.urlopen(urllib.request.Request(base + 'data/latest.json?verify=' + stamp, headers=headers), timeout=15) as response:
+                      data = json.loads(response.read().decode('utf-8'))
+                  assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
+                  assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
+                  assert len(data.get('news', [])) >= 5, 'fewer than five general news items'
+                  assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'general news source links missing'
+                  china_news = data.get('china_ai_news', [])
+                  assert isinstance(china_news, list), 'China AI stories field missing'
+                  for story in china_news:
+                      assert story.get('url', '').startswith('https://'), 'China AI story source URL missing'
+                      assert story.get('image_url', '').startswith('https://'), 'China AI story image missing'
+                      assert story.get('category'), 'China AI story category missing'
+                      assert story.get('published'), 'China AI story publication date missing'
+                  qr_target = 'https://davylab.github.io/radar/daily/'
+                  for poster_name in (today + '.png', 'latest.png'):
+                      poster_req = urllib.request.Request(base + 'posters/' + poster_name + '?verify=' + stamp, headers=headers)
+                      with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
+                          assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), f'{poster_name} missing'
+                          poster_bytes = poster_response.read()
+                      poster_image = cv2.imdecode(np.frombuffer(poster_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
+                      assert poster_image is not None, f'{poster_name} is not a valid PNG'
+                      decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image)
+                      if not decoded:
+                          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image[1600:1790, 25:240])
+                      assert decoded == qr_target, f'{poster_name} QR decode/URL mismatch: {decoded!r}'
+                      assert points is not None and len(points), f'{poster_name} QR geometry not detected'
+                  verification_req = urllib.request.Request(base + 'posters/' + today + '.qr-verification.json?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(verification_req, timeout=15) as verification_response:
+                      verification = json.loads(verification_response.read().decode('utf-8'))
+                  assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
+                  assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
+                  assert verification.get('report_date') == today, 'QR verification date mismatch'
+                  history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(history_req, timeout=15) as history_response:
+                      history = json.loads(history_response.read().decode('utf-8'))
+                  assert today + '.json' in history.get('days', []), 'today is missing from history index'
+                  skill = (data.get('skills') or [{}])[0]
+                  assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
+                  old_days = [x for x in history.get('days',[]) if x != today + '.json']
+                  if old_days:
+                      old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
+                      with urllib.request.urlopen(urllib.request.Request(old_url,headers=headers),timeout=15) as old_response:
+                          old_data = json.loads(old_response.read().decode('utf-8'))
+                      assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
+                  print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
+                  break
+              except Exception as exc:
+                  last_error = f'{type(exc).__name__}: {exc}'
+                  print(f'Attempt {attempt + 1}/30: {last_error}')
+                  time.sleep(10)
+          else:
+              raise SystemExit('Post-deploy verification failed: ' + last_error)
+          PY
