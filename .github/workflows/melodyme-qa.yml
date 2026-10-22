@@ -1,0 +1,100 @@
+name: MelodyMe prototype QA
+
+on:
+  pull_request:
+    paths:
+      - "melodyme/**"
+      - ".github/workflows/melodyme-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prototype-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate prototype source and embedded JavaScript
+        run: |
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          import re
+          p = Path("melodyme/index.html")
+          html = p.read_text(encoding="utf-8")
+          class Checker(HTMLParser):
+              def __init__(self):
+                  super().__init__(convert_charrefs=True)
+                  self.errors = []
+              def error(self, message):
+                  self.errors.append(message)
+          parser = Checker()
+          parser.feed(html)
+          parser.close()
+          assert "<!doctype html>" in html.lower(), "missing doctype"
+          assert 'name="viewport"' in html, "missing responsive viewport"
+          assert 'id="generate"' in html, "missing generate action"
+          assert 'id="timeline"' in html, "missing timeline"
+          assert "localStorage" in html, "local-only persistence disclosure/implementation missing"
+          assert "真实 AI" in html, "prototype limitations must be disclosed"
+          scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
+          assert scripts, "no inline JavaScript found"
+          Path("/tmp/melodyme-inline.js").write_text("\n".join(scripts), encoding="utf-8")
+          print(f"HTML source checks passed; {len(html)} chars, {len(scripts)} inline script block(s)")
+          PY
+          node --check /tmp/melodyme-inline.js
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Run desktop and mobile interaction smoke tests
+        run: |
+          python -m http.server 4173 --directory . >/tmp/melodyme-http.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill $SERVER_PID 2>/dev/null || true' EXIT
+          node --input-type=module <<'JS'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({headless:true});
+          const errors = [];
+          const page = await browser.newPage({viewport:{width:1280,height:900}});
+          page.on('pageerror', e => errors.push(e.message));
+          await page.goto('http://127.0.0.1:4173/melodyme/', {waitUntil:'networkidle'});
+          if (!(await page.title()).includes('MelodyMe')) throw new Error('title missing');
+          await page.getByRole('button',{name:/记录一个音乐瞬间/}).click();
+          await page.locator('#generate').click();
+          if (!(await page.locator('#story').evaluate(el=>el.validationMessage)).length && (await page.locator('#story').inputValue())==='') {
+            // Prototype validation is an in-page message, not a native required field.
+            if (!(await page.getByText(/先写下一句话/).count())) throw new Error('empty input validation missing');
+          }
+          await page.locator('#story').fill('毕业那天，我们在车站告别。这首歌让我想起那个夏天。');
+          await page.locator('#song').fill('那年夏天');
+          await page.locator('#moods .chip').filter({hasText:'怀念'}).click();
+          await page.locator('#generate').click();
+          if (!(await page.locator('#result').isVisible())) throw new Error('result view not shown');
+          await page.locator('#editCopy').fill('QA edited story');
+          await page.locator('#save').click();
+          if (!(await page.locator('#timeline').getByText('那年夏天').count())) throw new Error('saved memory not in timeline');
+          await page.reload();
+          await page.getByRole('button',{name:/我的音乐人生/}).click();
+          if (!(await page.locator('#timeline').getByText('那年夏天').count())) throw new Error('localStorage persistence failed after reload');
+          const mobile = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
+          mobile.on('pageerror', e => errors.push(e.message));
+          await mobile.goto('http://127.0.0.1:4173/melodyme/', {waitUntil:'networkidle'});
+          const dimensions = await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
+          if (dimensions.scroll > dimensions.client + 1) throw new Error('mobile horizontal overflow: '+JSON.stringify(dimensions));
+          await mobile.getByRole('button',{name:/记录一首歌/}).click();
+          await mobile.locator('#story').fill('在海边听着这首歌，突然觉得可以重新开始。');
+          await mobile.locator('#generate').click();
+          if (!(await mobile.locator('#result').isVisible())) throw new Error('mobile create flow failed');
+          if (errors.length) throw new Error('browser errors: '+errors.join('; '));
+          console.log('PASS: desktop create/save/reload, mobile create flow, no horizontal overflow, no page errors.');
+          await browser.close();
+          JS
