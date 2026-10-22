@@ -52,8 +52,10 @@ jobs:
           print(f"HTML source checks passed; {len(html)} chars, {len(scripts)} inline script block(s)")
           PY
           node --check /tmp/melodyme-inline.js
-      - name: Syntax-check live QA script when present
-        run: node --check scripts/qa-smoke.cjs
+      - name: Syntax-check browser QA scripts
+        run: |
+          node --check scripts/qa-smoke.cjs
+          node --check scripts/melodyme-live-qa.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save playwright

@@ -12,27 +12,36 @@
 | P-04 | 完整创作 | 输入歌名、歌手、年份、情绪 | 结果页显示对应信息 |
 | P-05 | 编辑作品 | 修改故事文案 | 修改后的内容保留在编辑器 |
 | P-06 | 保存记忆 | 保存作品后打开时间线 | 新记忆出现在时间线 |
-| P-07 | 删除记忆 | 删除自己的记录（后续功能） | 仅目标记录删除，其他记录保留 |
+| P-07 | 删除记忆 | 删除自己的记录 | 仅目标记录删除，其他记录保留 |
 | P-08 | 分享权限 | 尝试打开私密记录分享 URL（后续功能） | 无权限时拒绝访问 |
 | P-09 | 移动端布局 | 390×844 和 360×800 视口检查 | 无横向溢出，主要按钮可触达 |
 | P-10 | 键盘操作 | Tab/Shift+Tab/Enter 操作 | 焦点顺序合理，交互可操作 |
 | P-11 | 失败恢复 | 模拟生成失败（真实 AI 接入后） | 输入保留、错误可理解、可重试 |
-| P-12 | 刷新持久性 | 刷新页面 | 原型仅本地状态；生产版必须验收云端持久化 |
+| P-12 | 刷新持久性 | 刷新页面 | 原型本地存储；生产版须验收云端持久化 |
+
+## Automated prototype test evidence
+- GitHub Actions run 39823723984: passed HTML checks, JavaScript syntax check, desktop create/save/reload, mobile create flow, mobile overflow, and browser page-error checks.
+- GitHub Actions run 39824055898: repeated prototype smoke checks passed after adding the architecture/schema draft.
+- GitHub Actions run 39824386825: prototype and live-QA script syntax checks passed; desktop/mobile prototype smoke checks passed.
+- These tests used a local static server in GitHub Actions; they do not prove real AI, account auth, cloud sync, or production backend security.
+
+## Production live route test
+The separate `MelodyMe live deployment QA` workflow checks the deployed `/melodyme/` URL after app files change on `main`. It records route response, empty-input validation, create/preview/save/reload, SVG export, desktop/mobile page errors, mobile horizontal overflow, and screenshots/JSON report as a 14-day artifact.
 
 ## Production security checks (not yet applicable to static prototype)
-- 两个不同用户 A/B：A 不能读取/更新/删除 B 的私人记忆。
-- 未登录请求读取私人记录应返回拒绝，不应返回正文。
-- 修改 URL 中的 memory_id 不得越权。
-- RLS 对所有用户拥有的数据表开启并验证。
-- 服务端 API 不能信任客户端传入 user_id。
-- AI key 不得出现在打包产物、浏览器网络请求或 Git 历史。
-- 私密作品不可通过对象存储公开 URL 绕过权限。
-- 分享撤销后再次访问必须拒绝。
-- 重复请求不得重复创建/扣费；失败重试状态可恢复。
-- 删除记忆时按策略删除相关派生内容和文件。
+- Two users A/B: A cannot read/update/delete B's private memories.
+- Unauthenticated requests cannot read private records.
+- Changing memory IDs in URLs cannot bypass authorization.
+- RLS enabled and verified for all user-owned tables.
+- Server API never trusts client-supplied user_id.
+- AI key absent from bundle, browser network requests, and Git history.
+- Private artwork cannot be accessed via permanent public object URLs.
+- Revoked share links reject subsequent access.
+- Repeated requests cannot duplicate charges; retries restore job state.
+- Memory deletion removes related derived content and files per policy.
 
 ## Release gate
-- 静态检查与构建成功。
-- 核心流程端到端测试通过。
-- 生产 URL 返回正确页面并加载静态资源。
-- 未完成或无法验证的测试必须标注，不得默认通过。
+- Static checks and build pass.
+- Core end-to-end flow passes.
+- Production URL returns correct page and loads assets.
+- Unverified items remain explicitly marked; no implicit pass.
