@@ -223,10 +223,11 @@ const mark = (status, name, detail = '') => {
         const repoCount = await kp.locator('#githubRepoList .github-repo-row').count();
         mark(repoCount > 0 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 公开仓库加载', 'octocat 可选仓库数=' + repoCount);
         if (repoCount > 0) {
+          const selectedRepoName = await kp.locator('#githubRepoList .github-repo-row strong').first().innerText();
           await kp.locator('#githubRepoList input[type="checkbox"]').first().check();
           await kp.locator('#githubImportSelectedBtn').click();
-          await kp.waitForFunction(() => document.querySelector('#projectCards')?.innerText.includes('octocat'), null, { timeout: 10000 });
-          mark('PASS', 'KeyPocket 仓库导入与项目卡片渲染', '测试仓库已导入');
+          await kp.waitForFunction(name => document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
+          mark('PASS', 'KeyPocket 仓库导入与项目卡片渲染', '测试仓库已导入：' + selectedRepoName);
         }
       }
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
