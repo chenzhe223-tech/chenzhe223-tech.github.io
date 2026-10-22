@@ -248,6 +248,15 @@ const mark = (status, name, detail = '') => {
       await topicPage.waitForSelector('#feedList', { timeout: 10000 });
       const topicTitle = await topicPage.title();
       mark(topicTitle.includes('公众号选题工作台') ? 'PASS' : 'FAIL', '选题工作台页面标题', topicTitle);
+      await topicPage.locator('#ideaInput').waitFor({ timeout: 8000 });
+      mark('PASS', 'V2 AI 选题工作区', '自然语言输入与方向结果区域已加载');
+      mark(await topicPage.locator('#directionResults').count() === 1 ? 'PASS' : 'FAIL', '选题方向结果区域', 'directionResults 存在');
+      await topicPage.locator('#importNianbox').click();
+      await topicPage.locator('#importDialog[open]').waitFor({ timeout: 5000 });
+      const nianboxConnectVisible = await topicPage.locator('#connectNianbox').isVisible();
+      mark(nianboxConnectVisible ? 'PASS' : 'FAIL', '念头盒导入入口', '账号连接与文件/粘贴降级入口已加载');
+      await topicPage.locator('#closeImportDialog').click();
+      mark(await topicPage.locator('#openChatGPT').count() === 1 ? 'PASS' : 'FAIL', 'ChatGPT 交接入口', '创作指令区提供打开 ChatGPT 操作');
       await topicPage.waitForFunction(() => {
         const el = document.querySelector('#sourceStatus');
         return el && el.innerText.trim().length > 0;
