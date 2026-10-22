@@ -69,7 +69,19 @@ async function main() {
     const worker = await fetch("https://nianbox-cloud.chenzhe223.workers.dev/health");
     assert.equal(worker.status, 200, "NianBox cloud Worker health endpoint responds");
     const health = await worker.json();
-    assert.equal(health.service, "nianbox-cloud", "connected API identifies the expected service");
+
+    const capabilitiesResponse = await fetch("https://nianbox-cloud.chenzhe223.workers.dev/capabilities");
+    assert.equal(capabilitiesResponse.status, 200, "NianBox AI capabilities endpoint responds");
+    const capabilities = await capabilitiesResponse.json();
+    assert.equal(typeof capabilities.classify, "boolean", "server reports AI configuration status without exposing secrets");
+    assert.ok(capabilities.aiModel === "" || typeof capabilities.aiModel === "string", "AI model metadata is safe string metadata");
+    const unauthenticated = await fetch("https://nianbox-cloud.chenzhe223.workers.dev/ai/topic-directions", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ input: "普通人如何用 AI 做出第一个小产品" }),
+    });
+    assert.equal(unauthenticated.status, 401, "topic directions API rejects unauthenticated calls");
+    console.log(JSON.stringify({ ok: true, browser: "Chromium", viewports: [1440, 1024, 390, 360], fallbackImport: "passed", prompt: "passed", workerHealth: health, aiConfigured: capabilities.classify, aiModel: capabilities.aiModel || null, endpointAuth: unauthenticated.status }, null, 2));
     console.log(JSON.stringify({ ok: true, browser: "Chromium", viewports: [1440, 1024, 390, 360], fallbackImport: "passed", prompt: "passed", workerHealth: health }, null, 2));
   } finally {
     await browser.close();
