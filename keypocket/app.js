@@ -1,6 +1,6 @@
 'use strict';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
-const $=s=>document.querySelector(s); let db, cryptoKey=null, vault=null, records=[], editId=null, toastTimer=null;
+const $=s=>document.querySelector(s); let db, cryptoKey=null, vault=null, records=[], projects=[], editId=null, toastTimer=null;
 const PROVIDERS=[
  {id:'openai',name:'OpenAI',short:'OA',category:'AI 模型',patterns:[/^sk-proj-/,/^sk-[A-Za-z0-9_-]{20,}$/],urls:['platform.openai.com']},
  {id:'anthropic',name:'Anthropic',short:'AN',category:'AI 模型',patterns:[/^sk-ant-/],urls:['console.anthropic.com']},
