@@ -10,7 +10,7 @@ const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "
 async function main() {
   const htmlPath = path.join(root, "topic-studio", "index.html");
   const html = fs.readFileSync(htmlPath, "utf8");
-  const inline = html.match(/<script>([\\s\\S]*?)<\\/script>/);
+  const inline = html.match(/<script>([\s\S]*?)<\/script>/);
   assert.ok(inline, "inline application script exists");
   new Function(inline[1]);
   assert.ok(html.includes('id="ideaInput"'), "AI idea input exists");
