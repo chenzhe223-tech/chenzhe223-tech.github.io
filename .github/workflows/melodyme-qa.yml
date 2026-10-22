@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "melodyme/**"
+      - "scripts/qa-smoke.cjs"
       - ".github/workflows/melodyme-qa.yml"
   workflow_dispatch:
 
@@ -51,6 +52,8 @@ jobs:
           print(f"HTML source checks passed; {len(html)} chars, {len(scripts)} inline script block(s)")
           PY
           node --check /tmp/melodyme-inline.js
+      - name: Syntax-check live QA script when present
+        run: node --check scripts/qa-smoke.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save playwright
