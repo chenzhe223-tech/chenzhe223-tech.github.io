@@ -236,6 +236,48 @@ const mark = (status, name, detail = '') => {
       mark('FAIL', 'KeyPocket smoke checks', e.stack || e.message || e);
     }
 
+
+    // DAVYLAB WeChat Topic Studio: verify the route and its core local-first workflow.
+    try {
+      const topicPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      const topicErrors = [];
+      topicPage.on('pageerror', e => topicErrors.push(e.message));
+      const topicResp = await topicPage.goto(base + 'topic-studio/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      mark(topicResp && topicResp.status() === 200 ? 'PASS' : 'FAIL', '公众号选题工作台路由', 'HTTP ' + (topicResp && topicResp.status()));
+      await topicPage.waitForSelector('#feedList', { timeout: 10000 });
+      const topicTitle = await topicPage.title();
+      mark(topicTitle.includes('公众号选题工作台') ? 'PASS' : 'FAIL', '选题工作台页面标题', topicTitle);
+      await topicPage.waitForFunction(() => {
+        const el = document.querySelector('#sourceStatus');
+        return el && el.innerText.trim().length > 0;
+      }, null, { timeout: 12000 });
+      const feedState = await topicPage.locator('#sourceStatus').innerText();
+      mark(feedState.includes('已连接') ? 'PASS' : 'WARN', 'Davy Radar 数据连接', feedState);
+      await topicPage.locator('#newTop').click();
+      await topicPage.locator('#topicDialog[open]').waitFor({ timeout: 5000 });
+      await topicPage.locator('#topicTitle').fill('QA 临时选题：AI 产品实践');
+      await topicPage.locator('#topicWhy').fill('用于验证选题新建、评分和本地保存路径，不作为正式选题。');
+      await topicPage.locator('#topicForm button[type="submit"]').click();
+      await topicPage.locator('#topicList').getByText('QA 临时选题：AI 产品实践').waitFor({ timeout: 8000 });
+      const savedTopic = await topicPage.evaluate(() => {
+        const data = JSON.parse(localStorage.getItem('davylab-topic-studio-v1') || '[]');
+        return data.some(t => t.title === 'QA 临时选题：AI 产品实践');
+      });
+      mark(savedTopic ? 'PASS' : 'FAIL', '选题新建与本地保存', savedTopic ? '新建记录可重新读取' : '未在 localStorage 找到测试选题');
+      await topicPage.screenshot({ path: path.join(out, 'topic-studio-home.png'), fullPage: true });
+      mark(topicErrors.length === 0 ? 'PASS' : 'FAIL', '选题工作台 JavaScript 异常', topicErrors.length ? JSON.stringify(topicErrors) : '未发现 pageerror');
+      await topicPage.close();
+
+      const topicMobile = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      const mobileResp = await topicMobile.goto(base + 'topic-studio/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await topicMobile.waitForSelector('#feedList', { timeout: 10000 });
+      const overflow = await topicMobile.evaluate(() => ({ viewport: document.documentElement.clientWidth, document: document.documentElement.scrollWidth }));
+      mark(mobileResp && mobileResp.status() === 200 && overflow.document <= overflow.viewport + 4 ? 'PASS' : 'FAIL', '选题工作台手机端与横向溢出', JSON.stringify({ status: mobileResp && mobileResp.status(), ...overflow }));
+      await topicMobile.close();
+    } catch (e) {
+      mark('FAIL', '公众号选题工作台 smoke checks', e.stack || e.message || e);
+    }
+
     report.externalLinks = links;
     report.summary = {
       passed: checks.filter(c => c.status === 'PASS').length,
