@@ -48,7 +48,9 @@ async function main() {
     }
 
     await page.getByRole("button", { name: /分析并生成方向/ }).click();
-    await page.getByRole("status").filter({ hasText: /请先点击/ }).waitFor();
+    await page.locator("#aiState").waitFor();
+    await page.waitForTimeout(150);
+    assert.match(await page.locator("#aiState").innerText(), /请先点击|登录|连接/, "AI analysis must require an authenticated NianBox session");
     assert.equal(await page.locator(".direction-card").count(), 0, "AI failure/auth-required state must not show fake direction cards");
 
     await page.getByRole("button", { name: /从念头盒导入/ }).click();
