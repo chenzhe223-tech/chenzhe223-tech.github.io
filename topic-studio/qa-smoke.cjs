@@ -47,6 +47,7 @@ async function main() {
       assert.ok(sizes.doc <= sizes.viewport + 1, `no horizontal overflow at ${width}px: ${JSON.stringify(sizes)}`);
     }
 
+    await page.locator("#ideaInput").fill("普通人如何用 AI 做出第一个小产品");
     await page.getByRole("button", { name: /分析并生成方向/ }).click();
     await page.locator("#aiState").waitFor();
     await page.waitForTimeout(150);
