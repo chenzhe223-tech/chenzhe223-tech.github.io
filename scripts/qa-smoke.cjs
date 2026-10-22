@@ -205,15 +205,29 @@ const mark = (status, name, detail = '') => {
       await kp.waitForSelector('#unlockForm', { timeout: 10000 });
       const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
       mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
-      // Do not create or unlock a real vault; inspect import UI only after safely opening the project tab.
+      // Fresh browser context: create a disposable test vault using synthetic credentials only.
+      await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
+      await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
+      await kp.locator('#unlockBtn').click();
+      await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       await kp.locator('[data-module="projects"]').click();
-      await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 }).catch(() => {});
+      await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 });
       const importButton = await kp.locator('#importGithubBtn').count();
       mark(importButton === 1 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 导入入口', '按钮数量=' + importButton);
       if (importButton === 1) {
-        // The vault is locked on a fresh test context, so the UI is gated; validate static control presence only.
-        const buttonText = await kp.locator('#importGithubBtn').innerText();
-        mark(buttonText.includes('GitHub') ? 'PASS' : 'FAIL', 'KeyPocket 导入按钮文案', buttonText);
+        await kp.locator('#importGithubBtn').click();
+        await kp.waitForSelector('#githubOwner', { timeout: 5000 });
+        await kp.locator('#githubOwner').fill('octocat');
+        await kp.locator('#githubLoadBtn').click();
+        await kp.waitForFunction(() => document.querySelector('#githubImportStatus')?.classList.contains('ok'), null, { timeout: 20000 });
+        const repoCount = await kp.locator('#githubRepoList .github-repo-row').count();
+        mark(repoCount > 0 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 公开仓库加载', 'octocat 可选仓库数=' + repoCount);
+        if (repoCount > 0) {
+          await kp.locator('#githubRepoList input[type="checkbox"]').first().check();
+          await kp.locator('#githubImportSelectedBtn').click();
+          await kp.waitForFunction(() => document.querySelector('#projectCards')?.innerText.includes('octocat'), null, { timeout: 10000 });
+          mark('PASS', 'KeyPocket 仓库导入与项目卡片渲染', '测试仓库已导入');
+        }
       }
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
       await kp.screenshot({ path: path.join(out, 'keypocket-home.png'), fullPage: true });
