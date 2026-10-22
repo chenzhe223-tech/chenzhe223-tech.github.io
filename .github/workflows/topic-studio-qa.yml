@@ -1,0 +1,37 @@
+name: Topic Studio V2 QA
+
+on:
+  pull_request:
+    paths:
+      - "topic-studio/**"
+      - ".github/workflows/topic-studio-qa.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "topic-studio/**"
+      - ".github/workflows/topic-studio-qa.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: topic-studio-qa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --prefix /tmp/topic-studio-test playwright
+          npx --yes playwright install --with-deps chromium
+      - name: Run Topic Studio browser smoke tests
+        env:
+          PLAYWRIGHT_PATH: /tmp/topic-studio-test/node_modules/playwright
+        run: node topic-studio/qa-smoke.cjs
