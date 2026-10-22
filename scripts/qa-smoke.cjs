@@ -194,6 +194,34 @@ const mark = (status, name, detail = '') => {
       mark('FAIL', 'AI 简报 → 念头盒一键收录', e.stack || e.message || e);
     }
 
+
+    // KeyPocket public GitHub import smoke checks
+    try {
+      const kp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      const kpErrors = [];
+      kp.on('pageerror', e => kpErrors.push(e.message));
+      const kpResp = await kp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      mark(kpResp && kpResp.status() < 400 ? 'PASS' : 'FAIL', 'KeyPocket 页面可打开', 'HTTP ' + (kpResp && kpResp.status()));
+      await kp.waitForSelector('#unlockForm', { timeout: 10000 });
+      const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
+      mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
+      // Do not create or unlock a real vault; inspect import UI only after safely opening the project tab.
+      await kp.locator('[data-module="projects"]').click();
+      await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 }).catch(() => {});
+      const importButton = await kp.locator('#importGithubBtn').count();
+      mark(importButton === 1 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 导入入口', '按钮数量=' + importButton);
+      if (importButton === 1) {
+        // The vault is locked on a fresh test context, so the UI is gated; validate static control presence only.
+        const buttonText = await kp.locator('#importGithubBtn').innerText();
+        mark(buttonText.includes('GitHub') ? 'PASS' : 'FAIL', 'KeyPocket 导入按钮文案', buttonText);
+      }
+      mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
+      await kp.screenshot({ path: path.join(out, 'keypocket-home.png'), fullPage: true });
+      await kp.close();
+    } catch (e) {
+      mark('FAIL', 'KeyPocket smoke checks', e.stack || e.message || e);
+    }
+
     report.externalLinks = links;
     report.summary = {
       passed: checks.filter(c => c.status === 'PASS').length,
