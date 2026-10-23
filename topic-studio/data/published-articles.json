@@ -3,8 +3,42 @@
   "account_name": "DAVYLAB",
   "account_ghid": "",
   "sync_method": "workbuddy-browser",
-  "sync_status": "not_synced",
-  "last_synced_at": null,
-  "notes": "Empty initial archive. Only populate with article records verified in the DAVYLAB WeChat Official Account backend; do not fabricate published articles.",
-  "articles": []
+  "sync_status": "synced_via_browser",
+  "last_synced_at": "2026-10-23T12:20:00+08:00",
+  "notes": "Records verified against DAVYLAB WeChat Official Account backend '发表记录' (3 items) and each permanent link's title via public fetch on 2026-10-23. Drafts and previews excluded. Missing optional fields left empty.",
+  "articles": [
+    {
+      "id": "CkQ2SwYLCSUFaETKMruKEA",
+      "title": "不会设计，也能规划专业业务看板？",
+      "url": "https://mp.weixin.qq.com/s/CkQ2SwYLCSUFaETKMruKEA",
+      "publishedAt": "2026-10-22",
+      "column": "",
+      "format": "贴图",
+      "summary": "",
+      "coverUrl": "",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "RSLSWp1q6-c6iXUPEAgk3Q",
+      "title": "我用 AI 做了几个应用后，才发现：能生成，不等于能用",
+      "url": "https://mp.weixin.qq.com/s/RSLSWp1q6-c6iXUPEAgk3Q",
+      "publishedAt": "2026-10-21",
+      "column": "",
+      "format": "文章",
+      "summary": "",
+      "coverUrl": "",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "d0QM0FArSpI3OIQzyPbVeA",
+      "title": "DAVYLAB 正式上线｜把想法，做成能用的工具",
+      "url": "https://mp.weixin.qq.com/s/d0QM0FArSpI3OIQzyPbVeA",
+      "publishedAt": "2026-10-20",
+      "column": "",
+      "format": "文章",
+      "summary": "",
+      "coverUrl": "",
+      "source": "WeChat Official Account backend"
+    }
+  ]
 }
