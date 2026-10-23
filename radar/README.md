@@ -40,3 +40,6 @@ The two DAVYLAB reference designs are stored as complete templates: geometric-na
 The style changes weekly, not daily. radar/scripts/poster_style.py is the single deterministic source of truth. It anchors ISO 2026-W01 to Monday 2025-12-29 and alternates every consecutive Monday-based week, including ISO year boundaries. For example, 2026-10-23 (ISO 2026-W43) uses geometric-navy; the week starting 2026-10-26 (ISO 2026-W44) uses mountain-editorial.
 
 Every daily run generates one complete poster in that week's style, with real story content and locally encoded QR, decodes the QR from the final PNG, checks the canonical URL, and records the ISO year/week, style-cycle index and template version. The build then commits the daily archive and assets, deploys GitHub Pages, and verifies the public report and poster assets. Automated decoding is distinct from physical phone-camera scanning.
+
+
+Topic fallback images are visibly labeled 「主题插画 · 非新闻现场」 in the final poster. The poster template version is 2.1.0; production preflight requires the manifest template version to match the code so template changes trigger a fresh generation.

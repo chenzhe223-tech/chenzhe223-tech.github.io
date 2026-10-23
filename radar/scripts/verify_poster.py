@@ -135,7 +135,8 @@ def main() -> int:
         if manifest.get("report_date") != today:
             fail(f"Poster manifest date {manifest.get('report_date')!r} is not today ({today})")
         if manifest.get("qr_url") != PUBLIC_URL:
-            fail(f"Manifest QR target mismatch: {manifest.get('qr_url')!r}")        for key, expected in expected_style.items():
+            fail(f"Manifest QR target mismatch: {manifest.get('qr_url')!r}")
+        for key, expected in expected_style.items():
             if manifest.get(key) != expected:
                 fail(f"Poster style metadata mismatch for {key}: got {manifest.get(key)!r}, expected {expected!r}")
         dated_path = ROOT / str(manifest.get("poster", ""))

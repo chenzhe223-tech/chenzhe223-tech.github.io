@@ -62,6 +62,20 @@ def paragraph(draw, text, xy, fnt, fill, width, max_lines=3, line_gap=5):
         y += fnt.size + line_gap
     return y
 
+def mark_topic_illustration(image, story):
+    """Label generic thematic fallback images so they cannot be mistaken for event photography."""
+    image_source = str(story.get("image_source") or "")
+    status = str(story.get("image_match_status") or "")
+    if status != "thematic_fallback" and image_source.lower() != "unsplash topic illustration":
+        return image
+    canvas = image.convert("RGBA")
+    band_h = min(38, canvas.height)
+    band = Image.new("RGBA", (canvas.width, band_h), (8, 25, 48, 220))
+    canvas.alpha_composite(band, (0, canvas.height - band_h))
+    overlay_draw = ImageDraw.Draw(canvas)
+    overlay_draw.text((14, canvas.height - band_h + 7), "主题插画 · 非新闻现场", font=font(15, True), fill=WHITE)
+    return canvas.convert("RGB")
+
 def image_for_story(story, idx):
     """Try matched image, saved backup, then story-category web illustration."""
     candidates = [str(story.get("image_url") or "").strip(), str(story.get("image_fallback_url") or "").strip()]
@@ -88,7 +102,12 @@ def image_for_story(story, idx):
             req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
             with urllib.request.urlopen(req, timeout=8) as r:
                 raw = r.read(16 * 1024 * 1024)
-            return Image.open(BytesIO(raw)).convert("RGB")
+            image = Image.open(BytesIO(raw)).convert("RGB")
+            primary = str(story.get("image_url") or "").strip()
+            if url != primary and ("unsplash.com" in url or url == str(story.get("image_fallback_url") or "").strip()):
+                fallback_story = {**story, "image_match_status": "thematic_fallback", "image_source": "Unsplash topic illustration"}
+                return mark_topic_illustration(image, fallback_story)
+            return mark_topic_illustration(image, story)
         except Exception:
             continue
     # Keep a polished editorial composition when network images are unavailable.
@@ -98,7 +117,7 @@ def image_for_story(story, idx):
     d.text((42, 48), "DAVYLAB  /  AI TOPIC VISUAL", font=font(25, True), fill=(58, 79, 99))
     title_text = str(story.get("title_zh") or story.get("original_title") or story.get("title_en") or "AI topic illustration")
     paragraph(d, title_text, (42, 112), font(24, True), (36, 55, 73), 600, 4, 8)
-    d.text((42, 310), "TOPIC ILLUSTRATION  ·  OPEN SOURCE ARTICLE", font=font(14), fill=(99, 117, 131))
+    d.text((42, 310), "主题插画 · 非新闻现场", font=font(18, True), fill=(99, 117, 131))
     return img
 
 def crop_cover(img, size):

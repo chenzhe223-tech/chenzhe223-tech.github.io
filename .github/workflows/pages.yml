@@ -104,10 +104,19 @@ jobs:
             fi
           fi
           if [ -f /tmp/Horizon/requirements.txt ]; then
-            if ! timeout 180s python -m pip install -r /tmp/Horizon/requirements.txt; then
-              echo "::warning::Horizon dependency installation failed or timed out; publishing will continue with source-backed baseline data."
+            if ! timeout 300s python -m pip install -r /tmp/Horizon/requirements.txt; then
+              echo "::warning::Horizon requirements installation failed or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
+          elif [ -f /tmp/Horizon/pyproject.toml ]; then
+            # This upstream repository declares its runtime dependencies in pyproject.toml, not requirements.txt.
+            if ! timeout 300s python -m pip install -e /tmp/Horizon; then
+              echo "::warning::Horizon editable install failed or timed out; publishing will continue with source-backed baseline data."
+              exit 0
+            fi
+          else
+            echo "::warning::No recognized Horizon dependency manifest; attempting minimal dotenv dependency."
+            python -m pip install "python-dotenv>=1.0.0"
           fi
           # The Python runner retries each DeepSeek JSON request up to three times.
           # Retry the whole enrichment once more for transient Horizon/model failures.
