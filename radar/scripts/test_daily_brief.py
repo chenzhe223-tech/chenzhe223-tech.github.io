@@ -42,6 +42,22 @@ class DailyBriefContractTests(unittest.TestCase):
         self.assertIsNone(result)
         mocked.assert_called_once()
 
+    def test_featured_skill_rejects_archived_or_forked_repository(self):
+        for flag, value in (("archived", True), ("fork", True)):
+            metadata = {
+                "full_name": "example/unusable-skill",
+                "html_url": "https://github.com/example/unusable-skill",
+                "description": "Must not be featured",
+                "license": {"spdx_id": "MIT", "name": "MIT License"},
+                "archived": flag == "archived" and value,
+                "fork": flag == "fork" and value,
+            }
+            with self.subTest(flag=flag):
+                with patch("radar.scripts.build_daily.http_get", return_value=json.dumps(metadata).encode()) as mocked:
+                    result = verify_skill_candidate({"name": "example/unusable-skill"})
+                self.assertIsNone(result)
+                mocked.assert_called_once()
+
     def test_featured_skill_rejects_missing_readme(self):
         metadata = {
             "full_name": "example/no-readme-skill",
