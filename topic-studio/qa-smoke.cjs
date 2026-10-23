@@ -20,6 +20,10 @@ async function main() {
   assert.ok(html.includes('id="importNianbox"'), "NianBox import entry exists");
   assert.ok(html.includes("NIANBOX_TOKEN_KEY"), "NianBox session token is session-scoped");
   assert.ok(!/AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}/.test(html), "no obvious provider API key is embedded");
+  const archivePath = path.join(root, "topic-studio", "data", "published-articles.json");
+  assert.ok(fs.existsSync(archivePath), "published content archive JSON exists");
+  const archiveJson = JSON.parse(fs.readFileSync(archivePath, "utf8"));
+  assert.ok(Array.isArray(archiveJson.articles), "published archive uses articles array schema");
 
   const server = http.createServer((req, res) => {
     const pathname = decodeURIComponent(new URL(req.url, "http://127.0.0.1").pathname);
@@ -127,6 +131,30 @@ async function main() {
 
     await page.locator('#topicList button[data-a="prompt"]').first().click();
     assert.ok((await page.locator("#promptBox").inputValue()).includes("事实核查"), "creation prompt includes fact-checking instructions");
+    
+    // Published content library: shared archive loading, create/preview/local persistence and cleanup.
+    await page.locator('button[data-section="published"]').click();
+    await page.locator("#publishedCount").waitFor();
+    await page.waitForFunction(() => {
+      const status = document.querySelector("#publishedSyncStatus");
+      return status && !status.innerText.includes("正在读取");
+    }, null, { timeout: 7000 });
+    assert.ok((await page.locator("#publishedSyncStatus").innerText()).includes("共享档案"), "published page reports shared archive state");
+    await page.locator("#addPublished").click();
+    await page.locator("#publishedTitle").fill("QA 临时已发表文章");
+    await page.locator("#publishedUrl").fill("https://mp.weixin.qq.com/s/davylab-qa-temporary");
+    await page.locator("#publishedDate").fill("2026-10-23");
+    await page.locator("#publishedSummary").fill("只用于浏览器验收的临时记录。");
+    await page.locator("#publishedForm button[type=submit]").click();
+    await page.locator("#publishedList").getByText("QA 临时已发表文章", { exact: true }).waitFor({ timeout: 5000 });
+    const savedPublished = await page.evaluate(() => {
+      const rows = JSON.parse(localStorage.getItem("davylab-published-articles-v1") || "[]");
+      return rows.some(a => a.title === "QA 临时已发表文章" && a.url === "https://mp.weixin.qq.com/s/davylab-qa-temporary");
+    });
+    assert.ok(savedPublished, "published article record is stored locally");
+    page.once("dialog", dialog => dialog.accept());
+    await page.locator('#publishedList button[data-published-action="remove"]').first().click();
+
     assert.deepEqual(errors, [], `browser console/page errors: ${errors.join("; ")}`);
 
     const worker = await fetch("https://nianbox-cloud.chenzhe223.workers.dev/health");
