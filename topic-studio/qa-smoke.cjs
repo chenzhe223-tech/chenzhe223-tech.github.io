@@ -5,6 +5,8 @@ const http = require("node:http");
 const { chromium } = require(process.env.PLAYWRIGHT_PATH || "playwright");
 
 const root = path.resolve(__dirname, "..");
+const screenshotDir = path.join(__dirname, "test-results");
+fs.mkdirSync(screenshotDir, { recursive: true });
 const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
 
 async function main() {
@@ -39,12 +41,51 @@ async function main() {
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
+    await page.locator(".feedcard").first().waitFor({ timeout: 12000 });
+
+    // Desktop visual regression: the feed card has a dedicated visual, content and action column.
+    const desktopCard = await page.locator(".feedcard").first().evaluate(card => {
+      const style = getComputedStyle(card);
+      const cover = card.querySelector(".feedcover").getBoundingClientRect();
+      const body = card.children[1].getBoundingClientRect();
+      const actions = card.querySelector(".feedactions").getBoundingClientRect();
+      const box = card.getBoundingClientRect();
+      return {
+        columns: style.gridTemplateColumns.trim().split(/\\s+/).length,
+        coverX: Math.round(cover.x), bodyX: Math.round(body.x), actionsX: Math.round(actions.x),
+        actionsRight: Math.round(actions.right), cardRight: Math.round(box.right),
+        minCardHeight: Math.round(box.height)
+      };
+    });
+    assert.equal(desktopCard.columns, 3, `desktop topic card must have three aligned columns: ${JSON.stringify(desktopCard)}`);
+    assert.ok(desktopCard.coverX < desktopCard.bodyX && desktopCard.bodyX < desktopCard.actionsX, `desktop card order is wrong: ${JSON.stringify(desktopCard)}`);
+    assert.ok(desktopCard.actionsRight <= desktopCard.cardRight + 2, `desktop actions overflow the card: ${JSON.stringify(desktopCard)}`);
+    await page.screenshot({ path: path.join(screenshotDir, "topic-studio-desktop.png"), fullPage: false });
+    await page.locator(".feedcard").first().screenshot({ path: path.join(screenshotDir, "topic-studio-feed-card.png") });
 
     for (const width of [1440, 1024, 390, 360]) {
       await page.setViewportSize({ width, height: 850 });
       await page.waitForTimeout(80);
       const sizes = await page.evaluate(() => ({ viewport: innerWidth, doc: document.documentElement.scrollWidth }));
       assert.ok(sizes.doc <= sizes.viewport + 1, `no horizontal overflow at ${width}px: ${JSON.stringify(sizes)}`);
+      if (width === 390) {
+        const mobileCard = await page.locator(".feedcard").first().evaluate(card => {
+          const style = getComputedStyle(card);
+          const actions = card.querySelector(".feedactions").getBoundingClientRect();
+          const body = card.children[1].getBoundingClientRect();
+          const box = card.getBoundingClientRect();
+          return {
+            columns: style.gridTemplateColumns.trim().split(/\\s+/).length,
+            actionsLeft: Math.round(actions.left), actionsRight: Math.round(actions.right),
+            bodyBottom: Math.round(body.bottom), actionsTop: Math.round(actions.top),
+            cardLeft: Math.round(box.left), cardRight: Math.round(box.right)
+          };
+        });
+        assert.equal(mobileCard.columns, 2, `mobile card should use two columns: ${JSON.stringify(mobileCard)}`);
+        assert.ok(mobileCard.actionsLeft >= mobileCard.cardLeft && mobileCard.actionsRight <= mobileCard.cardRight + 2, `mobile actions overflow: ${JSON.stringify(mobileCard)}`);
+        assert.ok(mobileCard.actionsTop >= mobileCard.bodyBottom - 2, `mobile actions should follow the content: ${JSON.stringify(mobileCard)}`);
+        await page.screenshot({ path: path.join(screenshotDir, "topic-studio-mobile.png"), fullPage: false });
+      }
     }
 
     await page.locator("#ideaInput").fill("普通人如何用 AI 做出第一个小产品");
