@@ -1,10 +1,21 @@
 {
-  "report_date": "2026-10-22",
+  "report_date": "2026-10-23",
   "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
-  "checked_at": "2026-10-22T09:38:22.820111+08:00",
+  "checked_at": "2026-10-23T09:19:37.245724+08:00",
+  "design_variant": "geometric-navy",
+  "iso_year": 2026,
+  "iso_week": 43,
+  "iso_weekday": 5,
+  "style_cycle_index": 42,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.1.0",
   "checks": [
     {
       "name": "destination_reachable",
+      "status": "PASS"
+    },
+    {
+      "name": "weekly_style_matches_iso_week",
       "status": "PASS"
     },
     {
@@ -33,7 +44,7 @@
   },
   "images": [
     {
-      "path": "radar/posters/2026-10-22.png",
+      "path": "radar/posters/2026-10-23.png",
       "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
       "url_matches": true,
       "width": 1200,
