@@ -2,7 +2,7 @@ name: MelodyMe live deployment QA
 
 on:
   workflow_run:
-    workflows: ["Deploy DAVYLAB to GitHub Pages"]
+    workflows: ["pages build and deployment"]
     types: [completed]
     branches: ["main"]
 
