@@ -80,6 +80,14 @@
 - 公众号已发内容的共享部分来自 GitHub JSON；本地临时新增的记录不会自动更新共享 JSON，需导入导出或由 WorkBuddy 更新仓库文件。
 - 生成创作指令并不代表文章已经写成；保存公众号草稿不代表预览通过；预览通过也不代表文章已正式发布。
 
+
+### I. 将对话日志和规则沉淀到 GitHub
+- 用户明确要求把对话日志及开发过程中形成的应用规则同步到 GitHub，以便后续调取。
+- 新增 `topic-studio/docs/CONVERSATION_LOG_2026-10-23.md`、`topic-studio/docs/PRODUCT_RULES.md` 和 `topic-studio/OPERATIONS_CONTEXT.md`，并更新本目录 `README.md` 作为入口。
+- 这三份文档分别承担：关键决策时间线、持续适用的产品/工程规范、压缩后的工作交接摘要。
+- 文档同步后的核验确认：上述文件、`WECHAT_CONTENT_SYNC.md`、`data/published-articles.json` 均可从目标仓库 `main` 分支重新读取。
+- 纯文档提交已触发 GitHub Pages build 和 Topic Studio V2 QA；本日志最后核查时两个最新工作流均处于 pending，因此不把本次文档提交描述为新的部署/回归已完成。此前最近已完成成功记录见本文件第 3 节。
+
 ## 3. 验收证据
 - GitHub Pages 构建与 DAVYLAB Browser QA 最近一次记录：
   - Pages build/deployment：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/39924260078
