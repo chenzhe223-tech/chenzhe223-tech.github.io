@@ -24,29 +24,28 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Wait for GitHub Pages to publish this exact commit
+      - name: Wait for a successful Pages deployment containing this commit
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          echo "Waiting for Pages deployment for commit $GITHUB_SHA"
+          echo "Waiting for a successful Pages deployment that contains $GITHUB_SHA"
           for attempt in $(seq 1 40); do
-            RUNS="$(gh run list --workflow "pages.yml" --commit "$GITHUB_SHA" --json databaseId,status,conclusion --limit 10)"
-            RUN_ID="$(echo "$RUNS" | jq -r '.[0].databaseId // empty')"
-            STATUS="$(echo "$RUNS" | jq -r '.[0].status // empty')"
-            CONCLUSION="$(echo "$RUNS" | jq -r '.[0].conclusion // empty')"
-            if [ -n "$RUN_ID" ]; then
-              echo "Pages run $RUN_ID: $STATUS / $CONCLUSION"
-              if [ "$STATUS" = "completed" ]; then
-                [ "$CONCLUSION" = "success" ] || { echo "Pages deployment failed"; exit 1; }
+            RUNS="$(gh run list --workflow "pages.yml" --branch main --json databaseId,status,conclusion,headSha --limit 20)"
+            PAGES_SHA="$(echo "$RUNS" | jq -r '[.[] | select(.status == "completed" and .conclusion == "success")][0].headSha // empty')"
+            RUN_ID="$(echo "$RUNS" | jq -r '[.[] | select(.status == "completed" and .conclusion == "success")][0].databaseId // empty')"
+            if [ -n "$PAGES_SHA" ]; then
+              RELATION="$(gh api "repos/$GITHUB_REPOSITORY/compare/$GITHUB_SHA...$PAGES_SHA" --jq .status)"
+              echo "Successful Pages run $RUN_ID at $PAGES_SHA; commit relation: $RELATION"
+              if [ "$RELATION" = "ahead" ] || [ "$RELATION" = "identical" ]; then
                 exit 0
               fi
             else
-              echo "Pages run not visible yet (attempt $attempt)"
+              echo "No successful Pages deployment visible yet (attempt $attempt)"
             fi
             sleep 15
           done
-          echo "Timed out waiting for Pages deployment"
+          echo "Timed out waiting for a successful Pages deployment containing this commit"
           exit 1
       - name: Install Playwright and Chromium
         run: |
