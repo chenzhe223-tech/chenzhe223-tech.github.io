@@ -28,7 +28,7 @@ permissions:
 
 concurrency:
   # Separate the daily research pipeline from generic site builds and avoid unrelated app pushes starving Radar.
-  group: radar-daily-pipeline
+  group: radar-daily-pipeline-v2
   cancel-in-progress: true
 
 jobs:
