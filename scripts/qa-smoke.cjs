@@ -262,7 +262,28 @@ const mark = (status, name, detail = '') => {
         return el && el.innerText.trim().length > 0;
       }, null, { timeout: 12000 });
       const feedState = await topicPage.locator('#sourceStatus').innerText();
+
       mark(feedState.includes('已连接') ? 'PASS' : 'WARN', 'Davy Radar 数据连接', feedState);
+      try {
+        await topicPage.waitForSelector('.feedcard', { timeout: 12000 });
+        const grid = await topicPage.locator('.feedcard').first().evaluate(card => {
+          const style = getComputedStyle(card);
+          const cover = card.querySelector('.feedcover').getBoundingClientRect();
+          const body = card.children[1].getBoundingClientRect();
+          const actions = card.querySelector('.feedactions').getBoundingClientRect();
+          const box = card.getBoundingClientRect();
+          return {
+            columns: style.gridTemplateColumns.split(' ').length,
+            coverX: Math.round(cover.x), bodyX: Math.round(body.x),
+            actionsX: Math.round(actions.x), actionsRight: Math.round(actions.right),
+            cardRight: Math.round(box.right), cardHeight: Math.round(box.height)
+          };
+        });
+        const aligned = grid.columns === 3 && grid.coverX < grid.bodyX && grid.bodyX < grid.actionsX && grid.actionsRight <= grid.cardRight + 2;
+        mark(aligned ? 'PASS' : 'FAIL', '选题素材卡片三列对齐', JSON.stringify(grid));
+      } catch (e) {
+        mark('FAIL', '选题素材卡片三列对齐', e.message);
+      }
       await topicPage.locator('#newTop').click();
       await topicPage.locator('#topicDialog[open]').waitFor({ timeout: 5000 });
       await topicPage.locator('#topicTitle').fill('QA 临时选题：AI 产品实践');
@@ -283,6 +304,15 @@ const mark = (status, name, detail = '') => {
       await topicMobile.waitForSelector('#feedList', { timeout: 10000 });
       const overflow = await topicMobile.evaluate(() => ({ viewport: document.documentElement.clientWidth, document: document.documentElement.scrollWidth }));
       mark(mobileResp && mobileResp.status() === 200 && overflow.document <= overflow.viewport + 4 ? 'PASS' : 'FAIL', '选题工作台手机端与横向溢出', JSON.stringify({ status: mobileResp && mobileResp.status(), ...overflow }));
+      await topicMobile.waitForSelector('.feedcard', { timeout: 12000 });
+      const mobileGrid = await topicMobile.locator('.feedcard').first().evaluate(card => {
+        const style = getComputedStyle(card);
+        const actions = card.querySelector('.feedactions').getBoundingClientRect();
+        const box = card.getBoundingClientRect();
+        return { columns: style.gridTemplateColumns.split(' ').length, actionsLeft: Math.round(actions.left), actionsRight: Math.round(actions.right), cardLeft: Math.round(box.left), cardRight: Math.round(box.right) };
+      });
+      const mobileAligned = mobileGrid.columns === 2 && mobileGrid.actionsLeft >= mobileGrid.cardLeft && mobileGrid.actionsRight <= mobileGrid.cardRight + 2;
+      mark(mobileAligned ? 'PASS' : 'FAIL', '选题素材卡片手机端操作区', JSON.stringify(mobileGrid));
       await topicMobile.close();
     } catch (e) {
       mark('FAIL', '公众号选题工作台 smoke checks', e.stack || e.message || e);
