@@ -31,9 +31,9 @@ jobs:
           set -euo pipefail
           echo "Waiting for a successful Pages deployment that contains $GITHUB_SHA"
           for attempt in $(seq 1 40); do
-            RUNS="$(gh run list --branch main --json databaseId,status,conclusion,headSha,name --limit 50)"
-            PAGES_SHA="$(echo "$RUNS" | jq -r '[.[] | select(.name == "pages build and deployment" and .status == "completed" and .conclusion == "success")][0].headSha // empty')"
-            RUN_ID="$(echo "$RUNS" | jq -r '[.[] | select(.name == "pages build and deployment" and .status == "completed" and .conclusion == "success")][0].databaseId // empty')"
+            RUNS="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?branch=main&per_page=100")"
+            PAGES_SHA="$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.name == "pages build and deployment" and .status == "completed" and .conclusion == "success")][0].head_sha // empty')"
+            RUN_ID="$(echo "$RUNS" | jq -r '[.workflow_runs[] | select(.name == "pages build and deployment" and .status == "completed" and .conclusion == "success")][0].id // empty')"
             if [ -n "$PAGES_SHA" ]; then
               RELATION="$(gh api "repos/$GITHUB_REPOSITORY/compare/$GITHUB_SHA...$PAGES_SHA" --jq .status)"
               echo "Successful Pages run $RUN_ID at $PAGES_SHA; commit relation: $RELATION"
