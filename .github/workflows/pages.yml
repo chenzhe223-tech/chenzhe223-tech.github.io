@@ -62,14 +62,23 @@ jobs:
           from pathlib import Path
           from zoneinfo import ZoneInfo
           from radar.scripts.poster_style import poster_style_metadata
-          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          timezone = ZoneInfo('Asia/Shanghai')
+          now_local = dt.datetime.now(timezone)
+          today = now_local.date().isoformat()
           expected_style = poster_style_metadata(today)
+          report_age_minutes = None
           try:
               report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
               qr_check = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+              generated_at = dt.datetime.fromisoformat(str(report.get('generated_at', '')).replace('Z', '+00:00'))
+              if generated_at.tzinfo is None:
+                  generated_at = generated_at.replace(tzinfo=dt.timezone.utc)
+              report_age_minutes = (now_local - generated_at.astimezone(timezone)).total_seconds() / 60
+              report_fresh_enough = 0 <= report_age_minutes <= 120
               complete = (
-                  report.get('report_date') == today
+                  report_fresh_enough
+                  and report.get('report_date') == today
                   and report.get('generated_at', '').startswith(today)
                   and report.get('top5_status') == 'ai_curated'
                   and len(report.get('top5', [])) == 5
@@ -89,7 +98,7 @@ jobs:
               complete = False
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
               output.write('skip=' + ('true' if complete else 'false') + '\n')
-          print(f"Today's complete AI-curated report already published: {complete}")
+          print(f"Today's complete AI-curated report already published and fresh (age <= 120 min): {complete}; age_minutes={report_age_minutes}")
           PY
       - name: Install poster rendering and QA dependencies
         if: steps.preflight.outputs.skip != 'true'
