@@ -240,6 +240,63 @@ const mark = (status, name, detail = '') => {
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
       mark('PASS', 'KeyPocket 多个 API Key 本地加密持久化', await kp.locator('#totalCount').innerText() + ' 条解锁后记录');
+      // Add a third independent custom-provider key and verify the earlier records remain intact.
+      await kp.locator('#addKeyBtn').click();
+      await kp.waitForSelector('#recordForm', { timeout: 5000 });
+      await kp.locator('#keyInput').fill('qa-synthetic-custom-key-not-real-003');
+      await kp.locator('#providerInput').selectOption('custom');
+      await kp.locator('#nameInput').fill('QA Synthetic Custom Key');
+      await kp.locator('#purposeInput').fill('Third independent record');
+      await kp.locator('#projectInput').fill('QA isolation');
+      await kp.locator('#tagsInput').fill('qa, custom, third');
+      await kp.locator('#notesInput').fill('synthetic only');
+      await kp.locator('#recordForm button[type="submit"]').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '3', null, { timeout: 5000 });
+      let cardsText = await kp.locator('#cards').innerText();
+      mark(cardsText.includes('QA Synthetic DeepSeek Key') && cardsText.includes('QA Synthetic OpenAI Key') && cardsText.includes('QA Synthetic Custom Key') ? 'PASS' : 'FAIL', 'KeyPocket 第三条记录不覆盖已有密钥', cardsText.slice(0, 450));
+      // Search and provider filter must preserve accurate visible counts.
+      await kp.locator('#searchInput').fill('QA Synthetic OpenAI Key');
+      await kp.waitForFunction(() => document.querySelector('#listCount')?.textContent.includes('1 条'), null, { timeout: 3000 });
+      mark('PASS', 'KeyPocket 多密钥搜索', await kp.locator('#listCount').innerText());
+      await kp.locator('#searchInput').fill('');
+      await kp.locator('#providerFilter').selectOption('custom');
+      await kp.waitForFunction(() => document.querySelector('#listCount')?.textContent.includes('1 条'), null, { timeout: 3000 });
+      mark('PASS', 'KeyPocket 服务商筛选', await kp.locator('#listCount').innerText());
+      await kp.locator('#providerFilter').selectOption('');
+      // Edit only the third record; the two existing records must remain.
+      const customCard = kp.locator('#cards .card').filter({ hasText: 'QA Synthetic Custom Key' });
+      await customCard.locator('[data-action="edit"]').click();
+      await kp.waitForSelector('#recordForm', { timeout: 5000 });
+      await kp.locator('#nameInput').fill('QA Synthetic Custom Key Edited');
+      await kp.locator('#recordForm button[type="submit"]').click();
+      await kp.waitForFunction(() => document.querySelector('#cards')?.innerText.includes('QA Synthetic Custom Key Edited'), null, { timeout: 5000 });
+      cardsText = await kp.locator('#cards').innerText();
+      mark(cardsText.includes('QA Synthetic DeepSeek Key') && cardsText.includes('QA Synthetic OpenAI Key') && cardsText.includes('QA Synthetic Custom Key Edited') ? 'PASS' : 'FAIL', 'KeyPocket 单条编辑不影响其他记录', cardsText.slice(0, 450));
+      // Export backup through the real UI and verify payload is encrypted; no plaintext keys in the file.
+      const downloadPromise = kp.waitForEvent('download');
+      await kp.locator('#exportBtn').click();
+      await kp.waitForSelector('#exportForm', { timeout: 5000 });
+      await kp.locator('#backupPassword').fill('QA-only-backup-password-2026');
+      await kp.locator('#backupConfirm').fill('QA-only-backup-password-2026');
+      await kp.locator('#exportForm button[type="submit"]').click();
+      const backupDownload = await downloadPromise;
+      const backupPath = await backupDownload.path();
+      const backupRaw = JSON.parse(require('fs').readFileSync(backupPath, 'utf8'));
+      const backupHasNoPlaintext = !JSON.stringify(backupRaw).includes('qa-synthetic-');
+      mark(backupRaw.app === 'KeyPocket' && backupRaw.cipher?.name === 'AES-256-GCM' && backupHasNoPlaintext ? 'PASS' : 'FAIL', 'KeyPocket 多记录加密备份导出', '加密文件结构有效；未发现明文测试密钥');
+      // On mobile, ensure the permanent add button remains visible and has no horizontal overflow.
+      const mobileKp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+      const mobileErrors = [];
+      mobileKp.on('pageerror', e => mobileErrors.push(e.message));
+      await mobileKp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await mobileKp.locator('#masterPassword').fill('QA-only-demo-password-2026');
+      await mobileKp.locator('#unlockBtn').click();
+      await mobileKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      const addOnMobile = await mobileKp.locator('#addKeyBtn').isVisible();
+      const mobileBounds = await mobileKp.evaluate(() => ({viewport: innerWidth, doc: document.documentElement.scrollWidth, buttonRight: document.querySelector('#addKeyBtn').getBoundingClientRect().right}));
+      mark(addOnMobile && mobileBounds.doc <= mobileBounds.viewport && mobileBounds.buttonRight <= mobileBounds.viewport ? 'PASS' : 'FAIL', 'KeyPocket 手机端新增按钮与布局', JSON.stringify(mobileBounds));
+      mark(mobileErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 手机端 JavaScript 异常', mobileErrors.length ? JSON.stringify(mobileErrors) : '未发现 pageerror');
+      await mobileKp.close();
       await kp.locator('[data-module="projects"]').click();
       await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 });
       const importButton = await kp.locator('#importGithubBtn').count();
