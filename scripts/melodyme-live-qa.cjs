@@ -29,6 +29,10 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.locator('[data-style="像一段电影旁白"]').click();
   await page.locator('#next').click();
   await page.locator('#results').waitFor({state:'visible',timeout:5000});
+  record('Twelve poster styles',await page.locator('.stylepick').count()===12,'12 distinct style options');
+  await page.locator('#autoStyle').click();
+  record('Local style recommendation is selectable',await page.locator('.stylepick[aria-pressed="true"]').count()===1,'Recommendation remains user-overridable');
+  record('Real music card and Shazam URL input',await page.locator('#musiccard').count()===1&&await page.locator('#shazamUrl').count()===1,'Music card renders without inventing a track');
   record('Map journey to artwork',await page.locator('#postertitle').innerText().then(t=>t.length>0),'Memory → mood → optional song clue → artwork');
   await page.locator('#storycopy').fill('Live QA edited story');
   await page.locator('#sharecopy').fill('Live QA share copy');
