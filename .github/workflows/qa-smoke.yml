@@ -1,6 +1,12 @@
 name: DAVYLAB Browser QA
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "keypocket/**"
+      - "scripts/qa-smoke.cjs"
+      - ".github/workflows/qa-smoke.yml"
   workflow_run:
     workflows: ["Deploy DAVYLAB to GitHub Pages", "pages build and deployment"]
     types: [completed]
@@ -11,7 +17,7 @@ permissions:
 
 jobs:
   browser-smoke:
-    if: github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'push' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
@@ -21,7 +27,7 @@ jobs:
       - name: Check out DAVYLAB source
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.event_name == 'push' && github.sha || github.event.workflow_run.head_sha }}
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
