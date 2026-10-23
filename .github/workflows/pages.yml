@@ -81,6 +81,9 @@ jobs:
                   and report.get('localization', {}).get('status') == 'ok'
                   and poster.get('report_date') == today
                   and poster.get('qr_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
+                  and poster.get('skill') == ((report.get('skills') or [{}])[0] or {}).get('name')
+                  and poster.get('generated_at', '') >= report.get('generated_at', '')
+                  and poster.get('template_version') == expected_style.get('template_version')
                   and all(poster.get(key) == value for key, value in expected_style.items())
                   and qr_check.get('report_date') == today
                   and qr_check.get('status') == 'PASS'
@@ -279,6 +282,59 @@ jobs:
           # Remove generated untracked files from this old checkout but retain QA artifacts.
           git clean -fd -e test-results/
           git checkout -B main origin/main
+          # Never let a slower recovery run roll back a newer, already-verified same-day bundle.
+          # Skip only when main already contains a coherent newer/equal report + poster + PASS QR gate.
+          if python - "$SNAPSHOT/latest.json" <<'PY'
+          import datetime as dt, json, sys
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          from radar.scripts.poster_style import poster_style_metadata
+          target = 'https://chenzhe223-tech.github.io/radar/daily/'
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          candidate = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+          try:
+              current = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+              poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+              qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+          except Exception as exc:
+              print(f'No complete main-branch bundle to protect yet: {type(exc).__name__}')
+              raise SystemExit(1)
+          def parse_stamp(value):
+              try:
+                  return dt.datetime.fromisoformat(str(value).replace('Z', '+00:00'))
+              except Exception:
+                  return None
+          current_time = parse_stamp(current.get('generated_at'))
+          candidate_time = parse_stamp(candidate.get('generated_at'))
+          expected_style = poster_style_metadata(today)
+          skill = ((current.get('skills') or [{}])[0] or {}).get('name')
+          bundle_ok = (
+              current.get('report_date') == today
+              and current.get('top5_status') == 'ai_curated'
+              and len(current.get('top5') or []) == 5
+              and current.get('localization', {}).get('status') == 'ok'
+              and poster.get('report_date') == today
+              and poster.get('skill') == skill
+              and poster.get('qr_url') == target
+              and all(poster.get(key) == value for key, value in expected_style.items())
+              and parse_stamp(poster.get('generated_at')) is not None
+              and current_time is not None
+              and parse_stamp(poster.get('generated_at')) >= current_time
+              and qr.get('report_date') == today
+              and qr.get('status') == 'PASS'
+              and qr.get('expected_url') == target
+              and all(qr.get(key) == value for key, value in expected_style.items())
+          )
+          if bundle_ok and current_time and candidate_time and candidate.get('report_date') == today and current_time >= candidate_time:
+              print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at')}.")
+              raise SystemExit(0)
+          print('Current main bundle is incomplete or candidate is newer; this run may update the bundle.')
+          raise SystemExit(1)
+          PY
+          then
+            echo 'A coherent newer/equal daily bundle already exists on main; keeping it instead of overwriting with an older run.'
+            exit 0
+          fi
           cp "$SNAPSHOT/latest.json" radar/data/latest.json
           cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
           cp "$SNAPSHOT/today.json" "radar/data/archive/$TODAY.json"

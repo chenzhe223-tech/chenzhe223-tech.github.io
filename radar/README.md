@@ -43,3 +43,7 @@ Every daily run generates one complete poster in that week's style, with real st
 
 
 Topic fallback images are visibly labeled 「主题插画 · 非新闻现场」 in the final poster. The poster template version is 2.1.0; production preflight requires the manifest template version to match the code so template changes trigger a fresh generation.
+
+## Concurrent recovery runs and monotonic publishing
+
+Daily schedule/recovery runs may overlap in queue time. Before committing, each run snapshots its output, syncs the latest `main`, and compares its `generated_at` with the current branch. A run must not replace a coherent same-day report/poster/QR bundle whose report timestamp is newer or equal to its snapshot. Preflight checks date, AI-curated five-story state, localization status, current-week style metadata, the first Skill name across report/poster, poster generation time, and the PASS QR record. This preserves the newest complete daily bundle if an older queued run finishes later.
