@@ -11,7 +11,7 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
  try{
   browser=await chromium.launch({headless:true});
   const page=await browser.newPage({viewport:{width:1280,height:900}});
-  await page.addInitScript(()=>{localStorage.clear()});
+  await page.addInitScript(()=>{if(!sessionStorage.getItem('melodyme-test-clean')){localStorage.clear();sessionStorage.setItem('melodyme-test-clean','1')}});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const response=await page.goto(target,{waitUntil:'domcontentloaded',timeout:45000});
   record('Production route responds',!!response&&response.status()===200,'HTTP '+(response&&response.status()));
