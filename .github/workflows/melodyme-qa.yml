@@ -60,7 +60,7 @@ jobs:
           const browser = await chromium.launch({headless:true});
           const errors = [];
           const page = await browser.newPage({viewport:{width:1280,height:900}});
-          await page.addInitScript(()=>localStorage.clear());
+          await page.addInitScript(()=>{if(!sessionStorage.getItem('melodyme-test-clean')){localStorage.clear();sessionStorage.setItem('melodyme-test-clean','1')}});
           page.on('pageerror', e=>errors.push(e.message));
           await page.goto('http://127.0.0.1:4173/melodyme/',{waitUntil:'networkidle'});
           if (!(await page.title()).includes('MelodyMe')) throw new Error('title missing');
