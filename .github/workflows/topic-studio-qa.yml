@@ -35,3 +35,11 @@ jobs:
         env:
           PLAYWRIGHT_PATH: /tmp/topic-studio-test/node_modules/playwright
         run: node topic-studio/qa-smoke.cjs
+      - name: Upload Topic Studio visual QA screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: topic-studio-visual-qa
+          path: topic-studio/test-results/*.png
+          if-no-files-found: warn
+          retention-days: 7
