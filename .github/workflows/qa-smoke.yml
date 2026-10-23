@@ -2,7 +2,7 @@ name: DAVYLAB Browser QA
 
 on:
   workflow_run:
-    workflows: ["Deploy DAVYLAB to GitHub Pages"]
+    workflows: ["Deploy DAVYLAB to GitHub Pages", "pages build and deployment"]
     types: [completed]
     branches: [main]
 
