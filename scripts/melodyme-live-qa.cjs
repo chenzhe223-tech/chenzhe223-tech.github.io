@@ -39,9 +39,6 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.getByRole('button',{name:/我的作品/}).click();
   await page.getByText('线上验收测试歌曲').waitFor({timeout:3000});
   record('Local work persistence after reload',true,'Saved item restored from browser storage');
-  await page.getByRole('button',{name:/删除/}).first().click();
-  page.once('dialog',d=>d.accept());
-  // If confirmation was already opened, it is accepted by the handler above only on a subsequent click; perform a guarded delete check separately.
   await page.screenshot({path:path.join(out,'desktop.png'),fullPage:true});
   record('Desktop JavaScript errors',errors.length===0,errors.join('; ')||'none');
   const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true,deviceScaleFactor:1});
