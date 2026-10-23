@@ -10,6 +10,11 @@ import urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+try:
+    from radar.scripts.poster_style import poster_style_metadata
+except ModuleNotFoundError:
+    from poster_style import poster_style_metadata
+
 import cv2
 import numpy as np
 from PIL import Image
@@ -117,10 +122,12 @@ def main() -> int:
         return 1
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     today = dt.datetime.now(TZ).date().isoformat()
+    expected_style = poster_style_metadata(today)
     record = {
         "report_date": today,
         "expected_url": PUBLIC_URL,
         "checked_at": dt.datetime.now(TZ).isoformat(),
+        **expected_style,
         "checks": [],
         "status": "FAILED",
     }
@@ -128,7 +135,9 @@ def main() -> int:
         if manifest.get("report_date") != today:
             fail(f"Poster manifest date {manifest.get('report_date')!r} is not today ({today})")
         if manifest.get("qr_url") != PUBLIC_URL:
-            fail(f"Manifest QR target mismatch: {manifest.get('qr_url')!r}")
+            fail(f"Manifest QR target mismatch: {manifest.get('qr_url')!r}")        for key, expected in expected_style.items():
+            if manifest.get(key) != expected:
+                fail(f"Poster style metadata mismatch for {key}: got {manifest.get(key)!r}, expected {expected!r}")
         dated_path = ROOT / str(manifest.get("poster", ""))
         if dated_path.resolve().parent != POSTERS.resolve() or dated_path.suffix.lower() != ".png":
             fail(f"Manifest poster path is outside radar/posters or is not a PNG: {dated_path}")
@@ -140,6 +149,7 @@ def main() -> int:
         ]
         record["images"] = image_results
         record["checks"].extend([
+            {"name": "weekly_style_matches_iso_week", "status": "PASS"},
             {"name": "dated_poster_final_image_qr_decode", "status": "PASS"},
             {"name": "latest_poster_final_image_qr_decode", "status": "PASS"},
             {"name": "exact_url_match", "status": "PASS"},

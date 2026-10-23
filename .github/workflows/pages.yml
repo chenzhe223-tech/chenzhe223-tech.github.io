@@ -50,7 +50,9 @@ jobs:
           import datetime as dt, json, os
           from pathlib import Path
           from zoneinfo import ZoneInfo
+          from radar.scripts.poster_style import poster_style_metadata
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          expected_style = poster_style_metadata(today)
           try:
               report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
@@ -63,7 +65,7 @@ jobs:
                   and report.get('localization', {}).get('status') == 'ok'
                   and poster.get('report_date') == today
                   and poster.get('qr_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
-                  and poster.get('design_variant') == ('mountain-editorial' if dt.date.fromisoformat(today).toordinal() % 2 == 0 else 'geometric-navy')
+                  and all(poster.get(key) == value for key, value in expected_style.items())
                   and qr_check.get('report_date') == today
                   and qr_check.get('status') == 'PASS'
                   and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
@@ -142,6 +144,7 @@ jobs:
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py
           python -m unittest radar.scripts.test_daily_brief
+          python -m unittest radar.scripts.test_poster_style -v
           python -m unittest radar.scripts.test_news_image_match -v
           python - <<'PY'
           import datetime as dt, json
@@ -312,7 +315,13 @@ jobs:
           from zoneinfo import ZoneInfo
 
           base = 'https://chenzhe223-tech.github.io/radar/'
-          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          today_date = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date()
+          today = today_date.isoformat()
+          anchor = dt.date(2025, 12, 29)
+          monday = today_date - dt.timedelta(days=today_date.weekday())
+          style_cycle_index = (monday - anchor).days // 7
+          expected_variant = 'geometric-navy' if style_cycle_index % 2 == 0 else 'mountain-editorial'
+          iso_year, iso_week, _ = today_date.isocalendar()
           last_error = 'not checked'
           headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
           for attempt in range(30):
@@ -337,6 +346,13 @@ jobs:
                       assert story.get('category'), 'China AI story category missing'
                       assert story.get('published'), 'China AI story publication date missing'
                   qr_target = 'https://chenzhe223-tech.github.io/radar/daily/'
+                  with urllib.request.urlopen(urllib.request.Request(base + 'posters/' + today + '.json?verify=' + stamp, headers=headers), timeout=15) as poster_meta_response:
+                      poster_meta = json.loads(poster_meta_response.read().decode('utf-8'))
+                  assert poster_meta.get('report_date') == today, 'poster manifest date mismatch'
+                  assert poster_meta.get('qr_url') == qr_target, 'poster manifest QR URL mismatch'
+                  assert poster_meta.get('design_variant') == expected_variant, f"weekly style mismatch: {poster_meta.get('design_variant')!r}, expected {expected_variant!r}"
+                  assert poster_meta.get('iso_year') == iso_year and poster_meta.get('iso_week') == iso_week, 'poster ISO week metadata mismatch'
+                  assert poster_meta.get('style_cycle_index') == style_cycle_index, 'poster style cycle index mismatch'
                   for poster_name in (today + '.png', 'latest.png'):
                       poster_req = urllib.request.Request(base + 'posters/' + poster_name + '?verify=' + stamp, headers=headers)
                       with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
@@ -355,6 +371,8 @@ jobs:
                   assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
                   assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
                   assert verification.get('report_date') == today, 'QR verification date mismatch'
+                  assert verification.get('design_variant') == expected_variant, 'QR verification weekly style mismatch'
+                  assert verification.get('iso_year') == iso_year and verification.get('iso_week') == iso_week, 'QR verification ISO week mismatch'
                   history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(history_req, timeout=15) as history_response:
                       history = json.loads(history_response.read().decode('utf-8'))

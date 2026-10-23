@@ -9,6 +9,11 @@ import urllib.request
 from io import BytesIO
 from pathlib import Path
 from zoneinfo import ZoneInfo
+
+try:
+    from radar.scripts.poster_style import poster_style_metadata
+except ModuleNotFoundError:
+    from poster_style import poster_style_metadata
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import qrcode
 
@@ -102,7 +107,7 @@ def crop_cover(img, size):
 
 def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: dict) -> None:
     """Second fixed brand template: warm-white editorial cover with a mountain hero.
-    The daily data changes, while the layout, type hierarchy and restrained navy/blue
+    The weekly style schedule selects this template; daily content changes while the layout, type hierarchy and restrained navy/blue
     palette remain fixed. All QR data is encoded locally to the stable public URL.
     """
     canvas = Image.new("RGB", (W, H), (252, 250, 245))
@@ -131,6 +136,8 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         for xx in range(0, 780, 8):
             alpha = int(236 * (1 - xx / 940))
             vd.rectangle((xx, 0, xx + 8, 520), fill=(255, 253, 248, max(0, alpha)))
+        if veil.size != canvas.size:
+            raise ValueError(f"Editorial veil size {veil.size} does not match canvas {canvas.size}")
         canvas = Image.alpha_composite(canvas.convert("RGBA"), veil).convert("RGB")
         draw = ImageDraw.Draw(canvas)
     else:
@@ -233,7 +240,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         "news_count": 5,
         "skill": skill_name,
         "design": "mountain-editorial-cover",
-        "design_variant": "mountain-editorial",
+        **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -242,14 +249,14 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
 
 
 def render_alternating_template(report: dict, date: str, top: list[dict], skill: dict) -> bool:
-    """Return True when the mountain-editorial template was rendered for this date."""
-    date_obj = dt.date.fromisoformat(date)
-    # Alternate daily between the established geometric-navy and mountain-editorial designs.
-    # The existing geometric template is retained below; odd/even date parity is deterministic.
-    if date_obj.toordinal() % 2 == 0:
+    """Render the single template assigned to the ISO week; retries stay deterministic."""
+    selected = poster_style_metadata(date)["design_variant"]
+    if selected == "mountain-editorial":
         render_mountain_editorial(report, date, top, skill)
         return True
-    return False
+    if selected == "geometric-navy":
+        return False  # main() below contains the complete geometric-navy template.
+    raise RuntimeError(f"Unknown weekly poster style: {selected!r}")
 
 def main():
     report = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
@@ -413,7 +420,7 @@ def main():
         "news_count": 5,
         "skill": skill_name,
         "design": "geometric-navy-mountain",
-        "design_variant": "geometric-navy",
+        **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
     (POSTERS / f"{date}.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
