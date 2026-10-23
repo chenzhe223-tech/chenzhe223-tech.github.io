@@ -46,7 +46,7 @@ async function main() {
     // Desktop visual regression: the feed card has a dedicated visual, content and action column.
     const desktopCard = await page.locator(".feedcard").first().evaluate(card => {
       const style = getComputedStyle(card);
-      const cover = card.querySelector(".feedcover").getBoundingClientRect();
+      const cover = card.querySelector(".feed-media").getBoundingClientRect();
       const body = card.children[1].getBoundingClientRect();
       const actions = card.querySelector(".feedactions").getBoundingClientRect();
       const box = card.getBoundingClientRect();
@@ -58,6 +58,26 @@ async function main() {
       };
     });
     assert.equal(desktopCard.columns, 3, `desktop topic card must have three aligned columns: ${JSON.stringify(desktopCard)}`);
+    const imageCheck = await page.locator(".feedcard").first().evaluate(card => {
+      const img = card.querySelector(".feed-media img");
+      const b = card.querySelector(".feed-media").getBoundingClientRect();
+      return { exists: !!img, src: img?.getAttribute("src") || "", alt: img?.getAttribute("alt") || "", fallback: img?.getAttribute("data-fallback") || "", width: Math.round(b.width), height: Math.round(b.height) };
+    });
+    assert.ok(imageCheck.exists, "news card must show an image element instead of a plain color square");
+    assert.match(imageCheck.src, /^https:\/\//, `thumbnail must use a public HTTPS image: ${JSON.stringify(imageCheck)}`);
+    assert.ok(imageCheck.alt.length > 0, "thumbnail alt text should identify the related story");
+    assert.match(imageCheck.fallback, /^https:\/\//, "each thumbnail should have an HTTPS fallback");
+    assert.ok(imageCheck.width >= 120 && imageCheck.height >= 75, `desktop thumbnail should be editorial landscape size: ${JSON.stringify(imageCheck)}`);
+    const cardsImages = await page.locator(".feedcard .feed-media img").count();
+    const cardsCount = await page.locator(".feedcard").count();
+    assert.equal(cardsImages, cardsCount, "every visible source/topic card has its own thumbnail");
+    await page.locator(".feedcard").first().locator(".feed-media img").evaluate(img => { img.setAttribute("src", "https://invalid.davylab-image-test.invalid/missing.jpg"); });
+    await page.waitForFunction(() => {
+      const img = document.querySelector(".feedcard .feed-media img");
+      return img && img.dataset.fallbackUsed === "1";
+    }, null, { timeout: 7000 });
+    assert.ok(await page.locator(".feedcard").first().locator(".feed-media").evaluate(el => el.classList.contains("is-thematic")), "failed source image should switch to the thematic fallback");
+
     assert.ok(desktopCard.coverX < desktopCard.bodyX && desktopCard.bodyX < desktopCard.actionsX, `desktop card order is wrong: ${JSON.stringify(desktopCard)}`);
     assert.ok(desktopCard.actionsRight <= desktopCard.cardRight + 2, `desktop actions overflow the card: ${JSON.stringify(desktopCard)}`);
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-desktop.png"), fullPage: false });
@@ -73,15 +93,17 @@ async function main() {
           const style = getComputedStyle(card);
           const actions = card.querySelector(".feedactions").getBoundingClientRect();
           const body = card.children[1].getBoundingClientRect();
+          const cover = card.querySelector(".feed-media").getBoundingClientRect();
           const box = card.getBoundingClientRect();
           return {
             columns: style.gridTemplateColumns.trim().split(/\s+/).length,
             actionsLeft: Math.round(actions.left), actionsRight: Math.round(actions.right),
-            bodyBottom: Math.round(body.bottom), actionsTop: Math.round(actions.top),
+            bodyBottom: Math.round(body.bottom), actionsTop: Math.round(actions.top), imageWidth: Math.round(cover.width), imageHeight: Math.round(cover.height),
             cardLeft: Math.round(box.left), cardRight: Math.round(box.right)
           };
         });
         assert.equal(mobileCard.columns, 2, `mobile card should use two columns: ${JSON.stringify(mobileCard)}`);
+        assert.ok(mobileCard.imageWidth >= 75 && mobileCard.imageHeight >= 55, `mobile card image should remain visible: ${JSON.stringify(mobileCard)}`);
         assert.ok(mobileCard.actionsLeft >= mobileCard.cardLeft && mobileCard.actionsRight <= mobileCard.cardRight + 2, `mobile actions overflow: ${JSON.stringify(mobileCard)}`);
         assert.ok(mobileCard.actionsTop >= mobileCard.bodyBottom - 2, `mobile actions should follow the content: ${JSON.stringify(mobileCard)}`);
         await page.screenshot({ path: path.join(screenshotDir, "topic-studio-mobile.png"), fullPage: false });
