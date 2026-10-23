@@ -76,6 +76,16 @@ def mark_topic_illustration(image, story):
     overlay_draw.text((14, canvas.height - band_h + 7), "主题插画 · 非新闻现场", font=font(15, True), fill=WHITE)
     return canvas.convert("RGB")
 
+def composite_same_size(background: Image.Image, overlay: Image.Image) -> Image.Image:
+    """Alpha-composite same-sized images with an explicit diagnostic on mismatch."""
+    if background.size != overlay.size:
+        raise ValueError(f"Alpha-composite size mismatch: background={background.size}, overlay={overlay.size}")
+    base = background.convert("RGBA")
+    top = overlay.convert("RGBA")
+    if base.size != top.size:
+        raise ValueError(f"RGBA conversion changed dimensions: base={base.size}, overlay={top.size}")
+    return Image.alpha_composite(base, top).convert("RGB")
+
 def image_for_story(story, idx):
     """Try matched image, saved backup, then story-category web illustration."""
     candidates = [str(story.get("image_url") or "").strip(), str(story.get("image_fallback_url") or "").strip()]
@@ -94,14 +104,14 @@ def image_for_story(story, idx):
     photo_ids.extend(["photo-1531297484001-80022131f5a1", "photo-1498050108023-c5249f4df085"])
     candidates.extend(f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&w=700&q=82" for photo_id in photo_ids)
     seen = set()
-    for url in candidates:
+    for url in candidates[:3]:  # Cap network attempts to prevent one poster run stalling on remote images.
         if not url.startswith("https://") or url in seen:
             continue
         seen.add(url)
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
-            with urllib.request.urlopen(req, timeout=8) as r:
-                raw = r.read(16 * 1024 * 1024)
+            with urllib.request.urlopen(req, timeout=5) as r:
+                raw = r.read(8 * 1024 * 1024)
             image = Image.open(BytesIO(raw)).convert("RGB")
             primary = str(story.get("image_url") or "").strip()
             if url != primary and ("unsplash.com" in url or url == str(story.get("image_fallback_url") or "").strip()):
@@ -155,9 +165,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         for xx in range(0, 780, 8):
             alpha = int(236 * (1 - xx / 940))
             vd.rectangle((xx, 0, xx + 8, 520), fill=(255, 253, 248, max(0, alpha)))
-        if veil.size != canvas.size:
-            raise ValueError(f"Editorial veil size {veil.size} does not match canvas {canvas.size}")
-        canvas = Image.alpha_composite(canvas.convert("RGBA"), veil).convert("RGB")
+        canvas = composite_same_size(canvas, veil)
         draw = ImageDraw.Draw(canvas)
     else:
         draw.rectangle((0, 0, W, 520), fill=(239, 244, 247))
