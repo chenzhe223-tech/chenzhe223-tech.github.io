@@ -75,7 +75,7 @@ async function main() {
     const cardsImages = await page.locator(".feedcard .feed-media img").count();
     const cardsCount = await page.locator(".feedcard").count();
     assert.equal(cardsImages, cardsCount, "every visible source/topic card has its own thumbnail");
-    await page.locator(".feedcard").first().locator(".feed-media img").evaluate(img => { img.setAttribute("src", "https://invalid.davylab-image-test.invalid/missing.jpg"); });
+    await page.locator(".feedcard").first().locator(".feed-media img").evaluate(img => { img.dispatchEvent(new Event("error")); });
     await page.waitForFunction(() => {
       const img = document.querySelector(".feedcard .feed-media img");
       return img && img.dataset.fallbackUsed === "1";
