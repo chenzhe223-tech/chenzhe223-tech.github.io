@@ -36,7 +36,7 @@ jobs:
           parser = Checker(convert_charrefs=True)
           parser.feed(html)
           parser.close()
-          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI']:
+          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI', 'itunes.apple.com/search', 'id="musiccard"', 'id="autoStyle"']:
               assert token.lower() in html.lower(), f"missing required token: {token}"
           scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
           assert scripts, "no inline JavaScript found"
@@ -75,6 +75,9 @@ jobs:
           await page.locator('#next').click();
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
+          if (await page.locator('.stylepick').count() !== 12) throw new Error('expected 12 poster styles');
+          await page.locator('#autoStyle').click();
+          if (!(await page.locator('.stylepick[aria-pressed="true"]').count())) throw new Error('style selection state missing');
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
           await page.locator('#save').click();
           await page.getByRole('button',{name:/我的作品/}).click();
