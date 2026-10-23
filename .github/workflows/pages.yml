@@ -28,7 +28,7 @@ permissions:
 
 concurrency:
   # Separate the daily research pipeline from generic site builds and avoid unrelated app pushes starving Radar.
-  group: radar-daily-pipeline-v2
+  group: radar-daily-pipeline
   cancel-in-progress: true
 
 jobs:
@@ -480,6 +480,8 @@ jobs:
                       assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
                   print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
                   break
+              except NameError as exc:
+                  raise SystemExit(f'Non-retryable verification code error: {type(exc).__name__}: {exc}') from exc
               except Exception as exc:
                   last_error = f'{type(exc).__name__}: {exc}'
                   print(f'Attempt {attempt + 1}/30: {last_error}')
