@@ -27,7 +27,8 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  # Separate the daily research pipeline from generic site builds and avoid unrelated app pushes starving Radar.
+  group: radar-daily-pipeline
   cancel-in-progress: false
 
 jobs:
