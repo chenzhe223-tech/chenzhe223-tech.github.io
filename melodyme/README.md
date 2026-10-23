@@ -1,30 +1,26 @@
-# MelodyMe — Phase 1 product foundation
+# MelodyMe — 音乐人生地图
 
-> 每一首歌，都是你走过的路。  
-> 用音乐，记录更真实的你。
+> 每一首歌，都是你走过的路。
 
-MelodyMe is an AI-assisted music-memory and personal storytelling product concept. This folder contains the Phase 1 interactive web prototype and implementation documents.
+MelodyMe 是一款以音乐为线索、以人生记忆为内容的个人创作产品原型。新版从长表单转为地图式渐进探索，让用户用一句话开始，并逐步选择情绪、音乐线索和作品风格。
 
-## Current status
-- Product discovery / UI prototype: in progress.
-- The prototype supports local-only memory drafting, editable story text, a visual poster preview, and a local timeline.
-- It does **not** yet call a real AI model, play or stream copyrighted music, authenticate users, sync across devices, or publish private memories.
-- Browser-local prototype data is not a substitute for a production database and may be cleared by the user/browser.
+## 当前可体验
+- 四站音乐人生地图：唤起记忆、找到感觉、发现音乐、收获作品。
+- 一句话即可开始；歌曲名与歌手可选，专辑和年份不要求用户填写。
+- 节点可跳过、回访；草稿与作品保存在当前浏览器。
+- 故事与朋友圈文案可编辑，支持 SVG 海报导出。
+- 默认本地私密，不会自动公开。
 
-## Open locally
-Open `index.html` in a modern browser. No build step is required for the prototype.
+## 真实限制
+这是静态交互原型。文案由本地规则生成，**尚未调用真实 AI**；没有账号、云数据库、跨设备同步、公开分享或真实音乐目录。歌曲候选、专辑、年份与封面不得根据模糊故事猜测。Shazam/音乐外部查询的可用性需单独核验。
 
-## Documents
-- [Product requirements (PRD)](docs/PRD.md)
-- [Design system](docs/DESIGN_SYSTEM.md)
-- [QA plan](docs/QA_PLAN.md)
+## 本地运行
+直接在现代浏览器打开 `index.html`，无需构建步骤。
 
-## Architecture direction (not yet implemented)
-Keep the client lightweight; introduce server-side API boundaries for AI; use Supabase Auth/Postgres/Storage with RLS for user-owned data and Cloudflare Workers for secrets and server-side orchestration only after provider choices and deployment access are verified. Never expose provider secrets in frontend code.
+## 文档
+- [PRD](docs/PRD.md)
+- [设计系统](docs/DESIGN_SYSTEM.md)
+- [技术架构](docs/ARCHITECTURE.md)
+- [测试计划](docs/QA_PLAN.md)
 
-## Product principles
-1. One sentence is enough to start.
-2. A memory is private by default.
-3. AI proposes; the user decides.
-4. Music metadata and playback must come from a lawful, verified source.
-5. No feature is marked production-ready without real tests and evidence.
+视频生成与 AI 视频接口不属于当前阶段。
