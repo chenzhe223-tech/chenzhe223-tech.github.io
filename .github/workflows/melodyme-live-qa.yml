@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           echo "Waiting for Pages deployment for commit $GITHUB_SHA"
           for attempt in $(seq 1 40); do
-            RUNS="$(gh run list --workflow "pages build and deployment" --commit "$GITHUB_SHA" --json databaseId,status,conclusion --limit 10)"
+            RUNS="$(gh run list --workflow "pages.yml" --commit "$GITHUB_SHA" --json databaseId,status,conclusion --limit 10)"
             RUN_ID="$(echo "$RUNS" | jq -r '.[0].databaseId // empty')"
             STATUS="$(echo "$RUNS" | jq -r '.[0].status // empty')"
             CONCLUSION="$(echo "$RUNS" | jq -r '.[0].conclusion // empty')"
