@@ -405,6 +405,7 @@ jobs:
           today = today_date.isoformat()
           expected_style = poster_style_metadata(today_date)
           expected_variant = expected_style['design_variant']
+          style_cycle_index = expected_style['style_cycle_index']
           iso_year, iso_week, _ = today_date.isocalendar()
           last_error = 'not checked'
           headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
