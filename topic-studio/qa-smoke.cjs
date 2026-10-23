@@ -51,7 +51,7 @@ async function main() {
       const actions = card.querySelector(".feedactions").getBoundingClientRect();
       const box = card.getBoundingClientRect();
       return {
-        columns: style.gridTemplateColumns.trim().split(/\\s+/).length,
+        columns: style.gridTemplateColumns.trim().split(/\s+/).length,
         coverX: Math.round(cover.x), bodyX: Math.round(body.x), actionsX: Math.round(actions.x),
         actionsRight: Math.round(actions.right), cardRight: Math.round(box.right),
         minCardHeight: Math.round(box.height)
@@ -75,7 +75,7 @@ async function main() {
           const body = card.children[1].getBoundingClientRect();
           const box = card.getBoundingClientRect();
           return {
-            columns: style.gridTemplateColumns.trim().split(/\\s+/).length,
+            columns: style.gridTemplateColumns.trim().split(/\s+/).length,
             actionsLeft: Math.round(actions.left), actionsRight: Math.round(actions.right),
             bodyBottom: Math.round(body.bottom), actionsTop: Math.round(actions.top),
             cardLeft: Math.round(box.left), cardRight: Math.round(box.right)
