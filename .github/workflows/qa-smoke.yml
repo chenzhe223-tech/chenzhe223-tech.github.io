@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     concurrency:
-      group: davylab-browser-qa-${{ github.event.workflow_run.head_sha }}
+      group: davylab-browser-qa-${{ github.event_name == 'push' && github.sha || github.event.workflow_run.head_sha }}
       cancel-in-progress: false
     steps:
       - name: Check out DAVYLAB source
