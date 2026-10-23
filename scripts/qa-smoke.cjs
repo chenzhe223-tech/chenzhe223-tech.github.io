@@ -210,6 +210,36 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#unlockBtn').click();
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      // Regression: adding multiple provider keys must remain available when the vault is non-empty.
+      const addKeyButton = kp.locator('#addKeyBtn');
+      mark(await addKeyButton.count() === 1 && await addKeyButton.isVisible() ? 'PASS' : 'FAIL', 'KeyPocket 始终可见的新增 API Key 入口', '新增按钮必须在已有记录前后均可访问');
+      await addKeyButton.click();
+      await kp.waitForSelector('#recordForm', { timeout: 5000 });
+      await kp.locator('#keyInput').fill('qa-synthetic-deepseek-key-not-real-001');
+      await kp.locator('#providerInput').selectOption('deepseek').catch(async () => {
+        await kp.locator('#providerInput').selectOption('custom');
+      });
+      await kp.locator('#nameInput').fill('QA Synthetic DeepSeek Key');
+      await kp.locator('#purposeInput').fill('Browser QA only');
+      await kp.locator('#recordForm button[type="submit"]').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '1', null, { timeout: 5000 });
+      mark('PASS', 'KeyPocket 新增首个 API Key', await kp.locator('#totalCount').innerText() + ' 条');
+      await addKeyButton.click();
+      await kp.waitForSelector('#recordForm', { timeout: 5000 });
+      await kp.locator('#keyInput').fill('qa-synthetic-openai-key-not-real-002');
+      await kp.locator('#providerInput').selectOption('openai');
+      await kp.locator('#nameInput').fill('QA Synthetic OpenAI Key');
+      await kp.locator('#purposeInput').fill('Second provider test');
+      await kp.locator('#recordForm button[type="submit"]').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
+      const keyCardText = await kp.locator('#cards').innerText();
+      mark(keyCardText.includes('QA Synthetic DeepSeek Key') && keyCardText.includes('QA Synthetic OpenAI Key') ? 'PASS' : 'FAIL', 'KeyPocket 多平台 API Key 分别保存与展示', keyCardText.slice(0, 500));
+      await kp.reload({ waitUntil: 'domcontentloaded' });
+      await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
+      await kp.locator('#unlockBtn').click();
+      await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
+      mark('PASS', 'KeyPocket 多个 API Key 本地加密持久化', await kp.locator('#totalCount').innerText() + ' 条解锁后记录');
       await kp.locator('[data-module="projects"]').click();
       await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 });
       const importButton = await kp.locator('#importGithubBtn').count();
