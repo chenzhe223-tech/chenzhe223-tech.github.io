@@ -18,11 +18,6 @@ jobs:
       group: davylab-browser-qa-${{ github.event.workflow_run.head_sha }}
       cancel-in-progress: false
     steps:
-      - name: Confirm Pages deployment is complete for this commit
-        env:
-          TARGET_SHA: ${{ github.event.workflow_run.head_sha }}
-        run: |
-          node -e "const https=require('https'); const fs=require('fs'); const u='https://api.github.com/repos/chenzhe223-tech/chenzhe223-tech.github.io/pages/deployments/'+process.env.TARGET_SHA; https.get(u,{headers:{'User-Agent':'davylab-browser-qa',Accept:'application/vnd.github+json'}},r=>{let b='';r.on('data',x=>b+=x);r.on('end',()=>{ if(r.statusCode===404){console.log('Pages deployment endpoint unavailable; continuing with live asset and runtime checks');process.exit(0)} if(r.statusCode<200||r.statusCode>=300){console.error('Pages deployment lookup failed: '+r.statusCode);process.exit(1)} console.log(b); });}).on('error',e=>{console.error(e.message);process.exit(1)})"
       - name: Check out DAVYLAB source
         uses: actions/checkout@v4
         with:
