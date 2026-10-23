@@ -88,6 +88,7 @@ jobs:
                   and qr_check.get('report_date') == today
                   and qr_check.get('status') == 'PASS'
                   and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
+                  and all(qr_check.get(key) == value for key, value in expected_style.items())
               )
           except Exception:
               complete = False
@@ -383,6 +384,7 @@ jobs:
     needs: qa
     timeout-minutes: 6
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -394,14 +396,13 @@ jobs:
           python - <<'PY'
           import datetime as dt, json, time, urllib.request, cv2, numpy as np
           from zoneinfo import ZoneInfo
+          from radar.scripts.poster_style import poster_style_metadata
 
           base = 'https://chenzhe223-tech.github.io/radar/'
           today_date = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date()
           today = today_date.isoformat()
-          anchor = dt.date(2025, 12, 29)
-          monday = today_date - dt.timedelta(days=today_date.weekday())
-          style_cycle_index = (monday - anchor).days // 7
-          expected_variant = 'geometric-navy' if style_cycle_index % 2 == 0 else 'mountain-editorial'
+          expected_style = poster_style_metadata(today_date)
+          expected_variant = expected_style['design_variant']
           iso_year, iso_week, _ = today_date.isocalendar()
           last_error = 'not checked'
           headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
@@ -452,8 +453,16 @@ jobs:
                   assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
                   assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
                   assert verification.get('report_date') == today, 'QR verification date mismatch'
-                  assert verification.get('design_variant') == expected_variant, 'QR verification weekly style mismatch'
-                  assert verification.get('iso_year') == iso_year and verification.get('iso_week') == iso_week, 'QR verification ISO week mismatch'
+                  for key, expected in expected_style.items():
+                      assert verification.get(key) == expected, f'QR verification metadata mismatch for {key}'
+                  poster_manifest_req = urllib.request.Request(base + 'posters/latest.json?verify=' + stamp, headers=headers)
+                  with urllib.request.urlopen(poster_manifest_req, timeout=15) as poster_manifest_response:
+                      poster_manifest = json.loads(poster_manifest_response.read().decode('utf-8'))
+                  assert poster_manifest.get('report_date') == today, 'Latest poster manifest date mismatch'
+                  assert poster_manifest.get('qr_url') == qr_target, 'Latest poster manifest destination mismatch'
+                  assert poster_manifest.get('design_variant') == expected_variant, 'Latest poster manifest weekly style mismatch'
+                  for key, expected in expected_style.items():
+                      assert poster_manifest.get(key) == expected, f'Latest poster manifest metadata mismatch for {key}'
                   history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(history_req, timeout=15) as history_response:
                       history = json.loads(history_response.read().decode('utf-8'))
