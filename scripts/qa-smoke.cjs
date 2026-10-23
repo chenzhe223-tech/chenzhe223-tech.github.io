@@ -284,12 +284,56 @@ const mark = (status, name, detail = '') => {
       const backupRaw = JSON.parse(require('fs').readFileSync(backupPath, 'utf8'));
       const backupHasNoPlaintext = !JSON.stringify(backupRaw).includes('qa-synthetic-');
       mark(backupRaw.app === 'KeyPocket' && backupRaw.cipher?.name === 'AES-256-GCM' && backupHasNoPlaintext ? 'PASS' : 'FAIL', 'KeyPocket 多记录加密备份导出', '加密文件结构有效；未发现明文测试密钥');
+      // Restore the encrypted backup into a fresh, isolated browser context to verify compatibility.
+      const restoreKp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      const restoreErrors = [];
+      restoreKp.on('pageerror', e => restoreErrors.push(e.message));
+      await restoreKp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await restoreKp.locator('#masterPassword').fill('QA-only-restore-password-2026');
+      await restoreKp.locator('#confirmPassword').fill('QA-only-restore-password-2026');
+      await restoreKp.locator('#unlockBtn').click();
+      await restoreKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      await restoreKp.locator('#importBtn').click();
+      await restoreKp.locator('#backupFile').setInputFiles(backupPath);
+      await restoreKp.waitForSelector('#importForm', { timeout: 5000 });
+      await restoreKp.locator('#importPassword').fill('QA-only-backup-password-2026');
+      await restoreKp.locator('#importMode').selectOption('replace');
+      await restoreKp.locator('#importForm button[type="submit"]').click();
+      await restoreKp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '3', null, { timeout: 10000 });
+      const restoredNames = await restoreKp.locator('#cards').innerText();
+      const restorePassed = restoredNames.includes('QA Synthetic DeepSeek Key') && restoredNames.includes('QA Synthetic OpenAI Key') && restoredNames.includes('QA Synthetic Custom Key Edited');
+      mark(restorePassed && restoreErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 加密备份恢复与旧格式兼容', '恢复后记录数=' + await restoreKp.locator('#totalCount').innerText() + '；仅核对合成测试记录名称');
+      await restoreKp.close();
+      // Exercise favourite, clipboard action, and deletion without exposing key material in the report.
+      const openAiCard = kp.locator('#cards .card').filter({ hasText: 'QA Synthetic OpenAI Key' });
+      await openAiCard.locator('[data-action="favorite"]').click();
+      await kp.waitForFunction(() => [...document.querySelectorAll('#cards .card')].some(el => el.innerText.includes('QA Synthetic OpenAI Key') && el.innerText.includes('取消收藏')), null, { timeout: 5000 });
+      mark('PASS', 'KeyPocket 收藏切换', '指定记录已收藏');
+      try {
+        await kp.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: 'https://chenzhe223-tech.github.io' });
+        await kp.locator('#cards .card').filter({ hasText: 'QA Synthetic DeepSeek Key' }).locator('[data-action="copy"]').click();
+        await kp.waitForFunction(() => document.querySelector('#toast')?.textContent.includes('已复制完整 Key'), null, { timeout: 3000 });
+        mark('PASS', 'KeyPocket 复制操作', '剪贴板操作成功；未读取或记录剪贴板内容');
+      } catch {
+        // Browsers can disable clipboard APIs; the visible fallback is an accepted safe path.
+        const fallbackVisible = await kp.locator('#modalRoot .modal').count() > 0;
+        mark(fallbackVisible ? 'PASS' : 'FAIL', 'KeyPocket 复制操作', '权限受限时显示手动复制回退窗口');
+        await kp.locator('#modalRoot [data-action="close"]').click().catch(() => {});
+      }
+      const deleteCard = kp.locator('#cards .card').filter({ hasText: 'QA Synthetic Custom Key Edited' });
+      await deleteCard.locator('[data-action="menu"]').click();
+      await kp.waitForSelector('#modalRoot [data-action="delete"]', { timeout: 5000 });
+      kp.once('dialog', dialog => dialog.accept());
+      await kp.locator('#modalRoot [data-action="delete"]').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
+      mark('PASS', 'KeyPocket 单条删除与统计更新', '删除测试记录后仍保留另外两条密钥');
       // On mobile, ensure the permanent add button remains visible and has no horizontal overflow.
       const mobileKp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
       const mobileErrors = [];
       mobileKp.on('pageerror', e => mobileErrors.push(e.message));
       await mobileKp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
       await mobileKp.locator('#masterPassword').fill('QA-only-demo-password-2026');
+      await mobileKp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await mobileKp.locator('#unlockBtn').click();
       await mobileKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       const addOnMobile = await mobileKp.locator('#addKeyBtn').isVisible();
