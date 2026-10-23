@@ -2,9 +2,59 @@ import datetime as dt
 import json
 import unittest
 from pathlib import Path
-from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items
+from unittest.mock import patch
+from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
 
 class DailyBriefContractTests(unittest.TestCase):
+
+    def test_featured_skill_requires_live_license_and_readme(self):
+        metadata = {
+            "full_name": "example/verified-skill",
+            "html_url": "https://github.com/example/verified-skill",
+            "description": "A verified browser automation skill",
+            "stargazers_count": 25,
+            "updated_at": "2026-10-22T12:00:00Z",
+            "license": {"spdx_id": "MIT", "name": "MIT License"},
+            "archived": False,
+            "fork": False,
+        }
+        readme = b"# Verified Skill\n\nThis README describes a useful project and how to install it.\n" + b"Details. " * 30
+        candidate = {"name": "example/verified-skill", "url": metadata["html_url"], "description": "candidate"}
+        with patch("radar.scripts.build_daily.http_get", side_effect=[json.dumps(metadata).encode(), readme]) as mocked:
+            result = verify_skill_candidate(candidate)
+        self.assertIsNotNone(result)
+        self.assertEqual(result["license"], "MIT")
+        self.assertEqual(result["license_name"], "MIT License")
+        self.assertEqual(result["name"], "example/verified-skill")
+        self.assertEqual(mocked.call_count, 2)
+
+    def test_featured_skill_rejects_repository_without_detected_license(self):
+        metadata = {
+            "full_name": "example/unlicensed-skill",
+            "html_url": "https://github.com/example/unlicensed-skill",
+            "description": "License metadata absent",
+            "license": None,
+            "archived": False,
+            "fork": False,
+        }
+        with patch("radar.scripts.build_daily.http_get", return_value=json.dumps(metadata).encode()) as mocked:
+            result = verify_skill_candidate({"name": "example/unlicensed-skill"})
+        self.assertIsNone(result)
+        mocked.assert_called_once()
+
+    def test_featured_skill_rejects_missing_readme(self):
+        metadata = {
+            "full_name": "example/no-readme-skill",
+            "html_url": "https://github.com/example/no-readme-skill",
+            "description": "No readable README",
+            "license": {"spdx_id": "MIT", "name": "MIT License"},
+            "archived": False,
+            "fork": False,
+        }
+        with patch("radar.scripts.build_daily.http_get", side_effect=[json.dumps(metadata).encode(), OSError("README unavailable")]):
+            result = verify_skill_candidate({"name": "example/no-readme-skill"})
+        self.assertIsNone(result)
+
     def test_latest_data_has_enough_source_stories(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
         self.assertGreaterEqual(len(data.get("news", [])), 5)
