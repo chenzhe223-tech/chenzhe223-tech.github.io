@@ -1,47 +1,41 @@
-# MelodyMe 测试计划 v0.1
+# MelodyMe 测试计划 v0.2
 
-## 测试状态说明
-本清单定义测试步骤，不代表测试已执行。每次测试需记录浏览器/设备、构建版本、步骤、预期、实际结果和证据链接。
+## 当前测试范围
+静态 HTML/CSS/JS 音乐地图交互原型。该测试范围不证明真实 AI、音乐目录、账号认证、云同步或后端安全已完成。
 
-## Phase 1 prototype checks
-| ID | 场景 | 步骤 | 预期 |
-|---|---|---|---|
-| P-01 | 首次进入 | 打开首页 | 产品定位和创作入口清晰 |
-| P-02 | 空输入校验 | 不输入故事，点击生成 | 阻止生成并提示填写一句回忆 |
-| P-03 | 最小创作 | 只输入故事后生成 | 生成可编辑的本地模拟结果 |
-| P-04 | 完整创作 | 输入歌名、歌手、年份、情绪 | 结果页显示对应信息 |
-| P-05 | 编辑作品 | 修改故事文案 | 修改后的内容保留在编辑器 |
-| P-06 | 保存记忆 | 保存作品后打开时间线 | 新记忆出现在时间线 |
-| P-07 | 删除记忆 | 删除自己的记录 | 仅目标记录删除，其他记录保留 |
-| P-08 | 分享权限 | 尝试打开私密记录分享 URL（后续功能） | 无权限时拒绝访问 |
-| P-09 | 移动端布局 | 390×844 和 360×800 视口检查 | 无横向溢出，主要按钮可触达 |
-| P-10 | 键盘操作 | Tab/Shift+Tab/Enter 操作 | 焦点顺序合理，交互可操作 |
-| P-11 | 失败恢复 | 模拟生成失败（真实 AI 接入后） | 输入保留、错误可理解、可重试 |
-| P-12 | 刷新持久性 | 刷新页面 | 原型本地存储；生产版须验收云端持久化 |
+## 手工/自动化验收
+| ID | 场景 | 预期 |
+|---|---|---|
+| MAP-01 | 首次进入 | 首屏优先显示地图与开始探索入口 |
+| MAP-02 | 一句话开始 | 无需歌手、专辑、年份即可进入下一站 |
+| MAP-03 | 空故事 | 继续时提示；跳过仍可探索其他节点 |
+| MAP-04 | 节点选择 | 地图节点与左侧节点均可跳转到对应站点 |
+| MAP-05 | 情绪选择 | 可多选、取消，刷新后保留 |
+| MAP-06 | 音乐线索 | 歌名与艺人可选；专辑/年份不是必填 |
+| MAP-07 | 跳过节点 | 可跳过非必要节点且可返回 |
+| MAP-08 | 作品生成 | 生成可编辑故事与朋友圈文案，标注本地模拟状态 |
+| MAP-09 | 保存与恢复 | 保存作品后刷新仍在本地作品集 |
+| MAP-10 | 删除作品 | 仅删除选中的本地记录，并二次确认 |
+| MAP-11 | SVG 导出 | 导出非空 SVG 文件 |
+| MAP-12 | 复制文案 | 支持复制；剪贴板不可用时提供手动复制回退 |
+| MAP-13 | 音乐外链 | 无歌曲线索时不跳转；有线索才打开查询 |
+| MAP-14 | 手机布局 | 360px / 390px 视口无横向溢出 |
+| MAP-15 | 错误与持久性 | 刷新后旅程恢复；控制台无未处理错误 |
 
-## Automated prototype test evidence
-- GitHub Actions run 39823723984: passed HTML checks, JavaScript syntax check, desktop create/save/reload, mobile create flow, mobile overflow, and browser page-error checks.
-- GitHub Actions run 39824055898: repeated prototype smoke checks passed after adding the architecture/schema draft.
-- GitHub Actions run 39824386825: prototype and live-QA script syntax checks passed; desktop/mobile prototype smoke checks passed.
-- These tests used a local static server in GitHub Actions; they do not prove real AI, account auth, cloud sync, or production backend security.
+## 已有证据（历史）
+- GitHub Actions runs 39823723984、39824055898、39824386825：旧版原型相关桌面/移动流程曾通过。
+- Run 39824918303：旧版生产 smoke test 曾验证 HTTP 200、创作/保存/刷新恢复、SVG 导出、移动端溢出与 JS 错误。
+- **上述记录针对此前旧版本，不代表 v0.2 地图重构已通过。** 新版合并后必须重新运行自动化并查看实际结果。
 
-## Production live route test
-The separate `MelodyMe live deployment QA` workflow checks the deployed `/melodyme/` URL after app files change on `main`. It records route response, empty-input validation, create/preview/save/reload, SVG export, desktop/mobile page errors, mobile horizontal overflow, and screenshots/JSON report as a 14-day artifact.
+## 尚未验证
+- 真实 AI 服务及模型密钥。
+- 音乐元数据 API、专辑封面授权与 Shazam 官方跳转。
+- Supabase Auth、RLS、双用户隔离、跨设备同步、撤销分享。
+- 服务端 Secret 未泄露与生成成本控制。
+- 真实用户可用性与创作完成率。
 
-## Production security checks (not yet applicable to static prototype)
-- Two users A/B: A cannot read/update/delete B's private memories.
-- Unauthenticated requests cannot read private records.
-- Changing memory IDs in URLs cannot bypass authorization.
-- RLS enabled and verified for all user-owned tables.
-- Server API never trusts client-supplied user_id.
-- AI key absent from bundle, browser network requests, and Git history.
-- Private artwork cannot be accessed via permanent public object URLs.
-- Revoked share links reject subsequent access.
-- Repeated requests cannot duplicate charges; retries restore job state.
-- Memory deletion removes related derived content and files per policy.
-
-## Release gate
-- Static checks and build pass.
-- Core end-to-end flow passes.
-- Production URL returns correct page and loads assets.
-- Unverified items remain explicitly marked; no implicit pass.
+## 发布门槛
+- JavaScript 语法检查通过。
+- 新版桌面与移动核心流程通过。
+- 生产 URL 指向已验收提交。
+- 所有未验证项目在交付报告中保留明确状态。
