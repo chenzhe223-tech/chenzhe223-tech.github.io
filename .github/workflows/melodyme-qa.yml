@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "melodyme/**"
-      - "scripts/qa-smoke.cjs"
+      - "scripts/melodyme-live-qa.cjs"
       - ".github/workflows/melodyme-qa.yml"
   workflow_dispatch:
 
@@ -23,44 +23,34 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Validate prototype source and embedded JavaScript
+      - name: Validate HTML and embedded JavaScript
         run: |
           python - <<'PY'
           from html.parser import HTMLParser
           from pathlib import Path
           import re
-          p = Path("melodyme/index.html")
-          html = p.read_text(encoding="utf-8")
+          html = Path("melodyme/index.html").read_text(encoding="utf-8")
           class Checker(HTMLParser):
-              def __init__(self):
-                  super().__init__(convert_charrefs=True)
-                  self.errors = []
               def error(self, message):
-                  self.errors.append(message)
-          parser = Checker()
+                  raise AssertionError(message)
+          parser = Checker(convert_charrefs=True)
           parser.feed(html)
           parser.close()
-          assert "<!doctype html>" in html.lower(), "missing doctype"
-          assert 'name="viewport"' in html, "missing responsive viewport"
-          assert 'id="generate"' in html, "missing generate action"
-          assert 'id="timeline"' in html, "missing timeline"
-          assert "localStorage" in html, "local-only persistence disclosure/implementation missing"
-          assert "真实 AI" in html, "prototype limitations must be disclosed"
+          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI']:
+              assert token.lower() in html.lower(), f"missing required token: {token}"
           scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
           assert scripts, "no inline JavaScript found"
           Path("/tmp/melodyme-inline.js").write_text("\n".join(scripts), encoding="utf-8")
-          print(f"HTML source checks passed; {len(html)} chars, {len(scripts)} inline script block(s)")
+          print(f"HTML source checks passed; {len(html)} chars")
           PY
           node --check /tmp/melodyme-inline.js
-      - name: Syntax-check browser QA scripts
-        run: |
-          node --check scripts/qa-smoke.cjs
-          node --check scripts/melodyme-live-qa.cjs
+      - name: Syntax-check browser QA script
+        run: node --check scripts/melodyme-live-qa.cjs
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
-      - name: Run desktop and mobile interaction smoke tests
+      - name: Run desktop and mobile journey smoke tests
         run: |
           python -m http.server 4173 --directory . >/tmp/melodyme-http.log 2>&1 &
           SERVER_PID=$!
@@ -70,36 +60,42 @@ jobs:
           const browser = await chromium.launch({headless:true});
           const errors = [];
           const page = await browser.newPage({viewport:{width:1280,height:900}});
-          page.on('pageerror', e => errors.push(e.message));
-          await page.goto('http://127.0.0.1:4173/melodyme/', {waitUntil:'networkidle'});
+          await page.addInitScript(()=>localStorage.clear());
+          page.on('pageerror', e=>errors.push(e.message));
+          await page.goto('http://127.0.0.1:4173/melodyme/',{waitUntil:'networkidle'});
           if (!(await page.title()).includes('MelodyMe')) throw new Error('title missing');
-          await page.getByRole('button',{name:/记录一个音乐瞬间/}).click();
-          await page.locator('#generate').click();
-          if (!(await page.locator('#story').evaluate(el=>el.validationMessage)).length && (await page.locator('#story').inputValue())==='') {
-            // Prototype validation is an in-page message, not a native required field.
-            if (!(await page.getByText(/先写下一句话/).count())) throw new Error('empty input validation missing');
-          }
+          await page.getByRole('button',{name:/开始探索/}).click();
+          await page.locator('#next').click();
+          if (!(await page.locator('#feedback').innerText())) throw new Error('empty story validation missing');
           await page.locator('#story').fill('毕业那天，我们在车站告别。这首歌让我想起那个夏天。');
-          await page.locator('#song').fill('那年夏天');
-          await page.locator('#moods .chip').filter({hasText:'怀念'}).click();
-          await page.locator('#generate').click();
-          if (!(await page.locator('#result').isVisible())) throw new Error('result view not shown');
-          await page.locator('#editCopy').fill('QA edited story');
+          await page.locator('#next').click();
+          await page.locator('[data-mood="怀念"]').click();
+          await page.locator('#next').click();
+          await page.locator('#songinput').fill('QA 歌曲线索');
+          await page.locator('#next').click();
+          await page.locator('#next').click();
+          await page.locator('#results').waitFor({state:'visible'});
+          await page.locator('#storycopy').fill('可编辑的 QA 文案');
           await page.locator('#save').click();
-          if (!(await page.locator('#timeline').getByText('那年夏天').count())) throw new Error('saved memory not in timeline');
+          await page.getByRole('button',{name:/我的作品/}).click();
+          if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('save to collection failed');
           await page.reload();
-          await page.getByRole('button',{name:/我的音乐人生/}).click();
-          if (!(await page.locator('#timeline').getByText('那年夏天').count())) throw new Error('localStorage persistence failed after reload');
-          const mobile = await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
-          mobile.on('pageerror', e => errors.push(e.message));
-          await mobile.goto('http://127.0.0.1:4173/melodyme/', {waitUntil:'networkidle'});
-          const dimensions = await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
-          if (dimensions.scroll > dimensions.client + 1) throw new Error('mobile horizontal overflow: '+JSON.stringify(dimensions));
-          await mobile.getByRole('button',{name:/记录一首歌/}).click();
-          await mobile.locator('#story').fill('在海边听着这首歌，突然觉得可以重新开始。');
-          await mobile.locator('#generate').click();
-          if (!(await mobile.locator('#result').isVisible())) throw new Error('mobile create flow failed');
-          if (errors.length) throw new Error('browser errors: '+errors.join('; '));
-          console.log('PASS: desktop create/save/reload, mobile create flow, no horizontal overflow, no page errors.');
+          await page.getByRole('button',{name:/我的作品/}).click();
+          if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('local persistence failed');
+          const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+          mobile.on('pageerror',e=>errors.push(e.message));
+          await mobile.goto('http://127.0.0.1:4173/melodyme/',{waitUntil:'networkidle'});
+          const dims=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
+          if(dims.scroll>dims.client+1)throw new Error('mobile overflow '+JSON.stringify(dims));
+          await mobile.getByRole('button',{name:/开始探索/}).click();
+          await mobile.locator('#story').fill('手机端验收：这首歌让我想起一次旅行。');
+          await mobile.locator('#next').click();
+          await mobile.locator('[data-mood="自由"]').click();
+          await mobile.locator('#next').click();
+          await mobile.locator('#next').click();
+          await mobile.locator('#next').click();
+          await mobile.locator('#results').waitFor({state:'visible'});
+          if(errors.length)throw new Error('browser errors: '+errors.join('; '));
+          console.log('PASS: map journey, empty validation, optional song fields, editable output, local save/reload, mobile overflow and no page errors.');
           await browser.close();
           JS
