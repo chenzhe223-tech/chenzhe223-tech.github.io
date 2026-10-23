@@ -1,26 +1,53 @@
 name: MelodyMe live deployment QA
 
 on:
-  workflow_run:
-    workflows: ["pages build and deployment"]
-    types: [completed]
+  push:
     branches: ["main"]
+    paths:
+      - "melodyme/**"
+      - "scripts/melodyme-live-qa.cjs"
+      - ".github/workflows/melodyme-live-qa.yml"
+  workflow_dispatch:
 
 permissions:
   contents: read
+  actions: read
 
 jobs:
   live-smoke:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - name: Wait for GitHub Pages to publish this exact commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo "Waiting for Pages deployment for commit $GITHUB_SHA"
+          for attempt in $(seq 1 40); do
+            RUNS="$(gh run list --workflow "pages build and deployment" --commit "$GITHUB_SHA" --json databaseId,status,conclusion --limit 10)"
+            RUN_ID="$(echo "$RUNS" | jq -r '.[0].databaseId // empty')"
+            STATUS="$(echo "$RUNS" | jq -r '.[0].status // empty')"
+            CONCLUSION="$(echo "$RUNS" | jq -r '.[0].conclusion // empty')"
+            if [ -n "$RUN_ID" ]; then
+              echo "Pages run $RUN_ID: $STATUS / $CONCLUSION"
+              if [ "$STATUS" = "completed" ]; then
+                [ "$CONCLUSION" = "success" ] || { echo "Pages deployment failed"; exit 1; }
+                exit 0
+              fi
+            else
+              echo "Pages run not visible yet (attempt $attempt)"
+            fi
+            sleep 15
+          done
+          echo "Timed out waiting for Pages deployment"
+          exit 1
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save playwright
@@ -28,7 +55,7 @@ jobs:
       - name: Verify deployed MelodyMe route and user flow
         env:
           MELODYME_URL: https://chenzhe223-tech.github.io/melodyme/
-          EXPECTED_COMMIT: ${{ github.event.workflow_run.head_sha }}
+          EXPECTED_COMMIT: ${{ github.sha }}
         run: |
           echo "Verifying production after Pages deployment for commit $EXPECTED_COMMIT"
           node scripts/melodyme-live-qa.cjs
