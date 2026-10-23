@@ -1,23 +1,23 @@
 name: MelodyMe live deployment QA
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Deploy DAVYLAB to GitHub Pages"]
+    types: [completed]
     branches: ["main"]
-    paths:
-      - "melodyme/**"
-      - "scripts/melodyme-live-qa.cjs"
-      - ".github/workflows/melodyme-live-qa.yml"
-  workflow_dispatch:
 
 permissions:
   contents: read
 
 jobs:
   live-smoke:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -25,10 +25,13 @@ jobs:
         run: |
           npm install --no-save playwright
           npx playwright install --with-deps chromium
-      - name: Verify live MelodyMe route and user flow
+      - name: Verify deployed MelodyMe route and user flow
         env:
           MELODYME_URL: https://chenzhe223-tech.github.io/melodyme/
-        run: node scripts/melodyme-live-qa.cjs
+          EXPECTED_COMMIT: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          echo "Verifying production after Pages deployment for commit $EXPECTED_COMMIT"
+          node scripts/melodyme-live-qa.cjs
       - name: Upload live QA evidence
         if: always()
         uses: actions/upload-artifact@v4
