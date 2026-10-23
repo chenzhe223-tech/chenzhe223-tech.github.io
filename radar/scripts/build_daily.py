@@ -300,6 +300,45 @@ def github_search(query: str) -> list[dict]:
         print(f"[github-warning] {query}: {type(exc).__name__}")
         return []
 
+def verify_skill_candidate(item: dict) -> dict | None:
+    """Verify the featured Skill project has a recognized license and a readable README.
+
+    A GitHub search result alone is not enough to recommend a Skill. Query the live
+    repository metadata for its SPDX license, then require its README endpoint to
+    return substantive content. If either check cannot be proved, fail closed.
+    """
+    name = str(item.get("name") or "").strip()
+    if not re.fullmatch(r"[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+", name):
+        return None
+    base = "https://api.github.com/repos/" + name
+    try:
+        metadata = json.loads(http_get(base, "application/vnd.github+json", timeout=8))
+        if not metadata.get("full_name") or metadata.get("archived") or metadata.get("fork"):
+            return None
+        license_info = metadata.get("license") or {}
+        license_id = str(license_info.get("spdx_id") or "").strip()
+        if not license_id or license_id.upper() in {"NOASSERTION", "OTHER"}:
+            print(f"[skill-warning] no recognized license: {name}")
+            return None
+        readme = http_get(base + "/readme", "application/vnd.github.raw+json", timeout=8)
+        if len(readme.strip()) < 80:
+            print(f"[skill-warning] README missing or too small: {name}")
+            return None
+        return {
+            **item,
+            "name": metadata.get("full_name", name),
+            "url": metadata.get("html_url", item.get("url", "")),
+            "description": clean(metadata.get("description") or item.get("description") or ""),
+            "stars": int(metadata.get("stargazers_count") or item.get("stars") or 0),
+            "updated": metadata.get("updated_at") or item.get("updated", ""),
+            "license": license_id,
+            "license_name": str(license_info.get("name") or license_id),
+        }
+    except Exception as exc:
+        print(f"[skill-warning] repository verification {name}: {type(exc).__name__}")
+        return None
+
+
 def collect_skills() -> list[dict]:
     """Collect a broad Skill candidate pool and rotate the featured pick by daily theme.
 
@@ -351,6 +390,7 @@ def collect_skills() -> list[dict]:
                 "language": r.get("language") or "Multi-language",
                 "topics": topics[:8],
                 "daily_theme": theme_name,
+                "license": str(((r.get("license") or {}).get("spdx_id")) or ""),
             }
         time.sleep(0.2)
 
@@ -367,7 +407,12 @@ def collect_skills() -> list[dict]:
         # Theme relevance has real weight; stars are only a modest quality signal.
         return theme_hits * 1800 + min(int(item.get("stars") or 0), 100000) * 0.015 + max(0, 120 - days) * 0.8
 
-    ranked = sorted(repos.values(), key=score, reverse=True)
+    ranked = sorted(
+        (item for item in repos.values()
+         if item.get("license") and item["license"].upper() not in {"NOASSERTION", "OTHER"}),
+        key=score,
+        reverse=True,
+    )
 
     # Read recent archive picks so the featured Skill doesn't repeat every day.
     recent_picks: list[str] = []
@@ -391,10 +436,16 @@ def collect_skills() -> list[dict]:
         if any(term in (item.get("name", "") + " " + item.get("description", "") + " " +
                         " ".join(item.get("topics") or [])).lower() for term in theme_terms)
     ]
-    # Prefer a theme-relevant project not featured in the previous week.
-    featured = next((item for item in theme_ranked if item["name"].lower() not in recent_picks), None)
-    if featured is None:
-        featured = next((item for item in ranked if item["name"].lower() not in recent_picks), None)
+    # Prefer a theme-relevant project not featured recently, but verify the
+    # selected repository's SPDX license and README against the live GitHub API.
+    featured = None
+    verification_queue = [item for item in theme_ranked if item["name"].lower() not in recent_picks]
+    verification_queue += [item for item in ranked if item["name"].lower() not in recent_picks
+                           and item["name"].lower() not in {x["name"].lower() for x in verification_queue}]
+    for candidate in verification_queue:
+        featured = verify_skill_candidate(candidate)
+        if featured:
+            break
 
     if featured is None:
         # Search API may be rate-limited. Verify curated candidates live rather than
@@ -413,7 +464,10 @@ def collect_skills() -> list[dict]:
                     timeout=8,
                 ))
                 actual_name = payload.get("full_name", "")
-                if not actual_name or payload.get("archived") or payload.get("fork"):
+                license_info = payload.get("license") or {}
+                license_id = str(license_info.get("spdx_id") or "").strip()
+                if (not actual_name or payload.get("archived") or payload.get("fork")
+                        or not license_id or license_id.upper() in {"NOASSERTION", "OTHER"}):
                     continue
                 if actual_name.lower() in recent_picks and len(fallback_names) > len(recent_picks):
                     continue
@@ -426,17 +480,24 @@ def collect_skills() -> list[dict]:
                     "language": payload.get("language") or "Multi-language",
                     "topics": (payload.get("topics") or ["agent-skills"])[:8],
                     "daily_theme": theme_name,
+                    "license": license_id,
+                    "license_name": str(license_info.get("name") or license_id),
                 })
             except Exception as exc:
                 print(f"[skill-warning] curated metadata {full_name}: {type(exc).__name__}")
         ranked = sorted(fallback_items, key=score, reverse=True)
-        featured = next((item for item in ranked if item["name"].lower() not in recent_picks), None)
+        for candidate in ranked:
+            if candidate["name"].lower() in recent_picks:
+                continue
+            featured = verify_skill_candidate(candidate)
+            if featured:
+                break
 
     if featured is None:
         # No current project could be verified. Return only verified search results
         # and expose a warning; never claim that a repeated pick is new.
-        print(f"[skill-warning] no fresh featured Skill found for theme {theme_name}; candidate pool={len(ranked)}")
-        return ranked[:10]
+        print(f"[skill-warning] no Skill candidate passed live license/README verification for theme {theme_name}; candidate pool={len(ranked)}")
+        return []
 
     featured["daily_theme"] = theme_name
     # Keep the featured pick first for the current page contract; remaining entries
