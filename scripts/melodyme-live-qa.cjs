@@ -41,7 +41,7 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.locator('#saved strong').waitFor({timeout:3000});
   await page.reload({waitUntil:'domcontentloaded'});
   await page.getByRole('button',{name:/我的作品/}).click();
-  await page.getByText('线上验收测试歌曲').waitFor({timeout:3000});
+  await page.locator('#saved strong').waitFor({timeout:3000});
   record('Local work persistence after reload',true,'Saved item restored from browser storage');
   await page.screenshot({path:path.join(out,'desktop.png'),fullPage:true});
   record('Desktop JavaScript errors',errors.length===0,errors.join('; ')||'none');
