@@ -36,7 +36,7 @@ jobs:
         run: |
           npm init -y
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Test the live website and app links
         run: node scripts/qa-smoke.cjs
       - name: Upload screenshots and QA report
