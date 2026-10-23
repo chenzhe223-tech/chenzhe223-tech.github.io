@@ -4,8 +4,8 @@
   "timezone": "Asia/Shanghai",
   "generated_at": "2026-10-24T07:26:33+08:00",
   "status": "ok",
-  "sources_ok": 5,
-  "sources_total": 5,
+  "sources_ok": 4,
+  "sources_total": 4,
   "news": [
     {
       "title": "OpenAI resumes frontier AI training with enhanced security, no internet access",
@@ -723,8 +723,7 @@
     "matched": 0,
     "processed": 0,
     "strategy": [
-      "The daily page labels fallback visuals as topic illustrations when article-specific image provenance is unavailable."
-    ],
-    "last_run": "2026-10-24T07:26:33+08:00"
+      "Where no article-specific image provenance is available, the public page labels fallback visuals as topic illustrations."
+    ]
   }
 }
