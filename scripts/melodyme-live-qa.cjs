@@ -26,7 +26,7 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.locator('#songinput').fill('线上验收测试歌曲');
   await page.locator('#artistinput').fill('MelodyMe QA');
   await page.locator('#next').click();
-  await page.locator('[data-style="像一段电影旁白"]').click();
+  await page.locator('[data-style="电影雾光"]').click();
   await page.locator('#next').click();
   await page.locator('#results').waitFor({state:'visible',timeout:5000});
   record('Twelve poster styles',await page.locator('.stylepick').count()===12,'12 distinct style options');
