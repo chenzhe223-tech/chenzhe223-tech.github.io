@@ -222,13 +222,50 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
 @media(max-width:760px){.feedcard{grid-template-columns:94px minmax(0,1fr)!important;gap:12px!important;padding:13px!important}.feed-media{width:94px;height:70px;border-radius:10px}.feedcard>div:nth-child(2){grid-column:2}.feedactions{grid-column:1/-1}.feed-image-credit{max-width:calc(100% - 14px);font-size:8px}.feed-image-index{display:none}}
 @media(max-width:420px){.feedcard{grid-template-columns:82px minmax(0,1fr)!important;gap:10px!important}.feed-media{width:82px;height:64px}}
 
+
+/* Published content library */
+#section-published .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+#section-published .stat{box-shadow:none;background:#fbfcfe}
+.published-card{display:grid;grid-template-columns:112px minmax(0,1fr) auto;align-items:center;gap:15px;padding:15px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.published-cover{width:112px;height:78px;position:relative;overflow:hidden;border-radius:10px;background:linear-gradient(135deg,#172c45,#587aa5);display:grid;place-items:center;color:#fff}
+.published-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.published-cover span{position:absolute;left:8px;bottom:6px;font-size:8px;letter-spacing:1.2px;background:#10243dcc;padding:3px 5px;border-radius:4px}
+.published-main{min-width:0}
+.published-main h3{font-size:15px;line-height:1.5;margin:0 0 6px;color:#1a2c43}
+.published-main p{font-size:12px;line-height:1.7;color:#68788d;margin:0 0 7px;overflow-wrap:anywhere}
+.published-meta{display:flex;flex-wrap:wrap;gap:6px 10px;font-size:10.5px;color:#7c899b}
+.published-actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;min-width:112px}
+.published-actions .btn{font-size:11px;min-height:32px;padding:6px 8px}
+.published-actions .btn.remove{background:transparent;border-color:transparent;color:#8b96a6}
+.published-actions .btn.remove:hover{color:#b94242;background:#fff5f5}
+.published-source-badge{display:inline-flex;align-items:center;gap:5px;background:#eef7f2;color:#317458;border-radius:999px;padding:3px 7px;font-size:10px}
+@media(max-width:760px){
+ #section-published .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ #section-published .stat{padding:10px}
+ #section-published .statnum{font-size:22px}
+ #section-published .paneltools{display:flex;gap:6px}
+ .published-card{grid-template-columns:76px minmax(0,1fr);gap:11px;padding:12px}
+ .published-cover{width:76px;height:63px}
+ .published-actions{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));min-width:0}
+ .published-actions .btn{min-width:0}
+}
+@media(max-width:420px){
+ #section-published .stats{grid-template-columns:1fr}
+ #section-published .stat{display:flex;align-items:center;gap:12px}
+ #section-published .statnum{min-width:44px;margin:0}
+ #section-published .statfoot{display:none}
+ #section-published .formrow>.field[style*="width"]{width:100%!important}
+ .published-card{grid-template-columns:66px minmax(0,1fr);gap:9px}
+ .published-cover{width:66px;height:58px}
+}
+
 </style></head>
 <body><div class="app">
 <aside>
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
-  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button>
+  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button>
  </div></div>
  <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span>AI 创造机会雷达 ↗</a><a class="nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span>Dashboard Studio ↗</a></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
@@ -262,6 +299,52 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
  </div><div class="panel"><div class="panelhead"><div><h2>可复制的 AI 选题指令</h2><p>选择一个选题后，复制编辑指令到 ChatGPT 继续创作。</p></div></div><textarea id="promptBox" style="width:100%;min-height:145px;border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--ink);background:#fbfcfd" placeholder="从选题卡片点击“AI 指令”，这里会出现提示词。"></textarea><div class="actions" style="justify-content:flex-start;margin-top:9px"><button class="btn primary" id="copyPrompt">复制选题指令</button><button class="btn" id="openChatGPT">打开 ChatGPT ↗</button><button class="btn" id="clearPrompt">清空</button></div></div>
 </section>
 <section class="section" id="section-calendar"><div class="panel"><div class="panelhead"><div><h2>内容排期</h2><p>把选题安排到合适的日子。当前排期保存在本地，不会自动发送提醒。</p></div><button class="btn primary small" id="newCalendar">＋ 添加排期</button></div><div class="filters"><span class="tag">建议节奏：每周 1–2 篇</span><span class="tag">先安排选题，再确定形式</span></div><div id="calendarList" class="calendarlist"><div class="empty"><strong>还没有排期</strong>编辑选题并设置计划日期后，这里会按时间显示。</div></div></div></section>
+<section class="section" id="section-published">
+ <div class="panel">
+  <div class="panelhead">
+   <div><div class="eyebrow">PUBLISHED CONTENT LIBRARY</div><h2>公众号内容库</h2><p>把已经发布的文章集中保存，回顾做过什么、哪些主题覆盖过，也为下一篇选题寻找空间。</p></div>
+   <div class="paneltools"><button class="btn small" id="refreshPublished">↻ 刷新共享档案</button><button class="btn small" id="exportPublished">导出内容 JSON</button><button class="btn small" id="importPublished">导入内容</button><button class="btn primary small" id="addPublished">＋ 添加文章</button><input type="file" id="publishedFile" accept=".json,application/json" hidden></div>
+  </div>
+  <div class="notice"><span>ℹ</span><div><strong>连接状态说明：</strong>工作台会读取 GitHub 中的共享文章档案；WorkBuddy 可以从公众号后台“已发表/发表记录”核对后更新这份档案。当前还没有直接连接微信公众号官方 API。自动接口同步需先确认 DAVYLAB 账号具备相应权限，公众号 AppSecret 不能存放在网页或 GitHub 中。</div></div>
+  <div class="stats" style="grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 18px">
+   <div class="stat"><div class="statlabel">内容库文章</div><div class="statnum" id="publishedCount">0</div><div class="statfoot" id="publishedCountFoot">等待读取共享档案</div></div>
+   <div class="stat"><div class="statlabel">已关联选题</div><div class="statnum" id="publishedLinkedCount">0</div><div class="statfoot">可回看文章来自哪个选题</div></div>
+   <div class="stat"><div class="statlabel">最新发表</div><div class="statnum" id="publishedLatest" style="font-size:19px">—</div><div class="statfoot" id="publishedLatestTitle">尚无记录</div></div>
+  </div>
+  <div class="formrow" style="margin-bottom:13px">
+   <div class="field" style="flex:1;min-width:190px"><label for="publishedSearch">搜索历史内容</label><input id="publishedSearch" placeholder="搜索标题、栏目、摘要或链接…"></div>
+   <div class="field" style="width:190px"><label for="publishedColumnFilter">内容栏目</label><select id="publishedColumnFilter"><option value="all">全部栏目</option><option>从念头到产品</option><option>AI 实战手记</option><option>AI 创造机会雷达</option><option>普通人的 AI 创造力</option><option>产品复盘与实验室</option><option>未分类</option></select></div>
+   <div class="field" style="width:155px"><label for="publishedSort">排序</label><select id="publishedSort"><option value="newest">最新发表优先</option><option value="oldest">最早发表优先</option><option value="title">按标题排序</option></select></div>
+  </div>
+  <div id="publishedFormWrap" hidden>
+   <form id="publishedForm" class="panel" style="background:#f8faff;border-color:#dce5f5;box-shadow:none;margin-bottom:17px">
+    <input type="hidden" id="publishedId">
+    <div class="panelhead"><div><h2 id="publishedFormTitle">添加已发表文章</h2><p>可从公众号后台复制标题、原文链接和日期。保存后先写入当前浏览器。</p></div><button class="btn small" type="button" id="cancelPublishedForm">取消</button></div>
+    <div class="formgrid">
+     <div class="field full"><label for="publishedTitle">文章标题 *</label><input id="publishedTitle" required maxlength="160" placeholder="填写公众号文章的正式标题"></div>
+     <div class="field"><label for="publishedUrl">文章原文链接 *</label><input id="publishedUrl" type="url" required placeholder="https://mp.weixin.qq.com/s/..."></div>
+     <div class="field"><label for="publishedDate">发表日期</label><input id="publishedDate" type="date"></div>
+     <div class="field"><label for="publishedColumn">内容栏目</label><select id="publishedColumn"><option value="未分类">未分类</option><option>从念头到产品</option><option>AI 实战手记</option><option>AI 创造机会雷达</option><option>普通人的 AI 创造力</option><option>产品复盘与实验室</option></select></div>
+     <div class="field"><label for="publishedFormat">内容形式</label><select id="publishedFormat"><option>文章</option><option>贴图</option><option>视频</option><option>其他</option></select></div>
+     <div class="field full"><label for="publishedSummary">摘要 / 复盘备注</label><textarea id="publishedSummary" placeholder="可记下文章主题、核心观点，或发布后的复盘。"></textarea></div>
+     <div class="field"><label for="publishedCover">封面图片链接（可选）</label><input id="publishedCover" type="url" placeholder="https://..."></div>
+     <div class="field"><label for="publishedTopicLink">关联已有选题（可选）</label><select id="publishedTopicLink"><option value="">暂不关联</option></select></div>
+    </div>
+    <div class="formrow" style="justify-content:flex-end;margin-top:14px"><button class="btn primary" type="submit">保存文章记录</button></div>
+   </form>
+  </div>
+  <div id="publishedList" class="topiclist"><div class="empty"><strong>正在读取公众号内容档案</strong>请稍候，或添加文章、导入已有的内容清单。</div></div>
+  <div class="sourcefooter" id="publishedSyncStatus">共享档案来源：topic-studio/data/published-articles.json。此处展示的是已经导入/同步的记录，不会把“选题待交稿”当作“公众号已发布”。</div>
+ </div>
+ <div class="panel">
+  <div class="panelhead"><div><h2>如何同步公众号已发记录？</h2><p>先用 WorkBuddy 的浏览器登录方式建立真实档案，再根据公众号权限决定是否升级为 API 自动同步。</p></div><a class="btn small" href="https://mp.weixin.qq.com/" target="_blank" rel="noopener noreferrer">打开公众号后台 ↗</a></div>
+  <div class="methodgrid">
+   <div class="method"><div class="num">01 / VERIFY</div><h3>核对真实发表记录</h3><p>WorkBuddy 登录后台，进入“内容管理 / 已发表”或“发表记录”，读取标题、永久链接、发表日期和封面。</p></div>
+   <div class="method"><div class="num">02 / SYNC</div><h3>更新共享文章档案</h3><p>去重后写入 GitHub 的 <code>topic-studio/data/published-articles.json</code>，让工作台在不同设备都能读取同一份已同步记录。</p></div>
+   <div class="method"><div class="num">03 / CONNECT</div><h3>再检查官方 API 权限</h3><p>若账号权限支持，由 Cloudflare Worker 安全保管服务端凭证；否则继续采用后台浏览器同步或 JSON 导入，不绕过平台限制。</p></div>
+  </div>
+ </div>
+</section>
 <section class="section" id="section-workflow"><div class="panel"><div class="panelhead"><div><h2>从灵感到公众号草稿</h2><p>有检查点的工作流，不是点一下就自动发文。每一步都保留真实状态。</p></div></div><div class="methodgrid">
  <div class="method"><div class="num">01 / DISCOVER</div><h3>发现与收集</h3><p>查看 Davy Radar 的真实来源，或记录产品开发中的问题。新闻内容先回到原文核实。</p></div>
  <div class="method"><div class="num">02 / SELECT</div><h3>判断值不值得写</h3><p>按读者价值、时效、实操性、差异化和品牌契合度评分。分数只是辅助，不是爆款预测。</p></div>
@@ -305,7 +388,7 @@ function safe(v=""){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<"
 function safeUrl(v=""){try{const u=new URL(String(v),location.href);return ["http:","https:"].includes(u.protocol)?u.href:"#"}catch{return"#"}}
 function toast(s){const e=$("toast");e.textContent=s;e.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove("show"),2200)}
 function saveTopics(){localStorage.setItem(STORE_KEY,JSON.stringify(topics));renderStats();renderTopics();renderCalendar()}
-function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池",calendar:"内容排期",workflow:"创作流程"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();window.scrollTo({top:0,behavior:"smooth"})}
+function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池",calendar:"内容排期",published:"公众号内容库",workflow:"创作流程"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();if(n==="published")renderPublishedArticles();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll(".nav[data-section]").forEach(e=>e.addEventListener("click",()=>changeSection(e.dataset.section)));
 function fmtDate(s){try{return new Intl.DateTimeFormat("zh-CN",{month:"2-digit",day:"2-digit"}).format(new Date(s+"T00:00:00"))}catch{return s}}
 function ago(s){if(!s)return"时间未知";const d=new Date(s);if(Number.isNaN(d.getTime()))return"时间未知";const h=Math.round((Date.now()-d.getTime())/3600000);return h<0?"刚刚":h<24?h+" 小时前":Math.floor(h/24)+" 天前"}
@@ -336,6 +419,32 @@ function downloadBlob(blob,name){const u=URL.createObjectURL(blob),a=document.cr
 function exportJson(){downloadBlob(new Blob([JSON.stringify({product:"DAVYLAB Topic Studio",version:1,exported_at:new Date().toISOString(),topics},null,2)],{type:"application/json"}),"davylab-topics-"+new Date().toISOString().slice(0,10)+".json");toast("选题已导出")}
 function importJson(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result),a=Array.isArray(d)?d:d.topics;if(!Array.isArray(a))throw Error("JSON 中找不到 topics 数组");if(!confirm("即将导入 "+a.length+" 条选题；相同 ID 的记录将被覆盖。继续？"))return;const m=new Map(topics.map(t=>[t.id,t]));a.forEach(t=>{if(t&&typeof t.title==="string"&&t.title.trim()){const id=t.id||uid();m.set(id,{...t,id})}});topics=[...m.values()];saveTopics();toast("导入完成")}catch(e){toast("导入失败："+e.message)}};r.readAsText(file)}
 $("exportTop").addEventListener("click",exportJson);$("exportBtn").addEventListener("click",exportJson);$("importBtn").addEventListener("click",()=>$("importFile").click());$("importFile").addEventListener("change",e=>{if(e.target.files?.[0])importJson(e.target.files[0]);e.target.value=""});
+
+const PUBLISHED_STORAGE_KEY="davylab-published-articles-v1";
+const PUBLISHED_INDEX_URL="./data/published-articles.json";
+let publishedArticles=loadPublishedArticles(),sharedPublishedArticles=[],publishedEditingId=null,publishedSharedLoaded=false;
+function loadPublishedArticles(){try{const a=JSON.parse(localStorage.getItem(PUBLISHED_STORAGE_KEY)||"[]");return Array.isArray(a)?a:[]}catch{return[]}}
+function allPublishedArticles(){const map=new Map();for(const a of [...sharedPublishedArticles,...publishedArticles]){if(!a||!a.title)continue;const k=(a.url||a.title).trim();if(!map.has(k)||a.storageSource==="local")map.set(k,a)}return [...map.values()]}
+function savePublishedArticles(){localStorage.setItem(PUBLISHED_STORAGE_KEY,JSON.stringify(publishedArticles));renderPublishedArticles()}
+function normalizePublishedArticle(a){const title=String(a.title||a.title_zh||a.name||a.article_title||"").trim();const url=String(a.url||a.link||a.article_url||a.content_url||a.permalink||"").trim();if(!title||!/^https?:\/\//i.test(url))return null;return{id:String(a.id||uid()),title,url,publishedAt:String(a.publishedAt||a.publish_time||a.published_at||a.publish_date||a.date||"").slice(0,10),column:String(a.column||a.category||"未分类"),format:String(a.format||a.type||"文章"),summary:String(a.summary||a.description||a.notes||""),coverUrl:String(a.coverUrl||a.cover_image_url||a.cover||a.thumb_url||""),linkedTopicId:String(a.linkedTopicId||a.topic_id||""),source:String(a.source||"import"),addedAt:a.addedAt||new Date().toISOString(),storageSource:a.storageSource||"local"}}
+async function loadSharedPublishedArticles(){const status=$("publishedSyncStatus");try{const r=await fetch(PUBLISHED_INDEX_URL+"?t="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const d=await r.json();const arr=Array.isArray(d)?d:(Array.isArray(d.articles)?d.articles:[]);sharedPublishedArticles=arr.map(normalizePublishedArticle).filter(Boolean).map(a=>({...a,storageSource:"shared"}));publishedSharedLoaded=true;renderPublishedArticles();const synced=d.last_synced_at||d.updated_at||d.updatedAt||"";status.textContent="共享档案已读取："+sharedPublishedArticles.length+" 条记录。"+(synced?"最近同步："+String(synced).slice(0,19).replace("T"," ")+". ":"")+"公众号后台尚未由本页面直接连接；请用 WorkBuddy 更新共享 JSON，或导入内容文件。"}catch(e){publishedSharedLoaded=false;status.textContent="共享档案读取失败（"+e.message+"）。本地记录仍可查看、添加、导入和导出。"}}
+function showPublishedForm(article=null){publishedEditingId=article?.id||null;$("publishedId").value=article?.id||"";$("publishedFormTitle").textContent=article?"编辑文章记录":"添加已发表文章";$("publishedTitle").value=article?.title||"";$("publishedUrl").value=article?.url||"";$("publishedDate").value=article?.publishedAt||"";$("publishedColumn").value=article?.column||"未分类";$("publishedFormat").value=article?.format||"文章";$("publishedSummary").value=article?.summary||"";$("publishedCover").value=article?.coverUrl||"";renderPublishedTopicOptions(article?.linkedTopicId||"");$("publishedFormWrap").hidden=false;$("publishedFormWrap").scrollIntoView({behavior:"smooth",block:"start"})}
+function hidePublishedForm(){$("publishedFormWrap").hidden=true;publishedEditingId=null;$("publishedForm").reset();$("publishedId").value=""}
+function renderPublishedTopicOptions(selected=""){const select=$("publishedTopicLink");if(!select)return;const items=topics.slice().sort((a,b)=>String(a.title).localeCompare(String(b.title),"zh-CN"));select.innerHTML='<option value="">暂不关联</option>'+items.map(t=>'<option value="'+safe(t.id)+'" '+(t.id===selected?"selected":"")+'>'+safe(t.title)+(t.status==="published"?"（已发布状态）":"")+'</option>').join("")}
+function renderPublishedArticles(){const all=allPublishedArticles();const query=($("publishedSearch")?.value||"").trim().toLowerCase();const col=$("publishedColumnFilter")?.value||"all";const sort=$("publishedSort")?.value||"newest";let arr=all.filter(a=>{const text=[a.title,a.summary,a.column,a.url].join(" ").toLowerCase();return(!query||text.includes(query))&&(col==="all"||a.column===col)});arr.sort((a,b)=>sort==="title"?a.title.localeCompare(b.title,"zh-CN"):sort==="oldest"?String(a.publishedAt).localeCompare(String(b.publishedAt)):String(b.publishedAt).localeCompare(String(a.publishedAt)));
+const root=$("publishedList");if(!root)return;
+$("publishedCount").textContent=all.length;$("publishedCountFoot").textContent=(sharedPublishedArticles.length?"共享档案 "+sharedPublishedArticles.length+" 条":"共享档案尚无记录")+" · 本地记录 "+publishedArticles.length+" 条";
+const linked=all.filter(a=>a.linkedTopicId||topics.some(t=>t.status==="published"&&(t.publishedArticleUrl===a.url||t.title===a.title))).length;$("publishedLinkedCount").textContent=linked;
+const latest=all.slice().sort((a,b)=>String(b.publishedAt).localeCompare(String(a.publishedAt)))[0];$("publishedLatest").textContent=latest?.publishedAt||"—";$("publishedLatestTitle").textContent=latest?.title||"尚无记录";
+if(!arr.length){root.innerHTML='<div class="empty"><strong>'+(all.length?"没有找到匹配的文章":"内容库还没有文章")+'</strong>'+(all.length?"换个关键词或栏目筛选试试。":"可以先点击“添加文章”，也可以导入文章 JSON；要同步成所有设备可见的共享档案，请让 WorkBuddy 更新 GitHub 中的发布记录文件。")+'</div>';return}
+root.innerHTML=arr.map(a=>{const linkedTopic=a.linkedTopicId?topics.find(t=>t.id===a.linkedTopicId):topics.find(t=>t.status==="published"&&(t.publishedArticleUrl===a.url||t.title===a.title));const local=a.storageSource==="local";const cover=/^https:\/\//i.test(a.coverUrl||"")?'<img src="'+safeUrl(a.coverUrl)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">':"";return'<article class="published-card"><div class="published-cover">'+cover+'<span>'+safe(a.format||"文章")+'</span></div><div class="published-main"><div class="tags"><span class="tag blue">'+safe(a.column||"未分类")+'</span><span class="published-source-badge">'+(local?"● 本地记录":"● 共享档案")+'</span>'+(linkedTopic?'<span class="tag green">已关联选题</span>':"")+'</div><h3>'+safe(a.title)+'</h3><p>'+safe(a.summary||"暂未添加摘要。")+'</p><div class="published-meta"><span>发表日期：'+safe(a.publishedAt||"未记录")+'</span><span>'+safe(a.source||"微信公众平台")+'</span></div></div><div class="published-actions"><a class="btn primary" href="'+safeUrl(a.url)+'" target="_blank" rel="noopener noreferrer">阅读原文 ↗</a>'+(local?'<button class="btn" data-published-action="edit" data-id="'+safe(a.id)+'">编辑记录</button><button class="btn remove" data-published-action="remove" data-id="'+safe(a.id)+'">移除本地记录</button>':(linkedTopic?'<button class="btn" data-published-action="topic" data-id="'+safe(linkedTopic.id)+'">查看关联选题</button>':'<button class="btn" data-published-action="link" data-id="'+safe(a.id)+'">关联选题</button>'))+'</div></article>'}).join("");
+root.querySelectorAll("[data-published-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.publishedAction,id=btn.dataset.id;if(action==="edit"){const a=publishedArticles.find(x=>x.id===id);if(a)showPublishedForm(a)}else if(action==="remove"){if(!confirm("仅从当前浏览器移除这条本地记录，不会删除公众号文章。继续？"))return;publishedArticles=publishedArticles.filter(x=>x.id!==id);savePublishedArticles();toast("已移除本地记录")}else if(action==="link"){const a=allPublishedArticles().find(x=>x.id===id);if(a){showPublishedForm(a);$("publishedTopicLink").focus()}}else if(action==="topic"){changeSection("library");const t=topics.find(x=>x.id===id);if(t){$("searchTopics").value=t.title;renderTopics()}}}));
+}
+function savePublishedForm(e){e.preventDefault();const title=$("publishedTitle").value.trim(),url=$("publishedUrl").value.trim();if(!title||!/^https?:\/\//i.test(url)){toast("请填写标题和有效的文章链接");return}let a=publishedArticles.find(x=>x.id===$("publishedId").value);const existing=a,linkedTopicId=$("publishedTopicLink").value;const value={id:a?.id||uid(),title,url,publishedAt:$("publishedDate").value||"",column:$("publishedColumn").value,format:$("publishedFormat").value,summary:$("publishedSummary").value.trim(),coverUrl:$("publishedCover").value.trim(),linkedTopicId,source:a?.source||"manual",addedAt:a?.addedAt||new Date().toISOString(),storageSource:"local"};if(existing)publishedArticles=publishedArticles.map(x=>x.id===existing.id?value:x);else {publishedArticles=publishedArticles.filter(x=>x.url!==url);publishedArticles.unshift(value)}if(linkedTopicId){const topic=topics.find(t=>t.id===linkedTopicId);if(topic){topic.status="published";topic.publishedArticleUrl=url;topic.publishedAt=value.publishedAt;topic.publishedArticleTitle=title;saveTopics()}}savePublishedArticles();hidePublishedForm();toast(existing?"文章记录已更新":"文章记录已保存")}
+function exportPublishedJson(){const data={product:"DAVYLAB Topic Studio Published Content",version:1,exported_at:new Date().toISOString(),last_synced_at:null,articles:allPublishedArticles().map(({storageSource,...a})=>a)};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"davylab-published-articles-"+new Date().toISOString().slice(0,10)+".json");toast("已导出公众号内容 JSON")}
+function importPublishedJson(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);const list=Array.isArray(data)?data:(Array.isArray(data.articles)?data.articles:Array.isArray(data.published_articles)?data.published_articles:null);if(!list)throw Error("JSON 中没有 articles 数组");if(!confirm("即将导入 "+list.length+" 条文章记录。相同链接的记录会去重，是否继续？"))return;const byUrl=new Map(allPublishedArticles().map(a=>[a.url,a]));let count=0;for(const raw of list){const a=normalizePublishedArticle(raw);if(!a)continue;a.storageSource="local";byUrl.set(a.url,a);count++}publishedArticles=[...byUrl.values()].filter(a=>a.storageSource==="local");savePublishedArticles();toast("已导入/合并 "+count+" 条文章记录")}catch(e){toast("导入失败："+e.message)}};reader.readAsText(file)}
+function mergePublishedTopics(){let changed=false;for(const article of allPublishedArticles()){const topic=topics.find(t=>t.publishedArticleUrl===article.url)||topics.find(t=>t.title.trim()===article.title.trim());if(topic&&topic.status!=="published"){topic.status="published";topic.publishedArticleUrl=article.url;topic.publishedAt=article.publishedAt;topic.publishedArticleTitle=article.title;changed=true}}if(changed)saveTopics()}
+
 function renderCalendar(){const a=topics.filter(t=>t.plannedDate&&t.status!=="published").sort((x,y)=>x.plannedDate.localeCompare(y.plannedDate)),el=$("calendarList");if(!a.length){el.innerHTML='<div class="empty"><strong>还没有排期</strong>编辑选题并设置计划日期后，这里会按时间显示。它不会自动创建草稿或发送提醒。</div>';return}const g={};a.forEach(t=>(g[t.plannedDate]??=[]).push(t));el.innerHTML=Object.entries(g).map(([d,items])=>'<div class="dategroup"><div class="datebadge">'+safe(fmtDate(d))+'<small>'+safe(d)+'</small></div><div class="dateitems">'+items.map(t=>'<div class="dateitem"><div><strong>'+safe(t.title)+'</strong><div class="feedmeta">'+safe(t.format||"文章")+' · '+safe(STATUS[t.status]||"灵感收集")+'</div></div><button class="btn small" data-edit-date="'+safe(t.id)+'">编辑</button></div>').join("")+'</div></div>').join("");el.querySelectorAll("[data-edit-date]").forEach(b=>b.addEventListener("click",()=>openDialog(topics.find(t=>t.id===b.dataset.editDate))))}
 
 function setAiState(message,kind=""){const el=$("aiState");el.textContent=message;el.className="ai-state"+(kind?" "+kind:"")}
@@ -367,5 +476,15 @@ $("confirmNianboxImport").addEventListener("click",()=>{const selected=nianboxCa
 $("ideaInput").addEventListener("input",()=>{if($("ideaInput").value.length>0&&directionSet.length===0)setAiState("准备就绪。点击“分析并生成方向”将请求服务端 AI；若接口未配置，会明确显示错误并保留原始输入。")});
 
 function startNew(){openDialog(null)}["newTop","newHero","newLibrary","newCalendar"].forEach(id=>$(id).addEventListener("click",startNew));$("refreshRadar").addEventListener("click",()=>loadRadar().then(()=>toast("已尝试刷新在线素材")));
-renderStats();renderTopics();renderCalendar();loadRadar();
+$("addPublished").addEventListener("click",()=>showPublishedForm());
+$("cancelPublishedForm").addEventListener("click",hidePublishedForm);
+$("publishedForm").addEventListener("submit",savePublishedForm);
+$("publishedSearch").addEventListener("input",renderPublishedArticles);
+$("publishedColumnFilter").addEventListener("change",renderPublishedArticles);
+$("publishedSort").addEventListener("change",renderPublishedArticles);
+$("exportPublished").addEventListener("click",exportPublishedJson);
+$("importPublished").addEventListener("click",()=>$("publishedFile").click());
+$("publishedFile").addEventListener("change",e=>{if(e.target.files?.[0])importPublishedJson(e.target.files[0]);e.target.value=""});
+$("refreshPublished").addEventListener("click",()=>loadSharedPublishedArticles().then(()=>toast("已刷新共享文章档案")));
+renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics();loadSharedPublishedArticles();
 </script></body></html>
