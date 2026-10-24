@@ -29,19 +29,22 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.locator('#artistinput').fill('The Beatles');
   await page.locator('#searchMusic').click();
   await page.waitForFunction(() => document.querySelector('#musicresults')?.querySelectorAll('.candidate').length > 0 || /查询失败|没有找到目录结果/.test(document.querySelector('#toast')?.textContent || ''), {timeout:15000}).catch(()=>{});
+  let selectedCatalogTrack = '';
   const musicCandidates = page.locator('#musicresults .candidate');
   const candidateCount = await musicCandidates.count();
   record('Real music catalog search response',candidateCount>0,'iTunes Search candidates: '+candidateCount);
   if(candidateCount>0){
     const coverSrc = await musicCandidates.first().locator('img').getAttribute('src');
     record('Real catalog artwork URL',!!coverSrc&&(coverSrc.startsWith('https://')||coverSrc.startsWith('http://')),coverSrc||'missing');
+    selectedCatalogTrack = await musicCandidates.first().locator('strong').innerText();
     await musicCandidates.first().getByRole('button',{name:'选这首'}).click();
-    record('Catalog candidate selection',await page.locator('#musicname').innerText().then(t=>t.toLowerCase().includes('yesterday')),'Selected real catalog result');
+    record('Catalog candidate selection',!!selectedCatalogTrack,'Selected real catalog result: '+selectedCatalogTrack);
   }
   await page.locator('#next').click();
   await page.locator('[data-style="电影雾光"]').click();
   await page.locator('#next').click();
   await page.locator('#results').waitFor({state:'visible',timeout:5000});
+  if(selectedCatalogTrack) record('Confirmed catalog metadata appears in artwork',await page.locator('#musicname').innerText().then(t=>t===selectedCatalogTrack),'Artwork card title: '+await page.locator('#musicname').innerText());
   record('Twelve poster styles',await page.locator('.stylepick').count()===12,'12 distinct style options');
   await page.locator('#autoStyle').click();
   record('Local style recommendation is selectable',await page.locator('.stylepick[aria-pressed="true"]').count()===1,'Recommendation remains user-overridable');
