@@ -214,3 +214,55 @@ MelodyMe 是一款围绕「人生记忆 × 音乐 × 个人表达」的轻量创
 6. 发布并记录最终验收证据、提交 SHA、CI 运行链接和已知限制。
 
 **交接原则：持续推进直到真实验收完成；不因计划或代码合并而提前停止。只有确实需要用户授权或在用户侧执行无法代办的操作时，才提出明确、最少的请求。**
+
+
+---
+
+## v0.4 implementation handoff — iTunes preview + AI decorative cover (2026-10-24)
+
+### Scope of this change
+
+- Add a 30-second audio preview player for the selected iTunes candidate only when the catalog result includes `previewUrl`; source is the returned URL unchanged, playback is user-initiated, and other audio elements pause when playback starts.
+- Keep Shazam as a separate external song page/recognition entry.
+- Add a separate decorative AI cover area, not replacing the poster, catalog artwork, or SVG export.
+- Use Pollinations.ai first with prompt keywords derived locally from a fixed style map, selected moods, and a small mapped scene category. The original story text is not included in the Pollinations request.
+- Use a deterministic seed derived from song/style/mood/mapped prompt terms.
+- Pollinations image failure or 12-second timeout triggers Worker `generateAlbumArt`; two-provider failure leaves a local gradient placeholder and preserves text/poster content.
+- Add Cloudflare Workers AI binding `[ai] binding = "AI"`. Primary model is `@cf/stabilityai/stable-diffusion-xl-base-1.0`; fallback is `@cf/black-forest-labs/flux-1-schnell` when available. Free quotas and model availability are not guaranteed or unlimited.
+- Worker image response is binary `image/png`; errors use controlled JSON codes. Image generation does not require the DeepSeek key, but still follows exact Origin checks, POST-only, payload limit, rate limiting and timeout controls.
+
+### Code changes prepared on branch
+
+Branch: `feat/melodyme-preview-ai-cover`
+
+Files changed:
+- `melodyme/index.html`
+- `melodyme/worker/src/index.js`
+- `melodyme/worker/wrangler.toml`
+- `melodyme/worker/test/worker.test.js`
+- `melodyme/README.md`
+- `melodyme/docs/ARCHITECTURE.md`
+- `melodyme/docs/PRD.md`
+- `melodyme/docs/QA_PLAN.md`
+- this handoff document
+
+### Status at handoff
+
+- [x] Code edits committed to a feature branch.
+- [x] Added Worker unit test cases for valid image response, origin, method, oversized body, prompt/dimensions validation, missing binding, provider errors, and absence of secret data in response.
+- [ ] Worker syntax check and unit tests have not yet been confirmed for this branch.
+- [ ] Desktop/mobile journey tests have not yet been confirmed for this branch.
+- [ ] PR not yet merged.
+- [ ] Worker binding/model fallback not yet deployed to Cloudflare.
+- [ ] GitHub Pages deployment not yet confirmed.
+- [ ] Real iTunes preview playback, Pollinations generation, Worker fallback and total-failure preservation not yet verified in a production browser.
+
+### Required next actions
+
+1. Run `npm run check` and `npm test` in `melodyme/worker` through CI.
+2. Run existing desktop/mobile prototype journey smoke tests and extend them if the harness can reliably stub audio and image services.
+3. Review any test failures, then open/merge PR only when CI is green.
+4. Deploy Worker config and code; confirm `AI` binding is attached. No new secret is required for image generation.
+5. Confirm Cloudflare Workers AI model availability and actual account-included usage limits; model fallback is best-effort.
+6. Verify production browser flows for audio, Pollinations, Worker fallback and graceful degradation.
+7. Update this document with exact CI run, merge SHA, deployment evidence and real end-to-end status. Never infer deployment or acceptance from code merge alone.
