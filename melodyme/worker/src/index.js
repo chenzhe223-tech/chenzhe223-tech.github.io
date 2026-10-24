@@ -16,17 +16,35 @@ const schemas = {
  planPosterComposition: {recommended_style:"",palette:[],composition:"",typography:"",image_treatment:"",text_density:"",visual_motifs:[],reason_summary:""}
 };
 function json(data,status,origin,allowed){return new Response(JSON.stringify(data),{status,headers:{"content-type":"application/json; charset=utf-8","cache-control":"no-store","access-control-allow-origin":origin||allowed,"vary":"Origin"}})}
+function boundedString(v,min=1,max=8000){return typeof v==="string"&&v.trim().length>=min&&v.length<=max}
+function validOutput(action,result){
+ if(!result||typeof result!=="object"||Array.isArray(result))return false;
+ const has=(key)=>Object.prototype.hasOwnProperty.call(result,key);
+ const arr=(key,max=30)=>Array.isArray(result[key])&&result[key].length<=max;
+ switch(action){
+  case "analyzeMemory": return ["people_clues","age_clues","time_clues","location_clues","relationship_clues","emotion_clues","music_keywords","genre_clues","era_candidates","missing_information"].every(k=>arr(k))&&boundedString(result.life_stage,1,100)&&["low","medium","high"].includes(result.confidence)&&boundedString(result.narrative_direction,1,1000)&&boundedString(result.reasoning_summary,1,1000);
+  case "inferMusicCandidates": return arr("candidates",8)&&result.candidates.length>0&&result.candidates.every(c=>c&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200)&&boundedString(c.search_query,1,300)&&boundedString(c.reason_summary,1,1000)&&["ai_inferred","catalog_verified","unverified"].includes(c.status)&& (c.album_year===null||Number.isInteger(c.album_year))&&(c.track_year===null||Number.isInteger(c.track_year)))&&arr("missing_information");
+  case "compareTrackVersions": return arr("comparisons",8)&&boundedString(result.recommendation,1,1200)&&result.comparisons.every(c=>c&&boundedString(c.candidate_id,1,100)&&boundedString(c.reason_summary,1,1000)&&["low","medium","high"].includes(c.era_fit)&&arr("evidence_needed",10));
+  case "generateMemoryStory": return ["title","story","core_line","memory_summary","poster_title","poster_subtitle","song_connection"].every(k=>boundedString(result[k],1,2000));
+  case "generateSocialCopy": return boundedString(result.copy,1,3000);
+  case "planPosterComposition": return boundedString(result.recommended_style,1,100)&&arr("palette",12)&&boundedString(result.composition,1,1500)&&boundedString(result.typography,1,1000)&&boundedString(result.image_treatment,1,1000)&&boundedString(result.text_density,1,100)&&arr("visual_motifs",20)&&boundedString(result.reason_summary,1,1000);
+  default: return false;
+ }
+}
 function validInput(action,input){
  if(!input||typeof input!=="object"||Array.isArray(input))return false;
  if(action==="analyzeMemory"||action==="inferMusicCandidates"||action==="generateMemoryStory"||action==="generateSocialCopy"||action==="planPosterComposition")return typeof input.story==="string"&&input.story.trim().length>0&&input.story.length<=8000;
- if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8;
+ if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8&&input.candidates.every(c=>c&&typeof c==="object"&&boundedString(c.id||c.candidate_id,1,100)&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200));
  return false;
 }
 export default {
  async fetch(request,env){
   const allowed=env.ALLOWED_ORIGIN||"https://chenzhe223-tech.github.io";
   const origin=request.headers.get("Origin")||"";
-  if(request.method==="OPTIONS")return new Response(null,{status:204,headers:{"access-control-allow-origin":allowed,"access-control-allow-methods":"POST, OPTIONS","access-control-allow-headers":"content-type","access-control-max-age":"86400","vary":"Origin"}});
+  if(request.method==="OPTIONS"){
+   if(origin!==allowed)return new Response(null,{status:403,headers:{"vary":"Origin"}});
+   return new Response(null,{status:204,headers:{"access-control-allow-origin":allowed,"access-control-allow-methods":"POST, OPTIONS","access-control-allow-headers":"content-type","access-control-max-age":"86400","vary":"Origin"}});
+  }
   if(origin!==allowed)return json({error:"origin_not_allowed"},403,origin,allowed);
   if(request.method!=="POST")return json({error:"method_not_allowed"},405,origin,allowed);
   if(!env.DEEPSEEK_API_KEY)return json({error:"ai_service_not_configured",message:"AI 服务尚未配置，请稍后重试。"},503,origin,allowed);
@@ -45,7 +63,7 @@ export default {
    if(!response.ok){const status=response.status;return json({error:status===429?"ai_rate_limited":status>=500?"ai_provider_unavailable":"ai_request_failed",message:"AI 服务暂时无法完成请求。"},status===429?429:502,origin,allowed)}
    const data=await response.json();const content=data?.choices?.[0]?.message?.content;
    let result;try{result=JSON.parse(content)}catch{return json({error:"invalid_model_output",message:"AI 返回格式无法验证，请重试。"},502,origin,allowed)}
-   if(!result||typeof result!=="object"||Array.isArray(result))return json({error:"invalid_model_output"},502,origin,allowed);
+   if(!validOutput(action,result))return json({error:"invalid_model_output",message:"AI 返回内容未通过结构校验，请重试。"},502,origin,allowed);
    return json({ok:true,action,model,result,source:"deepseek",generated_at:new Date().toISOString()},200,origin,allowed)
   }catch(error){return json({error:error?.name==="AbortError"?"ai_timeout":"ai_network_error",message:"AI 服务暂时不可用，请稍后重试。"},504,origin,allowed)}
   finally{clearTimeout(timeout)}
