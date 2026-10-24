@@ -5,7 +5,8 @@
  * Never deploy without a rate-limit rule at the edge.
  */
 const MAX_BODY_BYTES = 12000;
-const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition"]);
+const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition","generateAlbumArt"]);
+const IMAGE_MODELS = ["@cf/stabilityai/stable-diffusion-xl-base-1.0", "@cf/black-forest-labs/flux-1-schnell"];
 const SYSTEM = `You are MelodyMe, a careful music-memory creative assistant. Return only valid JSON matching the requested task. Never invent verified music facts, album covers, release years, or URLs. Separate AI hypotheses from catalog-verified facts. Do not claim the user experienced events not present in their story. Keep user-facing explanations concise.`;
 const schemas = {
  analyzeMemory: {people_clues:[],life_stage:"unknown",age_clues:[],time_clues:[],location_clues:[],relationship_clues:[],emotion_clues:[],music_keywords:[],genre_clues:[],era_candidates:[],narrative_direction:"",missing_information:[],confidence:"low|medium|high",reasoning_summary:""},
@@ -33,6 +34,7 @@ function validOutput(action,result){
 }
 function validInput(action,input){
  if(!input||typeof input!=="object"||Array.isArray(input))return false;
+ if(action==="generateAlbumArt")return boundedString(input.prompt,1,400)&&Number.isInteger(input.width)&&input.width>=256&&input.width<=1024&&Number.isInteger(input.height)&&input.height>=256&&input.height<=1024&&(input.seed===undefined||(Number.isInteger(input.seed)&&input.seed>=0&&input.seed<=2147483647));
  if(action==="analyzeMemory"||action==="inferMusicCandidates"||action==="generateMemoryStory"||action==="generateSocialCopy"||action==="planPosterComposition")return typeof input.story==="string"&&input.story.trim().length>0&&input.story.length<=8000;
  if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8&&input.candidates.every(c=>c&&typeof c==="object"&&boundedString(c.id||c.candidate_id,1,100)&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200));
  return false;
@@ -54,13 +56,43 @@ export default {
     if(!limit.success)return json({error:"request_rate_limited",message:"请求过于频繁，请稍后再试。"},429,origin,allowed);
    }catch{return json({error:"rate_limiter_unavailable",message:"服务保护机制暂不可用，请稍后重试。"},503,origin,allowed)}
   }
-  if(!env.DEEPSEEK_API_KEY)return json({error:"ai_service_not_configured",message:"AI 服务尚未配置，请稍后重试。"},503,origin,allowed);
   const length=Number(request.headers.get("content-length")||0);
   if(length>MAX_BODY_BYTES)return json({error:"payload_too_large"},413,origin,allowed);
   let body;try{body=await request.json()}catch{return json({error:"invalid_json"},400,origin,allowed)}
   if(new TextEncoder().encode(JSON.stringify(body)).length>MAX_BODY_BYTES)return json({error:"payload_too_large"},413,origin,allowed);
   const {action,input}=body||{};
-  if(!ACTIONS.has(action)||!validInput(action,input))return json({error:"invalid_request"},400,origin,allowed);
+  if(!ACTIONS.has(action)||!validInput(action,input))return json({error:"invalid_request",message:"请求参数无效，请检查输入。"},400,origin,allowed);
+  if(action==="generateAlbumArt"){
+   if(!env.AI||typeof env.AI.run!=="function")return json({error:"ai_image_service_not_configured",message:"AI 封面服务暂不可用。"},503,origin,allowed);
+   const controller=new AbortController();
+   let timeoutId;
+   try{
+    const generation=(async()=>{
+     let lastError;
+     for(const modelName of IMAGE_MODELS){
+      try{
+       // Primary model: @cf/stabilityai/stable-diffusion-xl-base-1.0.
+       // Free fallback: @cf/black-forest-labs/flux-1-schnell, when enabled for this account.
+       const generated=await env.AI.run(modelName,{prompt:input.prompt,width:input.width,height:input.height,seed:input.seed===undefined?1:input.seed},{signal:controller.signal});
+       const image=generated&&typeof generated==="object"&&"image" in generated?generated.image:generated;
+       if(image instanceof ArrayBuffer)return {model:modelName,body:new Uint8Array(image)};
+       if(ArrayBuffer.isView(image))return {model:modelName,body:new Uint8Array(image.buffer,image.byteOffset,image.byteLength)};
+       if(typeof ReadableStream!=="undefined"&&image instanceof ReadableStream)return {model:modelName,body:image};
+       if(typeof Blob!=="undefined"&&image instanceof Blob)return {model:modelName,body:image.stream()};
+       throw new Error("empty_image_result");
+      }catch(error){lastError=error}
+     }
+     throw lastError||new Error("image_generation_failed");
+    })();
+    const timedOut=new Promise((_,reject)=>{timeoutId=setTimeout(()=>{controller.abort();reject(new Error("image_generation_timeout"))},25000)});
+    const output=await Promise.race([generation,timedOut]);
+    return new Response(output.body,{status:200,headers:{"content-type":"image/png","cache-control":"no-store","access-control-allow-origin":allowed,"vary":"Origin","x-melodyme-model":output.model}});
+   }catch(error){
+    const timedOut=error&&error.message==="image_generation_timeout";
+    return json({error:timedOut?"ai_image_timeout":"ai_image_generation_failed",message:timedOut?"AI 封面生成超时，请稍后重试。":"AI 封面生成暂不可用，请稍后重试。"},timedOut?504:502,origin,allowed);
+   }finally{clearTimeout(timeoutId)}
+  }
+  if(!env.DEEPSEEK_API_KEY)return json({error:"ai_service_not_configured",message:"AI 服务尚未配置，请稍后重试。"},503,origin,allowed);
   const model=env.DEEPSEEK_MODEL||"deepseek-chat";
   const taskSchema=schemas[action];
   const prompt="Task: "+action+"\nExpected JSON shape: "+JSON.stringify(taskSchema)+"\nUser input JSON: "+JSON.stringify(input)+"\nReturn JSON only. Values marked unknown/null must remain unknown when unsupported. For music candidates, provide search_query for catalog verification, not invented URLs or image URLs. User-facing rationale must be a brief evidence summary, not hidden chain-of-thought.";
