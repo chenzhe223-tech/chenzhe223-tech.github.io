@@ -486,6 +486,49 @@ def verify_skill_candidate(item: dict) -> dict | None:
         return None
 
 
+def verify_material_update(candidate: dict, history_records: list[dict]) -> dict | None:
+    """Permit a repeat only when a real release after the last recommendation proves a material change."""
+    canonical=canonical_project_id(str(candidate.get("url") or candidate.get("name") or ""))
+    if not canonical or not candidate.get("name"):
+        return None
+    prior_dates=[]
+    for old in history_records:
+        old_id=canonical_project_id(str(old.get("url") or old.get("repository_url") or old.get("name") or ""))
+        if old_id==canonical and old.get("_history_date"):
+            prior_dates.append(str(old["_history_date"]))
+    if not prior_dates:
+        return None
+    last_recommended=max(prior_dates)
+    api_url="https://api.github.com/repos/"+str(candidate["name"])+"/releases?per_page=3"
+    try:
+        releases=json.loads(http_get(api_url,"application/vnd.github+json",timeout=8))
+    except Exception as exc:
+        print(f"[skill-update-warning] release evidence unavailable for {candidate.get('name')}: {type(exc).__name__}")
+        return None
+    if not isinstance(releases,list):
+        return None
+    material_terms=re.compile(r"\b(security fix|security update|cve-\d{4}-\d+|breaking change|major release|new feature|now supports|support for|migration|critical bug fix|performance improvement)\b",re.I)
+    for release in releases:
+        if not isinstance(release,dict) or release.get("draft") or release.get("prerelease"):
+            continue
+        published=str(release.get("published_at") or "")[:10]
+        if not published or published<=last_recommended:
+            continue
+        title=str(release.get("name") or release.get("tag_name") or "")
+        body=str(release.get("body") or "")
+        evidence=(title+"\n"+body).strip()
+        if len(body.strip())<80 or not material_terms.search(evidence):
+            continue
+        return {
+            "material_update_verified":True,
+            "re_recommendation_reason":(title or "Verified material release")+" — release published after last recommendation",
+            "material_update_evidence_url":str(release.get("html_url") or api_url),
+            "last_release_at":published,
+            "release_evidence_source":str(release.get("html_url") or api_url),
+            "novelty_status":"material_update",
+        }
+    return None
+
 def collect_skills() -> list[dict]:
     """Collect a broad Skill candidate pool and rotate the featured pick by daily theme.
 
@@ -589,10 +632,19 @@ def collect_skills() -> list[dict]:
     # Exclude all projects present in accessible 90-day history before spending API calls.
     eligible = []
     historical_exclusions = []
+    release_checks = 0
     for candidate in ranked:
         hit = identify_duplicate(candidate, history["records"])
         if hit:
-            historical_exclusions.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "90-day history duplicate", "match": hit})
+            update = verify_material_update(candidate, history["records"]) if release_checks < 8 else None
+            if release_checks < 8:
+                release_checks += 1
+            if update:
+                candidate.update(update)
+                candidate["history_duplicate_match"] = hit
+                eligible.append(candidate)
+            else:
+                historical_exclusions.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "90-day history duplicate; no verified material release", "match": hit})
         else:
             eligible.append(candidate)
 
@@ -605,7 +657,8 @@ def collect_skills() -> list[dict]:
         if not result:
             verification_failures.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "repository/license/README verification failed"})
             continue
-        result["novelty_status"] = "new"
+        if not result.get("material_update_verified"):
+            result["novelty_status"] = "new"
         result = score_candidate(result, today_text)
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
