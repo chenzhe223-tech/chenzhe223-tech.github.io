@@ -35,7 +35,28 @@ if(i===2){$("content").innerHTML='<label class="muted" for="songinput">歌曲名
 if(i===3){$("content").innerHTML='<p><strong>海报风格 · 12 种编辑设计</strong></p><p class="stylehint">系统可按记忆内容推荐风格；你可以随时切换。当前为本地规则推荐，真实 AI 风格分析尚未接入。</p><div class="stylegrid">'+styleInfo.map(function(x,idx){return '<button class="stylepick" data-style="'+styles[idx]+'" aria-pressed="'+(s.style===styles[idx])+'"><span class="swatch" style="background:linear-gradient(145deg,'+x[0]+','+x[1]+')"></span><strong>'+styles[idx]+'</strong><small>'+x[2]+'</small></button>'}).join("")+'</div><button class="ghost" id="autoStyle" style="margin-bottom:10px">✦ 根据我的故事推荐风格</button><p><strong>画面气质</strong></p><div class="choices">'+palettes.map(function(x){return '<button class="choice" data-palette="'+x+'" aria-pressed="'+(s.palette===x)+'">'+x+'</button>'}).join("")+'</div><p class="muted">风格选择只影响作品视觉，不会修改你的原始故事。</p>';document.querySelectorAll("[data-style]").forEach(function(b){b.onclick=function(){s.style=b.dataset.style;s.styleAuto=false;persist();render()}});document.querySelectorAll("[data-palette]").forEach(function(b){b.onclick=function(){s.palette=b.dataset.palette;persist();render()}})}
 $("clue").textContent=s.story?s.story.slice(0,70)+(s.story.length>70?"…":""):"你的记忆正在等待被唤起。";$("draft").textContent=s.moods.length?"情绪线索："+s.moods.join(" · "):"每一个细节，都可以由你决定。";if(i===3&&s.out)showOut()}
 function copyText(){var p=s.style===styles[0]?"有些画面会慢慢褪色，声音却替我们留住了那一刻。":s.style===styles[1]?"写给那时的自己：谢谢你认真走过那段路。":s.style===styles[2]?"记下这一页，不是为了停留，而是想记得当时的自己。":"有些记忆，不必说得太满。一首歌，就足够想起那段时光。";var t=s.story?s.story:"今天，想为自己的记忆留一张地图。";return p+"\n\n"+t+(s.moods.length?"\n\n那段记忆的颜色，是"+s.moods.join("、")+"。":"")+(s.song?"\n\n那时的旋律："+s.song+(s.artist?" · "+s.artist:"")+"。":"")}
-function generate(){var body=copyText();s.out={storyCopy:body,share:"有些歌，不只是旋律，也是人生某一页。"+(s.story?s.story.slice(0,90)+(s.story.length>90?"…":""):"今天，想为自己的记忆留一张地图。")+" #MelodyMe #我的音乐人生"};showOut();$("stage").classList.add("hidden");$("results").classList.add("show");$("feedback").textContent="本地文案初稿已生成。当前未调用真实 AI；请按自己的真实经历编辑。"}
+async function generate(){
+ var body=copyText();
+ s.out={storyCopy:body,share:"有些歌，不只是旋律，也是人生某一页。"+(s.story?s.story.slice(0,90)+(s.story.length>90?"…":""):"今天，想为自己的记忆留一张地图。")+" #MelodyMe #我的音乐人生"};
+ showOut();$("stage").classList.add("hidden");$("results").classList.add("show");$("feedback").textContent="正在尝试连接 MelodyMe AI；若服务未配置，将保留可编辑的本地初稿。";
+ var endpoint=window.MELODYME_AI_ENDPOINT||"https://melodyme-ai.chenzhe223.workers.dev";
+ var input={story:s.story,moods:s.moods,song:s.song||"",artist:s.artist||"",selected_track:s.selectedTrack?{title:s.selectedTrack.trackName,artist:s.selectedTrack.artistName,album:s.selectedTrack.collectionName,release_date:s.selectedTrack.releaseDate||null}:null};
+ try{
+  var responses=await Promise.all([
+   fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generateMemoryStory",input:input})}),
+   fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generateSocialCopy",input:input})})
+  ]);
+  if(!responses[0].ok||!responses[1].ok)throw new Error("AI endpoint status "+responses.find(function(r){return !r.ok}).status);
+  var storyData=await responses[0].json(),socialData=await responses[1].json();
+  var story=storyData&&storyData.result,social=socialData&&socialData.result;
+  if(!story||!social||typeof story.story!=="string"||typeof social.copy!=="string")throw new Error("invalid AI response");
+  s.out={storyCopy:(story.title?story.title+"\\n\\n":"")+story.story+(story.core_line?"\\n\\n"+story.core_line:"")+(story.song_connection?"\\n\\n"+story.song_connection:""),share:social.copy};
+  $("feedback").textContent="已由 DeepSeek 生成故事与分享文案。歌曲、艺人、专辑与封面仍以你确认的真实目录结果为准。";
+ }catch(e){
+  $("feedback").textContent="AI 服务暂不可用或尚未配置密钥，已保留本地可编辑初稿；不会把本地文案伪装成 AI 结果。";
+ }
+ showOut();persist();
+}
 function showOut(){if(!s.out)return;$("postertitle").textContent=s.song?"《"+s.song+"》\\n留住的那段时光":"那些被旋律\\n记住的时刻";$("postersong").textContent=s.song?s.song+(s.artist?" · "+s.artist:"")+" · A MEMORY":"A SONG · A MEMORY · YOUR STORY";$("storycopy").value=s.out.storyCopy;$("sharecopy").value=s.out.share;renderMusicCard();renderStylePoster()}
 function renderStylePoster(){var ix=styles.indexOf(s.style);if(ix<0)ix=0;var p=$("poster");for(var i=0;i<12;i++)p.classList.remove("style-"+i);p.classList.add("style-"+ix);p.style.color=ix===1||ix===4||ix===6?"#25364a":"#fff";p.style.setProperty("--poster-ink",ix===1||ix===4||ix===6?"#25364a":"#fff")}
 function renderMusicCard(){var t=s.selectedTrack;var card=$("musiccard");if(!card)return;var old=card.querySelector(".cover-real");if(old)old.remove();if(t){$("musicname").textContent=t.trackName||s.song;$("musicartist").textContent=t.artistName||s.artist||"艺人待确认";$("musicmeta").textContent=[t.collectionName||"专辑待确认",t.releaseDate?"目录返回发行日期："+t.releaseDate.slice(0,4)+"（单曲/专辑年份待核对）":""].filter(Boolean).join(" · ")+" · Apple iTunes 目录";$("musicstatus").textContent="目录候选 · 请确认";var img=document.createElement("img");img.className="cover-real";img.alt="真实专辑封面："+(t.collectionName||t.trackName);img.src=(t.artworkUrl100||"").replace("100x100bb","600x600bb");img.onerror=function(){this.style.display="none"};card.prepend(img);$("shazamLink").href=s.shazamUrl||"https://www.shazam.com/";$("shazamLink").textContent=s.shazamUrl?"打开这首歌的 Shazam 页面 ↗":"在 Shazam 中继续查找 ↗"}else{$("musicname").textContent=s.song||"音乐线索尚未确认";$("musicartist").textContent=s.artist||"歌手待确认";$("musicmeta").textContent=s.song?"用户输入，尚未通过目录确认。可以搜索并选择匹配的真实歌曲。":"可选填歌名与歌手，再查询真实目录；也可以跳过。";$("musicstatus").textContent="待核验";$("shazamLink").href=s.shazamUrl||"https://www.shazam.com/";$("shazamLink").textContent=s.shazamUrl?"打开 Shazam 歌曲页 ↗":"打开 Shazam 官方识曲页 ↗"}if($("shazamUrl"))$("shazamUrl").value=s.shazamUrl||"";renderMusicResults()}
