@@ -135,9 +135,9 @@ def crop_cover(img, size):
 
 
 def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: dict) -> None:
-    """Second fixed brand template: warm-white editorial cover with a mountain hero.
-    The weekly style schedule selects this template; daily content changes while the layout, type hierarchy and restrained navy/blue
-    palette remain fixed. All QR data is encoded locally to the stable public URL.
+    """Mountain-editorial template: warm-white editorial layout with a photographic mountain hero.
+    Distinct from geometric-navy, which uses the approved geometric mountain illustration over a deep-navy hero.
+    The weekly schedule is deterministic and QR data always targets the stable public URL.
     """
     canvas = Image.new("RGB", (W, H), (252, 250, 245))
     draw = ImageDraw.Draw(canvas)
@@ -327,7 +327,9 @@ def main():
     if render_alternating_template(report, date, top, skill):
         return
 
-    # Premium editorial palette: warm paper, deep navy, and restrained orange.
+    # ISO-selected geometric-navy template, aligned with the official 2026-10-23 reference:
+    # deep-navy geometric mountain hero + warm-white editorial body + restrained orange accents.
+    # Do not replace the hero with generic stock photography; the mountains are intentional geometric brand art.
     canvas = Image.new("RGB", (W, H), (250, 247, 239))
     draw = ImageDraw.Draw(canvas)
     dark = (16, 35, 61)
@@ -339,7 +341,8 @@ def main():
     muted = (82, 99, 116)
     light_line = (218, 219, 214)
 
-    # Deep-navy hero with sunrise and layered mountain silhouettes.
+    # Official geometric-navy hero: deep navy, warm amber sun, and layered geometric mountain silhouettes.
+    # This composition is the approved reference treatment for geometric-navy (ISO week 43).
     for yy in range(0, 425):
         t = yy / 425
         c = (int(13 + 17*t), int(31 + 25*t), int(54 + 28*t))
@@ -446,7 +449,7 @@ def main():
         "qr_url": PUBLIC_URL,
         "news_count": 5,
         "skill": skill_name,
-        "design": "geometric-navy-mountain",
+        "design": "geometric-navy",
         **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
