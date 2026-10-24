@@ -10,6 +10,7 @@ class DailyBriefContractTests(unittest.TestCase):
     def test_featured_skill_requires_live_license_and_readme(self):
         metadata = {
             "full_name": "example/verified-skill",
+            "default_branch": "main",
             "html_url": "https://github.com/example/verified-skill",
             "description": "A verified browser automation skill",
             "stargazers_count": 25,
@@ -18,15 +19,15 @@ class DailyBriefContractTests(unittest.TestCase):
             "archived": False,
             "fork": False,
         }
-        readme = b"# Verified Skill\n\nThis README describes a useful project and how to install it.\n" + b"Details. " * 30
+        readme = b"# Verified Skill\n\nInstall the agent skill by copying skills/browser/SKILL.md into your agent's skills directory.\n" + b"Details. " * 30
         candidate = {"name": "example/verified-skill", "url": metadata["html_url"], "description": "candidate"}
-        with patch("radar.scripts.build_daily.http_get", side_effect=[json.dumps(metadata).encode(), readme]) as mocked:
+        with patch("radar.scripts.build_daily.http_get", side_effect=[json.dumps(metadata).encode(), readme, json.dumps({"tree":[{"path":"skills/browser/SKILL.md"}]}).encode()]) as mocked:
             result = verify_skill_candidate(candidate)
         self.assertIsNotNone(result)
         self.assertEqual(result["license"], "MIT")
         self.assertEqual(result["license_name"], "MIT License")
         self.assertEqual(result["name"], "example/verified-skill")
-        self.assertEqual(mocked.call_count, 2)
+        self.assertEqual(mocked.call_count, 3)
 
     def test_featured_skill_rejects_repository_without_detected_license(self):
         metadata = {
