@@ -112,7 +112,7 @@ def score_candidate(item: dict, today: str) -> dict:
     quality=15 if item.get("license") and item.get("readme_verified",True) and item.get("evidence_verified") else 7 if item.get("license") else 0
     novelty=10 if item.get("novelty_status")=="new" else 4
     total=round(heat+trend+usefulness+quality+novelty+maintenance,1)
-    confidence="high" if item.get("evidence_verified") and item.get("license") and item.get("readme_verified",True) else "medium" if item.get("license") else "low"
+    confidence="high" if item.get("evidence_verified") and item.get("license") and item.get("readme_verified",True) and item.get("security_status")=="PASS" else "medium" if item.get("license") and item.get("readme_verified",True) else "low"
     return {**item,"canonical_id":canonical_project_id(str(item.get("url") or item.get("name") or "")),
       "stars_total":stars,"stars_delta_7d":None,"stars_delta_30d":None,
       "community_signals":community,"community_count_7d":community_count,
@@ -148,6 +148,9 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
         if hit and material_update:
             item["recommendation_history_match"]=hit
             item["novelty_status"]="material_update"
+        if item.get("critical_security_issue") is True or str(item.get("security_status") or "").lower() in {"critical","high_risk","critical_risk"}:
+            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"critical_security_risk"})
+            continue
         if item.get("quality_status")!="PASS":
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":item.get("quality_status") or "not_verified"})
             continue
