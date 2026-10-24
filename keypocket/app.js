@@ -244,11 +244,11 @@ function openPendingRadarSkillModal(){
     const projectName=(title.length>90?title.slice(0,90):title)+' · Skill';
     const noteParts=[
      '来源：DAVYLAB AI 前沿简报'+(item.reportDate?'（'+item.reportDate+'）':''),
-     item.description?'简介：'+item.description:'',
-     item.topics.length?'Topics：'+item.topics.join('、'):'',
      item.license?'许可证：'+item.license:'',
      item.stars!==null?'推荐时 GitHub Stars：'+item.stars:'',
      item.updated?'简报记录的更新时间：'+item.updated:'',
+     item.topics.length?'Topics：'+item.topics.join('、').slice(0,100):'',
+     item.description?'简介：'+item.description.slice(0,200):'',
      item.sourcePage?'来源页面：'+item.sourcePage:''
     ].filter(Boolean);
     const project=normalizeProject({
