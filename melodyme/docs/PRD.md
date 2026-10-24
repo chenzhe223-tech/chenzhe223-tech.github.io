@@ -57,3 +57,10 @@
 - 音乐线索步骤支持用户主动查询 Apple iTunes Search 公开目录，展示歌曲、艺人、专辑、真实封面和目录发行日期等候选。候选仍需用户确认，失败时不生成假封面。
 - 作品页展示音乐卡片，支持粘贴并展示用户提供的 Shazam 具体歌曲 URL。Shazam 是外部链接，不保证网页内嵌播放。
 - 目录的 releaseDate 不自动描述为歌曲首次发行年份；用户不搜索时不会请求音乐目录。
+
+
+## AI music memory engine v1
+
+The intended experience is story-first: AI extracts memory clues, proposes hypotheses, then external music catalog results are verified separately. Candidate facts must preserve provenance (`ai_inferred`, `catalog_verified`, `user_confirmed`, `unknown`). Real cover art must match a catalog/release record. Shazam links must be exact, verified song-detail links; never claim guaranteed autoplay.
+
+Output modes: illustrated poster using verified/authorized cover art, and a complete text-only work with AI-adapted typography and palette. DeepSeek, version comparison, AI copy, and layout planning are not considered delivered until a deployed server endpoint and real browser integration tests pass.
