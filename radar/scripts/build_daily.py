@@ -4,6 +4,7 @@ No API key is required; GitHub unauthenticated API limits apply.
 """
 from __future__ import annotations
 import datetime as dt
+import difflib
 import json
 import os
 import re
@@ -67,6 +68,98 @@ CHINA_ENTITY_TERMS = re.compile(
 AI_TERMS = re.compile(r"\b(ai|artificial intelligence|llm|large language model|agent|agents|skill|model|openai|anthropic|claude|gpt|gemini|deepseek|hugging face|machine learning|生成式|人工智能|大模型|智能体|开源模型)\b", re.I)
 TAG_RE = re.compile(r"<[^>]+>")
 WS_RE = re.compile(r"\s+")
+
+HISTORY_DEDUPE_COUNTS = {"global_removed": 0, "china_removed": 0, "matches": []}
+
+def _story_url_key(item: dict) -> str:
+    raw = str(item.get("url") or item.get("source_url") or item.get("link") or "").strip()
+    try:
+        p = urllib.parse.urlsplit(raw)
+        if p.scheme not in ("http", "https") or not p.hostname:
+            return ""
+        host = p.hostname.lower().removeprefix("www.")
+        path = re.sub(r"/+", "/", p.path).rstrip("/")
+        return urllib.parse.urlunsplit(("https", host, path, "", ""))
+    except Exception:
+        return ""
+
+def _story_title(item: dict) -> str:
+    return clean(str(item.get("title_zh") or item.get("title") or item.get("title_en") or item.get("original_title") or ""))
+
+def _story_tokens(text: str) -> set[str]:
+    value = re.sub(r"https?://\\S+", " ", (text or "").lower())
+    value = re.sub(r"[^a-z0-9\\u4e00-\\u9fff]+", " ", value)
+    words = {x for x in value.split() if len(x) > 1 and x not in {"the","and","for","with","from","this","that","news","update","updates","ai","model","models","company","announces","announced"}}
+    # Chinese text commonly has no spaces; add character bigrams to capture paraphrases.
+    compact = re.sub(r"\\s+", "", value)
+    words.update(compact[i:i+2] for i in range(max(0, len(compact)-1)) if re.search(r"[\\u4e00-\\u9fff]", compact[i:i+2]))
+    return words
+
+def _history_stories(today: str) -> list[dict]:
+    if not ARCHIVE.exists():
+        raise RuntimeError("Historical archive directory missing; cannot certify news freshness.")
+    paths = sorted(ARCHIVE.glob("*.json"))
+    if not paths:
+        raise RuntimeError("No historical archive records; cannot certify news freshness.")
+    records = []
+    for path in paths:
+        if path.stem == today:
+            continue
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+            if not isinstance(doc, dict):
+                raise ValueError("archive root is not an object")
+        except Exception as exc:
+            raise RuntimeError(f"Cannot read historical archive {path.name}: {type(exc).__name__}") from exc
+        for section in ("news", "top5", "china_ai_news", "china_news", "top_news"):
+            values = doc.get(section, [])
+            if not isinstance(values, list):
+                continue
+            for item in values:
+                if isinstance(item, dict) and _story_title(item):
+                    record = dict(item)
+                    record["_history_date"] = path.stem
+                    record["_history_section"] = section
+                    records.append(record)
+    return records
+
+def _duplicate_match(candidate: dict, history: list[dict]) -> dict | None:
+    title = _story_title(candidate)
+    url = _story_url_key(candidate)
+    tokens = _story_tokens(title)
+    for old in history:
+        old_url = _story_url_key(old)
+        if url and old_url and url == old_url:
+            return {"kind":"same_url","date":old.get("_history_date"),"title":_story_title(old),"url":old.get("url")}
+        old_title = _story_title(old)
+        if not title or not old_title:
+            continue
+        if re.sub(r"[^a-z0-9\\u4e00-\\u9fff]", "", title.lower()) == re.sub(r"[^a-z0-9\\u4e00-\\u9fff]", "", old_title.lower()):
+            return {"kind":"same_title","date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+        ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
+        old_tokens = _story_tokens(old_title)
+        overlap = len(tokens & old_tokens) / max(1, min(len(tokens), len(old_tokens)))
+        if ratio >= 0.86 or (overlap >= 0.78 and len(tokens & old_tokens) >= 4):
+            return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+    return None
+
+def filter_historical_duplicates(items: list[dict], section: str, today: str) -> list[dict]:
+    history = _history_stories(today)
+    kept, matches = [], []
+    for item in items:
+        match = _duplicate_match(item, history)
+        if match:
+            matches.append({"section":section,"candidate":_story_title(item),"match":match})
+        else:
+            kept.append(item)
+    HISTORY_DEDUPE_COUNTS["matches"].extend(matches)
+    if section == "china_ai_news":
+        HISTORY_DEDUPE_COUNTS["china_removed"] += len(matches)
+    else:
+        HISTORY_DEDUPE_COUNTS["global_removed"] += len(matches)
+    if matches:
+        print(f"[history-dedupe] section={section} removed={len(matches)}")
+    return kept
 
 def http_get(url: str, accept: str = "*/*", timeout: int = 18) -> bytes:
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": accept})
@@ -281,6 +374,7 @@ def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
             item["region"] = "China"
             candidates.append(item)
 
+    candidates = filter_historical_duplicates(candidates, "china_ai_news", now.astimezone(TZ).date().isoformat())
     ranked = rank_diverse_china_items(candidates)
     if len(ranked) < CHINA_NEWS_MIN:
         print(
@@ -528,6 +622,7 @@ def main() -> None:
     items = list(unique.values())
     recent = [x for x in items if not x["published"] or dt.datetime.fromisoformat(x["published"].replace("Z", "+00:00")) >= cutoff]
     recent.sort(key=lambda x: x.get("published") or "", reverse=True)
+    recent = filter_historical_duplicates(recent, "global_news", now.astimezone(TZ).date().isoformat())
     skills = collect_skills()
     china_ai_news, china_sources_ok = collect_china_ai_news(now)
     report = {
@@ -540,6 +635,13 @@ def main() -> None:
         "sources_total": len(FEEDS),
         "news": recent[:20],
         "china_ai_news": china_ai_news,
+        "historical_dedupe": {
+            "status": "ok",
+            "global_removed": HISTORY_DEDUPE_COUNTS["global_removed"],
+            "china_removed": HISTORY_DEDUPE_COUNTS["china_removed"],
+            "matches": HISTORY_DEDUPE_COUNTS["matches"],
+            "history_archive_files": len(list(ARCHIVE.glob("*.json"))) if ARCHIVE.exists() else 0,
+        },
         "china_sources_ok": china_sources_ok,
         "china_sources_total": len(CHINA_FEEDS),
         "skills": skills,
