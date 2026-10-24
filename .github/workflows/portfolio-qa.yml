@@ -41,6 +41,8 @@ jobs:
           done
           cat /tmp/portfolio-http.log
           exit 1
+      - name: Check regression script syntax
+        run: node --check scripts/qa-portfolio.cjs
       - name: Test portfolio on desktop and mobile
         run: node scripts/qa-portfolio.cjs
       - name: Upload screenshots and regression report
