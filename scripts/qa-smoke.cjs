@@ -206,7 +206,9 @@ const mark = (status, name, detail = '') => {
       const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
       mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
       // Fresh browser context: create a disposable test vault using synthetic credentials only.
+      await kp.waitForFunction(() => { const el = document.querySelector('#confirmWrap'); return el && !el.classList.contains('hidden'); }, null, { timeout: 15000 });
       await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
+      await kp.locator('#confirmPassword').waitFor({ state: 'visible', timeout: 5000 });
       await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#unlockBtn').click();
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
