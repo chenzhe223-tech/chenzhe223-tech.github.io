@@ -321,3 +321,6 @@ window.addEventListener('storage',event=>{
  if(!pendingCount&&$('#modalRoot').innerHTML.includes('saveRadarSkillBtn'))closeModal();
 });
 updateRadarImportButton();
+$('#projectSearch')?.addEventListener('input',renderProjects);
+$('#projectSourceFilter')?.addEventListener('change',renderProjects);
+$('#projectCategoryFilter')?.addEventListener('change',renderProjects);
