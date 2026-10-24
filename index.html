@@ -20,104 +20,71 @@
 @media(max-width:700px){.contact-section-head{margin-bottom:19px}.contact-section-head h2{font-size:35px}.contact-form-card{padding:16px;border-radius:18px}.contact-wechat-card{padding:21px 17px;border-radius:18px}.contact-chat-head{gap:9px}.chat-avatar{width:38px;height:38px;flex-basis:38px}.contact-chat-head strong{font-size:12px}.chat-step{font-size:7px;padding:5px 7px}.project-chips{gap:6px}.project-chip{padding:8px 10px}.form-grid{gap:12px 9px}.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{font-size:16px;padding:11px}.field-label{font-size:11px}.wechat-qr-link{width:min(78vw,272px);padding:10px}}
 @media(prefers-reduced-motion:reduce){.project-chip,.wechat-qr-link,.lead-form textarea,.lead-form input,.lead-form select{transition:none!important}}
 
-/* Balanced SaaS portfolio refinement — additive overrides; existing markup and interactions preserved. */
-:root{color-scheme:light;--bg:#F7F7F4;--panel:#FFFFFF;--line:#E7E8E4;--ink:#202630;--muted:#626B76;--dim:#7A818B;--cyan:#456783;--lime:#DCE8D9;--violet:#73869B}
-body{background:var(--bg);color:var(--ink)}
-.topbar{background:rgba(247,247,244,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
-.brand small{color:#68717c}.navlinks{color:#626b76}.navlinks a:hover{color:#20364E}
-.brand-icon{background:#20364E;color:#fff;box-shadow:none}
-.pill-button,.btn-primary{background:#20364E;color:#fff;box-shadow:none}
-.pill-button:hover,.btn-primary:hover{background:#2c4965;box-shadow:0 7px 18px rgba(32,54,78,.12)}
-.btn-secondary{border-color:#D5D9D8;background:#fff;color:#20364E}
-.hero{padding-top:62px}.eyebrow{color:#426580}
-.hero h1{color:#202630}.gradient{background:none;color:#20364E;-webkit-text-fill-color:#20364E}
-.hero p{color:#626B76}.hero p strong{color:#202630}.hero-note{color:#7A818B}
-.orbit{border-color:#20364E18}.orbit:before,.orbit:after{border-color:#20364E16}
-.orbit-tag{background:#fff;border-color:#E0E3E0;box-shadow:0 8px 24px rgba(32,38,48,.06);color:#202630}
-.orbit-tag b{color:#426580}.orbit-tag span{color:#626B76}
-.core{box-shadow:0 18px 55px rgba(32,54,78,.14),inset 0 1px rgba(255,255,255,.65)}
-.ticker{border-color:var(--line);background:#fff}.ticker-track{color:#7A818B}.ticker strong{color:#20364E}.ticker i{background:#6F927F}
-.desc{color:#626B76}.section-side{color:#7A818B}
-.market-tools{border-color:var(--line);background:#fff}
-.searchbox input{border-color:#DDE1DE;background:#FDFDFC;color:#202630}
-.searchbox input:focus{border-color:#20364E;box-shadow:0 0 0 3px rgba(32,54,78,.1)}
-.count,.shelf-tools,.market-foot{color:#69727D}
-.filter{border-color:#DDE1DE;background:#fff;color:#525D68}
-.filter.active{background:#20364E;border-color:#20364E;color:#fff}
-.arrow-btn{border-color:#DDE1DE;background:#fff;color:#20364E}
-.arrow-btn:hover:not(:disabled){background:#20364E;color:#fff;border-color:#20364E}
-.shelf{scrollbar-color:#AAB5B0 transparent}
-.shelf::-webkit-scrollbar-thumb{background:#AAB5B0}
-.app-card{border-color:#E0E3E0;background:#fff;box-shadow:0 4px 14px rgba(32,38,48,.035)}
-.app-card:hover{border-color:#9AAEBE;background:#fff;box-shadow:0 10px 24px rgba(32,54,78,.09)}
-.app-card:focus-visible{outline-color:#20364E}
-.app-en{color:#7A818B}.app-desc{color:#626B76}
-.app-bottom{border-color:#E7E8E4;color:#20364E}.open-mark{border-color:#DDE1DE;color:#20364E}
-.app-card:hover .open-mark{background:#20364E;color:#fff;border-color:#20364E}
-.status{background:#F1F3F1;color:#526575}.status.live{color:#32684F;background:#EAF3ED}.status.concept{color:#6C5A8B;background:#F1EDF7}
-.empty{border-color:#D5D9D8;color:#69727D}
-.manifesto{border-color:#DDE1DE;background:#fff;box-shadow:0 8px 30px rgba(26,45,74,.04)}
-.manifesto h2 em{color:#426580}.manifesto-copy{color:#626B76}
-.value,.step{border-color:#E0E3E0;background:#fff}
-.value small,.step b{color:#426580}.value p,.step p{color:#626B76}
-.offer-main,.offer-note{border-color:#DDE1DE;background:#fff}
-.offer-kicker{color:#6C5A8B}.offer p,.offer-note li{color:#626B76}.price span{color:#69727D}
-.contact-panel{background:#E8EEE8;color:#202630;border:1px solid #D6E0D8}
-.contact-panel p{color:#4F5E59}.contact-panel .btn{background:#20364E;color:#fff}
-.footer{border-color:#E0E3E0;color:#69727D}.footer-brand{color:#20364E}
-.modal{background:rgba(25,35,45,.48);backdrop-filter:blur(8px)}
-.modal-card{background:#fff;border-color:#E0E3E0;box-shadow:0 24px 70px rgba(32,38,48,.2)}
-.modal-top,.modal-section{border-color:#E7E8E4}.modal-close{border-color:#DDE1DE;background:#F7F7F4;color:#20364E}
-.modal-title{color:#202630}.modal-en{color:#69727D}.modal-body p{color:#626B76}
-.modal-tags span{border-color:#DDE1DE;color:#52606C}
-.detail-btn{border-color:#DDE1DE;background:#fff;color:#20364E}
-.detail-btn:hover{color:#fff;background:#20364E;border-color:#20364E}
-.app-main:hover .app-name{color:#20364E}
-.toast{background:#20364E;color:#fff}
-.preview-label{border-color:#E7E8E4;color:#69727D}.preview-label strong{color:#426580}
-.preview-stage{background:#F1F3F1}.preview-stage img{background:#F1F3F1}
-.preview-fallback{color:#626B76}.preview-retry{border-color:#DDE1DE;background:#fff;color:#20364E}
-.preview-retry:hover{background:#20364E;color:#fff;border-color:#20364E}
-.concept-preview{background:linear-gradient(135deg,#F7F7F4,#E9EEF0)}.concept-preview-inner strong{color:#202630}.concept-preview-inner small{color:#69727D}
-.concept-preview-inner .concept-label{color:#20364E;border-color:#CAD6D0;background:#EDF2EE}
-.contact-form-card{background:#fff;border-color:#E0E3E0;box-shadow:0 8px 30px rgba(26,45,74,.04)}
-.contact-wechat-card{border-color:#E0E3E0;background:#fff;box-shadow:0 8px 30px rgba(26,45,74,.04)}
-.contact-chat-head{border-color:#E7E8E4}.contact-chat-head strong{color:#202630}.contact-chat-head small{color:#69727D}
-.chat-step{border-color:#DDE1DE;color:#69727D}.chat-bubble{background:#F5F6F3;border-color:#E7E8E4;color:#4F5963}
-.project-chip{border-color:#DDE1DE;background:#fff;color:#52606C}.project-chip.active{background:#20364E;color:#fff;border-color:#20364E}
-input,textarea,select{color:#202630}
-button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #527897;outline-offset:3px}
-@media(max-width:700px){.hero{padding-top:40px}.visual{overflow:visible}.section{padding:55px 0}.app-card{background:#fff}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-form-card,.contact-wechat-card{padding:18px}.nav{gap:10px}}
+/* DAVYLAB tech-fashion palette: midnight graphite, electric blue, muted rose, champagne. */
+:root{color-scheme:dark;--bg:#050813;--panel:#0b1221;--line:#222a3b;--ink:#f5f7ff;--muted:#a8b3c8;--dim:#8491aa;--cyan:#8bb8ff;--lime:#f0d7a3;--violet:#d6a9d9}
+body{background:radial-gradient(ellipse at 15% 0%,#3663c52b,transparent 35%),radial-gradient(ellipse at 95% 25%,#8448bd1c,transparent 32%),var(--bg);color:var(--ink)}
+.topbar{background:#050813e8;border-bottom:1px solid #a9bce817}
+.brand small{color:#92a4c5}.navlinks{color:#a8b6d1}.navlinks a:hover{color:#fff}
+.brand-icon{background:linear-gradient(135deg,#8bb8ff,#d6a9d9 62%,#f0d7a3);color:#10192a}
+.pill-button,.btn-primary{background:linear-gradient(105deg,#f0d7a3,#ffced8);color:#0b1425;box-shadow:none}
+.pill-button:hover,.btn-primary:hover{box-shadow:0 8px 30px #d6a9d920}
+.btn-secondary{border-color:#a9bce826;background:#ffffff07;color:#e6eeff}
+.eyebrow{color:#8bb8ff}.hero h1{color:#f5f7ff}.gradient{background:linear-gradient(95deg,#fff 0%,#8bb8ff 38%,#d6a9d9 72%,#f0d7a3 100%);background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.hero p{color:#b8bfd0}.hero p strong{color:#fff}.hero-note{color:#8491aa}
+.orbit{border-color:#9ebaff28}.orbit:before,.orbit:after{border-color:#95c6ff22}
+.orbit-tag{background:#080f1de6;border-color:#a9bce828;box-shadow:0 12px 32px #0002;color:#eaf0ff}.orbit-tag b{color:#f0d7a3}.orbit-tag span{color:#d3def4}
+.ticker{border-color:#a9bce817;background:#ffffff03}.ticker-track{color:#8395b9}.ticker strong{color:#dce7ff}.ticker i{background:#f0d7a3}
+.desc{color:#a8b3c8}.section-side{color:#8491aa}
+.market-tools{border-color:#a9bce823;background:#ffffff04}
+.searchbox input{border-color:#bcd0ff17;background:#070d19;color:#f5f7ff}
+.searchbox input:focus{border-color:#8bb8ff77;box-shadow:0 0 0 3px #8bb8ff10}
+.count,.shelf-tools,.market-foot{color:#8394b6}
+.filter{border-color:#c5d7ff19;background:transparent;color:#a6b5d2}
+.filter.active{background:#f0d7a3;border-color:#f0d7a3;color:#0d1728}
+.arrow-btn{border-color:#a9bce826;background:#ffffff05;color:#e2ebff}
+.arrow-btn:hover:not(:disabled){background:#f0d7a3;color:#10192a;border-color:#f0d7a3}
+.shelf{scrollbar-color:#637aa64c transparent}.shelf::-webkit-scrollbar-thumb{background:#8298bf55}
+.app-card{border-color:#a9bce821;background:linear-gradient(155deg,#11192a,#0a101e);box-shadow:none;color:inherit}
+.app-card:hover{border-color:#8bb8ff62;background:linear-gradient(155deg,#151f34,#101b33);box-shadow:0 10px 24px #0003}
+.app-card:focus-visible{outline-color:#f0d7a3}
+.app-en{color:#8494b4}.app-desc{color:#a8b3c8}.app-bottom{border-color:#d0ddff10;color:#cfddfa}
+.open-mark{border-color:#a9bce826;color:#dce7ff}.app-card:hover .open-mark{background:#f0d7a3;color:#0a1425;border-color:#f0d7a3}
+.status{background:#ffffff0b;color:#9fdefd}.status.live{color:#bdffad;background:#bdff8512}.status.concept{color:#d6a9d9;background:#d6a9d916}
+.empty{border-color:#a9bce828;color:#a8b3c8}
+.manifesto{border-color:#91b4ff25;background:radial-gradient(ellipse at 8% 0%,#3c71c423,transparent 45%),radial-gradient(ellipse at 100% 100%,#d6a9d90f,transparent 35%),linear-gradient(135deg,#101c36,#0b152a);box-shadow:none}
+.manifesto h2 em{color:#f0d7a3}.manifesto-copy{color:#afbfdb}
+.value,.step{border-color:#d4e1ff16;background:#ffffff04}.value small,.step b{color:#8bb8ff}.value p,.step p{color:#94a7ca}
+.offer-main,.offer-note{border-color:#b8a7ff35;background:linear-gradient(130deg,#b8a7ff13,#5e94ff0b),#0d1830}
+.offer-kicker{color:#ffced8}.offer p,.offer-note li{color:#a5b5d3}.price span{color:#bbcae6}
+.contact-panel{background:linear-gradient(115deg,#8bb8ff,#d6a9d9 49%,#f0d7a3);color:#0a1728;border:1px solid #d6a9d955}
+.contact-panel p{color:#233955}.contact-panel .btn{background:#0b172b;color:#fff}
+.footer{border-color:#a9bce817;color:#7485a7}.footer-brand{color:#e4ebfa}
+.modal{background:#030816c9;backdrop-filter:blur(12px)}.modal-card{background:#0c1424;border-color:#d8e4ff20;box-shadow:0 30px 100px #0008}
+.modal-top,.modal-section{border-color:#a9bce820}.modal-close{border-color:#a9bce820;background:#ffffff08;color:#fff}
+.modal-title{color:#f5f7ff}.modal-en{color:#8293b6}.modal-body p{color:#a8b9d9}
+.modal-tags span{border-color:#a9bce820;color:#b9c9e5}
+.detail-btn{border-color:#a9bce824;background:#ffffff05;color:#b8c7e4}.detail-btn:hover{color:#0b1425;background:#f0d7a3;border-color:#f0d7a3}
+.app-main:hover .app-name{color:#fff}.toast{background:#f0d7a3;color:#10192a}
+.preview-label{border-color:#a9bce817;color:#9eb1d4}.preview-label strong{color:#f0d7a3}
+.preview-stage{background:#101d36}.preview-stage img{background:#0b152a}.preview-fallback{color:#a8badb}
+.preview-retry{border-color:#a9bce83b;background:#ffffff0b;color:#eaf1ff}.preview-retry:hover{background:#f0d7a3;color:#091329;border-color:#f0d7a3}
+.concept-preview{background:radial-gradient(circle at 50% 45%,#5b70a72b,transparent 39%),linear-gradient(135deg,#111f3b,#070d19)}
+.concept-preview-inner strong{color:#f5f7ff}.concept-preview-inner small{color:#95a8cb}
+.concept-preview-inner .concept-label{color:#f0d7a3;border-color:#f0d7a340;background:#f0d7a310}
+.contact-form-card{background:linear-gradient(155deg,#13213d,#0d172b);border-color:#a9bce824;box-shadow:0 20px 60px #0002}
+.contact-wechat-card{border-color:#a9bce824;background:radial-gradient(ellipse at 82% 5%,#a48dff22,transparent 40%),linear-gradient(145deg,#121f3a,#0b1529);box-shadow:0 20px 60px #0002}
+.contact-chat-head{border-color:#a9bce817}.contact-chat-head strong{color:#f5f7ff}.contact-chat-head small{color:#92a5ca}
+.chat-step{border-color:#a9bce820;color:#8fa2c6;background:transparent}.chat-bubble{background:#ffffff08;border-color:#a9bce816;color:#c5d3e9}
+.project-chip{border-color:#a9bce824;background:#ffffff04;color:#a9b9d7}.project-chip.active{background:#8bb8ff1c;border-color:#8bb8ff;color:#e6eeff}
+.field-label{color:#dfe8fa}.field-label span{color:#ffb8d7}
+.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:#070d19;color:#f3f6ff;border-color:#a9bce822}
+.lead-form input::placeholder,.lead-form textarea::placeholder{color:#6f82a8}
+.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:#8bb8ff95;box-shadow:0 0 0 3px #8bb8ff10}
+.consent-row{color:#8fa2c6}.consent-row input{accent-color:#f0d7a3}.field-hint{color:#8296bb}
+.form-status.success{background:#bdff8512;border-color:#f0d7a33b;color:#dcffb4}.form-status.error{background:#ff7ba812;border-color:#ff9bc344;color:#ffd0e1}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #8bb8ff;outline-offset:3px}
+@media(max-width:700px){.hero{padding-top:40px;padding-bottom:48px}.visual{overflow:visible;min-height:270px;margin-bottom:12px}.tag-c{bottom:12px}.tag-d{bottom:35px}.section{padding:55px 0}.app-card{background:linear-gradient(155deg,#11192a,#0a101e)}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-form-card,.contact-wechat-card{padding:18px}.nav{gap:10px}}
 @media(prefers-reduced-motion:reduce){.app-card:hover,.pill-button:hover,.btn-primary:hover{transform:none}}
-
-
-/* Final visual QA refinements: light contact form and more breathing room on mobile. */
-.contact-form-card{background:#FFFFFF;border:1px solid #E7E8E4;box-shadow:0 8px 28px rgba(32,38,48,.04)}
-.contact-chat-head{border-bottom-color:#E7E8E4}
-.contact-chat-head strong{color:#202630}
-.contact-chat-head small{color:#68717C}
-.chat-step{border-color:#DDE1DE;color:#68717C;background:#F7F7F4}
-.chat-bubble{background:#F5F6F3;border-color:#E7E8E4;color:#4F5963}
-.project-chip{border-color:#DDE1DE;background:#FFFFFF;color:#52606C}
-.project-chip:hover{border-color:#A8B4BE;background:#F7F7F4;color:#20364E}
-.project-chip.active{background:#20364E;color:#FFFFFF;border-color:#20364E}
-.field-label{color:#35414D}
-.field-label span{color:#A44F69}
-.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:#FFFFFF;color:#202630;border-color:#DDE1DE;box-shadow:none}
-.lead-form input::placeholder,.lead-form textarea::placeholder{color:#7A818B}
-.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:#456783;box-shadow:0 0 0 3px rgba(69,103,131,.14)}
-.consent-row{color:#626B76}
-.consent-row input{accent-color:#20364E}
-.field-hint{color:#7A818B}
-.form-status.success{background:#EEF5ED;border-color:#C8DCC4;color:#35553A}
-.form-status.error{background:#FBEEF1;border-color:#E6C4CC;color:#8B344A}
-@media(max-width:700px){
-  .hero{padding-bottom:48px}
-  .visual{min-height:270px;margin-bottom:12px}
-  .tag-c{bottom:12px}
-  .tag-d{bottom:35px}
-}
-
 </style></head><body>
 <header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
 <main id="top"><section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Independent AI Product Studio</div><h1>把想法，<br><span class="gradient">做成能用的工具。</span></h1><p>AI 正在降低创造的门槛。<strong>DAVYLAB 想做的，是让更多普通人把一个念头，走成一款真实的产品。</strong> 从灵感、原型到应用，让创造不再停在“想一想”。</p><div class="actions"><a class="btn btn-primary" href="#products">探索我的产品 ↓</a><a class="btn btn-secondary" href="#contact">带来你的想法 ↗</a></div><div class="hero-note">SPARK AN IDEA · BUILD A TOOL · KEEP THE PULSE ALIVE</div></div><div class="visual" aria-label="灵感与产品的动态视觉"><div class="orbit"></div><div class="core"><svg viewBox="0 0 100 100" fill="none"><path d="M53 7 28 47h20l-7 45 34-52H53l11-33Z" fill="#d7ff74"/><path d="M9 65C22 46 32 47 44 63S69 80 91 53" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="24" r="4" fill="#fff"/></svg></div><div class="orbit-tag tag-a"><b>01 / SPARK</b><span>让灵感被看见</span></div><div class="orbit-tag tag-b"><b>02 / BUILD</b><span>把想法做出来</span></div><div class="orbit-tag tag-c"><b>03 / PULSE</b><span>持续验证与迭代</span></div><div class="orbit-tag tag-d"><b>IDEA → PRODUCT</b><span>从念头到工具</span></div></div></div></section>
