@@ -192,6 +192,7 @@ jobs:
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_historical_dedupe -v
+          python -m unittest radar.scripts.test_skill_radar -v
           python -m unittest radar.scripts.test_poster_style -v
           python -m unittest radar.scripts.test_poster_generation -v
           python -m unittest radar.scripts.test_news_image_match -v
