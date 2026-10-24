@@ -266,7 +266,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         "qr_url": PUBLIC_URL,
         "news_count": 5,
         "skill": skill_name,
-        "design": "mountain-editorial-cover",
+        "design": "mountain-editorial",
         **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
