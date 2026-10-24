@@ -186,7 +186,6 @@ jobs:
           python -m py_compile radar/scripts/quality_gate.py radar/scripts/test_quality_gate.py
           python -m unittest radar.scripts.test_quality_gate -v
           python -m radar.scripts.quality_gate
-        if: steps.preflight.outputs.skip != 'true'
       - name: Validate today's date, fresh news and data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py
@@ -387,6 +386,13 @@ jobs:
             echo 'No report data changes to commit.'
           fi
         if: steps.preflight.outputs.skip != 'true'
+      - name: Upload news/image freshness gate report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: news-image-quality-gate
+          path: test-results/radar/news-image-quality-gate.json
+          if-no-files-found: warn
       - name: Upload daily briefing screenshots and report
         if: always() && steps.preflight.outputs.skip != 'true'
         uses: actions/upload-artifact@v4
