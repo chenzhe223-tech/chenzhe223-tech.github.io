@@ -47,6 +47,13 @@ export default {
   }
   if(origin!==allowed)return json({error:"origin_not_allowed"},403,origin,allowed);
   if(request.method!=="POST")return json({error:"method_not_allowed"},405,origin,allowed);
+  if(env.AI_RATE_LIMITER){
+   const ip=request.headers.get("cf-connecting-ip")||"unknown";
+   try{
+    const limit=await env.AI_RATE_LIMITER.limit({key:ip});
+    if(!limit.success)return json({error:"request_rate_limited",message:"请求过于频繁，请稍后再试。"},429,origin,allowed);
+   }catch{return json({error:"rate_limiter_unavailable",message:"服务保护机制暂不可用，请稍后重试。"},503,origin,allowed)}
+  }
   if(!env.DEEPSEEK_API_KEY)return json({error:"ai_service_not_configured",message:"AI 服务尚未配置，请稍后重试。"},503,origin,allowed);
   const length=Number(request.headers.get("content-length")||0);
   if(length>MAX_BODY_BYTES)return json({error:"payload_too_large"},413,origin,allowed);
