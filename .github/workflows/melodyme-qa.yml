@@ -135,7 +135,7 @@ jobs:
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
           await page.locator('#save').click();
           await page.getByRole('button',{name:/我的作品/}).click();
-          if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('save to collection failed');
+          if (!(await page.getByText('QA Preview Track').count())) throw new Error('save to collection failed');
           await page.reload();
           await page.getByRole('button',{name:/我的作品/}).click();
           if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('local persistence failed');
