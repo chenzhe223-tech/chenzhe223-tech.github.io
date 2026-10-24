@@ -1,7 +1,11 @@
 import unittest
-from radar.scripts.quality_gate import compare_story, norm_url, published_image_records, similarity, tokens
+from radar.scripts.quality_gate import compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
 
 class QualityGateTests(unittest.TestCase):
+    def test_unreachable_historical_image_is_reported_but_does_not_block_clean_current_assets(self):
+        self.assertEqual(evaluate_quality_gate([],[],[],[],[],[{"url":"https://old.example/missing.jpg"}],[]),"PASS")
+        self.assertEqual(evaluate_quality_gate([],[],[{"type":"image_unverifiable"}],[],[],[],[]),"FAIL")
+        self.assertEqual(evaluate_quality_gate([],[],[],[{"type":"same_week_content_reuse"}],[],[],[]),"FAIL")
     def test_weekly_image_index_ignores_unpublished_rss_candidates(self):
         doc={"news":[{"title":"Unused RSS candidate","image_url":"https://example.com/unused.jpg"}],"top5":[{"title":"Published story","image_url":"https://example.com/published.jpg"}]}
         items=list(published_image_records(doc,"2026-10-23"))
