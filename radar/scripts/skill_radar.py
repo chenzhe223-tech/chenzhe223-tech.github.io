@@ -129,6 +129,89 @@ def load_recommendation_history(archive_dir: Path,today: str,window_days: int=90
     else:
         status="complete" if (current-lower).days<=len(seen_days) else "partial"
     return {"status":status,"records":records,"files_read":len(seen_days),"coverage_days":len(seen_days),"window_days":window_days,"window_start":lower.isoformat(),"window_end":(current-dt.timedelta(days=1)).isoformat(),"errors":errors}
+def enrich_growth_metrics(candidates: list[dict],snapshot_dir: Path,today: str) -> dict:
+    """Compare directly observed GitHub Stars with prior daily snapshots; never infer growth from update dates."""
+    try:
+        current=dt.date.fromisoformat(today)
+    except ValueError:
+        return {"status":"unavailable","snapshot_file":None,"error":"invalid current date","candidate_count":len(candidates)}
+    lower=current-dt.timedelta(days=35)
+    snapshots=[]
+    errors=[]
+    if snapshot_dir.exists():
+        for path in sorted(snapshot_dir.glob("*.json")):
+            try:
+                day=dt.date.fromisoformat(path.stem)
+            except ValueError:
+                continue
+            if not (lower<=day<current):
+                continue
+            try:
+                doc=json.loads(path.read_text(encoding="utf-8"))
+                if not isinstance(doc,dict) or not isinstance(doc.get("candidates"),list):
+                    raise ValueError("invalid candidate snapshot schema")
+                snapshots.append((day,doc["candidates"]))
+            except Exception as exc:
+                errors.append({"file":path.name,"error":type(exc).__name__})
+    # If any relevant historical snapshot is corrupt, do not claim a trustworthy growth comparison.
+    by_id:dict[str,list[tuple[dt.date,int]]]={}
+    for day,items in snapshots:
+        for old in items:
+            if not isinstance(old,dict): continue
+            cid=str(old.get("canonical_id") or canonical_project_id(str(old.get("url") or old.get("name") or "")))
+            try: stars=int(old.get("stars_total"))
+            except (TypeError,ValueError): continue
+            if cid: by_id.setdefault(cid,[]).append((day,stars))
+    for item in candidates:
+        cid=canonical_project_id(str(item.get("url") or item.get("name") or ""))
+        try: current_stars=max(0,int(item.get("stars") if item.get("stars") is not None else item.get("stars_total") or 0))
+        except (TypeError,ValueError): current_stars=0
+        item["canonical_id"]=cid
+        item["stars_total"]=current_stars
+        item["stars_delta_7d"]=None
+        item["stars_delta_30d"]=None
+        item["growth_baseline_7d_date"]=None
+        item["growth_baseline_30d_date"]=None
+        item["growth_data_status"]="no historical candidate snapshot in 7-day/30-day comparison windows"
+        if errors:
+            item["growth_data_status"]="historical candidate snapshot unreadable; growth comparison withheld"
+            continue
+        history=sorted(by_id.get(cid,[]),key=lambda x:x[0])
+        for window,field,date_field,max_lag in ((7,"stars_delta_7d","growth_baseline_7d_date",3),(30,"stars_delta_30d","growth_baseline_30d_date",5)):
+            target=current-dt.timedelta(days=window)
+            eligible=[(day,stars) for day,stars in history if target-dt.timedelta(days=max_lag)<=day<=target]
+            if not eligible: continue
+            baseline_day,baseline_stars=max(eligible,key=lambda x:x[0])
+            item[field]=current_stars-baseline_stars
+            item[date_field]=baseline_day.isoformat()
+        if item["stars_delta_7d"] is not None or item["stars_delta_30d"] is not None:
+            item["growth_data_status"]="directly observed daily GitHub Stars snapshots; baseline dates recorded"
+    snapshot_dir.mkdir(parents=True,exist_ok=True)
+    snapshot_file=snapshot_dir/f"{today}.json"
+    payload={
+        "snapshot_date":today,
+        "checked_at":dt.datetime.now(dt.timezone.utc).isoformat(),
+        "source":"GitHub repository search API",
+        "metrics_policy":"Stars are direct observed cumulative counts; deltas are calculated only against dated prior snapshots of the same canonical repository.",
+        "candidate_count":len(candidates),
+        "candidates":[
+            {"canonical_id":canonical_project_id(str(x.get("url") or x.get("name") or "")),
+             "name":x.get("name"),"url":x.get("url"),
+             "stars_total":int(x.get("stars") if x.get("stars") is not None else x.get("stars_total") or 0),
+             "repository_updated_at":x.get("updated"),"created_at":x.get("created_at"),
+             "pushed_at":x.get("pushed_at"),"community_signals":x.get("community_signals"),
+             "source":"GitHub repository search API","observed_at":dt.datetime.now(dt.timezone.utc).isoformat()}
+            for x in candidates
+        ],
+    }
+    # One file per China-local day makes retries idempotent and prevents unbounded duplicate records.
+    snapshot_file.write_text(json.dumps(payload,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    return {"status":"unavailable" if errors else "observed" if snapshots else "baseline_started",
+            "snapshot_file":str(snapshot_file),"historical_snapshots_read":len(snapshots),
+            "historical_errors":errors,"candidate_count":len(candidates),
+            "candidates_with_7d_delta":sum(x.get("stars_delta_7d") is not None for x in candidates),
+            "candidates_with_30d_delta":sum(x.get("stars_delta_30d") is not None for x in candidates)}
+
 def _clamp(v: float,lo: float=0,hi: float=100)->float: return max(lo,min(hi,v))
 def score_candidate(item: dict, today: str) -> dict:
     stars=max(0,int(item.get("stars") or 0))
@@ -136,7 +219,11 @@ def score_candidate(item: dict, today: str) -> dict:
     # Do not infer stars/week from updated_at.
     community=item.get("community_signals") if isinstance(item.get("community_signals"),dict) else {}
     community_count=max(0,int(community.get("count_7d") or 0))
-    heat=_clamp(math.log10(stars+1)/5*20 + min(5,community_count*1.5),0,25)
+    growth7=item.get("stars_delta_7d")
+    try: growth7=int(growth7) if growth7 is not None else None
+    except (TypeError,ValueError): growth7=None
+    growth_component=(math.log1p(max(0,growth7))/math.log1p(5000)*8) if growth7 is not None else 0
+    heat=_clamp(math.log10(stars+1)/5*12 + growth_component + min(5,community_count*1.5),0,25)
     updated=str(item.get("updated") or "")
     age_days=None
     activity_date=str(item.get("pushed_at") or updated)[:10]
@@ -161,7 +248,9 @@ def score_candidate(item: dict, today: str) -> dict:
       "last_recommended_at":today_text,"last_release_at":item.get("last_release_at"),
       "recommendation_history":item.get("recommendation_history") or [],
       "rejection_reason":item.get("rejection_reason"),"re_recommendation_reason":item.get("re_recommendation_reason"),
-      "stars_total":stars,"stars_delta_7d":None,"stars_delta_30d":None,
+      "stars_total":stars,"stars_delta_7d":item.get("stars_delta_7d"),"stars_delta_30d":item.get("stars_delta_30d"),
+      "growth_baseline_7d_date":item.get("growth_baseline_7d_date"),"growth_baseline_30d_date":item.get("growth_baseline_30d_date"),
+      "growth_component":round(growth_component,2),
       "community_signals":community,"community_count_7d":community_count,
       "community_evidence_urls":community.get("evidence_urls",[]),
       "heat_data_status":"GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -169,7 +258,7 @@ def score_candidate(item: dict, today: str) -> dict:
       "usefulness_score":round(usefulness,1),"quality_score":round(quality,1),
       "novelty_score":round(novelty,1),"maintenance_score":round(maintenance,1),
       "total_score":total,"age_since_update_days":age_days,
-      "growth_data_status":"暂无可靠历史 Stars 快照，未推算近期增长",
+      "growth_data_status":item.get("growth_data_status") or "暂无可靠历史 Stars 快照，未推算近期增长",
       "confidence_level":confidence,"evidence_checked_at":item.get("evidence_checked_at"),
       "maturity_level":"持续维护" if age_days is not None and age_days<=90 else "维护状态待确认",
       "compatibility_status":"文档及仓库元数据已核验；未执行安装测试",
