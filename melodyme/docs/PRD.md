@@ -64,3 +64,10 @@
 The intended experience is story-first: AI extracts memory clues, proposes hypotheses, then external music catalog results are verified separately. Candidate facts must preserve provenance (`ai_inferred`, `catalog_verified`, `user_confirmed`, `unknown`). Real cover art must match a catalog/release record. Shazam links must be exact, verified song-detail links; never claim guaranteed autoplay.
 
 Output modes: illustrated poster using verified/authorized cover art, and a complete text-only work with AI-adapted typography and palette. DeepSeek, version comparison, AI copy, and layout planning are not considered delivered until a deployed server endpoint and real browser integration tests pass.
+
+
+## AI music memory engine v1
+
+Story-first AI extracts memory clues and proposes hypotheses; external catalog results are verified separately. Candidate facts preserve provenance (`ai_inferred`, `catalog_verified`, `user_confirmed`, `unknown`). Cover art must match a catalog/release record. Shazam links must be exact, verified song-detail links; never claim guaranteed autoplay.
+
+Output modes: illustrated poster using verified/authorized cover art, and a complete text-only work with adapted typography and palette. DeepSeek, version comparison, AI copy and layout planning are not delivered until a deployed endpoint and real browser integration tests pass.
