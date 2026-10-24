@@ -71,7 +71,7 @@ jobs:
             await page.route(/https:\/\/image\.pollinations\.ai\/.*/, route => pollinationsMode === 'ok'
               ? route.fulfill({status:200,contentType:'image/png',body:tinyPng})
               : route.fulfill({status:503,contentType:'text/plain',body:'mock image failure'}));
-            await page.route(/melodyme-ai\\.chenzhe223\\.workers\\.dev/, async route => {
+            await page.route(/melodyme-ai\.chenzhe223\.workers\.dev/, async route => {
               const payload = route.request().postDataJSON() || {};
               if (payload.action === 'generateAlbumArt') {
                 return workerImageMode === 'ok'
