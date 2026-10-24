@@ -63,7 +63,7 @@ def _weekly_used_images(today: str) -> set[str]:
             doc = json.loads(path.read_text(encoding="utf-8"))
         except Exception as exc:
             raise RuntimeError(f"Cannot read weekly image history {path.name}: {type(exc).__name__}") from exc
-        for section in ("top5", "china_ai_news", "news"):
+        for section in ("top5", "china_ai_news"):
             items = doc.get(section, [])
             if not isinstance(items, list):
                 continue
@@ -400,7 +400,15 @@ def _thematic_fallback(story: dict, used: set[str]) -> dict:
         if _image_identity(url) not in used and valid_image_url(url):
             break
     else:
-        url = checked[0] if checked else _theme_photo_url(THEME_PHOTOS["general"][0])
+        # Never recycle a prior weekly asset merely because the candidate pool is exhausted.
+        title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI news")
+        return {
+            "image_url": "", "image_source": "No verified unique image available",
+            "image_page_url": "", "image_credit": "", "image_license": "",
+            "image_license_url": "", "image_alt": "配图暂缺 · 未找到符合本周去重规则的唯一图片",
+            "image_match_status": "image_unavailable", "image_matched_at": dt.datetime.now(TZ).isoformat(),
+            "image_is_generated": False, "image_generation_prompt": build_illustration_prompt(story),
+        }
     title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI news")
     labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration",
               "product":"AI product / software topic illustration","business":"AI business / industry topic illustration",
