@@ -19,7 +19,12 @@ class QualityGateTests(unittest.TestCase):
     def test_similar_headline_same_event_is_duplicate(self):
         old={"title":"UK announces £600m AI safety funding and biological safety lab","summary":"The government announced new AI safety funding","_history_date":"2026-10-23"}
         new={"title":"Britain unveils 600 million pounds for AI safety, including biosafety lab","summary":"Government funding for AI security","url":"https://example.com"}
-        self.assertIsNotNone(compare_story(new,[old]))
+        self.assertIsNotNone(compare_story(new,[old],current_date="2026-10-25"))
+    def test_old_near_event_does_not_block_a_new_update(self):
+        old={"title":"UK announces £600m AI safety funding and biological safety lab","summary":"The government announced new AI safety funding","_history_date":"2026-10-20"}
+        new={"title":"Britain unveils 600 million pounds for AI safety, including biosafety lab","summary":"Government funding for AI security","url":"https://example.com"}
+        self.assertIsNone(compare_story(new,[old],current_date="2026-10-25"))
+
     def test_same_company_only_does_not_trigger_duplicate(self):
         old={"title":"OpenAI launches a new coding agent for enterprise customers"}
         new={"title":"OpenAI announces a new voice model for mobile devices"}

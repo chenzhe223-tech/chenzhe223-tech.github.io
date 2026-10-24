@@ -135,36 +135,58 @@ def _history_stories(today: str) -> list[dict]:
                     records.append(record)
     return records
 
-def _duplicate_match(candidate: dict, history: list[dict]) -> dict | None:
+def _near_match_is_recent(old: dict, current_date: str | None, window_days: int = 2) -> bool:
+    """Only suppress near-identical events across the last two report dates.
+
+    Exact URL/title matches remain duplicates across the full archive. Older stories
+    may share a company or theme with a genuinely new development and should not
+    exhaust the daily news pool.
+    """
+    raw_old_date = old.get("_history_date") or old.get("_current_date")
+    if not raw_old_date:
+        return True
+    try:
+        current = dt.date.fromisoformat(str(current_date)[:10]) if current_date else dt.datetime.now(TZ).date()
+        previous = dt.date.fromisoformat(str(raw_old_date)[:10])
+        age = (current - previous).days
+        return 0 <= age <= window_days
+    except Exception:
+        return True
+
+def _duplicate_match(candidate: dict, history: list[dict], current_date: str | None = None) -> dict | None:
     titles = _story_title_variants(candidate)
     url = _story_url_key(candidate)
     tokens = set().union(*(_story_tokens(x) for x in titles)) if titles else set()
+    current_date = current_date or candidate.get("_current_date") or dt.datetime.now(TZ).date().isoformat()
     for old in history:
         old_url = _story_url_key(old)
         if url and old_url and url == old_url:
-            return {"kind":"same_url","date":old.get("_history_date"),"title":_story_title(old),"url":old.get("url")}
+            return {"kind":"same_url","date":old.get("_history_date") or old.get("_current_date"),"title":_story_title(old),"url":old.get("url")}
         old_titles = _story_title_variants(old)
         for title in titles:
             for old_title in old_titles:
                 normalized = lambda value: re.sub(r"\W", "", value.lower())
                 if normalized(title) and normalized(title) == normalized(old_title):
-                    return {"kind":"same_title","date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+                    return {"kind":"same_title","date":old.get("_history_date") or old.get("_current_date"),"title":old_title,"url":old.get("url")}
+                if not _near_match_is_recent(old, current_date):
+                    continue
                 ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
                 old_tokens = _story_tokens(old_title)
                 overlap = len(_story_tokens(title) & old_tokens) / max(1, min(len(_story_tokens(title)), len(old_tokens)))
                 if ratio >= 0.82 or (overlap >= 0.78 and len(_story_tokens(title) & old_tokens) >= 4):
-                    return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
-        old_tokens = set().union(*(_story_tokens(x) for x in old_titles)) if old_titles else set()
-        overlap = len(tokens & old_tokens) / max(1, min(len(tokens), len(old_tokens)))
-        if overlap >= 0.84 and len(tokens & old_tokens) >= 5:
-            return {"kind":"multilingual_title_overlap","score":round(overlap,3),"date":old.get("_history_date"),"title":_story_title(old),"url":old.get("url")}
+                    return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date") or old.get("_current_date"),"title":old_title,"url":old.get("url")}
+        if _near_match_is_recent(old, current_date):
+            old_tokens = set().union(*(_story_tokens(x) for x in old_titles)) if old_titles else set()
+            overlap = len(tokens & old_tokens) / max(1, min(len(tokens), len(old_tokens)))
+            if overlap >= 0.84 and len(tokens & old_tokens) >= 5:
+                return {"kind":"multilingual_title_overlap","score":round(overlap,3),"date":old.get("_history_date") or old.get("_current_date"),"title":_story_title(old),"url":old.get("url")}
     return None
 
 def filter_historical_duplicates(items: list[dict], section: str, today: str) -> list[dict]:
     history = _history_stories(today)
     kept, matches = [], []
     for item in items:
-        match = _duplicate_match(item, history)
+        match = _duplicate_match(item, history, today)
         if match:
             matches.append({"section":section,"candidate":_story_title(item),"match":match})
         else:
@@ -325,6 +347,15 @@ def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
             seen_titles.add(title_key)
 
     ranked = sorted(unique, key=lambda x: x.get("published", ""), reverse=True)
+    # Keep the freshest of near-identical headlines in the same day's module.
+    today = dt.datetime.now(TZ).date().isoformat()
+    deduped: list[dict] = []
+    for item in ranked:
+        prior = [{**old, "_current_date": today} for old in deduped]
+        if _duplicate_match(item, prior, today):
+            continue
+        deduped.append(item)
+    ranked = deduped
     if not ranked:
         return []
 
@@ -357,7 +388,6 @@ def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
         if len(selected) >= CHINA_NEWS_TARGET or len(selected) >= CHINA_NEWS_MAX:
             break
     return selected[:CHINA_NEWS_MAX]
-
 
 def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
     """Collect recent, source-linked China AI developments; do not synthesize missing stories."""

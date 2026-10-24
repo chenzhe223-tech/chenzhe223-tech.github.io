@@ -7,9 +7,14 @@ class HistoricalDedupeTests(unittest.TestCase):
         new={"title":"OpenAI acquires Orchestra Bio to beef up biotech business","url":"https://new.example/story"}
         self.assertIsNotNone(_duplicate_match(new,[old]))
     def test_near_identical_headline_is_filtered_after_ai_reselection(self):
-        old={"title":"OpenAI收购Orchestra Bio，强化生物科技业务","url":"https://old.example/story","_history_date":"2026-10-21"}
+        old={"title":"OpenAI收购Orchestra Bio，强化生物科技业务","url":"https://old.example/story","_history_date":"2026-10-24"}
         new={"title":"OpenAI收购Orchestra Bio","url":"https://new.example/story"}
-        self.assertIsNotNone(_duplicate_match(new,[old]))
+        self.assertIsNotNone(_duplicate_match(new,[old],current_date="2026-10-25"))
+    def test_old_near_event_does_not_hide_a_new_update(self):
+        old={"title":"OpenAI收购Orchestra Bio，强化生物科技业务","url":"https://old.example/story","_history_date":"2026-10-20"}
+        new={"title":"OpenAI收购Orchestra Bio","url":"https://new.example/story"}
+        self.assertIsNone(_duplicate_match(new,[old],current_date="2026-10-25"))
+
     def test_tracking_url_variants_are_same_story(self):
         a={"title":"A new AI product","url":"https://www.example.com/story/?utm_source=x"}
         b={"title":"Completely rewritten headline","url":"http://example.com/story#details"}

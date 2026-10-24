@@ -105,24 +105,40 @@ def published_image_records(doc, day):
                 x=dict(item); x["_history_date"]=day; x["_history_section"]=section
                 yield x
 
-def compare_story(candidate, history):
+def _near_match_is_recent(candidate, old, current_date=None, window_days=2):
+    raw_old_date = old.get("_history_date") or old.get("_current_date")
+    if not raw_old_date:
+        return True
+    try:
+        current = dt.date.fromisoformat(str(current_date or candidate.get("_current_date") or dt.datetime.now(TZ).date().isoformat())[:10])
+        previous = dt.date.fromisoformat(str(raw_old_date)[:10])
+        age = (current - previous).days
+        return 0 <= age <= window_days
+    except Exception:
+        return True
+
+def compare_story(candidate, history, current_date=None):
     cu=norm_url(candidate.get("url") or candidate.get("source_url") or candidate.get("link") or "")
     ct=story_title(candidate)
     ctext=story_text(candidate)
+    current_date = current_date or candidate.get("_current_date") or dt.datetime.now(TZ).date().isoformat()
     for old in history:
         ou=norm_url(old.get("url") or old.get("source_url") or old.get("link") or "")
         if cu and ou and cu==ou:
-            return {"kind":"exact_url","score":1.0,"history_date":old.get("_history_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
+            return {"kind":"exact_url","score":1.0,"history_date":old.get("_history_date") or old.get("_current_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
         if norm_text(ct) and norm_text(ct)==norm_text(story_title(old)):
-            return {"kind":"exact_title","score":1.0,"history_date":old.get("_history_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
+            return {"kind":"exact_title","score":1.0,"history_date":old.get("_history_date") or old.get("_current_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
+        if not _near_match_is_recent(candidate, old, current_date):
+            continue
         score=similarity(ct,story_title(old))
         # Require both meaningful title similarity and supporting content overlap; avoids company-name-only false positives.
         a,b=tokens(ct),tokens(story_title(old))
         overlap=len(a&b)/max(1,min(len(a),len(b)))
         body=similarity(ctext,story_text(old))
         if (score>=0.86 and overlap>=0.65) or (score>=0.76 and overlap>=0.72 and body>=0.70):
-            return {"kind":"near_title_or_event","score":round(max(score,body),3),"history_date":old.get("_history_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
+            return {"kind":"near_title_or_event","score":round(max(score,body),3),"history_date":old.get("_history_date") or old.get("_current_date"),"history_title":story_title(old),"history_url":old.get("url") or old.get("source_url")}
     return None
+
 def image_url(s):
     return str(s.get("image_url") or s.get("image") or s.get("thumbnail") or "").strip()
 def download_fingerprints(url):
@@ -173,12 +189,12 @@ def main():
         if isinstance(arr,list):
             for item in arr:
                 if isinstance(item,dict) and story_title(item):
-                    x=dict(item); x["_current_section"]=key; current.append(x)
+                    x=dict(item); x["_current_section"]=key; x["_current_date"]=today; current.append(x)
     # Check duplicates within the five selected stories and against every accessible historical record.
     duplicate_hits=[]
     seen_current=[]
     for item in current:
-        hit=compare_story(item,history)
+        hit=compare_story(item,history,current_date=today)
         if hit:
             duplicate_hits.append({"scope":"history","section":item.get("_current_section"),"title":story_title(item),"match":hit})
         # The general news feed intentionally contains the same records as top5.
@@ -186,7 +202,7 @@ def main():
         # not between the source pool and its selected subset.
         if item.get("_current_section") in ("top5", "china_ai_news"):
             curated_seen=[x for x in seen_current if x.get("_current_section") in ("top5", "china_ai_news")]
-            internal=compare_story(item,curated_seen)
+            internal=compare_story(item,curated_seen,current_date=today)
             if internal:
                 duplicate_hits.append({"scope":"current_curated_sections","section":item.get("_current_section"),"title":story_title(item),"match":internal})
         seen_current.append(item)
@@ -198,7 +214,7 @@ def main():
             china_history.append(old)
     china_hits=[]
     for item in china:
-        hit=compare_story(item,china_history)
+        hit=compare_story(item,china_history,current_date=today)
         if hit: china_hits.append({"title":story_title(item),"match":hit})
     # Current-day unique-image checks: URL canonicalization and content hashes.
     image_errors=[]; current_images=[]; image_seen={}
