@@ -81,6 +81,7 @@ jobs:
                   and report.get('report_date') == today
                   and report.get('generated_at', '').startswith(today)
                   and report.get('top5_status') == 'ai_curated'
+                  and report.get('quality_gate', {}).get('status') == 'PASS'
                   and len(report.get('top5', [])) == 5
                   and report.get('localization', {}).get('status') == 'ok'
                   and bool((report.get('skills') or [{}])[0].get('license'))
