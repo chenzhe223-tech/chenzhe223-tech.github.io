@@ -2,9 +2,13 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from radar.scripts.skill_radar import canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate, build_radar
+from radar.scripts.skill_radar import canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate, build_radar
 
 class SkillRadarTests(unittest.TestCase):
+    def test_skill_type_requires_actual_skill_files(self):
+        self.assertEqual(classify_skill_type("owner/skills-pack","Agent skills collection","Install by copying skills/research/SKILL.md into your agent's skills directory."),"skill_pack")
+        self.assertIsNone(classify_skill_type("owner/mcp-server","MCP server for web search","Run npm install and start the MCP server."))
+        self.assertIsNone(classify_skill_type("owner/tutorial","Learn how to write skills","This tutorial explains concepts but contains no installable skill files."))
     def test_canonical_id_normalizes_url_git_and_case(self):
         self.assertEqual(canonical_project_id("https://WWW.GitHub.com/Owner/Repo.git?tab=readme"),"github.com/owner/repo")
     def test_same_project_different_url_is_duplicate(self):
