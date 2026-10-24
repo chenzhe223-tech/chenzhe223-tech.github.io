@@ -18,7 +18,7 @@ from zoneinfo import ZoneInfo
 try:
     from radar.scripts.skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, enrich_growth_metrics, score_candidate
 except ModuleNotFoundError:
-    from skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, score_candidate
+    from skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, enrich_growth_metrics, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -658,6 +658,7 @@ def collect_skills() -> list[dict]:
             "selected_count": 0,
             "excluded_count": 0,
             "message": "Skill recommendation history could not be verified; no fresh Skill was selected.",
+            "growth_snapshots": {k:v for k,v in growth_report.items() if k!="snapshot_file"},
             "discovery_sources": {"github_repository_search": "available" if repos else "no_candidates", "hacker_news": {k:v for k,v in community_report.items() if k!="signals"}, "github_candidate_count": len(repos)}
         })
         print(f"[skill-error] history unavailable; refusing to recommend without history check: {history.get('errors')}")
@@ -712,6 +713,7 @@ def collect_skills() -> list[dict]:
         "status": final_status,
         "engine_version": ENGINE_VERSION,
         "discovery_sources": {"github_repository_search": "available" if repos else "no_candidates", "hacker_news": {k:v for k,v in community_report.items() if k!="signals"}, "github_candidate_count": len(repos)},
+        "growth_snapshots": {k:v for k,v in growth_report.items() if k!="snapshot_file"},
         "history": radar.get("history", {}),
         "candidate_count": len(repos),
         "history_duplicate_exclusions": historical_exclusions,
