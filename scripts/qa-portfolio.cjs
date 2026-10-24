@@ -13,7 +13,7 @@ const path = require('node:path');
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
 
   try {
-    await page.goto('http://127.0.0.1:4173/', { waitUntil: 'networkidle', timeout: 30000 });
+    await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.locator('#products').waitFor();
     await page.locator('#shelf .app-card').first().waitFor({ timeout: 10000 });
     const title = await page.locator('h1').innerText();
@@ -70,7 +70,7 @@ const path = require('node:path');
     await page.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
     results.push({ test: 'mobile 390px layout', status: 'PASS', detail: mobile });
 
-    if (errors.length) throw new Error('Browser console/page errors: ' + errors.join(' | '));
+    if (errors.length) throw new Error('Uncaught browser page errors: ' + errors.join(' | '));
     results.push({ test: 'browser console and uncaught exceptions', status: 'PASS', detail: 'No errors captured' });
     fs.writeFileSync(path.join(outDir, 'report.json'), JSON.stringify({ status: 'PASS', results, errors }, null, 2));
     console.log(JSON.stringify({ status: 'PASS', results }, null, 2));
