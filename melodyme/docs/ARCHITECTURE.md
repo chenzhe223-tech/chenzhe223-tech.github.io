@@ -2,7 +2,7 @@
 
 ## 当前真实状态
 - 目前产品原型以静态 HTML/CSS/JS 运行，记忆数据保存在用户当前浏览器 localStorage。
-- 真实 AI、认证、云数据库、跨设备同步、公开分享、歌曲元数据服务均未接入。
+- 当前前端已接入 DeepSeek Worker 的故事与分享文案生成、海报风格规划调用；实际线上模型响应仍需按当前验收报告确认。iTunes Search 公开目录已接入。认证、云数据库、跨设备同步与公开分享未接入。
 - 现有 Supabase 连接可见的项目为其他产品（dashboard-studio、tongxing-aa）；不得把 MelodyMe 数据写入这些项目。
 - 当前代码位于 DAVYLAB GitHub Pages 仓库的 `melodyme/` 子目录，尚未建立独立应用仓库。
 - 生产后端需要独立 Supabase 项目/明确的数据隔离与服务端 AI provider 配置；新建付费资源前需先确认成本。
@@ -107,11 +107,38 @@ Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker
 - The existing front-end has not yet been wired to a deployed endpoint. Until deployment/configuration and browser integration are complete, real DeepSeek analysis is **not available in production**.
 
 
-## DeepSeek AI adapter (source added; deployment pending)
+## DeepSeek AI adapter (source deployed previously; current production verification remains separate)
 
 Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker/wrangler.toml`.
 
 - Supports `analyzeMemory`, `inferMusicCandidates`, `compareTrackVersions`, `generateMemoryStory`, `generateSocialCopy`, and `planPosterComposition`.
 - Reads the key only from Worker secret `DEEPSEEK_API_KEY`; it is not bundled into client code.
 - Includes exact-origin check, POST-only JSON, bounded payloads, 20-second provider timeout, and explicit provider/network/invalid-output errors.
-- This Worker is not deployed. The public app is currently GitHub Pages static hosting and is not yet connected to a deployed endpoint. Real DeepSeek is not available in production until deployment, secret configuration, rate limiting, frontend integration and real smoke tests are complete.
+- The Worker has been deployed previously as `melodyme-ai`, and the front end references its workers.dev endpoint. The `DEEPSEEK_API_KEY` secret name was confirmed in Cloudflare, but a real model response has not been verified by the current execution environment. Do not mark live inference as accepted until a real browser request succeeds.
+
+
+## 2026-10-24 implementation addendum: preview audio and generated cover
+
+This section supersedes older statements above that say the Worker source is undeployed or that all AI integration is absent. Status must still be distinguished between code, CI, deployment and real end-to-end verification.
+
+### iTunes preview audio
+
+- The selected iTunes Search result may include `previewUrl`. The UI uses that exact returned URL; it never constructs or guesses a preview URL.
+- When present, the selected music card renders an HTML audio control with `preload="none"` and the label “30 秒试听片段”. Playback is user-initiated, not autoplay.
+- Starting a different audio element pauses any other page audio element.
+- If the selected catalog record has no preview URL, the UI states “该曲目暂无试听片段” and does not render a broken player.
+- Preview audio is a short sample only, not full-track playback. Shazam remains a separate external song-detail/recognition link.
+
+### AI decorative cover generation
+
+- Pollinations.ai is the first attempt and requires no API key. Its URL is constructed from a prompt containing only a mapped scene category, selected style and mood keywords; the original story text is never sent to Pollinations.
+- A deterministic seed is derived locally from song/style/mood and mapped prompt keywords. The story is only inspected locally to map to a small predefined scene category; raw story text is not transmitted.
+- The generated image is displayed separately from both the catalog artwork and the existing SVG poster. It must carry the label “AI 生成封面（非真实专辑封面）”.
+- Pollinations image load failure or a 12-second timeout triggers the Worker fallback. If both fail, a local gradient placeholder and the honest message “AI 封面暂不可用，已保留你的文字和海报内容” remain visible.
+- The Worker action `generateAlbumArt` uses a Cloudflare Workers AI binding configured as `[ai] binding = "AI"`. Primary model: `@cf/stabilityai/stable-diffusion-xl-base-1.0`; fallback model: `@cf/black-forest-labs/flux-1-schnell` when available to the account. Availability and included/free usage limits are account- and model-dependent; neither unlimited usage nor continuous availability is promised.
+- Worker returns image bytes as `image/png`; errors use the existing JSON error envelope and controlled error codes. The image action does not require the DeepSeek key, but still uses the same Origin check, request size bound, rate limiter and explicit timeout.
+- AI images are decorative outputs only. They never replace iTunes artwork and do not alter the 12 poster styles or SVG export process.
+
+### Boundaries
+
+No music generation, AI video, complete-song playback, autoplay, account requirement, cloud sync, cross-device sync, paid/credit-card-required service or client-side model secret is introduced. Public-service availability and free quotas can change. CI success is not a substitute for real browser verification of both image providers and the preview player.
