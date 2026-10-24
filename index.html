@@ -19,6 +19,105 @@
 @media(max-width:850px){.contact-grid{grid-template-columns:1fr}.contact-wechat-card{align-items:center;text-align:center}.contact-wechat-card>p{max-width:500px}.contact-wechat-card .contact-divider,.contact-wechat-card .contact-email,.contact-wechat-card .contact-small{align-self:stretch;text-align:left}.contact-wechat-card h3{font-size:29px}.wechat-qr-link{width:min(76vw,290px)}}
 @media(max-width:700px){.contact-section-head{margin-bottom:19px}.contact-section-head h2{font-size:35px}.contact-form-card{padding:16px;border-radius:18px}.contact-wechat-card{padding:21px 17px;border-radius:18px}.contact-chat-head{gap:9px}.chat-avatar{width:38px;height:38px;flex-basis:38px}.contact-chat-head strong{font-size:12px}.chat-step{font-size:7px;padding:5px 7px}.project-chips{gap:6px}.project-chip{padding:8px 10px}.form-grid{gap:12px 9px}.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{font-size:16px;padding:11px}.field-label{font-size:11px}.wechat-qr-link{width:min(78vw,272px);padding:10px}}
 @media(prefers-reduced-motion:reduce){.project-chip,.wechat-qr-link,.lead-form textarea,.lead-form input,.lead-form select{transition:none!important}}
+
+/* Balanced SaaS portfolio refinement — additive overrides; existing markup and interactions preserved. */
+:root{color-scheme:light;--bg:#F7F7F4;--panel:#FFFFFF;--line:#E7E8E4;--ink:#202630;--muted:#626B76;--dim:#7A818B;--cyan:#456783;--lime:#DCE8D9;--violet:#73869B}
+body{background:var(--bg);color:var(--ink)}
+.topbar{background:rgba(247,247,244,.94);border-bottom:1px solid var(--line);backdrop-filter:blur(16px)}
+.brand small{color:#68717c}.navlinks{color:#626b76}.navlinks a:hover{color:#20364E}
+.brand-icon{background:#20364E;color:#fff;box-shadow:none}
+.pill-button,.btn-primary{background:#20364E;color:#fff;box-shadow:none}
+.pill-button:hover,.btn-primary:hover{background:#2c4965;box-shadow:0 7px 18px rgba(32,54,78,.12)}
+.btn-secondary{border-color:#D5D9D8;background:#fff;color:#20364E}
+.hero{padding-top:62px}.eyebrow{color:#426580}
+.hero h1{color:#202630}.gradient{background:none;color:#20364E;-webkit-text-fill-color:#20364E}
+.hero p{color:#626B76}.hero p strong{color:#202630}.hero-note{color:#7A818B}
+.orbit{border-color:#20364E18}.orbit:before,.orbit:after{border-color:#20364E16}
+.orbit-tag{background:#fff;border-color:#E0E3E0;box-shadow:0 8px 24px rgba(32,38,48,.06);color:#202630}
+.orbit-tag b{color:#426580}.orbit-tag span{color:#626B76}
+.core{box-shadow:0 18px 55px rgba(32,54,78,.14),inset 0 1px rgba(255,255,255,.65)}
+.ticker{border-color:var(--line);background:#fff}.ticker-track{color:#7A818B}.ticker strong{color:#20364E}.ticker i{background:#6F927F}
+.desc{color:#626B76}.section-side{color:#7A818B}
+.market-tools{border-color:var(--line);background:#fff}
+.searchbox input{border-color:#DDE1DE;background:#FDFDFC;color:#202630}
+.searchbox input:focus{border-color:#20364E;box-shadow:0 0 0 3px rgba(32,54,78,.1)}
+.count,.shelf-tools,.market-foot{color:#69727D}
+.filter{border-color:#DDE1DE;background:#fff;color:#525D68}
+.filter.active{background:#20364E;border-color:#20364E;color:#fff}
+.arrow-btn{border-color:#DDE1DE;background:#fff;color:#20364E}
+.arrow-btn:hover:not(:disabled){background:#20364E;color:#fff;border-color:#20364E}
+.shelf{scrollbar-color:#AAB5B0 transparent}
+.shelf::-webkit-scrollbar-thumb{background:#AAB5B0}
+.app-card{border-color:#E0E3E0;background:#fff;box-shadow:0 4px 14px rgba(32,38,48,.035)}
+.app-card:hover{border-color:#9AAEBE;background:#fff;box-shadow:0 10px 24px rgba(32,54,78,.09)}
+.app-card:focus-visible{outline-color:#20364E}
+.app-en{color:#7A818B}.app-desc{color:#626B76}
+.app-bottom{border-color:#E7E8E4;color:#20364E}.open-mark{border-color:#DDE1DE;color:#20364E}
+.app-card:hover .open-mark{background:#20364E;color:#fff;border-color:#20364E}
+.status{background:#F1F3F1;color:#526575}.status.live{color:#32684F;background:#EAF3ED}.status.concept{color:#6C5A8B;background:#F1EDF7}
+.empty{border-color:#D5D9D8;color:#69727D}
+.manifesto{border-color:#DDE1DE;background:#fff;box-shadow:0 8px 30px rgba(26,45,74,.04)}
+.manifesto h2 em{color:#426580}.manifesto-copy{color:#626B76}
+.value,.step{border-color:#E0E3E0;background:#fff}
+.value small,.step b{color:#426580}.value p,.step p{color:#626B76}
+.offer-main,.offer-note{border-color:#DDE1DE;background:#fff}
+.offer-kicker{color:#6C5A8B}.offer p,.offer-note li{color:#626B76}.price span{color:#69727D}
+.contact-panel{background:#E8EEE8;color:#202630;border:1px solid #D6E0D8}
+.contact-panel p{color:#4F5E59}.contact-panel .btn{background:#20364E;color:#fff}
+.footer{border-color:#E0E3E0;color:#69727D}.footer-brand{color:#20364E}
+.modal{background:rgba(25,35,45,.48);backdrop-filter:blur(8px)}
+.modal-card{background:#fff;border-color:#E0E3E0;box-shadow:0 24px 70px rgba(32,38,48,.2)}
+.modal-top,.modal-section{border-color:#E7E8E4}.modal-close{border-color:#DDE1DE;background:#F7F7F4;color:#20364E}
+.modal-title{color:#202630}.modal-en{color:#69727D}.modal-body p{color:#626B76}
+.modal-tags span{border-color:#DDE1DE;color:#52606C}
+.detail-btn{border-color:#DDE1DE;background:#fff;color:#20364E}
+.detail-btn:hover{color:#fff;background:#20364E;border-color:#20364E}
+.app-main:hover .app-name{color:#20364E}
+.toast{background:#20364E;color:#fff}
+.preview-label{border-color:#E7E8E4;color:#69727D}.preview-label strong{color:#426580}
+.preview-stage{background:#F1F3F1}.preview-stage img{background:#F1F3F1}
+.preview-fallback{color:#626B76}.preview-retry{border-color:#DDE1DE;background:#fff;color:#20364E}
+.preview-retry:hover{background:#20364E;color:#fff;border-color:#20364E}
+.concept-preview{background:linear-gradient(135deg,#F7F7F4,#E9EEF0)}.concept-preview-inner strong{color:#202630}.concept-preview-inner small{color:#69727D}
+.concept-preview-inner .concept-label{color:#20364E;border-color:#CAD6D0;background:#EDF2EE}
+.contact-form-card{background:#fff;border-color:#E0E3E0;box-shadow:0 8px 30px rgba(26,45,74,.04)}
+.contact-wechat-card{border-color:#E0E3E0;background:#fff;box-shadow:0 8px 30px rgba(26,45,74,.04)}
+.contact-chat-head{border-color:#E7E8E4}.contact-chat-head strong{color:#202630}.contact-chat-head small{color:#69727D}
+.chat-step{border-color:#DDE1DE;color:#69727D}.chat-bubble{background:#F5F6F3;border-color:#E7E8E4;color:#4F5963}
+.project-chip{border-color:#DDE1DE;background:#fff;color:#52606C}.project-chip.active{background:#20364E;color:#fff;border-color:#20364E}
+input,textarea,select{color:#202630}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #527897;outline-offset:3px}
+@media(max-width:700px){.hero{padding-top:40px}.visual{overflow:visible}.section{padding:55px 0}.app-card{background:#fff}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-form-card,.contact-wechat-card{padding:18px}.nav{gap:10px}}
+@media(prefers-reduced-motion:reduce){.app-card:hover,.pill-button:hover,.btn-primary:hover{transform:none}}
+
+
+/* Final visual QA refinements: light contact form and more breathing room on mobile. */
+.contact-form-card{background:#FFFFFF;border:1px solid #E7E8E4;box-shadow:0 8px 28px rgba(32,38,48,.04)}
+.contact-chat-head{border-bottom-color:#E7E8E4}
+.contact-chat-head strong{color:#202630}
+.contact-chat-head small{color:#68717C}
+.chat-step{border-color:#DDE1DE;color:#68717C;background:#F7F7F4}
+.chat-bubble{background:#F5F6F3;border-color:#E7E8E4;color:#4F5963}
+.project-chip{border-color:#DDE1DE;background:#FFFFFF;color:#52606C}
+.project-chip:hover{border-color:#A8B4BE;background:#F7F7F4;color:#20364E}
+.project-chip.active{background:#20364E;color:#FFFFFF;border-color:#20364E}
+.field-label{color:#35414D}
+.field-label span{color:#A44F69}
+.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:#FFFFFF;color:#202630;border-color:#DDE1DE;box-shadow:none}
+.lead-form input::placeholder,.lead-form textarea::placeholder{color:#7A818B}
+.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:#456783;box-shadow:0 0 0 3px rgba(69,103,131,.14)}
+.consent-row{color:#626B76}
+.consent-row input{accent-color:#20364E}
+.field-hint{color:#7A818B}
+.form-status.success{background:#EEF5ED;border-color:#C8DCC4;color:#35553A}
+.form-status.error{background:#FBEEF1;border-color:#E6C4CC;color:#8B344A}
+@media(max-width:700px){
+  .hero{padding-bottom:48px}
+  .visual{min-height:270px;margin-bottom:12px}
+  .tag-c{bottom:12px}
+  .tag-d{bottom:35px}
+}
+
 </style></head><body>
 <header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
 <main id="top"><section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Independent AI Product Studio</div><h1>把想法，<br><span class="gradient">做成能用的工具。</span></h1><p>AI 正在降低创造的门槛。<strong>DAVYLAB 想做的，是让更多普通人把一个念头，走成一款真实的产品。</strong> 从灵感、原型到应用，让创造不再停在“想一想”。</p><div class="actions"><a class="btn btn-primary" href="#products">探索我的产品 ↓</a><a class="btn btn-secondary" href="#contact">带来你的想法 ↗</a></div><div class="hero-note">SPARK AN IDEA · BUILD A TOOL · KEEP THE PULSE ALIVE</div></div><div class="visual" aria-label="灵感与产品的动态视觉"><div class="orbit"></div><div class="core"><svg viewBox="0 0 100 100" fill="none"><path d="M53 7 28 47h20l-7 45 34-52H53l11-33Z" fill="#d7ff74"/><path d="M9 65C22 46 32 47 44 63S69 80 91 53" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="24" r="4" fill="#fff"/></svg></div><div class="orbit-tag tag-a"><b>01 / SPARK</b><span>让灵感被看见</span></div><div class="orbit-tag tag-b"><b>02 / BUILD</b><span>把想法做出来</span></div><div class="orbit-tag tag-c"><b>03 / PULSE</b><span>持续验证与迭代</span></div><div class="orbit-tag tag-d"><b>IDEA → PRODUCT</b><span>从念头到工具</span></div></div></div></section>
@@ -113,12 +212,12 @@ appservice:'<svg viewBox="0 0 64 64" aria-label="DAVYLAB app development visual 
 function projectLogo(p){if(logos[p.logo])return logos[p.logo];if(logoProposals[p.id])return logoProposals[p.id];if(p.id==='wuyu')return '<svg viewBox="0 0 64 64" aria-label="物遇 WUYU existing wordmark"><rect width="64" height="64" rx="17" fill="#efe5cc"/><text x="32" y="44" text-anchor="middle" font-family="serif" font-size="35" font-weight="800" fill="#23483c">遇</text></svg>';return '<svg viewBox="0 0 64 64" aria-label="DAVYLAB project mark proposal"><rect width="64" height="64" rx="17" fill="#172a49"/><path d="M35 8 18 34h13l-3 22 19-29H34Z" fill="#d7ff74"/></svg>'}
 
 function identity(p){const mark=projectLogo(p);return '<div class="app-id"><span class="app-logo '+(p.logo==='pinyin'?'nobg':'')+'">'+mark+'</span><div><div class="app-name">'+p.name+'</div><span class="app-en">'+p.en+'</span></div></div>'}
-const shelf=document.getElementById('shelf'),search=document.getElementById('search'),filters=document.getElementById('filters'),count=document.getElementById('count');let active='all';
+const shelf=document.getElementById('shelf'),search=document.getElementById('search'),filters=document.getElementById('filters'),count=document.getElementById('count');let active='all',modalOpener=null;
 function sc(p){return p.status==='live'?'live':p.status==='concept'?'concept':''}
 function card(p){const main=identity(p)+'<span class="status '+sc(p)+'">'+p.statusText+'</span><p class="app-desc">'+p.desc+'</p>';const mainAction=p.direct&&p.url?'<a class="app-main" href="'+p.url+'" target="_blank" rel="noopener noreferrer" aria-label="打开'+p.name+'">'+main+'</a>':'<button class="app-main app-main-button" type="button" data-open-id="'+p.id+'" aria-label="查看'+p.name+'详情">'+main+'</button>';const external=p.direct&&p.url?'<a class="open-mark" href="'+p.url+'" target="_blank" rel="noopener noreferrer" aria-label="打开'+p.name+'">↗</a>':'';return '<article class="app-card" data-id="'+p.id+'">'+mainAction+'<div class="app-bottom"><span>'+p.tags.slice(0,2).join(' · ')+'</span><div class="card-actions"><button class="detail-btn" type="button" data-detail="'+p.id+'">详情</button>'+external+'</div></div></article>'}
 function updateArrows(){document.getElementById('prev').disabled=shelf.scrollLeft<=2;document.getElementById('next').disabled=shelf.scrollLeft+shelf.clientWidth>=shelf.scrollWidth-3}
 function render(){const q=search.value.trim().toLowerCase();const shown=projects.filter(p=>(active==='all'||p.group===active)&&(!q||[p.name,p.en,p.desc,p.why,p.what,p.statusText].concat(p.tags).join(' ').toLowerCase().includes(q)));shelf.innerHTML=shown.length?shown.map(card).join(''):'<div class="empty">没有找到匹配的产品，试试其他关键词或分类。</div>';shelf.scrollLeft=0;count.textContent='当前展示 '+shown.length+' / '+projects.length+' 个项目';requestAnimationFrame(updateArrows)}
-function openProject(p){const mark=document.getElementById('modalMark');mark.innerHTML=projectLogo(p);mark.style.display='grid';document.getElementById('modalLogoNote').textContent=(logos[p.logo]||p.id==='wuyu')?'沿用现有产品标志':'DAVYLAB 视觉标识提案 · 后续可按产品风格定稿';document.getElementById('modalTitle').textContent=p.name;document.getElementById('modalEn').textContent=p.en.toUpperCase();document.getElementById('modalStatus').innerHTML='<span class="status '+sc(p)+'">'+p.statusText+'</span>';document.getElementById('modalDesc').textContent=p.desc;document.getElementById('modalWhy').textContent=p.why;document.getElementById('modalWhat').textContent=p.what;document.getElementById('modalState').textContent=p.state;document.getElementById('modalTags').innerHTML=p.tags.map(t=>'<span>'+t+'</span>').join('');renderProjectPreview(p);let a='';if(p.url)a+='<a class="btn btn-primary" href="'+p.url+'" target="_blank" rel="noopener noreferrer">'+(p.urlLabel||'打开项目入口 ↗')+'</a>';if(p.url2)a+='<a class="btn btn-secondary" href="'+p.url2+'" target="_blank" rel="noopener noreferrer">'+(p.url2Label||'相关入口 ↗')+'</a>';if(p.repo)a+='<a class="btn btn-secondary" href="'+p.repo+'" target="_blank" rel="noopener noreferrer">查看源码仓库 ↗</a>';if(p.repo2)a+='<a class="btn btn-secondary" href="'+p.repo2+'" target="_blank" rel="noopener noreferrer">应用仓库 ↗</a>';if(!a)a='<a class="btn btn-primary" href="#contact" onclick="closeModal()">聊聊类似的想法 ↗</a>';document.getElementById('modalActions').innerHTML=a;document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden'}
+function openProject(p){modalOpener=document.activeElement;const mark=document.getElementById('modalMark');mark.innerHTML=projectLogo(p);mark.style.display='grid';document.getElementById('modalLogoNote').textContent=(logos[p.logo]||p.id==='wuyu')?'沿用现有产品标志':'DAVYLAB 视觉标识提案 · 后续可按产品风格定稿';document.getElementById('modalTitle').textContent=p.name;document.getElementById('modalEn').textContent=p.en.toUpperCase();document.getElementById('modalStatus').innerHTML='<span class="status '+sc(p)+'">'+p.statusText+'</span>';document.getElementById('modalDesc').textContent=p.desc;document.getElementById('modalWhy').textContent=p.why;document.getElementById('modalWhat').textContent=p.what;document.getElementById('modalState').textContent=p.state;document.getElementById('modalTags').innerHTML=p.tags.map(t=>'<span>'+t+'</span>').join('');renderProjectPreview(p);let a='';if(p.url)a+='<a class="btn btn-primary" href="'+p.url+'" target="_blank" rel="noopener noreferrer">'+(p.urlLabel||'打开项目入口 ↗')+'</a>';if(p.url2)a+='<a class="btn btn-secondary" href="'+p.url2+'" target="_blank" rel="noopener noreferrer">'+(p.url2Label||'相关入口 ↗')+'</a>';if(p.repo)a+='<a class="btn btn-secondary" href="'+p.repo+'" target="_blank" rel="noopener noreferrer">查看源码仓库 ↗</a>';if(p.repo2)a+='<a class="btn btn-secondary" href="'+p.repo2+'" target="_blank" rel="noopener noreferrer">应用仓库 ↗</a>';if(!a)a='<a class="btn btn-primary" href="#contact" onclick="closeModal()">聊聊类似的想法 ↗</a>';document.getElementById('modalActions').innerHTML=a;document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden';document.getElementById('closeModal').focus()}
 function renderProjectPreview(p){
  const box=document.getElementById('modalPreview');
  const target=p.previewUrl||p.url||p.url2;
@@ -201,9 +300,9 @@ function renderProjectPreview(p){
   box.innerHTML='<div class="preview-label"><span>PROJECT PREVIEW</span><strong>概念项目 · 非运行截图</strong></div><div class="preview-stage concept-preview"><div class="concept-preview-inner"><div class="concept-preview-mark">'+projectLogo(p)+'</div><strong>'+p.name+'</strong><small>'+p.en.toUpperCase()+'</small><span class="concept-label">概念探索 / 暂无公开运行页面</span></div></div><div class="preview-label"><span>这里展示的是品牌标识提案</span><span>不是应用运行截图</span></div>';
  }
 }
-function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow='';if(modalOpener&&typeof modalOpener.focus==='function')modalOpener.focus();modalOpener=null}
 shelf.addEventListener('click',e=>{const detail=e.target.closest('[data-detail]');if(detail){e.preventDefault();e.stopPropagation();const p=projects.find(x=>x.id===detail.dataset.detail);if(p)openProject(p);return}const concept=e.target.closest('[data-open-id]');if(concept){const p=projects.find(x=>x.id===concept.dataset.openId);if(p)openProject(p)}});
-filters.addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;active=b.dataset.filter;filters.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});search.addEventListener('input',render);document.getElementById('prev').addEventListener('click',()=>shelf.scrollBy({left:-Math.max(240,shelf.clientWidth*.8),behavior:'smooth'}));document.getElementById('next').addEventListener('click',()=>shelf.scrollBy({left:Math.max(240,shelf.clientWidth*.8),behavior:'smooth'}));shelf.addEventListener('scroll',updateArrows,{passive:true});window.addEventListener('resize',updateArrows);document.getElementById('closeModal').addEventListener('click',closeModal);document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});document.getElementById('year').textContent=new Date().getFullYear();const contactForm=document.getElementById('leadForm');
+filters.addEventListener('click',e=>{const b=e.target.closest('[data-filter]');if(!b)return;active=b.dataset.filter;filters.querySelectorAll('.filter').forEach(x=>x.classList.toggle('active',x===b));render()});search.addEventListener('input',render);document.getElementById('prev').addEventListener('click',()=>shelf.scrollBy({left:-Math.max(240,shelf.clientWidth*.8),behavior:'smooth'}));document.getElementById('next').addEventListener('click',()=>shelf.scrollBy({left:Math.max(240,shelf.clientWidth*.8),behavior:'smooth'}));shelf.addEventListener('scroll',updateArrows,{passive:true});window.addEventListener('resize',updateArrows);document.getElementById('closeModal').addEventListener('click',closeModal);document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});document.addEventListener('keydown',e=>{const modal=document.getElementById('modal');if(!modal.classList.contains('open'))return;if(e.key==='Escape'){closeModal();return}if(e.key==='Tab'){const focusable=Array.from(modal.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(el=>el.offsetWidth||el.offsetHeight||el.getClientRects().length);if(!focusable.length){e.preventDefault();return}const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});document.getElementById('year').textContent=new Date().getFullYear();const contactForm=document.getElementById('leadForm');
 const projectType=document.getElementById('projectType');
 document.querySelectorAll('[data-project-type]').forEach(btn=>btn.addEventListener('click',()=>{
   projectType.value=btn.dataset.projectType;
