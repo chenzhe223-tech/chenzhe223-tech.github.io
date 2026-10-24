@@ -16,9 +16,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 try:
-    from radar.scripts.skill_radar import build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
+    from radar.scripts.skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
 except ModuleNotFoundError:
-    from skill_radar import build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
+    from skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -465,7 +465,7 @@ def verify_skill_candidate(item: dict) -> dict | None:
         branch=str(metadata.get("default_branch") or "main")
         tree_url=base+"/git/trees/"+urllib.parse.quote(branch,safe="")+"?recursive=1"
         tree=json.loads(http_get(tree_url,"application/vnd.github+json",timeout=8))
-        paths=[str(entry.get("path") or "") for entry in tree.get("tree",[]) if str(entry.get("path") or "").rsplit("/",1)[-1].lower()=="skill.md"]
+        paths=actual_skill_files(tree)
         if not paths:
             print(f"[skill-warning] no actual SKILL.md file found in repository tree: {name}")
             return None
