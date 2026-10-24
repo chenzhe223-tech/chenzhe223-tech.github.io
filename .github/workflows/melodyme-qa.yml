@@ -36,7 +36,7 @@ jobs:
           parser = Checker(convert_charrefs=True)
           parser.feed(html)
           parser.close()
-          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI', 'itunes.apple.com/search', 'id="musiccard"', 'id="autoStyle"']:
+          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI', 'itunes.apple.com/search', 'id="musiccard"', 'id="autoStyle"', 'previewUrl', 'generateAlbumArt', 'aiCoverImage']:
               assert token.lower() in html.lower(), f"missing required token: {token}"
           scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
           assert scripts, "no inline JavaScript found"
@@ -59,7 +59,36 @@ jobs:
           import { chromium } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const errors = [];
+          const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/qJkAAAAASUVORK5CYII=', 'base64');
+          const catalog = { results: [
+            { trackName:'QA Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa/100x100bb.jpg', previewUrl:'https://audio-ssl.itunes.apple.com/qa-preview.m4a', releaseDate:'2001-01-01T00:00:00Z' },
+            { trackName:'QA No Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa2/100x100bb.jpg', releaseDate:'2002-01-01T00:00:00Z' }
+          ] };
+          async function mockExternalServices(page) {
+            let pollinationsMode = 'ok';
+            let workerImageMode = 'ok';
+            await page.route('https://itunes.apple.com/search**', route => route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(catalog)}));
+            await page.route('https://image.pollinations.ai/**', route => pollinationsMode === 'ok'
+              ? route.fulfill({status:200,contentType:'image/png',body:tinyPng})
+              : route.fulfill({status:503,contentType:'text/plain',body:'mock image failure'}));
+            await page.route('https://melodyme-ai.chenzhe223.workers.dev/**', async route => {
+              const payload = route.request().postDataJSON() || {};
+              if (payload.action === 'generateAlbumArt') {
+                return workerImageMode === 'ok'
+                  ? route.fulfill({status:200,contentType:'image/png',body:tinyPng})
+                  : route.fulfill({status:502,contentType:'application/json',body:JSON.stringify({error:'ai_image_generation_failed'})});
+              }
+              const results = {
+                generateMemoryStory:{title:'QA Story',story:'A story generated for QA.',core_line:'A song, a memory.',memory_summary:'QA memory',poster_title:'QA poster',poster_subtitle:'QA subtitle',song_connection:'QA song connection'},
+                generateSocialCopy:{copy:'QA social copy.'},
+                planPosterComposition:{recommended_style:'电影雾光',palette:['#d8c8c8','#20384f'],composition:'Simple centered composition',typography:'Editorial serif',image_treatment:'Soft grain',text_density:'low',visual_motifs:['light'],reason_summary:'Matches the memory mood'}
+              };
+              return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,action:payload.action,model:'mock-test',result:results[payload.action] || {}})});
+            });
+            return {setPollinationsMode:v=>{pollinationsMode=v;},setWorkerImageMode:v=>{workerImageMode=v;}};
+          }
           const page = await browser.newPage({viewport:{width:1280,height:900}});
+          const mock = await mockExternalServices(page);
           await page.addInitScript(()=>{if(!sessionStorage.getItem('melodyme-test-clean')){localStorage.clear();sessionStorage.setItem('melodyme-test-clean','1')}});
           page.on('pageerror', e=>errors.push(e.message));
           await page.goto('http://127.0.0.1:4173/melodyme/',{waitUntil:'networkidle'});
@@ -71,11 +100,36 @@ jobs:
           await page.locator('#next').click();
           await page.locator('[data-mood="怀念"]').click();
           await page.locator('#next').click();
-          await page.locator('#songinput').fill('QA 歌曲线索');
+          await page.locator('#songinput').fill('QA Preview Track');
+          await page.locator('#searchMusic').click();
+          await page.locator('.candidate').first().waitFor({state:'visible'});
+          await page.locator('.candidate').nth(0).getByRole('button',{name:'选这首'}).click();
+          const preview = page.locator('#musiccard audio');
+          await preview.waitFor({state:'visible'});
+          if (await preview.getAttribute('preload') !== 'none') throw new Error('preview preload must be none');
+          if (await preview.getAttribute('src') !== 'https://audio-ssl.itunes.apple.com/qa-preview.m4a') throw new Error('preview URL must be the exact iTunes previewUrl');
+          if (!(await page.locator('#musiccard').getByText('30 秒试听片段').count())) throw new Error('preview label missing');
+          if (!(await preview.evaluate(el=>el.paused))) throw new Error('preview must not autoplay');
+          await page.evaluate(()=>{const other=document.createElement('audio');other.id='qa-other-audio';other.pause=()=>{window.__qaOtherPaused=true};document.body.appendChild(other);document.querySelector('#musiccard audio').dispatchEvent(new Event('play'));});
+          if (!(await page.evaluate(()=>window.__qaOtherPaused===true))) throw new Error('starting preview should pause other audio');
+          await page.locator('.candidate').nth(1).getByRole('button',{name:'选这首'}).click();
+          if (await page.locator('#musiccard audio').count() !== 0) throw new Error('player should hide when previewUrl is missing');
+          if (!(await page.locator('#musiccard').getByText('该曲目暂无试听片段').count())) throw new Error('missing preview fallback text absent');
+          await page.locator('.candidate').nth(0).getByRole('button',{name:'选这首'}).click();
           await page.locator('#next').click();
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
           if (await page.locator('.stylepick').count() !== 12) throw new Error('expected 12 poster styles');
+          await page.locator('#aiCoverStatus').waitFor({state:'visible'});
+          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('Pollinations.ai'));
+          if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
+          mock.setPollinationsMode('fail');
+          await page.locator('#regenerateCover').click();
+          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('Cloudflare Workers AI'));
+          mock.setWorkerImageMode('fail');
+          await page.locator('#regenerateCover').click();
+          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
+          if (!(await page.locator('#storycopy').inputValue()).includes('A story generated for QA.')) throw new Error('cover failure must preserve story copy');
           await page.locator('#autoStyle').click();
           if (!(await page.locator('.stylepick[aria-pressed="true"]').count())) throw new Error('style selection state missing');
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
@@ -86,6 +140,7 @@ jobs:
           await page.getByRole('button',{name:/我的作品/}).click();
           if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('local persistence failed');
           const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
+          await mockExternalServices(mobile);
           mobile.on('pageerror',e=>errors.push(e.message));
           await mobile.goto('http://127.0.0.1:4173/melodyme/',{waitUntil:'networkidle'});
           const dims=await mobile.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
