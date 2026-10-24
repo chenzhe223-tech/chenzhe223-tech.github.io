@@ -207,21 +207,19 @@ const mark = (status, name, detail = '') => {
       await kp.waitForSelector('#unlockForm', { timeout: 10000 });
       const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
       mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
-      // Explicitly reset only the isolated QA context's IndexedDB; never touch user devices/data.
-      await kp.evaluate(async () => {
-        await new Promise((resolve, reject) => {
-          const req = indexedDB.deleteDatabase('keypocket-local-v1');
-          req.onsuccess = resolve;
-          req.onerror = () => reject(req.error || new Error('QA database reset failed'));
-          req.onblocked = () => reject(new Error('QA database reset blocked'));
-        });
-      });
-      await kp.reload({ waitUntil: 'domcontentloaded' });
+      // The browser context above is isolated. Wait for app initialization and branch
+      // according to actual UI state instead of assuming first-run setup every time.
       await kp.waitForFunction(() => {
         const wrap = document.querySelector('#confirmWrap');
         const btn = document.querySelector('#unlockBtn');
-        return wrap && !wrap.classList.contains('hidden') && btn && !btn.disabled && btn.textContent.includes('创建本地密钥库');
+        return wrap && btn && !btn.disabled && btn.textContent.trim().length > 0;
       }, null, { timeout: 15000 });
+      const firstRun = await kp.locator('#confirmWrap').evaluate(el => !el.classList.contains('hidden'));
+      if (!firstRun) {
+        // Do not guess a user's password. A non-empty isolated vault is a test fixture issue,
+        // not permission to reset data; report it clearly rather than timing out.
+        throw new Error('QA context unexpectedly contains an existing vault; first-run setup cannot be tested safely.');
+      }
       await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#confirmPassword').waitFor({ state: 'visible', timeout: 5000 });
       await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
