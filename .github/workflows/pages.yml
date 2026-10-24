@@ -102,6 +102,12 @@ jobs:
               output.write('skip=' + ('true' if complete else 'false') + '\n')
           print(f"Today's complete AI-curated report already published, fresh and with a license-verified featured Skill (age <= 120 min): {complete}; age_minutes={report_age_minutes}")
           PY
+      - name: Run Skill Radar and freshness regression tests before network-heavy setup
+        run: |
+          python -m py_compile radar/scripts/skill_radar.py radar/scripts/build_daily.py radar/scripts/quality_gate.py
+          python -m unittest radar.scripts.test_skill_radar -v
+          python -m unittest radar.scripts.test_quality_gate -v
+          python -m unittest radar.scripts.test_historical_dedupe -v
       - name: Install poster rendering and QA dependencies
         if: steps.preflight.outputs.skip != 'true'
         timeout-minutes: 6
