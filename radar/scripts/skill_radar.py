@@ -101,7 +101,8 @@ def score_candidate(item: dict, today: str) -> dict:
     heat=_clamp(math.log10(stars+1)/5*20 + min(5,community_count*1.5),0,25)
     updated=str(item.get("updated") or "")
     age_days=None
-    try: age_days=max(0,(dt.date.fromisoformat(today)-dt.date.fromisoformat(updated[:10])).days)
+    activity_date=str(item.get("pushed_at") or updated)[:10]
+    try: age_days=max(0,(dt.date.fromisoformat(today)-dt.date.fromisoformat(activity_date)).days)
     except Exception: pass
     maintenance=10 if age_days is not None and age_days<=30 else 8 if age_days is not None and age_days<=90 else 5 if age_days is not None and age_days<=365 else 2
     text=" ".join(str(item.get(k) or "") for k in ("name","description","topics","daily_theme")).lower()
