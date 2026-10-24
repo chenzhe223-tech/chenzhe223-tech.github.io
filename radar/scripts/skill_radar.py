@@ -27,6 +27,21 @@ def canonical_project_id(value: str) -> str:
     except Exception:
         return ""
     return ""
+def classify_skill_type(name: str, description: str, readme: str) -> str|None:
+    """Accept projects that contain/install actual Agent Skill files, not merely related tools or tutorials."""
+    text=(str(readme or "")+" "+str(description or "")).lower()
+    repo=(name or "").lower()
+    explicit_paths=(
+        "skill.md" in text or ".claude/skills/" in text or ".codex/skills/" in text
+        or ".agents/skills/" in text or bool(re.search(r"(?:^|[\\s`])skills/[a-z0-9_.-]+",text))
+    )
+    explicit_install=("install" in text or "installation" in text or "copy" in text or "add to" in text)
+    explicit_skill_phrase=("agent skills" in text or "skill files" in text or "skills directory" in text or "skill folder" in text)
+    if explicit_paths:
+        return "skill_pack" if ("awesome" in repo or "collection" in repo or "catalog" in repo or "pack" in repo) else "agent_skill_or_pack"
+    if explicit_skill_phrase and explicit_install:
+        return "skill_pack" if ("awesome" in repo or "collection" in repo or "catalog" in repo or "pack" in repo) else "agent_skill_or_pack"
+    return None
 def project_tokens(item: dict) -> set[str]:
     value=" ".join(str(item.get(k) or "") for k in ("name","description","description_zh","description_en","daily_theme","category","aliases"))
     value=re.sub(r"https?://\S+"," ",value.lower())
@@ -113,7 +128,16 @@ def score_candidate(item: dict, today: str) -> dict:
     novelty=10 if item.get("novelty_status")=="new" else 4
     total=round(heat+trend+usefulness+quality+novelty+maintenance,1)
     confidence="high" if item.get("evidence_verified") and item.get("license") and item.get("readme_verified",True) and item.get("security_status")=="PASS" else "medium" if item.get("license") and item.get("readme_verified",True) else "low"
+    today_text=today
+    repo_name=str(item.get("name") or "")
+    short_name=repo_name.split("/")[-1] if "/" in repo_name else repo_name
+    aliases=list(dict.fromkeys([repo_name,short_name,*[str(x) for x in (item.get("aliases") or [])]]))
     return {**item,"canonical_id":canonical_project_id(str(item.get("url") or item.get("name") or "")),
+      "aliases":aliases,"discovered_at":item.get("discovered_at") or today_text,
+      "first_recommended_at":item.get("first_recommended_at") or today_text,
+      "last_recommended_at":today_text,"last_release_at":item.get("last_release_at"),
+      "recommendation_history":item.get("recommendation_history") or [],
+      "rejection_reason":item.get("rejection_reason"),"re_recommendation_reason":item.get("re_recommendation_reason"),
       "stars_total":stars,"stars_delta_7d":None,"stars_delta_30d":None,
       "community_signals":community,"community_count_7d":community_count,
       "community_evidence_urls":community.get("evidence_urls",[]),
