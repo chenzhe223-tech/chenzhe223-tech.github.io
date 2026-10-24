@@ -90,6 +90,34 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:700px){.hero{padding-top:40px}.visual{overflow:visible}.section{padding:55px 0}.app-card{background:#fff}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-form-card,.contact-wechat-card{padding:18px}.nav{gap:10px}}
 @media(prefers-reduced-motion:reduce){.app-card:hover,.pill-button:hover,.btn-primary:hover{transform:none}}
 
+
+/* Final visual QA refinements: light contact form and more breathing room on mobile. */
+.contact-form-card{background:#FFFFFF;border:1px solid #E7E8E4;box-shadow:0 8px 28px rgba(32,38,48,.04)}
+.contact-chat-head{border-bottom-color:#E7E8E4}
+.contact-chat-head strong{color:#202630}
+.contact-chat-head small{color:#68717C}
+.chat-step{border-color:#DDE1DE;color:#68717C;background:#F7F7F4}
+.chat-bubble{background:#F5F6F3;border-color:#E7E8E4;color:#4F5963}
+.project-chip{border-color:#DDE1DE;background:#FFFFFF;color:#52606C}
+.project-chip:hover{border-color:#A8B4BE;background:#F7F7F4;color:#20364E}
+.project-chip.active{background:#20364E;color:#FFFFFF;border-color:#20364E}
+.field-label{color:#35414D}
+.field-label span{color:#A44F69}
+.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:#FFFFFF;color:#202630;border-color:#DDE1DE;box-shadow:none}
+.lead-form input::placeholder,.lead-form textarea::placeholder{color:#7A818B}
+.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:#456783;box-shadow:0 0 0 3px rgba(69,103,131,.14)}
+.consent-row{color:#626B76}
+.consent-row input{accent-color:#20364E}
+.field-hint{color:#7A818B}
+.form-status.success{background:#EEF5ED;border-color:#C8DCC4;color:#35553A}
+.form-status.error{background:#FBEEF1;border-color:#E6C4CC;color:#8B344A}
+@media(max-width:700px){
+  .hero{padding-bottom:48px}
+  .visual{min-height:270px;margin-bottom:12px}
+  .tag-c{bottom:12px}
+  .tag-d{bottom:35px}
+}
+
 </style></head><body>
 <header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
 <main id="top"><section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Independent AI Product Studio</div><h1>把想法，<br><span class="gradient">做成能用的工具。</span></h1><p>AI 正在降低创造的门槛。<strong>DAVYLAB 想做的，是让更多普通人把一个念头，走成一款真实的产品。</strong> 从灵感、原型到应用，让创造不再停在“想一想”。</p><div class="actions"><a class="btn btn-primary" href="#products">探索我的产品 ↓</a><a class="btn btn-secondary" href="#contact">带来你的想法 ↗</a></div><div class="hero-note">SPARK AN IDEA · BUILD A TOOL · KEEP THE PULSE ALIVE</div></div><div class="visual" aria-label="灵感与产品的动态视觉"><div class="orbit"></div><div class="core"><svg viewBox="0 0 100 100" fill="none"><path d="M53 7 28 47h20l-7 45 34-52H53l11-33Z" fill="#d7ff74"/><path d="M9 65C22 46 32 47 44 63S69 80 91 53" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="24" r="4" fill="#fff"/></svg></div><div class="orbit-tag tag-a"><b>01 / SPARK</b><span>让灵感被看见</span></div><div class="orbit-tag tag-b"><b>02 / BUILD</b><span>把想法做出来</span></div><div class="orbit-tag tag-c"><b>03 / PULSE</b><span>持续验证与迭代</span></div><div class="orbit-tag tag-d"><b>IDEA → PRODUCT</b><span>从念头到工具</span></div></div></div></section>
