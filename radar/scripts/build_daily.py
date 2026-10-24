@@ -91,6 +91,13 @@ def _story_url_key(item: dict) -> str:
 def _story_title(item: dict) -> str:
     return clean(str(item.get("title_zh") or item.get("title") or item.get("title_en") or item.get("original_title") or ""))
 
+def _story_title_variants(item: dict) -> list[str]:
+    values=[]
+    for key in ("title_zh","title_en","title","original_title"):
+        value=clean(str(item.get(key) or ""))
+        if value and value not in values: values.append(value)
+    return values
+
 def _story_tokens(text: str) -> set[str]:
     value = re.sub(r"https?://\S+", " ", (text or "").lower())
     value = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", " ", value)
@@ -129,23 +136,28 @@ def _history_stories(today: str) -> list[dict]:
     return records
 
 def _duplicate_match(candidate: dict, history: list[dict]) -> dict | None:
-    title = _story_title(candidate)
+    titles = _story_title_variants(candidate)
     url = _story_url_key(candidate)
-    tokens = _story_tokens(title)
+    tokens = set().union(*(_story_tokens(x) for x in titles)) if titles else set()
     for old in history:
         old_url = _story_url_key(old)
         if url and old_url and url == old_url:
             return {"kind":"same_url","date":old.get("_history_date"),"title":_story_title(old),"url":old.get("url")}
-        old_title = _story_title(old)
-        if not title or not old_title:
-            continue
-        if re.sub(r"[^a-z0-9\\u4e00-\\u9fff]", "", title.lower()) == re.sub(r"[^a-z0-9\\u4e00-\\u9fff]", "", old_title.lower()):
-            return {"kind":"same_title","date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
-        ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
-        old_tokens = _story_tokens(old_title)
+        old_titles = _story_title_variants(old)
+        for title in titles:
+            for old_title in old_titles:
+                normalized = lambda value: re.sub(r"[^a-z0-9\\u4e00-\\u9fff]", "", value.lower())
+                if normalized(title) and normalized(title) == normalized(old_title):
+                    return {"kind":"same_title","date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+                ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
+                old_tokens = _story_tokens(old_title)
+                overlap = len(_story_tokens(title) & old_tokens) / max(1, min(len(_story_tokens(title)), len(old_tokens)))
+                if ratio >= 0.82 or (overlap >= 0.78 and len(_story_tokens(title) & old_tokens) >= 4):
+                    return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+        old_tokens = set().union(*(_story_tokens(x) for x in old_titles)) if old_titles else set()
         overlap = len(tokens & old_tokens) / max(1, min(len(tokens), len(old_tokens)))
-        if ratio >= 0.82 or (overlap >= 0.78 and len(tokens & old_tokens) >= 4):
-            return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
+        if overlap >= 0.84 and len(tokens & old_tokens) >= 5:
+            return {"kind":"multilingual_title_overlap","score":round(overlap,3),"date":old.get("_history_date"),"title":_story_title(old),"url":old.get("url")}
     return None
 
 def filter_historical_duplicates(items: list[dict], section: str, today: str) -> list[dict]:
