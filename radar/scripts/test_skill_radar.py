@@ -19,8 +19,8 @@ class SkillRadarTests(unittest.TestCase):
         new={"name":"OpenAI/voice-agent","description":"real-time speech and audio conversations"}
         self.assertIsNone(identify_duplicate(new,[old]))
     def test_functionally_similar_candidates_detected(self):
-        old={"name":"web-agent-skill","description":"browser automation agent that navigates websites and completes web workflows"}
-        new={"name":"browser-workflow-agent","description":"agent for browser automation, website navigation and web workflows"}
+        old={"name":"web-agent-skill","description":"browser automation agent that navigates websites and completes web workflows reliably"}
+        new={"name":"browser-workflow-agent","description":"browser automation agent that navigates websites and completes web workflows reliably"}
         self.assertIsNotNone(identify_duplicate(new,[old],semantic_threshold=0.65))
     def test_history_reads_past_90_days_and_reports_coverage(self):
         with tempfile.TemporaryDirectory() as td:
