@@ -461,6 +461,18 @@ def verify_skill_candidate(item: dict) -> dict | None:
         if not skill_type:
             print(f"[skill-warning] repository does not prove it contains installable Agent Skill files: {name}")
             return None
+        # Confirm the skill file actually exists in the repository tree; README claims alone are insufficient.
+        branch=str(metadata.get("default_branch") or "main")
+        tree_url=base+"/git/trees/"+urllib.parse.quote(branch,safe="")+"?recursive=1"
+        tree=json.loads(http_get(tree_url,"application/vnd.github+json",timeout=8))
+        paths=[str(entry.get("path") or "") for entry in tree.get("tree",[]) if str(entry.get("path") or "").rsplit("/",1)[-1].lower()=="skill.md"]
+        if not paths:
+            print(f"[skill-warning] no actual SKILL.md file found in repository tree: {name}")
+            return None
+        if len(paths)>1 or any("/skills/" in "/"+p.lower() for p in paths):
+            skill_type="skill_pack"
+        else:
+            skill_type="agent_skill_or_pack"
         return {
             **item,
             "name": metadata.get("full_name", name),
@@ -662,7 +674,7 @@ def collect_skills() -> list[dict]:
         result = score_candidate(result, today_text)
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
-        if len(verified) >= 15:
+        if len(verified) >= 10:
             break
 
     # Keep the established first-item featured Skill contract while returning only
