@@ -1,7 +1,11 @@
 import unittest
-from radar.scripts.quality_gate import compare_story, norm_url, similarity, tokens
+from radar.scripts.quality_gate import compare_story, norm_url, published_image_records, similarity, tokens
 
 class QualityGateTests(unittest.TestCase):
+    def test_weekly_image_index_ignores_unpublished_rss_candidates(self):
+        doc={"news":[{"title":"Unused RSS candidate","image_url":"https://example.com/unused.jpg"}],"top5":[{"title":"Published story","image_url":"https://example.com/published.jpg"}]}
+        items=list(published_image_records(doc,"2026-10-23"))
+        self.assertEqual([x["title"] for x in items],["Published story"])
     def test_url_normalization_ignores_tracking_and_host_prefix(self):
         self.assertEqual(norm_url("http://www.example.com/a/?utm_source=x#top"), "https://example.com/a")
     def test_exact_same_story_different_url_is_duplicate_by_title(self):
