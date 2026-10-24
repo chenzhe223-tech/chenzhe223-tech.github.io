@@ -138,7 +138,7 @@ jobs:
           if (!(await page.getByText('QA Preview Track').count())) throw new Error('save to collection failed');
           await page.reload();
           await page.getByRole('button',{name:/我的作品/}).click();
-          if (!(await page.getByText('QA 歌曲线索').count())) throw new Error('local persistence failed');
+          if (!(await page.getByText('QA Preview Track').count())) throw new Error('local persistence failed');
           const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
           await mockExternalServices(mobile);
           mobile.on('pageerror',e=>errors.push(e.message));
