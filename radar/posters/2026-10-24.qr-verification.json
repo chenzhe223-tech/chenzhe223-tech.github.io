@@ -1,0 +1,93 @@
+{
+  "report_date": "2026-10-24",
+  "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "checked_at": "2026-10-24T08:33:24.398320+08:00",
+  "design_variant": "geometric-navy",
+  "iso_year": 2026,
+  "iso_week": 43,
+  "iso_weekday": 6,
+  "style_cycle_index": 42,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.1.0",
+  "checks": [
+    {
+      "name": "destination_reachable",
+      "status": "PASS"
+    },
+    {
+      "name": "weekly_style_matches_iso_week",
+      "status": "PASS"
+    },
+    {
+      "name": "dated_poster_final_image_qr_decode",
+      "status": "PASS"
+    },
+    {
+      "name": "latest_poster_final_image_qr_decode",
+      "status": "PASS"
+    },
+    {
+      "name": "exact_url_match",
+      "status": "PASS"
+    },
+    {
+      "name": "qr_size_contrast_quiet_zone",
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS",
+  "destination": {
+    "requested_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "http_status": 200,
+    "status": "PASS"
+  },
+  "images": [
+    {
+      "path": "radar/posters/2026-10-24.png",
+      "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+      "url_matches": true,
+      "width": 1200,
+      "height": 1800,
+      "qr_tile_px": [
+        180,
+        180
+      ],
+      "detected_qr_px": [
+        143.0,
+        143.0
+      ],
+      "contrast_percentile_range": 255,
+      "quiet_zone_px": {
+        "top_px": 18,
+        "bottom_px": 18,
+        "left_px": 18,
+        "right_px": 18
+      },
+      "status": "PASS"
+    },
+    {
+      "path": "radar/posters/latest.png",
+      "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+      "url_matches": true,
+      "width": 1200,
+      "height": 1800,
+      "qr_tile_px": [
+        180,
+        180
+      ],
+      "detected_qr_px": [
+        143.0,
+        143.0
+      ],
+      "contrast_percentile_range": 255,
+      "quiet_zone_px": {
+        "top_px": 18,
+        "bottom_px": 18,
+        "left_px": 18,
+        "right_px": 18
+      },
+      "status": "PASS"
+    }
+  ]
+}
