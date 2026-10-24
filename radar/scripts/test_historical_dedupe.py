@@ -2,6 +2,10 @@ import unittest
 from radar.scripts.build_daily import _duplicate_match, _story_url_key, _story_tokens
 
 class HistoricalDedupeTests(unittest.TestCase):
+    def test_english_source_title_matches_historical_original_title(self):
+        old={"title_zh":"OpenAI收购Orchestra Bio，强化生物科技业务","title":"OpenAI acquires Orchestra Bio to beef up biotech business","url":"https://old.example/story","_history_date":"2026-10-21"}
+        new={"title":"OpenAI acquires Orchestra Bio to beef up biotech business","url":"https://new.example/story"}
+        self.assertIsNotNone(_duplicate_match(new,[old]))
     def test_near_identical_headline_is_filtered_after_ai_reselection(self):
         old={"title":"OpenAI收购Orchestra Bio，强化生物科技业务","url":"https://old.example/story","_history_date":"2026-10-21"}
         new={"title":"OpenAI收购Orchestra Bio","url":"https://new.example/story"}
