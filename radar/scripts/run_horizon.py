@@ -18,6 +18,10 @@ CONFIG=ROOT/'radar/config/horizon.json'
 DATA_DIR=ROOT/'radar/horizon-data'
 HORIZON_DIR=Path(os.environ.get('HORIZON_DIR','/tmp/Horizon'))
 TZ=ZoneInfo('Asia/Shanghai')
+try:
+    from radar.scripts.build_daily import filter_historical_duplicates
+except ModuleNotFoundError:
+    from build_daily import filter_historical_duplicates
 
 def _safe_error_detail(exc: Exception) -> str:
     """Return actionable provider diagnostics without exposing credentials."""
@@ -232,6 +236,29 @@ def main():
         except Exception as exc: report['ai_analysis']={'status':'unavailable','message':'AI 分析暂时不可用，基础新闻与 Skill 榜单已保留。'}; print(f'[horizon-warning] {type(exc).__name__}')
     localize(report)
     ensure_story_fallback(report)
+    # Final post-AI guard: localization can make a previously missed event match
+    # historical Chinese headlines. Remove it before poster generation and refill
+    # only from the already history-filtered source-backed news pool.
+    today_local=dt.datetime.now(TZ).date().isoformat()
+    for _ in range(3):
+        current=report.get('top5') if isinstance(report.get('top5'),list) else []
+        safe=filter_historical_duplicates(current,'top5',today_local)
+        if len(safe)==len(current):
+            break
+        removed_urls={str(x.get('source_url') or '') for x in current if x not in safe}
+        report['top5']=safe
+        report['news']=[x for x in report.get('news',[]) if str(x.get('url') or x.get('link') or '') not in removed_urls]
+        ensure_story_fallback(report)
+        print(f'[skill-history-guard] removed={len(current)-len(safe)} historical duplicate from AI-selected top5; refilled from verified news candidates.')
+    final_top5=report.get('top5') if isinstance(report.get('top5'),list) else []
+    final_safe=filter_historical_duplicates(final_top5,'top5',today_local)
+    if len(final_safe)!=len(final_top5):
+        report['top5']=final_safe
+        report['top5_status']='unavailable'
+        print('[skill-history-guard] unable to replace all duplicate top5 stories; release gate will block publication.')
+    if len(report.get('top5') or [])<5:
+        report['top5_status']='unavailable'
+        if isinstance(report.get('localization'),dict): report['localization']['status']='partial'
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return 0
 if __name__=='__main__': raise SystemExit(main())
