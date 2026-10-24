@@ -401,8 +401,10 @@ def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
     return ranked, sources_ok
 
 def github_search(query: str) -> list[dict]:
+    # Recent-created/pushed searches must not inherit the default cumulative-Stars sort.
+    sort = "updated" if re.search(r"\\b(created|pushed):>", query) else "stars"
     url = "https://api.github.com/search/repositories?" + urllib.parse.urlencode({
-        "q": query, "sort": "stars", "order": "desc", "per_page": 30
+        "q": query, "sort": sort, "order": "desc", "per_page": 30
     })
     try:
         payload = json.loads(http_get(url, "application/vnd.github+json"))
@@ -572,17 +574,19 @@ def collect_skills() -> list[dict]:
     # Use the local report date, not UTC, so the editorial theme changes at Beijing midnight.
     today = dt.datetime.now(TZ).date()
     theme_name, theme_terms = daily_themes[today.toordinal() % len(daily_themes)]
+    recent_30 = (today - dt.timedelta(days=30)).isoformat()
+    recent_7 = (today - dt.timedelta(days=7)).isoformat()
     queries = [
         "agent skills AI in:name,description",
         "claude skills in:name,description",
         "agent-skills in:name,description",
         "awesome-copilot in:name,description",
+        f"agent skill created:>{recent_30}",
+        f"SKILL.md created:>{recent_30}",
+        f"agent skill pushed:>{recent_7}",
         "AI coding agent skill design UI UX",
         "AI agent skill data analytics dashboard",
-        "AI agent skill research news search",
-        "AI agent skill writing documentation marketing",
         "AI agent skill browser automation testing",
-        "AI agent skill product planning prototype",
     ]
     repos: dict[str, dict] = {}
     for query in queries:
