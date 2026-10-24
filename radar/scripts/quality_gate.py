@@ -26,6 +26,16 @@ STOP = {"the","and","for","with","from","into","over","after","before","says","s
 def norm_text(s):
     s = (s or "").lower()
     s = re.sub(r"https?://\S+", " ", s)
+    # Normalize common editorial variants without treating a shared company name as an event match.
+    aliases = [
+        (r"\bbritain\b|\bbritish\b", " uk "),
+        (r"\bunveils?\b|\bannounced?\b|\bannounces\b", " announce "),
+        (r"\b600\s+million\s+pounds?\b|\b600m\b|\b£600\s*million\b", " 600m "),
+        (r"\bbiological\s+safety\b", " biosafety "),
+        (r"\bsecurity\b", " safety "),
+    ]
+    for pattern, replacement in aliases:
+        s = re.sub(pattern, replacement, s)
     s = re.sub(r"[^\w\u4e00-\u9fff]+", " ", s)
     return " ".join(s.split())
 def tokens(s):
