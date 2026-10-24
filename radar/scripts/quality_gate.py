@@ -152,9 +152,14 @@ def main():
         hit=compare_story(item,history)
         if hit:
             duplicate_hits.append({"scope":"history","section":item.get("_current_section"),"title":story_title(item),"match":hit})
-        internal=compare_story(item,seen_current)
-        if internal:
-            duplicate_hits.append({"scope":"current_report","section":item.get("_current_section"),"title":story_title(item),"match":internal})
+        # The general news feed intentionally contains the same records as top5.
+        # Internal duplication is only meaningful across curated sections (top5 / China AI),
+        # not between the source pool and its selected subset.
+        if item.get("_current_section") in ("top5", "china_ai_news"):
+            curated_seen=[x for x in seen_current if x.get("_current_section") in ("top5", "china_ai_news")]
+            internal=compare_story(item,curated_seen)
+            if internal:
+                duplicate_hits.append({"scope":"current_curated_sections","section":item.get("_current_section"),"title":story_title(item),"match":internal})
         seen_current.append(item)
     # Compare current China AI stories specifically to yesterday and all historical China stories.
     china=report.get("china_ai_news") if isinstance(report.get("china_ai_news"),list) else []
@@ -202,21 +207,42 @@ def main():
             u=image_url(story)
             if u: week_urls[norm_url(u)]={"date":day,"title":story_title(story),"url":u}
     week_image_hits=[]
+    historical_week_images=[]
+    historical_image_failures=[]
+    for day,doc in docs:
+        try:
+            if dt.date.fromisoformat(day).isoformat()<week_start: continue
+        except Exception: continue
+        for story in records_from(doc,day):
+            u=image_url(story)
+            if not u: continue
+            canonical=norm_url(u)
+            try:
+                sha,ph=download_fingerprints(u)
+                historical_week_images.append({"date":day,"title":story_title(story),"url":u,"canonical_url":canonical,"sha256":sha,"phash":ph})
+            except Exception as exc:
+                historical_image_failures.append({"date":day,"title":story_title(story),"url":u,"error":type(exc).__name__})
     for img in current_images:
         old=week_urls.get(img["canonical_url"])
-        if old: week_image_hits.append({"title":img["title"],"url":img["url"],"history":old})
+        if old:
+            week_image_hits.append({"type":"same_week_url_reuse","title":img["title"],"url":img["url"],"history":old})
+            continue
+        for old_img in historical_week_images:
+            if img["sha256"]==old_img["sha256"] or (img.get("phash") and old_img.get("phash") and hamming(img["phash"],old_img["phash"])<=4):
+                week_image_hits.append({"type":"same_week_content_reuse","title":img["title"],"url":img["url"],"history":old_img})
+                break
     # History incompleteness is surfaced, never silently treated as clean.
     result={
       "report_date":today,"generated_at":dt.datetime.now(TZ).isoformat(),
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
-      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"same_iso_week_url_reuse":week_image_hits,"sha256_and_phash_checked":True},
-      "status":"FAIL" if duplicate_hits or china_hits or image_errors or week_image_hits or unreadable else "PASS",
+      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "status":"FAIL" if duplicate_hits or china_hits or image_errors or week_image_hits or unreadable or historical_image_failures else "PASS",
       "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"unreadable_history_blocks_publish":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print(json.dumps({"status":result["status"],"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"report":str(out)},ensure_ascii=False))
+    print(json.dumps({"status":result["status"],"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"report":str(out)},ensure_ascii=False))
     if result["status"]!="PASS":
         raise SystemExit("FAIL: news/image freshness gate blocked publication; see test-results/radar/news-image-quality-gate.json")
     return 0
