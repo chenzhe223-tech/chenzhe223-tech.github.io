@@ -44,7 +44,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          app_url='https://chenzhe223-tech.github.io/keypocket/app.js?v=kp-radar-skill-bridge-2'
+          app_url='https://chenzhe223-tech.github.io/keypocket/app.js?v=kp-radar-skill-bridge-3'
           radar_url='https://chenzhe223-tech.github.io/radar/daily/'
           for attempt in $(seq 1 24); do
             app="$(curl --fail --silent --show-error --max-time 20 "$app_url" 2>/dev/null || true)"
