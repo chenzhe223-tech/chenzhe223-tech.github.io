@@ -36,8 +36,8 @@ def infer_skill_category(item: dict) -> str:
         ("研究与知识管理",("research","scientific","paper","literature","knowledge","search","citation","academic")),
         ("软件工程与测试",("coding","code review","architecture","frontend","backend","software","programming","debugging","testing","test automation","developer","devtools")),
         ("办公与业务自动化",("office","document","email","calendar","marketing","sales","crm","finance","invoice","customer support")),
-        ("个人效率与知识管理",("adhd","productivity","focus","habit","personal workflow","task management","time management")),
         ("Agent 工作流与规划",("agent","planning","orchestration","workflow","memory","context","multi-agent","task")),
+        ("个人效率与知识管理",("adhd","productivity","focus","habit","personal workflow","task management","time management")),
     ]
     for category,keywords in rules:
         if any(k in text for k in keywords): return category
