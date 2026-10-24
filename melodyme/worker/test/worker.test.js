@@ -58,3 +58,70 @@ test("maps provider throttling to a controlled response", async () => {
     assert.equal((await res.json()).error,"ai_rate_limited");
   } finally { globalThis.fetch = originalFetch; }
 });
+
+
+const artRequest = (overrides = {}) => req({
+  action: "generateAlbumArt",
+  prompt: "square abstract memory artwork, blue ocean and soft light",
+  seed: 123,
+  width: 600,
+  height: 600,
+  ...overrides
+});
+test("generates album art through Workers AI and returns PNG without secret fields", async () => {
+  const calls = [];
+  const imageEnv = { ...env, AI: { run: async (model, input) => {
+    calls.push({ model, input });
+    return new Uint8Array([137, 80, 78, 71]);
+  } } };
+  const res = await worker.fetch(artRequest(), imageEnv);
+  assert.equal(res.status, 200);
+  assert.match(res.headers.get("content-type"), /image\/png/);
+  assert.deepEqual([...new Uint8Array(await res.arrayBuffer())], [137, 80, 78, 71]);
+  assert.equal(calls[0].model, "@cf/stabilityai/stable-diffusion-xl-base-1.0");
+  assert.equal(calls[0].input.prompt, "square abstract memory artwork, blue ocean and soft light");
+  assert.equal(res.headers.get("access-control-allow-origin"), ORIGIN);
+  assert.equal(res.headers.get("x-deepseek-api-key"), null);
+});
+test("rejects album-art requests from disallowed origins", async () => {
+  const res = await worker.fetch(artRequest(), { ...env, AI: { run: async () => new Uint8Array([1]) } });
+  const request = new Request("https://worker.test/", { method: "POST", headers: { Origin: "https://evil.example", "Content-Type": "application/json" }, body: JSON.stringify({ action: "generateAlbumArt", prompt: "art", width: 600, height: 600 }) });
+  const denied = await worker.fetch(request, { ...env, AI: { run: async () => new Uint8Array([1]) } });
+  assert.equal(denied.status, 403);
+  assert.equal(res.status, 200);
+});
+test("rejects non-POST album-art requests", async () => {
+  const res = await worker.fetch(req(null, { method: "GET" }), { ...env, AI: { run: async () => new Uint8Array([1]) } });
+  assert.equal(res.status, 405);
+});
+test("rejects oversized album-art request bodies", async () => {
+  const request = new Request("https://worker.test/", { method: "POST", headers: { Origin: ORIGIN, "Content-Type": "application/json", "Content-Length": "12001" }, body: JSON.stringify({ action: "generateAlbumArt", prompt: "x", width: 600, height: 600 }) });
+  const res = await worker.fetch(request, { ...env, AI: { run: async () => new Uint8Array([1]) } });
+  assert.equal(res.status, 413);
+});
+test("rejects empty and overlong album-art prompts", async () => {
+  for (const prompt of ["", " ".repeat(401), "x".repeat(401)]) {
+    const res = await worker.fetch(artRequest({ prompt }), { ...env, AI: { run: async () => new Uint8Array([1]) } });
+    assert.equal(res.status, 400);
+  }
+});
+test("rejects album-art dimensions outside 256 to 1024", async () => {
+  for (const dims of [{ width: 255, height: 600 }, { width: 1025, height: 600 }, { width: 600, height: 255 }, { width: 600, height: 1025 }]) {
+    const res = await worker.fetch(artRequest(dims), { ...env, AI: { run: async () => new Uint8Array([1]) } });
+    assert.equal(res.status, 400);
+  }
+});
+test("maps Workers AI failures to a controlled image error without stack details", async () => {
+  const res = await worker.fetch(artRequest(), { ...env, AI: { run: async () => { throw new Error("private upstream stack and secret"); } } });
+  assert.equal(res.status, 502);
+  const data = await res.json();
+  assert.equal(data.error, "ai_image_generation_failed");
+  assert.equal(JSON.stringify(data).includes("private upstream stack"), false);
+  assert.equal(JSON.stringify(data).includes("test-only-key"), false);
+});
+test("returns a controlled error when Workers AI binding is missing", async () => {
+  const { AI, ...withoutAI } = { ...env, AI: undefined };
+  const res = await worker.fetch(artRequest(), withoutAI);
+  assert.equal(res.status, 503);
+  assert.equal((await res.json()).error, "ai_image_service_not_configured");
+});
