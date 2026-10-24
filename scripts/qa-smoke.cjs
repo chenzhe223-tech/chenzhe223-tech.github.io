@@ -212,8 +212,17 @@ const mark = (status, name, detail = '') => {
       await kp.waitForFunction(() => {
         const wrap = document.querySelector('#confirmWrap');
         const btn = document.querySelector('#unlockBtn');
-        return wrap && btn && !btn.disabled && btn.textContent.trim().length > 0;
-      }, null, { timeout: 15000 });
+        const title = document.querySelector('#lockTitle')?.textContent || '';
+        // The HTML contains a static placeholder label before async IndexedDB init.
+        // Wait for the app to replace it with a definitive initialized state.
+        return wrap && btn && (
+          btn.disabled ||
+          btn.textContent.trim() === '创建本地密钥库' ||
+          btn.textContent.trim() === '解锁密钥库' ||
+          title.includes('检测到本地数据') ||
+          title.includes('本地密钥库暂时无法读取')
+        );
+      }, null, { timeout: 20000 });
       const firstRun = await kp.locator('#confirmWrap').evaluate(el => !el.classList.contains('hidden'));
       if (!firstRun) {
         // Do not guess a user's password. A non-empty isolated vault is a test fixture issue,
