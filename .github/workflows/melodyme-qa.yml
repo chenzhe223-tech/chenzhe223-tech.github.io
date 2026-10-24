@@ -59,7 +59,7 @@ jobs:
           import { chromium } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const errors = [];
-          const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/qJkAAAAASUVORK5CYII=', 'base64');
+          const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64');
           const catalog = { results: [
             { trackName:'QA Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa/100x100bb.jpg', previewUrl:'https://audio-ssl.itunes.apple.com/qa-preview.m4a', releaseDate:'2001-01-01T00:00:00Z' },
             { trackName:'QA No Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa2/100x100bb.jpg', releaseDate:'2002-01-01T00:00:00Z' }
