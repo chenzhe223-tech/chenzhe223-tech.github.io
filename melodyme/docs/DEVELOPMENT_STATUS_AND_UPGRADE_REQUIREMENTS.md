@@ -250,9 +250,9 @@ Files changed:
 
 - [x] Code edits committed to a feature branch.
 - [x] Added Worker unit test cases for valid image response, origin, method, oversized body, prompt/dimensions validation, missing binding, provider errors, and absence of secret data in response.
-- [ ] Worker syntax check and unit tests have not yet been confirmed for this branch.
-- [ ] Desktop/mobile journey tests have not yet been confirmed for this branch.
-- [ ] PR not yet merged.
+- [x] Worker syntax check and unit tests passed: GitHub Actions run 40108810169 (`npm run check`, `npm test`); 17 tests passed, 0 failed. Latest Worker CI: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40108810169
+- [x] Desktop/mobile journey smoke tests passed: GitHub Actions run 40108810190, including mocked iTunes preview selection, no-preview fallback, no-autoplay/single-audio behavior, Pollinations success, Worker fallback, both-provider failure preservation, mobile layout, and no page errors. Run: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40108810190
+- [ ] PR #38 is open and not merged: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/38
 - [ ] Worker binding/model fallback not yet deployed to Cloudflare.
 - [ ] GitHub Pages deployment not yet confirmed.
 - [ ] Real iTunes preview playback, Pollinations generation, Worker fallback and total-failure preservation not yet verified in a production browser.
