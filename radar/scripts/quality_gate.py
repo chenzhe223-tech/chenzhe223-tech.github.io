@@ -254,6 +254,16 @@ def main():
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
+    # Persist a PASS marker only after every quality check succeeds. The workflow preflight
+    # requires this marker, so a failed run is retried instead of incorrectly skipped tomorrow.
+    if result["status"] == "PASS":
+        report["quality_gate"] = {
+            "status": "PASS", "checked_at": result["generated_at"],
+            "history_files": len(archive_files), "history_stories": len(history),
+            "news_duplicate_hits": len(duplicate_hits), "china_duplicate_hits": len(china_hits),
+            "same_week_image_reuse": len(week_image_hits), "report_path": "test-results/radar/news-image-quality-gate.json"
+        }
+        REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"status":result["status"],"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"report":str(out)},ensure_ascii=False))
     if result["status"]!="PASS":
         raise SystemExit("FAIL: news/image freshness gate blocked publication; see test-results/radar/news-image-quality-gate.json")
