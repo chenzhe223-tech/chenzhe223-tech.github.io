@@ -2,7 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from radar.scripts.skill_radar import actual_skill_files, canonical_project_id, classify_skill_type, infer_skill_category, identify_duplicate, load_recommendation_history, score_candidate, build_radar
+from radar.scripts.skill_radar import actual_skill_files, canonical_project_id, classify_skill_type, infer_skill_category, identify_duplicate, load_recommendation_history, enrich_growth_metrics, score_candidate, build_radar
 
 class SkillRadarTests(unittest.TestCase):
     def test_skill_categories_are_inferred_from_project_content(self):
@@ -56,6 +56,24 @@ class SkillRadarTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             h=load_recommendation_history(Path(td),"2026-10-24")
             self.assertEqual(h["status"],"unavailable")
+    def test_candidate_snapshot_calculates_observed_7d_growth(self):
+        with tempfile.TemporaryDirectory() as td:
+            p=Path(td)/"2026-10-17.json"
+            p.write_text(json.dumps({"snapshot_date":"2026-10-17","candidates":[{"name":"owner/repo","url":"https://github.com/owner/repo","canonical_id":"github.com/owner/repo","stars_total":100}]}))
+            items=[{"name":"owner/repo","url":"https://github.com/owner/repo","stars":145}]
+            result=enrich_growth_metrics(items,Path(td),"2026-10-24")
+            self.assertEqual(items[0]["stars_delta_7d"],45)
+            self.assertEqual(items[0]["growth_baseline_7d_date"],"2026-10-17")
+            self.assertEqual(items[0]["stars_delta_30d"],None)
+            self.assertEqual(result["candidates_with_7d_delta"],1)
+    def test_candidate_snapshot_starts_baseline_without_inventing_growth(self):
+        with tempfile.TemporaryDirectory() as td:
+            items=[{"name":"owner/repo","url":"https://github.com/owner/repo","stars":145}]
+            result=enrich_growth_metrics(items,Path(td),"2026-10-24")
+            self.assertIsNone(items[0]["stars_delta_7d"])
+            self.assertIn("no historical",items[0]["growth_data_status"])
+            self.assertTrue((Path(td)/"2026-10-24.json").exists())
+            self.assertEqual(result["status"],"baseline_started")
     def test_score_does_not_fabricate_growth(self):
         s=score_candidate({"name":"owner/repo","url":"https://github.com/owner/repo","stars":1000,"updated":"2026-10-20","license":"MIT","description":"Useful AI agent skill","evidence_verified":True},"2026-10-24")
         self.assertIsNone(s["stars_delta_7d"]); self.assertIsNone(s["stars_delta_30d"])
