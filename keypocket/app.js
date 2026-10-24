@@ -154,51 +154,7 @@ function skillImportModal(){
  });
 }
 async function refreshSavedSkillHeat(){
- const btn=$('#refreshSkillHeatBtn');if(!btn)return;
- const skills=projects.filter(p=>p.favorite&&isExternalSkillProject(p));
- if(!skills.length){showToast('暂未找到已收藏的外部 Skill 仓库');return;}
- btn.disabled=true;const label=btn.textContent;let updated=0,failed=0,skipped=0;
- try{
-  for(let i=0;i<Math.min(skills.length,12);i++){
-   const p=skills[i];
-   btn.textContent='刷新中 '+(i+1)+'/'+Math.min(skills.length,12);
-   try{
-    const meta=await fetchGithubRepoMeta(p.repoUrl,8000);
-    const h=skillHeat(meta),now=new Date().toISOString();
-    const purpose=skillPurpose({...meta,name:meta.name,description:meta.description,language:meta.language,topics:meta.topics});
-    const old=String(p.notes||'').split('\n').filter(line=>!/^GitHub 排名：|^热度：|^热度采集时间：|^GitHub Stars：|^主要作用：|^应用建议：|^建议方向：/.test(line)).join('\n').trim();
-    p.notes=(old?old+'\n':'')+'主要作用：'+purpose+'\n应用建议：'+skillUseCase(meta)+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+now+'。';
-    if(meta.homepage&&validWebUrl(meta.homepage))p.appUrl=meta.homepage;
-    p.category=githubCategory(meta);p.stack=[meta.language,...(meta.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160);
-    if(!p.tags.trim())p.tags=suggestedProjectTags(meta).join(', ');
-    p.updatedAt=Date.now();await putItem(await sealProject(p));updated++;
-   }catch(e){failed++;}
-   await new Promise(resolve=>setTimeout(resolve,120));
-  }
-  renderProjects();showToast('已刷新 '+updated+' 个外部 Skill'+(failed?'；'+failed+' 个失败或超时':'')+(skills.length>12?'；本次最多刷新 12 个，请再次点击继续':''));
- }finally{btn.disabled=false;btn.textContent=label;}
-}
-$('#refreshSkillHeatBtn');if(!btn)return;
- const skills=projects.filter(p=>p.repoUrl&&(/skill/i.test(p.name+' '+p.category)||p.favorite&&/skill/i.test(p.tags)));
- if(!skills.length){showToast('暂未找到已收藏的 Skill 项目');return;}
- btn.disabled=true;const label=btn.textContent;btn.textContent='正在刷新…';let updated=0,failed=0;
- try{
-  for(const p of skills){
-   try{
-    const meta=await fetchGithubRepoMeta(p.repoUrl);
-    const h=skillHeat(meta),now=new Date().toISOString();
-    const base=(p.notes||'').split('\n').filter(line=>!/^GitHub 排名：|^热度：|^热度采集时间：|^GitHub Stars：/.test(line)).join('\n').trim();
-    p.notes=(base?base+'\n':'')+'GitHub Stars：'+h.stars+'；Forks：'+h.forks+'；'+h.level+'；'+h.freshness+'。\n热度采集时间：'+now+'。';
-    if(meta.homepage&&validWebUrl(meta.homepage))p.appUrl=meta.homepage;
-    p.category=githubCategory(meta);p.stack=[meta.language,...(meta.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160);
-    const tags=suggestedProjectTags(meta);if(!p.tags.trim())p.tags=tags.join(', ');
-    p.updatedAt=Date.now();await putItem(await sealProject(p));updated++;
-   }catch(e){failed++;}
-  }
-  renderProjects();showToast('已刷新 '+updated+' 个 Skill'+(failed?'；'+failed+' 个暂时失败（可能触发 GitHub 限流）':''));
- }finally{btn.disabled=false;btn.textContent=label;}
-}
-$('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
+ const btn=$('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
 $('#importSkillBtn')?.addEventListener('click',skillImportModal);
 
 function canonicalSkillRepoUrl(value){
