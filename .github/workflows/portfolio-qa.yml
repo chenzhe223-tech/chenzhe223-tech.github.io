@@ -1,0 +1,53 @@
+name: Portfolio UI regression
+
+on:
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "index.html"
+      - "scripts/qa-portfolio.cjs"
+      - ".github/workflows/portfolio-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-qa-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  browser-regression:
+    name: Desktop and mobile UI regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout proposed portfolio changes
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start local static server
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/portfolio-http.log 2>&1 &
+          for i in $(seq 1 20); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/portfolio-http.log
+          exit 1
+      - name: Test portfolio on desktop and mobile
+        run: node scripts/qa-portfolio.cjs
+      - name: Upload screenshots and regression report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-ui-regression
+          path: test-results/portfolio/
+          if-no-files-found: warn
+          retention-days: 14
