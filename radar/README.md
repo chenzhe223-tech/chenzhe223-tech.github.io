@@ -23,6 +23,10 @@ GitHub Actions refreshes and publishes the report daily at 23:30 UTC (07:30 Asia
 ## Verification
 The workflow logs show whether Horizon completed and whether the Chinese summary was attached. Public source links remain the basis for checking claims; model-generated analysis is editorial assistance, not independent verification.
 
+## One-click Skill collection to KeyPocket
+
+Each Skill recommendation card and the featured Skill include a separate 「一键收录到 KeyPocket」 action linking to https://chenzhe223-tech.github.io/keypocket/. Before navigation, the daily page places the public repository URL, name, short description, topics, license, observed Stars, update date and report date in the same-origin browser `localStorage` queue (`kp.radar.pending-skills.v1`). No API keys or access tokens are sent. KeyPocket validates the repository URL, requires vault unlock and explicit confirmation, deduplicates by repository URL, encrypts the project metadata using its existing local vault, and removes the queued item after a successful save or explicit ignore. This is a same-browser handoff, not cloud sync or automatic Skill installation; if browser storage is blocked, the link is cancelled and the page shows an error.
+
 
 ## News Image Match Skill
 
