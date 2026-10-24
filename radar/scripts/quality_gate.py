@@ -221,6 +221,8 @@ def main():
     week_image_hits=[]
     historical_week_images=[]
     historical_image_failures=[]
+    verified_historical_urls=set()
+    historical_fingerprint_cache={}
     for day,doc in docs:
         try:
             if dt.date.fromisoformat(day).isoformat()<week_start: continue
@@ -229,8 +231,15 @@ def main():
             u=image_url(story)
             if not u: continue
             canonical=norm_url(u)
+            if not canonical or canonical in verified_historical_urls:
+                continue
+            verified_historical_urls.add(canonical)
             try:
-                sha,ph=download_fingerprints(u)
+                if canonical in historical_fingerprint_cache:
+                    sha,ph=historical_fingerprint_cache[canonical]
+                else:
+                    sha,ph=download_fingerprints(u)
+                    historical_fingerprint_cache[canonical]=(sha,ph)
                 historical_week_images.append({"date":day,"title":story_title(story),"url":u,"canonical_url":canonical,"sha256":sha,"phash":ph})
             except Exception as exc:
                 historical_image_failures.append({"date":day,"title":story_title(story),"url":u,"error":type(exc).__name__})
