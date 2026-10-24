@@ -648,7 +648,7 @@ def collect_skills() -> list[dict]:
     for candidate in ranked:
         hit = identify_duplicate(candidate, history["records"])
         if hit:
-            update = verify_material_update(candidate, history["records"]) if release_checks < 8 else None
+            update = verify_material_update(candidate, history["records"]) if release_checks < 4 else None
             if release_checks < 8:
                 release_checks += 1
             if update:
@@ -664,7 +664,7 @@ def collect_skills() -> list[dict]:
     # The unverified search-result pool is never published as if it passed review.
     verified = []
     verification_failures = []
-    for candidate in eligible[:60]:
+    for candidate in eligible[:15]:
         result = verify_skill_candidate(candidate)
         if not result:
             verification_failures.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "repository/license/README verification failed"})
@@ -674,12 +674,12 @@ def collect_skills() -> list[dict]:
         result = score_candidate(result, today_text)
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
-        if len(verified) >= 10:
+        if len(verified) >= 8:
             break
 
     # Keep the established first-item featured Skill contract while returning only
     # evidence-verified projects that passed historical and same-day deduplication.
-    radar = build_radar(verified, ARCHIVE, today_text, limit=10)
+    radar = build_radar(verified, ARCHIVE, today_text, limit=8)
     selected = radar.get("selected", [])
     if selected:
         selected[0]["daily_theme"] = theme_name
