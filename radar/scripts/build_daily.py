@@ -15,6 +15,7 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
+from radar.scripts.skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -70,6 +71,7 @@ TAG_RE = re.compile(r"<[^>]+>")
 WS_RE = re.compile(r"\s+")
 
 HISTORY_DEDUPE_COUNTS = {"global_removed": 0, "china_removed": 0, "matches": []}
+SKILL_RADAR_DIAGNOSTICS: dict = {"status": "not_run"}
 
 def _story_url_key(item: dict) -> str:
     raw = str(item.get("url") or item.get("source_url") or item.get("link") or "").strip()
@@ -427,6 +429,13 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "updated": metadata.get("updated_at") or item.get("updated", ""),
             "license": license_id,
             "license_name": str(license_info.get("name") or license_id),
+            "forks_total": int(metadata.get("forks_count") or 0),
+            "open_issues_total": int(metadata.get("open_issues_count") or 0),
+            "evidence_verified": True,
+            "readme_verified": True,
+            "evidence_checked_at": dt.datetime.now(TZ).isoformat(),
+            "evidence_urls": [metadata.get("html_url", item.get("url", "")), base + "/readme"],
+            "quality_status": "PASS",
         }
     except Exception as exc:
         print(f"[skill-warning] repository verification {name}: {type(exc).__name__}")
@@ -508,98 +517,73 @@ def collect_skills() -> list[dict]:
         reverse=True,
     )
 
-    # Read recent archive picks so the featured Skill doesn't repeat every day.
-    recent_picks: list[str] = []
-    try:
-        archive_files = sorted(ARCHIVE.glob("*.json"), reverse=True)
-        for archive_path in archive_files[:8]:
-            if archive_path.stem == today.isoformat():
-                continue
-            try:
-                previous = json.loads(archive_path.read_text(encoding="utf-8"))
-                previous_skills = previous.get("skills") or []
-                if previous_skills and previous_skills[0].get("name"):
-                    recent_picks.append(previous_skills[0]["name"].lower())
-            except Exception:
-                continue
-    except Exception:
-        pass
-
-    theme_ranked = [
-        item for item in ranked
-        if any(term in (item.get("name", "") + " " + item.get("description", "") + " " +
-                        " ".join(item.get("topics") or [])).lower() for term in theme_terms)
-    ]
-    # Prefer a theme-relevant project not featured recently, but verify the
-    # selected repository's SPDX license and README against the live GitHub API.
-    featured = None
-    verification_queue = [item for item in theme_ranked if item["name"].lower() not in recent_picks]
-    verification_queue += [item for item in ranked if item["name"].lower() not in recent_picks
-                           and item["name"].lower() not in {x["name"].lower() for x in verification_queue}]
-    for candidate in verification_queue:
-        featured = verify_skill_candidate(candidate)
-        if featured:
-            break
-
-    if featured is None:
-        # Search API may be rate-limited. Verify curated candidates live rather than
-        # inventing metrics or describing unverified repositories as current.
-        fallback_names = (
-            "obra/superpowers", "anthropics/skills", "github/awesome-copilot",
-            "browser-use/browser-use", "microsoft/playwright-mcp",
-            "openai/openai-cookbook", "nextlevelbuilder/ui-ux-pro-max-skill",
-        )
-        fallback_items = []
-        for full_name in fallback_names:
-            try:
-                payload = json.loads(http_get(
-                    "https://api.github.com/repos/" + full_name,
-                    "application/vnd.github+json",
-                    timeout=8,
-                ))
-                actual_name = payload.get("full_name", "")
-                license_info = payload.get("license") or {}
-                license_id = str(license_info.get("spdx_id") or "").strip()
-                if (not actual_name or payload.get("archived") or payload.get("fork")
-                        or not license_id or license_id.upper() in {"NOASSERTION", "OTHER"}):
-                    continue
-                if actual_name.lower() in recent_picks and len(fallback_names) > len(recent_picks):
-                    continue
-                fallback_items.append({
-                    "name": actual_name,
-                    "url": payload.get("html_url", ""),
-                    "description": clean(payload.get("description") or "Open-source AI workflow project"),
-                    "stars": int(payload.get("stargazers_count") or 0),
-                    "updated": payload.get("updated_at", ""),
-                    "language": payload.get("language") or "Multi-language",
-                    "topics": (payload.get("topics") or ["agent-skills"])[:8],
-                    "daily_theme": theme_name,
-                    "license": license_id,
-                    "license_name": str(license_info.get("name") or license_id),
-                })
-            except Exception as exc:
-                print(f"[skill-warning] curated metadata {full_name}: {type(exc).__name__}")
-        ranked = sorted(fallback_items, key=score, reverse=True)
-        for candidate in ranked:
-            if candidate["name"].lower() in recent_picks:
-                continue
-            featured = verify_skill_candidate(candidate)
-            if featured:
-                break
-
-    if featured is None:
-        # No current project could be verified. Return only verified search results
-        # and expose a warning; never claim that a repeated pick is new.
-        print(f"[skill-warning] no Skill candidate passed live license/README verification for theme {theme_name}; candidate pool={len(ranked)}")
+    today_text = today.isoformat()
+    history = load_recommendation_history(ARCHIVE, today_text, 90)
+    if history["status"] == "unavailable":
+        SKILL_RADAR_DIAGNOSTICS.clear()
+        SKILL_RADAR_DIAGNOSTICS.update({
+            "status": "history_unavailable",
+            "history": {k:v for k,v in history.items() if k!="records"},
+            "selected_count": 0,
+            "excluded_count": 0,
+            "message": "Skill recommendation history could not be verified; no fresh Skill was selected."
+        })
+        print(f"[skill-error] history unavailable; refusing to recommend without history check: {history.get('errors')}")
         return []
 
-    featured["daily_theme"] = theme_name
-    # Keep the featured pick first for the current page contract; remaining entries
-    # are a useful popularity/activity shortlist, with the featured project removed.
-    remaining = [item for item in ranked if item["name"].lower() != featured["name"].lower()]
-    result = [featured] + remaining[:9]
-    print(f"[skill-pick] date={today.isoformat()} theme={theme_name} featured={featured['name']} recent_exclusions={len(recent_picks)} candidates={len(ranked)}")
-    return result
+    # Exclude all projects present in accessible 90-day history before spending API calls.
+    eligible = []
+    historical_exclusions = []
+    for candidate in ranked:
+        hit = identify_duplicate(candidate, history["records"])
+        if hit:
+            historical_exclusions.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "90-day history duplicate", "match": hit})
+        else:
+            eligible.append(candidate)
+
+    # Verify every selected candidate's live repository metadata, license and README.
+    # The unverified search-result pool is never published as if it passed review.
+    verified = []
+    verification_failures = []
+    for candidate in eligible[:60]:
+        result = verify_skill_candidate(candidate)
+        if not result:
+            verification_failures.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "repository/license/README verification failed"})
+            continue
+        result = score_candidate(result, today_text)
+        result["novelty_status"] = "new"
+        result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
+        verified.append(result)
+        if len(verified) >= 15:
+            break
+
+    # Keep the established first-item featured Skill contract while returning only
+    # evidence-verified projects that passed historical and same-day deduplication.
+    radar = build_radar(verified, ARCHIVE, today_text, limit=10)
+    selected = radar.get("selected", [])
+    if selected:
+        selected[0]["daily_theme"] = theme_name
+    SKILL_RADAR_DIAGNOSTICS.clear()
+    SKILL_RADAR_DIAGNOSTICS.update({
+        "status": radar.get("status", "unknown"),
+        "history": radar.get("history", {}),
+        "candidate_count": len(repos),
+        "history_duplicate_exclusions": historical_exclusions,
+        "verification_failures": verification_failures,
+        "selected_count": len(selected),
+        "excluded_count": len(historical_exclusions) + len(verification_failures) + len(radar.get("excluded", [])),
+        "excluded": radar.get("excluded", []),
+        "scoring_model": {
+            "weights": {"recent_heat_and_growth":25,"ai_trend_relevance":20,"practical_usefulness":20,"technical_quality":15,"novelty":10,"maintenance":10},
+            "growth_data_policy": "No historical Stars snapshots are available; 7-day and 30-day growth remain null rather than estimated from cumulative Stars."
+        },
+        "limitations": ["Only accessible archived recommendation days can be checked; incomplete 90-day coverage is explicitly reported.", "Repository metadata and README were checked; installation and dedicated security audits were not performed."]
+    })
+    if not selected:
+        print(f"[skill-warning] no candidates passed evidence, freshness and duplicate gates; pool={len(repos)} verified={len(verified)} historical_exclusions={len(historical_exclusions)}")
+        return []
+    print(f"[skill-pick] date={today_text} theme={theme_name} selected={len(selected)} verified={len(verified)} historical_exclusions={len(historical_exclusions)} history={history['status']} coverage_days={history['coverage_days']}")
+    return selected
 
 def main() -> None:
     now = dt.datetime.now(TZ)
@@ -645,13 +629,14 @@ def main() -> None:
         "china_sources_ok": china_sources_ok,
         "china_sources_total": len(CHINA_FEEDS),
         "skills": skills,
+        "skill_radar": SKILL_RADAR_DIAGNOSTICS,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
             "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr and AIquanbao public RSS; filtered for China-related AI entities and timestamps within seven days",
             "china_ai_news_minimum": CHINA_NEWS_MIN,
             "china_ai_news_target": CHINA_NEWS_TARGET,
             "china_ai_news_window_days": CHINA_NEWS_WINDOW_DAYS,
-            "skill_ranking": "public GitHub repository stars with a modest freshness adjustment; not install counts",
+            "skill_ranking": "evidence-verified GitHub repositories ranked by weighted heat, trend relevance, practical usefulness, technical quality, novelty and maintenance; current cumulative Stars are not treated as historical growth",
         },
     }
     DATA.mkdir(parents=True, exist_ok=True)
