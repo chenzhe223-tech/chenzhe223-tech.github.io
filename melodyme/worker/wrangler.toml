@@ -1,0 +1,18 @@
+name = "melodyme-ai"
+main = "src/index.js"
+compatibility_date = "2026-10-24"
+
+[vars]
+ALLOWED_ORIGIN = "https://chenzhe223-tech.github.io"
+DEEPSEEK_MODEL = "deepseek-chat"
+
+[[ratelimits]]
+name = "AI_RATE_LIMITER"
+namespace_id = "62841024"
+
+[ratelimits.simple]
+limit = 10
+period = 60
+
+# Configure DEEPSEEK_API_KEY with: npx wrangler secret put DEEPSEEK_API_KEY
+# Anonymous requests are limited to approximately 10/minute per IP per Cloudflare location.

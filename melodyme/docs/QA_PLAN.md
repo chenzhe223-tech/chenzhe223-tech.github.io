@@ -67,3 +67,15 @@
 - 本次生产测试通过：HTTP 200、产品标题、空故事提示、真实 iTunes 搜索返回 8 条候选、封面 URL 为 API 返回的 `mzstatic.com` 图片、候选选择后作品卡显示歌曲、12 种海报风格、可覆盖的本地风格推荐、Shazam 具体歌曲 URL 操作、作品生成、保存/刷新恢复、桌面与移动端无 JS 错误、390px 移动端无横向溢出、SVG 海报导出。
 - 已知限制：自动风格推荐仍是本地规则，不是 AI；故事与朋友圈文案仍是本地规则生成；没有登录、云端保存、多设备同步或公开分享；没有音乐播放嵌入；测试未覆盖真实用户双账号隔离。
 - 生产音乐目录搜索验证的是当时的真实外部响应；外部目录可能随网络、地区和服务策略变化，不能保证每次都返回相同结果。
+
+
+## DeepSeek server adapter gate (not production verified)
+
+- [ ] Deploy Worker to a controlled Cloudflare environment.
+- [ ] Configure `DEEPSEEK_API_KEY` as a Worker secret; verify it is absent from client assets and logs.
+- [ ] Configure exact allowed origin and edge rate limiting.
+- [ ] Test all six action schemas against real DeepSeek responses.
+- [ ] Test missing key, malformed input, body limit, origin rejection, provider errors, timeout and malformed model JSON.
+- [ ] Wire client to deployed endpoint; verify a user story produces real analysis with provenance.
+- [ ] Verify no original story is sent to the music catalog API.
+- [ ] Verify AI candidates against real catalog records; never use AI output as factual album metadata or image URLs.

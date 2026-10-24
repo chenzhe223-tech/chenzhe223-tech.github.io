@@ -1,0 +1,29 @@
+name: MelodyMe Worker CI
+
+on:
+  pull_request:
+    paths:
+      - "melodyme/worker/**"
+      - ".github/workflows/melodyme-worker-ci.yml"
+  push:
+    branches: [main]
+    paths:
+      - "melodyme/worker/**"
+      - ".github/workflows/melodyme-worker-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  worker-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: melodyme/worker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm run check
+      - run: npm test
