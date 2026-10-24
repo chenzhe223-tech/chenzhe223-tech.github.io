@@ -122,13 +122,13 @@ jobs:
           if (await page.locator('.stylepick').count() !== 12) throw new Error('expected 12 poster styles');
           await page.locator('#aiCoverFrame').scrollIntoViewIfNeeded();
           await page.locator('#aiCoverStatus').waitFor({state:'visible'});
-          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('Pollinations.ai'));
+          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Pollinations.ai'));
           if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
           if (await page.locator('#aiCoverImage').getAttribute('loading') !== 'lazy') throw new Error('AI cover must lazy-load');
           if (await page.locator('#aiCoverImage').getAttribute('alt') !== 'AI 生成封面（非真实专辑封面）') throw new Error('AI cover alt/disclosure missing');
           mock.setPollinationsMode('fail');
           await page.locator('#regenerateCover').click();
-          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('Cloudflare Workers AI'));
+          await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Cloudflare Workers AI 兜底'));
           mock.setWorkerImageMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
