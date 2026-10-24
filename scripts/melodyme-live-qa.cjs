@@ -34,7 +34,7 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   record('Real music catalog search response',candidateCount>0,'iTunes Search candidates: '+candidateCount);
   if(candidateCount>0){
     const coverSrc = await musicCandidates.first().locator('img').getAttribute('src');
-    record('Real catalog artwork URL',!!coverSrc&&/^https?:\\/\\//.test(coverSrc),coverSrc||'missing');
+    record('Real catalog artwork URL',!!coverSrc&&(coverSrc.startsWith('https://')||coverSrc.startsWith('http://')),coverSrc||'missing');
     await musicCandidates.first().getByRole('button',{name:'选这首'}).click();
     record('Catalog candidate selection',await page.locator('#musicname').innerText().then(t=>t.toLowerCase().includes('yesterday')),'Selected real catalog result');
   }
