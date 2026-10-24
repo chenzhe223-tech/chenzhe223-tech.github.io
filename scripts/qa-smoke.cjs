@@ -207,8 +207,21 @@ const mark = (status, name, detail = '') => {
       await kp.waitForSelector('#unlockForm', { timeout: 10000 });
       const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
       mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
-      // Fresh browser context: create a disposable test vault using synthetic credentials only.
-      await kp.waitForFunction(() => { const el = document.querySelector('#confirmWrap'); return el && !el.classList.contains('hidden'); }, null, { timeout: 15000 });
+      // Explicitly reset only the isolated QA context's IndexedDB; never touch user devices/data.
+      await kp.evaluate(async () => {
+        await new Promise((resolve, reject) => {
+          const req = indexedDB.deleteDatabase('keypocket-local-v1');
+          req.onsuccess = resolve;
+          req.onerror = () => reject(req.error || new Error('QA database reset failed'));
+          req.onblocked = () => reject(new Error('QA database reset blocked'));
+        });
+      });
+      await kp.reload({ waitUntil: 'domcontentloaded' });
+      await kp.waitForFunction(() => {
+        const wrap = document.querySelector('#confirmWrap');
+        const btn = document.querySelector('#unlockBtn');
+        return wrap && !wrap.classList.contains('hidden') && btn && !btn.disabled && btn.textContent.includes('创建本地密钥库');
+      }, null, { timeout: 15000 });
       await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#confirmPassword').waitFor({ state: 'visible', timeout: 5000 });
       await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
