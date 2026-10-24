@@ -283,6 +283,16 @@ def main():
         if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
         if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})
+        try:
+            if float(skill.get("total_score")) < 80 and not (
+                skill.get("rare_value_verified") is True
+                and bool(str(skill.get("rare_value_reason") or "").strip())
+                and str(skill.get("rare_value_evidence_url") or "").startswith(("https://","http://"))
+                and int(skill.get("actual_skill_file_count") or 0)>0
+            ):
+                skill_errors.append({"type":"sub80_without_verified_rare_value","name":skill.get("name")})
+        except (TypeError,ValueError):
+            pass
         if not skill.get("evidence_urls") or not skill.get("evidence_checked_at"): skill_errors.append({"type":"missing_evidence_provenance","name":skill.get("name")})
         try:
             total=float(skill.get("total_score"))
