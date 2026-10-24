@@ -16,9 +16,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 try:
-    from radar.scripts.skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
+    from radar.scripts.skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, score_candidate
 except ModuleNotFoundError:
-    from skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
+    from skill_radar import actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -683,6 +683,7 @@ def collect_skills() -> list[dict]:
             continue
         if not result.get("material_update_verified"):
             result["novelty_status"] = "new"
+        result["daily_theme"] = infer_skill_category(result)
         result = score_candidate(result, today_text)
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
