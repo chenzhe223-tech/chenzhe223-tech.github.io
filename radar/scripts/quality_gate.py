@@ -139,7 +139,9 @@ def main():
     for day,doc in docs:
         history.extend(records_from(doc,day))
     current=[]
-    for key in ("top5","news","china_ai_news"):
+    # Only published-facing selections are publication blockers; the raw RSS candidate pool
+    # may contain older items that are supposed to be filtered before selection.
+    for key in ("top5","china_ai_news"):
         arr=report.get(key)
         if isinstance(arr,list):
             for item in arr:
@@ -174,7 +176,7 @@ def main():
     # Current-day unique-image checks: URL canonicalization and content hashes.
     image_errors=[]; current_images=[]; image_seen={}
     image_stories=[]
-    for key in ("top5","news","china_ai_news"):
+    for key in ("top5","china_ai_news"):
         arr=report.get(key)
         if isinstance(arr,list):
             image_stories.extend(x for x in arr if isinstance(x,dict) and image_url(x))
