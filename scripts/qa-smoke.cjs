@@ -197,7 +197,9 @@ const mark = (status, name, detail = '') => {
 
     // KeyPocket public GitHub import smoke checks
     try {
-      const kp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+      // Isolate KeyPocket QA from any prior browser storage; never touch a user's existing vault.
+      const kpContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+      const kp = await kpContext.newPage();
       const kpErrors = [];
       kp.on('pageerror', e => kpErrors.push(e.message));
       const kpResp = await kp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
