@@ -2,9 +2,12 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
-from radar.scripts.skill_radar import canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate, build_radar
+from radar.scripts.skill_radar import actual_skill_files, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate, build_radar
 
 class SkillRadarTests(unittest.TestCase):
+    def test_actual_skill_file_must_exist_in_tree(self):
+        self.assertEqual(actual_skill_files({"tree":[{"path":"skills/research/SKILL.md"},{"path":"README.md"}]}),["skills/research/SKILL.md"])
+        self.assertEqual(actual_skill_files({"tree":[{"path":"README.md"}]}),[])
     def test_skill_type_requires_actual_skill_files(self):
         self.assertEqual(classify_skill_type("owner/skills-pack","Agent skills collection","Install by copying skills/research/SKILL.md into your agent's skills directory."),"skill_pack")
         self.assertIsNone(classify_skill_type("owner/mcp-server","MCP server for web search","Run npm install and start the MCP server."))
@@ -68,6 +71,13 @@ class SkillRadarTests(unittest.TestCase):
             r=build_radar([candidate],Path(td),"2026-10-24")
             self.assertEqual(r["selected"],[])
             self.assertEqual(r["excluded"][0]["reason"],"critical_security_risk")
+    def test_score_below_70_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":69,"license":"MIT"}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(r["selected"],[])
+            self.assertEqual(r["excluded"][0]["reason"],"score_below_70_or_invalid")
     def test_unverified_candidates_not_selected(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
