@@ -51,3 +51,10 @@ Topic fallback images are visibly labeled 「主题插画 · 非新闻现场」 
 ## Concurrent recovery runs and monotonic publishing
 
 Daily schedule/recovery runs may overlap in queue time. Before committing, each run snapshots its output, syncs the latest `main`, and compares its `generated_at` with the current branch. A run must not replace a coherent same-day report/poster/QR bundle whose report timestamp is newer or equal to its snapshot. Preflight checks date, AI-curated five-story state, localization status, current-week style metadata, the first Skill name across report/poster, poster generation time, and the PASS QR record. This preserves the newest complete daily bundle if an older queued run finishes later.
+
+## Daily social share copy
+
+- Every daily social post must include the stable public brief URL: https://chenzhe223-tech.github.io/radar/daily/.
+- Keep weekday copy concise and useful; on weekends prefer a relaxed, upbeat tone with a small touch of humor rather than urgency or work-pressure language.
+- Posters must encode the exact stable public brief URL in a real QR code. The final dated poster and `latest.png` must both be decoded and checked against that URL before sharing; never publish placeholder QR artwork or temporary URLs.
+- Clearly distinguish verified reporting from editorial interpretation, and only recommend a Skill after checking its public repository, actual Skill file, and license evidence.
