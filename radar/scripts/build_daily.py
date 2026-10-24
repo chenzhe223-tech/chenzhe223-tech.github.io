@@ -16,7 +16,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 try:
-    from radar.scripts.skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, score_candidate
+    from radar.scripts.skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, enrich_growth_metrics, score_candidate
 except ModuleNotFoundError:
     from skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, score_candidate
 
@@ -616,6 +616,9 @@ def collect_skills() -> list[dict]:
     for repo_name, signals in community_report["signals"].items():
         if repo_name in repos:
             repos[repo_name]["community_signals"] = signals
+    growth_report = enrich_growth_metrics(list(repos.values()), DATA / "skill-candidates", today.isoformat())
+    SKILL_RADAR_DIAGNOSTICS["growth_snapshots"] = {k:v for k,v in growth_report.items() if k!="snapshot_file"}
+    SKILL_RADAR_DIAGNOSTICS["growth_snapshots"]["snapshot_file"] = "data/skill-candidates/" + today.isoformat() + ".json"
     SKILL_RADAR_DIAGNOSTICS["discovery_sources"] = {
         "github_repository_search": "available" if repos else "no_candidates",
         "hacker_news": {k:v for k,v in community_report.items() if k!="signals"},
@@ -633,7 +636,10 @@ def collect_skills() -> list[dict]:
                     " ".join(item.get("topics") or [])).lower()
         theme_hits = sum(1 for term in theme_terms if term in combined)
         # Theme relevance has real weight; stars are only a modest quality signal.
-        return theme_hits * 1800 + min(int(item.get("stars") or 0), 100000) * 0.015 + max(0, 120 - days) * 0.8
+        growth = item.get("stars_delta_7d")
+        try: growth_bonus = min(1200, max(0, int(growth or 0)) * 2)
+        except (TypeError, ValueError): growth_bonus = 0
+        return theme_hits * 1800 + growth_bonus + min(int(item.get("stars") or 0), 100000) * 0.015 + max(0, 120 - days) * 0.8
 
     ranked = sorted(
         (item for item in repos.values()
@@ -715,7 +721,7 @@ def collect_skills() -> list[dict]:
         "excluded": radar.get("excluded", []),
         "scoring_model": {
             "weights": {"recent_heat_and_growth":25,"ai_trend_relevance":20,"practical_usefulness":20,"technical_quality":15,"novelty":10,"maintenance":10},
-            "growth_data_policy": "No historical Stars snapshots are available; 7-day and 30-day growth remain null rather than estimated from cumulative Stars."
+            "growth_data_policy": "7-day and 30-day Stars deltas are populated only when a dated snapshot of the same canonical repository exists in the permitted comparison window; otherwise null. Current run records a daily candidate snapshot."
         },
         "limitations": ["Only accessible archived recommendation days can be checked; incomplete 90-day coverage is explicitly reported.", "Repository metadata and README were checked; installation and dedicated security audits were not performed."]
     })
