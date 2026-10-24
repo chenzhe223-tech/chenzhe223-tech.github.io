@@ -15,7 +15,10 @@ import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
-from radar.scripts.skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
+try:
+    from radar.scripts.skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
+except ModuleNotFoundError:
+    from skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -563,9 +566,10 @@ def collect_skills() -> list[dict]:
     selected = radar.get("selected", [])
     if selected:
         selected[0]["daily_theme"] = theme_name
+    final_status = radar.get("status", "unknown") if selected else "NO_QUALIFIED_CANDIDATES"
     SKILL_RADAR_DIAGNOSTICS.clear()
     SKILL_RADAR_DIAGNOSTICS.update({
-        "status": radar.get("status", "unknown"),
+        "status": final_status,
         "history": radar.get("history", {}),
         "candidate_count": len(repos),
         "history_duplicate_exclusions": historical_exclusions,
