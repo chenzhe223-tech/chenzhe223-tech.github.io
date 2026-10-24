@@ -60,7 +60,8 @@ export default {
   if(length>MAX_BODY_BYTES)return json({error:"payload_too_large"},413,origin,allowed);
   let body;try{body=await request.json()}catch{return json({error:"invalid_json"},400,origin,allowed)}
   if(new TextEncoder().encode(JSON.stringify(body)).length>MAX_BODY_BYTES)return json({error:"payload_too_large"},413,origin,allowed);
-  const {action,input}=body||{};
+  const {action}=body||{};
+  const input=action==="generateAlbumArt"?body:(body||{}).input;
   if(!ACTIONS.has(action)||!validInput(action,input))return json({error:"invalid_request",message:"请求参数无效，请检查输入。"},400,origin,allowed);
   if(action==="generateAlbumArt"){
    if(!env.AI||typeof env.AI.run!=="function")return json({error:"ai_image_service_not_configured",message:"AI 封面服务暂不可用。"},503,origin,allowed);
