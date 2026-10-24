@@ -130,4 +130,26 @@ function skillImportModal(){
   }catch(err){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}finally{btn.disabled=false;}
  });
 }
+async function refreshSavedSkillHeat(){
+ const btn=$('#refreshSkillHeatBtn');if(!btn)return;
+ const skills=projects.filter(p=>p.repoUrl&&(/skill/i.test(p.name+' '+p.category)||p.favorite&&/skill/i.test(p.tags)));
+ if(!skills.length){showToast('暂未找到已收藏的 Skill 项目');return;}
+ btn.disabled=true;const label=btn.textContent;btn.textContent='正在刷新…';let updated=0,failed=0;
+ try{
+  for(const p of skills){
+   try{
+    const meta=await fetchGithubRepoMeta(p.repoUrl);
+    const h=skillHeat(meta),now=new Date().toISOString();
+    const base=(p.notes||'').split('\n').filter(line=>!/^GitHub 排名：|^热度：|^热度采集时间：|^GitHub Stars：/.test(line)).join('\n').trim();
+    p.notes=(base?base+'\n':'')+'GitHub Stars：'+h.stars+'；Forks：'+h.forks+'；'+h.level+'；'+h.freshness+'。\n热度采集时间：'+now+'。';
+    if(meta.homepage&&validWebUrl(meta.homepage))p.appUrl=meta.homepage;
+    p.category=githubCategory(meta);p.stack=[meta.language,...(meta.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160);
+    const tags=suggestedProjectTags(meta);if(!p.tags.trim())p.tags=tags.join(', ');
+    p.updatedAt=Date.now();await putItem(await sealProject(p));updated++;
+   }catch(e){failed++;}
+  }
+  renderProjects();showToast('已刷新 '+updated+' 个 Skill'+(failed?'；'+failed+' 个暂时失败（可能触发 GitHub 限流）':''));
+ }finally{btn.disabled=false;btn.textContent=label;}
+}
+$('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
 $('#importSkillBtn')?.addEventListener('click',skillImportModal);
