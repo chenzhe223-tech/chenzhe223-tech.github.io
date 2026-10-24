@@ -154,7 +154,29 @@ function skillImportModal(){
  });
 }
 async function refreshSavedSkillHeat(){
- const btn=$('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
+ const btn=$('#refreshSkillHeatBtn');if(!btn)return;
+ const skills=projects.filter(p=>p.favorite&&isExternalSkillProject(p));
+ if(!skills.length){showToast('暂未找到已收藏的外部 Skill 仓库');return;}
+ btn.disabled=true;const label=btn.textContent;let updated=0,failed=0;
+ try{
+  const batch=skills.slice(0,8);
+  for(let i=0;i<batch.length;i++){
+   const p=batch[i];btn.textContent='刷新中 '+(i+1)+'/'+batch.length;
+   try{
+    const meta=await fetchGithubRepoMeta(p.repoUrl,7000),h=skillHeat(meta),now=new Date().toISOString();
+    const old=String(p.notes||'').split('\n').filter(line=>!/^GitHub 排名：|^热度：|^热度采集时间：|^GitHub Stars：|^主要作用：|^应用建议：|^建议方向：/.test(line)).join('\n').trim();
+    p.notes=(old?old+'\n':'')+'主要作用：'+skillPurpose(meta)+'\n应用建议：'+skillUseCase(meta)+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+now+'。';
+    if(meta.homepage&&validWebUrl(meta.homepage))p.appUrl=meta.homepage;
+    p.category=githubCategory(meta);p.stack=[meta.language,...(meta.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160);
+    if(!p.tags.trim())p.tags=suggestedProjectTags(meta).join(', ');
+    p.updatedAt=Date.now();await putItem(await sealProject(p));updated++;
+   }catch(err){failed++;}
+   await new Promise(resolve=>setTimeout(resolve,100));
+  }
+  renderProjects();showToast('已刷新 '+updated+' 个外部 Skill'+(failed?'；'+failed+' 个失败或超时':'')+(skills.length>batch.length?'；本次最多刷新 8 个':''));
+ }finally{btn.disabled=false;btn.textContent=label;}
+}
+$('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
 $('#importSkillBtn')?.addEventListener('click',skillImportModal);
 
 function canonicalSkillRepoUrl(value){
