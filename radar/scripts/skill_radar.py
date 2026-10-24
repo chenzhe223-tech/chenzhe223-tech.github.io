@@ -96,7 +96,9 @@ def score_candidate(item: dict, today: str) -> dict:
     stars=max(0,int(item.get("stars") or 0))
     # GitHub search currently gives a cumulative count, not a trustworthy historical delta.
     # Do not infer stars/week from updated_at.
-    heat=_clamp(math.log10(stars+1)/5*25,0,25)
+    community=item.get("community_signals") if isinstance(item.get("community_signals"),dict) else {}
+    community_count=max(0,int(community.get("count_7d") or 0))
+    heat=_clamp(math.log10(stars+1)/5*20 + min(5,community_count*1.5),0,25)
     updated=str(item.get("updated") or "")
     age_days=None
     try: age_days=max(0,(dt.date.fromisoformat(today)-dt.date.fromisoformat(updated[:10])).days)
@@ -104,7 +106,7 @@ def score_candidate(item: dict, today: str) -> dict:
     maintenance=10 if age_days is not None and age_days<=30 else 8 if age_days is not None and age_days<=90 else 5 if age_days is not None and age_days<=365 else 2
     text=" ".join(str(item.get(k) or "") for k in ("name","description","topics","daily_theme")).lower()
     trend_terms=("agent","skill","coding","mcp","multimodal","eval","security","browser","workflow","research","data","automation")
-    trend=_clamp(8+min(12,sum(1 for x in trend_terms if x in text)*1.5),0,20)
+    trend=_clamp(6+min(10,sum(1 for x in trend_terms if x in text)*1.25)+min(4,community_count*1.0),0,20)
     usefulness=20 if len(str(item.get("description") or ""))>=120 else 16 if len(str(item.get("description") or ""))>=70 else 8 if item.get("description") else 0
     quality=15 if item.get("license") and item.get("readme_verified",True) and item.get("evidence_verified") else 7 if item.get("license") else 0
     novelty=10 if item.get("novelty_status")=="new" else 4
@@ -112,6 +114,9 @@ def score_candidate(item: dict, today: str) -> dict:
     confidence="high" if item.get("evidence_verified") and item.get("license") and item.get("readme_verified",True) else "medium" if item.get("license") else "low"
     return {**item,"canonical_id":canonical_project_id(str(item.get("url") or item.get("name") or "")),
       "stars_total":stars,"stars_delta_7d":None,"stars_delta_30d":None,
+      "community_signals":community,"community_count_7d":community_count,
+      "community_evidence_urls":community.get("evidence_urls",[]),
+      "heat_data_status":"GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
       "heat_score":round(heat,1),"trend_score":round(trend,1),"relevance_score":round(trend,1),
       "usefulness_score":round(usefulness,1),"quality_score":round(quality,1),
       "novelty_score":round(novelty,1),"maintenance_score":round(maintenance,1),
