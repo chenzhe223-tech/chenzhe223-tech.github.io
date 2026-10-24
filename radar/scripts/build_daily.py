@@ -574,7 +574,8 @@ def collect_skills() -> list[dict]:
             "history": {k:v for k,v in history.items() if k!="records"},
             "selected_count": 0,
             "excluded_count": 0,
-            "message": "Skill recommendation history could not be verified; no fresh Skill was selected."
+            "message": "Skill recommendation history could not be verified; no fresh Skill was selected.",
+            "discovery_sources": {"github_repository_search": "available" if repos else "no_candidates", "hacker_news": {k:v for k,v in community_report.items() if k!="signals"}, "github_candidate_count": len(repos)}
         })
         print(f"[skill-error] history unavailable; refusing to recommend without history check: {history.get('errors')}")
         return []
@@ -615,6 +616,7 @@ def collect_skills() -> list[dict]:
     SKILL_RADAR_DIAGNOSTICS.clear()
     SKILL_RADAR_DIAGNOSTICS.update({
         "status": final_status,
+        "discovery_sources": {"github_repository_search": "available" if repos else "no_candidates", "hacker_news": {k:v for k,v in community_report.items() if k!="signals"}, "github_candidate_count": len(repos)},
         "history": radar.get("history", {}),
         "candidate_count": len(repos),
         "history_duplicate_exclusions": historical_exclusions,
