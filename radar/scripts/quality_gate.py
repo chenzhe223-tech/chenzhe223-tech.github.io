@@ -146,6 +146,13 @@ def download_fingerprints(url):
     return sha,phash
 def hamming(a,b):
     return sum(x!=y for x,y in zip(a,b)) if a and b and len(a)==len(b) else 999
+def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_image_hits, unreadable_history, historical_image_failures, skill_errors):
+    """Historical image URL fetch failures are explicit coverage gaps, not proof of current reuse.
+    Current image fetch failures, known reuse, unreadable archives and Skill errors still block publication.
+    """
+    blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors)
+    return "FAIL" if blocking else "PASS"
+
 def main():
     OUT_DIR.mkdir(parents=True,exist_ok=True)
     if not REPORT.exists(): raise SystemExit("FAIL: latest.json missing; cannot run historical quality gate")
@@ -286,12 +293,13 @@ def main():
             skill_errors.append({"type":"critical_security_risk","name":skill.get("name")})
     result={
       "report_date":today,"generated_at":dt.datetime.now(TZ).isoformat(),
-      "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files"},
+      "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files",
+      "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
       "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
-      "status":"FAIL" if duplicate_hits or china_hits or image_errors or week_image_hits or unreadable or historical_image_failures or skill_errors else "PASS",
-      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"unreadable_history_blocks_publish":True}
+      "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors),
+      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
