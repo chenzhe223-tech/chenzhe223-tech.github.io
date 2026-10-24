@@ -181,6 +181,12 @@ jobs:
           RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
         run: python radar/scripts/news_image_match.py
         if: steps.preflight.outputs.skip != 'true'
+      - name: Enforce historical news and image freshness gate
+        run: |
+          python -m py_compile radar/scripts/quality_gate.py radar/scripts/test_quality_gate.py
+          python -m unittest radar.scripts.test_quality_gate -v
+          python -m radar.scripts.quality_gate
+        if: steps.preflight.outputs.skip != 'true'
       - name: Validate today's date, fresh news and data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py
