@@ -41,3 +41,8 @@ MelodyMe 是一款以音乐为线索、以人生记忆为内容的个人创作�
 - 生产测试覆盖 HTTP 200、真实 iTunes 搜索候选与封面 URL、候选选择、12 种风格、Shazam 链接操作、保存/刷新恢复、桌面/移动端 JS 错误、390px 横向溢出和 SVG 下载。
 - 测试证据 Artifact（保留 14 天）：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081612291/artifacts/12555795968>
 - 测试不证明真实 AI、账号、云同步、双用户隔离或后端安全已经完成。
+
+
+## DeepSeek engine status
+
+Worker adapter source: `worker/src/index.js`; deployment settings: `worker/wrangler.toml`. Requires a Cloudflare Worker deployment and the `DEEPSEEK_API_KEY` secret. It is source-only and is not yet deployed or connected to the production browser app. Do not treat the source code as completed real AI integration.
