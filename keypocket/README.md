@@ -39,3 +39,12 @@ python -m http.server 8000
 - 项目清单会包含在加密备份中；旧版本备份若没有 projects 字段，可正常按空项目列表导入。
 - 保存 GitHub 仓库链接不需要 GitHub Token；当前版本不会自动读取仓库元数据或同步私有仓库。
 - 删除项目只删除本地索引，不会删除 GitHub 仓库或线上网站。
+
+## 从每日 AI 简报一键收录 Skill
+
+- 在 [DAVYLAB AI 前沿简报](https://chenzhe223-tech.github.io/radar/daily/) 的 Skill 推荐卡片中点击「一键收录到 KeyPocket」。
+- 简报页只把公开仓库名称、GitHub URL、简介、主题、许可证、采集时 Stars、更新时间和来源日期暂存在同一网站源的浏览器 `localStorage` 队列中；不会传送 API Key、访问令牌或其他密钥。
+- 解锁 KeyPocket 后，应用会展示待收录信息；用户确认后，资料会经过 GitHub 仓库 URL 校验、相同仓库去重，再使用当前密钥库的 AES-GCM 加密并保存到 IndexedDB 的「我的应用与仓库」。
+- 若 KeyPocket 已经打开，跨标签页的存储事件会提示待收录项。也可在「我的应用与仓库」点击「从 AI 简报收录」手动处理。
+- 暂不处理会保留队列；成功收录或忽略后会从待处理队列移除。队列只在当前浏览器和同一浏览器用户配置中共享，不是云同步；跨设备请使用 KeyPocket 的加密备份流程。
+- 本功能只收录 Skill 的公开项目资料，不会自动安装 Skill，也不会验证其安全性或功能是否适合你的环境。使用前仍需检查 README、权限及许可证。
