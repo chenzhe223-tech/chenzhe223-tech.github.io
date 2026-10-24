@@ -10,6 +10,10 @@
 - [x] Backup file encrypts records with a separate backup password and AES-256-GCM.
 - [x] Backup import rejects files larger than 10 MB, KDF iterations outside 100,000–1,000,000, malformed salt/IV/data, more than 5,000 records, invalid records, and duplicate record IDs.
 - [x] Provider identification is local and conservative; ambiguous `sk-...` formats are not guessed.
+- [x] Radar-to-KeyPocket handoff accepts only HTTPS public GitHub repository URLs and bounds queued metadata fields.
+- [x] Incoming Skills require an unlocked vault and an explicit user confirmation before saving.
+- [x] Incoming Skill projects are deduplicated by canonical GitHub repository URL and encrypted through the existing AES-GCM `sealProject` path before IndexedDB storage.
+- [x] Inter-app queue contains public Skill metadata only; it must never contain API keys, tokens, or vault secrets.
 
 ## Executed checks
 - [x] JavaScript syntax check with `node --check`.
