@@ -144,7 +144,7 @@ def _duplicate_match(candidate: dict, history: list[dict]) -> dict | None:
         ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
         old_tokens = _story_tokens(old_title)
         overlap = len(tokens & old_tokens) / max(1, min(len(tokens), len(old_tokens)))
-        if ratio >= 0.86 or (overlap >= 0.78 and len(tokens & old_tokens) >= 4):
+        if ratio >= 0.82 or (overlap >= 0.78 and len(tokens & old_tokens) >= 4):
             return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
     return None
 
