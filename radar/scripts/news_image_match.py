@@ -29,6 +29,51 @@ IMAGE_FIELDS = (
     "image_is_generated", "image_generation_prompt",
 )
 
+def _image_identity(value: str) -> str:
+    """Canonical visual asset identity: ignore tracking/crop query strings so URL variants do not evade weekly reuse checks."""
+    normalized = normalize_url(value)
+    if not normalized:
+        return ""
+    parsed = urllib.parse.urlsplit(normalized)
+    host = (parsed.hostname or "").lower().removeprefix("www.")
+    path = re.sub(r"/+", "/", parsed.path).rstrip("/")
+    return urllib.parse.urlunsplit(("https", host, path, "", ""))
+
+def _weekly_used_images(today: str) -> set[str]:
+    """Seed used assets from every readable archive in the current China-time ISO week."""
+    try:
+        day = dt.date.fromisoformat(today)
+    except ValueError:
+        return set()
+    week_start = day - dt.timedelta(days=day.weekday())
+    used = set()
+    archive = ROOT / "radar" / "data" / "archive"
+    if not archive.exists():
+        raise RuntimeError("Historical archive directory is missing; refusing to assume image freshness.")
+    for path in archive.glob("*.json"):
+        if path.stem == today:
+            continue
+        try:
+            archived_day = dt.date.fromisoformat(path.stem)
+        except ValueError:
+            continue
+        if not (week_start <= archived_day < day):
+            continue
+        try:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except Exception as exc:
+            raise RuntimeError(f"Cannot read weekly image history {path.name}: {type(exc).__name__}") from exc
+        for section in ("top5", "china_ai_news", "news"):
+            items = doc.get(section, [])
+            if not isinstance(items, list):
+                continue
+            for item in items:
+                if isinstance(item, dict):
+                    identity = _image_identity(str(item.get("image_url") or item.get("image") or ""))
+                    if identity:
+                        used.add(identity)
+    return used
+
 def firecrawl_enabled() -> bool:
     """Firecrawl is explicitly opt-in; absent secrets/flag keep the free flow unchanged."""
     enabled = os.environ.get("RADAR_USE_FIRECRAWL", "").strip().lower() in {"1", "true", "yes", "on"}
@@ -352,7 +397,7 @@ def _thematic_fallback(story: dict, used: set[str]) -> dict:
         if url in checked:
             continue
         checked.append(url)
-        if url not in used and valid_image_url(url):
+        if _image_identity(url) not in used and valid_image_url(url):
             break
     else:
         url = checked[0] if checked else _theme_photo_url(THEME_PHOTOS["general"][0])
@@ -441,7 +486,7 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
                 continue
             image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
             page_url = normalize_url(candidate.get("foreign_landing_url") or "")
-            if not image_url or image_url in used or not valid_image_url(image_url):
+            if not image_url or _image_identity(image_url) in used or not valid_image_url(image_url):
                 continue
             license_name = " ".join(str(candidate.get("license") or "").split())
             version = str(candidate.get("license_version") or "").strip()
@@ -495,7 +540,7 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     cached = cache.get(key) if key else None
     # Version 2 deliberately retries cached "none" results with expanded web/image search.
     if isinstance(cached, dict) and cached.get("cache_version") == CACHE_VERSION and _fresh(cached, 72):
-        if cached.get("image_url") and cached.get("image_url") not in used and not is_generic_brand_asset(cached.get("image_url", "")):
+        if cached.get("image_url") and _image_identity(cached.get("image_url", "")) not in used and not is_generic_brand_asset(cached.get("image_url", "")):
             if cached.get("image_match_status") == "thematic_fallback":
                 # Refresh topic artwork if taxonomy improves; don't repeat remote searches.
                 result = _thematic_fallback(story, used)
@@ -507,14 +552,14 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     article_url = normalize_url(key)
     existing = normalize_url(story.get("image_url") or "")
     result = {}
-    if existing and existing not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
+    if existing and _image_identity(existing) not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
         result = _metadata_result(existing, story)
         result["image_match_status"] = "feed_image"
     else:
         if article_url:
             document = fetch_article_html(article_url)
             for candidate_url in extract_image_candidates(document, article_url):
-                if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
+                if _image_identity(candidate_url) not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
                     result = _metadata_result(candidate_url, story)
                     break
             # Use Firecrawl only after direct extraction fails and opt-in is explicit.
@@ -557,7 +602,7 @@ def _image_cache_save(cache: dict) -> None:
     CACHE_PATH.write_text(json.dumps(dict(entries), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
-    used: set[str] = set()
+    used: set[str] = _weekly_used_images(str(report.get("report_date") or dt.datetime.now(TZ).date().isoformat()))
     processed_urls: dict[str, dict] = {}
     matched = 0
     total = 0
@@ -571,7 +616,7 @@ def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
         url = _cache_key(story_for_matching)
         total += 1
         previous = processed_urls.get(url) if url else None
-        if previous and previous.get("image_url") and previous.get("image_url") not in used:
+        if previous and previous.get("image_url") and _image_identity(previous.get("image_url", "")) not in used:
             result = dict(previous)
         else:
             result = resolve_story_image(story_for_matching, cache, used)
@@ -580,7 +625,7 @@ def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
             _apply_result(source_story, result)
         image_url = result.get("image_url")
         if image_url:
-            used.add(image_url)
+            used.add(_image_identity(image_url))
             matched += 1
         if url:
             processed_urls[url] = result
