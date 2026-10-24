@@ -12,8 +12,10 @@ const appHtml = read('keypocket/index.html');
 const radarHtml = read('radar/daily/index.html');
 
 function constantValue(source, name) {
-  const match = source.match(new RegExp('const\\s+' + name + '\\s*=\\s*[\\'"]([^\\'"]+)[\\'"]'));
-  assert.ok(match, 'missing constant: ' + name);
+  const line = source.split('\n').find((entry) => new RegExp('^const\\s+' + name + '\\s*=').test(entry));
+  assert.ok(line, 'missing constant: ' + name);
+  const match = line.match(/=\s*["']([^"']+)["']/);
+  assert.ok(match, 'constant value must be a quoted string: ' + name);
   return match[1];
 }
 
