@@ -38,7 +38,7 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,220,255,.52),transpare
 <div class="banner"><span>◈</span><div><strong>本地优先 · 加密存储</strong>密钥在此浏览器内加密保存，不会发送到 KeyPocket 服务器。复制操作会把完整密钥放入系统剪贴板，请留意共享设备。</div></div>
 <nav class="module-tabs" aria-label="管理模块"><button class="module-tab active" data-module="keys" type="button">🔑 API Key</button><button class="module-tab" data-module="projects" type="button">▣ 我的应用与仓库</button></nav>
 <section id="projectView" class="hidden">
-<div class="project-intro"><div><h2>我的应用与仓库</h2><p>集中保存应用、GitHub 仓库与 Skills，并查看 Skill 热度、作用和应用方向。</p></div><div class="project-intro-actions"><button id="importGithubBtn" class="btn" type="button">↧ 导入 GitHub</button><button id="importSkillBtn" class="btn" type="button">✦ 按 Skill 名称导入</button><button id="refreshSkillHeatBtn" class="btn" type="button">↻ 刷新收藏 Skill 热度</button><button id="addProjectBtn" class="btn primary" type="button">＋ 收录项目</button></div></div>
+<div class="project-intro"><div><h2>我的应用与仓库</h2><p>集中保存应用、GitHub 仓库与 Skills，并查看 Skill 热度、作用和应用方向。</p></div><div class="project-intro-actions"><button id="importGithubBtn" class="btn" type="button">↧ 导入 GitHub</button><button id="importSkillBtn" class="btn" type="button">✦ 按 Skill 名称导入</button><button id="refreshSkillHeatBtn" class="btn" type="button">↻ 刷新 Skill 热度</button><button id="refreshSkillHeatBtn" class="btn" type="button">↻ 刷新收藏 Skill 热度</button><button id="addProjectBtn" class="btn primary" type="button">＋ 收录项目</button></div></div>
 <div class="toolbar"><div class="search"><span>⌕</span><input id="projectSearch" type="search" placeholder="搜索项目名、仓库地址、标签…" autocomplete="off"></div><span id="projectCount" class="project-count">0 个项目</span></div>
 <div id="projectCards" class="cards" aria-live="polite"></div>
 <div class="notice info">隐私说明：项目、仓库与 Skill 资料均在本地加密保存。Skill 热度来自公开 GitHub 元数据，可能受 API 限额影响；不会读取私有仓库或保存访问令牌。</div>
@@ -47,4 +47,4 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,220,255,.52),transpare
 <div class="stats"><div class="stat"><b id="totalCount">0</b><span>已保存密钥</span></div><div class="stat"><b id="providerCount">0</b><span>服务商</span></div><div class="stat"><b id="favoriteCount">0</b><span>常用收藏</span></div></div>
 <div class="list-head"><h2>我的密钥</h2><div class="list-head-actions"><small id="listCount">0 条记录</small><button id="addKeyBtn" class="btn primary" type="button">＋ 新增 API Key</button></div></div><section id="cards" class="cards" aria-live="polite"></section>
 <footer class="footer"><span>KeyPocket v0.2 · 本地加密存储</span><span>不提供云同步 · 不验证密钥有效性 · 请定期轮换凭证</span></footer></section></main><div id="modalRoot"></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
-<script src="./app.js?v=184145c" defer></script></body></html>
+<script src="./app.js?v=ac471b4" defer></script></body></html>
