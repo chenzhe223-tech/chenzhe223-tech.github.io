@@ -38,6 +38,19 @@ class SkillRadarTests(unittest.TestCase):
     def test_score_total_is_weighted_and_bounded(self):
         s=score_candidate({"name":"owner/repo","url":"https://github.com/owner/repo","stars":10000,"updated":"2026-10-20","license":"MIT","description":"A detailed and useful AI agent skill","evidence_verified":True},"2026-10-24")
         self.assertGreaterEqual(s["total_score"],0); self.assertLessEqual(s["total_score"],100)
+    def test_90_day_recommendation_is_blocked(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[{"name":"x/y","url":"https://github.com/x/y"}]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":95,"license":"MIT","canonical_id":"github.com/x/y"}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(r["selected"],[])
+            self.assertEqual(r["excluded"][0]["reason"],"duplicate")
+    def test_verified_material_update_can_be_rerecommended(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[{"name":"x/y","url":"https://github.com/x/y"}]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":95,"license":"MIT","canonical_id":"github.com/x/y","material_update_verified":True,"re_recommendation_reason":"Major security fix released","material_update_evidence_url":"https://github.com/x/y/releases/tag/v2"}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(len(r["selected"]),1)
     def test_unverified_candidates_not_selected(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
