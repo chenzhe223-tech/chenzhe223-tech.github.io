@@ -955,11 +955,20 @@ function renderChinaAINews(items){
 function renderNews(items){const countNode=$("newsCount");if(countNode)countNode.textContent=items.length;const root=$("newsList");if(!root)return;root.innerHTML=items.length?items.map((x,i)=>{const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title);const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary);const why=currentLang==="zh"?(x.why_it_matters_zh||""):(x.why_it_matters_en||"");return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">✦ '+esc(x.source||t("source"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p>'+(why?'<div class="why"><strong>'+esc(t("why"))+' · </strong>'+esc(why)+'</div>':'')+'<div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>'}).join(""):'<div class="empty">'+esc(t("newsEmpty"))+'</div>'}
 const NIANBOX_APP_URL="https://chenzhe223-tech.github.io/niantou-box-app/#/";
 const NIANBOX_PENDING_SKILL_KEY="nb.radar.pending-skill.v1";
+const KEYPOCKET_APP_URL="https://chenzhe223-tech.github.io/keypocket/";
+const KEYPOCKET_PENDING_SKILL_KEY="kp.radar.pending-skills.v1";
 function skillSaveLink(x){
  const name=x.name||"Community Skill";
  const description=currentLang==="en"?(x.description_en||x.description||""):(x.description_zh||x.description||"");
  const topics=(x.topics||[]).slice(0,8).join(" · ");
- return '<a class="skill-save-cta" href="'+NIANBOX_APP_URL+'" target="_blank" rel="noopener noreferrer" data-nb-skill-save="1" data-skill-name="'+esc(name)+'" data-skill-url="'+esc(x.url||"")+'" data-skill-description="'+esc(description)+'" data-skill-topics="'+esc(topics)+'" data-report-date="'+esc(reportData?.report_date||"")+'">'+esc(currentLang==="en"?"Save to NianBox ↗":"收进念头盒 ↗")+'</a>';
+ const license=x.license||x.license_name||"";
+ const stars=x.stars!=null&&x.stars!==""?String(x.stars):"";
+ const language=x.language||"";
+ const updated=(x.updated||x.pushed_at||"").slice(0,10);
+ const reportDate=reportData?.report_date||"";
+ const nianbox='<a class="skill-save-cta" href="'+NIANBOX_APP_URL+'" target="_blank" rel="noopener noreferrer" data-nb-skill-save="1" data-skill-name="'+esc(name)+'" data-skill-url="'+esc(x.url||"")+'" data-skill-description="'+esc(description)+'" data-skill-topics="'+esc(topics)+'" data-report-date="'+esc(reportDate)+'">'+esc(currentLang==="en"?"Save to NianBox ↗":"收进念头盒 ↗")+'</a>';
+ const keypocket='<a class="skill-save-cta keypocket-save-cta" href="'+KEYPOCKET_APP_URL+'" target="_blank" rel="noopener noreferrer" data-kp-skill-save="1" data-skill-name="'+esc(name)+'" data-skill-url="'+esc(x.url||"")+'" data-skill-description="'+esc(description)+'" data-skill-topics="'+esc(topics)+'" data-skill-license="'+esc(license)+'" data-skill-stars="'+esc(stars)+'" data-skill-language="'+esc(language)+'" data-skill-updated="'+esc(updated)+'" data-report-date="'+esc(reportDate)+'">'+esc(currentLang==="en"?"Save to KeyPocket ↗":"一键收录到 KeyPocket ↗")+'</a>';
+ return nianbox+keypocket;
 }
 function renderSkills(items){
  const skillCountNode=$("skillCount");if(skillCountNode)skillCountNode.textContent=items.length;
@@ -988,6 +997,43 @@ function stableSkillCaptureHash(value){
  for(let i=0;i<value.length;i++){h^=value.charCodeAt(i);h=Math.imul(h,16777619)}
  return (h>>>0).toString(36);
 }
+document.addEventListener("click",event=>{
+ const target=event.target instanceof Element?event.target.closest("[data-kp-skill-save]"):null;
+ if(!target)return;
+ const name=(target.dataset.skillName||"").trim();
+ const url=(target.dataset.skillUrl||"").trim();
+ let parsed;
+ try{parsed=new URL(url)}catch{parsed=null}
+ const parts=parsed?parsed.pathname.split("/").filter(Boolean):[];
+ if(!name||!parsed||parsed.protocol!=="https:"||parsed.hostname.toLowerCase()!=="github.com"||parsed.username||parsed.password||parsed.port||parts.length!==2){
+  event.preventDefault();showRadarToast(currentLang==="en"?"This Skill does not have a valid public GitHub repository URL, so it was not sent to KeyPocket.":"这个 Skill 没有有效的公开 GitHub 仓库地址，未发送到 KeyPocket。");return;
+ }
+ const repositoryUrl="https://github.com/"+parts[0]+"/"+parts[1].replace(/\.git$/i,"");
+ const reportDate=/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(target.dataset.reportDate||"")?target.dataset.reportDate:"";
+ const id="davy-radar-"+(reportDate||"undated")+"-"+stableSkillCaptureHash(repositoryUrl.toLowerCase());
+ const starsRaw=(target.dataset.skillStars||"").trim();
+ const stars=starsRaw!==""&&Number.isFinite(Number(starsRaw))&&Number(starsRaw)>=0?Number(starsRaw):null;
+ const payload={
+  id,source:"davy-radar",createdAt:Date.now(),reportDate,name:name.slice(0,180),url:repositoryUrl,
+  description:(target.dataset.skillDescription||"").slice(0,2400),
+  topics:(target.dataset.skillTopics||"").slice(0,500),
+  license:(target.dataset.skillLicense||"").slice(0,80),
+  stars,language:(target.dataset.skillLanguage||"").slice(0,80),
+  updated:(target.dataset.skillUpdated||"").slice(0,10),
+  sourcePage:window.location.origin+window.location.pathname+(reportDate?"?date="+encodeURIComponent(reportDate):"")
+ };
+ try{
+  let queue=[];
+  const stored=window.localStorage.getItem(KEYPOCKET_PENDING_SKILL_KEY);
+  if(stored){const parsedQueue=JSON.parse(stored);if(Array.isArray(parsedQueue))queue=parsedQueue.filter(item=>item&&typeof item.id==="string"&&item.source==="davy-radar")}
+  if(!queue.some(item=>item.id===id))queue.push(payload);
+  if(queue.length>100){event.preventDefault();showRadarToast(currentLang==="en"?"There are too many Skills waiting for KeyPocket. Open KeyPocket and finish the pending items first.":"KeyPocket 待收录队列已满，请先打开 KeyPocket 处理已有条目。");return}
+  window.localStorage.setItem(KEYPOCKET_PENDING_SKILL_KEY,JSON.stringify(queue));
+  showRadarToast(currentLang==="en"?"Sent to KeyPocket. Unlock it and confirm to save this Skill locally.":"已发送到 KeyPocket。解锁后确认，即可本地加密收录。");
+ }catch(error){
+  event.preventDefault();showRadarToast(currentLang==="en"?"Browser storage is unavailable. Nothing was sent to KeyPocket.":"浏览器本机存储不可用，未发送到 KeyPocket。");
+ }
+});
 document.addEventListener("click",event=>{
  const target=event.target instanceof Element?event.target.closest("[data-nb-skill-save]"):null;
  if(!target)return;
