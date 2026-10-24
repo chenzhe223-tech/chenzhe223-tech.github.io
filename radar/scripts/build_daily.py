@@ -105,10 +105,28 @@ def _story_title_variants(item: dict) -> list[str]:
 def _story_tokens(text: str) -> set[str]:
     value = re.sub(r"https?://\S+", " ", (text or "").lower())
     value = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", " ", value)
-    words = {x for x in value.split() if len(x) > 1 and x not in {"the","and","for","with","from","this","that","news","update","updates","ai","model","models","company","announces","announced"}}
-    # Chinese text commonly has no spaces; add character bigrams to capture paraphrases.
+    # Keep Latin/number tokens, but tokenize Chinese runs as bigrams below.
+    words = {
+        x for x in value.split()
+        if len(x) > 1
+        and x not in {"the","and","for","with","from","this","that","news","update","updates","ai","model","models","company","announces","announced"}
+        and not re.fullmatch(r"[\u4e00-\u9fff]+", x)
+    }
+    # Generic Chinese headline phrasing is not evidence that two stories are the
+    # same event. Exclude common bigrams and retain distinctive entities/actions.
+    generic_cjk = {
+        "同一","另一","一条","条中","中国","国ai","ai新","新闻","人工","工智","智能","能体",
+        "大模","模型","型发","发布","最新","消息","产品","企业","公司","行业","技术","进展",
+        "国产","开源","研究","推出","升级","合作","宣布","发展","全球","世界","功能","测试",
+        "上线","接入","应用","芯片","算力","项目","平台","系统","方案","落地","方面"
+    }
     compact = re.sub(r"\s+", "", value)
-    words.update(compact[i:i+2] for i in range(max(0, len(compact)-1)) if re.search(r"[\u4e00-\u9fff]", compact[i:i+2]))
+    words.update(
+        compact[i:i+2]
+        for i in range(max(0, len(compact)-1))
+        if re.search(r"[\u4e00-\u9fff]", compact[i:i+2])
+        and compact[i:i+2] not in generic_cjk
+    )
     return words
 
 def _history_stories(today: str) -> list[dict]:
@@ -177,7 +195,15 @@ def _duplicate_match(candidate: dict, history: list[dict], current_date: str | N
                 ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
                 old_tokens = _story_tokens(old_title)
                 overlap = len(_story_tokens(title) & old_tokens) / max(1, min(len(_story_tokens(title)), len(old_tokens)))
-                if ratio >= 0.82 or (overlap >= 0.78 and len(_story_tokens(title) & old_tokens) >= 4):
+                shared_tokens = _story_tokens(title) & old_tokens
+                has_cjk = bool(re.search(r"[\u4e00-\u9fff]", title + old_title))
+                # For Chinese/mixed headlines, require distinctive entity overlap;
+                # sequence similarity alone over-collapses generic phrasing.
+                near_match = (
+                    (ratio >= 0.82 and (not has_cjk or len(shared_tokens) >= 3))
+                    or (overlap >= 0.78 and len(shared_tokens) >= 4)
+                )
+                if near_match:
                     return {"kind":"near_title_or_event","score":round(max(ratio, overlap),3),"date":old.get("_history_date") or old.get("_current_date"),"title":old_title,"url":old.get("url")}
         if _near_match_is_recent(old, current_date):
             old_tokens = set().union(*(_story_tokens(x) for x in old_titles)) if old_titles else set()
