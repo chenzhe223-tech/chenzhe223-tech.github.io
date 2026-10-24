@@ -1,5 +1,6 @@
 'use strict';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
+const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
 const $=s=>document.querySelector(s); let db, cryptoKey=null, vault=null, records=[], projects=[], editId=null, toastTimer=null;
 const PROVIDERS=[
  {id:'openai',name:'OpenAI',short:'OA',category:'AI 模型',patterns:[/^sk-proj-/,/^sk-[A-Za-z0-9_-]{20,}$/],urls:['platform.openai.com']},
@@ -43,7 +44,7 @@ function showToast(msg){const t=$('#toast');t.textContent=msg;t.classList.remove
 function showLockNotice(msg,type='error'){const n=$('#lockNotice');n.textContent=msg;n.className='notice '+type;}
 function setView(locked){$('#lockView').classList.toggle('hidden',!locked);$('#mainView').classList.toggle('hidden',locked);}
 async function init(){if(!window.crypto?.subtle||!window.indexedDB){$('#lockDesc').textContent='当前浏览器不支持所需的安全加密功能，请使用最新版 HTTPS 浏览器。';$('#unlockBtn').disabled=true;return;}try{db=await openDB();vault=await getItem('vault-meta');const all=await allItems();const hasData=all.some(x=>x.id!=='vault-meta');if(!vault&&hasData){$('#lockTitle').textContent='检测到本地数据，但密钥库信息缺失';$('#lockDesc').textContent='为保护已有数据，KeyPocket 已阻止创建新密码。请回到最初保存密钥的浏览器/设备和原网址打开；不要清理网站数据。此页面中的数据未被删除。';$('#unlockBtn').textContent='暂不可创建密码';$('#unlockBtn').disabled=true;$('#confirmWrap').classList.add('hidden');$('#resetLocalBtn').classList.add('hidden');showLockNotice('安全保护已启动：发现现有记录但缺少密钥库元数据，已阻止覆盖。','error');setView(true);return;}$('#lockTitle').textContent=vault?'欢迎回来':'创建你的本地密钥库';$('#lockDesc').textContent=vault?'输入本地密码解锁。密码不会上传，也无法由我们找回。':'设置一个至少 10 位的本地密码。它将用于加密密钥，且不会上传。';$('#unlockBtn').textContent=vault?'解锁密钥库':'创建本地密钥库';$('#confirmWrap').classList.toggle('hidden',!!vault);$('#resetLocalBtn').classList.toggle('hidden',!vault);setView(true);}catch(err){$('#lockTitle').textContent='本地密钥库暂时无法读取';$('#lockDesc').textContent='读取本地存储时发生错误。请勿清除网站数据，刷新后重试；如仍失败，请保留此页面并反馈错误。';showLockNotice(err.message||'初始化失败。','error');$('#unlockBtn').disabled=true;setView(true);}}
-$('#unlockForm').addEventListener('submit',async e=>{e.preventDefault();const pass=$('#masterPassword').value,confirm=$('#confirmPassword').value,btn=$('#unlockBtn');if(btn.disabled)return;const originalLabel=btn.textContent;btn.disabled=true;btn.textContent=vault?'正在验证密码…':'正在创建加密密钥…';showLockNotice(vault?'正在验证密码并读取本地加密数据，请勿关闭页面。':'正在创建本地加密密钥库，请稍候。','info');try{if(!vault){if(pass.length<10)throw Error('密码至少需要 10 位。');if(pass!==confirm)throw Error('两次输入的密码不一致。');const salt=randomBytes(16);cryptoKey=await deriveKey(pass,salt);btn.textContent='正在安全保存…';const verifier=await encryptJson({check:'keypocket-v1'});vault={id:'vault-meta',salt:toB64(salt),iterations:310000,verifier};await putItem(vault);records=[];projects=[];showToast('本地密钥库已创建');}else{cryptoKey=await deriveKey(pass,fromB64(vault.salt),vault.iterations||310000);btn.textContent='正在读取本地记录…';const check=await decryptJson(vault.verifier);if(check.check!=='keypocket-v1')throw Error('密码校验失败，或本地数据已损坏。');const stored=(await allItems()).filter(x=>x.id!=='vault-meta');records=await Promise.all(stored.filter(x=>x.kind!=='project'&&!x.id.startsWith('project:')).map(openRecord));projects=await Promise.all(stored.filter(x=>x.kind==='project'||x.id.startsWith('project:')).map(openProject));showToast('已安全解锁');}$('#masterPassword').value='';$('#confirmPassword').value='';$('#lockNotice').className='notice hidden';setView(false);render();renderProjects();}catch(err){cryptoKey=null;const msg=err&&err.name==='OperationError'?'密码不正确，或本地加密数据已损坏。':(err.message||'解锁失败，请重试。');showLockNotice(msg,'error');}finally{btn.disabled=false;btn.textContent=vault?'解锁密钥库':originalLabel;}});
+$('#unlockForm').addEventListener('submit',async e=>{e.preventDefault();const pass=$('#masterPassword').value,confirm=$('#confirmPassword').value,btn=$('#unlockBtn');if(btn.disabled)return;const originalLabel=btn.textContent;btn.disabled=true;btn.textContent=vault?'正在验证密码…':'正在创建加密密钥…';showLockNotice(vault?'正在验证密码并读取本地加密数据，请勿关闭页面。':'正在创建本地加密密钥库，请稍候。','info');try{if(!vault){if(pass.length<10)throw Error('密码至少需要 10 位。');if(pass!==confirm)throw Error('两次输入的密码不一致。');const salt=randomBytes(16);cryptoKey=await deriveKey(pass,salt);btn.textContent='正在安全保存…';const verifier=await encryptJson({check:'keypocket-v1'});vault={id:'vault-meta',salt:toB64(salt),iterations:310000,verifier};await putItem(vault);records=[];projects=[];showToast('本地密钥库已创建');}else{cryptoKey=await deriveKey(pass,fromB64(vault.salt),vault.iterations||310000);btn.textContent='正在读取本地记录…';const check=await decryptJson(vault.verifier);if(check.check!=='keypocket-v1')throw Error('密码校验失败，或本地数据已损坏。');const stored=(await allItems()).filter(x=>x.id!=='vault-meta');records=await Promise.all(stored.filter(x=>x.kind!=='project'&&!x.id.startsWith('project:')).map(openRecord));projects=await Promise.all(stored.filter(x=>x.kind==='project'||x.id.startsWith('project:')).map(openProject));showToast('已安全解锁');}$('#masterPassword').value='';$('#confirmPassword').value='';$('#lockNotice').className='notice hidden';setView(false);render();renderProjects();updateRadarImportButton();if(readPendingRadarSkills().length)openPendingRadarSkillModal();}catch(err){cryptoKey=null;const msg=err&&err.name==='OperationError'?'密码不正确，或本地加密数据已损坏。':(err.message||'解锁失败，请重试。');showLockNotice(msg,'error');}finally{btn.disabled=false;btn.textContent=vault?'解锁密钥库':originalLabel;}});
 $('#resetLocalBtn').addEventListener('click',async()=>{if(!confirm('这将永久删除此浏览器中的全部密钥与本地库，无法撤销。确定继续？'))return;const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).clear();tx.oncomplete=()=>{vault=null;cryptoKey=null;records=[];projects=[];$('#masterPassword').value='';$('#lockTitle').textContent='创建你的本地密钥库';$('#lockDesc').textContent='设置一个至少 10 位的本地密码。';$('#confirmWrap').classList.remove('hidden');$('#resetLocalBtn').classList.add('hidden');$('#unlockBtn').textContent='创建本地密钥库';showLockNotice('本地库已清空，可以设置新密码。','ok');};});
 $('#lockBtn').addEventListener('click',()=>{cryptoKey=null;records=[];projects=[];setView(true);$('#lockTitle').textContent='密钥库已锁定';$('#lockDesc').textContent='输入本地密码重新解锁。';$('#unlockBtn').textContent='解锁密钥库';$('#confirmWrap').classList.add('hidden');$('#masterPassword').focus();});
 function render(){const query=$('#searchInput').value.trim().toLowerCase(),filter=$('#providerFilter').value;const shown=records.filter(r=>(!filter||r.provider===filter)&&(!query||[r.name,r.providerName,r.purpose,r.project,r.notes,...(r.tags||[])].join(' ').toLowerCase().includes(query))).sort((a,b)=>Number(b.favorite)-Number(a.favorite)||b.updatedAt-a.updatedAt);$('#totalCount').textContent=records.length;$('#providerCount').textContent=new Set(records.map(r=>r.provider)).size;$('#favoriteCount').textContent=records.filter(r=>r.favorite).length;$('#listCount').textContent=`${shown.length} 条记录`;const select=$('#providerFilter'),old=select.value;select.innerHTML='<option value="">全部服务商</option>'+[...new Set(records.map(r=>r.provider))].map(id=>`<option value="${esc(id)}">${esc(providerById(id).name)}</option>`).join('');select.value=records.some(r=>r.provider===old)?old:'';const cards=$('#cards');if(!shown.length){cards.innerHTML=`<div class="empty"><div class="big">⌘</div><h3>${records.length?'没有找到匹配的密钥':'你的口袋还是空的'}</h3><p>${records.length?'试试更换关键词或筛选条件。':'添加第一个 API Key，之后就能快速查找和复制。'}</p>${records.length?'':'<button class="btn primary" data-action="add">＋ 新增 API Key</button>'}</div>`;return;}cards.innerHTML=shown.map(r=>{const p=providerById(r.provider);return `<article class="card" data-id="${esc(r.id)}"><div class="cardtop"><div class="provider-icon">${esc(p.short)}</div><div class="cardtitle"><h3>${esc(r.name||p.name)} ${r.favorite?'★':''}</h3><p>${esc(p.name)} · ${esc(r.purpose||'未填写用途')}</p></div><button class="dots" data-action="menu" aria-label="更多操作" title="更多操作">⋯</button></div><div class="secret"><code>${esc(mask(r.key))}</code><button data-action="reveal" title="临时显示密钥" aria-label="临时显示密钥">◉</button></div><div class="tags">${r.project?`<span class="tag">项目：${esc(r.project)}</span>`:''}${(r.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}<span class="tag">更新于 ${new Date(r.updatedAt).toLocaleDateString()}</span></div><div class="cardactions"><button class="btn primary copy" data-action="copy">复制 Key</button><button class="btn" data-action="edit">编辑</button><button class="btn" data-action="favorite">${r.favorite?'取消收藏':'收藏'}</button></div></article>`}).join('');}
@@ -153,3 +154,126 @@ async function refreshSavedSkillHeat(){
 }
 $('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
 $('#importSkillBtn')?.addEventListener('click',skillImportModal);
+
+function canonicalSkillRepoUrl(value){
+ try{
+  const u=new URL(String(value||''));
+  if(u.protocol!=='https:'||u.hostname.toLowerCase()!=='github.com'||u.username||u.password||u.port)return '';
+  const parts=u.pathname.split('/').filter(Boolean);
+  if(parts.length!==2||! /^[A-Za-z0-9_.-]{1,100}$/.test(parts[0])||! /^[A-Za-z0-9_.-]{1,100}$/.test(parts[1]))return '';
+  const repository=parts[1].replace(/\.git$/i,'');
+  if(!repository)return '';
+  return 'https://github.com/'+parts[0]+'/'+repository;
+ }catch{return '';}
+}
+function readPendingRadarSkills(){
+ try{
+  const raw=window.localStorage.getItem(KEYPOCKET_PENDING_SKILL_KEY);
+  const parsed=raw?JSON.parse(raw):[];
+  if(!Array.isArray(parsed))return [];
+  return parsed.slice(0,100).map(item=>{
+   if(!item||typeof item!=='object'||item.source!=='davy-radar'||typeof item.id!=='string'||!item.id.trim()||item.id.length>180)return null;
+   const url=canonicalSkillRepoUrl(item.url);
+   if(!url)return null;
+   const topicInput=Array.isArray(item.topics)?item.topics:(typeof item.topics==='string'?item.topics.split(/[·,]/):[]);
+   const topics=topicInput.filter(x=>typeof x==='string').map(x=>x.trim()).filter(Boolean).slice(0,8).map(x=>x.slice(0,80));
+   const date=/^\d{4}-\d{2}-\d{2}$/.test(String(item.reportDate||''))?String(item.reportDate):'';
+   const stars=Number(item.stars);
+   return {
+    id:item.id,source:'davy-radar',createdAt:Number.isFinite(item.createdAt)?item.createdAt:Date.now(),
+    reportDate:date,name:String(item.name||url.split('/').pop()).trim().slice(0,180),
+    url,description:typeof item.description==='string'?item.description.slice(0,2400):'',
+    topics,license:typeof item.license==='string'?item.license.slice(0,80):'',
+    stars:Number.isFinite(stars)&&stars>=0?stars:null,
+    language:typeof item.language==='string'?item.language.slice(0,80):'',
+    updated:typeof item.updated==='string'?item.updated.slice(0,10):'',
+    sourcePage:typeof item.sourcePage==='string'&&validWebUrl(item.sourcePage)?item.sourcePage.slice(0,500):''
+   };
+  }).filter(Boolean);
+ }catch{return [];}
+}
+function updateRadarImportButton(){
+ const btn=$('#importRadarSkillsBtn');
+ if(!btn)return;
+ const count=readPendingRadarSkills().length;
+ btn.textContent=count?'↧ 从 AI 简报收录（'+count+'）':'↧ 从 AI 简报收录';
+ btn.title=count?'有 '+count+' 个 Skill 等待确认收录':'从每日 AI 简报收录公开 Skill';
+ btn.setAttribute('aria-label',btn.title);
+}
+function writePendingRadarSkills(queue){
+ window.localStorage.setItem(KEYPOCKET_PENDING_SKILL_KEY,JSON.stringify(queue.slice(0,100)));
+ updateRadarImportButton();
+}
+function removePendingRadarSkill(id){
+ const queue=readPendingRadarSkills().filter(item=>item.id!==id);
+ writePendingRadarSkills(queue);
+}
+function openPendingRadarSkillModal(){
+ if(!cryptoKey){showToast('请先解锁 KeyPocket，再收录 AI 简报中的 Skill。');return;}
+ if($('#modalRoot').innerHTML.trim())return;
+ const queue=readPendingRadarSkills();
+ updateRadarImportButton();
+ if(!queue.length){showToast('目前没有待收录的 Skill。请从 AI 前沿简报点击「一键收录到 KeyPocket」。');return;}
+ const item=queue[0],repoUrl=canonicalSkillRepoUrl(item.url);
+ if(!repoUrl){removePendingRadarSkill(item.id);showToast('发现无效的 GitHub 链接，已跳过该条目。');return;}
+ const duplicate=projects.find(p=>canonicalSkillRepoUrl(p.repoUrl).toLowerCase()===repoUrl.toLowerCase());
+ const queueLabel=queue.length>1?'<p class="sub">待处理队列共 '+queue.length+' 个 Skill；本次先处理第一条。</p>':'';
+ if(duplicate){
+  openModal('<h2>这个 Skill 已经收录</h2><p class="sub">KeyPocket 中已存在相同的 GitHub 仓库，不会重复创建记录。</p><div class="notice info"><strong>'+esc(duplicate.name)+'</strong><br>'+esc(repoUrl)+'</div>'+queueLabel+'<div class="modal-actions"><button type="button" class="btn" data-action="close">稍后处理</button><button type="button" class="btn primary" id="removeDuplicateRadarSkill">移出待处理队列</button></div>');
+  $('#removeDuplicateRadarSkill').addEventListener('click',()=>{
+   try{removePendingRadarSkill(item.id);closeModal();showToast('重复 Skill 已从待处理队列移除。');}
+   catch(err){showToast('更新队列失败，请检查浏览器本地存储。');}
+  });
+  return;
+ }
+ const title=item.name||repoUrl.split('/').pop();
+ const topics=item.topics.length?item.topics.join(' · '):'未提供';
+ const stars=item.stars===null?'未提供':item.stars.toLocaleString('en-US');
+ openModal('<h2>收录 Skill 到 KeyPocket</h2><p class="sub">请核对公开仓库信息，再确认加入「我的应用与仓库」。资料会在本机加密保存；不会导入 API Key，也不会上传到服务器。</p><div class="notice info"><strong>'+esc(title)+'</strong><br><a href="'+esc(repoUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(repoUrl)+' ↗</a></div>'+queueLabel+'<div class="field"><label>项目简介</label><div class="project-note">'+esc(item.description||'原简报未提供项目简介。')+'</div></div><div class="field"><label>主题 / Topics</label><div class="project-note">'+esc(topics)+'</div></div><div class="grid2"><div class="field"><label>许可证</label><div class="project-note">'+esc(item.license||'请打开仓库核实')+'</div></div><div class="field"><label>简报记录的 Stars</label><div class="project-note">'+esc(stars)+'</div></div></div><div id="radarSkillImportNotice" class="notice info">即将收录仓库链接、简介、主题和来源日期。Stars 是简报采集时的记录，不代表安装量。</div><div class="modal-actions"><button type="button" class="btn" data-action="close">稍后处理</button><button type="button" class="btn ghost" id="ignoreRadarSkillBtn">忽略此条</button><button type="button" class="btn primary" id="saveRadarSkillBtn">确认收录</button></div>');
+ $('#ignoreRadarSkillBtn').addEventListener('click',()=>{
+  try{removePendingRadarSkill(item.id);closeModal();showToast('已忽略此 Skill；其他待处理项仍保留。');}
+  catch(err){const n=$('#radarSkillImportNotice');n.textContent='更新队列失败，请检查浏览器本地存储。';n.className='notice error';}
+ });
+ $('#saveRadarSkillBtn').addEventListener('click',async()=>{
+  const btn=$('#saveRadarSkillBtn'),notice=$('#radarSkillImportNotice');
+  btn.disabled=true;btn.textContent='正在加密保存…';
+  try{
+   const duplicateNow=projects.find(p=>canonicalSkillRepoUrl(p.repoUrl).toLowerCase()===repoUrl.toLowerCase());
+   if(!duplicateNow){
+    const now=Date.now();
+    const projectName=(title.length>90?title.slice(0,90):title)+' · Skill';
+    const noteParts=[
+     '来源：DAVYLAB AI 前沿简报'+(item.reportDate?'（'+item.reportDate+'）':''),
+     item.description?'简介：'+item.description:'',
+     item.topics.length?'Topics：'+item.topics.join('、'):'',
+     item.license?'许可证：'+item.license:'',
+     item.stars!==null?'推荐时 GitHub Stars：'+item.stars:'',
+     item.updated?'简报记录的更新时间：'+item.updated:'',
+     item.sourcePage?'来源页面：'+item.sourcePage:''
+    ].filter(Boolean);
+    const project=normalizeProject({
+     id:crypto.randomUUID(),name:projectName.slice(0,100),repoUrl,appUrl:'',
+     category:'AI 工具',stack:[item.language,...item.topics.slice(0,4)].filter(Boolean).join(', ').slice(0,160),
+     notes:noteParts.join('\n').slice(0,500),
+     tags:['Skill','AI 前沿简报',item.license?'License '+item.license:''].filter(Boolean).join(', ').slice(0,200),
+     favorite:true,createdAt:now,updatedAt:now
+    });
+    await putItem(await sealProject(project));
+    projects.push(project);
+   }
+   removePendingRadarSkill(item.id);
+   closeModal();setModule('projects');renderProjects();updateRadarImportButton();
+   showToast(duplicateNow?'该 Skill 已收录，已清理重复待办。':'Skill 已加密收录到 KeyPocket。');
+  }catch(err){
+   btn.disabled=false;btn.textContent='确认收录';
+   if(notice){notice.textContent='收录失败：'+(err.message||'请重试。');notice.className='notice error';}
+  }
+ });
+}
+$('#importRadarSkillsBtn')?.addEventListener('click',openPendingRadarSkillModal);
+window.addEventListener('storage',event=>{
+ if(event.key!==KEYPOCKET_PENDING_SKILL_KEY)return;
+ updateRadarImportButton();
+ if(cryptoKey&&readPendingRadarSkills().length&&!$('#modalRoot').innerHTML.trim())openPendingRadarSkillModal();
+});
+updateRadarImportButton();
