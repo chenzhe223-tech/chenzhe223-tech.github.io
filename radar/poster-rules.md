@@ -16,11 +16,11 @@
 
 ## 2. 两种风格按 ISO 周交替（P0）
 按周切换，不按日切换。每天仅生成当周指定的一张风格；重试不能改变风格。
-- 深色科技信息编辑风：geometric-navy。深海军蓝背景、暖白正文、克制橙色重点、清晰新闻卡片和底部二维码区。
-- 暖白山峰科技杂志风：mountain-editorial。暖白背景、深海军蓝标题、山峰/云海主视觉、杂志式主题与图文新闻布局。
+- 深色几何科技编辑风：geometric-navy。顶部必须使用深海军蓝头图、暖橙色日轮和分层几何山峦剪影；正文为暖白底色，采用深海军蓝文字、克制橙色强调、三张主新闻卡片 + 两张补充卡片、Skill 推荐区和底部二维码。该组合就是 2026-10-23 正式海报的基准，不得误判为错误混搭。
+- 暖白山峰科技杂志风：mountain-editorial。暖白编辑版式，以真实山峰/云海摄影作为主视觉，搭配深海军蓝标题、杂志式主题与图文新闻布局。与 geometric-navy 的几何插画山峦头图明确区分。
 - 唯一算法位于 radar/scripts/poster_style.py::poster_style_metadata：固定锚点为 2025-12-29（ISO 2026-W01 的周一），按目标日期所在周的周一与锚点相差的完整周数计算连续周索引。偶数索引使用 geometric-navy，奇数索引使用 mountain-editorial，保证跨 ISO 年份仍每周切换。
 - 生成器、定时预检、二维码验证和部署后验收必须共享同一算法；禁止另外使用日序号奇偶判断。
-- 海报和验收记录必须包括 iso_year、iso_week、style_cycle_index、style_cycle、design_variant、template_version。
+- 海报和验收记录必须包括 iso_year、iso_week、style_cycle_index、style_cycle、design_variant、template_version 及与该风格一致的 design 标识。geometric-navy 的 design 必须为 geometric-navy；mountain-editorial 的 design 必须为 mountain-editorial。
 - 示例：2026-10-23 属于 ISO 2026-W43，使用 geometric-navy；2026-10-26 开始的 ISO 2026-W44 使用 mountain-editorial。
 - 自动测试覆盖同一周风格一致、相邻周风格不同、重试确定，以及 ISO 第 53 周到下一 ISO 年第 1 周仍交替。
 
