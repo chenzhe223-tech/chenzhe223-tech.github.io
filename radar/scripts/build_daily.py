@@ -553,8 +553,8 @@ def collect_skills() -> list[dict]:
         if not result:
             verification_failures.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "repository/license/README verification failed"})
             continue
-        result = score_candidate(result, today_text)
         result["novelty_status"] = "new"
+        result = score_candidate(result, today_text)
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
         if len(verified) >= 15:
