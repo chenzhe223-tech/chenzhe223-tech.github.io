@@ -263,8 +263,17 @@ def main():
         if not isinstance(skill,dict): skill_errors.append({"type":"invalid_skill_record"}); continue
         if not skill.get("canonical_id"): skill_errors.append({"type":"missing_canonical_id","name":skill.get("name")})
         if not skill.get("license"): skill_errors.append({"type":"missing_verified_license","name":skill.get("name")})
+        if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
         if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})
+        if not skill.get("evidence_urls") or not skill.get("evidence_checked_at"): skill_errors.append({"type":"missing_evidence_provenance","name":skill.get("name")})
+        try:
+            total=float(skill.get("total_score"))
+            if total<70 or total>100: skill_errors.append({"type":"score_out_of_policy","name":skill.get("name"),"score":total})
+        except (TypeError,ValueError):
+            skill_errors.append({"type":"missing_score","name":skill.get("name")})
+        if skill.get("critical_security_issue") is True or str(skill.get("security_status") or "").lower() in ("critical","high_risk","critical_risk"):
+            skill_errors.append({"type":"critical_security_risk","name":skill.get("name")})
     result={
       "report_date":today,"generated_at":dt.datetime.now(TZ).isoformat(),
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files"},
