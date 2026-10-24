@@ -7,6 +7,16 @@ from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, 
 
 class DailyBriefContractTests(unittest.TestCase):
 
+    def test_china_near_duplicate_headlines_are_collapsed(self):
+        candidates = [
+            {"title": "Kimi K3.1 Pro上线 WorkBuddy", "url": "https://example.com/a", "published": "2026-10-25T01:00:00+00:00", "source": "A"},
+            {"title": "Kimi K3.1 Pro接入 WorkBuddy", "url": "https://example.com/b", "published": "2026-10-25T00:00:00+00:00", "source": "B"},
+            {"title": "MiniMax发布新的AI推理模型", "url": "https://example.com/c", "published": "2026-10-24T23:00:00+00:00", "source": "C"},
+        ]
+        ranked = rank_diverse_china_items(candidates)
+        kimi = [item for item in ranked if "Kimi" in item["title"]]
+        self.assertEqual(len(kimi), 1)
+
     def test_featured_skill_requires_live_license_and_readme(self):
         metadata = {
             "full_name": "example/verified-skill",
