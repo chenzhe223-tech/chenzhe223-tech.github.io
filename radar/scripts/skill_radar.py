@@ -33,7 +33,7 @@ def classify_skill_type(name: str, description: str, readme: str) -> str|None:
     repo=(name or "").lower()
     explicit_paths=(
         "skill.md" in text or ".claude/skills/" in text or ".codex/skills/" in text
-        or ".agents/skills/" in text or bool(re.search(r"(?:^|[\\s`])skills/[a-z0-9_.-]+",text))
+        or ".agents/skills/" in text or bool(re.search(r"(?:^|[\s`])skills/[a-z0-9_.-]+",text))
     )
     explicit_install=("install" in text or "installation" in text or "copy" in text or "add to" in text)
     explicit_skill_phrase=("agent skills" in text or "skill files" in text or "skills directory" in text or "skill folder" in text)
