@@ -27,6 +27,11 @@ def canonical_project_id(value: str) -> str:
     except Exception:
         return ""
     return ""
+def actual_skill_files(tree_payload: dict) -> list[str]:
+    tree=tree_payload.get("tree") if isinstance(tree_payload,dict) else []
+    if not isinstance(tree,list): return []
+    return sorted({str(entry.get("path") or "") for entry in tree
+        if isinstance(entry,dict) and str(entry.get("path") or "").rsplit("/",1)[-1].lower()=="skill.md"})
 def classify_skill_type(name: str, description: str, readme: str) -> str|None:
     """Accept projects that contain/install actual Agent Skill files, not merely related tools or tutorials."""
     text=(str(readme or "")+" "+str(description or "")).lower()
@@ -177,6 +182,13 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
             continue
         if item.get("quality_status")!="PASS":
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":item.get("quality_status") or "not_verified"})
+            continue
+        try:
+            score=float(item.get("total_score"))
+        except (TypeError,ValueError):
+            score=0
+        if score<70 or score>100:
+            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_below_70_or_invalid","score":score})
             continue
         if hit and material_update:
             item["novelty_status"]="material_update"
