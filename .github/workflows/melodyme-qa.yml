@@ -120,6 +120,7 @@ jobs:
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
           if (await page.locator('.stylepick').count() !== 12) throw new Error('expected 12 poster styles');
+          await page.locator('#aiCoverFrame').scrollIntoViewIfNeeded();
           await page.locator('#aiCoverStatus').waitFor({state:'visible'});
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('Pollinations.ai'));
           if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
