@@ -23,7 +23,7 @@ jobs:
   verify-handoff:
     name: Verify source contract and live assets
     runs-on: ubuntu-latest
-    timeout-minutes: 6
+    timeout-minutes: 15
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -58,3 +58,15 @@ jobs:
           done
           echo "::error::Live KeyPocket/Radar handoff assets did not appear after retry window."
           exit 1
+
+      - name: Install Playwright
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: npm install --no-save --no-audit --no-fund playwright
+
+      - name: Install Chromium
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: npx playwright install --with-deps chromium
+
+      - name: Exercise the live one-click Skill collection flow
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        run: node scripts/e2e-keypocket-skill-handoff.cjs
