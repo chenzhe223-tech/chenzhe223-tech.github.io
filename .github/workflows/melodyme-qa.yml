@@ -126,9 +126,11 @@ jobs:
           if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
           if (await page.locator('#aiCoverImage').getAttribute('loading') !== 'lazy') throw new Error('AI cover must lazy-load');
           if (await page.locator('#aiCoverImage').getAttribute('alt') !== 'AI 生成封面（非真实专辑封面）') throw new Error('AI cover alt/disclosure missing');
+          await page.locator('[data-style="旧照片"]').click();
           mock.setPollinationsMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Cloudflare Workers AI 兜底'));
+          await page.locator('[data-style="城市夜色"]').click();
           mock.setWorkerImageMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
