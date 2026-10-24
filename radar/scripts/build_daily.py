@@ -468,8 +468,6 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "forks_total": int(metadata.get("forks_count") or 0),
             "pushed_at": metadata.get("pushed_at"),
             "created_at": metadata.get("created_at"),
-            "pushed_at": metadata.get("pushed_at"),
-            "created_at": metadata.get("created_at"),
             "open_issues_total": int(metadata.get("open_issues_count") or 0),
             "evidence_verified": True,
             "readme_verified": True,
