@@ -92,11 +92,24 @@ function skillUseCase(repo){
  return '先阅读 README、安装要求与权限范围，再用一个明确的小任务试用，确认效果后再纳入常规工作流。';
 }
 function skillPurpose(repo){return (repo.description||'暂无项目描述。')+'\n主要作用：'+((repo.topics||[]).slice(0,5).join('、')||'以仓库 README 为准')+'。\n应用建议：'+skillUseCase(repo);}
-function skillHeat(repo){
+function skillHeat(repo,rank=0,total=0){
  const stars=Number(repo.stargazers_count)||0,forks=Number(repo.forks_count)||0,updated=Date.parse(repo.pushed_at||repo.updated_at||'')||0,ageDays=updated?Math.max(0,(Date.now()-updated)/86400000):9999;
  const level=stars>=5000?'高热度':stars>=1000?'较高热度':stars>=200?'有一定关注':stars>=30?'小众关注':'关注度较低';
  const freshness=ageDays<30?'近期活跃':ageDays<180?'半年内有更新':'近期更新较少';
- return {stars,forks,level,freshness,ageDays:Math.round(ageDays)};
+ return {stars,forks,level,freshness,ageDays:Math.round(ageDays),rank,total,percentile:rank&&total?Math.round((total-rank+1)/total*100):null};
+}
+function githubRepoPath(url){try{const u=new URL(url);if(u.hostname.toLowerCase()!=='github.com')return null;const p=u.pathname.split('/').filter(Boolean);if(p.length<2)return null;return {owner:p[0],repo:p[1].replace(/\.git$/,'')};}catch{return null;}}
+function suggestedProjectTags(repo){
+ const pool=[...(repo.topics||[]),repo.language,repo.homepage?'已上线':'待部署',githubCategory(repo),'GitHub','Skill'];
+ const out=[];for(const x of pool){const t=String(x||'').trim().replace(/-/g,' ');if(t&&!out.some(y=>y.toLowerCase()===t.toLowerCase()))out.push(t);if(out.length===6)break;}
+ while(out.length<6){const t=['开源项目','效率工具','持续维护','待评估','个人项目','AI 工具'][out.length];if(!out.includes(t))out.push(t);}
+ return out.slice(0,6);
+}
+async function fetchGithubRepoMeta(url){
+ const path=githubRepoPath(url);if(!path)throw Error('请输入有效的 github.com/owner/repo 仓库地址。');
+ const response=await fetch('https://api.github.com/repos/'+encodeURIComponent(path.owner)+'/'+encodeURIComponent(path.repo),{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+ if(!response.ok)throw Error(response.status===404?'未找到公开仓库，请检查地址。':response.status===403?'GitHub API 请求频率受限，请稍后重试。':'GitHub 仓库信息读取失败（HTTP '+response.status+'）。');
+ return response.json();
 }
 function skillImportModal(){
  openModal('<h2>按 Skill 名称导入</h2><p class="sub">输入 Skill 名称或关键词，从公开 GitHub 仓库中匹配候选。热度依据 Stars、Forks 和最近更新；这不是全网安装量排名。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、frontend design、mcp"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">搜索 GitHub 公开仓库；请核对仓库名称与 README 后再导入。</div><div id="skillSearchResults" class="github-repo-list"></div>');
@@ -112,8 +125,8 @@ function skillImportModal(){
    const data=await response.json(),items=(data.items||[]).filter(r=>!r.private&&r.html_url);
    if(!items.length){status.className='notice';status.textContent='没有找到匹配结果。可尝试更短的 Skill 名称或英文关键词。';return;}
    status.className='notice ok';status.textContent='找到 '+items.length+' 个候选。热度指标为公开仓库数据，不代表真实安装量或质量背书。';
-   results.innerHTML=items.map((r,i)=>{const h=skillHeat(r),existing=projects.some(p=>p.repoUrl.replace(/\/$/,'').toLowerCase()===r.html_url.replace(/\/$/,'').toLowerCase());return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(r.description||'暂无描述')+'</small><small>★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+' · '+esc(h.level)+' · '+esc(h.freshness)+'</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';}).join('');
-   results.querySelectorAll('[data-save-skill]').forEach(b=>b.addEventListener('click',async()=>{const r=items[Number(b.dataset.saveSkill)];if(!r)return;b.disabled=true;try{const h=skillHeat(r),now=Date.now(),p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:r.html_url,appUrl:'',category:'Skill',stack:r.language||'',notes:skillPurpose(r)+'\n热度：'+h.level+'；★ '+h.stars+'；Fork '+h.forks+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...(r.topics||[]).slice(0,7)].join(', '),favorite:true,createdAt:now,updatedAt:now});await putItem(await sealProject(p));projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已收录；热度与应用建议已保存');}catch(err){b.disabled=false;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}}));
+   results.innerHTML=items.map((r,i)=>{const h=skillHeat(r,i+1,items.length),existing=projects.some(p=>p.repoUrl.replace(/\/$/,'').toLowerCase()===r.html_url.replace(/\/$/,'').toLowerCase());return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(r.description||'暂无描述')+'</small><small>★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+' · '+esc(h.level)+' · '+esc(h.freshness)+'</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';}).join('');
+   results.querySelectorAll('[data-save-skill]').forEach(b=>b.addEventListener('click',async()=>{const r=items[Number(b.dataset.saveSkill)];if(!r)return;b.disabled=true;try{const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now(),p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:r.html_url,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:skillPurpose(r)+'\nGitHub 排名：#'+h.rank+'/'+h.total+'（本次关键词搜索结果，按 Stars 降序；非全网排名）\n热度：'+h.level+'；★ '+h.stars+'；Fork '+h.forks+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:suggestedProjectTags(r).join(', '),favorite:true,createdAt:now,updatedAt:now});await putItem(await sealProject(p));projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已收录；热度与应用建议已保存');}catch(err){b.disabled=false;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}}));
   }catch(err){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}finally{btn.disabled=false;}
  });
 }
