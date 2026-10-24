@@ -253,12 +253,25 @@ def main():
                 week_image_hits.append({"type":"same_week_content_reuse","title":img["title"],"url":img["url"],"history":old_img})
                 break
     # History incompleteness is surfaced, never silently treated as clean.
+    # Skill recommendations are a separate quality domain and must pass before the report can publish.
+    skill_radar=report.get("skill_radar") if isinstance(report.get("skill_radar"),dict) else {}
+    skills=report.get("skills") if isinstance(report.get("skills"),list) else []
+    skill_errors=[]
+    if skill_radar.get("status")!="PASS": skill_errors.append({"type":"skill_radar_status","status":skill_radar.get("status","missing")})
+    if not skills: skill_errors.append({"type":"no_qualified_skill_recommendations"})
+    for skill in skills:
+        if not isinstance(skill,dict): skill_errors.append({"type":"invalid_skill_record"}); continue
+        if not skill.get("canonical_id"): skill_errors.append({"type":"missing_canonical_id","name":skill.get("name")})
+        if not skill.get("license"): skill_errors.append({"type":"missing_verified_license","name":skill.get("name")})
+        if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
+        if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})
     result={
       "report_date":today,"generated_at":dt.datetime.now(TZ).isoformat(),
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
       "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
-      "status":"FAIL" if duplicate_hits or china_hits or image_errors or week_image_hits or unreadable or historical_image_failures else "PASS",
+      "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
+      "status":"FAIL" if duplicate_hits or china_hits or image_errors or week_image_hits or unreadable or historical_image_failures or skill_errors else "PASS",
       "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"unreadable_history_blocks_publish":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
