@@ -6,7 +6,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
-    build_illustration_prompt, firecrawl_enabled,
+    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS,
 )
 
 
@@ -87,6 +87,12 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertIn("智谱发布新的 GLM 模型", prompt)
         self.assertIn("not event photography", prompt)
         self.assertIn("Do not invent documentary evidence", prompt)
+
+    def test_thematic_fallback_pool_supports_weekly_unique_images(self):
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["general"])), 8)
+        for topic in ("robot", "compute", "product", "business", "creative"):
+            self.assertGreaterEqual(len(set(THEME_PHOTOS[topic])), 5)
+        self.assertTrue(all(photo_id.startswith("photo-") for values in THEME_PHOTOS.values() for photo_id in values))
 
     def test_firecrawl_requires_explicit_opt_in_and_key(self):
         from unittest.mock import patch
