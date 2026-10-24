@@ -38,7 +38,7 @@ assert.match(app, /if\(!cryptoKey\).*请先解锁 KeyPocket/s, 'incoming Skills 
 assert.match(app, /window\.localStorage\.removeItem|writePendingRadarSkills|removePendingRadarSkill/, 'the pending queue must be manageable');
 
 assert.match(appHtml, /id="importRadarSkillsBtn"/, 'KeyPocket must expose a manual pending-import entry point');
-assert.match(appHtml, /app\.js\?v=kp-radar-skill-bridge-1/, 'KeyPocket must use a cache-busted app bundle');
+assert.match(appHtml, /app\.js\?v=kp-radar-skill-bridge-2/, 'KeyPocket must use a cache-busted app bundle');
 
 console.log('PASS: Radar-to-KeyPocket Skill handoff source contract');
 console.log('PASS: shared local queue key:', keyPocketQueueKey);
