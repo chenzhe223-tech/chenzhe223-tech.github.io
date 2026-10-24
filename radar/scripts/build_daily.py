@@ -87,12 +87,12 @@ def _story_title(item: dict) -> str:
     return clean(str(item.get("title_zh") or item.get("title") or item.get("title_en") or item.get("original_title") or ""))
 
 def _story_tokens(text: str) -> set[str]:
-    value = re.sub(r"https?://\\S+", " ", (text or "").lower())
-    value = re.sub(r"[^a-z0-9\\u4e00-\\u9fff]+", " ", value)
+    value = re.sub(r"https?://\S+", " ", (text or "").lower())
+    value = re.sub(r"[^a-z0-9\u4e00-\u9fff]+", " ", value)
     words = {x for x in value.split() if len(x) > 1 and x not in {"the","and","for","with","from","this","that","news","update","updates","ai","model","models","company","announces","announced"}}
     # Chinese text commonly has no spaces; add character bigrams to capture paraphrases.
-    compact = re.sub(r"\\s+", "", value)
-    words.update(compact[i:i+2] for i in range(max(0, len(compact)-1)) if re.search(r"[\\u4e00-\\u9fff]", compact[i:i+2]))
+    compact = re.sub(r"\s+", "", value)
+    words.update(compact[i:i+2] for i in range(max(0, len(compact)-1)) if re.search(r"[\u4e00-\u9fff]", compact[i:i+2]))
     return words
 
 def _history_stories(today: str) -> list[dict]:
