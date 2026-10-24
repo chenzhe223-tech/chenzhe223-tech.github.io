@@ -2,7 +2,7 @@
   "product": "Davy Radar",
   "report_date": "2026-10-24",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-24T10:25:34.196654+08:00",
+  "generated_at": "2026-10-24T10:33:36.414274+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
@@ -15,10 +15,10 @@
       "source": "TechCrunch AI",
       "title_zh": "OpenAI称将不再用实时互联网训练其AI模型，理由是存在“重大风险”",
       "summary_zh": "OpenAI将切断前沿模型与互联网的连接，而数周前其一名工程师曾表示该方案行不通。",
-      "why_it_matters_zh": "这标志着OpenAI在模型训练数据来源上的重大转变，可能影响前沿模型的能力与安全策略。",
+      "why_it_matters_zh": "这标志着OpenAI在模型训练数据来源上的重大政策转变，可能影响未来前沿模型的能力与安全边界。",
       "title_en": "OpenAI says it will no longer train its AI models on the live internet, citing “significant risks”",
       "summary_en": "OpenAI will cut frontier models off from the internet weeks after one of its engineers said that solution wouldn't work.",
-      "why_it_matters_en": "It marks a major shift in how OpenAI sources training data for frontier models, potentially affecting both capability and safety strategy.",
+      "why_it_matters_en": "It marks a major policy shift in how OpenAI sources training data, potentially affecting the capabilities and safety boundaries of future frontier models.",
       "image_url": "https://founder.ua/storage/photos/shares/news/OpenAI_11zon.jpg",
       "image_source": "Bing Images",
       "image_page_url": "https://founder.ua/article/openai-predstavlyaje-novii-agent-chatgpt-dlya-glibokogo-doslidzennya",
@@ -40,11 +40,11 @@
       "published": "2026-10-23T21:35:13+00:00",
       "source": "Simon Willison",
       "title_zh": "Quick Study",
-      "summary_zh": "该工具向Claude Opus 5.5 High发送提示，构建一个可打开照片并用canvas元素和模拟画笔在数秒内快速绘制该照片版本的应用；它使用Sobel边缘检测，无外部依赖。",
-      "why_it_matters_zh": "它展示了AI编码助手如何快速生成交互式创意工具，并与此前用P5.js模拟水彩的实验相呼应。",
+      "summary_zh": "该工具向Claude Opus 5.5 High发送提示，构建一个可打开照片并用canvas元素和模拟画笔在数秒内快速绘制该照片版本的artifact。",
+      "why_it_matters_zh": "它展示了利用AI编码助手快速构建交互式创意工具的实验方向，并使用了Sobel边缘检测。",
       "title_en": "Quick Study",
-      "summary_en": "Tool: Quick Study Prompt to Claude Opus 5.5 High : Build an artifact where you open a photo and it rapidly (in a few seconds) paints a version of that photo using a canvas element and simulated paintbrush. Quick Study uses Sobel edge detection, with no external dependencies.",
-      "why_it_matters_en": "It shows how AI coding assistants can quickly produce interactive creative tools, echoing an earlier experiment simulating watercolor with P5.js.",
+      "summary_en": "Tool: Quick Study Prompt to Claude Opus 5.5 High : Build an artifact where you open a photo and it rapidly (in a few seconds) paints a version of that photo using a canvas element and simulated paintbrush.",
+      "why_it_matters_en": "It illustrates an experimental direction for using AI coding assistants to rapidly build interactive creative tools, using Sobel edge detection.",
       "image_url": "https://static.simonwillison.net/static/2026/heron-oil.webp",
       "image_source": "Simon Willison",
       "image_page_url": "https://simonwillison.net/2026/Oct/23/quick-study-painter/",
@@ -65,11 +65,11 @@
       "published": "2026-10-23T19:40:54+00:00",
       "source": "Simon Willison",
       "title_zh": "推出Kimi K3.1 Pro",
-      "summary_zh": "Kimi K3.1 Pro今日上线Kimi API，尚未开放权重，但Moonshot承诺“完整模型权重将于2026年11月4日前发布”；另提供速度快2-3倍、价格翻倍的“Highspeed”版本（输入token缓存命中价格相同）。",
-      "why_it_matters_zh": "它表明Moonshot在开放权重前先通过API提供新模型，并以分级定价兼顾速度与成本。",
+      "summary_zh": "Kimi K3.1 Pro今日上线Kimi API，尚未开放权重，但Moonshot承诺“完整模型权重将于2026年11月4日前发布”。",
+      "why_it_matters_zh": "该模型还提供速度提升2-3倍、价格翻倍的“Highspeed”版本，其定价与开放权重时间表值得关注。",
       "title_en": "Introducing Kimi K3.1 Pro",
-      "summary_en": "Kimi K3.1 Pro landed on the Kimi API today; it's not yet open weights, but Moonshot promises full model weights will be released by Nov 4, 2026. A \"Highspeed\" version is 2-3x faster at twice the price, except input token cache hits, which are priced the same.",
-      "why_it_matters_en": "It shows Moonshot offering a new model via API before releasing weights, with tiered pricing balancing speed and cost.",
+      "summary_en": "Kimi K3.1 Pro landed on the Kimi API today - it's not yet open weights, but Moonshot promise \"Full model weights will be released by Nov 4, 2026\".",
+      "why_it_matters_en": "The model also offers a \"Highspeed\" version that is 2-3x faster at twice the price, and its pricing and open-weights timeline are worth watching.",
       "image_url": "https://static.simonwillison.net/static/2026-10-23/image-2.png",
       "image_source": "Simon Willison",
       "image_page_url": "https://simonwillison.net/2026/Oct/23/kimi-k31-pro/",
@@ -89,12 +89,12 @@
       "summary": "Hosted by TechCrunch in partnership with Fidelity Private Shares, the full-day event goes beyond fundraising and AI to explore the realities of finding customers, building teams, sharpening a pitch, developing founder leadership, and scaling companies both inside and outside traditional startup hubs.",
       "published": "2026-10-23T19:06:23+00:00",
       "source": "TechCrunch AI",
-      "title_zh": "从Toast到Bessemer：创始人将在TechCrunch Founder Summit 2026听到谁的声音",
+      "title_zh": "从Toast到Bessemer：创始人将在TechCrunch Founder Summit 2026上听到谁的声音",
       "summary_zh": "该全天活动由TechCrunch与Fidelity Private Shares合作举办，除融资和AI外，还探讨寻找客户、组建团队、打磨路演、培养创始人领导力以及在传统创业中心内外扩张公司等现实问题。",
-      "why_it_matters_zh": "它为创始人提供超越融资与AI话题的实操议题，覆盖公司成长的关键环节。",
+      "why_it_matters_zh": "它为创始人提供了超越融资与AI话题的实务经验交流平台。",
       "title_en": "From Toast to Bessemer: Who founders will hear from at TechCrunch Founder Summit 2026",
-      "summary_en": "Hosted by TechCrunch in partnership with Fidelity Private Shares, the full-day event goes beyond fundraising and AI to explore finding customers, building teams, sharpening a pitch, developing founder leadership, and scaling companies inside and outside traditional startup hubs.",
-      "why_it_matters_en": "It gives founders practical topics beyond fundraising and AI, covering key stages of company growth.",
+      "summary_en": "Hosted by TechCrunch in partnership with Fidelity Private Shares, the full-day event goes beyond fundraising and AI to explore the realities of finding customers, building teams, sharpening a pitch, developing founder leadership, and scaling companies both inside and outside traditional startup hubs.",
+      "why_it_matters_en": "It gives founders a practical forum for exchanging experience beyond fundraising and AI topics.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2026/01/TC-All-Stage-2025-Breakout-QA.jpg?resize=1200,800",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/23/from-toast-to-bessemer-who-founders-will-hear-from-at-techcrunch-founder-summit-2026/",
@@ -115,11 +115,11 @@
       "published": "2026-10-23T17:00:00+00:00",
       "source": "OpenAI",
       "title_zh": "为服务超10亿ChatGPT用户而快速扩展在线存储（第二部分）",
-      "summary_zh": "文章介绍OpenAI如何通过可靠的多租户、全局缓存和Azure Cosmos DB扩展Habitat，使ChatGPT读取速度提升12倍。",
-      "why_it_matters_zh": "它揭示了支撑ChatGPT大规模用户量的存储架构实践，对构建高并发系统具有参考价值。",
+      "summary_zh": "文章介绍OpenAI如何通过可靠的多租户、全球缓存和Azure Cosmos DB扩展Habitat，为ChatGPT实现12倍更快的读取。",
+      "why_it_matters_zh": "它揭示了支撑超10亿用户规模ChatGPT的存储架构工程实践。",
       "title_en": "Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)",
       "summary_en": "Learn how OpenAI scaled Habitat with reliable multi-tenancy, global caching, and Azure Cosmos DB to deliver 12× faster reads for ChatGPT.",
-      "why_it_matters_en": "It reveals storage architecture practices behind ChatGPT's massive user base, offering lessons for building high-concurrency systems.",
+      "why_it_matters_en": "It reveals the storage architecture engineering behind ChatGPT at a scale of over 1 billion users.",
       "image_url": "https://1.bp.blogspot.com/-U_XvUXG38_c/XkcgoyqgXXI/AAAAAAAAcL8/6613UaJyBrEOsumLJZThUXIFV5Tz2D4EQCLcBGAsYHQ/s1600/microsoft-teams.png",
       "image_source": "Bing Images",
       "image_page_url": "https://www.gameblast.com.br/2020/02/microsoft-promove-game-jam-plataforma-teams.html",
@@ -142,10 +142,10 @@
       "source": "OpenAI",
       "title_zh": "保护我们的前沿模型训练环境",
       "summary_zh": "OpenAI说明其如何加强前沿模型训练与评估的隔离，包括离线环境和高算力红队测试。",
-      "why_it_matters_zh": "它体现了OpenAI在前沿模型训练安全与隔离方面的具体措施。",
+      "why_it_matters_zh": "它反映了OpenAI在前沿模型训练安全与隔离方面的具体措施。",
       "title_en": "Securing our frontier model training environment",
       "summary_en": "OpenAI explains how we strengthened containment for frontier model training and evaluation, including offline environments and high-compute red-teaming.",
-      "why_it_matters_en": "It reflects concrete measures OpenAI is taking to secure and contain frontier model training.",
+      "why_it_matters_en": "It reflects OpenAI's concrete measures for safety and containment in frontier model training.",
       "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_%28IA_gov.gpo.fdsys.CHRG-114hhrg21271%29.pdf/page1-960px-THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_%28IA_gov.gpo.fdsys.CHRG-114hhrg21271%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "image_source": "Wikimedia Commons",
       "image_page_url": "https://commons.wikimedia.org/wiki/File:THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_(IA_gov.gpo.fdsys.CHRG-114hhrg21271).pdf",
@@ -167,11 +167,11 @@
       "published": "2026-10-23T00:00:00+00:00",
       "source": "Hugging Face",
       "title_zh": "你的模型能在AWS Trainium上运行吗？查一查",
-      "summary_zh": "该博文介绍如何查询模型是否支持AWS Trainium。",
-      "why_it_matters_zh": "它帮助开发者确认模型在Trainium上的兼容性，便于选择硬件。",
+      "summary_zh": "该博文介绍如何查询模型对AWS Trainium的支持情况。",
+      "why_it_matters_zh": "它帮助开发者了解模型在AWS Trainium上的兼容性。",
       "title_en": "Does Your Model Run on AWS Trainium? Look It Up",
       "summary_en": "The post explains how to look up whether a model is supported on AWS Trainium.",
-      "why_it_matters_en": "It helps developers check model compatibility with Trainium when choosing hardware."
+      "why_it_matters_en": "It helps developers check model compatibility with AWS Trainium."
     },
     {
       "title": "Meta wants to pay for its broad AI buildout with a newly created class of stock",
@@ -179,12 +179,12 @@
       "summary": "The social media giant is planning a new stock strategy to help power its broad investments in AI models and services.",
       "published": "2026-10-21T22:45:34+00:00",
       "source": "TechCrunch AI",
-      "title_zh": "Meta想用新创设的股票类别为其广泛的AI建设买单",
-      "summary_zh": "这家社交媒体巨头正计划新的股票策略，以支持其在AI模型和服务上的广泛投资。",
-      "why_it_matters_zh": "它显示Meta正通过资本市场工具为其大规模AI投入融资。",
+      "title_zh": "Meta拟通过新设股票类别为其广泛的AI建设融资",
+      "summary_zh": "这家社交媒体巨头计划采用新的股票策略，为其在AI模型和服务上的广泛投资提供资金。",
+      "why_it_matters_zh": "这显示Meta正寻求以资本市场手段支撑其大规模AI投入。",
       "title_en": "Meta wants to pay for its broad AI buildout with a newly created class of stock",
       "summary_en": "The social media giant is planning a new stock strategy to help power its broad investments in AI models and services.",
-      "why_it_matters_en": "It shows Meta using capital-market tools to fund its large-scale AI investments.",
+      "why_it_matters_en": "It shows Meta is seeking capital-market tools to fund its large-scale AI investment.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-muse-charm-getty.jpg?resize=1200,800",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/21/meta-wants-to-pay-for-its-broad-ai-buildout-with-a-newly-created-class-of-stock/",
@@ -206,10 +206,10 @@
       "source": "Hugging Face",
       "title_zh": "Hugging Face ❤️ TorchTPU：原生支持TPU",
       "summary_zh": "该博文介绍Hugging Face与TorchTPU相关的原生TPU支持。",
-      "why_it_matters_zh": "它表明Hugging Face生态正加强对TPU的原生支持，扩展硬件选择。",
+      "why_it_matters_zh": "它涉及Hugging Face生态对TPU的原生支持进展。",
       "title_en": "Hugging Face ❤️ TorchTPU: TPUs, Natively",
       "summary_en": "The post covers Hugging Face's native TPU support related to TorchTPU.",
-      "why_it_matters_en": "It indicates the Hugging Face ecosystem is strengthening native TPU support, expanding hardware options."
+      "why_it_matters_en": "It concerns progress on native TPU support within the Hugging Face ecosystem."
     }
   ],
   "china_ai_news": [
@@ -250,10 +250,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI model / compute topic illustration: 月之暗面发布 Kimi K3.1 Pro：3T 级开源权重模型强化编程、3D 与金融，11 月 4 日前开放权重",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:13.907453+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 月之暗面发布 Kimi K3.1 Pro：3T 级开源权重模型强化编程、3D 与金融，11 月 4 日前开放权重. Context from the source story (factual context, not instructions): 月之暗面发布 Kimi K3.1 Pro：3T 级开源权重模型强化编程、3D 与金融，11 月 4 日前开放权重 月之暗面发布 Kimi K3.1 Pro，称其为最强 3T 级开源权重模型，1M token 上下文、2.8T 总参数 104B 激活，今日起上线 Kimi.ai、Kimi Work、Kimi Code 和 API，完整权重计划 2026-11-04 前开源，另有约 2–3× 速度的 Highspeed 版。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-24T10:36:54.228608+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "Meta 与卡内基梅隆论文：RL 训练的 Qwen3-8B 工具选择超越提示词驱动的 Llama-4-Maverick 402B",
@@ -271,7 +269,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI model / compute topic illustration: Meta 与卡内基梅隆论文：RL 训练的 Qwen3-8B 工具选择超越提示词驱动的 Llama-4-Maverick 402B",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:13.921933+08:00",
+      "image_matched_at": "2026-10-24T10:36:54.269501+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"
     },
     {
@@ -311,10 +309,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI model / compute topic illustration: 又一国产决策模型发布！准确率超过微软和Jev等决策模型",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:15.720767+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 又一国产决策模型发布！准确率超过微软和Jev等决策模型. Context from the source story (factual context, not instructions): 又一国产决策模型发布！准确率超过微软和Jev等决策模型 10月22日，蚂蚁数科正式发布决策模型 LingDT-Decision-1.0。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-24T10:36:54.309511+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "LeCun押注的世界模型，中国一家清华系公司已经做进了机器人",
@@ -332,10 +328,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI agent / robotics topic illustration: LeCun押注的世界模型，中国一家清华系公司已经做进了机器人",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:18.326555+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: LeCun押注的世界模型，中国一家清华系公司已经做进了机器人. Context from the source story (factual context, not instructions): LeCun押注的世界模型，中国一家清华系公司已经做进了机器人 世界模型赛道新看点：千诀隐变量可辨识性方向的研究，比LeCun相近工作早一年，不堆画面预测，主打物理规律与跨本体复用。 具身智能与智能终端. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-24T10:36:54.836838+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "Artificial Analysis 评测 Kimi K3.1 Pro：知识工作与编码领先，AA-3D 或排名靠后",
@@ -353,10 +347,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI agent / robotics topic illustration: Artificial Analysis 评测 Kimi K3.1 Pro：知识工作与编码领先，AA-3D 或排名靠后",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:19.490428+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Artificial Analysis 评测 Kimi K3.1 Pro：知识工作与编码领先，AA-3D 或排名靠后. Context from the source story (factual context, not instructions): Artificial Analysis 评测 Kimi K3.1 Pro：知识工作与编码领先，AA-3D 或排名靠后 Artificial Analysis 评测 Kimi K3.1 Pro，称其在 GDPval-AA 和 Terminal-Bench 4.0 的智能体知识工作与编码中处于领先行列。其 AA-3D 的偏好投票仍在收集中，前代 Kimi K3 在该基准 22 个模型中排第 12；文中展示了其生成的 492 m 山地车下坡 3D 场景，演示可随时接管转向、踩踏和刹车。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-24T10:36:54.918142+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板",
@@ -374,10 +366,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI agent / robotics topic illustration: 量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-24T10:29:21.293069+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板. Context from the source story (factual context, not instructions): 量智齐飞！4个月9款车落地，轻舟城市NOA击穿10-20万体验天花板 百万台搭载打底，智驾普及与安全并重 具身智能与智能终端. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-24T10:36:55.047368+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82"
     }
   ],
   "historical_dedupe": {
@@ -896,8 +886,8 @@
       "name": "calesthio/OpenMontage",
       "url": "https://github.com/calesthio/OpenMontage",
       "description": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
-      "stars": 71199,
-      "updated": "2026-10-24T02:15:41Z",
+      "stars": 71203,
+      "updated": "2026-10-24T02:33:23Z",
       "language": "Python",
       "topics": [
         "agent",
@@ -915,30 +905,45 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-10-24T10:25:47.630732+08:00",
+        "checked_at": "2026-10-24T10:33:51.210628+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/calesthio/openmontage",
-      "stars_total": 71199,
+      "stars_total": 71203,
       "stars_delta_7d": null,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": null,
       "growth_baseline_30d_date": null,
       "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
       "license_name": "GNU Affero General Public License v3.0",
-      "forks_total": 9215,
+      "forks_total": 9216,
       "pushed_at": "2026-10-24T00:49:34Z",
       "created_at": "2026-03-29T15:23:22Z",
       "open_issues_total": 406,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-10-24T10:25:56.685164+08:00",
+      "evidence_checked_at": "2026-10-24T10:34:04.211443+08:00",
       "evidence_urls": [
         "https://github.com/calesthio/OpenMontage",
         "https://api.github.com/repos/calesthio/OpenMontage/readme"
       ],
       "quality_status": "PASS",
       "skill_type": "skill_pack",
+      "actual_skill_file_count": 140,
+      "skill_file_paths": [
+        ".agents/skills/3d-asset-generation/SKILL.md",
+        ".agents/skills/acestep/SKILL.md",
+        ".agents/skills/agents/SKILL.md",
+        ".agents/skills/ai-video-gen/SKILL.md",
+        ".agents/skills/atlas-cloud/SKILL.md",
+        ".agents/skills/avatar-video/SKILL.md",
+        ".agents/skills/azure-speech-to-text/SKILL.md",
+        ".agents/skills/azure-text-to-speech/SKILL.md",
+        ".agents/skills/beautiful-mermaid/SKILL.md",
+        ".agents/skills/bfl-api/SKILL.md",
+        ".agents/skills/canvas-procedural-animation/SKILL.md",
+        ".agents/skills/character-animation-qa/SKILL.md"
+      ],
       "novelty_status": "new",
       "aliases": [
         "calesthio/OpenMontage",
@@ -970,7 +975,10 @@
       "security_status": "未完成专项安全审计",
       "recommendation_type": "成熟实用",
       "user_feedback": [],
-      "description_zh": "号称全球首个开源、智能体驱动的视频制作系统，含12条制作流水线、100多个工具、700多个智能体技能与制作知识文件，可把AI编程助手变成完整的视频制作工作室。",
+      "rare_value_verified": true,
+      "rare_value_reason": "Distinct documented capability: video + production; actual SKILL.md files, README and license verified. This is a use-case distinction, not a claim of global uniqueness.",
+      "rare_value_evidence_url": "https://api.github.com/repos/calesthio/OpenMontage/readme",
+      "description_zh": "号称全球首个开源、智能体驱动的视频制作系统，包含12条制作流水线、100多个工具、700多个智能体技能与制作知识文件，可将AI编码助手变成完整的视频制作工作室。",
       "description_en": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio."
     },
     {
@@ -996,7 +1004,7 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-10-24T10:25:47.630768+08:00",
+        "checked_at": "2026-10-24T10:33:51.210653+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/othmanadi/planning-with-files",
@@ -1013,13 +1021,28 @@
       "open_issues_total": 13,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-10-24T10:25:57.121170+08:00",
+      "evidence_checked_at": "2026-10-24T10:34:05.397993+08:00",
       "evidence_urls": [
         "https://github.com/OthmanAdi/planning-with-files",
         "https://api.github.com/repos/OthmanAdi/planning-with-files/readme"
       ],
       "quality_status": "PASS",
       "skill_type": "skill_pack",
+      "actual_skill_file_count": 18,
+      "skill_file_paths": [
+        ".agents/skills/planning-with-files/SKILL.md",
+        ".codebuddy/skills/planning-with-files/SKILL.md",
+        ".codex/skills/planning-with-files/SKILL.md",
+        ".continue/skills/planning-with-files/SKILL.md",
+        ".cursor/skills/planning-with-files/SKILL.md",
+        ".factory/skills/planning-with-files/SKILL.md",
+        ".gemini/skills/planning-with-files/SKILL.md",
+        ".hermes/skills/planning-with-files/SKILL.md",
+        ".kiro/skills/planning-with-files/SKILL.md",
+        ".mastracode/skills/planning-with-files/SKILL.md",
+        ".opencode/skills/planning-with-files/SKILL.md",
+        ".pi/skills/planning-with-files/SKILL.md"
+      ],
       "novelty_status": "new",
       "aliases": [
         "OthmanAdi/planning-with-files",
@@ -1051,15 +1074,18 @@
       "security_status": "未完成专项安全审计",
       "recommendation_type": "成熟实用",
       "user_feedback": [],
-      "description_zh": "为AI编程智能体和长时任务提供基于文件的持久化规划：防崩溃的Markdown计划、/clear与压缩后的会话恢复、每轮重新注入以对抗上下文腐化、确定性完成门控，支持从npm、Claude Code插件市场或npx skills安装，兼容Codex、Cursor、OpenCode等60多个智能体。",
-      "description_en": "Persistent file-based planning for AI coding agents and long-running tasks. Crash-proof markdown plans, session recovery after /clear and compaction, per-turn re-injection against context rot, deterministic completion gate. Manus-style. Install from npm, the Claude Code plugin marketplace, or npx skills. Codex, Cursor, OpenCode, 60+ agents."
+      "rare_value_verified": true,
+      "rare_value_reason": "Distinct documented capability: persistent + planning; actual SKILL.md files, README and license verified. This is a use-case distinction, not a claim of global uniqueness.",
+      "rare_value_evidence_url": "https://api.github.com/repos/OthmanAdi/planning-with-files/readme",
+      "description_zh": "面向AI编码智能体和长时任务的持久化文件式规划，提供防崩溃的Markdown计划、/clear与压缩后的会话恢复、逐轮重注入以对抗上下文腐化，以及确定性完成门控。",
+      "description_en": "Persistent file-based planning for AI coding agents and long-running tasks. Crash-proof markdown plans, session recovery after /clear and compaction, per-turn re-injection against context rot, deterministic completion gate."
     },
     {
       "name": "tt-a1i/archify",
       "url": "https://github.com/tt-a1i/archify",
       "description": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more.",
-      "stars": 88315,
-      "updated": "2026-10-24T02:22:29Z",
+      "stars": 88318,
+      "updated": "2026-10-24T02:33:13Z",
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -1077,11 +1103,11 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-10-24T10:25:47.630817+08:00",
+        "checked_at": "2026-10-24T10:33:51.210690+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/tt-a1i/archify",
-      "stars_total": 88315,
+      "stars_total": 88318,
       "stars_delta_7d": null,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": null,
@@ -1094,13 +1120,21 @@
       "open_issues_total": 290,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-10-24T10:25:56.197262+08:00",
+      "evidence_checked_at": "2026-10-24T10:34:02.834342+08:00",
       "evidence_urls": [
         "https://github.com/tt-a1i/archify",
         "https://api.github.com/repos/tt-a1i/archify/readme"
       ],
       "quality_status": "PASS",
       "skill_type": "skill_pack",
+      "actual_skill_file_count": 5,
+      "skill_file_paths": [
+        ".agents/skills/archify-review/SKILL.md",
+        ".agents/skills/archify-tuning/SKILL.md",
+        ".agents/skills/simplify-codebase/SKILL.md",
+        ".agents/skills/test-value/SKILL.md",
+        "archify/SKILL.md"
+      ],
       "novelty_status": "new",
       "aliases": [
         "tt-a1i/archify",
@@ -1132,13 +1166,16 @@
       "security_status": "未完成专项安全审计",
       "recommendation_type": "成熟实用",
       "user_feedback": [],
-      "description_zh": "把任何想法、计划或代码库转化为美观的交互式图表，是适用于Claude Code、Codex等的智能体技能。",
+      "rare_value_verified": true,
+      "rare_value_reason": "Distinct documented capability: interactive + diagram; actual SKILL.md files, README and license verified. This is a use-case distinction, not a claim of global uniqueness.",
+      "rare_value_evidence_url": "https://api.github.com/repos/tt-a1i/archify/readme",
+      "description_zh": "将任何想法、计划或代码库转化为美观的交互式图表，是适用于Claude Code、Codex等的智能体技能。",
       "description_en": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more."
     }
   ],
   "skill_radar": {
     "status": "PASS",
-    "engine_version": "2026.10.24.3",
+    "engine_version": "2026.10.24.4",
     "discovery_sources": {
       "github_repository_search": "available",
       "hacker_news": {
@@ -1147,13 +1184,13 @@
         "query_count": 3,
         "window_days": 7
       },
-      "github_candidate_count": 209
+      "github_candidate_count": 195
     },
     "growth_snapshots": {
       "status": "baseline_started",
       "historical_snapshots_read": 0,
       "historical_errors": [],
-      "candidate_count": 209,
+      "candidate_count": 195,
       "candidates_with_7d_delta": 0,
       "candidates_with_30d_delta": 0
     },
@@ -1167,7 +1204,7 @@
       "errors": [],
       "records": 80
     },
-    "candidate_count": 209,
+    "candidate_count": 195,
     "history_duplicate_exclusions": [
       {
         "name": "affaan-m/ECC",
@@ -1225,25 +1262,14 @@
         }
       },
       {
-        "name": "justhandledlabs/agent-skills",
-        "url": "https://github.com/justhandledlabs/agent-skills",
-        "reason": "90-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-23",
-          "name": "justhandledlabs/agent-skills",
-          "url": "https://github.com/justhandledlabs/agent-skills"
-        }
-      },
-      {
-        "name": "obra/superpowers",
-        "url": "https://github.com/obra/superpowers",
+        "name": "Graphify-Labs/graphify",
+        "url": "https://github.com/Graphify-Labs/graphify",
         "reason": "90-day history duplicate; no verified material release",
         "match": {
           "kind": "canonical_id",
           "history_date": "2026-10-16",
-          "name": "obra/superpowers",
-          "url": "https://github.com/obra/superpowers"
+          "name": "Graphify-Labs/graphify",
+          "url": "https://github.com/Graphify-Labs/graphify"
         }
       },
       {
@@ -1258,14 +1284,25 @@
         }
       },
       {
-        "name": "Graphify-Labs/graphify",
-        "url": "https://github.com/Graphify-Labs/graphify",
+        "name": "mattpocock/skills",
+        "url": "https://github.com/mattpocock/skills",
         "reason": "90-day history duplicate; no verified material release",
         "match": {
           "kind": "canonical_id",
           "history_date": "2026-10-16",
-          "name": "Graphify-Labs/graphify",
-          "url": "https://github.com/Graphify-Labs/graphify"
+          "name": "mattpocock/skills",
+          "url": "https://github.com/mattpocock/skills"
+        }
+      },
+      {
+        "name": "obra/superpowers",
+        "url": "https://github.com/obra/superpowers",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "obra/superpowers",
+          "url": "https://github.com/obra/superpowers"
         }
       },
       {
@@ -1277,17 +1314,6 @@
           "history_date": "2026-10-16",
           "name": "JuliusBrussee/caveman",
           "url": "https://github.com/JuliusBrussee/caveman"
-        }
-      },
-      {
-        "name": "mattpocock/skills",
-        "url": "https://github.com/mattpocock/skills",
-        "reason": "90-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-16",
-          "name": "mattpocock/skills",
-          "url": "https://github.com/mattpocock/skills"
         }
       },
       {
@@ -1465,39 +1491,6 @@
           "name": "Yugpat1835/awesome-copilot-cowork-skills",
           "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills"
         }
-      },
-      {
-        "name": "mexin/qa-agent-skill",
-        "url": "https://github.com/mexin/qa-agent-skill",
-        "reason": "90-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-23",
-          "name": "mexin/qa-agent-skill",
-          "url": "https://github.com/mexin/qa-agent-skill"
-        }
-      },
-      {
-        "name": "JuanMarchetto/agent-skills",
-        "url": "https://github.com/JuanMarchetto/agent-skills",
-        "reason": "90-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-23",
-          "name": "JuanMarchetto/agent-skills",
-          "url": "https://github.com/JuanMarchetto/agent-skills"
-        }
-      },
-      {
-        "name": "magallon/testing-toolkit",
-        "url": "https://github.com/magallon/testing-toolkit",
-        "reason": "90-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-23",
-          "name": "magallon/testing-toolkit",
-          "url": "https://github.com/magallon/testing-toolkit"
-        }
       }
     ],
     "verification_failures": [
@@ -1507,31 +1500,30 @@
         "reason": "repository/license/README verification failed"
       },
       {
+        "name": "Lucewalk/lucewalk-experts",
+        "url": "https://github.com/Lucewalk/lucewalk-experts",
+        "reason": "repository/license/README verification failed"
+      },
+      {
         "name": "sEbas12312nft/awesome-copilot",
         "url": "https://github.com/sEbas12312nft/awesome-copilot",
         "reason": "repository/license/README verification failed"
       }
     ],
     "selected_count": 3,
-    "excluded_count": 37,
+    "excluded_count": 34,
     "excluded": [
       {
         "name": "ayghri/i-have-adhd",
         "url": "https://github.com/ayghri/i-have-adhd",
-        "reason": "category_saturation",
-        "category": "软件工程与测试"
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 72.2
       },
       {
         "name": "RealTask/MAX-DESIGN",
         "url": "https://github.com/RealTask/MAX-DESIGN",
         "reason": "score_below_70_or_invalid",
         "score": 66.4
-      },
-      {
-        "name": "helmut-hoffer-von-ankershoffen/heinzel",
-        "url": "https://github.com/helmut-hoffer-von-ankershoffen/heinzel",
-        "reason": "score_below_70_or_invalid",
-        "score": 64.8
       },
       {
         "name": "JuanColoradoV/pd-design-team",
@@ -1544,6 +1536,12 @@
         "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills",
         "reason": "score_below_70_or_invalid",
         "score": 61.9
+      },
+      {
+        "name": "cognizhi/fyniq",
+        "url": "https://github.com/cognizhi/fyniq",
+        "reason": "score_below_70_or_invalid",
+        "score": 59.5
       }
     ],
     "scoring_model": {
@@ -1573,8 +1571,8 @@
   "ai_analysis": {
     "status": "ok",
     "provider": "DeepSeek via Horizon",
-    "generated_at": "2026-10-24T10:28:49.541365+08:00",
-    "summary_markdown": "# Horizon 每日速递 - 2026-10-24\n\n> 从 13 条内容中筛选出 4 条重要资讯。\n\n---\n\n**科技新闻**\n1. [博客称攻破 iPhone，社区讨论 Lockdown Mode 与 AI 红队门槛](#item-tech-news-1) ⭐️ 8.0/10\n2. [Dessa 公布全双工语音模型，称可在 MacBook 本地运行](#item-tech-news-2) ⭐️ 7.0/10\n3. [Kimi K3.1 Pro 上线 API，承诺 11 月 4 日前开放权重](#item-tech-news-3) ⭐️ 7.0/10\n4. [CVE Tracker 看板引发 CVE 数量激增讨论](#item-tech-news-4) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [博客称攻破 iPhone，社区讨论 Lockdown Mode 与 AI 红队门槛](https://blog.calif.io/p/iphone) ⭐️ 8.0/10\n\n一篇博客文章声称“今天攻破了原本要攻破的目标：iPhone”，相关内容围绕漏洞利用演示展开；但公开条目未给出受影响 iOS 版本、漏洞编号、完整利用链或独立复现结果，因此这仍是发布方的主张，尚不能视为已核实的能力。对 iOS 用户和移动安全研究者来说，目前可以确认的是攻破演示及讨论已经公开，实际适用范围和前置条件仍不明确。\n\nhackernews · pavel\\_lishin · 10月23日 16:21 · [社区讨论](https://news.ycombinator.com/item?id=50211474)\n\n**「背景」** iOS 越狱的核心是绕过系统代码签名与沙盒限制、取得 root 级控制；Lockdown Mode 则是苹果为高风险用户提供的可选加固模式，会收紧消息附件、网页渲染等攻击面。Calif 团队此前公开演示过绕过苹果 MIE（macOS 26.4.1）的利用，并在 Hexacon 上展示过针对 iOS 27.0.1 与 iPhone 18 Pro 的非 tethered 越狱，为理解此次 iPhone 演示提供了直接脉络。\n\n**「社区讨论」** 有评论者追问 Lockdown Mode 对这类利用是否真正有效，也有人担心越狱后 Apple 会检测并限制 iCloud、iMessage 等服务；另有评论者批评前沿模型的“红队”访问只向内部圈子开放，令外部安全研究者难以参与。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.explainx.ai/blog/calif-io-ios-27-0-1-untethered-jailbreak-iphone-18-pro-hexacon-ai-claimed-vs-verified-2026\">iOS 27.0.1 Untethered Jailbreak: AI Role Checked (2026 ...</a></li>\n<li><a href=\"https://blog.calif.io/\">Calif Newsletter | Substack</a></li>\n\n</ul>\n</details>\n\n**标签**: `#iPhone security`, `#exploit research`, `#AI red teaming`, `#jailbreaking`, `#vulnerability disclosure`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [Dessa 公布全双工语音模型，称可在 MacBook 本地运行](https://block.xyz/dessa) ⭐️ 7.0/10\n\nblock.xyz 公布了一个名为 Dessa 的全双工语音模型，宣称具备低延迟、富有表现力的对话能力，并可在 MacBook Pro M4 Max 或更高配置的机器上本地运行。该页面还称，团队只用了单台 NVIDIA GB200 NVL72 就完成了训练，并以“史上最真实的全双工语音模型”作为标题。上述性能与训练规模均为发布方说法，目前没有独立评测或可核实的细节，标题措辞本身也属于营销表述。\n\nhackernews · dsr12 · 10月23日 19:09 · [社区讨论](https://news.ycombinator.com/item?id=50213925)\n\n**「背景」** 主流语音助手普遍采用“轮流发言”（turn-taking）模式：模型必须等用户说完一句后才开始回应，因此很难自然处理打断、附和以及双方同时说话的情况。Block 所说的全双工（full-duplex）则指模型边听边说，能在同一时刻接收输入并生成语音，而不必等待对方把话说完。\n\n**「影响」** 如果这些说法成立，开发者就能在没有云端推理的情况下，在本机获得实时双向语音对话；但本地运行的门槛被明确设定为 MacBook Pro M4 Max 或更高配置，较旧的 Mac 和普通笔记本被排除在外。在权重、许可证和实际延迟数据公布之前，团队无法据此做部署规划。\n\n**「社区讨论」** 有评论者对“本地运行 + 单台 GB200 NVL72 训练”的组合表示惊讶，认为若真能复现这种低延迟与表现力，对小型团队而言是不小的成果。另一些评论者则质疑演示的人为感：有人指出模型被训练成频繁打断对方，第一个示例中“winter”之后的 AI 笑声并不自然；也有人批评“最真实”这类夸张标题不该靠改标题上首页，并推测训练数据大量来自播客。还有评论认为该模型本身推理能力有限，语音之外的价值不大。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://aitoolsrecap.com/Blog/block-dessa-voice-model-trained-only-on-speech-2026\">Block&#x27;s Dessa Learned to Talk Without Reading Any Text</a></li>\n\n</ul>\n</details>\n\n**标签**: `#speech models`, `#full-duplex dialogue`, `#local inference`, `#AI systems`, `#model training`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [Kimi K3.1 Pro 上线 API，承诺 11 月 4 日前开放权重](https://simonwillison.net/2026/Oct/23/kimi-k31-pro/) ⭐️ 7.0/10\n\nMoonshot 于 10 月 23 日将 Kimi K3.1 Pro 上线 Kimi API，输入定价为每百万 token 2 美元、输出 10 美元，与 GPT-6.1 Sol 相同，是 Claude Opus 5.5 的一半。同步提供的 Highspeed 版本速度提升 2–3 倍，价格翻倍，但输入 token 缓存命中的价格不变。模型目前尚未开放权重，Moonshot 承诺在 11 月 4 日前发布完整权重。Artificial Analysis 给该模型 55 分，低于 Claude Opus 5.5 的 58 分，高于 Claude Fable 5.1、GPT-6 Astra 和 Gemini 4 Argon 的 53 分；Moonshot 自测则称其与 Opus 5.5 和 GPT-6 Astra 大致相当。\n\nrss · Simon Willison · 10月23日 19:40\n\n**「背景」** 开放权重指模型训练后的参数可以被下载并自行部署，而不是只能通过厂商的托管 API 调用；这是区分“已发布”与“承诺发布”的关键。Artificial Analysis 的综合评分是第三方聚合指标，与厂商自报的基准结果不是同一类证据。\n\n**「影响」** 希望自托管的团队目前还无法使用该模型：在 Moonshot 兑现 11 月 4 日的权重发布承诺前，无法验证可下载权重、许可证条款或本地部署表现。\n\n**「社区讨论」** Hacker News 评论中，一名用户报告其 99 美元/月订阅在一次会话中 47 分钟内就触发了 5 小时配额上限，提醒订阅额度可能与预期不符。另有用户称 Kimi 的回答比美国模型更直白、好辩，也有人质疑 Moonshot 不把最高网络攻防能力放入开放权重的说法。\n\n**标签**: `#llm-release`, `#moonshot-ai`, `#kimi`, `#ai-benchmarks`, `#model-pricing`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [CVE Tracker 看板引发 CVE 数量激增讨论](https://cve.0xosprey.com/) ⭐️ 6.0/10\n\nHacker News 上分享了一个 CVE 跟踪看板，但原帖未提供其数据来源、统计方法或功能说明，能够确认的只是该看板被公开分享。围绕它的讨论集中在 CVE 数量近两年急升的原因：评论者把 GitHub 与 Linux 内核成为独立 CNA、申报门槛下降列为主要因素，并援引关键 CVE 增长更快的筛选结果；这些均为社区说法，未经过独立验证。\n\nhackernews · Group\\_B · 10月23日 21:21 · [社区讨论](https://news.ycombinator.com/item?id=50215530)\n\n**「背景」** CNA（CVE 编号机构）是获 CVE Program 授权、可自行分配 CVE 编号的组织。Linux 内核在 2024 年初成为 CNA，可直接处理内核相关漏洞编号；此后内核 CVE 的产出方式发生变化，发布量也明显上升。\n\n**「对漏洞管理的影响」** 对用该看板判断漏洞趋势的团队来说，评论者指出它没有严重性筛选，单看 CVE 总量会把申报门槛下降带来的低影响条目一并放大；同一讨论引用的数据还称，关键 CVE 约为 2020 年的 25 倍，而全部 CVE 约为 5 倍。依赖 CVE 数量排优先级的组织需要另行核对严重性和实际暴露面，而不能把总量直接当作处置依据。\n\n**「社区讨论」** 评论者认为，GitHub 于 2024 年中、Linux 内核于 2025 年中成为独立 CNA 后，自动化和更低的申报门槛让过去不会申报的小问题也能获得 CVE，一位开发者称自己的 Obsidian 插件就因 Beta 版路径正则问题被分配 CVE。另一位评论者称，按严重性筛选后关键 CVE 约为 2020 年的 25 倍，而全部 CVE 约为 5 倍；还有用户报告站点的对数坐标切换无效并导致页面卡死。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://openssf.org/blog/2024/02/14/linux-kernel-achieves-cve-numbering-authority-status/\">Linux Kernel Achieves CVE Numbering Authority Status</a></li>\n<li><a href=\"https://github.com/cloud-lts/linux-cve-analysis\">GitHub - cloud-lts/linux-cve-analysis</a></li>\n\n</ul>\n</details>\n\n**标签**: `#CVE`, `#cybersecurity`, `#vulnerability management`, `#data visualization`\n\n---",
+    "generated_at": "2026-10-24T10:36:33.102328+08:00",
+    "summary_markdown": "# Horizon 每日速递 - 2026-10-24\n\n> 从 13 条内容中筛选出 4 条重要资讯。\n\n---\n\n**科技新闻**\n1. [Kimi K3.1 Pro 上线 API，承诺 11 月 4 日开放权重](#item-tech-news-1) ⭐️ 8.0/10\n2. [calif.io 博客称已攻破 iPhone，引发越狱与安全准入讨论](#item-tech-news-2) ⭐️ 7.0/10\n3. [Google 或将以 Gmail 与 Google Photos 数据定向广告](#item-tech-news-3) ⭐️ 6.0/10\n4. [Dessa: the most authentic full-duplex speech model ever built](#item-tech-news-4) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [Kimi K3.1 Pro 上线 API，承诺 11 月 4 日开放权重](https://simonwillison.net/2026/Oct/23/kimi-k31-pro/) ⭐️ 8.0/10\n\nMoonshot 已在 Kimi API 上线 Kimi K3.1 Pro，但目前尚未开放权重，承诺最迟在 2026 年 11 月 4 日发布完整模型权重。API 价格为每百万输入 token 2 美元、每百万输出 token 10 美元，与 GPT-6.1 Sol 相同，是 Claude Opus 5.5 的一半；另有 Highspeed 版本，速度为标准版的 2–3 倍、价格翻倍，但输入缓存命中价格不变。Moonshot 自测称其大致与 Opus 5.5 和 GPT-6 Astra 持平；Artificial Analysis 给出 55 分，高于 Claude Fable 5.1、GPT-6 Astra 和 Gemini 4 Argon 的 53 分，低于 Opus 5.5 的 58 分。Simon Willison 称这是首个（即将）开放权重的模型在对前沿模型的评分中达到这一水平，并用 LLM 0.32 的 OpenAI 兼容端点做了测试。\n\nrss · Simon Willison · 10月23日 19:40\n\n**「背景」** Kimi K3.1 Pro 是 Moonshot Kimi 系列中 Kimi K3 的后续版本；原文作者用相同的“骑自行车鹈鹕”SVG 提示词，在低、中、max 三档推理强度下分别测试 K3.1 Pro 与 K3，作为版本间对比。该模型通过 Kimi API 提供，并可用 OpenAI 兼容端点调用，这也是作者能直接用 LLM 0.32 的 \\`llm openai endpoint\\` 进行试用的前提。\n\n**「影响」** 对需要自托管或权重审计的团队，当前只能通过 API 调用，必须等到 Moonshot 兑现最迟 2026 年 11 月 4 日发布完整权重的承诺；作者已用 LLM 0.32 的 OpenAI 兼容端点成功调用 Moonshot API，表明可通过 OpenAI 兼容端点接入。\n\n**「社区讨论」** HN 评论中，一名用户报告其 99 美元/月订阅在单次会话 47 分钟内触发了 5 小时配额上限，提醒订阅额度可能低于预期；另一名评论者注意到 Moonshot 表示 K3.1 Pro 的网络攻击能力刻意低于其管线可达到的水平，并计划逐步提高开放权重中的这项能力。\n\n**标签**: `#AI models`, `#Moonshot AI`, `#Kimi K3.1 Pro`, `#LLM pricing`, `#benchmarks`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [calif.io 博客称已攻破 iPhone，引发越狱与安全准入讨论](https://blog.calif.io/p/iphone) ⭐️ 7.0/10\n\ncalif.io 博客发布了一篇题为《今天我们攻破了原本打算攻破的目标：iPhone》的文章，记录了一次 iPhone 漏洞利用研究演示；该文在 Hacker News 上引发大量讨论。由于提供的材料中没有文章正文，攻击所针对的 iOS 版本、漏洞类型、是否构成完整利用链，以及苹果是否回应等关键细节都无法确认；因此它目前只能算研究者的演示性声明，而不是经过独立验证的结果。\n\nhackernews · pavel\\_lishin · 10月23日 16:21 · [社区讨论](https://news.ycombinator.com/item?id=50211474)\n\n**「背景」** Calif 团队在巴黎 Hexacon 安全会议上展示了一系列针对 iPhone 的攻击演示，并声称攻破了这部设备。理解这类演示时，需要区分“展示一条可利用的漏洞链”和“提供稳定的越狱”：前者证明某些漏洞可以被组合利用，后者还涉及代码签名、持久化以及系统更新等限制；目前材料没有给出受影响的 iOS 版本或具体漏洞细节。\n\n**「复现门槛与未解的防护疑问」** 对打算复现这些演示的人来说，最直接的限制来自设备与账号的绑定：有评论者指出，一旦越狱被 Apple 检测到，iCloud、iMessage 等服务可能被切断，手机将退化成类似 iPod touch 的设备，因此不宜在主用机上尝试。另一个尚未回答的问题是对普通用户的实际防护意义——有评论者追问开启 Lockdown 模式能否挡住这类利用链，但所给材料并未给出相关测试结论。\n\n**「社区讨论」** 评论者主要追问实际防护和可用性：jeroenhd 想知道 Lockdown 模式面对这类漏洞利用在真实环境中有多大效果，slowin 则希望获得手机的 root 权限，并询问这种改动是否会阻止苹果推送更新或移除它。jinseokim 认为，前沿模型只向少数“红队”成员或公司开放，使“可信网络访问”计划更像竞争壁垒而非安全防护；reacharavindh 则抱怨生态锁定：即使越狱并拒绝更新，苹果仍可能检测到越狱，并切断 iCloud、iMessage 等服务。这些都属于个人观点与期待，而非已证实的事实。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://blog.calif.io/p/iphone\">iPhone - Calif Newsletter</a></li>\n<li><a href=\"https://zeli.app/story/50211474\">Calif hackers claim a full iPhone · Hacker News | Zeli</a></li>\n\n</ul>\n</details>\n\n**标签**: `#iPhone security`, `#exploit research`, `#jailbreaking`, `#AI security`, `#security access policy`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [Google 或将以 Gmail 与 Google Photos 数据定向广告](https://www.theverge.com/tech/1017600/google-personal-intelligence-privacy-policy-ads-update) ⭐️ 6.0/10\n\n据 The Verge 报道，Google 一项隐私政策更新可能允许 Gmail 和 Google Photos 的数据用于个性化广告，但这取决于用户是否选择将这些服务的数据开放给其他支持个性化广告的 Google 服务。该报道将变化限定在“关联服务”设置之下，并非无条件直接读取；现有信息尚未完整说明该政策的生效范围和具体适用条件。\n\nhackernews · JustSkyfall · 10月23日 19:34 · [社区讨论](https://news.ycombinator.com/item?id=50214218)\n\n**「背景」** Google 此前一直承诺不会将 Gmail、Drive 和 Google Photos 中的数据用于个性化广告，而此次隐私政策更新为这一承诺增加了例外条款。据 9to5Google 报道，Personal Intelligence 于今年年初开始以 beta 形式推出，它允许 Gemini 在 Gmail、Photos、Search、Drive 等应用之间共享数据；一旦用户开启该功能，相关数据便可能被纳入广告定向。\n\n**「影响取决于联动设置」** 对用户而言，报道所述广告数据使用并非无条件生效：只有把 Gmail、Google Photos 等数据开放给支持个性化广告的其他 Google 服务时，才可能影响广告定向，因此应检查并关闭不需要的联动与广告个性化设置。欧盟用户还可依据 DMA 的联动服务选择，限制跨服务合并个人数据用于广告，除非给出明确同意。\n\n**「社区讨论」** 评论中，zmmmmm 强调这一变化以用户主动把数据开放给支持个性化广告的其他 Google 服务为前提，并非无条件读取 Gmail 和 Photos；accrual 则怀疑“可能”实际上等于“一定会”。actapp80 引用欧盟《数字市场法》（DMA）说明欧盟用户可逐项选择是否关联服务，JumpCrisscross 和 jmathai 分别给出了关闭搜索个性化设置以及用 Google Takeout 和 Immich 迁出照片的实用路径。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.theverge.com/tech/1017600/google-personal-intelligence-privacy-policy-ads-update\">Now Google says it might use your Gmail and Google Photos ...</a></li>\n<li><a href=\"https://arstechnica.com/gadgets/2026/10/updated-google-privacy-policy-says-your-gmail-might-be-used-for-advertising/\">Updated Google privacy policy says your Gmail might be used ...</a></li>\n<li><a href=\"https://9to5google.com/2026/10/23/google-will-target-ads-based-on-gmail-photos-data-if-personal-intelligence-is-enabled/\">Google will target ads based on Gmail, Photos data if ...</a></li>\n<li><a href=\"https://www.consentscout.com/articles/digital-markets-act-ad-personalisation\">The Digital Markets Act: what it means for ad personalisation</a></li>\n<li><a href=\"https://support.google.com/chrome/answer/14202510?hl=en-GB\">About DMA and your linked services - Google Chrome Help</a></li>\n\n</ul>\n</details>\n\n**标签**: `#privacy`, `#Google`, `#targeted advertising`, `#data policy`, `#consumer tech`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [Dessa: the most authentic full-duplex speech model ever built](https://block.xyz/dessa) ⭐️ 6.0/10\n\nDessa is a new full-duplex speech model claiming expressive low-latency conversation, local MacBook inference, and efficient single-GB200 training, though the claims remain largely unverified and marketing-framed.\n\nhackernews · dsr12 · 10月23日 19:09 · [社区讨论](https://news.ycombinator.com/item?id=50213925)\n\n**标签**: `#full-duplex speech`, `#speech synthesis`, `#on-device AI`, `#model training efficiency`, `#Hacker News`\n\n---",
     "summary_markdown_en": "",
     "summary_source": "Horizon daily digest; source URLs are included where available."
   },
@@ -1583,31 +1581,31 @@
       "source_index": 0,
       "title_zh": "OpenAI称将不再用实时互联网训练其AI模型，理由是“重大风险”",
       "title_en": "OpenAI says it will no longer train its AI models on the live internet, citing \"significant risks\"",
-      "category_zh": "技术突破/Technical Breakthrough",
-      "category_en": "Technical Breakthrough",
-      "what_zh": "据TechCrunch报道，OpenAI表示将让前沿模型与互联网隔离，不再用实时网络数据训练，理由是存在“重大风险”；报道称此举发生在一位工程师称该方案行不通的数周之后。",
-      "what_en": "TechCrunch reports OpenAI will cut frontier models off from the live internet for training, citing \"significant risks,\" weeks after one of its engineers said that solution wouldn't work.",
-      "why_zh": "训练数据来源与隔离策略直接影响模型能力、安全与合规，是行业关注的核心议题。",
-      "why_en": "Training-data sourcing and isolation affect model capability, safety and compliance—a core industry issue.",
-      "editor_judgment_zh": "方向重要，但报道本身指出内部存在分歧，需以官方说明为准。",
-      "editor_judgment_en": "Important direction, but the report notes internal disagreement; rely on official statements.",
-      "opportunity_risk_zh": "机会：更可控的数据与安全实践；风险：信息不完整，可能被过度解读。",
-      "opportunity_risk_en": "Opportunity: more controllable data and safety practices; risk: incomplete information may be overinterpreted.",
+      "category_zh": "行业影响",
+      "category_en": "Industry Impact",
+      "what_zh": "据TechCrunch报道，OpenAI表示将切断前沿模型与互联网的连接，不再用实时网络数据训练，理由是存在“重大风险”。",
+      "what_en": "Per TechCrunch, OpenAI says it will cut frontier models off from the internet and stop training on live web data, citing \"significant risks.\"",
+      "why_zh": "若属实，这改变了前沿模型获取数据的方式，并可能影响其他实验室的数据策略。",
+      "why_en": "If accurate, this changes how frontier models source data and could influence other labs' data strategies.",
+      "editor_judgment_zh": "重要信号，但细节有限；报道称此前有工程师认为该方案不可行，需核实官方说明。",
+      "editor_judgment_en": "A significant signal with limited detail; the report notes an engineer previously said the approach wouldn't work, so verify against official statements.",
+      "opportunity_risk_zh": "机会：更可控的数据来源；风险：模型时效性与数据覆盖可能下降。",
+      "opportunity_risk_en": "Opportunity: more controlled data sourcing; risk: reduced freshness and coverage.",
       "action_zh": "阅读原文并核对OpenAI官方说明后再判断。",
-      "action_en": "Read the source and verify against OpenAI's official statements before judging.",
+      "action_en": "Read the source and check OpenAI's official statement before drawing conclusions.",
       "scores": {
-        "innovation": 7,
-        "practicality": 6,
-        "feasibility": 5,
+        "innovation": 6,
+        "practicality": 5,
+        "feasibility": 4,
         "impact": 8,
-        "opportunity": 6
+        "opportunity": 5
       },
       "confidence": "medium",
       "source_url": "https://techcrunch.com/2026/10/23/openai-says-it-will-no-longer-train-its-ai-models-on-the-live-internet-citing-significant-risks/",
       "source": "TechCrunch AI",
       "published": "2026-10-23T23:05:49+00:00",
       "original_title": "OpenAI says it will no longer train its AI models on the live internet, citing “significant risks”",
-      "total_score": 32,
+      "total_score": 28,
       "image_url": "https://founder.ua/storage/photos/shares/news/OpenAI_11zon.jpg",
       "image_source": "Bing Images",
       "image_page_url": "https://founder.ua/article/openai-predstavlyaje-novii-agent-chatgpt-dlya-glibokogo-doslidzennya",
@@ -1624,33 +1622,33 @@
     },
     {
       "source_index": 2,
-      "title_zh": "Kimi K3.1 Pro 发布",
+      "title_zh": "Kimi K3.1 Pro发布",
       "title_en": "Introducing Kimi K3.1 Pro",
-      "category_zh": "产品应用/Product & Application",
+      "category_zh": "产品应用",
       "category_en": "Product & Application",
-      "what_zh": "Kimi K3.1 Pro 上线 Kimi API，尚未开放权重；Moonshot 承诺2026年11月4日前发布完整模型权重，并提供速度2-3倍、价格翻倍的“Highspeed”版本（输入token缓存命中价格相同）。",
-      "what_en": "Kimi K3.1 Pro landed on the Kimi API; weights are not yet open, but Moonshot promises full weights by Nov 4, 2026. A \"Highspeed\" version is 2-3x faster at twice the price (input token cache hits priced the same).",
-      "why_zh": "新模型与定价/速度选项直接影响开发者的选型与成本。",
-      "why_en": "A new model plus speed/pricing options directly affect developer choice and cost.",
-      "editor_judgment_zh": "对开发者有实际参考价值，但权重开放仍是承诺，需等待兑现。",
-      "editor_judgment_en": "Practically useful for developers, but open weights remain a promise to be verified.",
-      "opportunity_risk_zh": "机会：更快的推理选项；风险：权重未开放、价格结构需核算。",
-      "opportunity_risk_en": "Opportunity: faster inference option; risk: weights not open and pricing needs calculation.",
-      "action_zh": "阅读原文，按自身用量核算Highspeed版本成本。",
-      "action_en": "Read the source and calculate Highspeed costs against your own usage.",
+      "what_zh": "Kimi K3.1 Pro已上线Kimi API，暂未开放权重；Moonshot承诺2026年11月4日前发布完整模型权重，并提供速度2-3倍、价格翻倍的Highspeed版本。",
+      "what_en": "Kimi K3.1 Pro is live on the Kimi API, not yet open weights; Moonshot promises full weights by Nov 4, 2026, and offers a Highspeed version 2-3x faster at twice the price.",
+      "why_zh": "新模型上线并给出开放权重时间表，对开发者的模型选型有直接影响。",
+      "why_en": "A new model launch with an open-weights timeline directly affects developers' model choices.",
+      "editor_judgment_zh": "信息具体、可验证，但性能表现尚无独立评测，需谨慎看待。",
+      "editor_judgment_en": "Concrete and verifiable, but performance lacks independent evaluation; treat claims cautiously.",
+      "opportunity_risk_zh": "机会：可提前测试API；风险：定价与权重开放时间可能变化。",
+      "opportunity_risk_en": "Opportunity: early API testing; risk: pricing and weights timeline may change.",
+      "action_zh": "阅读原文，按需在Kimi API上做小规模测试。",
+      "action_en": "Read the source and run small-scale tests on the Kimi API if relevant.",
       "scores": {
         "innovation": 6,
-        "practicality": 8,
-        "feasibility": 8,
+        "practicality": 7,
+        "feasibility": 7,
         "impact": 6,
-        "opportunity": 7
+        "opportunity": 6
       },
       "confidence": "medium",
       "source_url": "https://simonwillison.net/2026/Oct/23/kimi-k31-pro/",
       "source": "Simon Willison",
       "published": "2026-10-23T19:40:54+00:00",
       "original_title": "Introducing Kimi K3.1 Pro",
-      "total_score": 35,
+      "total_score": 32,
       "image_url": "https://static.simonwillison.net/static/2026-10-23/image-2.png",
       "image_source": "Simon Willison",
       "image_page_url": "https://simonwillison.net/2026/Oct/23/kimi-k31-pro/",
@@ -1668,31 +1666,31 @@
       "source_index": 5,
       "title_zh": "OpenAI加固前沿模型训练环境的安全",
       "title_en": "Securing our frontier model training environment",
-      "category_zh": "行业影响/Industry Impact",
-      "category_en": "Industry Impact",
-      "what_zh": "OpenAI说明其如何加强前沿模型训练与评估的隔离，包括离线环境与高算力红队测试。",
+      "category_zh": "技术突破",
+      "category_en": "Technical Breakthrough",
+      "what_zh": "OpenAI介绍如何加强前沿模型训练与评估的隔离，包括离线环境和高算力红队测试。",
       "what_en": "OpenAI explains how it strengthened containment for frontier model training and evaluation, including offline environments and high-compute red-teaming.",
-      "why_zh": "前沿模型安全隔离是监管与行业实践的共同焦点。",
-      "why_en": "Frontier-model containment is a shared focus of regulators and industry practice.",
-      "editor_judgment_zh": "属于方法披露，可作为理解行业安全实践的参考。",
-      "editor_judgment_en": "A methods disclosure useful for understanding industry safety practice.",
-      "opportunity_risk_zh": "机会：可借鉴的隔离思路；风险：细节有限，难以独立验证。",
-      "opportunity_risk_en": "Opportunity: reusable containment ideas; risk: limited detail, hard to verify independently.",
-      "action_zh": "阅读原文了解其隔离与红队做法。",
+      "why_zh": "训练环境安全是前沿模型治理的关键环节，与数据隔离议题直接相关。",
+      "why_en": "Training-environment security is central to frontier model governance and ties directly to data isolation.",
+      "editor_judgment_zh": "官方一手材料，但属方法说明而非可复现成果。",
+      "editor_judgment_en": "First-party material, but a methods description rather than reproducible results.",
+      "opportunity_risk_zh": "机会：可借鉴隔离实践；风险：细节有限，难以直接复用。",
+      "opportunity_risk_en": "Opportunity: borrow containment practices; risk: limited detail for direct reuse.",
+      "action_zh": "阅读原文，了解其隔离与红队做法。",
       "action_en": "Read the source to understand its containment and red-teaming approach.",
       "scores": {
         "innovation": 5,
-        "practicality": 6,
-        "feasibility": 6,
-        "impact": 7,
-        "opportunity": 5
+        "practicality": 5,
+        "feasibility": 5,
+        "impact": 6,
+        "opportunity": 4
       },
       "confidence": "medium",
       "source_url": "https://openai.com/index/securing-our-frontier-model-training-environment",
       "source": "OpenAI",
       "published": "2026-10-23T10:00:00+00:00",
       "original_title": "Securing our frontier model training environment",
-      "total_score": 29,
+      "total_score": 25,
       "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_%28IA_gov.gpo.fdsys.CHRG-114hhrg21271%29.pdf/page1-960px-THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_%28IA_gov.gpo.fdsys.CHRG-114hhrg21271%29.pdf.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "image_source": "Wikimedia Commons",
       "image_page_url": "https://commons.wikimedia.org/wiki/File:THE_INTERNET_OF_THINGS-_EXPLORING_THE_NEXT_TECHNOLOGY_FRONTIER_(IA_gov.gpo.fdsys.CHRG-114hhrg21271).pdf",
@@ -1709,33 +1707,33 @@
     },
     {
       "source_index": 7,
-      "title_zh": "Meta拟以新设股票类别为其大规模AI投入融资",
+      "title_zh": "Meta拟设新类别股票为其AI大规模投入融资",
       "title_en": "Meta wants to pay for its broad AI buildout with a newly created class of stock",
-      "category_zh": "商业动态/Business & Market",
+      "category_zh": "商业动态",
       "category_en": "Business & Market",
-      "what_zh": "TechCrunch报道，Meta计划通过新设股票类别为其在AI模型与服务上的广泛投资提供资金支持。",
-      "what_en": "TechCrunch reports Meta plans a new stock strategy to help fund its broad investments in AI models and services.",
-      "why_zh": "大型AI资本开支的融资方式会影响股东结构与行业投资节奏。",
-      "why_en": "How big AI capex is financed affects shareholder structure and industry investment pace.",
-      "editor_judgment_zh": "值得关注，但报道细节有限，需看正式公告。",
-      "editor_judgment_en": "Worth watching, but details are limited; await formal filings.",
-      "opportunity_risk_zh": "机会：AI投入持续的信号；风险：股权结构变化的不确定性。",
-      "opportunity_risk_en": "Opportunity: signal of sustained AI investment; risk: uncertainty over share structure changes.",
-      "action_zh": "阅读原文并关注Meta官方披露。",
-      "action_en": "Read the source and watch for Meta's official disclosures.",
+      "what_zh": "据TechCrunch报道，Meta计划通过新设立的股票类别为其广泛的AI模型与服务投资提供资金。",
+      "what_en": "Per TechCrunch, Meta plans a new class of stock to help fund its broad investments in AI models and services.",
+      "why_zh": "反映大型科技公司AI资本开支的融资方式变化，影响投资者与行业成本结构。",
+      "why_en": "Reflects changing financing for big-tech AI capex, affecting investors and industry cost structure.",
+      "editor_judgment_zh": "值得关注，但报道细节有限，需以公司公告为准。",
+      "editor_judgment_en": "Worth watching, but details are limited; rely on company filings.",
+      "opportunity_risk_zh": "机会：关注AI基建融资创新；风险：股权结构变化可能稀释股东权益。",
+      "opportunity_risk_en": "Opportunity: watch AI-infrastructure financing innovation; risk: share structure changes may dilute shareholders.",
+      "action_zh": "阅读原文并核对Meta官方披露。",
+      "action_en": "Read the source and verify against Meta's official disclosures.",
       "scores": {
         "innovation": 4,
         "practicality": 5,
         "feasibility": 5,
-        "impact": 7,
-        "opportunity": 5
+        "impact": 6,
+        "opportunity": 4
       },
-      "confidence": "low",
+      "confidence": "medium",
       "source_url": "https://techcrunch.com/2026/10/21/meta-wants-to-pay-for-its-broad-ai-buildout-with-a-newly-created-class-of-stock/",
       "source": "TechCrunch AI",
       "published": "2026-10-21T22:45:34+00:00",
       "original_title": "Meta wants to pay for its broad AI buildout with a newly created class of stock",
-      "total_score": 26,
+      "total_score": 24,
       "image_url": "https://techcrunch.com/wp-content/uploads/2026/09/mark-zuckerberg-muse-charm-getty.jpg?resize=1200,800",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/21/meta-wants-to-pay-for-its-broad-ai-buildout-with-a-newly-created-class-of-stock/",
@@ -1751,33 +1749,33 @@
     },
     {
       "source_index": 1,
-      "title_zh": "Quick Study：用Claude生成模拟笔触绘画的演示",
-      "title_en": "Quick Study",
-      "category_zh": "值得关注/Signals to Watch",
+      "title_zh": "Quick Study：用Claude生成模拟画笔绘画的网页工具",
+      "title_en": "Quick Study: a Claude-built tool that simulates brush painting",
+      "category_zh": "值得关注",
       "category_en": "Signals to Watch",
-      "what_zh": "Simon Willison展示了一个提示词实验：打开照片后，用canvas元素在数秒内以模拟画笔“绘制”该照片，使用Sobel边缘检测，无外部依赖。",
-      "what_en": "Simon Willison shares a prompt experiment: open a photo and it rapidly paints a version using a canvas element and simulated paintbrush, using Sobel edge detection with no external dependencies.",
-      "why_zh": "展示了用提示词快速生成可交互视觉原型的可行性。",
-      "why_en": "Shows the feasibility of quickly generating interactive visual prototypes via prompts.",
-      "editor_judgment_zh": "属于个人实验，非产品发布，适合作为创作灵感参考。",
-      "editor_judgment_en": "A personal experiment, not a product launch; useful as creative inspiration.",
-      "opportunity_risk_zh": "机会：低成本视觉原型；风险：效果与稳定性未经系统评估。",
-      "opportunity_risk_en": "Opportunity: low-cost visual prototyping; risk: effects and reliability not systematically evaluated.",
-      "action_zh": "阅读原文并自行复现实验。",
-      "action_en": "Read the source and reproduce the experiment yourself.",
+      "what_zh": "Simon Willison分享提示词实验：让Claude Opus 5.5构建一个打开照片后用canvas元素在数秒内模拟画笔绘制的artifact，使用Sobel边缘检测。",
+      "what_en": "Simon Willison shares a prompt experiment: Claude Opus 5.5 builds an artifact that opens a photo and simulates brush painting on a canvas in seconds, using Sobel edge detection.",
+      "why_zh": "展示单提示词生成可交互创意工具的能力，对创作者有直接参考价值。",
+      "why_en": "Shows single-prompt generation of an interactive creative tool, directly useful to creators.",
+      "editor_judgment_zh": "个人实验，非产品发布；效果需自行验证。",
+      "editor_judgment_en": "A personal experiment, not a product launch; results need independent verification.",
+      "opportunity_risk_zh": "机会：低成本原型创意工具；风险：效果与稳定性未经系统评测。",
+      "opportunity_risk_en": "Opportunity: low-cost creative prototyping; risk: effects and stability not systematically evaluated.",
+      "action_zh": "阅读原文并自行复现提示词实验。",
+      "action_en": "Read the source and reproduce the prompt experiment yourself.",
       "scores": {
-        "innovation": 6,
+        "innovation": 5,
         "practicality": 6,
         "feasibility": 7,
-        "impact": 4,
-        "opportunity": 6
+        "impact": 3,
+        "opportunity": 5
       },
       "confidence": "medium",
       "source_url": "https://simonwillison.net/2026/Oct/23/quick-study-painter/",
       "source": "Simon Willison",
       "published": "2026-10-23T21:35:13+00:00",
       "original_title": "Quick Study",
-      "total_score": 29,
+      "total_score": 26,
       "image_url": "https://static.simonwillison.net/static/2026/heron-oil.webp",
       "image_source": "Simon Willison",
       "image_page_url": "https://simonwillison.net/2026/Oct/23/quick-study-painter/",
@@ -1793,12 +1791,12 @@
     }
   ],
   "editorial": {
-    "core_zh": "本期主线是模型训练与数据来源的边界收紧，以及围绕模型发布、安全隔离与资本投入的配套动作。",
-    "core_en": "The throughline: tightening boundaries around model training and data sourcing, alongside moves on model releases, safety containment and capital.",
-    "trend_zh": "前沿实验室更强调训练环境隔离与可控数据，同时以API发布、定价分层和融资手段推进商业化。",
-    "trend_en": "Frontier labs emphasize training-environment isolation and controlled data, while advancing commercialization via API releases, pricing tiers and financing.",
-    "next_question_zh": "OpenAI的“断网训练”是否会成为行业标准，Kimi的权重开放承诺能否按期兑现？",
-    "next_question_en": "Will OpenAI's offline-training stance become an industry norm, and will Kimi's open-weights promise be met on time?"
+    "core_zh": "本期主线是数据与训练环境的可控性：OpenAI收紧训练数据来源与训练隔离，同时模型侧持续上新。",
+    "core_en": "The throughline is control over data and training environments: OpenAI tightens data sourcing and training containment while new models keep shipping.",
+    "trend_zh": "前沿实验室更重视训练数据与环境的边界，开源权重与API竞争同步加速。",
+    "trend_en": "Frontier labs increasingly bound their training data and environments, while open-weights and API competition accelerates.",
+    "next_question_zh": "切断实时互联网训练后，模型时效性与数据合规将如何平衡？",
+    "next_question_en": "After cutting off live-internet training, how will model freshness and data compliance be balanced?"
   },
   "localization": {
     "status": "ok",
@@ -1825,11 +1823,11 @@
       "Bing Images",
       "Unsplash topic illustration fallback"
     ],
-    "last_run": "2026-10-24T10:29:21.293176+08:00"
+    "last_run": "2026-10-24T10:36:55.047483+08:00"
   },
   "quality_gate": {
     "status": "PASS",
-    "checked_at": "2026-10-24T10:29:48.395727+08:00",
+    "checked_at": "2026-10-24T10:37:26.470160+08:00",
     "history_files": 9,
     "history_stories": 225,
     "news_duplicate_hits": 0,
