@@ -388,7 +388,7 @@ jobs:
           days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
           Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           PY
-          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
