@@ -54,3 +54,16 @@
 | MUSIC-05 | 事实状态 | 候选明确标注待用户确认；不把专辑发行日期冒称歌曲发行年份 |
 
 以上是测试要求，不代表这些新增功能已经通过生产验收。
+
+
+## v0.3 生产验收结果（2026-10-24）
+
+生产 URL：<https://chenzhe223-tech.github.io/melodyme/>
+
+部署提交：`31e2fcd0769e2c3ee2070bf4bdd106e3ea9c91bd`。GitHub Pages 部署与生产 smoke test 均成功。
+
+- 生产 smoke test：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081612291>
+- 本次 artifact：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081612291/artifacts/12555795968>（desktop/mobile 截图与 JSON 报告，14 天保留）
+- 本次生产测试通过：HTTP 200、产品标题、空故事提示、真实 iTunes 搜索返回 8 条候选、封面 URL 为 API 返回的 `mzstatic.com` 图片、候选选择后作品卡显示歌曲、12 种海报风格、可覆盖的本地风格推荐、Shazam 具体歌曲 URL 操作、作品生成、保存/刷新恢复、桌面与移动端无 JS 错误、390px 移动端无横向溢出、SVG 海报导出。
+- 已知限制：自动风格推荐仍是本地规则，不是 AI；故事与朋友圈文案仍是本地规则生成；没有登录、云端保存、多设备同步或公开分享；没有音乐播放嵌入；测试未覆盖真实用户双账号隔离。
+- 生产音乐目录搜索验证的是当时的真实外部响应；外部目录可能随网络、地区和服务策略变化，不能保证每次都返回相同结果。
