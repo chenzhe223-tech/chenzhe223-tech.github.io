@@ -94,3 +94,14 @@
 - 目前音乐数据只在用户主动搜索时请求，搜索词会发送到 Apple；人生故事不随该音乐查询请求发送。
 - Shazam 使用用户粘贴的官方歌曲 URL；这是外部链接，不代表 Shazam 在页面内播放，也不代表自动识别故事里的歌曲。
 - 真实 AI 模型、服务端代理、账号/云同步、RLS 与跨用户安全测试仍未交付。
+
+## DeepSeek AI adapter (implementation added, deployment pending)
+
+Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker/wrangler.toml`.
+
+- Server-side adapter supports `analyzeMemory`, `inferMusicCandidates`, `compareTrackVersions`, `generateMemoryStory`, `generateSocialCopy`, and `planPosterComposition`.
+- The API key is read only from the Worker secret `DEEPSEEK_API_KEY`; it is never bundled into client code.
+- Requests are restricted to the configured exact Origin, POST JSON, bounded payloads, 20-second provider timeout, and structured JSON responses.
+- Provider/network/timeout/invalid-output errors return explicit error codes. The adapter never fabricates success when the key is missing.
+- This Worker source is **not deployed yet**. The current public site is GitHub Pages static hosting; the Worker needs a Cloudflare account deployment and secret setup. Public exposure must be preceded by a Cloudflare rate-limit rule and real smoke tests.
+- The existing front-end has not yet been wired to a deployed endpoint. Until deployment/configuration and browser integration are complete, real DeepSeek analysis is **not available in production**.
