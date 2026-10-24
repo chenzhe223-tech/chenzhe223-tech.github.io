@@ -1,7 +1,7 @@
 # MelodyMe 测试计划 v0.2
 
 ## 当前测试范围
-静态 HTML/CSS/JS 音乐地图交互原型。该测试范围不证明真实 AI、音乐目录、账号认证、云同步或后端安全已完成。
+静态 HTML/CSS/JS 音乐地图前端、iTunes Search、Cloudflare Worker 文本 AI 适配器及 Workers AI 封面接口。CI 只证明自动化覆盖范围内的行为；不证明真实线上模型、外部图片服务、生产发布、账号认证或云同步已完成。
 
 ## 手工/自动化验收
 | ID | 场景 | 预期 |
@@ -13,7 +13,7 @@
 | MAP-05 | 情绪选择 | 可多选、取消，刷新后保留 |
 | MAP-06 | 音乐线索 | 歌名与艺人可选；专辑/年份不是必填 |
 | MAP-07 | 跳过节点 | 可跳过非必要节点且可返回 |
-| MAP-08 | 作品生成 | 生成可编辑故事与朋友圈文案，标注本地模拟状态 |
+| MAP-08 | 作品生成 | 优先尝试 Worker AI；失败时保留可编辑本地初稿并明确提示降级 |
 | MAP-09 | 保存与恢复 | 保存作品后刷新仍在本地作品集 |
 | MAP-10 | 删除作品 | 仅删除选中的本地记录，并二次确认 |
 | MAP-11 | SVG 导出 | 导出非空 SVG 文件 |
@@ -79,3 +79,69 @@
 - [ ] Wire client to deployed endpoint; verify a user story produces real analysis with provenance.
 - [ ] Verify no original story is sent to the music catalog API.
 - [ ] Verify AI candidates against real catalog records; never use AI output as factual album metadata or image URLs.
+
+
+## v0.4 — iTunes 试听与 AI 纪念封面验收
+
+### iTunes previewUrl
+
+| ID | 场景 | 预期 |
+|---|---|---|
+| AUDIO-01 | 选择包含 `previewUrl` 的 iTunes 候选 | 音乐资料卡显示 HTML audio controls，标签为“30 秒试听片段” |
+| AUDIO-02 | 检查试听 URL | `audio.src` 与 iTunes 目录返回的 `previewUrl` 一致；不拼接、不猜测 |
+| AUDIO-03 | 用户首次进入结果页 | 音频不自动播放，`preload="none"` |
+| AUDIO-04 | 点击第二个音频播放（如页面存在多个音频） | 其他 audio 元素被暂停 |
+| AUDIO-05 | 选择没有 `previewUrl` 的目录候选 | 不显示音频控件，显示“该曲目暂无试听片段”，控制台无异常 |
+| AUDIO-06 | Shazam 外链 | 仍独立显示；不以试听替代 Shazam，不宣称完整歌曲播放 |
+
+### AI 纪念封面
+
+| ID | 场景 | 预期 |
+|---|---|---|
+| COVER-01 | Pollinations 成功返回图片 | 图片使用 lazy loading、描述性 alt，显示“AI 生成封面（非真实专辑封面）” |
+| COVER-02 | 检查发往 Pollinations 的 prompt | 仅包含风格、情绪和映射后的场景关键词，不包含完整故事原文、姓名或完整用户输入 |
+| COVER-03 | 同一输入重复生成 | 由歌曲/风格/情绪/映射场景产生稳定 seed |
+| COVER-04 | Pollinations 图片加载失败 | 自动尝试 Worker 的 `generateAlbumArt`，响应按 image/png 解析 |
+| COVER-05 | Pollinations 超时 | 12 秒后启动 Worker 兜底 |
+| COVER-06 | 两路图片服务均失败 | 显示本地渐变占位和“AI 封面暂不可用，已保留你的文字和海报内容”；故事、分享文案和 SVG 导出仍可用 |
+| COVER-07 | 点击重新生成 | 显示 loading 状态；按钮禁用防止重复触发；完成或失败后恢复可操作 |
+| COVER-08 | 检查真实专辑封面 | AI 装饰封面不得覆盖 iTunes artworkUrl，也不得被标记为真实专辑封面 |
+| COVER-09 | 海报回归 | 12 种风格名称/样式不变；SVG 导出逻辑未被 AI 图片改写；纯文字模式仍可用 |
+
+### Worker generateAlbumArt
+
+| ID | 场景 | 预期 |
+|---|---|---|
+| ARTAPI-01 | 有效请求，AI 返回图片字节 | HTTP 200、`content-type: image/png`、返回图像字节 |
+| ARTAPI-02 | Origin 不匹配 | HTTP 403，AI 不被调用 |
+| ARTAPI-03 | 非 POST | HTTP 405 |
+| ARTAPI-04 | 请求体超过 12 KB | HTTP 413 |
+| ARTAPI-05 | prompt 空、全空白或超过 400 字符 | HTTP 400 |
+| ARTAPI-06 | width/height 小于 256 或大于 1024 | HTTP 400 |
+| ARTAPI-07 | Workers AI 绑定缺失 | HTTP 503，返回 `ai_image_service_not_configured` |
+| ARTAPI-08 | 所有图像模型调用失败 | HTTP 502，返回 `ai_image_generation_failed`，不泄露内部堆栈或密钥 |
+| ARTAPI-09 | 超时 | HTTP 504，返回 `ai_image_timeout` |
+| ARTAPI-10 | Rate Limiter 触发/不可用 | HTTP 429/503，复用 Worker 既有保护机制 |
+| ARTAPI-11 | 响应检查 | 不返回任何 API key 或 secret 字段 |
+| ARTAPI-12 | DeepSeek Secret 缺失但 Workers AI 已绑定 | `generateAlbumArt` 不依赖 DeepSeek Secret；文本动作仍按原逻辑返回 503 |
+
+### 响应式与核心流程
+
+- [ ] 12 种海报风格名称逐项存在，地图四站可继续、跳过与回访。
+- [ ] 纯文字文案与图片/文字海报都可完成；AI 封面失败不影响 SVG 下载。
+- [ ] 360px、390px、桌面视口无横向溢出。
+- [ ] 浏览器控制台无未处理 JavaScript 错误。
+- [ ] 保存、刷新恢复、编辑、删除和 SVG 下载无回归。
+- [ ] 无音频自动播放；所有音频仅由用户主动操作。
+- [ ] 真实 iTunes 返回缺少 previewUrl 时，页面正确显示无试听状态。
+
+## 本次交付状态必须分四栏记录
+
+| 状态 | 含义 |
+|---|---|
+| 已代码修改 | 对应变更已提交到 PR 分支或合并提交 |
+| 已跑测试 | 明确列出实际执行的命令/CI 运行与结果 |
+| 已部署 | 目标环境已发布对应提交；仅有合并记录不算部署证据 |
+| 真实端到端验收通过 | 在生产浏览器/Worker 中实际完成操作并保存证据；不能由单元测试代替 |
+
+新功能在 CI 和生产浏览器回归完成之前保持“待验证”。Pollinations 和 Workers AI 均为外部服务，免费额度、模型可用性和访问策略可能变化。

@@ -28,11 +28,11 @@
 - 文案语气、视觉气质快捷选择。
 - 可编辑故事文案、朋友圈文案、SVG 海报导出。
 - 本地保存、列表展示、删除与移动端响应式适配。
-- 清晰披露当前为本地交互原型，不调用真实 AI、不具备账号/云同步/公开分享。
+- 清晰披露服务可用状态：部分文案/风格规划通过 Worker 尝试调用真实 AI，失败时回退本地初稿；不具备账号/云同步/公开分享。
 
-## 后续服务接入（当前未实现）
-- 真实 AI 故事理解、候选歌曲建议、文案生成与海报规划。
-- 经许可且核验可用性的音乐元数据源、专辑封面来源及官方 Shazam 跳转方式。
+## 尚未全部接入的后续能力
+- 将记忆分析、AI 音乐候选和版本比较完整接入用户路径；当前故事/分享文案和风格规划已尝试连接 Worker，但真实线上推理仍需验证。
+- 进一步核验音乐目录可用性、版本匹配与外链正确性；当前已接入 iTunes Search 和 Shazam 外链输入。
 - 独立 Supabase 项目、认证、RLS、私有存储与跨设备同步。
 - 服务端模型适配器、Secret 管理、超时、重试、配额和幂等。
 - 用户主动分享、分享快照和撤销能力。
@@ -71,3 +71,28 @@ Output modes: illustrated poster using verified/authorized cover art, and a comp
 Story-first AI extracts memory clues and proposes hypotheses; external catalog results are verified separately. Candidate facts preserve provenance (`ai_inferred`, `catalog_verified`, `user_confirmed`, `unknown`). Cover art must match a catalog/release record. Shazam links must be exact, verified song-detail links; never claim guaranteed autoplay.
 
 Output modes: illustrated poster using verified/authorized cover art, and a complete text-only work with adapted typography and palette. DeepSeek, version comparison, AI copy and layout planning are not delivered until a deployed endpoint and real browser integration tests pass.
+
+
+## v0.4 增补：30 秒试听与 AI 纪念封面
+
+### iTunes 试听片段
+
+- 仅在用户选中 iTunes Search 返回的歌曲候选后，读取该结果原始 `previewUrl` 并渲染试听播放器。
+- 播放器文案必须是“30 秒试听片段”，使用原始目录 URL、`controls` 与 `preload="none"`；不得自动播放。
+- 同一时间只允许一个试听音频播放。切换播放时暂停其他音频。
+- 如果目录没有返回 `previewUrl`，不渲染播放器，明确显示“该曲目暂无试听片段”。
+- 试听片段不是完整歌曲播放；Shazam 仍是独立外部歌曲页面入口。
+
+### AI 纪念封面（装饰性图片）
+
+- Pollinations.ai 为首选服务，不要求 API Key。只发送由风格、情绪与有限场景类别映射出的关键词，不发送完整故事原文。
+- seed 在浏览器本地确定性生成，便于同一组歌曲/风格/情绪/场景复现。
+- Pollinations 加载失败或超时后调用 Worker 的 `generateAlbumArt`；Worker 使用 Cloudflare Workers AI 绑定。
+- Workers AI 首选 `@cf/stabilityai/stable-diffusion-xl-base-1.0`，不可用时尝试 `@cf/black-forest-labs/flux-1-schnell`。模型和免费额度取决于账户、模型供应及 Cloudflare 当前规则，不承诺无限量免费。
+- 成功图片使用 `loading="lazy"` 与描述性 alt，并显示“AI 生成封面（非真实专辑封面）”。
+- 两路均失败时显示本地渐变占位与“AI 封面暂不可用，已保留你的文字和海报内容”；不得清空故事、文案或 SVG 海报。
+- AI 装饰封面不覆盖 iTunes 的真实 artwork，不改变现有 12 种海报风格和 SVG 导出。
+
+### 范围外
+
+不接入音乐生成、AI 视频、完整歌曲播放、自动播放、付费/绑卡新服务或浏览器端 API Secret。保留纯文字与图片/文字两种创作模式、四站地图流程和免注册体验。
