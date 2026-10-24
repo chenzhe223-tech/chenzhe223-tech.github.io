@@ -506,6 +506,8 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "evidence_urls": [metadata.get("html_url", item.get("url", "")), base + "/readme"],
             "quality_status": "PASS",
             "skill_type": skill_type,
+            "actual_skill_file_count": len(paths),
+            "skill_file_paths": paths[:12],
         }
     except Exception as exc:
         print(f"[skill-warning] repository verification {name}: {type(exc).__name__}")
@@ -696,6 +698,24 @@ def collect_skills() -> list[dict]:
             result["novelty_status"] = "new"
         result["daily_theme"] = infer_skill_category(result)
         result = score_candidate(result, today_text)
+        description = str(result.get("description") or "").lower()
+        rare_capability_pairs = [
+            ("video", "production"), ("persistent", "planning"), ("session", "recovery"),
+            ("interactive", "diagram"), ("browser", "automation"), ("data", "dashboard"),
+            ("security", "audit"), ("multimodal", "generation"), ("workflow", "automation"),
+            ("research", "citation"), ("test", "automation"), ("design", "system"),
+            ("api", "integration"), ("spreadsheet", "analysis"), ("audio", "transcription"),
+            ("image", "generation"), ("document", "workflow"), ("long-running", "task"),
+            ("codebase", "diagram"), ("product", "prototype")
+        ]
+        rare_pair = next((pair for pair in rare_capability_pairs if all(term in description for term in pair)), None)
+        result["rare_value_verified"] = bool(rare_pair and result.get("actual_skill_file_count", 0) > 0 and result.get("evidence_verified") and result.get("readme_verified"))
+        result["rare_value_reason"] = (
+            f"Distinct documented capability: {' + '.join(rare_pair)}; actual SKILL.md files, README and license verified. "
+            "This is a use-case distinction, not a claim of global uniqueness."
+            if result["rare_value_verified"] else None
+        )
+        result["rare_value_evidence_url"] = (result.get("evidence_urls") or ["", ""])[1] if result["rare_value_verified"] else None
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
         if len(verified) >= 8:
