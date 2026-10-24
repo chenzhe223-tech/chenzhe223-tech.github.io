@@ -103,8 +103,8 @@ Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker
 - The API key is read only from the Worker secret `DEEPSEEK_API_KEY`; it is never bundled into client code.
 - Requests are restricted to the configured exact Origin, POST JSON, bounded payloads, 20-second provider timeout, and structured JSON responses.
 - Provider/network/timeout/invalid-output errors return explicit error codes. The adapter never fabricates success when the key is missing.
-- This Worker source is **not deployed yet**. The current public site is GitHub Pages static hosting; the Worker needs a Cloudflare account deployment and secret setup. Public exposure must be preceded by a Cloudflare rate-limit rule and real smoke tests.
-- The existing front-end has not yet been wired to a deployed endpoint. Until deployment/configuration and browser integration are complete, real DeepSeek analysis is **not available in production**.
+- The Worker source is deployed to the `melodyme-ai` workers.dev endpoint; current branch changes still require a new deployment after merge. Keep deployment and real smoke-test status distinct.
+- The existing front end references the deployed Worker for story/share generation and poster-style planning. Real DeepSeek responses remain unverified until a live browser request succeeds; the new image-generation action is not deployed until this branch is merged and released.
 
 
 ## DeepSeek AI adapter (source deployed previously; current production verification remains separate)
