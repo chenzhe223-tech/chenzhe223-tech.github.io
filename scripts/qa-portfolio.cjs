@@ -44,11 +44,21 @@ const path = require('node:path');
     if (await page.locator('#shelf .app-card').count() !== initialCount) throw new Error('All-products filter did not restore product cards');
     results.push({ test: 'category filters', status: 'PASS', detail: { initialCount, filteredCount } });
 
-    await page.locator('#shelf [data-detail]').first().click();
+    const opener = page.locator('#shelf [data-detail]').first();
+    await opener.click();
     await page.locator('#modal.open').waitFor({ timeout: 5000 });
-    await page.locator('#closeModal').click();
+    if (await page.evaluate(() => document.activeElement?.id) !== 'closeModal') throw new Error('Opening the detail dialog did not move focus to its close button');
+    await page.keyboard.press('Shift+Tab');
+    const wrappedToLast = await page.evaluate(() => {
+      const modal = document.querySelector('#modal');
+      const focusable = Array.from(modal.querySelectorAll('a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter(el => el.offsetWidth || el.offsetHeight || el.getClientRects().length);
+      return document.activeElement === focusable[focusable.length - 1];
+    });
+    if (!wrappedToLast) throw new Error('Dialog focus did not wrap from first to last control with Shift+Tab');
+    await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('#modal')?.classList.contains('open'), null, { timeout: 3000 });
-    results.push({ test: 'project detail modal open/close', status: 'PASS' });
+    if (!(await opener.evaluate(el => document.activeElement === el))) throw new Error('Closing the detail dialog did not restore focus to the opener');
+    results.push({ test: 'project detail dialog keyboard focus and Escape close', status: 'PASS' });
 
     await page.screenshot({ path: path.join(outDir, 'desktop.png'), fullPage: true });
     const desktopOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
