@@ -146,7 +146,7 @@ def _duplicate_match(candidate: dict, history: list[dict]) -> dict | None:
         old_titles = _story_title_variants(old)
         for title in titles:
             for old_title in old_titles:
-                normalized = lambda value: re.sub(r"\\W", "", value.lower())
+                normalized = lambda value: re.sub(r"\W", "", value.lower())
                 if normalized(title) and normalized(title) == normalized(old_title):
                     return {"kind":"same_title","date":old.get("_history_date"),"title":old_title,"url":old.get("url")}
                 ratio = difflib.SequenceMatcher(None, title.lower(), old_title.lower()).ratio()
