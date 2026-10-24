@@ -2,47 +2,48 @@
 
 > 每一首歌，都是你走过的路。
 
-MelodyMe 是一款以音乐为线索、以人生记忆为内容的个人创作产品原型。新版从长表单转为地图式渐进探索，让用户用一句话开始，并逐步选择情绪、音乐线索和作品风格。
+MelodyMe 是一款以人生记忆为起点、以音乐为线索的轻量创作应用。用户通过四站地图式流程，逐步生成可编辑的记忆故事、分享文案和纪念海报。
 
-## 当前可体验
-- 四站音乐人生地图：唤起记忆、找到感觉、发现音乐、收获作品。
-- 一句话即可开始；歌曲名与歌手可选，专辑和年份不要求用户填写。
-- 节点可跳过、回访；草稿与作品保存在当前浏览器。
-- 故事与朋友圈文案可编辑，支持 SVG 海报导出。
-- 默认本地私密，不会自动公开。
+## 当前功能
 
-## 真实限制
-这是静态交互原型。文案由本地规则生成，**尚未调用真实 AI**；没有账号、云数据库、跨设备同步、公开分享或真实 AI。用户可主动查询 Apple iTunes Search 公开歌曲目录，查看真实返回的候选、专辑信息和封面并手动选择；此功能依赖外部服务、网络和地区可用性。Shazam 只作为经过域名校验的外部歌曲链接入口，不保证网页内嵌播放。
+- 四站探索地图：唤起记忆、找到感觉、发现音乐、收获作品；无需注册，每一步可跳过或返回。
+- 记忆故事、情绪线索、音乐目录候选与 12 种海报风格。
+- Apple iTunes Search 真实目录查询。若所选目录结果提供 `previewUrl`，显示用户主动点击的**30 秒试听片段**；这不是完整歌曲播放，也不自动播放。
+- Shazam 作为外部歌曲详情/识曲入口，与试听片段分开；不承诺网页内完整播放或自动播放。
+- AI 纪念封面：优先请求 Pollinations.ai；图片加载失败时调用 Cloudflare Worker 的 Workers AI 文生图兜底。封面必须标注“AI 生成封面（非真实专辑封面）”，不替换真实 iTunes artwork 或 SVG 海报。
+- 故事与朋友圈文案可编辑；保留 SVG 海报下载、纯文字创作与图片/文字海报路径。
+- 当前草稿与作品保存在本浏览器 `localStorage`。不提供账号、云同步或跨设备同步。
 
-## 本地运行
-直接在现代浏览器打开 `index.html`，无需构建步骤。
+## AI 与图片服务
+
+- 文本 AI 通过 Cloudflare Worker 服务端调用 DeepSeek；密钥仅存 Worker Secret，不得放进前端。
+- AI 图片首选 Pollinations.ai（无需 API Key）；这是外部公共服务，服务可用性、速率、模型策略及免费政策可能变化。
+- 图片兜底使用 Cloudflare Workers AI 绑定。Workers AI 的免费额度、模型可用性与账户限制以 Cloudflare 当前规则为准；不保证无限量免费。
+- 首选图片超时/加载失败后尝试 Worker；两者都失败时显示本地渐变占位和明确提示，保留故事、文案与 SVG 海报。
+- 图片 prompt 只发送风格、情绪和有限场景关键词，不发送完整故事原文。
+- AI 封面是创作装饰，不是真实专辑封面。真实专辑 artwork 只使用 iTunes Search 返回的 URL。
+- 不接入音乐生成、AI 视频、完整歌曲播放或需要付费/绑卡的新服务。
+
+## 开发与测试
+
+直接在现代浏览器打开 `index.html` 可查看静态前端；Worker 在 `worker/` 目录中，使用 Node.js 22 运行：
+
+```sh
+cd melodyme/worker
+npm run check
+npm test
+```
+
+GitHub Actions 会在相关 PR/push 上运行 Worker 测试。CI 通过不等于线上 Worker 或真实模型端到端验收通过。
 
 ## 文档
+
+- [开发状态与升级需求](docs/DEVELOPMENT_STATUS_AND_UPGRADE_REQUIREMENTS.md)
 - [PRD](docs/PRD.md)
 - [设计系统](docs/DESIGN_SYSTEM.md)
 - [技术架构](docs/ARCHITECTURE.md)
 - [测试计划](docs/QA_PLAN.md)
 
-视频生成与 AI 视频接口不属于当前阶段。
+## 验收状态说明
 
-
-## 新增：海报风格与音乐资料卡
-- 12 种独立视觉风格，可手动选择；支持本地规则推荐（并非真实 AI 自动分析）。
-- 用户主动查询 Apple iTunes Search 后，可查看真实目录候选与专辑封面并选择确认。
-- 可粘贴 Shazam 官方歌曲链接，在作品内展示对应入口。Shazam 播放仍在外部服务进行，网页内嵌播放未经验证。
-- 当前没有真实 AI 模型调用、云同步或账号服务。音乐查询依赖外部公开目录，可能因网络、地区或服务策略不可用。
-
-
-## 当前生产验收记录（2026-10-24）
-- 生产地址：<https://chenzhe223-tech.github.io/melodyme/>
-- 已验证提交：`31e2fcd0769e2c3ee2070bf4bdd106e3ea9c91bd`
-- 生产 smoke test：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081612291>
-- 原型 QA：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081540880>
-- 生产测试覆盖 HTTP 200、真实 iTunes 搜索候选与封面 URL、候选选择、12 种风格、Shazam 链接操作、保存/刷新恢复、桌面/移动端 JS 错误、390px 横向溢出和 SVG 下载。
-- 测试证据 Artifact（保留 14 天）：<https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/40081612291/artifacts/12555795968>
-- 测试不证明真实 AI、账号、云同步、双用户隔离或后端安全已经完成。
-
-
-## DeepSeek engine status
-
-Worker adapter source: `worker/src/index.js`; deployment settings: `worker/wrangler.toml`. Requires a Cloudflare Worker deployment and the `DEEPSEEK_API_KEY` secret. It is source-only and is not yet deployed or connected to the production browser app. Do not treat the source code as completed real AI integration.
+必须分别记录：**已代码修改 / 已跑测试 / 已部署 / 真实端到端验收通过**。本次新功能的代码、CI、部署与真实线上验证状态以对应 PR、Actions 和交付报告为准；未经实际测试不得标注为生产验收通过。
