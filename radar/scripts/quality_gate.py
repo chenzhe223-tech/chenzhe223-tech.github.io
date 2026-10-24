@@ -95,6 +95,16 @@ def load_history(today):
                     docs.append((path.stem,{"news":normalized}))
             except Exception as exc: unreadable.append({"path":str(path.relative_to(ROOT)),"error":type(exc).__name__})
     return docs, unreadable, [p.name for p in files]
+def published_image_records(doc, day):
+    """Only index images that were actually published in curated cards, not unused RSS candidates."""
+    for section in ("top5", "china_ai_news"):
+        items=doc.get(section)
+        if not isinstance(items,list): continue
+        for item in items:
+            if isinstance(item,dict) and story_title(item) and image_url(item):
+                x=dict(item); x["_history_date"]=day; x["_history_section"]=section
+                yield x
+
 def compare_story(candidate, history):
     cu=norm_url(candidate.get("url") or candidate.get("source_url") or candidate.get("link") or "")
     ct=story_title(candidate)
@@ -215,7 +225,7 @@ def main():
         try:
             if dt.date.fromisoformat(day).isoformat()<week_start: continue
         except Exception: continue
-        for story in records_from(doc,day):
+        for story in published_image_records(doc,day):
             u=image_url(story)
             if u: week_urls[norm_url(u)]={"date":day,"title":story_title(story),"url":u}
     week_image_hits=[]
@@ -227,7 +237,7 @@ def main():
         try:
             if dt.date.fromisoformat(day).isoformat()<week_start: continue
         except Exception: continue
-        for story in records_from(doc,day):
+        for story in published_image_records(doc,day):
             u=image_url(story)
             if not u: continue
             canonical=norm_url(u)
