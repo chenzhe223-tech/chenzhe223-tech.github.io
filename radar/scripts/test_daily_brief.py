@@ -126,8 +126,13 @@ class DailyBriefContractTests(unittest.TestCase):
         for source, domain, count in publishers:
             for _ in range(count):
                 stamp = (base - dt.timedelta(minutes=index)).isoformat()
+                topic = [
+                    "智能客服部署案例", "视觉推理模型评测", "医疗影像辅助诊断", "企业知识库检索",
+                    "具身机器人控制系统", "AI 芯片互联架构", "多模态视频生成工具", "开源代码审查助手",
+                    "工业质检视觉模型", "端侧语音识别方案", "智能驾驶仿真平台", "科学文献分析代理",
+                ][index]
                 candidates.append({
-                    "title": f"中国 AI 产业新闻样例 {index}",
+                    "title": f"{source}发布/报道：{topic}方案 {index}",
                     "url": f"https://{domain}/news/{index}",
                     "source": source,
                     "published": stamp,
