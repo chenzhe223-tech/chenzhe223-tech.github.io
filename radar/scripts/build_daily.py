@@ -399,6 +399,39 @@ def github_search(query: str) -> list[dict]:
         print(f"[github-warning] {query}: {type(exc).__name__}")
         return []
 
+def collect_hackernews_skill_signals(repo_names: list[str]) -> dict:
+    """Collect independent 7-day Hacker News evidence; match only exact owner/repo mentions."""
+    now_epoch=int(dt.datetime.now(dt.timezone.utc).timestamp())
+    cutoff=now_epoch-7*86400
+    queries=("agent skills","Claude Code skills","Codex skills")
+    indexed={name.lower():{"source":"Hacker News Algolia","count_7d":0,"evidence_urls":[],"checked_at":dt.datetime.now(TZ).isoformat()} for name in repo_names}
+    successful=0
+    for query in queries:
+        url="https://hn.algolia.com/api/v1/search_by_date?"+urllib.parse.urlencode({
+            "query":query,"tags":"story","numericFilters":f"created_at_i>{cutoff}","hitsPerPage":100
+        })
+        try:
+            payload=json.loads(http_get(url,"application/json",timeout=8))
+            successful+=1
+            for hit in payload.get("hits",[]):
+                haystack=" ".join(str(hit.get(k) or "") for k in ("title","url","story_text")).lower()
+                story_url=str(hit.get("url") or "")
+                object_id=str(hit.get("objectID") or "")
+                for name in repo_names:
+                    if name.lower() in haystack:
+                        rec=indexed[name.lower()]
+                        if story_url and story_url not in rec["evidence_urls"]:
+                            rec["evidence_urls"].append(story_url)
+                        elif object_id:
+                            hn_url="https://news.ycombinator.com/item?id="+object_id
+                            if hn_url not in rec["evidence_urls"]: rec["evidence_urls"].append(hn_url)
+        except Exception as exc:
+            print(f"[skill-community-warning] source=HackerNews query={query!r} error={type(exc).__name__}")
+    for rec in indexed.values():
+        rec["count_7d"]=len(rec["evidence_urls"])
+        rec["status"]="observed" if rec["count_7d"] else "no_exact_match"
+    return {"status":"ok" if successful else "unavailable","queries_succeeded":successful,"query_count":len(queries),"signals":indexed,"window_days":7}
+
 def verify_skill_candidate(item: dict) -> dict | None:
     """Verify the featured Skill project has a recognized license and a readable README.
 
@@ -433,6 +466,10 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "license": license_id,
             "license_name": str(license_info.get("name") or license_id),
             "forks_total": int(metadata.get("forks_count") or 0),
+            "pushed_at": metadata.get("pushed_at"),
+            "created_at": metadata.get("created_at"),
+            "pushed_at": metadata.get("pushed_at"),
+            "created_at": metadata.get("created_at"),
             "open_issues_total": int(metadata.get("open_issues_count") or 0),
             "evidence_verified": True,
             "readme_verified": True,
@@ -499,6 +536,16 @@ def collect_skills() -> list[dict]:
                 "license": str(((r.get("license") or {}).get("spdx_id")) or ""),
             }
         time.sleep(0.2)
+
+    community_report = collect_hackernews_skill_signals(list(repos.keys()))
+    for repo_name, signals in community_report["signals"].items():
+        if repo_name in repos:
+            repos[repo_name]["community_signals"] = signals
+    SKILL_RADAR_DIAGNOSTICS["discovery_sources"] = {
+        "github_repository_search": "available" if repos else "no_candidates",
+        "hacker_news": {k:v for k,v in community_report.items() if k!="signals"},
+        "github_candidate_count": len(repos),
+    }
 
     now = dt.datetime.now(dt.timezone.utc)
     def score(item: dict) -> float:
