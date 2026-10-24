@@ -21,7 +21,7 @@ class SkillRadarTests(unittest.TestCase):
     def test_functionally_similar_candidates_detected(self):
         old={"name":"web-agent-skill","description":"browser automation agent that navigates websites and completes web workflows reliably"}
         new={"name":"browser-workflow-agent","description":"browser automation agent that navigates websites and completes web workflows reliably"}
-        self.assertIsNotNone(identify_duplicate(new,[old],semantic_threshold=0.65))
+        self.assertIsNotNone(identify_duplicate(new,[old]))
     def test_history_reads_past_90_days_and_reports_coverage(self):
         with tempfile.TemporaryDirectory() as td:
             p=Path(td)/"2026-10-20.json"; p.write_text(json.dumps({"skills":[{"name":"owner/repo","url":"https://github.com/owner/repo"}]}))
@@ -57,6 +57,13 @@ class SkillRadarTests(unittest.TestCase):
             candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":95,"license":"MIT","canonical_id":"github.com/x/y","material_update_verified":True,"re_recommendation_reason":"Major security fix released","material_update_evidence_url":"https://github.com/x/y/releases/tag/v2"}
             r=build_radar([candidate],Path(td),"2026-10-24")
             self.assertEqual(len(r["selected"]),1)
+    def test_critical_security_risk_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":95,"license":"MIT","critical_security_issue":True}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(r["selected"],[])
+            self.assertEqual(r["excluded"][0]["reason"],"critical_security_risk")
     def test_unverified_candidates_not_selected(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
