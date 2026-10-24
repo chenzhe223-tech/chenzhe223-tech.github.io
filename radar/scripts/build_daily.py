@@ -402,7 +402,7 @@ def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
 
 def github_search(query: str) -> list[dict]:
     # Recent-created/pushed searches must not inherit the default cumulative-Stars sort.
-    sort = "updated" if re.search(r"\\b(created|pushed):>", query) else "stars"
+    sort = "updated" if re.search(r"\b(created|pushed):>", query) else "stars"
     url = "https://api.github.com/search/repositories?" + urllib.parse.urlencode({
         "q": query, "sort": sort, "order": "desc", "per_page": 30
     })
