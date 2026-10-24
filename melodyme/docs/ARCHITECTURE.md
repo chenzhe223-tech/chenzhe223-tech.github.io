@@ -105,3 +105,13 @@ Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker
 - Provider/network/timeout/invalid-output errors return explicit error codes. The adapter never fabricates success when the key is missing.
 - This Worker source is **not deployed yet**. The current public site is GitHub Pages static hosting; the Worker needs a Cloudflare account deployment and secret setup. Public exposure must be preceded by a Cloudflare rate-limit rule and real smoke tests.
 - The existing front-end has not yet been wired to a deployed endpoint. Until deployment/configuration and browser integration are complete, real DeepSeek analysis is **not available in production**.
+
+
+## DeepSeek AI adapter (source added; deployment pending)
+
+Source: `melodyme/worker/src/index.js`; Wrangler configuration: `melodyme/worker/wrangler.toml`.
+
+- Supports `analyzeMemory`, `inferMusicCandidates`, `compareTrackVersions`, `generateMemoryStory`, `generateSocialCopy`, and `planPosterComposition`.
+- Reads the key only from Worker secret `DEEPSEEK_API_KEY`; it is not bundled into client code.
+- Includes exact-origin check, POST-only JSON, bounded payloads, 20-second provider timeout, and explicit provider/network/invalid-output errors.
+- This Worker is not deployed. The public app is currently GitHub Pages static hosting and is not yet connected to a deployed endpoint. Real DeepSeek is not available in production until deployment, secret configuration, rate limiting, frontend integration and real smoke tests are complete.
