@@ -114,6 +114,19 @@ class SkillRadarTests(unittest.TestCase):
             r=build_radar([candidate],Path(td),"2026-10-24")
             self.assertEqual(r["selected"],[])
             self.assertEqual(r["excluded"][0]["reason"],"score_below_70_or_invalid")
+    def test_sub80_candidate_without_rare_value_is_rejected(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":76,"license":"MIT","canonical_id":"github.com/x/y","evidence_verified":True,"readme_verified":True,"actual_skill_file_count":1}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(r["selected"],[])
+            self.assertEqual(r["excluded"][0]["reason"],"score_70_79_without_verified_rare_value")
+    def test_sub80_candidate_with_verified_rare_value_is_accepted(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
+            candidate={"name":"x/y","url":"https://github.com/x/y","quality_status":"PASS","total_score":76,"license":"MIT","canonical_id":"github.com/x/y","evidence_verified":True,"readme_verified":True,"actual_skill_file_count":1,"rare_value_verified":True,"rare_value_reason":"Distinct documented use case","rare_value_evidence_url":"https://github.com/x/y#readme"}
+            r=build_radar([candidate],Path(td),"2026-10-24")
+            self.assertEqual(len(r["selected"]),1)
     def test_unverified_candidates_not_selected(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
