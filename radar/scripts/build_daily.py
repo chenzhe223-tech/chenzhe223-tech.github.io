@@ -16,9 +16,9 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 from zoneinfo import ZoneInfo
 try:
-    from radar.scripts.skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
+    from radar.scripts.skill_radar import build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
 except ModuleNotFoundError:
-    from skill_radar import build_radar, canonical_project_id, identify_duplicate, load_recommendation_history, score_candidate
+    from skill_radar import build_radar, canonical_project_id, classify_skill_type, identify_duplicate, load_recommendation_history, score_candidate
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -456,6 +456,11 @@ def verify_skill_candidate(item: dict) -> dict | None:
         if len(readme.strip()) < 80:
             print(f"[skill-warning] README missing or too small: {name}")
             return None
+        readme_text=readme.decode("utf-8",errors="replace") if isinstance(readme,bytes) else str(readme)
+        skill_type=classify_skill_type(name,str(metadata.get("description") or item.get("description") or ""),readme_text)
+        if not skill_type:
+            print(f"[skill-warning] repository does not prove it contains installable Agent Skill files: {name}")
+            return None
         return {
             **item,
             "name": metadata.get("full_name", name),
@@ -474,6 +479,7 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "evidence_checked_at": dt.datetime.now(TZ).isoformat(),
             "evidence_urls": [metadata.get("html_url", item.get("url", "")), base + "/readme"],
             "quality_status": "PASS",
+            "skill_type": skill_type,
         }
     except Exception as exc:
         print(f"[skill-warning] repository verification {name}: {type(exc).__name__}")
