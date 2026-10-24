@@ -24,10 +24,10 @@ const path = require('node:path');
       ink: getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),
       canvas: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
     }));
-    if (!colors.canvas.toLowerCase().includes('#f7f7f4') || !colors.ink.toLowerCase().includes('#202630')) {
-      throw new Error('Balanced SaaS design tokens are not active: ' + JSON.stringify(colors));
+    if (!colors.canvas.toLowerCase().includes('#050813') || !colors.ink.toLowerCase().includes('#f5f7ff')) {
+      throw new Error('Tech-fashion dark design tokens are not active: ' + JSON.stringify(colors));
     }
-    results.push({ test: 'Balanced SaaS design tokens', status: 'PASS', detail: colors });
+    results.push({ test: 'Tech-fashion dark design tokens', status: 'PASS', detail: colors });
 
     const initialCount = await page.locator('#shelf .app-card').count();
     if (initialCount < 3) throw new Error('Expected at least 3 product cards, got ' + initialCount);
