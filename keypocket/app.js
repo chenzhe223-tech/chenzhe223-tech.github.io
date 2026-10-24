@@ -178,7 +178,7 @@ function readPendingRadarSkills(){
    const topicInput=Array.isArray(item.topics)?item.topics:(typeof item.topics==='string'?item.topics.split(/[·,]/):[]);
    const topics=topicInput.filter(x=>typeof x==='string').map(x=>x.trim()).filter(Boolean).slice(0,8).map(x=>x.slice(0,80));
    const date=/^\d{4}-\d{2}-\d{2}$/.test(String(item.reportDate||''))?String(item.reportDate):'';
-   const stars=Number(item.stars);
+   const stars=item.stars!==null&&item.stars!==undefined&&item.stars!==''?Number(item.stars):NaN;
    return {
     id:item.id,source:'davy-radar',createdAt:Number.isFinite(item.createdAt)?item.createdAt:Date.now(),
     reportDate:date,name:String(item.name||url.split('/').pop()).trim().slice(0,180),
@@ -274,6 +274,8 @@ $('#importRadarSkillsBtn')?.addEventListener('click',openPendingRadarSkillModal)
 window.addEventListener('storage',event=>{
  if(event.key!==KEYPOCKET_PENDING_SKILL_KEY)return;
  updateRadarImportButton();
- if(cryptoKey&&readPendingRadarSkills().length&&!$('#modalRoot').innerHTML.trim())openPendingRadarSkillModal();
+ const pendingCount=readPendingRadarSkills().length;
+ if(cryptoKey&&pendingCount&&!$('#modalRoot').innerHTML.trim())openPendingRadarSkillModal();
+ if(!pendingCount&&$('#modalRoot').innerHTML.includes('saveRadarSkillBtn'))closeModal();
 });
 updateRadarImportButton();
