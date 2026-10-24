@@ -38,8 +38,8 @@ def similarity(a: dict,b: dict) -> float:
     containment=len(ta&tb)/max(1,min(len(ta),len(tb)))
     seq=difflib.SequenceMatcher(None," ".join(sorted(ta))," ".join(sorted(tb))).ratio()
     # Require substantial overlap, not just shared generic AI vocabulary.
-    return max(jac, containment*0.82, seq*0.7)
-def identify_duplicate(item: dict, history: list[dict], semantic_threshold: float=0.82) -> dict|None:
+    return max(jac, containment, seq*0.7)
+def identify_duplicate(item: dict, history: list[dict], semantic_threshold: float=0.68) -> dict|None:
     identity=canonical_project_id(str(item.get("url") or item.get("repository_url") or item.get("name") or ""))
     aliases={str(x).strip().lower() for x in (item.get("aliases") or []) if str(x).strip()}
     name=str(item.get("name") or "").strip().lower()
@@ -105,9 +105,9 @@ def score_candidate(item: dict, today: str) -> dict:
     text=" ".join(str(item.get(k) or "") for k in ("name","description","topics","daily_theme")).lower()
     trend_terms=("agent","skill","coding","mcp","multimodal","eval","security","browser","workflow","research","data","automation")
     trend=_clamp(8+min(12,sum(1 for x in trend_terms if x in text)*1.5),0,20)
-    usefulness=15 if len(str(item.get("description") or ""))>=70 else 10 if item.get("description") else 3
-    quality=15 if item.get("license") and item.get("readme_verified",True) else 5
-    novelty=8 if item.get("novelty_status")=="new" else 4
+    usefulness=20 if len(str(item.get("description") or ""))>=120 else 16 if len(str(item.get("description") or ""))>=70 else 8 if item.get("description") else 0
+    quality=15 if item.get("license") and item.get("readme_verified",True) and item.get("evidence_verified") else 7 if item.get("license") else 0
+    novelty=10 if item.get("novelty_status")=="new" else 4
     total=round(heat+trend+usefulness+quality+novelty+maintenance,1)
     confidence="high" if item.get("evidence_verified") and item.get("license") and item.get("readme_verified",True) else "medium" if item.get("license") else "low"
     return {**item,"canonical_id":canonical_project_id(str(item.get("url") or item.get("name") or "")),
@@ -120,7 +120,9 @@ def score_candidate(item: dict, today: str) -> dict:
       "confidence_level":confidence,"evidence_checked_at":item.get("evidence_checked_at"),
       "maturity_level":"持续维护" if age_days is not None and age_days<=90 else "维护状态待确认",
       "compatibility_status":"文档及仓库元数据已核验；未执行安装测试",
-      "security_status":"未完成专项安全审计"}
+      "security_status":"未完成专项安全审计",
+      "recommendation_type":"成熟实用" if stars>=1000 and age_days is not None and age_days<=90 else "趋势观察（未验证增长）" if age_days is not None and age_days<=30 else "维护状态观察",
+      "user_feedback":[]}
 def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=10) -> dict:
     history=load_recommendation_history(archive_dir,today,90)
     if history["status"]=="unavailable":
@@ -131,12 +133,20 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
     for item in ranked:
         hit=identify_duplicate(item,history["records"])
         if not hit: hit=identify_duplicate(item,selected_today)
-        if hit:
+        material_update=(item.get("material_update_verified") is True
+            and bool(item.get("re_recommendation_reason"))
+            and str(item.get("material_update_evidence_url") or "").startswith(("https://","http://")))
+        if hit and not material_update:
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"duplicate","match":hit})
             continue
+        if hit and material_update:
+            item["recommendation_history_match"]=hit
+            item["novelty_status"]="material_update"
         if item.get("quality_status")!="PASS":
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":item.get("quality_status") or "not_verified"})
             continue
+        if hit and material_update:
+            item["novelty_status"]="material_update"
         selected.append(item); selected_today.append(item)
         if len(selected)>=limit: break
     return {"status":"PASS" if history["status"] in ("complete","partial") else "history_unavailable",
