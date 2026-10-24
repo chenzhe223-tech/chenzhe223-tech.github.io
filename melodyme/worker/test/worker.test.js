@@ -125,3 +125,25 @@ test("returns a controlled error when Workers AI binding is missing", async () =
   assert.equal(res.status, 503);
   assert.equal((await res.json()).error, "ai_image_service_not_configured");
 });
+
+test("enforces the existing Worker rate limiter for album-art requests", async () => {
+  let called = false;
+  const limitedEnv = { ...env, AI_RATE_LIMITER: { limit: async () => ({ success: false }) }, AI: { run: async () => { called = true; return new Uint8Array([1]); } } };
+  const res = await worker.fetch(artRequest(), limitedEnv);
+  assert.equal(res.status, 429);
+  assert.equal((await res.json()).error, "request_rate_limited");
+  assert.equal(called, false);
+});
+test("maps album-art timeout to a controlled 504 response", async () => {
+  const originalSetTimeout = globalThis.setTimeout;
+  globalThis.setTimeout = (fn) => originalSetTimeout(fn, 0);
+  try {
+    const res = await worker.fetch(artRequest(), { ...env, AI: { run: async () => new Promise(() => {}) } });
+    assert.equal(res.status, 504);
+    const data = await res.json();
+    assert.equal(data.error, "ai_image_timeout");
+    assert.equal(JSON.stringify(data).includes("test-only-key"), false);
+  } finally {
+    globalThis.setTimeout = originalSetTimeout;
+  }
+});
