@@ -293,9 +293,14 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           TODAY="$(TZ=Asia/Shanghai date +%F)"
           SNAPSHOT=/tmp/davy-radar-refresh
-          mkdir -p "$SNAPSHOT"
+          mkdir -p "$SNAPSHOT/skill-candidates"
           # Snapshot generated outputs before switching to the latest main, which
-          # may already contain another run's files for the same date.
+          # may already contain another run's files for the same date. Candidate
+          # snapshots are untracked until commit, so preserve them outside the checkout
+          # before git clean removes generated files.
+          if [ -d radar/data/skill-candidates ]; then
+            cp -a radar/data/skill-candidates/. "$SNAPSHOT/skill-candidates/"
+          fi
           cp radar/data/latest.json "$SNAPSHOT/latest.json"
           cp radar/data/image-cache.json "$SNAPSHOT/image-cache.json"
           cp "radar/data/archive/$TODAY.json" "$SNAPSHOT/today.json"
@@ -373,6 +378,8 @@ jobs:
           cp "$SNAPSHOT/latest.png" radar/posters/latest.png
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
           cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
+          mkdir -p radar/data/skill-candidates
+          cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
 
           # Rebuild the history index from the merged archive directory so
           # this run cannot delete history added by another run.
