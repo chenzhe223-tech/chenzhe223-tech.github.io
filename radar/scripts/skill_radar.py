@@ -27,6 +27,22 @@ def canonical_project_id(value: str) -> str:
     except Exception:
         return ""
     return ""
+def infer_skill_category(item: dict) -> str:
+    text=" ".join([str(item.get("name") or ""),str(item.get("description") or ""), " ".join(str(x) for x in (item.get("topics") or []))]).lower()
+    rules=[
+        ("安全与评估",("security","safety","vulnerability","red team","evaluation","benchmark","evals","guardrail")),
+        ("多模态与创作",("video","image","audio","music","creative","montage","animation","media","design","ui/ux","slides","presentation","storyboard")),
+        ("数据与分析",("data","analytics","sql","database","dashboard","spreadsheet","query","visualization","bi ")),
+        ("研究与知识管理",("research","scientific","paper","literature","knowledge","search","citation","academic")),
+        ("软件工程与测试",("coding","code review","architecture","frontend","backend","software","programming","debugging","testing","test automation","developer","devtools")),
+        ("办公与业务自动化",("office","document","email","calendar","marketing","sales","crm","finance","invoice","customer support")),
+        ("个人效率与知识管理",("adhd","productivity","focus","habit","personal workflow","task management","time management")),
+        ("Agent 工作流与规划",("agent","planning","orchestration","workflow","memory","context","multi-agent","task")),
+    ]
+    for category,keywords in rules:
+        if any(k in text for k in keywords): return category
+    return "通用 Agent 技能"
+
 def actual_skill_files(tree_payload: dict) -> list[str]:
     tree=tree_payload.get("tree") if isinstance(tree_payload,dict) else []
     if not isinstance(tree,list): return []
@@ -162,7 +178,7 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
     history=load_recommendation_history(archive_dir,today,90)
     if history["status"]=="unavailable":
         return {"status":"history_unavailable","history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":90,"errors":history["errors"]},"selected":[],"excluded":[]}
-    selected=[]; excluded=[]; selected_today=[]
+    selected=[]; excluded=[]; selected_today=[]; category_counts={}; owner_counts={}
     # Rank only evidence-verified candidates, and never fabricate historical growth.
     ranked=sorted(candidates,key=lambda x:float(x.get("total_score") or 0),reverse=True)
     for item in ranked:
@@ -190,9 +206,23 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
         if score<70 or score>100:
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_below_70_or_invalid","score":score})
             continue
+        category=str(item.get("daily_theme") or infer_skill_category(item))
+        try:
+            owner=urllib.parse.urlsplit(str(item.get("url") or "")).path.strip("/").split("/")[0].lower()
+        except Exception:
+            owner=""
+        if category_counts.get(category,0)>=2:
+            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"category_saturation","category":category})
+            continue
+        if owner and owner_counts.get(owner,0)>=2:
+            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"developer_saturation","owner":owner})
+            continue
+        item["daily_theme"]=category
         if hit and material_update:
             item["novelty_status"]="material_update"
         selected.append(item); selected_today.append(item)
+        category_counts[category]=category_counts.get(category,0)+1
+        if owner: owner_counts[owner]=owner_counts.get(owner,0)+1
         if len(selected)>=limit: break
     return {"status":"PASS" if history["status"] in ("complete","partial") else "history_unavailable",
       "history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":90,"window_start":history.get("window_start"),"window_end":history.get("window_end"),"errors":history["errors"],"records":len(history["records"])},
