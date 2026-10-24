@@ -35,6 +35,12 @@ class SkillRadarTests(unittest.TestCase):
         s=score_candidate({"name":"owner/repo","url":"https://github.com/owner/repo","stars":1000,"updated":"2026-10-20","license":"MIT","description":"Useful AI agent skill","evidence_verified":True},"2026-10-24")
         self.assertIsNone(s["stars_delta_7d"]); self.assertIsNone(s["stars_delta_30d"])
         self.assertIn("未推算",s["growth_data_status"])
+    def test_recent_community_signal_is_recorded_and_scored(self):
+        base={"name":"owner/repo","url":"https://github.com/owner/repo","stars":1000,"updated":"2026-10-20","license":"MIT","description":"A detailed and useful AI agent skill","evidence_verified":True,"readme_verified":True}
+        without=score_candidate(base,"2026-10-24")
+        with_signal=score_candidate({**base,"community_signals":{"count_7d":2,"evidence_urls":["https://news.ycombinator.com/item?id=1"]}},"2026-10-24")
+        self.assertEqual(with_signal["community_count_7d"],2)
+        self.assertGreater(with_signal["heat_score"],without["heat_score"])
     def test_score_total_is_weighted_and_bounded(self):
         s=score_candidate({"name":"owner/repo","url":"https://github.com/owner/repo","stars":10000,"updated":"2026-10-20","license":"MIT","description":"A detailed and useful AI agent skill","evidence_verified":True},"2026-10-24")
         self.assertGreaterEqual(s["total_score"],0); self.assertLessEqual(s["total_score"],100)
