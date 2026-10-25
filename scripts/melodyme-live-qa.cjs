@@ -19,10 +19,11 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   await page.getByRole('button',{name:/开始探索/}).click();
   await page.locator('#next').click();
   record('Empty story feedback',await page.locator('#feedback').innerText().then(t=>t.length>0),'Empty input receives guidance');
-  await page.locator('#story').fill('傍晚走在海边，听到一首歌，突然想起毕业那天的告别。');
+  await page.locator('#story').fill('今天我在加班，周末有台风，外面晴雨不定，我听着周杰伦的晴天，心情舒畅开心。');
   await page.locator('#next').click();
   await page.locator('[data-mood="怀念"]').click();
   await page.locator('#next').click();
+  record('Explicit song and artist inferred from memory',await page.locator('#songinput').inputValue().then(v=>v==='晴天')&&await page.locator('#artistinput').inputValue().then(v=>v==='周杰伦'),'Song title and artist are prefilled and remain editable');
   await page.locator('#songinput').fill('线上验收测试歌曲');
   await page.locator('#artistinput').fill('MelodyMe QA');
   await page.locator('#songinput').fill('Yesterday');
@@ -70,10 +71,11 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
   const dims=await mobile.evaluate(()=>({viewport:document.documentElement.clientWidth,document:document.documentElement.scrollWidth}));
   record('Mobile route and overflow',!!mr&&mr.status()===200&&dims.document<=dims.viewport+2,JSON.stringify({status:mr&&mr.status(),...dims}));
   await mobile.getByRole('button',{name:/开始探索/}).click();
-  await mobile.locator('#story').fill('手机端验收：一首歌让我想起一次旅行。');
+  await mobile.locator('#story').fill('我一直记得孙燕姿《遇见》陪我度过那段时间。');
   await mobile.locator('#next').click();
   await mobile.locator('[data-mood="自由"]').click();
   await mobile.locator('#next').click();
+  record('Chinese bracketed artist-title inference',await mobile.locator('#songinput').inputValue().then(v=>v==='遇见')&&await mobile.locator('#artistinput').inputValue().then(v=>v==='孙燕姿'),'孙燕姿《遇见》 auto-fills both editable fields');
   await mobile.locator('#next').click();
   await mobile.locator('#next').click();
   await mobile.locator('#results').waitFor({state:'visible',timeout:5000});
