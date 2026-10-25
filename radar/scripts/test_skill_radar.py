@@ -19,7 +19,7 @@ class SkillRadarTests(unittest.TestCase):
     def test_developer_concentration_is_limited(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
-            candidates=[{"name":f"owner/tool-{i}","url":f"https://github.com/owner/tool-{i}","quality_status":"PASS","total_score":95-i,"license":"MIT","daily_theme":f"category-{i}"} for i in range(3)]
+            candidates=[{"name":f"owner/tool-{i}","url":f"https://github.com/owner/tool-{i}","description":desc,"quality_status":"PASS","total_score":95-i,"license":"MIT","daily_theme":f"category-{i}"} for i,desc in enumerate(["image creative video design","data analytics SQL dashboard","research academic literature citation"])]
             r=build_radar(candidates,Path(td),"2026-10-24",limit=8)
             self.assertEqual(len(r["selected"]),2)
             self.assertEqual(r["excluded"][0]["reason"],"developer_saturation")
