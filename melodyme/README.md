@@ -44,6 +44,16 @@ GitHub Actions 会在相关 PR/push 上运行 Worker 测试。CI 通过不等于
 - [技术架构](docs/ARCHITECTURE.md)
 - [测试计划](docs/QA_PLAN.md)\n- [海报设计系统](docs/POSTER_DESIGN_SYSTEM.md)
 
+## 工程技能（开发代理使用）
+
+`AGENTS.md` 为 MelodyMe 任务提供技能路由；以下本地 Skill 是开发与验收规范，不会作为浏览器运行时代码加载：
+
+- [前端质量与视觉验收](skills/melodyme-frontend/SKILL.md)
+- [浏览器音频试听工程](skills/melodyme-audio-engineering/SKILL.md)
+- [音乐目录与 MusicKit 合规接入](skills/melodyme-music-platform/SKILL.md)
+
+这些规范以当前 Web 架构为准：iTunes Search 与真实可用的短试听仍是默认路径。MusicKit 是未来可选集成，不代表当前已接入 Apple Music 完整曲库或原生 iOS 播放能力。
+
 ## 验收状态说明
 
 必须分别记录：**已代码修改 / 已跑测试 / 已部署 / 真实端到端验收通过**。本次新功能的代码、CI、部署与真实线上验证状态以对应 PR、Actions 和交付报告为准；未经实际测试不得标注为生产验收通过。
