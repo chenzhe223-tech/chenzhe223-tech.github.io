@@ -160,6 +160,12 @@ jobs:
           if (await page.locator('#downloadCityMap').isDisabled()) throw new Error('generated map should be downloadable');
           await page.locator('#downloadCityMap').click();
           if (await page.locator('#cityRouteSvg').count() !== 1) throw new Error('map download must not remove the map');
+          await page.locator('#saveCityMap').click();
+          await page.getByRole('button',{name:/我的作品/}).click();
+          if (!(await page.getByText('QA Preview Track').count())) throw new Error('saved city journey missing from collection');
+          await page.getByRole('button',{name:'查看 / 编辑'}).click();
+          await page.locator('#cityRouteSvg').waitFor({state:'visible'});
+          if (await page.locator('#cityMapCanvas .city-map-pin').count() !== 4) throw new Error('saved journey should restore four city pins');
           const duplicateCities = ['西安','西安','上海','新加坡'];
           for (let i=0;i<4;i++) await page.locator('#cityInput'+i).fill(duplicateCities[i]);
           await page.locator('#buildCityMap').click();
