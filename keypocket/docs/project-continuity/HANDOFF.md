@@ -8,7 +8,7 @@
 - 项目目录：keypocket/
 - 线上地址：https://chenzhe223-tech.github.io/keypocket/
 - 分支：main
-- 最近一次连续性/文档提交：d55744a7dc484e716c7eb234c9be66ee4c129ce8
+- 本轮档案与文档更新最新提交：d9a724bc151dae7f014b783dbe81202dfa9b0eae
 - 生产部署：未核实
 - 当前任务：KP-CONT-003 / KP-CONT-004
 
@@ -20,19 +20,18 @@
 
 ## 2. 已完成并验证
 - 9 份连续性档案已新增并逐一回读成功。
-- 发现同步 UI 与旧“无云同步”描述不一致，以及 CSP 与旧安全文档描述冲突。
-- 已提交对 README.md、SECURITY-ACCEPTANCE.md、DELIVERY-REPORT.md 的修正；需要回读确认。
-- 连续性档案提交：05d51d45d7bc1707b9980259dae8280c394c7e2d。
+- 已更新 README.md、SECURITY-ACCEPTANCE.md、DELIVERY-REPORT.md，并回读确认内容。
+- 发现同步 UI 与旧“无云同步”描述不一致，以及 CSP 与旧安全文档描述冲突；相关说明已更新。
+- 最近提交：[d9a724b](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/commit/d9a724bc151dae7f014b783dbe81202dfa9b0eae)。
 
 ## 3. 当前正在做什么
-核实文档修正、CI/部署状态和 Supabase 访问策略，然后运行可执行的 QA。
+核实 CI/部署状态和 Supabase 访问策略，然后运行可执行的 QA。
 
 ## 4. 未解决事项
-1. 回读本次更新的三份产品文档。
-2. 查询 GitHub Actions 最新运行和 Pages 部署记录。
-3. 核实 Supabase keypocket_vault_sync 的 RLS 与策略。
-4. 运行当前版本语法、静态和 E2E 测试。
-5. 完成新对话恢复演练并记录结果。
+1. 查询 GitHub Actions 最新运行和 Pages 部署记录。
+2. 核实 Supabase keypocket_vault_sync 的 RLS 与策略。
+3. 运行当前版本语法、静态和 E2E 测试。
+4. 完成新对话恢复演练并记录结果。
 
 ## 5. 不要重复做
 - 不要重复创建连续性目录或重新添加模板。
@@ -41,4 +40,4 @@
 - 不要未经证据擅自更改加密、同步或备份格式。
 
 ## 6. 恢复后的第一项行动
-回读 README.md、SECURITY-ACCEPTANCE.md、DELIVERY-REPORT.md，确认同步说明已与当前 app.js 对齐；随后查询 Actions 和 Pages 部署状态。
+查询仓库现有 GitHub Actions 工作流和最新 Pages 部署记录，确认文档更新是否已发布；然后核实 Supabase 表策略并运行可用的 QA。
