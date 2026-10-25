@@ -58,6 +58,34 @@
 <body><header class="shell top"><div class="brand"><b>♫</b>MelodyMe</div><nav class="nav"><button class="active" data-view="explore">探索地图</button><button data-view="works">我的作品 <span id="count">0</span></button></nav></header>
 <main class="shell"><section class="hero" id="hero"><div><div class="eyebrow">YOUR LIFE · YOUR SOUNDTRACK</div><h1>每一首歌，<br>都是你走过的路。</h1><p>不用整理好所有细节。只要一个瞬间，我们就从那里出发，一步步找回那段音乐、那种心情，以及当时的你。</p><div class="heroactions"><button class="primary" id="start">开始探索　↗</button><button class="ghost" id="continue" hidden>继续上次旅程</button></div><div class="hint">一句话就够了 · 每一步都可跳过 · 记忆默认保存在此设备</div></div>
 <div class="map"><div class="maphead"><span>THE MEMORY ATLAS</span><span id="mapcount">0 / 4 STOPS</span></div><svg viewBox="0 0 420 260" role="img" aria-label="由四个记忆岛屿组成的音乐探索地图"><path class="route" d="M48 190 C85 155 94 85 157 100 S224 200 270 150 S330 55 376 73"/><ellipse cx="77" cy="199" rx="46" ry="25" fill="#d6c8b6"/><ellipse cx="164" cy="112" rx="43" ry="28" fill="#d9d1e5"/><ellipse cx="271" cy="162" rx="46" ry="27" fill="#c2d0cf"/><ellipse cx="360" cy="80" rx="42" ry="26" fill="#e8c6c5"/><g data-map="0"><circle class="island" cx="77" cy="185" r="18" fill="#fffdfa"/><text x="77" y="189" text-anchor="middle">✦</text><text x="77" y="230" text-anchor="middle">记忆起点</text></g><g data-map="1"><circle class="island" cx="164" cy="103" r="18" fill="#f4eefb"/><text x="164" y="107" text-anchor="middle">♡</text><text x="164" y="143" text-anchor="middle">情绪岛屿</text></g><g data-map="2"><circle class="island" cx="271" cy="153" r="18" fill="#f2faf8"/><text x="271" y="157" text-anchor="middle">♫</text><text x="271" y="193" text-anchor="middle">音乐线索</text></g><g data-map="3"><circle class="island" cx="360" cy="71" r="18" fill="#fff4f1"/><text x="360" y="75" text-anchor="middle">✧</text><text x="360" y="111" text-anchor="middle">作品终点</text></g></svg><div class="mapfoot"><span>一段记忆 · 一条属于你的路线</span><span>探索中 ↗</span></div><div class="progress"><span id="bar"></span></div></div></section>
+<section class="section hidden" id="cityStudio">
+ <div class="secthead"><div class="eyebrow">YOUR CITIES · YOUR SONG</div><h2>四座城市，一首歌，一段只属于你的旅程。</h2><p>输入你人生中有意义的四座城市，再写下一首歌。MelodyMe 会核验真实城市坐标、匹配歌曲与可用试听片段，再把它们编织成一张会随音乐流动的记忆地图。</p></div>
+ <div class="city-layout">
+  <section class="card city-input-card">
+   <div class="city-card-head"><div><div class="eyebrow">01 — THE PLACES</div><h3>把你的城市放上地图</h3></div><span class="city-count">4 CITIES</span></div>
+   <p class="muted">按记忆发生的顺序填写。尽量写到城市名，例如「西安」「成都」「上海」「新加坡」。</p>
+   <div class="city-fields">
+    <label class="city-field"><span class="city-index">01</span><span><strong>第一站</strong><small>起点 · 初遇 / 出发</small></span><input id="cityInput0" maxlength="80" autocomplete="address-level2" placeholder="例如：西安" /></label>
+    <label class="city-field"><span class="city-index">02</span><span><strong>第二站</strong><small>转折 · 成长 / 相遇</small></span><input id="cityInput1" maxlength="80" autocomplete="address-level2" placeholder="例如：成都" /></label>
+    <label class="city-field"><span class="city-index">03</span><span><strong>第三站</strong><small>远行 · 改变 / 告别</small></span><input id="cityInput2" maxlength="80" autocomplete="address-level2" placeholder="例如：上海" /></label>
+    <label class="city-field"><span class="city-index">04</span><span><strong>第四站</strong><small>此刻 · 回望 / 归来</small></span><input id="cityInput3" maxlength="80" autocomplete="address-level2" placeholder="例如：新加坡" /></label>
+   </div>
+   <div class="city-song-block"><div class="eyebrow">02 — THE SONG</div><h3>哪首歌，记得那段日子？</h3><div class="city-song-search"><input id="citySongInput" maxlength="120" placeholder="输入歌名，例如：晴天" autocomplete="off" /><button class="primary" id="citySearchSong" type="button">查找歌曲</button></div><p class="muted" id="cityMusicStatus" role="status">将查询真实音乐目录；只展示目录实际返回的歌手、封面与可用试听。</p><div id="cityMusicResults" class="city-music-results"></div><div id="citySelectedTrack" class="city-selected-track hidden"></div></div>
+   <button class="primary city-generate" id="buildCityMap" type="button">核验城市 · 生成音乐地图 <span>↗</span></button>
+   <p class="city-disclosure">城市坐标通过高德地图服务核验。歌曲来自 Apple iTunes Search；试听仅在曲目提供预览时可用，通常为约 30 秒片段。</p>
+  </section>
+  <section class="city-map-card" aria-label="动态音乐地图">
+   <div class="city-map-top"><div><div class="eyebrow">MELODYME ATLAS</div><h3 id="cityMapTitle">你的记忆，还没有坐标。</h3></div><span class="map-live-dot">LIVE MAP</span></div>
+   <div class="city-map-canvas" id="cityMapCanvas">
+    <div class="city-map-empty"><span class="map-empty-orbit">♫</span><strong>四座城市，连成你的故事。</strong><p>核验城市后，这里会按真实地理位置绘制路线。</p></div>
+   </div>
+   <div class="city-map-legend"><span><i class="legend-dot"></i>真实城市坐标</span><span><i class="legend-line"></i>记忆顺序连线 · 非导航路线</span></div>
+   <div class="city-map-player"><div class="city-now-playing"><span class="playing-glyph">♫</span><div><strong id="cityNowSong">等待你的那首歌</strong><small id="cityNowArtist">选定歌曲后，地图将随音乐播放。</small></div></div><button id="cityPlayJourney" type="button" class="city-play-button" disabled>▶ 播放旅程</button></div>
+   <audio id="cityAudio" preload="none" controls aria-label="已选歌曲的试听片段" hidden></audio>
+   <div class="city-map-foot"><span id="cityMapStatus" role="status">等待输入四座城市</span><button type="button" id="downloadCityMap" disabled>下载地图 SVG ↗</button></div>
+  </section>
+ </div>
+</section>
 <section class="section" id="explore"><div class="secthead"><div class="eyebrow">YOUR JOURNEY</div><h2>慢慢走，作品会一点点浮现。</h2><p>每一站只做一件小事。你可以跳过，也可以随时回来修改。</p></div><div class="layout">
 <aside class="card"><h3>你的音乐地图</h3><div class="muted">点选节点，继续或回到之前的记忆。</div><div class="nodes"><button class="node selected" data-node="0"><span class="icon">✦</span><span><strong>唤起记忆</strong><small>一句话就够了</small></span><span class="nodecheck"></span></button><button class="node" data-node="1"><span class="icon">♡</span><span><strong>找到感觉</strong><small>选择一种情绪</small></span><span class="nodecheck"></span></button><button class="node" data-node="2"><span class="icon">♫</span><span><strong>发现音乐</strong><small>歌曲线索可选</small></span><span class="nodecheck"></span></button><button class="node" data-node="3"><span class="icon">✧</span><span><strong>收获作品</strong><small>生成你的表达</small></span><span class="nodecheck"></span></button></div><div class="feedback" id="sidefeedback">从一句记忆开始，其他信息都可以之后再补。</div><div class="privacy">🔒 原始故事和作品仅保存在当前浏览器。本原型不会上传你的故事。</div></aside>
 <section class="card" aria-live="polite"><div class="eyebrow" id="stepno">STOP 01 / 04</div><h2 class="prompt" id="title">有一个瞬间，你一直记得吗？</h2><p class="muted" id="desc">写下一句话，也可以从下面选一个方向。无需填写歌名、歌手或年份。</p><div id="content"><textarea class="field story" id="story" maxlength="1200" placeholder="比如：毕业那天，我们在火车站分别。回去的路上，一首歌一直在耳机里循环……"></textarea><div class="choices"><button class="choice" data-prompt="我想起一个很久没见的人。">某个人</button><button class="choice" data-prompt="我想起一次很远的旅行。">一段旅途</button><button class="choice" data-prompt="我想起人生中一个重要的转折。">人生转折</button><button class="choice" data-prompt="我想从一个随机的记忆开始。">随机开启</button></div></div><div class="actions"><button class="primary" id="next">继续这一站　→</button><button class="ghost" id="skip">跳过这一站</button><button class="ghost hidden" id="back">上一步</button></div><div class="feedback" id="feedback"></div><div class="minipreview" id="stage"><div class="mini"><strong>✦ 已经找到的线索</strong><p id="clue">你的记忆正在等待被唤起。</p></div><div class="mini"><strong>✧ 作品正在成形</strong><p id="draft">每一个细节，都可以由你决定。</p></div></div>
@@ -119,6 +147,57 @@
 .rhythm-result strong{font-size:14px}.rhythm-result p{font-size:12px;line-height:1.5;color:var(--muted);margin:3px 0 0}
 .rhythm-footnote{font-size:11px;line-height:1.55;margin:12px 0 0}
 @media(max-width:420px){.rhythm-composer{padding:13px;border-radius:20px}.rhythm-staff{gap:0;min-height:88px}.rhythm-step{height:88px}.rhythm-note{width:6px;height:6px}.rhythm-step.is-on .rhythm-note{width:9px;height:7px}.rhythm-step.is-on:after{height:21px}.rhythm-actions{display:grid;grid-template-columns:1fr 1fr}.rhythm-actions button:last-child{grid-column:1/-1}}
+<style id="melodyme-city-map">
+.city-layout{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:18px;align-items:start}
+.city-input-card{padding:clamp(18px,3vw,28px)}
+.city-card-head,.city-map-top,.city-map-player,.city-map-foot{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.city-card-head h3,.city-song-block h3,.city-map-top h3{margin:6px 0 0;font-size:22px;letter-spacing:-.035em}
+.city-count,.map-live-dot{font-size:10px;letter-spacing:.13em;font-weight:750;color:var(--muted);border:1px solid var(--line);padding:7px 9px;border-radius:999px;white-space:nowrap}
+.city-fields{display:grid;gap:9px;margin:18px 0 25px}
+.city-field{display:grid;grid-template-columns:34px minmax(90px,.58fr) minmax(0,1fr);align-items:center;gap:10px;border:1px solid var(--line);border-radius:15px;background:#fffdfa;padding:10px 12px;min-width:0}
+.city-index{display:grid;place-items:center;width:30px;height:30px;border-radius:10px;background:#e9e4d9;color:var(--ink);font-size:11px;font-weight:800}
+.city-field strong,.city-field small{display:block}.city-field strong{font-size:13px}.city-field small{font-size:10px;color:var(--muted);margin-top:3px}
+.city-field input,.city-song-search input{min-width:0;width:100%;border:0;outline:0;background:transparent;color:var(--ink);font:inherit;font-size:15px}
+.city-field:focus-within,.city-song-search:focus-within{border-color:#a194c9;box-shadow:0 0 0 3px #a194c91a}
+.city-song-block{border-top:1px solid var(--line);padding-top:21px}
+.city-song-search{display:flex;gap:8px;align-items:center;margin-top:13px;padding:7px;border:1px solid var(--line);border-radius:14px;background:#fffdfa}
+.city-song-search input{padding:9px 7px}.city-song-search button{white-space:nowrap;padding:11px 14px;font-size:12px;border-radius:10px}
+#cityMusicStatus{font-size:12px;line-height:1.55;margin:10px 0}
+.city-music-results{display:grid;gap:7px;margin-top:10px}
+.city-track-option{display:grid;grid-template-columns:42px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:12px;background:#fffdfa}
+.city-track-option img{width:42px;height:42px;object-fit:cover;border-radius:8px;background:#ece8df}
+.city-track-option strong,.city-track-option small{display:block;overflow-wrap:anywhere}.city-track-option strong{font-size:12px}.city-track-option small{font-size:10px;color:var(--muted);margin-top:3px}
+.city-track-option button{border:1px solid var(--line);border-radius:999px;padding:8px 10px;background:#f7f4ed;color:var(--ink);font-size:11px;white-space:nowrap}
+.city-selected-track{display:flex;align-items:center;gap:10px;margin-top:10px;padding:10px;border-radius:12px;background:#e8f0ec}
+.city-selected-track img{width:44px;height:44px;border-radius:8px;object-fit:cover}
+.city-selected-track strong,.city-selected-track small{display:block}.city-selected-track strong{font-size:13px}.city-selected-track small{font-size:11px;color:var(--muted);margin-top:3px}
+.city-generate{width:100%;margin-top:20px;display:flex;justify-content:space-between;align-items:center}
+.city-disclosure{font-size:10px;line-height:1.6;color:var(--muted);margin:12px 0 0}
+.city-map-card{min-width:0;overflow:hidden;border:1px solid #d8d1c5;border-radius:24px;background:#eae6db;box-shadow:0 18px 45px #172b420a}
+.city-map-top{padding:22px 22px 13px;align-items:flex-start}.city-map-top .eyebrow{font-size:10px;letter-spacing:.17em}.city-map-top h3{font-size:clamp(18px,2.5vw,26px);max-width:420px}
+.map-live-dot{display:flex;align-items:center;gap:6px;font-size:9px;background:#f8f5ee}.map-live-dot:before{content:"";width:6px;height:6px;border-radius:50%;background:#4d8a72}
+.city-map-canvas{position:relative;min-height:300px;overflow:hidden;background:radial-gradient(ellipse at 20% 25%,#f4f0e6 0,transparent 48%),radial-gradient(ellipse at 78% 78%,#dce2d8 0,transparent 48%),linear-gradient(135deg,#e9e4d8,#e1e5dc)}
+.city-map-canvas:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 31px,#fff9 32px,#fff9 33px),repeating-linear-gradient(90deg,transparent 0 31px,#fff9 32px,#fff9 33px);opacity:.4;pointer-events:none}
+.city-map-canvas:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 30% 42%,transparent 0 16%,#fff5 16.2% 16.6%,transparent 16.8% 24%,#fff4 24.2% 24.6%,transparent 24.8%),radial-gradient(ellipse at 68% 58%,transparent 0 13%,#fff5 13.2% 13.6%,transparent 13.8% 21%,#fff4 21.2% 21.6%,transparent 21.8%);pointer-events:none}
+.city-map-canvas svg{position:relative;z-index:1;display:block;width:100%;height:auto;min-height:300px}
+.city-map-empty{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.map-empty-orbit{display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#fff9;border:1px solid #fff;box-shadow:0 0 0 9px #ffffff45;font-size:27px;color:#657d79;margin-bottom:20px}
+.city-map-empty strong{font-size:16px}.city-map-empty p{font-size:12px;color:#7f857f;max-width:230px;line-height:1.6}
+.city-map-legend{display:flex;flex-wrap:wrap;gap:15px;padding:12px 20px;font-size:10px;color:#737b78;border-top:1px solid #fff9}
+.city-map-legend span{display:flex;align-items:center;gap:7px}.legend-dot{width:7px;height:7px;background:#2f5b50;border-radius:50%}.legend-line{width:20px;border-top:2px dashed #a18dcb}
+.city-map-player{padding:16px 20px;background:#f9f7f1;border-top:1px solid #d8d1c5}
+.city-now-playing{display:flex;align-items:center;gap:11px;min-width:0}.playing-glyph{display:grid;place-items:center;width:42px;height:42px;flex:0 0 42px;border-radius:13px;background:#182e46;color:#fff;font-size:20px}
+.city-now-playing strong,.city-now-playing small{display:block;overflow-wrap:anywhere}.city-now-playing strong{font-size:13px}.city-now-playing small{font-size:11px;color:var(--muted);margin-top:4px}
+.city-play-button{border:0;border-radius:999px;background:#182e46;color:white;padding:13px 16px;white-space:nowrap;font-weight:700;font-size:12px}.city-play-button:disabled{opacity:.4}
+.city-map-foot{padding:12px 20px 17px;font-size:10px;color:#737b78}.city-map-foot button{border:0;background:transparent;color:#182e46;font:inherit;font-weight:700;white-space:nowrap}.city-map-foot button:disabled{opacity:.35}
+.city-map-route{fill:none;stroke:#fff9;stroke-width:10;stroke-linecap:round;stroke-linejoin:round}.city-map-route-accent{fill:none;stroke:#9582c4;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 10;stroke-dashoffset:0}
+.city-map-route-accent.is-playing{stroke-dasharray:1;stroke-dashoffset:1;animation:city-route-draw 30s linear forwards}
+@keyframes city-route-draw{to{stroke-dashoffset:0}}
+.city-map-pin{filter:drop-shadow(0 5px 5px #182e4618)}.city-map-pin circle{stroke:#fff;stroke-width:3}.city-map-pin text{font-family:inherit;fill:#182e46}.city-map-pin .city-number{font-size:10px;font-weight:800;fill:#fff}.city-map-pin .city-label{font-size:13px;font-weight:750}.city-map-pin .city-coord{font-size:9px;fill:#6c7773;font-weight:500}
+.city-map-card.is-playing .playing-glyph{animation:city-note-pulse 1s ease-in-out infinite alternate}
+@keyframes city-note-pulse{to{transform:scale(1.08);box-shadow:0 0 0 7px #a194c933}}
+@media(max-width:820px){.city-layout{grid-template-columns:1fr}.city-map-card{order:-1}.city-map-canvas,.city-map-canvas svg{min-height:250px}.city-map-top{padding:18px 17px 10px}.city-map-legend,.city-map-player,.city-map-foot{padding-left:16px;padding-right:16px}}
+@media(max-width:430px){.city-input-card{padding:15px}.city-field{grid-template-columns:30px minmax(75px,.48fr) minmax(0,1fr);gap:7px;padding:9px}.city-field input{font-size:14px}.city-field small{font-size:9px}.city-song-search button{padding:11px 10px}.city-map-canvas,.city-map-canvas svg{min-height:220px}.city-map-player{align-items:flex-start;flex-direction:column}.city-play-button{width:100%}.city-map-foot{align-items:flex-start;flex-direction:column;gap:8px}}
 </style>
 <script src="poster-system.js"></script>
 <script>
