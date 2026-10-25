@@ -5,7 +5,7 @@
  * Never deploy without a rate-limit rule at the edge.
  */
 const MAX_BODY_BYTES = 12000;
-const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition","generateAlbumArt","searchMusic"]);
+const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition","generateAlbumArt","searchMusic","resolveCities"]);
 const IMAGE_MODELS = ["@cf/stabilityai/stable-diffusion-xl-base-1.0", "@cf/black-forest-labs/flux-1-schnell"];
 const SYSTEM = `You are MelodyMe, a careful music-memory creative assistant. Return only valid JSON matching the requested task. Never invent verified music facts, album covers, release years, or URLs. Separate AI hypotheses from catalog-verified facts. Do not claim the user experienced events not present in their story. Keep user-facing explanations concise.`;
 const schemas = {
@@ -35,6 +35,7 @@ function validOutput(action,result){
 function validInput(action,input){
  if(!input||typeof input!=="object"||Array.isArray(input))return false;
  if(action==="searchMusic")return typeof input.song==="string"&&input.song.length<=120&&typeof input.artist==="string"&&input.artist.length<=120&&(input.song.trim().length>0||input.artist.trim().length>0);
+ if(action==="resolveCities")return Array.isArray(input.cities)&&input.cities.length===4&&input.cities.every(v=>typeof v==="string"&&v.trim().length>0&&v.length<=80)&&new Set(input.cities.map(v=>v.trim().replace(/\\s/g,"").toLowerCase())).size===4;
  if(action==="generateAlbumArt")return boundedString(input.prompt,1,6000)&&Number.isInteger(input.width)&&input.width>=256&&input.width<=1024&&Number.isInteger(input.height)&&input.height>=256&&input.height<=1024&&(input.seed===undefined||(Number.isInteger(input.seed)&&input.seed>=0&&input.seed<=2147483647));
  if(action==="analyzeMemory"||action==="inferMusicCandidates"||action==="generateMemoryStory"||action==="generateSocialCopy"||action==="planPosterComposition")return typeof input.story==="string"&&input.story.trim().length>0&&input.story.length<=8000;
  if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8&&input.candidates.every(c=>c&&typeof c==="object"&&boundedString(c.id||c.candidate_id,1,100)&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200));
@@ -64,6 +65,28 @@ export default {
   const {action}=body||{};
   const input=action==="generateAlbumArt"?body:(body||{}).input;
   if(!ACTIONS.has(action)||!validInput(action,input))return json({error:"invalid_request",message:"请求参数无效，请检查输入。"},400,origin,allowed);
+  if(action==="resolveCities"){
+   if(!env.AMAP_REST_KEY)return json({error:"amap_not_configured",message:"高德地图服务尚未配置。请在 Cloudflare Worker 中设置 AMAP_REST_KEY 后重试。"},503,origin,allowed);
+   const cities=input.cities.map(v=>String(v).trim());
+   const resolved=await Promise.all(cities.map(async(name,index)=>{
+    const url="https://restapi.amap.com/v3/geocode/geo?address="+encodeURIComponent(name)+"&key="+encodeURIComponent(env.AMAP_REST_KEY);
+    try{
+     const response=await fetch(url,{headers:{accept:"application/json"},signal:AbortSignal.timeout(9000)});
+     if(!response.ok)throw new Error("amap_http_"+response.status);
+     const data=await response.json();
+     if(data.status!=="1"||!Array.isArray(data.geocodes)||!data.geocodes.length)throw new Error(data.info||"city_not_found");
+     const item=data.geocodes[0],parts=String(item.location||"").split(",");
+     const lng=Number(parts[0]),lat=Number(parts[1]);
+     if(!Number.isFinite(lng)||!Number.isFinite(lat))throw new Error("invalid_coordinates");
+     return {index,name,matchedName:item.city||item.district||item.formatted_address||name,formattedAddress:item.formatted_address||name,province:item.province||"",city:Array.isArray(item.city)?item.city[0]||"":item.city||"",adcode:item.adcode||"",lng,lat,source:"高德地图地理编码"};
+    }catch(error){return {index,name,error:String(error&&error.message||error)}}
+   }));
+   const failed=resolved.filter(v=>v.error);
+   if(failed.length)return json({error:"city_geocoding_failed",message:"部分城市未能通过高德地图核验，请检查城市名称后重试。",failed:failed.map(v=>({index:v.index,name:v.name}))},422,origin,allowed);
+   const seen=new Set();
+   for(const city of resolved){const key=city.lng.toFixed(3)+","+city.lat.toFixed(3);if(seen.has(key))return json({error:"duplicate_resolved_city",message:"有两个输入匹配到同一地点，请填写四个不同的城市。",duplicate:city.name},422,origin,allowed);seen.add(key)}
+   return json({ok:true,action:"resolveCities",source:"AMap Web Service geocoding",cities:resolved.map(({index,name,matchedName,formattedAddress,province,city,adcode,lng,lat,source})=>({index,name,matchedName,formattedAddress,province,city,adcode,lng,lat,source}))},200,origin,allowed);
+  }
   if(action==="searchMusic"){
    const song=String(input.song||"").trim(),artist=String(input.artist||"").trim();
    const aliases={"遇见":"Encounter","晴天":"Sunny Day","后来":"Later","小幸运":"A Little Happiness","演员":"Actor","稻香":"Rice Field","夜曲":"Nocturne"};
