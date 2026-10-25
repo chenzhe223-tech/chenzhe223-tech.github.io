@@ -149,8 +149,8 @@ jobs:
           await page.locator('#songinput').fill('QA Preview Track');
           await page.locator('#searchMusic').click();
           await page.locator('.candidate').first().waitFor({state:'visible'});
-          await page.locator('.candidate').nth(0).getByRole('button',{name:'选这首'}).click();
-          const preview = page.locator('#musicresults audio');
+          await page.locator('.candidate').nth(0).getByRole('button',{name:'换成这首'}).click();
+          const preview = page.locator('#musiccard audio');
           await preview.waitFor({state:'visible'});
           if (await preview.getAttribute('preload') !== 'none') throw new Error('preview preload must be none');
           if (await preview.getAttribute('src') !== 'https://audio-ssl.itunes.apple.com/qa-preview.m4a') throw new Error('preview URL must be the exact iTunes previewUrl');
@@ -158,10 +158,10 @@ jobs:
           if (!(await preview.evaluate(el=>el.paused))) throw new Error('preview must not autoplay');
           await page.evaluate(()=>{const other=document.createElement('audio');other.id='qa-other-audio';other.pause=()=>{window.__qaOtherPaused=true};document.body.appendChild(other);document.querySelector('#musicresults audio').dispatchEvent(new Event('play'));});
           if (!(await page.evaluate(()=>window.__qaOtherPaused===true))) throw new Error('starting preview should pause other audio');
-          await page.locator('.candidate').nth(1).getByRole('button',{name:'选这首'}).click();
-          if (await page.locator('#musicresults audio').count() !== 0) throw new Error('player should hide when previewUrl is missing');
-          if (!(await page.locator('#musicresults').getByText('该曲目暂无试听片段').count())) throw new Error('missing preview fallback text absent');
-          await page.locator('.candidate').nth(0).getByRole('button',{name:'选这首'}).click();
+          await page.locator('.candidate').first().getByRole('button',{name:'换成这首'}).click();
+          if (await page.locator('#musiccard audio').count() !== 0) throw new Error('player should hide when previewUrl is missing');
+          if (!(await page.locator('#musicmeta').innerText()).includes('该曲目暂无试听片段')) throw new Error('missing preview fallback text absent');
+          await page.locator('.candidate').first().getByRole('button',{name:'换成这首'}).click();
           await page.locator('#next').click();
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
