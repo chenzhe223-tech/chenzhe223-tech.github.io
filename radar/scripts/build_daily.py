@@ -27,13 +27,19 @@ ARCHIVE = DATA / "archive"
 TZ = ZoneInfo("Asia/Shanghai")
 USER_AGENT = "DavyRadar/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 FEEDS = [
+    # Primary sources and developer ecosystem
     ("OpenAI", "https://openai.com/news/rss.xml"),
     ("Anthropic", "https://www.anthropic.com/news/rss.xml"),
     ("Google AI Blog", "https://blog.google/technology/ai/rss/"),
     ("Hugging Face", "https://huggingface.co/blog/feed.xml"),
     ("GitHub Blog", "https://github.blog/feed/"),
     ("Simon Willison", "https://simonwillison.net/atom/everything/"),
+    # Independent editorial coverage prevents a stale single-publisher feed from
+    # collapsing the daily pool below the five-story minimum after history dedupe.
     ("TechCrunch AI", "https://techcrunch.com/category/artificial-intelligence/feed/"),
+    ("MIT Technology Review AI", "https://www.technologyreview.com/topic/artificial-intelligence/feed/"),
+    ("The Verge AI", "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml"),
+    ("MarkTechPost", "https://www.marktechpost.com/feed/"),
 ]
 # Chinese-language sources for a separately curated China AI development stream.
 CHINA_FEEDS = [
