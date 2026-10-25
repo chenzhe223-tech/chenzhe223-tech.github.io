@@ -42,3 +42,12 @@ Follow `docs/DESIGN_SYSTEM.md` as the authority. Current visual language: warm p
 - [ ] Automated test results, deployment state, and actual device inspection are reported separately.
 
 Do not claim an actual iPhone check unless it was performed on a real device.
+
+## MelodyMe single-poster acceptance gate
+
+- Render exactly one complete visible poster in the results view.
+- The AI artwork must be the background layer inside the existing `#poster`; do not render a separate cover card below it.
+- Reuse the same DOM container for initial generation, regeneration, style changes, failures/retries, and restored works.
+- Never duplicate the image as both an `img` and a CSS background on the poster surface.
+- Keep download/regenerate/share and concise disclosure controls outside the poster image, but inside the same poster module.
+- Verify DOM counts and visibility, not only headings: exactly one `#poster`; `#aiCoverFrame` is a descendant of `#poster`; no second full-poster image/card exists in the artwork panel.
