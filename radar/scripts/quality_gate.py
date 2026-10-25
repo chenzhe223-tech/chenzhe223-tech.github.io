@@ -291,7 +291,7 @@ def main():
     skills=report.get("skills") if isinstance(report.get("skills"),list) else []
     skill_errors=[]
     if skill_radar.get("status")!="PASS": skill_errors.append({"type":"skill_radar_status","status":skill_radar.get("status","missing")})
-    if not skills: skill_errors.append({"type":"no_qualified_skill_recommendations"})
+    if len(skills)<5: skill_errors.append({"type":"insufficient_qualified_skill_recommendations","selected_count":len(skills),"minimum":5})
     for skill in skills:
         if not isinstance(skill,dict): skill_errors.append({"type":"invalid_skill_record"}); continue
         if not skill.get("canonical_id"): skill_errors.append({"type":"missing_canonical_id","name":skill.get("name")})
