@@ -136,7 +136,7 @@ async function generate(){
  s.out={storyCopy:body,share:body};
  showOut();$("stage").classList.add("hidden");$("results").classList.add("show");$("feedback").textContent="DeepSeek 正在根据你的记忆、情绪和已确认歌曲整理一段自然的音乐故事…";
  var endpoint=window.MELODYME_AI_ENDPOINT||"https://melodyme-ai.chenzhe223.workers.dev";
- var input={story:s.story,moods:s.moods,song:s.song||"",artist:s.artist||"",selected_track:s.selectedTrack?{title:s.selectedTrack.trackName,artist:s.selectedTrack.artistName,album:s.selectedTrack.collectionName,release_date:s.selectedTrack.releaseDate||null}:null};
+ var input={story:s.story,moods:s.moods,song:s.song||"",artist:s.artist||"",writing_style:"自然、克制、散文式中文；像一个真实的人回望自己的音乐人生，具体、温柔、有留白，不要营销腔、总结腔、套话或明显的 AI 口吻。只根据用户提供的记忆和已确认的歌曲写作，不虚构经历。",selected_track:s.selectedTrack?{title:s.selectedTrack.trackName,artist:s.selectedTrack.artistName,album:s.selectedTrack.collectionName,release_date:s.selectedTrack.releaseDate||null}:null};
  try{
   var response=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generateMemoryStory",input:input})});
   if(!response.ok){var detail="HTTP "+response.status;try{var errBody=await response.clone().json();if(errBody&&errBody.error)detail+=" · "+errBody.error}catch(e){}throw new Error(detail)}
