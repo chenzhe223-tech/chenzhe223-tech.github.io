@@ -169,9 +169,20 @@ jobs:
           await page.locator('#aiCoverFrame').scrollIntoViewIfNeeded();
           await page.locator('#aiCoverStatus').waitFor({state:'visible'});
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Pollinations.ai'));
-          if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
+          if (!(await page.getByText('AI 生成海报 · 创作装饰 · 非真实专辑封面').count())) throw new Error('single poster disclosure missing');
+          const posterCount = await page.locator('#results #poster').count();
+          if (posterCount !== 1) throw new Error('expected exactly one poster container, got '+posterCount);
+          if (!(await page.locator('#poster').locator('#aiCoverFrame').count())) throw new Error('AI artwork frame must be inside the only poster');
+          if (await page.locator('.artwork-panel .ai-cover-box').count()) throw new Error('duplicate standalone AI cover card must not exist');
+          if (await page.locator('#poster img').count() > 1) throw new Error('poster must not contain duplicate artwork images');
           if (await page.locator('#aiCoverImage').getAttribute('loading') !== 'lazy') throw new Error('AI cover must lazy-load');
           if (await page.locator('#aiCoverImage').getAttribute('alt') !== 'AI 生成封面（非真实专辑封面）') throw new Error('AI cover alt/disclosure missing');
+          for (let i=0;i<5;i++) {
+            await page.locator('#regenerateCover').click();
+            await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Pollinations.ai'));
+            if (await page.locator('#results #poster').count() !== 1) throw new Error('regeneration created duplicate poster container');
+            if (await page.locator('.artwork-panel .ai-cover-box').count()) throw new Error('regeneration created a duplicate cover card');
+          }
           await page.locator('[data-poster-style="复古胶片"]').click();
           mock.setPollinationsMode('fail');
           await page.locator('#regenerateCover').click();
