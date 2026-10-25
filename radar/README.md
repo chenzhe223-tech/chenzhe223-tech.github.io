@@ -3,7 +3,7 @@
 Daily AI news, a public GitHub Skill shortlist, and an optional Horizon-powered Chinese AI briefing for DAVYLAB.
 
 ## Schedule
-GitHub Actions refreshes and publishes the report daily at 23:30 UTC (07:30 Asia/Shanghai), and supports manual workflow dispatch. It collects public RSS news and GitHub Skill data, optionally enriches the report with Horizon/DeepSeek, validates the report date and source freshness, stores a daily archive, deploys GitHub Pages, and then checks the live page and JSON. GitHub may delay scheduled starts during busy periods; 07:30 is the target, not an exact-time guarantee.
+GitHub Actions refreshes and publishes the report daily starting at 21:30 UTC (05:30 Asia/Shanghai), and supports manual workflow dispatch. Recovery runs are scheduled at 22:15, 23:00 and 23:45 UTC (06:15, 07:00 and 07:45 Beijing time) if a complete AI-curated report is still missing. It collects public RSS news and GitHub Skill data, optionally enriches the report with Horizon/DeepSeek, validates the report date and source freshness, stores a daily archive, deploys GitHub Pages, and then checks the live page and JSON. GitHub may delay scheduled starts during busy periods; 05:30 is the target, not an exact-time guarantee.
 
 ## Data pipeline
 - `scripts/build_daily.py` collects public RSS feeds and public GitHub repository search results.
