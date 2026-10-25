@@ -1,30 +1,51 @@
-# KeyPocket MVP security acceptance
+# KeyPocket 安全边界与验收状态
 
-## Implemented controls (static/code inspection)
-- [x] No account or server API in the application.
-- [x] CSP sets `connect-src 'none'`; no remote scripts/styles are loaded.
-- [x] API records are encrypted with AES-256-GCM before being written to IndexedDB.
-- [x] Password-derived key uses PBKDF2-HMAC-SHA-256 with 310,000 iterations and a random per-vault salt.
-- [x] The derived key is non-extractable and kept in memory only while unlocked.
-- [x] UI masks keys by default and requires explicit reveal/copy action.
-- [x] Backup file encrypts records with a separate backup password and AES-256-GCM.
-- [x] Backup import rejects files larger than 10 MB, KDF iterations outside 100,000–1,000,000, malformed salt/IV/data, more than 5,000 records, invalid records, and duplicate record IDs.
-- [x] Provider identification is local and conservative; ambiguous `sk-...` formats are not guessed.
-- [x] Radar-to-KeyPocket handoff accepts only HTTPS public GitHub repository URLs and bounds queued metadata fields.
-- [x] Incoming Skills require an unlocked vault and an explicit user confirmation before saving.
-- [x] Incoming Skill projects are deduplicated by canonical GitHub repository URL and encrypted through the existing AES-GCM `sealProject` path before IndexedDB storage.
-- [x] Inter-app queue contains public Skill metadata only; it must never contain API keys, tokens, or vault secrets.
+> 本文件区分代码中可见的实现、已有历史检查记录和仍需重新验证的项目。代码检查不等于独立安全审计。
 
-## Executed checks
-- [x] JavaScript syntax check with `node --check`.
-- [x] Node Web Crypto tests: AES-GCM roundtrip, ciphertext does not contain plaintext, wrong password rejected, backup roundtrip.
-- [x] Static checks: CSP, no remote asset URLs, IndexedDB, AES-GCM/PBKDF2, backup import/export, clipboard path, responsive breakpoint, no fetch/XHR/WebSocket calls in application JS.
-- [x] JavaScript syntax check after backup-import hardening.
+## 1. 从当前代码中可见的实现
+- [x] API Key 记录在客户端使用 AES-GCM 加密后保存至 IndexedDB。
+- [x] 本地密码通过 PBKDF2-HMAC-SHA-256 派生 AES-GCM 密钥；当前代码默认迭代次数为 310,000。
+- [x] 派生密钥不可导出，并在解锁期间保存在内存中。
+- [x] UI 默认遮蔽密钥，显示/复制需要明确操作。
+- [x] 备份使用独立密码加密；导入流程包含文件大小、迭代次数、字段和记录数量等校验。
+- [x] 简报到 KeyPocket 的待收录队列只接受经过验证的公开 GitHub 仓库资料；保存前需要解锁和用户确认。
+- [x] 项目记录通过现有 AES-GCM 路径加密后保存到 IndexedDB。
+- [x] 当前页面有可选同步账号 UI。客户端使用 Supabase Auth / REST API；同步前会将 records 与 projects 快照用 AES-GCM 加密，再发送 envelope。
+- [x] 当前 index.html CSP 的 connect-src 允许 GitHub API 和 Supabase 域名；这与旧版 connect-src 'none' 描述不同。
 
-## Not yet verified in a real browser session
-- [ ] Full end-to-end UI flows for create/read/update/delete, clipboard permissions, backup download/upload, and restore.
-- [ ] Browser devtools network panel confirmation.
-- [ ] Mobile visual QA on actual iOS/Android browsers.
-- [ ] Live GitHub commit and Cloudflare Pages deployment.
+## 2. 同步模型的已知边界
 
-The local browser automation environment blocked navigation to both `file://` and the local HTTP server, so these browser-level checks are explicitly not claimed as passed. Complete them after serving the package in a normal local browser or after a preview deployment.
+从当前客户端代码可见：
+- Supabase 请求会包含认证信息；客户端配置包含 publishable 项目键，该类客户端键本身不是服务端秘密，但必须依赖正确的服务端访问策略。
+- 同步 payload 包含加密的快照 envelope；云端记录另有 user ID、schema version、revision 和更新时间等元数据。
+- 客户端使用本地解锁密码派生用于同步快照的加密密钥，因此跨设备同步需要用户在各设备使用兼容的本地解锁密码。
+- 代码可见的客户端加密并不能单独证明服务端表策略配置正确。
+
+以下项目仍未核实：
+- [ ] Supabase keypocket_vault_sync 表的 RLS 是否启用，以及 SELECT/INSERT/UPDATE 策略是否严格限制到当前认证用户。
+- [ ] 生产项目配置、认证会话生命周期、账号删除/恢复策略和服务端日志保留情况。
+- [ ] 真实浏览器网络面板中请求与预期一致，未发送明文 records/projects。
+- [ ] 云端 envelope 在生产环境中的实际存储形态与权限隔离。
+- [ ] 同步冲突、并发更新、请求失败、重复点击和恢复场景的 E2E 测试。
+- [ ] 独立安全审计。
+
+## 3. 已有历史检查记录（需在本轮重新执行前视为历史证据）
+
+历史交付资料记录过 JavaScript 语法、AES-GCM 往返、错误密码拒绝、备份往返和简报收录流程检查。由于这些记录不等于对当前提交重新运行测试，本文件不把它们计作本次验证结果。
+
+## 4. 本次连续性试运行检查
+- [x] 读取当前 README、index.html、app.js 片段和既有交付/安全文档。
+- [x] 发现并记录旧文档与当前页面/代码之间的同步及 CSP 描述冲突。
+- [ ] 对当前 HEAD 重新运行 JavaScript 语法检查。
+- [ ] 运行现有静态检查与 Skill handoff 测试。
+- [ ] 运行完整浏览器 E2E。
+- [ ] 核对 Supabase RLS / 访问策略。
+- [ ] 核对 GitHub Pages 当前部署并执行生产冒烟测试。
+- [ ] 在真实 iOS / Android 浏览器完成移动端验收。
+
+## 5. 安全验收原则
+- 不要将“页面能打开”视为完整功能验收。
+- 不要将“payload 在客户端加密”视为服务端权限策略已验证。
+- 不要把“CI 曾通过”当作当前提交已通过。
+- 不要把客户端 publishable key 当作用户 API Key 或服务端秘密；也不要将任何真正的秘密写入仓库。
+- 任何安全结论都应附带对应代码、测试、配置或运行证据。
