@@ -36,7 +36,7 @@ jobs:
           parser = Checker(convert_charrefs=True)
           parser.feed(html)
           parser.close()
-          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI', 'itunes.apple.com/search', 'id="musiccard"', 'id="autoStyle"', 'previewUrl', 'generateAlbumArt', 'aiCoverImage', 'inferSongFromStory', 'songAutoDetected', 'scoreMusicResult', 'q.country', 'Encounter']:
+          for token in ['<!doctype html>', 'name="viewport"', 'id="start"', 'id="next"', 'data-node="0"', 'localStorage', '真实 AI', 'action:"searchMusic"', 'id="musiccard"', 'id="autoStyle"', 'previewUrl', 'generateAlbumArt', 'aiCoverImage', 'inferSongFromStory', 'songAutoDetected', 'scoreMusicResult', 'q.country', 'Encounter']:
               assert token.lower() in html.lower(), f"missing required token: {token}"
           scripts = re.findall(r"<script>(.*?)</script>", html, re.S)
           assert scripts, "no inline JavaScript found"
@@ -73,6 +73,9 @@ jobs:
               : route.fulfill({status:503,contentType:'text/plain',body:'mock image failure'}));
             await page.route(/melodyme-ai\.chenzhe223\.workers\.dev/, async route => {
               const payload = route.request().postDataJSON() || {};
+              if (payload.action === 'searchMusic') {
+                return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({ok:true,action:'searchMusic',results:catalog.results,queries:8,failedQueries:0})});
+              }
               if (payload.action === 'generateAlbumArt') {
                 return workerImageMode === 'ok'
                   ? route.fulfill({status:200,contentType:'image/png',body:tinyPng})
