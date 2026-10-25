@@ -8,7 +8,7 @@ GitHub Actions refreshes and publishes the report daily starting at 21:30 UTC (0
 ## Data pipeline
 - `scripts/build_daily.py` collects public RSS feeds and public GitHub repository search results.
 - News retains source, timestamp and original URL; AI-related headlines are filtered and deduplicated.
-- The Skill list ranks public repositories by stars with a modest freshness adjustment. Stars are not downloads or actual usage. Routine recommendations avoid repeating the same repository within seven days unless a material update is verified; older projects may return after that cooling-off period.
+- The Skill list ranks public repositories by stars with a modest freshness adjustment. Stars are not downloads or actual usage. Routine recommendations avoid repeating the same repository within seven days unless a material update is verified; older projects may return after that cooling-off period. Skill category limits adapt to the verified candidate pool: preserve diversity when possible, but relax the cap for a narrow theme rather than publishing an incomplete shortlist.
 - `scripts/run_horizon.py` runs the upstream MIT-licensed [Horizon](https://github.com/Thysrael/Horizon) project with DeepSeek, then attaches its Chinese daily digest to `data/latest.json`.
 - `config/horizon.json` contains only non-secret runtime configuration. The API key is read from the GitHub Actions secret `DEEPSEEK_API_KEY`; never commit the key itself.
 - Horizon webhook, email, and WeChat delivery are disabled. Results are published only to the website; no active notifications are sent.

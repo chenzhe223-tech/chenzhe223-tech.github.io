@@ -9,13 +9,13 @@ class SkillRadarTests(unittest.TestCase):
         self.assertEqual(infer_skill_category({"name":"owner/OpenMontage","description":"agentic video production and media creation"}),"多模态与创作")
         self.assertEqual(infer_skill_category({"name":"owner/planning-with-files","description":"agent workflow planning and task management"}),"Agent 工作流与规划")
         self.assertEqual(infer_skill_category({"name":"owner/archify","description":"software architecture and code review"}),"软件工程与测试")
-    def test_category_concentration_is_limited(self):
+    def test_category_cap_relaxes_when_verified_pool_has_one_category(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
             candidates=[{"name":f"owner/tool-{i}","url":f"https://github.com/owner/tool-{i}","quality_status":"PASS","total_score":95-i,"license":"MIT","daily_theme":"多模态与创作"} for i in range(3)]
             r=build_radar(candidates,Path(td),"2026-10-24",limit=8)
-            self.assertEqual(len(r["selected"]),2)
-            self.assertEqual(r["excluded"][0]["reason"],"category_saturation")
+            self.assertEqual(len(r["selected"]),3)
+            self.assertFalse(any(x["reason"]=="category_saturation" for x in r["excluded"]))
     def test_developer_concentration_is_limited(self):
         with tempfile.TemporaryDirectory() as td:
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))

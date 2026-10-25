@@ -8,7 +8,7 @@ import math
 import re
 import urllib.parse
 
-ENGINE_VERSION = "2026.10.26.1"
+ENGINE_VERSION = "2026.10.26.2"
 from pathlib import Path
 
 STOP={"the","and","for","with","from","this","that","into","your","using","use","skill","skills","agent","agents","ai","open","source","tool","tools","project","github","claude","codex","mcp"}
@@ -274,7 +274,7 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
     ranked=sorted(candidates,key=lambda x:float(x.get("total_score") or 0),reverse=True)
     for item in ranked:
         hit=identify_duplicate(item,history["records"])
-        if not hit: hit=identify_duplicate(item,selected_today)
+        if not hit: hit=identify_duplicate(item,selected_today,semantic_threshold=0.82)
         material_update=(item.get("material_update_verified") is True
             and bool(item.get("re_recommendation_reason"))
             and str(item.get("material_update_evidence_url") or "").startswith(("https://","http://")))
@@ -304,7 +304,7 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
             owner=urllib.parse.urlsplit(str(item.get("url") or "")).path.strip("/").split("/")[0].lower()
         except Exception:
             owner=""
-        if category_counts.get(category,0)>=2:
+        if category_counts.get(category,0)>=category_cap:
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"category_saturation","category":category})
             continue
         if owner and owner_counts.get(owner,0)>=2:
