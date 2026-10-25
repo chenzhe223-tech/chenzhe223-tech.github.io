@@ -210,6 +210,22 @@ function canonicalSkillRepoUrl(value){
 }
 function readPendingRadarSkills(){
  try{
+  const captureParam=new URLSearchParams(window.location.search).get('kp_capture');
+  if(captureParam){
+   try{
+    const incoming=JSON.parse(captureParam);
+    if(incoming&&incoming.source==='davy-radar'&&canonicalSkillRepoUrl(incoming.url)){
+     const stored=window.localStorage.getItem(KEYPOCKET_PENDING_SKILL_KEY);
+     const parsed=stored?JSON.parse(stored):[];
+     const queue=Array.isArray(parsed)?parsed:[];
+     if(!queue.some(x=>x&&x.id===incoming.id))queue.push(incoming);
+     window.localStorage.setItem(KEYPOCKET_PENDING_SKILL_KEY,JSON.stringify(queue.slice(-100)));
+    }
+   }catch(e){console.warn('KeyPocket capture payload invalid',e)}
+   const cleanUrl=new URL(window.location.href);
+   cleanUrl.searchParams.delete('kp_capture');
+   window.history.replaceState({},'',cleanUrl.pathname+cleanUrl.search+cleanUrl.hash);
+  }
   const raw=window.localStorage.getItem(KEYPOCKET_PENDING_SKILL_KEY);
   const parsed=raw?JSON.parse(raw):[];
   if(!Array.isArray(parsed))return [];
