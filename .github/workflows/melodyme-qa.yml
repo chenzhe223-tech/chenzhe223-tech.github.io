@@ -164,8 +164,7 @@ jobs:
           for (let i=0;i<4;i++) await page.locator('#cityInput'+i).fill(duplicateCities[i]);
           await page.locator('#buildCityMap').click();
           if (!(await page.getByText('请填写四座不同的城市').count())) throw new Error('duplicate cities must be rejected');
-          const posterCount = await page.locator('#results #poster').count();
-          if (posterCount !== 0) throw new Error('city map flow should not create a duplicate legacy poster');
+          if (!(await page.locator('#results').isHidden())) throw new Error('legacy poster flow should remain hidden in the new city map experience');
           const mobile=await browser.newPage({viewport:{width:390,height:844},isMobile:true,hasTouch:true});
           await mockExternalServices(mobile);
           mobile.on('pageerror',e=>errors.push(e.message));
