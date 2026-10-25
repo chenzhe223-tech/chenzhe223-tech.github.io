@@ -145,3 +145,25 @@
 | 真实端到端验收通过 | 在生产浏览器/Worker 中实际完成操作并保存证据；不能由单元测试代替 |
 
 新功能在 CI 和生产浏览器回归完成之前保持“待验证”。Pollinations 和 Workers AI 均为外部服务，免费额度、模型可用性和访问策略可能变化。
+
+
+## v1.0 — Nine-mode poster design system
+
+| ID | Scenario | Expected |
+|---|---|---|
+| POSTER-01 | Mode selector | Exactly nine mode cards; one selected state; changing mode preserves story and selected track |
+| POSTER-02 | Prompt composition | Each mode includes its own locked composition, palette, lighting, materials, subject guidance, reserved text zones and negative rules |
+| POSTER-03 | Comic substyles | Three distinct substyle configurations: lively pencil, gentle journal, comic panels |
+| POSTER-04 | Portrait image request | Pollinations and Worker requests use 768×1024 within the Worker’s accepted bounds |
+| POSTER-05 | Technical image checks | Decode succeeds, ratio is within 0.68–0.82, dimensions are at least 600×800 |
+| POSTER-06 | Mode switch | Previous generated background is invalidated; no stale image is presented as the newly selected style |
+| POSTER-07 | Regeneration | Explicit regeneration changes the deterministic variation seed; automatic retries remain bounded to the existing two-service path |
+| POSTER-08 | Verified metadata | Poster title/artist come from selected catalog track; unconfirmed typed values are not displayed as confirmed song metadata |
+| POSTER-09 | SVG export | Uses the generated background URL when available and front-end song typography; external image URL means export is not guaranteed to be self-contained/offline |
+| POSTER-10 | Visual fidelity | Must be manually/vision-reviewed. Basic image checks do not count as semantic style validation or a style score |
+
+### v1.0 automated evidence
+
+The updated `.github/workflows/melodyme-qa.yml` adds a Node-based configuration test for 9 modes × 3 mood cues (27 prompt combinations), three comic substyles, and positive/negative image-dimension checks. It also updates Playwright selectors and uses a deterministic 768×1024 PNG fixture so image dimensions can be tested without paying for real generations.
+
+The automated suite does **not** perform 27 live generations. No real visual score is emitted. The real image provider, live Worker and all nine visual styles remain subject to separate production verification.
