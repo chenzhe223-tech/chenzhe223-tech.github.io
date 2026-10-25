@@ -4,8 +4,26 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
+from radar.scripts.run_horizon import build_selection_pool
 
 class DailyBriefContractTests(unittest.TestCase):
+
+    def test_top5_selection_pool_combines_global_and_china_ai_sources(self):
+        global_news = [
+            {"title": "Global story A", "url": "https://example.com/a", "source": "Global A"},
+            {"title": "Global story B", "url": "https://example.com/b", "source": "Global B"},
+        ]
+        china_news = [
+            {"title": "China story C", "url": "https://example.com/c", "source": "China C"},
+            {"title": "China story D", "url": "https://example.com/d", "source": "China D"},
+            {"title": "Duplicate A", "url": "https://example.com/a", "source": "Duplicate"},
+            {"title": "China story E", "url": "https://example.com/e", "source": "China E"},
+        ]
+        pool = build_selection_pool(global_news, china_news)
+        self.assertEqual(len(pool), 5)
+        self.assertEqual([item["selection_section"] for item in pool].count("global_news"), 2)
+        self.assertEqual([item["selection_section"] for item in pool].count("china_ai_news"), 3)
+        self.assertEqual(len({item["url"] for item in pool}), 5)
 
     def test_china_near_duplicate_headlines_are_collapsed(self):
         candidates = [

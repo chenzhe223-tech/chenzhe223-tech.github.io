@@ -79,6 +79,21 @@ def _deepseek_json(key: str, model: str, prompt: str, payload: dict, max_tokens:
                 time.sleep(2 ** (attempt+1))
     raise RuntimeError(f'DeepSeek JSON request failed after 3 attempts ({type(last_error).__name__})') from last_error
 
+def build_selection_pool(global_news, china_news):
+    """Combine source-backed global and China AI items for the five-story editorial selection."""
+    pool=[]
+    seen_urls=set()
+    for section,items in (("global_news",global_news),("china_ai_news",china_news)):
+        for item in items if isinstance(items,list) else []:
+            if not isinstance(item,dict):
+                continue
+            url=str(item.get("url") or item.get("link") or "").strip()
+            if not url or url in seen_urls:
+                continue
+            seen_urls.add(url)
+            pool.append({**item,"selection_section":section})
+    return pool
+
 def ensure_story_fallback(report):
     """Populate source-linked cards without pretending fallback stories are AI-scored."""
     current=report.get('top5')
@@ -153,7 +168,19 @@ def localize(report):
 
     # A separate, compact selection request prevents long translation output from
     # truncating the five-story JSON object. Source indices are validated below.
-    selection_payload={'news':[{'index':i,'title':x.get('title',''),'summary':x.get('summary',''),'source':x.get('source',''),'url':x.get('url','')} for i,x in enumerate(news)]}
+    selection_news=build_selection_pool(news,china_news)
+    selection_payload={'news':[{
+        'index':i,
+        'section':x.get('selection_section','global_news'),
+        'title':x.get('title') or x.get('title_zh',''),
+        'title_zh':x.get('title_zh',''),
+        'summary':x.get('summary') or x.get('summary_zh',''),
+        'summary_zh':x.get('summary_zh',''),
+        'why_it_matters_zh':x.get('why_it_matters_zh',''),
+        'source':x.get('source',''),
+        'url':x.get('url') or x.get('link',''),
+        'published':x.get('published','')
+    } for i,x in enumerate(selection_news)]}
     selection_prompt=(
         'Act as a restrained AI-news editor for ordinary users, builders and creators. Select up to five distinct real stories from the supplied list. '
         'If at least five sources exist, return exactly five, prioritizing recency, evidence and usefulness. Use these category labels in order where evidence supports them: '
@@ -172,7 +199,7 @@ def localize(report):
             if selection_attempt:
                 retry_prompt += (
                     ' IMPORTANT RETRY: Your previous output did not contain exactly five valid distinct source-backed stories. '
-                    'Return exactly five objects, source_index must be an integer from 0 to 11 matching the input, '
+                    'Return exactly five objects, source_index must be an integer within the supplied input list matching the input, '
                     'keep every text field to one concise sentence, and do not omit any required field. Input: '
                 )
             selected=_deepseek_json(key,model,retry_prompt,selection_payload,10000)
@@ -180,10 +207,10 @@ def localize(report):
             for entry in selected.get('top5',[])[:5]:
                 try:
                     idx=int(entry.get('source_index',-1))
-                    if idx<0 or idx>=len(news) or any(x.get('source_url')==news[idx].get('url') for x in top5): continue
+                    if idx<0 or idx>=len(selection_news) or any(x.get('source_url')==selection_news[idx].get('url') for x in top5): continue
                     scores=entry.get('scores') or {}
                     normalized={k:max(1,min(10,int(scores.get(k,5)))) for k in ('innovation','practicality','feasibility','impact','opportunity')}
-                    top5.append({**entry,'source_url':news[idx].get('url',''),'source':news[idx].get('source',''),'published':news[idx].get('published',''),'original_title':news[idx].get('title',''),'scores':normalized,'total_score':sum(normalized.values())})
+                    top5.append({**entry,'source_url':selection_news[idx].get('url') or selection_news[idx].get('link',''),'source':selection_news[idx].get('source',''),'published':selection_news[idx].get('published',''),'original_title':selection_news[idx].get('title') or selection_news[idx].get('title_zh',''),'source_section':selection_news[idx].get('selection_section','global_news'),'scores':normalized,'total_score':sum(normalized.values())})
                 except (TypeError,ValueError): continue
             last_selection_count=len(top5)
             if len(top5)==5:
