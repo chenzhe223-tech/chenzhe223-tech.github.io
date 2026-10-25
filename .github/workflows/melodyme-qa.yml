@@ -165,7 +165,15 @@ jobs:
           await page.locator('#next').click();
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
-          if (await page.locator('.poster-mode-card').count() !== 9) throw new Error('expected nine poster modes');
+          if (await page.locator('#rhythmStaff .rhythm-step').count() !== 16) throw new Error('expected sixteen editable rhythm steps');
+          if (!(await page.locator('#rhythmStaff .rhythm-step').first().getAttribute('aria-label')).includes('有节拍')) throw new Error('rhythm staff accessibility labels missing');
+          const initialRhythm = await page.locator('#rhythmStaff .rhythm-step.is-on').count();
+          await page.locator('#rhythmStaff .rhythm-step').nth(1).click();
+          if (await page.locator('#rhythmStaff .rhythm-step.is-on').count() === initialRhythm) throw new Error('tapping a staff step should change the rhythm');
+          await page.locator('#rhythmTempo').fill('124');
+          if (!(await page.locator('#tempoValue').innerText()).includes('124')) throw new Error('tempo control did not update');
+          await page.locator('#randomRhythm').click();
+          if (await page.locator('#rhythmStaff .rhythm-step').count() !== 16) throw new Error('random rhythm should retain sixteen steps');
           await page.locator('#aiCoverFrame').scrollIntoViewIfNeeded();
           await page.locator('#aiCoverStatus').waitFor({state:'visible'});
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Pollinations.ai'));
@@ -183,17 +191,18 @@ jobs:
             if (await page.locator('#results #poster').count() !== 1) throw new Error('regeneration created duplicate poster container');
             if (await page.locator('.artwork-panel .ai-cover-box').count()) throw new Error('regeneration created a duplicate cover card');
           }
-          await page.locator('[data-poster-style="复古胶片"]').click();
+          await page.locator('#randomRhythm').click();
           mock.setPollinationsMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Cloudflare Workers AI 兜底'));
-          await page.locator('[data-poster-style="未来数字音乐"]').click();
+          await page.locator('#rhythmStaff .rhythm-step').nth(7).click();
           mock.setWorkerImageMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
           if (!(await page.locator('#storycopy').inputValue()).includes('A story generated for QA.')) throw new Error('cover failure must preserve story copy');
           await page.locator('#autoStyle').click();
-          if (!(await page.locator('.poster-mode-card[aria-pressed="true"]').count())) throw new Error('style selection state missing');
+          if (await page.locator('.poster-mode-card').count() !== 0) throw new Error('fixed poster style picker should be removed');
+          if (!(await page.locator('#rhythmInterpretation').innerText()).includes('BPM')) throw new Error('rhythm interpretation missing');
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
           await page.locator('#save').click();
           await page.getByRole('button',{name:/我的作品/}).click();
