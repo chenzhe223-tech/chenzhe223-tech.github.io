@@ -35,7 +35,7 @@ function validOutput(action,result){
 function validInput(action,input){
  if(!input||typeof input!=="object"||Array.isArray(input))return false;
  if(action==="searchMusic")return typeof input.song==="string"&&input.song.length<=120&&typeof input.artist==="string"&&input.artist.length<=120&&(input.song.trim().length>0||input.artist.trim().length>0);
- if(action==="resolveCities")return Array.isArray(input.cities)&&input.cities.length===4&&input.cities.every(v=>typeof v==="string"&&v.trim().length>0&&v.length<=80)&&new Set(input.cities.map(v=>v.trim().replace(/\\s/g,"").toLowerCase())).size===4;
+ if(action==="resolveCities")return Array.isArray(input.cities)&&input.cities.length===4&&input.cities.every(v=>typeof v==="string"&&v.trim().length>0&&v.length<=80)&&new Set(input.cities.map(v=>v.trim().replace(/\s/g,"").toLowerCase())).size===4;
  if(action==="generateAlbumArt")return boundedString(input.prompt,1,6000)&&Number.isInteger(input.width)&&input.width>=256&&input.width<=1024&&Number.isInteger(input.height)&&input.height>=256&&input.height<=1024&&(input.seed===undefined||(Number.isInteger(input.seed)&&input.seed>=0&&input.seed<=2147483647));
  if(action==="analyzeMemory"||action==="inferMusicCandidates"||action==="generateMemoryStory"||action==="generateSocialCopy"||action==="planPosterComposition")return typeof input.story==="string"&&input.story.trim().length>0&&input.story.length<=8000;
  if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8&&input.candidates.every(c=>c&&typeof c==="object"&&boundedString(c.id||c.candidate_id,1,100)&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200));
@@ -75,10 +75,10 @@ export default {
      if(!response.ok)throw new Error("amap_http_"+response.status);
      const data=await response.json();
      if(data.status!=="1"||!Array.isArray(data.geocodes)||!data.geocodes.length)throw new Error(data.info||"city_not_found");
-     const item=data.geocodes[0],parts=String(item.location||"").split(",");
+     const item=data.geocodes[0],parts=String(item.location||"").split(","),cityValue=Array.isArray(item.city)?item.city.find(Boolean)||"":item.city||"";
      const lng=Number(parts[0]),lat=Number(parts[1]);
      if(!Number.isFinite(lng)||!Number.isFinite(lat))throw new Error("invalid_coordinates");
-     return {index,name,matchedName:item.city||item.district||item.formatted_address||name,formattedAddress:item.formatted_address||name,province:item.province||"",city:Array.isArray(item.city)?item.city[0]||"":item.city||"",adcode:item.adcode||"",lng,lat,source:"高德地图地理编码"};
+     return {index,name,matchedName:cityValue||item.district||item.formatted_address||name,formattedAddress:item.formatted_address||name,province:item.province||"",city:Array.isArray(item.city)?item.city[0]||"":item.city||"",adcode:item.adcode||"",lng,lat,source:"高德地图地理编码"};
     }catch(error){return {index,name,error:String(error&&error.message||error)}}
    }));
    const failed=resolved.filter(v=>v.error);
