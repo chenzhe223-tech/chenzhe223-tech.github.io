@@ -119,19 +119,21 @@ def localize(report):
         report['localization']={'status':'unavailable','message':'DEEPSEEK_API_KEY is not configured.'}
         ensure_story_fallback(report)
         return
-    news=report.get('news',[])[:12]; skills=report.get('skills',[])[:6]
+    news=report.get('news',[])[:12]; skills=report.get('skills',[])[:6]; china_news=report.get('china_ai_news',[])[:10]
     cfg=json.loads(CONFIG.read_text(encoding='utf-8')) if CONFIG.exists() else {}
     model=(cfg.get('ai') or {}).get('model') or 'deepseek-chat'
     payload={
         'news':[{'title':x.get('title',''),'summary':x.get('summary',''),'source':x.get('source',''),'url':x.get('url','')} for x in news],
-        'skills':[{'name':x.get('name',''),'description':x.get('description',''),'topics':x.get('topics',[])[:5]} for x in skills]
+        'skills':[{'name':x.get('name',''),'description':x.get('description',''),'topics':x.get('topics',[])[:5]} for x in skills],
+        'china_ai_news':[{'title':x.get('title',''),'summary':x.get('summary',''),'source':x.get('source',''),'url':x.get('url','')} for x in china_news]
     }
     translation_prompt=(
         'You are a careful bilingual AI editor. Translate and summarize only what the source supports. '
         'Do not invent facts, metrics, quotes or dates. Keep each field concise (one or two sentences). '
         'Return news array in input order with title_zh, summary_zh, why_it_matters_zh, title_en, summary_en, why_it_matters_en; '
         'and skills array in input order with description_zh and description_en. '
-        'Return JSON schema: {"news":[{"title_zh":"","summary_zh":"","why_it_matters_zh":"","title_en":"","summary_en":"","why_it_matters_en":""}],"skills":[{"description_zh":"","description_en":""}]}. Input: '
+        'Also translate every china_ai_news item in input order into title_zh, summary_zh, title_en, summary_en. Chinese titles and summaries are required for Chinese-language display; never copy an English headline into title_zh. '
+        'Return JSON schema: {"news":[{"title_zh":"","summary_zh":"","why_it_matters_zh":"","title_en":"","summary_en":"","why_it_matters_en":""}],"skills":[{"description_zh":"","description_en":""}],"china_ai_news":[{"title_zh":"","summary_zh":"","title_en":"","summary_en":""}]}. Input: '
     )
     translated_news=False
     try:
@@ -141,6 +143,9 @@ def localize(report):
                 if isinstance(trans.get(field),str) and trans[field].strip(): item[field]=trans[field].strip()
         for item,trans in zip(skills,translated.get('skills',[])):
             for field in ('description_zh','description_en'):
+                if isinstance(trans.get(field),str) and trans[field].strip(): item[field]=trans[field].strip()
+        for item,trans in zip(china_news,translated.get('china_ai_news',[])):
+            for field in ('title_zh','summary_zh','title_en','summary_en'):
                 if isinstance(trans.get(field),str) and trans[field].strip(): item[field]=trans[field].strip()
         translated_news=True
     except Exception as exc:
