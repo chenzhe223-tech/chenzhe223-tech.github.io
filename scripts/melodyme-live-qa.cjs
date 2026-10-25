@@ -42,20 +42,19 @@ function record(name,ok,detail=''){results.push({name,status:ok?'PASS':'FAIL',de
     record('Catalog candidate selection',!!selectedCatalogTrack,'Selected real catalog result: '+selectedCatalogTrack);
   }
   await page.locator('#next').click();
-  await page.locator('[data-style="电影雾光"]').click();
+  await page.locator('[data-poster-style="电影感氛围"]').click();
   await page.locator('#next').click();
   await page.locator('#results').waitFor({state:'visible',timeout:5000});
   if(selectedCatalogTrack) record('Confirmed catalog metadata appears in artwork',await page.locator('#musicname').innerText().then(t=>t===selectedCatalogTrack),'Artwork card title: '+await page.locator('#musicname').innerText());
-  record('Twelve poster styles',await page.locator('.stylepick').count()===12,'12 distinct style options');
+  record('Nine poster modes',await page.locator('.poster-mode-card').count()===9,'9 distinct style-locked modes');
   await page.locator('#autoStyle').click();
-  record('Local style recommendation is selectable',await page.locator('.stylepick[aria-pressed="true"]').count()===1,'Recommendation remains user-overridable');
+  record('Local style recommendation is selectable',await page.locator('.poster-mode-card[aria-pressed="true"]').count()===1,'Recommendation remains user-overridable');
   record('Real music card and Shazam URL input',await page.locator('#musiccard').count()===1&&await page.locator('#shazamUrl').count()===1,'Music card renders without inventing a track');
   await page.locator('#shazamUrl').fill('https://www.shazam.com/song/123456789/example-song');
   await page.locator('#applyShazam').click();
   record('Shazam URL action',await page.locator('#shazamLink').getAttribute('href')==='https://www.shazam.com/song/123456789/example-song','Specific official song URL is reflected in the music card');
   record('Map journey to artwork',await page.locator('#postertitle').innerText().then(t=>t.length>0),'Memory → mood → optional song clue → artwork');
   await page.locator('#storycopy').fill('Live QA edited story');
-  await page.locator('#sharecopy').fill('Live QA share copy');
   await page.locator('#save').click();
   await page.getByRole('button',{name:/我的作品/}).click();
   await page.locator('#saved strong').waitFor({timeout:3000});
