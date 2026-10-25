@@ -789,7 +789,7 @@ def collect_skills() -> list[dict]:
     # The unverified search-result pool is never published as if it passed review.
     verified = []
     verification_failures = []
-    for candidate in eligible[:15]:
+    for candidate in eligible[:40]:
         result = verify_skill_candidate(candidate)
         if not result:
             verification_failures.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "repository/license/README verification failed"})
@@ -818,12 +818,12 @@ def collect_skills() -> list[dict]:
         result["rare_value_evidence_url"] = (result.get("evidence_urls") or ["", ""])[1] if result["rare_value_verified"] else None
         result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
         verified.append(result)
-        if len(verified) >= 8:
+        if len(verified) >= 20:
             break
 
     # Keep the established first-item featured Skill contract while returning only
     # evidence-verified projects that passed historical and same-day deduplication.
-    radar = build_radar(verified, ARCHIVE, today_text, limit=8)
+    radar = build_radar(verified, ARCHIVE, today_text, limit=10)
     selected = radar.get("selected", [])
     if selected:
         selected[0]["daily_theme"] = theme_name
