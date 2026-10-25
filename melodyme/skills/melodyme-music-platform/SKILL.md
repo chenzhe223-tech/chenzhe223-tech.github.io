@@ -1,64 +1,43 @@
 ---
 name: melodyme-music-platform
-description: Make compliant decisions about iTunes Search, Apple Music catalog metadata, and possible future MusicKit integration for MelodyMe. Use when changing music search, track metadata, preview links, provider attribution, or native Apple Music support.
+description: Work on iTunes Search metadata, Apple MusicKit evaluation, track availability, provider authentication, and lawful music catalog integration in MelodyMe.
 ---
 
 # MelodyMe Music Platform Integration
 
-## Important source verification
+## Reference and compatibility
+This skill is informed by the MusicKit audio skill listing previously found in the public [Claude Skill Registry](https://github.com/majiayu000/claude-skill-registry). The registry is a community catalog, not an official Apple SDK. For implementation, consult the current official [Apple MusicKit documentation](https://developer.apple.com/musickit/) and [iTunes Search API documentation](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/).
 
-A previously listed “MusicKit Audio Skill” path in https://github.com/majiayu000/claude-skill-registry could not be found at the referenced path during repository verification. Do not claim that this repository skill is installed or copied. This file is a project-specific compatibility guide based on MelodyMe's existing architecture and publicly documented Apple platform boundaries.
+Native iOS `MediaPlayer` APIs do not run directly inside MelodyMe's static web page. Browser MusicKit JS and iOS-native MusicKit are distinct integration paths and must not be mixed up.
 
-Source registry: https://github.com/majiayu000/claude-skill-registry (MIT repository license; individual generated entries may have distinct origins and should be checked individually before copying).
+## Existing product boundary
+The current MelodyMe flow uses real iTunes Search catalog results and available short preview URLs. Preserve that behavior. Do not imply that a preview URL gives full-song playback or that iTunes Search results grant Apple Music subscriber catalog access.
 
-## Current MelodyMe implementation
+## Integration rules
+1. Keep track metadata separate from playback capability. A catalog result may be metadata-only, preview-capable, or available for a separately authorized full-track playback path.
+2. Use official, documented provider APIs and SDKs. Verify current auth requirements, regional availability, rate limits, attribution, artwork use, preview terms, and caching rules before implementation.
+3. Never fabricate tracks, artists, album art, preview URLs, full-track availability, or provider response fields.
+4. Do not commit private keys, developer tokens, or user tokens. Any secret embedded in client-side JavaScript is public. If a private secret is required, stop and propose a secure backend architecture rather than shipping it in the page.
+5. Handle empty results, missing artwork, missing preview, region restrictions, authorization expiry, throttling, and network errors explicitly. Preserve user input and provide a retry or fallback.
+6. Respect copyright, DRM, account, subscription, and geographic restrictions. Do not scrape, download, redistribute, or proxy protected music.
+7. Add MusicKit only if the user-visible requirement justifies it and the required developer configuration, authorization flow, terms, and tests can be met. Do not add a runtime dependency merely to claim a skill was integrated.
+8. Keep the current static GitHub Pages architecture unless a new capability truly requires a backend or build system.
 
-- Use iTunes Search results for real catalog metadata and artwork URLs.
-- Only use a preview URL when it is actually returned by the provider.
-- Keep preview playback distinct from Apple Music subscription playback.
-- Keep AI-generated memorial art clearly labeled as AI-generated and never present it as official album artwork.
-- Do not fabricate artists, titles, release years, artwork, availability, or preview URLs.
+## Suggested internal abstraction
+Where it reduces coupling, normalize provider results behind a small adapter:
+- `searchTracks(query)`: real metadata records.
+- `getTrackDetails(id)`: metadata plus explicit preview/full-playback capability.
+- `getPlaybackCapability(track)`: `full`, `preview`, or `metadata-only`.
+- `playPreview(track)`: attempt supported preview playback and return a clear result.
 
-## MusicKit decision gate
-
-MusicKit is not a drop-in replacement for iTunes Search. Consider it only when the product requirement explicitly calls for Apple Music catalog or subscriber playback beyond short previews.
-
-Before implementation, verify the current official Apple documentation and requirements for:
-- Apple Developer team and MusicKit configuration.
-- Developer token creation and secure server-side handling of signing keys.
-- User authorization and Music User Token handling where required.
-- Required entitlements, platform support, regional availability, subscription state, and playback restrictions.
-- Privacy disclosure, user consent, revocation, and error/empty states.
-
-Never put Apple signing keys or private credentials in `index.html`, public JavaScript, Git history, or client-side environment variables. Any developer-token signing operation must remain server-side. Do not request or store an Apple ID password.
-
-## Web versus native
-
-- The current MelodyMe deployment is a static web frontend with a Cloudflare Worker backend. Do not assume native iOS APIs or MediaPlayer framework classes can run in this web app.
-- For the web frontend, use only supported web APIs and documented MusicKit JS capabilities after checking the current official documentation.
-- Native iOS MusicKit / MediaPlayer code belongs in a separate native client, not in the static web page.
-- Do not add a MusicKit SDK or token flow solely to satisfy this skill. Existing iTunes Search + short preview remains the default unless requirements change.
-
-## Search and metadata quality
-
-1. Normalize provider response fields at the service boundary.
-2. Preserve provider IDs and canonical URLs when supplied.
-3. Validate URLs and tolerate missing optional fields.
-4. Keep loading, empty, rate-limit, network, configuration, and provider-error states distinct.
-5. Never scrape private endpoints or bypass access controls.
-6. If a provider's terms, access requirements, or current behavior are uncertain, verify official documentation before implementation.
+Use the codebase's existing naming and data model if one already exists; this abstraction is guidance, not a mandate to rewrite.
 
 ## Acceptance checklist
+- [ ] Every displayed track comes from a real provider response or is clearly marked demo content.
+- [ ] Preview and full-track capability are not conflated.
+- [ ] No secret is committed in frontend code.
+- [ ] Missing previews and provider failures are clearly represented.
+- [ ] Provider attribution and usage terms are documented.
+- [ ] Existing search, selection, poster, story, and save flows remain compatible.
 
-- Search results reflect a real provider response.
-- Missing artwork/preview fields are handled without breaking the page.
-- Search failures show a useful error and preserve user-entered memory/story content.
-- No provider secrets appear in frontend assets or repository history.
-- The UI never implies full-song playback when only a short preview is available.
-- Integration is tested on the target platform; native iOS capability is not claimed from web-only testing.
-
-## References
-
-- Apple MusicKit: https://developer.apple.com/musickit/
-- iTunes Search API documentation: https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/
-- MelodyMe architecture: `../../docs/ARCHITECTURE.md`
+This skill is an engineering guide, not a MusicKit entitlement, API token, or license to stream full tracks.
