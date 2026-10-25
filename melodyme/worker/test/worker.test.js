@@ -60,6 +60,38 @@ test("maps provider throttling to a controlled response", async () => {
 });
 
 
+test("requires the AMap REST key for real city geocoding", async () => {
+  const res = await worker.fetch(req({action:"resolveCities",input:{cities:["西安","成都","上海","新加坡"]}}),env);
+  assert.equal(res.status,503);
+  assert.equal((await res.json()).error,"amap_not_configured");
+});
+test("resolves four distinct cities using AMap geocoding and returns real coordinates", async () => {
+  const originalFetch = globalThis.fetch;
+  const names = ["西安","成都","上海","新加坡"];
+  globalThis.fetch = async url => {
+    const parsed = new URL(url);
+    assert.equal(parsed.hostname,"restapi.amap.com");
+    assert.equal(parsed.pathname,"/v3/geocode/geo");
+    assert.equal(parsed.searchParams.get("key"),"amap-test-key");
+    const name = parsed.searchParams.get("address");
+    const index = names.indexOf(name);
+    return new Response(JSON.stringify({status:"1",info:"OK",geocodes:[{city:name,formatted_address:name,adcode:String(610000+index),location:[108.9+index*5,34.3+index*2].join(",")}]}),{status:200,headers:{"content-type":"application/json"}});
+  };
+  try {
+    const res = await worker.fetch(req({action:"resolveCities",input:{cities:names}}),{...env,AMAP_REST_KEY:"amap-test-key"});
+    assert.equal(res.status,200);
+    const data = await res.json();
+    assert.equal(data.source,"AMap Web Service geocoding");
+    assert.equal(data.cities.length,4);
+    assert.equal(data.cities[0].lng,108.9);
+    assert.equal(data.cities[3].name,"新加坡");
+    assert.equal(data.cities[2].source,"高德地图地理编码");
+  } finally { globalThis.fetch = originalFetch; }
+});
+test("rejects repeated city names before contacting AMap", async () => {
+  const res = await worker.fetch(req({action:"resolveCities",input:{cities:["西安","西安","上海","新加坡"]}}),{...env,AMAP_REST_KEY:"amap-test-key"});
+  assert.equal(res.status,400);
+});
 const artRequest = (overrides = {}) => req({
   action: "generateAlbumArt",
   prompt: "square abstract memory artwork, blue ocean and soft light",
