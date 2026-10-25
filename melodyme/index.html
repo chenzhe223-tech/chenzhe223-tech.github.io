@@ -6,56 +6,6 @@
 .stylegrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}.stylepick{border:1px solid var(--line);background:#fffefa;border-radius:13px;padding:7px;text-align:left;color:var(--ink);min-width:0}.stylepick[aria-pressed=true]{border:2px solid var(--lilac);padding:6px;background:#f2eef9}.swatch{height:48px;border-radius:8px;margin-bottom:7px;position:relative;overflow:hidden}.swatch:after{content:"";position:absolute;left:12%;right:18%;bottom:11px;height:2px;background:#ffffffbb;box-shadow:0 -7px 0 #ffffff77}.stylepick strong{font-size:11px;display:block}.stylepick small{font-size:10px;color:var(--muted);display:block}.music-layout{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px;align-items:center;margin-top:14px}.cover-real{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#e5e0d7;box-shadow:0 8px 24px #172b4218}.music-title{font-size:21px;font-weight:750;line-height:1.2;margin:0 0 6px;overflow-wrap:anywhere}.music-artist{font-size:15px;color:#566474}.music-meta{font-size:12px;color:var(--muted);margin-top:8px}.music-link{display:inline-flex;margin-top:10px;text-decoration:none;border-radius:999px;background:#24242a;color:white;padding:9px 13px;font-size:12px}.candidate{display:grid;grid-template-columns:46px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:13px;margin-top:8px}.candidate img{width:46px;height:46px;object-fit:cover;border-radius:8px}.candidate strong{display:block;font-size:12px}.candidate small{display:block;font-size:11px;color:var(--muted)}.candidate button{border:1px solid var(--line);border-radius:999px;background:#fff;padding:7px 10px;font-size:11px}.stylehint{font-size:11px;color:var(--muted);margin:6px 0 12px}.musicbox{border:1px solid var(--line);border-radius:18px;background:#fffefa;padding:14px;margin-top:12px}.musicbox-head{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:11px;color:var(--muted)}@media(max-width:560px){.stylegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.music-layout{grid-template-columns:110px minmax(0,1fr);gap:11px}.music-title{font-size:17px}.candidate{grid-template-columns:40px minmax(0,1fr)}.candidate img{width:40px;height:40px}.candidate button{grid-column:2;justify-self:start}}
 .candidate.selected{border-color:var(--lilac);background:#f8f5fc}.candidate-preview{grid-column:1/-1;min-width:0;border-top:1px solid var(--line);padding-top:9px;margin-top:2px}.candidate-preview strong{display:block;font-size:11px;margin-bottom:6px}.candidate-preview audio{display:block;width:100%;max-width:100%;height:42px}.candidate-preview.muted{font-size:12px;color:var(--muted)}.ai-cover-box{margin-top:12px;border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:13px;min-width:0}.ai-cover-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;flex-wrap:wrap}.ai-cover-head span{font-size:10px;color:var(--muted)}.ai-cover-frame{position:relative;width:100%;aspect-ratio:1/1;overflow:hidden;border-radius:12px;margin-top:10px;background:linear-gradient(145deg,#d8c8c8,#20384f 55%,#9588c9)}.ai-cover-frame img{display:block;width:100%;height:100%;object-fit:cover}.ai-cover-frame img[hidden],.ai-cover-placeholder[hidden]{display:none!important}.ai-cover-frame img:not([data-loaded="true"]){opacity:0}.ai-cover-placeholder{z-index:1}.ai-cover-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:#fff;padding:20px;background:linear-gradient(145deg,#d8c8c8,#20384f 55%,#9588c9)}.ai-cover-placeholder span{font-size:42px}.ai-cover-placeholder strong{font-size:14px}.ai-cover-placeholder small{font-size:11px;max-width:230px}.ai-cover-box button{width:100%;min-height:44px}.ai-cover-box p{overflow-wrap:anywhere}.preview-wrap{grid-column:1/-1;min-width:0;border-top:1px solid var(--line);padding-top:9px;margin-top:3px}.preview-wrap strong{display:block;font-size:11px;margin-bottom:6px}.preview-wrap audio{display:block;width:100%;max-width:100%;height:42px}.preview-wrap .muted{margin:4px 0 0}.music-layout,.musicbox,.candidate{min-width:0}audio{max-width:100%}@media(max-width:560px){.ai-cover-box{padding:10px}.ai-cover-head{align-items:flex-start;flex-direction:column}.preview-wrap{grid-column:1/-1}}
 .poster.style-0{background:radial-gradient(ellipse at 80% 15%,#d8c8c8 0,transparent 36%),linear-gradient(155deg,#d8c8c8,#20384f)!important}.poster.style-1{background:linear-gradient(0deg,#8e745d55,#8e745d55),repeating-linear-gradient(0deg,#e9dcc5,#e9dcc5 3px,#e3d5bf 4px,#e3d5bf 5px)!important;color:#473a2d!important}.poster.style-2{background:radial-gradient(ellipse at 30% 10%,#f1e5d3 0,transparent 30%),linear-gradient(160deg,#a8c5d0,#183d56)!important}.poster.style-3{background:radial-gradient(ellipse at 75% 20%,#d8b7c8 0,transparent 30%),linear-gradient(155deg,#222b43,#101723)!important}.poster.style-4{background:repeating-linear-gradient(0deg,#d7d0c3,#d7d0c3 2px,#cfc6b8 3px,#cfc6b8 4px)!important;color:#3c332d!important}.poster.style-5{background:radial-gradient(ellipse at 80% 12%,#fff4e7 0,transparent 32%),linear-gradient(145deg,#f1d7d2,#8d8cc4)!important}.poster.style-6{background:#f7f3eb!important;color:#25364a!important}.poster.style-7{background:radial-gradient(circle at center,#d5b98c 0 3%,#473a2d 3.5% 28%,#d5b98c 28.5% 30%,#473a2d 31% 100%)!important}.poster.style-8{background:radial-gradient(ellipse at 70% 15%,#6b6a98 0,transparent 35%),linear-gradient(160deg,#27385b,#111b32)!important}.poster.style-9{background:linear-gradient(145deg,#cbd8bf,#536e64)!important}.poster.style-10{background:radial-gradient(ellipse at 75% 15%,#f7df9d 0,transparent 22%),radial-gradient(ellipse at 20% 80%,#f6e1dc 0,transparent 32%),linear-gradient(145deg,#edc4c7,#55766c)!important}.poster.style-11{background:radial-gradient(ellipse at 50% 15%,#596e90 0,transparent 32%),linear-gradient(160deg,#17253a,#090f1b)!important}.poster.style-1:after,.poster.style-4:after{border-style:dashed}.poster.style-6:after{border-color:#25364a55}.poster.style-7:after{border-radius:50%;inset:12%}.poster.style-9:after{border-style:dotted}.poster.style-10:after{border-radius:48% 48% 10px 10px}
-/* Mobile-first listening-focused results */@media(max-width:760px){.shell{padding-left:16px;padding-right:16px}.section{padding-top:18px;padding-bottom:38px}.hero{padding-top:20px}.layout{gap:12px}.nodes{grid-template-columns:repeat(2,minmax(0,1fr))}.results{margin-top:12px}.workgrid{grid-template-columns:minmax(0,1fr);gap:12px}.workgrid>div:first-child{display:flex;flex-direction:column;gap:10px}.poster{display:none}.ai-cover-box{margin-top:0;padding:10px;border-radius:18px}.ai-cover-head{flex-direction:row;align-items:center}.ai-cover-frame{aspect-ratio:1/1;max-height:min(78vw,360px);width:min(100%,420px);margin:10px auto 0}.musicbox{margin-top:14px;padding:12px}.music-layout{grid-template-columns:96px minmax(0,1fr)}.music-title{font-size:16px}.music-link{min-height:42px;align-items:center}.candidate{grid-template-columns:42px minmax(0,1fr);padding:10px}.candidate button{grid-column:2;min-height:40px}.candidate-preview audio,.preview-wrap audio{height:44px}.stylegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.actions{gap:8px}.actions button{flex:1;min-width:0}#next{width:100%}}@media(max-width:380px){.nav{gap:4px}.nav button{font-size:11px;padding:7px 8px}.music-layout{grid-template-columns:82px minmax(0,1fr)}.music-title{font-size:15px}}
-/* MelodyMe mobile music-player redesign */
-.musicbox{background:linear-gradient(145deg,#18283c 0%,#263e59 58%,#4b536e 100%);border:0;border-radius:24px;padding:17px;color:#fff;box-shadow:0 16px 34px #172b4224;overflow:hidden}
-.musicbox-head{color:#d8deea;font-size:11px;letter-spacing:.04em;margin-bottom:13px}
-.musicbox-head span:last-child{border:1px solid #ffffff35;border-radius:999px;padding:5px 8px;color:#e4d8f5}
-.music-layout{grid-template-columns:104px minmax(0,1fr);gap:14px;align-items:center;margin-top:0}
-.music-layout .album{display:none!important}
-.music-layout .cover-real{width:104px;height:104px;aspect-ratio:1;object-fit:cover;border-radius:15px;box-shadow:0 10px 26px #0003}
-.music-title{font-size:19px;color:#fff;line-height:1.25;margin:0 0 5px}
-.music-artist{font-size:13px;color:#e0e4ec}
-.music-meta{font-size:11px;line-height:1.55;color:#c4ccda;margin:7px 0 0}
-.music-link{background:#f7f3eb;color:#1c2b40;border-radius:999px;font-size:12px;font-weight:650;padding:10px 14px;margin-top:11px}
-.musicbox .muted,.musicbox label{color:#d7dce6}
-.musicbox .field{background:#ffffff12;color:#fff;border-color:#ffffff30;border-radius:14px}
-.musicbox .field::placeholder{color:#bdc5d2}
-.musicbox .ghost{color:#fff;border-color:#ffffff55;background:#ffffff0b}
-.musicbox .feedback{background:#ffffff12;color:#e5e9f1}
-.musicbox .privacy{color:#c0c8d6}
-.musicbox #musicresults{margin-top:14px}
-.musicbox .candidate{border-color:#ffffff30;background:#ffffff0b;color:#fff}
-.musicbox .candidate small{color:#d1d7e1}
-.musicbox .candidate button{background:#f7f3eb;color:#1c2b40;border:0}
-.musicbox .candidate.selected{background:#ffffff18;border-color:#c7b8ed}
-.musicbox .candidate-preview{border-color:#ffffff30}
-.musicbox .candidate-preview strong,.musicbox .candidate-preview.muted{color:#e1e5ed}
-.musicbox audio{accent-color:#c7b8ed}
-.track-preview{display:block;width:100%;height:34px;margin-top:9px;filter:brightness(1.05)}
-.ai-cover-box{border:1px solid var(--line);border-radius:20px;background:#fffdfa;padding:12px}
-.ai-cover-head{font-size:12px}
-@media(max-width:760px){
- .workgrid{display:flex;flex-direction:column;gap:13px}
- .workgrid>div{display:contents!important}
- .musicbox{order:-10;width:100%;padding:15px;border-radius:23px}
- .music-layout{grid-template-columns:96px minmax(0,1fr);gap:12px}
- .music-layout .cover-real{width:96px;height:96px}
- .music-title{font-size:18px}
- .ai-cover-box{order:10;width:100%;margin-top:0}
- .ai-cover-frame{width:100%;max-width:none;aspect-ratio:2.15/1;height:auto;max-height:190px;margin:10px auto 0;border-radius:14px}
- .ai-cover-placeholder{padding:12px;gap:4px}
- .ai-cover-placeholder span{font-size:27px}
- .ai-cover-placeholder strong{font-size:12px}
- .ai-cover-placeholder small{font-size:10px}
- .ai-cover-box>p{font-size:11px;margin:8px 0}
- .workgrid .actions{order:12;width:100%;margin-top:0}
- .workgrid label[for="storycopy"]{order:20}
- #storycopy{order:21;min-height:110px!important}
-  .workgrid .actions:has(#save){order:24}
-}
-@media(max-width:380px){.music-layout{grid-template-columns:80px minmax(0,1fr);gap:10px}.music-layout .cover-real{width:80px;height:80px}.music-title{font-size:16px}}
-
 .style-select-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:end;margin:12px 0}.style-select-row label{grid-column:1/-1}.style-select{min-width:0;border-radius:12px;background:#fffdfa;color:var(--ink)}.style-select-row .ghost{min-height:40px}
 .palette-preview{display:flex;align-items:center;gap:10px;padding:11px 13px;margin:8px 0 12px;border:1px solid var(--line);border-radius:15px;background:#fffdfa}
 .palette-dots{display:inline-block;width:42px;height:25px;flex:0 0 42px;border-radius:8px;background:linear-gradient(90deg,#c8b8a8 0 33%,#e7ddd1 33% 66%,#35465a 66%)}
@@ -106,7 +56,7 @@ button{min-height:40px;line-height:1.25}
 .poster-tools{margin:0;justify-content:flex-start}
 .poster-tools #download{min-height:40px;padding:9px 13px;border-radius:var(--mm-radius-sm);font-size:12px}
 .story-editor-head{margin:0;font-size:19px;line-height:1.3}
-#storycopy{width:100%;min-height:240px!important;margin:0;padding:var(--mm-space-4)!important;border-radius:var(--mm-radius-md)!important;border-color:var(--mm-line);background:#fffdfa;font-size:15px;line-height:1.8;overflow-wrap:anywhere;resize:vertical}
+#storycopy{width:100%;min-height:240px;margin:0;padding:var(--mm-space-4)!important;border-radius:var(--mm-radius-md)!important;border-color:var(--mm-line);background:#fffdfa;font-size:15px;line-height:1.8;overflow-wrap:anywhere;resize:vertical}
 .story-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--mm-space-2);margin:0}
 .story-actions button{min-height:44px;padding:10px 12px;border-radius:var(--mm-radius-sm);font-size:13px}
 .story-panel .field{margin-top:0}
@@ -132,7 +82,7 @@ button{min-height:40px;line-height:1.25}
  .ai-cover-head{flex-direction:row;align-items:center;flex-wrap:wrap}
  .ai-cover-frame{aspect-ratio:1.55/1;max-height:260px}
  .story-panel{gap:var(--mm-space-3)}
- #storycopy{min-height:200px!important}
+ #storycopy{min-height:200px}
  .story-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
 }
 @media(max-width:390px){
@@ -161,7 +111,7 @@ button{min-height:40px;line-height:1.25}
 <div id="identifyNotice" class="identify-notice" aria-live="polite">点击「听音识歌」可尝试唤起设备上的音乐识别服务。</div><div id="musicresults"></div><div class="privacy">歌曲资料来自公开音乐目录。识曲由设备上的音乐识别服务完成；网页不会在后台录音。</div>
 </div></section>
 <section class="artwork-panel" aria-label="记忆海报"><div class="poster" id="poster"><small>MELODYME · A PERSONAL SOUNDTRACK</small><h3 id="postertitle">那些被旋律<br>记住的时刻</h3><small id="postersong">A SONG · A MEMORY · YOUR STORY</small></div><section class="ai-cover-box" aria-label="AI 生成纪念封面"><div class="ai-cover-head"><strong>AI 纪念封面</strong><span>创作装饰 · 非真实专辑封面</span></div><div class="ai-cover-frame" id="aiCoverFrame"><div class="ai-cover-placeholder" id="aiCoverPlaceholder"><span>♫</span><strong>为这段记忆生成一张封面</strong><small>只使用风格、情绪与场景关键词，不发送完整故事。</small></div><img id="aiCoverImage" alt="AI 生成封面（非真实专辑封面）" loading="lazy" hidden></div><p id="aiCoverStatus" class="muted" role="status">AI 封面尚未生成</p><button class="ghost" id="regenerateCover" type="button">生成 AI 纪念封面</button><p class="muted">AI 生成封面（非真实专辑封面）。不会替换真实音乐目录封面或 SVG 海报。</p></section><div class="poster-tools"><button class="ghost" id="download" type="button">↓ 下载图文海报</button></div></section>
-<section class="story-panel" aria-label="我的音乐故事"><div class="story-editor-head"><strong>我的音乐故事</strong><button class="icon-action" id="copyStory" type="button" aria-label="复制我的音乐故事" title="复制文案">⧉</button></div><textarea class="field" id="storycopy" aria-label="我的音乐故事，可编辑" placeholder="这里会生成一段自然、散文式的音乐记忆……" style="min-height:190px"></textarea><div class="actions story-actions"><button class="primary" id="save">保存这份作品</button><button class="ghost" id="regen">重新生成故事</button></div></section>
+<section class="story-panel" aria-label="我的音乐故事"><div class="story-editor-head"><strong>我的音乐故事</strong><button class="icon-action" id="copyStory" type="button" aria-label="复制我的音乐故事" title="复制文案">⧉</button></div><textarea class="field" id="storycopy" aria-label="我的音乐故事，可编辑" placeholder="这里会生成一段自然、散文式的音乐记忆……" ></textarea><div class="actions story-actions"><button class="primary" id="save">保存这份作品</button><button class="ghost" id="regen">重新生成故事</button></div></section>
 </div></div><section class="section hidden" id="works"><div class="secthead"><div class="eyebrow">YOUR COLLECTION</div><h2>收藏那些，值得再听一次的时刻。</h2><p>作品保存在当前浏览器中，不会自动公开。</p></div><div class="card"><button class="primary" id="new">开启新旅程 +</button><p id="empty" class="muted">还没有保存的作品。每一段记忆，都可以成为起点。</p><div class="saved" id="saved"></div></div></section></main>
 <footer class="shell footer"><span>MelodyMe · 每一首歌，都是你走过的路。</span><span>本地原型 · 真实 AI（DeepSeek）按需调用；试听以目录片段为准，无云同步</span></footer><div class="toast" id="toast" role="status"></div>
 <script>
