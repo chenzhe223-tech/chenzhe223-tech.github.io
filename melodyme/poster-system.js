@@ -26,7 +26,7 @@
   function buildPrompt(input){
     input=input||{};var mode=byId(input.styleId||input.styleName);var sub=null;
     if(mode.substyles&&input.substyle)sub=mode.substyles.find(function(x){return x.id===input.substyle||x.name===input.substyle;})||null;
-    var mood=String(input.mood||"").slice(0,80),scene=String(input.scene||"").slice(0,120);
+    var mood=String(input.mood||"").slice(0,80),scene=String(input.scene||"").slice(0,120),paletteNuance=String(input.palette||"").slice(0,80);
     var songContext=[mood?"Mood direction: "+mood:"",scene?"Optional scene cue: "+scene:""].filter(Boolean).join(". ");
     return [
       "Create an original premium music poster BACKGROUND ONLY in vertical 3:4 composition, target 768x1024 or closest supported portrait ratio.",
@@ -36,6 +36,7 @@
       "LIGHTING: "+mode.lighting+". MATERIALS: "+mode.materials+".",
       "SUBJECT GUIDANCE: "+mode.subjectGuidance+".",
       songContext?"ALLOWED VARIATION ONLY: "+songContext+". This may influence scene and mood but must not override the fixed style, palette logic, or materials.":"",
+      paletteNuance?"OPTIONAL PALETTE NUANCE: "+paletteNuance+". Use only as a subtle accent within the mode’s fixed palette; do not replace its core palette.":"",
       sub?"SUBSTYLE "+sub.name+" LINE LANGUAGE: "+sub.linework+".":"",
       "TYPOGRAPHY SAFE ZONES: "+mode.reservedTextZones.join(", ")+". Leave those areas visually quiet and low-detail for separately typeset real song title and artist.",
       "DO NOT render any text, title, artist name, lyrics, logo, watermark, QR code, player controls or fake data. Frontend will typeset all text.",
