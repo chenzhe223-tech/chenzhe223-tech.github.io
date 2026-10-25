@@ -102,6 +102,7 @@ class DailyBriefContractTests(unittest.TestCase):
             self.assertTrue(story.get("source"))
             self.assertTrue(story.get("category"))
             self.assertTrue(story.get("published"))
+            self.assertTrue(story.get("image_url", "").startswith("https://"), f"China AI story image missing: {story.get('title')}")
             published = dt.datetime.fromisoformat(story["published"].replace("Z", "+00:00"))
             if published.tzinfo is None:
                 published = published.replace(tzinfo=dt.timezone.utc)
