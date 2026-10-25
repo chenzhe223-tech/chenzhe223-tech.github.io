@@ -298,7 +298,8 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_below_60_or_invalid","score":score})
             continue
         # Verified installable Skills do not require an extra rare-value label to be recommended.
-        category=str(item.get("daily_theme") or infer_skill_category(item))
+        # Diversify by the candidate's actual capability category, not the shared daily theme label.
+        category=infer_skill_category(item)
         try:
             owner=urllib.parse.urlsplit(str(item.get("url") or "")).path.strip("/").split("/")[0].lower()
         except Exception:
