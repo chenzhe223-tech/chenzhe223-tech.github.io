@@ -200,7 +200,7 @@ jobs:
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
           if (!(await page.locator('#storycopy').inputValue()).includes('A story generated for QA.')) throw new Error('cover failure must preserve story copy');
-          await page.locator('#autoStyle').click();
+          await page.locator('#randomRhythm').click();
           if (await page.locator('.poster-mode-card').count() !== 0) throw new Error('fixed poster style picker should be removed');
           if (!(await page.locator('#rhythmInterpretation').innerText()).includes('BPM')) throw new Error('rhythm interpretation missing');
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
