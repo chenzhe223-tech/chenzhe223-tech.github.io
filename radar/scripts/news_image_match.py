@@ -611,6 +611,32 @@ def _image_cache_save(cache: dict) -> None:
     entries = sorted(cache.items(), key=lambda pair: str(pair[1].get("checked_at", "")), reverse=True)[:500]
     CACHE_PATH.write_text(json.dumps(dict(entries), ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
+def enforce_unique_story_images(report: dict, used: set[str]) -> None:
+    """Prevent the same visual asset being assigned to different stories across curated sections."""
+    seen: dict[str, str] = {}
+    for section in ("top5", "china_ai_news"):
+        items = report.get(section)
+        if not isinstance(items, list):
+            continue
+        for story in items:
+            if not isinstance(story, dict):
+                continue
+            story_url = _cache_key(story)
+            identity = _image_identity(str(story.get("image_url") or ""))
+            if not identity:
+                continue
+            previous_story = seen.get(identity)
+            # The same article may be cross-listed in top5 and China AI; keep its image.
+            # Different source articles must receive different verified visual assets.
+            if previous_story and previous_story != story_url:
+                replacement = _thematic_fallback(story, used)
+                _apply_result(story, replacement)
+                identity = _image_identity(str(story.get("image_url") or ""))
+            if identity:
+                seen[identity] = story_url
+                used.add(identity)
+
+
 def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
     used: set[str] = _weekly_used_images(str(report.get("report_date") or dt.datetime.now(TZ).date().isoformat()))
     processed_urls: dict[str, dict] = {}
@@ -660,6 +686,10 @@ def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
     china_news = report.get("china_ai_news") if isinstance(report.get("china_ai_news"), list) else []
     for story in china_news:
         enrich(story)
+    enforce_unique_story_images(report, used)
+    processed_stories = list(top5) + [x for x in news[:5] if x.get("url") not in top_urls] + list(china_news)
+    total = len(processed_stories)
+    matched = sum(bool(normalize_url(str(x.get("image_url") or ""))) for x in processed_stories if isinstance(x, dict))
     report["image_matching"] = {
         "status": "ok" if matched == total else "partial", "matched": matched, "processed": total,
         "strategy": ["RSS/feed image", "article OG/Twitter metadata", "Horizon semantic query expansion", "Openverse", "Wikimedia Commons", "Bing Images", "Unsplash topic illustration fallback"],

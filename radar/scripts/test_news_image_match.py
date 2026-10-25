@@ -1,16 +1,34 @@
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
-    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS,
+    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity,
 )
 
 
 class NewsImageMatchTests(unittest.TestCase):
+    def test_duplicate_image_is_replaced_for_different_story_but_kept_for_crosslist(self):
+        shared = "https://cdn.example.com/shared.jpg"
+        unique = "https://cdn.example.com/unique.jpg"
+        report = {
+            "top5": [{"source_url": "https://example.com/story-a", "image_url": shared}],
+            "china_ai_news": [
+                {"url": "https://example.com/story-a", "image_url": shared},
+                {"url": "https://example.com/story-b", "image_url": shared},
+            ],
+        }
+        used = {_image_identity(shared)}
+        with patch("news_image_match._thematic_fallback", return_value={"image_url": unique, "image_source": "thematic_fallback"}):
+            enforce_unique_story_images(report, used)
+        self.assertEqual(report["top5"][0]["image_url"], shared)
+        self.assertEqual(report["china_ai_news"][0]["image_url"], shared)
+        self.assertEqual(report["china_ai_news"][1]["image_url"], unique)
+
     def test_extracts_og_and_twitter_images_in_preferred_order(self):
         document = """
         <html><head>
