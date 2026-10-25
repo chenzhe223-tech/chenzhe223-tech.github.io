@@ -513,8 +513,11 @@ jobs:
                   with urllib.request.urlopen(history_req, timeout=15) as history_response:
                       history = json.loads(history_response.read().decode('utf-8'))
                   assert today + '.json' in history.get('days', []), 'today is missing from history index'
-                  skill = (data.get('skills') or [{}])[0]
-                  assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
+                  skills = data.get('skills') or []
+                  assert len(skills) >= 5, f'expected at least five verified Skill recommendations, got {len(skills)}'
+                  for skill in skills:
+                      assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
+                      assert skill.get('quality_status') == 'PASS', 'unverified Skill recommendation is published'
                   old_days = [x for x in history.get('days',[]) if x != today + '.json']
                   if old_days:
                       old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
