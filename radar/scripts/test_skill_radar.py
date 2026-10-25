@@ -131,4 +131,15 @@ class SkillRadarTests(unittest.TestCase):
             Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
             r=build_radar([{"name":"x/y","url":"https://github.com/x/y","quality_status":"FAIL","total_score":99}],Path(td),"2026-10-24")
             self.assertEqual(r["selected"],[])
+    def test_diversity_uses_actual_capability_not_shared_daily_theme(self):
+        with tempfile.TemporaryDirectory() as td:
+            Path(td,"2026-10-20.json").write_text(json.dumps({"skills":[]}))
+            candidates = [
+                {"name":"a/image-skill","url":"https://github.com/a/image-skill","description":"image video creative design skill","quality_status":"PASS","total_score":95,"license":"MIT","daily_theme":"开发提效"},
+                {"name":"b/data-skill","url":"https://github.com/b/data-skill","description":"data analytics SQL dashboard skill","quality_status":"PASS","total_score":94,"license":"MIT","daily_theme":"开发提效"},
+                {"name":"c/research-skill","url":"https://github.com/c/research-skill","description":"research literature academic citation skill","quality_status":"PASS","total_score":93,"license":"MIT","daily_theme":"开发提效"},
+                {"name":"d/security-skill","url":"https://github.com/d/security-skill","description":"security vulnerability evaluation skill","quality_status":"PASS","total_score":92,"license":"MIT","daily_theme":"开发提效"},
+            ]
+            r = build_radar(candidates,Path(td),"2026-10-24",limit=8)
+            self.assertEqual(len(r["selected"]),4)
 if __name__=="__main__": unittest.main()
