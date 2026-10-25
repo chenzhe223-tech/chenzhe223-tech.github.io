@@ -2,7 +2,7 @@
   "product": "Davy Radar",
   "report_date": "2026-10-25",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-10-25T10:15:23.851653+08:00",
+  "generated_at": "2026-10-25T10:19:14.455789+08:00",
   "status": "ok",
   "sources_ok": 6,
   "sources_total": 7,
@@ -14,11 +14,11 @@
       "published": "2026-10-24T19:00:00+00:00",
       "source": "TechCrunch AI",
       "title_zh": "AI坟场：一份持续更新的失败项目与初创公司清单",
-      "summary_zh": "从苹果多次推迟的Siri AI到OpenAI混乱的“超级应用”发布，本文梳理了已关停或未达预期的AI项目。",
-      "why_it_matters_zh": "这份清单为评估AI热潮中的实际落地情况提供了参照，提醒人们关注失败案例而非只看宣传。",
+      "summary_zh": "从苹果多次推迟的Siri AI到OpenAI混乱的“超级应用”发布，本文梳理了那些已关停或未达预期的AI项目。",
+      "why_it_matters_zh": "这份清单为评估AI热潮中的实际落地情况提供了参照，提醒人们关注项目失败与预期落空的风险。",
       "title_en": "The AI graveyard: a running list of projects and startups that didn’t make it",
-      "summary_en": "From Apple's repeatedly delayed Siri AI to OpenAI's messy \"super app\" launch, this looks at AI projects that shut down or missed expectations.",
-      "why_it_matters_en": "The list offers a reference point for assessing real-world AI deployment and highlights failures beyond the hype.",
+      "summary_en": "From Apple's repeatedly delayed Siri AI to OpenAI's messy \"super app\" launch, this piece looks at AI projects that shut down or missed expectations.",
+      "why_it_matters_en": "The list offers a reference point for judging real-world AI execution and highlights the risk of failed or underwhelming projects.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2019/12/GettyImages-95927766-1.jpg?resize=1200,797",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/",
@@ -39,11 +39,11 @@
       "published": "2026-10-24T16:00:00+00:00",
       "source": "TechCrunch AI",
       "title_zh": "Block的新语音模型听起来异常像真人",
-      "summary_zh": "Block表示，该语音模型可在MacBook M4 Max上本地运行。",
-      "why_it_matters_zh": "本地运行意味着语音生成可能减少对云端的依赖，并带来隐私与延迟方面的优势。",
+      "summary_zh": "Block表示，该语音模型可以在MacBook M4 Max上本地运行。",
+      "why_it_matters_zh": "若能在本地设备上运行并达到接近真人的效果，可能降低对云端语音服务的依赖。",
       "title_en": "Block’s new voice model sounds eerily human",
       "summary_en": "Block said that the voice model can run locally on a MacBook M4 Max.",
-      "why_it_matters_en": "Local operation could reduce cloud dependence for voice generation and offer privacy and latency benefits.",
+      "why_it_matters_en": "Local, human-like voice generation could reduce reliance on cloud-based voice services.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2025/07/jack-dorsey.jpg?resize=1200,822",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/blocks-new-voice-model-sounds-eerily-human/",
@@ -64,11 +64,11 @@
       "published": "2026-10-24T15:00:00+00:00",
       "source": "TechCrunch AI",
       "title_zh": "被迫二选一时，Grok的AI模型选共和党，OpenAI的选民主党",
-      "summary_zh": "一项新研究发现，Grok的AI压倒性地推荐共和党候选人，而OpenAI的GPT偏向民主党，两个模型在近500场选举中超过90%的场次意见不一致。",
-      "why_it_matters_zh": "这表明不同AI模型在政治倾向上存在显著差异，引发对模型偏见及其影响的关注。",
+      "summary_zh": "一项新研究发现，Grok的AI压倒性地推荐共和党候选人，而OpenAI的GPT偏向民主党，两个模型在近500场选举中超过90%的情况意见不一致。",
+      "why_it_matters_zh": "研究结果凸显AI模型在政治倾向上的差异，引发对模型偏见及其潜在影响的关注。",
       "title_en": "Forced to pick, Grok’s AI model chooses Republicans. OpenAI’s picks Democrats.",
       "summary_en": "A new study found Grok's AI overwhelmingly recommends Republican candidates while OpenAI's GPT favors Democrats, with the two models disagreeing in more than 90% of nearly 500 election races.",
-      "why_it_matters_en": "This shows significant political lean differences between AI models, raising concerns about model bias and its effects.",
+      "why_it_matters_en": "The findings highlight divergent political leanings across AI models and raise concerns about bias and its potential impact.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2026/10/GettyImages-1777713346.jpg?resize=1200,900",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/",
@@ -88,12 +88,12 @@
       "summary": "We created a list of the most notable AI agents that can live in your text messages, from general assistants to agents designed for families, travel, and work.",
       "published": "2026-10-24T14:00:00+00:00",
       "source": "TechCrunch AI",
-      "title_zh": "可驻留在你短信里的顶级AI智能体盘点",
-      "summary_zh": "我们整理了一份值得关注的、可驻留在短信中的AI智能体清单，涵盖通用助手以及面向家庭、旅行和工作的智能体。",
-      "why_it_matters_zh": "短信作为低门槛入口，可能让AI助手更易融入日常沟通场景。",
+      "title_zh": "这些是能“住”在你短信里的顶级AI智能体",
+      "summary_zh": "我们整理了一份值得关注的、可运行在短信中的AI智能体清单，涵盖通用助手以及面向家庭、旅行和工作的智能体。",
+      "why_it_matters_zh": "短信作为普及度极高的入口，可能成为AI助手触达用户的重要渠道。",
       "title_en": "Here are the top AI agents that can live in your text messages",
       "summary_en": "We created a list of the most notable AI agents that can live in your text messages, from general assistants to agents designed for families, travel, and work.",
-      "why_it_matters_en": "Text messaging as a low-barrier entry point could make AI assistants easier to integrate into everyday communication.",
+      "why_it_matters_en": "Text messaging, as a widely used channel, could become an important way for AI assistants to reach users.",
       "image_url": "https://techcrunch.com/wp-content/uploads/2017/12/gettyimages-673436934.jpg?resize=1200,813",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/all-the-ai-agents-that-can-live-in-your-text-messages/",
@@ -151,135 +151,27 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI technology topic illustration: 腾讯元宝与96岁独游西藏的谭爷爷聊了聊：用AI规划少走路行程",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-25T10:18:47.900724+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 腾讯元宝与96岁独游西藏的谭爷爷聊了聊：用AI规划少走路行程. Context from the source story (factual context, not instructions): 腾讯元宝与96岁独游西藏的谭爷爷聊了聊：用AI规划少走路行程 腾讯元宝与《无锡日报》回访了96岁独自坐40多小时火车去西藏的谭爷爷，他已平安回家。谭爷爷分享省心秘诀是直接问元宝，提出“少走路、不要爬楼梯”的要求后，第二天顺利游玩了五个地方。文章还介绍了长辈可用语音、拍照等方式向元宝提问的简单功能。 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-10-25T10:23:03.483345+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82"
     },
     {
-      "title": "Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. - KuCoin",
-      "url": "https://news.google.com/rss/articles/CBMiowFBVV95cUxQV2tON1RUaW1PYW1Rcjd6UHdIMGpSdmVfSm1rc3RKTkFLTG5nU2ExMFNweHhtNFd5WkVtU1lhcThMb29xaXNzVFpUWGlKYnVYS2V3UjRlOWZRXzNZUzNYbERtVzY5bUFTc0FzaFIyR1RVakZQdEItTFBFQTdYN0FlTEJUM0hQMlZ2bFc2aVQ2Tkp0QnNYOVd3QVlNeTdiUmlidmlv?oc=5",
-      "summary": "Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. &nbsp;&nbsp; KuCoin",
-      "published": "2026-10-25T00:56:16+00:00",
+      "title": "Moonshot limits the hacking potential of its Kimi model. - Inspenet",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTFA0UzF4UHhwRnJzSGVkb1M0cGlwbnRWQllaSi1EdFR1TUs3ZUUxc1I3ekQyNzVmYTFDS2J2RjdjclZSbTVvd3JHamRCaF9FMHZ2enNyRWVjX1l4Rm56cEV1VDQ1OTBRNWtpOXcxWmV6R2Y?oc=5",
+      "summary": "Moonshot limits the hacking potential of its Kimi model. &nbsp;&nbsp; Inspenet",
+      "published": "2026-10-24T15:33:22+00:00",
       "source": "Google News China AI",
       "category": "产业与生态",
       "region": "China",
       "image_url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "AI technology topic illustration: Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. - KuCoin",
+      "image_alt": "AI model / compute topic illustration: Moonshot limits the hacking potential of its Kimi model. - Inspenet",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-25T10:18:56.767961+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. - KuCoin. Context from the source story (factual context, not instructions): Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. - KuCoin Moonshot AI unveils Kimi K3.1 teaser; release date still unannounced. &nbsp;&nbsp; KuCoin 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
-    },
-    {
-      "title": "China clears DeepSeek, MiniMax for overseas AI deployment - digitimes",
-      "url": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxPdDh5VWJWOEg3WTVranpFRmZkTElMd0k4MW1CNTV4LWRZZlVwQUhWbGlmSE1TUkMyV0RQRGhEV3lPVjNWajBNWlRYSFFRYTFTcWUzanczSzFuUHNnSHlUMmhKWU9zMDZVQXYyYzRGd2hxYzFGaDg3REVreHYwQzVaTVNyMG1CdUlf?oc=5",
-      "summary": "China clears DeepSeek, MiniMax for overseas AI deployment &nbsp;&nbsp; digitimes",
-      "published": "2026-10-25T00:45:17+00:00",
-      "source": "Google News China AI",
-      "category": "产业与生态",
-      "region": "China",
-      "image_url": "https://www.tekedia.com/wp-content/uploads/2025/01/DeepSeek-scaled-1.webp",
-      "image_source": "Bing Images",
-      "image_page_url": "https://www.tekedia.com/china-approves-deepseek-and-minimax-ai-models-for-global-use-amid-proposed-export-controls/",
-      "image_credit": "www.tekedia.com",
-      "image_license": "Reuse terms not independently verified; editorial/topic image",
-      "image_license_url": "",
-      "image_alt": "China Approves DeepSeek and MiniMax AI Models for Global Use Amid Proposed Export Controls - Tekedia",
-      "image_match_status": "web_search_topic",
-      "image_match_score": 0.375,
-      "image_matched_at": "2026-10-25T10:19:03.507532+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: China clears DeepSeek, MiniMax for overseas AI deployment - digitimes. Context from the source story (factual context, not instructions): China clears DeepSeek, MiniMax for overseas AI deployment - digitimes China clears DeepSeek, MiniMax for overseas AI deployment &nbsp;&nbsp; digitimes 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
-    },
-    {
-      "title": "Tagged: Kimi K3.1 Pro - Crowdfund Insider",
-      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE9jb1ZPM1FjTHBjWFlJRFhJMjhheTUyTVJtTVVMTEpZM2g3M0NhUC12bFBDRFpPd0dJS205RnJac0E0S1BaQVdPUEo0OHBoVC1hUGVySEoyLUdfZ2hkQ2hjUQ?oc=5",
-      "summary": "Tagged: Kimi K3.1 Pro &nbsp;&nbsp; Crowdfund Insider",
-      "published": "2026-10-24T22:45:42+00:00",
-      "source": "Google News China AI",
-      "category": "产业与生态",
-      "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/business-technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "AI business / industry topic illustration: Tagged: Kimi K3.1 Pro - Crowdfund Insider",
-      "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-25T10:19:03.542766+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82"
-    },
-    {
-      "title": "Chinese AI startup DeepSeek raises $15 billion ahead of potential IPO - The Daily Star",
-      "url": "https://news.google.com/rss/articles/CBMiwAFBVV95cUxPZXZzblRac211RElKalkxTVo3bDNHMGFtMU5Hc3BXVmRzN3k5NjBkbXpua3B4ZFN6bFVnRHJHakxKRnZSTWF5VTJHS2s3MV8yZXlGRkh2LXk4aDZXWTlkWUI1SDZrOW9oMEpoaFZqNklVaWp4U3JDblJTaDJUNG1hLXVPMkNjbWY1WkRoUTRBeTJJN3RFVXRJemtyd1hvZVdmcExHeHNtbksxNzZ5OG9JdE5scWtHVjZEN0h4M1dFTUs?oc=5",
-      "summary": "Chinese AI startup DeepSeek raises $15 billion ahead of potential IPO &nbsp;&nbsp; The Daily Star",
-      "published": "2026-10-24T16:28:39+00:00",
-      "source": "Google News China AI",
-      "category": "产业与生态",
-      "region": "China",
-      "image_url": "https://cdn.deepseek.com/images/deepseek-chat-open-graph-image.jpeg",
-      "image_source": "Bing Images",
-      "image_page_url": "https://zglg.work/ai/news/zh/2026-10-17-deepseek-releases-model-update-and-opens-search-apis-to-all-users",
-      "image_credit": "zglg.work",
-      "image_license": "Reuse terms not independently verified; editorial/topic image",
-      "image_license_url": "",
-      "image_alt": "DeepSeek 发布模型更新，并向所有用户开放搜索 API | zglg.work",
-      "image_match_status": "web_search_topic",
-      "image_match_score": 0.125,
-      "image_matched_at": "2026-10-25T08:17:23.293106+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Chinese AI startup DeepSeek raises $15 billion ahead of potential IPO - The Daily Star. Context from the source story (factual context, not instructions): Chinese AI startup DeepSeek raises $15 billion ahead of potential IPO - The Daily Star Chinese AI startup DeepSeek raises $15 billion ahead of potential IPO &nbsp;&nbsp; The Daily Star 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
-    },
-    {
-      "title": "Together AI's Dan Fu: Inference Now Burns 12x More Compute Than Training, and DeepSeek's 80% Margins Prove It - BigGo Finance",
-      "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE9lMGNTX204dUNFS1FZY01IZ3Vlb25HRFNBQTZqQnZOczlOV3p3dS1fYTVGQUxvX190QUJLaC0zdFR2X2lsRUdJelN3OUxrcDRKQjhjOFNxWG5oTjg?oc=5",
-      "summary": "Together AI's Dan Fu: Inference Now Burns 12x More Compute Than Training, and DeepSeek's 80% Margins Prove It &nbsp;&nbsp; BigGo Finance",
-      "published": "2026-10-24T16:08:00+00:00",
-      "source": "Google News China AI",
-      "category": "产业与生态",
-      "region": "China",
-      "image_url": "https://thumbs.dreamstime.com/z/happy-family-relaxing-green-nature-together-32683193.jpg",
-      "image_source": "Bing Images",
-      "image_page_url": "https://www.dreamstime.com/stock-photos-happy-family-relaxing-green-nature-together-image32683193",
-      "image_credit": "www.dreamstime.com",
-      "image_license": "Reuse terms not independently verified; editorial/topic image",
-      "image_license_url": "",
-      "image_alt": "Happy family stock image. Image of meadow, hold, enjoying - 32683193",
-      "image_match_status": "web_search_topic",
-      "image_match_score": 0.25,
-      "image_matched_at": "2026-10-25T08:17:28.357285+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Together AI's Dan Fu: Inference Now Burns 12x More Compute Than Training, and DeepSeek's 80% Margins Prove It - BigGo Finance. Context from the source story (factual context, not instructions): Together AI's Dan Fu: Inference Now Burns 12x More Compute Than Training, and DeepSeek's 80% Margins Prove It - BigGo Finance Together AI's Dan Fu: Inference Now Burns 12x More Compute Than Training, and DeepSeek's 80% Margins Prove It &nbsp;&nbsp; BigGo Finance 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
-    },
-    {
-      "title": "Kimi K3.1 Pro: A Big Upgrade over K3, with Gaps in Reasoning and Science - Medium",
-      "url": "https://news.google.com/rss/articles/CBMiuwFBVV95cUxOSGpZalFLLTF1LWJfSkQ2QmhrSnUyeXRJQm9ibGFnb2Y1X3ZoTzdOYTJHY2pNRThCQ2g3ZEFGM0tyMU03Um1jV0ZlTHZjdTM3U0ZNcVlCVlNlQjNFaUdCaXlZTDhsbkxUWHA5OEVMdDNPcTNiWktBd2pWUWV3bzc0bkNISE8wUU5UWlNuRGNEZnR4VjFNMkN4X240eVprMkRCYVRhRFZua1Fxa3RSS2c5dTBqOV9UV2l0d2FZ?oc=5",
-      "summary": "Kimi K3.1 Pro: A Big Upgrade over K3, with Gaps in Reasoning and Science &nbsp;&nbsp; Medium",
-      "published": "2026-10-24T15:36:30+00:00",
-      "source": "Google News China AI",
-      "category": "产业与生态",
-      "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "AI technology topic illustration: Kimi K3.1 Pro: A Big Upgrade over K3, with Gaps in Reasoning and Science - Medium",
-      "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-25T10:19:03.576516+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82"
+      "image_matched_at": "2026-10-25T10:23:03.549646+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "Kimi’s Global Moment—and a Very Chinese PR Habit - Pekingnology",
@@ -289,7 +181,7 @@
       "source": "Google News China AI",
       "category": "产业与生态",
       "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
       "image_credit": "Unsplash",
@@ -297,8 +189,115 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI technology topic illustration: Kimi’s Global Moment—and a Very Chinese PR Habit - Pekingnology",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-10-25T10:19:03.611016+08:00",
+      "image_matched_at": "2026-10-25T10:23:03.615493+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82"
+    },
+    {
+      "title": "Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities - ForkLog",
+      "url": "https://news.google.com/rss/articles/CBMingFBVV95cUxQNHVSeFZqYVp3Yk5OR3FsaXZuTXpZVE5hejFEX3Biam1XdWYwUTlmaEpMRUNHcXFxR1FHdnZDVmd1eTVWNEdnTDNUaFZJZ0FrQ3J6QkREUDJLb1UxTFNRMG9lMC1FYXg0OTVkNzF5MUNDSm9MelZNRklpV1dPVWFUYmFVZXBDZEZRcmp4N0pzMnFrN1U3b3BTTWFsUE5oQQ?oc=5",
+      "summary": "Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities &nbsp;&nbsp; ForkLog",
+      "published": "2026-10-24T10:17:31+00:00",
+      "source": "Google News China AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI technology topic illustration: Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities - ForkLog",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-25T10:23:10.978196+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities - ForkLog. Context from the source story (factual context, not instructions): Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities - ForkLog Moonshot AI launches Kimi K3.1 Pro, restricts its cyberattack capabilities &nbsp;&nbsp; ForkLog 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Kimi K3.1 Pro: 1M Context, 3T Open Weights [2026] - https://tech-insider.org/",
+      "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxOWVZOa1Ata3k5dGctejB3MlN3aXBJZ2szbnNoRzJyRW5CbVVsd1V3SU1qb3RfeUtqdTNFeXRuZ0hmNFRWSmxrY1FPQnVTb2lHcDZDMHRLd1o1b0pDX1BRLWNNc0tFSFBfZVJtNE95NHYxOHZveTdMZExhWERDMDZsMTVLc1lEQQ?oc=5",
+      "summary": "Kimi K3.1 Pro: 1M Context, 3T Open Weights [2026] &nbsp;&nbsp; https://tech-insider.org/",
+      "published": "2026-10-24T09:48:05+00:00",
+      "source": "Google News China AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://i.pinimg.com/originals/90/71/46/9071460c97b85dc2c1b9e4f95df452f9.png",
+      "image_source": "Bing Images",
+      "image_page_url": "https://www.artofit.org/image-gallery/bearded-dragon-weight-chart/",
+      "image_credit": "www.artofit.org",
+      "image_license": "Reuse terms not independently verified; editorial/topic image",
+      "image_license_url": "",
+      "image_alt": "Bearded dragon weight chart – Artofit",
+      "image_match_status": "web_search_topic",
+      "image_match_score": 0.375,
+      "image_matched_at": "2026-10-25T08:03:50.400856+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Kimi K3.1 Pro: 1M Context, 3T Open Weights [2026] - https://tech-insider.org/. Context from the source story (factual context, not instructions): Kimi K3.1 Pro: 1M Context, 3T Open Weights [2026] - https://tech-insider.org/ Kimi K3.1 Pro: 1M Context, 3T Open Weights [2026] &nbsp;&nbsp; https://tech-insider.org/ 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "China’s Moonshot AI unveils Kimi K3.1 Pro model - Tech in Asia",
+      "url": "https://news.google.com/rss/articles/CBMilAFBVV95cUxPNTZ0R2xzQVpLWFk2elpaeWh4ejA5UjY2MWh3b3ZCN3A5cTQteUo3dnAzWWRCam5lRFB5OFFhdURHVFl5VmZuTWZPRTlyd2NOSUcyMjA0OXRiN08yeVptNDZSQXVFY1R2UjJYajUyZXRsTG9Nd0ltaVd0WWR2eTNZT2NTcHdDd2ZVUTJSbm50Nm1GSm0x?oc=5",
+      "summary": "China’s Moonshot AI unveils Kimi K3.1 Pro model &nbsp;&nbsp; Tech in Asia",
+      "published": "2026-10-24T08:10:00+00:00",
+      "source": "Google News China AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI model / compute topic illustration: China’s Moonshot AI unveils Kimi K3.1 Pro model - Tech in Asia",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-25T10:23:16.704433+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: China’s Moonshot AI unveils Kimi K3.1 Pro model - Tech in Asia. Context from the source story (factual context, not instructions): China’s Moonshot AI unveils Kimi K3.1 Pro model - Tech in Asia China’s Moonshot AI unveils Kimi K3.1 Pro model &nbsp;&nbsp; Tech in Asia 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "FILE PHOTO: Deepseek AI sign in Beijing - The Daily News | Texas' Oldest Newspaper",
+      "url": "https://news.google.com/rss/articles/CBMizgFBVV95cUxPWWpDOVdfdWVZTlpFbnlFeGt0cXctdDVGSk9ZUlVHVC1VNVEyaUNoZXhyNkUyUFhGc2tXYjlGNlY2UlAtNFhzYnlvY0s2N0hTNEI4ZE13SWxDX08xN1lnaTI5T0NZSXc3U0VrazVBaC0xdEp5LUpJQUNfQW9VajJSMGxDQzJiNHZXRHZoLUp3TmphU2FTWjhJekwyVFl3ZS1SMnBkYWxVLWNxcHBvbHNKSmswVXQ4bU82QmdEVURvWm5xQkw2S3laNDJGVEN5UQ?oc=5",
+      "summary": "FILE PHOTO: Deepseek AI sign in Beijing &nbsp;&nbsp; The Daily News | Texas' Oldest Newspaper",
+      "published": "2026-10-24T08:09:31+00:00",
+      "source": "Google News China AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://cdn.pixabay.com/photo/2014/04/02/10/34/folder-303891__180.png",
+      "image_source": "Bing Images",
+      "image_page_url": "https://pixabay.com/en/html-file-type-source-code-code-154434/",
+      "image_credit": "pixabay.com",
+      "image_license": "Reuse terms not independently verified; editorial/topic image",
+      "image_license_url": "",
+      "image_alt": "Free vector graphic: Html, File Type, Source Code, Code - Free Image on Pixabay - 154434",
+      "image_match_status": "web_search_topic",
+      "image_match_score": 0.25,
+      "image_matched_at": "2026-10-25T08:03:52.904937+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: FILE PHOTO: Deepseek AI sign in Beijing - The Daily News | Texas' Oldest Newspaper. Context from the source story (factual context, not instructions): FILE PHOTO: Deepseek AI sign in Beijing - The Daily News | Texas' Oldest Newspaper FILE PHOTO: Deepseek AI sign in Beijing &nbsp;&nbsp; The Daily News | Texas' Oldest Newspaper 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Moonshot AI curbs hacking ability in Kimi K3.1 Pro model - TradingView",
+      "url": "https://news.google.com/rss/articles/CBMivgFBVV95cUxOTDBfZHF1RzI1LWlzcllWdWdOUDRQRk14dnE5Q003X0E2RFliRjVwalRJMUZjeEZ0YU02ODRRUzgxeWpZdWhWNzJYa0JacVh2VDhOM1dtb3N5dUs0V2w0X3JDaklrOFVsaTAwVWJMNl9xSmFnbXRKbThjVFVsWk9JQ2xnanY1Z1dDUTdfQk9BdDlrODU1OVNfYmlYeDEwMFp0ODk5Rm5sb0lDc1pmZ2VQdTkxUFQ4SEdsTE9STkdR?oc=5",
+      "summary": "Moonshot AI curbs hacking ability in Kimi K3.1 Pro model &nbsp;&nbsp; TradingView",
+      "published": "2026-10-24T06:48:00+00:00",
+      "source": "Google News China AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI model / compute topic illustration: Moonshot AI curbs hacking ability in Kimi K3.1 Pro model - TradingView",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-25T10:23:21.202905+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Moonshot AI curbs hacking ability in Kimi K3.1 Pro model - TradingView. Context from the source story (factual context, not instructions): Moonshot AI curbs hacking ability in Kimi K3.1 Pro model - TradingView Moonshot AI curbs hacking ability in Kimi K3.1 Pro model &nbsp;&nbsp; TradingView 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
     }
   ],
   "historical_dedupe": {
@@ -947,8 +946,8 @@
       "name": "cloudflare/security-audit-skill",
       "url": "https://github.com/cloudflare/security-audit-skill",
       "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
-      "stars": 44694,
-      "updated": "2026-10-25T02:15:11Z",
+      "stars": 44696,
+      "updated": "2026-10-25T02:19:02Z",
       "language": "JavaScript",
       "topics": [],
       "daily_theme": "开发提效",
@@ -957,11 +956,11 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-10-25T10:15:29.635296+08:00",
+        "checked_at": "2026-10-25T10:19:27.700477+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/cloudflare/security-audit-skill",
-      "stars_total": 44694,
+      "stars_total": 44696,
       "stars_delta_7d": null,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": null,
@@ -974,7 +973,7 @@
       "open_issues_total": 86,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-10-25T10:15:31.182224+08:00",
+      "evidence_checked_at": "2026-10-25T10:19:35.937313+08:00",
       "evidence_urls": [
         "https://github.com/cloudflare/security-audit-skill",
         "https://api.github.com/repos/cloudflare/security-audit-skill/readme"
@@ -1019,7 +1018,7 @@
       "rare_value_verified": true,
       "rare_value_reason": "Distinct documented capability: security + audit; actual SKILL.md files, README and license verified. This is a use-case distinction, not a claim of global uniqueness.",
       "rare_value_evidence_url": "https://api.github.com/repos/cloudflare/security-audit-skill/readme",
-      "description_zh": "一个面向编码智能体的技能，用于多阶段安全审计，产出经独立验证、机器可读的发现。",
+      "description_zh": "一个面向编码智能体的技能，用于多阶段安全审计，产出经过独立验证、机器可读的发现结果。",
       "description_en": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings."
     }
   ],
@@ -1034,13 +1033,13 @@
         "query_count": 3,
         "window_days": 7
       },
-      "github_candidate_count": 1
+      "github_candidate_count": 210
     },
     "growth_snapshots": {
       "status": "observed",
       "historical_snapshots_read": 1,
       "historical_errors": [],
-      "candidate_count": 1,
+      "candidate_count": 210,
       "candidates_with_7d_delta": 0,
       "candidates_with_30d_delta": 0
     },
@@ -1054,12 +1053,587 @@
       "errors": [],
       "records": 83
     },
-    "candidate_count": 1,
-    "history_duplicate_exclusions": [],
-    "verification_failures": [],
+    "candidate_count": 210,
+    "history_duplicate_exclusions": [
+      {
+        "name": "zhaoxuya520/reverse-skill",
+        "url": "https://github.com/zhaoxuya520/reverse-skill",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "zhaoxuya520/reverse-skill",
+          "url": "https://github.com/zhaoxuya520/reverse-skill"
+        }
+      },
+      {
+        "name": "obra/superpowers",
+        "url": "https://github.com/obra/superpowers",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "obra/superpowers",
+          "url": "https://github.com/obra/superpowers"
+        }
+      },
+      {
+        "name": "JuliusBrussee/caveman",
+        "url": "https://github.com/JuliusBrussee/caveman",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "JuliusBrussee/caveman",
+          "url": "https://github.com/JuliusBrussee/caveman"
+        }
+      },
+      {
+        "name": "addyosmani/agent-skills",
+        "url": "https://github.com/addyosmani/agent-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "addyosmani/agent-skills",
+          "url": "https://github.com/addyosmani/agent-skills"
+        }
+      },
+      {
+        "name": "sickn33/agentic-awesome-skills",
+        "url": "https://github.com/sickn33/agentic-awesome-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "sickn33/agentic-awesome-skills",
+          "url": "https://github.com/sickn33/agentic-awesome-skills"
+        }
+      },
+      {
+        "name": "alirezarezvani/claude-skills",
+        "url": "https://github.com/alirezarezvani/claude-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "alirezarezvani/claude-skills",
+          "url": "https://github.com/alirezarezvani/claude-skills"
+        }
+      },
+      {
+        "name": "kesslernity/awesome-copilot-chat-agents",
+        "url": "https://github.com/kesslernity/awesome-copilot-chat-agents",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "kesslernity/awesome-copilot-chat-agents",
+          "url": "https://github.com/kesslernity/awesome-copilot-chat-agents"
+        }
+      },
+      {
+        "name": "JuanMarchetto/agent-skills",
+        "url": "https://github.com/JuanMarchetto/agent-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "JuanMarchetto/agent-skills",
+          "url": "https://github.com/JuanMarchetto/agent-skills"
+        }
+      },
+      {
+        "name": "affaan-m/ECC",
+        "url": "https://github.com/affaan-m/ECC",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "affaan-m/ECC",
+          "url": "https://github.com/affaan-m/ECC"
+        }
+      },
+      {
+        "name": "Leonxlnx/taste-skill",
+        "url": "https://github.com/Leonxlnx/taste-skill",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "Leonxlnx/taste-skill",
+          "url": "https://github.com/Leonxlnx/taste-skill"
+        }
+      },
+      {
+        "name": "tt-a1i/archify",
+        "url": "https://github.com/tt-a1i/archify",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "tt-a1i/archify",
+          "url": "https://github.com/tt-a1i/archify"
+        }
+      },
+      {
+        "name": "calesthio/OpenMontage",
+        "url": "https://github.com/calesthio/OpenMontage",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "calesthio/OpenMontage",
+          "url": "https://github.com/calesthio/OpenMontage"
+        }
+      },
+      {
+        "name": "coreyhaines31/marketingskills",
+        "url": "https://github.com/coreyhaines31/marketingskills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "coreyhaines31/marketingskills",
+          "url": "https://github.com/coreyhaines31/marketingskills"
+        }
+      },
+      {
+        "name": "zarazhangrui/frontend-slides",
+        "url": "https://github.com/zarazhangrui/frontend-slides",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "zarazhangrui/frontend-slides",
+          "url": "https://github.com/zarazhangrui/frontend-slides"
+        }
+      },
+      {
+        "name": "OthmanAdi/planning-with-files",
+        "url": "https://github.com/OthmanAdi/planning-with-files",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "OthmanAdi/planning-with-files",
+          "url": "https://github.com/OthmanAdi/planning-with-files"
+        }
+      },
+      {
+        "name": "Orchestra-Research/AI-Research-SKILLs",
+        "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "Orchestra-Research/AI-Research-SKILLs",
+          "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs"
+        }
+      },
+      {
+        "name": "kesslernity/awesome-copilot-cowork-skills",
+        "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "kesslernity/awesome-copilot-cowork-skills",
+          "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills"
+        }
+      },
+      {
+        "name": "Yugpat1835/awesome-copilot-cowork-skills",
+        "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "Yugpat1835/awesome-copilot-cowork-skills",
+          "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills"
+        }
+      },
+      {
+        "name": "mexin/qa-agent-skill",
+        "url": "https://github.com/mexin/qa-agent-skill",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "mexin/qa-agent-skill",
+          "url": "https://github.com/mexin/qa-agent-skill"
+        }
+      },
+      {
+        "name": "justhandledlabs/agent-skills",
+        "url": "https://github.com/justhandledlabs/agent-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "justhandledlabs/agent-skills",
+          "url": "https://github.com/justhandledlabs/agent-skills"
+        }
+      },
+      {
+        "name": "magallon/testing-toolkit",
+        "url": "https://github.com/magallon/testing-toolkit",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "magallon/testing-toolkit",
+          "url": "https://github.com/magallon/testing-toolkit"
+        }
+      },
+      {
+        "name": "Graphify-Labs/graphify",
+        "url": "https://github.com/Graphify-Labs/graphify",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "Graphify-Labs/graphify",
+          "url": "https://github.com/Graphify-Labs/graphify"
+        }
+      },
+      {
+        "name": "mattpocock/skills",
+        "url": "https://github.com/mattpocock/skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "mattpocock/skills",
+          "url": "https://github.com/mattpocock/skills"
+        }
+      },
+      {
+        "name": "Shubhamsaboo/awesome-llm-apps",
+        "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-16",
+          "name": "Shubhamsaboo/awesome-llm-apps",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps"
+        }
+      },
+      {
+        "name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "mvanhorn/last30days-skill",
+          "url": "https://github.com/mvanhorn/last30days-skill"
+        }
+      },
+      {
+        "name": "blader/humanizer",
+        "url": "https://github.com/blader/humanizer",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "blader/humanizer",
+          "url": "https://github.com/blader/humanizer"
+        }
+      },
+      {
+        "name": "K-Dense-AI/scientific-agent-skills",
+        "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "K-Dense-AI/scientific-agent-skills",
+          "url": "https://github.com/K-Dense-AI/scientific-agent-skills"
+        }
+      },
+      {
+        "name": "googleworkspace/cli",
+        "url": "https://github.com/googleworkspace/cli",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "googleworkspace/cli",
+          "url": "https://github.com/googleworkspace/cli"
+        }
+      },
+      {
+        "name": "op7418/guizang-ppt-skill",
+        "url": "https://github.com/op7418/guizang-ppt-skill",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "op7418/guizang-ppt-skill",
+          "url": "https://github.com/op7418/guizang-ppt-skill"
+        }
+      },
+      {
+        "name": "AgriciDaniel/claude-seo",
+        "url": "https://github.com/AgriciDaniel/claude-seo",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "AgriciDaniel/claude-seo",
+          "url": "https://github.com/AgriciDaniel/claude-seo"
+        }
+      },
+      {
+        "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+        "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-21",
+          "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+          "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep"
+        }
+      },
+      {
+        "name": "yusufkaraaslan/Skill_Seekers",
+        "url": "https://github.com/yusufkaraaslan/Skill_Seekers",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-22",
+          "name": "yusufkaraaslan/Skill_Seekers",
+          "url": "https://github.com/yusufkaraaslan/Skill_Seekers"
+        }
+      },
+      {
+        "name": "jaktestowac/awesome-copilot-for-testers",
+        "url": "https://github.com/jaktestowac/awesome-copilot-for-testers",
+        "reason": "90-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "jaktestowac/awesome-copilot-for-testers",
+          "url": "https://github.com/jaktestowac/awesome-copilot-for-testers"
+        }
+      }
+    ],
+    "verification_failures": [
+      {
+        "name": "rlaope/oh-my-hermes",
+        "url": "https://github.com/rlaope/oh-my-hermes",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "dfinke/awesome-copilot-chatmodes",
+        "url": "https://github.com/dfinke/awesome-copilot-chatmodes",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "trumandaniels/AgenticSkillsPublic",
+        "url": "https://github.com/trumandaniels/AgenticSkillsPublic",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "github/awesome-copilot",
+        "url": "https://github.com/github/awesome-copilot",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-copilot-studio-agents",
+        "url": "https://github.com/kesslernity/awesome-copilot-studio-agents",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "hisea/radian",
+        "url": "https://github.com/hisea/radian",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "bigrivi/nova",
+        "url": "https://github.com/bigrivi/nova",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "baybayda0911/skills-package",
+        "url": "https://github.com/baybayda0911/skills-package",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "JhonHawk/tricell-hive",
+        "url": "https://github.com/JhonHawk/tricell-hive",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "yxpwinnie130607/frontend-director",
+        "url": "https://github.com/yxpwinnie130607/frontend-director",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "MarcoAmaral/qa-instinct",
+        "url": "https://github.com/MarcoAmaral/qa-instinct",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "MauricioPerera/repo-as-an-agent",
+        "url": "https://github.com/MauricioPerera/repo-as-an-agent",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "mizaelsouto/kaminho",
+        "url": "https://github.com/mizaelsouto/kaminho",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "Seolyticize/skills",
+        "url": "https://github.com/Seolyticize/skills",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "bompus/house-rules",
+        "url": "https://github.com/bompus/house-rules",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "zompinc/agent-conventions",
+        "url": "https://github.com/zompinc/agent-conventions",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "elendil-tech/magik-harness",
+        "url": "https://github.com/elendil-tech/magik-harness",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "codewithasnari/nongeneric",
+        "url": "https://github.com/codewithasnari/nongeneric",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+        "url": "https://github.com/huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "cumabozkurt/god-of-design",
+        "url": "https://github.com/cumabozkurt/god-of-design",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "taylorwinfield/ux-ui-skills",
+        "url": "https://github.com/taylorwinfield/ux-ui-skills",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "RealTask/MAX-DESIGN",
+        "url": "https://github.com/RealTask/MAX-DESIGN",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "ca-who-codes/ultimate.UIUX.design.skills",
+        "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "fkucukkara/awesome-copilot-csharp",
+        "url": "https://github.com/fkucukkara/awesome-copilot-csharp",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "devanshuDesai/agent-skills",
+        "url": "https://github.com/devanshuDesai/agent-skills",
+        "reason": "repository/license/README verification failed"
+      }
+    ],
     "selected_count": 1,
-    "excluded_count": 0,
-    "excluded": [],
+    "excluded_count": 72,
+    "excluded": [
+      {
+        "name": "Donchitos/Claude-Code-Game-Studios",
+        "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 75.4
+      },
+      {
+        "name": "nidhinjs/prompt-master",
+        "url": "https://github.com/nidhinjs/prompt-master",
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 73.5
+      },
+      {
+        "name": "greensock/gsap-skills",
+        "url": "https://github.com/greensock/gsap-skills",
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 72.9
+      },
+      {
+        "name": "ayghri/i-have-adhd",
+        "url": "https://github.com/ayghri/i-have-adhd",
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 72.2
+      },
+      {
+        "name": "virgiliojr94/book-to-skill",
+        "url": "https://github.com/virgiliojr94/book-to-skill",
+        "reason": "score_70_79_without_verified_rare_value",
+        "score": 70.4
+      },
+      {
+        "name": "GulajavaMinistudio/awesome-copilot-id",
+        "url": "https://github.com/GulajavaMinistudio/awesome-copilot-id",
+        "reason": "score_below_70_or_invalid",
+        "score": 69.4
+      },
+      {
+        "name": "DiegoLopez0208/mechanism",
+        "url": "https://github.com/DiegoLopez0208/mechanism",
+        "reason": "score_below_70_or_invalid",
+        "score": 68.5
+      },
+      {
+        "name": "Moddingflow/better-design",
+        "url": "https://github.com/Moddingflow/better-design",
+        "reason": "score_below_70_or_invalid",
+        "score": 68.4
+      },
+      {
+        "name": "Seance1723/UXCraft",
+        "url": "https://github.com/Seance1723/UXCraft",
+        "reason": "score_below_70_or_invalid",
+        "score": 68.0
+      },
+      {
+        "name": "creedants/pstack-t3",
+        "url": "https://github.com/creedants/pstack-t3",
+        "reason": "score_below_70_or_invalid",
+        "score": 67.7
+      },
+      {
+        "name": "conn-castle/agent-layer",
+        "url": "https://github.com/conn-castle/agent-layer",
+        "reason": "score_below_70_or_invalid",
+        "score": 64.5
+      },
+      {
+        "name": "higherorderfunctor/nix-agentic-tools",
+        "url": "https://github.com/higherorderfunctor/nix-agentic-tools",
+        "reason": "score_below_70_or_invalid",
+        "score": 64.4
+      },
+      {
+        "name": "touchine-ojo/OJO-Design-Skills",
+        "url": "https://github.com/touchine-ojo/OJO-Design-Skills",
+        "reason": "score_below_70_or_invalid",
+        "score": 64.1
+      },
+      {
+        "name": "godot-fun/gai",
+        "url": "https://github.com/godot-fun/gai",
+        "reason": "score_below_70_or_invalid",
+        "score": 58.2
+      }
+    ],
     "scoring_model": {
       "weights": {
         "recent_heat_and_growth": 25,
@@ -1087,8 +1661,8 @@
   "ai_analysis": {
     "status": "ok",
     "provider": "DeepSeek via Horizon",
-    "generated_at": "2026-10-25T10:18:23.430172+08:00",
-    "summary_markdown": "# Horizon 每日速递 - 2026-10-25\n\n> 从 15 条内容中筛选出 6 条重要资讯。\n\n---\n\n**科技新闻**\n1. [Dan Luu 呼吁以更高野心构建软件](#item-tech-news-1) ⭐️ 7.0/10\n2. [Brotli 解压 RCE 更名 HTTP2Shell，波及大量 HTTP 库与 Python 包](#item-tech-news-2) ⭐️ 7.0/10\n3. [gpu-unlock 利用固件漏洞提升 Nvidia 3000 系 FP/BF16 发射率](#item-tech-news-3) ⭐️ 7.0/10\n4. [美创意业 20 万岗位流失，AI 是主因吗](#item-tech-news-4) ⭐️ 7.0/10\n5. [Goose 编程语言亮相：多数据栈与不共享线程](#item-tech-news-5) ⭐️ 7.0/10\n6. [研究称 Grok 倾向推荐共和党人，GPT 倾向民主党人](#item-tech-news-6) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [Dan Luu 呼吁以更高野心构建软件](https://danluu.com/ambitious/) ⭐️ 7.0/10\n\nDan Luu 发表了观点文章《We should be more ambitious with the software we build》，呼吁开发者不要满足于现状，而应对所构建的软件设定更高目标。文章随后在 Hacker News 引发讨论，涉及 AI 辅助编程、软件性能宣称与工程文化；这些讨论属于社区反应，文章本身没有发布新工具或给出经独立验证的性能数据。\n\nhackernews · ltratt · 10月24日 21:47 · [社区讨论](https://news.ycombinator.com/item?id=50225695)\n\n**「背景」** 要理解这篇评论，先要看 Dan Luu 对“ambitious”的界定：他在文中用它指“做到比以前更多”，而非专指某个高度专门化的工具。文章的相关摘要还以 AI 编程工具为背景，称这类工具让个人能够构建过去可能需要一年以上才能完成的软件项目。\n\n**「社区讨论」** 评论者 mindcandy 认为，开发者更应借助 AI 尝试过去认为不可能完成的项目，而不是抱怨 AI 取代了原有工作；lubujackson 则指出，AI 能快速把想法做到 MVP，但无法消除 MVP 之后的产品功能取舍与复杂性问题。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://daily.dev/posts/we-should-be-more-ambitious-with-the-software-we-build-l2m1e5rw3\">We should be more ambitious with the software we build</a></li>\n<li><a href=\"https://danluu.com/ambitious/\">&quot;We should be more ambitious with the software we build&quot;</a></li>\n\n</ul>\n</details>\n\n**标签**: `#software engineering`, `#developer culture`, `#software performance`, `#AI-assisted coding`, `#opinion`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [Brotli 解压 RCE 更名 HTTP2Shell，波及大量 HTTP 库与 Python 包](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) ⭐️ 7.0/10\n\nAikido 的博客称，此前名为 Node2Shell 的 Brotli 解压远程代码执行漏洞已更名为 HTTP2Shell，编号为 CVE-2026-111497，并称其影响大量 HTTP 库和 Python 包。现有材料没有给出完整的受影响组件与版本清单，也没有说清哪些实际配置会触发该漏洞，因此真实影响范围仍不明确。社区评论引述文章称该漏洞可未经认证触发，但相关说法尚缺独立验证；实际暴露面很可能取决于应用是否接受 Brotli 压缩的请求体。\n\nhackernews · theanonymousone · 10月24日 08:06 · [社区讨论](https://news.ycombinator.com/item?id=50219177)\n\n**「背景」** 该问题源于对不可信 Brotli 压缩数据的解压过程：Brotli 是常用于 HTTP 响应体的压缩算法，但库在解压恶意构造的数据时若存在缺陷，就可能触发远程代码执行。此前的 Node2Shell 名称对应较窄的 Node.js 影响范围，而 HTTP2Shell 是同一问题在据称波及多种 HTTP 库和 Python 包后的重新命名；评论者还指出，任何手工解压 Brotli 数据的场景都可能受影响，并不限于 HTTP。\n\n**「影响与处置」** 若所用库确实在受影响范围内，暴露面集中在会解码攻击者提供的 Brotli 数据的服务：HTTP 请求体解压是常见路径，但评论者指出手动 Brotli 解码同样可能触发，因此不能只按是否运行 HTTP 服务来判断。相关团队应确认依赖是否已包含修复版本，并检查常见配置下是否会接受 Brotli 压缩请求体；在修复前限制不可信 Brotli 输入可降低风险。\n\n**「社区讨论」** 评论者集中批评“HTTP2Shell”这一命名过于宽泛：netsharc 认为它没有描述实际问题，pimterry 更倾向 Broccoli2Shell，并指出手动进行 Brotli 解码也可能触发漏洞，不必经过 HTTP。bawolff 则质疑文章没有说清多少库在常见配置下真正支持 Brotli 压缩的请求体，认为应当尽快修补而不是继续炒作。\n\n**标签**: `#security-vulnerability`, `#brotli`, `#remote-code-execution`, `#http-libraries`, `#python-packages`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [gpu-unlock 利用固件漏洞提升 Nvidia 3000 系 FP/BF16 发射率](https://github.com/Zagitta/gpu-unlock) ⭐️ 7.0/10\n\n开发者 Zagitta 发布 gpu-unlock，把针对 Nvidia 3000 系消费卡的固件漏洞封装成工具，用于提高 FP/BF16 指令发射率，省去直接给 Nvidia 驱动打补丁的麻烦。作者表示漏洞本身并非其原创，封装方式受到 CMP90/50 Windows 解锁所用、可链式加载进操作系统的独立 UEFI 模块启发。评论者 Tiberium 称自测结果属实，并引用项目文档称引导程序利用缓冲区溢出和 ROP 执行代码；这意味着收益依赖固件缺陷，而非 Nvidia 官方开放的功能。该工具面向较旧的消费级卡，评论中还提到存在针对 RTX 4090 和 4070 Ti Super 的仓库，但源评论未给出完整地址。\n\nhackernews · fragebogen · 10月24日 09:58 · [社区讨论](https://news.ycombinator.com/item?id=50219700)\n\n**「背景」** 作者 Zagitta 在讨论中说明，这些漏洞利用并非其原创：此前已有针对 CMP 90/50 的 Windows 解锁，以独立的 UEFI 模块形式在操作系统加载前运行，本次工作主要是把整套流程打包成比修改 Nvidia 驱动更省事的工具。评论中引用的项目文档称，解锁依赖启动固件中一个经典的缓冲区溢出，并通过面向返回编程（ROP）执行代码。\n\n**「影响」** 对用 RTX 3000 消费卡跑计算密集型神经网络的研究者，评论者报告该解锁有实际性能收益；但部署时要按更高功耗和散热预算规划，jacquesm 称部分卡需把功耗上限提到 450W 才能拿到主要收益，已高于原装散热设计。\n\n**「社区讨论」** 评论者 Tiberium 称自测确认收益真实，但强调它依赖固件漏洞；jacquesm 提醒这会让显卡更热，且部分卡要到 450W 才拿到主要收益，已超出原装散热设计，并称可与已有的 P2P 解锁叠加。RachelF 还提到另一项面向多卡的驱动补丁，可在消费级卡上带来约 20% 的卡间速度提升、绕过 Nvidia 对低价卡的限速，但它与 gpu-unlock 是不同项目。\n\n**标签**: `#GPU computing`, `#Nvidia`, `#firmware exploit`, `#performance tuning`, `#open source`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [美创意业 20 万岗位流失，AI 是主因吗](https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class) ⭐️ 7.0/10\n\n一篇分析文章讨论美国媒体、电影和艺术行业约 20 万个岗位流失在多大程度上与 AI 有关，但没有把 AI 认定为确定原因。文章将这一变化放在效率追求、注意力经济和更广泛的行业压力中考察，强调现有证据不足以给出单一归因。Hacker News 的讨论则补充了订阅疲劳、内容供给过剩和娱乐支出收缩等可能因素。\n\nhackernews · gnabgib · 10月24日 23:11 · [社区讨论](https://news.ycombinator.com/item?id=50226419)\n\n**「背景」** Apricitas 的这篇分析以美国就业数据为起点；外部摘要显示，媒体、电影和艺术行业在过去四年减少逾 20 万个岗位，最近一年约 5 万个，其中好莱坞减少逾 10 万个、出版业减少逾 7 万个。围绕这些数字的讨论同时指向流媒体经济、疫情后需求变化与生成式 AI，意味着当前证据更适合用来比较多种因素，而不是把岗位流失直接归因于单一技术。\n\n**「社区讨论」** 有评论赞赏文章没有简单断言 AI 是否为原因，而把娱乐业困境与追求效率、劳动和产业相互依赖联系起来；也有评论指出，早在 AI 出现前，内容供给就已远超有限的注意力和时间，流媒体涨价与内容质量争议进一步压低需求。这些是读者观点，并非文章已证明的因果结论。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://zeli.app/story/50226419\">America&#x27;s Creative Class Has Shed 200 · Hacker News | Zeli</a></li>\n<li><a href=\"https://agihunt.info/en/p/1a1705c80f795a8716f912dafb3\">US Media, Film and Arts Lost 200k Jobs — How… · AGI Hunt</a></li>\n<li><a href=\"https://aiweekly.co/alerts/politano-us-creative-sector-lost-200000-jobs-in-ais-rise\">Politano: U.S. creative sector lost 200,000+ jobs in AI&#x27;s ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#AI and jobs`, `#creative industries`, `#media and film`, `#attention economy`, `#economic analysis`\n\n---\n\n<a id=\"item-tech-news-5\"></a>\n### [Goose 编程语言亮相：多数据栈与不共享线程](https://aardappel.github.io/goose/) ⭐️ 7.0/10\n\n作者 Aardappel 在 Hacker News 上公布了他开发的新编程语言 Goose，并提供了 GitHub 仓库；这是一种仍处于展示阶段、尚未显示广泛采用的语言设计。其设计包含多个数据栈、可调整大小的字段、相对引用和内置二进制结构校验，目标是让数据结构可直接映射内存并直接使用文件或网络数据。并发上采用不共享内存的 worker：每个 worker 被编译成拥有独立内存的独立程序，扁平值通过带类型的队列以 memcpy 传递，因此语言中不提供数据竞争、锁、原子操作和内存顺序等概念。\n\nhackernews · bobbydigitales · 10月24日 19:06 · [社区讨论](https://news.ycombinator.com/item?id=50224100)\n\n**「背景」** Goose 由 Wouter van Oortmerssen（aardappel）开发，代码已在 GitHub 公开。它采用无堆的静态内存模型：动态值内联存放在编译器管理的数据栈上，通过递增指针分配、在作用域退出时释放；编译器推断每个引用的根变量，并拒绝可能比其所有者活得更久的引用，因此无需生命周期标注、别名规则或 unsafe 块。\n\n**「影响」** 按其设计，读取文件或网络数据时可跳过传统解析步骤，直接把二进制结构映射为语言内数据；代价是程序需按多个数据栈组织值，并把 worker 间通信限制为带类型队列中的扁平值，依赖共享可变状态的现有代码无法直接套用。\n\n**「社区讨论」** 评论区有人追问：固定数量的数据栈如何表示任意数量、大小会动态变化的字符串或哈希表值，可能需要额外的间接层。另有评论将不共享线程模型类比为 Dart Isolates，并提到 ML 的 region 方案曾因部分程序内存占用偏高而被认为走不通。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://github.com/aardappel/goose/tree/master/\">GitHub - aardappel/goose: The Goose Programming Language</a></li>\n<li><a href=\"https://github.com/aardappel\">Wouter van Oortmerssen aardappel - GitHubThe Goose Programming Language - daily.devWouter van Oortmerssen on X: &quot;@ID_AA_Carmack I just made a ...The Goose Programming Language - daily.devGoose Programming Language Claims Speed Wins Over C++ and ...Goose: A Heap-Free Memory-Safe Systems Language</a></li>\n\n</ul>\n</details>\n\n**标签**: `#programming languages`, `#memory management`, `#concurrency`, `#language design`\n\n---\n\n<a id=\"item-tech-news-6\"></a>\n### [研究称 Grok 倾向推荐共和党人，GPT 倾向民主党人](https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/) ⭐️ 6.0/10\n\n一项新研究称，在接受“二选一”式的候选人推荐测试时，Grok 绝大多数情况下推荐共和党候选人，而 OpenAI 的 GPT 则偏向民主党候选人。报道指出，两者在近 500 场选举中的分歧率超过 90%。TechCrunch 的这篇报道只转述了结论，未说明研究由谁开展、测试使用了哪个模型版本、提示词如何设计，也未给出样本筛选与统计方法，因此这属于一项尚未经独立验证的研究结论。\n\nrss · TechCrunch AI · 10月24日 15:00\n\n**「背景」** 这项研究由康奈尔大学教授 Tapan Parikh 领导的 Convovo 研究工作室设计，测试方式是通过两家公司的 API 直接询问模型在具体选区该投谁，而不是让模型自由生成政治评论。被测版本分别为 Grok 4.7 和 GPT-6.1 Sol，覆盖近 500 场美国中期选举。\n\n**「影响」** 若结论成立，选民若用聊天机器人了解候选人，得到的推荐会随所选模型系统性偏移；超过 90% 的分歧率也意味着，换一个模型就可能得到几乎相反的答案。在方法细节公布前，读者不宜把该结果当作对各模型政治倾向的定论。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://www.bpinfo.ca/en/news/2026-10-24-grok-gpt-election-recommendations-study/\">Study: forced to name a candidate, Grok’s API picks ...</a></li>\n<li><a href=\"https://madrobot.blog/2026/10/24/ai-ballot-2026-gpt-picks-democrats-grok-picks-republicans-midterms/\">GPT picks Democrats, Grok picks Republicans in AI ballot study</a></li>\n\n</ul>\n</details>\n\n**标签**: `#AI bias`, `#model evaluation`, `#political bias`, `#Grok`, `#OpenAI`\n\n---",
+    "generated_at": "2026-10-25T10:22:45.953683+08:00",
+    "summary_markdown": "# Horizon 每日速递 - 2026-10-25\n\n> 从 15 条内容中筛选出 6 条重要资讯。\n\n---\n\n**科技新闻**\n1. [HTTP2Shell：Brotli 解码漏洞波及多款 HTTP 库](#item-tech-news-1) ⭐️ 8.0/10\n2. [Goose：实验性语言主打多数据栈与无共享并发](#item-tech-news-2) ⭐️ 7.0/10\n3. [America has lost 200k of jobs in media, film and the arts. How much is AI?](#item-tech-news-3) ⭐️ 7.0/10\n4. [Dan Luu 谈软件雄心与 AI 开发争议](#item-tech-news-4) ⭐️ 7.0/10\n5. [gpu-unlock 通过 UEFI 解锁 RTX 3000 的 FP/BF16 发射率](#item-tech-news-5) ⭐️ 7.0/10\n6. [研究称 Grok 推荐共和党候选人，GPT 偏向民主党](#item-tech-news-6) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [HTTP2Shell：Brotli 解码漏洞波及多款 HTTP 库](https://www.aikido.dev/blog/python-packages-vulnerable-node2shell-brotli-cve-2026-111497) ⭐️ 8.0/10\n\n据 Aikido 博客文章，一个与 Brotli 解码有关的漏洞被命名为 HTTP2Shell，编号 CVE-2026-111497，报道称该漏洞可在多款 HTTP 库和应用中造成未经身份验证的远程代码执行。文章称其波及面广，但社区讨论显示，实际影响范围仍不清楚，尤其是不清楚普通 HTTP 服务是否受影响，以及哪些配置会处理 Brotli 压缩的请求体。现有信息不足以确认具体受影响版本或修复状态。\n\nhackernews · theanonymousone · 10月24日 08:06 · [社区讨论](https://news.ycombinator.com/item?id=50219177)\n\n**「背景」** 该问题对应 CVE-2026-111497：Tenable 将其描述为 Google Brotli 1.0.3 至 1.2.0 解码器（c/dec/decode.c）中的缓冲区溢出，远程未认证攻击者可用特制的 Brotli 压缩流破坏相邻解码器状态内存，造成敏感内存泄露、拒绝服务，并可能执行任意代码。SecurityArsenal 的检测指南称，Imperva 研究人员已在官方 Node.js 24.22 构建上演示了完整代码执行；GitHub 上的审计工具则特别说明，该漏洞也被称为 Node2Shell 和 HTTP2Shell，与 2025 年 12 月的 React2Shell（CVE-2025-55182）根因不同。\n\n**「实际影响与处置」** 该漏洞的实际暴露面取决于具体配置：有评论者指出，只有当应用或 HTTP 栈主动对请求体进行 Brotli 解压时才会触发，而文章并未说明多少受影响项目在常见配置下支持 Brotli 压缩的请求体。因此开发与运维团队应先确认自己使用的库是否会解压 Brotli 请求体，再升级到包含修复的版本，而不宜仅凭“受影响包数量”评估风险。\n\n**「社区讨论」** 评论者批评 HTTP2Shell 这一名称过于宽泛、无法说明真实触发条件，并更倾向 Broccoli2Shell 或 Brotli2Shell；也有人指出，只要应用手动进行 Brotli 解码，就未必需要经过 HTTP 才能触发。另有评论质疑报道的耸动措辞，并希望厘清常见配置中支持 Brotli 压缩请求体的实现究竟有多少，而不是把不同风险混为一谈。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://github.com/pt-act/node2shell-cve-2026-111497\">GitHub - pt-act/node2shell-cve-2026-111497: Node2Shell / HTTP2Shell ...</a></li>\n<li><a href=\"https://www.tenable.com/cve/CVE-2026-111497\">CVE-2026-111497 | Tenable®</a></li>\n<li><a href=\"https://securityarsenal.com/blog/cve-2026-111497-node2shell-rce-in-nodejs-brotli-decoder-detection-and-remediation-guide\">CVE-2026-111497: Node2Shell RCE in Node.js Brotli Decoder — Detection ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#security vulnerability`, `#remote code execution`, `#Brotli`, `#HTTP libraries`, `#CVE-2026-111497`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [Goose：实验性语言主打多数据栈与无共享并发](https://aardappel.github.io/goose/) ⭐️ 7.0/10\n\nGoose 作者 Aardappel 在 Hacker News 公布了一门新的实验性编程语言，并提供了 GitHub 仓库，面向需要直接处理二进制数据和并发的系统开发者。该语言采用多个数据栈和可调整大小的字段，配合相对引用与内建二进制结构校验，使文件或网络数据可以直接映射到内存结构，而不必先做常规解析。按作者描述，其并发模型把 worker 编译为拥有独立内存的单独程序，扁平值通过带类型的队列以 memcpy 传递，语言中不存在数据竞争，也没有锁、原子操作或内存序。该项目目前处于实验阶段，这些特性尚不能视为已获独立验证或已稳定的生产能力。\n\nhackernews · bobbydigitales · 10月24日 19:06 · [社区讨论](https://news.ycombinator.com/item?id=50224100)\n\n**「背景：单栈假设与多栈布局」** 主流语言通常为每个执行线程维护一条调用栈，大小会变化的值往往要在堆上单独分配，再通过指针或引用访问，序列化与解析二进制数据时还要额外拷贝。Goose 的实验点在于采用多数据栈布局：可变长字段可以就地调整大小，配合相对引用，就能把文件或网络数据直接映射到内存结构上使用。作者在讨论中说明语言由自己开发，并给出了 GitHub 仓库，但项目目前仍属实验性，没有版本发布或标准化进展。\n\n**「对开发者的影响」** 对采用 Goose 的开发者来说，worker 会被编译成拥有独立内存的独立程序，跨 worker 只能通过带类型的队列以 memcpy 传递扁平值，因此无法共享可变引用，也不能靠锁、原子操作或内存序协调状态。实际设计需要预先划分状态，并把跨 worker 的数据做成可复制消息；依赖共享堆对象的现有代码不能直接迁移。\n\n**「社区讨论」** 评论区一方面引用 John Carmack 的肯定，认为自动分析、多数据栈和可调整字段把可直接内存映射的数据范围从“很多”扩大到“几乎全部”；另一方面，malisper 追问固定数量的栈如何容纳任意多个动态大小值，例如字符串哈希表，ebiederm 则回忆 ML 的 regions 方案曾因内存占用问题被认为走不通。另有评论把 worker 模型类比为 Dart isolates。\n\n**标签**: `#programming-languages`, `#language-design`, `#memory-management`, `#concurrency`, `#serialization`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [America has lost 200k of jobs in media, film and the arts. How much is AI?](https://www.apricitas.io/p/ai-and-the-fall-of-the-creative-class) ⭐️ 7.0/10\n\nAn economic analysis piece questioning how much of the roughly 200k job losses in media, film, and the arts can be attributed to AI, drawing substantial community debate about causality, commercial art automation, and content oversupply.\n\nhackernews · gnabgib · 10月24日 23:11 · [社区讨论](https://news.ycombinator.com/item?id=50226419)\n\n**标签**: `#AI and labor markets`, `#creative industries`, `#generative AI`, `#media economics`, `#industry analysis`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [Dan Luu 谈软件雄心与 AI 开发争议](https://danluu.com/ambitious/) ⭐️ 7.0/10\n\nDan Luu 发表文章《We should be more ambitious with the software we build》，面向软件开发者主张把构建目标定得更高，该文在 Hacker News 引发讨论。评论者围绕 AI 辅助开发展开争论：有人认为 AI 能把想法从零推进到 MVP，也能帮只掌握部分技术栈的人补齐知识，但不会自动解决 MVP 之后的功能取舍、集成和维护；也有人批评资深开发者只抱怨 AI 取代工作，而不用新工具去做过去认为做不到的项目。\n\nhackernews · ltratt · 10月24日 21:47 · [社区讨论](https://news.ycombinator.com/item?id=50225695)\n\n**「背景」** 这是一篇由 Dan Luu 撰写的评论文章，主张软件开发者应为自己的作品设定更高目标，而不是满足于容易交付的小项目。Hacker News 上的讨论由此展开：一方认为 AI 能把想法快速推到 MVP，另一方则强调 MVP 之后的产品取舍与集成难题才是真正门槛；讨论还延伸到文中对“自称很快的慢软件”及其基准与性能声明的质疑。\n\n**「社区讨论」** 有评论者强调，AI 的价值在于帮助开发者完成更有野心的项目，而不只是把已有工作自动化；另一位评论者则指出，从 0 到 MVP 只是起点，产品化后的取舍和整合仍需人来处理。这些均为评论者观点，讨论未形成共识。\n\n**标签**: `#software engineering`, `#AI-assisted development`, `#industry analysis`, `#software quality`, `#Hacker News discussion`\n\n---\n\n<a id=\"item-tech-news-5\"></a>\n### [gpu-unlock 通过 UEFI 解锁 RTX 3000 的 FP/BF16 发射率](https://github.com/Zagitta/gpu-unlock) ⭐️ 7.0/10\n\n开源项目 gpu-unlock 提供基于 UEFI 固件的工具，用于在 Nvidia RTX 3000 显卡上解锁更高的 FP/BF16 指令发射率，目标是免去直接修改 Nvidia 驱动的麻烦。项目作者称，该工具把已有的固件漏洞利用封装成可先于操作系统加载的 UEFI 模块；社区测试者报告结果真实，但该方案依赖固件漏洞利用，且部分显卡需要更高功耗上限和额外散热，并非 Nvidia 官方支持。\n\nhackernews · fragebogen · 10月24日 09:58 · [社区讨论](https://news.ycombinator.com/item?id=50219700)\n\n**「背景」** NVIDIA 在消费级 RTX 3000 卡上通过固件和驱动限制 FP16、BF16 指令的发射率，使其低于专业卡水平。此次发布的 gpu-unlock 1.0.0 将早先 CMP 解锁所用的 V67/PLM 手法与 UEFI 模块在驱动加载前抢先执行的思路合并为一个 Linux 内核模块，在未修改的 NVIDIA 驱动接管前写入 SS0 0x88888888、SS1 0x8 等速度选择器并执行功能级复位（FLR），从而解除这一限制。\n\n**「实际影响」** 对使用 RTX 3000 运行 FP/BF16 计算密集型任务的用户，这一改动可能提高指令发射率，但代价是采用固件漏洞利用，并应对更高功耗和散热压力：有测试者指出，部分卡需要把功耗上限提高到 450W，已超出原装散热器的设计范围。部署前应先核实电源、散热与稳定性，且这不是 Nvidia 官方支持的能力。\n\n**「社区讨论」** 项目作者在讨论中说明，其工作是把既有漏洞利用封装成比修改驱动更方便的 UEFI 模块。有测试者称自行验证结果属实，但指出方案利用启动固件的缓冲区溢出并以 ROP 执行代码，因此存在风险；另一位评论者提醒，部分显卡要获得明显收益需把功耗上限提高到 450W，原装散热可能不足。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://github.com/Zagitta/gpu-unlock\">GitHub - Zagitta/gpu-unlock: Unlock FP/BF16 instruction issue ...</a></li>\n<li><a href=\"https://aiweekly.co/alerts/zagitta-releases-gpu-unlock-lifts-fp16bf16-caps-on-rtx-3000s\">Zagitta Releases gpu-unlock, Lifts FP16/BF16 Caps on RTX ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#GPU`, `#firmware`, `#Nvidia`, `#hardware-modding`, `#FP-BF16`\n\n---\n\n<a id=\"item-tech-news-6\"></a>\n### [研究称 Grok 推荐共和党候选人，GPT 偏向民主党](https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/) ⭐️ 6.0/10\n\n一项新研究称，Grok 会不成比例地推荐共和党候选人，而 OpenAI 的 GPT 则偏向民主党；在近 500 场选举中，两个模型在超过 90% 的竞选中给出了不一致的推荐。该结果以简讯形式发布，未附研究论文、提问设计、样本选取方式或同行评审状态，因此上述比例目前只能视为未经独立核实的研究结论。报道也没有说明测试使用的是哪一具体模型版本、在什么时间运行，以及“推荐”是如何被判定和计数的。\n\nrss · TechCrunch AI · 10月24日 15:00\n\n**「测试背景」** 一篇汇总该研究的博客称，测试涉及 OpenAI 的 GPT-6.1 Sol 和 xAI 的 Grok 4.7 两个具体模型版本。研究让模型在近 500 场中期选举中直接给出候选人选择，因此结果反映的是模型在“被迫二选一”时的推荐倾向，而不是对政治议题的完整回答。\n\n**「影响」** 对直接用聊天机器人询问“该投给谁”的选民来说，这一结果意味着推荐可能高度取决于所使用的模型：按该研究，两个模型在九成以上竞选中指向不同阵营。因此在把模型输出当作投票参考前，用户需要回到候选人实际的政纲与投票记录自行核对，而不能把单一模型的排序当作中立信息。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://madrobot.blog/2026/10/24/ai-ballot-2026-gpt-picks-democrats-grok-picks-republicans-midterms/\">GPT picks Democrats, Grok picks Republicans in AI ballot study</a></li>\n\n</ul>\n</details>\n\n**标签**: `#AI bias`, `#large language models`, `#elections`, `#political bias`, `#model evaluation`\n\n---",
     "summary_markdown_en": "",
     "summary_source": "Horizon daily digest; source URLs are included where available."
   },
@@ -1099,16 +1673,16 @@
       "title_en": "Block's new voice model sounds eerily human",
       "category_zh": "技术突破",
       "category_en": "Technical Breakthrough",
-      "what_zh": "Block 表示其新语音模型可在 MacBook M4 Max 上本地运行，听感接近真人。",
+      "what_zh": "Block 称其新语音模型可在 MacBook M4 Max 上本地运行，听感接近真人。",
       "what_en": "Block says its new voice model can run locally on a MacBook M4 Max and sounds close to human.",
-      "why_zh": "本地可运行的拟真语音降低了语音应用的门槛，对隐私敏感场景和离线产品有直接价值。",
-      "why_en": "Locally runnable, human-like voice lowers the barrier for voice apps, especially for privacy-sensitive and offline use.",
-      "editor_judgment_zh": "值得关注，但需实测音质、延迟与硬件占用，避免仅凭厂商描述下结论。",
-      "editor_judgment_en": "Worth watching, but verify audio quality, latency and hardware load rather than relying on vendor claims.",
-      "opportunity_risk_zh": "机会：本地语音助手、无障碍与内容创作；风险：滥用合成语音与评测口径不一。",
-      "opportunity_risk_en": "Opportunity: local voice assistants, accessibility and content creation; risk: voice-cloning misuse and inconsistent benchmarks.",
-      "action_zh": "阅读原文并确认是否开放权重或 API，再决定是否试用。",
-      "action_en": "Read the source and check whether weights or an API are available before trying it.",
+      "why_zh": "本地可运行的拟真语音模型，意味着更低延迟、更强隐私和更低的推理成本，对创作者和开发者有直接价值。",
+      "why_en": "A locally runnable, human-like voice model implies lower latency, stronger privacy and lower inference cost, directly useful to creators and developers.",
+      "editor_judgment_zh": "技术方向明确，但摘要未给出评测数据，效果需以实际试听和基准验证为准。",
+      "editor_judgment_en": "Clear technical direction, but the summary gives no benchmarks; verify with hands-on listening and tests.",
+      "opportunity_risk_zh": "机会：本地语音交互与内容创作；风险：拟真语音带来滥用与合规问题。",
+      "opportunity_risk_en": "Opportunity: local voice interaction and content creation; risk: realistic voice enables misuse and compliance issues.",
+      "action_zh": "阅读原文并关注是否公布模型开放方式与评测数据。",
+      "action_en": "Read the source and check whether model access and benchmarks are published.",
       "scores": {
         "innovation": 7,
         "practicality": 7,
@@ -1141,16 +1715,16 @@
       "title_en": "OpenAI acquires Orchestra Bio",
       "category_zh": "商业动态",
       "category_en": "Business & Market",
-      "what_zh": "OpenAI 宣布收购 Orchestra Bio，将 AI 运营引入生命科学研发，帮助生物制药团队加速药物开发。",
+      "what_zh": "OpenAI 宣布收购 Orchestra Bio，将 AI 运营能力引入生命科学研发，帮助生物制药团队加速药物开发。",
       "what_en": "OpenAI announced it is acquiring Orchestra Bio to bring AI-powered operations to life sciences R&D and help biopharma teams accelerate drug development.",
-      "why_zh": "这是 OpenAI 向垂直行业落地的明确动作，显示其从模型提供方向行业解决方案延伸。",
-      "why_en": "This is a clear move by OpenAI into vertical industry deployment, extending from model provider toward industry solutions.",
-      "editor_judgment_zh": "信号意义大于短期产品影响，需观察整合方式与客户落地情况。",
-      "editor_judgment_en": "More a signal than a near-term product impact; watch integration and customer adoption.",
-      "opportunity_risk_zh": "机会：生物医药 AI 工具链；风险：交易细节与监管审查尚不明确。",
-      "opportunity_risk_en": "Opportunity: AI tooling for biopharma; risk: deal terms and regulatory review remain unclear.",
-      "action_zh": "阅读 OpenAI 官方公告核实交易范围与时间表。",
-      "action_en": "Read OpenAI's official announcement to verify deal scope and timeline.",
+      "why_zh": "这是 OpenAI 向垂直行业落地的并购动作，显示其从通用模型向行业解决方案延伸。",
+      "why_en": "This is an OpenAI acquisition aimed at vertical industry deployment, showing expansion from general models to industry solutions.",
+      "editor_judgment_zh": "交易金额与整合细节未披露，需以官方公告为准，不宜过度解读。",
+      "editor_judgment_en": "Deal terms and integration details are undisclosed; rely on the official announcement and avoid overreading.",
+      "opportunity_risk_zh": "机会：AI 在生物医药研发的效率提升；风险：行业监管与数据合规门槛高。",
+      "opportunity_risk_en": "Opportunity: efficiency gains in biopharma R&D; risk: high regulatory and data-compliance barriers.",
+      "action_zh": "阅读 OpenAI 官方公告，核实收购范围与业务整合计划。",
+      "action_en": "Read OpenAI's official announcement to verify scope and integration plans.",
       "scores": {
         "innovation": 6,
         "practicality": 6,
@@ -1180,33 +1754,33 @@
     },
     {
       "source_index": 2,
-      "title_zh": "研究称 Grok 与 GPT 在选举推荐上明显分化",
-      "title_en": "Study finds Grok and GPT diverge sharply on election picks",
+      "title_zh": "研究：Grok 倾向共和党，OpenAI 模型倾向民主党",
+      "title_en": "Study: Grok's AI model chooses Republicans, OpenAI's picks Democrats",
       "category_zh": "行业影响",
       "category_en": "Industry Impact",
-      "what_zh": "一项新研究发现，在近 500 场选举中，Grok 压倒性地推荐共和党候选人，而 OpenAI 的 GPT 偏向民主党，两者在超过 90% 的竞选中意见不一致。",
-      "what_en": "A new study found Grok overwhelmingly recommends Republican candidates while OpenAI's GPT favors Democrats, disagreeing in more than 90% of nearly 500 races.",
-      "why_zh": "模型在政治问题上的系统性偏向会影响用户认知，也关系到平台信任与合规。",
-      "why_en": "Systematic political leanings in models can shape user perception and raise platform trust and compliance issues.",
-      "editor_judgment_zh": "重要但需谨慎解读：应核对研究方法、提示设计与样本，避免过度外推。",
-      "editor_judgment_en": "Important but needs careful reading: check methodology, prompts and sample before generalizing.",
-      "opportunity_risk_zh": "机会：模型中立性评测与审计工具；风险：被误读为模型固有立场。",
-      "opportunity_risk_en": "Opportunity: neutrality evaluation and audit tools; risk: misreading results as fixed model ideology.",
-      "action_zh": "阅读原文核实研究设计与数据来源。",
-      "action_en": "Read the source to verify study design and data sources.",
+      "what_zh": "一项新研究发现，在近 500 场选举中，Grok 压倒性推荐共和党候选人，而 OpenAI 的 GPT 偏向民主党，两者在超过 90% 的竞选中意见不一致。",
+      "what_en": "A new study found Grok overwhelmingly recommends Republican candidates while OpenAI's GPT favors Democrats, with the two models disagreeing in more than 90% of nearly 500 races.",
+      "why_zh": "模型在政治选择上的系统性偏向，直接关系到 AI 的中立性、选举信息生态与用户信任。",
+      "why_en": "Systematic political leanings in models bear directly on AI neutrality, election information ecosystems and user trust.",
+      "editor_judgment_zh": "单一研究结论需谨慎对待，应查看研究方法、样本与复现情况。",
+      "editor_judgment_en": "Treat a single study cautiously; check methodology, sample and reproducibility.",
+      "opportunity_risk_zh": "机会：模型对齐与偏见评估工具需求上升；风险：政治偏见可能放大信息茧房与监管争议。",
+      "opportunity_risk_en": "Opportunity: rising demand for alignment and bias-evaluation tools; risk: political bias may amplify filter bubbles and regulatory disputes.",
+      "action_zh": "阅读原文并查阅研究细节后再形成判断。",
+      "action_en": "Read the source and review study details before forming a judgment.",
       "scores": {
         "innovation": 5,
-        "practicality": 5,
-        "feasibility": 5,
+        "practicality": 6,
+        "feasibility": 6,
         "impact": 8,
-        "opportunity": 5
+        "opportunity": 6
       },
       "confidence": "medium",
       "source_url": "https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/",
       "source": "TechCrunch AI",
       "published": "2026-10-24T15:00:00+00:00",
       "original_title": "Forced to pick, Grok’s AI model chooses Republicans. OpenAI’s picks Democrats.",
-      "total_score": 28,
+      "total_score": 31,
       "image_url": "https://techcrunch.com/wp-content/uploads/2026/10/GettyImages-1777713346.jpg?resize=1200,900",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/forced-to-pick-groks-ai-model-chooses-republicans-openais-picks-democrats/",
@@ -1222,20 +1796,20 @@
     },
     {
       "source_index": 3,
-      "title_zh": "可驻留短信中的 AI 智能体盘点",
-      "title_en": "A roundup of AI agents that live in your text messages",
+      "title_zh": "可驻留短信中的主流 AI 智能体盘点",
+      "title_en": "Top AI agents that can live in your text messages",
       "category_zh": "产品应用",
       "category_en": "Product & Application",
-      "what_zh": "TechCrunch 整理了可驻留短信中的 AI 智能体，涵盖通用助手及面向家庭、旅行和工作的专用智能体。",
-      "what_en": "TechCrunch compiled notable AI agents that live in text messages, from general assistants to ones for families, travel and work.",
-      "why_zh": "短信入口门槛低、覆盖广，是智能体触达普通用户的重要渠道。",
-      "why_en": "Messaging is a low-barrier, broad-reach channel for agents to reach ordinary users.",
-      "editor_judgment_zh": "实用清单，适合作为选型参考，但需自行验证各产品可用性与隐私条款。",
-      "editor_judgment_en": "A practical list for comparison, but verify availability and privacy terms yourself.",
-      "opportunity_risk_zh": "机会：低门槛个人助理与垂直场景；风险：短信渠道的隐私与数据留存问题。",
-      "opportunity_risk_en": "Opportunity: low-barrier personal assistants and niche use cases; risk: privacy and data retention in messaging.",
-      "action_zh": "阅读原文，按自身场景挑选 1–2 个试用并检查隐私政策。",
-      "action_en": "Read the source, pick one or two to try for your use case, and check privacy policies.",
+      "what_zh": "TechCrunch 盘点了可驻留短信中的 AI 智能体，涵盖通用助手以及面向家庭、旅行和工作的专用智能体。",
+      "what_en": "TechCrunch compiled notable AI agents that live in text messages, from general assistants to agents for families, travel and work.",
+      "why_zh": "短信是低门槛入口，智能体嵌入消息场景可能改变普通用户的日常使用方式。",
+      "why_en": "Text messaging is a low-barrier entry point; embedding agents in messaging could change everyday usage for ordinary users.",
+      "editor_judgment_zh": "属于产品盘点而非技术突破，价值在于帮助用户快速了解可选方案。",
+      "editor_judgment_en": "A product roundup rather than a breakthrough; its value is helping users quickly survey options.",
+      "opportunity_risk_zh": "机会：消息入口的智能体创业与集成；风险：隐私、垃圾信息与平台政策限制。",
+      "opportunity_risk_en": "Opportunity: agent startups and integrations at the messaging entry point; risk: privacy, spam and platform policy limits.",
+      "action_zh": "阅读原文，按自身场景试用其中一两个智能体。",
+      "action_en": "Read the source and try one or two agents for your own use case.",
       "scores": {
         "innovation": 5,
         "practicality": 8,
@@ -1268,21 +1842,21 @@
       "title_en": "The AI graveyard: a running list of failed projects and startups",
       "category_zh": "值得关注",
       "category_en": "Signals to Watch",
-      "what_zh": "TechCrunch 汇总了被关停或未达预期的 AI 项目，包括苹果多次延期的 Siri AI 与 OpenAI 的“超级应用”发布。",
-      "what_en": "TechCrunch tracks AI projects that shut down or missed expectations, including Apple's repeatedly delayed Siri AI and OpenAI's \"super app\" launch.",
-      "why_zh": "失败案例有助于识别炒作与落地之间的差距，为决策提供反面参照。",
-      "why_en": "Failure cases help distinguish hype from execution and provide a counter-reference for decisions.",
-      "editor_judgment_zh": "有价值的复盘素材，但清单为持续更新，需注意时效与口径。",
-      "editor_judgment_en": "Useful retrospective material, but it is a running list; mind timeliness and criteria.",
-      "opportunity_risk_zh": "机会：避坑与需求验证；风险：单一案例易被过度概括。",
-      "opportunity_risk_en": "Opportunity: avoiding pitfalls and validating demand; risk: overgeneralizing from single cases.",
-      "action_zh": "阅读原文，结合自身项目对照失败原因。",
-      "action_en": "Read the source and compare failure causes against your own project.",
+      "what_zh": "TechCrunch 维护一份 AI 项目与初创公司的失败清单，包括苹果多次延期的 Siri AI 和 OpenAI 混乱的“超级应用”发布等。",
+      "what_en": "TechCrunch maintains a running list of AI projects and startups that shut down or missed expectations, including Apple's repeatedly delayed Siri AI and OpenAI's messy \"super app\" launch.",
+      "why_zh": "失败案例是判断行业预期与现实差距的重要参照，有助于避免重复踩坑。",
+      "why_en": "Failure cases are a key reference for gauging the gap between hype and reality and avoiding repeated mistakes.",
+      "editor_judgment_zh": "清单类内容偏回顾性，具体条目需逐条核实来源。",
+      "editor_judgment_en": "A retrospective list; verify each entry against its source.",
+      "opportunity_risk_zh": "机会：从失败中提炼产品与运营教训；风险：清单可能简化复杂原因，需谨慎引用。",
+      "opportunity_risk_en": "Opportunity: extract product and operational lessons from failures; risk: the list may oversimplify causes, so cite cautiously.",
+      "action_zh": "阅读原文，挑选与自身业务相关的案例做复盘。",
+      "action_en": "Read the source and pick relevant cases for a retrospective.",
       "scores": {
         "innovation": 4,
         "practicality": 6,
-        "feasibility": 6,
-        "impact": 5,
+        "feasibility": 7,
+        "impact": 6,
         "opportunity": 5
       },
       "confidence": "medium",
@@ -1290,7 +1864,7 @@
       "source": "TechCrunch AI",
       "published": "2026-10-24T19:00:00+00:00",
       "original_title": "The AI graveyard: a running list of projects and startups that didn’t make it",
-      "total_score": 26,
+      "total_score": 28,
       "image_url": "https://techcrunch.com/wp-content/uploads/2019/12/GettyImages-95927766-1.jpg?resize=1200,797",
       "image_source": "TechCrunch AI",
       "image_page_url": "https://techcrunch.com/2026/10/24/the-ai-graveyard-a-running-list-of-projects-and-startups-that-didnt-make-it/",
@@ -1306,12 +1880,12 @@
     }
   ],
   "editorial": {
-    "core_zh": "今日主线是落地：本地语音、行业收购、消息入口智能体与失败复盘，共同勾勒 AI 从演示走向实际使用的路径。",
-    "core_en": "Today's thread is deployment: local voice, vertical acquisitions, messaging agents and failure retrospectives map AI's path from demo to real use.",
-    "trend_zh": "模型能力向本地化与垂直行业渗透，同时中立性与可靠性问题开始被公开审视。",
-    "trend_en": "Model capability is moving toward local deployment and vertical industries, while neutrality and reliability face public scrutiny.",
-    "next_question_zh": "本地语音模型与行业收购，哪个会更快改变普通用户的实际体验？",
-    "next_question_en": "Which will change ordinary users' experience sooner: local voice models or vertical acquisitions?"
+    "core_zh": "今日信号集中在语音本地化、行业并购、模型政治偏向与消息入口智能体，既有落地进展也有治理隐忧。",
+    "core_en": "Today's signals center on local voice models, vertical acquisitions, political leanings in models and messaging-based agents—both deployment progress and governance concerns.",
+    "trend_zh": "AI 正从通用能力竞争转向场景落地与可信度治理并行。",
+    "trend_en": "AI is shifting from general-capability competition toward parallel tracks of scenario deployment and trust governance.",
+    "next_question_zh": "当模型在政治等敏感议题上出现系统性偏向时，产品方应如何评估与披露？",
+    "next_question_en": "When models show systematic leanings on sensitive topics like politics, how should product teams assess and disclose them?"
   },
   "localization": {
     "status": "ok",
@@ -1338,6 +1912,6 @@
       "Bing Images",
       "Unsplash topic illustration fallback"
     ],
-    "last_run": "2026-10-25T10:19:03.611129+08:00"
+    "last_run": "2026-10-25T10:23:21.203092+08:00"
   }
 }
