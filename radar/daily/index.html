@@ -946,8 +946,8 @@ function renderChinaAINews(items){
   {"模型与技术进展":"模型与技术进展","产品与产业应用":"产品与产业应用","芯片与算力":"芯片与算力","具身智能与智能终端":"具身智能与智能终端","产业与生态":"产业与生态"};
  const stories=Array.isArray(items)?items.filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&x.title):[];
  root.innerHTML=stories.length?stories.map((x,i)=>{
-  const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title_zh||x.title);
-  const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary_zh||x.summary);
+  const title=currentLang==="zh"?(x.title_zh||(/[\u3400-\u9fff]/.test(x.title||"")?x.title:"中文标题暂不可用，请查看原文")):(x.title_en||x.title_zh||x.title);
+  const summary=currentLang==="zh"?(x.summary_zh||(/[\u3400-\u9fff]/.test(x.summary||"")?x.summary:"中文摘要暂不可用，请查看原文")):(x.summary_en||x.summary_zh||x.summary);
   const category=labels[x.category]||(currentLang==="en"?"China AI":"中国 AI");
   return '<article class="top5-card china-ai-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><span class="china-category">'+esc(category)+'</span><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta china-story-source"><span class="pill">'+esc(x.source||t("chinaSource"))+'</span><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+' ↗</a></div></div></article>';
  }).join(""):'<div class="empty">'+esc(Array.isArray(reportData?.china_ai_news)?t("chinaEmpty"):t("chinaArchiveEmpty"))+'</div>';
