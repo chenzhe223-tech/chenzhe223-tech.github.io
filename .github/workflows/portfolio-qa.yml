@@ -1,6 +1,12 @@
 name: Portfolio UI regression
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - "index.html"
+      - "scripts/qa-portfolio.cjs"
+      - ".github/workflows/portfolio-qa.yml"
   pull_request:
     branches: ["main"]
     paths:
