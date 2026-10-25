@@ -147,3 +147,40 @@ test("maps album-art timeout to a controlled 504 response", async () => {
     globalThis.setTimeout = originalSetTimeout;
   }
 });
+
+test("proxies music catalog search through Worker and returns ranked real catalog results", async () => {
+  const originalFetch = globalThis.fetch;
+  const urls = [];
+  globalThis.fetch = async (url) => {
+    urls.push(String(url));
+    const isSunny = String(url).includes("Sunny%20Day") || String(url).includes("Sunny%20Day");
+    const result = isSunny
+      ? [{trackId:2,trackName:"Sunny Day",artistName:"Jay Chou",artworkUrl100:"https://example.test/real-artwork.jpg",previewUrl:"https://example.test/preview.m4a"}]
+      : [{trackId:1,trackName:"晴天",artistName:"周杰伦",artworkUrl100:"https://example.test/real-artwork.jpg",previewUrl:"https://example.test/preview.m4a"}];
+    return new Response(JSON.stringify({results:result}),{status:200,headers:{"content-type":"application/json"}});
+  };
+  try {
+    const res = await worker.fetch(req({action:"searchMusic",input:{song:"晴天",artist:"周杰伦"}}),env);
+    assert.equal(res.status,200);
+    const data = await res.json();
+    assert.equal(data.ok,true);
+    assert.ok(data.results.length>0);
+    assert.equal(data.results[0].trackName,"晴天");
+    assert.ok(urls.some(url=>url.includes("country=CN")));
+    assert.ok(urls.some(url=>url.includes("country=US")));
+    assert.ok(urls.some(url=>url.includes("Sunny%20Day")));
+  } finally { globalThis.fetch = originalFetch; }
+});
+test("returns a controlled catalog-unavailable error when all upstream requests fail", async () => {
+  const originalFetch = globalThis.fetch;
+  globalThis.fetch = async () => { throw new Error("network unavailable"); };
+  try {
+    const res = await worker.fetch(req({action:"searchMusic",input:{song:"遇见",artist:"孙燕姿"}}),env);
+    assert.equal(res.status,502);
+    assert.equal((await res.json()).error,"music_catalog_unavailable");
+  } finally { globalThis.fetch = originalFetch; }
+});
+test("rejects empty catalog queries", async () => {
+  const res = await worker.fetch(req({action:"searchMusic",input:{song:" ",artist:""}}),env);
+  assert.equal(res.status,400);
+});

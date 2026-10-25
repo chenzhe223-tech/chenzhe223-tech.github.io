@@ -5,7 +5,7 @@
  * Never deploy without a rate-limit rule at the edge.
  */
 const MAX_BODY_BYTES = 12000;
-const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition","generateAlbumArt"]);
+const ACTIONS = new Set(["analyzeMemory","inferMusicCandidates","compareTrackVersions","generateMemoryStory","generateSocialCopy","planPosterComposition","generateAlbumArt","searchMusic"]);
 const IMAGE_MODELS = ["@cf/stabilityai/stable-diffusion-xl-base-1.0", "@cf/black-forest-labs/flux-1-schnell"];
 const SYSTEM = `You are MelodyMe, a careful music-memory creative assistant. Return only valid JSON matching the requested task. Never invent verified music facts, album covers, release years, or URLs. Separate AI hypotheses from catalog-verified facts. Do not claim the user experienced events not present in their story. Keep user-facing explanations concise.`;
 const schemas = {
@@ -34,6 +34,7 @@ function validOutput(action,result){
 }
 function validInput(action,input){
  if(!input||typeof input!=="object"||Array.isArray(input))return false;
+ if(action==="searchMusic")return typeof input.song==="string"&&input.song.length<=120&&typeof input.artist==="string"&&input.artist.length<=120&&(input.song.trim().length>0||input.artist.trim().length>0);
  if(action==="generateAlbumArt")return boundedString(input.prompt,1,400)&&Number.isInteger(input.width)&&input.width>=256&&input.width<=1024&&Number.isInteger(input.height)&&input.height>=256&&input.height<=1024&&(input.seed===undefined||(Number.isInteger(input.seed)&&input.seed>=0&&input.seed<=2147483647));
  if(action==="analyzeMemory"||action==="inferMusicCandidates"||action==="generateMemoryStory"||action==="generateSocialCopy"||action==="planPosterComposition")return typeof input.story==="string"&&input.story.trim().length>0&&input.story.length<=8000;
  if(action==="compareTrackVersions")return Array.isArray(input.candidates)&&input.candidates.length>0&&input.candidates.length<=8&&input.candidates.every(c=>c&&typeof c==="object"&&boundedString(c.id||c.candidate_id,1,100)&&boundedString(c.title,1,200)&&boundedString(c.artist,1,200));
@@ -63,6 +64,23 @@ export default {
   const {action}=body||{};
   const input=action==="generateAlbumArt"?body:(body||{}).input;
   if(!ACTIONS.has(action)||!validInput(action,input))return json({error:"invalid_request",message:"请求参数无效，请检查输入。"},400,origin,allowed);
+  if(action==="searchMusic"){
+   const song=String(input.song||"").trim(),artist=String(input.artist||"").trim();
+   const aliases={"遇见":"Encounter","晴天":"Sunny Day","后来":"Later","小幸运":"A Little Happiness","演员":"Actor","稻香":"Rice Field","夜曲":"Nocturne"};
+   const queries=[];
+   const add=(term,country)=>{term=String(term||"").trim();if(!term)return;const key=country+"|"+term;if(!queries.some(q=>q.key===key))queries.push({key,term,country})};
+   for(const country of ["CN","TW","HK","US"]){add([song,artist].filter(Boolean).join(" "),country);add(song,country)}
+   if(artist)add(artist+" "+song,"TW");
+   if(aliases[song]){add([aliases[song],artist].filter(Boolean).join(" "),"US");add(aliases[song],"US")}
+   const settled=await Promise.all(queries.map(async q=>{try{const url="https://itunes.apple.com/search?term="+encodeURIComponent(q.term)+"&entity=song&limit=25&country="+q.country+"&media=music";const response=await fetch(url,{headers:{"accept":"application/json"},signal:AbortSignal.timeout(8000)});if(!response.ok)throw new Error("itunes_http_"+response.status);const data=await response.json();return {results:Array.isArray(data.results)?data.results:[],error:null}}catch(error){return {results:[],error:String(error&&error.message||error)}}}));
+   const merged=[],seen=new Set();for(const batch of settled)for(const track of batch.results){if(!track||!track.trackName||!track.artistName||!track.artworkUrl100)continue;const key=String(track.trackId||"")+":"+String(track.trackName).toLowerCase()+":"+String(track.artistName).toLowerCase();if(!seen.has(key)){seen.add(key);merged.push(track)}}
+   const norm=v=>String(v||"").toLowerCase().normalize("NFKC").replace(/[\\s\\-—_.,，。:：'’"“”()（）\\[\\]【】《》]/g,"");
+   const alias=norm(aliases[song]||"");
+   const score=t=>{const title=norm(t.trackName),want=norm(song),name=norm(t.artistName),wantArtist=norm(artist);let n=0;if(want){if(title===want||alias&&title===alias)n+=120;else if(title.includes(want)||want.includes(title)||alias&&(title.includes(alias)||alias.includes(title)))n+=55}if(wantArtist){if(name===wantArtist)n+=100;else if(name.includes(wantArtist)||wantArtist.includes(name))n+=45}if(t.previewUrl)n+=2;return n};
+   merged.sort((a,b)=>score(b)-score(a));
+   if(!merged.length&&settled.every(x=>x.error))return json({error:"music_catalog_unavailable",message:"音乐目录暂时无法连接，请检查网络或稍后重试。"},502,origin,allowed);
+   return json({ok:true,action:"searchMusic",results:merged.slice(0,25),queries:queries.length,failedQueries:settled.filter(x=>x.error).length},200,origin,allowed);
+  }
   if(action==="generateAlbumArt"){
    if(!env.AI||typeof env.AI.run!=="function")return json({error:"ai_image_service_not_configured",message:"AI 封面服务暂不可用。"},503,origin,allowed);
    const controller=new AbortController();
