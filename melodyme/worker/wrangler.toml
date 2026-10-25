@@ -21,3 +21,6 @@ period = 60
 # Anonymous requests are limited to approximately 10/minute per IP per Cloudflare location.
 
 # Workers AI image generation uses account-included usage where available; limits and availability vary by account/model.
+
+# Required for four-city memory maps; set the value as a Worker secret.
+# npx wrangler secret put AMAP_REST_KEY
