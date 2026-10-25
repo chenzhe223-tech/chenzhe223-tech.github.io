@@ -294,20 +294,10 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
             score=float(item.get("total_score"))
         except (TypeError,ValueError):
             score=0
-        if score<70 or score>100:
-            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_below_70_or_invalid","score":score})
+        if score<60 or score>100:
+            excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_below_60_or_invalid","score":score})
             continue
-        if score<80:
-            rare_evidence=str(item.get("rare_value_evidence_url") or "")
-            rare_ok=(item.get("rare_value_verified") is True
-                and bool(str(item.get("rare_value_reason") or "").strip())
-                and rare_evidence.startswith(("https://","http://"))
-                and int(item.get("actual_skill_file_count") or 0)>0
-                and item.get("evidence_verified") is True
-                and item.get("readme_verified") is True)
-            if not rare_ok:
-                excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"score_70_79_without_verified_rare_value","score":score})
-                continue
+        # Verified installable Skills do not require an extra rare-value label to be recommended.
         category=str(item.get("daily_theme") or infer_skill_category(item))
         try:
             owner=urllib.parse.urlsplit(str(item.get("url") or "")).path.strip("/").split("/")[0].lower()
