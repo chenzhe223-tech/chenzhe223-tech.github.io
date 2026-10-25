@@ -4,6 +4,7 @@ No API key is required; GitHub unauthenticated API limits apply.
 """
 from __future__ import annotations
 import datetime as dt
+import html
 import difflib
 import json
 import os
@@ -51,7 +52,7 @@ CHINA_FEEDS = [
     # Additional English-language coverage for Chinese AI labs and cross-border policy.
     ("动点科技 TechNode", "https://cn.technode.com/feed/"),
     ("TechCrunch AI", "https://techcrunch.com/category/artificial-intelligence/feed/"),
-    ("Google News China AI", "https://news.google.com/rss/search?q=DeepSeek+OR+Kimi+OR+Qwen+OR+MiniMax+OR+Moonshot+AI+when%3A7d&hl=en-US&gl=US&ceid=US%3Aen"),
+    ("Google News China AI", "https://news.google.com/rss/search?q=DeepSeek+OR+Kimi+OR+Qwen+OR+MiniMax+OR+Moonshot+AI+when%3A7d&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"),
 ]
 CHINA_NEWS_MIN = 6
 CHINA_NEWS_TARGET = 8
@@ -237,6 +238,7 @@ def http_get(url: str, accept: str = "*/*", timeout: int = 18) -> bytes:
 
 def clean(value: str) -> str:
     value = TAG_RE.sub(" ", value or "")
+    value = html.unescape(value)
     value = WS_RE.sub(" ", value).strip()
     return value
 
