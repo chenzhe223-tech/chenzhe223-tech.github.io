@@ -100,7 +100,7 @@ test("rejects oversized album-art request bodies", async () => {
   assert.equal(res.status, 413);
 });
 test("rejects empty and overlong album-art prompts", async () => {
-  for (const prompt of ["", " ".repeat(401), "x".repeat(401)]) {
+  for (const prompt of ["", " ".repeat(6001), "x".repeat(6001)]) {
     const res = await worker.fetch(artRequest({ prompt }), { ...env, AI: { run: async () => new Uint8Array([1]) } });
     assert.equal(res.status, 400);
   }
