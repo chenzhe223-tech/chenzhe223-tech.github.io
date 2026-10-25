@@ -12,7 +12,7 @@ const catalog={results:[
 ]};
 const coords=[{lng:108.9398,lat:34.3416},{lng:104.0668,lat:30.5728},{lng:121.4737,lat:31.2304},{lng:103.8198,lat:1.3521}];
 async function mockServices(page){
- await page.route(/melodyme-ai\\.chenzhe223\\.workers\\.dev/,async route=>{
+ await page.route(/melodyme-ai\.chenzhe223\.workers\.dev/,async route=>{
   const payload=route.request().postDataJSON()||{};
   if(payload.action==='resolveCities'){
    const names=payload.input.cities||[];
