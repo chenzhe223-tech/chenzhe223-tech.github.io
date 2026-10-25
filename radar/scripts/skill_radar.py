@@ -8,7 +8,7 @@ import math
 import re
 import urllib.parse
 
-ENGINE_VERSION = "2026.10.26.2"
+ENGINE_VERSION = "2026.10.26.3"
 from pathlib import Path
 
 STOP={"the","and","for","with","from","this","that","into","your","using","use","skill","skills","agent","agents","ai","open","source","tool","tools","project","github","claude","codex","mcp"}
@@ -272,6 +272,9 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
     selected=[]; excluded=[]; selected_today=[]; category_counts={}; owner_counts={}
     # Rank only evidence-verified candidates, and never fabricate historical growth.
     ranked=sorted(candidates,key=lambda x:float(x.get("total_score") or 0),reverse=True)
+    available_categories={infer_skill_category(x) for x in ranked}
+    # Keep two-per-category when the verified pool is broad; relax to at most five for a narrow theme.
+    category_cap=min(5,max(2,math.ceil(5/max(1,len(available_categories)))))
     for item in ranked:
         hit=identify_duplicate(item,history["records"])
         if not hit: hit=identify_duplicate(item,selected_today,semantic_threshold=0.82)
