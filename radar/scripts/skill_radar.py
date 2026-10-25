@@ -313,10 +313,10 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
             owner=urllib.parse.urlsplit(str(item.get("url") or "")).path.strip("/").split("/")[0].lower()
         except Exception:
             owner=""
-        if category_counts.get(category,0)>=3:
+        if category_counts.get(category,0)>=2:
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"category_saturation","category":category})
             continue
-        if owner and owner_counts.get(owner,0)>=3:
+        if owner and owner_counts.get(owner,0)>=2:
             excluded.append({"name":item.get("name"),"url":item.get("url"),"reason":"developer_saturation","owner":owner})
             continue
         item["daily_theme"]=category
