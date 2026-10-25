@@ -103,6 +103,92 @@
 .palette-dots{display:inline-block;width:42px;height:25px;flex:0 0 42px;border-radius:8px;background:linear-gradient(90deg,#c8b8a8 0 33%,#e7ddd1 33% 66%,#35465a 66%)}
 .palette-name{font-size:12px;font-weight:650;color:var(--ink);white-space:nowrap}
 .palette-note{font-size:10px;color:var(--muted);margin-left:auto;text-align:right}
+
+/* MelodyMe layout system v2: 4px rhythm, explicit regions, mobile-first */
+:root{--mm-space-1:4px;--mm-space-2:8px;--mm-space-3:12px;--mm-space-4:16px;--mm-space-5:24px;--mm-space-6:32px;--mm-page-gutter:20px;--mm-card-pad:20px;--mm-radius-sm:12px;--mm-radius-md:16px;--mm-radius-lg:22px;--mm-focus:#9588c9;--mm-ink:#172b42;--mm-muted:#74808c;--mm-line:#ded9d0;--mm-paper:#f5f2ec}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{overflow-wrap:break-word}
+.shell{width:min(100%,1120px);padding-inline:var(--mm-page-gutter)}
+button,input,textarea,select{min-width:0;max-width:100%}
+button{min-height:40px;line-height:1.25}
+.section{padding-block:var(--mm-space-6) 56px}
+.results{margin-top:var(--mm-space-5)}
+.workgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"player player" "art story";gap:var(--mm-space-5);align-items:start}
+.player-panel{grid-area:player;min-width:0}
+.artwork-panel{grid-area:art;min-width:0;display:grid;gap:var(--mm-space-4);align-content:start}
+.story-panel{grid-area:story;min-width:0;display:flex;flex-direction:column;gap:var(--mm-space-3)}
+.musicbox{margin:0;padding:var(--mm-card-pad);border:1px solid #d7dfe5;border-radius:var(--mm-radius-lg);background:linear-gradient(140deg,#20354b 0%,#314b62 62%,#47586b 100%);color:#f7f8fb;box-shadow:0 10px 28px #172b420c}
+.musicbox-head{display:flex;align-items:center;justify-content:space-between;gap:var(--mm-space-3);min-height:28px;font-size:11px;letter-spacing:.06em;color:#d6e0e8}
+.musicbox-head span:last-child{font-size:11px;letter-spacing:0;border:1px solid #ffffff3d;border-radius:8px;padding:5px 8px;white-space:nowrap}
+.music-layout{display:grid;grid-template-columns:minmax(120px,28%) minmax(0,1fr);gap:var(--mm-space-5);align-items:center;margin-top:var(--mm-space-4)}
+.music-layout .album,.music-layout .cover-real{width:100%;height:auto;aspect-ratio:1;min-width:0;object-fit:cover;border-radius:var(--mm-radius-md);box-shadow:none}
+.music-layout .album{background:linear-gradient(145deg,#aebdca,#71869b 55%,#283c52);font-size:32px}
+.music-detail{min-width:0}
+.music-title{font-size:clamp(21px,3vw,30px);font-weight:700;line-height:1.2;letter-spacing:-.025em;margin:0 0 var(--mm-space-2);overflow-wrap:anywhere}
+.music-artist{font-size:16px;line-height:1.4;color:#dce5ec}
+.music-meta{font-size:12px;line-height:1.5;color:#c2ced9;margin:var(--mm-space-3) 0 0}
+.player-actions{display:flex;align-items:center;gap:var(--mm-space-2);flex-wrap:wrap;margin-top:var(--mm-space-4)}
+.player-actions .music-link{display:inline-flex;align-items:center;justify-content:center;gap:var(--mm-space-2);min-height:40px;margin:0;padding:10px 14px;border-radius:var(--mm-radius-sm);font-size:13px;font-weight:650;white-space:nowrap}
+.player-actions #listenIdentify{background:#f7f3eb;color:#172b42;border:1px solid #f7f3eb}
+.player-actions .secondary-link{background:#ffffff12;color:#f7f8fb;border:1px solid #ffffff4a}
+.identify-notice{font-size:11px;line-height:1.5;color:#d1dbe4;margin-top:var(--mm-space-3)}
+.musicbox .privacy{font-size:10px;line-height:1.5;color:#c1ccd6;margin-top:var(--mm-space-3)}
+.musicbox #musicresults{margin-top:var(--mm-space-3)}
+.musicbox .candidate{border-color:#ffffff2b;background:#ffffff0b;color:#f7f8fb}
+.musicbox .candidate small,.musicbox .candidate-preview.muted{color:#d0d9e1}
+.musicbox .candidate button{background:#f7f3eb;color:#172b42;border-color:transparent}
+.musicbox .candidate-preview{border-color:#ffffff2b}
+.musicbox .candidate-preview strong{color:#edf1f5}
+.musicbox audio{width:100%;max-width:100%}
+.poster{width:100%;aspect-ratio:4/5;min-height:0;border-radius:var(--mm-radius-lg);padding:var(--mm-space-5);box-shadow:none}
+.poster h3{font-size:clamp(25px,3vw,34px);line-height:1.3;max-width:100%;overflow-wrap:anywhere}
+.ai-cover-box{margin:0;padding:var(--mm-space-4);border-radius:var(--mm-radius-md);background:#fffdfa;border:1px solid var(--mm-line)}
+.ai-cover-frame{aspect-ratio:4/3;border-radius:var(--mm-radius-sm);margin-top:var(--mm-space-3)}
+.ai-cover-box button{min-height:40px;border-radius:var(--mm-radius-sm)}
+.poster-tools{margin:0;justify-content:flex-start}
+.poster-tools #download{min-height:40px;padding:9px 13px;border-radius:var(--mm-radius-sm);font-size:12px}
+.story-editor-head{margin:0;font-size:19px;line-height:1.3}
+#storycopy{width:100%;min-height:240px!important;margin:0;padding:var(--mm-space-4)!important;border-radius:var(--mm-radius-md)!important;border-color:var(--mm-line);background:#fffdfa;font-size:15px;line-height:1.8;overflow-wrap:anywhere;resize:vertical}
+.story-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:var(--mm-space-2);margin:0}
+.story-actions button{min-height:44px;padding:10px 12px;border-radius:var(--mm-radius-sm);font-size:13px}
+.story-panel .field{margin-top:0}
+.results .eyebrow{margin-bottom:var(--mm-space-4)}
+.palette-preview{gap:var(--mm-space-3);padding:var(--mm-space-3);margin-block:var(--mm-space-2) var(--mm-space-3);border-radius:var(--mm-radius-sm)}
+.palette-note{max-width:42%;line-height:1.35}
+@media(max-width:760px){
+ :root{--mm-page-gutter:16px;--mm-card-pad:16px}
+ .shell{padding-inline:var(--mm-page-gutter)}
+ .section{padding-block:var(--mm-space-5) 40px}
+ .results{margin-top:var(--mm-space-4)}
+ .workgrid{grid-template-columns:minmax(0,1fr);grid-template-areas:"player" "art" "story";gap:var(--mm-space-5)}
+ .music-layout{grid-template-columns:minmax(92px,30%) minmax(0,1fr);gap:var(--mm-space-4);margin-top:var(--mm-space-4)}
+ .music-title{font-size:clamp(20px,5.6vw,26px)}
+ .music-artist{font-size:15px}
+ .music-meta{font-size:12px;margin-top:var(--mm-space-2)}
+ .player-actions{gap:var(--mm-space-2);margin-top:var(--mm-space-3)}
+ .player-actions .music-link{min-height:40px;padding:9px 12px;font-size:12px}
+ .artwork-panel{gap:var(--mm-space-3)}
+ .poster{padding:var(--mm-space-4);aspect-ratio:4/5}
+ .poster h3{font-size:clamp(25px,7vw,34px)}
+ .ai-cover-box{padding:var(--mm-space-3)}
+ .ai-cover-head{flex-direction:row;align-items:center;flex-wrap:wrap}
+ .ai-cover-frame{aspect-ratio:1.55/1;max-height:260px}
+ .story-panel{gap:var(--mm-space-3)}
+ #storycopy{min-height:200px!important}
+ .story-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+}
+@media(max-width:390px){
+ :root{--mm-page-gutter:12px;--mm-card-pad:12px}
+ .music-layout{grid-template-columns:84px minmax(0,1fr);gap:var(--mm-space-3)}
+ .music-layout .album,.music-layout .cover-real{width:84px;height:84px}
+ .music-title{font-size:20px}
+ .player-actions .music-link{padding:9px 10px;font-size:12px}
+ .musicbox-head{font-size:10px}
+ .musicbox-head span:last-child{font-size:10px;padding:4px 6px}
+ .poster{padding:var(--mm-space-3)}
+ .story-actions button{font-size:12px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 </style></head>
 <body><header class="shell top"><div class="brand"><b>♫</b>MelodyMe</div><nav class="nav"><button class="active" data-view="explore">探索地图</button><button data-view="works">我的作品 <span id="count">0</span></button></nav></header>
 <main class="shell"><section class="hero" id="hero"><div><div class="eyebrow">YOUR LIFE · YOUR SOUNDTRACK</div><h1>每一首歌，<br>都是你走过的路。</h1><p>不用整理好所有细节。只要一个瞬间，我们就从那里出发，一步步找回那段音乐、那种心情，以及当时的你。</p><div class="heroactions"><button class="primary" id="start">开始探索　↗</button><button class="ghost" id="continue" hidden>继续上次旅程</button></div><div class="hint">一句话就够了 · 每一步都可跳过 · 记忆默认保存在此设备</div></div>
@@ -110,8 +196,15 @@
 <section class="section" id="explore"><div class="secthead"><div class="eyebrow">YOUR JOURNEY</div><h2>慢慢走，作品会一点点浮现。</h2><p>每一站只做一件小事。你可以跳过，也可以随时回来修改。</p></div><div class="layout">
 <aside class="card"><h3>你的音乐地图</h3><div class="muted">点选节点，继续或回到之前的记忆。</div><div class="nodes"><button class="node selected" data-node="0"><span class="icon">✦</span><span><strong>唤起记忆</strong><small>一句话就够了</small></span><span class="nodecheck"></span></button><button class="node" data-node="1"><span class="icon">♡</span><span><strong>找到感觉</strong><small>选择一种情绪</small></span><span class="nodecheck"></span></button><button class="node" data-node="2"><span class="icon">♫</span><span><strong>发现音乐</strong><small>歌曲线索可选</small></span><span class="nodecheck"></span></button><button class="node" data-node="3"><span class="icon">✧</span><span><strong>收获作品</strong><small>生成你的表达</small></span><span class="nodecheck"></span></button></div><div class="feedback" id="sidefeedback">从一句记忆开始，其他信息都可以之后再补。</div><div class="privacy">🔒 原始故事和作品仅保存在当前浏览器。本原型不会上传你的故事。</div></aside>
 <section class="card" aria-live="polite"><div class="eyebrow" id="stepno">STOP 01 / 04</div><h2 class="prompt" id="title">有一个瞬间，你一直记得吗？</h2><p class="muted" id="desc">写下一句话，也可以从下面选一个方向。无需填写歌名、歌手或年份。</p><div id="content"><textarea class="field story" id="story" maxlength="1200" placeholder="比如：毕业那天，我们在火车站分别。回去的路上，一首歌一直在耳机里循环……"></textarea><div class="choices"><button class="choice" data-prompt="我想起一个很久没见的人。">某个人</button><button class="choice" data-prompt="我想起一次很远的旅行。">一段旅途</button><button class="choice" data-prompt="我想起人生中一个重要的转折。">人生转折</button><button class="choice" data-prompt="我想从一个随机的记忆开始。">随机开启</button></div></div><div class="actions"><button class="primary" id="next">继续这一站　→</button><button class="ghost" id="skip">跳过这一站</button><button class="ghost hidden" id="back">上一步</button></div><div class="feedback" id="feedback"></div><div class="minipreview" id="stage"><div class="mini"><strong>✦ 已经找到的线索</strong><p id="clue">你的记忆正在等待被唤起。</p></div><div class="mini"><strong>✧ 作品正在成形</strong><p id="draft">每一个细节，都可以由你决定。</p></div></div>
-<div class="results" id="results"><div class="eyebrow">YOUR MEMORY ARTWORK</div><div class="workgrid"><div><div class="poster" id="poster"><small>MELODYME · A PERSONAL SOUNDTRACK</small><h3 id="postertitle">那些被旋律<br>记住的时刻</h3><small id="postersong">A SONG · A MEMORY · YOUR STORY</small></div><section class="ai-cover-box" aria-label="AI 生成纪念封面"><div class="ai-cover-head"><strong>AI 纪念封面</strong><span>创作装饰 · 非真实专辑封面</span></div><div class="ai-cover-frame" id="aiCoverFrame"><div class="ai-cover-placeholder" id="aiCoverPlaceholder"><span>♫</span><strong>为这段记忆生成一张封面</strong><small>只使用风格、情绪与场景关键词，不发送完整故事。</small></div><img id="aiCoverImage" alt="AI 生成封面（非真实专辑封面）" loading="lazy" hidden></div><p id="aiCoverStatus" class="muted" role="status">AI 封面尚未生成</p><button class="ghost" id="regenerateCover" type="button">生成 AI 纪念封面</button><p class="muted">AI 生成封面（非真实专辑封面）。不会替换真实音乐目录封面或 SVG 海报。</p></section><div class="poster-tools"><button class="ghost" id="download" type="button">↓ 下载图文海报</button></div></div><div><div class="story-editor-head"><strong>我的音乐故事</strong><button class="icon-action" id="copyStory" type="button" aria-label="复制我的音乐故事" title="复制文案">⧉</button></div><textarea class="field" id="storycopy" aria-label="我的音乐故事，可编辑" placeholder="这里会生成一段自然、散文式的音乐记忆……" style="min-height:190px"></textarea><div class="actions story-actions"><button class="primary" id="save">保存这份作品</button><button class="ghost" id="regen">重新生成故事</button></div><div class="musicbox"><div class="musicbox-head"><span>NOW PLAYING · 歌曲与识别</span><span id="musicstatus">等待确认</span></div><div id="musiccard" class="music-layout"><div class="album" style="width:100%;height:auto;aspect-ratio:1">♫</div><div class="music-detail"><h3 class="music-title" id="musicname">还没找到这首歌</h3><div class="music-artist" id="musicartist">你的记忆，可以从旋律开始</div><p class="music-meta" id="musicmeta">搜索歌名或歌手，确认后将显示真实封面与可用试听。</p><div class="player-actions"><button class="music-link" id="listenIdentify" type="button"><span>◉</span> 听音识歌</button><button class="music-link secondary-link" id="downloadInline" type="button" title="下载记忆海报" aria-label="下载记忆海报">↓ 海报</button></div></div></div><div id="identifyNotice" class="identify-notice" aria-live="polite">点击「听音识歌」可尝试唤起设备上的音乐识别服务。</div><div id="musicresults"></div><div class="privacy">歌曲资料来自公开音乐目录。识曲由设备上的音乐识别服务完成；网页不会在后台录音。</div></div></div></div></div></section></div></section>
-<section class="section hidden" id="works"><div class="secthead"><div class="eyebrow">YOUR COLLECTION</div><h2>收藏那些，值得再听一次的时刻。</h2><p>作品保存在当前浏览器中，不会自动公开。</p></div><div class="card"><button class="primary" id="new">开启新旅程 +</button><p id="empty" class="muted">还没有保存的作品。每一段记忆，都可以成为起点。</p><div class="saved" id="saved"></div></div></section></main>
+<div class="results" id="results"><div class="eyebrow">YOUR MEMORY ARTWORK</div><div class="workgrid">
+<section class="player-panel" aria-label="歌曲识别与播放器"><div class="musicbox">
+<div class="musicbox-head"><span>NOW PLAYING · 歌曲与识别</span><span id="musicstatus">等待确认</span></div>
+<div id="musiccard" class="music-layout"><div class="album" style="width:100%;height:auto;aspect-ratio:1">♫</div><div class="music-detail"><h3 class="music-title" id="musicname">还没找到这首歌</h3><div class="music-artist" id="musicartist">你的记忆，可以从旋律开始</div><p class="music-meta" id="musicmeta">搜索歌名或歌手，确认后将显示真实封面与可用试听。</p><div class="player-actions"><button class="music-link" id="listenIdentify" type="button"><span>◉</span> 听音识歌</button><button class="music-link secondary-link" id="downloadInline" type="button" title="下载记忆海报" aria-label="下载记忆海报">↓ 海报</button></div></div></div>
+<div id="identifyNotice" class="identify-notice" aria-live="polite">点击「听音识歌」可尝试唤起设备上的音乐识别服务。</div><div id="musicresults"></div><div class="privacy">歌曲资料来自公开音乐目录。识曲由设备上的音乐识别服务完成；网页不会在后台录音。</div>
+</div></section>
+<section class="artwork-panel" aria-label="记忆海报"><div class="poster" id="poster"><small>MELODYME · A PERSONAL SOUNDTRACK</small><h3 id="postertitle">那些被旋律<br>记住的时刻</h3><small id="postersong">A SONG · A MEMORY · YOUR STORY</small></div><section class="ai-cover-box" aria-label="AI 生成纪念封面"><div class="ai-cover-head"><strong>AI 纪念封面</strong><span>创作装饰 · 非真实专辑封面</span></div><div class="ai-cover-frame" id="aiCoverFrame"><div class="ai-cover-placeholder" id="aiCoverPlaceholder"><span>♫</span><strong>为这段记忆生成一张封面</strong><small>只使用风格、情绪与场景关键词，不发送完整故事。</small></div><img id="aiCoverImage" alt="AI 生成封面（非真实专辑封面）" loading="lazy" hidden></div><p id="aiCoverStatus" class="muted" role="status">AI 封面尚未生成</p><button class="ghost" id="regenerateCover" type="button">生成 AI 纪念封面</button><p class="muted">AI 生成封面（非真实专辑封面）。不会替换真实音乐目录封面或 SVG 海报。</p></section><div class="poster-tools"><button class="ghost" id="download" type="button">↓ 下载图文海报</button></div></section>
+<section class="story-panel" aria-label="我的音乐故事"><div class="story-editor-head"><strong>我的音乐故事</strong><button class="icon-action" id="copyStory" type="button" aria-label="复制我的音乐故事" title="复制文案">⧉</button></div><textarea class="field" id="storycopy" aria-label="我的音乐故事，可编辑" placeholder="这里会生成一段自然、散文式的音乐记忆……" style="min-height:190px"></textarea><div class="actions story-actions"><button class="primary" id="save">保存这份作品</button><button class="ghost" id="regen">重新生成故事</button></div></section>
+</div></div><section class="section hidden" id="works"><div class="secthead"><div class="eyebrow">YOUR COLLECTION</div><h2>收藏那些，值得再听一次的时刻。</h2><p>作品保存在当前浏览器中，不会自动公开。</p></div><div class="card"><button class="primary" id="new">开启新旅程 +</button><p id="empty" class="muted">还没有保存的作品。每一段记忆，都可以成为起点。</p><div class="saved" id="saved"></div></div></section></main>
 <footer class="shell footer"><span>MelodyMe · 每一首歌，都是你走过的路。</span><span>本地原型 · 真实 AI（DeepSeek）按需调用；试听以目录片段为准，无云同步</span></footer><div class="toast" id="toast" role="status"></div>
 <script>
 (function(){
