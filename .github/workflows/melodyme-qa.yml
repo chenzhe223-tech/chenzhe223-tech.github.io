@@ -1,6 +1,12 @@
 name: MelodyMe prototype QA
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "melodyme/**"
+      - "scripts/melodyme-live-qa.cjs"
+      - ".github/workflows/melodyme-qa.yml"
   pull_request:
     paths:
       - "melodyme/**"
