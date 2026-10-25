@@ -51,3 +51,7 @@ Do not claim an actual iPhone check unless it was performed on a real device.
 - Never duplicate the image as both an `img` and a CSS background on the poster surface.
 - Keep download/regenerate/share and concise disclosure controls outside the poster image, but inside the same poster module.
 - Verify DOM counts and visibility, not only headings: exactly one `#poster`; `#aiCoverFrame` is a descendant of `#poster`; no second full-poster image/card exists in the artwork panel.
+
+## Rhythm-first poster creation
+
+The fourth step must use an interactive five-line rhythm composer instead of fixed style-selection cards. The user can toggle 16 steps, change BPM, preview the rhythm, randomize it, or clear it. Persist the rhythm and tempo with saved works. Derive the visual mode and image prompt from rhythm density, offbeat activity, transitions, repetition, tempo, memory, and mood. Regeneration may introduce controlled variation, but must remain grounded in the user's rhythm. Never record or upload audio for this interaction. Keep exactly one visible main poster.
