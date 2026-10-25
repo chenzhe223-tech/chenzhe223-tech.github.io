@@ -8,7 +8,7 @@ import math
 import re
 import urllib.parse
 
-ENGINE_VERSION = "2026.10.25.2"
+ENGINE_VERSION = "2026.10.26.1"
 from pathlib import Path
 
 STOP={"the","and","for","with","from","this","that","into","your","using","use","skill","skills","agent","agents","ai","open","source","tool","tools","project","github","claude","codex","mcp"}
@@ -266,9 +266,9 @@ def score_candidate(item: dict, today: str) -> dict:
       "recommendation_type":"成熟实用" if stars>=1000 and age_days is not None and age_days<=90 else "趋势观察（未验证增长）" if age_days is not None and age_days<=30 else "维护状态观察",
       "user_feedback":[]}
 def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=10) -> dict:
-    history=load_recommendation_history(archive_dir,today,90)
+    history=load_recommendation_history(archive_dir,today,7)
     if history["status"]=="unavailable":
-        return {"status":"history_unavailable","history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":90,"errors":history["errors"]},"selected":[],"excluded":[]}
+        return {"status":"history_unavailable","history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":7,"errors":history["errors"]},"selected":[],"excluded":[]}
     selected=[]; excluded=[]; selected_today=[]; category_counts={}; owner_counts={}
     # Rank only evidence-verified candidates, and never fabricate historical growth.
     ranked=sorted(candidates,key=lambda x:float(x.get("total_score") or 0),reverse=True)
@@ -318,5 +318,5 @@ def build_radar(candidates: list[dict],archive_dir: Path,today: str,limit: int=1
         if owner: owner_counts[owner]=owner_counts.get(owner,0)+1
         if len(selected)>=limit: break
     return {"status":"PASS" if history["status"] in ("complete","partial") else "history_unavailable",
-      "history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":90,"window_start":history.get("window_start"),"window_end":history.get("window_end"),"errors":history["errors"],"records":len(history["records"])},
+      "history":{"status":history["status"],"files_read":history["files_read"],"coverage_days":history["coverage_days"],"window_days":7,"window_start":history.get("window_start"),"window_end":history.get("window_end"),"errors":history["errors"],"records":len(history["records"])},
       "selected":selected,"excluded":excluded}

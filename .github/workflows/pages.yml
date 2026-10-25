@@ -82,7 +82,7 @@ jobs:
                   and report.get('generated_at', '').startswith(today)
                   and report.get('top5_status') == 'ai_curated'
                   and report.get('quality_gate', {}).get('status') == 'PASS'
-                  and report.get('skill_radar', {}).get('engine_version') == '2026.10.25.2'
+                  and report.get('skill_radar', {}).get('engine_version') == '2026.10.26.1'
                   and len(report.get('skills', [])) >= 5
                   and len(report.get('top5', [])) == 5
                   and all(str(story.get('image_url') or '').startswith('https://') for story in report.get('china_ai_news', []) if isinstance(story, dict))

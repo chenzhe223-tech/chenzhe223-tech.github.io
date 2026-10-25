@@ -745,7 +745,7 @@ def collect_skills() -> list[dict]:
     )
 
     today_text = today.isoformat()
-    history = load_recommendation_history(ARCHIVE, today_text, 90)
+    history = load_recommendation_history(ARCHIVE, today_text, 7)
     if history["status"] == "unavailable":
         SKILL_RADAR_DIAGNOSTICS.clear()
         SKILL_RADAR_DIAGNOSTICS.update({
@@ -760,7 +760,7 @@ def collect_skills() -> list[dict]:
         print(f"[skill-error] history unavailable; refusing to recommend without history check: {history.get('errors')}")
         return []
 
-    # Exclude all projects present in accessible 90-day history before spending API calls.
+    # Exclude projects recommended in the accessible past seven days before spending API calls; older projects may return after a week unless a material update warrants an earlier return.
     eligible = []
     historical_exclusions = []
     release_checks = 0
@@ -775,11 +775,11 @@ def collect_skills() -> list[dict]:
                 candidate["history_duplicate_match"] = hit
                 eligible.append(candidate)
             else:
-                historical_exclusions.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "90-day history duplicate; no verified material release", "match": hit})
+                historical_exclusions.append({"name": candidate.get("name"), "url": candidate.get("url"), "reason": "7-day history duplicate; no verified material release", "match": hit})
         else:
             eligible.append(candidate)
 
-    # Verify the practical security-audit fallback first if it is not in the 90-day
+    # Verify the practical security-audit fallback first if it is not in the seven-day
     # recommendation history. The final rank is still determined by evidence-backed
     # quality scores; this only ensures the fallback is actually evaluated.
     fallback_keys = {"cloudflare/security-audit-skill"}
@@ -847,7 +847,7 @@ def collect_skills() -> list[dict]:
             "weights": {"recent_heat_and_growth":25,"ai_trend_relevance":20,"practical_usefulness":20,"technical_quality":15,"novelty":10,"maintenance":10},
             "growth_data_policy": "7-day and 30-day Stars deltas are populated only when a dated snapshot of the same canonical repository exists in the permitted comparison window; otherwise null. Current run records a daily candidate snapshot."
         },
-        "limitations": ["Only accessible archived recommendation days can be checked; incomplete 90-day coverage is explicitly reported.", "Repository metadata and README were checked; installation and dedicated security audits were not performed."]
+        "limitations": ["Only accessible archived recommendation days in the seven-day window can be checked; coverage is explicitly reported.", "Repository metadata and README were checked; installation and dedicated security audits were not performed."]
     })
     if not selected:
         print(f"[skill-warning] no candidates passed evidence, freshness and duplicate gates; pool={len(repos)} verified={len(verified)} historical_exclusions={len(historical_exclusions)}")
