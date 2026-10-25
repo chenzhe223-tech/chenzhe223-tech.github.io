@@ -7,7 +7,7 @@ MelodyMe 是一款以人生记忆为起点、以音乐为线索的轻量创作�
 ## 当前功能
 
 - 四站探索地图：唤起记忆、找到感觉、发现音乐、收获作品；无需注册，每一步可跳过或返回。
-- 记忆故事、情绪线索、音乐目录候选与 12 种海报风格。
+- 记忆故事、情绪线索、音乐目录候选与 9 种独立视觉规范的海报模式（彩色素描漫画含 3 种子风格）。
 - Apple iTunes Search 真实目录查询。若所选目录结果提供 `previewUrl`，显示用户主动点击的**30 秒试听片段**；这不是完整歌曲播放，也不自动播放。
 - Shazam 作为外部歌曲详情/识曲入口，与试听片段分开；不承诺网页内完整播放或自动播放。
 - AI 纪念封面：优先请求 Pollinations.ai；图片加载失败时调用 Cloudflare Worker 的 Workers AI 文生图兜底。封面必须标注“AI 生成封面（非真实专辑封面）”，不替换真实 iTunes artwork 或 SVG 海报。
@@ -42,7 +42,7 @@ GitHub Actions 会在相关 PR/push 上运行 Worker 测试。CI 通过不等于
 - [PRD](docs/PRD.md)
 - [设计系统](docs/DESIGN_SYSTEM.md)
 - [技术架构](docs/ARCHITECTURE.md)
-- [测试计划](docs/QA_PLAN.md)
+- [测试计划](docs/QA_PLAN.md)\n- [海报设计系统](docs/POSTER_DESIGN_SYSTEM.md)
 
 ## 验收状态说明
 
