@@ -89,7 +89,7 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertIn("Do not invent documentary evidence", prompt)
 
     def test_thematic_fallback_pool_supports_weekly_unique_images(self):
-        self.assertGreaterEqual(len(set(THEME_PHOTOS["general"])), 8)
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["general"])), 25, "General fallback pool must support a full weekly run without exhausting unique images")
         for topic in ("robot", "compute", "product", "business", "creative"):
             self.assertGreaterEqual(len(set(THEME_PHOTOS[topic])), 5)
         self.assertTrue(all(photo_id.startswith("photo-") for values in THEME_PHOTOS.values() for photo_id in values))
