@@ -102,7 +102,9 @@ class DailyBriefContractTests(unittest.TestCase):
 
     def test_latest_data_has_enough_source_stories(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
-        self.assertGreaterEqual(len(data.get("news", [])), 5)
+        pool = list(data.get("news", [])) + list(data.get("china_ai_news", []))
+        unique_urls = {x.get("url") for x in pool if isinstance(x, dict) and x.get("url")}
+        self.assertGreaterEqual(len(unique_urls), 5, "The five-story shortlist must have at least five unique source-backed candidates across both news streams.")
 
     def test_china_ai_news_contract_and_provenance(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
@@ -178,6 +180,7 @@ class DailyBriefContractTests(unittest.TestCase):
     def test_top5_is_source_backed_when_present(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
         urls={x.get("url") for x in data.get("news", [])}
+        urls.update(x.get("url") for x in data.get("china_ai_news", []))
         top5=data.get("top5", [])
         self.assertLessEqual(len(top5), 5)
         seen=set()

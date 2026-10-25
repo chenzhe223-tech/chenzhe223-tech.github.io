@@ -202,9 +202,23 @@ def main():
         # not between the source pool and its selected subset.
         if item.get("_current_section") in ("top5", "china_ai_news"):
             curated_seen=[x for x in seen_current if x.get("_current_section") in ("top5", "china_ai_news")]
-            internal=compare_story(item,curated_seen,current_date=today)
-            if internal:
-                duplicate_hits.append({"scope":"current_curated_sections","section":item.get("_current_section"),"title":story_title(item),"match":internal})
+            # A top-five card may intentionally reference a China AI story to complete
+            # the cross-source editorial shortlist. Allow only the exact URL cross-list;
+            # duplicate stories within top5 or within the China AI module remain blocked.
+            intentional_crosslist = (
+                item.get("_current_section") == "china_ai_news"
+                and any(
+                    x.get("_current_section") == "top5"
+                    and x.get("source_section") == "china_ai_news"
+                    and norm_url(x.get("source_url") or x.get("url") or x.get("link") or "")
+                        == norm_url(item.get("url") or item.get("source_url") or item.get("link") or "")
+                    for x in curated_seen
+                )
+            )
+            if not intentional_crosslist:
+                internal=compare_story(item,curated_seen,current_date=today)
+                if internal:
+                    duplicate_hits.append({"scope":"current_curated_sections","section":item.get("_current_section"),"title":story_title(item),"match":internal})
         seen_current.append(item)
     # Compare current China AI stories specifically to yesterday and all historical China stories.
     china=report.get("china_ai_news") if isinstance(report.get("china_ai_news"),list) else []
