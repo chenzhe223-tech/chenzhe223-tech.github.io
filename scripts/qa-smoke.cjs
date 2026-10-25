@@ -141,7 +141,12 @@ const mark = (status, name, detail = '') => {
       ['暖间地图', 'https://warm-room-map.pages.dev/'],
       ['物遇官网', 'https://chenzhe223-tech.github.io/wuyu-brand-site/'],
       ['物遇商家工作台', 'https://chenzhe223-tech.github.io/wuyu-brand-site/merchant/'],
-      ['随调', 'https://chenzhe223-tech.github.io/SipSpark/'],
+      ['随调轻应用', 'https://chenzhe223-tech.github.io/SipSpark/app.html'],
+      ['随调品牌站', 'https://chenzhe223-tech.github.io/SipSpark/'],
+      ['音乐人生地图 MelodyMe', 'https://chenzhe223-tech.github.io/melodyme/'],
+      ['Dashboard Studio', 'https://ds.dashboard-studio-1dp.pages.dev/'],
+      ['DAVYLAB DesignOS', 'https://davylab-designos.pages.dev/'],
+      ['TrustLoop 源码仓库', 'https://github.com/chenzhe223-tech/davy-lab-trustloop'],
       ['山姆全球购工具', 'https://chenzhe223-tech.github.io/sam-global-buy/'],
       ['山姆数据导入', 'https://chenzhe223-tech.github.io/sam-global-buy/sam-app-import.html']
     ];

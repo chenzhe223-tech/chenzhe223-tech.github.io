@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - "keypocket/**"
+      - "index.html"
       - "scripts/qa-smoke.cjs"
       - ".github/workflows/qa-smoke.yml"
   workflow_run:
