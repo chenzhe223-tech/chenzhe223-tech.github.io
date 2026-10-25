@@ -44,8 +44,43 @@ jobs:
           print(f"HTML source checks passed; {len(html)} chars")
           PY
           node --check /tmp/melodyme-inline.js
+      - name: Validate nine poster modes and 27 prompt combinations
+        run: |
+          node <<'JS'
+          const assert = require("node:assert/strict");
+          global.window = {};
+          require("./melodyme/poster-system.js");
+          const engine = window.MelodyMePosterSystem;
+          assert.equal(engine.modes.length, 9, "exactly nine poster modes");
+          for (const mode of engine.modes) {
+            for (const mood of ["calm", "nostalgic", "energetic"]) {
+              const prompt = engine.buildPrompt({styleName:mode.styleName,mood,scene:"rainy window",palette:"warm sunset",substyle:mode.styleId === "color-sketch-comic" ? "gentle-journal" : ""});
+              assert.ok(prompt.includes(mode.englishName), mode.styleId + " style lock missing");
+              assert.ok(prompt.includes(mode.negativePrompt), mode.styleId + " negative prompt missing");
+              assert.ok(prompt.includes("DO NOT render any text"), mode.styleId + " text exclusion missing");
+              assert.ok(prompt.includes("OPTIONAL PALETTE NUANCE"), mode.styleId + " palette nuance missing");
+            }
+          }
+          assert.equal(engine.byId("color-sketch-comic").substyles.length, 3);
+          assert.equal(engine.inspectImage({naturalWidth:768,naturalHeight:1024}).technicalPassed, true);
+          assert.equal(engine.inspectImage({naturalWidth:1,naturalHeight:1}).technicalPassed, false);
+          console.log("PASS: 9 mode configs, 27 prompt combinations, 3 comic substyles, technical image checks.");
+          JS
       - name: Syntax-check browser QA script
         run: node --check scripts/melodyme-live-qa.cjs
+      - name: Create deterministic portrait PNG fixture
+        run: |
+          python - <<'PY'
+          import struct, zlib
+          from pathlib import Path
+          width, height = 768, 1024
+          raw = b"".join(b"\x00" + bytes([42, 68, 92]) * width for _ in range(height))
+          def chunk(kind, data):
+              return struct.pack(">I", len(data)) + kind + data + struct.pack(">I", zlib.crc32(kind + data) & 0xffffffff)
+          png = b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", struct.pack(">2I5B", width, height, 8, 2, 0, 0, 0)) + chunk(b"IDAT", zlib.compress(raw)) + chunk(b"IEND", b"")
+          Path("/tmp/melodyme-test-portrait.png").write_bytes(png)
+          print(f"Created {width}x{height} deterministic PNG fixture ({len(png)} bytes)")
+          PY
       - name: Install Playwright and Chromium
         run: |
           npm install --no-save playwright
@@ -59,7 +94,8 @@ jobs:
           import { chromium } from 'playwright';
           const browser = await chromium.launch({headless:true});
           const errors = [];
-          const tinyPng = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAADUlEQVR4nGP4z8AAAAMBAQDJ/pLvAAAAAElFTkSuQmCC', 'base64');
+          const { readFileSync } = await import('node:fs');
+          const tinyPng = readFileSync('/tmp/melodyme-test-portrait.png');
           const catalog = { results: [
             { trackName:'QA Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa/100x100bb.jpg', previewUrl:'https://audio-ssl.itunes.apple.com/qa-preview.m4a', releaseDate:'2001-01-01T00:00:00Z' },
             { trackName:'QA No Preview Track', artistName:'QA Artist', collectionName:'QA Album', artworkUrl100:'https://is1-ssl.mzstatic.com/image/thumb/qa2/100x100bb.jpg', releaseDate:'2002-01-01T00:00:00Z' }
@@ -123,24 +159,24 @@ jobs:
           await page.locator('#next').click();
           await page.locator('#next').click();
           await page.locator('#results').waitFor({state:'visible'});
-          if (await page.locator('.stylepick').count() !== 12) throw new Error('expected 12 poster styles');
+          if (await page.locator('.poster-mode-card').count() !== 9) throw new Error('expected nine poster modes');
           await page.locator('#aiCoverFrame').scrollIntoViewIfNeeded();
           await page.locator('#aiCoverStatus').waitFor({state:'visible'});
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Pollinations.ai'));
           if (!(await page.getByText('AI 生成封面（非真实专辑封面）').count())) throw new Error('AI cover disclosure missing');
           if (await page.locator('#aiCoverImage').getAttribute('loading') !== 'lazy') throw new Error('AI cover must lazy-load');
           if (await page.locator('#aiCoverImage').getAttribute('alt') !== 'AI 生成封面（非真实专辑封面）') throw new Error('AI cover alt/disclosure missing');
-          await page.locator('[data-style="旧照片"]').click();
+          await page.locator('[data-poster-style="复古胶片"]').click();
           mock.setPollinationsMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('· Cloudflare Workers AI 兜底'));
-          await page.locator('[data-style="城市夜色"]').click();
+          await page.locator('[data-poster-style="未来数字音乐"]').click();
           mock.setWorkerImageMode('fail');
           await page.locator('#regenerateCover').click();
           await page.waitForFunction(()=>document.querySelector('#aiCoverStatus').textContent.includes('AI 封面暂不可用'));
           if (!(await page.locator('#storycopy').inputValue()).includes('A story generated for QA.')) throw new Error('cover failure must preserve story copy');
           await page.locator('#autoStyle').click();
-          if (!(await page.locator('.stylepick[aria-pressed="true"]').count())) throw new Error('style selection state missing');
+          if (!(await page.locator('.poster-mode-card[aria-pressed="true"]').count())) throw new Error('style selection state missing');
           await page.locator('#storycopy').fill('可编辑的 QA 文案');
           await page.locator('#save').click();
           await page.getByRole('button',{name:/我的作品/}).click();
