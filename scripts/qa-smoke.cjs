@@ -478,68 +478,17 @@ const mark = (status, name, detail = '') => {
       mark('FAIL', '公众号选题工作台 smoke checks', e.stack || e.message || e);
     }
 
-    // MelodyMe live route smoke: verify the current four-step memory flow, local-first save, SVG export, and mobile layout.
+    // MelodyMe's legacy four-step story flow has been replaced by the four-city music map.
+    // Reuse the dedicated desktop/mobile acceptance suite so the portfolio smoke test stays aligned.
     try {
-      const melodyPage = await browser.newPage({ viewport: { width: 1280, height: 900 } });
-      const melodyErrors = [];
-      melodyPage.on('pageerror', e => melodyErrors.push(e.message));
-      const melodyResponse = await melodyPage.goto(base + 'melodyme/', { waitUntil: 'domcontentloaded', timeout: 45000 });
-      mark(melodyResponse && melodyResponse.status() === 200 ? 'PASS' : 'FAIL', 'MelodyMe 线上路由', 'HTTP ' + (melodyResponse && melodyResponse.status()));
-      const melodyTitle = await melodyPage.title();
-      mark(melodyTitle.includes('MelodyMe') ? 'PASS' : 'FAIL', 'MelodyMe 页面标题', melodyTitle);
-
-      await melodyPage.locator('#start').click();
-      await melodyPage.locator('#next').click();
-      const emptyMessage = await melodyPage.locator('#feedback').innerText();
-      mark(emptyMessage.includes('写一句你记得的事') ? 'PASS' : 'FAIL', 'MelodyMe 空输入校验', emptyMessage || '未出现空输入提示');
-
-      await melodyPage.locator('#story').fill('QA 测试记忆：傍晚走在海边，听到这首歌，决定重新出发。');
-      await melodyPage.locator('#next').click(); // memory story -> mood
-      await melodyPage.locator('#next').click(); // mood -> optional song metadata
-      await melodyPage.locator('#songinput').fill('线上 QA 测试歌曲');
-      await melodyPage.locator('#artistinput').fill('DAVYLAB QA');
-      await melodyPage.locator('#next').click(); // song metadata -> poster style
-      await melodyPage.locator('#next').click(); // generate local-first artwork
-      await melodyPage.locator('#results.show').waitFor({ state: 'visible', timeout: 5000 });
-      mark('PASS', 'MelodyMe 四步创作流程', '记忆 → 情绪 → 可选歌曲信息 → 风格与作品预览');
-
-      await melodyPage.locator('#storycopy').fill('MelodyMe live QA editable copy');
-      const downloadPromise = melodyPage.waitForEvent('download', { timeout: 8000 });
-      await melodyPage.locator('#download').click();
-      const posterDownload = await downloadPromise;
-      mark(posterDownload.suggestedFilename().endsWith('.svg') ? 'PASS' : 'FAIL', 'MelodyMe 海报 SVG 导出', posterDownload.suggestedFilename());
-
-      await melodyPage.locator('#save').click();
-      await melodyPage.locator('[data-view="works"]').click();
-      await melodyPage.locator('#saved').getByText('线上 QA 测试歌曲').waitFor({ timeout: 5000 });
-      await melodyPage.reload({ waitUntil: 'domcontentloaded' });
-      await melodyPage.locator('[data-view="works"]').click();
-      await melodyPage.locator('#saved').getByText('线上 QA 测试歌曲').waitFor({ timeout: 5000 });
-      mark('PASS', 'MelodyMe 本地保存与刷新恢复', '保存的作品在页面刷新后可重新读取');
-      await melodyPage.screenshot({ path: path.join(out, 'melodyme-desktop.png'), fullPage: true });
-      mark(melodyErrors.length === 0 ? 'PASS' : 'FAIL', 'MelodyMe 桌面端 JavaScript 异常', melodyErrors.length ? JSON.stringify(melodyErrors) : '未发现 pageerror');
-      await melodyPage.close();
-
-      const melodyMobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
-      const mobileErrors = [];
-      melodyMobile.on('pageerror', e => mobileErrors.push(e.message));
-      const melodyMobileResponse = await melodyMobile.goto(base + 'melodyme/', { waitUntil: 'domcontentloaded', timeout: 45000 });
-      const melodyDimensions = await melodyMobile.evaluate(() => ({ viewport: document.documentElement.clientWidth, document: document.documentElement.scrollWidth }));
-      mark(melodyMobileResponse && melodyMobileResponse.status() === 200 && melodyDimensions.document <= melodyDimensions.viewport + 2 ? 'PASS' : 'FAIL', 'MelodyMe 手机端响应与横向溢出', JSON.stringify({ status: melodyMobileResponse && melodyMobileResponse.status(), ...melodyDimensions }));
-      await melodyMobile.locator('#start').click();
-      await melodyMobile.locator('#story').fill('手机端 QA：这首歌让我想起一次旅行。');
-      await melodyMobile.locator('#next').click();
-      await melodyMobile.locator('#next').click();
-      await melodyMobile.locator('#songinput').fill('手机端 QA 测试歌曲');
-      await melodyMobile.locator('#next').click();
-      await melodyMobile.locator('#next').click();
-      await melodyMobile.locator('#results.show').waitFor({ state: 'visible', timeout: 5000 });
-      mark('PASS', 'MelodyMe 手机端创作流程', '手机视口下可完成记忆输入、四步探索和作品预览');
-      mark(mobileErrors.length === 0 ? 'PASS' : 'FAIL', 'MelodyMe 手机端 JavaScript 异常', mobileErrors.length ? JSON.stringify(mobileErrors) : '未发现 pageerror');
-      await melodyMobile.screenshot({ path: path.join(out, 'melodyme-mobile.png'), fullPage: true });
-      await melodyMobile.close();
+      const { execFileSync } = require('node:child_process');
+      execFileSync(process.execPath, [path.join(__dirname, 'melodyme-live-qa.cjs')], {
+        stdio: 'inherit',
+        env: { ...process.env, MELODYME_URL: base + 'melodyme/' }
+      });
+      mark('PASS', 'MelodyMe 四城音乐地图验收', '复用专用桌面与移动端验收套件');
     } catch (e) {
-      mark('FAIL', 'MelodyMe 线上冒烟验收', e.stack || e.message || e);
+      mark('FAIL', 'MelodyMe 四城音乐地图验收', e.stack || e.message || e);
     }
 
     report.externalLinks = links;
