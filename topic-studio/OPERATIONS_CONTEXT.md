@@ -25,8 +25,9 @@
 - 念头盒灵感导入导出；选题池、评分、状态、排期与创作指令。
 - 新闻卡片配图：优先原始 `image_url`，无原图时采用主题 fallback；图片失败有降级处理；真实来源图与主题辅助图必须区分标注。
 - 「已发内容」模块：读取 GitHub 共享 JSON，支持搜索、筛选、本地添加/编辑、JSON 导入/导出及关联选题。
-- GitHub 内容流水线协议、manifest 模板、队列与包校验脚本现已写入仓库；GitHub Actions 对流水线变更执行自动校验。
-- 当前内容包队列刚初始化为空；未提交至仓库的聊天素材不是队列内容。需以当前 GitHub main 为准继续执行。
+- 内容生产规范和私有 WorkBuddy 交接协议已建立；新内容包实际保存于 private 仓库 workbuddy-workspace/davylab-content-pipeline/。首次真实 WorkBuddy 操作仍需实测，不能仅凭文档声称端到端通过。
+- 私有仓库的内容队列刚初始化为空；在聊天里生成但没有提交到私有仓库的素材不算已入队。
+- 公开仓库的 QA Action 仅验证公开工程脚手架，不代表已验证微信后台下载、草稿、手机预览或发表。
 - 公众号官方 API 尚未接入。权限需在公众号后台实际核实；凭证只能存服务端 Secret。
 - 贴图与普通文章使用不同内容类型；正式发布必须遵循当前 manifest 的审批范围、内容包绑定、素材 QA、手机预览和回查要求。
 
@@ -40,7 +41,8 @@
 - 用户必须针对明确的 package ID 和提案作审批。没有审批时不生成最终发布包，也不能进入公众号后台。
 - `generate_only` 只生成并同步；`draft_only` 允许保存草稿但不得发布；`publish_after_approval` 仅在当前包有可核验的明确授权且 QA/手机预览通过时允许发布。
 - 用户只说“批准”默认为 `draft_only`；只有明确表示“批准生成并发布”才可能进入 `publish_after_approval`。
-- WorkBuddy 执行指令与失败停机条件详见 `CONTENT_PIPELINE.md`。
+- WorkBuddy 执行指令与失败停机条件详见公开的 CONTENT_PIPELINE.md 及私有仓库 davylab-content-pipeline/WORKBUDDY_COMMAND.md。
+- 用户批准选题只授权开始制作，不是发表许可；只有 WorkBuddy 针对指定 package ID 的单次明确发布命令，才可触发该包发表。
 - 公共 GitHub 只能存打算公开的内容素材，严禁任何账号凭证、Cookie、token 或隐私信息。
 
 ## 关键经验
