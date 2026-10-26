@@ -902,7 +902,7 @@ function storyImageMarkup(x){
  const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"https://unsplash.com/s/photos/artificial-intelligence";
   // Image credits are displayed in story metadata, never overlaid on thumbnails.
 
- return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}" +'</div>';
+ return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}"></div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
