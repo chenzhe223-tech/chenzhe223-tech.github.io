@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#f5f4f0">
-<meta name="description" content="DAVYLAB 公众号内容生产流水线：查看已审批内容包、素材 QA 与 WorkBuddy 交接状态。">
-<title>内容生产流水线 · DAVYLAB</title>
+<meta name="description" content="DAVYLAB 公众号内容生产流水线：进入私有内容包工作区，查看审批、素材验收和 WorkBuddy 操作规范。">
+<title>内容生产流程入口 · DAVYLAB</title>
 <style>
 :root{--paper:#f5f4f0;--card:#fff;--ink:#17283e;--muted:#68778a;--line:#e2e6e9;--blue:#3769df;--blueSoft:#edf2ff;--navy:#112238;--shadow:0 12px 34px #182a410d;--green:#267451;--amber:#98621a;--red:#a43d3d}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:inherit}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid #3769df66;outline-offset:3px}.wrap{max-width:1120px;margin:0 auto;padding:28px 24px 64px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;border-bottom:1px solid var(--line);padding-bottom:20px}.brand{display:flex;align-items:center;gap:12px}.mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(140deg,#7294ff,#c5ceff);font-weight:900;font-size:21px;color:var(--navy)}.brand strong{font-size:16px;letter-spacing:.4px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px}.links{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);background:white;border-radius:10px;padding:8px 12px;text-decoration:none;color:var(--ink);font-weight:700}.btn.primary{background:var(--blue);border-color:var(--blue);color:white}.hero{padding:34px 0 24px;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.6fr);gap:24px;align-items:end}.eyebrow{font-size:10px;color:#5476c2;letter-spacing:2px;font-weight:850}.hero h1{font-size:clamp(30px,4vw,46px);line-height:1.12;letter-spacing:-1.3px;margin:9px 0 12px}.hero p{margin:0;color:var(--muted);max-width:710px}.note{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow);font-size:12px;color:var(--muted)}.note strong{display:block;color:var(--ink);margin-bottom:5px;font-size:13px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:8px 0 25px}.stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px}.stat small{display:block;color:var(--muted);font-size:11px}.stat b{display:block;font-size:26px;line-height:1.4;margin-top:4px}.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:28px 0 13px}.sectionhead h2{font-size:17px;margin:0}.sectionhead span{color:var(--muted);font-size:11px}.package-list{display:grid;gap:12px}.package{background:white;border:1px solid var(--line);border-radius:16px;padding:19px;box-shadow:var(--shadow)}.pkg-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pkg-title{font-size:17px;font-weight:800;line-height:1.4}.pkg-id{color:var(--muted);font-size:11px;overflow-wrap:anywhere;margin-top:4px}.badge{display:inline-flex;white-space:nowrap;background:#f1f3f6;color:#566579;padding:5px 9px;border-radius:999px;font-size:11px;font-weight:750}.badge.ready,.badge.preview_passed,.badge.published{background:#e8f6ee;color:var(--green)}.badge.awaiting_approval,.badge.approved,.badge.generating{background:#fff4dd;color:var(--amber)}.badge.failed,.badge.blocked,.badge.needs_revision{background:#fff0f0;color:var(--red)}.meta{display:flex;flex-wrap:wrap;gap:8px;margin:13px 0;color:var(--muted);font-size:12px}.meta span{border:1px solid #edf0f2;border-radius:7px;padding:4px 7px}.pkg-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.empty{background:#fff;border:1px dashed #ccd4de;border-radius:16px;padding:32px 22px;text-align:center}.empty .symbol{font-size:30px}.empty h3{margin:6px 0;font-size:16px}.empty p{max-width:540px;margin:0 auto;color:var(--muted);font-size:12px}.guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.guide article{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px}.guide .n{font-size:10px;color:#5476c2;font-weight:850;letter-spacing:1.6px}.guide h3{font-size:14px;margin:6px 0}.guide p{color:var(--muted);font-size:12px;margin:0}.foot{margin-top:30px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}.error{color:var(--red);font-size:12px;margin:12px 0}
@@ -16,98 +16,36 @@
 <div class="wrap">
 <header class="top">
   <div class="brand"><div class="mark">D</div><div><strong>DAVYLAB</strong><small>CONTENT PIPELINE</small></div></div>
-  <div class="links"><a class="btn" href="../">返回选题工作台 ↗</a><a class="btn" href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio/content-pipeline" target="_blank" rel="noopener">GitHub 内容队列 ↗</a><a class="btn primary" href="../CONTENT_PIPELINE.md" target="_blank" rel="noopener">执行规范 ↗</a></div>
+  <div class="links"><a class="btn" href="../">返回选题工作台 ↗</a><a class="btn" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/davylab-content-pipeline" target="_blank" rel="noopener">打开私有内容区 ↗</a><a class="btn primary" href="../CONTENT_PIPELINE.md" target="_blank" rel="noopener">执行规范 ↗</a></div>
 </header>
 <section class="hero">
-  <div><div class="eyebrow">FROM IDEA TO PUBLISHED</div><h1>让好选题，<br>有一条可追溯的生产线。</h1><p>从选题分析、用户批准、原创图文生产，到 GitHub 归档、WorkBuddy 校验与公众号发布。这里展示仓库里真实记录的内容包状态，不根据计划臆报完成。</p></div>
-  <aside class="note"><strong>状态说明</strong>此页面只读 GitHub 公开队列与 manifest。审批动作发生在 ChatGPT 对话中；发布授权、素材 QA 和后台回执必须绑定到具体内容包。</aside>
+  <div><div class="eyebrow">FROM IDEA TO PUBLISHED</div><h1>让好选题，<br>有一条可追溯的生产线。</h1><p>从选题分析、用户批准、原创图文生产，到 GitHub 归档、WorkBuddy 校验与公众号发布。此页只提供流程入口；未发表稿件、图片与执行回执保存在私有 GitHub 内容区，不在这里公开展示。</p></div>
+  <aside class="note"><strong>状态说明</strong>公开页面不会读取或展示未发表内容包。审批动作发生在 ChatGPT 对话中；未发表正文与图片保存在私有仓库；正式发表还需要 WorkBuddy 对具体内容包执行单次发布命令。</aside>
 </section>
-<section class="stats" aria-label="流水线状态">
- <div class="stat"><small>内容包总数</small><b id="statTotal">—</b></div>
- <div class="stat"><small>待 WorkBuddy 处理</small><b id="statReady">—</b></div>
- <div class="stat"><small>草稿/预览阶段</small><b id="statDraft">—</b></div>
- <div class="stat"><small>已发布</small><b id="statPublished">—</b></div>
+<section class="note" style="margin:10px 0 22px">
+<strong>私有执行区是唯一内容包来源</strong>
+未发表稿件、分页文案、真实 PNG、来源核查、hash 清单和 WorkBuddy 执行回执，统一保存在私有仓库 <code>chenzhe223-tech/workbuddy-workspace/davylab-content-pipeline/</code>。不要把它们提交至公开 GitHub Pages 仓库。
+<div class="links" style="margin-top:12px">
+<a class="btn primary" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/davylab-content-pipeline" target="_blank" rel="noopener">打开私有内容区 ↗</a>
+<a class="btn" href="https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md" target="_blank" rel="noopener">WorkBuddy 命令 ↗</a>
+<a class="btn" href="https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/README.md" target="_blank" rel="noopener">校验和存储规范 ↗</a>
+</div>
 </section>
-<div class="sectionhead"><h2>内容包队列</h2><span id="updatedAt">正在读取 GitHub 队列…</span></div>
-<div id="error" class="error" role="status" hidden></div>
-<div id="packages" class="package-list" aria-live="polite"></div>
-<div class="sectionhead"><h2>如何使用这条流水线</h2><span>每一步都保留可核验状态</span></div>
+<div class="sectionhead"><h2>当前自动化边界</h2><span>以真实回执为准，不以文档代替执行</span></div>
+<section class="guide" style="margin-bottom:24px">
+<article><div class="n">PUBLIC / STATIC</div><h3>选题平台与公开档案</h3><p>公开站点保存平台代码、Davy Radar 公开来源和经过核验的已发文章元数据。浏览器 localStorage 的选题不会自动跨设备同步。</p></article>
+<article><div class="n">PRIVATE / PACKAGE</div><h3>未发表内容包</h3><p>文章、配文、图片、来源说明、SHA-256 清单和 QA 报告保存到私有仓库；通过审批后才生产正式内容包。</p></article>
+<article><div class="n">WORKBUDDY / DRAFT</div><h3>草稿与手机预览</h3><p>WorkBuddy 命令 A 下载、校验并保存草稿，再重新打开检查和手机预览；只有所有检查通过才能继续。</p></article>
+<article><div class="n">ONE-TIME AUTHORIZATION</div><h3>正式发表需单独授权</h3><p>用户在 WorkBuddy 当前会话对指定 package ID 发出命令 B 后，才可正式发表。生产审批不等于发表许可。</p></article>
+</section><div class="sectionhead"><h2>推荐操作顺序</h2><span>每一步都保留可核验状态</span></div>
 <section class="guide">
- <article><div class="n">01 / ANALYZE</div><h3>分析与提案</h3><p>ChatGPT 读取雷达、已发文章和可核验原文，给出读者价值、角度、结构及风险；先由你批准，不在未批准前公开最终稿。</p></article>
- <article><div class="n">02 / PRODUCE</div><h3>制作与归档</h3><p>获批后生成原创文案、插画、配文与 QA 报告；校验通过并将完整文件同步到 GitHub，才会进入 WorkBuddy 就绪队列。</p></article>
- <article><div class="n">03 / DELIVER</div><h3>下载与发布</h3><p>WorkBuddy 读取 ready 包，校验后保存草稿并检查手机预览。只有当前包具备明确发布授权且检查全部通过才发布。</p></article>
+<article><div class="n">01 / PROPOSE</div><h3>分析并批准提案</h3><p>ChatGPT 核查原始来源、去重已发内容并提出一个首选方向；用户明确批准制作后才继续。</p></article>
+<article><div class="n">02 / PRODUCE</div><h3>生成并验收素材</h3><p>制作原创图文、图片、来源说明、SHA-256 清单和 QA 报告；未通过验收不交给 WorkBuddy。</p></article>
+<article><div class="n">03 / COMMAND A</div><h3>保存草稿并预览</h3><p>WorkBuddy 从私有仓库下载指定包，校验后录入 DAVYLAB 公众号，保存草稿、重新打开并检查手机预览。</p></article>
+<article><div class="n">04 / COMMAND B</div><h3>单次授权后发表</h3><p>草稿与手机预览确认后，用户对指定 package ID 明确下达发布命令。没有这条命令，流程必须停在草稿。</p></article>
 </section>
 <div class="foot"><span>DAVYLAB · 把想法，做成能用的工具。</span><span>如果队列状态、草稿或发布链接无法核验，请停止并回报，而不是推测。</span></div>
 </div>
-<script>
-const STATE_LABELS={proposed:"提案",awaiting_approval:"待你批准",approved:"已批准",generating:"素材制作中",qa_passed:"QA 已通过",ready_for_workbuddy:"待 WorkBuddy 处理",downloaded:"已下载",draft_saved:"草稿已保存",preview_passed:"手机预览通过",published:"已发布",needs_revision:"需要修改",blocked:"已阻塞",failed:"失败"};
-const READY=new Set(["ready_for_workbuddy"]);
-const DRAFT=new Set(["draft_saved","preview_passed"]);
-const PUBLISHED=new Set(["published"]);
-const $=(id)=>document.getElementById(id);
-function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n}
-function link(href,label){const a=el("a","btn small",label);a.href=href;a.target="_blank";a.rel="noopener";return a}
-function safePackagePath(p){return typeof p==="string"&&/^packages\/[A-Za-z0-9._-]+$/.test(p)}
-function createPackageCard(row,manifest){
- const article=el("article","package");
- const top=el("div","pkg-top"), left=el("div",""), title=el("div","pkg-title",manifest.title||"（未命名内容包）"), id=el("div","pkg-id",manifest.package_id||row.package_id);
- left.append(title,id);
- const state=manifest.state||"unknown", badge=el("span","badge "+state,STATE_LABELS[state]||state);
- top.append(left,badge);article.append(top);
- const meta=el("div","meta");
- meta.append(el("span","",manifest.content_type==="newspic"?"公众号贴图":manifest.content_type==="article"?"图文文章":"形式待确认"));
- if(manifest.source?.title)meta.append(el("span","", "来源："+manifest.source.title));
- if(manifest.source?.verification_status)meta.append(el("span","", "来源核验："+manifest.source.verification_status));
- if(manifest.approval?.scope)meta.append(el("span","", "审批范围："+manifest.approval.scope));
- if(manifest.delivery?.mobile_preview)meta.append(el("span","", "手机预览："+manifest.delivery.mobile_preview));
- article.append(meta);
- const decision=manifest.editorial_decision||{};
- if(decision.reader_promise)article.append(el("p","",decision.reader_promise));
- const actions=el("div","pkg-actions");
- actions.append(link("https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio/content-pipeline/"+encodeURIComponent(row.package_id),"查看 GitHub 文件"));
- if(manifest.delivery?.published_url)actions.append(link(manifest.delivery.published_url,"打开已发布文章 ↗"));
- if(manifest.delivery?.github_commit)actions.append(link(manifest.delivery.github_commit,"查看提交记录 ↗"));
- if(manifest.state==="ready_for_workbuddy")actions.append(el("span","badge ready","可供 WorkBuddy 下载（仍需校验）"));
- article.append(actions);
- return article;
-}
-async function load(){
- try{
-  const response=await fetch("./queue.json",{cache:"no-store"});
-  if(!response.ok)throw new Error("queue.json HTTP "+response.status);
-  const queue=await response.json();
-  if(queue.schema_version!==1||!Array.isArray(queue.packages))throw new Error("队列 schema 不正确");
-  const container=$("packages");container.replaceChildren();
-  const results=[];
-  for(const row of queue.packages){
-   if(!row||!row.package_id||!safePackagePath(row.path)||row.path!==("packages/"+row.package_id)){
-    $("error").hidden=false;$("error").textContent="发现路径不符合规范的队列记录，已跳过。";continue;
-   }
-   try{
-    const res=await fetch("./"+row.path+"/manifest.json",{cache:"no-store"});
-    if(!res.ok)throw new Error("manifest HTTP "+res.status);
-    const manifest=await res.json();
-    if(manifest.package_id!==row.package_id)throw new Error("package_id 不匹配");
-    results.push({row,manifest});
-    container.append(createPackageCard(row,manifest));
-   }catch(err){$("error").hidden=false;$("error").textContent="部分内容包读取失败："+String(err.message||err);}
-  }
-  $("statTotal").textContent=String(results.length);
-  $("statReady").textContent=String(results.filter(x=>READY.has(x.manifest.state)).length);
-  $("statDraft").textContent=String(results.filter(x=>DRAFT.has(x.manifest.state)).length);
-  $("statPublished").textContent=String(results.filter(x=>PUBLISHED.has(x.manifest.state)).length);
-  $("updatedAt").textContent="队列最近更新："+(queue.updated_at||"未记录")+" · 页面只读取 GitHub 状态";
-  if(!results.length){
-    const empty=el("div","empty");empty.append(el("div","symbol","✳"),el("h3","","目前没有已入队的内容包"),el("p","","先在 ChatGPT 中确认选题与提案；获批后生成完整素材、通过 QA 并同步到 GitHub，内容包才会出现在这里。当前为空是实际状态，不代表流程异常。"));container.append(empty);
-  }
- }catch(err){
-  $("statTotal").textContent=$("statReady").textContent=$("statDraft").textContent=$("statPublished").textContent="—";
-  $("updatedAt").textContent="无法读取队列";
-  $("error").hidden=false;$("error").textContent="读取 GitHub 内容队列失败："+String(err.message||err);
-  $("packages").replaceChildren();
- }
-}
-load();
-</script>
+
 </body>
 </html>
