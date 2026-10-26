@@ -367,7 +367,7 @@ def classify_china_topic(text: str) -> str:
         return "产品与产业应用"
     return "产业与生态"
 
-def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
+def rank_diverse_china_items(candidates: list[dict], *, include_buffer: bool = False) -> list[dict]:
     """Deduplicate source-backed stories and prefer source diversity before relaxing caps."""
     unique: list[dict] = []
     seen_urls: set[str] = set()
@@ -404,8 +404,10 @@ def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
 
     selected: list[dict] = []
     selected_urls: set[str] = set()
-    # Aim for eight stories, with at most two per publisher initially. Relax to three,
-    # then fill from all verified candidates only if the source mix is too small.
+    limit = CHINA_NEWS_MAX if include_buffer else CHINA_NEWS_TARGET
+    # Public selection caps each publisher at two whenever the source mix permits.
+    # CI may request a two-story buffer; only those extra candidates relax to three
+    # per publisher, so the published module still starts from a diverse set of eight.
     for cap in (2, 3, len(ranked)):
         counts: dict[str, int] = {}
         for item in selected:
@@ -421,14 +423,11 @@ def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
             selected.append(item)
             selected_urls.add(url)
             counts[publisher] = counts.get(publisher, 0) + 1
-            # Keep a small buffer beyond the public target. The AI-curated top five
-            # may overlap this section; run_horizon removes cross-section duplicates
-            # and trims the final module back to CHINA_NEWS_TARGET.
-            if len(selected) >= CHINA_NEWS_MAX:
+            if len(selected) >= limit:
                 break
-        if len(selected) >= CHINA_NEWS_MAX:
+        if len(selected) >= limit:
             break
-    return selected[:CHINA_NEWS_MAX]
+    return selected[:limit]
 
 def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
     """Collect recent, source-linked China AI developments; do not synthesize missing stories."""
@@ -463,7 +462,7 @@ def collect_china_ai_news(now: dt.datetime) -> tuple[list[dict], int]:
             candidates.append(item)
 
     candidates = filter_historical_duplicates(candidates, "china_ai_news", now.astimezone(TZ).date().isoformat())
-    ranked = rank_diverse_china_items(candidates)
+    ranked = rank_diverse_china_items(candidates, include_buffer=True)
     if len(ranked) < CHINA_NEWS_MIN:
         print(
             f"[china-warning] Only {len(ranked)} verified China AI stories found; "
