@@ -76,6 +76,45 @@ try {
   fs.writeFileSync(path.join(pkgDir,images[0]),pngHeader(1000,1000));
   writeJson(manifestPath,manifest);
   run("wrong image dimensions are rejected",false,"expected 1080x1440");
+
+  // Receipt-state checks: the state must never outrun a verifiable WeChat result.
+  fs.writeFileSync(path.join(pkgDir,images[0]),pngHeader(1080,1440));
+  manifest.state="draft_saved";
+  manifest.approval.scope="draft_only";
+  manifest.approval.evidence="批准保存草稿";
+  manifest.approval.approved_proposal_sha256="";
+  manifest.delivery={workbuddy_status:"saved",wechat_draft_id:"",draft_saved_at:"",mobile_preview:"not_checked"};
+  writeJson(manifestPath,manifest);
+  run("draft state without a real draft ID is rejected",false,"require delivery.wechat_draft_id");
+
+  manifest.delivery.wechat_draft_id="draft-123";
+  manifest.delivery.draft_saved_at="2026-10-26T22:00:00+08:00";
+  writeJson(manifestPath,manifest);
+  run("draft state with a draft receipt passes",true);
+
+  manifest.state="preview_passed";
+  manifest.delivery.mobile_preview="not_checked";
+  writeJson(manifestPath,manifest);
+  run("preview state without a passing mobile preview is rejected",false,"delivery.mobile_preview=passed");
+
+  manifest.delivery.mobile_preview="passed";
+  writeJson(manifestPath,manifest);
+  run("preview state with a passing mobile preview passes",true);
+
+  manifest.state="published";
+  manifest.approval.scope="publish_after_approval";
+  manifest.approval.evidence="批准生成并发布 package case-pass";
+  manifest.approval.approved_proposal_sha256="test-hash";
+  manifest.delivery.published_url="";
+  manifest.delivery.published_at="";
+  writeJson(manifestPath,manifest);
+  run("published state without a permanent URL is rejected",false,"published state requires delivery.published_url");
+
+  manifest.delivery.published_url="https://mp.weixin.qq.com/s/example";
+  manifest.delivery.published_at="2026-10-26T22:30:00+08:00";
+  writeJson(manifestPath,manifest);
+  run("published state with explicit authorization and receipt passes",true);
+
   console.log(process.exitCode ? "Content package contract tests failed." : "All content package contract tests passed.");
 } finally {
   fs.rmSync(temp,{recursive:true,force:true});
