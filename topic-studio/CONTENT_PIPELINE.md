@@ -11,7 +11,9 @@
   - [README 与存储规范](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/README.md)
   - [WorkBuddy 执行指令](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md)
   - [内容包模板](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/templates/manifest.template.json)
+  - [ChatGPT 复用执行指令](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/CHATGPT_WORKFLOW_PROMPT.md)
   - [内容包校验器](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/scripts/validate-package.mjs)
+  - [队列校验器](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/scripts/validate-queue.mjs)
 - 已发表内容共享列表：公开仓库的 topic-studio/data/published-articles.json。只有公众号后台真实发表状态与永久链接已核验后才更新。
 - 贴图标准通常为 8 页、每页 1080×1440 px、每页一个核心结论并带有主体插画；标题不超过 20 个 Unicode 字符，正文与标签须通过长度检查。贴图与普通图文文章不可混用。封面即使复用同一图像文件，也必须按微信要求单独上传。
 
