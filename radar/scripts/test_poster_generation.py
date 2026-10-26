@@ -5,6 +5,7 @@ from unittest.mock import patch
 
 import qrcode
 from PIL import Image, ImageDraw
+from radar.scripts import verify_poster
 
 from radar.scripts import generate_poster as poster
 
@@ -63,6 +64,26 @@ class PosterGenerationTests(unittest.TestCase):
         self.assertGreater(len(lines), 1)
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font), 110.5)
+
+    def test_final_composite_qr_decodes_at_mobile_friendly_size(self):
+        target = "https://chenzhe223-tech.github.io/radar/daily/"
+        qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+        qr.add_data(target)
+        qr.make(fit=True)
+        qr_image = qr.make_image(fill_color="black", back_color="white").convert("RGB")
+        qr_image = qr_image.resize((poster.QR_SIZE, poster.QR_SIZE), Image.Resampling.NEAREST)
+        final_image = Image.new("RGB", (poster.W, poster.H), (14, 34, 60))
+        final_image.paste(qr_image, (poster.QR_X, poster.QR_Y))
+        path = poster.POSTERS / "_test-final-qr.png"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            final_image.save(path, format="PNG", optimize=True)
+            result = verify_poster.decode_poster(path, target)
+            self.assertEqual(result["decoded_url"], target)
+            self.assertEqual(result["qr_tile_px"], [240, 240])
+            self.assertEqual(result["status"], "PASS")
+        finally:
+            path.unlink(missing_ok=True)
 
     def test_qr_encoder_produces_the_canonical_target_payload(self):
         target = "https://chenzhe223-tech.github.io/radar/daily/"

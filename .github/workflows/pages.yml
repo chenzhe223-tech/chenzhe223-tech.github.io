@@ -430,6 +430,24 @@ jobs:
     timeout-minutes: 6
     steps:
       - uses: actions/checkout@v4
+      - name: Sync verification checkout to the exact candidate bundle on main
+        run: |
+          git fetch origin main
+          git checkout --detach origin/main
+          python - <<'PY'
+          import datetime as dt, json
+          from pathlib import Path
+          from zoneinfo import ZoneInfo
+          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
+          report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
+          qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+          if report.get('report_date') != today:
+              raise SystemExit(f'Candidate main report is not today: {report.get("report_date")!r} != {today}')
+          if poster.get('report_date') != today or qr.get('report_date') != today or qr.get('status') != 'PASS':
+              raise SystemExit('Candidate main poster bundle is incomplete or QR verification did not PASS')
+          print(f'Candidate bundle selected from origin/main: {today}; report generated_at={report.get("generated_at")}')
+          PY
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -439,7 +457,8 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
-          import datetime as dt, json, time, urllib.request, cv2, numpy as np
+          import datetime as dt, hashlib, json, time, urllib.request, cv2, numpy as np
+          from pathlib import Path
           from zoneinfo import ZoneInfo
           from radar.scripts.poster_style import poster_style_metadata
 
@@ -451,7 +470,14 @@ jobs:
           style_cycle_index = expected_style['style_cycle_index']
           iso_year, iso_week, _ = today_date.isocalendar()
           last_error = 'not checked'
-          headers = {'Cache-Control':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
+          headers = {'Cache-Control':'no-cache, no-store, max-age=0','Pragma':'no-cache','User-Agent':'DavyRadar-Publish-Check/1.0'}
+          def assert_matches_repo(relative_path, live_bytes):
+              local_path = Path(relative_path)
+              if not local_path.is_file():
+                  raise AssertionError(f'Candidate bundle file missing from verification checkout: {relative_path}')
+              local_hash = hashlib.sha256(local_path.read_bytes()).hexdigest()
+              live_hash = hashlib.sha256(live_bytes).hexdigest()
+              assert live_hash == local_hash, f'Live asset is stale or differs from origin/main: {relative_path}; live_sha256={live_hash}; expected_sha256={local_hash}'
           for attempt in range(30):
               try:
                   stamp = str(time.time())
@@ -461,7 +487,9 @@ jobs:
                   assert 'id="chinaAI"' in page, 'China AI developments section missing from live page'
                   assert 'china-news-grid' in page, 'China AI card grid styling missing from live page'
                   with urllib.request.urlopen(urllib.request.Request(base + 'data/latest.json?verify=' + stamp, headers=headers), timeout=15) as response:
-                      data = json.loads(response.read().decode('utf-8'))
+                      report_bytes = response.read()
+                  assert_matches_repo('radar/data/latest.json', report_bytes)
+                  data = json.loads(report_bytes.decode('utf-8'))
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
                   assert len(data.get('news', [])) >= 5, 'fewer than five general news items'
@@ -475,7 +503,9 @@ jobs:
                       assert story.get('published'), 'China AI story publication date missing'
                   qr_target = 'https://chenzhe223-tech.github.io/radar/daily/'
                   with urllib.request.urlopen(urllib.request.Request(base + 'posters/' + today + '.json?verify=' + stamp, headers=headers), timeout=15) as poster_meta_response:
-                      poster_meta = json.loads(poster_meta_response.read().decode('utf-8'))
+                      poster_meta_bytes = poster_meta_response.read()
+                  assert_matches_repo('radar/posters/' + today + '.json', poster_meta_bytes)
+                  poster_meta = json.loads(poster_meta_bytes.decode('utf-8'))
                   assert poster_meta.get('report_date') == today, 'poster manifest date mismatch'
                   assert poster_meta.get('qr_url') == qr_target, 'poster manifest QR URL mismatch'
                   assert poster_meta.get('design_variant') == expected_variant, f"weekly style mismatch: {poster_meta.get('design_variant')!r}, expected {expected_variant!r}"
@@ -486,6 +516,7 @@ jobs:
                       with urllib.request.urlopen(poster_req, timeout=15) as poster_response:
                           assert poster_response.status == 200 and poster_response.headers.get('Content-Type','').startswith('image/png'), f'{poster_name} missing'
                           poster_bytes = poster_response.read()
+                      assert_matches_repo('radar/posters/' + poster_name, poster_bytes)
                       poster_image = cv2.imdecode(np.frombuffer(poster_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
                       assert poster_image is not None, f'{poster_name} is not a valid PNG'
                       decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image)
@@ -495,7 +526,9 @@ jobs:
                       assert points is not None and len(points), f'{poster_name} QR geometry not detected'
                   verification_req = urllib.request.Request(base + 'posters/' + today + '.qr-verification.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(verification_req, timeout=15) as verification_response:
-                      verification = json.loads(verification_response.read().decode('utf-8'))
+                      verification_bytes = verification_response.read()
+                  assert_matches_repo('radar/posters/' + today + '.qr-verification.json', verification_bytes)
+                  verification = json.loads(verification_bytes.decode('utf-8'))
                   assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
                   assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
                   assert verification.get('report_date') == today, 'QR verification date mismatch'
@@ -503,7 +536,9 @@ jobs:
                       assert verification.get(key) == expected, f'QR verification metadata mismatch for {key}'
                   poster_manifest_req = urllib.request.Request(base + 'posters/latest.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(poster_manifest_req, timeout=15) as poster_manifest_response:
-                      poster_manifest = json.loads(poster_manifest_response.read().decode('utf-8'))
+                      poster_manifest_bytes = poster_manifest_response.read()
+                  assert_matches_repo('radar/posters/latest.json', poster_manifest_bytes)
+                  poster_manifest = json.loads(poster_manifest_bytes.decode('utf-8'))
                   assert poster_manifest.get('report_date') == today, 'Latest poster manifest date mismatch'
                   assert poster_manifest.get('qr_url') == qr_target, 'Latest poster manifest destination mismatch'
                   assert poster_manifest.get('design_variant') == expected_variant, 'Latest poster manifest weekly style mismatch'
@@ -511,8 +546,15 @@ jobs:
                       assert poster_manifest.get(key) == expected, f'Latest poster manifest metadata mismatch for {key}'
                   history_req = urllib.request.Request(base + 'data/history.json?verify=' + stamp, headers=headers)
                   with urllib.request.urlopen(history_req, timeout=15) as history_response:
-                      history = json.loads(history_response.read().decode('utf-8'))
+                      history_bytes = history_response.read()
+                  assert_matches_repo('radar/data/history.json', history_bytes)
+                  history = json.loads(history_bytes.decode('utf-8'))
                   assert today + '.json' in history.get('days', []), 'today is missing from history index'
+                  with urllib.request.urlopen(urllib.request.Request(base + 'posters/latest.qr-verification.json?verify=' + stamp, headers=headers), timeout=15) as latest_qr_response:
+                      latest_qr_bytes = latest_qr_response.read()
+                  assert_matches_repo('radar/posters/latest.qr-verification.json', latest_qr_bytes)
+                  latest_qr = json.loads(latest_qr_bytes.decode('utf-8'))
+                  assert latest_qr.get('status') == 'PASS' and latest_qr.get('expected_url') == qr_target, 'latest QR manifest is not a matching PASS'
                   skills = data.get('skills') or []
                   assert len(skills) >= 5, f'expected at least five verified Skill recommendations, got {len(skills)}'
                   for skill in skills:
@@ -522,7 +564,9 @@ jobs:
                   if old_days:
                       old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
                       with urllib.request.urlopen(urllib.request.Request(old_url,headers=headers),timeout=15) as old_response:
-                          old_data = json.loads(old_response.read().decode('utf-8'))
+                          old_bytes = old_response.read()
+                      assert_matches_repo('radar/data/archive/' + old_days[0], old_bytes)
+                      old_data = json.loads(old_bytes.decode('utf-8'))
                       assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
                   print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
                   break

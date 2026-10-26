@@ -22,6 +22,8 @@ from PIL import Image
 ROOT = Path.cwd().resolve() if (Path.cwd() / "radar" / "data" / "latest.json").exists() else Path(__file__).resolve().parents[2]
 POSTERS = ROOT / "radar" / "posters"
 PUBLIC_URL = "https://chenzhe223-tech.github.io/radar/daily/"
+QR_SIZE = 240
+QR_X, QR_Y = 48, 1540
 TZ = ZoneInfo("Asia/Shanghai")
 
 
@@ -43,7 +45,7 @@ def decode_poster(path: Path, expected_url: str) -> dict:
     if not decoded:
         # Secondary scan of the reserved lower-left QR zone; it is still cropped
         # from the final composed image, not from a standalone QR source file.
-        roi = image[max(0, height - 200):height - 10, 20:min(width, 230)]
+        roi = image[QR_Y:QR_Y + QR_SIZE, QR_X:QR_X + QR_SIZE]
         decoded_roi, points_roi, _ = cv2.QRCodeDetector().detectAndDecode(roi)
         if decoded_roi:
             decoded, points = decoded_roi, points_roi
@@ -54,9 +56,9 @@ def decode_poster(path: Path, expected_url: str) -> dict:
     if points is None or len(points) == 0:
         fail(f"QR decoded but no QR geometry was detected in {path}")
 
-    # The generator reserves a 150 x 150 px, lower-left QR tile in a 1200 x 1800
+    # The generator reserves a 240 x 240 px, lower-left QR tile in a 1200 x 1800
     # poster. Check the actual final image region for contrast and quiet zone.
-    qr_x, qr_y, qr_size = 48, height - 190, 180
+    qr_x, qr_y, qr_size = QR_X, QR_Y, QR_SIZE
     if qr_y < 0 or qr_x + qr_size > width or qr_y + qr_size > height:
         fail(f"Expected QR tile lies outside the final poster: {path}")
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
