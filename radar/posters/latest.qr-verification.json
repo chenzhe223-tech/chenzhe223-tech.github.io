@@ -1,14 +1,14 @@
 {
   "report_date": "2026-10-26",
   "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
-  "checked_at": "2026-10-26T08:54:51.654702+08:00",
+  "checked_at": "2026-10-26T12:36:21.375337+08:00",
   "design_variant": "mountain-editorial",
   "iso_year": 2026,
   "iso_week": 44,
   "iso_weekday": 1,
   "style_cycle_index": 43,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
-  "template_version": "2.1.0",
+  "template_version": "2.2.0",
   "checks": [
     {
       "name": "destination_reachable",
@@ -50,19 +50,19 @@
       "width": 1200,
       "height": 1800,
       "qr_tile_px": [
-        180,
-        180
+        240,
+        240
       ],
       "detected_qr_px": [
-        143.0,
-        143.0
+        193.0,
+        193.0
       ],
       "contrast_percentile_range": 255,
       "quiet_zone_px": {
-        "top_px": 18,
-        "bottom_px": 18,
-        "left_px": 18,
-        "right_px": 18
+        "top_px": 23,
+        "bottom_px": 23,
+        "left_px": 23,
+        "right_px": 23
       },
       "status": "PASS"
     },
@@ -73,19 +73,19 @@
       "width": 1200,
       "height": 1800,
       "qr_tile_px": [
-        180,
-        180
+        240,
+        240
       ],
       "detected_qr_px": [
-        143.0,
-        143.0
+        193.0,
+        193.0
       ],
       "contrast_percentile_range": 255,
       "quiet_zone_px": {
-        "top_px": 18,
-        "bottom_px": 18,
-        "left_px": 18,
-        "right_px": 18
+        "top_px": 23,
+        "bottom_px": 23,
+        "left_px": 23,
+        "right_px": 23
       },
       "status": "PASS"
     }
