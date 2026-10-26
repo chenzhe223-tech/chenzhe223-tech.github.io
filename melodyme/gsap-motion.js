@@ -68,6 +68,9 @@
 
   function routeProgress() {
     if (!routePath || !audio) return;
+    // Keep the initial route reveal visible until playback starts; metadata events
+    // can fire while paused at time zero and must not hide the route again.
+    if (audio.paused && !(audio.currentTime > 0)) return;
     var duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
     var progress = duration ? Math.max(0, Math.min(1, (audio.currentTime || 0) / duration)) : 0;
     // The SVG uses pathLength="1", making audio progress independent of map dimensions.
