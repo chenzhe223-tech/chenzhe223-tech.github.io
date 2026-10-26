@@ -182,7 +182,7 @@ class DailyBriefContractTests(unittest.TestCase):
             for _ in range(count):
                 stamp = (base - dt.timedelta(minutes=index)).isoformat()
                 candidates.append({
-                    "title": f"{source}报道：AI 新闻主题 {index}",
+                    "title": f"UniqueProject{index} {source} launches specialized system{index} for market{index}",
                     "url": f"https://{domain}/news/buffer-{index}",
                     "source": source,
                     "published": stamp,
