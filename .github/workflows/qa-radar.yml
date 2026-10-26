@@ -28,7 +28,11 @@ jobs:
         with:
           python-version: "3.12"
       - name: Refresh source-backed report for contract tests
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python radar/scripts/build_daily.py
+      - name: Match current news images before contract and browser tests
+        run: python radar/scripts/news_image_match.py
       - name: Validate daily brief data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py
