@@ -32,7 +32,7 @@ const path = require('node:path');
         return heading && getComputedStyle(heading).visibility !== 'hidden' && Number(getComputedStyle(heading).opacity) >= 0.99;
       }, null, { timeout: 10000 });
     }
-    results.push({ test: 'desktop initial render and GSAP progressive enhancement', status: 'PASS', detail: { title: title.replace(/\\s+/g, ' ').trim(), ...motion } });
+    results.push({ test: 'desktop initial render and GSAP progressive enhancement', status: 'PASS', detail: { title: title.replace(/\s+/g, ' ').trim(), ...motion } });
 
     const colors = await page.evaluate(() => ({
       background: getComputedStyle(document.body).backgroundColor,
