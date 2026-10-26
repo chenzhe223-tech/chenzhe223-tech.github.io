@@ -274,11 +274,19 @@ jobs:
       - name: Mandatory final-image QR and destination gate
         run: python radar/scripts/verify_poster.py
         if: steps.preflight.outputs.skip != 'true'
+      - name: Cache Playwright browser and npm downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-radar-playwright-v1
       - name: Install Playwright
         run: |
           npm init -y
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
+          node -e "require('playwright').chromium.launch({headless:true}).then(async b=>{await b.close();console.log('PASS: Chromium launch smoke test')}).catch(e=>{console.error(e);process.exit(1)})"
         if: steps.preflight.outputs.skip != 'true'
       - name: Start local static server
         run: |

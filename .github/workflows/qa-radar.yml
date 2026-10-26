@@ -47,11 +47,19 @@ jobs:
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_news_image_match -v
+      - name: Cache Playwright browser and npm downloads
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/ms-playwright
+          key: ${{ runner.os }}-radar-playwright-v1
       - name: Install Playwright
         run: |
           npm init -y
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
+          node -e "require('playwright').chromium.launch({headless:true}).then(async b=>{await b.close();console.log('PASS: Chromium launch smoke test')}).catch(e=>{console.error(e);process.exit(1)})"
       - name: Start local static server
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/radar-http.log 2>&1 &
