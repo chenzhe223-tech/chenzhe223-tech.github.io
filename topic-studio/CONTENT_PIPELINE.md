@@ -17,6 +17,8 @@
 
 `proposed → awaiting_approval → approved → generating → qa_passed → ready_for_workbuddy → downloaded → draft_saved → preview_passed → published`
 
+其中 `proposed/awaiting_approval` 默认发生在 ChatGPT 对话中，不写入公开仓库；获批后才创建内容包。若授权范围为 `generate_only`，素材验收通过后停留在 `qa_passed`，不进入 WorkBuddy 队列。只有 `draft_only` 或 `publish_after_approval` 才能进入 `ready_for_workbuddy`。
+
 异常状态为 `needs_revision`、`blocked`、`failed`。每次转态都要更新 `manifest.json`、`updated_at`，并记录可核验原因。不得跳过审批、素材 QA 或后台回执。
 
 ### 审批范围
