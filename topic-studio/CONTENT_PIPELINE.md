@@ -1,133 +1,55 @@
-# DAVYLAB 公众号内容生产自动化流程
+# DAVYLAB 公众号内容生产流水线（主运行规范）
 
-> 目标：以现有选题工作台和 GitHub 仓库作为内容源与交付中枢，由 ChatGPT 研究、判断和制作；用户批准后生成素材并归档；WorkBuddy 下载、验收并操作已登录的 DAVYLAB 公众号后台。
+目标：ChatGPT 负责选题分析、来源核验、原创内容及素材 QA；用户批准后产出内容包并同步 GitHub；WorkBuddy 下载、校验，保存微信公众号草稿；只有针对具体内容包的单次明确发布命令，才允许正式发表。
 
-## 现状和边界
+## 系统边界
 
 - 选题工作台：https://chenzhe223-tech.github.io/topic-studio/
-- 仓库：`chenzhe223-tech/chenzhe223-tech.github.io`，分支 `main`，项目目录 `topic-studio/`
-- Davy Radar 原始素材：https://chenzhe223-tech.github.io/radar/daily/
-- 已发内容共享档案：`topic-studio/data/published-articles.json`
-- 贴图格式参考：`wechat-newspic` Skill，默认 8 页、1080×1440、每页有叙事性插画；标题不超过 20 个 Unicode 字符，正文与标签按平台规范验收。
-- 当前 Topic Studio 是 GitHub Pages 静态站点。部分选题池数据保存在浏览器 `localStorage`，不会自动跨设备同步。因此 ChatGPT 可直接读取 GitHub 中的公开素材和已发档案，但不能凭空读取另一个浏览器里的私有本地记录；如需用某条本地选题，应从平台导出后上传，或把内容链接/选题文字发送给 ChatGPT。
-- 当前并未证明已接入微信公众号官方 API。WorkBuddy 应使用用户授权的登录浏览器/后台；遇到扫码、验证码或登录过期，由用户本人完成验证。不得绕过安全验证。
-- GitHub Pages 仓库为公开仓库，内容包只能保存计划公开的文章、公开来源、图片、文案和非敏感 QA 信息。严禁保存 AppSecret、access_token、Cookie、密码、用户隐私或未脱敏商业资料。
+- 公开代码仓库：chenzhe223-tech/chenzhe223-tech.github.io（main）。此仓库公开可见，只存平台代码、公开来源及已核验的已发表档案，不存未发表全文、内部审稿意见、图片包或凭证。
+- 实际内容包存储：私有仓库 chenzhe223-tech/workbuddy-workspace（private），目录 davylab-content-pipeline/。
+- 私有仓库文件：
+  - [README 与存储规范](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/README.md)
+  - [WorkBuddy 执行指令](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md)
+  - [内容包模板](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/templates/manifest.template.json)
+  - [内容包校验器](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/scripts/validate-package.mjs)
+- 已发表内容共享列表：公开仓库的 topic-studio/data/published-articles.json。只有公众号后台真实发表状态与永久链接已核验后才更新。
+- 贴图标准通常为 8 页、每页 1080×1440 px、每页一个核心结论并带有主体插画；标题不超过 20 个 Unicode 字符，正文与标签须通过长度检查。贴图与普通图文文章不可混用。封面即使复用同一图像文件，也必须按微信要求单独上传。
 
-## 状态机
+## Topic Studio 的已知局限
 
-`proposed → awaiting_approval → approved → generating → qa_passed → ready_for_workbuddy → downloaded → draft_saved → preview_passed → published`
+Topic Studio 是静态 GitHub Pages 应用。部分选题池记录保存在浏览器 localStorage，不会自动跨设备同步；ChatGPT 无法仅凭打开公开网址读取另一台设备的本地记录。若要分析这些选题，请从平台导出 JSON 并上传，或直接提供标题与原始链接。Davy Radar 的公开 JSON 和已发表档案可以作为公开研究来源。
 
-其中 `proposed/awaiting_approval` 默认发生在 ChatGPT 对话中，不写入公开仓库；获批后才创建内容包。若授权范围为 `generate_only`，素材验收通过后停留在 `qa_passed`，不进入 WorkBuddy 队列。只有 `draft_only` 或 `publish_after_approval` 才能进入 `ready_for_workbuddy`。
+尚未核实微信公众号官方 API 权限。WorkBuddy 使用用户授权的登录浏览器；登录过期、扫码/验证码、账号不匹配或权限异常时，必须停下并交由账号所有者处理，不得绕过安全验证。
 
-异常状态为 `needs_revision`、`blocked`、`failed`。每次转态都要更新 `manifest.json`、`updated_at`，并记录可核验原因。不得跳过审批、素材 QA 或后台回执。
+## 标准流程
 
-### 审批范围
+1. **研究与去重：** 查看 Topic Studio、Davy Radar、已发内容档案和原始来源。优先阅读原文，不以搜索摘要代替；打不开原文时请用户粘贴正文或上传截图。
+2. **提案：** 输出一个首选方向和最多两个备选，说明目标读者、读者收获、原创角度、标题候选、结构、建议形式、来源依据和事实风险。此时只提案，不生成最终素材、不进入公众号后台。
+3. **用户批准制作：** 用户针对明确 package ID 回复“批准方案 <package_id>，开始制作”。这只授权制作，不授权正式发表。
+4. **制作与 QA：** 生成原创正文/配文、分页文案、真实图片文件、来源说明、审稿记录、素材清单和 QA 报告。逐张检查尺寸、文字、错字、裁切、手机可读性、来源/授权。存在阻断项时不得交给 WorkBuddy。
+5. **私有 GitHub 归档：** 内容放在私有仓库 davylab-content-pipeline/packages/<package_id>/，至少包含 manifest.json、proposal.md、正文/配文、source-notes.md、qa-report.json、ASSET_MANIFEST.md 和实际素材。每次修订采用新版本/commit；已批准版本不原地覆盖。
+6. **WorkBuddy 保存草稿：** 拉取私有仓库最新版本，验证 package ID、版本、审批、文件与 SHA-256、素材数量/尺寸及来源；确认公众号账号为 DAVYLAB，选择正确内容类型并实际上传媒体。保存草稿后重新打开检查，再完成手机预览。
+7. **单次正式发表授权：** 手机预览通过后，用户在 WorkBuddy 当前会话中对具体 package ID 发出单独的明确发布命令。命令必须绑定当前内容包与版本；任何实质改动都需重新审核。不得无人值守、定时或批量发布。
+8. **回流已发档案：** 只有正式发表状态和永久 URL 经核验后，才把最少必要的标题、链接、日期与形式写入公开的 topic-studio/data/published-articles.json，并按 URL 去重。
 
-审批需要针对一个明确的 package ID、标题、核心观点与内容形式。默认仅在聊天中收到明确“批准”后才开始生产，不把沉默或模糊的赞同当授权。
+## WorkBuddy 操作方式
 
-- `generate_only`：允许生成并同步素材到 GitHub；WorkBuddy 不操作公众号。
-- `draft_only`：允许生成、同步并由 WorkBuddy 保存为公众号草稿；不正式发布。
-- `publish_after_approval`：用户明确回复“批准生成并发布”，且审批绑定当前 package ID、提案摘要和哈希时，WorkBuddy 可在完成素材 QA、草稿回查与手机预览后发布该包；任何改题、改标题、改核心结论、改素材都必须重新审批。遇到平台安全验证、内容与审批不一致或 QA 失败，立即停止并回报。
-- 单独的“批准”默认解释为 `draft_only`，不能解释为允许群发。
+- **默认只保存草稿：** 打开私有仓库 davylab-content-pipeline/WORKBUDDY_COMMAND.md，复制“命令 A”，替换成目标 package ID。命令明确要求只保存草稿，不发表。
+- **正式发表：** 草稿已重新打开核对、手机预览通过且全部 QA 通过后，再从同一文件复制“命令 B”，针对该 package ID 进行单次授权。发布校验未通过或状态无法确认时，必须停下。
 
-发布授权应记录在内容包的 `approval` 对象里，并注明用户原话/确认时间；不要让一个旧的批准自动授权未来内容。正式发布后必须记录公众号真实永久链接和发布时间。
+## 状态分别汇报
 
-## 每次运行流程
+- awaiting_approval：提案待批准。
+- ready_for_workbuddy：内容与素材 QA 通过，可以交给执行端。
+- draft_saved：微信公众号草稿已保存并回查。
+- preview_passed：实际手机预览通过。
+- published：正式发表状态与永久链接已核验。
+- blocked / failed / needs_revision：明确原因并停止继续操作。
 
-### A. 分析与提案（ChatGPT）
+## 真实性和安全
 
-1. 读取本文件、`docs/PRODUCT_RULES.md`、`OPERATIONS_CONTEXT.md`、`WECHAT_CONTENT_SYNC.md`、最新对话日志、`data/published-articles.json` 和相关雷达原始 JSON。
-2. 核对原文链接和文章实际内容；把来源支持的事实、作者观点、模型推论分开记录。链接不可读取时应请求用户提供正文，不得以标题/搜索摘要代替原文。
-3. 对候选选题按读者价值、时效性、实操性、差异化、品牌契合度分析。评分只辅助决策，不预测阅读量。检查近期开过的主题，避免重复。
-4. 产出一份短提案：为什么值得写、目标读者、读者收获、一句话观点、内容结构、事实风险、建议形式（贴图/文章），并附提案摘要 hash 或稳定版本号。
-5. 在当前对话中展示提案，明确 package ID、提案版本/hash、建议形式和默认审批范围；此阶段不把未批准提案或草稿放入公开 GitHub。用户批准后才创建正式内容包并提交。若用户明确要求把提案归档，才将其作为非发布状态单独提交。
-
-### B. 获批后生产（ChatGPT）
-
-1. 用户针对确切 package ID 明确批准，并选择审批范围。若用户没明确选择，按 `draft_only` 处理。
-2. 生成原创稿件、贴图页文案、配图、配文、来源核验说明、素材清单和 QA 报告。允许创造性重构，不照抄来源；引用需有出处。
-3. 用稳定的 package ID 版本化保存至 `topic-studio/content-pipeline/packages/<package-id>/`。
-4. 每页独立插画；文字由排版层渲染，不让生图模型直接绘制中文正文。不得伪造二维码、数据、截图、用户评价或引用。
-5. 运行包校验脚本并逐张肉眼查看渲染图片。若失败，先修复；QA 不通过不得将状态写为 `ready_for_workbuddy`。
-6. 通过授权的 Git 写入通道提交 manifest、正文、图片和 QA 文件，并保存 commit 链接。二进制图片必须在仓库里真实存在且能通过尺寸/文件校验；仅有本地 ZIP 下载链接不算 GitHub 同步成功。若当前执行环境不能把 PNG 二进制写入 GitHub，状态必须保持 `qa_passed`/ `blocked`，清楚报告图片同步阻塞，不可伪报 `ready_for_workbuddy`。
-
-### C. 下载与公众号后台处理（WorkBuddy）
-
-1. 执行下方标准指令；从 GitHub 拉取最新 `main`，只选择状态为 `ready_for_workbuddy` 且审批有效的内容包。
-2. 下载后校验包 ID、文件 hash、图片数量/尺寸、标题、正文、来源及 `qa-report.json`；不通过即停止。
-3. 进入已授权的 DAVYLAB 微信公众平台后台。确认账号名称；不接受其他公众号混淆。不得复用旧文章正文，不得把预览链接当永久链接。
-4. 根据 `content_type` 选择正确发布类型：`newspic` 贴图与普通图文文章不可互换。标题、封面、正文分别填入对应位置。正文图片实际上传到微信编辑器，不能使用本地文件 URL。
-5. 按审批范围执行：
-   - `generate_only`：不进入后台。
-   - `draft_only`：保存草稿，回查标题/类型/图片数量/草稿 ID；重新生成手机预览并检查。
-   - `publish_after_approval`：只有审批绑定的包与当前包完全一致，且素材/草稿回查及手机预览都通过时，才发布。发布后回查真实永久链接。
-6. 用新 commit 回写 manifest 状态、草稿 ID、手机预览结果、真实永久链接、时间和 QA 回执。不可写入 Cookie/token/密码。
-
-## 在 ChatGPT 里启动一轮内容决策
-
-每次准备做新内容时，可以直接向 ChatGPT 发送：
-
-```text
-启动 DAVYLAB 公众号内容流水线。请先读取我当前公开的公众号选题工作台、
-GitHub 仓库里的 CONTENT_PIPELINE.md、PRODUCT_RULES.md、已发表文章档案
-和 Davy Radar 最新素材。
-
-先做选题分析，不要立即生成最终素材：去重最近已发表内容，核查原始链接，
-从读者价值、时效性、实操性、差异化、DAVYLAB 品牌契合度进行判断；
-给出你推荐的最佳选题、为什么值得写、目标读者、读者能获得什么、
-原创角度、内容结构、建议形式，以及尚待核实的事实风险。
-然后等待我批准。不要把本地浏览器 localStorage 里的选题假装成已读取。
-```
-
-审批时必须明确范围：
-- “批准，生成并同步素材，先保存草稿”——对应 `draft_only`。
-- “批准生成并发布”——只对当前展示的选题提案和版本授权，适用于 `publish_after_approval`；制作内容若偏离提案核心结论，必须重新征得批准。
-- “只生成并同步到 GitHub，不操作公众号”——对应 `generate_only`。
-
-## WorkBuddy 标准指令
-
-复制以下指令发送给 WorkBuddy（项目仓库路径可按其本地环境配置）：
-
-```text
-执行 DAVYLAB 公众号内容流水线。先读取
-topic-studio/CONTENT_PIPELINE.md、
-topic-studio/OPERATIONS_CONTEXT.md、
-topic-studio/docs/PRODUCT_RULES.md 和
-topic-studio/content-pipeline/README.md。
-
-目标仓库必须是 chenzhe223-tech/chenzhe223-tech.github.io，分支 main。
-拉取最新提交，只处理 topic-studio/content-pipeline/queue.json 中指向、
-且 manifest.state=ready_for_workbuddy 的包。严格按 manifest.approval.scope 执行；
-缺少对本包的明确审批、提案 hash 不匹配、内容包校验失败、账号不匹配、
-二维码/图片/来源验证失败、需要重新登录/扫码/验证码时，立即停止并报告，
-不要猜测、不要绕过安全机制、不要发布别的包。
-
-运行 node topic-studio/scripts/validate-content-package.mjs。
-下载并校验所有素材，依照内容类型将内容录入 DAVYLAB 公众号后台；
-保存草稿并检查手机预览。仅当 approval.scope=publish_after_approval、
-审批记录绑定此包且全部 QA 通过时才正式发布；否则停在草稿。
-完成后回写 manifest 与队列相关记录、提交 GitHub，报告 package_id、
-commit、素材数、草稿 ID、手机预览状态、发布链接（如有）和所有阻塞项。
-绝不把凭证、Cookie、access_token 或 AppSecret 写进仓库和日志。
-```
-
-## 运行命令
-
-在仓库根目录执行：
-
-```bash
-node topic-studio/scripts/validate-content-package.mjs
-```
-
-或传入内容流水线目录：
-
-```bash
-node topic-studio/scripts/validate-content-package.mjs topic-studio/content-pipeline
-```
-
-## 已知未自动化项
-
-- ChatGPT 在当前会话中执行分析和内容制作，不代表一个持续运行的后台 Agent；用户提出任务或批准后，才继续相应阶段。
-- Topic Studio 的 localStorage 选题不会自动进入 GitHub。本地选题必须导出/分享，后续可以升级为有身份验证的服务端同步。
-- GitHub 存储与包验证协议已定义，空队列的校验 Action 已跑通；尚未用一套带真实 PNG 的内容包验证二进制图片提交及 WorkBuddy 端到端流程。公众号后台能否完全无人值守，取决于 WorkBuddy 本地浏览器权限、当前登录状态和微信后台实际支持的操作。不能在未运行的环境里宣称已完成端到端实测。
-- 如果后续确认公众号官方接口权限，可另行设计服务端集成；凭证只能放在 Cloudflare Worker Secret 或其他服务端密钥存储，不能放在静态站点或公开 GitHub 文件中。
+- 不伪造数据、引语、作者经历、截图、产品效果、二维码或媒体授权。
+- 公开仓库存储均视为公众可见；未发表稿件、图片包与审稿信息必须在私有仓库。
+- AppSecret、access_token、Cookie、密码、验证码和临时认证链接不得存入 GitHub、前端、manifest 或日志。
+- 公开仓库内现有 topic-studio/content-pipeline/ 队列/模板/校验脚本仅作为公开工程脚手架；不得将它当作未发表内容的私有存储区。
+- 文档、模板和校验器已建立，但 WorkBuddy 的真实登录浏览器、微信公众号草稿、手机预览与发表尚未在本次修改中完成端到端实测。只有获取真实运行回执后才能报告成功。
