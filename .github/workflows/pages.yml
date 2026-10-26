@@ -12,13 +12,13 @@ on:
       - "!radar/data/**"
       - "!radar/posters/**"
   schedule:
-    # Beijing time: start at 05:30. Recovery runs at 06:15, 07:00 and 07:45
+    # Beijing time: start at 07:30. Recovery runs at 08:15, 09:00 and 09:45
     # if a complete AI-curated report is still missing. GitHub Actions cron uses UTC.
     # Scheduled starts may be delayed during periods of high load.
-    - cron: "30 21 * * *"
-    - cron: "15 22 * * *"
-    - cron: "0 23 * * *"
-    - cron: "45 23 * * *"
+    - cron: "30 23 * * *"
+    - cron: "15 0 * * *"
+    - cron: "0 1 * * *"
+    - cron: "45 1 * * *"
   workflow_dispatch:
 
 permissions:
