@@ -19,7 +19,20 @@ const path = require('node:path');
     await page.locator('h1').waitFor({ state: 'visible', timeout: 10000 });
     const title = await page.locator('h1').innerText();
     if (!title.trim()) throw new Error('Hero heading is empty');
-    results.push({ test: 'desktop initial render', status: 'PASS', detail: title.replace(/\s+/g, ' ').trim() });
+    const motion = await page.evaluate(() => ({
+      gsapLoaded: !!window.gsap,
+      reducedMotion: window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+      heroVisibility: getComputedStyle(document.querySelector('h1')).visibility,
+      heroOpacity: Number(getComputedStyle(document.querySelector('h1')).opacity)
+    }));
+    if (motion.heroVisibility === 'hidden') throw new Error('Hero heading remained hidden after initial render');
+    if (motion.gsapLoaded && !motion.reducedMotion) {
+      await page.waitForFunction(() => {
+        const heading = document.querySelector('h1');
+        return heading && getComputedStyle(heading).visibility !== 'hidden' && Number(getComputedStyle(heading).opacity) >= 0.99;
+      }, null, { timeout: 10000 });
+    }
+    results.push({ test: 'desktop initial render and GSAP progressive enhancement', status: 'PASS', detail: { title: title.replace(/\\s+/g, ' ').trim(), ...motion } });
 
     const colors = await page.evaluate(() => ({
       background: getComputedStyle(document.body).backgroundColor,
