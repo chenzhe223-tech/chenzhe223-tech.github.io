@@ -1,91 +1,166 @@
 /* MelodyMe GSAP motion layer.
  * Progressive enhancement only: the app remains usable if GSAP/CDN is unavailable.
- * Keep animations short, transform/opacity-first, and respectful of reduced motion.
+ * Motion is transform/opacity-first, short, touch-safe, and respects reduced motion.
  */
 (function () {
   "use strict";
   if (typeof window === "undefined" || typeof document === "undefined") return;
 
-  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var motionPreference = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
   var gsap = window.gsap;
-  if (reduced || !gsap) return;
+  if ((motionPreference && motionPreference.matches) || !gsap) return;
 
   if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
 
-  function init() {
+  var routePath = null;
+  var routePulse = null;
+  var mapCard = null;
+  var audio = null;
+  var observedMap = null;
+
+  function animateHero() {
     var hero = document.querySelector(".hero");
-    if (hero) {
-      var intro = hero.querySelectorAll(".eyebrow, h1, p, .heroactions, .hint");
-      if (intro.length) {
-        gsap.from(intro, {
-          y: 14,
-          autoAlpha: 0,
-          duration: 0.65,
-          stagger: 0.075,
-          ease: "power2.out",
-          clearProps: "transform"
-        });
-      }
-      var map = hero.querySelector(".map");
-      if (map) gsap.from(map, {
-        y: 12,
+    if (!hero || hero.dataset.gsapIntro === "done") return;
+    hero.dataset.gsapIntro = "done";
+    var intro = hero.querySelectorAll(".eyebrow, h1, p, .heroactions, .hint");
+    if (intro.length) {
+      gsap.from(intro, {
+        y: 14,
         autoAlpha: 0,
-        scale: 0.985,
-        duration: 0.8,
-        delay: 0.12,
+        duration: 0.65,
+        stagger: 0.075,
         ease: "power2.out",
         clearProps: "transform"
       });
     }
+    var map = hero.querySelector(".map");
+    if (map) gsap.from(map, {
+      y: 12,
+      autoAlpha: 0,
+      scale: 0.985,
+      duration: 0.8,
+      delay: 0.12,
+      ease: "power2.out",
+      clearProps: "transform"
+    });
+  }
 
-    if (window.ScrollTrigger) {
-      gsap.utils.toArray(".section .secthead, .section .layout > .card").forEach(function (el) {
-        gsap.from(el, {
-          y: 16,
-          autoAlpha: 0,
-          duration: 0.55,
-          ease: "power2.out",
-          clearProps: "transform",
-          scrollTrigger: {
-            trigger: el,
-            start: "top 90%",
-            once: true
-          }
-        });
-      });
-    }
-
-    // The route's existing playback logic remains the source of truth.
-    // GSAP only adds a restrained visual pulse while the existing playing class is present.
-    var mapCard = document.querySelector(".city-map-card");
-    var route = document.querySelector("#cityRoutePath");
-    if (mapCard && route && window.MutationObserver) {
-      var pulse = null;
-      function syncRouteMotion() {
-        if (mapCard.classList.contains("is-playing")) {
-          if (pulse) pulse.kill();
-          pulse = gsap.to(route, {
-            opacity: 0.72,
-            duration: 0.7,
-            yoyo: true,
-            repeat: -1,
-            ease: "sine.inOut"
-          });
-        } else {
-          if (pulse) pulse.kill();
-          pulse = null;
-          gsap.to(route, { opacity: 1, duration: 0.18, overwrite: true });
+  function animateSections() {
+    if (!window.ScrollTrigger) return;
+    gsap.utils.toArray(".section .secthead, .section .layout > .card").forEach(function (el) {
+      if (el.dataset.gsapReveal === "done") return;
+      el.dataset.gsapReveal = "done";
+      gsap.from(el, {
+        y: 16,
+        autoAlpha: 0,
+        duration: 0.55,
+        ease: "power2.out",
+        clearProps: "transform",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 90%",
+          once: true
         }
+      });
+    });
+    window.ScrollTrigger.refresh();
+  }
+
+  function routeProgress() {
+    if (!routePath || !audio) return;
+    var duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+    var progress = duration ? Math.max(0, Math.min(1, (audio.currentTime || 0) / duration)) : 0;
+    // The SVG uses pathLength="1", making audio progress independent of map dimensions.
+    gsap.set(routePath, { strokeDasharray: 1, strokeDashoffset: 1 - progress });
+  }
+
+  function syncRoutePulse() {
+    if (!routePath || !mapCard) return;
+    if (mapCard.classList.contains("is-playing")) {
+      if (routePulse) routePulse.kill();
+      routePulse = gsap.to(routePath, {
+        opacity: 0.76,
+        duration: 0.7,
+        yoyo: true,
+        repeat: -1,
+        ease: "sine.inOut",
+        overwrite: true
+      });
+    } else {
+      if (routePulse) routePulse.kill();
+      routePulse = null;
+      gsap.to(routePath, { opacity: 1, duration: 0.18, overwrite: true });
+    }
+  }
+
+  function bindRouteIfPresent() {
+    var nextPath = document.querySelector("#cityMapCanvas #cityRoutePath");
+    if (nextPath && nextPath !== routePath) {
+      if (routePulse) routePulse.kill();
+      routePulse = null;
+      routePath = nextPath;
+
+      // Override the legacy CSS keyframe only when GSAP is available.
+      // Audio events below are the source of truth for route progress and pause/resume.
+      routePath.style.animation = "none";
+      gsap.set(routePath, { strokeDasharray: 1, strokeDashoffset: 1, opacity: 1 });
+
+      var pins = routePath.parentNode ? routePath.parentNode.querySelectorAll(".city-map-pin") : [];
+      gsap.fromTo(routePath,
+        { strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: 0.85, ease: "power2.out", overwrite: true }
+      );
+      if (pins.length) {
+        gsap.from(pins, {
+          scale: 0.72,
+          autoAlpha: 0,
+          transformOrigin: "center center",
+          duration: 0.42,
+          stagger: 0.1,
+          delay: 0.16,
+          ease: "back.out(1.5)",
+          clearProps: "transform"
+        });
       }
-      new MutationObserver(syncRouteMotion).observe(mapCard, {
+      routeProgress();
+      syncRoutePulse();
+    }
+  }
+
+  function initAudioSync() {
+    audio = document.querySelector("#cityAudio");
+    mapCard = document.querySelector(".city-map-card");
+    if (!audio || audio.dataset.gsapSync === "done") return;
+    audio.dataset.gsapSync = "done";
+
+    ["timeupdate", "seeking", "seeked", "loadedmetadata", "durationchange"].forEach(function (name) {
+      audio.addEventListener(name, routeProgress, { passive: true });
+    });
+    audio.addEventListener("play", function () {
+      bindRouteIfPresent();
+      routeProgress();
+      syncRoutePulse();
+    });
+    audio.addEventListener("pause", function () {
+      routeProgress();
+      syncRoutePulse();
+    });
+    audio.addEventListener("ended", function () {
+      if (routePath) gsap.set(routePath, { strokeDasharray: 1, strokeDashoffset: 0, opacity: 1 });
+      syncRoutePulse();
+    });
+    if (mapCard && window.MutationObserver) {
+      new MutationObserver(syncRoutePulse).observe(mapCard, {
         attributes: true,
         attributeFilter: ["class"]
       });
-      syncRouteMotion();
     }
+  }
 
-    // Small touch-safe press feedback. Avoid changing layout dimensions.
+  function initButtonFeedback() {
     document.querySelectorAll(".primary, .heroactions .ghost").forEach(function (button) {
+      if (button.dataset.gsapPress === "done") return;
+      button.dataset.gsapPress = "done";
       button.addEventListener("pointerdown", function () {
         gsap.to(button, { scale: 0.985, duration: 0.1, overwrite: true });
       }, { passive: true });
@@ -97,9 +172,37 @@
     });
   }
 
+  function init() {
+    animateHero();
+    animateSections();
+    initAudioSync();
+    initButtonFeedback();
+    bindRouteIfPresent();
+
+    // The map SVG is created after the user submits four cities, so watch for
+    // route replacement rather than assuming it exists at initial page load.
+    var canvas = document.querySelector("#cityMapCanvas");
+    if (canvas && window.MutationObserver && canvas !== observedMap) {
+      observedMap = canvas;
+      new MutationObserver(function () {
+        bindRouteIfPresent();
+        initButtonFeedback();
+        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+      }).observe(canvas, { childList: true, subtree: true });
+    }
+  }
+
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init, { once: true });
   } else {
     init();
+  }
+
+  // If the system preference changes while the page is open, stop running tweens.
+  if (motionPreference && motionPreference.addEventListener) {
+    motionPreference.addEventListener("change", function (event) {
+      if (event.matches) gsap.globalTimeline.pause();
+      else gsap.globalTimeline.resume();
+    });
   }
 })();
