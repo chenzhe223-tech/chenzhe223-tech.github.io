@@ -80,19 +80,40 @@ const path = require('node:path');
     if (desktopOverflow) throw new Error('Horizontal page overflow at 1440px desktop viewport');
     results.push({ test: 'desktop layout overflow', status: 'PASS' });
 
-    await page.setViewportSize({ width: 390, height: 844 });
-    await page.waitForTimeout(250);
-    const mobile = await page.evaluate(() => ({
+    const mobilePage = await browser.newPage({
+      viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true
+    });
+    mobilePage.on('pageerror', error => errors.push('mobile: ' + error.message));
+    await mobilePage.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await mobilePage.locator('#products').waitFor();
+    await mobilePage.locator('#shelf .app-card').first().waitFor({ timeout: 10000 });
+    await mobilePage.locator('h1').waitFor({ state: 'visible', timeout: 10000 });
+    await mobilePage.waitForTimeout(1600);
+    const mobile = await mobilePage.evaluate(() => ({
       width: window.innerWidth,
       documentWidth: document.documentElement.scrollWidth,
+      coarsePointer: matchMedia('(pointer: coarse)').matches,
+      gsapLoaded: !!window.gsap,
+      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches,
       heroVisible: !!document.querySelector('h1') && document.querySelector('h1').getBoundingClientRect().width > 0,
+      heroOpacity: Number(getComputedStyle(document.querySelector('h1')).opacity),
       searchVisible: !!document.querySelector('#search') && document.querySelector('#search').getBoundingClientRect().width > 0,
-      cardWidth: document.querySelector('#shelf .app-card')?.getBoundingClientRect().width || 0
+      cardWidth: document.querySelector('#shelf .app-card')?.getBoundingClientRect().width || 0,
+      progressRail: !!document.querySelector('.motion-progress'),
+      activeGsapAnimations: window.gsap ? window.gsap.globalTimeline.getChildren(true, true, true).length : 0
     }));
     if (!mobile.heroVisible || !mobile.searchVisible || mobile.cardWidth <= 0) throw new Error('Essential mobile content is not visible: ' + JSON.stringify(mobile));
+    if (!mobile.coarsePointer) throw new Error('Mobile test did not activate coarse-pointer/touch media features: ' + JSON.stringify(mobile));
     if (mobile.documentWidth > mobile.width + 2) throw new Error('Horizontal page overflow at mobile viewport: ' + JSON.stringify(mobile));
-    await page.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
-    results.push({ test: 'mobile 390px layout', status: 'PASS', detail: mobile });
+    if (mobile.gsapLoaded && !mobile.reducedMotion && (!mobile.progressRail || mobile.activeGsapAnimations < 1)) {
+      throw new Error('GSAP mobile motion layer did not initialize: ' + JSON.stringify(mobile));
+    }
+    if (mobile.gsapLoaded && !mobile.reducedMotion && mobile.heroOpacity < 0.99) {
+      throw new Error('Mobile hero entrance did not finish: ' + JSON.stringify(mobile));
+    }
+    await mobilePage.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
+    results.push({ test: 'real touch-mobile layout and GSAP motion', status: 'PASS', detail: mobile });
+    await mobilePage.close();
 
     if (errors.length) throw new Error('Uncaught browser page errors: ' + errors.join(' | '));
     results.push({ test: 'browser console and uncaught exceptions', status: 'PASS', detail: 'No errors captured' });
