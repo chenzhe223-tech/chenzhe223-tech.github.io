@@ -5,12 +5,14 @@ on:
     branches: ["main"]
     paths:
       - "index.html"
+      - "gsap-motion.js"
       - "scripts/qa-portfolio.cjs"
       - ".github/workflows/portfolio-qa.yml"
   pull_request:
     branches: ["main"]
     paths:
       - "index.html"
+      - "gsap-motion.js"
       - "scripts/qa-portfolio.cjs"
       - ".github/workflows/portfolio-qa.yml"
   workflow_dispatch:
