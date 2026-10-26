@@ -52,7 +52,7 @@
 
   function animateSections() {
     if (!window.ScrollTrigger) return;
-    gsap.utils.toArray(".section .secthead, .section .layout > .card, .section .city-layout > .card").forEach(function (el) {
+    gsap.utils.toArray(".section .secthead, .section .layout > .card").forEach(function (el) {
       if (el.closest(".hidden") || el.dataset.gsapReveal === "done") return;
       el.dataset.gsapReveal = "done";
       gsap.from(el, {
