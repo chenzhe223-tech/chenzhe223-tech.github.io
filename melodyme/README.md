@@ -68,6 +68,23 @@ GitHub Actions 会在相关 PR/push 上运行 Worker 测试。CI 通过不等于
 
 这些规范以当前 Web 架构为准：iTunes Search 与真实可用的短试听仍是默认路径。MusicKit 是未来可选集成，不代表当前已接入 Apple Music 完整曲库或原生 iOS 播放能力。
 
+
+## GSAP 动效系统
+
+项目内随附 GreenSock 官方 GSAP Skills，供 Codex 在修改动画时按需读取，位于 `.agents/skills/`（8 个技能）。它们是开发代理的指导文件，不是浏览器运行时代码。
+
+运行时动效通过 `gsap-motion.js` 渐进增强加载，使用 GSAP Core 与 ScrollTrigger CDN。当前应用是静态 HTML/JS，不需要为引入 GSAP 改造为 React 或添加构建流程。若 CDN 不可用，GSAP 动效会停用，主要创作流程仍应正常工作。
+
+当前首批使用场景：
+- 首页标题、说明与地图卡片的轻量入场动效；
+- 滚动进入视口时，章节标题和内容卡片渐进显现；
+- 用户主动播放城市音乐旅程时，对已有路线作轻微视觉呼吸反馈；
+- 主按钮触控反馈，使用短促缩放而非改变布局。
+
+动效验收原则：尊重系统减少动态效果设置；不自动播放音乐；不干预音频时间与地图坐标；不改变 SVG 导出内容；不创建第二张海报；GSAP/CDN 失败时保持核心功能可用。部署后还需在 iPhone Safari 与桌面浏览器实测，代码提交本身不代表线上验收通过。
+
+官方来源：[greensock/gsap-skills](https://github.com/greensock/gsap-skills)。
+
 ## 验收状态说明
 
 必须分别记录：**已代码修改 / 已跑测试 / 已部署 / 真实端到端验收通过**。本次新功能的代码、CI、部署与真实线上验证状态以对应 PR、Actions 和交付报告为准；未经实际测试不得标注为生产验收通过。
