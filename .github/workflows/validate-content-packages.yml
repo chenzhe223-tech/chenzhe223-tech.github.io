@@ -12,6 +12,7 @@ on:
     paths:
       - "topic-studio/content-pipeline/**"
       - "topic-studio/scripts/validate-content-package.mjs"
+      - "topic-studio/scripts/test-content-package-validator.mjs"
       - ".github/workflows/validate-content-packages.yml"
   workflow_dispatch:
 
