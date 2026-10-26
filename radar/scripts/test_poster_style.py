@@ -1,7 +1,7 @@
 """Tests for deterministic weekly poster style selection."""
 import datetime as dt
 import unittest
-from radar.scripts.poster_style import STYLE_GEOMETRIC, STYLE_MOUNTAIN, poster_style_metadata
+from radar.scripts.poster_style import STYLE_GEOMETRIC, STYLE_MOUNTAIN, TEMPLATE_VERSION, poster_style_metadata
 
 class PosterStyleScheduleTests(unittest.TestCase):
     def test_same_iso_week_keeps_one_style(self):
@@ -16,6 +16,10 @@ class PosterStyleScheduleTests(unittest.TestCase):
         next_week = poster_style_metadata("2026-10-26")
         self.assertNotEqual(this_week["design_variant"], next_week["design_variant"])
         self.assertEqual(next_week["design_variant"], STYLE_MOUNTAIN)
+
+    def test_qr_tile_upgrade_bumps_template_version_to_force_regeneration(self):
+        self.assertEqual(TEMPLATE_VERSION, "2.2.0")
+        self.assertEqual(poster_style_metadata("2026-10-26")["template_version"], "2.2.0")
 
     def test_retries_for_same_date_are_deterministic(self):
         self.assertEqual(poster_style_metadata("2026-10-23"), poster_style_metadata("2026-10-23"))
