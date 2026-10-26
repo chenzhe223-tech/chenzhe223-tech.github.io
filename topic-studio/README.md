@@ -12,15 +12,13 @@
 - 「已发内容」模块：查看共享文章档案、手动添加/编辑、搜索和筛选、JSON 导入/导出，并可关联现有选题；关联后会把对应选题标记为已发布。
 - WorkBuddy 共享档案位置：`topic-studio/data/published-articles.json`；同步流程见 `topic-studio/WECHAT_CONTENT_SYNC.md`。
 
-## 公众号内容生产流水线（新增）
-- 流程规范：[`CONTENT_PIPELINE.md`](./CONTENT_PIPELINE.md)
-- GitHub/WorkBuddy 交接协议与队列：[`content-pipeline/README.md`](./content-pipeline/README.md)、[`content-pipeline/queue.json`](./content-pipeline/queue.json)
-- Manifest 模板：[`content-pipeline/templates/manifest.template.json`](./content-pipeline/templates/manifest.template.json)
-- 包验证脚本：[`scripts/validate-content-package.mjs`](./scripts/validate-content-package.mjs)
-- GitHub Actions 会在内容流水线文件变更时自动检查包结构、审批范围、来源/QA 必填项及贴图尺寸。
-- 内容流程：ChatGPT 提案 → 用户明确批准 → 生成原创内容与图片 → QA → GitHub 版本化归档 → WorkBuddy 下载并复核 → 保存草稿/预览 → 按审批范围执行发布。
-- “批准”默认只授权保存草稿；只有明确批准当前内容包“生成并发布”，且包 ID 与提案版本匹配、素材 QA 与手机预览均通过，才允许 WorkBuddy 自动发布。
-- 当前队列为空；此前只在聊天中制作、尚未提交到该仓库的素材并不算入队。
+## 公众号内容生产流水线
+- 主运行规范：CONTENT_PIPELINE.md
+- 实际未发表内容包存放在私有仓库 chenzhe223-tech/workbuddy-workspace 的 davylab-content-pipeline/；执行指令见 [WorkBuddy 命令文件](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md)（需要该私有仓库访问权限）。
+- 私有仓库保存内容包 manifest、来源、审稿清单、实际图片和执行回执；公开仓库只保留平台代码、公开来源及核验后的已发文章清单。
+- 流程：ChatGPT 提案 → 用户批准制作 → 生成内容和图片 → QA → 私有 GitHub 归档 → WorkBuddy 保存草稿并检查手机预览 → 用户针对指定 package ID 单次明确授权发表 → 回查真实永久链接 → 更新公开已发档案。
+- Topic Studio 的 localStorage 选题记录目前不会自动跨设备同步；需要分析本地选题时请导出 JSON 或提供选题标题/原文链接。
+- 公开路径 topic-studio/content-pipeline/ 下现有队列/模板/校验脚本是工程脚手架，不应存放未发表的私人内容包；对应的 GitHub Actions 只验证该公开目录，不代表微信后台端到端已经验收。
 
 ## 对话记录、产品规则与后续交接
 
