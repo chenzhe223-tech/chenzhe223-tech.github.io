@@ -43,7 +43,8 @@ function check(ok, name, detail = '') {
         if (chinaCount > 0) {
           const rank = page.locator('#chinaAINewsList .top5-rank').first();
           const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
-          check(initialOpacity < 0.1, viewport.name + ': China AI card rank is visually hidden before hover', 'opacity=' + initialOpacity);
+          const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
+          check(initialRankStateOk, viewport.name + ': China AI rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
           await chinaCards.first().hover();
           const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
           check(hoverOpacity > 0.5, viewport.name + ': China AI card rank appears on hover', 'opacity=' + hoverOpacity);
@@ -61,7 +62,8 @@ function check(ok, name, detail = '') {
       if (count > 0) {
         const rank = page.locator('#top5List .top5-rank').first();
         const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
-        check(initialOpacity < 0.1, viewport.name + ': top-story rank is visually hidden before hover', 'opacity=' + initialOpacity);
+        const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
+        check(initialRankStateOk, viewport.name + ': top-story rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
         await cards.first().hover();
         const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
         check(hoverOpacity > 0.5, viewport.name + ': top-story rank appears on hover', 'opacity=' + hoverOpacity);
