@@ -38,7 +38,7 @@
 2. 核对原文链接和文章实际内容；把来源支持的事实、作者观点、模型推论分开记录。链接不可读取时应请求用户提供正文，不得以标题/搜索摘要代替原文。
 3. 对候选选题按读者价值、时效性、实操性、差异化、品牌契合度分析。评分只辅助决策，不预测阅读量。检查近期开过的主题，避免重复。
 4. 产出一份短提案：为什么值得写、目标读者、读者收获、一句话观点、内容结构、事实风险、建议形式（贴图/文章），并附提案摘要 hash 或稳定版本号。
-5. 先写入 GitHub 的内容包 `manifest.json` 和 `proposal.md`，状态为 `awaiting_approval`，同时更新 `queue.json`。这一步不写最终内容，也不发布。
+5. 在当前对话中展示提案，明确 package ID、提案版本/hash、建议形式和默认审批范围；此阶段不把未批准提案或草稿放入公开 GitHub。用户批准后才创建正式内容包并提交。若用户明确要求把提案归档，才将其作为非发布状态单独提交。
 
 ### B. 获批后生产（ChatGPT）
 
@@ -47,7 +47,7 @@
 3. 用稳定的 package ID 版本化保存至 `topic-studio/content-pipeline/packages/<package-id>/`。
 4. 每页独立插画；文字由排版层渲染，不让生图模型直接绘制中文正文。不得伪造二维码、数据、截图、用户评价或引用。
 5. 运行包校验脚本并逐张肉眼查看渲染图片。若失败，先修复；QA 不通过不得将状态写为 `ready_for_workbuddy`。
-6. 通过 GitHub 提交更新 manifest、正文和图片。保存 commit 链接，状态置为 `ready_for_workbuddy`。
+6. 通过授权的 Git 写入通道提交 manifest、正文、图片和 QA 文件，并保存 commit 链接。二进制图片必须在仓库里真实存在且能通过尺寸/文件校验；仅有本地 ZIP 下载链接不算 GitHub 同步成功。若当前执行环境不能把 PNG 二进制写入 GitHub，状态必须保持 `qa_passed`/ `blocked`，清楚报告图片同步阻塞，不可伪报 `ready_for_workbuddy`。
 
 ### C. 下载与公众号后台处理（WorkBuddy）
 
@@ -106,5 +106,5 @@ node topic-studio/scripts/validate-content-package.mjs topic-studio/content-pipe
 
 - ChatGPT 在当前会话中执行分析和内容制作，不代表一个持续运行的后台 Agent；用户提出任务或批准后，才继续相应阶段。
 - Topic Studio 的 localStorage 选题不会自动进入 GitHub。本地选题必须导出/分享，后续可以升级为有身份验证的服务端同步。
-- GitHub 存储与包验证协议已定义，但公众号后台能否完全无人值守取决于 WorkBuddy 本地浏览器权限、当前登录状态和微信后台实际支持的操作。不能在未运行的环境里宣称已完成端到端实测。
+- GitHub 存储与包验证协议已定义，空队列的校验 Action 已跑通；尚未用一套带真实 PNG 的内容包验证二进制图片提交及 WorkBuddy 端到端流程。公众号后台能否完全无人值守，取决于 WorkBuddy 本地浏览器权限、当前登录状态和微信后台实际支持的操作。不能在未运行的环境里宣称已完成端到端实测。
 - 如果后续确认公众号官方接口权限，可另行设计服务端集成；凭证只能放在 Cloudflare Worker Secret 或其他服务端密钥存储，不能放在静态站点或公开 GitHub 文件中。
