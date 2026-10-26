@@ -10,7 +10,7 @@
       return;
     }
 
-    gsap.registerPlugin(window.ScrollTrigger);
+    if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
     gsap.set(".hero .eyebrow, .hero h1, .hero p, .hero .actions, .hero .hero-note", { autoAlpha: 0, y: 16 });
     gsap.set(".visual .orbit-tag", { autoAlpha: 0, y: 10 });
     gsap.set(".visual .core", { autoAlpha: 0, scale: 0.92 });
