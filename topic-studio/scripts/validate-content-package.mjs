@@ -79,6 +79,29 @@ for (const entry of entries) {
     }
   }
 
+  const delivery = manifest.delivery || {};
+  if (["draft_saved", "preview_passed", "published"].includes(manifest.state)) {
+    if (!nonEmpty(delivery.wechat_draft_id) || !nonEmpty(delivery.draft_saved_at)) {
+      errors.push(`${packageId}: draft_saved and later states require delivery.wechat_draft_id and delivery.draft_saved_at`);
+    }
+  }
+  if (["preview_passed", "published"].includes(manifest.state) && delivery.mobile_preview !== "passed") {
+    errors.push(`${packageId}: preview_passed/published state requires delivery.mobile_preview=passed`);
+  }
+  if (manifest.state === "published") {
+    if (manifest.approval?.scope !== "publish_after_approval") errors.push(`${packageId}: published state requires publish_after_approval scope`);
+    if (!nonEmpty(delivery.published_url) || !nonEmpty(delivery.published_at)) {
+      errors.push(`${packageId}: published state requires delivery.published_url and delivery.published_at`);
+    } else {
+      try {
+        const publishedUrl = new URL(delivery.published_url);
+        if (publishedUrl.protocol !== "https:") errors.push(`${packageId}: published_url must use HTTPS`);
+      } catch {
+        errors.push(`${packageId}: published_url must be a valid URL`);
+      }
+    }
+  }
+
   const assets = manifest.assets || {};
   for (const key of ["proposal", "caption", "source_notes", "qa_report"]) {
     const file = assets[key];
