@@ -67,7 +67,7 @@ jobs:
             '#cityMapCanvas #cityRoutePath',
             'timeupdate',
             'strokeDashoffset',
-            'if (!gsap)'
+            '|| !gsap) return'
           ]) assert.ok(motion.includes(token), 'missing GSAP motion contract: ' + token);
           const skills = [
             'gsap-core','gsap-timeline','gsap-scrolltrigger','gsap-plugins',
