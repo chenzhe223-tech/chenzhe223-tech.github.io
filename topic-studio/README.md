@@ -12,12 +12,22 @@
 - 「已发内容」模块：查看共享文章档案、手动添加/编辑、搜索和筛选、JSON 导入/导出，并可关联现有选题；关联后会把对应选题标记为已发布。
 - WorkBuddy 共享档案位置：`topic-studio/data/published-articles.json`；同步流程见 `topic-studio/WECHAT_CONTENT_SYNC.md`。
 
+## 公众号内容生产流水线（新增）
+- 流程规范：[`CONTENT_PIPELINE.md`](./CONTENT_PIPELINE.md)
+- GitHub/WorkBuddy 交接协议与队列：[`content-pipeline/README.md`](./content-pipeline/README.md)、[`content-pipeline/queue.json`](./content-pipeline/queue.json)
+- Manifest 模板：[`content-pipeline/templates/manifest.template.json`](./content-pipeline/templates/manifest.template.json)
+- 包验证脚本：[`scripts/validate-content-package.mjs`](./scripts/validate-content-package.mjs)
+- GitHub Actions 会在内容流水线文件变更时自动检查包结构、审批范围、来源/QA 必填项及贴图尺寸。
+- 内容流程：ChatGPT 提案 → 用户明确批准 → 生成原创内容与图片 → QA → GitHub 版本化归档 → WorkBuddy 下载并复核 → 保存草稿/预览 → 按审批范围执行发布。
+- “批准”默认只授权保存草稿；只有明确批准当前内容包“生成并发布”，且包 ID 与提案版本匹配、素材 QA 与手机预览均通过，才允许 WorkBuddy 自动发布。
+- 当前队列为空；此前只在聊天中制作、尚未提交到该仓库的素材并不算入队。
+
 ## 对话记录、产品规则与后续交接
 
 为了避免跨对话重复解释，请在开始新任务前依次查看：
 - [精简运营上下文](./OPERATIONS_CONTEXT.md)：当前架构、功能状态、关键路径和待办。
 - [产品与工程规则](./docs/PRODUCT_RULES.md)：UI/配图/事实核查/微信同步/数据安全/验收要求。
-- [对话与决策日志（2026-10-23）](./docs/CONVERSATION_LOG_2026-10-23.md)：本轮关键需求、设计决策、错误经验与验收记录。
+- [对话与决策日志（2026-10-23）](./docs/CONVERSATION_LOG_2026-10-23.md)：此前关键需求、设计决策、错误经验与验收记录。
 - [公众号已发内容同步指南](./WECHAT_CONTENT_SYNC.md)：WorkBuddy 核验和更新共享文章档案的步骤。
 
 ## 使用方式
@@ -35,8 +45,9 @@
 - CSS 主题封面不是生成式图片，也不代表有真实图片素材授权。
 - 公众号内容库目前读取 GitHub 共享 JSON 与本地浏览器记录；只有经 WorkBuddy 从 DAVYLAB 后台核验并更新共享 JSON 后，文章才会出现在所有设备的共享列表中。当前还没有直接连接公众号官方 API。
 - 官方 API 是否能直接拉取已发表内容取决于账号主体、认证情况和接口权限。任何 AppSecret/access_token 只能保存在后端 Secret，不得写入 GitHub 或前端。
-- 不会自动操作或发布微信公众号；正式发布仍由作者本人确认。
-
+- WorkBuddy 内容流水线协议和校验脚本已建立，但 WorkBuddy 本机真实下载、公众号后台录入与发布是否成功，必须基于本次实际执行的日志/回执确认。
+- 不会仅因素材生成完成就自动发布；发布取决于当前内容包里可核验的明确授权范围与发布前 QA。
+ 
 ## 数据来源
 - Davy Radar：https://chenzhe223-tech.github.io/radar/daily/
 - 今日 JSON：https://chenzhe223-tech.github.io/radar/data/latest.json
