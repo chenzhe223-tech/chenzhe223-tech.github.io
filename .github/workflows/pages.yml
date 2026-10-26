@@ -523,7 +523,7 @@ jobs:
                       assert poster_image is not None, f'{poster_name} is not a valid PNG'
                       decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image)
                       if not decoded:
-                          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image[1600:1790, 25:240])
+                          decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(poster_image[1540:1780, 48:288])
                       assert decoded == qr_target, f'{poster_name} QR decode/URL mismatch: {decoded!r}'
                       assert points is not None and len(points), f'{poster_name} QR geometry not detected'
                   verification_req = urllib.request.Request(base + 'posters/' + today + '.qr-verification.json?verify=' + stamp, headers=headers)
