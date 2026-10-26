@@ -421,9 +421,12 @@ def rank_diverse_china_items(candidates: list[dict]) -> list[dict]:
             selected.append(item)
             selected_urls.add(url)
             counts[publisher] = counts.get(publisher, 0) + 1
-            if len(selected) >= CHINA_NEWS_TARGET or len(selected) >= CHINA_NEWS_MAX:
+            # Keep a small buffer beyond the public target. The AI-curated top five
+            # may overlap this section; run_horizon removes cross-section duplicates
+            # and trims the final module back to CHINA_NEWS_TARGET.
+            if len(selected) >= CHINA_NEWS_MAX:
                 break
-        if len(selected) >= CHINA_NEWS_TARGET or len(selected) >= CHINA_NEWS_MAX:
+        if len(selected) >= CHINA_NEWS_MAX:
             break
     return selected[:CHINA_NEWS_MAX]
 
@@ -923,7 +926,7 @@ def main() -> None:
     archive_file.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     history = sorted((p.name for p in ARCHIVE.glob("*.json")), reverse=True)[:30]
     (DATA / "history.json").write_text(json.dumps({"days": history}, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Built Davy Radar: {len(recent[:20])} global news, {len(china_ai_news)} China AI news (minimum {CHINA_NEWS_MIN}, target {CHINA_NEWS_TARGET}), {len(skills)} skills; feeds {source_success}/{len(FEEDS)} global, {china_sources_ok}/{len(CHINA_FEEDS)} China")
+    print(f"Built Davy Radar: {len(recent[:20])} global news, {len(china_ai_news)} China AI news (minimum {CHINA_NEWS_MIN}, public target {CHINA_NEWS_TARGET}, buffer max {CHINA_NEWS_MAX}), {len(skills)} skills; feeds {source_success}/{len(FEEDS)} global, {china_sources_ok}/{len(CHINA_FEEDS)} China")
 
 if __name__ == "__main__":
     main()
