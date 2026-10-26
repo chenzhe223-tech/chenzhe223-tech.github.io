@@ -13,7 +13,7 @@ The single source of truth is radar/scripts/poster_style.py::poster_style_metada
 
 ## Required checks
 1. Generate the QR locally with a standard QR encoder; never draw QR-like patterns or use a remote QR image service.
-2. Embed it into the dated final PNG and radar/posters/latest.png with a clear white quiet zone, sufficient module size, and contrast. The current reserved QR tile is 240×240 px at x=48, y=1540 on the 1200×1800 canvas; generator, local verifier, regression tests, and post-deploy fallback crop must use this same geometry.
+2. Embed it into the dated final PNG and radar/posters/latest.png with a clear white quiet zone, sufficient module size, and contrast. The current reserved QR tile is 240×240 px at x=912, y=1302 on the 1200×1800 canvas; generator, local verifier, regression tests, and post-deploy fallback crop must use this same geometry.
 3. Decode the QR from each final composed PNG using OpenCV; do not validate only the standalone QR source.
 4. Compare the decoded text character-for-character with the canonical URL.
 5. Check geometry, at least 12 px of clear quiet zone, sufficient contrast, and minimum detected size.

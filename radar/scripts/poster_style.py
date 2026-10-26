@@ -8,7 +8,7 @@ ANCHOR_MONDAY = date(2025, 12, 29)
 STYLE_GEOMETRIC = "geometric-navy"
 STYLE_MOUNTAIN = "mountain-editorial"
 STYLE_CYCLE = "ISO-WEEK-ALTERNATING-V1"
-TEMPLATE_VERSION = "2.2.0"
+TEMPLATE_VERSION = "2.3.0"
 
 def poster_style_metadata(value: str | date) -> dict:
     """Return deterministic style and ISO-week metadata for a date."""

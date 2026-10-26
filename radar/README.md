@@ -46,7 +46,7 @@ The style changes weekly, not daily. radar/scripts/poster_style.py is the single
 Every daily run generates one complete poster in that week's style, with real story content and locally encoded QR, decodes the QR from the final PNG, checks the canonical URL, and records the ISO year/week, style-cycle index and template version. The build then commits the daily archive and assets, deploys GitHub Pages, and verifies the public report and poster assets. Automated decoding is distinct from physical phone-camera scanning.
 
 
-Topic fallback images are visibly labeled 「主题插画 · 非新闻现场」 in the final poster. The poster template version is 2.1.0; production preflight requires the manifest template version to match the code so template changes trigger a fresh generation.
+Topic fallback images are visibly labeled 「主题插画 · 非新闻现场」 in the final poster. The poster template version is 2.3.0; production preflight requires the manifest template version to match the code so template changes trigger a fresh generation.
 
 ## Concurrent recovery runs and monotonic publishing
 

@@ -1,6 +1,6 @@
 # DAVYLAB AI 前沿简报海报生成与发布规则
 
-版本：2026-10-23
+版本：2026-10-27
 权威实现：radar/scripts/poster_style.py、generate_poster.py、verify_poster.py 与 .github/workflows/pages.yml。
 
 本规则适用于每日简报的海报生成、检查与发布。文档、程序和工作流必须执行同一套规则；发生冲突时必须修正代码和自动化测试，不能只改说明。
@@ -16,8 +16,8 @@
 
 ## 2. 两种风格按 ISO 周交替（P0）
 按周切换，不按日切换。每天仅生成当周指定的一张风格；重试不能改变风格。
-- 深色几何科技编辑风：geometric-navy。顶部必须使用深海军蓝头图、暖橙色日轮和分层几何山峦剪影；正文为暖白底色，采用深海军蓝文字、克制橙色强调、三张主新闻卡片 + 两张补充卡片、Skill 推荐区和底部二维码。该组合就是 2026-10-23 正式海报的基准，不得误判为错误混搭。
-- 暖白山峰科技杂志风：mountain-editorial。暖白编辑版式，以真实山峰/云海摄影作为主视觉，搭配深海军蓝标题、杂志式主题与图文新闻布局。与 geometric-navy 的几何插画山峦头图明确区分。
+- 深色几何科技编辑风：geometric-navy。顶部必须使用深海军蓝头图、暖橙色日轮和分层几何山峦剪影；正文为暖白底色，采用深海军蓝文字、克制橙色强调、三张主新闻卡片 + 两张补充卡片、Skill 推荐区和右侧独立二维码。该组合就是 2026-10-23 正式海报的基准，不得误判为错误混搭。
+- 暖白山峰科技杂志风：mountain-editorial。暖白编辑版式，以真实山峰/云海摄影作为主视觉；顶部使用超大中文标题与蓝色日期，正文严格采用五栏等宽新闻网格（标题、摘要、图片和来源按固定节奏排列），下方为今日观察横幅、左侧 Skill 推荐卡、右侧独立二维码框及品牌页脚。与 geometric-navy 的几何插画山峦头图明确区分。
 - 唯一算法位于 radar/scripts/poster_style.py::poster_style_metadata：固定锚点为 2025-12-29（ISO 2026-W01 的周一），按目标日期所在周的周一与锚点相差的完整周数计算连续周索引。偶数索引使用 geometric-navy，奇数索引使用 mountain-editorial，保证跨 ISO 年份仍每周切换。
 - 生成器、定时预检、二维码验证和部署后验收必须共享同一算法；禁止另外使用日序号奇偶判断。
 - 海报和验收记录必须包括 iso_year、iso_week、style_cycle_index、style_cycle、design_variant、template_version 及与该风格一致的 design 标识。geometric-navy 的 design 必须为 geometric-navy；mountain-editorial 的 design 必须为 mountain-editorial。
@@ -38,7 +38,7 @@
 https://chenzhe223-tech.github.io/radar/daily/
 - 使用标准二维码库在本地生成；禁止仿画、占位符、远程临时二维码或虚构链接。
 - 嵌入最终 PNG 后，再从完整图片中解码，并将结果与正式 URL 完整字符串比较。
-- 检查二维码尺寸、位置、对比度、白色静区及是否被裁切或遮挡。
+- 检查二维码尺寸、右侧独立位置、对比度、白色静区及是否被裁切或遮挡。
 - 实际请求正式网页，记录 HTTP 状态和最终跳转 URL。
 - 写入 radar/posters/YYYY-MM-DD.qr-verification.json 和 radar/posters/latest.qr-verification.json，记录日期、风格元数据、图像路径、解码值、目标 URL 和逐项结果。
 - 发布后重新下载线上日期海报和 latest.png 并再解码，确认线上文件及数据属于当天。

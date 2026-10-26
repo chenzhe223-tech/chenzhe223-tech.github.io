@@ -23,7 +23,7 @@ ROOT = Path.cwd().resolve() if (Path.cwd() / "radar" / "data" / "latest.json").e
 POSTERS = ROOT / "radar" / "posters"
 PUBLIC_URL = "https://chenzhe223-tech.github.io/radar/daily/"
 QR_SIZE = 240
-QR_X, QR_Y = 48, 1540
+QR_X, QR_Y = 912, 1302
 TZ = ZoneInfo("Asia/Shanghai")
 
 

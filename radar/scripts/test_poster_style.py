@@ -18,8 +18,8 @@ class PosterStyleScheduleTests(unittest.TestCase):
         self.assertEqual(next_week["design_variant"], STYLE_MOUNTAIN)
 
     def test_qr_tile_upgrade_bumps_template_version_to_force_regeneration(self):
-        self.assertEqual(TEMPLATE_VERSION, "2.2.0")
-        self.assertEqual(poster_style_metadata("2026-10-26")["template_version"], "2.2.0")
+        self.assertEqual(TEMPLATE_VERSION, "2.3.0")
+        self.assertEqual(poster_style_metadata("2026-10-26")["template_version"], "2.3.0")
 
     def test_retries_for_same_date_are_deterministic(self):
         self.assertEqual(poster_style_metadata("2026-10-23"), poster_style_metadata("2026-10-23"))
