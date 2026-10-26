@@ -15,6 +15,8 @@ const path = require('node:path');
     await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.locator('#products').waitFor();
     await page.locator('#shelf .app-card').first().waitFor({ timeout: 10000 });
+    // GSAP intentionally starts the hero heading hidden; wait for its entrance animation before asserting rendered text.
+    await page.locator('h1').waitFor({ state: 'visible', timeout: 10000 });
     const title = await page.locator('h1').innerText();
     if (!title.trim()) throw new Error('Hero heading is empty');
     results.push({ test: 'desktop initial render', status: 'PASS', detail: title.replace(/\s+/g, ' ').trim() });
