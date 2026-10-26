@@ -168,6 +168,34 @@ class DailyBriefContractTests(unittest.TestCase):
             per_domain[domain] = per_domain.get(domain, 0) + 1
         self.assertLessEqual(max(per_domain.values()), 2, "The initial source mix should cap each publisher at two stories")
 
+    def test_china_news_ranking_can_buffer_two_extra_candidates_without_losing_diversity(self):
+        base = dt.datetime.now(dt.timezone.utc)
+        candidates = []
+        publishers = [
+            ("量子位", "qbitai.com", 4),
+            ("36氪", "36kr.com", 3),
+            ("雷峰网", "leiphone.com", 3),
+            ("极客公园", "geekpark.net", 2),
+        ]
+        index = 0
+        for source, domain, count in publishers:
+            for _ in range(count):
+                stamp = (base - dt.timedelta(minutes=index)).isoformat()
+                candidates.append({
+                    "title": f"{source}报道：AI 新闻主题 {index}",
+                    "url": f"https://{domain}/news/buffer-{index}",
+                    "source": source,
+                    "published": stamp,
+                })
+                index += 1
+        selected = rank_diverse_china_items(candidates, include_buffer=True)
+        self.assertEqual(len(selected), 10)
+        per_domain = {}
+        for story in selected:
+            domain = story["url"].split("/")[2]
+            per_domain[domain] = per_domain.get(domain, 0) + 1
+        self.assertLessEqual(max(per_domain.values()), 3)
+
     def test_china_news_ranking_deduplicates_identical_titles_across_sources(self):
         now = dt.datetime.now(dt.timezone.utc).isoformat()
         candidates = [
