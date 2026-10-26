@@ -41,13 +41,14 @@ function check(ok, name, detail = '') {
         check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
         check(await page.locator('#chinaAINewsList .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays China AI thumbnails');
         if (chinaCount > 0) {
-          const rank = page.locator('#chinaAINewsList .top5-rank').first();
-          const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+          const chinaCard = chinaCards.first();
+          const initialOpacity = Number(await chinaCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
           const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
           check(initialRankStateOk, viewport.name + ': China AI rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
-          await chinaCards.first().hover();
-          const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
-          check(hoverOpacity > 0.5, viewport.name + ': China AI card rank appears on hover', 'opacity=' + hoverOpacity);
+          await chinaCard.hover();
+          await page.waitForTimeout(240);
+          const hoverState = await chinaCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
+          check(hoverState.opacity > 0.5, viewport.name + ': China AI card rank appears on hover', JSON.stringify(hoverState));
         }
       } else {
         check((await page.locator('#chinaAINewsList').innerText()).length > 0, viewport.name + ': empty China AI state explains no qualifying stories');
@@ -60,13 +61,14 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .image-placeholder').count() === 0, viewport.name + ': no top story displays a no-image placeholder');
       check(await page.locator('#top5List .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays top-story thumbnails');
       if (count > 0) {
-        const rank = page.locator('#top5List .top5-rank').first();
-        const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+        const topStoryCard = cards.first();
+        const initialOpacity = Number(await topStoryCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
         const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
         check(initialRankStateOk, viewport.name + ': top-story rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
-        await cards.first().hover();
-        const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
-        check(hoverOpacity > 0.5, viewport.name + ': top-story rank appears on hover', 'opacity=' + hoverOpacity);
+        await topStoryCard.hover();
+        await page.waitForTimeout(240);
+        const hoverState = await topStoryCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
+        check(hoverState.opacity > 0.5, viewport.name + ': top-story rank appears on hover', JSON.stringify(hoverState));
       }
       check(await page.locator('#top5List a[href^="http"]').count() >= 5, viewport.name + ': each story has source link');
       check(await page.locator('#featuredSkill h3').count() === 1, viewport.name + ': daily Skill recommendation is rendered');
