@@ -260,14 +260,28 @@
 
     // The map SVG is created after the user submits four cities, so watch for
     // route replacement rather than assuming it exists at initial page load.
-    var canvas = document.querySelector("#cityMapCanvas");
-    if (canvas && window.MutationObserver && canvas !== observedMap) {
-      observedMap = canvas;
-      new MutationObserver(function () {
+    // The city-map canvas may itself be inserted only after the user starts
+    // the four-city flow. Observe the stable document body so late-created
+    // canvases and route SVGs are detected as well.
+    var observerRoot = document.body;
+    if (observerRoot && window.MutationObserver && observerRoot !== observedMap) {
+      observedMap = observerRoot;
+      new MutationObserver(function (mutations) {
+        var mapChanged = mutations.some(function (mutation) {
+          var target = mutation.target;
+          if (target && (target.id === "cityMapCanvas" ||
+              (target.closest && target.closest("#cityMapCanvas")))) return true;
+          return Array.prototype.some.call(mutation.addedNodes || [], function (node) {
+            if (!node || node.nodeType !== 1) return false;
+            return (node.matches && node.matches("#cityMapCanvas, #cityRoutePath")) ||
+              (node.querySelector && node.querySelector("#cityMapCanvas, #cityRoutePath"));
+          });
+        });
+        if (!mapChanged) return;
         bindRouteIfPresent();
         initButtonFeedback();
         if (window.ScrollTrigger) window.ScrollTrigger.refresh();
-      }).observe(canvas, { childList: true, subtree: true });
+      }).observe(observerRoot, { childList: true, subtree: true });
     }
   }
 
