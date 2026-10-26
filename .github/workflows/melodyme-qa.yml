@@ -185,7 +185,8 @@ jobs:
           await page.locator('#cityRouteSvg').waitFor({state:'visible'});
           if (await page.locator('#cityMapCanvas .city-map-pin').count() !== 4) throw new Error('map must show four geocoded city stops');
           const gsapLoaded = await page.evaluate(() => !!window.gsap);
-          if (gsapLoaded) {
+          const reducedMotion = await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+          if (gsapLoaded && !reducedMotion) {
             await page.waitForFunction(() => {
               const path = document.querySelector('#cityMapCanvas #cityRoutePath');
               return path && path.style.animation === 'none';
