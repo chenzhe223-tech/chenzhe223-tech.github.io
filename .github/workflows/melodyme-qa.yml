@@ -188,7 +188,7 @@ jobs:
             await page.waitForFunction(() => {
               const path = document.querySelector('#cityMapCanvas #cityRoutePath');
               return path && path.style.animation === 'none';
-            }, { timeout: 3000 });
+            }, null, { timeout: 3000 });
             if (!(await page.locator('#cityMapCanvas #cityRoutePath').evaluate(el => el.style.strokeDasharray === '1'))) {
               throw new Error('GSAP should bind to the dynamically rendered city route');
             }
