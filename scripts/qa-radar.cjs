@@ -43,8 +43,8 @@ function check(ok, name, detail = '') {
         if (chinaCount > 0) {
           const chinaCard = chinaCards.first();
           const initialOpacity = Number(await chinaCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
-          const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
-          check(initialRankStateOk, viewport.name + ': China AI rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
+          const initialRankStateOk = initialOpacity < 0.1;
+          check(initialRankStateOk, viewport.name + ': China AI rank is transparent before interaction on all devices', 'opacity=' + initialOpacity);
           await chinaCard.hover();
           await page.waitForTimeout(240);
           const hoverState = await chinaCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
