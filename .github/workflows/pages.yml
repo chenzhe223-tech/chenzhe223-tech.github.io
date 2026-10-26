@@ -484,10 +484,15 @@ jobs:
               try:
                   stamp = str(time.time())
                   with urllib.request.urlopen(urllib.request.Request(base + 'daily/?verify=' + stamp, headers=headers), timeout=15) as response:
-                      page = response.read().decode('utf-8', 'replace')
+                      page_bytes = response.read()
                       assert response.status == 200
+                  assert_matches_repo('radar/daily/index.html', page_bytes)
+                  page = page_bytes.decode('utf-8', 'replace')
                   assert 'id="chinaAI"' in page, 'China AI developments section missing from live page'
                   assert 'china-news-grid' in page, 'China AI card grid styling missing from live page'
+                  assert '.story-image .image-credit{display:none!important}' in page, 'live page still permits image-source badges over thumbnails'
+                  assert '.top5-card:hover .top5-rank,.top5-card:focus-within .top5-rank' in page, 'live page is missing hover-only rank styling'
+                  assert 'const creditLink=' not in page, 'live page still renders source labels over images'
                   with urllib.request.urlopen(urllib.request.Request(base + 'data/latest.json?verify=' + stamp, headers=headers), timeout=15) as response:
                       report_bytes = response.read()
                   assert_matches_repo('radar/data/latest.json', report_bytes)
