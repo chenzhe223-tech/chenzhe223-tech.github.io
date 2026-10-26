@@ -312,4 +312,8 @@ function showSubmittedNotice(){
   window.history.replaceState(null,'',url.pathname+(url.search?url.search:'')+url.hash);
 }
 function toast(t){const el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),1900)}render();showSubmittedNotice();
-</script></body></html>
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="./gsap-motion.js"></script>
+</body></html>
