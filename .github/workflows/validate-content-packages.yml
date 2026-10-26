@@ -6,6 +6,7 @@ on:
     paths:
       - "topic-studio/content-pipeline/**"
       - "topic-studio/scripts/validate-content-package.mjs"
+      - "topic-studio/scripts/test-content-package-validator.mjs"
       - ".github/workflows/validate-content-packages.yml"
   pull_request:
     paths:
@@ -27,5 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Validate package contract
+      - name: Test package validator
+        run: node topic-studio/scripts/test-content-package-validator.mjs
+      - name: Validate current queue and packages
         run: node topic-studio/scripts/validate-content-package.mjs
