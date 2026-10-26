@@ -181,8 +181,22 @@ class DailyBriefContractTests(unittest.TestCase):
         for source, domain, count in publishers:
             for _ in range(count):
                 stamp = (base - dt.timedelta(minutes=index)).isoformat()
+                distinct_titles = [
+                    "UniqueProject0 量子位发布端侧多模态模型，面向手机离线推理",
+                    "UniqueProject1 量子位推出长上下文检索基准，测试企业知识库",
+                    "UniqueProject2 量子位公布芯片压缩方案，降低边缘部署功耗",
+                    "UniqueProject3 量子位开源语音转写工具，支持低延迟中文",
+                    "UniqueProject4 36氪报道AI医疗助手进入多家医院试点",
+                    "UniqueProject5 36氪称制造业质检平台新增视觉模型",
+                    "UniqueProject6 36氪关注AI电商客服的新一轮融资",
+                    "UniqueProject7 雷峰网披露机器人供应链企业扩大产线",
+                    "UniqueProject8 雷峰网解析国产推理芯片的新型封装路线",
+                    "UniqueProject9 雷峰网关注智能驾驶系统完成新一轮道路测试",
+                    "UniqueProject10 极客公园体验AI眼镜的实时翻译功能",
+                    "UniqueProject11 极客公园评测新款笔记本端侧模型续航表现",
+                ]
                 candidates.append({
-                    "title": f"UniqueProject{index} {source} launches specialized system{index} for market{index}",
+                    "title": distinct_titles[index],
                     "url": f"https://{domain}/news/buffer-{index}",
                     "source": source,
                     "published": stamp,
