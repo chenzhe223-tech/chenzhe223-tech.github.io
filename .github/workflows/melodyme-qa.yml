@@ -50,6 +50,34 @@ jobs:
           print(f"HTML source checks passed; {len(html)} chars")
           PY
           node --check /tmp/melodyme-inline.js
+          node --check melodyme/gsap-motion.js
+          node <<'JS'
+          const assert = require("node:assert/strict");
+          const fs = require("node:fs");
+          const html = fs.readFileSync("melodyme/index.html", "utf8");
+          const motion = fs.readFileSync("melodyme/gsap-motion.js", "utf8");
+          for (const token of [
+            'gsap@3.13.0/dist/gsap.min.js',
+            'gsap@3.13.0/dist/ScrollTrigger.min.js',
+            'gsap-motion.js'
+          ]) assert.ok(html.includes(token), 'missing GSAP runtime reference: ' + token);
+          for (const token of [
+            'prefers-reduced-motion: reduce',
+            'MutationObserver',
+            '#cityMapCanvas #cityRoutePath',
+            'timeupdate',
+            'strokeDashoffset',
+            'if (!gsap)'
+          ]) assert.ok(motion.includes(token), 'missing GSAP motion contract: ' + token);
+          const skills = [
+            'gsap-core','gsap-timeline','gsap-scrolltrigger','gsap-plugins',
+            'gsap-utils','gsap-react','gsap-performance','gsap-frameworks'
+          ];
+          for (const skill of skills) {
+            assert.ok(fs.existsSync('melodyme/.agents/skills/' + skill + '/SKILL.md'), 'missing official skill: ' + skill);
+          }
+          console.log('PASS: GSAP runtime references, progressive enhancement, dynamic map/audio sync, reduced motion, and all 8 project-local skills.');
+          JS
       - name: Validate nine poster modes and 27 prompt combinations
         run: |
           node <<'JS'
