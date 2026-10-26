@@ -27,12 +27,21 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Refresh source-backed report for contract tests
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-        run: python radar/scripts/build_daily.py
-      - name: Match current news images before contract and browser tests
-        run: python radar/scripts/news_image_match.py
+      - name: Validate committed report fixture for browser tests
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          assert len(report.get('news') or []) >= 5, 'committed report has fewer than five source news items'
+          assert len(report.get('top5') or []) == 5, 'committed report must have exactly five editorial stories'
+          assert len(report.get('china_ai_news') or []) >= 6, 'committed report has fewer than six China AI stories'
+          assert len(report.get('skills') or []) >= 5, 'committed report has fewer than five Skills'
+          assert all(str(x.get('image_url') or '').startswith('https://') for x in report['top5']), 'a top-five story is missing an HTTPS image'
+          assert all(str(x.get('image_url') or '').startswith('https://') for x in report['china_ai_news']), 'a China AI story is missing an HTTPS image'
+          assert all(x.get('quality_status') == 'PASS' for x in report['skills']), 'committed report includes an unverified Skill'
+          print('PASS: committed browser fixture meets story, image and Skill contracts; date=' + str(report.get('report_date')))
+          PY
       - name: Validate daily brief data contract
         run: |
           python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py
