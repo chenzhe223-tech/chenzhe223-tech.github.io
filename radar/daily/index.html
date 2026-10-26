@@ -805,7 +805,7 @@ header{padding-top:4px}
 /* Editorial card QA: keep ranking chrome out of the image until interaction. */
 .top5-card .top5-rank{opacity:0!important;transition:opacity .18s ease,transform .18s ease;transform:translateY(-2px);pointer-events:none}
 .top5-card:hover .top5-rank,.top5-card:focus-within .top5-rank,.top5-card.rank-active .top5-rank{opacity:.92!important;transform:translateY(0)}
-@media(hover:none){.top5-card .top5-rank{opacity:.2!important}}
+@media(hover:none){.top5-card .top5-rank{opacity:0!important}.top5-card:active .top5-rank{opacity:.92!important}}
 .story-image .image-credit{display:none!important}
 @media(prefers-reduced-motion:reduce){.top5-card .top5-rank{transition:none}}
 </style>
