@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "package_id": "YYYY-MM-DD-short-slug",
+  "created_at": "",
+  "updated_at": "",
+  "state": "awaiting_approval",
+  "content_type": "newspic",
+  "title": "",
+  "summary": "",
+  "source": {
+    "primary_url": "",
+    "title": "",
+    "author": "",
+    "source_type": "article",
+    "fetched_at": "",
+    "verification_status": "pending"
+  },
+  "editorial_decision": {
+    "target_reader": "",
+    "reader_promise": "",
+    "angle": "",
+    "why_this_angle": "",
+    "alternative_angles": []
+  },
+  "approval": {
+    "status": "pending",
+    "requested_at": "",
+    "approved_at": "",
+    "approved_by": "",
+    "scope": "none",
+    "approved_proposal_sha256": "",
+    "evidence": ""
+  },
+  "assets": {
+    "proposal": "proposal.md",
+    "article": "",
+    "caption": "caption.txt",
+    "pages": "pages.json",
+    "source_notes": "source-notes.md",
+    "qa_report": "qa-report.json",
+    "images": [],
+    "preview": "preview.png"
+  },
+  "qa": {
+    "status": "pending",
+    "machine_checks": null,
+    "visual_review": null,
+    "reviewed_at": ""
+  },
+  "delivery": {
+    "github_commit": "",
+    "workbuddy_status": "not_downloaded",
+    "wechat_draft_id": "",
+    "draft_saved_at": "",
+    "mobile_preview": "not_checked",
+    "published_url": "",
+    "published_at": ""
+  }
+}
