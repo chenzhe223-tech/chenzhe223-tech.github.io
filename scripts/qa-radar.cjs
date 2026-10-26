@@ -39,6 +39,15 @@ function check(ok, name, detail = '') {
         check(await page.locator('#chinaAINewsList .story-image img[src^="https://"]').count() === chinaCount, viewport.name + ': every China AI picture uses an HTTPS image source');
         check(await page.locator('#chinaAINewsList .image-placeholder').count() === 0, viewport.name + ': no China AI card displays a no-image placeholder');
         check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
+        check(await page.locator('#chinaAINewsList .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays China AI thumbnails');
+        if (chinaCount > 0) {
+          const rank = page.locator('#chinaAINewsList .top5-rank').first();
+          const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+          check(initialOpacity < 0.1, viewport.name + ': China AI card rank is visually hidden before hover', 'opacity=' + initialOpacity);
+          await chinaCards.first().hover();
+          const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+          check(hoverOpacity > 0.5, viewport.name + ': China AI card rank appears on hover', 'opacity=' + hoverOpacity);
+        }
       } else {
         check((await page.locator('#chinaAINewsList').innerText()).length > 0, viewport.name + ': empty China AI state explains no qualifying stories');
       }
@@ -48,6 +57,15 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': all five stories show a picture');
       check(await page.locator('#top5List .story-image img[src^="https://"]').count() === 5, viewport.name + ': every story picture uses an HTTPS image source');
       check(await page.locator('#top5List .image-placeholder').count() === 0, viewport.name + ': no top story displays a no-image placeholder');
+      check(await page.locator('#top5List .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays top-story thumbnails');
+      if (count > 0) {
+        const rank = page.locator('#top5List .top5-rank').first();
+        const initialOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+        check(initialOpacity < 0.1, viewport.name + ': top-story rank is visually hidden before hover', 'opacity=' + initialOpacity);
+        await cards.first().hover();
+        const hoverOpacity = Number(await rank.evaluate(el => getComputedStyle(el).opacity));
+        check(hoverOpacity > 0.5, viewport.name + ': top-story rank appears on hover', 'opacity=' + hoverOpacity);
+      }
       check(await page.locator('#top5List a[href^="http"]').count() >= 5, viewport.name + ': each story has source link');
       check(await page.locator('#featuredSkill h3').count() === 1, viewport.name + ': daily Skill recommendation is rendered');
       const featuredSkillText = await page.locator('#featuredSkill').innerText();
