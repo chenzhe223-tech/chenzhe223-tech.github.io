@@ -19,9 +19,58 @@ DATA_DIR=ROOT/'radar/horizon-data'
 HORIZON_DIR=Path(os.environ.get('HORIZON_DIR','/tmp/Horizon'))
 TZ=ZoneInfo('Asia/Shanghai')
 try:
-    from radar.scripts.build_daily import filter_historical_duplicates
+    from radar.scripts.build_daily import _duplicate_match, filter_historical_duplicates
 except ModuleNotFoundError:
-    from build_daily import filter_historical_duplicates
+    from build_daily import _duplicate_match, filter_historical_duplicates
+
+CHINA_NEWS_PUBLIC_TARGET = 8
+
+def remove_top5_duplicates_from_china(report: dict) -> dict:
+    """Keep the China AI module distinct from the five editorial highlights.
+
+    Build_daily intentionally collects up to ten candidates as a buffer; after
+    removing cross-section duplicates, publish at most eight China AI stories.
+    """
+    top5 = report.get("top5") if isinstance(report.get("top5"), list) else []
+    china = report.get("china_ai_news") if isinstance(report.get("china_ai_news"), list) else []
+    today = str(report.get("report_date") or dt.datetime.now(TZ).date().isoformat())
+    history = []
+    for card in top5:
+        if not isinstance(card, dict):
+            continue
+        history.append({
+            "title": card.get("original_title") or card.get("title_en") or card.get("title_zh") or "",
+            "title_zh": card.get("title_zh") or "",
+            "title_en": card.get("title_en") or "",
+            "original_title": card.get("original_title") or "",
+            "url": card.get("source_url") or "",
+            "_history_date": today,
+        })
+    kept, removed = [], []
+    for story in china:
+        if not isinstance(story, dict):
+            continue
+        match = _duplicate_match(story, history, current_date=today) if history else None
+        if match:
+            removed.append({
+                "title": story.get("title_zh") or story.get("title") or "",
+                "url": story.get("url") or "",
+                "matched_title": match.get("title"),
+                "matched_url": match.get("url"),
+                "kind": match.get("kind"),
+            })
+        else:
+            kept.append(story)
+    report["china_ai_news"] = kept[:CHINA_NEWS_PUBLIC_TARGET]
+    if removed:
+        report["cross_section_dedupe"] = {
+            "status": "ok" if len(report["china_ai_news"]) >= 6 else "insufficient_unique_china_stories",
+            "removed_from_china_ai_news": len(removed),
+            "remaining_china_ai_news": len(report["china_ai_news"]),
+            "removed": removed,
+        }
+        print(f"[cross-section-dedupe] removed={len(removed)} overlapping China AI story/stories; remaining={len(report['china_ai_news'])}")
+    return report
 
 def _safe_error_detail(exc: Exception) -> str:
     """Return actionable provider diagnostics without exposing credentials."""
@@ -239,6 +288,7 @@ def main():
     if not os.environ.get('DEEPSEEK_API_KEY'):
         report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；基础新闻与 Skill 榜单仍可正常更新。'}
         ensure_story_fallback(report)
+        remove_top5_duplicates_from_china(report)
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8'); return 0
     if not (HORIZON_DIR/'src'/'main.py').exists():
         report['ai_analysis']={'status':'unavailable','message':'Horizon 运行目录未就绪；基础日报已保留。'}
@@ -291,6 +341,7 @@ def main():
     if len(report.get('top5') or [])<5:
         report['top5_status']='unavailable'
         if isinstance(report.get('localization'),dict): report['localization']['status']='partial'
+    remove_top5_duplicates_from_china(report)
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return 0
 if __name__=='__main__': raise SystemExit(main())
