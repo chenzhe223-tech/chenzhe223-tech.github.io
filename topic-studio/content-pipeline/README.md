@@ -23,7 +23,7 @@ content-pipeline/
 
 ## 队列规则
 
-- `queue.json` 是 package ID 与相对路径的索引；包的状态以每个包的 `manifest.json` 为准。
+- `queue.json` 只索引已批准、QA 通过且允许 WorkBuddy 处理的 package ID 与相对路径；`generate_only` 内容包可留在仓库但不进入队列。包的状态以每个包的 `manifest.json` 为准。
 - `awaiting_approval` 是待用户审阅的提案；WorkBuddy 必须跳过它。
 - 只有 `ready_for_workbuddy` 并且审批有效的包可下载处理。
 - 只有 `approval.scope=draft_only` 或 `publish_after_approval` 时，WorkBuddy 才能进入公众号后台。
@@ -33,4 +33,4 @@ content-pipeline/
 
 ## 当前状态
 
-初始队列为空。不要将先前在对话中生成、但尚未上传至本仓库的本地素材包误认为已经入队。创建新包时先在 ChatGPT 里完成提案审批流程，再同步实际生成的文件。
+初始队列为空。不要将先前在对话中生成、但尚未上传至本仓库的本地素材包误认为已经入队。ChatGPT 先在对话中给出提案并等待批准；获批后才生成正式内容并同步素材。仅当审批范围允许 WorkBuddy 继续处理且完整素材已真实提交到 GitHub 时，才加入此队列。
