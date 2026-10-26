@@ -59,7 +59,8 @@ jobs:
           for (const token of [
             'gsap@3.13.0/dist/gsap.min.js',
             'gsap@3.13.0/dist/ScrollTrigger.min.js',
-            'gsap-motion.js'
+            'gsap-motion.js',
+            'melodyme-gsap-motion-accessibility'
           ]) assert.ok(html.includes(token), 'missing GSAP runtime reference: ' + token);
           for (const token of [
             'prefers-reduced-motion: reduce',
