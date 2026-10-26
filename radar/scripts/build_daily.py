@@ -238,7 +238,16 @@ def filter_historical_duplicates(items: list[dict], section: str, today: str) ->
     return kept
 
 def http_get(url: str, accept: str = "*/*", timeout: int = 18) -> bytes:
-    req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT, "Accept": accept})
+    headers = {"User-Agent": USER_AGENT, "Accept": accept}
+    # Use the workflow's short-lived GITHUB_TOKEN for api.github.com requests.
+    # Unauthenticated API limits were causing many valid Skill candidates to be
+    # discarded, which left the daily report with fewer than the required five.
+    token = os.environ.get("GITHUB_TOKEN", "").strip()
+    host = urllib.parse.urlsplit(url).hostname or ""
+    if token and host.lower() == "api.github.com":
+        headers["Authorization"] = "Bearer " + token
+        headers["X-GitHub-Api-Version"] = "2022-11-28"
+    req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=timeout) as resp:
         return resp.read()
 

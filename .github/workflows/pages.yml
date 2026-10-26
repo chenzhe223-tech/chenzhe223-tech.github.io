@@ -121,6 +121,8 @@ jobs:
           timeout 120s sudo apt-get install -y --no-install-recommends fonts-wqy-microhei
           timeout 180s python -m pip install --disable-pip-version-check --retries 2 --timeout 25 --upgrade pillow 'qrcode[pil]' opencv-python-headless numpy
       - name: Refresh today's AI news and Skill shortlist
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: python radar/scripts/build_daily.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Diagnose AI enrichment configuration (without exposing secrets)

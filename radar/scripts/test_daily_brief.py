@@ -3,10 +3,30 @@ import json
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+import os
+from radar.scripts import build_daily
 from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
 from radar.scripts.run_horizon import build_selection_pool
 
+class _FakeHttpResponse:
+    def __enter__(self): return self
+    def __exit__(self, exc_type, exc, tb): return False
+    def read(self): return b'{}'
+
+
 class DailyBriefContractTests(unittest.TestCase):
+
+    def test_github_api_requests_use_workflow_token_without_leaking_to_other_hosts(self):
+        with patch.dict(os.environ, {"GITHUB_TOKEN": "unit-test-token"}):
+            with patch.object(build_daily.urllib.request, "urlopen", return_value=_FakeHttpResponse()) as mocked:
+                build_daily.http_get("https://api.github.com/repos/example/project")
+                api_request = mocked.call_args.args[0]
+                self.assertEqual(api_request.get_header("Authorization"), "Bearer unit-test-token")
+                self.assertEqual(api_request.get_header("X-github-api-version"), "2022-11-28")
+            with patch.object(build_daily.urllib.request, "urlopen", return_value=_FakeHttpResponse()) as mocked:
+                build_daily.http_get("https://example.com/feed.xml")
+                external_request = mocked.call_args.args[0]
+                self.assertIsNone(external_request.get_header("Authorization"))
 
     def test_top5_selection_pool_combines_global_and_china_ai_sources(self):
         global_news = [

@@ -802,6 +802,11 @@ header{padding-top:4px}
   .brief-date-line{font-size:12px!important}
   .brief-date-line strong{font-size:15px!important}
 }
+/* Editorial card QA: keep ranking chrome out of the image until interaction. */
+.top5-card .top5-rank{opacity:0!important;transition:opacity .18s ease,transform .18s ease;transform:translateY(-2px);pointer-events:none}
+.top5-card:hover .top5-rank,.top5-card:focus-within .top5-rank{opacity:.92!important;transform:translateY(0)}
+.story-image .image-credit{display:none!important}
+@media(prefers-reduced-motion:reduce){.top5-card .top5-rank{transition:none}}
 </style>
 </head>
 <body><div class="wrap">
@@ -895,9 +900,9 @@ function storyImageMarkup(x){
  const isIllustration=!x.image_url||x.image_match_status==="thematic_fallback";
  const alt=x.image_alt||(isIllustration?(currentLang==="en"?"Topic illustration: ":"主题示意图：")+(title||"AI news"):(title|| (currentLang==="en"?"News image":"新闻配图")));
  const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"https://unsplash.com/s/photos/artificial-intelligence";
- const credit=isIllustration?(currentLang==="en"?"Topic illustration · Unsplash":"主题示意图 · Unsplash"):(x.image_credit||x.image_source||(currentLang==="en"?"Image source":"图片来源"));
- const creditLink='<a class="image-credit" href="'+esc(page)+'" target="_blank" rel="noopener noreferrer">'+esc(credit)+'</a>';
- return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}" >'+creditLink+'</div>';
+  // Image credits are displayed in story metadata, never overlaid on thumbnails.
+
+ return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}" +'</div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
