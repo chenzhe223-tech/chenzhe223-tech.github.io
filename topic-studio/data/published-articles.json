@@ -4,9 +4,20 @@
   "account_ghid": "",
   "sync_method": "workbuddy-browser",
   "sync_status": "synced_via_browser",
-  "last_synced_at": "2026-10-23T12:20:00+08:00",
-  "notes": "Records verified against DAVYLAB WeChat Official Account backend '发表记录' (3 items) and each permanent link's title via public fetch on 2026-10-23. Drafts and previews excluded. Missing optional fields left empty.",
+  "last_synced_at": "2026-10-26T21:22:00+08:00",
+  "notes": "Records verified against DAVYLAB WeChat Official Account backend '发表记录' (account DAVYLAB, 共发表 4 次) on 2026-10-26; permanent links extracted directly from the backend list. Drafts and previews excluded. Optional fields left empty when not verifiable.",
   "articles": [
+    {
+      "id": "dRXsf5hhVdTDmjRjwPPijQ",
+      "title": "Sam Altman谈成功的13条思考",
+      "url": "https://mp.weixin.qq.com/s/dRXsf5hhVdTDmjRjwPPijQ",
+      "publishedAt": "2026-10-25",
+      "column": "",
+      "format": "贴图",
+      "summary": "",
+      "coverUrl": "",
+      "source": "WeChat Official Account backend"
+    },
     {
       "id": "CkQ2SwYLCSUFaETKMruKEA",
       "title": "不会设计，也能规划专业业务看板？",
@@ -26,7 +37,7 @@
       "column": "",
       "format": "文章",
       "summary": "",
-      "coverUrl": "",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5JUrGcETeiatIh24bhq0p4NGy0TGAzxsicqgIzVQtoV24M5oUKhB2wIqOH6nd5sjQc1IhspC2ZKS7fFwHWq794Rkr2OdmCN7KvWo/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
