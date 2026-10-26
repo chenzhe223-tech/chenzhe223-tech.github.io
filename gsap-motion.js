@@ -82,8 +82,8 @@
         repeat: -1, yoyo: true, stagger: { each: 0.16, from: "random" }
       });
       gsap.to(".brand-icon", {
-        boxShadow: "0 0 24px rgba(139,230,255,.24)", duration: 2.4,
-        ease: "sine.inOut", repeat: -1, yoyo: true
+        scale: 1.045, duration: 2.4,
+        ease: "sine.inOut", repeat: -1, yoyo: true, transformOrigin: "50% 50%"
       });
 
       if (window.ScrollTrigger) {
