@@ -17,6 +17,8 @@
   var mapCard = null;
   var audio = null;
   var observedMap = null;
+  var observedPoster = null;
+  var observedResults = null;
 
   function animateHero() {
     var hero = document.querySelector(".hero");
@@ -160,6 +162,56 @@
     }
   }
 
+  function animatePoster() {
+    var results = document.querySelector("#results");
+    var poster = document.querySelector("#poster");
+    if (!results || !poster || !results.classList.contains("show")) return;
+
+    var copy = poster.querySelectorAll(".poster-copy > small, .poster-copy h3, .poster-copy p");
+    if (copy.length) {
+      gsap.fromTo(copy,
+        { y: 12, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.42, stagger: 0.055, ease: "power2.out", overwrite: true }
+      );
+    }
+    var image = poster.querySelector("#aiCoverImage[data-loaded='true']");
+    if (image) {
+      gsap.fromTo(image,
+        { scale: 1.035, autoAlpha: 0.72 },
+        { scale: 1, autoAlpha: 1, duration: 0.75, ease: "power2.out", overwrite: true }
+      );
+    }
+  }
+
+  function observePoster() {
+    var poster = document.querySelector("#poster");
+    var results = document.querySelector("#results");
+    if (poster && window.MutationObserver && poster !== observedPoster) {
+      observedPoster = poster;
+      new MutationObserver(function (mutations) {
+        var relevant = mutations.some(function (mutation) {
+          if (mutation.type === "attributes") return mutation.attributeName === "data-loaded";
+          return true;
+        });
+        if (relevant) animatePoster();
+      }).observe(poster, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ["data-loaded"]
+      });
+    }
+    if (results && window.MutationObserver && results !== observedResults) {
+      observedResults = results;
+      new MutationObserver(animatePoster).observe(results, {
+        attributes: true,
+        attributeFilter: ["class"]
+      });
+    }
+    animatePoster();
+  }
+
   function initButtonFeedback() {
     document.querySelectorAll(".primary, .heroactions .ghost").forEach(function (button) {
       if (button.dataset.gsapPress === "done") return;
@@ -180,6 +232,7 @@
     animateSections();
     initAudioSync();
     initButtonFeedback();
+    observePoster();
     bindRouteIfPresent();
 
     // The map SVG is created after the user submits four cities, so watch for
