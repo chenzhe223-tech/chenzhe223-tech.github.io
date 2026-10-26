@@ -19,6 +19,9 @@
   var observedMap = null;
   var observedPoster = null;
   var observedResults = null;
+  var posterMotionKey = "";
+  var posterEpoch = 0;
+  var resultsWereShown = false;
 
   function animateHero() {
     var hero = document.querySelector(".hero");
@@ -167,6 +170,12 @@
     var poster = document.querySelector("#poster");
     if (!results || !poster || !results.classList.contains("show")) return;
 
+    var title = poster.querySelector("#postertitle");
+    var image = poster.querySelector("#aiCoverImage[data-loaded='true']");
+    var key = posterEpoch + "|" + (title ? title.textContent : "") + "|" + (image ? (image.currentSrc || image.src) : "");
+    if (key === posterMotionKey) return;
+    posterMotionKey = key;
+
     var copy = poster.querySelectorAll(".poster-copy > small, .poster-copy h3, .poster-copy p");
     if (copy.length) {
       gsap.fromTo(copy,
@@ -174,7 +183,6 @@
         { y: 0, autoAlpha: 1, duration: 0.42, stagger: 0.055, ease: "power2.out", overwrite: true }
       );
     }
-    var image = poster.querySelector("#aiCoverImage[data-loaded='true']");
     if (image) {
       gsap.fromTo(image,
         { scale: 1.035, autoAlpha: 0.72 },
@@ -204,7 +212,12 @@
     }
     if (results && window.MutationObserver && results !== observedResults) {
       observedResults = results;
-      new MutationObserver(animatePoster).observe(results, {
+      new MutationObserver(function () {
+        var shown = results.classList.contains("show");
+        if (shown && !resultsWereShown) posterEpoch += 1;
+        resultsWereShown = shown;
+        animatePoster();
+      }).observe(results, {
         attributes: true,
         attributeFilter: ["class"]
       });
