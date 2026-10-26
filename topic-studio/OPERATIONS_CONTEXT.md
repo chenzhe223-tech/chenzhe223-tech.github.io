@@ -10,10 +10,11 @@
 
 ## 必读文件
 - 本次新增内容生产流程：`topic-studio/CONTENT_PIPELINE.md`
-- 内容包队列和交接约定：`topic-studio/content-pipeline/README.md`
-- 队列：`topic-studio/content-pipeline/queue.json`
-- 内容包模板：`topic-studio/content-pipeline/templates/manifest.template.json`
-- 包校验脚本：`topic-studio/scripts/validate-content-package.mjs`
+- 实际内容包存储：私有仓库 `chenzhe223-tech/workbuddy-workspace/davylab-content-pipeline/`
+- WorkBuddy 执行指令：https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md
+- 私有包模板：https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/templates/manifest.template.json
+- 私有包校验器：https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/scripts/validate-package.mjs
+- 公开仓库中的 `topic-studio/content-pipeline/` 和 `topic-studio/scripts/validate-content-package.mjs` 仅作为公开工程脚手架，不保存未发表内容。
 - 应用规则：`topic-studio/docs/PRODUCT_RULES.md`
 - 最新对话决策日志：`topic-studio/docs/CONVERSATION_LOG_2026-10-26.md`
 - 公众号已发内容同步说明：`topic-studio/WECHAT_CONTENT_SYNC.md`
