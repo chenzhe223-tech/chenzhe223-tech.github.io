@@ -6,7 +6,7 @@ from unittest.mock import patch
 import os
 from radar.scripts import build_daily
 from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
-from radar.scripts.run_horizon import build_selection_pool
+from radar.scripts.run_horizon import build_selection_pool, ensure_story_fallback
 
 class _FakeHttpResponse:
     def __enter__(self): return self
@@ -238,6 +238,29 @@ class DailyBriefContractTests(unittest.TestCase):
             {"title": "另一条中国 AI 新闻", "url": "https://36kr.com/news/3", "source": "36氪", "published": now},
         ]
         self.assertEqual(len(rank_diverse_china_items(candidates)), 2)
+
+    def test_ensure_story_fallback_drops_unbacked_top5_and_refills_from_verified_sources(self):
+        report = {
+            "news": [
+                {"title": "Story A", "title_zh": "新闻 A", "url": "https://example.com/a", "source": "A", "published": "2026-10-27T00:00:00Z", "summary": "A"},
+                {"title": "Story B", "title_zh": "新闻 B", "url": "https://example.com/b", "source": "B", "published": "2026-10-27T00:00:00Z", "summary": "B"},
+                {"title": "Story C", "title_zh": "新闻 C", "url": "https://example.com/c", "source": "C", "published": "2026-10-27T00:00:00Z", "summary": "C"},
+                {"title": "Story D", "title_zh": "新闻 D", "url": "https://example.com/d", "source": "D", "published": "2026-10-27T00:00:00Z", "summary": "D"},
+                {"title": "Story E", "title_zh": "新闻 E", "url": "https://example.com/e", "source": "E", "published": "2026-10-27T00:00:00Z", "summary": "E"},
+            ],
+            "china_ai_news": [],
+            "top5": [
+                {"title_zh": "AI-selected A", "source_url": "https://example.com/a"},
+                {"title_zh": "Unverified story", "source_url": "https://example.com/not-in-source-pool"},
+            ],
+        }
+        ensure_story_fallback(report)
+        source_urls = {item["url"] for item in report["news"]}
+        self.assertEqual(len(report["top5"]), 5)
+        self.assertTrue(all(card.get("source_url") in source_urls for card in report["top5"]))
+        self.assertNotIn("https://example.com/not-in-source-pool", {card.get("source_url") for card in report["top5"]})
+        self.assertEqual(report["top5"][0]["source_url"], "https://example.com/a")
+        self.assertEqual(report["top5_status"], "source_fallback")
 
     def test_top5_is_source_backed_when_present(self):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))

@@ -144,38 +144,89 @@ def build_selection_pool(global_news, china_news):
     return pool
 
 def ensure_story_fallback(report):
-    """Populate source-linked cards without pretending fallback stories are AI-scored."""
-    current=report.get('top5')
-    if isinstance(current,list) and len(current)>=5:
-        # Keep the quality marker in sync with the actual cards. Without this,
-        # successful AI selections could be published without top5_status and
-        # the scheduled recovery guard would rerun the pipeline indefinitely.
-        report['top5_status']='source_fallback' if any(x.get('fallback') for x in current[:5]) else 'ai_curated'
-        return
-    cards=list(current) if isinstance(current,list) else []
-    seen={x.get('source_url') for x in cards}
-    for item in report.get('news',[]):
-        url=item.get('url') or item.get('link') or ''
-        if not url or url in seen:
+    """Keep every editorial highlight tied to a canonical URL in the verified source pool."""
+    news = report.get("news") if isinstance(report.get("news"), list) else []
+    china = report.get("china_ai_news") if isinstance(report.get("china_ai_news"), list) else []
+    candidates = [item for item in news + china if isinstance(item, dict)]
+
+    by_key = {}
+    for item in candidates:
+        raw_url = str(item.get("url") or item.get("link") or item.get("source_url") or "").strip()
+        if not raw_url.startswith("https://"):
+            continue
+        key = _story_url_key({"url": raw_url})
+        if key:
+            by_key.setdefault(key, item)
+
+    current = report.get("top5") if isinstance(report.get("top5"), list) else []
+    cards = []
+    seen = set()
+    dropped_unbacked = 0
+    for card in current:
+        if not isinstance(card, dict):
+            continue
+        raw_url = str(card.get("source_url") or card.get("url") or "").strip()
+        key = _story_url_key({"url": raw_url})
+        source_item = by_key.get(key)
+        if not source_item:
+            dropped_unbacked += 1
+            continue
+        if key in seen:
+            continue
+        canonical_url = str(source_item.get("url") or source_item.get("link") or source_item.get("source_url") or "").strip()
+        if not canonical_url.startswith("https://"):
+            dropped_unbacked += 1
+            continue
+
+        merged = dict(source_item)
+        merged.update(card)
+        # Canonical source metadata always wins over a model-supplied URL/source label.
+        merged["source_url"] = canonical_url
+        merged["source"] = source_item.get("source") or card.get("source") or ""
+        merged["published"] = source_item.get("published") or card.get("published") or ""
+        merged["title_zh"] = card.get("title_zh") or source_item.get("title_zh") or source_item.get("title") or source_item.get("original_title") or ""
+        merged["title_en"] = card.get("title_en") or source_item.get("title_en") or source_item.get("title") or ""
+        merged["what_zh"] = card.get("what_zh") or card.get("summary_zh") or source_item.get("what_zh") or source_item.get("summary_zh") or source_item.get("summary") or ""
+        merged["what_en"] = card.get("what_en") or card.get("summary_en") or source_item.get("what_en") or source_item.get("summary_en") or source_item.get("summary") or ""
+        merged["why_zh"] = card.get("why_zh") or source_item.get("why_zh") or source_item.get("why_it_matters_zh") or ""
+        merged["why_en"] = card.get("why_en") or source_item.get("why_en") or source_item.get("why_it_matters_en") or ""
+        cards.append(merged)
+        seen.add(key)
+
+    # If an AI-selected card is not source-backed, refill only from the verified pool.
+    for item in candidates:
+        if len(cards) >= 5:
+            break
+        raw_url = str(item.get("url") or item.get("link") or item.get("source_url") or "").strip()
+        if not raw_url.startswith("https://"):
+            continue
+        key = _story_url_key({"url": raw_url})
+        if not key or key in seen:
             continue
         cards.append({
-            'title_zh':item.get('title_zh') or item.get('title') or '',
-            'title_en':item.get('title_en') or item.get('title') or '',
-            'what_zh':item.get('summary_zh') or item.get('summary') or '',
-            'what_en':item.get('summary_en') or item.get('summary') or '',
-            'why_zh':item.get('why_it_matters_zh') or '',
-            'why_en':item.get('why_it_matters_en') or '',
-            'source_url':url,
-            'source':item.get('source') or '',
-            'published':item.get('published') or '',
-            'original_title':item.get('title') or '',
-            'fallback':True,
+            "title_zh": item.get("title_zh") or item.get("title") or item.get("original_title") or "",
+            "title_en": item.get("title_en") or item.get("title") or "",
+            "what_zh": item.get("what_zh") or item.get("summary_zh") or item.get("summary") or "",
+            "what_en": item.get("what_en") or item.get("summary_en") or item.get("summary") or "",
+            "why_zh": item.get("why_zh") or item.get("why_it_matters_zh") or "",
+            "why_en": item.get("why_en") or item.get("why_it_matters_en") or "",
+            "source_url": raw_url,
+            "source": item.get("source") or "",
+            "published": item.get("published") or "",
+            "original_title": item.get("original_title") or item.get("title") or "",
+            "fallback": True,
         })
-        seen.add(url)
-        if len(cards)>=5:
-            break
-    report['top5']=cards[:5]
-    report['top5_status']='ai_curated' if all(not x.get('fallback') for x in cards[:5]) and len(cards)>=5 else ('source_fallback' if cards else 'unavailable')
+        seen.add(key)
+
+    report["top5"] = cards[:5]
+    if dropped_unbacked:
+        print(f"[source-backed-top5] dropped={dropped_unbacked} unverified AI-selected URL(s); refilled from verified candidates.")
+    if len(report["top5"]) >= 5:
+        report["top5_status"] = "source_fallback" if any(item.get("fallback") for item in report["top5"]) else "ai_curated"
+    else:
+        report["top5_status"] = "source_fallback" if report["top5"] else "unavailable"
+        if isinstance(report.get("localization"), dict):
+            report["localization"]["status"] = "partial"
 
 def localize(report):
     key=os.environ.get('DEEPSEEK_API_KEY')
