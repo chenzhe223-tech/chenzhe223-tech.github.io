@@ -197,7 +197,11 @@ jobs:
           if (!(await page.locator('#cityMapStatus').innerText()).includes('高德地图')) throw new Error('map must disclose AMap coordinate source');
           if (await page.locator('#cityPlayJourney').isDisabled()) throw new Error('selected preview track should enable journey playback');
           if (await page.locator('#downloadCityMap').isDisabled()) throw new Error('generated map should be downloadable');
+          const mapDownloadPromise = page.waitForEvent('download');
           await page.locator('#downloadCityMap').click();
+          const mapDownload = await mapDownloadPromise;
+          const downloadedMapSvg = readFileSync(await mapDownload.path(), 'utf8');
+          if (!downloadedMapSvg.includes('stroke-dashoffset: 0')) throw new Error('downloaded SVG must export the complete route, not an in-progress GSAP frame');
           if (await page.locator('#cityRouteSvg').count() !== 1) throw new Error('map download must not remove the map');
           await page.locator('#saveCityMap').click();
           await page.getByRole('button',{name:/我的作品/}).click();
