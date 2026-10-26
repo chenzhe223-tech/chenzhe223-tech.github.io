@@ -15,7 +15,9 @@
 - 音频预览、HTMLAudioElement、媒体事件、错误恢复或播放行为：`skills/melodyme-audio-engineering/SKILL.md`
 - Apple MusicKit、iTunes Search、目录/播放权限、将来原生 iOS 集成：`skills/melodyme-music-platform/SKILL.md`
 
-## MelodyMe 不可突破的产品边界
+## 动效技能路由\n\n
+- GSAP 动效、时间轴、滚动触发、动画性能或框架集成：先读取对应官方项目技能 `.agents/skills/gsap-*/SKILL.md。项目内已随仓库安装 GreenSock 官方 8 个 GSAP Skills。
+\n## GSAP 在 MelodyMe 中的使用边界\n\n- 运行时动画位于 `gsap-motion.js`，通过 GSAP 与 ScrollTrigger CDN 作为渐进增强加载；CDN 不可用时，核心创作、地图、音频、保存和下载功能必须继续可用。\n- 动效优先使用 transform/opacity，不得动画化会造成明显布局抖动的属性；尊重 `prefers-reduced-motion`，避免长时间、强烈、妨碍阅读的动效。\n- 地图路线的播放状态仍由现有音频播放逻辑控制。GSAP 只能增强视觉反馈，不得自动播放音乐、改变音频时间、伪造地理坐标或影响 SVG 导出内容。\n- 不因引入 GSAP 重写现有单文件应用，也不重复创建海报 DOM；所有动效必须适配移动端，并保留无 GSAP 时的可用性。\n\n## MelodyMe 不可突破的产品边界
 
 1. 当前应用使用 iTunes Search 返回真实歌曲目录与可用的短试听 URL；试听必须由用户主动触发，不得伪装成完整歌曲播放。
 2. 不得声称拥有 Apple Music 完整曲库播放权限，不得绕过 DRM、登录、订阅或地区限制。
