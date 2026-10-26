@@ -56,7 +56,7 @@ def decode_poster(path: Path, expected_url: str) -> dict:
     if points is None or len(points) == 0:
         fail(f"QR decoded but no QR geometry was detected in {path}")
 
-    # The generator reserves a 150 x 150 px, lower-left QR tile in a 1200 x 1800
+    # The generator reserves a 240 x 240 px, lower-left QR tile in a 1200 x 1800
     # poster. Check the actual final image region for contrast and quiet zone.
     qr_x, qr_y, qr_size = QR_X, QR_Y, QR_SIZE
     if qr_y < 0 or qr_x + qr_size > width or qr_y + qr_size > height:
