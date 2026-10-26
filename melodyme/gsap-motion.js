@@ -52,8 +52,8 @@
 
   function animateSections() {
     if (!window.ScrollTrigger) return;
-    gsap.utils.toArray(".section .secthead, .section .layout > .card").forEach(function (el) {
-      if (el.dataset.gsapReveal === "done") return;
+    gsap.utils.toArray(".section .secthead, .section .layout > .card, .section .city-layout > .card").forEach(function (el) {
+      if (el.closest(".hidden") || el.dataset.gsapReveal === "done") return;
       el.dataset.gsapReveal = "done";
       gsap.from(el, {
         y: 16,
@@ -69,6 +69,15 @@
       });
     });
     window.ScrollTrigger.refresh();
+  }
+
+  function observeSections() {
+    if (!window.MutationObserver) return;
+    document.querySelectorAll(".section").forEach(function (section) {
+      new MutationObserver(function () {
+        if (!section.classList.contains("hidden")) animateSections();
+      }).observe(section, { attributes: true, attributeFilter: ["class"] });
+    });
   }
 
   function routeProgress() {
@@ -243,6 +252,7 @@
   function init() {
     animateHero();
     animateSections();
+    observeSections();
     initAudioSync();
     initButtonFeedback();
     observePoster();
