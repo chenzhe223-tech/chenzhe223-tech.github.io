@@ -183,6 +183,16 @@ jobs:
           await page.locator('#buildCityMap').click();
           await page.locator('#cityRouteSvg').waitFor({state:'visible'});
           if (await page.locator('#cityMapCanvas .city-map-pin').count() !== 4) throw new Error('map must show four geocoded city stops');
+          const gsapLoaded = await page.evaluate(() => !!window.gsap);
+          if (gsapLoaded) {
+            await page.waitForFunction(() => {
+              const path = document.querySelector('#cityMapCanvas #cityRoutePath');
+              return path && path.style.animation === 'none';
+            }, { timeout: 3000 });
+            if (!(await page.locator('#cityMapCanvas #cityRoutePath').evaluate(el => el.style.strokeDasharray === '1'))) {
+              throw new Error('GSAP should bind to the dynamically rendered city route');
+            }
+          }
           if (!(await page.locator('#cityMapStatus').innerText()).includes('高德地图')) throw new Error('map must disclose AMap coordinate source');
           if (await page.locator('#cityPlayJourney').isDisabled()) throw new Error('selected preview track should enable journey playback');
           if (await page.locator('#downloadCityMap').isDisabled()) throw new Error('generated map should be downloadable');
