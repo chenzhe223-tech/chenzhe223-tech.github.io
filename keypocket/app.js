@@ -152,23 +152,111 @@ async function fetchGithubRepoMeta(url,timeoutMs=8000){
  if(!response.ok)throw Error(response.status===404?'未找到公开仓库，请检查地址。':response.status===403?'GitHub API 请求频率受限，请稍后重试。':'GitHub 仓库信息读取失败（HTTP '+response.status+'）。');
  return response.json();
 }
+function normalizeSkillQuery(q){
+ return String(q||'').trim().toLowerCase().replace(/[\s_-]+/g,' ').replace(/\bskills?\b/g,'').trim();
+}
+function skillQueryPlans(q){
+ const n=normalizeSkillQuery(q), raw=String(q||'').trim();
+ const plans=[];
+ const add=x=>{if(x&&!plans.includes(x))plans.push(x);};
+ if(/^(playwright|playwright skill|playwright skills)$/i.test(raw)){
+  add('"playwright" "skill"');add('playwright skill');add('playwright agent skill');
+ }else if(/^(lemo ?opuscar|lemo opuscar|lemomo ai lemo opuscar)$/i.test(raw)){
+  add('lemomo-ai/lemo-opuscar');add('"lemo-opuscar"');add('"lemo opuscar"');
+ }else if(/^(all design|all design skill|all design skills)$/i.test(raw)){
+  add('"all design" skill');add('ui ux pro max skill');add('"design skill"');
+ }else{
+  add('"'+raw.replace(/"/g,'')+'" skill');add(raw+' skill');add(n);
+ }
+ return plans.slice(0,3);
+}
+function scoreSkillResult(r,q){
+ const query=normalizeSkillQuery(q),full=String(r.full_name||'').toLowerCase(),name=String(r.name||'').toLowerCase();
+ const desc=String(r.description||'').toLowerCase(),topics=(r.topics||[]).join(' ').toLowerCase();
+ let score=0;
+ const tokens=query.split(' ').filter(Boolean);
+ if(tokens.length&&tokens.every(t=>name.includes(t)))score+=100;
+ if(tokens.length&&tokens.every(t=>full.includes(t)))score+=90;
+ if(query&&name===query.replace(/\s+/g,'-'))score+=180;
+ if(query&&full.endsWith('/'+query.replace(/\s+/g,'-')))score+=220;
+ if(tokens.some(t=>desc.includes(t)))score+=20;
+ if(tokens.some(t=>topics.includes(t)))score+=15;
+ if(/skill|agent|mcp|playwright|design/i.test([name,desc,topics].join(' ')))score+=8;
+ if(r.fork)score-=15;
+ score+=Math.min(Number(r.stargazers_count)||0,10000)/10000;
+ return score;
+}
+function isClearlyRelevantSkill(r,q){
+ const query=normalizeSkillQuery(q),full=String(r.full_name||'').toLowerCase(),name=String(r.name||'').toLowerCase(),desc=String(r.description||'').toLowerCase(),topics=(r.topics||[]).join(' ').toLowerCase();
+ if(/lemo ?opuscar/i.test(q))return /lemo-opuscar/.test(full+' '+name)||/lemomo-ai\/lemo-opuscar/i.test(full);
+ if(/^all design/i.test(query))return /all.?design|ui.?ux.?pro.?max|design.?skill/.test(full+' '+name+' '+desc+' '+topics);
+ if(/^playwright/i.test(query))return /playwright/.test(full+' '+name+' '+desc+' '+topics)&&(/skill|agent|mcp|automation|test/i.test(full+' '+name+' '+desc+' '+topics)||/playwright/.test(name));
+ const tokens=query.split(' ').filter(Boolean);
+ return tokens.length>0&&tokens.some(t=>(full+' '+name+' '+desc+' '+topics).includes(t));
+}
+function skillResultHtml(r,i,items,q){
+ const h=skillHeat(r,i+1,items.length),repo=canonicalSkillRepoUrl(r.html_url);
+ const existing=projects.some(p=>canonicalSkillRepoUrl(p.repoUrl)===repo);
+ const description=String(r.description||'暂无描述').replace(/\s+/g,' ').slice(0,220);
+ const owner=String(r.owner?.login||r.full_name.split('/')[0]||'');
+ const nativeHint=(/microsoft|playwright|lemomo-ai|nextlevelbuilder/i.test(owner+' '+r.full_name))?'优先关注的上游/原作者候选':'第三方候选，请核对作者与 README';
+ return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(description)+(String(r.description||'').length>220?'…':'')+'</small><small>'+esc(nativeHint)+' · ★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+'</small><small>本次关键词相关度排序 #'+(i+1)+'/'+items.length+'；不是全网安装量排名</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(repo||r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';
+}
 function skillImportModal(){
- openModal('<h2>按 Skill 名称导入</h2><p class="sub">输入 Skill 名称或关键词，从公开 GitHub 仓库中匹配候选。热度依据 Stars、Forks 和最近更新；这不是全网安装量排名。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、frontend design、mcp"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">搜索 GitHub 公开仓库；请核对仓库名称与 README 后再导入。</div><div id="skillSearchResults" class="github-repo-list"></div>');
+ openModal('<h2>按 Skill 名称导入</h2><p class="sub">优先精确匹配仓库名和原作者候选，再展示相关项目。结果按关键词相关度排序，热度仅作参考。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、lemo opuscar、all design"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">输入具体名称可优先匹配原作者仓库；收录前请核对来源。</div><div id="skillSearchResults" class="github-repo-list"></div>');
  const form=$('#skillSearchForm'),status=$('#skillSearchStatus'),results=$('#skillSearchResults');
+ let searchSequence=0,activeController=null,searching=false;
  form.addEventListener('submit',async e=>{
-  e.preventDefault();const q=$('#skillNameInput').value.trim();if(!q)return;
-  status.className='notice info';status.textContent='正在搜索公开仓库…';results.innerHTML='';
+  e.preventDefault();const q=$('#skillNameInput').value.trim();if(!q||searching)return;
+  const sequence=++searchSequence;searching=true;
+  if(activeController)activeController.abort();
+  activeController=new AbortController();
+  status.className='notice info';status.textContent='正在搜索 GitHub 公开仓库…';results.innerHTML='';
   const btn=form.querySelector('button[type=submit]');btn.disabled=true;
   try{
-   const url='https://api.github.com/search/repositories?q='+encodeURIComponent(q+' skill')+'&sort=stars&order=desc&per_page=10';
-   const response=await fetch(url,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
-   if(!response.ok)throw Error(response.status===403?'GitHub 搜索触发频率限制，请稍后重试。':'GitHub 搜索失败（HTTP '+response.status+'）。');
-   const data=await response.json(),items=(data.items||[]).filter(r=>!r.private&&r.html_url);
-   if(!items.length){status.className='notice';status.textContent='没有找到匹配结果。可尝试更短的 Skill 名称或英文关键词。';return;}
-   status.className='notice ok';status.textContent='找到 '+items.length+' 个候选。热度指标为公开仓库数据，不代表真实安装量或质量背书。';
-   results.innerHTML=items.map((r,i)=>{const h=skillHeat(r,i+1,items.length),existing=projects.some(p=>p.repoUrl.replace(/\/$/,'').toLowerCase()===r.html_url.replace(/\/$/,'').toLowerCase());return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(r.description||'暂无描述')+'</small><small>★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+' · '+esc(h.level)+' · '+esc(h.freshness)+'</small><small>本次关键词结果排名：#'+h.rank+'/'+h.total+'（按 Stars 降序；不是全 GitHub 全网排名）</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';}).join('');
-   results.querySelectorAll('[data-save-skill]').forEach(b=>b.addEventListener('click',async()=>{const r=items[Number(b.dataset.saveSkill)];if(!r)return;b.disabled=true;try{const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now(),p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:r.html_url,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\nGitHub 排名：#'+h.rank+'/'+h.total+'（本次关键词搜索结果，按 Stars 降序；非全网排名）\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});await putItem(await sealProject(p));projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已收录；热度与应用建议已保存');}catch(err){b.disabled=false;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}}));
-  }catch(err){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}finally{btn.disabled=false;}
+   const plans=skillQueryPlans(q),merged=new Map();
+   for(const plan of plans){
+    if(sequence!==searchSequence)return;
+    const url='https://api.github.com/search/repositories?q='+encodeURIComponent(plan)+'&sort=stars&order=desc&per_page=15';
+    const response=await fetch(url,{signal:activeController.signal,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+    if(!response.ok){
+     if(response.status===403)throw Error('GitHub API 搜索次数已达限制，请稍后再试。');
+     if(response.status===422)continue;
+     throw Error('GitHub 搜索失败（HTTP '+response.status+'）。');
+    }
+    const data=await response.json();
+    for(const r of (data.items||[])){
+     if(!r||r.private||!r.html_url||!canonicalSkillRepoUrl(r.html_url))continue;
+     const key=canonicalSkillRepoUrl(r.html_url);
+     if(!merged.has(key))merged.set(key,r);
+    }
+   }
+   if(sequence!==searchSequence)return;
+   let items=[...merged.values()].filter(r=>isClearlyRelevantSkill(r,q));
+   items.sort((a,b)=>scoreSkillResult(b,q)-scoreSkillResult(a,q)||Number(b.stargazers_count||0)-Number(a.stargazers_count||0));
+   items=items.slice(0,10);
+   if(!items.length){status.className='notice';status.textContent='没有找到足够相关的公开仓库。试试官方仓库名、作者名或更准确的英文关键词。';return;}
+   status.className='notice ok';status.textContent='找到 '+items.length+' 个相关候选，已按名称和关键词相关度排序。请优先核对上游作者与仓库内容。';
+   results.innerHTML=items.map((r,i)=>skillResultHtml(r,i,items,q)).join('');
+   results.querySelectorAll('[data-save-skill]').forEach(b=>b.addEventListener('click',async()=>{
+    const r=items[Number(b.dataset.saveSkill)];if(!r||b.disabled)return;
+    const repo=canonicalSkillRepoUrl(r.html_url);
+    if(!repo){status.className='notice error';status.textContent='仓库地址校验失败，未收录。';return;}
+    const existing=projects.find(p=>canonicalSkillRepoUrl(p.repoUrl)===repo);
+    if(existing){b.disabled=true;b.textContent='已收录';status.className='notice';status.textContent='该仓库已存在于你的项目清单中。';return;}
+    b.disabled=true;const original=b.textContent;b.textContent='正在保存…';
+    try{
+     const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now();
+     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\n关键词：'+q+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
+     await putItem(await sealProject(p));projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已加密保存');status.className='notice ok';status.textContent='已收录 '+r.full_name+'。你可以继续搜索其他 Skill。';
+    }catch(err){b.disabled=false;b.textContent=original;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}
+   }));
+  }catch(err){
+   if(err.name==='AbortError')return;
+   if(sequence===searchSequence){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}
+  }finally{
+   if(sequence===searchSequence){searching=false;btn.disabled=false;activeController=null;}
+  }
  });
 }
 async function refreshSavedSkillHeat(){
@@ -401,7 +489,7 @@ async function kpMergeAndSync(){
  }finally{status.disabled=!kpSession()?.access_token;status.textContent='合并并同步加密资料';}
 }
 $('#syncSignUpBtn')?.addEventListener('click',async()=>{try{const email=$('#syncEmail').value.trim(),password=$('#syncPassword').value;if(!email||password.length<10)throw Error('请输入邮箱及至少 10 位的账号密码。');await kpAuth('signup',email,password);kpSyncStatus('账号请求已提交。若邮箱验证已开启，请先查收验证邮件，再返回登录。');}catch(e){kpSyncStatus(e.message,true)}});
-$('#syncSignInBtn')?.addEventListener('click',async()=>{try{const email=$('#syncEmail').value.trim(),password=$('#syncPassword').value;if(!email||!password)throw Error('请输入邮箱和账号密码。');await kpAuth('token?grant_type=password',email,password);kpSyncStatus('已登录同步账号。现在点击“合并并同步加密资料”。');}catch(e){kpSyncStatus(e.message,true)}});
+$('#syncSignInBtn')?.addEventListener('click',async()=>{const btn=$('#syncSignInBtn');if(btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.textContent='正在登录…';try{const email=$('#syncEmail').value.trim(),password=$('#syncPassword').value;if(!email||!password)throw Error('请输入邮箱和账号密码。');const body=await kpAuth('token?grant_type=password',email,password);if(!body.access_token)throw Error('登录请求未返回有效会话，请检查邮箱验证状态或同步服务配置。');kpSyncStatus('登录成功。请点击“合并并同步加密资料”完成同步。');}catch(e){const msg=String(e.message||'登录失败');kpSyncStatus(msg.includes('Invalid login credentials')?'邮箱或密码不正确。':msg.includes('Email not confirmed')?'邮箱尚未验证，请先完成验证，或检查同步服务的邮箱验证设置。':msg.includes('Failed to fetch')?'无法连接同步服务，请检查网络或后端服务状态。':'登录失败：'+msg,true);}finally{btn.disabled=!!kpSession()?.access_token;btn.textContent=old;}});
 $('#syncSignOutBtn')?.addEventListener('click',async()=>{try{const s=kpSession();if(s?.access_token)await fetch(KP_SUPABASE_URL+'/auth/v1/logout',{method:'POST',headers:{'apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+s.access_token}});}catch{}kpSetSession(null);kpSyncStatus('已退出同步账号。本地加密库未受影响。');});
 $('#syncNowBtn')?.addEventListener('click',async()=>{try{await kpMergeAndSync()}catch(e){kpSyncStatus('同步未完成：'+e.message+' 本地数据保持不变；请确认所有设备使用相同的本地解锁密码。',true)}});
 kpSetSession(kpSession());
