@@ -19,9 +19,9 @@ DATA_DIR=ROOT/'radar/horizon-data'
 HORIZON_DIR=Path(os.environ.get('HORIZON_DIR','/tmp/Horizon'))
 TZ=ZoneInfo('Asia/Shanghai')
 try:
-    from radar.scripts.build_daily import _duplicate_match, filter_historical_duplicates
+    from radar.scripts.build_daily import _duplicate_match, _story_url_key, filter_historical_duplicates
 except ModuleNotFoundError:
-    from build_daily import _duplicate_match, filter_historical_duplicates
+    from build_daily import _duplicate_match, _story_url_key, filter_historical_duplicates
 
 CHINA_NEWS_PUBLIC_TARGET = 8
 
