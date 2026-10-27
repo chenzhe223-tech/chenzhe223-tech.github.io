@@ -266,6 +266,13 @@ class DailyBriefContractTests(unittest.TestCase):
         data=json.loads(Path("radar/data/latest.json").read_text(encoding="utf-8"))
         urls={x.get("url") for x in data.get("news", [])}
         urls.update(x.get("url") for x in data.get("china_ai_news", []))
+        # Top-5 China stories are deliberately removed from the China AI display
+        # section to avoid duplicate cards; the cross-section dedupe audit keeps
+        # their original and matched URLs as the source-of-truth trail.
+        cross_section = data.get("cross_section_dedupe", {})
+        for removed in cross_section.get("removed", []) if isinstance(cross_section, dict) else []:
+            if isinstance(removed, dict):
+                urls.update(url for url in (removed.get("url"), removed.get("matched_url")) if url)
         top5=data.get("top5", [])
         self.assertLessEqual(len(top5), 5)
         seen=set()
