@@ -88,3 +88,13 @@
 - The applied project has feedback and a final milestone.
 - Existing NianBox capture integration and glossary/learning interactions remain intact.
 - No claim of live deployment or mobile runtime pass without actual verification.
+
+
+## Mobile bugfix follow-up — 2026-10-29
+
+- Removed a legacy duplicate `renderProgress()` declaration that overrode the new mastery-based map renderer. This explains why chapter mastery and map progress could disagree.
+- Changed chapter-answer handling to update the existing card in place instead of rebuilding all six cards. This avoids the page jumping to a different scroll position after selecting an answer.
+- Reworked Quick Quiz into a finite assessment: answer feedback and explanation, disabled answer options after submission, explicit next-question progression, final score and percentage, pass/fail threshold of 80%, and restart action.
+- Latest page commit: `0f1c93b4d7b3f12cd41168fb5c97ad7c393a0830`.
+- Source-level verification: JavaScript syntax passed; only one `renderProgress()` definition remains; finite quiz result/restart functions exist; NianBox queue key and four stage markers remain.
+- Still pending: actual iPhone runtime verification and live Pages propagation; connected browser session was unavailable during this run.
