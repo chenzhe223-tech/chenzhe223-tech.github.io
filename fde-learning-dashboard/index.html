@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#101D32">
+<meta name="description" content="DAVYLAB Enterprise FDE 学习作战台：能力地图、90天学习路线、采购业务案例、学习资源与可保存的行动清单。">
+<title>Enterprise FDE 学习作战台 · DAVYLAB</title>
+<style>
+:root{--bg:#f4f6fa;--paper:#fff;--ink:#17263c;--muted:#64748b;--line:#e2e8f0;--navy:#101d32;--navy2:#1b3150;--blue:#2979ff;--cyan:#28c8d8;--pale:#eaf6fa;--green:#138a68;--amber:#b97917;--red:#b94a48;--radius:18px;--shadow:0 10px 30px rgba(16,29,50,.06)}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:100px}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;font-size:15px;-webkit-font-smoothing:antialiased}a{color:#1769ca;text-decoration:none}a:hover{text-decoration:underline}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid #7dd3fc;outline-offset:2px}
+.top{position:sticky;top:0;z-index:30;background:rgba(16,29,50,.96);color:#fff;backdrop-filter:blur(15px);border-bottom:1px solid rgba(255,255,255,.1)}.topin{max-width:1180px;margin:auto;padding:12px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}.brand{display:flex;align-items:center;gap:11px;min-width:0}.brandmark{width:38px;height:38px;border:1px solid rgba(40,200,216,.65);border-radius:12px;display:grid;place-items:center;color:var(--cyan);font-weight:800;font-size:13px;letter-spacing:.04em;background:linear-gradient(145deg,rgba(40,200,216,.13),rgba(41,121,255,.12))}.brandtitle{font-weight:750;font-size:14px;letter-spacing:.08em}.brandsub{font-size:11px;color:#b7c5d7;letter-spacing:.12em}.topactions{display:flex;align-items:center;gap:8px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 13px;border-radius:10px;font-weight:650;font-size:13px}.btn.dark{color:#fff;background:transparent;border-color:rgba(255,255,255,.25)}.btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.small{padding:7px 10px;font-size:12px}.tabs{border-top:1px solid rgba(255,255,255,.09);overflow-x:auto;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}.tabsin{max-width:1180px;margin:auto;padding:0 18px;display:flex;gap:4px;white-space:nowrap}.tab{border:0;background:none;color:#c0cad9;padding:12px 13px 11px;border-bottom:2px solid transparent;font-size:13px;font-weight:650}.tab.active{color:#fff;border-color:var(--cyan)}.wrap{max-width:1180px;margin:auto;padding:26px 22px 92px}.hero{position:relative;overflow:hidden;background:linear-gradient(125deg,#101d32 0%,#172c4b 58%,#174f65 100%);border-radius:26px;padding:30px 30px 28px;color:#fff;box-shadow:0 18px 46px rgba(16,29,50,.16)}.hero:before{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(40,200,216,.18);border-radius:50%;right:-70px;top:-135px;box-shadow:0 0 0 26px rgba(40,200,216,.035),0 0 0 58px rgba(40,200,216,.025)}.eyebrow{color:var(--cyan);font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase}.hero h1{font-size:clamp(29px,5vw,48px);letter-spacing:-.04em;line-height:1.13;margin:12px 0 13px;max-width:760px}.hero p{margin:0;color:#d5dfeb;max-width:720px;font-size:15px}.hero strong{color:#fff}.herofoot{margin-top:25px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}.chip{display:inline-flex;align-items:center;gap:7px;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#eaf5ff}.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);display:inline-block}.section{margin-top:30px}.sectionhead{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px}.sectionhead h2{font-size:22px;line-height:1.25;margin:0;letter-spacing:-.025em}.sectionhead p{margin:5px 0 0;color:var(--muted);font-size:13px}.kicker{font-size:11px;letter-spacing:.1em;color:var(--blue);text-transform:uppercase;font-weight:800;margin-bottom:4px}.grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:19px;box-shadow:var(--shadow);min-width:0}.card h3{font-size:16px;margin:0 0 7px;line-height:1.4}.card p{margin:0;color:var(--muted);font-size:13px}.stat{font-size:31px;font-weight:800;letter-spacing:-.04em;color:var(--navy);line-height:1.15}.statlabel{font-size:12px;color:var(--muted);margin-top:5px}.stataccent{color:var(--blue)}.bar{height:7px;background:#e9eef5;border-radius:99px;overflow:hidden;margin-top:13px}.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--cyan));border-radius:99px;transition:width .2s}.smallnote{font-size:12px;color:var(--muted)}.callout{border-left:3px solid var(--cyan);padding:13px 15px;background:#eaf7fa;border-radius:0 12px 12px 0;color:#254456;font-size:14px}.badge{display:inline-flex;border-radius:999px;font-size:11px;padding:4px 8px;font-weight:750;background:#edf4ff;color:#2455a7}.badge.green{background:#e7f7ef;color:#14744f}.badge.amber{background:#fff4df;color:#99610b}.badge.gray{background:#edf0f5;color:#58677d}.divider{border:0;border-top:1px solid var(--line);margin:15px 0}.list{list-style:none;margin:0;padding:0;display:grid;gap:10px}.list li{display:flex;gap:9px;align-items:flex-start;font-size:13px}.bullet{flex:0 0 22px;width:22px;height:22px;border-radius:7px;display:grid;place-items:center;background:#eef5ff;color:#2065c7;font-size:12px;font-weight:800;margin-top:1px}.muted{color:var(--muted)}.case{display:flex;flex-direction:column;gap:11px}.casehead{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.caseicon{height:40px;width:40px;display:grid;place-items:center;border-radius:12px;background:#edf5ff;color:#1c65bf;font-size:18px;margin-bottom:12px}.case a{font-size:12px;font-weight:700}.two-col{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);gap:16px}.roadmap{display:grid;gap:13px}.phase{display:grid;grid-template-columns:112px minmax(0,1fr);gap:15px}.phasetag{border-radius:13px;background:var(--navy);color:#fff;padding:13px 10px;text-align:center;align-self:start}.phasetag strong{font-size:18px;display:block}.phasetag span{font-size:11px;color:#b7c7dd}.phasebody{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px}.phasebody h3{margin:0 0 7px;font-size:16px}.checklist{display:grid;gap:9px;margin-top:13px}.checkrow{display:flex;align-items:flex-start;gap:10px;padding:10px 11px;border:1px solid #e7ecf3;border-radius:11px;background:#fbfcfe}.checkrow input{margin-top:4px;accent-color:var(--blue);width:16px;height:16px;flex:0 0 auto}.checkrow label{font-size:13px;cursor:pointer;flex:1}.checkrow.done{background:#f1faf5;border-color:#d3ebdd}.checkrow.done label{text-decoration:line-through;color:#6a8577}.resourcelink{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.resourcelink:last-child{border-bottom:0}.resourcelink strong{display:block;font-size:14px}.resourcelink span{font-size:12px;color:var(--muted);display:block;margin-top:2px}.resourcelink a{font-size:12px;font-weight:750;white-space:nowrap}.metricrow{display:grid;grid-template-columns:140px minmax(0,1fr) 95px;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.metricrow:last-child{border-bottom:0}.metricrow strong{font-size:13px}.metricrow small{font-size:12px;color:var(--muted)}.statepill{font-size:11px;padding:5px 8px;border-radius:9px;background:#edf1f7;color:#44566f;text-align:center;font-weight:750}.statepill.strong{background:#e7f7ef;color:#14744f}.statepill.practice{background:#eaf3ff;color:#245ab1}.statepill.gap{background:#fff4df;color:#94600f}.footnote{margin-top:18px;color:var(--muted);font-size:12px;line-height:1.7}.hidden{display:none!important}.mobilehint{display:none}.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#12233b;color:#fff;border-radius:12px;padding:10px 15px;font-size:13px;z-index:60;box-shadow:var(--shadow);display:none;max-width:90vw}.bottomnav{display:none}.sectionanchor{scroll-margin-top:115px}
+@media(max-width:900px){.g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.two-col{grid-template-columns:1fr}.metricrow{grid-template-columns:115px minmax(0,1fr) 82px}}
+@media(max-width:620px){body{font-size:14px}.topin{padding:10px 14px}.brandmark{width:34px;height:34px}.brandtitle{font-size:12px}.brandsub{font-size:9px}.topactions .btn{padding:7px 8px;font-size:11px}.tabsin{padding:0 8px}.tab{padding:11px 10px;font-size:12px}.wrap{padding:15px 13px 106px}.hero{padding:23px 20px 22px;border-radius:21px}.hero h1{font-size:32px}.hero p{font-size:14px}.herofoot{margin-top:20px}.section{margin-top:23px}.sectionhead h2{font-size:19px}.sectionhead{align-items:flex-start}.g4,.g3,.g2{grid-template-columns:1fr}.statsmobile{grid-template-columns:repeat(2,minmax(0,1fr))}.card{padding:16px;border-radius:15px}.stat{font-size:27px}.phase{grid-template-columns:75px minmax(0,1fr);gap:9px}.phasetag{padding:12px 5px}.phasetag strong{font-size:16px}.phasebody{padding:14px}.metricrow{grid-template-columns:minmax(0,1fr) auto;gap:5px 8px}.metricrow .bar{grid-column:1/-1;grid-row:2;margin:5px 0}.metricrow .statepill{grid-column:2;grid-row:1}.mobilehint{display:block}.bottomnav{display:flex;position:fixed;z-index:35;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);padding:7px max(7px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(7px,env(safe-area-inset-left));justify-content:space-around;gap:2px}.bottomnav button{border:0;background:transparent;color:#718096;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 7px;border-radius:10px;min-width:0}.bottomnav button span:first-child{font-size:17px;line-height:1.15}.bottomnav button.active{background:#eef7ff;color:#1b64b5;font-weight:800}.toast{bottom:83px}.footnote{font-size:11px}.resourcelink{align-items:flex-start}.resourcelink a{font-size:11px}.case p{font-size:13px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="topin">
+    <div class="brand"><div class="brandmark">DL</div><div><div class="brandtitle">DAVYLAB · FDE LEARNING OS</div><div class="brandsub">BUSINESS × AI × ENGINEERING</div></div></div>
+    <div class="topactions">
+      <button class="btn dark small" id="exportBtn" type="button">导出进度</button>
+      <button class="btn primary small" id="continueBtn" type="button">继续学习 ↓</button>
+    </div>
+  </div>
+  <nav class="tabs" aria-label="页面导航"><div class="tabsin">
+    <button class="tab active" data-go="overview">总览</button><button class="tab" data-go="capabilities">能力地图</button><button class="tab" data-go="roadmap">90天路线</button><button class="tab" data-go="cases">项目案例</button><button class="tab" data-go="resources">学习资源</button><button class="tab" data-go="weekly">每周行动</button>
+  </div></nav>
+</header>
+<main class="wrap">
+<section class="hero sectionanchor" id="overview">
+  <div class="eyebrow">YOUR NEXT COMPETITIVE ADVANTAGE</div>
+  <h1>把业务经验，<br>变成企业 AI 交付能力。</h1>
+  <p>面向 <strong>Enterprise FDE（Forward Deployed Engineer）</strong> 的个人学习与实践作战台。以采购和成本管理为业务起点，用真实项目打通需求发现、AI 应用、系统集成、工程质量与业务价值验证。</p>
+  <div class="herofoot"><span class="chip"><i class="dot"></i>当前定位：Business-native AI FDE</span><span class="chip">主线项目：采购付款管理</span><span class="chip">节奏：90 天实战</span></div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><div class="kicker">At a glance</div><h2>你的 FDE 学习面板</h2><p>勾选任务后会保存在当前浏览器，适合每天打开继续推进。</p></div><span class="badge">手机优先</span></div>
+  <div class="grid g4 statsmobile">
+    <div class="card"><div class="stat stataccent" id="doneCount">0</div><div class="statlabel">已完成学习任务</div><div class="bar"><span id="overallBar" style="width:0%"></span></div><div class="smallnote" id="progressLabel">总进度 0%</div></div>
+    <div class="card"><div class="stat">90 <small style="font-size:14px;letter-spacing:0">天</small></div><div class="statlabel">建议实战周期</div><div class="smallnote" style="margin-top:12px">学一个、做一个、验收一个</div></div>
+    <div class="card"><div class="stat">03</div><div class="statlabel">代表性业务案例</div><div class="smallnote" style="margin-top:12px">付款 · 采购看板 · 物流追踪</div></div>
+    <div class="card"><div class="stat">06</div><div class="statlabel">核心能力维度</div><div class="smallnote" style="margin-top:12px">从业务发现到价值验证</div></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><div class="kicker">Your positioning</div><h2>个人定位</h2><p>不是从零转型的普通 AI 开发者，而是将业务专业能力与技术交付结合。</p></div></div>
+  <div class="grid g2">
+    <div class="card">
+      <span class="badge green">建议定位</span>
+      <h3 style="font-size:21px;margin-top:12px">Business-native Enterprise FDE</h3>
+      <p>懂采购与成本管理，能用 AI 将业务问题变成可操作的应用，并持续补齐企业系统、安全、测试和部署能力。</p>
+      <hr class="divider">
+      <ul class="list">
+        <li><span class="bullet">01</span><span><strong>懂业务：</strong>采购、成本、合同付款、供应商协同和物流交付。</span></li>
+        <li><span class="bullet">02</span><span><strong>能构建：</strong>看板、Web 应用、AI 文档处理与工作流。</span></li>
+        <li><span class="bullet">03</span><span><strong>能交付：</strong>逐步建立数据、安全、测试、部署和效果度量闭环。</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>FDE 的工作闭环</h3><p>每个项目都应经过这五个步骤，而不是停留在原型能运行。</p>
+      <div class="checklist">
+        <div class="checkrow"><span class="bullet">1</span><label><strong>发现问题</strong><br><span class="muted">业务访谈、痛点、基线和验收标准</span></label></div>
+        <div class="checkrow"><span class="bullet">2</span><label><strong>重构流程</strong><br><span class="muted">业务规则、流程状态、数据模型和边界</span></label></div>
+        <div class="checkrow"><span class="bullet">3</span><label><strong>构建系统</strong><br><span class="muted">AI / Agent、数据库、API 和界面</span></label></div>
+        <div class="checkrow"><span class="bullet">4</span><label><strong>安全交付</strong><br><span class="muted">权限、测试、监控、备份和恢复</span></label></div>
+        <div class="checkrow"><span class="bullet">5</span><label><strong>证明价值</strong><br><span class="muted">使用率、时间、错误率和业务影响</span></label></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section sectionanchor" id="capabilities">
+  <div class="sectionhead"><div><div class="kicker">Capability map</div><h2>能力地图：已有优势与下一步差距</h2><p>这是基于已分享项目材料的定性判断，不是认证成绩；可用来决定学习优先级。</p></div></div>
+  <div class="card">
+    <div class="metricrow"><div><strong>采购与成本业务理解</strong><br><small>领域知识和场景识别</small></div><div><div class="bar"><span style="width:92%;background:#138a68"></span></div></div><div class="statepill strong">已有优势</div></div>
+    <div class="metricrow"><div><strong>需求转化与产品设计</strong><br><small>把问题变成工具</small></div><div><div class="bar"><span style="width:78%"></span></div></div><div class="statepill practice">有实践</div></div>
+    <div class="metricrow"><div><strong>AI 应用与 Agent</strong><br><small>模型调用、结构化输出</small></div><div><div class="bar"><span style="width:68%"></span></div></div><div class="statepill practice">有实践</div></div>
+    <div class="metricrow"><div><strong>数据建模与系统集成</strong><br><small>数据库、API、事务与同步</small></div><div><div class="bar"><span style="width:42%;background:#b97917"></span></div></div><div class="statepill gap">重点补强</div></div>
+    <div class="metricrow"><div><strong>安全与权限治理</strong><br><small>身份、访问控制、审计</small></div><div><div class="bar"><span style="width:28%;background:#b97917"></span></div></div><div class="statepill gap">证据不足</div></div>
+    <div class="metricrow"><div><strong>自动化测试与生产交付</strong><br><small>CI/CD、监控、恢复</small></div><div><div class="bar"><span style="width:34%;background:#b97917"></span></div></div><div class="statepill gap">重点补强</div></div>
+    <div class="metricrow"><div><strong>业务价值与规模化复用</strong><br><small>指标、使用情况、ROI</small></div><div><div class="bar"><span style="width:30%;background:#b97917"></span></div></div><div class="statepill gap">需要量化</div></div>
+    <p class="footnote">进度条是学习优先级的示意表达，不是客观能力测试分数。不能以仓库项目数量推断生产级成熟度；应以代码审查、测试执行、部署记录和业务指标补证。</p>
+  </div>
+</section>
+
+<section class="section sectionanchor" id="roadmap">
+  <div class="sectionhead"><div><div class="kicker">90-day execution plan</div><h2>90 天学习与实战路线</h2><p>以付款管理平台为主线，在项目里学工程，而不是另起一堆互不相关的练习。</p></div><span class="badge amber">可勾选记录</span></div>
+  <div class="roadmap">
+    <article class="phase"><div class="phasetag"><strong>01–30</strong><span>第一个月</span></div><div class="phasebody"><h3>业务建模与工程底座</h3><p>把目前的付款工具拆解为业务、数据、接口、权限和验收模块。</p><div class="checklist">
+      <div class="checkrow"><input type="checkbox" data-task="r1"><label>梳理付款业务 AS-IS / TO-BE 流程、角色和异常场景。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r2"><label>学习 PostgreSQL 与 SQL，完成 ER 图、数据字典和迁移脚本。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r3"><label>明确合同、申请、实付之间的关联、金额口径和唯一约束。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r4"><label>为项目写清需求范围、风险清单和可验证的验收标准。</label></div>
+    </div><p class="smallnote" style="margin-top:12px"><strong>阶段交付：</strong>业务流程图、架构图、数据模型、可运行原型与验收计划。</p></div></article>
+    <article class="phase"><div class="phasetag"><strong>31–60</strong><span>第二个月</span></div><div class="phasebody"><h3>系统集成、安全与可靠性</h3><p>把关键逻辑从“我本地能运行”提升到“经过授权的用户可以可靠地使用”。</p><div class="checklist">
+      <div class="checkrow"><input type="checkbox" data-task="r5"><label>完成至少一个授权数据源的 API 同步，并记录更新时间和失败原因。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r6"><label>实现用户认证、角色/行级权限，测试越权读写是否被阻止。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r7"><label>用 Playwright 或等效工具覆盖关键浏览器流程。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r8"><label>补齐错误日志、备份恢复、部署文档与回滚步骤。</label></div>
+    </div><p class="smallnote" style="margin-top:12px"><strong>阶段交付：</strong>具有明确权限边界、可重复测试、可追踪运行状态的系统版本。</p></div></article>
+    <article class="phase"><div class="phasetag"><strong>61–90</strong><span>第三个月</span></div><div class="phasebody"><h3>试点验证与 FDE 案例沉淀</h3><p>在获准环境中验证系统是否解决了业务问题，并把方法沉淀成可复用资产。</p><div class="checklist">
+      <div class="checkrow"><input type="checkbox" data-task="r9"><label>使用脱敏案例建立测试集，覆盖正常、缺失、冲突和异常输入。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r10"><label>记录业务基线与试点结果：处理时间、错误率、使用率与反馈。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r11"><label>形成项目案例：痛点、方案、架构、测试证据、部署和实际效果。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="r12"><label>把通用数据适配器、测试用例、部署模板抽象成可复用组件。</label></div>
+    </div><p class="smallnote" style="margin-top:12px"><strong>阶段交付：</strong>一个代表项目、一份可核验案例报告、一套个人 FDE Playbook。</p></div></article>
+  </div>
+</section>
+
+<section class="section sectionanchor" id="cases">
+  <div class="sectionhead"><div><div class="kicker">Evidence portfolio</div><h2>代表项目案例</h2><p>对外展示使用脱敏表述；企业内网、客户名称和真实业务数据不应未经授权公开。</p></div></div>
+  <div class="grid g3">
+    <article class="card case"><div><div class="caseicon">↗</div><div class="casehead"><h3>采购付款管理</h3><span class="badge green">优先主案例</span></div><p>合同/项目 → 付款申请 → 实际付款的分层业务模型，覆盖币种、金额口径、发票抽取与申请生成。</p></div><hr class="divider"><div><strong style="font-size:12px">FDE 能力体现</strong><ul class="list" style="margin-top:8px"><li><span class="bullet">✓</span><span>业务建模与数据适配</span></li><li><span class="bullet">✓</span><span>AI 字段抽取及结果校验</span></li><li><span class="bullet">✓</span><span>自检用例与异常规则设计</span></li></ul></div><div><span class="badge amber">待补证：权限、持久化、实测和部署恢复</span></div></article>
+    <article class="card case"><div><div class="caseicon">▥</div><h3>采购与成本决策看板</h3><p>围绕报价比较、项目台账、供应商信息与进度管理，把不同业务口径整理成可检索、可分析、可追踪的工具。</p></div><hr class="divider"><div><strong style="font-size:12px">FDE 能力体现</strong><ul class="list" style="margin-top:8px"><li><span class="bullet">✓</span><span>业务需求转化与可视化</span></li><li><span class="bullet">✓</span><span>数据标准化和决策支持</span></li><li><span class="bullet">✓</span><span>采购领域知识工程化</span></li></ul></div><div><span class="badge amber">待补证：结果对照、用户采纳和效率指标</span></div></article>
+    <article class="card case"><div><div class="caseicon">⇄</div><h3>采购物流追踪</h3><p>面向生产、发货、运输、清关与交付过程，规划统一状态、关键时间、责任人和异常处理机制。</p></div><hr class="divider"><div><strong style="font-size:12px">FDE 能力体现</strong><ul class="list" style="margin-top:8px"><li><span class="bullet">✓</span><span>端到端流程设计</span></li><li><span class="bullet">✓</span><span>跨系统数据集成规划</span></li><li><span class="bullet">✓</span><span>异常与交付管理</span></li></ul></div><div><span class="badge gray">待验证：持续数据源、告警与生产运行</span></div></article>
+  </div>
+  <div class="callout" style="margin-top:14px"><strong>案例叙事模板：</strong>业务痛点 → 方案取舍 → 技术实现 → 测试结果 → 使用情况 → 业务指标。没有证据的收益不写成既成事实。</div>
+</section>
+
+<section class="section sectionanchor" id="resources">
+  <div class="sectionhead"><div><div class="kicker">Learning library</div><h2>学习资源库</h2><p>直接从正在做的项目切入学习，避免不必要的技术栈铺张。</p></div></div>
+  <div class="grid g2">
+    <div class="card"><h3>工程基础</h3>
+      <div class="resourcelink"><div><strong>PostgreSQL 官方文档</strong><span>SQL、事务、约束、索引与关系建模</span></div><a href="https://www.postgresql.org/docs/" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>Supabase 官方文档</strong><span>Postgres、认证、RLS 与迁移</span></div><a href="https://supabase.com/docs" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>MDN Web Docs</strong><span>HTTP、JavaScript、浏览器与安全基础</span></div><a href="https://developer.mozilla.org/" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>GitHub Actions</strong><span>CI 自动化、测试流水线和部署检查</span></div><a href="https://docs.github.com/actions" target="_blank" rel="noopener">打开 ↗</a></div>
+    </div>
+    <div class="card"><h3>测试、安全与 AI</h3>
+      <div class="resourcelink"><div><strong>Playwright 官方文档</strong><span>浏览器端到端测试与回归验收</span></div><a href="https://playwright.dev/docs/intro" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>OWASP GenAI Security</strong><span>LLM 应用、Agent 权限与安全风险</span></div><a href="https://genai.owasp.org/" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>OpenAI 开发者文档</strong><span>模型 API、工具调用与结构化输出</span></div><a href="https://platform.openai.com/docs" target="_blank" rel="noopener">打开 ↗</a></div>
+      <div class="resourcelink"><div><strong>OWASP Top 10</strong><span>常见 Web 应用安全风险与验证方向</span></div><a href="https://owasp.org/www-project-top-ten/" target="_blank" rel="noopener">打开 ↗</a></div>
+    </div>
+  </div>
+  <div class="callout" style="margin-top:14px">学习顺序建议：先学数据库和数据约束，再做 API 与权限，然后补测试、部署和监控，最后强化 Agent 评测与效果量化。AI 工具继续用，但把学习重点转向工程质量。</div>
+</section>
+
+<section class="section sectionanchor" id="weekly">
+  <div class="sectionhead"><div><div class="kicker">Weekly practice</div><h2>每周行动清单</h2><p>每周只抓住一条主线：做完、测过、记录证据，再进入下一步。</p></div><button class="btn small" id="resetWeek" type="button">重置本页勾选</button></div>
+  <div class="grid g2">
+    <div class="card"><h3>每周固定节奏</h3><div class="checklist">
+      <div class="checkrow"><input type="checkbox" data-task="w1"><label><strong>1 次业务复盘</strong><br><span class="muted">本周解决的业务痛点和仍未解决的问题是什么？</span></label></div>
+      <div class="checkrow"><input type="checkbox" data-task="w2"><label><strong>1 个工程概念</strong><br><span class="muted">将一个数据库、API、安全或测试概念用进项目。</span></label></div>
+      <div class="checkrow"><input type="checkbox" data-task="w3"><label><strong>1 组可重复测试</strong><br><span class="muted">记录输入、预期、实际结果和失败场景。</span></label></div>
+      <div class="checkrow"><input type="checkbox" data-task="w4"><label><strong>1 条证据入档</strong><br><span class="muted">提交 SHA、测试报告、部署记录或用户反馈。</span></label></div>
+      <div class="checkrow"><input type="checkbox" data-task="w5"><label><strong>1 次价值更新</strong><br><span class="muted">记录时间、错误率、采用情况等真实指标。</span></label></div>
+    </div></div>
+    <div class="card"><h3>项目验收门槛</h3><p>每次准备宣布“完成”前，逐项确认：</p><div class="checklist">
+      <div class="checkrow"><input type="checkbox" data-task="g1"><label>需求与验收标准已明确，并且有边界说明。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="g2"><label>核心流程与异常路径已测试，结果有记录。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="g3"><label>权限、密钥与敏感数据处理已检查。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="g4"><label>已区分代码完成、测试通过、部署成功和线上验收。</label></div>
+      <div class="checkrow"><input type="checkbox" data-task="g5"><label>业务效果有基线或已明确标注尚待测量。</label></div>
+    </div><hr class="divider"><p class="smallnote">提醒：未运行的测试不要标记通过；未经授权，不使用企业数据做公开演示。</p></div>
+  </div>
+  <div class="card" style="margin-top:14px"><div class="sectionhead" style="margin-bottom:8px"><div><h3 style="margin:0">学习记录</h3><p>简短写下本次学到了什么、下一步要验证什么。</p></div><span class="badge gray">仅本地保存</span></div><textarea id="notes" rows="4" placeholder="例如：本周梳理了合同、申请与实付的数据关系；下周为金额勾稽建立自动化测试……" style="width:100%;resize:vertical;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit;background:#fbfcfe"></textarea><div style="display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px"><span class="smallnote" id="saveState">自动保存到当前浏览器</span><button class="btn small" id="saveNote" type="button">保存记录</button></div></div>
+</section>
+
+<section class="section">
+  <div class="sectionhead"><div><div class="kicker">North star</div><h2>最终要沉淀的个人 FDE Playbook</h2></div></div>
+  <div class="grid g3">
+    <div class="card"><h3>业务发现手册</h3><p>访谈问题、流程拆解、业务基线、优先级和验收模板。</p></div>
+    <div class="card"><h3>工程交付模板</h3><p>架构图、数据字典、API 约定、安全检查、测试和部署文档。</p></div>
+    <div class="card"><h3>证据与案例库</h3><p>项目提交、测试报告、部署验证、用户反馈和真实业务指标。</p></div>
+  </div>
+  <div class="callout" style="margin-top:14px"><strong>判断进步的标准：</strong>不再只是“我用 AI 做出了一个工具”，而是“我能够解释为什么这样设计、如何证明它正确、怎样安全部署、出了问题怎么恢复，以及它为业务带来了什么可验证的变化”。</div>
+</section>
+
+<footer class="footnote">DAVYLAB · Enterprise FDE Learning OS · v1.0<br>进度与学习笔记保存在当前浏览器的 localStorage 中，仅本机可见；更换设备或清理浏览器数据前，请先点击「导出进度」。本页面为个人学习规划工具，不代表技术认证或生产环境安全审查结果。</footer>
+</main>
+<nav class="bottomnav" aria-label="手机快速导航">
+  <button class="active" data-go="overview"><span>⌂</span><span>总览</span></button>
+  <button data-go="capabilities"><span>◈</span><span>能力</span></button>
+  <button data-go="roadmap"><span>◷</span><span>路线</span></button>
+  <button data-go="cases"><span>▤</span><span>案例</span></button>
+  <button data-go="weekly"><span>✓</span><span>行动</span></button>
+</nav>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){
+  'use strict';
+  var KEY='davylab-fde-dashboard-v1';
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){saved={};}
+  var boxes=Array.prototype.slice.call(document.querySelectorAll('[data-task]'));
+  boxes.forEach(function(box){box.checked=!!(saved.tasks&&saved.tasks[box.getAttribute('data-task')]);syncRow(box);box.addEventListener('change',function(){syncRow(box);persist();updateProgress();});});
+  var notes=document.getElementById('notes');notes.value=saved.notes||'';
+  function syncRow(box){var row=box.closest('.checkrow');if(row){row.classList.toggle('done',box.checked);}}
+  function persist(){saved.tasks=saved.tasks||{};boxes.forEach(function(b){saved.tasks[b.getAttribute('data-task')]=b.checked;});saved.notes=notes.value;try{localStorage.setItem(KEY,JSON.stringify(saved));document.getElementById('saveState').textContent='已保存 · '+new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});}catch(e){document.getElementById('saveState').textContent='浏览器不允许本地保存，请导出进度';}}
+  function updateProgress(){var done=boxes.filter(function(b){return b.checked;}).length;var pct=Math.round(done/boxes.length*100);document.getElementById('doneCount').textContent=done;document.getElementById('overallBar').style.width=pct+'%';document.getElementById('progressLabel').textContent='总进度 '+pct+'% · '+done+'/'+boxes.length+' 项';}
+  function toast(msg){var el=document.getElementById('toast');el.textContent=msg;el.style.display='block';clearTimeout(window.__fdeToastTimer);window.__fdeToastTimer=setTimeout(function(){el.style.display='none';},2200);}
+  function go(id){var el=document.getElementById(id);if(!el)return;el.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});document.querySelectorAll('[data-go]').forEach(function(b){b.classList.toggle('active',b.getAttribute('data-go')===id);});}
+  document.querySelectorAll('[data-go]').forEach(function(b){b.addEventListener('click',function(){go(b.getAttribute('data-go'));});});
+  document.getElementById('continueBtn').addEventListener('click',function(){go('roadmap');});
+  notes.addEventListener('input',function(){persist();});
+  document.getElementById('saveNote').addEventListener('click',function(){persist();toast('学习记录已保存');});
+  document.getElementById('resetWeek').addEventListener('click',function(){var ids=['w1','w2','w3','w4','w5','g1','g2','g3','g4','g5'];boxes.forEach(function(b){if(ids.indexOf(b.getAttribute('data-task'))>=0){b.checked=false;syncRow(b);}});persist();updateProgress();toast('每周行动与验收清单已重置');});
+  document.getElementById('exportBtn').addEventListener('click',function(){persist();var blob=new Blob([JSON.stringify({exportedAt:new Date().toISOString(),dashboard:'DAVYLAB Enterprise FDE Learning OS',data:saved},null,2)],{type:'application/json'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='davylab-fde-learning-progress.json';document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url);toast('进度备份已导出');});
+  updateProgress();
+  document.getElementById('saveState').textContent='进度自动保存在当前浏览器';
+})();
+</script>
+</body>
+</html>
