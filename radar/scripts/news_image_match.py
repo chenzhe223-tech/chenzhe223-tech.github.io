@@ -37,6 +37,9 @@ def _image_identity(value: str) -> str:
     parsed = urllib.parse.urlsplit(normalized)
     host = (parsed.hostname or "").lower().removeprefix("www.")
     path = re.sub(r"/+", "/", parsed.path).rstrip("/")
+    # Publisher/CDN resized variants of the same source image must count as one asset.
+    # Example: photo-1200x800.jpg and photo-2048x1365.jpg should not evade weekly reuse checks.
+    path = re.sub(r"-(?:\\d{2,5}x\\d{2,5})(?=\\.[a-z0-9]{2,5}$)", "", path, flags=re.I)
     return urllib.parse.urlunsplit(("https", host, path, "", ""))
 
 def _weekly_used_images(today: str) -> set[str]:

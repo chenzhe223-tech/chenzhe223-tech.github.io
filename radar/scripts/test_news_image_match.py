@@ -29,6 +29,11 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertEqual(report["china_ai_news"][0]["image_url"], shared)
         self.assertEqual(report["china_ai_news"][1]["image_url"], unique)
 
+    def test_image_identity_normalizes_resized_variants(self):
+        first = "https://coincentral.com/wp-content/uploads/2026/04/Deepseek-1-1200x800.jpg"
+        second = "https://coincentral.com/wp-content/uploads/2026/04/Deepseek-1-2048x1365.jpg"
+        self.assertEqual(_image_identity(first), _image_identity(second))
+
     def test_extracts_og_and_twitter_images_in_preferred_order(self):
         document = """
         <html><head>
