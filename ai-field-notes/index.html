@@ -107,11 +107,19 @@ const quizzes=[{q:'MCP 最主要解决哪类问题？',a:['训练更大的语言
 function renderQuiz(){answered=false;const q=quizzes[quizIndex%quizzes.length];document.getElementById('quizCount').textContent=String(quizIndex+1).padStart(2,'0');document.getElementById('quizQuestion').textContent=q.q;document.getElementById('quizFeedback').textContent='';document.getElementById('quizAnswers').innerHTML=q.a.map((a,i)=>'<button class="answer" onclick="answerQuiz('+i+')">'+String.fromCharCode(65+i)+'. '+a+'</button>').join('')}
 function answerQuiz(i){if(answered)return;answered=true;const q=quizzes[quizIndex%quizzes.length];document.querySelectorAll('.answer').forEach((b,j)=>{if(j===q.c)b.classList.add('good');else if(j===i)b.classList.add('bad')});document.getElementById('quizFeedback').textContent=(i===q.c?'答对了！ ':'再想一想。 ')+q.why}
 function nextQuiz(){quizIndex=(quizIndex+1)%quizzes.length;renderQuiz()}
+const projectQuestions=[
+{title:'1. 选择执行方式',q:'报价比较需要读取数据、逐步计算并标记异常，优先考虑什么？',a:['只用一句提示词要求模型直接给结论','设计可检查的步骤，必要时由 Agent 调用工具'],c:1,why:'多步工作应拆解步骤，并保留可观察的结果。'},
+{title:'2. 复用团队规则',q:'同类报价需要反复遵循统一规则，应该怎么做？',a:['把处理步骤、约束和验收标准整理成可复用 Skill','依赖每次对话都记住所有要求'],c:0,why:'可复用规则能减少遗漏，但仍需维护和验收。'},
+{title:'3. 验证结果与风险',q:'工具读数不完整或计算异常时，系统应该如何处理？',a:['忽略异常，直接给最终结论','验证数据与计算，按策略重试或交由人工确认'],c:1,why:'验证、错误处理与人工复核是可靠流程的一部分。'}
+];
+function renderProject(){const p=getLearningProgress();document.getElementById('projectSteps').innerHTML=projectQuestions.map((q,i)=>'<div class="project-step"><b>'+q.title+'</b><p>'+q.q+'</p>'+q.a.map((a,j)=>'<button class="project-choice '+(p.project[i]===j?'selected':'')+'" onclick="answerProject('+i+','+j+')">'+String.fromCharCode(65+j)+'. '+a+'</button>').join('')+'<div class="project-feedback">'+(p.project[i]===q.c?'✓ '+q.why:p.project[i]!==null?'再检查一下：'+q.why:'')+'</div></div>').join('');document.getElementById('projectStatus').textContent=p.projectPassed?'挑战通过！你已完成四阶段路线的综合实践。':'已完成 '+p.project.filter(v=>v!==null).length+' / 3 项选择。每题答对后即可继续；答错可重新选择。'}
+function answerProject(i,j){const p=getLearningProgress();p.project[i]=j;p.projectPassed=p.project.every((v,k)=>v===projectQuestions[k].c);saveLearningProgress(p);renderProject();renderProgress()}
+
 function renderTerms(){const query=(document.getElementById('termSearch').value||'').toLowerCase().trim();const filtered=terms.filter(t=>t.join(' ').toLowerCase().includes(query));document.getElementById('terms').innerHTML=filtered.map(t=>'<article class="term"><small>'+t[1]+'</small><b>'+t[0]+'</b><p>'+(mode==='pro'?t[2]:t[3])+'</p></article>').join('')||'<div class="term">没有找到匹配词条，试试英文缩写或中文关键词。</div>'}
 function makeCapture(title,content,tags){return{id:'ai-field-notes-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,9),source:'ai-field-notes',createdAt:Date.now(),title,content,tags}}
 function saveCapture(capture){const key='nb.learning.pending-note.v1';try{const old=JSON.parse(localStorage.getItem(key)||'[]');if(!Array.isArray(old))throw Error('invalid');old.push(capture);localStorage.setItem(key,JSON.stringify(old));document.getElementById('saveStatus').textContent='已放入待导入队列。打开同一浏览器中的念头盒应用，待导入笔记会自动进入收件箱。';return}catch(e){document.getElementById('saveStatus').textContent='浏览器暂不允许本地存储。你可以复制下面的内容，再手动记录到念头盒。';const txt=capture.title+'\n\n'+capture.content;const a=document.createElement('textarea');a.value=txt;a.style.width='100%';a.style.marginTop='10px';a.rows=5;document.querySelector('.savebar').appendChild(a);a.focus();a.select()}}
 function saveTopic(i){const t=topics[i];saveCapture(makeCapture(t.title,t.title+'\n\n'+(mode==='pro'?t.pro:t.easy)+'\n\n关键问题：'+t.question+'\n参考理解：'+t.answer,['AI学习',...t.tags]))}
 function saveCurrent(){saveTopic(topicIndex)}
-renderTopics();renderTerms();renderFlash();renderQuiz();initMap();
+renderTopics();renderTerms();renderFlash();renderQuiz();initMap();renderProject();
 </script>
 </body></html>
