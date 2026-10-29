@@ -85,6 +85,25 @@ const path = require('node:path');
     if (!(await opener.evaluate(el => document.activeElement === el))) throw new Error('Closing the detail dialog did not restore focus to the opener');
     results.push({ test: 'project detail dialog keyboard focus and Escape close', status: 'PASS' });
 
+    const adapterAvailable = await page.evaluate(() => !!window.DAVYLABMotion && typeof window.DAVYLABMotion.applyPreset === 'function');
+    if (!adapterAvailable) throw new Error('Visual DNA motion preset adapter did not load');
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, document.querySelector('#skills').offsetTop);
+    });
+    await page.waitForTimeout(120);
+    const skillsMotion = await page.evaluate(() => ({
+      targetCount: document.querySelectorAll('#skills .open-skill-main, #skills .open-skill-aside').length,
+      activePreviewCount: Array.from(document.querySelectorAll('#skills .open-skill-main, #skills .open-skill-aside'))
+        .reduce((count, element) => count + element.getAnimations().length, 0),
+      reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches
+    }));
+    if (skillsMotion.targetCount !== 2) throw new Error('Expected two isolated Open Skills motion targets: ' + JSON.stringify(skillsMotion));
+    if (!skillsMotion.reducedMotion && skillsMotion.activePreviewCount < 1) {
+      throw new Error('Open Skills section did not use the Visual DNA preset adapter: ' + JSON.stringify(skillsMotion));
+    }
+    results.push({ test: 'isolated Visual DNA preset integration in Open Skills section', status: 'PASS', detail: skillsMotion });
+
     await page.screenshot({ path: path.join(outDir, 'desktop.png'), fullPage: true });
     const desktopOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     if (desktopOverflow) throw new Error('Horizontal page overflow at 1440px desktop viewport');
