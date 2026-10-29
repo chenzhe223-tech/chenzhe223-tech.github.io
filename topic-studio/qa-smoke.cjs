@@ -64,6 +64,11 @@ async function main() {
     await page.locator("#radarSearch").fill("");
     await page.locator("#radarSort").selectOption("source");
     await page.locator("#radarSort").selectOption("fresh");
+    const radarBeforeTheme = await page.locator(".feedcard").count();
+    await page.locator("#radarTheme").selectOption("models");
+    assert.ok(/^显示 \d+ \/ \d+ 条$/.test(await page.locator("#radarResultCount").innerText()), "theme clustering keeps visible/total result count in sync");
+    assert.ok((await page.locator(".feedcard").count()) <= radarBeforeTheme, "topic clustering filters the current radar without inventing new items");
+    await page.locator("#radarTheme").selectOption("all");
 
     // Desktop visual regression: the feed card has a dedicated visual, content and action column.
     const desktopCard = await page.locator(".feedcard").first().evaluate(card => {
@@ -207,6 +212,9 @@ async function main() {
     await page.locator("#growthReviewForm button[type=submit]").click();
     reviewCount = await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "{}").reviews?.length || 0);
     assert.equal(reviewCount, 2, "editing a review updates the existing checkpoint instead of duplicating it");
+    await page.locator("#growthReviewList").getByText("7 日 → 30 日表现变化", { exact: true }).waitFor();
+    assert.ok((await page.locator("#growthReviewList").innerText()).includes("阅读变化 +270"), "7/30 review comparison calculates the observed cumulative-read difference");
+    assert.ok((await page.locator("#growthReviewSummary").innerText()).includes("1 篇文章已有完整 7/30 日双节点数据"), "review summary counts complete 7/30 comparisons");
 
     await page.locator("#growthActionPlan .growth-action-item").first().waitFor();
     assert.ok(await page.locator("#growthActionPlan .growth-action-item").count() >= 2, "Growth Lab renders data-driven next actions when initial data is missing");
