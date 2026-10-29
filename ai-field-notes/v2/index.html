@@ -94,6 +94,26 @@
 .lesson-dialog-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;flex-wrap:wrap}.lesson-dialog-actions .btn{min-height:44px}
 @media(max-width:760px){.lesson-dialog-actions{justify-content:stretch}.lesson-dialog-actions .btn{flex:1}.lesson-dialog-actions #completeLesson{flex-basis:100%}}
 
+
+/* Cultivation progression: Motion Lab principles, native Web Animations API, reduced-motion safe */
+.cult-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;margin:4px 0 22px}
+.cult-title{font-size:clamp(30px,4vw,47px);line-height:1.12;letter-spacing:-.06em}
+.cult-badge{min-width:220px;border:1px solid var(--line);background:#fff;border-radius:16px;padding:16px 18px;display:grid;gap:5px;box-shadow:var(--shadow)}
+.cult-badge span,.cult-badge small{font-size:10px;color:var(--muted)}.cult-badge strong{font-size:19px;letter-spacing:-.03em}
+.cult-banner{border-radius:22px;padding:clamp(23px,3vw,36px);background:radial-gradient(circle at 85% 50%,#4c6fbd55,transparent 30%),linear-gradient(120deg,#111b32,#20365e 68%,#2b4a7b);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:22px;overflow:hidden;position:relative}
+.cult-banner .overline{color:#b6cbff}.cult-banner h2{font-size:clamp(23px,2.6vw,32px);margin:9px 0;letter-spacing:-.04em}.cult-banner p{font-size:12px;line-height:1.8;color:#c4d0e8;max-width:690px;margin:0}
+.cult-orbit{width:140px;height:140px;flex:none;border:1px solid #ffffff38;border-radius:50%;display:grid;place-items:center;position:relative;animation:cultFloat 8s ease-in-out infinite}.cult-orbit:before,.cult-orbit:after{content:"";position:absolute;border:1px solid #ffffff32;border-radius:50%;inset:14px}.cult-orbit:after{inset:31px}.cult-orbit i{position:absolute;width:7px;height:7px;border-radius:50%;background:#b6cbff;box-shadow:0 0 15px #9fbbff;top:10px;left:64px}.cult-orbit i:nth-child(2){top:auto;left:auto;right:8px;bottom:42px;background:#c7f36b}.cult-orbit i:nth-child(3){top:38px;left:12px;background:#79e2d0}.cult-orbit b{font-size:29px;letter-spacing:-.06em}
+.realm-track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.realm-node{position:relative;text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:17px;border:1px solid var(--line);border-radius:15px;background:#fff;color:var(--ink);min-height:128px;transition:border-color .2s,background .2s,transform .2s;overflow:hidden}
+.realm-node:hover{border-color:#b7c8ee;transform:translateY(-2px)}.realm-node.current{border-color:#2864e8;background:linear-gradient(145deg,#fff,#edf3ff);box-shadow:0 8px 24px #2864e812}.realm-node.current:after{content:"";position:absolute;right:-15px;top:-15px;width:62px;height:62px;border-radius:50%;border:1px solid #2864e833;box-shadow:0 0 0 12px #2864e808}
+.realm-no{font-size:9px;letter-spacing:.14em;color:var(--blue);font-weight:800}.realm-name{font-size:18px;font-weight:780;letter-spacing:-.04em}.realm-node small{font-size:11px;color:var(--muted);line-height:1.5}.realm-node i{font-size:10px;color:#6c7890;font-style:normal;margin-top:auto}
+.realm-detail{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;margin-top:14px;background:#fff}.realm-detail h3{font-size:21px;margin:12px 0 7px;letter-spacing:-.04em}.realm-detail p{font-size:12px;color:var(--muted);line-height:1.8;margin:0}.realm-require{display:grid;gap:9px;align-content:start;border-left:1px solid var(--line);padding-left:20px}.realm-require strong{font-size:12px}.realm-require span{font-size:11px;color:#65718a}.realm-require span:before{content:"✓";color:var(--green);margin-right:8px}.realm-require .btn{justify-self:start;margin-top:4px}
+.universe-head{display:flex;align-items:center;justify-content:space-between}.universe-symbol{width:38px;height:38px;border-radius:12px;background:#edf2ff;color:#315fc2;display:grid;place-items:center;font-size:22px}.universe-grid .track{min-height:230px}.universe-grid .track h4{margin-top:16px}.fde-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.fde-steps article{background:#fff;border:1px solid var(--line);border-radius:15px;padding:18px}.fde-steps article span{font-size:10px;letter-spacing:.12em;color:var(--blue);font-weight:800}.fde-steps h4{font-size:14px;margin:12px 0 7px}.fde-steps p{font-size:11px;color:var(--muted);margin:0;line-height:1.8}
+@keyframes cultFloat{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-5px) rotate(4deg)}}
+@media(prefers-reduced-motion:reduce){.cult-orbit{animation:none!important}.realm-node{transition:none!important}}
+@media(max-width:850px){.cult-intro{align-items:flex-start;flex-direction:column}.cult-badge{width:100%}.realm-track{grid-template-columns:repeat(2,minmax(0,1fr))}.realm-detail{grid-template-columns:1fr}.realm-require{border-left:0;border-top:1px solid var(--line);padding:15px 0 0}.fde-steps{grid-template-columns:1fr}.cult-orbit{width:100px;height:100px}.cult-orbit b{font-size:23px}}
+@media(max-width:520px){.realm-track{grid-template-columns:1fr}.realm-node{min-height:100px}.cult-banner{align-items:flex-start}.cult-orbit{display:none}}
+
 </style>
 </head>
 <body>
@@ -105,6 +125,7 @@
     <button data-page="archive"><span class="ico">◷</span>版本与存档</button>
     <button data-page="brief"><span class="ico">◉</span>AI 前沿简报</button>
     <button data-page="search"><span class="ico">⌕</span>AI 知识搜索</button>
+    <button data-page="cultivation"><span class="ico">✦</span>修行境界</button>
   </nav></div>
   <div><div class="nav-label">Membership</div><nav class="nav"><button data-page="pro"><span class="ico">✧</span>专业版 · Pro</button></nav></div>
   <div class="side-bottom"><strong>学习不是终点，创造才刚刚开始。</strong><p>把零散的 AI 知识，变成真正解决问题的能力。</p><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener">查看 DAVY Radar ↗</a></div>
@@ -335,6 +356,47 @@
       </div>
       <div class="notice">当前通过 D1 搜索已发布课程，并通过已有 DAVY Radar 数据匹配新闻标题、摘要与价值说明；简报结果可打开原文或加入个人地图。尚未接入大模型语义检索、向量搜索或全网网页全文索引。</div>
     </section>
+    
+    <section class="page" id="page-cultivation">
+      <div class="cult-intro">
+        <div><div class="overline">THE CULTIVATION OF AI · FDE PATH</div><h1 class="h-title cult-title">踏入 AI 大陆，<br>以实战证道。</h1><p class="sub">每一个小宇宙，都是一套独立的知识体系；每一次破境，都意味着你能把更复杂的 AI 能力带入真实世界。</p></div>
+        <div class="cult-badge"><span>当前修为 · 预览</span><strong id="cultCurrent">炼气期 · 初期</strong><small>境界会根据课程与实战验收逐步解锁</small></div>
+      </div>
+      <div class="cult-banner">
+        <div><div class="overline">THE CONTINENT OF AI</div><h2>AI 大陆 · 多重知识宇宙</h2><p>提示词、Agent、AI 工程、企业 FDE 各自成系，又沿着能力链条彼此连接。探索更深的宇宙，需要完成前置修行与实战试炼。</p></div>
+        <div class="cult-orbit" aria-hidden="true"><i></i><i></i><i></i><b>AI</b></div>
+      </div>
+      <div class="section-head"><div><h3>修行境界 · 从炼气到飞升</h3><p>等级名称借鉴《凡人修仙传》的境界意象；升阶标准为 DAVYLAB 自定义的 AI 能力评价，不代表原作设定或任何官方认证。</p></div><span class="pill">境界 × 能力 × 交付</span></div>
+      <div class="realm-track" id="realmTrack">
+        <button class="realm-node current" data-realm="0"><span class="realm-no">01</span><span class="realm-name">炼气期</span><small>建立灵根 · AI 基础</small><i>当前起点</i></button>
+        <button class="realm-node" data-realm="1"><span class="realm-no">02</span><span class="realm-name">筑基期</span><small>打牢根基 · Prompt 与上下文</small><i>完成基础试炼</i></button>
+        <button class="realm-node" data-realm="2"><span class="realm-no">03</span><span class="realm-name">结丹期</span><small>凝聚核心 · Workflow 与 Agent</small><i>完成端到端小项目</i></button>
+        <button class="realm-node" data-realm="3"><span class="realm-no">04</span><span class="realm-name">元婴期</span><small>自主行动 · 工具与知识库</small><i>通过系统实战</i></button>
+        <button class="realm-node" data-realm="4"><span class="realm-no">05</span><span class="realm-name">化神期</span><small>融会贯通 · 多系统协同</small><i>完成集成验收</i></button>
+        <button class="realm-node" data-realm="5"><span class="realm-no">06</span><span class="realm-name">炼虚期</span><small>跨界工程 · 安全与可靠性</small><i>通过质量门槛</i></button>
+        <button class="realm-node" data-realm="6"><span class="realm-no">07</span><span class="realm-name">合体期</span><small>业务融合 · 企业级 FDE</small><i>交付真实试点</i></button>
+        <button class="realm-node" data-realm="7"><span class="realm-no">08</span><span class="realm-name">大乘期</span><small>体系化交付 · 规模化复用</small><i>沉淀 Playbook</i></button>
+        <button class="realm-node" data-realm="8"><span class="realm-no">09</span><span class="realm-name">飞升 · 仙界</span><small>开宗立派 · 架构与组织赋能</small><i>持续迭代境界</i></button>
+      </div>
+      <div class="realm-detail card" id="realmDetail" aria-live="polite"><div><span class="tier">当前境界</span><h3>炼气期 · 建立灵根</h3><p>理解模型能力边界、提示词结构与上下文；能把一个模糊问题写成清晰输入、期望输出和验收标准。</p></div><div class="realm-require"><strong>本境试炼</strong><span>完成基础知识测验</span><span>提交一个可复现的 AI 任务案例</span><button class="btn primary" data-go="home">进入基础修行 ↗</button></div></div>
+      <div class="section-head"><div><h3>小宇宙 · 独立成系，层层递进</h3><p>每个宇宙可以独立学习，但高级宇宙会要求前置知识与能力凭证。</p></div></div>
+      <div class="grid track-grid universe-grid">
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">◈</span><span class="tier">基础宇宙</span></div><h4>灵根宇宙 · AI 基础与提示词</h4><p>模型、上下文、提示词、评测与信息核验。所有修行者的共同起点。</p><div class="track-foot"><small>前置：无</small><button class="link" data-go="home">进入宇宙 ↗</button></div></article>
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">⌘</span><span class="tier">进阶宇宙</span></div><h4>御器宇宙 · Agent、Workflow 与 Skills</h4><p>工具调用、任务拆解、工作流、技能复用与自动化执行。</p><div class="track-foot"><small>前置：炼气期试炼</small><button class="link" data-openlesson="agent">查看入门 ↗</button></div></article>
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">⌬</span><span class="tier">工程宇宙</span></div><h4>洞天宇宙 · 数据、API 与知识库</h4><p>数据建模、API、RAG、检索、身份认证、测试与可观测性。</p><div class="track-foot"><small>前置：筑基期试炼</small><button class="link" data-openlesson="systems">查看基础 ↗</button></div></article>
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">⌖</span><span class="tier pro">PRO · FDE 主宇宙</span></div><h4>企业实战宇宙 · Enterprise FDE</h4><p>以真实业务问题为起点，贯通需求发现、业务建模、AI 应用、系统集成、安全、试点验证与价值复盘。</p><div class="track-foot"><small>主线：90 天实战路线</small><a class="link" href="https://chenzhe223-tech.github.io/fde-learning-dashboard/" target="_blank" rel="noopener">进入 FDE 作战台 ↗</a></div></article>
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">⟲</span><span class="tier">进阶宇宙</span></div><h4>炼器宇宙 · AI 产品工程</h4><p>把原型升级为可靠产品：版本管理、权限、部署、回滚、质量验收。</p><div class="track-foot"><small>前置：结丹期试炼</small><button class="link" data-go="pro">查看专业路线 ↗</button></div></article>
+        <article class="card track"><div class="universe-head"><span class="universe-symbol">✧</span><span class="tier">持续进阶</span></div><h4>天道宇宙 · 架构与组织赋能</h4><p>将成功方案沉淀成标准、Playbook 与可复用能力，在更多业务场景扩展。</p><div class="track-foot"><small>前置：企业 FDE 实战交付</small><button class="link" data-go="pro">查看进阶方向 ↗</button></div></article>
+      </div>
+      <div class="section-head"><div><h3>专业版主线 · Enterprise FDE</h3><p>把已有的 FDE 学习作战台纳入 Pro 课程体系，继续使用原有 90 天路线与采购业务案例。</p></div><a class="btn primary" href="https://chenzhe223-tech.github.io/fde-learning-dashboard/" target="_blank" rel="noopener">打开完整 FDE 看板 ↗</a></div>
+      <div class="fde-steps">
+        <article><span>DAY 01–30</span><h4>筑基 · 业务建模与工程底座</h4><p>业务流程、数据模型、API、可运行原型与验收计划。</p></article>
+        <article><span>DAY 31–60</span><h4>结丹 · 集成、安全与可靠性</h4><p>权限边界、可重复测试、运行状态、异常处理与审计。</p></article>
+        <article><span>DAY 61–90</span><h4>元婴 · 试点验证与案例沉淀</h4><p>验证业务价值，交付一个代表项目、一份案例报告和个人 FDE Playbook。</p></article>
+      </div>
+      <div class="notice">进度等级是学习激励与能力地图，不以阅读时长或点击次数自动升级。正式版本将根据课程完成、测验、实操交付与验收记录判定；当前境界和进度均为原型展示，未写入账号档案。</div>
+    </section>
+
     <section class="page" id="page-pro">
       <div class="heading-row"><div><div class="overline">PRO KNOWLEDGE · PRACTICE FIRST</div><h1 class="h-title" style="margin-top:8px">不是更多内容，而是更强的实操能力。</h1><p class="sub">专业版的目标是帮助用户完成任务：从理解原理到复现过程，再到验证成果。</p></div><span class="pill">会员模型预览</span></div>
       <div class="hero" style="grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr)"><div><div class="overline">BUILT FOR REAL WORK</div><h2 style="font-size:30px">把知识，变成<br>可复用的工作能力。</h2><p>每个专业专题都以真实问题为起点，提供工具清单、步骤、提示词或代码、样例输入输出、排错与验收标准。</p></div><div class="hero-stats" style="grid-template-columns:1fr 1fr"><div class="stat"><b>01</b><span>真实场景</span></div><div class="stat"><b>02</b><span>完整步骤</span></div><div class="stat"><b>03</b><span>可复现示例</span></div><div class="stat"><b>04</b><span>验收与复盘</span></div></div></div>
@@ -359,14 +421,44 @@
 const V1_URL = "https://chenzhe223-tech.github.io/ai-field-notes/";
 const RADAR_URL = "https://chenzhe223-tech.github.io/radar/daily/";
 const API_BASE = "https://ai-field-notes-api.chenzhe223.workers.dev";
-const pages = ["home","archive","brief","search","pro"];
-const titles = {home:"学习首页",archive:"版本与存档",brief:"AI 前沿简报",search:"AI 知识搜索",pro:"专业版 · Pro"};
+const pages = ["home","archive","brief","search","cultivation","pro"];
+const titles = {home:"学习首页",archive:"版本与存档",brief:"AI 前沿简报",search:"AI 知识搜索",cultivation:"修行境界",pro:"专业版 · Pro"};
 const lessonData = {
  foundation:{title:"认识 AI 与模型",content:"先理解模型能力、上下文、提示词与输出限制。学习时把问题、输入与验收条件写清楚。真实课程内容继续沿用 V1 作为基线。"},
  agent:{title:"让 AI 做事：Agent 与 Workflow",content:"Workflow 更适合步骤相对确定、可预先设计的流程；Agent 通常需要在任务目标下选择下一步行动并调用工具。实际系统常将固定工作流与局部 Agent 决策组合使用。验证重点是工具权限、状态、异常处理和结果质量。"},
  systems:{title:"稳定运行：MCP、Hook 与 Harness",content:"把工具连接、执行钩子、运行控制与结果验证拆开理解。设计实际系统时，明确输入边界、权限、日志、重试、失败回退和人工检查，避免把成功运行等同于结果正确。"},
  build:{title:"从念头到 AI 小应用",content:"选择一个高频且可验证的问题：写出输入、预期输出、约束条件和验收样例；先完成最小闭环，再加入 AI 自动化。每次迭代都保留可复现的输入、输出和变更记录。"}
 };
+
+const realmData = [
+ {name:"炼气期 · 建立灵根",desc:"理解模型能力边界、提示词结构与上下文；能把一个模糊问题写成清晰输入、期望输出和验收标准。",tasks:["完成 AI 基础知识测验","提交一个可复现的 AI 任务案例"],cta:"进入基础修行",page:"home"},
+ {name:"筑基期 · 夯实根基",desc:"能稳定设计提示词、管理上下文、处理结构化输入输出，并用测试样例检查结果。",tasks:["完成提示词与上下文专项","为任务建立可复用的测试样例"],cta:"查看学习路线",page:"home"},
+ {name:"结丹期 · 形成执行核心",desc:"能设计 Workflow 或 Agent 任务链，配置工具调用、异常路径与人工确认点，完成一个端到端小项目。",tasks:["完成一个可运行的自动化工作流","提交执行日志与验收结果"],cta:"查看实操课程",page:"pro"},
+ {name:"元婴期 · 自主执行",desc:"能将知识检索、工具调用、状态管理和评测组合起来，让 AI 在清晰权限边界内完成多步骤任务。",tasks:["完成知识库或工具调用实战","提交错误处理与回归测试记录"],cta:"查看工程宇宙",page:"pro"},
+ {name:"化神期 · 融会贯通",desc:"能跨多个系统整合数据与模型能力，定义接口契约、身份权限、日志与可观测性。",tasks:["完成一次系统集成","提供权限矩阵与测试报告"],cta:"进入 FDE 宇宙",page:"pro"},
+ {name:"炼虚期 · 跨界工程",desc:"能处理安全、可靠性、部署、版本迁移与回滚，具备在受控环境中验证系统质量的能力。",tasks:["完成安全与可靠性检查","演示失败恢复或回滚"],cta:"查看 FDE 路线",page:"pro"},
+ {name:"合体期 · 企业级 FDE",desc:"能贯通需求发现、业务建模、AI 应用、系统集成、试点验证与业务价值复盘。",tasks:["完成一个真实业务试点","提交业务价值与验收报告"],cta:"打开 FDE 作战台",page:"pro"},
+ {name:"大乘期 · 规模化复用",desc:"能把成功交付沉淀成 Playbook、参考架构、模板与团队实践，在多个场景中稳定复用。",tasks:["完成个人 FDE Playbook","在第二个场景复用并验证"],cta:"查看进阶路线",page:"pro"},
+ {name:"飞升 · 仙界",desc:"能设计跨团队、跨业务的 AI 能力体系，建立治理、评测、复用与持续改进机制。",tasks:["提交架构级方案与治理标准","完成跨场景复用复盘"],cta:"查看专业版路线",page:"pro"}
+];
+function selectRealm(index){
+ const data=realmData[index];if(!data)return;
+ document.querySelectorAll(".realm-node").forEach((node,i)=>node.classList.toggle("current",i===index));
+ document.getElementById("cultCurrent").textContent=data.name;
+ const detail=document.getElementById("realmDetail");
+ detail.querySelector("h3").textContent=data.name;
+ detail.querySelector("p").textContent=data.desc;
+ const req=detail.querySelector(".realm-require");
+ req.querySelectorAll("span").forEach(el=>el.remove());
+ data.tasks.forEach(task=>{const span=document.createElement("span");span.textContent=task;req.insertBefore(span,req.querySelector("button"))});
+ const btn=req.querySelector("button");btn.textContent=data.cta+" ↗";btn.onclick=()=>go(data.page);
+ if(!window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+   const targets=[document.getElementById("realmDetail")];
+   targets.forEach(el=>{const animation=el.animate([{opacity:.55,transform:"translateY(7px)"},{opacity:1,transform:"translateY(0)"}],{duration:420,easing:"cubic-bezier(.22,1,.36,1)"});window.__realmAnimations=window.__realmAnimations||[];window.__realmAnimations.push(animation);});
+ }
+}
+document.querySelectorAll("[data-realm]").forEach(node=>node.addEventListener("click",()=>selectRealm(Number(node.dataset.realm))));
+
 function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove("show"),2800)}
 function go(name){if(!pages.includes(name))return;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+name));document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===name));document.getElementById("crumbTitle").textContent=titles[name];document.getElementById("sidebar").classList.remove("open");history.replaceState(null,"","#"+name);window.scrollTo({top:0,behavior:"smooth"});if(name==="archive"){loadArchiveCatalog();loadLearningCandidates();}if(name==="brief")loadBriefItems();if(name==="search")search(document.getElementById("searchInput")?.value||"")}
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
