@@ -815,6 +815,32 @@ $("#deleteMotionPreset").addEventListener("click", () => {
 });
 refreshSavedMotionPresets();
 
+
+function loadSharedMotionConfig() {
+  if (!window.location.hash.startsWith("#motion=")) return false;
+  try {
+    const encoded = window.location.hash.slice("#motion=".length);
+    const config = JSON.parse(decodeURIComponent(encoded));
+    $("#motionImportJson").value = JSON.stringify(config, null, 2);
+    applyImportedMotionConfig();
+    return $("#motionImportStatus").textContent.includes("成功应用");
+  } catch (error) {
+    $("#motionImportStatus").textContent = "分享链接无法读取：" + error.message;
+    return false;
+  }
+}
+$("#shareMotionConfig").addEventListener("click", async () => {
+  const url = window.location.origin + window.location.pathname + "#motion=" + encodeURIComponent(JSON.stringify(readMotionConfig()));
+  $("#motionShareUrl").value = url;
+  try {
+    await navigator.clipboard.writeText(url);
+    $("#motionShareStatus").textContent = "分享链接已复制。其他设备打开链接后会自动载入这份配置；配置仅保存在链接片段中。";
+  } catch {
+    $("#motionShareUrl").focus(); $("#motionShareUrl").select();
+    $("#motionShareStatus").textContent = "浏览器未允许直接复制；链接已生成并选中，请使用 Ctrl/Cmd+C。";
+  }
+});
+
 function applyControls() {
   state.speed = Number($("#speed").value);
   state.intensity = Number($("#intensity").value) / 100;
@@ -849,7 +875,7 @@ function applyControls() {
 ["speed","intensity","stagger","reduceMotion"].forEach(id => $("#" + id).addEventListener("input", applyControls));
 systemReduce.addEventListener?.("change", applyControls);
 window.addEventListener("pagehide", () => state.scene?.dispose(), { once: true });
-try { initGSAP(); void initMotion(); void initThree(); applyControls(); selectMotion("fade-up", false); playSelectedMotion(); }
+try { initGSAP(); void initMotion(); void initThree(); applyControls(); selectMotion("fade-up", false); if (!loadSharedMotionConfig()) playSelectedMotion(); }
 catch (error) { console.error("Visual DNA Motion Lab initialization failed", error); note.textContent = "部分动效引擎未能初始化；页面内容仍可阅读。请检查网络与浏览器支持。"; }
 </script>
 </body>
