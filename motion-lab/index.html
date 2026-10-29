@@ -25,7 +25,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
 .btn{border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px 16px;border-radius:999px;font-weight:700;font-size:12px;transition:transform 140ms var(--ease),background 180ms var(--ease),border-color 180ms var(--ease)}
 .btn:hover{transform:translateY(-2px);border-color:#7b9487;background:#ffffff08}.btn.primary{background:var(--accent);border-color:var(--accent);color:#10170a}.btn.primary:hover{background:#d7ff91}
-.hero-note{margin-top:20px;color:#71838d;font-size:11px;display:flex;gap:10px;align-items:center}.hero-note span{width:1px;height:13px;background:var(--line)}
+.hero-note{margin-top:20px;color:#71838d;font-size:11px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}.hero-note span:empty{width:1px;height:13px;flex:0 0 1px;background:var(--line)}.hero-note span:not(:empty){width:auto;height:auto;background:none}
 .hero-visual{min-height:330px;position:relative;border:1px solid #ffffff12;border-radius:28px;background:radial-gradient(circle at 50% 44%,#b6a4ff15,transparent 48%),linear-gradient(145deg,#111a21,#0b1016);overflow:hidden;isolation:isolate}
 .hero-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,#000,transparent 90%);z-index:-1}
 .hero-orb{position:absolute;width:150px;height:150px;border-radius:50%;left:50%;top:48%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 27%,#f4ffd9 0,#c7f36b 10%,#5c8966 36%,#263c42 61%,#121922 73%);box-shadow:inset -16px -18px 32px #03090b9c,0 0 60px #c7f36b22}
@@ -73,7 +73,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .three-stage{min-height:360px}
 #threeCanvas{display:block;width:100%;height:360px;touch-action:pan-y}
 .three-overlay{position:absolute;left:15px;bottom:14px;color:#73868d;font:10px ui-monospace,monospace;pointer-events:none}
-.three-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px;background:radial-gradient(circle,#1e3028,#090e13 70%)}
+.three-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px;background:radial-gradient(circle,#1e3028,#090e13 70%)}.three-fallback[hidden]{display:none}
 .controls{padding:52px 0 76px;border-top:1px solid #ffffff12}
 .control-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end;padding:18px;border:1px solid var(--line);background:#10161d;border-radius:18px}
 .control label{display:flex;justify-content:space-between;gap:8px;color:#d5e0e1;font-size:11px;margin-bottom:10px}.control output{font:11px ui-monospace,monospace;color:var(--accent)}
@@ -172,6 +172,7 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const systemReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 const state = { speed: 1, intensity: 1, stagger: 0.09, reduce: systemReduce.matches, scene: null, gsapIntro: null };
 const note = $("#controlNote");
+$("#reduceMotion").checked = systemReduce.matches;
 const reduced = () => state.reduce || systemReduce.matches;
 const duration = value => reduced() ? 0 : value / state.speed;
 $("#year").textContent = new Date().getFullYear();
@@ -191,8 +192,8 @@ function initGSAP() {
   else gsap.set(".hero-copy .eyebrow,.hero h1,.hero p,.hero-actions,.hero-visual", { clearProps: "all" });
 
   if (!reduced()) {
-    const orbit = gsap.to(".hero-visual .orbit", { rotation: "+=360", duration: 48 / state.speed, ease: "none", repeat: -1, transformOrigin: "50% 50%" });
-    const orb = gsap.to(".hero-orb", { y: -5 * state.intensity, duration: 2.8 / state.speed, ease: "sine.inOut", repeat: -1, yoyo: true });
+    const orbit = gsap.to(".hero-visual .orbit", { rotation: "+=360", duration: 48, ease: "none", repeat: -1, transformOrigin: "50% 50%" });
+    const orb = gsap.to(".hero-orb", { y: -5 * state.intensity, duration: 2.8, ease: "sine.inOut", repeat: -1, yoyo: true });
     state.ambient = [orbit, orb];
   } else {
     state.ambient = [];
@@ -354,6 +355,7 @@ function applyControls() {
   $("#intensityValue").textContent = Math.round(state.intensity * 100) + "%";
   $("#staggerValue").textContent = Math.round(state.stagger * 1000) + "ms";
   document.documentElement.style.setProperty("--motion-duration", (240 / state.speed) + "ms");
+  if (window.gsap) window.gsap.globalTimeline.timeScale(state.speed);
   document.documentElement.style.setProperty("--motion-distance", (18 * state.intensity) + "px");
   if (state.reduce) {
     state.ambient?.forEach(t => t.pause());
