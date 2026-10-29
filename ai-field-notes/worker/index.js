@@ -174,7 +174,7 @@ export default {
         }
         sql += " LIMIT 12";
         const statement = env.DB.prepare(sql);
-        const result = (params.length ? statement.bind(...params) : statement).all();
+        const result = await (params.length ? statement.bind(...params) : statement).all();
         const items = (result.results || []).map((row) => {
           const body = safeJson(row.content_json);
           return {
