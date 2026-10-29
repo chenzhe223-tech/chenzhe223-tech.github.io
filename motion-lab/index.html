@@ -191,9 +191,14 @@ function initGSAP() {
   if (!reduced()) hero.play();
   else gsap.set(".hero-copy .eyebrow,.hero h1,.hero p,.hero-actions,.hero-visual", { clearProps: "all" });
 
-  const orbit = gsap.to(".hero-visual .orbit", { rotation: "+=360", duration: duration(48), ease: "none", repeat: -1, transformOrigin: "50% 50%" });
-  const orb = gsap.to(".hero-orb", { y: -5 * state.intensity, duration: duration(2.8), ease: "sine.inOut", repeat: -1, yoyo: true });
-  state.ambient = [orbit, orb];
+  if (!reduced()) {
+    const orbit = gsap.to(".hero-visual .orbit", { rotation: "+=360", duration: 48 / state.speed, ease: "none", repeat: -1, transformOrigin: "50% 50%" });
+    const orb = gsap.to(".hero-orb", { y: -5 * state.intensity, duration: 2.8 / state.speed, ease: "sine.inOut", repeat: -1, yoyo: true });
+    state.ambient = [orbit, orb];
+  } else {
+    state.ambient = [];
+    gsap.set(".hero-visual .orbit,.hero-orb", { clearProps: "transform" });
+  }
 
   const rows = $$(".scroll-row");
   if (!reduced()) {
