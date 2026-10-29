@@ -1,0 +1,9 @@
+name = "ai-field-notes-api"
+main = "worker/index.js"
+compatibility_date = "2026-10-29"
+workers_dev = true
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-field-notes-dev"
+database_id = "fd14c318-76ad-4071-ac54-b219f6b28380"
