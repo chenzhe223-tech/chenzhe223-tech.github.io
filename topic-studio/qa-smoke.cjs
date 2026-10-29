@@ -56,7 +56,8 @@ async function main() {
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
     await page.locator(".feedcard").first().waitFor({ timeout: 12000 });
     const radarFirstTitle = await page.locator(".feedcard").first().locator("h3").innerText();
-    assert.ok(await page.locator("#radarResultCount").innerText().includes("/"), "global AI radar shows visible/total result counts");
+    assert.equal(await page.locator("#radarResultCount").count(), 1, "global AI radar includes a visible/total result counter");
+    assert.ok((await page.locator("#radarResultCount").textContent()).includes("/"), "global AI radar shows visible/total result counts");
     await page.locator("#radarSearch").fill(radarFirstTitle);
     await page.locator(".feedcard").first().locator("h3").getByText(radarFirstTitle, { exact: true }).waitFor();
     assert.equal(await page.locator(".feedcard").count(), 1, "global AI radar search narrows results to the matching story");
