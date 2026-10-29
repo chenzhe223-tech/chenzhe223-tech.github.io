@@ -101,6 +101,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  html[data-appearance-navmode="bottom"] .navlinks a{flex:0 0 auto;white-space:nowrap;font-size:11px}
  html[data-appearance-navmode="bottom"] .nav{gap:10px}
 }
+
+.appearance-section-reset{display:inline-flex;align-items:center;justify-content:center;margin-top:10px;min-height:32px;padding:7px 10px;border:1px solid var(--appearance-border);border-radius:7px;background:transparent;color:var(--appearance-muted);font:inherit;font-size:10px;font-weight:750;cursor:pointer}
+.appearance-section-reset:hover{border-color:var(--appearance-accent);color:var(--appearance-text)}
+.appearance-section-reset:focus-visible{outline:2px solid var(--appearance-accent);outline-offset:2px}
 </style>
 <!-- Visual DNA Design · DAVYLAB editorial studio refresh v1 -->
 <style id="visual-dna-homepage-v1">
@@ -712,6 +716,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
       <button class="appearance-preset" type="button" data-appearance-theme="tech" aria-pressed="false"><span class="appearance-swatch"><i style="background:#0b1020"></i><i style="background:#b7ff5a"></i><i style="background:#6c7bff"></i></span><span><strong>科技创新</strong><small>深空黑 · 酸橙荧光</small></span></button>
       <button class="appearance-preset" type="button" data-appearance-theme="colorful" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fff4ef"></i><i style="background:#ff5e7e"></i><i style="background:#7c4dff"></i></span><span><strong>时尚多彩</strong><small>珊瑚粉 · 活力橙 · 电光紫</small></span></button>
     </div>
+  <button class="appearance-section-reset" type="button" data-appearance-reset="theme" aria-label="恢复主题与配色默认值">重置主题与配色</button>
   </section>
   <section class="appearance-section"><span class="appearance-label">LAYOUT SYSTEM / 页面布局</span>
     <div class="appearance-presets">
@@ -724,6 +729,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
     </div>
     <label class="appearance-range"><span>内容宽度比例 <b id="appearanceWidthValue">90%</b></span><input id="appearanceWidth" type="range" min="80" max="100" value="94"><small>控制主内容使用可用画布的比例。</small></label>
     <label class="appearance-range"><span>模块间距 <b id="appearanceGapValue">22 px</b></span><input id="appearanceGap" type="range" min="8" max="40" value="22"><small>统一控制卡片与区块之间的间距。</small></label>
+    <button class="appearance-section-reset" type="button" data-appearance-reset="layout" aria-label="恢复布局与间距默认值">重置布局与间距</button>
   </section>
   <section class="appearance-section"><span class="appearance-label">NAVIGATION / 导航栏位置</span>
     <div class="appearance-presets">
@@ -735,12 +741,14 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
       <button class="appearance-preset" data-appearance-navmode="hidden" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fffefa"></i><i style="background:#fffefa"></i><i style="background:#c8c8c8"></i></span><span><strong>隐藏</strong><small>保留唤出入口</small></span></button>
     </div>
     <label class="appearance-check"><input type="checkbox" id="appearanceNavCollapsed"> 默认收起导航 <small>可随时通过导航入口重新展开。</small></label>
+    <button class="appearance-section-reset" type="button" data-appearance-reset="nav" aria-label="恢复导航默认值">重置导航</button>
   </section>
   <section class="appearance-section"><span class="appearance-label">TYPOGRAPHY / 页面字体</span>
     <div class="appearance-fonts">
       <label>英文与数字<select id="appearanceFontEn"><option value="Inter">Inter · 默认 UI</option><option value="DM Sans">DM Sans</option><option value="Manrope">Manrope</option><option value="Space Grotesk">Space Grotesk</option><option value="Source Sans 3">Source Sans 3</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Liberation Sans">Liberation Sans · 兼容</option><option value="Liberation Serif">Liberation Serif · 兼容</option></select></label>
       <label>中文字体<select id="appearanceFontZh"><option value="Noto Sans SC">Noto Sans SC</option><option value="Noto Serif SC">Noto Serif SC</option><option value="LXGW WenKai">霞鹜文楷</option><option value="Smiley Sans">得意黑</option><option value="Alibaba PuHuiTi">阿里巴巴普惠体</option><option value="ZCOOL KuaiLe">站酷快乐体</option><option value="YouShe BiaoTiHei">优设标题黑</option><option value="Chiron GoRound TC">Chiron GoRound TC</option></select></label>
     </div><p class="appearance-note">字体选项代表 CSS 字体族已接入；实际显示取决于系统字体或页面是否成功加载字体资源。</p>
+    <button class="appearance-section-reset" type="button" data-appearance-reset="typography" aria-label="恢复字体默认值">重置字体</button>
   </section>
   <section class="appearance-section"><span class="appearance-label">自定义颜色</span><div class="appearance-colors">
     <label class="appearance-color" for="appearancePage">页面背景<input type="color" id="appearancePage" value="#f5f3ed"></label>
@@ -750,7 +758,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
     <label class="appearance-color" for="appearanceAccent">强调色<input type="color" id="appearanceAccent" value="#2457c5"></label>
     <label class="appearance-color" for="appearanceNav">导航底色<input type="color" id="appearanceNav" value="#f5f3ed"></label>
   </div><p class="appearance-note">颜色调整会即时预览。主题与自定义颜色独立于原有产品数据和联系表单。</p></section>
-  <div class="appearance-panel-actions"><button class="appearance-reset" id="appearanceReset" type="button">恢复默认</button><button class="appearance-done" id="appearanceDone" type="button">完成</button></div>
+  <div class="appearance-panel-actions"><button class="appearance-reset" id="appearanceReset" type="button">全部恢复默认</button><button class="appearance-done" id="appearanceDone" type="button">完成</button></div>
 </aside>
 
 <script id="davylab-appearance-controller">
@@ -863,6 +871,18 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  document.getElementById('appearanceFontEn').addEventListener('change',event=>{state.fontEn=event.target.value;apply()});
  document.getElementById('appearanceFontZh').addEventListener('change',event=>{state.fontZh=event.target.value;apply()});
  document.getElementById('appearanceReset').addEventListener('click',()=>{state={...defaults};apply()});
+ const resetGroups={
+  theme:()=>{state={...state,theme:defaults.theme,page:defaults.page,surface:defaults.surface,text:defaults.text,border:defaults.border,accent:defaults.accent,nav:defaults.nav}},
+  layout:()=>{state={...state,layout:defaults.layout,width:defaults.width,gap:defaults.gap}},
+  nav:()=>{state={...state,navmode:defaults.navmode,navCollapsed:defaults.navCollapsed};closeNavigation()},
+  typography:()=>{state={...state,fontEn:defaults.fontEn,fontZh:defaults.fontZh}}
+ };
+ document.querySelectorAll('[data-appearance-reset]').forEach(button=>button.addEventListener('click',()=>{
+  const reset=resetGroups[button.dataset.appearanceReset];
+  if(!reset)return;
+  reset();apply();
+ }));
+
  state=safeLoad();apply();
 })();
 </script>

@@ -194,6 +194,51 @@ const path = require('node:path');
       throw new Error('Visual DNA settings did not persist independently: ' + JSON.stringify(persisted));
     }
     await page.locator('#appearanceTrigger').click();
+    await page.locator('.appearance-section-reset[data-appearance-reset="typography"]').click();
+    const afterTypographyReset = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      fontEn: document.getElementById('appearanceFontEn').value,
+      fontZh: document.getElementById('appearanceFontZh').value,
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-accent').trim()
+    }));
+    if (afterTypographyReset.layout !== 'split' || afterTypographyReset.navmode !== 'left' ||
+        afterTypographyReset.fontEn !== 'Inter' || afterTypographyReset.fontZh !== 'Noto Sans SC' ||
+        afterTypographyReset.accent.toLowerCase() !== '#c2410c') {
+      throw new Error('Typography reset changed another settings category: ' + JSON.stringify(afterTypographyReset));
+    }
+    await page.locator('.appearance-section-reset[data-appearance-reset="nav"]').click();
+    const afterNavReset = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-accent').trim()
+    }));
+    if (afterNavReset.layout !== 'split' || afterNavReset.navmode !== 'top' || afterNavReset.accent.toLowerCase() !== '#c2410c') {
+      throw new Error('Navigation reset changed another settings category: ' + JSON.stringify(afterNavReset));
+    }
+    await page.locator('.appearance-section-reset[data-appearance-reset="layout"]').click();
+    const afterLayoutReset = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      width: getComputedStyle(document.documentElement).getPropertyValue('--vd-content-width').trim(),
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-accent').trim()
+    }));
+    if (afterLayoutReset.layout !== 'bento' || afterLayoutReset.navmode !== 'top' ||
+        afterLayoutReset.width !== '94%' || afterLayoutReset.accent.toLowerCase() !== '#c2410c') {
+      throw new Error('Layout reset changed another settings category: ' + JSON.stringify(afterLayoutReset));
+    }
+    await page.locator('.appearance-section-reset[data-appearance-reset="theme"]').click();
+    const afterThemeReset = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-accent').trim(),
+      fontEn: document.getElementById('appearanceFontEn').value
+    }));
+    if (afterThemeReset.layout !== 'bento' || afterThemeReset.navmode !== 'top' ||
+        afterThemeReset.accent.toLowerCase() !== '#2457c5' || afterThemeReset.fontEn !== 'Inter') {
+      throw new Error('Theme reset changed another settings category or did not restore colors: ' + JSON.stringify(afterThemeReset));
+    }
+    results.push({ test: 'Visual DNA category resets preserve unrelated settings', status: 'PASS', detail: { afterTypographyReset, afterNavReset, afterLayoutReset, afterThemeReset } });
     await page.locator('#appearanceReset').click();
     await page.locator('#appearanceDone').click();
     await page.evaluate(() => localStorage.setItem('davylab-appearance:v1', '{invalid-json'));
