@@ -45,6 +45,11 @@ const path = require('node:path');
       throw new Error('Editorial light design tokens are not active: ' + JSON.stringify(colors));
     }
     results.push({ test: 'Visual DNA editorial light design tokens', status: 'PASS', detail: colors });
+    const fontDisclosure = await page.locator('.appearance-note').filter({ hasText: '字体族选项已接入 CSS' }).innerText();
+    if (!fontDisclosure.includes('未部署这些字体的 Web 字体文件') || !fontDisclosure.includes('不代表字体二进制已加载')) {
+      throw new Error('Font selector does not clearly disclose web-font binary deployment status: ' + fontDisclosure);
+    }
+    results.push({ test: 'font selector clearly distinguishes CSS options from deployed font binaries', status: 'PASS' });
 
     // Hidden navigation must retain a visible, keyboard-operable recovery entry.
     await page.locator('#appearanceTrigger').click();
