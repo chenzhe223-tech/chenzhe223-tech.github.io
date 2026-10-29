@@ -45,7 +45,7 @@
               <div class="compass" aria-label="地图方向标"><span>N</span><svg viewBox="0 0 30 44" aria-hidden="true"><path d="M15 2 L24 29 L15 23 L6 29 Z" fill="#e7ce98"/><path d="M15 2 L15 23 L6 29 Z" fill="#fff0cc"/><path d="M15 23 L24 29 L15 42 L6 29 Z" fill="#58758c"/></svg><small>北 / NORTH</small></div>
               <div class="map-coordinate coordinate-a">SECTOR 01 · KNOWN LANDS</div>
               <div class="map-coordinate coordinate-b">BEYOND THE EDGE</div>
-              <svg class="atlas-svg" viewBox="0 0 1100 620" role="group" aria-label="可交互的 AI 世界地图。选择任意区域，查看其学习状态并继续探索。">
+              <div class="atlas-canvas-scroll" tabindex="0" role="region" aria-label="可左右滑动浏览已知区域与未知海域"><svg class="atlas-svg" viewBox="0 0 1100 620" role="group" aria-label="可交互的 AI 世界地图。选择任意区域，查看其学习状态并继续探索。">
                 <defs>
                   <linearGradient id="seaGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0c1930"/><stop offset=".55" stop-color="#142842"/><stop offset="1" stop-color="#0d1b32"/></linearGradient>
                   <linearGradient id="landGradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#597c83"/><stop offset=".55" stop-color="#375d6a"/><stop offset="1" stop-color="#243e55"/></linearGradient>
@@ -129,7 +129,7 @@
                   <g class="unknown-fog"><ellipse cx="924" cy="293" rx="165" ry="242" fill="url(#unknownGradient)" filter="url(#fogBlur)"/><ellipse cx="924" cy="293" rx="144" ry="219" fill="none" stroke="#9caac0" stroke-width="1.2" stroke-dasharray="3 9" opacity=".5"/><ellipse cx="924" cy="293" rx="116" ry="181" fill="none" stroke="#9caac0" stroke-width=".8" stroke-dasharray="2 12" opacity=".35"/><text x="888" y="242" fill="#e1e6f1" font-size="12" letter-spacing="3">UNCHARTED</text><text x="884" y="263" fill="#a9b9d1" font-size="10" letter-spacing="1">KEEP WONDERING</text></g>
                   <g class="map-frame" fill="none" stroke="#91a8c0" stroke-width="1" opacity=".2"><path d="M18 18H50M18 18V50M1082 18H1050M1082 18V50M18 602H50M18 602V570M1082 602H1050M1082 602V570"/></g>
                 </g>
-              </svg>
+              </svg></div>
               <div class="map-bottom-note"><span>✦</span><span>这里并非世界的尽头，只是你当前视野的边界。</span></div>
             </div>
             <div class="atlas-legend">
@@ -184,6 +184,12 @@ er;color:#7e899b;font-size:10px;line-height:1.5}.atlas-star{color:#c79e56;font-s
 
 @media(max-width:1080px){.shell{grid-template-columns:205px minmax(0,1fr)}.grid.stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.track-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-stats{max-width:460px}.two-col{grid-template-columns:1fr}}
 @media(max-width:720px){.shell{display:block}aside{position:fixed;z-index:15;left:-260px;width:236px;transition:left .25s;box-shadow:18px 0 40px #07112b3b}aside.open{left:0}.mobile-menu{display:inline-flex}.topbar{height:62px;padding:0 16px}.top-actions .badge{display:none}.content{padding:23px 15px 36px}.heading-row{align-items:flex-start;flex-direction:column}.heading-row .btn{align-self:stretch}.hero{padding:23px;border-radius:19px}.hero h2{font-size:29px}.hero-stats{grid-template-columns:repeat(2,1fr)}.grid.stats-grid{gap:9px}.metric{padding:13px;gap:9px}.metric-icon{width:31px;height:31px;font-size:14px}.metric strong{font-size:20px}.grid.track-grid,.brief-grid,.price-grid{grid-template-columns:1fr}.track{min-height:195px}.two-col{gap:12px}.card{padding:16px}.callout{align-items:flex-start;flex-wrap:wrap}.callout .btn{margin-left:0}.release{grid-template-columns:1fr}.release .btn{width:100%}.search-box{flex-wrap:wrap}.search-box input{width:100%;flex-basis:100%}.search-box .btn{width:100%}.price-card{padding:19px}.footer{flex-direction:column}.crumb{font-size:11px}}
+
+/* Responsive map canvas stays horizontally navigable on narrow screens. */
+.atlas-canvas-scroll{position:absolute;inset:0;overflow:hidden;outline:none;scrollbar-width:thin;scrollbar-color:#647d99 #14223a}.atlas-canvas-scroll:focus-visible{outline:2px solid #e5c98b;outline-offset:-3px}.atlas-canvas-scroll .atlas-svg{position:absolute;inset:0}.lesson-dialog-actions{display:flex;gap:8px;margin-top:18px;justify-content:flex-end;flex-wrap:wrap}.lesson-dialog-actions .btn{min-height:42px}
+@media(max-width:760px){.atlas-map{overflow:hidden;height:450px}.atlas-canvas-scroll{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y}.atlas-canvas-scroll .atlas-svg{position:relative;inset:auto;display:block;min-width:780px;width:780px;height:439px;min-height:0;max-height:none;transform:none}.atlas-map-toolbar{pointer-events:none}.atlas-map-toolbar>*{pointer-events:auto}.map-bottom-note{pointer-events:none}.compass{pointer-events:none}.atlas-canvas-scroll::-webkit-scrollbar{height:5px}.atlas-canvas-scroll::-webkit-scrollbar-track{background:#14223a}.atlas-canvas-scroll::-webkit-scrollbar-thumb{background:#536c88;border-radius:10px}.lesson-dialog-actions{justify-content:stretch}.lesson-dialog-actions .btn{flex:1}.lesson-dialog-actions #completeLesson{flex-basis:100%}}
+@media(max-width:420px){.atlas-map{height:420px}.atlas-canvas-scroll .atlas-svg{min-width:760px;width:760px;height:428px}.atlas-map-toolbar{left:7px;right:7px}.map-filter{font-size:8px;padding:6px 6px}}
+
 </style>
 </head>
 <body>
@@ -286,7 +292,7 @@ er;color:#7e899b;font-size:10px;line-height:1.5}.atlas-star{color:#c79e56;font-s
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog id="lessonDialog" style="max-width:560px;width:calc(100% - 28px);border:1px solid var(--line);border-radius:20px;padding:0;box-shadow:0 30px 100px #0c173455;color:var(--ink)">
-  <div style="padding:24px"><div class="overline">LEARNING NOTE · PREVIEW</div><h2 id="lessonTitle" style="font-size:25px;letter-spacing:-.04em;margin:9px 0">学习预览</h2><p id="lessonContent" style="font-size:13px;color:var(--muted);line-height:1.8"></p><div class="notice">此处为可交互页面原型。该内容未存入云端学习档案，账号同步正在后续开发计划中。</div><div style="display:flex;gap:8px;margin-top:18px;justify-content:flex-end"><button class="btn" id="closeDialog">关闭</button><button class="btn primary" data-go="archive" id="toArchive">查看版本记录</button></div></div>
+  <div style="padding:24px"><div class="overline">LEARNING NOTE · PREVIEW</div><h2 id="lessonTitle" style="font-size:25px;letter-spacing:-.04em;margin:9px 0">学习预览</h2><p id="lessonContent" style="font-size:13px;color:var(--muted);line-height:1.8"></p><div class="notice">此处为可交互页面原型。该内容未存入云端学习档案，账号同步正在后续开发计划中。</div><div class="lesson-dialog-actions"><button class="btn" id="closeDialog">关闭</button><button class="btn" data-go="archive" id="toArchive">查看版本记录</button><button class="btn primary" id="completeLesson">完成学习 · 更新地图</button></div></div>
 </dialog>
 <script>
 const V1_URL = "https://chenzhe223-tech.github.io/ai-field-notes/";
@@ -307,9 +313,16 @@ document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("sidebar").classList.toggle("open"));
 document.querySelectorAll("[data-toast]").forEach(b=>b.addEventListener("click",()=>toast(b.dataset.toast)));
 document.querySelector("[data-gov1]").addEventListener("click",()=>window.open(V1_URL,"_blank","noopener"));
-document.querySelectorAll("[data-openlesson]").forEach(b=>b.addEventListener("click",()=>{const d=lessonData[b.dataset.openlesson];if(!d)return;document.getElementById("lessonTitle").textContent=d.title;document.getElementById("lessonContent").textContent=d.content;document.getElementById("lessonDialog").showModal()}));
+let currentLessonKey = "foundation";
+document.querySelectorAll("[data-openlesson]").forEach(b=>b.addEventListener("click",()=>{const d=lessonData[b.dataset.openlesson];if(!d)return;currentLessonKey=b.dataset.openlesson;document.getElementById("lessonTitle").textContent=d.title;document.getElementById("lessonContent").textContent=d.content;document.getElementById("lessonDialog").showModal()}));
 document.getElementById("closeDialog").addEventListener("click",()=>document.getElementById("lessonDialog").close());
 document.getElementById("toArchive").addEventListener("click",()=>{document.getElementById("lessonDialog").close();go("archive")});
+document.getElementById("completeLesson").addEventListener("click",()=>{
+ const destination={foundation:"models",agent:"agent",systems:"tools",build:"creator"}[currentLessonKey]||"origin";
+ atlasState[destination]="known";saveAtlasState();selectedAtlasNode=destination;currentAtlasFilter="all";renderAtlasMap();
+ document.getElementById("lessonDialog").close();go("home");toast("学习进度已写入本地地图："+atlasNodes[destination].name);
+});
+
 document.querySelectorAll("[data-query]").forEach(b=>b.addEventListener("click",()=>{document.getElementById("searchInput").value=b.dataset.query;search(b.dataset.query)}));
 const index = [
 {title:"Agent 与 Workflow：如何选择合适的执行方式？",body:"从步骤是否明确、是否需要动态决策、工具调用和异常处理出发，比较 Agent 与 Workflow 的适用场景。",tags:"agent workflow 工作流 自动化"},
