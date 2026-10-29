@@ -54,7 +54,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 </section>
 <section class="preview-panel" aria-labelledby="previewTitle"><div class="preview-toolbar"><strong id="previewTitle">实时预览</strong><span>4:5 · 社交媒体竖版</span></div>
 <div class="stage"><article class="poster" id="poster" data-motion="rise" aria-label="动态海报预览"><div class="poster-grid"></div><div class="poster-top"><span>DAVYLAB / CREATIVE SIGNAL</span><span class="poster-badge">IDEA 001</span></div><div class="poster-center" id="posterCenter"><div class="poster-orb" aria-hidden="true"></div><h2 id="posterHeading">让想法<br><span>有生命。</span></h2><p class="poster-sub" id="posterSub">从一个念头开始，让创意拥有自己的节奏。</p><div class="poster-rule"></div></div><div class="poster-bottom"><span>MAKE POSSIBILITIES HAPPEN</span><span class="signature" id="posterSignature">BY DAVYLAB</span></div></article></div>
-<div class="actions" style="margin-top:14px"><button class="btn primary" id="exportPng" type="button">导出 PNG 海报</button><button class="btn" id="exportHtml" type="button">导出动态 HTML</button><button class="btn" id="share" type="button">生成分享链接</button></div><div class="status" id="exportStatus" role="status" aria-live="polite">PNG 是静态图片；动态 HTML 可保留网页动画。分享链接会包含当前文字与样式设置。</div>
+<div class="actions" style="margin-top:14px"><button class="btn primary" id="exportPng" type="button">导出 PNG 海报</button><button class="btn" id="exportVideo" type="button">导出 WebM 视频</button><button class="btn" id="exportHtml" type="button">导出动态 HTML</button><button class="btn" id="share" type="button">生成分享链接</button></div><div class="status" id="exportStatus" role="status" aria-live="polite">PNG 是静态图片；动态 HTML 可保留网页动画。分享链接会包含当前文字与样式设置。</div>
 </section>
 </div>
 </main>
@@ -105,6 +105,57 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
       ctx.fillStyle=p.ink;ctx.font="18px Arial, sans-serif";ctx.fillText("MAKE POSSIBILITIES HAPPEN",78,1210);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",1002,1210);ctx.textAlign="left";
       canvas.toBlob(blob=>{if(!blob){$("#exportStatus").textContent="PNG 生成失败，请尝试其他浏览器。";return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="davylab-motion-poster.png";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$("#exportStatus").textContent="PNG 海报已生成并开始下载。";},"image/png");
     } catch(error){$("#exportStatus").textContent="导出失败："+error.message;}
+  });
+  $("#exportVideo").addEventListener("click",async()=>{
+    try {
+      if (!HTMLCanvasElement.prototype.captureStream || typeof MediaRecorder === "undefined") {
+        $("#exportStatus").textContent="当前浏览器不支持画布录制。请使用“导出动态 HTML”，或在支持 MediaRecorder 的桌面浏览器中导出 WebM。";
+        return;
+      }
+      const mimeCandidates=["video/webm;codecs=vp9","video/webm;codecs=vp8","video/webm","video/mp4"];
+      const mimeType=mimeCandidates.find(type=>MediaRecorder.isTypeSupported(type));
+      if(!mimeType){$("#exportStatus").textContent="当前浏览器没有可用的视频编码格式。你仍可导出 PNG 或动态 HTML。";return;}
+      const c=config(),p=palettes[theme],canvas=document.createElement("canvas");
+      canvas.width=720;canvas.height=900;
+      const ctx=canvas.getContext("2d");if(!ctx)throw new Error("无法创建视频画布");
+      const stream=canvas.captureStream(24);
+      const chunks=[];
+      const recorder=new MediaRecorder(stream,{mimeType,videoBitsPerSecond:2500000});
+      recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+      const finished=new Promise((resolve,reject)=>{recorder.onerror=()=>reject(new Error("浏览器录制失败"));recorder.onstop=resolve;});
+      const started=performance.now(),durationMs=3200;
+      function draw(now){
+        const progress=Math.min(1,(now-started)/durationMs),ease=1-Math.pow(1-progress,3);
+        ctx.clearRect(0,0,canvas.width,canvas.height);ctx.fillStyle=p.bg;ctx.fillRect(0,0,canvas.width,canvas.height);
+        const glow=ctx.createRadialGradient(570,170,10,570,170,390);glow.addColorStop(0,p.accent+"40");glow.addColorStop(1,p.bg+"00");ctx.fillStyle=glow;ctx.fillRect(0,0,720,900);
+        ctx.strokeStyle="#ffffff0b";ctx.lineWidth=1;for(let x=0;x<720;x+=32){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,900);ctx.stroke();}for(let y=0;y<900;y+=32){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(720,y);ctx.stroke();}
+        const orbitAngle=c.motion==="orbit"?progress*Math.PI*2:Math.sin(progress*Math.PI*2)*.08;
+        const orbX=570+Math.cos(orbitAngle)*10,orbY=240+Math.sin(orbitAngle)*14;
+        const orb=ctx.createRadialGradient(orbX-45,orbY-55,4,orbX,orbY,145);orb.addColorStop(0,"#f5ffcf");orb.addColorStop(.18,p.accent);orb.addColorStop(.7,"#476858");orb.addColorStop(1,p.bg);
+        ctx.globalAlpha=.8;ctx.fillStyle=orb;ctx.beginPath();ctx.arc(orbX,orbY,112,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
+        let alpha=c.motion==="fade"?ease:Math.min(1,progress*3.2);let yOffset=c.motion==="rise"?(1-ease)*52:0;let scale=c.motion==="zoom"?.88+.12*ease:1;
+        ctx.save();ctx.globalAlpha=alpha;ctx.translate(62,455+yOffset);ctx.scale(scale,scale);
+        const fontSize=c.title.length>25?50:c.title.length>14?60:72;ctx.font="800 "+fontSize+"px Arial, sans-serif";
+        const lines=wrappedLines(ctx,c.title,595);let y=-(lines.length*fontSize*1.08)/2;
+        lines.forEach((line,i)=>{ctx.fillStyle=i===lines.length-1?p.accent:p.ink;ctx.fillText(line,0,y);y+=fontSize*1.12;});
+        y+=25;ctx.fillStyle=p.ink;ctx.globalAlpha=alpha*.85;ctx.font="20px Arial, sans-serif";wrappedLines(ctx,c.subtitle,565).slice(0,4).forEach(line=>{ctx.fillText(line,0,y);y+=31;});
+        ctx.restore();ctx.globalAlpha=1;
+        ctx.strokeStyle="#ffffff55";ctx.beginPath();ctx.moveTo(62,790);ctx.lineTo(658,790);ctx.stroke();
+        ctx.fillStyle=p.ink;ctx.font="12px Arial, sans-serif";ctx.fillText("MAKE POSSIBILITIES HAPPEN",62,820);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",658,820);ctx.textAlign="left";
+      }
+      recorder.start(150);
+      function frame(now){draw(now);if(now-started<durationMs&&recorder.state==="recording")requestAnimationFrame(frame);else if(recorder.state==="recording")recorder.stop();}
+      requestAnimationFrame(frame);
+      $("#exportStatus").textContent="正在录制 3.2 秒动态海报，请稍候……";
+      await finished;
+      stream.getTracks().forEach(track=>track.stop());
+      const blob=new Blob(chunks,{type:mimeType});
+      if(!blob.size)throw new Error("录制文件为空");
+      const url=URL.createObjectURL(blob),a=document.createElement("a");
+      const ext=mimeType.includes("mp4")?"mp4":"webm";
+      a.href=url;a.download="davylab-motion-poster."+ext;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);
+      $("#exportStatus").textContent="视频已生成（"+ext.toUpperCase()+"，720×900，约 3.2 秒）。实际可用格式取决于当前浏览器。";
+    } catch(error) { $("#exportStatus").textContent="视频导出失败："+error.message+"。可改用动态 HTML 导出。"; }
   });
   $("#exportHtml").addEventListener("click",()=>{
     const c=config(),p=palettes[theme],escaped=JSON.stringify(c).replace(/</g,"\\u003c");
