@@ -54,6 +54,47 @@ try {
     if (effect === "orbit" && !(await page.locator("#previewOrbit").isVisible())) throw new Error("Orbit path is hidden");
     if (effect === "stagger" && !(await page.locator("#previewTrail").isVisible())) throw new Error("Stagger trail is hidden");
   }
+  // Productivity workflow: named personalities, validated JSON import, and engine-specific code generation.
+  const productPersonality = page.locator('.motion-personality[data-personality="product"]');
+  await productPersonality.click();
+  if (await productPersonality.getAttribute("aria-pressed") !== "true") throw new Error("Product interaction personality did not activate");
+  const personalityConfig = JSON.parse(await page.locator("#motionConfig").inputValue());
+  if (personalityConfig.effect !== "spring" || personalityConfig.durationMs !== 1200) throw new Error("Product personality did not apply its documented defaults");
+
+  for (const engine of ["waapi", "gsap", "motion"]) {
+    await page.locator("#motionSnippetEngine").selectOption(engine);
+    const snippet = await page.locator("#motionIntegrationSnippet").inputValue();
+    if (!snippet.includes(".your-target")) throw new Error("Integration snippet missing target placeholder: " + engine);
+    if (engine === "gsap" && !snippet.includes("gsap.fromTo")) throw new Error("GSAP snippet was not generated");
+    if (engine === "motion" && !snippet.includes('from "motion"')) throw new Error("Motion vanilla import was not generated");
+    if (engine === "waapi" && !snippet.includes(".animate(")) throw new Error("Web Animations API snippet was not generated");
+  }
+
+  const importConfig = {
+    schema: "davylab.visual-dna-motion/v1",
+    effect: "slide",
+    durationMs: 3500,
+    intensityPercent: 80,
+    distancePx: 40,
+    direction: "left",
+    easing: "cubic-bezier(0.22,1,0.36,1)",
+    playback: "once",
+    globalTokens: { speed: 1, staggerMs: 90, reducedMotion: false }
+  };
+  await page.locator("#motionImportJson").fill(JSON.stringify(importConfig));
+  await page.locator("#applyImportedMotionConfig").click();
+  const importedConfig = JSON.parse(await page.locator("#motionConfig").inputValue());
+  if (importedConfig.effect !== "slide" || importedConfig.durationMs !== 3500 || importedConfig.direction !== "left") {
+    throw new Error("Valid JSON import did not apply selected effect and tuning values");
+  }
+  if (!(await page.locator("#motionImportStatus").textContent()).includes("成功应用")) throw new Error("Successful JSON import status was not announced");
+
+  const beforeInvalidImport = await page.locator("#motionConfig").inputValue();
+  await page.locator("#motionImportJson").fill(JSON.stringify({ schema:"wrong/version", effect:"orbit" }));
+  await page.locator("#applyImportedMotionConfig").click();
+  if (await page.locator("#motionConfig").inputValue() !== beforeInvalidImport) throw new Error("Invalid JSON import modified current configuration");
+  if (!(await page.locator("#motionImportStatus").textContent()).includes("导入失败")) throw new Error("Invalid JSON import did not explain the failure");
+
   await page.locator("#speed").evaluate(el => {
     el.value = "1.4";
     el.dispatchEvent(new Event("input", { bubbles: true }));
