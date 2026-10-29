@@ -101,6 +101,20 @@ try {
   }
   if (!(await page.locator("#motionImportStatus").textContent()).includes("成功应用")) throw new Error("Successful JSON import status was not announced");
 
+  await page.locator("#shareMotionConfig").click();
+  const shareUrl = await page.locator("#motionShareUrl").inputValue();
+  if (!shareUrl.includes("#motion=")) throw new Error("Share link did not encode the current motion config in its URL fragment");
+  const sharedPage = await browser.newPage({ viewport: { width: 1024, height: 900 }, reducedMotion: "no-preference" });
+  sharedPage.on("pageerror", error => pageErrors.push("shared page: " + error.message));
+  await sharedPage.goto(shareUrl, { waitUntil: "domcontentloaded" });
+  await sharedPage.locator("#labTitle").waitFor();
+  const sharedConfig = JSON.parse(await sharedPage.locator("#motionConfig").inputValue());
+  if (sharedConfig.effect !== "slide" || sharedConfig.durationMs !== 3500 || sharedConfig.direction !== "left") {
+    throw new Error("Opening a share link did not restore the motion configuration on a fresh page");
+  }
+  await sharedPage.close();
+
+
   const beforeInvalidImport = await page.locator("#motionConfig").inputValue();
   await page.locator("#motionImportJson").fill(JSON.stringify({ schema:"wrong/version", effect:"orbit" }));
   await page.locator("#applyImportedMotionConfig").click();
