@@ -97,6 +97,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .motion-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .motion-workbench-status{min-height:18px;margin-top:8px;color:#8fa29f;font-size:11px;line-height:1.5}
 @media(max-width:900px){.motion-personalities{grid-template-columns:1fr}.motion-workbench{grid-template-columns:1fr}}
+.motion-scenarios{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:18px 0 16px}
+.motion-scenario{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;min-height:112px;padding:14px;text-align:left;border:1px solid var(--line);border-radius:13px;background:#0e141b;color:var(--ink);transition:border-color 180ms,background 180ms}
+.motion-scenario[aria-pressed="true"]{border-color:var(--cyan);background:#79e2d00d;box-shadow:inset 0 0 0 1px #79e2d020}
+.motion-scenario strong{font-size:13px}.motion-scenario small{font-size:11px;line-height:1.55;color:var(--muted)}
+.motion-scenario .option-index{font:10px ui-monospace,monospace;color:var(--cyan);letter-spacing:.1em}
+@media(max-width:900px){.motion-scenarios{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:480px){.motion-scenarios{grid-template-columns:1fr}.motion-scenario{min-height:0}}
 .motion-picker-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;align-items:stretch}
 .motion-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
 .motion-option{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;text-align:left;padding:14px;border:1px solid var(--line);border-radius:14px;background:#10161d;color:var(--ink);transition:border-color 180ms,background 180ms}
@@ -213,6 +220,15 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <button class="motion-personality" type="button" data-personality="editorial" aria-pressed="true"><span class="option-index">STYLE / 01</span><strong>克制编辑</strong><small>低幅度、柔和减速。适合内容阅读、品牌官网和专业工具。</small></button>
       <button class="motion-personality" type="button" data-personality="product" aria-pressed="false"><span class="option-index">STYLE / 02</span><strong>产品交互</strong><small>清晰响应、轻微弹性。适合按钮反馈、状态变化和操作引导。</small></button>
       <button class="motion-personality" type="button" data-personality="immersive" aria-pressed="false"><span class="option-index">STYLE / 03</span><strong>沉浸空间</strong><small>更长节奏与空间旋转。适合主视觉、探索体验和展示场景。</small></button>
+    </div>
+    <div class="section-index" style="margin-top:22px">USE CASE / 场景方案</div>
+    <div class="motion-scenarios" role="group" aria-label="按界面场景选择动效方案">
+      <button class="motion-scenario" type="button" data-scenario="content" aria-pressed="false"><span class="option-index">SCENE / 01</span><strong>内容入场</strong><small>文章、功能区与信息块。轻幅淡入上移，优先保持阅读节奏。</small></button>
+      <button class="motion-scenario" type="button" data-scenario="feedback" aria-pressed="false"><span class="option-index">SCENE / 02</span><strong>操作反馈</strong><small>按钮、确认状态与轻量成功提示。短促弹性，不拖慢操作。</small></button>
+      <button class="motion-scenario" type="button" data-scenario="panel" aria-pressed="false"><span class="option-index">SCENE / 03</span><strong>面板切换</strong><small>抽屉、侧栏和步骤切换。明确方向，帮助理解空间关系。</small></button>
+      <button class="motion-scenario" type="button" data-scenario="focus" aria-pressed="false"><span class="option-index">SCENE / 04</span><strong>重点显影</strong><small>封面、重点成果与精选内容。柔和去模糊，避免密集重复使用。</small></button>
+      <button class="motion-scenario" type="button" data-scenario="list" aria-pressed="false"><span class="option-index">SCENE / 05</span><strong>列表错峰</strong><small>列表、流程与功能分组。按节奏依次出现，避免过长等待。</small></button>
+      <button class="motion-scenario" type="button" data-scenario="brand" aria-pressed="false"><span class="option-index">SCENE / 06</span><strong>品牌主视觉</strong><small>品牌首屏与探索场景。空间回旋用于低频展示，不用于高频控件。</small></button>
     </div>
     <div class="motion-picker-grid">
       <div class="motion-options" role="group" aria-label="选择动效效果">
@@ -706,6 +722,30 @@ $("#motionImportFile").addEventListener("change", async event => {
   $("#motionImportStatus").textContent = "文件已读取，点击「校验并应用」后才会更改当前设置。";
 });
 document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-personality").forEach(preset => preset.setAttribute("aria-pressed","false")); selectMotion(button.dataset.effect); }));
+
+const motionScenarios = {
+  content: { effect:"fade-up", durationMs:1800, intensityPercent:65, distancePx:24, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:.9, staggerMs:70 },
+  feedback: { effect:"spring", durationMs:1200, intensityPercent:90, distancePx:16, direction:"up", easing:"cubic-bezier(0.34,1.56,0.64,1)", playback:"once", speed:1.1, staggerMs:40 },
+  panel: { effect:"slide", durationMs:2200, intensityPercent:85, distancePx:40, direction:"right", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:1, staggerMs:60 },
+  focus: { effect:"blur", durationMs:2000, intensityPercent:75, distancePx:32, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:.95, staggerMs:70 },
+  list: { effect:"stagger", durationMs:2600, intensityPercent:80, distancePx:24, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:1, staggerMs:90 },
+  brand: { effect:"orbit", durationMs:4000, intensityPercent:80, distancePx:48, direction:"up", easing:"cubic-bezier(0.65,0,0.35,1)", playback:"loop", speed:.8, staggerMs:120 }
+};
+function applyMotionScenario(name) {
+  const scenario = motionScenarios[name];
+  if (!scenario) return;
+  document.querySelectorAll(".motion-scenario").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.scenario === name)));
+  document.querySelectorAll(".motion-personality").forEach(button => button.setAttribute("aria-pressed", "false"));
+  applyMotionValues(scenario);
+  $("#speed").value = String(scenario.speed);
+  $("#stagger").value = String(scenario.staggerMs);
+  selectMotion(scenario.effect, false);
+  applyControls();
+  playSelectedMotion();
+  previewStatus.textContent = "已应用场景方案「" + document.querySelector('.motion-scenario[data-scenario="' + name + '"] strong').textContent + "」，可继续微调参数。";
+}
+document.querySelectorAll(".motion-scenario").forEach(button => button.addEventListener("click", () => applyMotionScenario(button.dataset.scenario)));
+
 $("#replaySelectedMotion").addEventListener("click", playSelectedMotion);
 $("#resetMotionTuning").addEventListener("click", () => {
   $("#previewDuration").value = "2000";
