@@ -46,6 +46,14 @@ const path = require('node:path');
     }
     results.push({ test: 'Visual DNA editorial light design tokens', status: 'PASS', detail: colors });
 
+    // Trigger the existing scroll-reveal enhancement before interacting with product tools.
+    // A zero-opacity pre-reveal element is intentionally not actionable until it enters view.
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, document.querySelector('#products').offsetTop);
+    });
+    await page.waitForTimeout(900);
+
     const initialCount = await page.locator('#shelf .app-card').count();
     if (initialCount < 3) throw new Error('Expected at least 3 product cards, got ' + initialCount);
     await page.locator('#search').fill('zz-no-match-davylab-qa');
