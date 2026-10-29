@@ -16,6 +16,8 @@
 .growth-kpi{padding:11px;background:#ffffff12;border:1px solid #ffffff25;border-radius:11px}.growth-kpi strong{font-size:22px;display:block;line-height:1.2}.growth-kpi span{font-size:10px;color:#d5e0ef}
 .growth-target-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.growth-target-form label{font-size:10px;color:#d5e0ef;display:block;margin-bottom:4px}.growth-target-form input{width:100%;min-width:0;border:1px solid #ffffff38;background:#ffffff12;color:#fff;border-radius:8px;padding:8px}.growth-target-form input::placeholder{color:#bdcce0}
 .growth-side{display:flex;flex-direction:column;gap:10px}.growth-mini{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;min-width:0}.growth-mini strong{font-size:20px;display:block}.growth-mini span{font-size:11px;color:var(--muted)}
+
+.growth-action-panel{margin:18px 0}.growth-action-list{display:grid;gap:10px}.growth-action-item{display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:12px;background:#fff}.growth-action-index{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--blue-soft);color:var(--blue);font-weight:800;font-size:12px}.growth-action-copy{min-width:0}.growth-action-copy h3{font-size:13px;margin:4px 0}.growth-action-copy p{font-size:12px;color:var(--muted);margin:0;line-height:1.55}.growth-action-meta{display:flex;gap:5px;flex-wrap:wrap}.growth-action-item .btn{white-space:nowrap}.growth-action-panel .growth-footnote{margin-top:12px}@media(max-width:560px){.growth-action-item{grid-template-columns:30px minmax(0,1fr);gap:9px}.growth-action-index{width:28px;height:28px}.growth-action-item>.btn{grid-column:2;justify-self:start}.growth-action-copy h3{font-size:12px}}
 .growth-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.growth-grid .panel{margin-bottom:14px}
 .growth-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.growth-form .full{grid-column:1/-1}.growth-form .field input,.growth-form .field select{width:100%;min-width:0}
 .growth-list{display:grid;gap:9px;margin-top:12px}.growth-item{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fff;min-width:0}.growth-item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.growth-item h3{font-size:13px;line-height:1.45;margin:0 0 5px;overflow-wrap:anywhere}.growth-item p{font-size:11px;color:var(--muted);margin:0;overflow-wrap:anywhere}.growth-item-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.growth-badge{display:inline-flex;align-items:center;border-radius:999px;background:#eef2f8;color:#53647a;padding:3px 7px;font-size:10px}.growth-badge.good{background:#e8f6ee;color:#26724f}.growth-badge.warn{background:#fff2df;color:#8a5a14}
@@ -409,6 +411,11 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
    <div class="growth-mini"><span>本月实验进度</span><strong id="viralExperimentCount">0 / 3</strong><span>已建立的本月实验记录</span></div>
   </div>
  </div>
+ <div class="panel growth-action-panel">
+  <div class="panelhead"><div><h2>本周增长行动建议</h2><p>根据本机已记录的订阅、实验和贴图任务生成；不使用猜测数据，也不会自动执行。</p></div><span class="tag blue">动态建议</span></div>
+  <div id="growthActionPlan" class="growth-action-list" aria-live="polite"><div class="growth-empty">正在根据已有记录整理下一步动作…</div></div>
+  <div class="growth-footnote">建议仅用于辅助排优先级。所有指标均来自你手动录入的本地记录；建议不是增长结果承诺。</div>
+ </div>
  <div class="growth-grid">
   <div>
    <div class="panel">
@@ -691,7 +698,25 @@ function renderMetrics(){
  el.querySelectorAll("[data-metric-edit]").forEach(b=>b.addEventListener("click",()=>{const x=growth.metrics.find(y=>y.id===b.dataset.metricEdit);if(!x)return;$("metricDate").value=x.date||todayLocal();$("metricFollowers").value=x.followers??"";$("metricArticle").value=x.article||"";$("metricReads").value=x.reads??"";$("metricShares").value=x.shares??"";$("metricNewFollowers").value=x.newFollowers??"";$("growthMetricForm").dataset.editId=x.id;$("metricFollowers").focus();toast("已载入指标记录，保存时将更新原记录")}));
  el.querySelectorAll("[data-metric-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条指标记录？")){growth.metrics=growth.metrics.filter(x=>x.id!==b.dataset.metricDelete);saveGrowth()}}));
 }
-function renderGrowth(){renderGrowthTarget();renderGrowthTasks();renderExperiments();renderPosterTasks();renderMetrics()}
+function renderGrowthActionPlan(){
+ const el=$("growthActionPlan");if(!el)return;
+ const actions=[],today=todayLocal(),month=today.slice(0,7);
+ const validMetrics=growth.metrics.filter(x=>x.followers!==null&&x.followers!==undefined&&x.followers!==""&&Number.isFinite(Number(x.followers))&&x.date);
+ const latestMetric=validMetrics.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""))[0];
+ const recentMetric=validMetrics.some(x=>{const age=(new Date(today+"T00:00:00")-new Date(x.date+"T00:00:00"))/86400000;return age>=0&&age<=7});
+ if(numOrBlank(growth.target.latest)===null)actions.push({level:"优先",title:"补录当前真实订阅人数",detail:"先建立增长目标的当前基线；请以公众号后台显示的数字为准。",target:"growthLatest"});
+ if(!recentMetric)actions.push({level:"本周",title:"记录本周增长数据",detail:latestMetric?"最近一条有效订阅记录日期为 "+growthDate(latestMetric.date)+"；建议补录本周数据。":"目前还没有有效订阅人数记录，先录入一条真实数据。",target:"metricFollowers",kind:"metric"});
+ const experimentsThisMonth=growth.experiments.filter(x=>(x.date||x.createdAt||"").slice(0,7)===month).length;
+ if(experimentsThisMonth<3)actions.push({level:"本月",title:"补齐本月内容实验",detail:"本月已建立 "+experimentsThisMonth+" / 3 个实验，还需 "+(3-experimentsThisMonth)+" 个；选择不同角度进行验证。",target:"viralTitle",kind:"experiment"});
+ const openPosters=growth.posters.filter(x=>["queued","creating","blocked"].includes(x.status));
+ if(openPosters.length)actions.push({level:"待处理",title:"推进未完成的新闻贴图任务",detail:"当前有 "+openPosters.length+" 项处于待制作、制作中或阻塞状态；先完成素材核验，再交接 WorkBuddy。",target:"posterTitle",kind:"poster"});
+ const publishedWithoutData=growth.experiments.filter(x=>x.status==="published"&&(x.views===null||x.views===undefined||x.views===""));
+ if(publishedWithoutData.length)actions.push({level:"复盘",title:"补齐已发布内容的 7 日数据",detail:"有 "+publishedWithoutData.length+" 个已发布实验尚未录入 7 日阅读量；数据完整后再判断表现。",target:"viralViews",kind:"experiment"});
+ if(!actions.length)actions.push({level:"保持",title:"继续记录真实数据并复盘",detail:"当前没有明显缺项。按实际数据更新阅读、分享和净增订阅，避免仅凭感觉判断选题。",target:"metricFollowers",kind:"metric"});
+ el.innerHTML=actions.slice(0,4).map((a,i)=>'<article class="growth-action-item"><div class="growth-action-index">'+String(i+1).padStart(2,"0")+'</div><div class="growth-action-copy"><div class="growth-action-meta"><span class="growth-badge">'+escapeGrowth(a.level)+'</span></div><h3>'+escapeGrowth(a.title)+'</h3><p>'+escapeGrowth(a.detail)+'</p></div><button class="btn small" type="button" data-growth-focus="'+escapeGrowth(a.target)+'">去处理</button></article>').join("");
+ el.querySelectorAll("[data-growth-focus]").forEach(b=>b.addEventListener("click",()=>{const target=$(b.dataset.growthFocus);if(!target)return;if(target.id==="metricFollowers")$("metricDate").value=today;if(target.id==="viralTitle")$("viralDate").value=today;if(target.id==="posterTitle")$("posterDate").value=today;target.scrollIntoView({behavior:"smooth",block:"center"});target.focus({preventScroll:true})}));
+}
+function renderGrowth(){renderGrowthTarget();renderGrowthTasks();renderExperiments();renderPosterTasks();renderMetrics();renderGrowthActionPlan()}
 function growthId(){return "g_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
 function resetGrowthForm(form){form.reset();delete form.dataset.editId}
 $("growthBaseline").value=growth.target.baseline||"";
