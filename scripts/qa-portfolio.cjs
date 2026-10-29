@@ -134,6 +134,7 @@ const path = require('node:path');
     results.push({ test: 'desktop layout overflow', status: 'PASS' });
 
     const layoutModes = ['editorial', 'balanced', 'vertical', 'compact', 'bento', 'split'];
+    const layoutSignatures = [];
     for (const layoutMode of layoutModes) {
       const settingsTrigger = await page.locator('#appearanceTrigger').isVisible()
         ? page.locator('#appearanceTrigger') : page.locator('#appearanceEmergencyTrigger');
@@ -141,16 +142,34 @@ const path = require('node:path');
       await page.locator('[data-appearance-layout="' + layoutMode + '"]').click();
       await page.locator('#appearanceDone').click();
       await page.waitForFunction(mode => document.documentElement.dataset.appearanceLayout === mode, layoutMode);
-      const layoutMetrics = await page.evaluate(() => ({
-        mode: document.documentElement.dataset.appearanceLayout,
-        viewport: window.innerWidth,
-        documentWidth: document.documentElement.scrollWidth
-      }));
+      const layoutMetrics = await page.evaluate(() => {
+        const hero = document.querySelector('.hero');
+        const heroGrid = document.querySelector('.hero-grid');
+        const sectionHead = document.querySelector('#products .section-head') || document.querySelector('.section-head');
+        return {
+          mode: document.documentElement.dataset.appearanceLayout,
+          viewport: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          heroGridColumns: getComputedStyle(heroGrid).gridTemplateColumns,
+          sectionHeadDisplay: getComputedStyle(sectionHead).display,
+          sectionHeadColumns: getComputedStyle(sectionHead).gridTemplateColumns,
+          heroPaddingTop: getComputedStyle(hero).paddingTop
+        };
+      });
       if (layoutMetrics.documentWidth > layoutMetrics.viewport + 2) {
         throw new Error('Horizontal overflow in layout ' + layoutMode + ': ' + JSON.stringify(layoutMetrics));
       }
+      layoutSignatures.push([
+        layoutMetrics.heroGridColumns,
+        layoutMetrics.sectionHeadDisplay,
+        layoutMetrics.sectionHeadColumns,
+        layoutMetrics.heroPaddingTop
+      ].join('|'));
     }
-    results.push({ test: 'six Visual DNA layouts apply without desktop horizontal overflow', status: 'PASS', detail: layoutModes });
+    if (new Set(layoutSignatures).size < 5) {
+      throw new Error('Visual DNA layout presets are too visually similar structurally: ' + JSON.stringify({ layoutModes, layoutSignatures }));
+    }
+    results.push({ test: 'six Visual DNA layouts change structure without desktop horizontal overflow', status: 'PASS', detail: { layoutModes, distinctStructuralSignatures: new Set(layoutSignatures).size } });
     // Verify independent settings survive reload and corrupted storage degrades safely.
     await page.locator('#appearanceTrigger').click();
     await page.locator('.appearance-preset[data-appearance-layout="split"]').click();
