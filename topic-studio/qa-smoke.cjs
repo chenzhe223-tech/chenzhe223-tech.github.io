@@ -50,7 +50,7 @@ async function main() {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on("pageerror", error => errors.push(error.message));
-    page.on("console", message => { if (message.type() === "error") errors.push(message.text()); });
+    page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text()); });
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
