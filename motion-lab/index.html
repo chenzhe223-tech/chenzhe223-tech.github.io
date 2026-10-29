@@ -485,48 +485,49 @@ function playSelectedMotion() {
   previewStatus.textContent = "正在预览：" + config.name + " · " + (config.durationMs / 1000).toFixed(1) + " 秒";
   const object = previewObject;
   const durationMs = config.durationMs;
+  const animationDuration = config.playback === "loop" ? Math.max(250, durationMs / 2) : durationMs;
+  const repeat = config.playback === "loop" ? 2 : 1;
   const intensity = config.intensityPercent / 100;
   const distance = config.distancePx * intensity;
   const easing = config.easing;
   const directionOffset = { up:[0,-distance], down:[0,distance], left:[-distance,0], right:[distance,0] }[config.direction] || [0,-distance];
   const fromTransform = (x,y,scale=1,rotate=0) => "translate(" + x + "px," + y + "px) scale(" + scale + ") rotate(" + rotate + "deg)";
   const run = (el, keyframes, options) => {
-    const animation = el.animate(keyframes, { duration:durationMs, easing, fill:"both", ...options });
+    const animation = el.animate(keyframes, { duration:animationDuration, easing, fill:"both", iterations:repeat, ...options });
     previewAnimations.push(animation);
     animation.onfinish = () => { if (el === object) previewStatus.textContent = "预览完成。可调整参数或再次播放。"; };
     return animation;
   };
-  const repeat = config.playback === "loop" ? Math.max(0, Math.floor(durationMs / 850) - 1) : 0;
   const base = { opacity:1, transform:fromTransform(0,0,1,0), filter:"blur(0px)" };
   if (selectedMotion === "fade-up") {
     object.style.opacity = "0";
-    run(object,[{opacity:0,transform:fromTransform(directionOffset[0],directionOffset[1],.94)},{...base}],{iterations:repeat+1});
+    run(object,[{opacity:0,transform:fromTransform(directionOffset[0],directionOffset[1],.94)},{...base}],{iterations:repeat});
   } else if (selectedMotion === "spring") {
-    run(object,[{transform:fromTransform(0,0,.72)},{transform:fromTransform(0,0,1.08)},{transform:fromTransform(0,0,.97)},{...base}],{iterations:repeat+1});
+    run(object,[{transform:fromTransform(0,0,.72)},{transform:fromTransform(0,0,1.08)},{transform:fromTransform(0,0,.97)},{...base}],{iterations:repeat});
   } else if (selectedMotion === "slide") {
-    run(object,[{opacity:0,transform:fromTransform(...directionOffset,.96)},{...base}],{iterations:repeat+1});
+    run(object,[{opacity:0,transform:fromTransform(...directionOffset,.96)},{...base}],{iterations:repeat});
   } else if (selectedMotion === "blur") {
-    run(object,[{opacity:0,filter:"blur("+(12*intensity)+"px)",transform:fromTransform(0,0,.96)},{...base}],{iterations:repeat+1});
+    run(object,[{opacity:0,filter:"blur("+(12*intensity)+"px)",transform:fromTransform(0,0,.96)},{...base}],{iterations:repeat});
   } else if (selectedMotion === "stagger") {
-    const dots = $("#previewTrail span");
+    const dots = [...document.querySelectorAll("#previewTrail span")];
     previewTrail.hidden = false;
     const els = [object,...dots];
     els.forEach((el,i) => {
       el.style.opacity = "0";
       const y = el === object ? distance * -.5 : -12 * intensity;
-      const anim = el.animate([{opacity:0,transform:fromTransform(0,y,.88)},{opacity:1,transform:fromTransform(0,0,1)}],{duration:durationMs,easing,fill:"both",delay:Math.round(state.stagger*1000)*i,iterations:repeat+1});
+      const anim = el.animate([{opacity:0,transform:fromTransform(0,y,.88)},{opacity:1,transform:fromTransform(0,0,1)}],{duration:animationDuration,easing,fill:"both",delay:Math.round(state.stagger*1000)*i,iterations:repeat});
       previewAnimations.push(anim);
     });
   } else if (selectedMotion === "orbit") {
     previewOrbit.hidden = false;
-    run(object,[{transform:fromTransform(0,0,.94,-18*intensity)},{transform:fromTransform(0,0,1,342*intensity)}],{iterations:repeat+1});
-    run(previewOrbit,[{transform:"rotate(-28deg) scale(.78)",opacity:.25},{transform:"rotate(332deg) scale(1.08)",opacity:.9}],{iterations:repeat+1});
+    run(object,[{transform:fromTransform(0,0,.94,-18*intensity)},{transform:fromTransform(0,0,1,342*intensity)}],{iterations:repeat});
+    run(previewOrbit,[{transform:"rotate(-28deg) scale(.78)",opacity:.25},{transform:"rotate(332deg) scale(1.08)",opacity:.9}],{iterations:repeat});
   }
 }
 function selectMotion(effect, autoplay=true) {
   if (!motionDefinitions[effect]) return;
   selectedMotion = effect;
-  $(".motion-option").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.effect === effect)));
+  document.querySelectorAll(".motion-option").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.effect === effect)));
   previewOrbit.hidden = effect !== "orbit";
   previewTrail.hidden = effect !== "stagger";
   updateMotionConfig();
@@ -587,6 +588,8 @@ function applyControls() {
     }
     note.textContent = systemReduce.matches ? "你的系统已设置减少动态效果；实验室将继续尊重系统偏好。" : "参数已应用于实验场。系统级减少动态效果设置优先级更高。";
   }
+  if (typeof updateMotionConfig === "function") updateMotionConfig();
+  if (reduced() && typeof cancelMotionPreview === "function") cancelMotionPreview();
 }
 ["speed","intensity","stagger","reduceMotion"].forEach(id => $("#" + id).addEventListener("input", applyControls));
 systemReduce.addEventListener?.("change", applyControls);
