@@ -299,8 +299,54 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:700px){.nav{height:auto;min-height:70px;flex-wrap:wrap;padding:11px 0}.navlinks{order:3;width:100%;justify-content:flex-start;gap:18px;overflow-x:auto;padding:3px 0 5px;scrollbar-width:none;white-space:nowrap}.navlinks::-webkit-scrollbar{display:none}.navlinks a{flex:0 0 auto;font-size:11px}.nav .pill-button{padding:9px 12px;font-size:10px}.open-skill-links{align-items:stretch;flex-direction:column}.open-skill-link{width:100%}.open-skill-top{margin-bottom:21px}}
 
 </style>
+
+<style id="davylab-appearance-controls">
+:root{--appearance-page:#f5f3ed;--appearance-panel:#fffefa;--appearance-text:#14263d;--appearance-muted:#586777;--appearance-border:#d9ddd7;--appearance-accent:#2457c5;--appearance-nav:#f5f3edf2}
+body{background:var(--appearance-page);color:var(--appearance-text)}
+.topbar{background:var(--appearance-nav);border-color:var(--appearance-border)}
+.hero h1,h2,.app-name,.value h3,.step h3,.offer h3,.modal-title{color:var(--appearance-text)}
+.hero p,.desc,.app-desc,.manifesto-copy,.value p,.step p,.offer p,.modal-body p{color:var(--appearance-muted)}
+.market-tools,.app-card,.step,.offer-main,.offer-note,.contact-form-card,.modal-card{background:var(--appearance-panel);border-color:var(--appearance-border)}
+.manifesto,.ticker,.contact-wechat-card{background:color-mix(in srgb,var(--appearance-panel) 72%,var(--appearance-page));border-color:var(--appearance-border)}
+.navlinks,.section-side,.market-foot,.shelf-tools,.footer{color:var(--appearance-muted)}
+.eyebrow,.app-bottom,.open-skill-index{color:var(--appearance-accent)}
+.btn-primary,.pill-button,.filter.active,.open-mark:hover{background:var(--appearance-accent);border-color:var(--appearance-accent);color:#fff}
+.btn-secondary,.arrow-btn,.filter,.detail-btn,.project-chip{border-color:var(--appearance-border);color:var(--appearance-text)}
+.searchbox input,.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:var(--appearance-panel);color:var(--appearance-text);border-color:var(--appearance-border)}
+.searchbox input:focus,.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:var(--appearance-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--appearance-accent) 13%,transparent)}
+.appearance-trigger{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:9px 12px;border:1px solid var(--appearance-border);border-radius:7px;background:var(--appearance-panel);color:var(--appearance-text);font:inherit;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;transition:border-color .18s,background .18s}
+.appearance-trigger:hover,.appearance-trigger[aria-expanded="true"]{border-color:var(--appearance-accent);background:color-mix(in srgb,var(--appearance-accent) 7%,var(--appearance-panel))}
+.appearance-trigger svg{width:16px;height:16px;flex:0 0 auto}
+.appearance-backdrop{position:fixed;inset:0;z-index:79;background:#14263d40;backdrop-filter:blur(2px)}
+.appearance-backdrop[hidden],.appearance-panel[hidden]{display:none!important}
+.appearance-panel{position:fixed;z-index:80;top:82px;right:clamp(12px,3vw,44px);width:min(390px,calc(100vw - 24px));max-height:calc(100dvh - 100px);overflow:auto;padding:19px;background:var(--appearance-panel);color:var(--appearance-text);border:1px solid var(--appearance-border);border-radius:13px;box-shadow:0 22px 70px #14263d2b}
+.appearance-panel-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding-bottom:14px;border-bottom:1px solid var(--appearance-border)}
+.appearance-panel-head h2{font-size:19px;letter-spacing:-.04em;margin:0 0 3px}
+.appearance-panel-head p{margin:0;color:var(--appearance-muted);font-size:11px;line-height:1.6}
+.appearance-close{width:32px;height:32px;border:1px solid var(--appearance-border);border-radius:7px;background:transparent;color:inherit;cursor:pointer;font-size:19px}
+.appearance-section{padding:15px 0;border-bottom:1px solid var(--appearance-border)}
+.appearance-section:last-of-type{border-bottom:0}
+.appearance-label{display:block;font-size:11px;font-weight:850;margin-bottom:9px}
+.appearance-presets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.appearance-preset{display:flex;align-items:center;gap:9px;min-width:0;padding:10px;border:1px solid var(--appearance-border);border-radius:8px;background:transparent;color:inherit;text-align:left;cursor:pointer}
+.appearance-preset[aria-pressed="true"]{border-color:var(--appearance-accent);box-shadow:inset 0 0 0 1px var(--appearance-accent)}
+.appearance-swatch{display:flex;flex:0 0 38px;height:30px;overflow:hidden;border-radius:5px;border:1px solid #0001}
+.appearance-swatch i{display:block;flex:1}
+.appearance-preset strong{display:block;font-size:11px}
+.appearance-preset small{display:block;color:var(--appearance-muted);font-size:9px;margin-top:2px}
+.appearance-colors{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.appearance-color{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 9px;border:1px solid var(--appearance-border);border-radius:7px;font-size:10px;color:var(--appearance-muted)}
+.appearance-color input{width:31px;height:28px;padding:0;border:0;background:transparent;cursor:pointer}
+.appearance-panel-actions{display:flex;gap:8px;align-items:center;padding-top:14px}
+.appearance-reset,.appearance-done{min-height:38px;border-radius:7px;padding:9px 13px;font-size:11px;font-weight:800;cursor:pointer}
+.appearance-reset{border:1px solid var(--appearance-border);background:transparent;color:inherit}
+.appearance-done{border:1px solid var(--appearance-accent);background:var(--appearance-accent);color:#fff;flex:1}
+.appearance-note{font-size:9px;line-height:1.6;color:var(--appearance-muted);margin:10px 0 0}
+@media(max-width:700px){.appearance-trigger{min-height:36px;padding:8px 9px;font-size:10px}.appearance-trigger svg{width:14px;height:14px}.appearance-panel{top:auto;bottom:max(12px,env(safe-area-inset-bottom));right:12px;left:12px;width:auto;max-height:82dvh;padding:16px}.appearance-panel-head h2{font-size:18px}}
+@media(prefers-reduced-motion:reduce){.appearance-trigger{transition:none}}
+</style>
 </head><body>
-<header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#skills">开放 Skill</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
+<header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#skills">开放 Skill</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><button class="appearance-trigger" id="appearanceTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2v17.6M3.2 12h17.6M5.8 5.8l12.4 12.4M18.2 5.8 5.8 18.2"/></svg><span>外观与配色</span></button><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
 <main id="top"><section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Independent AI Product Studio</div><h1>把想法，<br><span class="gradient">做成能用的工具。</span></h1><p>AI 正在降低创造的门槛。<strong>DAVYLAB 想做的，是让更多普通人把一个念头，走成一款真实的产品。</strong> 从灵感、原型到应用，让创造不再停在“想一想”。</p><div class="actions"><a class="btn btn-primary" href="#products">探索我的产品 ↓</a><a class="btn btn-secondary" href="#contact">带来你的想法 ↗</a></div><div class="hero-note">SPARK AN IDEA · BUILD A TOOL · KEEP THE PULSE ALIVE</div></div><div class="visual" aria-label="灵感与产品的动态视觉"><div class="orbit"></div><div class="core"><svg viewBox="0 0 100 100" fill="none"><path d="M53 7 28 47h20l-7 45 34-52H53l11-33Z" fill="#d7ff74"/><path d="M9 65C22 46 32 47 44 63S69 80 91 53" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="24" r="4" fill="#fff"/></svg></div><div class="orbit-tag tag-a"><b>01 / SPARK</b><span>让灵感被看见</span></div><div class="orbit-tag tag-b"><b>02 / BUILD</b><span>把想法做出来</span></div><div class="orbit-tag tag-c"><b>03 / PULSE</b><span>持续验证与迭代</span></div><div class="orbit-tag tag-d"><b>IDEA → PRODUCT</b><span>从念头到工具</span></div></div></div></section>
 <div class="ticker"><div class="ticker-track"><span>IDEA → PRODUCT</span><i></i><strong>AI APPLICATIONS</strong><i></i><span>SMALL IDEAS, REAL TOOLS</span><i></i><strong>SPARK &amp; PULSE</strong><i></i><span>BUILD · TEST · ITERATE</span></div></div>
 <section id="products"><div class="wrap"><div class="section-head"><div><div class="eyebrow">The Product Shelf</div><h2>我的应用超市<span class="gradient">。</span></h2><p class="desc">不是一份静态作品集，而是一排持续生长的产品货架。横向浏览、搜索与筛选，看看哪些想法已经变成工具，哪些还在探索下一种可能。</p></div><div class="section-side">每个产品都从一个具体需求开始。<br>状态公开标注，概念 Logo 与真实 Logo 清晰区分。</div></div>
@@ -550,4 +596,77 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="./gsap-motion.js"></script>
+
+<div class="appearance-backdrop" id="appearanceBackdrop" hidden></div>
+<aside class="appearance-panel" id="appearancePanel" role="dialog" aria-modal="true" aria-labelledby="appearanceTitle" hidden>
+  <div class="appearance-panel-head"><div><h2 id="appearanceTitle">网页外观与配色</h2><p>调整 DAVYLAB 的视觉氛围，设置会保存在当前浏览器。</p></div><button class="appearance-close" id="appearanceClose" type="button" aria-label="关闭外观设置">×</button></div>
+  <section class="appearance-section"><span class="appearance-label">选择一套主题</span>
+    <div class="appearance-presets">
+      <button class="appearance-preset" type="button" data-appearance-theme="editorial" aria-pressed="true"><span class="appearance-swatch"><i style="background:#f5f3ed"></i><i style="background:#1d5a49"></i><i style="background:#2457c5"></i></span><span><strong>纸感编辑</strong><small>暖白 · 森林绿</small></span></button>
+      <button class="appearance-preset" type="button" data-appearance-theme="coastal" aria-pressed="false"><span class="appearance-swatch"><i style="background:#edf4f0"></i><i style="background:#176b63"></i><i style="background:#398c91"></i></span><span><strong>海雾青绿</strong><small>雾青 · 深海绿</small></span></button>
+      <button class="appearance-preset" type="button" data-appearance-theme="midnight" aria-pressed="false"><span class="appearance-swatch"><i style="background:#101923"></i><i style="background:#eaf0f2"></i><i style="background:#65d7d0"></i></span><span><strong>午夜青蓝</strong><small>深石墨 · 冰川青</small></span></button>
+      <button class="appearance-preset" type="button" data-appearance-theme="classic" aria-pressed="false"><span class="appearance-swatch"><i style="background:#f2f4fa"></i><i style="background:#202e50"></i><i style="background:#536bd5"></i></span><span><strong>经典蓝紫</strong><small>清晰 · 数字感</small></span></button>
+    </div>
+  </section>
+  <section class="appearance-section"><span class="appearance-label">自定义颜色</span><div class="appearance-colors">
+    <label class="appearance-color" for="appearancePage">页面背景<input type="color" id="appearancePage" value="#f5f3ed"></label>
+    <label class="appearance-color" for="appearancePanelColor">面板底色<input type="color" id="appearancePanelColor" value="#fffefa"></label>
+    <label class="appearance-color" for="appearanceText">主文字<input type="color" id="appearanceText" value="#14263d"></label>
+    <label class="appearance-color" for="appearanceBorder">边框分割线<input type="color" id="appearanceBorder" value="#d9ddd7"></label>
+    <label class="appearance-color" for="appearanceAccent">强调色<input type="color" id="appearanceAccent" value="#2457c5"></label>
+    <label class="appearance-color" for="appearanceNav">导航底色<input type="color" id="appearanceNav" value="#f5f3ed"></label>
+  </div><p class="appearance-note">颜色调整会即时预览。主题与自定义颜色独立于原有产品数据和联系表单。</p></section>
+  <div class="appearance-panel-actions"><button class="appearance-reset" id="appearanceReset" type="button">恢复默认</button><button class="appearance-done" id="appearanceDone" type="button">完成</button></div>
+</aside>
+
+<script id="davylab-appearance-controller">
+(function(){
+ const root=document.documentElement;
+ const trigger=document.getElementById('appearanceTrigger');
+ const panel=document.getElementById('appearancePanel');
+ const backdrop=document.getElementById('appearanceBackdrop');
+ if(!trigger||!panel||!backdrop)return;
+ const storageKey='davylab-appearance:v1';
+ const defaults={theme:'editorial',page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed'};
+ const themes={
+  editorial:{page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed'},
+  coastal:{page:'#edf4f0',surface:'#fbfdf9',text:'#173b3b',border:'#cbdcd4',accent:'#176b63',nav:'#edf4f0'},
+  midnight:{page:'#101923',surface:'#182631',text:'#eaf0f2',border:'#34454f',accent:'#65d7d0',nav:'#101923'},
+  classic:{page:'#f2f4fa',surface:'#ffffff',text:'#202e50',border:'#d6dced',accent:'#536bd5',nav:'#f2f4fa'}
+ };
+ const inputs={page:document.getElementById('appearancePage'),surface:document.getElementById('appearancePanelColor'),text:document.getElementById('appearanceText'),border:document.getElementById('appearanceBorder'),accent:document.getElementById('appearanceAccent'),nav:document.getElementById('appearanceNav')};
+ let state={...defaults};
+ function validColor(value,fallback){return typeof value==='string'&&/^#[0-9a-fA-F]{6}$/.test(value)?value:fallback}
+ function safeLoad(){try{const raw=window.localStorage.getItem(storageKey);if(!raw)return {...defaults};const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return {...defaults};return {...defaults,...saved,theme:themes[saved.theme]?saved.theme:'custom',page:validColor(saved.page,defaults.page),surface:validColor(saved.surface,defaults.surface),text:validColor(saved.text,defaults.text),border:validColor(saved.border,defaults.border),accent:validColor(saved.accent,defaults.accent),nav:validColor(saved.nav,defaults.nav)}}catch(_){return {...defaults}}}
+ function safeSave(){try{window.localStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
+ function apply(){
+  root.style.setProperty('--appearance-page',state.page);
+  root.style.setProperty('--appearance-panel',state.surface);
+  root.style.setProperty('--appearance-text',state.text);
+  root.style.setProperty('--appearance-border',state.border);
+  root.style.setProperty('--appearance-accent',state.accent);
+  root.style.setProperty('--appearance-nav',state.nav+'f2');
+  root.style.setProperty('--vd-paper',state.page);
+  root.style.setProperty('--vd-surface',state.surface);
+  root.style.setProperty('--vd-ink',state.text);
+  root.style.setProperty('--vd-line',state.border);
+  root.style.setProperty('--vd-accent',state.accent);
+  Object.keys(inputs).forEach(key=>{if(inputs[key])inputs[key].value=state[key]});
+  document.querySelectorAll('[data-appearance-theme]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.appearanceTheme===state.theme)));
+  safeSave();
+ }
+ function setTheme(name){const palette=themes[name];if(!palette)return;state={theme:name,...palette};apply()}
+ function open(){panel.hidden=false;backdrop.hidden=false;trigger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';document.getElementById('appearanceClose').focus()}
+ function close(){panel.hidden=true;backdrop.hidden=true;trigger.setAttribute('aria-expanded','false');document.body.style.overflow='';trigger.focus()}
+ trigger.addEventListener('click',()=>panel.hidden?open():close());
+ document.getElementById('appearanceClose').addEventListener('click',close);
+ document.getElementById('appearanceDone').addEventListener('click',close);
+ backdrop.addEventListener('click',close);
+ document.addEventListener('keydown',event=>{if(panel.hidden)return;if(event.key==='Escape'){event.preventDefault();close();return}if(event.key==='Tab'){const focusable=[...panel.querySelectorAll('button:not([disabled]),input:not([disabled])')];if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}});
+ document.querySelectorAll('[data-appearance-theme]').forEach(button=>button.addEventListener('click',()=>setTheme(button.dataset.appearanceTheme)));
+ Object.entries(inputs).forEach(([key,input])=>input.addEventListener('input',()=>{state[key]=validColor(input.value,defaults[key]);state.theme='custom';apply()}));
+ document.getElementById('appearanceReset').addEventListener('click',()=>{state={...defaults};apply()});
+ state=safeLoad();apply();
+})();
+</script>
 </body></html>
