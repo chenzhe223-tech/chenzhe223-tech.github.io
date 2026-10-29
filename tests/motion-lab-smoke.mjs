@@ -54,6 +54,27 @@ try {
     if (effect === "orbit" && !(await page.locator("#previewOrbit").isVisible())) throw new Error("Orbit path is hidden");
     if (effect === "stagger" && !(await page.locator("#previewTrail").isVisible())) throw new Error("Stagger trail is hidden");
   }
+  // Scene-first workflow: use-case presets apply coherent effect/timing values and remain editable.
+  const sceneExpectations = {
+    content: "fade-up", feedback: "spring", panel: "slide", focus: "blur", list: "stagger", brand: "orbit"
+  };
+  for (const [scene, expectedEffect] of Object.entries(sceneExpectations)) {
+    const sceneButton = page.locator('.motion-scenario[data-scenario="' + scene + '"]');
+    await sceneButton.click();
+    if (await sceneButton.getAttribute("aria-pressed") !== "true") throw new Error("Scene preset did not become active: " + scene);
+    const sceneConfig = JSON.parse(await page.locator("#motionConfig").inputValue());
+    if (sceneConfig.effect !== expectedEffect) throw new Error("Scene preset effect mismatch for " + scene + ": " + sceneConfig.effect);
+    if (sceneConfig.durationMs < 1000 || sceneConfig.durationMs > 5000) throw new Error("Scene preset duration outside supported preview range: " + scene);
+    if (await page.locator("#previewName").textContent() === "") throw new Error("Scene preset did not update preview details: " + scene);
+  }
+
+  await page.locator('.motion-scenario[data-scenario="panel"]').click();
+  await page.locator('.motion-option[data-effect="fade-up"]').click();
+  if (await page.locator('.motion-scenario[aria-pressed="true"]').count() !== 0) throw new Error("Choosing a standalone effect left a stale active scene preset");
+  await page.locator('.motion-scenario[data-scenario="feedback"]').click();
+  await page.locator('.motion-personality[data-personality="editorial"]').click();
+  if (await page.locator('.motion-scenario[aria-pressed="true"]').count() !== 0) throw new Error("Choosing a personality left a stale active scene preset");
+
   // Productivity workflow: named personalities, validated JSON import, and engine-specific code generation.
   const productPersonality = page.locator('.motion-personality[data-personality="product"]');
   await productPersonality.click();
