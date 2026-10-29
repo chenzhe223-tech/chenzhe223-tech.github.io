@@ -193,6 +193,48 @@ const path = require('node:path');
     results.push({ test: 'Visual DNA settings persist across reload and recover from corrupted storage', status: 'PASS', detail: { persisted, afterCorruptStorage } });
     // Restore the editorial default before the baseline desktop screenshot.
 
+    // Tablet-width navigation matrix (1024px): all six modes must retain access and the main canvas.
+    const tabletPage = await browser.newPage({ viewport: { width: 1024, height: 900 }, deviceScaleFactor: 1 });
+    tabletPage.on('pageerror', error => errors.push('tablet: ' + error.message));
+    await tabletPage.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await tabletPage.locator('#products').waitFor();
+    const tabletModes = ['top', 'left', 'right', 'bottom', 'floating', 'hidden'];
+    for (const navMode of tabletModes) {
+      const settingsTrigger = await tabletPage.locator('#appearanceTrigger').isVisible()
+        ? tabletPage.locator('#appearanceTrigger') : tabletPage.locator('#appearanceEmergencyTrigger');
+      await settingsTrigger.click();
+      await tabletPage.locator('.appearance-preset[data-appearance-navmode="' + navMode + '"]').click();
+      await tabletPage.locator('#appearanceDone').click();
+      await tabletPage.waitForFunction(mode => document.documentElement.dataset.appearanceNavmode === mode, navMode);
+      const navMetrics = await tabletPage.evaluate(() => {
+        const mode = document.documentElement.dataset.appearanceNavmode;
+        const main = document.querySelector('main').getBoundingClientRect();
+        const content = document.querySelector('#top .wrap').getBoundingClientRect();
+        return {
+          mode,
+          width: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          headerVisible: getComputedStyle(document.querySelector('#topNavigation')).display !== 'none',
+          mainLeft: getComputedStyle(document.querySelector('main')).marginLeft,
+          mainRight: getComputedStyle(document.querySelector('main')).marginRight,
+          contentRatio: content.width / Math.max(1, main.width)
+        };
+      });
+      if (navMetrics.documentWidth > navMetrics.width + 2) throw new Error('Tablet navigation overflow: ' + JSON.stringify(navMetrics));
+      if (navMode === 'hidden' && navMetrics.headerVisible) throw new Error('Tablet hidden navigation should hide the header: ' + JSON.stringify(navMetrics));
+      if (navMode !== 'hidden' && !navMetrics.headerVisible) throw new Error('Tablet navigation header unexpectedly hidden: ' + JSON.stringify(navMetrics));
+      if (['left', 'right'].includes(navMode) && navMetrics.contentRatio < 0.9) {
+        throw new Error('Tablet content canvas uses less than 90% of available width: ' + JSON.stringify(navMetrics));
+      }
+    }
+    const tabletSettingsTrigger = await tabletPage.locator('#appearanceTrigger').isVisible()
+      ? tabletPage.locator('#appearanceTrigger') : tabletPage.locator('#appearanceEmergencyTrigger');
+    await tabletSettingsTrigger.click();
+    await tabletPage.locator('.appearance-preset[data-appearance-navmode="top"]').click();
+    await tabletPage.locator('#appearanceDone').click();
+    results.push({ test: 'tablet navigation matrix and available content width', status: 'PASS', detail: { viewport: 1024, modes: tabletModes } });
+    await tabletPage.close();
+
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true
     });
