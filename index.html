@@ -391,6 +391,11 @@ html[data-appearance-navmode="floating"] .topbar .wrap{width:auto;padding:0 12px
 html[data-appearance-navmode="floating"] .nav{height:54px}
 html[data-appearance-navmode="hidden"] .topbar{display:none}
 html[data-appearance-navmode="hidden"] #appearanceTrigger{position:fixed;z-index:70;top:12px;right:12px}
+.appearance-emergency-trigger{display:none;position:fixed;z-index:78;right:14px;top:14px;align-items:center;gap:7px;padding:10px 13px;border:1px solid var(--appearance-border);border-radius:999px;background:var(--appearance-panel);color:var(--appearance-text);box-shadow:0 8px 28px #14263d24;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
+.appearance-emergency-trigger span:first-child{font-size:17px;line-height:1}
+html[data-appearance-navmode="hidden"] .appearance-emergency-trigger{display:inline-flex}
+html[data-appearance-navmode="hidden"] #appearanceTrigger{display:none}
+.appearance-emergency-trigger:focus-visible{outline:2px solid var(--appearance-accent);outline-offset:3px}
 html[data-appearance-navmode="hidden"] .navlinks{display:none}
 html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{white-space:normal}
 @media(max-width:700px){html[data-appearance-navmode="left"] .topbar,html[data-appearance-navmode="right"] .topbar{width:min(82vw,280px);z-index:60}html[data-appearance-navmode="left"] main,html[data-appearance-navmode="right"] main{margin-left:0;margin-right:0;padding-top:74px}html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{display:flex}html[data-appearance-navmode="bottom"] .navlinks{gap:10px}html[data-appearance-layout="split"] .hero-grid,html[data-appearance-layout="balanced"] .hero-grid,html[data-appearance-layout="bento"] .hero-grid{grid-template-columns:1fr}}
@@ -647,6 +652,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="./gsap-motion.js"></script>
 
+<button class="appearance-emergency-trigger" id="appearanceEmergencyTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-label="打开外观与配色设置"><span aria-hidden="true">☷</span><span>外观设置</span></button>
 <div class="appearance-backdrop" id="appearanceBackdrop" hidden></div>
 <aside class="appearance-panel" id="appearancePanel" role="dialog" aria-modal="true" aria-labelledby="appearanceTitle" hidden>
   <div class="appearance-panel-head"><div><h2 id="appearanceTitle">网页外观与配色</h2><p>调整 DAVYLAB 的视觉氛围，设置会保存在当前浏览器。</p></div><button class="appearance-close" id="appearanceClose" type="button" aria-label="关闭外观设置">×</button></div>
@@ -704,7 +710,9 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
 (function(){
  const root=document.documentElement;
  const trigger=document.getElementById('appearanceTrigger');
+ const emergencyTrigger=document.getElementById('appearanceEmergencyTrigger');
  const panel=document.getElementById('appearancePanel');
+ let activeTrigger=trigger;
  const backdrop=document.getElementById('appearanceBackdrop');
  if(!trigger||!panel||!backdrop)return;
  const storageKey='davylab-appearance:v1';
@@ -757,9 +765,10 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
   safeSave();
  }
  function setTheme(name){const palette=themes[name];if(!palette)return;state={...state,theme:name,...palette};apply()}
- function open(){panel.hidden=false;backdrop.hidden=false;trigger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';document.getElementById('appearanceClose').focus()}
- function close(){panel.hidden=true;backdrop.hidden=true;trigger.setAttribute('aria-expanded','false');document.body.style.overflow='';trigger.focus()}
- trigger.addEventListener('click',()=>panel.hidden?open():close());
+ function open(source){activeTrigger=source||trigger;panel.hidden=false;backdrop.hidden=false;trigger.setAttribute('aria-expanded','true');emergencyTrigger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';document.getElementById('appearanceClose').focus()}
+ function close(){panel.hidden=true;backdrop.hidden=true;trigger.setAttribute('aria-expanded','false');emergencyTrigger.setAttribute('aria-expanded','false');document.body.style.overflow='';if(activeTrigger&&activeTrigger.isConnected&&activeTrigger.getClientRects().length)activeTrigger.focus();else emergencyTrigger.focus()}
+ trigger.addEventListener('click',()=>panel.hidden?open(trigger):close());
+ emergencyTrigger.addEventListener('click',()=>panel.hidden?open(emergencyTrigger):close());
  document.getElementById('appearanceClose').addEventListener('click',close);
  document.getElementById('appearanceDone').addEventListener('click',close);
  backdrop.addEventListener('click',close);
