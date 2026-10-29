@@ -242,6 +242,11 @@ try {
   const pngDownload = await pngDownloadPromise;
   if (!pngDownload.suggestedFilename().endsWith(".png")) throw new Error("Poster PNG export did not create a PNG download");
   await posterPage.locator("#motionInput").selectOption("orbit");
+  const videoDownloadPromise = posterPage.waitForEvent("download");
+  await posterPage.locator("#exportVideo").click();
+  const videoDownload = await videoDownloadPromise;
+  if (!/\\.(webm|mp4)$/.test(videoDownload.suggestedFilename())) throw new Error("Motion poster video export did not create a supported video file");
+  if (!(await posterPage.locator("#exportStatus").textContent()).includes("视频已生成")) throw new Error("Motion poster video export did not report successful completion");
   const htmlDownloadPromise = posterPage.waitForEvent("download");
   await posterPage.locator("#exportHtml").click();
   const htmlDownload = await htmlDownloadPromise;
