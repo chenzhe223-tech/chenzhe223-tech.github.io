@@ -153,7 +153,7 @@ const path = require('node:path');
     results.push({ test: 'six Visual DNA layouts apply without desktop horizontal overflow', status: 'PASS', detail: layoutModes });
     // Verify independent settings survive reload and corrupted storage degrades safely.
     await page.locator('#appearanceTrigger').click();
-    await page.locator('[data-appearance-layout="split"]').click();
+    await page.locator('.appearance-preset[data-appearance-layout="split"]').click();
     await page.locator('[data-appearance-navmode="left"]').click();
     await page.locator('#appearanceFontEn').selectOption('DM Sans');
     await page.locator('#appearanceFontZh').selectOption('Noto Serif SC');
