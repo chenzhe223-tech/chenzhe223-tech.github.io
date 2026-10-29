@@ -23,6 +23,7 @@
 .growth-bar{height:7px;border-radius:999px;background:#e9edf3;overflow:hidden;margin:8px 0}.growth-bar span{display:block;height:100%;background:#3769df;border-radius:999px}
 .growth-task{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid #edf0f3;font-size:12px}.growth-task:last-child{border-bottom:0}.growth-task input{margin-top:4px;accent-color:#3769df}.growth-task small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
 .growth-footnote{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+.growth-trend{margin-top:12px;border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;min-width:0}.growth-trend svg{display:block;width:100%;height:auto;min-height:130px}.growth-trend .growth-empty{border:0;padding:12px}.growth-trend-meta{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:10px;color:var(--muted);padding:2px 5px 5px}
 @media(max-width:900px){.growth-hero,.growth-grid{grid-template-columns:1fr}.growth-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.growth-target{padding:15px}.growth-target h2{font-size:22px}.growth-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.growth-kpi{padding:8px}.growth-kpi strong{font-size:18px}.growth-target-form,.growth-form{grid-template-columns:1fr 1fr}.growth-side{grid-template-columns:1fr 1fr}.growth-item-head{display:block}}
 
@@ -454,7 +455,7 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
      <div class="field"><label for="metricNewFollowers">本期净增订阅</label><input id="metricNewFollowers" type="number" placeholder="可填负数"></div>
      <div class="field full"><button class="btn primary" type="submit">保存一条真实数据</button></div>
     </form>
-    <div id="growthMetricSummary" class="growth-footnote">尚未录入增长数据。</div>
+    <div id="growthMetricSummary" class="growth-footnote">尚未录入增长数据。</div><div id="growthTrendChart" class="growth-trend"><div class="growth-empty">至少录入两条不同日期的订阅记录后，显示趋势图。</div></div>
     <div id="growthMetricList" class="growth-list"><div class="growth-empty">每周至少记录一次订阅人数；发布文章后补充阅读与分享数据。</div></div>
    </div>
   </div>
@@ -658,7 +659,30 @@ function renderPosterTasks(){
  el.querySelectorAll("[data-poster-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条贴图任务记录？")){growth.posters=growth.posters.filter(x=>x.id!==b.dataset.posterDelete);saveGrowth()}}));
  el.querySelectorAll("[data-poster-edit]").forEach(b=>b.addEventListener("click",()=>{const x=growth.posters.find(y=>y.id===b.dataset.posterEdit);if(!x)return;$("posterTitle").value=x.title||"";$("posterDate").value=x.date||"";$("posterStatus").value=x.status||"queued";$("posterNote").value=x.note||"";$("posterTaskForm").dataset.editId=x.id;$("posterTitle").focus();toast("已载入贴图任务，保存时将更新原记录")}));
 }
+
+function renderGrowthTrend(){
+ const host=$("growthTrendChart");
+ const items=growth.metrics.filter(x=>x.date&&Number.isFinite(Number(x.followers))).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+ const points=items.slice(-14);
+ if(points.length<2){host.innerHTML='<div class="growth-empty">至少录入两条不同日期的订阅记录后，显示最近 14 条记录趋势图。</div>';return}
+ const ns="http://www.w3.org/2000/svg",w=640,h=205,left=46,right=16,top=18,bottom=34,plotW=w-left-right,plotH=h-top-bottom;
+ const values=points.map(x=>Number(x.followers)),min=Math.min(...values),max=Math.max(...values),span=Math.max(1,max-min),pad=span*.12;
+ const lo=Math.max(0,min-pad),hi=max+pad||1;
+ const xy=values.map((v,i)=>({x:left+(points.length===1?plotW/2:i*plotW/(points.length-1)),y:top+(hi-v)/(hi-lo)*plotH,v}));
+ const svg=document.createElementNS(ns,"svg");svg.setAttribute("viewBox","0 0 "+w+" "+h);svg.setAttribute("role","img");svg.setAttribute("aria-label","最近订阅人数变化趋势图");
+ const add=(tag,attrs,textValue)=>{const el=document.createElementNS(ns,tag);Object.entries(attrs||{}).forEach(([k,v])=>el.setAttribute(k,String(v)));if(textValue!==undefined)el.textContent=String(textValue);svg.appendChild(el);return el};
+ for(let i=0;i<4;i++){const y=top+i*plotH/3,val=Math.round(hi-i*(hi-lo)/3);add("line",{x1:left,y1:y,x2:w-right,y2:y,stroke:"#e6ebf2","stroke-width":1});add("text",{x:left-8,y:y+4,"text-anchor":"end",fill:"#718096","font-size":10},val)}
+ add("polyline",{points:xy.map(p=>p.x+","+p.y).join(" "),fill:"none",stroke:"#315fce","stroke-width":3,"stroke-linecap":"round","stroke-linejoin":"round"});
+ xy.forEach((p,i)=>{add("circle",{cx:p.x,cy:p.y,r:i===xy.length-1?4.5:3,fill:"#315fce",stroke:"#fff","stroke-width":1.5});if(i===0||i===xy.length-1||i===Math.floor((xy.length-1)/2)){const d=points[i].date||"";add("text",{x:p.x,y:h-12,"text-anchor":i===0?"start":i===xy.length-1?"end":"middle",fill:"#718096","font-size":10},d.slice(5))}});
+ host.replaceChildren(svg);
+ const delta=values[values.length-1]-values[0];
+ const meta=document.createElement("div");meta.className="growth-trend-meta";
+ const a=document.createElement("span");a.textContent="最近 "+points.length+" 条记录 · "+points[0].date+" 至 "+points[points.length-1].date;
+ const b=document.createElement("strong");b.style.color=delta>=0?"#26724f":"#b54747";b.textContent="区间变化 "+(delta>=0?"+":"")+delta.toLocaleString("zh-CN");
+ meta.append(a,b);host.appendChild(meta);
+}
 function renderMetrics(){
+ renderGrowthTrend();
  const el=$("growthMetricList"),items=growth.metrics.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
  if(!items.length){el.innerHTML='<div class="growth-empty">每周至少记录一次订阅人数；发布文章后补充阅读与分享数据。</div>';$("growthMetricSummary").textContent="尚未录入增长数据。";return}
  const latest=items[0],first=items[items.length-1],delta=Number(latest.followers)-Number(first.followers);
