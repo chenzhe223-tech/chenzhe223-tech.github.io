@@ -76,6 +76,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .three-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px;background:radial-gradient(circle,#1e3028,#090e13 70%)}.three-fallback[hidden]{display:none}
 
 .motion-picker{padding:52px 0 76px;border-top:1px solid #ffffff12}
+.motion-personalities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.motion-personality{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:0;padding:15px;border:1px solid var(--line);border-radius:13px;background:#10161d;color:var(--ink)}
+.motion-personality[aria-pressed="true"]{border-color:var(--accent);background:#c7f36b0d;box-shadow:inset 0 0 0 1px #c7f36b20}
+.motion-personality strong{font-size:13px}.motion-personality small{font-size:11px;line-height:1.6;color:var(--muted)}
+.motion-workbench{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.motion-workbench-panel{min-width:0;padding:18px;border:1px solid var(--line);border-radius:16px;background:#10161d}
+.motion-workbench-panel h3{font-size:14px;margin:0 0 7px}.motion-workbench-panel p{font-size:11px;line-height:1.65;color:var(--muted);margin:0 0 12px}
+.motion-workbench-panel textarea{width:100%;min-height:135px;resize:vertical;border:1px solid var(--line);border-radius:9px;background:#090e13;color:#d4e3dd;padding:11px;font:11px/1.6 ui-monospace,SFMono-Regular,monospace}
+.motion-workbench-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.motion-workbench-panel select{width:100%;min-height:36px;padding:7px 9px;border:1px solid #34414a;border-radius:8px;background:#0b1117;color:var(--ink);margin-bottom:10px}
+.motion-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.motion-workbench-status{min-height:18px;margin-top:8px;color:#8fa29f;font-size:11px;line-height:1.5}
+@media(max-width:900px){.motion-personalities{grid-template-columns:1fr}.motion-workbench{grid-template-columns:1fr}}
 .motion-picker-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;align-items:stretch}
 .motion-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
 .motion-option{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;text-align:left;padding:14px;border:1px solid var(--line);border-radius:14px;background:#10161d;color:var(--ink);transition:border-color 180ms,background 180ms}
@@ -182,6 +195,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
   <section class="motion-picker" id="motionPicker" aria-labelledby="motionPickerTitle">
     <div class="section-head"><div><div class="section-index">04 / MOTION LIBRARY</div><h2 id="motionPickerTitle">先看效果，再决定怎么用。</h2></div><p>选择一种动效，右侧立即播放约 1–5 秒的对应预览。说明、调节参数和导出配置始终围绕当前选中的效果。</p></div>
+    <div class="motion-personalities" role="group" aria-label="动效性格预设">
+      <button class="motion-personality" type="button" data-personality="editorial" aria-pressed="true"><span class="option-index">STYLE / 01</span><strong>克制编辑</strong><small>低幅度、柔和减速。适合内容阅读、品牌官网和专业工具。</small></button>
+      <button class="motion-personality" type="button" data-personality="product" aria-pressed="false"><span class="option-index">STYLE / 02</span><strong>产品交互</strong><small>清晰响应、轻微弹性。适合按钮反馈、状态变化和操作引导。</small></button>
+      <button class="motion-personality" type="button" data-personality="immersive" aria-pressed="false"><span class="option-index">STYLE / 03</span><strong>沉浸空间</strong><small>更长节奏与空间旋转。适合主视觉、探索体验和展示场景。</small></button>
+    </div>
     <div class="motion-picker-grid">
       <div class="motion-options" role="group" aria-label="选择动效效果">
         <button class="motion-option" type="button" data-effect="fade-up" aria-pressed="true"><span class="option-index">MOTION / 01</span><strong>淡入上移</strong><small>柔和进入，适合内容区块与页面初始显现。</small></button>
@@ -211,6 +229,25 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="control"><label for="previewDirection">运动方向</label><select id="previewDirection"><option value="up">向上</option><option value="down">向下</option><option value="left">向左</option><option value="right">向右</option></select></div>
         <div class="control"><label for="previewEasing">缓动曲线</label><select id="previewEasing"><option value="cubic-bezier(0.22,1,0.36,1)">柔和减速</option><option value="cubic-bezier(0.34,1.56,0.64,1)">轻弹回</option><option value="cubic-bezier(0.65,0,0.35,1)">平滑进出</option><option value="linear">匀速</option></select></div>
         <div class="control"><label for="previewRepeat">播放方式</label><select id="previewRepeat"><option value="once">单次播放</option><option value="loop">预览时长内循环</option></select></div>
+      </div>
+      <div class="motion-workbench">
+        <section class="motion-workbench-panel" aria-labelledby="importMotionTitle">
+          <h3 id="importMotionTitle">导入现有动效配置</h3>
+          <p>粘贴此前导出的 JSON，或导入 .json 文件。系统会校验配置结构，并将有效参数应用到当前预览；无效文件不会覆盖当前设置。</p>
+          <textarea id="motionImportJson" spellcheck="false" aria-label="粘贴要导入的动画 JSON" placeholder='在这里粘贴 davylab.visual-dna-motion/v1 配置…'></textarea>
+          <input class="motion-file-input" type="file" id="motionImportFile" accept=".json,application/json">
+          <div class="motion-workbench-actions"><button class="btn" type="button" id="chooseMotionFile">选择 JSON 文件</button><button class="btn primary" type="button" id="applyImportedMotionConfig">校验并应用</button></div>
+          <div class="motion-workbench-status" id="motionImportStatus" role="status">支持导入本实验室 schema 标记的动效配置。</div>
+        </section>
+        <section class="motion-workbench-panel" aria-labelledby="snippetTitle">
+          <h3 id="snippetTitle">生成接入代码</h3>
+          <p>将当前效果转成可复制的基础接入示例。选择你项目使用的引擎；正式接入时仍需检查选择器、生命周期和现有动画是否冲突。</p>
+          <label for="motionSnippetEngine" style="display:block;font-size:11px;color:#d5e0e1;margin-bottom:6px">目标引擎</label>
+          <select id="motionSnippetEngine"><option value="waapi">原生 Web Animations API</option><option value="gsap">GSAP</option><option value="motion">Motion（vanilla）</option></select>
+          <textarea id="motionIntegrationSnippet" readonly spellcheck="false" aria-label="生成的动效接入代码"></textarea>
+          <div class="motion-workbench-actions"><button class="btn primary" type="button" id="copyMotionSnippet">复制接入代码</button></div>
+          <div class="motion-workbench-status" id="motionSnippetStatus" role="status">代码随当前效果与参数自动更新。</div>
+        </section>
       </div>
       <div class="motion-export">
         <div><label for="motionConfig" style="display:block;font-size:11px;color:#d5e0e1;margin-bottom:8px">当前效果配置 JSON</label><textarea id="motionConfig" readonly spellcheck="false" aria-label="当前动画配置 JSON"></textarea><div class="motion-status" id="motionStatus" role="status">配置会随效果与参数调整自动更新。</div></div>
