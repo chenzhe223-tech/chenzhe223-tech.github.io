@@ -7,6 +7,25 @@
 :root{--paper:#f5f4f0;--card:#fff;--ink:#17283e;--muted:#68778a;--line:#e2e6e9;--blue:#3769df;--blue-soft:#edf2ff;--nav:#112238;--shadow:0 8px 28px #182a410d;--r:16px}
 *{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit}button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #3769df55;outline-offset:2px}
 .app{min-height:100vh;display:grid;grid-template-columns:225px minmax(0,1fr)}aside{background:var(--nav);color:#e9eef8;padding:24px 15px;display:flex;flex-direction:column;gap:22px;min-height:100vh}.brand{display:flex;align-items:center;gap:10px;padding:0 7px}.mark{width:37px;height:37px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(140deg,#7294ff,#c5ceff);color:#112238;font-size:22px;font-weight:900}.brand b{font-size:17px;letter-spacing:.4px}.brand small{display:block;font-size:9px;color:#91a4c0;letter-spacing:2px}.sideintro{border:1px solid #34445b;background:#1a2e47;border-radius:12px;padding:13px;color:#b9c6d8;font-size:12px}.sideintro strong{display:block;color:white;font-size:13px;margin-bottom:5px}.navlabel{font-size:10px;color:#8294af;letter-spacing:1.6px;padding:0 10px 5px}.nav{display:flex;align-items:center;gap:10px;width:100%;padding:10px 11px;border:0;background:transparent;border-radius:10px;text-align:left;color:#c1cddd;font-weight:600;margin:3px 0;text-decoration:none}.nav .ico{width:20px;text-align:center;font-size:16px}.nav.active,.nav:hover{background:#29415f;color:white}.sidefoot{margin-top:auto;font-size:11px;color:#8294af;line-height:1.8}.sidefoot a{color:#dce7fb}main{min-width:0}.topbar{height:66px;border-bottom:1px solid var(--line);background:#f8f7f3e8;backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;z-index:5}.crumb{font-size:12px;color:var(--muted)}.actions{display:flex;align-items:center;gap:8px}.local{font-size:11px;border:1px solid #d3e6dd;background:#edf7f2;color:#27664f;border-radius:999px;padding:5px 9px}.btn{border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 12px;border-radius:10px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;gap:6px;text-decoration:none}.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}.btn.soft{background:var(--blue-soft);color:#2d58bd;border-color:#dce6ff}.btn.small{font-size:11px;padding:6px 9px}.content{width:min(1450px,100%);margin:auto;padding:28px 30px 55px}.hero{display:flex;justify-content:space-between;gap:22px;align-items:flex-end;margin:2px 0 22px}.eyebrow{color:#5476c2;font-size:10px;letter-spacing:1.8px;font-weight:850}.hero h1{font-size:clamp(28px,3.1vw,39px);line-height:1.18;letter-spacing:-1px;margin:8px 0 10px}.hero p{margin:0;color:var(--muted);font-size:14px;max-width:690px}.heroactions{display:flex;gap:8px;flex-wrap:wrap}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:11px;margin-bottom:22px}.stat,.panel{background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow)}.stat{padding:15px 17px;border-radius:14px}.statlabel{color:var(--muted);font-size:11px}.statnum{font-size:27px;line-height:1.2;font-weight:800;margin:4px 0}.statfoot{font-size:10px;color:#718198}.panel{border-radius:var(--r);padding:19px;margin-bottom:17px;min-width:0}.panelhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}.panelhead h2{font-size:17px;line-height:1.3;margin:0 0 5px}.panelhead p{font-size:12px;color:var(--muted);margin:0}.paneltools{display:flex;gap:7px;flex-wrap:wrap}.section{display:none}.section.active{display:block}.discovery{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;align-items:start}.ai-studio{border:1px solid #d6e0f5;background:linear-gradient(120deg,#fff 0%,#f6f8ff 100%);border-radius:18px;padding:20px;box-shadow:0 10px 34px #1b37600b;margin-bottom:16px}.ai-studio-head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:13px}.ai-studio-head h2{margin:4px 0 5px;font-size:21px;letter-spacing:-.4px}.ai-studio-head p{margin:0;color:var(--muted);font-size:12px}.ai-kicker{font-size:10px;letter-spacing:1.5px;color:#5476c2;font-weight:850}.ai-inputrow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:stretch}.ai-inputrow textarea{width:100%;min-height:90px;resize:vertical;border:1px solid #d7dfed;border-radius:12px;padding:12px 13px;background:#fff;color:var(--ink);line-height:1.6}.ai-controls{display:flex;flex-direction:column;gap:7px;min-width:142px}.ai-subrow{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px}.ai-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}.direction-card{border:1px solid var(--line);border-radius:13px;background:#fff;overflow:hidden;display:flex;flex-direction:column;min-width:0}.direction-cover{min-height:96px;padding:13px 14px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;background:linear-gradient(125deg,#173452,#3e6198)}.direction-cover[data-tone="2"]{background:linear-gradient(125deg,#352f60,#7c78b4)}.direction-cover[data-tone="3"]{background:linear-gradient(125deg,#24564f,#70a39a)}.direction-cover[data-tone="4"]{background:linear-gradient(125deg,#7a4b30,#c08b64)}.direction-cover small{font-size:9px;letter-spacing:1.5px;opacity:.82}.direction-cover strong{font-size:21px;letter-spacing:-.5px}.direction-body{padding:13px;display:flex;flex-direction:column;gap:8px;flex:1}.direction-body h3{font-size:14px;line-height:1.45;margin:0}.direction-body p{font-size:12px;color:var(--muted);margin:0}.direction-body .tagrow{display:flex;gap:5px;flex-wrap:wrap}.direction-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:5px}.ai-state{font-size:12px;padding:12px;border-radius:10px;background:#f5f7fb;color:#66758a;margin-top:12px}.ai-state.error{background:#fff4f1;color:#8c4338}.ai-state.success{background:#edf8f2;color:#27664f}.ai-convo{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.ai-convo input{flex:1;min-width:180px;border:1px solid #d7dfed;border-radius:9px;padding:8px 10px}.import-hint{font-size:11px;color:var(--muted)}.topic-visual{display:grid;grid-template-columns:76px minmax(0,1fr);gap:11px;align-items:start}.topic-cover{min-height:78px;border-radius:9px;display:grid;place-items:center;padding:8px;color:white;background:linear-gradient(145deg,#193b5d,#557fbb);font-size:19px;font-weight:850}.topic-cover[data-origin="manual"]{background:linear-gradient(145deg,#4a426f,#9386c4)}.topic-cover[data-origin="nianbox"]{background:linear-gradient(145deg,#26544d,#6da89b)}.topic-cover[data-origin="radar"]{background:linear-gradient(145deg,#764d30,#c28d5e)}.topiccover-label{font-size:8px;letter-spacing:1px;opacity:.8;display:block;text-align:center}.feedcard{grid-template-columns:54px minmax(0,1fr) auto}.feedcover{width:54px;min-height:68px;border-radius:8px;background:linear-gradient(145deg,#1c3c60,#698cc1);color:white;display:flex;align-items:flex-end;padding:6px;font-size:9px;font-weight:800;letter-spacing:.5px}.feedcard:nth-child(3n+2) .feedcover{background:linear-gradient(145deg,#493e72,#9a8bc9)}.feedcard:nth-child(3n) .feedcover{background:linear-gradient(145deg,#27574f,#7ab1a4)}.direction-card.selected{border-color:#547be0;box-shadow:0 0 0 2px #3769df20}.direction-card.selected .direction-cover:after{content:"已选择";font-size:10px;align-self:flex-start;background:#ffffff24;padding:2px 7px;border-radius:999px}.feedlist,.topiclist{display:grid;gap:10px}.feedcard,.topiccard{border:1px solid var(--line);border-radius:12px;padding:13px;background:white}.feedcard{display:grid;grid-template-columns:84px minmax(0,1fr) 138px;align-items:center;gap:18px}.feedcard:hover,.topiccard:hover{border-color:#b8c8ed}.tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:7px}.tag{font-size:10px;background:#f0f3f7;color:#53647a;border-radius:5px;padding:3px 7px}.tag.blue{background:#edf2ff;color:#365ab4}.tag.green{background:#e9f6ef;color:#287454}.feedcard h3,.topiccard h3{font-size:14px;line-height:1.45;margin:0 0 6px}.feedcard p,.topiccard p{font-size:12px;color:var(--muted);margin:0 0 7px}.feedmeta{display:flex;gap:9px;flex-wrap:wrap;font-size:10px;color:#8591a2}.feedactions{display:flex;flex-direction:column;gap:6px;align-items:stretch;justify-content:center;min-width:112px}.feedactions .btn{font-size:11px;padding:7px}.filters{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:13px}.chip{border:1px solid var(--line);background:white;color:#637187;border-radius:999px;padding:7px 10px;font-size:11px}.chip.active{border-color:#bdcbef;background:#edf2ff;color:#2d56b4;font-weight:750}.notice{display:flex;gap:9px;align-items:flex-start;background:#f0f5ff;border:1px solid #dce7ff;border-radius:11px;padding:11px;color:#4e6284;font-size:11px;margin-bottom:12px}.loadstatus{display:flex;gap:7px;align-items:center;font-size:11px;color:var(--muted);white-space:nowrap}.dot{width:7px;height:7px;border-radius:50%;background:#d6a14e}.dot.good{background:#36a780}.dot.bad{background:#d96c62}.empty{padding:30px;text-align:center;color:var(--muted);border:1px dashed #d6dde5;border-radius:12px;background:#fafbfc;font-size:12px}.empty strong{display:block;color:#30435d;margin-bottom:5px}.methodgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}.method{border:1px solid var(--line);border-radius:13px;padding:14px;background:linear-gradient(150deg,#fff,#fafcff)}.method .num{font-size:10px;color:#5576c5;letter-spacing:1px;font-weight:850}.method h3{font-size:14px;margin:6px 0}.method p{font-size:12px;color:var(--muted);margin:0}.method.onecol{margin-bottom:8px}.topiccard{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px}.topicright{display:flex;flex-direction:column;align-items:flex-end;gap:7px}.score{display:grid;place-items:center;width:43px;height:43px;border-radius:50%;background:#eef3ff;color:#315abd;border:1px solid #dce6ff;font-weight:850}.topicactions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.statussel{font-size:11px;padding:6px;border-radius:8px;border:1px solid var(--line);background:#fbfcfd;color:var(--ink)}.formrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:11px;color:#4e5f73;font-weight:800}.field input,.field textarea,.field select{border:1px solid #dce2e8;background:#fbfcfd;color:var(--ink);border-radius:9px;padding:9px 10px;width:100%;min-width:0}.field textarea{min-height:84px;resize:vertical}.field.full{grid-column:1/-1}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.scoregrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.scoregrid .field select{padding:7px}.calendarlist{display:grid;gap:8px}.dategroup{display:grid;grid-template-columns:100px 1fr;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)}.datebadge{font-size:12px;font-weight:800}.datebadge small{display:block;font-size:10px;color:var(--muted);font-weight:500}.dateitems{display:grid;gap:7px}.dateitem{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:12px}.quickprompt{border:1px solid #dce4f5;background:#f4f7ff;border-radius:12px;padding:14px;margin-top:12px}.quickprompt textarea{width:100%;min-height:145px;border:1px solid #dce2e8;background:white;border-radius:9px;padding:11px;color:#33455e}.promptactions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.sourcefooter{font-size:10px;color:#8793a3;margin-top:11px}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);opacity:0;background:#12263f;color:white;padding:10px 15px;border-radius:11px;box-shadow:0 12px 30px #08162630;z-index:50;transition:.2s;pointer-events:none;font-size:12px}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}dialog{border:0;border-radius:17px;padding:0;width:min(750px,calc(100% - 24px));max-height:88vh;overflow:auto;box-shadow:0 25px 80px #0e22334d}dialog::backdrop{background:#0c1d35a6;backdrop-filter:blur(3px)}.modalhead,.modalfoot{display:flex;justify-content:space-between;align-items:center;padding:16px 20px}.modalhead{border-bottom:1px solid var(--line)}.modalhead h2{margin:0;font-size:17px}.modalbody{padding:19px 20px}.modalfoot{justify-content:flex-end;gap:8px;border-top:1px solid var(--line)}.close{border:0;background:#f1f3f6;border-radius:8px;padding:5px 10px;font-size:18px}
+
+/* Growth Lab: additive module; existing sections remain unchanged */
+.growth-hero{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(250px,.65fr);gap:14px;margin-bottom:15px}
+.growth-target{background:linear-gradient(135deg,#142b45,#274c78);color:#fff;border-radius:16px;padding:20px;min-width:0}
+.growth-target .eyebrow{color:#b8d0ff}.growth-target h2{font-size:25px;line-height:1.25;margin:7px 0}.growth-target p{font-size:12px;color:#d5e0ef;margin:0}
+.growth-kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:16px}
+.growth-kpi{padding:11px;background:#ffffff12;border:1px solid #ffffff25;border-radius:11px}.growth-kpi strong{font-size:22px;display:block;line-height:1.2}.growth-kpi span{font-size:10px;color:#d5e0ef}
+.growth-target-form{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.growth-target-form label{font-size:10px;color:#d5e0ef;display:block;margin-bottom:4px}.growth-target-form input{width:100%;min-width:0;border:1px solid #ffffff38;background:#ffffff12;color:#fff;border-radius:8px;padding:8px}.growth-target-form input::placeholder{color:#bdcce0}
+.growth-side{display:flex;flex-direction:column;gap:10px}.growth-mini{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px;min-width:0}.growth-mini strong{font-size:20px;display:block}.growth-mini span{font-size:11px;color:var(--muted)}
+.growth-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}.growth-grid .panel{margin-bottom:14px}
+.growth-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.growth-form .full{grid-column:1/-1}.growth-form .field input,.growth-form .field select{width:100%;min-width:0}
+.growth-list{display:grid;gap:9px;margin-top:12px}.growth-item{border:1px solid var(--line);border-radius:11px;padding:12px;background:#fff;min-width:0}.growth-item-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.growth-item h3{font-size:13px;line-height:1.45;margin:0 0 5px;overflow-wrap:anywhere}.growth-item p{font-size:11px;color:var(--muted);margin:0;overflow-wrap:anywhere}.growth-item-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.growth-badge{display:inline-flex;align-items:center;border-radius:999px;background:#eef2f8;color:#53647a;padding:3px 7px;font-size:10px}.growth-badge.good{background:#e8f6ee;color:#26724f}.growth-badge.warn{background:#fff2df;color:#8a5a14}
+.growth-item-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.growth-empty{padding:17px;border:1px dashed #d8dfe7;border-radius:10px;color:var(--muted);font-size:12px;text-align:center}
+.growth-bar{height:7px;border-radius:999px;background:#e9edf3;overflow:hidden;margin:8px 0}.growth-bar span{display:block;height:100%;background:#3769df;border-radius:999px}
+.growth-task{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid #edf0f3;font-size:12px}.growth-task:last-child{border-bottom:0}.growth-task input{margin-top:4px;accent-color:#3769df}.growth-task small{display:block;color:var(--muted);font-size:10px;margin-top:2px}
+.growth-footnote{font-size:11px;color:var(--muted);line-height:1.7;margin-top:10px}
+@media(max-width:900px){.growth-hero,.growth-grid{grid-template-columns:1fr}.growth-side{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.growth-target{padding:15px}.growth-target h2{font-size:22px}.growth-kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.growth-kpi{padding:8px}.growth-kpi strong{font-size:18px}.growth-target-form,.growth-form{grid-template-columns:1fr 1fr}.growth-side{grid-template-columns:1fr 1fr}.growth-item-head{display:block}}
+
 @media(max-width:1080px){.app{grid-template-columns:190px minmax(0,1fr)}.content{padding:22px 18px 40px}.discovery{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.methodgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.ai-result{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.ai-studio{padding:14px}.ai-studio-head{display:block}.ai-studio-head h2{font-size:19px}.ai-inputrow{grid-template-columns:1fr}.ai-controls{display:grid;grid-template-columns:1fr 1fr;min-width:0}.ai-result{grid-template-columns:1fr}.feedcard{grid-template-columns:44px minmax(0,1fr)}.feedcover{width:44px;min-height:58px}.feedactions{grid-column:1/-1}.topic-visual{grid-template-columns:58px minmax(0,1fr)}.topic-cover{min-height:64px}.app{display:block}aside{min-height:0;padding:11px 11px 8px;gap:10px}.brand{padding:0 3px}.sideintro,.sidefoot,.navlabel{display:none}.navwrap{display:flex;overflow:auto;gap:4px}.nav{flex:0 0 auto;width:auto;padding:8px 9px;margin:0;font-size:11px;white-space:nowrap}.topbar{height:53px;padding:0 12px}.crumb{font-size:11px}.local{display:none}.content{padding:18px 12px 34px}.hero{display:block}.hero h1{font-size:29px}.heroactions{margin-top:13px}.stats{gap:7px}.stat{padding:11px}.statnum{font-size:23px}.panel{padding:13px}.panelhead{display:block}.paneltools{margin-top:10px}.feedcard,.topiccard{grid-template-columns:1fr}.feedactions{flex-direction:row;justify-content:flex-start;flex-wrap:wrap}.topicright{align-items:flex-start}.topicactions{justify-content:flex-start}.methodgrid{grid-template-columns:1fr}.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}.scoregrid{grid-template-columns:repeat(2,minmax(0,1fr))}.scoregrid .field:last-child{grid-column:1/-1}.dategroup{grid-template-columns:68px 1fr;gap:8px}.dateitem{align-items:flex-start;flex-direction:column}.actions .btn{font-size:11px;padding:7px 8px}}
 
@@ -265,7 +284,7 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
-  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button>
+  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button>
  </div></div>
  <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span>AI 创造机会雷达 ↗</a><a class="nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span>内容生产流水线 ↗</a><a class="nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span>Dashboard Studio ↗</a></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
@@ -360,6 +379,96 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
   <div class="topiccard"><div><div class="tags"><span class="tag">下一阶段</span></div><h3>云端同步与自动选题生成</h3><p>当前记录只存在本浏览器；页面不会直接调用 AI 模型，也不会自动向公众号发布。后续需接入后端服务、身份认证与 AI API。</p></div></div>
  </div></div>
 </section>
+
+<section class="section" id="section-growth">
+ <div class="hero">
+  <div><div class="eyebrow">DAVYLAB · AUDIENCE GROWTH</div><h1>让每一篇内容，<br>都更接近下一位读者。</h1><p>记录订阅增长、验证爆款假设、管理每日新闻贴图任务。这里的数据由你手动记录并保存在当前浏览器，不会伪造微信后台数据，也不会自动发布。</p></div>
+  <div class="heroactions"><button class="btn" id="exportGrowth">导出增长数据</button><button class="btn primary" id="growthJumpTopics">去选题发现</button></div>
+ </div>
+ <div class="growth-hero">
+  <div class="growth-target">
+   <div class="eyebrow">6-MONTH NORTH STAR</div><h2>6 个月，争取 500+ 订阅用户</h2><p>增长目标不是保证值。请先录入当前订阅人数，再根据真实数据更新每周策略。</p>
+   <div class="growth-kpis">
+    <div class="growth-kpi"><strong id="growthCurrent">—</strong><span>当前订阅人数</span></div>
+    <div class="growth-kpi"><strong id="growthRemaining">—</strong><span>距离 500 目标</span></div>
+    <div class="growth-kpi"><strong id="growthPace">—</strong><span>日均净增需求</span></div>
+   </div>
+   <div class="growth-target-form">
+    <div><label for="growthBaseline">起始订阅人数</label><input id="growthBaseline" type="number" min="0" max="100000000" placeholder="填写当前真实人数"></div>
+    <div><label for="growthLatest">最新订阅人数</label><input id="growthLatest" type="number" min="0" max="100000000" placeholder="每周更新"></div>
+    <div><label for="growthStartDate">目标起始日期</label><input id="growthStartDate" type="date"></div>
+    <div><label for="growthDeadline">目标截止日期</label><input id="growthDeadline" type="date"></div>
+   </div>
+   <div class="growth-item-actions"><button class="btn small" id="saveGrowthTarget">保存目标</button><span id="growthTargetStatus" style="font-size:10px;color:#d5e0ef;align-self:center">尚未录入真实订阅数据</span></div>
+  </div>
+  <div class="growth-side">
+   <div class="growth-mini"><span>本月爆款实验目标</span><strong>至少 3 次</strong><span>目标是实验次数，不保证爆款结果</span></div>
+   <div class="growth-mini"><span>常规内容节奏</span><strong>隔日一篇</strong><span>约每月 15 篇，依实际排期调整</span></div>
+   <div class="growth-mini"><span>每日新闻贴图</span><strong id="posterTaskCount">0 期</strong><span>本地记录的贴图任务数</span></div>
+   <div class="growth-mini"><span>本月实验进度</span><strong id="viralExperimentCount">0 / 3</strong><span>已建立的本月实验记录</span></div>
+  </div>
+ </div>
+ <div class="growth-grid">
+  <div>
+   <div class="panel">
+    <div class="panelhead"><div><h2>爆款实验池</h2><p>每月至少规划 3 个差异化实验；以真实阅读、分享和订阅数据复盘。</p></div><span class="tag blue">实验，不是预测</span></div>
+    <form id="viralExperimentForm" class="growth-form">
+     <div class="field full"><label for="viralTitle">实验选题 / 标题 *</label><input id="viralTitle" required maxlength="140" placeholder="例如：一个海外 AI 新功能，普通人现在能用它做什么？"></div>
+     <div class="field"><label for="viralType">实验方向</label><select id="viralType"><option value="海外信息差">海外信息差</option><option value="AI 实测">AI 实测</option><option value="论文解读">论文解读</option><option value="开源项目">开源项目</option><option value="认知反差">认知反差</option></select></div>
+     <div class="field"><label for="viralStatus">当前状态</label><select id="viralStatus"><option value="planned">计划中</option><option value="researching">研究中</option><option value="draft">写作中</option><option value="published">已发布</option></select></div>
+     <div class="field"><label for="viralViews">发布 7 日阅读量</label><input id="viralViews" type="number" min="0" placeholder="未发布可留空"></div>
+     <div class="field"><label for="viralShares">分享 / 转发</label><input id="viralShares" type="number" min="0" placeholder="有数据再填写"></div>
+     <div class="field"><label for="viralFollows">新增订阅（可归因）</label><input id="viralFollows" type="number" min="0" placeholder="没有数据可留空"></div>
+     <div class="field"><label for="viralDate">计划 / 发布日期</label><input id="viralDate" type="date"></div>
+     <div class="field full"><label for="viralNote">假设与差异化角度</label><textarea id="viralNote" rows="2" placeholder="这篇为什么值得现在写？读者会得到什么？"></textarea></div>
+     <div class="field full"><button class="btn primary" type="submit">＋ 添加爆款实验</button></div>
+    </form>
+    <div id="viralExperimentList" class="growth-list"><div class="growth-empty">添加第一个实验，开始积累自己的内容增长经验。</div></div>
+   </div>
+   <div class="panel">
+    <div class="panelhead"><div><h2>每周增长动作</h2><p>把增长策略变成可执行的检查清单。</p></div></div>
+    <div id="growthTasks"></div>
+    <div class="growth-footnote">清单状态只保存在当前浏览器。完成勾选不代表相关工作已自动执行，需以真实执行记录为准。</div>
+   </div>
+  </div>
+  <div>
+   <div class="panel">
+    <div class="panelhead"><div><h2>每日 AI 新闻贴图任务</h2><p>追踪从新闻简报到 WorkBuddy 草稿准备的状态。这里不直接连接微信后台。</p></div></div>
+    <form id="posterTaskForm" class="growth-form">
+     <div class="field full"><label for="posterTitle">本期主题 / 任务名称 *</label><input id="posterTitle" required maxlength="140" placeholder="例如：AI 前沿新闻贴图 · 2026-10-29"></div>
+     <div class="field"><label for="posterDate">内容日期</label><input id="posterDate" type="date"></div>
+     <div class="field"><label for="posterStatus">任务状态</label><select id="posterStatus"><option value="queued">待制作</option><option value="creating">制作中</option><option value="qa_passed">素材验收通过</option><option value="ready_for_workbuddy">待交 WorkBuddy</option><option value="draft_saved">草稿已保存（已核验）</option><option value="published">已发表（已核验）</option><option value="blocked">阻塞 / 待修正</option></select></div>
+     <div class="field full"><label for="posterNote">来源 / 文件备注</label><textarea id="posterNote" rows="2" placeholder="记录新闻来源、实际文件路径或 WorkBuddy 回执；不要填写密钥。"></textarea></div>
+     <div class="field full"><button class="btn primary" type="submit">＋ 添加贴图任务</button></div>
+    </form>
+    <div id="posterTaskList" class="growth-list"><div class="growth-empty">尚无贴图任务记录。添加任务后可追踪状态。</div></div>
+   </div>
+   <div class="panel">
+    <div class="panelhead"><div><h2>增长数据记录</h2><p>按实际后台数据记录，不用估算值冒充真实表现。</p></div></div>
+    <form id="growthMetricForm" class="growth-form">
+     <div class="field"><label for="metricDate">日期</label><input id="metricDate" type="date"></div>
+     <div class="field"><label for="metricFollowers">订阅总人数</label><input id="metricFollowers" type="number" min="0" required placeholder="真实后台数字"></div>
+     <div class="field"><label for="metricArticle">文章 / 内容标题</label><input id="metricArticle" maxlength="140" placeholder="可留空"></div>
+     <div class="field"><label for="metricReads">阅读量</label><input id="metricReads" type="number" min="0" placeholder="没有则留空"></div>
+     <div class="field"><label for="metricShares">分享 / 转发</label><input id="metricShares" type="number" min="0" placeholder="没有则留空"></div>
+     <div class="field"><label for="metricNewFollowers">本期净增订阅</label><input id="metricNewFollowers" type="number" placeholder="可填负数"></div>
+     <div class="field full"><button class="btn primary" type="submit">保存一条真实数据</button></div>
+    </form>
+    <div id="growthMetricSummary" class="growth-footnote">尚未录入增长数据。</div>
+    <div id="growthMetricList" class="growth-list"><div class="growth-empty">每周至少记录一次订阅人数；发布文章后补充阅读与分享数据。</div></div>
+   </div>
+  </div>
+ </div>
+ <div class="panel">
+  <div class="panelhead"><div><h2>数据与使用边界</h2><p>为后续跨设备同步和自动化交接预留明确的数据结构。</p></div><button class="btn small" id="clearGrowthData">清空本机增长记录</button></div>
+  <div class="methodgrid">
+   <div class="method"><div class="num">01 / LOCAL</div><h3>本机数据</h3><p>当前版本将增长目标、实验、贴图任务和指标存放在本浏览器 localStorage。更换设备前请导出 JSON。</p></div>
+   <div class="method"><div class="num">02 / VERIFY</div><h3>真实数据优先</h3><p>阅读、分享、订阅与发布状态需要从真实后台或执行回执核验。未录入时显示空值，不自动生成虚假数字。</p></div>
+   <div class="method"><div class="num">03 / HANDOFF</div><h3>WorkBuddy 交接</h3><p>本模块记录交接状态，但不会自动下载私有内容包、上传图片或操作公众号。完成后再依据真实回执更新状态。</p></div>
+  </div>
+ </div>
+</section>
+
 <footer style="font-size:11px;color:#8591a2;padding:8px 2px 30px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><span>DAVYLAB · 把想法，做成能用的工具。</span><span>素材需核实 · 选题需判断 · 正式发布由作者确认</span></footer>
 </div></main></div>
 <dialog id="importDialog"><div class="modalhead"><h2>从念头盒导入灵感</h2><button class="close" type="button" id="closeImportDialog">×</button></div><div class="modalbody"><p style="margin-top:0;color:var(--muted);font-size:12px">可连接念头盒账号，浏览本人云端灵感；也可导入 JSON、TXT、Markdown 或粘贴内容。账号令牌仅保存在当前标签页会话中，关闭标签页后自动清除。导入只复制到当前选题池，不会修改念头盒原始记录。</p><div class="formgrid"><div class="field"><label for="nianboxEmail">念头盒账号邮箱</label><input id="nianboxEmail" type="email" autocomplete="username" placeholder="登录念头盒使用的邮箱"></div><div class="field"><label for="nianboxPassword">念头盒密码</label><input id="nianboxPassword" type="password" autocomplete="current-password" placeholder="密码只发送至念头盒云端服务"></div></div><div class="formrow" style="margin:10px 0"><button class="btn primary" type="button" id="connectNianbox">连接念头盒</button><button class="btn" type="button" id="loadNianboxIdeas" disabled>读取我的念头</button><button class="btn" type="button" id="disconnectNianbox" hidden>断开连接</button><span id="nianboxConnectionStatus" class="import-hint">尚未连接</span></div><div id="nianboxCloudList" class="topiclist" style="margin-bottom:12px"></div><div class="field"><label for="nianboxFile">或选择念头盒导出文件</label><input id="nianboxFile" type="file" accept=".json,.txt,.md,.markdown,application/json,text/plain,text/markdown"></div><div class="field" style="margin-top:12px"><label for="nianboxPaste">或粘贴念头内容</label><textarea id="nianboxPaste" style="min-height:110px" placeholder="可粘贴一条或多条念头；每段内容会被当作独立灵感候选。"></textarea></div><div id="nianboxPreview" class="topiclist" style="margin-top:12px"></div></div><div class="modalfoot"><button class="btn" type="button" id="cancelImport">取消</button><button class="btn primary" type="button" id="confirmNianboxImport">导入选中灵感</button></div></dialog><dialog id="topicDialog"><form id="topicForm"><div class="modalhead"><h2 id="dialogTitle">新建选题</h2><button class="close" type="button" id="closeDialog">×</button></div><div class="modalbody"><input type="hidden" id="topicId"><div class="formgrid">
@@ -486,5 +595,93 @@ $("exportPublished").addEventListener("click",exportPublishedJson);
 $("importPublished").addEventListener("click",()=>$("publishedFile").click());
 $("publishedFile").addEventListener("change",e=>{if(e.target.files?.[0])importPublishedJson(e.target.files[0]);e.target.value=""});
 $("refreshPublished").addEventListener("click",()=>loadSharedPublishedArticles().then(()=>toast("已刷新共享文章档案")));
+
+const GROWTH_KEY="davylab-growth-lab-v1";
+const GROWTH_TASKS=[
+ {title:"扫描海外官方发布与原始论文",detail:"优先找原始来源，记录发布时间与核验状态。"},
+ {title:"建立至少 3 个本月爆款实验",detail:"覆盖不同角度，避免只追同一种热点。"},
+ {title:"完成隔日发文排期",detail:"提前准备内容储备，避免临时赶稿。"},
+ {title:"制作并验收每日新闻贴图",detail:"逐张检查文字、尺寸、来源和手机可读性。"},
+ {title:"复盘阅读、分享与净增订阅",detail:"用真实数据决定下一周的选题。"}
+];
+const GROWTH_STATUS={queued:"待制作",creating:"制作中",qa_passed:"素材验收通过",ready_for_workbuddy:"待交 WorkBuddy",draft_saved:"草稿已保存（已核验）",published:"已发表（已核验）",blocked:"阻塞 / 待修正"};
+const VIRAL_STATUS={planned:"计划中",researching:"研究中",draft:"写作中",published:"已发布"};
+function blankGrowth(){return {target:{baseline:"",latest:"",start:"",deadline:""},experiments:[],posters:[],metrics:[],tasks:{}}}
+function loadGrowth(){try{const x=JSON.parse(localStorage.getItem(GROWTH_KEY)||"null");if(!x||typeof x!=="object")return blankGrowth();return { ...blankGrowth(), ...x, target:{...blankGrowth().target,...(x.target||{})},experiments:Array.isArray(x.experiments)?x.experiments:[],posters:Array.isArray(x.posters)?x.posters:[],metrics:Array.isArray(x.metrics)?x.metrics:[],tasks:x.tasks&&typeof x.tasks==="object"?x.tasks:{}}}catch{return blankGrowth()}}
+let growth=loadGrowth();
+function saveGrowth(){localStorage.setItem(GROWTH_KEY,JSON.stringify(growth));renderGrowth()}
+function todayLocal(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function numOrBlank(v){return v===""||v===null||v===undefined?null:Number(v)}
+function safeNum(v){return v===null||v===undefined||v===""?"—":Number(v).toLocaleString("zh-CN")}
+function growthDate(v){if(!v)return"日期未填写";try{return new Intl.DateTimeFormat("zh-CN",{year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date(v+"T00:00:00"))}catch{return v}}
+function escapeGrowth(v){return safe(v)}
+function renderGrowthTarget(){
+ const t=growth.target,base=numOrBlank(t.baseline),latest=numOrBlank(t.latest),target=500;
+ $("growthCurrent").textContent=latest===null?"—":safeNum(latest);
+ $("growthRemaining").textContent=latest===null?"—":safeNum(Math.max(0,target-latest));
+ let days=null;if(t.deadline){days=Math.ceil((new Date(t.deadline+"T23:59:59")-new Date())/86400000)}
+ const remaining=latest===null?null:Math.max(0,target-latest);
+ $("growthPace").textContent=remaining===null||!days||days<=0?"—":(remaining/days).toFixed(1);
+ $("growthBaseline").value=t.baseline??"";$("growthLatest").value=t.latest??"";$("growthStartDate").value=t.start||"";$("growthDeadline").value=t.deadline||"";
+ $("growthTargetStatus").textContent=latest===null?"尚未录入真实订阅数据":("已记录最新人数"+safeNum(latest)+(base===null?"":"；较起始"+(latest-base>=0?"+":"")+safeNum(latest-base)));
+ $("posterTaskCount").textContent=growth.posters.length+" 期";
+ const month=todayLocal().slice(0,7);
+ $("viralExperimentCount").textContent=growth.experiments.filter(x=>(x.date||x.createdAt||"").slice(0,7)===month).length+" / 3";
+}
+function renderGrowthTasks(){
+ const el=$("growthTasks");
+ el.innerHTML=GROWTH_TASKS.map((t,i)=>'<label class="growth-task"><input type="checkbox" data-growth-task="'+i+'" '+(growth.tasks[i]?"checked":"")+'><span><strong>'+escapeGrowth(t.title)+'</strong><small>'+escapeGrowth(t.detail)+'</small></span></label>').join("");
+ el.querySelectorAll("[data-growth-task]").forEach(c=>c.addEventListener("change",()=>{growth.tasks[c.dataset.growthTask]=c.checked;localStorage.setItem(GROWTH_KEY,JSON.stringify(growth))}));
+}
+function viralBadge(x){
+ const metric=numOrBlank(x.views),baseline=numOrBlank(x.baseline);
+ if(x.status==="published"&&metric!==null&&baseline!==null&&baseline>0&&metric>=baseline*3)return '<span class="growth-badge good">达到内部爆款候选线</span>';
+ if(x.status==="published")return '<span class="growth-badge warn">待按真实数据复盘</span>';
+ return '<span class="growth-badge">'+escapeGrowth(VIRAL_STATUS[x.status]||x.status||"计划中")+'</span>';
+}
+function renderExperiments(){
+ const el=$("viralExperimentList");
+ if(!growth.experiments.length){el.innerHTML='<div class="growth-empty">添加第一个实验，开始积累自己的内容增长经验。</div>';return}
+ const baseMedian=numOrBlank(growth.target.medianViews);
+ el.innerHTML=growth.experiments.slice().sort((a,b)=>(b.createdAt||"").localeCompare(a.createdAt||"")).map(x=>{
+ const isCandidate=x.status==="published"&&x.views!==null&&baseMedian!==null&&baseMedian>0&&Number(x.views)>=baseMedian*3;
+ return '<article class="growth-item"><div class="growth-item-head"><div><h3>'+escapeGrowth(x.title)+'</h3><p>'+escapeGrowth(x.type||"内容实验")+' · '+escapeGrowth(growthDate(x.date))+'</p></div>'+viralBadge({...x,baseline:baseMedian})+'</div>'+(x.note?'<p style="margin-top:7px">'+escapeGrowth(x.note)+'</p>':"")+'<div class="growth-item-meta"><span class="growth-badge">7 日阅读 '+safeNum(x.views)+'</span><span class="growth-badge">分享 '+safeNum(x.shares)+'</span><span class="growth-badge">新增订阅 '+safeNum(x.follows)+'</span>'+(isCandidate?'<span class="growth-badge good">阅读达到基线 3 倍</span>':"")+'</div><div class="growth-item-actions"><button class="btn small" data-viral-edit="'+escapeGrowth(x.id)+'">编辑</button><button class="btn small" data-viral-delete="'+escapeGrowth(x.id)+'">删除</button></div></article>'
+ }).join("");
+ el.querySelectorAll("[data-viral-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条爆款实验记录？")){growth.experiments=growth.experiments.filter(x=>x.id!==b.dataset.viralDelete);saveGrowth()}}));
+ el.querySelectorAll("[data-viral-edit]").forEach(b=>b.addEventListener("click",()=>{const x=growth.experiments.find(y=>y.id===b.dataset.viralEdit);if(!x)return;$("viralTitle").value=x.title||"";$("viralType").value=x.type||"海外信息差";$("viralStatus").value=x.status||"planned";$("viralViews").value=x.views??"";$("viralShares").value=x.shares??"";$("viralFollows").value=x.follows??"";$("viralDate").value=x.date||"";$("viralNote").value=x.note||"";$("viralExperimentForm").dataset.editId=x.id;$("viralTitle").focus();toast("已载入实验记录，保存时将更新原记录")}));
+}
+function renderPosterTasks(){
+ const el=$("posterTaskList");
+ if(!growth.posters.length){el.innerHTML='<div class="growth-empty">尚无贴图任务记录。添加任务后可追踪状态。</div>';return}
+ el.innerHTML=growth.posters.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||"")).map(x=>'<article class="growth-item"><div class="growth-item-head"><div><h3>'+escapeGrowth(x.title)+'</h3><p>'+escapeGrowth(growthDate(x.date))+'</p></div><span class="growth-badge '+(["qa_passed","ready_for_workbuddy","draft_saved","published"].includes(x.status)?"good":x.status==="blocked"?"warn":"")+'">'+escapeGrowth(GROWTH_STATUS[x.status]||x.status)+'</span></div>'+(x.note?'<p style="margin-top:7px">'+escapeGrowth(x.note)+'</p>':"")+'<div class="growth-item-actions"><button class="btn small" data-poster-status="'+escapeGrowth(x.id)+'">更新状态</button><button class="btn small" data-poster-edit="'+escapeGrowth(x.id)+'">编辑</button><button class="btn small" data-poster-delete="'+escapeGrowth(x.id)+'">删除</button></div></article>').join("");
+ el.querySelectorAll("[data-poster-status]").forEach(b=>b.addEventListener("click",()=>{const x=growth.posters.find(y=>y.id===b.dataset.posterStatus);if(!x)return;const order=["queued","creating","qa_passed","ready_for_workbuddy","draft_saved","published","blocked"];const current=order.indexOf(x.status);const next=prompt("输入新状态代码：\n"+order.map(k=>k+" = "+GROWTH_STATUS[k]).join("\n"),x.status);if(next===null)return;if(!GROWTH_STATUS[next]){toast("状态代码无效，未修改");return}if(["draft_saved","published"].includes(next)&&!confirm("请确认你已通过真实 WorkBuddy/公众号后台回执核验此状态。继续保存？"))return;x.status=next;x.updatedAt=new Date().toISOString();saveGrowth()}));
+ el.querySelectorAll("[data-poster-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条贴图任务记录？")){growth.posters=growth.posters.filter(x=>x.id!==b.dataset.posterDelete);saveGrowth()}}));
+ el.querySelectorAll("[data-poster-edit]").forEach(b=>b.addEventListener("click",()=>{const x=growth.posters.find(y=>y.id===b.dataset.posterEdit);if(!x)return;$("posterTitle").value=x.title||"";$("posterDate").value=x.date||"";$("posterStatus").value=x.status||"queued";$("posterNote").value=x.note||"";$("posterTaskForm").dataset.editId=x.id;$("posterTitle").focus();toast("已载入贴图任务，保存时将更新原记录")}));
+}
+function renderMetrics(){
+ const el=$("growthMetricList"),items=growth.metrics.slice().sort((a,b)=>(b.date||"").localeCompare(a.date||""));
+ if(!items.length){el.innerHTML='<div class="growth-empty">每周至少记录一次订阅人数；发布文章后补充阅读与分享数据。</div>';$("growthMetricSummary").textContent="尚未录入增长数据。";return}
+ const latest=items[0],first=items[items.length-1],delta=Number(latest.followers)-Number(first.followers);
+ $("growthMetricSummary").textContent="记录 "+items.length+" 条；最新订阅 "+safeNum(latest.followers)+"；记录期间订阅变化 "+(delta>=0?"+":"")+safeNum(delta)+"。";
+ el.innerHTML=items.slice(0,8).map(x=>'<article class="growth-item"><div class="growth-item-head"><div><h3>'+escapeGrowth(x.article||"订阅数据记录")+'</h3><p>'+escapeGrowth(growthDate(x.date))+'</p></div><span class="growth-badge">订阅 '+safeNum(x.followers)+'</span></div><div class="growth-item-meta"><span class="growth-badge">阅读 '+safeNum(x.reads)+'</span><span class="growth-badge">分享 '+safeNum(x.shares)+'</span><span class="growth-badge">净增 '+safeNum(x.newFollowers)+'</span></div><div class="growth-item-actions"><button class="btn small" data-metric-delete="'+escapeGrowth(x.id)+'">删除记录</button></div></article>').join("");
+ el.querySelectorAll("[data-metric-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条指标记录？")){growth.metrics=growth.metrics.filter(x=>x.id!==b.dataset.metricDelete);saveGrowth()}}));
+}
+function renderGrowth(){renderGrowthTarget();renderGrowthTasks();renderExperiments();renderPosterTasks();renderMetrics()}
+function growthId(){return "g_"+Date.now().toString(36)+"_"+Math.random().toString(36).slice(2,7)}
+function resetGrowthForm(form){form.reset();delete form.dataset.editId}
+$("growthBaseline").value=growth.target.baseline||"";
+$("growthLatest").value=growth.target.latest||"";
+$("growthStartDate").value=growth.target.start||todayLocal();
+$("growthDeadline").value=growth.target.deadline||"";
+$("posterDate").value=todayLocal();$("metricDate").value=todayLocal();$("viralDate").value=todayLocal();
+$("saveGrowthTarget").addEventListener("click",()=>{const baseline=numOrBlank($("growthBaseline").value),latest=numOrBlank($("growthLatest").value),start=$("growthStartDate").value,deadline=$("growthDeadline").value;if((baseline!==null&&baseline<0)||(latest!==null&&latest<0)){toast("订阅人数不能小于 0");return}if(start&&deadline&&deadline<start){toast("截止日期不能早于起始日期");return}growth.target={...growth.target,baseline:baseline===null?"":baseline,latest:latest===null?"":latest,start,deadline};saveGrowth();toast("增长目标已保存在当前浏览器")});
+$("viralExperimentForm").addEventListener("submit",e=>{e.preventDefault();const editId=e.currentTarget.dataset.editId;const item={id:editId||growthId(),title:$("viralTitle").value.trim(),type:$("viralType").value,status:$("viralStatus").value,views:numOrBlank($("viralViews").value),shares:numOrBlank($("viralShares").value),follows:numOrBlank($("viralFollows").value),date:$("viralDate").value,note:$("viralNote").value.trim(),createdAt:editId?(growth.experiments.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()};if(!item.title){toast("请填写实验选题");return}const i=growth.experiments.findIndex(x=>x.id===item.id);if(i>=0)growth.experiments[i]=item;else growth.experiments.unshift(item);saveGrowth();resetGrowthForm(e.currentTarget);$("viralDate").value=todayLocal();toast(editId?"实验记录已更新":"已添加爆款实验")});
+$("posterTaskForm").addEventListener("submit",e=>{e.preventDefault();const editId=e.currentTarget.dataset.editId;const item={id:editId||growthId(),title:$("posterTitle").value.trim(),date:$("posterDate").value||todayLocal(),status:$("posterStatus").value,note:$("posterNote").value.trim(),createdAt:editId?(growth.posters.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()};if(!item.title){toast("请填写贴图任务名称");return}const i=growth.posters.findIndex(x=>x.id===item.id);if(i>=0)growth.posters[i]=item;else growth.posters.unshift(item);saveGrowth();resetGrowthForm(e.currentTarget);$("posterDate").value=todayLocal();toast(editId?"贴图任务已更新":"已添加贴图任务")});
+$("growthMetricForm").addEventListener("submit",e=>{e.preventDefault();const item={id:growthId(),date:$("metricDate").value||todayLocal(),followers:Number($("metricFollowers").value),article:$("metricArticle").value.trim(),reads:numOrBlank($("metricReads").value),shares:numOrBlank($("metricShares").value),newFollowers:numOrBlank($("metricNewFollowers").value),createdAt:new Date().toISOString()};if(!Number.isFinite(item.followers)||item.followers<0){toast("请填写有效的订阅人数");return}growth.metrics.unshift(item);growth.target.latest=item.followers;saveGrowth();resetGrowthForm(e.currentTarget);$("metricDate").value=todayLocal();$("growthLatest").value=item.followers;toast("真实数据已记录")});
+$("exportGrowth").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:growth},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="davylab-growth-data-"+todayLocal()+".json";a.click();URL.revokeObjectURL(url);toast("已导出增长数据 JSON")});
+$("clearGrowthData").addEventListener("click",()=>{if(!confirm("这会删除当前浏览器中的增长目标、实验、贴图任务和指标记录。建议先导出备份。确定清空？"))return;growth=blankGrowth();saveGrowth();toast("本机增长记录已清空")});
+$("growthJumpTopics").addEventListener("click",()=>changeSection("discover"));
+renderGrowth();
+
 renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics();loadSharedPublishedArticles();
 </script></body></html>
