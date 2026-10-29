@@ -19,6 +19,10 @@ async function main() {
   assert.ok(html.includes('id="directionResults"'), "direction result region exists");
   assert.ok(html.includes('id="importNianbox"'), "NianBox import entry exists");
   assert.ok(html.includes("NIANBOX_TOKEN_KEY"), "NianBox session token is session-scoped");
+  assert.ok(html.includes('id="section-growth"'), "audience Growth Lab section exists");
+  assert.ok(html.includes('id="viralExperimentForm"'), "viral experiment form exists");
+  assert.ok(html.includes('id="posterTaskForm"'), "daily poster task form exists");
+  assert.ok(html.includes('id="growthMetricForm"'), "growth metric form exists");
   assert.ok(!/AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}/.test(html), "no obvious provider API key is embedded");
   const archivePath = path.join(root, "topic-studio", "data", "published-articles.json");
   assert.ok(fs.existsSync(archivePath), "published content archive JSON exists");
@@ -154,6 +158,47 @@ async function main() {
     assert.ok(savedPublished, "published article record is stored locally");
     page.once("dialog", dialog => dialog.accept());
     await page.locator('#publishedList button[data-published-action="remove"]').first().click();
+
+
+    // Growth Lab: target persistence, viral experiment threshold, poster queue and metrics.
+    await page.locator('button[data-section="growth"]').click();
+    await page.locator("#section-growth.active").waitFor();
+    await page.locator("#growthBaseline").fill("120");
+    await page.locator("#growthLatest").fill("135");
+    await page.locator("#growthStartDate").fill("2026-10-29");
+    await page.locator("#growthDeadline").fill("2027-04-29");
+    await page.locator("#growthMedianViews").fill("40");
+    await page.locator("#saveGrowthTarget").click();
+    assert.equal((await page.locator("#growthCurrent").innerText()).trim(), "135", "Growth Lab shows the latest subscriber count");
+    assert.equal((await page.locator("#growthRemaining").innerText()).trim(), "365", "Growth Lab calculates remaining subscribers to 500");
+    await page.locator("#viralTitle").fill("QA 爆款实验记录");
+    await page.locator("#viralType").selectOption("AI 实测");
+    await page.locator("#viralStatus").selectOption("published");
+    await page.locator("#viralViews").fill("120");
+    await page.locator("#viralShares").fill("12");
+    await page.locator("#viralFollows").fill("4");
+    await page.locator("#viralDate").fill("2026-10-29");
+    await page.locator("#viralExperimentForm").locator("button[type=submit]").click();
+    await page.locator("#viralExperimentList").getByText("QA 爆款实验记录", { exact: true }).waitFor();
+    await page.locator("#viralExperimentList").getByText("达到内部爆款候选线", { exact: true }).waitFor();
+    await page.locator("#posterTitle").fill("QA 每日新闻贴图任务");
+    await page.locator("#posterDate").fill("2026-10-29");
+    await page.locator("#posterStatus").selectOption("qa_passed");
+    await page.locator("#posterTaskForm").locator("button[type=submit]").click();
+    await page.locator("#posterTaskList").getByText("QA 每日新闻贴图任务", { exact: true }).waitFor();
+    await page.locator("#metricDate").fill("2026-10-29");
+    await page.locator("#metricFollowers").fill("135");
+    await page.locator("#metricArticle").fill("QA 增长数据记录");
+    await page.locator("#metricReads").fill("120");
+    await page.locator("#metricShares").fill("12");
+    await page.locator("#metricNewFollowers").fill("4");
+    await page.locator("#growthMetricForm").locator("button[type=submit]").click();
+    await page.locator("#growthMetricList").getByText("QA 增长数据记录", { exact: true }).waitFor();
+    const growthSaved = await page.evaluate(() => {
+      const x = JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "null");
+      return !!x && x.target.latest === 135 && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录");
+    });
+    assert.ok(growthSaved, "Growth Lab target, experiments, poster tasks and metrics persist locally");
 
     assert.deepEqual(errors, [], `browser console/page errors: ${errors.join("; ")}`);
 
