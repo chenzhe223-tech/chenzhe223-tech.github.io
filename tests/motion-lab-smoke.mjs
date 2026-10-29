@@ -91,6 +91,24 @@ try {
     if (engine === "waapi" && !snippet.includes(".animate(")) throw new Error("Web Animations API snippet was not generated");
   }
 
+  // Integration snippets must expose cleanup and mirror selected effect-specific values.
+  await page.locator('.motion-scenario[data-scenario="feedback"]').click();
+  for (const engine of ["waapi", "gsap", "motion"]) {
+    await page.locator("#motionSnippetEngine").selectOption(engine);
+    const snippet = await page.locator("#motionIntegrationSnippet").inputValue();
+    if (!snippet.includes('prefers-reduced-motion: reduce')) throw new Error("Snippet missing reduced-motion guard: " + engine);
+    if (engine === "waapi" && !snippet.includes("animation.cancel()")) throw new Error("WAAPI snippet missing animation cleanup");
+    if (engine === "gsap" && !snippet.includes("timeline.kill()")) throw new Error("GSAP snippet missing timeline cleanup");
+    if (engine === "motion" && !snippet.includes("controls.stop()")) throw new Error("Motion snippet missing controls cleanup");
+    if (!snippet.includes("Replace .your-target")) throw new Error("Snippet missing selector setup guidance: " + engine);
+  }
+  await page.locator('.motion-option[data-effect="stagger"]').click();
+  await page.locator("#motionSnippetEngine").selectOption("waapi");
+  if (!(await page.locator("#motionIntegrationSnippet").inputValue()).includes("translateY")) throw new Error("Stagger snippet did not include stagger-style movement");
+  await page.locator('.motion-option[data-effect="blur"]').click();
+  await page.locator("#motionSnippetEngine").selectOption("motion");
+  if (!(await page.locator("#motionIntegrationSnippet").inputValue()).includes('"filter"')) throw new Error("Blur snippet did not include filter animation");
+
   // Engine snippets preserve multi-keyframe spring motion and keep loops inside the configured total duration.
   await page.locator('.motion-personality[data-personality="product"]').click();
   await page.locator("#motionSnippetEngine").selectOption("gsap");
