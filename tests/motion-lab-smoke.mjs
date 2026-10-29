@@ -59,7 +59,7 @@ try {
   await productPersonality.click();
   if (await productPersonality.getAttribute("aria-pressed") !== "true") throw new Error("Product interaction personality did not activate");
   const personalityConfig = JSON.parse(await page.locator("#motionConfig").inputValue());
-  if (personalityConfig.effect !== "spring" || personalityConfig.durationMs !== 1200) throw new Error("Product personality did not apply its documented defaults");
+  if (personalityConfig.effect !== "spring" || personalityConfig.durationMs !== 1200) throw new Error("Product personality did not apply its documented defaults: " + JSON.stringify(personalityConfig));
 
   for (const engine of ["waapi", "gsap", "motion"]) {
     await page.locator("#motionSnippetEngine").selectOption(engine);
