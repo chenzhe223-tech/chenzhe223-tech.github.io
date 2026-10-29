@@ -28,8 +28,10 @@ The states belong to the learner's personal map. In this preview they are stored
 5. 工具调用港湾 — tools, MCP and permissions
 6. 知识库森林 — retrieval, RAG and traceable sources
 7. 自动化边境 — workflow engineering and verification
-8. 创造者之城 — personal projects and AI applications
-9. 未知海域 — future topics without a fixed syllabus
+8. 触发机制台地 — Hook, events and automated checks
+9. 执行环境高原 — Harness, execution control and recovery
+10. 创造者之城 — personal projects and AI applications
+11. 未知海域 — future topics without a fixed syllabus
 
 These names are an authored metaphor for navigation. They are not claims that the listed taxonomy exhausts the AI field or that all areas are equally mature.
 
