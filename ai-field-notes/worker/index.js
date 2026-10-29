@@ -128,7 +128,7 @@ export default {
       const rawQuery = (url.searchParams.get("q") || "").trim().slice(0, 120);
       const normalized = rawQuery.toLowerCase().replace(/[，。！？?!、,.;；:："'“”()（）]/g, " ");
       const latinTerms = normalized.match(/[a-z0-9][a-z0-9._-]*/g) || [];
-      const cjkRuns = normalized.match(/[\\u3400-\\u9fff]+/g) || [];
+      const cjkRuns = normalized.match(/[\u3400-\u9fff]+/g) || [];
       const stopWords = new Set(["如何","怎么","怎样","什么","哪些","可以","能否","请问","一个","一种","这个","那个","以及","对于","进行","帮我","如何用","怎么用"]);
       const cjkTerms = [];
       for (const run of cjkRuns) {
