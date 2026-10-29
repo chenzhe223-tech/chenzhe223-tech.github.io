@@ -23,6 +23,7 @@ async function main() {
   assert.ok(html.includes('id="viralExperimentForm"'), "viral experiment form exists");
   assert.ok(html.includes('id="posterTaskForm"'), "daily poster task form exists");
   assert.ok(html.includes('id="growthMetricForm"'), "growth metric form exists");
+  assert.ok(html.includes('data-metric-edit="'), "growth metrics support editing existing records");
   assert.ok(html.includes('id="importGrowthFile"'), "growth data import control exists");
   assert.ok(html.includes('id="exportGrowthCsv"'), "growth metrics CSV export exists");
   assert.ok(html.includes('id="exportGrowthReview"'), "weekly review export exists");
@@ -198,6 +199,14 @@ async function main() {
     await page.locator("#metricNewFollowers").fill("4");
     await page.locator("#growthMetricForm").locator("button[type=submit]").click();
     await page.locator("#growthMetricList").getByText("QA 增长数据记录", { exact: true }).waitFor();
+    await page.locator('#growthMetricList button[data-metric-edit]').first().click();
+    await page.locator("#metricShares").fill("13");
+    await page.locator("#growthMetricForm").locator("button[type=submit]").click();
+    const editedMetric = await page.evaluate(() => {
+      const x = JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "null");
+      return x && x.metrics.filter(m => m.article === "QA 增长数据记录").length === 1 && x.metrics.find(m => m.article === "QA 增长数据记录").shares === 13;
+    });
+    assert.ok(editedMetric, "editing a growth metric updates the existing record instead of duplicating it");
     const growthSaved = await page.evaluate(() => {
       const x = JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "null");
       return !!x && x.target.latest === 135 && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录");
