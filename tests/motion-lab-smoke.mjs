@@ -102,7 +102,7 @@ try {
     if (engine === "motion" && !snippet.includes("controls.stop()")) throw new Error("Motion snippet missing controls cleanup");
     if (!snippet.includes("Replace .your-target")) throw new Error("Snippet missing selector setup guidance: " + engine);
     if (!snippet.includes("function mountMotion()") || !snippet.includes("const cleanupMotion = mountMotion()")) throw new Error("Snippet is not wrapped in a runnable lifecycle function: " + engine);
-    if (/^\s*return\s/m.test(snippet)) throw new Error("Snippet contains an illegal top-level return: " + engine);
+    if (/^return\s/m.test(snippet)) throw new Error("Snippet contains an illegal top-level return: " + engine);
     const syntaxCheck = snippet.replace(/^import\s+.*;\s*$/m, "");
     try { new Function(syntaxCheck); } catch (error) { throw new Error("Generated snippet has invalid JavaScript syntax for " + engine + ": " + error.message); }
   }
