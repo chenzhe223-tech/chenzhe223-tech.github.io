@@ -1,5 +1,5 @@
 const ALLOWED_ORIGIN = "https://chenzhe223-tech.github.io";
-const API_VERSION = "0.1.0";
+const API_VERSION = "0.3.0";
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -133,16 +133,20 @@ export default {
       const cjkTerms = [];
       for (const run of cjkRuns) {
         if (run.length >= 2 && run.length <= 8 && !stopWords.has(run)) cjkTerms.push(run);
-        for (let i = 0; i < run.length - 2; i++) {
-          const tri = run.slice(i, i + 3);
-          if (!stopWords.has(tri)) cjkTerms.push(tri);
-        }
+        // Add bigrams before trigrams so meaningful Chinese keywords survive the query-term cap.
         for (let i = 0; i < run.length - 1; i++) {
           const pair = run.slice(i, i + 2);
           if (!stopWords.has(pair)) cjkTerms.push(pair);
         }
+        for (let i = 0; i < run.length - 2; i++) {
+          const tri = run.slice(i, i + 3);
+          if (!stopWords.has(tri)) cjkTerms.push(tri);
+        }
       }
-      const terms = [...new Set([...latinTerms, ...cjkTerms].filter((term) => term.length >= 2 && !stopWords.has(term)))].slice(0, 12);
+      let candidates = [...new Set([...latinTerms, ...cjkTerms].filter((term) => term.length >= 2 && !stopWords.has(term)))];
+      // A lone "AI" query is useful; in longer questions it is too generic to dominate matching.
+      if (candidates.length > 1) candidates = candidates.filter((term) => !["ai", "the", "how", "what"].includes(term));
+      const terms = candidates.slice(0, 12);
       try {
         let sql = `SELECT l.id, l.slug, l.title, l.summary, l.content_markdown, l.content_json,
                           l.access_tier, l.estimated_minutes, t.slug AS track_slug,
