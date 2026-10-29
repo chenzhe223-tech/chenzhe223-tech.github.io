@@ -92,6 +92,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .motion-workbench-panel h3{font-size:14px;margin:0 0 7px}.motion-workbench-panel p{font-size:11px;line-height:1.65;color:var(--muted);margin:0 0 12px}
 .motion-workbench-panel textarea{width:100%;min-height:135px;resize:vertical;border:1px solid var(--line);border-radius:9px;background:#090e13;color:#d4e3dd;padding:11px;font:11px/1.6 ui-monospace,SFMono-Regular,monospace}
 .motion-workbench-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.motion-share-link{width:100%;min-width:0;min-height:36px;padding:8px 10px;border:1px solid #34414a;border-radius:8px;background:#090e13;color:#d4e3dd;font:11px/1.5 ui-monospace,SFMono-Regular,monospace}
 .motion-workbench-panel select{width:100%;min-height:36px;padding:7px 9px;border:1px solid #34414a;border-radius:8px;background:#0b1117;color:var(--ink);margin-bottom:10px}
 .motion-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
 .motion-workbench-status{min-height:18px;margin-top:8px;color:#8fa29f;font-size:11px;line-height:1.5}
@@ -251,6 +252,10 @@ input[type=range]{width:100%;accent-color:var(--accent)}
           <input class="motion-file-input" type="file" id="motionImportFile" accept=".json,application/json">
           <div class="motion-workbench-actions"><button class="btn" type="button" id="chooseMotionFile">选择 JSON 文件</button><button class="btn primary" type="button" id="applyImportedMotionConfig">校验并应用</button></div>
           <div class="motion-workbench-status" id="motionImportStatus" role="status">支持导入本实验室 schema 标记的动效配置。</div>
+          <label for="motionShareUrl" style="display:block;font-size:11px;color:#d5e0e1;margin:14px 0 7px">跨设备分享当前配置</label>
+          <input class="motion-share-link" type="text" id="motionShareUrl" readonly aria-label="包含当前动效配置的分享链接" placeholder="生成链接后可复制并发送给其他设备">
+          <div class="motion-workbench-actions"><button class="btn" type="button" id="shareMotionConfig">生成并复制分享链接</button></div>
+          <div class="motion-workbench-status" id="motionShareStatus" role="status">链接将配置编码在 URL 片段中，不会将配置上传到服务器。</div>
         </section>
         <section class="motion-workbench-panel" aria-labelledby="snippetTitle">
           <h3 id="snippetTitle">生成接入代码</h3>
