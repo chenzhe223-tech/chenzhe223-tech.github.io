@@ -647,6 +647,9 @@ function applyImportedMotionConfig() {
     if (!Number.isFinite(Number(config.intensityPercent)) || Number(config.intensityPercent) < 0 || Number(config.intensityPercent) > 150) throw new Error("运动幅度超出允许范围。");
     if (!Number.isFinite(Number(config.distancePx)) || Number(config.distancePx) < 8 || Number(config.distancePx) > 80) throw new Error("位移距离超出允许范围。");
     if (!["once","loop"].includes(config.playback)) throw new Error("播放方式不受支持。");
+    const allowedEasings = Array.from($("#previewEasing").options).map(option => option.value);
+    if (!allowedEasings.includes(config.easing)) throw new Error("缓动曲线不受支持。");
+    if (motionDefinitions[config.effect].direction && !["up","down","left","right"].includes(config.direction)) throw new Error("运动方向不受支持。");
     applyMotionValues(config);
     if (config.globalTokens && Number.isFinite(Number(config.globalTokens.speed))) {
       $("#speed").value = String(Math.max(0.5, Math.min(1.8, Number(config.globalTokens.speed))));
@@ -672,7 +675,7 @@ $("#motionImportFile").addEventListener("change", async event => {
   $("#motionImportJson").value = await file.text();
   $("#motionImportStatus").textContent = "文件已读取，点击「校验并应用」后才会更改当前设置。";
 });
-document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => selectMotion(button.dataset.effect)));
+document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-personality").forEach(preset => preset.setAttribute("aria-pressed","false")); selectMotion(button.dataset.effect); }));
 $("#replaySelectedMotion").addEventListener("click", playSelectedMotion);
 $("#resetMotionTuning").addEventListener("click", () => {
   $("#previewDuration").value = "2000";
