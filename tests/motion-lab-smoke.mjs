@@ -109,6 +109,12 @@ try {
   await page.locator('.motion-option[data-effect="stagger"]').click();
   await page.locator("#motionSnippetEngine").selectOption("waapi");
   if (!(await page.locator("#motionIntegrationSnippet").inputValue()).includes("translateY")) throw new Error("Stagger snippet did not include stagger-style movement");
+  for (const engine of ["waapi", "gsap", "motion"]) {
+    await page.locator("#motionSnippetEngine").selectOption(engine);
+    const snippet = await page.locator("#motionIntegrationSnippet").inputValue();
+    if (!snippet.includes('querySelectorAll(":scope > *")')) throw new Error("Stagger snippet did not target list children: " + engine);
+    if (engine === "motion" && !snippet.includes("stagger(")) throw new Error("Motion snippet did not apply a stagger delay");
+  }
   await page.locator('.motion-option[data-effect="blur"]').click();
   await page.locator("#motionSnippetEngine").selectOption("motion");
   if (!(await page.locator("#motionIntegrationSnippet").inputValue()).includes('"filter"')) throw new Error("Blur snippet did not include filter animation");
