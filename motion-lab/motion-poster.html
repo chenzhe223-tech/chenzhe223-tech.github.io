@@ -31,7 +31,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes zoom{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes float{50%{transform:translateY(-9px)}}@keyframes orbit{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.stage{min-height:0}.poster{width:min(100%,390px)}.intro{align-items:start;flex-direction:column}}@media(max-width:480px){main{padding:16px}.top{height:60px}.templates{grid-template-columns:repeat(3,minmax(0,1fr))}.stage{padding:10px}.poster{padding:22px}.poster h2{font-size:clamp(36px,11vw,54px)}.poster-sub{font-size:11px}}
-</style>
+.engine-options{border:1px solid #c7f36b35;border-radius:12px;padding:12px;margin-bottom:16px;background:#c7f36b08}.engine-options h3{font-size:12px;margin:0 0 8px}.engine-options .option-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px}.engine-options button{border:1px solid var(--line);border-radius:8px;background:#0b1117;color:var(--ink);padding:7px 4px;font-size:10px;min-width:0}.engine-options button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}.engine-options select,.engine-options textarea{width:100%;border:1px solid #34424a;border-radius:8px;background:#0b1117;color:var(--ink);padding:9px;font-size:11px;margin-bottom:8px}.engine-options textarea{min-height:65px;resize:vertical}.engine-options small{display:block;color:var(--muted);font-size:10px;margin:2px 0 10px}.poster[data-style=cinematic] .poster-grid{opacity:.22}.poster[data-style=surreal] .poster-orb{filter:blur(1px) drop-shadow(0 0 35px var(--poster-accent))}.poster[data-style=film]{filter:sepia(.12)}.poster[data-style=sound] .poster-grid{background-size:12px 12px;opacity:.65}.poster[data-style=nature] .poster-orb{border-radius:40% 60% 55% 45%}.poster[data-style=future] .poster-grid{background-size:16px 16px;opacity:.8}.poster[data-style=comic]{border:3px solid var(--poster-ink)}.poster[data-style=minimal] .poster-grid{opacity:.08}@media(max-width:480px){.engine-options .option-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
 </head>
 <body>
 <header class="top"><a class="brand" href="./" aria-label="返回 DAVYLAB Motion Lab"><span class="mark" aria-hidden="true">D</span><span>DAVYLAB<small>MOTION POSTER STUDIO</small></span></a><a class="back" href="./">← 返回 Motion Lab</a></header>
@@ -39,6 +39,17 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 <section class="intro"><div><div class="eyebrow">CREATE / MOVE / SHARE</div><h1>让一个想法，变成动态作品。</h1><p>选择视觉风格，写下你的标题与文案，调整动效。你不需要会写代码，就能制作可分享的海报，并导出 PNG 或独立 HTML 文件。</p></div></section>
 <div class="workspace">
 <section class="editor" aria-labelledby="editTitle"><div class="panel-title"><h2 id="editTitle">编辑你的作品</h2><span class="tag">NO CODE REQUIRED</span></div>
+<div class="engine-options" id="engineOptions">
+<h3>AI 海报创作</h3><textarea id="aiPrompt" maxlength="500" placeholder="用一句话描述你想表达的画面，例如：雨后的海边，一个人听着旧歌，想起多年以前的夏天。"></textarea>
+<button class="btn primary" id="generateAI" type="button">AI 生成标题与文案 ↗</button><small id="aiStatus">AI 接口需配置服务端支持；未成功调用真实 AI 时会明确提示，不会伪造生成结果。</small>
+<h3>视觉风格 · 9 种</h3><div class="option-grid" id="styleGrid">
+<button data-style="editorial" aria-pressed="true">编辑排版</button><button data-style="cinematic" aria-pressed="false">电影叙事</button><button data-style="surreal" aria-pressed="false">超现实梦境</button><button data-style="film" aria-pressed="false">复古胶片</button><button data-style="sound" aria-pressed="false">声音可视化</button><button data-style="nature" aria-pressed="false">自然治愈</button><button data-style="future" aria-pressed="false">未来数字</button><button data-style="comic" aria-pressed="false">彩色手绘</button><button data-style="minimal" aria-pressed="false">极简几何</button></div>
+<h3>配色风格 · 6 种</h3><div class="option-grid" id="paletteGrid">
+<button data-palette="lime" aria-pressed="true">石墨荧光</button><button data-palette="coastal" aria-pressed="false">海雾青绿</button><button data-palette="paper" aria-pressed="false">纸感陶土</button><button data-palette="midnight" aria-pressed="false">午夜冰蓝</button><button data-palette="rose" aria-pressed="false">莓果玫瑰</button><button data-palette="forest" aria-pressed="false">森林苔绿</button></div>
+<h3>字体选择</h3><label for="fontEn">英文字体</label><select id="fontEn"><option>Inter</option><option>DM Sans</option><option>Manrope</option><option>Space Grotesk</option><option>Plus Jakarta Sans</option><option>Source Sans 3</option><option>Playfair Display</option><option>JetBrains Mono</option><option>Liberation Sans</option></select>
+<label for="fontZh">中文字体</label><select id="fontZh"><option>Noto Sans SC</option><option>Noto Serif SC</option><option>LXGW WenKai</option><option>Smiley Sans</option><option>Alibaba PuHuiTi</option><option>Chiron GoRound TC</option><option value="system">系统中文字体</option></select>
+<small>字体选项已接入；字体二进制是否加载成功取决于资源部署。未加载时使用系统回退。第三方字体按其授权与嵌入条件分别核查。</small>
+</div>
 <div class="field"><label>选择视觉风格</label><div class="templates">
 <button class="template" type="button" data-theme="lime" aria-pressed="true"><span class="swatch" style="background:linear-gradient(135deg,#0d1718,#c7f36b)"></span>石墨荧光</button>
 <button class="template" type="button" data-theme="coastal" aria-pressed="false"><span class="swatch" style="background:linear-gradient(135deg,#102b2c,#79e2d0)"></span>海雾青绿</button>
@@ -64,9 +75,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
   const poster = $("#poster");
   const title = $("#titleInput"), subtitle = $("#subtitleInput"), signature = $("#signatureInput"), motion = $("#motionInput"), duration = $("#durationInput");
   const palettes = {
-    lime: {bg:"#0d1718",ink:"#f0f5e9",accent:"#c7f36b"},
-    coastal: {bg:"#102b2c",ink:"#eff9f6",accent:"#79e2d0"},
-    paper: {bg:"#f3efe4",ink:"#202c27",accent:"#a64d32"}
+    lime:{bg:"#0d1718",ink:"#f0f5e9",accent:"#c7f36b"},coastal:{bg:"#102b2c",ink:"#eff9f6",accent:"#79e2d0"},paper:{bg:"#f3efe4",ink:"#202c27",accent:"#a64d32"},midnight:{bg:"#0b1020",ink:"#eef6ff",accent:"#6bc5e8"},rose:{bg:"#251923",ink:"#fff1f4",accent:"#ef9eb9"},forest:{bg:"#15261d",ink:"#f1f3df",accent:"#d0d9a0"}
   };
   let theme = "lime";
   const safe = (value) => String(value || "");
@@ -169,7 +178,30 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
     try{await navigator.clipboard.writeText(url.href);$("#exportStatus").textContent="分享链接已生成并复制。";}catch(_){const input=document.createElement("input");input.value=url.href;input.style.position="fixed";input.style.opacity="0";document.body.append(input);input.select();try{document.execCommand("copy");$("#exportStatus").textContent="分享链接已复制。";}catch(__){$("#exportStatus").textContent=url.href;}input.remove();}
   });
   try{const raw=location.hash.startsWith("#poster=")?decodeURIComponent(location.hash.slice(8)):null;if(raw){const c=JSON.parse(raw);if(typeof c.title==="string"&&typeof c.subtitle==="string"&&palettes[c.theme]){title.value=c.title;subtitle.value=c.subtitle;signature.value=c.signature||"";motion.value=["rise","fade","zoom","orbit"].includes(c.motion)?c.motion:"rise";duration.value=Math.min(1800,Math.max(300,Number(c.duration)||800));theme=c.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));}}else{const saved=JSON.parse(localStorage.getItem("davylab.motion-poster.v1")||"null");if(saved&&palettes[saved.theme]){title.value=saved.title||title.value;subtitle.value=saved.subtitle||subtitle.value;signature.value=saved.signature||signature.value;motion.value=saved.motion||motion.value;duration.value=saved.duration||duration.value;theme=saved.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));}}}catch(_){}
-  render();
+  let engineStyle="editorial",engineFontEn="Inter",engineFontZh="Noto Sans SC";
+  const styleLabels={editorial:"编辑排版",cinematic:"电影叙事",surreal:"超现实梦境",film:"复古胶片",sound:"声音可视化",nature:"自然治愈",future:"未来数字",comic:"彩色手绘",minimal:"极简几何"};
+  document.querySelectorAll("[data-style]").forEach(b=>b.addEventListener("click",()=>{engineStyle=b.dataset.style;document.querySelectorAll("[data-style]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));poster.dataset.style=engineStyle;render(true);}));
+  document.querySelectorAll("[data-palette]").forEach(b=>b.addEventListener("click",()=>{theme=b.dataset.palette;document.querySelectorAll("[data-palette]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));document.querySelectorAll("[data-theme]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.theme===theme)));render(true);}));
+  $("#fontEn").addEventListener("change",e=>{engineFontEn=e.target.value;poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';});
+  $("#fontZh").addEventListener("change",e=>{engineFontZh=e.target.value;poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';});
+  $("#generateAI").addEventListener("click",async()=>{
+    const idea=$("#aiPrompt").value.trim(),status=$("#aiStatus"),button=$("#generateAI");
+    if(!idea){status.textContent="请先输入一句话。";$("#aiPrompt").focus();return;}
+    const endpoint=window.DAVYLAB_POSTER_AI_ENDPOINT||window.MELODYME_AI_ENDPOINT;
+    if(!endpoint){status.textContent="AI 服务尚未配置，当前没有调用真实模型。请先接入支持 generatePosterContent 的服务端接口。";return;}
+    button.disabled=true;status.textContent="正在请求 AI…";
+    try{
+      const response=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generatePosterContent",input:{idea,style:styleLabels[engineStyle],palette:theme,language:"zh-CN",constraints:"根据一句话生成海报标题与副文案。标题简洁，副文案有画面感，不要虚构具体事实；返回 JSON，字段 title、subtitle、visualDirection。"}})});
+      if(!response.ok)throw new Error("HTTP "+response.status);
+      const payload=await response.json(),data=payload.result||payload;
+      if(typeof data.title!=="string"||typeof data.subtitle!=="string")throw new Error("接口响应缺少 title / subtitle");
+      title.value=data.title.slice(0,90);subtitle.value=data.subtitle.slice(0,220);render(true);
+      status.textContent="AI 已生成文案。"+(data.visualDirection||data.visual_direction?" 视觉建议："+(data.visualDirection||data.visual_direction):"");
+    }catch(err){status.textContent="AI 生成失败："+err.message+"。请确认服务端已实现 generatePosterContent；未生成的内容不会被当作成功结果。";}
+    finally{button.disabled=false;}
+  });
+  render();poster.dataset.style=engineStyle;
+  poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';
 })();
 </script>
 </body>
