@@ -189,6 +189,9 @@ const path = require('node:path');
     }
     // Side navigation must degrade to a drawer on phones instead of overlaying the reading canvas.
     for (const sideMode of ['left', 'right']) {
+      if (await mobilePage.locator('#navEmergencyTrigger').isVisible()) {
+        await mobilePage.locator('#navEmergencyTrigger').click();
+      }
       await mobilePage.locator('#appearanceTrigger').click();
       await mobilePage.locator('[data-appearance-navmode="' + sideMode + '"]').click();
       await mobilePage.locator('#appearanceDone').click();
