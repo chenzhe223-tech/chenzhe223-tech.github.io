@@ -275,6 +275,8 @@
     <section class="page" id="page-brief">
       <div class="heading-row"><div><div class="overline">DAVY RADAR · CONNECTED LEARNING</div><h1 class="h-title" style="margin-top:8px">从今日简报，走进下一堂课。</h1><p class="sub">复用已有 AI 简报，不重复建设新闻采集系统。点击打开真实简报源查看最新内容。</p></div><a class="btn primary" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener">打开真实 AI 简报 ↗</a></div>
       <div class="hero" style="padding:27px 30px;grid-template-columns:1fr auto;align-items:center"><div><div class="overline">FROM NEWS TO KNOWLEDGE</div><h2 style="font-size:26px;margin:9px 0">新闻不是终点，能学会、能做出来才有价值。</h2><p style="margin:0">未来将支持从新闻卡片直接进入知识解释、相关课程、实践任务和个人收藏。当前跨产品收藏与智能关联尚未接通。</p></div><div style="font-size:42px;opacity:.9">↗</div></div>
+      <div class="section-head"><div><h3>来自 DAVY Radar 的最新线索</h3><p id="briefMeta">正在读取现有 AI 简报的已发布数据……</p></div><a class="link" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener">打开原始简报 ↗</a></div>
+      <div class="brief-grid" id="briefCards"><article class="card brief-card"><h4>正在连接简报</h4><p>页面将从已有 DAVY Radar 数据读取最新条目与来源链接。</p></article></div>
       <div class="section-head"><div><h3>学习型简报工作流</h3><p>预览未来从阅读到实践的连接方式。</p></div></div>
       <div class="grid track-grid">
         <article class="card track"><div class="num">01</div><h4>阅读与核验</h4><p>查看标题、摘要、发布时间和原始来源链接，先判断信息是否可靠。</p><div class="track-foot"><small>输入：公开新闻</small><span class="mini-arrow">↗</span></div></article>
@@ -337,7 +339,7 @@ document.querySelectorAll("[data-openlesson]").forEach(b=>b.addEventListener("cl
 document.getElementById("closeDialog").addEventListener("click",()=>document.getElementById("lessonDialog").close());
 document.getElementById("toArchive").addEventListener("click",()=>{document.getElementById("lessonDialog").close();go("archive")});
 document.getElementById("completeLesson").addEventListener("click",()=>{
- const destination={foundation:"models",agent:"agent",systems:"tools",build:"creator"}[currentLessonKey]||"origin";
+ const destination=currentLessonRegion||({foundation:"models",agent:"agent",systems:"tools",build:"creator"}[currentLessonKey]||"origin");
  atlasState[destination]="known";saveAtlasState();selectedAtlasNode=destination;currentAtlasFilter="all";renderAtlasMap();
  document.getElementById("lessonDialog").close();go("home");toast("学习进度已写入本地地图："+atlasNodes[destination].name);
 });
@@ -350,7 +352,49 @@ const index = [
 {title:"把重复工作拆成可执行的 AI 自动化流程",body:"先定义触发条件、输入、步骤、工具权限、失败重试、人工介入和成功标准，再决定使用脚本、Workflow 或 Agent。",tags:"workflow 自动化 业务"},
 {title:"MCP、Hook、Harness：如何理解工程化执行系统",body:"分别看工具如何暴露、何时触发扩展逻辑，以及执行过程怎样被约束、观测和验收。",tags:"mcp hook harness 工程"}
 ];
-function search(query){const q=(query||"").trim().toLowerCase();const results=index.filter(x=>(x.title+" "+x.body+" "+x.tags).toLowerCase().includes(q)||q.split(/\s+/).filter(w=>w.length>1).some(w=>(x.title+" "+x.body+" "+x.tags).toLowerCase().includes(w)));const list=document.getElementById("searchResults");document.getElementById("resultHeading").textContent=q?("“"+query+"” 的演示检索结果"):"推荐探索";list.innerHTML="";(results.length?results:index.slice(0,3)).forEach((x,i)=>{const el=document.createElement("article");el.className="result";const h=document.createElement("h4");h.textContent=x.title;const p=document.createElement("p");p.textContent=x.body;const foot=document.createElement("div");foot.className="source";const s=document.createElement("span");s.textContent="内置演示知识 · 非实时搜索";const btn=document.createElement("button");btn.className="link";btn.textContent="查看相关学习 ↗";btn.addEventListener("click",()=>{const key=i%2===0?"agent":"systems";document.querySelector('[data-openlesson="'+key+'"]').click()});foot.append(s,btn);el.append(h,p,foot);list.append(el)});if(q&&!results.length)toast("未命中精确关键词，展示相关演示主题；实时 AI 搜索尚未接入")}
+async function search(query){
+ const q=(query||"").trim();
+ const list=document.getElementById("searchResults");
+ const heading=document.getElementById("resultHeading");
+ heading.textContent=q?("正在搜索「"+q+"」"):"已发布的 V1 知识目录";
+ list.innerHTML="";
+ try{
+  const response=await fetch(API_BASE+"/api/search?q="+encodeURIComponent(q),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("search API "+response.status);
+  const data=await response.json();
+  heading.textContent=q?("「"+q+"」的知识库结果"):"已发布的 V1 知识目录";
+  if(!Array.isArray(data.items)||!data.items.length){
+   const empty=document.createElement("div");empty.className="card empty";
+   empty.textContent=q?"目前已发布课程中没有匹配结果。可以尝试搜索模型、Agent、Skill、Hook、MCP 或 Harness。":"暂时没有可检索的已发布课程。";
+   list.append(empty);return;
+  }
+  data.items.forEach(item=>{
+   const el=document.createElement("article");el.className="result";
+   const title=document.createElement("h4");title.textContent=item.title;
+   const p=document.createElement("p");p.textContent=item.summary||item.excerpt||"此课程目前没有摘要。";
+   const detail=document.createElement("p");detail.textContent=(item.track?.title||"AI 知识地图")+" · "+(item.version||"已发布版本")+" · 约 "+(item.estimated_minutes||5)+" 分钟";
+   const foot=document.createElement("div");foot.className="source";
+   const label=document.createElement("span");label.textContent=(item.tags||[]).join(" · ")||item.source_label||"知识库课程";
+   const btn=document.createElement("button");btn.className="link";btn.textContent="在地图上定位 ↗";
+   btn.addEventListener("click",()=>jumpToMapForLesson(item));
+   foot.append(label,btn);el.append(title,p,detail,foot);list.append(el);
+  });
+ }catch(error){
+  heading.textContent=q?("「"+q+"」的离线参考结果"):"离线参考知识";
+  const localQuery=q.toLowerCase();
+  const results=index.filter(x=>!q||(x.title+" "+x.body+" "+x.tags).toLowerCase().includes(localQuery)||localQuery.split(/\\s+/).filter(w=>w.length>1).some(w=>(x.title+" "+x.body+" "+x.tags).toLowerCase().includes(w)));
+  (results.length?results:index.slice(0,3)).forEach((item,i)=>{
+   const el=document.createElement("article");el.className="result";
+   const title=document.createElement("h4");title.textContent=item.title;
+   const p=document.createElement("p");p.textContent=item.body;
+   const foot=document.createElement("div");foot.className="source";
+   const label=document.createElement("span");label.textContent="本地备用资料 · 实时 API 当前不可用";
+   const btn=document.createElement("button");btn.className="link";btn.textContent="查看相关学习 ↗";
+   btn.addEventListener("click",()=>{const key=i%2===0?"agent":"systems";document.querySelector('[data-openlesson="'+key+'"]').click()});
+   foot.append(label,btn);el.append(title,p,foot);list.append(el);
+  });
+ }
+}
 document.getElementById("searchForm").addEventListener("submit",e=>{e.preventDefault();search(document.getElementById("searchInput").value)});
 /* Interactive personal AI atlas: all progress in this preview is local to this browser. */
 const ATLAS_KEY = "ai-field-notes.atlas-preview.v1";
@@ -366,6 +410,7 @@ const atlasNodes = {
   unknown:{name:"未知海域",status:"unknown",desc:"这片海域尚未被画出明确边界。新的模型、新的能力与新的问题仍在出现。保持好奇，让下一次学习成为一次发现。",tags:["未知","想象力","未来探索"],next:"写下一个你还不知道答案的问题",chapter:"search",index:"THE UNMAPPED",icon:"unknown"}
 };
 let atlasState = loadAtlasState();
+const atlasHadSavedState = (()=>{try{return localStorage.getItem(ATLAS_KEY)!==null}catch{return false}})();
 let selectedAtlasNode = "origin";
 let currentAtlasFilter = "all";
 function loadAtlasState(){
@@ -414,13 +459,14 @@ function renderAtlasDetail(){
  document.getElementById("detailIndex").textContent=node.index;
  document.getElementById("detailTitle").textContent=node.name;
  document.getElementById("detailDesc").textContent=node.desc;
- document.getElementById("detailNext").textContent=node.next;
+ document.getElementById("detailNext").textContent=node.lesson ? ("关联课程："+node.lesson.title) : node.next;
+ const footnote=document.querySelector(".detail-footnote"); if(footnote)footnote.textContent=node.lesson ? ("已关联 "+node.lesson.version+" 课程；地图状态仍仅保存在当前浏览器。") : "该区域尚无完整已发布课程，可先加入探索路线。地图状态保存在当前浏览器。";
  document.getElementById("detailIllustration").innerHTML=detailIllustrationFor(node.icon);
  statusEl.className="detail-status"+(status==="exploring"?" status-exploring":status==="unknown"?" status-unknown":"");
  statusEl.innerHTML='<i class="legend-dot '+status+'"></i> '+atlasStatusLabel(status)+(status==="known"?" · 已绘入你的地图":status==="exploring"?" · 正在绘制边界":" · 等待你的第一步");
  const tags=document.getElementById("detailTags");tags.innerHTML="";node.tags.forEach(tag=>{const span=document.createElement("span");span.textContent=tag;tags.append(span)});
  const action=document.getElementById("mapAction"),secondary=document.getElementById("mapSecondary");
- action.textContent=status==="known"?"进入学习营地 ↗":status==="exploring"?"继续这段探索 ↗":"开始探索这片未知 ↗";
+ action.textContent=node.lesson?(status==="known"?"进入学习章节 ↗":status==="exploring"?"继续关联课程 ↗":"从相关课程开始 ↗"):(status==="known"?"查看探索建议 ↗":status==="exploring"?"继续这段探索 ↗":"开始探索这片未知 ↗");
  secondary.textContent=status==="known"?"从新问题再次出发":status==="exploring"?"标记为已探明":"先将区域加入探索路线";
  document.getElementById("mapStatusLine").setAttribute("title",node.name+" · "+atlasStatusLabel(status));
 }
@@ -431,11 +477,11 @@ document.querySelectorAll("[data-map-node]").forEach(node=>{
 });
 document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("click",()=>{currentAtlasFilter=b.dataset.mapFilter;renderAtlasMap()}));
 document.getElementById("mapAction").addEventListener("click",()=>{
- const id=selectedAtlasNode,status=atlasState[id];
- if(status==="unknown"){atlasState[id]="exploring";saveAtlasState();renderAtlasMap();toast("新区域已加入你的探索路线。");return;}
- if(status==="exploring"){toast("继续学习与实践，完成后可以将这片区域标记为已探明。");if(id==="unknown")go("search");else if(atlasNodes[id].chapter==="systems")go("search");else document.querySelector('[data-openlesson="'+atlasNodes[id].chapter+'"]')?.click();return;}
- if(id==="unknown"||id==="creator"){go("search");return;}
- document.querySelector('[data-openlesson="'+atlasNodes[id].chapter+'"]')?.click();
+ const id=selectedAtlasNode,node=atlasNodes[id],status=atlasState[id];
+ if(node.lesson && node.lesson.id){openAtlasLesson(id);return;}
+ if(status==="unknown"){atlasState[id]="exploring";saveAtlasState();renderAtlasMap();toast("新区域已加入你的探索路线。该区域的完整课程尚待发布。");return;}
+ if(id==="unknown"||id==="creator"||id==="knowledge"){go("search");toast("可以先搜索相关知识，再把发现加入地图。");return;}
+ toast("该区域尚未关联正式课程，可继续探索并记录你的问题。");
 });
 document.getElementById("mapSecondary").addEventListener("click",()=>{
  const id=selectedAtlasNode,status=atlasState[id];
@@ -452,8 +498,107 @@ document.getElementById("mapReset").addEventListener("click",()=>{
 renderAtlasMap();
 
 
+
+let currentLessonRegion=null;
+async function openAtlasLesson(regionId){
+ const node=atlasNodes[regionId];if(!node)return;
+ if(!node.lesson || !node.lesson.id){toast("这片区域尚未有完整课程，先将它保留在探索路线中。");return;}
+ currentLessonRegion=regionId;
+ document.getElementById("lessonTitle").textContent=node.lesson.title;
+ document.getElementById("lessonContent").textContent="正在读取 "+node.lesson.version+" 的课程内容……";
+ document.getElementById("lessonDialog").showModal();
+ try{
+  const response=await fetch(API_BASE+"/api/lessons/"+encodeURIComponent(node.lesson.id),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("lesson API "+response.status);
+  const data=await response.json();
+  if(data.lesson){
+   const parts=[data.lesson.summary||"",data.lesson.content_markdown||""].filter(Boolean);
+   document.getElementById("lessonTitle").textContent=data.lesson.title;
+   document.getElementById("lessonContent").textContent=parts.join("\\n\\n")+"\\n\\n版本："+(data.release?.version_label||node.lesson.version)+" · 来源：AI Field Notes 第一版知识内容。";
+  }
+ }catch{
+  document.getElementById("lessonContent").textContent=node.desc+"\\n\\n关联课程："+node.lesson.title+"。在线课程接口当前不可用，请稍后再试。";
+ }
+}
+async function loadAtlasRegions(){
+ try{
+  const response=await fetch(API_BASE+"/api/atlas/regions",{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("atlas API "+response.status);
+  const data=await response.json();if(!Array.isArray(data.items))throw new Error("atlas payload invalid");
+  data.items.forEach(item=>{
+   const local=atlasNodes[item.id];if(!local)return;
+   local.name=item.title||local.name;
+   local.desc=item.description||local.desc;
+   local.tags=Array.isArray(item.tags)?item.tags:local.tags;
+   local.lesson=item.lesson||null;
+   local.track=item.track||null;
+   local.index=String(item.sort_order+1).padStart(2,"0")==="09"?"THE UNMAPPED":"REGION "+String(item.sort_order+1).padStart(2,"0");
+   if(!atlasHadSavedState && item.default_state)atlasState[item.id]=item.default_state;
+  });
+  renderAtlasMap();
+ }catch(error){toast("地图已使用本地基础资料显示；实时区域数据暂不可用。")}
+}
+function mapRegionForText(value){
+ const text=(value||"").toLowerCase();
+ if(/mcp|工具调用|tool call|外部工具/.test(text))return "tools";
+ if(/rag|知识库|检索|retrieval|embedding/.test(text))return "knowledge";
+ if(/agent|智能体|mcode|workflow|工作流|skill|技能|自动化|编码/.test(text))return "agent";
+ if(/hook|harness|可靠性|上下文管理/.test(text))return "tools";
+ if(/模型|model|llm|语音模型|生成模型/.test(text))return "models";
+ return "prompt";
+}
+function jumpToMapForLesson(item){
+ let region=(item.track?.slug==="model"?"models":item.track?.slug==="agent"?"agent":item.track?.slug==="skill"?"workflow":item.track?.slug==="hook"||item.track?.slug==="mcp"?"tools":item.track?.slug==="harness"?"knowledge":mapRegionForText(item.title+" "+item.summary));
+ if(atlasState[region]==="unknown")atlasState[region]="exploring";
+ saveAtlasState();selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
+ toast("已定位到地图区域："+atlasNodes[region].name);
+}
+function mapRegionForBrief(item){
+ const region=mapRegionForText([item.title,item.summary,item.category,(item.tags||[]).join(" ")].join(" "));
+ return region==="knowledge"&&!atlasNodes[region].lesson?"prompt":region;
+}
+function addBriefSignal(item){
+ const region=mapRegionForBrief(item);
+ if(atlasState[region]==="unknown")atlasState[region]="exploring";
+ saveAtlasState();selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
+ toast("已将简报线索加入探索路线："+atlasNodes[region].name);
+}
+function renderBriefItems(items,meta){
+ const container=document.getElementById("briefCards"),metadata=document.getElementById("briefMeta");if(!container||!metadata)return;
+ container.innerHTML="";
+ metadata.textContent="DAVY Radar · "+(meta.report_date||"最新可用日期")+" · "+items.length+" 条精选线索"+(meta.generated_at?" · 数据生成 "+meta.generated_at.replace("T"," ").slice(0,16):"");
+ if(!items.length){const empty=document.createElement("div");empty.className="card empty";empty.textContent="简报数据暂时不可用，请打开原始简报查看。";container.append(empty);return;}
+ items.forEach((item,index)=>{
+  const card=document.createElement("article");card.className="card brief-card";
+  const top=document.createElement("div");top.className="brief-head";
+  const source=document.createElement("span");source.className="source";source.textContent=item.source||"DAVY Radar";
+  const number=document.createElement("span");number.className="tier";number.textContent="线索 "+String(index+1).padStart(2,"0");top.append(source,number);
+  const title=document.createElement("h4");title.textContent=item.title||"未命名线索";
+  const summary=document.createElement("p");summary.textContent=item.summary||item.why_it_matters||"打开来源了解详细信息。";
+  const foot=document.createElement("div");foot.className="foot";
+  const date=document.createElement("span");date.className="source";let dateText="来源链接";try{if(item.published_at)dateText=new Date(item.published_at).toLocaleDateString("zh-CN",{month:"short",day:"numeric"})}catch{}date.textContent=dateText;
+  const actions=document.createElement("div");actions.style.display="flex";actions.style.gap="12px";actions.style.flexWrap="wrap";
+  const link=document.createElement("a");link.className="link";link.textContent="原文 ↗";link.href=item.url;link.target="_blank";link.rel="noopener noreferrer";
+  const btn=document.createElement("button");btn.className="link";btn.textContent="加入地图 +";btn.addEventListener("click",()=>addBriefSignal(item));
+  actions.append(link,btn);foot.append(date,actions);card.append(top,title,summary,foot);container.append(card);
+ });
+}
+async function loadBriefItems(){
+ const container=document.getElementById("briefCards");if(!container)return;
+ try{
+  const response=await fetch(API_BASE+"/api/brief/latest",{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("brief API "+response.status);
+  const data=await response.json();renderBriefItems(data.items||[],data);
+ }catch{
+  const metadata=document.getElementById("briefMeta");if(metadata)metadata.textContent="实时简报接口暂不可用；可直接打开 DAVY Radar 原始简报。";
+  container.innerHTML='<article class="card brief-card"><h4>暂时无法读取最新条目</h4><p>已有简报与学习地图仍然独立可用。请通过上方原始简报入口查看最新信息。</p></article>';
+ }
+}
 async function checkApi(){const dot=document.getElementById("apiDot"),label=document.getElementById("apiText");try{const res=await fetch(API_BASE+"/health",{method:"GET",mode:"cors"});const data=await res.json();if(res.ok&&data.ok){dot.classList.add("ok");label.textContent="后端服务可达"}else{label.textContent="API 检查未通过"}}catch{label.textContent="后端状态待核验"}}
 checkApi();
+loadAtlasRegions();
+loadBriefItems();
+search("");
 const hash=location.hash.replace("#","");if(pages.includes(hash))go(hash);
 </script>
 </body>
