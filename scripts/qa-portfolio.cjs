@@ -262,6 +262,42 @@ const path = require('node:path');
     await mobilePage.locator('#appearanceDone').click();
     await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
     results.push({ test: 'mobile left/right navigation degrades to non-overlapping drawers', status: 'PASS' });
+
+    // Top/floating modes need a visible mobile launcher; bottom mode must keep its links visible.
+    const inlineLauncher = mobilePage.locator('#navInlineTrigger');
+    if (!(await inlineLauncher.isVisible())) throw new Error('Mobile top navigation has no visible inline launcher');
+    await inlineLauncher.click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+    if (!(await mobilePage.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Mobile top navigation drawer links are hidden');
+    await mobilePage.keyboard.press('Escape');
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+    await inlineLauncher.click();
+    await mobilePage.locator('#topNavigation .navlinks a[href="#products"]').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="floating"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'floating');
+    if (!(await inlineLauncher.isVisible())) throw new Error('Mobile floating navigation has no visible launcher');
+    await inlineLauncher.click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+    await mobilePage.locator('h1').click({ force: true });
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="bottom"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'bottom');
+    if (!(await mobilePage.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Mobile bottom navigation links are hidden');
+    const bottomNavMetrics = await mobilePage.evaluate(() => ({ width: window.innerWidth, documentWidth: document.documentElement.scrollWidth }));
+    if (bottomNavMetrics.documentWidth > bottomNavMetrics.width + 2) throw new Error('Mobile bottom navigation overflows: ' + JSON.stringify(bottomNavMetrics));
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="top"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
+    results.push({ test: 'mobile top/floating launchers and bottom navigation links remain usable', status: 'PASS', detail: bottomNavMetrics });
     await mobilePage.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
     results.push({ test: 'real touch-mobile layout and GSAP motion', status: 'PASS', detail: mobile });
     await mobilePage.close();
