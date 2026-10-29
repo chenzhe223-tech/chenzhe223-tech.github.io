@@ -187,17 +187,16 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
   $("#generateAI").addEventListener("click",async()=>{
     const idea=$("#aiPrompt").value.trim(),status=$("#aiStatus"),button=$("#generateAI");
     if(!idea){status.textContent="请先输入一句话。";$("#aiPrompt").focus();return;}
-    const endpoint=window.DAVYLAB_POSTER_AI_ENDPOINT||window.MELODYME_AI_ENDPOINT;
-    if(!endpoint){status.textContent="AI 服务尚未配置，当前没有调用真实模型。请先接入支持 generatePosterContent 的服务端接口。";return;}
+    const endpoint=window.DAVYLAB_POSTER_AI_ENDPOINT||window.MELODYME_AI_ENDPOINT||"https://melodyme-ai.chenzhe223.workers.dev";
     button.disabled=true;status.textContent="正在请求 AI…";
     try{
-      const response=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generatePosterContent",input:{idea,style:styleLabels[engineStyle],palette:theme,language:"zh-CN",constraints:"根据一句话生成海报标题与副文案。标题简洁，副文案有画面感，不要虚构具体事实；返回 JSON，字段 title、subtitle、visualDirection。"}})});
+      const response=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generateMemoryStory",input:{story:idea,moods:[styleLabels[engineStyle],theme],song:"",artist:"",writing_style:"根据用户的一句话生成适合视觉海报的中文标题和短文案。语言自然、有画面感、简洁克制，不要营销腔，不虚构具体人物经历或事实。标题适合大字排版，正文不超过两句。视觉风格："+styleLabels[engineStyle]+"；配色："+theme+"。",selected_track:null}})});
       if(!response.ok)throw new Error("HTTP "+response.status);
       const payload=await response.json(),data=payload.result||payload;
-      if(typeof data.title!=="string"||typeof data.subtitle!=="string")throw new Error("接口响应缺少 title / subtitle");
-      title.value=data.title.slice(0,90);subtitle.value=data.subtitle.slice(0,220);render(true);
-      status.textContent="AI 已生成文案。"+(data.visualDirection||data.visual_direction?" 视觉建议："+(data.visualDirection||data.visual_direction):"");
-    }catch(err){status.textContent="AI 生成失败："+err.message+"。请确认服务端已实现 generatePosterContent；未生成的内容不会被当作成功结果。";}
+      if(!data||typeof data.story!=="string")throw new Error("AI 服务返回格式不符合预期");
+      title.value=String(data.title||data.core_line||idea).slice(0,90);subtitle.value=String(data.core_line||data.story).slice(0,220);render(true);
+      status.textContent="AI 已生成海报文案。图片中的文字由前端排版。";
+    }catch(err){status.textContent="AI 生成失败："+err.message+"。请检查 AI 服务是否可用；未生成的内容不会被当作成功结果。";}
     finally{button.disabled=false;}
   });
   render();poster.dataset.style=engineStyle;
