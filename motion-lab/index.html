@@ -165,8 +165,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script type="module">
-import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
-import { animate, inView } from "https://cdn.jsdelivr.net/npm/motion@12/+esm";
+let motionApi = null;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -224,7 +223,9 @@ function initGSAP() {
   $("#showSteps").addEventListener("click", () => gsap.to(rows, { autoAlpha: 1, x: 0, duration: duration(.18), stagger: 0, clearProps: "all" }));
 }
 
-function initMotion() {
+async function initMotion() {
+  try { motionApi = await import("https://cdn.jsdelivr.net/npm/motion@12/+esm"); }
+  catch (error) { console.warn("Visual DNA Motion Lab: Motion module unavailable", error); }
   const card = $("#motionCard");
   const title = $("#cardTitle"), description = $("#cardDescription"), status = $("#cardStatus"), action = $("#cardAction"), progress = $("#cardProgress");
   let active = false;
@@ -237,27 +238,28 @@ function initMotion() {
     status.style.color = active ? "#c7f36b" : "#79e2d0";
     action.textContent = active ? "重置状态 ↺" : "点击探索 ↗";
     if (reduced()) return;
-    animate(card, { scale: [1, .975, 1], rotate: active ? [0, -.5, 0] : [0, .5, 0] }, { duration: duration(.32), ease: [.2,.75,.25,1] });
-    animate(progress, { scaleX: active ? [.68, 1] : [1, .68] }, { duration: duration(.45), ease: [.2,.75,.25,1] });
+    motionApi?.animate?.(card, { scale: [1, .975, 1], rotate: active ? [0, -.5, 0] : [0, .5, 0] }, { duration: duration(.32), ease: [.2,.75,.25,1] });
+    motionApi?.animate?.(progress, { scaleX: active ? [.68, 1] : [1, .68] }, { duration: duration(.45), ease: [.2,.75,.25,1] });
   };
   card.addEventListener("click", toggle);
   card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
-  if (typeof inView === "function") {
-    inView(".engine", (element) => {
+  if (typeof motionApi?.inView === "function") {
+    motionApi.inView(".engine", (element) => {
       if (reduced()) return;
-      animate(element, { opacity: [0, 1], y: [12, 0] }, { duration: duration(.42), delay: $$(".engine").indexOf(element) * state.stagger, ease: [.2,.75,.25,1] });
+      motionApi.animate(element, { opacity: [0, 1], y: [12, 0] }, { duration: duration(.42), delay: $(".engine").indexOf(element) * state.stagger, ease: [.2,.75,.25,1] });
     }, { amount: .15 });
   }
-  // Motion's vanilla animate() also powers hover feedback without requiring React.
-  $$(".engine").forEach(el => {
-    el.addEventListener("pointerenter", () => { if (!reduced()) animate(el, { y: -3 }, { duration: duration(.18) }); });
-    el.addEventListener("pointerleave", () => { if (!reduced()) animate(el, { y: 0 }, { duration: duration(.2) }); });
+  // Motion's vanilla animate() powers feedback when the optional module is available.
+  $(".engine").forEach(el => {
+    el.addEventListener("pointerenter", () => { if (!reduced()) motionApi?.animate?.(el, { y: -3 }, { duration: duration(.18) }); });
+    el.addEventListener("pointerleave", () => { if (!reduced()) motionApi?.animate?.(el, { y: 0 }, { duration: duration(.2) }); });
   });
 }
 
-function initThree() {
+async function initThree() {
   const canvas = $("#threeCanvas"), fallback = $("#threeFallback"), stage = $("#threeStage");
   try {
+    const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js");
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
     renderer.setSize(stage.clientWidth, stage.clientHeight, false);
@@ -369,7 +371,7 @@ function applyControls() {
 ["speed","intensity","stagger","reduceMotion"].forEach(id => $("#" + id).addEventListener("input", applyControls));
 systemReduce.addEventListener?.("change", applyControls);
 window.addEventListener("pagehide", () => state.scene?.dispose(), { once: true });
-try { initGSAP(); initMotion(); initThree(); applyControls(); }
+try { initGSAP(); void initMotion(); void initThree(); applyControls(); }
 catch (error) { console.error("Visual DNA Motion Lab initialization failed", error); note.textContent = "部分动效引擎未能初始化；页面内容仍可阅读。请检查网络与浏览器支持。"; }
 </script>
 </body>
