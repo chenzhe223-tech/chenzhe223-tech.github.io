@@ -237,6 +237,9 @@ try {
   if (!(await kitPage.locator("#outputText").inputValue()).includes("useEffect")) throw new Error("App Motion Kit did not generate React lifecycle code");
   await kitPage.locator('[data-scene="panel"]').click();
   if (!(await kitPage.locator("#outputText").inputValue()).includes("translateX")) throw new Error("App Motion Kit panel scene did not generate horizontal motion");
+  await kitPage.locator('[data-scene="list"]').click();
+  const staggerCode = await kitPage.locator("#outputText").inputValue();
+  if (!staggerCode.includes("children") || !staggerCode.includes("delay: index * 80")) throw new Error("App Motion Kit list scenario did not generate child-level stagger animation");
   await kitPage.locator('[data-output="prompt"]').click();
   if (!(await kitPage.locator("#outputText").inputValue()).includes("先审计")) throw new Error("App Motion Kit AI handoff prompt missing audit-first instructions");
   await kitPage.locator("#playPreview").click();
