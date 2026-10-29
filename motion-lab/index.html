@@ -470,7 +470,7 @@ function updateMotionConfig() {
 function cancelMotionPreview() {
   previewAnimations.forEach(animation => { try { animation.cancel(); } catch {} });
   previewAnimations = [];
-  [previewObject, previewOrbit, ...$("#previewTrail span")].forEach(el => {
+  [previewObject, previewOrbit, ...document.querySelectorAll("#previewTrail span")].forEach(el => {
     if (el) { el.getAnimations().forEach(animation => animation.cancel()); el.style.opacity = ""; el.style.transform = ""; el.style.filter = ""; }
   });
 }
@@ -533,7 +533,7 @@ function selectMotion(effect, autoplay=true) {
   updateMotionConfig();
   if (autoplay) playSelectedMotion();
 }
-$(".motion-option").forEach(button => button.addEventListener("click", () => selectMotion(button.dataset.effect)));
+document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => selectMotion(button.dataset.effect)));
 $("#replaySelectedMotion").addEventListener("click", playSelectedMotion);
 $("#resetMotionTuning").addEventListener("click", () => {
   $("#previewDuration").value = "2000";
