@@ -432,6 +432,14 @@ const path = require('node:path');
     if (!(await mobilePage.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Mobile bottom navigation links are hidden');
     const bottomNavMetrics = await mobilePage.evaluate(() => ({ width: window.innerWidth, documentWidth: document.documentElement.scrollWidth }));
     if (bottomNavMetrics.documentWidth > bottomNavMetrics.width + 2) throw new Error('Mobile bottom navigation overflows: ' + JSON.stringify(bottomNavMetrics));
+    const safeAreaSupport = await mobilePage.evaluate(() => ({
+      viewportFit: document.querySelector('meta[name="viewport"]').content.includes('viewport-fit=cover'),
+      topbarSafeArea: Array.from(document.querySelectorAll('style')).some(style => style.textContent.includes('padding-bottom:env(safe-area-inset-bottom)')),
+      bodySafeArea: Array.from(document.querySelectorAll('style')).some(style => style.textContent.includes('padding-bottom:calc(76px + env(safe-area-inset-bottom))'))
+    }));
+    if (!safeAreaSupport.viewportFit || !safeAreaSupport.topbarSafeArea || !safeAreaSupport.bodySafeArea) {
+      throw new Error('Mobile bottom navigation does not reserve the iOS safe area: ' + JSON.stringify(safeAreaSupport));
+    }
 
     await mobilePage.locator('#appearanceTrigger').click();
     await mobilePage.locator('.appearance-preset[data-appearance-navmode="top"]').click();
