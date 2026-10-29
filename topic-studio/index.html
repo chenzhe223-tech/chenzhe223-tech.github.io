@@ -662,7 +662,7 @@ function renderPosterTasks(){
 
 function renderGrowthTrend(){
  const host=$("growthTrendChart");
- const items=growth.metrics.filter(x=>x.date&&Number.isFinite(Number(x.followers))).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+ const items=growth.metrics.filter(x=>x.date&&x.followers!==null&&x.followers!==undefined&&x.followers!==""&&Number.isFinite(Number(x.followers))).slice().sort((a,b)=>(a.date||"").localeCompare(b.date||""));
  const points=items.slice(-14);
  if(points.length<2){host.innerHTML='<div class="growth-empty">至少录入两条不同日期的订阅记录后，显示最近 14 条记录趋势图。</div>';return}
  const ns="http://www.w3.org/2000/svg",w=640,h=205,left=46,right=16,top=18,bottom=34,plotW=w-left-right,plotH=h-top-bottom;
