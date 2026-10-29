@@ -182,6 +182,11 @@ const path = require('node:path');
       throw new Error('Open Skills section did not use the Visual DNA preset adapter: ' + JSON.stringify(skillsMotion));
     }
     results.push({ test: 'isolated Visual DNA preset integration in Open Skills section', status: 'PASS', detail: skillsMotion });
+    const openSkillHeadingColors = await page.evaluate(() => Array.from(document.querySelectorAll('#skills .open-skill-main h3, #skills .open-skill-aside h3')).map(element => getComputedStyle(element).color));
+    if (openSkillHeadingColors.length < 2 || openSkillHeadingColors.some(color => color !== 'rgb(245, 247, 255)')) {
+      throw new Error('Open Skill headings do not have readable light text on dark cards: ' + JSON.stringify(openSkillHeadingColors));
+    }
+    results.push({ test: 'dark Open Skill card headings maintain readable contrast', status: 'PASS', detail: openSkillHeadingColors });
 
     await revealAllSections(page);
     const desktopRevealState = await page.evaluate(() => {
