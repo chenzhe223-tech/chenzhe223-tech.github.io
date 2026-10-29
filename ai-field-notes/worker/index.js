@@ -79,7 +79,7 @@ function normalizeRadarFeed(feed) {
       why_it_matters: String(item.why_it_matters_zh || item.why_it_matters || "").slice(0, 3000),
       source: String(item.source || item.publisher || "DAVY Radar").slice(0, 300),
       published_at: item.published || item.published_at || null,
-      category: String(item.category || item.daily_theme || "").slice(0, 200),
+      category: String(item.category_zh || item.category || item.category_en || item.daily_theme || "").slice(0, 200),
       region: String(item.region || "").slice(0, 100),
       tags, tags_json: JSON.stringify(tags),
       report_date: reportDate, source_generated_at: generatedAt,
