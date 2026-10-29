@@ -173,7 +173,8 @@ export default {
           sql += " ORDER BY t.sort_order, l.sort_order";
         }
         sql += " LIMIT 12";
-        const result = await env.DB.prepare(sql).bind(...params).all();
+        const statement = env.DB.prepare(sql);
+        const result = (params.length ? statement.bind(...params) : statement).all();
         const items = (result.results || []).map((row) => {
           const body = safeJson(row.content_json);
           return {
