@@ -6,7 +6,6 @@ const pageErrors = [];
 page.on("pageerror", error => pageErrors.push(error.message));
 
 try {
-  await page.addInitScript(() => { try { localStorage.removeItem("davylab.visual-dna-motion.saved-presets.v1"); } catch {} });
   await page.goto("http://127.0.0.1:4173/motion-lab/", { waitUntil: "domcontentloaded" });
   await page.locator("#labTitle").waitFor();
   if (!(await page.title()).includes("Visual DNA Motion Lab")) throw new Error("Motion Lab document title missing");
