@@ -24,6 +24,8 @@ async function main() {
   assert.ok(html.includes('id="posterTaskForm"'), "daily poster task form exists");
   assert.ok(html.includes('id="growthMetricForm"'), "growth metric form exists");
   assert.ok(html.includes('id="importGrowthFile"'), "growth data import control exists");
+  assert.ok(html.includes('id="exportGrowthCsv"'), "growth metrics CSV export exists");
+  assert.ok(html.includes('id="exportGrowthReview"'), "weekly review export exists");
   assert.ok(!/AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}/.test(html), "no obvious provider API key is embedded");
   const archivePath = path.join(root, "topic-studio", "data", "published-articles.json");
   assert.ok(fs.existsSync(archivePath), "published content archive JSON exists");
@@ -224,6 +226,21 @@ async function main() {
       return !!x && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.experiments.some(e => e.title === "QA 导入实验") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录") && x.tasks[0] === true;
     });
     assert.ok(mergedGrowth, "Growth Lab import merges records and preserves existing data");
+    const csvDownloadPromise = page.waitForEvent("download");
+    await page.locator("#exportGrowthCsv").click();
+    const csvDownload = await csvDownloadPromise;
+    const csvPath = await csvDownload.path();
+    const csvContent = fs.readFileSync(csvPath, "utf8");
+    assert.ok(csvContent.includes("QA 增长数据记录"), "CSV export includes recorded article data");
+    assert.ok(csvContent.includes("订阅总人数"), "CSV export includes Chinese column headers");
+    const reviewDownloadPromise = page.waitForEvent("download");
+    await page.locator("#exportGrowthReview").click();
+    const reviewDownload = await reviewDownloadPromise;
+    const reviewPath = await reviewDownload.path();
+    const reviewContent = fs.readFileSync(reviewPath, "utf8");
+    assert.ok(reviewContent.includes("DAVYLAB 公众号增长周复盘"), "weekly review export has a clear title");
+    assert.ok(reviewContent.includes("QA 爆款实验记录"), "weekly review includes recorded experiment results");
+
 
     assert.deepEqual(errors, [], `browser console/page errors: ${errors.join("; ")}`);
 
