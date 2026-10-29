@@ -51,6 +51,9 @@ try {
 
   await page.locator("#reduceMotion").check();
   if (!(await page.locator("#controlNote").textContent()).includes("减少动态效果已开启")) throw new Error("Reduced-motion control did not update status");
+  if (!(await page.locator("#motionStatus").textContent()).includes("减少动态效果")) throw new Error("Motion preview did not explain reduced-motion behavior");
+  const reducedAnimations = await page.locator("#previewObject").evaluate(el => el.getAnimations().length);
+  if (reducedAnimations !== 0) throw new Error("Motion preview continued animating after reduced-motion was enabled");
 
   for (const width of [1440, 1024, 390]) {
     await page.setViewportSize({ width, height: 900 });
