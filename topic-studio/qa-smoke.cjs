@@ -23,6 +23,7 @@ async function main() {
   assert.ok(html.includes('id="viralExperimentForm"'), "viral experiment form exists");
   assert.ok(html.includes('id="posterTaskForm"'), "daily poster task form exists");
   assert.ok(html.includes('id="growthMetricForm"'), "growth metric form exists");
+  assert.ok(html.includes('id="importGrowthFile"'), "growth data import control exists");
   assert.ok(!/AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}/.test(html), "no obvious provider API key is embedded");
   const archivePath = path.join(root, "topic-studio", "data", "published-articles.json");
   assert.ok(fs.existsSync(archivePath), "published content archive JSON exists");
@@ -199,6 +200,30 @@ async function main() {
       return !!x && x.target.latest === 135 && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录");
     });
     assert.ok(growthSaved, "Growth Lab target, experiments, poster tasks and metrics persist locally");
+    page.once("dialog", dialog => dialog.accept());
+    const importedGrowth = {
+      schemaVersion: 1,
+      exportedAt: "2026-10-29T00:00:00.000Z",
+      data: {
+        target: { latest: 140, medianViews: 40 },
+        experiments: [{ id: "qa-import-experiment", title: "QA 导入实验", type: "海外信息差", status: "planned", views: null, shares: null, follows: null, date: "2026-10-29", note: "导入测试", createdAt: "2026-10-29T00:00:00.000Z" }],
+        posters: [],
+        metrics: [],
+        tasks: { 0: true }
+      }
+    };
+    await page.locator("#importGrowthFile").setInputFiles({
+      name: "davylab-growth-import.json",
+      mimeType: "application/json",
+      buffer: Buffer.from(JSON.stringify(importedGrowth))
+    });
+    await page.locator("#viralExperimentList").getByText("QA 导入实验", { exact: true }).waitFor();
+    assert.equal((await page.locator("#growthCurrent").innerText()).trim(), "140", "Growth Lab imports target values");
+    const mergedGrowth = await page.evaluate(() => {
+      const x = JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "null");
+      return !!x && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.experiments.some(e => e.title === "QA 导入实验") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录") && x.tasks[0] === true;
+    });
+    assert.ok(mergedGrowth, "Growth Lab import merges records and preserves existing data");
 
     assert.deepEqual(errors, [], `browser console/page errors: ${errors.join("; ")}`);
 
