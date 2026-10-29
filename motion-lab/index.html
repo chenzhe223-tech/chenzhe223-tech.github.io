@@ -621,9 +621,21 @@ function updateIntegrationSnippet() {
   else if (effect === "orbit") frames = [{ transform:"rotate(-18deg)" },{ transform:"rotate(342deg)" }];
   else frames = [{ opacity:0, transform:"translate(" + x + "px, " + y + "px)" },{ opacity:1, transform:"translate(0, 0)" }];
   const waapiFrames = JSON.stringify(frames, null, 2);
-  const waapi = 'const target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  const animation = target.animate(' + waapiFrames + ', {\n    duration: ' + config.durationMs + ',\n    easing: ' + JSON.stringify(config.easing) + ',\n    fill: "both",\n    iterations: ' + (config.playback === "loop" ? "2" : "1") + '\n  });\n}';
-  const gsap = 'const target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  gsap.fromTo(target, ' + JSON.stringify(frames[0]) + ', {\n    ...' + JSON.stringify(frames[frames.length-1]) + ',\n    duration: ' + duration + ',\n    ease: ' + JSON.stringify(easingMap[config.easing] || "power3.out") + ',\n    repeat: ' + (config.playback === "loop" ? "1" : "0") + ',\n    overwrite: "auto"\n  });\n}';
-  const motion = 'import { animate } from "motion";\n\nconst target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  animate(target, ' + waapiFrames + ', {\n    duration: ' + duration + ',\n    ease: ' + JSON.stringify(config.easing === "linear" ? "linear" : "ease-out") + ',\n    repeat: ' + (config.playback === "loop" ? "1" : "0") + '\n  });\n}';
+  const totalDuration = config.durationMs / 1000;
+  const cycleDuration = config.playback === "loop" ? totalDuration / 2 : totalDuration;
+  const repeatCount = config.playback === "loop" ? 1 : 0;
+  const waapi = 'const target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  const animation = target.animate(' + waapiFrames + ', {\\n    duration: ' + Math.round(config.playback === "loop" ? config.durationMs / 2 : config.durationMs) + ',\\n    easing: ' + JSON.stringify(config.easing) + ',\\n    fill: "both",\\n    iterations: ' + (config.playback === "loop" ? "2" : "1") + '\\n  });\\n}';
+  const gsapSteps = frames.slice(1).map((frame, index) => {
+    const serialized = JSON.stringify(frame);
+    return (index === 0 ? '  timeline.fromTo(target, ' + JSON.stringify(frames[0]) + ', { ...' + serialized + ', duration: ' + (cycleDuration / (frames.length - 1)).toFixed(3) + ', overwrite: "auto" });' : '  timeline.to(target, { ...' + serialized + ', duration: ' + (cycleDuration / (frames.length - 1)).toFixed(3) + ' });');
+  }).join('\\n');
+  const gsap = 'const target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  const timeline = gsap.timeline({ repeat: ' + repeatCount + ', defaults: { ease: ' + JSON.stringify(easingMap[config.easing] || "power3.out") + ' } });\\n' + gsapSteps + '\\n}';
+  let motionKeyframes;
+  if (effect === "spring") motionKeyframes = { transform:["scale(0.82)","scale(1.08)","scale(0.97)","scale(1)"] };
+  else if (effect === "blur") motionKeyframes = { opacity:[0,1], filter:["blur(" + Math.round(10*config.intensityPercent/100) + "px)","blur(0px)"] };
+  else if (effect === "orbit") motionKeyframes = { transform:["rotate(-18deg)","rotate(342deg)"] };
+  else motionKeyframes = { opacity:[0,1], transform:["translate(" + x + "px, " + y + "px)","translate(0px, 0px)"] };
+  const motion = 'import { animate } from "motion";\\n\\nconst target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  animate(target, ' + JSON.stringify(motionKeyframes, null, 2) + ', {\\n    duration: ' + cycleDuration.toFixed(3) + ',\\n    ease: ' + JSON.stringify(config.easing === "linear" ? "linear" : config.easing === "cubic-bezier(0.65,0,0.35,1)" ? "ease-in-out" : "ease-out") + ',\\n    repeat: ' + repeatCount + '\\n  });\\n}';
   const engine = $("#motionSnippetEngine").value;
   $("#motionIntegrationSnippet").value = engine === "gsap" ? gsap : engine === "motion" ? motion : waapi;
 }
