@@ -1,5 +1,5 @@
 const ALLOWED_ORIGIN = "https://chenzhe223-tech.github.io";
-const API_VERSION = "0.4.0";
+const API_VERSION = "0.5.0";
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -93,6 +93,60 @@ function normalizeRadarFeed(feed) {
   return { reportDate, generatedAt, items: normalized };
 }
 
+
+const CANDIDATE_RULES = [
+  {region_key:"hook",title:"Hook 事件触发与自动校验",terms:[{re:/\bhooks?\b|\bwebhooks?\b/i,label:"Hook"},{re:/钩子|事件触发|生命周期/,label:"事件触发"}]},
+  {region_key:"harness",title:"Harness 执行环境与可靠性",terms:[{re:/\bharness\b|\bevals?\b|\bevaluations?\b|benchmark/i,label:"Harness / Eval"},{re:/评测|评估|基准测试|可靠性|错误恢复|上下文管理/,label:"评测与可靠性"}]},
+  {region_key:"skill",title:"可复用 Skill 与任务方法",terms:[{re:/\bskills?\b/i,label:"Skill"},{re:/技能|可复用方法|技能库/,label:"可复用方法"}]},
+  {region_key:"tools",title:"MCP 与外部工具集成",terms:[{re:/\bmcp\b|tool calling|tool use|function calling/i,label:"MCP / Tool calling"},{re:/工具调用|外部工具/,label:"工具调用"}]},
+  {region_key:"knowledge",title:"RAG、知识库与可追溯检索",terms:[{re:/\brag\b|retrieval|embedding|vector database|knowledge base/i,label:"RAG / Retrieval"},{re:/知识库|检索增强|向量检索|向量数据库/,label:"知识检索"}]},
+  {region_key:"agent",title:"Agent 规划、工具调用与任务验证",terms:[{re:/\bagents?\b|agentic/i,label:"Agent"},{re:/智能体|多智能体/,label:"智能体"}]},
+  {region_key:"models",title:"模型能力、上下文与推理",terms:[{re:/\bllms?\b|foundation model|reasoning model|language model/i,label:"LLM / Reasoning"},{re:/模型能力|大语言模型|推理模型|多模态模型|模型上下文/,label:"模型能力"}]},
+  {region_key:"workflow",title:"AI 工作流与业务自动化",terms:[{re:/\bworkflows?\b|automation|automate|pipeline/i,label:"Workflow / Automation"},{re:/工作流|自动化|流程编排/,label:"工作流"}]},
+  {region_key:"creator",title:"AI 编程与应用构建",terms:[{re:/coding|code generation|\bide\b|app builder/i,label:"AI coding"},{re:/编程|AI开发|开发工具|应用构建/,label:"应用构建"}]},
+  {region_key:"prompt",title:"提示词与上下文设计",terms:[{re:/prompt engineering|\bprompts?\b|context engineering/i,label:"Prompt / Context"},{re:/提示词|提示工程|上下文工程/,label:"提示词"}]},
+];
+function classifyRadarCandidate(item) {
+  const text=[item.title,item.summary,item.why_it_matters,item.source,item.category,item.region,...(Array.isArray(item.tags)?item.tags:[])].filter(Boolean).join(" ");
+  for(const rule of CANDIDATE_RULES){const terms=rule.terms.filter(x=>x.re.test(text)).map(x=>x.label);if(terms.length)return {rule,terms};}
+  return null;
+}
+function candidateFingerprint(items) {
+  const value=items.map(x=>x.content_hash).sort().join("|");let a=0x811c9dc5,b=0x9e3779b9;
+  for(let i=0;i<value.length;i++){const c=value.charCodeAt(i);a=Math.imul(a^c,0x01000193);b=Math.imul(b^(c+i),0x85ebca6b);}
+  return (a>>>0).toString(16).padStart(8,"0")+(b>>>0).toString(16).padStart(8,"0");
+}
+async function discoverLearningCandidates(env,snapshot,now=new Date().toISOString()) {
+  const groups=new Map();
+  for(const item of snapshot.items){const found=classifyRadarCandidate(item);if(!found)continue;const key=found.rule.region_key;if(!groups.has(key))groups.set(key,{rule:found.rule,sources:[],topics:new Set()});const group=groups.get(key);group.sources.push({item,terms:found.terms});found.terms.forEach(t=>group.topics.add(t));}
+  if(!groups.size)return {ok:true,candidate_regions:0,source_links:0};
+  const writes=[];
+  for(const [regionKey,group] of groups){
+    const key="radar-topic:"+regionKey,topics=[...group.topics].slice(0,24);
+    const summary=group.sources.length+" 条已公开简报线索与该知识区域主题词匹配。此条目仅是自动发现的候选方向，不是已验证的完整课程。";
+    const rationale="基于 DAVY Radar 已发布的标题、摘要、类别与标签进行规则匹配（"+topics.slice(0,8).join("、")+"）。请人工核对原始来源、技术成熟度、适用版本和实操价值。";
+    writes.push(env.DB.prepare(
+      "INSERT INTO knowledge_candidates (candidate_key,region_key,candidate_title,candidate_summary,rationale,source_manifest_json,matched_topics_json,status,source_count,occurrence_count,first_seen_at,last_seen_at,last_report_date,last_content_hash,review_note,created_at,updated_at) VALUES (?,?,?,?,?,'[]',?,'needs_review',0,0,?,?,?,?, '',?,?) ON CONFLICT(candidate_key) DO UPDATE SET candidate_title=excluded.candidate_title,candidate_summary=excluded.candidate_summary,rationale=excluded.rationale,matched_topics_json=excluded.matched_topics_json,last_seen_at=excluded.last_seen_at,last_report_date=excluded.last_report_date,last_content_hash=excluded.last_content_hash,updated_at=excluded.updated_at"
+    ).bind(key,regionKey,group.rule.title,summary,rationale,JSON.stringify(topics),now,now,snapshot.reportDate,candidateFingerprint(group.sources.map(x=>x.item)),now,now));
+    for(const entry of group.sources){const item=entry.item,sourceKey=item.item_id+":"+item.content_hash;
+      writes.push(env.DB.prepare(
+        "INSERT INTO knowledge_candidate_sources (candidate_key,source_key,url,title,summary,why_it_matters,source,published_at,report_date,content_hash,matched_topics_json,first_seen_at,last_seen_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(candidate_key,source_key) DO UPDATE SET title=excluded.title,summary=excluded.summary,why_it_matters=excluded.why_it_matters,source=excluded.source,published_at=excluded.published_at,report_date=excluded.report_date,matched_topics_json=excluded.matched_topics_json,last_seen_at=excluded.last_seen_at"
+      ).bind(key,sourceKey,item.url,item.title,item.summary,item.why_it_matters,item.source,item.published_at,item.report_date,item.content_hash,JSON.stringify(entry.terms),now,now));
+    }
+  }
+  await env.DB.batch(writes);
+  const updates=[];
+  for(const regionKey of groups.keys()){
+    const key="radar-topic:"+regionKey;
+    const count=await env.DB.prepare("SELECT COUNT(*) occurrence_count,COUNT(DISTINCT url) source_count FROM knowledge_candidate_sources WHERE candidate_key=?").bind(key).first();
+    const rows=await env.DB.prepare("SELECT source_key,url,title,summary,why_it_matters,source,published_at,report_date,content_hash,matched_topics_json,last_seen_at FROM knowledge_candidate_sources WHERE candidate_key=? ORDER BY COALESCE(published_at,last_seen_at) DESC,last_seen_at DESC LIMIT 12").bind(key).all();
+    const manifest=(rows.results||[]).map(row=>({source_key:row.source_key,url:row.url,title:row.title,summary:row.summary,why_it_matters:row.why_it_matters,source:row.source,published_at:row.published_at,report_date:row.report_date,content_hash:row.content_hash,matched_topics:safeJson(row.matched_topics_json),last_seen_at:row.last_seen_at}));
+    updates.push(env.DB.prepare("UPDATE knowledge_candidates SET source_count=?,occurrence_count=?,source_manifest_json=?,updated_at=? WHERE candidate_key=?").bind(count?.source_count||0,count?.occurrence_count||0,JSON.stringify(manifest),now,key));
+  }
+  await env.DB.batch(updates);
+  return {ok:true,candidate_regions:groups.size,source_links:[...groups.values()].reduce((n,g)=>n+g.sources.length,0),note:"Rule-matched source candidates only; no course was generated or published."};
+}
+
 async function refreshRadarBriefIndex(env, trigger = "cron") {
   const startedAt = new Date().toISOString();
   const jobId = "radar-brief-refresh-" + Date.now().toString(36);
@@ -141,11 +195,14 @@ async function refreshRadarBriefIndex(env, trigger = "cron") {
 
     const results = await env.DB.batch(statements);
     const changes = (results || []).reduce((sum, result) => sum + (result.meta?.changes || 0), 0);
+    let candidateSync={ok:false,error:"not_run"};
+    try{candidateSync=await discoverLearningCandidates(env,snapshot,new Date().toISOString());}
+    catch(err){candidateSync={ok:false,error:String(err?.message||err||"candidate sync failed").slice(0,500)};console.error("Radar learning-candidate sync failed:",candidateSync.error);}
     const finishedAt = new Date().toISOString();
-    const manifest = { source: RADAR_PUBLIC_JSON, trigger, report_date: snapshot.reportDate, source_generated_at: snapshot.generatedAt, items_seen: snapshot.items.length, sql_statements: statements.length, d1_changes: changes };
+    const manifest = { source: RADAR_PUBLIC_JSON, trigger, report_date: snapshot.reportDate, source_generated_at: snapshot.generatedAt, items_seen: snapshot.items.length, sql_statements: statements.length, d1_changes: changes, candidate_sync:candidateSync };
     await env.DB.prepare(
-      "UPDATE refresh_jobs SET status = 'published', source_manifest_json = ?, error_message = '', updated_at = ?, finished_at = ? WHERE id = ?"
-    ).bind(JSON.stringify(manifest), finishedAt, finishedAt, jobId).run();
+      "UPDATE refresh_jobs SET status = 'published', source_manifest_json = ?, error_message = ?, updated_at = ?, finished_at = ? WHERE id = ?"
+    ).bind(JSON.stringify(manifest), candidateSync.ok?"":"candidate sync warning: "+(candidateSync.error||"unknown"), finishedAt, finishedAt, jobId).run();
     return { ok: true, ...manifest, finished_at: finishedAt };
   } catch (error) {
     const finishedAt = new Date().toISOString();
@@ -275,6 +332,14 @@ export default {
       } catch {
         return json({ error: "brief_source_unavailable" }, 502, cors);
       }
+    }
+
+    if (url.pathname === "/api/learning/candidates") {
+      try {
+        const result=await env.DB.prepare("SELECT c.candidate_key,c.region_key,r.title region_title,c.candidate_title,c.candidate_summary,c.rationale,c.source_manifest_json,c.matched_topics_json,c.status,c.source_count,c.occurrence_count,c.first_seen_at,c.last_seen_at,c.last_report_date,c.review_note,c.updated_at FROM knowledge_candidates c JOIN atlas_regions r ON r.region_key=c.region_key WHERE c.status IN ('needs_review','in_review') ORDER BY c.last_seen_at DESC,c.source_count DESC LIMIT 20").all();
+        const items=(result.results||[]).map(row=>({id:row.candidate_key,region:{key:row.region_key,title:row.region_title},title:row.candidate_title,summary:row.candidate_summary,rationale:row.rationale,matched_topics:safeJson(row.matched_topics_json),status:row.status,source_count:row.source_count,occurrence_count:row.occurrence_count,first_seen_at:row.first_seen_at,last_seen_at:row.last_seen_at,report_date:row.last_report_date,review_note:row.review_note,updated_at:row.updated_at,sources:safeJson(row.source_manifest_json),review_required:true,published_as_course:false}));
+        return json({count:items.length,items,generated_at:new Date().toISOString(),mode:"source-grounded-rule-candidates"},200,{...cors,"Cache-Control":"public, max-age=60"});
+      } catch { return json({error:"learning_candidates_unavailable"},503,cors); }
     }
 
     if (url.pathname === "/api/brief/versions") {
