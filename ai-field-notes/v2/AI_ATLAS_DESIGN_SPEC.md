@@ -92,3 +92,11 @@ MIT licence. The core and performance guidance was consulted for restrained anim
 6. Add real search: keyword search first, then evaluate a semantic search model against a fixed test set.
 7. Add payments only after identity, entitlement checks, callback signature verification, refund/cancel/expiry behavior and test cases are complete.
 8. Keep automatic content updates as drafts until evidence, link, structure and practice checks pass; publish immutable releases only.
+
+
+## Emerging-topic candidate queue
+
+- The hourly Radar index applies explicit keyword rules to public titles, summaries, category, and tags.
+- Each candidate contains source evidence with original links, report dates and content hashes.
+- Candidate status remains `needs_review` and the public endpoint does not expose internal reviewer notes.
+- A candidate is only a research lead. No course body is automatically generated or published.
