@@ -1,0 +1,43 @@
+import { chromium } from "playwright";
+
+const browser = await chromium.launch({ headless: true });
+const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "no-preference" });
+const pageErrors = [];
+page.on("pageerror", error => pageErrors.push(error.message));
+
+try {
+  await page.goto("http://127.0.0.1:4173/motion-lab/", { waitUntil: "domcontentloaded" });
+  await page.locator("#labTitle").waitFor();
+  if (!(await page.title()).includes("Visual DNA Motion Lab")) throw new Error("Motion Lab document title missing");
+
+  const card = page.locator("#motionCard");
+  await card.click();
+  if (await card.getAttribute("aria-pressed") !== "true") throw new Error("Motion card did not toggle to pressed state");
+  if (!(await page.locator("#cardTitle").textContent()).includes("反馈已触发")) throw new Error("Motion card status copy did not update");
+
+  await page.locator("#speed").evaluate(el => {
+    el.value = "1.4";
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+  });
+  if ((await page.locator("#speedValue").textContent()).trim() !== "1.4×") throw new Error("Speed control output did not update");
+
+  await page.locator("#reduceMotion").check();
+  if (!(await page.locator("#controlNote").textContent()).includes("减少动态效果已开启")) throw new Error("Reduced-motion control did not update status");
+
+  for (const width of [1440, 1024, 390]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.waitForTimeout(150);
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      page: document.documentElement.scrollWidth
+    }));
+    if (dimensions.page > dimensions.viewport + 1) {
+      throw new Error(`Horizontal overflow at ${width}px: page=${dimensions.page}, viewport=${dimensions.viewport}`);
+    }
+  }
+
+  if (pageErrors.length) throw new Error("Uncaught page errors: " + pageErrors.join(" | "));
+  console.log("PASS: Motion Lab loads, card interaction works, controls update, and 1440/1024/390px layouts have no horizontal overflow.");
+} finally {
+  await browser.close();
+}
