@@ -112,5 +112,5 @@ Cloudflare's current published Workers Free/D1 quotas include:
 - [ ] Complete browser-level runtime smoke tests after refreshing the public preview; the preview tab available during development had loaded an earlier build, and direct network access to the public Worker was unavailable from the validation runtime.
 - [ ] Authentication and cross-device sync are not implemented.
 - [ ] Semantic/vector search and source-aware search across news and external documents are not implemented.
-- [ ] Automated learning-content drafting, review, publishing and rollback are not implemented. Hourly public-brief indexing does not auto-publish course material.
+- [ ] Automated learning-content drafting, review, publishing and rollback are not implemented. Hourly public-brief indexing does not auto-publish course material. Hourly public-brief indexing does not auto-publish course material.
 - [ ] Products remain inactive; no payment gateway has been connected.
