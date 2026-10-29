@@ -651,6 +651,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
 <script defer src="./gsap-motion.js"></script>
+<script defer src="./assets/davylab-motion.js"></script>
 
 <button class="appearance-emergency-trigger" id="appearanceEmergencyTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-label="打开外观与配色设置"><span aria-hidden="true">☷</span><span>外观设置</span></button>
 <div class="appearance-backdrop" id="appearanceBackdrop" hidden></div>
@@ -786,4 +787,56 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  state=safeLoad();apply();
 })();
 </script>
+
+<script id="davylab-motion-preset-integration">
+(function () {
+  function initSkillsMotion() {
+    var adapter = window.DAVYLABMotion;
+    var section = document.querySelector("#skills");
+    if (!adapter || !section || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var targets = section.querySelectorAll(".open-skill-main, .open-skill-aside");
+    if (!targets.length) return;
+    var config = {
+      schema: "davylab.visual-dna-motion/v1",
+      effect: "stagger",
+      durationMs: 620,
+      intensityPercent: 65,
+      distancePx: 16,
+      direction: "up",
+      easing: "cubic-bezier(0.22,1,0.36,1)",
+      playback: "once",
+      globalTokens: { staggerMs: 90 }
+    };
+    var cleanup = function () {};
+    var observer = null;
+    var activate = function () {
+      cleanup = adapter.applyPreset(targets, config);
+    };
+
+    if (!("IntersectionObserver" in window)) {
+      activate();
+      return;
+    }
+    observer = new IntersectionObserver(function (entries) {
+      if (entries.some(function (entry) { return entry.isIntersecting; })) {
+        observer.disconnect();
+        activate();
+      }
+    }, { threshold: 0.12 });
+    observer.observe(section);
+    window.addEventListener("pagehide", function () {
+      observer.disconnect();
+      cleanup();
+    }, { once: true });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSkillsMotion, { once: true });
+  } else {
+    initSkillsMotion();
+  }
+})();
+</script>
+
 </body></html>
