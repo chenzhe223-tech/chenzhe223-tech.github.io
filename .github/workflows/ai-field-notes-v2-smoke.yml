@@ -1,0 +1,29 @@
+name: AI Field Notes V2 Smoke Test
+
+on:
+  pull_request:
+    paths:
+      - "ai-field-notes/**"
+      - "tests/ai-field-notes-v2-smoke.mjs"
+      - ".github/workflows/ai-field-notes-v2-smoke.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "ai-field-notes/**"
+      - "tests/ai-field-notes-v2-smoke.mjs"
+      - ".github/workflows/ai-field-notes-v2-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Run V2 regression smoke checks
+        run: node tests/ai-field-notes-v2-smoke.mjs
