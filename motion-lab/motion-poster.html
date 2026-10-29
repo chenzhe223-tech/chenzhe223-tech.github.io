@@ -41,7 +41,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 <section class="editor" aria-labelledby="editTitle"><div class="panel-title"><h2 id="editTitle">编辑你的作品</h2><span class="tag">NO CODE REQUIRED</span></div>
 <div class="engine-options" id="engineOptions">
 <h3>AI 海报创作</h3><textarea id="aiPrompt" maxlength="500" placeholder="用一句话描述你想表达的画面，例如：雨后的海边，一个人听着旧歌，想起多年以前的夏天。"></textarea>
-<button class="btn primary" id="generateAI" type="button">AI 生成标题与文案 ↗</button><small id="aiStatus">AI 接口需配置服务端支持；未成功调用真实 AI 时会明确提示，不会伪造生成结果。</small>
+<button class="btn primary" id="generateAI" type="button">AI 生成标题与文案 ↗</button><small id="aiStatus">调用已有 DeepSeek 服务端生成文案；若接口失败会明确提示，不会伪造生成结果。</small>
 <h3>视觉风格 · 9 种</h3><div class="option-grid" id="styleGrid">
 <button data-style="editorial" aria-pressed="true">编辑排版</button><button data-style="cinematic" aria-pressed="false">电影叙事</button><button data-style="surreal" aria-pressed="false">超现实梦境</button><button data-style="film" aria-pressed="false">复古胶片</button><button data-style="sound" aria-pressed="false">声音可视化</button><button data-style="nature" aria-pressed="false">自然治愈</button><button data-style="future" aria-pressed="false">未来数字</button><button data-style="comic" aria-pressed="false">彩色手绘</button><button data-style="minimal" aria-pressed="false">极简几何</button></div>
 <h3>配色风格 · 6 种</h3><div class="option-grid" id="paletteGrid">
