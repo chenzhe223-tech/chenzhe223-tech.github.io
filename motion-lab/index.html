@@ -224,9 +224,7 @@ function initGSAP() {
   $("#showSteps").addEventListener("click", () => gsap.to(rows, { autoAlpha: 1, x: 0, duration: duration(.18), stagger: 0, clearProps: "all" }));
 }
 
-async function initMotion() {
-  try { motionApi = await import("https://cdn.jsdelivr.net/npm/motion@12/+esm"); }
-  catch (error) { console.warn("Visual DNA Motion Lab: Motion module unavailable", error); }
+function initMotion() {
   const card = $("#motionCard");
   const title = $("#cardTitle"), description = $("#cardDescription"), status = $("#cardStatus"), action = $("#cardAction"), progress = $("#cardProgress");
   let active = false;
@@ -242,18 +240,25 @@ async function initMotion() {
     motionApi?.animate?.(card, { scale: [1, .975, 1], rotate: active ? [0, -.5, 0] : [0, .5, 0] }, { duration: duration(.32), ease: [.2,.75,.25,1] });
     motionApi?.animate?.(progress, { scaleX: active ? [.68, 1] : [1, .68] }, { duration: duration(.45), ease: [.2,.75,.25,1] });
   };
+  // Keep the core interaction available immediately, even while the optional Motion module loads.
   card.addEventListener("click", toggle);
   card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
-  if (typeof motionApi?.inView === "function") {
-    motionApi.inView(".engine", (element) => {
-      if (reduced()) return;
-      motionApi.animate(element, { opacity: [0, 1], y: [12, 0] }, { duration: duration(.42), delay: $(".engine").indexOf(element) * state.stagger, ease: [.2,.75,.25,1] });
-    }, { amount: .15 });
-  }
-  // Motion's vanilla animate() powers feedback when the optional module is available.
-  $(".engine").forEach(el => {
-    el.addEventListener("pointerenter", () => { if (!reduced()) motionApi?.animate?.(el, { y: -3 }, { duration: duration(.18) }); });
-    el.addEventListener("pointerleave", () => { if (!reduced()) motionApi?.animate?.(el, { y: 0 }, { duration: duration(.2) }); });
+
+  import("https://cdn.jsdelivr.net/npm/motion@12/+esm").then(api => {
+    motionApi = api;
+    if (typeof motionApi.inView === "function") {
+      motionApi.inView(".engine", (element) => {
+        if (reduced()) return;
+        motionApi.animate(element, { opacity: [0, 1], y: [12, 0] }, { duration: duration(.42), delay: $$(".engine").indexOf(element) * state.stagger, ease: [.2,.75,.25,1] });
+      }, { amount: .15 });
+    }
+    // Motion's vanilla animate() powers feedback when the optional module is available.
+    $$(".engine").forEach(el => {
+      el.addEventListener("pointerenter", () => { if (!reduced()) motionApi.animate(el, { y: -3 }, { duration: duration(.18) }); });
+      el.addEventListener("pointerleave", () => { if (!reduced()) motionApi.animate(el, { y: 0 }, { duration: duration(.2) }); });
+    });
+  }).catch(error => {
+    console.warn("Visual DNA Motion Lab: Motion module unavailable; interactions remain functional without animation.", error);
   });
 }
 
