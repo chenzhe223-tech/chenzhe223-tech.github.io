@@ -60,4 +60,7 @@ VALUES
 ('creator','创造者之城','从念头到应用','围绕个人项目与真实问题构建 AI 应用的实践区域，V1 提供项目挑战入口，后续继续细化实操课程。','["产品构建","实战项目","个人创造"]','unknown',NULL,NULL,7,0),
 ('unknown','未知海域','尚未绘制的边界','新方法、新模型与新问题持续出现。此区域保留开放，不试图用一份固定大纲定义 AI 世界的全部边界。','["未知","想象力","未来探索"]','unknown',NULL,NULL,8,1);
 
+-- Convert escaped newline characters from the initial import into readable markdown line breaks.
+UPDATE lessons SET content_markdown = replace(content_markdown, char(92) || 'n', char(10)) WHERE content_markdown LIKE '%' || char(92) || 'n' || '%';
+
 INSERT OR IGNORE INTO schema_migrations(version,name) VALUES ('0002','seed_v1_knowledge_and_ai_atlas_regions');
