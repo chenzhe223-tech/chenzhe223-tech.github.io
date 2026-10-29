@@ -62,6 +62,7 @@
 .map-manifesto{display:flex;align-items:center;gap:18px;margin:22px 0 3px;border-radius:17px;padding:22px 25px;background:#e9edf3;border:1px solid #dfe5ed}
 .manifesto-mark{font:62px/.8 Georgia,serif;color:#b6c1cf}.map-manifesto p{font-size:clamp(16px,2vw,21px);font-weight:700;letter-spacing:-.035em;margin:0 0 6px}.map-manifesto span{font-size:11px;color:#68758a}.manifesto-coordinates{margin-left:auto;flex:none;font:9px/1.8 ui-monospace,monospace;letter-spacing:.14em;color:#8b97a9;text-align:right}
 .map-route-cards .card{transition:transform .2s,border-color .2s,box-shadow .2s}.map-route-cards .card:hover{transform:translateY(-3px);border-color:#ced8e8;box-shadow:0 12px 28px rgba(18,34,62,.06)}
+.archive-release-row{background:#fff}.archive-lesson-link{cursor:pointer}.atlasHistoryList .empty{padding:20px}
 .archive-course-expansion{margin-top:13px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.archive-course-expansion[hidden],.archive-lesson-list[hidden]{display:none}.archive-release-row{border:1px solid var(--line);border-radius:11px;padding:11px;display:grid;gap:8px}.archive-release-row strong{font-size:11px}.archive-release-row p{font-size:10px;color:var(--muted);margin:0}.archive-release-row .btn{justify-self:start}.archive-lesson-list{display:grid;gap:6px}.archive-lesson-link{border:1px solid #e3e8f1;background:#f8faff;color:#315caa;text-align:left;padding:10px;border-radius:8px;font-size:11px;min-height:42px}.archive-lesson-link:hover{border-color:#b6c8ec}
 @keyframes atlasPulse{0%,100%{opacity:.14}50%{opacity:.3}}@keyframes fogFloat{from{transform:translate(-2px,1px)}to{transform:translate(9px,-4px)}}@keyframes currentDrift{to{stroke-dashoffset:-160}}
 @media(max-width:1080px){.map-intro{align-items:flex-start;flex-direction:column;gap:15px}.map-intro-actions{justify-content:flex-start}.atlas-content{grid-template-columns:minmax(0,1fr) 258px}.atlas-bottom{grid-template-columns:auto minmax(80px,1fr) auto}.atlas-bottom-note{grid-column:1/3}.atlas-reset{grid-column:3;grid-row:1/3;align-self:center}.legend-note{margin-left:0}.atlas-legend{gap:12px}}
@@ -245,8 +246,8 @@
 
       <div class="section-head"><div><h3>下一段探索路线</h3><p>不是所有路都要一次走完。选一条对你此刻最有意义的路线。</p></div><button class="link" data-go="archive">查看知识版本 →</button></div>
       <div class="grid track-grid map-route-cards">
-        <article class="card track"><div class="track-top"><span class="num">01</span><span class="tier">已探明</span></div><h4>模型山脉</h4><p>理解模型、上下文与能力边界，建立不会轻易过时的基础认知。</p><div class="track-foot"><small>基础航程 · V1.0</small><button class="link" data-openlesson="foundation">重新探索 ↗</button></div></article>
-        <article class="card track"><div class="track-top"><span class="num">02</span><span class="tier">探索中</span></div><h4>Agent 群岛</h4><p>了解 AI 如何选择行动、调用工具，并将复杂任务拆解成执行路线。</p><div class="track-foot"><small>系统能力 · V1.0</small><button class="link" data-openlesson="agent">继续探索 ↗</button></div></article>
+        <article class="card track"><div class="track-top"><span class="num">01</span><span class="tier">推荐起点</span></div><h4>模型山脉</h4><p>理解模型、上下文与能力边界，建立不会轻易过时的基础认知。</p><div class="track-foot"><small>基础航程 · V1.0</small><button class="link" data-openlesson="foundation">重新探索 ↗</button></div></article>
+        <article class="card track"><div class="track-top"><span class="num">02</span><span class="tier">后续路线</span></div><h4>Agent 群岛</h4><p>了解 AI 如何选择行动、调用工具，并将复杂任务拆解成执行路线。</p><div class="track-foot"><small>系统能力 · V1.0</small><button class="link" data-openlesson="agent">继续探索 ↗</button></div></article>
         <article class="card track"><div class="track-top"><span class="num">03</span><span class="tier pro">未知领域</span></div><h4>创造者之城</h4><p>在理解与实践基础上，构建真正解决问题的 AI 应用与工作流。</p><div class="track-foot"><small>你的专属目标</small><button class="link" data-go="search">寻找路径 ↗</button></div></article>
       </div>
 
@@ -268,12 +269,16 @@
       <div class="section-head"><div><h3>已发布知识与版本记录</h3><p>从开发数据库读取的真实课程目录和发布版本；V1 内容与未来规划分开显示。</p></div><span class="pill" id="archiveLiveState">正在读取目录</span></div>
       <div class="grid track-grid" id="archiveCatalog"><article class="card empty">正在读取 D1 中已发布的课程与版本……</article></div>
       <div class="notice">当前版本记录来自知识库数据库。每门课程的 V1.0 是第一版内容的发布快照；尚未发布的专项不会被显示成已上线课程。</div>
-      <div class="section-head"><div><h3>个人学习档案</h3><p>当前存档用演示数据呈现，云端账号同步仍在开发中。</p></div><button class="btn" data-toast="云端同步尚未上线，当前不会收集或上传你的学习数据">同步状态</button></div>
+      <div class="section-head"><div><h3>个人学习档案</h3><p>统计来自此浏览器真实记录；地图、足迹和学习完成记录可以导出备份。</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="exportAtlasArchive">导出个人地图</button><label class="btn" for="importAtlasFile">导入备份</label><input id="importAtlasFile" type="file" accept="application/json,.json" hidden></div></div>
       <div class="grid stats-grid">
-        <div class="metric"><div class="metric-icon">▤</div><div><small>已存档笔记</small><strong>03</strong><div class="micro" style="color:var(--muted)">示例档案</div></div></div>
-        <div class="metric"><div class="metric-icon">✧</div><div><small>已收藏内容</small><strong>06</strong><div class="micro" style="color:var(--muted)">示例档案</div></div></div>
-        <div class="metric"><div class="metric-icon">✓</div><div><small>完成练习</small><strong>08</strong><div class="micro" style="color:var(--muted)">示例档案</div></div></div>
-        <div class="metric"><div class="metric-icon">◷</div><div><small>最后学习版本</small><strong style="font-size:19px">V1.0</strong><div class="micro" style="color:var(--muted)">示例档案</div></div></div>
+        <div class="metric"><div class="metric-icon">◉</div><div><small>已探明区域</small><strong id="archiveKnownCount">0</strong><div class="micro" style="color:var(--muted)">个人地图状态</div></div></div>
+        <div class="metric"><div class="metric-icon">✦</div><div><small>探索足迹</small><strong id="archiveEventCount">0</strong><div class="micro" style="color:var(--muted)">本地记录事件</div></div></div>
+        <div class="metric"><div class="metric-icon">✓</div><div><small>完成课程</small><strong id="archiveCompletedCount">0</strong><div class="micro" style="color:var(--muted)">按课程记录去重</div></div></div>
+        <div class="metric"><div class="metric-icon">◷</div><div><small>最近探索</small><strong id="archiveLastActivity" style="font-size:17px">尚未开始</strong><div class="micro" style="color:var(--muted)">本地学习档案</div></div></div>
+      </div>
+      <div class="two-col" style="margin-top:16px">
+        <div class="card"><div class="section-head" style="margin:0 0 7px"><div><h3>最近探索足迹</h3><p>记录区域探索、课程完成与来自简报的线索。</p></div></div><div class="list" id="atlasHistoryList"><div class="empty">完成一次学习或探索后，这里会出现你的足迹。</div></div></div>
+        <div class="card"><div class="overline">LOCAL ARCHIVE</div><h3 style="font-size:17px;margin:9px 0">你的地图由你掌控</h3><p style="font-size:12px;color:var(--muted);margin:0;line-height:1.8">当前版本把地图状态和探索足迹保存在此浏览器，不会上传到服务器。换设备或清理浏览器数据前，请导出备份；以后接入账号后再提供云端同步。</p><div class="pill-row"><span class="pill">本地存储</span><span class="pill">JSON 备份</span><span class="pill">可导入恢复</span></div><button class="btn" style="margin-top:15px" data-toast="云端账号同步尚未开放；当前可通过导出与导入备份迁移个人地图。">同步能力说明</button></div>
       </div>
     </section>
     <section class="page" id="page-brief">
@@ -344,7 +349,7 @@ document.getElementById("closeDialog").addEventListener("click",()=>document.get
 document.getElementById("toArchive").addEventListener("click",()=>{document.getElementById("lessonDialog").close();go("archive")});
 document.getElementById("completeLesson").addEventListener("click",()=>{
  const destination=currentLessonRegion||({foundation:"models",agent:"agent",systems:"tools",build:"creator"}[currentLessonKey]||"origin");
- atlasState[destination]="known";saveAtlasState();selectedAtlasNode=destination;currentAtlasFilter="all";renderAtlasMap();
+ atlasState[destination]="known";saveAtlasState();recordAtlasEvent(destination,"lesson_completed","完成课程："+(atlasNodes[destination].lesson?.title||atlasNodes[destination].name),currentLessonId||atlasNodes[destination].lesson?.id||null);selectedAtlasNode=destination;currentAtlasFilter="all";renderAtlasMap();
  document.getElementById("lessonDialog").close();go("home");toast("学习进度已写入本地地图："+atlasNodes[destination].name);
 });
 
@@ -402,11 +407,12 @@ async function search(query){
 document.getElementById("searchForm").addEventListener("submit",e=>{e.preventDefault();search(document.getElementById("searchInput").value)});
 /* Interactive personal AI atlas: all progress in this preview is local to this browser. */
 const ATLAS_KEY = "ai-field-notes.atlas-preview.v1";
+const ATLAS_HISTORY_KEY = "ai-field-notes.atlas-events.v1";
 const atlasNodes = {
-  origin:{name:"起点营地",status:"known",desc:"你已经抵达 AI 世界的第一块陆地。站在这里，带着问题与好奇出发。",tags:["AI 基础","学习路线","问题意识"],next:"选择一个想理解的概念",chapter:"foundation",index:"REGION 01",icon:"camp"},
-  models:{name:"模型山脉",status:"known",desc:"在山脉里理解模型的能力、上下文与限制。基础概念越清楚，越能判断 AI 什么时候能帮上忙。",tags:["模型能力","上下文","基础认知"],next:"复习模型与上下文",chapter:"foundation",index:"REGION 02",icon:"mountain"},
-  prompt:{name:"提示词峡谷",status:"exploring",desc:"把模糊的愿望变成清晰的任务说明。探索上下文组织、输出结构、示例和迭代验证。",tags:["提示词","上下文设计","输出结构"],next:"完成一次提示词迭代",chapter:"foundation",index:"REGION 03",icon:"canyon"},
-  agent:{name:"Agent 群岛",status:"exploring",desc:"这里研究 AI 如何围绕目标选择行动、调用工具并处理过程状态。从单步问答走向能执行的任务链。",tags:["Agent","Workflow","工具调用"],next:"比较固定工作流与 Agent 决策",chapter:"agent",index:"REGION 04",icon:"islands"},
+  origin:{name:"起点营地",status:"exploring",desc:"你已经抵达 AI 世界的第一块陆地。站在这里，带着问题与好奇出发。",tags:["AI 基础","学习路线","问题意识"],next:"选择一个想理解的概念",chapter:"foundation",index:"REGION 01",icon:"camp"},
+  models:{name:"模型山脉",status:"unknown",desc:"在山脉里理解模型的能力、上下文与限制。基础概念越清楚，越能判断 AI 什么时候能帮上忙。",tags:["模型能力","上下文","基础认知"],next:"复习模型与上下文",chapter:"foundation",index:"REGION 02",icon:"mountain"},
+  prompt:{name:"提示词峡谷",status:"unknown",desc:"把模糊的愿望变成清晰的任务说明。探索上下文组织、输出结构、示例和迭代验证。",tags:["提示词","上下文设计","输出结构"],next:"完成一次提示词迭代",chapter:"foundation",index:"REGION 03",icon:"canyon"},
+  agent:{name:"Agent 群岛",status:"unknown",desc:"这里研究 AI 如何围绕目标选择行动、调用工具并处理过程状态。从单步问答走向能执行的任务链。",tags:["Agent","Workflow","工具调用"],next:"比较固定工作流与 Agent 决策",chapter:"agent",index:"REGION 04",icon:"islands"},
   tools:{name:"工具调用港湾",status:"unknown",desc:"让模型连接外部工具、服务与真实数据。这里将探索工具边界、调用权限、输入校验与失败回退。",tags:["工具调用","MCP","权限"],next:"探索安全的工具连接方式",chapter:"systems",index:"REGION 05",icon:"harbor"},
   knowledge:{name:"知识库森林",status:"unknown",desc:"把分散的文档变成能检索、可追溯的知识。探索检索策略、来源引用、更新机制与回答评测。",tags:["知识库","RAG","来源验证"],next:"设计一个能追溯来源的知识问答",chapter:"systems",index:"REGION 06",icon:"forest"},
   workflow:{name:"自动化边境",status:"unknown",desc:"从一个重复任务开始，设计触发、步骤、工具权限、异常处理和验收标准，让自动化稳妥地进入真实工作。",tags:["自动化","质量检查","业务流程"],next:"拆解一个重复工作流程",chapter:"build",index:"REGION 07",icon:"frontier"},
@@ -421,6 +427,66 @@ function loadAtlasState(){
   try{const stored=JSON.parse(localStorage.getItem(ATLAS_KEY)||"{}");const state={};Object.keys(atlasNodes).forEach(id=>{state[id]=stored[id]||atlasNodes[id].status;});return state;}catch{const state={};Object.keys(atlasNodes).forEach(id=>state[id]=atlasNodes[id].status);return state;}
 }
 function saveAtlasState(){try{localStorage.setItem(ATLAS_KEY,JSON.stringify(atlasState));}catch{toast("浏览器未能保存地图状态；当前页面仍可继续体验。");}}
+
+function getAtlasHistory(){
+ try{const value=JSON.parse(localStorage.getItem(ATLAS_HISTORY_KEY)||"[]");return Array.isArray(value)?value.filter(e=>e&&typeof e==="object"&&atlasNodes[e.region_id]&&typeof e.action==="string").slice(-200):[];}catch{return []}
+}
+function recordAtlasEvent(regionId,action,detail="",lessonId=null){
+ if(!atlasNodes[regionId])return;
+ const events=getAtlasHistory();
+ events.push({region_id:regionId,region_title:atlasNodes[regionId].name,action,detail:String(detail||"").slice(0,240),lesson_id:lessonId||null,created_at:new Date().toISOString()});
+ try{localStorage.setItem(ATLAS_HISTORY_KEY,JSON.stringify(events.slice(-200)));}catch{toast("浏览器存储空间不足，最新足迹未能保存。");}
+ updateProfileMetrics();
+}
+function updateProfileMetrics(){
+ const counts=getAtlasCounts(),events=getAtlasHistory();
+ const known=document.getElementById("archiveKnownCount"),eventCount=document.getElementById("archiveEventCount"),completed=document.getElementById("archiveCompletedCount"),last=document.getElementById("archiveLastActivity");
+ if(known)known.textContent=String(counts.known);
+ if(eventCount)eventCount.textContent=String(events.length);
+ const uniqueLessons=new Set(events.filter(e=>e.action==="lesson_completed").map(e=>e.lesson_id||e.region_id));
+ if(completed)completed.textContent=String(uniqueLessons.size);
+ const latest=events[events.length-1];
+ if(last)last.textContent=latest?new Date(latest.created_at).toLocaleDateString("zh-CN",{month:"short",day:"numeric"}):"尚未开始";
+ const list=document.getElementById("atlasHistoryList");
+ if(list){
+  list.innerHTML="";
+  if(!events.length){const empty=document.createElement("div");empty.className="empty";empty.textContent="完成一次学习或探索后，这里会出现你的足迹。";list.append(empty);}
+  const labels={started:"开始探索",marked_known:"标记为已探明",lesson_completed:"完成课程",reopened:"重新开启探索",brief_signal:"从简报发现线索",opened_lesson:"打开关联课程",imported:"导入地图备份"};
+  events.slice(-7).reverse().forEach(event=>{
+   const row=document.createElement("div");row.className="list-item";
+   const icon=document.createElement("span");icon.className="bullet";icon.textContent=event.action==="lesson_completed"?"✓":event.action==="brief_signal"?"↗":"✦";
+   const copy=document.createElement("div");copy.style.minWidth="0";copy.style.flex="1";
+   const title=document.createElement("b");title.textContent=event.region_title||atlasNodes[event.region_id].name;
+   const detail=document.createElement("p");detail.textContent=labels[event.action]||"探索记录";
+   if(event.detail){detail.textContent+=" · "+event.detail;}
+   const time=document.createElement("small");time.textContent=new Date(event.created_at).toLocaleString("zh-CN",{month:"short",day:"numeric",hour:"2-digit",minute:"2-digit"});
+   copy.append(title,detail,time);row.append(icon,copy);list.append(row);
+  });
+ }
+}
+function exportAtlasArchive(){
+ const archive={schema_version:1,product:"AI Field Notes Personal Atlas",exported_at:new Date().toISOString(),atlas_state:atlasState,events:getAtlasHistory()};
+ const blob=new Blob([JSON.stringify(archive,null,2)],{type:"application/json;charset=utf-8"});
+ const url=URL.createObjectURL(blob),link=document.createElement("a");
+ link.href=url;link.download="ai-field-notes-atlas-"+new Date().toISOString().slice(0,10)+".json";document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);
+ toast("个人地图备份已生成。请妥善保存 JSON 文件。");
+}
+async function importAtlasArchive(file){
+ if(!file)return;
+ try{
+  const parsed=JSON.parse(await file.text());
+  if(parsed.schema_version!==1||!parsed.atlas_state||typeof parsed.atlas_state!=="object")throw new Error("备份格式不正确");
+  const next={};Object.keys(atlasNodes).forEach(id=>{const value=parsed.atlas_state[id];next[id]=["known","exploring","unknown"].includes(value)?value:atlasNodes[id].status;});
+  const importedEvents=Array.isArray(parsed.events)?parsed.events.filter(e=>e&&atlasNodes[e.region_id]&&typeof e.action==="string"&&typeof e.created_at==="string").slice(-200).map(e=>({region_id:e.region_id,region_title:atlasNodes[e.region_id].name,action:e.action,detail:String(e.detail||"").slice(0,240),lesson_id:typeof e.lesson_id==="string"?e.lesson_id:null,created_at:e.created_at})):[];
+  if(!confirm("即将用备份文件中的地图状态和探索足迹替换当前浏览器的个人地图。建议先导出当前备份。是否继续？"))return;
+  atlasState=next;selectedAtlasNode="origin";currentAtlasFilter="all";
+  localStorage.setItem(ATLAS_KEY,JSON.stringify(atlasState));localStorage.setItem(ATLAS_HISTORY_KEY,JSON.stringify(importedEvents));
+  renderAtlasMap();toast("个人地图与探索足迹已从备份恢复。");
+ }catch(error){toast("无法导入该备份："+(error?.message||"文件格式错误"));}
+}
+document.getElementById("exportAtlasArchive")?.addEventListener("click",exportAtlasArchive);
+document.getElementById("importAtlasFile")?.addEventListener("change",event=>{const file=event.target.files?.[0];importAtlasArchive(file);event.target.value="";});
+
 function atlasStatusLabel(status){return status==="known"?"已探明":status==="exploring"?"探索中":"未知领域";}
 function getAtlasCounts(){const values=Object.values(atlasState);return {known:values.filter(v=>v==="known").length,exploring:values.filter(v=>v==="exploring").length,unknown:values.filter(v=>v==="unknown").length,total:values.length};}
 function renderAtlasMap(){
@@ -443,6 +509,7 @@ function renderAtlasMap(){
   document.getElementById("exploredBar").style.width=(c.known/c.total*100)+"%";
   document.getElementById("mapStatusLine").textContent=c.known===c.total?"一张不断扩展的个人知识地图":c.known+" 片区域已绘制 · "+c.unknown+" 片未知等待你出发";
   renderAtlasDetail();
+  updateProfileMetrics();
 }
 function detailIllustrationFor(icon){
  const drawings={
@@ -483,19 +550,19 @@ document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("cl
 document.getElementById("mapAction").addEventListener("click",()=>{
  const id=selectedAtlasNode,node=atlasNodes[id],status=atlasState[id];
  if(node.lesson && node.lesson.id){openAtlasLesson(id);return;}
- if(status==="unknown"){atlasState[id]="exploring";saveAtlasState();renderAtlasMap();toast("新区域已加入你的探索路线。该区域的完整课程尚待发布。");return;}
+ if(status==="unknown"){atlasState[id]="exploring";saveAtlasState();recordAtlasEvent(id,"started","将未知区域加入探索路线");renderAtlasMap();toast("新区域已加入你的探索路线。该区域的完整课程尚待发布。");return;}
  if(id==="unknown"||id==="creator"||id==="knowledge"){go("search");toast("可以先搜索相关知识，再把发现加入地图。");return;}
  toast("该区域尚未关联正式课程，可继续探索并记录你的问题。");
 });
 document.getElementById("mapSecondary").addEventListener("click",()=>{
  const id=selectedAtlasNode,status=atlasState[id];
- if(status==="known"){atlasState[id]="exploring";saveAtlasState();renderAtlasMap();toast("已重新打开这片区域，继续提出新问题。");}
- else if(status==="exploring"){atlasState[id]="known";saveAtlasState();renderAtlasMap();toast("区域已探明，地图已更新。");}
- else {atlasState[id]="exploring";saveAtlasState();renderAtlasMap();toast("区域已加入探索路线。");}
+ if(status==="known"){atlasState[id]="exploring";saveAtlasState();recordAtlasEvent(id,"reopened","重新打开这片区域");renderAtlasMap();toast("已重新打开这片区域，继续提出新问题。");}
+ else if(status==="exploring"){atlasState[id]="known";saveAtlasState();recordAtlasEvent(id,"marked_known","手动标记为已探明");renderAtlasMap();toast("区域已探明，地图已更新。");}
+ else {atlasState[id]="exploring";saveAtlasState();recordAtlasEvent(id,"started","将未知区域加入探索路线");renderAtlasMap();toast("区域已加入探索路线。");}
 });
 document.getElementById("mapReset").addEventListener("click",()=>{
  if(!confirm("重置当前浏览器中的个人地图演示状态？这不会影响 V1、课程内容或任何云端数据。"))return;
- try{localStorage.removeItem(ATLAS_KEY)}catch{}
+ try{localStorage.removeItem(ATLAS_KEY);localStorage.removeItem(ATLAS_HISTORY_KEY)}catch{}
  atlasState={};Object.keys(atlasNodes).forEach(id=>atlasState[id]=atlasNodes[id].status);
  selectedAtlasNode="origin";currentAtlasFilter="all";renderAtlasMap();toast("已恢复初始探索地图。");
 });
@@ -504,10 +571,11 @@ renderAtlasMap();
 
 
 let currentLessonRegion=null;
+let currentLessonId=null;
 async function openAtlasLesson(regionId){
  const node=atlasNodes[regionId];if(!node)return;
  if(!node.lesson || !node.lesson.id){toast("这片区域尚未有完整课程，先将它保留在探索路线中。");return;}
- currentLessonRegion=regionId;
+ currentLessonRegion=regionId;currentLessonId=node.lesson.id;
  document.getElementById("lessonTitle").textContent=node.lesson.title;
  document.getElementById("lessonContent").textContent="正在读取 "+node.lesson.version+" 的课程内容……";
  document.getElementById("lessonDialog").showModal();
@@ -554,7 +622,7 @@ function mapRegionForText(value){
 function jumpToMapForLesson(item){
  let region=(item.track?.slug==="model"?"models":item.track?.slug==="agent"?"agent":item.track?.slug==="skill"?"workflow":item.track?.slug==="hook"||item.track?.slug==="mcp"?"tools":item.track?.slug==="harness"?"knowledge":mapRegionForText(item.title+" "+item.summary));
  if(atlasState[region]==="unknown")atlasState[region]="exploring";
- saveAtlasState();selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
+ saveAtlasState();recordAtlasEvent(region,"opened_lesson","从知识搜索定位课程："+item.title,item.id);selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
  toast("已定位到地图区域："+atlasNodes[region].name);
 }
 function mapRegionForBrief(item){
@@ -564,7 +632,7 @@ function mapRegionForBrief(item){
 function addBriefSignal(item){
  const region=mapRegionForBrief(item);
  if(atlasState[region]==="unknown")atlasState[region]="exploring";
- saveAtlasState();selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
+ saveAtlasState();recordAtlasEvent(region,"brief_signal","简报线索："+item.title);selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
  toast("已将简报线索加入探索路线："+atlasNodes[region].name);
 }
 function renderBriefItems(items,meta){
@@ -669,7 +737,7 @@ async function loadArchiveCatalog(){
  }finally{delete container.dataset.loading;}
 }
 async function openCatalogLesson(lessonId,trackSlug){
- currentLessonRegion=({model:"models",agent:"agent",skill:"workflow",hook:"tools",mcp:"tools",harness:"knowledge"}[trackSlug]||"origin");
+ currentLessonRegion=({model:"models",agent:"agent",skill:"workflow",hook:"tools",mcp:"tools",harness:"knowledge"}[trackSlug]||"origin");currentLessonId=lessonId;
  currentLessonKey=({model:"foundation",agent:"agent",skill:"systems",hook:"systems",mcp:"systems",harness:"systems"}[trackSlug]||"foundation");
  document.getElementById("lessonTitle").textContent="正在打开课程……";
  document.getElementById("lessonContent").textContent="正在读取已发布课程与版本信息。";
