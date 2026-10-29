@@ -304,9 +304,12 @@ function initThree() {
         group.rotation.x += .0007 * state.speed * state.intensity;
         group.rotation.y += pointerX * .00035;
         group.rotation.x += pointerY * .00025;
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(render);
+      } else {
+        // Render one stable frame, then stop scheduling frames until motion is allowed again.
+        renderer.render(scene, camera);
       }
-      renderer.render(scene, camera);
-      if (!document.hidden && visible) raf = requestAnimationFrame(render);
     };
     const start = () => { if (!raf && !document.hidden && visible) raf = requestAnimationFrame(render); };
     const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
