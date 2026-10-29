@@ -383,7 +383,7 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
 <section class="section" id="section-growth">
  <div class="hero">
   <div><div class="eyebrow">DAVYLAB · AUDIENCE GROWTH</div><h1>让每一篇内容，<br>都更接近下一位读者。</h1><p>记录订阅增长、验证爆款假设、管理每日新闻贴图任务。这里的数据由你手动记录并保存在当前浏览器，不会伪造微信后台数据，也不会自动发布。</p></div>
-  <div class="heroactions"><button class="btn" id="exportGrowth">导出增长数据</button><button class="btn primary" id="growthJumpTopics">去选题发现</button></div>
+  <div class="heroactions"><button class="btn" id="exportGrowth">导出增长数据</button><button class="btn" id="importGrowth">导入 / 合并数据</button><input type="file" id="importGrowthFile" accept=".json,application/json" hidden><button class="btn primary" id="growthJumpTopics">去选题发现</button></div>
  </div>
  <div class="growth-hero">
   <div class="growth-target">
@@ -679,6 +679,22 @@ $("viralExperimentForm").addEventListener("submit",e=>{e.preventDefault();const 
 $("posterTaskForm").addEventListener("submit",e=>{e.preventDefault();const editId=e.currentTarget.dataset.editId;const item={id:editId||growthId(),title:$("posterTitle").value.trim(),date:$("posterDate").value||todayLocal(),status:$("posterStatus").value,note:$("posterNote").value.trim(),createdAt:editId?(growth.posters.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()};if(!item.title){toast("请填写贴图任务名称");return}const i=growth.posters.findIndex(x=>x.id===item.id);if(i>=0)growth.posters[i]=item;else growth.posters.unshift(item);saveGrowth();resetGrowthForm(e.currentTarget);$("posterDate").value=todayLocal();toast(editId?"贴图任务已更新":"已添加贴图任务")});
 $("growthMetricForm").addEventListener("submit",e=>{e.preventDefault();const item={id:growthId(),date:$("metricDate").value||todayLocal(),followers:Number($("metricFollowers").value),article:$("metricArticle").value.trim(),reads:numOrBlank($("metricReads").value),shares:numOrBlank($("metricShares").value),newFollowers:numOrBlank($("metricNewFollowers").value),createdAt:new Date().toISOString()};if(!Number.isFinite(item.followers)||item.followers<0){toast("请填写有效的订阅人数");return}growth.metrics.unshift(item);growth.target.latest=item.followers;saveGrowth();resetGrowthForm(e.currentTarget);$("metricDate").value=todayLocal();$("growthLatest").value=item.followers;toast("真实数据已记录")});
 $("exportGrowth").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:growth},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="davylab-growth-data-"+todayLocal()+".json";a.click();URL.revokeObjectURL(url);toast("已导出增长数据 JSON")});
+
+function mergeGrowthImport(incoming){
+ if(!incoming||incoming.schemaVersion!==1||!incoming.data||typeof incoming.data!=="object")throw new Error("文件格式不正确或版本不受支持");
+ const d=incoming.data;
+ for(const key of ["experiments","posters","metrics"]){if(!Array.isArray(d[key]))throw new Error("缺少有效的 "+key+" 数组")}
+ if(!confirm("将导入文件中的增长目标、爆款实验、贴图任务、指标与本机记录合并。相同 ID 的记录以导入文件为准，增长目标中非空字段会覆盖本机值。建议先导出当前数据备份。继续？"))return;
+ const mergeList=(current,added)=>{const map=new Map(current.map(x=>[String(x.id),x]));added.forEach(x=>{if(x&&x.id)map.set(String(x.id),x)});return [...map.values()]};
+ growth.target={...growth.target,...(d.target||{})};
+ growth.experiments=mergeList(growth.experiments,d.experiments);
+ growth.posters=mergeList(growth.posters,d.posters);
+ growth.metrics=mergeList(growth.metrics,d.metrics);
+ growth.tasks={...(growth.tasks||{}),...(d.tasks||{})};
+ saveGrowth();toast("增长数据已合并导入");
+}
+$("importGrowth").addEventListener("click",()=>$("importGrowthFile").click());
+$("importGrowthFile").addEventListener("change",e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{mergeGrowthImport(JSON.parse(String(reader.result||"{}")))}catch(err){toast("导入失败："+(err&&err.message?err.message:"文件无法读取"))}finally{e.target.value=""}};reader.onerror=()=>{toast("无法读取所选文件");e.target.value=""};reader.readAsText(file)});
 $("clearGrowthData").addEventListener("click",()=>{if(!confirm("这会删除当前浏览器中的增长目标、实验、贴图任务和指标记录。建议先导出备份。确定清空？"))return;growth=blankGrowth();saveGrowth();toast("本机增长记录已清空")});
 $("growthJumpTopics").addEventListener("click",()=>changeSection("discover"));
 renderGrowth();
