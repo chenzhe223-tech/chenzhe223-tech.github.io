@@ -101,6 +101,8 @@ try {
     if (engine === "gsap" && !snippet.includes("timeline.kill()")) throw new Error("GSAP snippet missing timeline cleanup");
     if (engine === "motion" && !snippet.includes("controls.stop()")) throw new Error("Motion snippet missing controls cleanup");
     if (!snippet.includes("Replace .your-target")) throw new Error("Snippet missing selector setup guidance: " + engine);
+    if (!snippet.includes("function mountMotion()") || !snippet.includes("const cleanupMotion = mountMotion()")) throw new Error("Snippet is not wrapped in a runnable lifecycle function: " + engine);
+    if (/^\s*return\s/m.test(snippet)) throw new Error("Snippet contains an illegal top-level return: " + engine);
   }
   await page.locator('.motion-option[data-effect="stagger"]').click();
   await page.locator("#motionSnippetEngine").selectOption("waapi");
