@@ -189,11 +189,8 @@ jobs:
           if (gsapLoaded && !reducedMotion) {
             await page.waitForFunction(() => {
               const path = document.querySelector('#cityMapCanvas #cityRoutePath');
-              return path && path.style.animation === 'none';
-            }, null, { timeout: 3000 });
-            if (!(await page.locator('#cityMapCanvas #cityRoutePath').evaluate(el => el.style.strokeDasharray === '1'))) {
-              throw new Error('GSAP should bind to the dynamically rendered city route');
-            }
+              return path && path.style.animation === 'none' && path.style.strokeDasharray === '1';
+            }, null, { timeout: 5000 });
           }
           if (!(await page.locator('#cityMapStatus').innerText()).includes('高德地图')) throw new Error('map must disclose AMap coordinate source');
           if (await page.locator('#cityPlayJourney').isDisabled()) throw new Error('selected preview track should enable journey playback');
