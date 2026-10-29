@@ -68,6 +68,13 @@ try {
     if (await page.locator("#previewName").textContent() === "") throw new Error("Scene preset did not update preview details: " + scene);
   }
 
+  await page.locator('.motion-scenario[data-scenario="panel"]').click();
+  await page.locator('.motion-option[data-effect="fade-up"]').click();
+  if (await page.locator('.motion-scenario[aria-pressed="true"]').count() !== 0) throw new Error("Choosing a standalone effect left a stale active scene preset");
+  await page.locator('.motion-scenario[data-scenario="feedback"]').click();
+  await page.locator('.motion-personality[data-personality="editorial"]').click();
+  if (await page.locator('.motion-scenario[aria-pressed="true"]').count() !== 0) throw new Error("Choosing a personality left a stale active scene preset");
+
   // Productivity workflow: named personalities, validated JSON import, and engine-specific code generation.
   const productPersonality = page.locator('.motion-personality[data-personality="product"]');
   await productPersonality.click();
