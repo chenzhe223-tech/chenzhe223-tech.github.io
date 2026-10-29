@@ -12,6 +12,15 @@
 - 「已发内容」模块：查看共享文章档案、手动添加/编辑、搜索和筛选、JSON 导入/导出，并可关联现有选题；关联后会把对应选题标记为已发布。
 - WorkBuddy 共享档案位置：`topic-studio/data/published-articles.json`；同步流程见 `topic-studio/WECHAT_CONTENT_SYNC.md`。
 
+## 增长实验室（Growth Lab）
+- 目标管理：记录起始/最新订阅人数、目标日期、500 人目标与最近 10 篇阅读中位数。
+- 内容实验：记录选题方向、状态、7 日阅读、分享和新增订阅；阅读达到已配置中位数 3 倍时，仅标记为内部候选线，不代表微信官方标准或爆款保证。
+- 新闻贴图任务：跟踪待制作、制作中、素材验收、待交 WorkBuddy、草稿已保存、已发表和阻塞状态；后两项必须依据真实执行回执核验。
+- 指标记录：手动记录订阅总人数、阅读、分享和净增订阅，支持 CSV 导出。
+- 周复盘：导出 Markdown 周复盘，基于最近 7 天已录入的数据生成，不会把缺失数据当作 0。
+- 数据迁移：支持 JSON 备份导出及导入合并；同一 ID 的导入记录覆盖本机对应记录，其他记录保留。
+- 数据边界：Growth Lab 目前使用浏览器 localStorage，不提供自动跨设备同步、自动抓取微信后台指标或直接发布公众号的能力。
+
 ## 公众号内容生产流水线
 - 主运行规范：CONTENT_PIPELINE.md
 - 实际未发表内容包存放在私有仓库 chenzhe223-tech/workbuddy-workspace 的 davylab-content-pipeline/；执行指令见 [WorkBuddy 命令文件](https://github.com/chenzhe223-tech/workbuddy-workspace/blob/main/davylab-content-pipeline/WORKBUDDY_COMMAND.md)（需要该私有仓库访问权限）。
