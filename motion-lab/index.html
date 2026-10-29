@@ -589,7 +589,12 @@ function applyControls() {
     note.textContent = systemReduce.matches ? "你的系统已设置减少动态效果；实验室将继续尊重系统偏好。" : "参数已应用于实验场。系统级减少动态效果设置优先级更高。";
   }
   if (typeof updateMotionConfig === "function") updateMotionConfig();
-  if (reduced() && typeof cancelMotionPreview === "function") cancelMotionPreview();
+  if (reduced() && typeof cancelMotionPreview === "function") {
+    cancelMotionPreview();
+    previewStatus.textContent = "已尊重减少动态效果设置：预览保持静态最终状态。";
+  } else if (selectedMotion === "stagger" && typeof playSelectedMotion === "function") {
+    playSelectedMotion();
+  }
 }
 ["speed","intensity","stagger","reduceMotion"].forEach(id => $("#" + id).addEventListener("input", applyControls));
 systemReduce.addEventListener?.("change", applyControls);
