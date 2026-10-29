@@ -193,6 +193,48 @@ const path = require('node:path');
     results.push({ test: 'Visual DNA settings persist across reload and recover from corrupted storage', status: 'PASS', detail: { persisted, afterCorruptStorage } });
     // Restore the editorial default before the baseline desktop screenshot.
 
+    // Tablet-width navigation matrix (1024px): all six modes must retain access and the main canvas.
+    const tabletPage = await browser.newPage({ viewport: { width: 1024, height: 900 }, deviceScaleFactor: 1 });
+    tabletPage.on('pageerror', error => errors.push('tablet: ' + error.message));
+    await tabletPage.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await tabletPage.locator('#products').waitFor();
+    const tabletModes = ['top', 'left', 'right', 'bottom', 'floating', 'hidden'];
+    for (const navMode of tabletModes) {
+      const settingsTrigger = await tabletPage.locator('#appearanceTrigger').isVisible()
+        ? tabletPage.locator('#appearanceTrigger') : tabletPage.locator('#appearanceEmergencyTrigger');
+      await settingsTrigger.click();
+      await tabletPage.locator('.appearance-preset[data-appearance-navmode="' + navMode + '"]').click();
+      await tabletPage.locator('#appearanceDone').click();
+      await tabletPage.waitForFunction(mode => document.documentElement.dataset.appearanceNavmode === mode, navMode);
+      const navMetrics = await tabletPage.evaluate(() => {
+        const mode = document.documentElement.dataset.appearanceNavmode;
+        const main = document.querySelector('main').getBoundingClientRect();
+        const content = document.querySelector('#top .wrap').getBoundingClientRect();
+        return {
+          mode,
+          width: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          headerVisible: getComputedStyle(document.querySelector('#topNavigation')).display !== 'none',
+          mainLeft: getComputedStyle(document.querySelector('main')).marginLeft,
+          mainRight: getComputedStyle(document.querySelector('main')).marginRight,
+          contentRatio: content.width / Math.max(1, main.width)
+        };
+      });
+      if (navMetrics.documentWidth > navMetrics.width + 2) throw new Error('Tablet navigation overflow: ' + JSON.stringify(navMetrics));
+      if (navMode === 'hidden' && navMetrics.headerVisible) throw new Error('Tablet hidden navigation should hide the header: ' + JSON.stringify(navMetrics));
+      if (navMode !== 'hidden' && !navMetrics.headerVisible) throw new Error('Tablet navigation header unexpectedly hidden: ' + JSON.stringify(navMetrics));
+      if (['left', 'right'].includes(navMode) && navMetrics.contentRatio < 0.9) {
+        throw new Error('Tablet content canvas uses less than 90% of available width: ' + JSON.stringify(navMetrics));
+      }
+    }
+    const tabletSettingsTrigger = await tabletPage.locator('#appearanceTrigger').isVisible()
+      ? tabletPage.locator('#appearanceTrigger') : tabletPage.locator('#appearanceEmergencyTrigger');
+    await tabletSettingsTrigger.click();
+    await tabletPage.locator('.appearance-preset[data-appearance-navmode="top"]').click();
+    await tabletPage.locator('#appearanceDone').click();
+    results.push({ test: 'tablet navigation matrix and available content width', status: 'PASS', detail: { viewport: 1024, modes: tabletModes } });
+    await tabletPage.close();
+
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true
     });
@@ -262,6 +304,42 @@ const path = require('node:path');
     await mobilePage.locator('#appearanceDone').click();
     await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
     results.push({ test: 'mobile left/right navigation degrades to non-overlapping drawers', status: 'PASS' });
+
+    // Top/floating modes need a visible mobile launcher; bottom mode must keep its links visible.
+    const inlineLauncher = mobilePage.locator('#navInlineTrigger');
+    if (!(await inlineLauncher.isVisible())) throw new Error('Mobile top navigation has no visible inline launcher');
+    await inlineLauncher.click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+    if (!(await mobilePage.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Mobile top navigation drawer links are hidden');
+    await mobilePage.keyboard.press('Escape');
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+    await inlineLauncher.click();
+    await mobilePage.locator('#topNavigation .navlinks a[href="#products"]').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="floating"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'floating');
+    if (!(await inlineLauncher.isVisible())) throw new Error('Mobile floating navigation has no visible launcher');
+    await inlineLauncher.click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+    await mobilePage.locator('h1').click({ force: true });
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="bottom"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'bottom');
+    if (!(await mobilePage.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Mobile bottom navigation links are hidden');
+    const bottomNavMetrics = await mobilePage.evaluate(() => ({ width: window.innerWidth, documentWidth: document.documentElement.scrollWidth }));
+    if (bottomNavMetrics.documentWidth > bottomNavMetrics.width + 2) throw new Error('Mobile bottom navigation overflows: ' + JSON.stringify(bottomNavMetrics));
+
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('.appearance-preset[data-appearance-navmode="top"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
+    results.push({ test: 'mobile top/floating launchers and bottom navigation links remain usable', status: 'PASS', detail: bottomNavMetrics });
     await mobilePage.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
     results.push({ test: 'real touch-mobile layout and GSAP motion', status: 'PASS', detail: mobile });
     await mobilePage.close();

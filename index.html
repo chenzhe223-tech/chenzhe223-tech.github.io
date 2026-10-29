@@ -85,6 +85,22 @@ body{background:radial-gradient(ellipse at 15% 0%,#3663c52b,transparent 35%),rad
 button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #8bb8ff;outline-offset:3px}
 @media(max-width:700px){.hero{padding-top:40px;padding-bottom:48px}.visual{overflow:visible;min-height:270px;margin-bottom:12px}.tag-c{bottom:12px}.tag-d{bottom:35px}.section{padding:55px 0}.app-card{background:linear-gradient(155deg,#11192a,#0a101e)}.contact-grid{grid-template-columns:minmax(0,1fr)}.contact-form-card,.contact-wechat-card{padding:18px}.nav{gap:10px}}
 @media(prefers-reduced-motion:reduce){.app-card:hover,.pill-button:hover,.btn-primary:hover{transform:none}}
+
+/* Mobile navigation: top/floating modes retain a compact inline menu trigger; bottom mode keeps links visible. */
+.nav-inline-trigger{display:none;flex:0 0 auto;width:34px;height:34px;padding:0;border:1px solid var(--appearance-border);border-radius:8px;background:var(--appearance-panel);color:var(--appearance-text);font-size:16px;line-height:1;cursor:pointer}
+.nav-inline-trigger:focus-visible{outline:2px solid var(--appearance-accent);outline-offset:3px}
+@media(max-width:700px){
+ html[data-appearance-navmode="top"] .nav-inline-trigger,html[data-appearance-navmode="floating"] .nav-inline-trigger{display:inline-flex;align-items:center;justify-content:center}
+ html[data-appearance-navmode="top"] .brand small,html[data-appearance-navmode="floating"] .brand small{display:none}
+ html[data-appearance-navmode="top"] .brand,html[data-appearance-navmode="floating"] .brand{font-size:17px;gap:7px}
+ html[data-appearance-navmode="top"] .nav>.pill-button,html[data-appearance-navmode="floating"] .nav>.pill-button{padding:8px 9px;font-size:9px}
+ html[data-appearance-navmode="top"] .navlinks,html[data-appearance-navmode="floating"] .navlinks{display:none}
+ html[data-appearance-navmode="top"][data-appearance-nav-open="true"] .topbar .navlinks,html[data-appearance-navmode="floating"][data-appearance-nav-open="true"] .topbar .navlinks{display:flex;position:absolute;z-index:77;top:calc(100% + 8px);left:0;right:0;flex-direction:column;align-items:stretch;gap:14px;margin:0;padding:16px;background:var(--appearance-nav);color:var(--appearance-text);border:1px solid var(--appearance-border);border-radius:12px;box-shadow:0 18px 45px #0002;white-space:normal}
+ html[data-appearance-navmode="top"] .topbar .nav,html[data-appearance-navmode="floating"] .topbar .nav{position:relative;gap:8px}
+ html[data-appearance-navmode="bottom"] .navlinks{display:flex;flex:1;min-width:0;justify-content:space-around;gap:10px;overflow-x:auto}
+ html[data-appearance-navmode="bottom"] .navlinks a{flex:0 0 auto;white-space:nowrap;font-size:11px}
+ html[data-appearance-navmode="bottom"] .nav{gap:10px}
+}
 </style>
 <!-- Visual DNA Design · DAVYLAB editorial studio refresh v1 -->
 <style id="visual-dna-homepage-v1">
@@ -430,7 +446,7 @@ html[data-appearance-navmode="hidden"][data-appearance-nav-open="true"] .topbar 
 }
 </style>
 </head><body>
-<header class="topbar" id="topNavigation"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#skills">开放 Skill</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><button class="appearance-trigger" id="appearanceTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2v17.6M3.2 12h17.6M5.8 5.8l12.4 12.4M18.2 5.8 5.8 18.2"/></svg><span>外观与配色</span></button><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
+<header class="topbar" id="topNavigation"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#skills">开放 Skill</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><button class="nav-inline-trigger" id="navInlineTrigger" type="button" aria-expanded="false" aria-controls="topNavigation" aria-label="打开网站导航">☰</button><button class="appearance-trigger" id="appearanceTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2v17.6M3.2 12h17.6M5.8 5.8l12.4 12.4M18.2 5.8 5.8 18.2"/></svg><span>外观与配色</span></button><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
 <main id="top"><section class="hero"><div class="wrap hero-grid"><div><div class="eyebrow">Independent AI Product Studio</div><h1>把想法，<br><span class="gradient">做成能用的工具。</span></h1><p>AI 正在降低创造的门槛。<strong>DAVYLAB 想做的，是让更多普通人把一个念头，走成一款真实的产品。</strong> 从灵感、原型到应用，让创造不再停在“想一想”。</p><div class="actions"><a class="btn btn-primary" href="#products">探索我的产品 ↓</a><a class="btn btn-secondary" href="#contact">带来你的想法 ↗</a></div><div class="hero-note">SPARK AN IDEA · BUILD A TOOL · KEEP THE PULSE ALIVE</div></div><div class="visual" aria-label="灵感与产品的动态视觉"><div class="orbit"></div><div class="core"><svg viewBox="0 0 100 100" fill="none"><path d="M53 7 28 47h20l-7 45 34-52H53l11-33Z" fill="#d7ff74"/><path d="M9 65C22 46 32 47 44 63S69 80 91 53" stroke="white" stroke-width="3" stroke-linecap="round"/><circle cx="75" cy="24" r="4" fill="#fff"/></svg></div><div class="orbit-tag tag-a"><b>01 / SPARK</b><span>让灵感被看见</span></div><div class="orbit-tag tag-b"><b>02 / BUILD</b><span>把想法做出来</span></div><div class="orbit-tag tag-c"><b>03 / PULSE</b><span>持续验证与迭代</span></div><div class="orbit-tag tag-d"><b>IDEA → PRODUCT</b><span>从念头到工具</span></div></div></div></section>
 <div class="ticker"><div class="ticker-track"><span>IDEA → PRODUCT</span><i></i><strong>AI APPLICATIONS</strong><i></i><span>SMALL IDEAS, REAL TOOLS</span><i></i><strong>SPARK &amp; PULSE</strong><i></i><span>BUILD · TEST · ITERATE</span></div></div>
 <section id="products"><div class="wrap"><div class="section-head"><div><div class="eyebrow">The Product Shelf</div><h2>我的应用超市<span class="gradient">。</span></h2><p class="desc">不是一份静态作品集，而是一排持续生长的产品货架。横向浏览、搜索与筛选，看看哪些想法已经变成工具，哪些还在探索下一种可能。</p></div><div class="section-side">每个产品都从一个具体需求开始。<br>状态公开标注，概念 Logo 与真实 Logo 清晰区分。</div></div>
@@ -802,13 +818,35 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  emergencyTrigger.addEventListener('click',()=>panel.hidden?open(emergencyTrigger):close());
  const navEmergencyTrigger=document.getElementById('navEmergencyTrigger');
  const navHeader=document.getElementById('topNavigation');
- function closeNavigation(){delete root.dataset.appearanceNavOpen;if(navEmergencyTrigger)navEmergencyTrigger.setAttribute('aria-expanded','false')}
- function toggleNavigation(){if(root.dataset.appearanceNavOpen==='true'){closeNavigation();return}root.dataset.appearanceNavOpen='true';navEmergencyTrigger.setAttribute('aria-expanded','true')}
- if(navEmergencyTrigger&&navHeader){
-  navEmergencyTrigger.addEventListener('click',toggleNavigation);
+ const navInlineTrigger=document.getElementById('navInlineTrigger');
+ function closeNavigation(){
+  delete root.dataset.appearanceNavOpen;
+  if(navEmergencyTrigger)navEmergencyTrigger.setAttribute('aria-expanded','false');
+  if(navInlineTrigger)navInlineTrigger.setAttribute('aria-expanded','false');
+ }
+ function toggleNavigation(){
+  if(root.dataset.appearanceNavOpen==='true'){closeNavigation();return}
+  root.dataset.appearanceNavOpen='true';
+  if(navEmergencyTrigger)navEmergencyTrigger.setAttribute('aria-expanded','true');
+  if(navInlineTrigger)navInlineTrigger.setAttribute('aria-expanded','true');
+ }
+ if(navHeader){
+  if(navEmergencyTrigger)navEmergencyTrigger.addEventListener('click',toggleNavigation);
+  if(navInlineTrigger)navInlineTrigger.addEventListener('click',toggleNavigation);
   navHeader.querySelectorAll('.navlinks a').forEach(link=>link.addEventListener('click',closeNavigation));
-  document.addEventListener('click',event=>{if(root.dataset.appearanceNavmode!=='hidden'||root.dataset.appearanceNavOpen!=='true')return;if(!navHeader.contains(event.target)&&!navEmergencyTrigger.contains(event.target))closeNavigation()});
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&root.dataset.appearanceNavOpen==='true'){event.preventDefault();closeNavigation();navEmergencyTrigger.focus()}});
+  document.addEventListener('click',event=>{
+   const mode=root.dataset.appearanceNavmode;
+   const mobileDrawerMode=window.matchMedia('(max-width: 700px)').matches&&['top','floating','left','right'].includes(mode);
+   if((mode!=='hidden'&&!['left','right'].includes(mode)&&!mobileDrawerMode)||root.dataset.appearanceNavOpen!=='true')return;
+   if(!navHeader.contains(event.target)&&!(navEmergencyTrigger&&navEmergencyTrigger.contains(event.target))&&!(navInlineTrigger&&navInlineTrigger.contains(event.target)))closeNavigation();
+  });
+  document.addEventListener('keydown',event=>{
+   if(event.key==='Escape'&&root.dataset.appearanceNavOpen==='true'){
+    event.preventDefault();closeNavigation();
+    const focusTarget=navInlineTrigger&&navInlineTrigger.getClientRects().length?navInlineTrigger:navEmergencyTrigger;
+    if(focusTarget&&focusTarget.getClientRects().length)focusTarget.focus();
+   }
+  });
  }
 
  document.getElementById('appearanceClose').addEventListener('click',close);
@@ -818,7 +856,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  document.querySelectorAll('[data-appearance-theme]').forEach(button=>button.addEventListener('click',()=>setTheme(button.dataset.appearanceTheme)));
  Object.entries(inputs).forEach(([key,input])=>input.addEventListener('input',()=>{state[key]=validColor(input.value,defaults[key]);state.theme='custom';apply()}));
  document.querySelectorAll('[data-appearance-layout]').forEach(button=>button.addEventListener('click',()=>{state.layout=button.dataset.appearanceLayout;apply()}));
- document.querySelectorAll('[data-appearance-navmode]').forEach(button=>button.addEventListener('click',()=>{state.navmode=button.dataset.appearanceNavmode;delete root.dataset.appearanceNavOpen;if(navEmergencyTrigger)navEmergencyTrigger.setAttribute('aria-expanded','false');apply()}));
+ document.querySelectorAll('[data-appearance-navmode]').forEach(button=>button.addEventListener('click',()=>{state.navmode=button.dataset.appearanceNavmode;delete root.dataset.appearanceNavOpen;if(navEmergencyTrigger)navEmergencyTrigger.setAttribute('aria-expanded','false');if(navInlineTrigger)navInlineTrigger.setAttribute('aria-expanded','false');apply()}));
  document.getElementById('appearanceWidth').addEventListener('input',event=>{state.width=Number(event.target.value);apply()});
  document.getElementById('appearanceGap').addEventListener('input',event=>{state.gap=Number(event.target.value);apply()});
  document.getElementById('appearanceNavCollapsed').addEventListener('change',event=>{state.navCollapsed=event.target.checked;apply()});
