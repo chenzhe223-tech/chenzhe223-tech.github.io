@@ -1,4 +1,5 @@
 import { chromium } from "playwright";
+import { readFile } from "node:fs/promises";
 
 const browser = await chromium.launch({ headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, reducedMotion: "no-preference" });
@@ -240,10 +241,17 @@ try {
   await posterPage.locator("#exportPng").click();
   const pngDownload = await pngDownloadPromise;
   if (!pngDownload.suggestedFilename().endsWith(".png")) throw new Error("Poster PNG export did not create a PNG download");
+  await posterPage.locator("#motionInput").selectOption("orbit");
   const htmlDownloadPromise = posterPage.waitForEvent("download");
   await posterPage.locator("#exportHtml").click();
   const htmlDownload = await htmlDownloadPromise;
   if (!htmlDownload.suggestedFilename().endsWith(".html")) throw new Error("Poster HTML export did not create an HTML download");
+  const exportedHtml = await readFile(await htmlDownload.path(), "utf8");
+  if (!exportedHtml.includes(".orb{animation:orbit") || !exportedHtml.includes("DAVYLAB Motion Poster")) throw new Error("Exported HTML did not preserve the selected orbit effect and document title");
+  const exportedPage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await exportedPage.setContent(exportedHtml, { waitUntil: "domcontentloaded" });
+  if (!(await exportedPage.locator("#title").textContent()).includes("测试海报")) throw new Error("Exported standalone HTML did not render the configured poster title");
+  await exportedPage.close();
   await posterPage.locator("#share").click();
   const shareStatus = await posterPage.locator("#exportStatus").textContent();
   if (!shareStatus.includes("分享链接")) throw new Error("Poster share action did not report a share link");
