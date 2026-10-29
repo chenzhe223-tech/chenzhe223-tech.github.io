@@ -46,6 +46,30 @@ const path = require('node:path');
     }
     results.push({ test: 'Visual DNA editorial light design tokens', status: 'PASS', detail: colors });
 
+    // Hidden navigation must retain a visible, keyboard-operable recovery entry.
+    await page.locator('#appearanceTrigger').click();
+    await page.locator('.appearance-preset[data-appearance-navmode="hidden"]').click();
+    await page.locator('#appearanceDone').click();
+    await page.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'hidden');
+    const hiddenNavLauncher = page.locator('#navEmergencyTrigger');
+    if (!(await hiddenNavLauncher.isVisible())) throw new Error('Hidden navigation removed its recovery launcher');
+    if (await page.locator('#topNavigation').isVisible()) throw new Error('Top navigation remained visible in hidden mode');
+    await hiddenNavLauncher.click();
+    await page.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+    if (!(await page.locator('#topNavigation').isVisible())) throw new Error('Navigation drawer did not open from the recovery launcher');
+    if (!(await page.locator('#topNavigation .navlinks a').first().isVisible())) throw new Error('Navigation drawer links are not visible');
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+    if (!(await hiddenNavLauncher.isVisible())) throw new Error('Recovery launcher disappeared after closing the drawer');
+    await hiddenNavLauncher.click();
+    await page.locator('#topNavigation .navlinks a[href="#products"]').click();
+    await page.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+    await page.locator('#appearanceEmergencyTrigger').click();
+    await page.locator('.appearance-preset[data-appearance-navmode="top"]').click();
+    await page.locator('#appearanceDone').click();
+    await page.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
+    results.push({ test: 'Visual DNA hidden navigation recovery, Escape, and link dismissal', status: 'PASS' });
+
     // Trigger the existing scroll-reveal enhancement before interacting with product tools.
     // A zero-opacity pre-reveal element is intentionally not actionable until it enters view.
     await page.evaluate(() => {
