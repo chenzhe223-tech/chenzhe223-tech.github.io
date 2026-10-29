@@ -54,7 +54,7 @@ export function IntroPanel() {
     return () => animation.cancel();
   }, []);
 
-  return <section ref={ref}>真实业务内容</section>;
+  return &lt;section ref={ref}&gt;真实业务内容&lt;/section&gt;;
 }</code></pre></article>
 <article class="panel"><div class="tag">03 / VUE 3</div><h2>Vue 3 · onMounted / onBeforeUnmount</h2><p>在 DOM 挂载后启动，卸载前清理动画；避免对尚未渲染的节点操作。</p><pre><code>&lt;script setup&gt;
 import { ref, onMounted, onBeforeUnmount } from "vue";
