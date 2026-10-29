@@ -55,13 +55,6 @@ async function main() {
     await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
     await page.locator(".feedcard").first().waitFor({ timeout: 12000 });
-    await page.locator('[data-section="growth"]').click();
-    await page.locator("#growthActionPlan .growth-action-item").first().waitFor();
-    assert.ok(await page.locator("#growthActionPlan .growth-action-item").count() >= 2, "Growth Lab renders data-driven next actions when initial data is missing");
-    assert.ok((await page.locator("#growthActionPlan").innerText()).includes("当前真实订阅人数"), "action plan identifies the missing baseline without inventing values");
-    await page.locator('#growthActionPlan [data-growth-focus="growthLatest"]').click();
-    assert.equal(await page.evaluate(() => document.activeElement?.id), "growthLatest", "growth action shortcut focuses the relevant input");
-
     // Desktop visual regression: the feed card has a dedicated visual, content and action column.
     const desktopCard = await page.locator(".feedcard").first().evaluate(card => {
       const style = getComputedStyle(card);
@@ -174,6 +167,11 @@ async function main() {
     // Growth Lab: target persistence, viral experiment threshold, poster queue and metrics.
     await page.locator('button[data-section="growth"]').click();
     await page.locator("#section-growth.active").waitFor();
+    await page.locator("#growthActionPlan .growth-action-item").first().waitFor();
+    assert.ok(await page.locator("#growthActionPlan .growth-action-item").count() >= 2, "Growth Lab renders data-driven next actions when initial data is missing");
+    assert.ok((await page.locator("#growthActionPlan").innerText()).includes("当前真实订阅人数"), "action plan identifies the missing baseline without inventing values");
+    await page.locator('#growthActionPlan [data-growth-focus="growthLatest"]').click();
+    assert.equal(await page.evaluate(() => document.activeElement?.id), "growthLatest", "growth action shortcut focuses the relevant input");
     await page.locator("#growthBaseline").fill("120");
     await page.locator("#growthLatest").fill("135");
     await page.locator("#growthStartDate").fill("2026-10-29");
