@@ -568,7 +568,12 @@ document.querySelectorAll("[data-map-node]").forEach(node=>{
  node.addEventListener("click",()=>selectAtlasNode(node.dataset.mapNode));
  node.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();selectAtlasNode(node.dataset.mapNode)}});
 });
-document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("click",()=>{currentAtlasFilter=b.dataset.mapFilter;renderAtlasMap()}));
+document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("click",()=>{
+ currentAtlasFilter=b.dataset.mapFilter;
+ const matches=id=>currentAtlasFilter==="all"||(currentAtlasFilter==="known"&&atlasState[id]==="known")||(currentAtlasFilter==="exploring"&&atlasState[id]==="exploring")||(currentAtlasFilter==="unknown"&&atlasState[id]==="unknown");
+ if(!matches(selectedAtlasNode))selectedAtlasNode=Object.keys(atlasNodes).find(matches)||"origin";
+ renderAtlasMap();
+}));
 document.getElementById("mapAction").addEventListener("click",()=>{
  const id=selectedAtlasNode,node=atlasNodes[id],status=atlasState[id];
  if(node.lesson && node.lesson.id){openAtlasLesson(id);return;}
@@ -598,7 +603,10 @@ let currentLessonId=null;
 async function openAtlasLesson(regionId){
  const node=atlasNodes[regionId];if(!node)return;
  if(!node.lesson || !node.lesson.id){toast("这片区域尚未有完整课程，先将它保留在探索路线中。");return;}
+ if(atlasState[regionId]==="unknown"){atlasState[regionId]="exploring";saveAtlasState();recordAtlasEvent(regionId,"started","从地图进入关联课程");}
  currentLessonRegion=regionId;currentLessonId=node.lesson.id;
+ recordAtlasEvent(regionId,"opened_lesson","打开课程："+node.lesson.title,node.lesson.id);
+ renderAtlasMap();
  document.getElementById("lessonTitle").textContent=node.lesson.title;
  document.getElementById("lessonContent").textContent="正在读取 "+node.lesson.version+" 的课程内容……";
  document.getElementById("lessonDialog").showModal();
@@ -760,7 +768,7 @@ async function loadArchiveCatalog(){
  }finally{delete container.dataset.loading;}
 }
 async function openCatalogLesson(lessonId,trackSlug){
- currentLessonRegion=({model:"models",agent:"agent",skill:"workflow",hook:"tools",mcp:"tools",harness:"knowledge"}[trackSlug]||"origin");currentLessonId=lessonId;
+ currentLessonRegion=({model:"models",agent:"agent",skill:"workflow",hook:"tools",mcp:"tools",harness:"knowledge"}[trackSlug]||"origin");currentLessonId=lessonId;if(atlasState[currentLessonRegion]==="unknown"){atlasState[currentLessonRegion]="exploring";saveAtlasState();recordAtlasEvent(currentLessonRegion,"started","从版本存档开始课程");}recordAtlasEvent(currentLessonRegion,"opened_lesson","从版本目录打开课程",lessonId);renderAtlasMap();
  currentLessonKey=({model:"foundation",agent:"agent",skill:"systems",hook:"systems",mcp:"systems",harness:"systems"}[trackSlug]||"foundation");
  document.getElementById("lessonTitle").textContent="正在打开课程……";
  document.getElementById("lessonContent").textContent="正在读取已发布课程与版本信息。";
