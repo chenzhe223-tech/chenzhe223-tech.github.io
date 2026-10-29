@@ -353,6 +353,33 @@ html[data-appearance-theme="colorful"] .ticker{background:linear-gradient(90deg,
 .appearance-note{font-size:9px;line-height:1.6;color:var(--appearance-muted);margin:10px 0 0}
 @media(max-width:700px){.appearance-trigger{min-height:36px;padding:8px 9px;font-size:10px}.appearance-trigger svg{width:14px;height:14px}.appearance-panel{top:auto;bottom:max(12px,env(safe-area-inset-bottom));right:12px;left:12px;width:auto;max-height:82dvh;padding:16px}.appearance-panel-head h2{font-size:18px}}
 @media(prefers-reduced-motion:reduce){.appearance-trigger{transition:none}}
+
+.appearance-range{display:block;margin-top:14px;font-size:11px}.appearance-range span{display:flex;justify-content:space-between;gap:8px}.appearance-range input{display:block;width:100%;margin:10px 0 5px;accent-color:var(--appearance-accent)}.appearance-range small,.appearance-check small{display:block;color:var(--appearance-muted);font-size:9px}.appearance-check{display:block;margin-top:13px;font-size:11px}.appearance-check input{accent-color:var(--appearance-accent);margin-right:7px}.appearance-fonts{display:grid;grid-template-columns:1fr;gap:9px}.appearance-fonts label{font-size:10px;font-weight:800}.appearance-fonts select{display:block;width:100%;margin-top:5px;padding:10px;border:1px solid var(--appearance-border);border-radius:7px;background:var(--appearance-panel);color:var(--appearance-text);font:inherit;font-size:11px}.appearance-preset:focus-visible,.appearance-trigger:focus-visible,.appearance-panel button:focus-visible,.appearance-panel input:focus-visible,.appearance-panel select:focus-visible{outline:2px solid var(--appearance-accent);outline-offset:2px}
+html[data-appearance-layout="vertical"] #products>.wrap>.market-tools,html[data-appearance-layout="vertical"] #products .market-tools{gap:var(--vd-gap,22px)}
+html[data-appearance-layout="balanced"] #products .app-card,html[data-appearance-layout="bento"] #products .app-card{border-radius:var(--vd-radius,12px)}
+html[data-appearance-layout="compact"] .hero{padding-top:clamp(32px,4vw,56px);padding-bottom:clamp(24px,3vw,40px)}
+html[data-appearance-layout="vertical"] .hero-grid{grid-template-columns:1fr;gap:var(--vd-gap,22px)}
+html[data-appearance-layout="split"] .hero-grid{grid-template-columns:minmax(0,1fr) minmax(300px,.85fr);gap:var(--vd-gap,22px)}
+html[data-appearance-layout="balanced"] .hero-grid{grid-template-columns:1fr 1fr;gap:var(--vd-gap,22px)}
+html[data-appearance-layout="bento"] .hero-grid{grid-template-columns:1.2fr .8fr;gap:var(--vd-gap,22px)}
+html[data-appearance-navmode="left"] .topbar,html[data-appearance-navmode="right"] .topbar{position:fixed;top:0;bottom:0;width:220px;overflow-y:auto;background:var(--appearance-nav);border:1px solid var(--appearance-border)}
+html[data-appearance-navmode="left"] .topbar{left:0}html[data-appearance-navmode="right"] .topbar{right:0}
+html[data-appearance-navmode="left"] .topbar .wrap,html[data-appearance-navmode="right"] .topbar .wrap{width:100%;padding:18px 14px}
+html[data-appearance-navmode="left"] .nav,html[data-appearance-navmode="right"] .nav{height:auto;display:flex;align-items:stretch;flex-direction:column}
+html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{display:flex;flex-direction:column;gap:12px;margin:24px 0}
+html[data-appearance-navmode="left"] main{margin-left:220px}html[data-appearance-navmode="right"] main{margin-right:220px}
+html[data-appearance-navmode="bottom"] .topbar{position:fixed;top:auto;bottom:0;left:0;right:0;border-top:1px solid var(--appearance-border);border-bottom:0}
+html[data-appearance-navmode="bottom"] body{padding-bottom:76px}
+html[data-appearance-navmode="bottom"] .nav{height:64px}html[data-appearance-navmode="bottom"] .brand,html[data-appearance-navmode="bottom"] .nav>.pill-button{display:none}
+html[data-appearance-navmode="bottom"] .navlinks{flex:1;justify-content:space-around;overflow:auto}
+html[data-appearance-navmode="floating"] .topbar{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100vw - 24px);border:1px solid var(--appearance-border);border-radius:12px;box-shadow:0 10px 35px #0002}
+html[data-appearance-navmode="floating"] .topbar .wrap{width:auto;padding:0 12px}
+html[data-appearance-navmode="floating"] .nav{height:54px}
+html[data-appearance-navmode="hidden"] .topbar{display:none}
+html[data-appearance-navmode="hidden"] #appearanceTrigger{position:fixed;z-index:70;top:12px;right:12px}
+html[data-appearance-navmode="hidden"] .navlinks{display:none}
+html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{white-space:normal}
+@media(max-width:700px){html[data-appearance-navmode="left"] .topbar,html[data-appearance-navmode="right"] .topbar{width:min(82vw,280px);z-index:60}html[data-appearance-navmode="left"] main,html[data-appearance-navmode="right"] main{margin-left:0;margin-right:0;padding-top:74px}html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{display:flex}html[data-appearance-navmode="bottom"] .navlinks{gap:10px}html[data-appearance-layout="split"] .hero-grid,html[data-appearance-layout="balanced"] .hero-grid,html[data-appearance-layout="bento"] .hero-grid{grid-template-columns:1fr}}
 </style>
 </head><body>
 <header class="topbar"><div class="wrap nav"><a class="brand" href="#top"><span class="brand-icon"><svg viewBox="0 0 32 32" fill="none"><path d="M18 2 7 18h8l-2 12L26 12h-8l3-10Z" fill="currentColor"/><path d="M3 25c5-5 9-5 13 0s8 5 13 0" stroke="#0a1728" stroke-width="1.8" stroke-linecap="round"/></svg></span><span>DAVYLAB<small>SPARK &amp; PULSE</small></span></a><nav class="navlinks"><a href="#products">应用超市</a><a href="#skills">开放 Skill</a><a href="#philosophy">品牌理念</a><a href="#process">创造方法</a><a href="#about">关于</a></nav><button class="appearance-trigger" id="appearanceTrigger" type="button" aria-haspopup="dialog" aria-controls="appearancePanel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="8.8"/><path d="M12 3.2v17.6M3.2 12h17.6M5.8 5.8l12.4 12.4M18.2 5.8 5.8 18.2"/></svg><span>外观与配色</span></button><a class="pill-button" href="#contact">让想法开始 ↗</a></div></header>
@@ -619,6 +646,35 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
       <button class="appearance-preset" type="button" data-appearance-theme="colorful" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fff4ef"></i><i style="background:#ff5e7e"></i><i style="background:#7c4dff"></i></span><span><strong>时尚多彩</strong><small>珊瑚粉 · 活力橙 · 电光紫</small></span></button>
     </div>
   </section>
+  <section class="appearance-section"><span class="appearance-label">LAYOUT SYSTEM / 页面布局</span>
+    <div class="appearance-presets">
+      <button class="appearance-preset" data-appearance-layout="editorial" type="button" aria-pressed="true"><span class="appearance-swatch"><i style="background:#e8e2d5"></i><i style="background:#687b58"></i><i style="background:#fffefa"></i></span><span><strong>编辑式布局</strong><small>主任务通栏 · 状态双栏</small></span></button>
+      <button class="appearance-preset" data-appearance-layout="balanced" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#dce5df"></i><i style="background:#fffefa"></i><i style="background:#a7b5a0"></i></span><span><strong>平衡网格</strong><small>均衡模块 · 双列分区</small></span></button>
+      <button class="appearance-preset" data-appearance-layout="vertical" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#f1eadc"></i><i style="background:#fffefa"></i><i style="background:#b8a88e"></i></span><span><strong>纵向流程</strong><small>单列排列 · 顺序浏览</small></span></button>
+      <button class="appearance-preset" data-appearance-layout="compact" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#dbe5e8"></i><i style="background:#fffefa"></i><i style="background:#647c83"></i></span><span><strong>分析聚焦</strong><small>宽主区 · 紧凑辅助栏</small></span></button>
+      <button class="appearance-preset" data-appearance-layout="bento" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#e6e3d9"></i><i style="background:#fffefa"></i><i style="background:#768568"></i></span><span><strong>Bento 拼贴</strong><small>能力模块 · 灵活跨度</small></span></button>
+      <button class="appearance-preset" data-appearance-layout="split" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#e8dfd8"></i><i style="background:#fffefa"></i><i style="background:#9a6b54"></i></span><span><strong>左右分栏</strong><small>双区域交错 · 分区浏览</small></span></button>
+    </div>
+    <label class="appearance-range"><span>内容宽度比例 <b id="appearanceWidthValue">90%</b></span><input id="appearanceWidth" type="range" min="80" max="100" value="94"><small>控制主内容使用可用画布的比例。</small></label>
+    <label class="appearance-range"><span>模块间距 <b id="appearanceGapValue">22 px</b></span><input id="appearanceGap" type="range" min="8" max="40" value="22"><small>统一控制卡片与区块之间的间距。</small></label>
+  </section>
+  <section class="appearance-section"><span class="appearance-label">NAVIGATION / 导航栏位置</span>
+    <div class="appearance-presets">
+      <button class="appearance-preset" data-appearance-navmode="top" type="button" aria-pressed="true"><span class="appearance-swatch"><i style="background:#d8d1c4"></i><i style="background:#fffefa"></i><i style="background:#d8d1c4"></i></span><span><strong>顶部</strong><small>横向导航</small></span></button>
+      <button class="appearance-preset" data-appearance-navmode="left" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#4b5f48"></i><i style="background:#fffefa"></i><i style="background:#fffefa"></i></span><span><strong>左侧</strong><small>固定侧栏</small></span></button>
+      <button class="appearance-preset" data-appearance-navmode="right" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fffefa"></i><i style="background:#fffefa"></i><i style="background:#4b5f48"></i></span><span><strong>右侧</strong><small>固定侧栏</small></span></button>
+      <button class="appearance-preset" data-appearance-navmode="bottom" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fffefa"></i><i style="background:#fffefa"></i><i style="background:#d8d1c4"></i></span><span><strong>底部</strong><small>底部快捷栏</small></span></button>
+      <button class="appearance-preset" data-appearance-navmode="floating" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fffefa"></i><i style="background:#fffefa"></i><i style="background:#4b5f48"></i></span><span><strong>悬浮</strong><small>浮动快捷入口</small></span></button>
+      <button class="appearance-preset" data-appearance-navmode="hidden" type="button" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fffefa"></i><i style="background:#fffefa"></i><i style="background:#c8c8c8"></i></span><span><strong>隐藏</strong><small>保留唤出入口</small></span></button>
+    </div>
+    <label class="appearance-check"><input type="checkbox" id="appearanceNavCollapsed"> 默认收起导航 <small>可随时通过导航入口重新展开。</small></label>
+  </section>
+  <section class="appearance-section"><span class="appearance-label">TYPOGRAPHY / 页面字体</span>
+    <div class="appearance-fonts">
+      <label>英文与数字<select id="appearanceFontEn"><option value="Inter">Inter · 默认 UI</option><option value="DM Sans">DM Sans</option><option value="Manrope">Manrope</option><option value="Space Grotesk">Space Grotesk</option><option value="Source Sans 3">Source Sans 3</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Liberation Sans">Liberation Sans · 兼容</option><option value="Liberation Serif">Liberation Serif · 兼容</option></select></label>
+      <label>中文字体<select id="appearanceFontZh"><option value="Noto Sans SC">Noto Sans SC</option><option value="Noto Serif SC">Noto Serif SC</option><option value="LXGW WenKai">霞鹜文楷</option><option value="Smiley Sans">得意黑</option><option value="Alibaba PuHuiTi">阿里巴巴普惠体</option><option value="ZCOOL KuaiLe">站酷快乐体</option><option value="YouShe BiaoTiHei">优设标题黑</option><option value="Chiron GoRound TC">Chiron GoRound TC</option></select></label>
+    </div><p class="appearance-note">字体选项代表 CSS 字体族已接入；实际显示取决于系统字体或页面是否成功加载字体资源。</p>
+  </section>
   <section class="appearance-section"><span class="appearance-label">自定义颜色</span><div class="appearance-colors">
     <label class="appearance-color" for="appearancePage">页面背景<input type="color" id="appearancePage" value="#f5f3ed"></label>
     <label class="appearance-color" for="appearancePanelColor">面板底色<input type="color" id="appearancePanelColor" value="#fffefa"></label>
@@ -638,7 +694,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  const backdrop=document.getElementById('appearanceBackdrop');
  if(!trigger||!panel||!backdrop)return;
  const storageKey='davylab-appearance:v1';
- const defaults={theme:'editorial',page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed'};
+ const defaults={theme:'editorial',page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed',layout:'bento',navmode:'top',navCollapsed:false,fontEn:'Inter',fontZh:'Noto Sans SC',width:94,gap:22};
  const themes={
   editorial:{page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed'},
   coastal:{page:'#edf4f0',surface:'#fbfdf9',text:'#173b3b',border:'#cbdcd4',accent:'#176b63',nav:'#edf4f0'},
@@ -650,10 +706,26 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  const inputs={page:document.getElementById('appearancePage'),surface:document.getElementById('appearancePanelColor'),text:document.getElementById('appearanceText'),border:document.getElementById('appearanceBorder'),accent:document.getElementById('appearanceAccent'),nav:document.getElementById('appearanceNav')};
  let state={...defaults};
  function validColor(value,fallback){return typeof value==='string'&&/^#[0-9a-fA-F]{6}$/.test(value)?value:fallback}
- function safeLoad(){try{const raw=window.localStorage.getItem(storageKey);if(!raw)return {...defaults};const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return {...defaults};return {...defaults,...saved,theme:themes[saved.theme]?saved.theme:'custom',page:validColor(saved.page,defaults.page),surface:validColor(saved.surface,defaults.surface),text:validColor(saved.text,defaults.text),border:validColor(saved.border,defaults.border),accent:validColor(saved.accent,defaults.accent),nav:validColor(saved.nav,defaults.nav)}}catch(_){return {...defaults}}}
+ function safeLoad(){try{const raw=window.localStorage.getItem(storageKey);if(!raw)return {...defaults};const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return {...defaults};return {...defaults,...saved,theme:themes[saved.theme]?saved.theme:'custom',page:validColor(saved.page,defaults.page),surface:validColor(saved.surface,defaults.surface),text:validColor(saved.text,defaults.text),border:validColor(saved.border,defaults.border),accent:validColor(saved.accent,defaults.accent),nav:validColor(saved.nav,defaults.nav),layout:['editorial','balanced','vertical','compact','bento','split'].includes(saved.layout)?saved.layout:defaults.layout,navmode:['top','left','right','bottom','floating','hidden'].includes(saved.navmode)?saved.navmode:defaults.navmode,navCollapsed:!!saved.navCollapsed,fontEn:typeof saved.fontEn==='string'?saved.fontEn:defaults.fontEn,fontZh:typeof saved.fontZh==='string'?saved.fontZh:defaults.fontZh,width:Number.isFinite(Number(saved.width))?Math.min(100,Math.max(80,Number(saved.width))):defaults.width,gap:Number.isFinite(Number(saved.gap))?Math.min(40,Math.max(8,Number(saved.gap))):defaults.gap}}catch(_){return {...defaults}}}
  function safeSave(){try{window.localStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
  function apply(){
   root.dataset.appearanceTheme=state.theme;
+  root.dataset.appearanceLayout=state.layout;
+  root.dataset.appearanceNavmode=state.navmode;
+  root.style.setProperty('--vd-gap',state.gap+'px');
+  root.style.setProperty('--vd-content-width',state.width+'%');
+  root.style.setProperty('--vd-font-en','"'+state.fontEn+'",Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif');
+  root.style.setProperty('--vd-font-zh','"'+state.fontZh+'","PingFang SC","Microsoft YaHei",sans-serif');
+  document.body.style.fontFamily='var(--vd-font-en),var(--vd-font-zh)';
+  const widthValue=document.getElementById('appearanceWidthValue');if(widthValue)widthValue.textContent=state.width+'%';
+  const gapValue=document.getElementById('appearanceGapValue');if(gapValue)gapValue.textContent=state.gap+' px';
+  const widthInput=document.getElementById('appearanceWidth');if(widthInput)widthInput.value=state.width;
+  const gapInput=document.getElementById('appearanceGap');if(gapInput)gapInput.value=state.gap;
+  const navCheck=document.getElementById('appearanceNavCollapsed');if(navCheck)navCheck.checked=state.navCollapsed;
+  const enSelect=document.getElementById('appearanceFontEn');if(enSelect)enSelect.value=state.fontEn;
+  const zhSelect=document.getElementById('appearanceFontZh');if(zhSelect)zhSelect.value=state.fontZh;
+  document.querySelectorAll('[data-appearance-layout]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.appearanceLayout===state.layout)));
+  document.querySelectorAll('[data-appearance-navmode]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.appearanceNavmode===state.navmode)));
   root.style.setProperty('--appearance-page',state.page);
   root.style.setProperty('--appearance-panel',state.surface);
   root.style.setProperty('--appearance-text',state.text);
@@ -669,7 +741,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
   document.querySelectorAll('[data-appearance-theme]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.appearanceTheme===state.theme)));
   safeSave();
  }
- function setTheme(name){const palette=themes[name];if(!palette)return;state={theme:name,...palette};apply()}
+ function setTheme(name){const palette=themes[name];if(!palette)return;state={...state,theme:name,...palette};apply()}
  function open(){panel.hidden=false;backdrop.hidden=false;trigger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';document.getElementById('appearanceClose').focus()}
  function close(){panel.hidden=true;backdrop.hidden=true;trigger.setAttribute('aria-expanded','false');document.body.style.overflow='';trigger.focus()}
  trigger.addEventListener('click',()=>panel.hidden?open():close());
@@ -679,6 +751,13 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  document.addEventListener('keydown',event=>{if(panel.hidden)return;if(event.key==='Escape'){event.preventDefault();close();return}if(event.key==='Tab'){const focusable=[...panel.querySelectorAll('button:not([disabled]),input:not([disabled])')];if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus()}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus()}}});
  document.querySelectorAll('[data-appearance-theme]').forEach(button=>button.addEventListener('click',()=>setTheme(button.dataset.appearanceTheme)));
  Object.entries(inputs).forEach(([key,input])=>input.addEventListener('input',()=>{state[key]=validColor(input.value,defaults[key]);state.theme='custom';apply()}));
+ document.querySelectorAll('[data-appearance-layout]').forEach(button=>button.addEventListener('click',()=>{state.layout=button.dataset.appearanceLayout;apply()}));
+ document.querySelectorAll('[data-appearance-navmode]').forEach(button=>button.addEventListener('click',()=>{state.navmode=button.dataset.appearanceNavmode;apply()}));
+ document.getElementById('appearanceWidth').addEventListener('input',event=>{state.width=Number(event.target.value);apply()});
+ document.getElementById('appearanceGap').addEventListener('input',event=>{state.gap=Number(event.target.value);apply()});
+ document.getElementById('appearanceNavCollapsed').addEventListener('change',event=>{state.navCollapsed=event.target.checked;apply()});
+ document.getElementById('appearanceFontEn').addEventListener('change',event=>{state.fontEn=event.target.value;apply()});
+ document.getElementById('appearanceFontZh').addEventListener('change',event=>{state.fontZh=event.target.value;apply()});
  document.getElementById('appearanceReset').addEventListener('click',()=>{state={...defaults};apply()});
  state=safeLoad();apply();
 })();
