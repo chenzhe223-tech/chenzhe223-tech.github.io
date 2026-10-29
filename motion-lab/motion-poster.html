@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#0b1117">
 <meta name="description" content="DAVYLAB Motion Poster：用简单的文字与动效，制作可分享的动态海报。">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Sans+3:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=LXGW+WenKai:wght@400;700&display=swap" rel="stylesheet">
 <title>Motion Poster · DAVYLAB</title>
 <style>
 :root{color-scheme:dark;--bg:#0b1117;--panel:#111a22;--line:#2b3941;--ink:#eef4f1;--muted:#9cadaa;--accent:#c7f36b;--cyan:#79e2d0}
@@ -31,7 +32,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes zoom{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:scale(1)}}@keyframes float{50%{transform:translateY(-9px)}}@keyframes orbit{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
 @media(max-width:900px){.workspace{grid-template-columns:1fr}.stage{min-height:0}.poster{width:min(100%,390px)}.intro{align-items:start;flex-direction:column}}@media(max-width:480px){main{padding:16px}.top{height:60px}.templates{grid-template-columns:repeat(3,minmax(0,1fr))}.stage{padding:10px}.poster{padding:22px}.poster h2{font-size:clamp(36px,11vw,54px)}.poster-sub{font-size:11px}}
-</style>
+.engine-options{border:1px solid #c7f36b35;border-radius:12px;padding:12px;margin-bottom:16px;background:#c7f36b08}.engine-options h3{font-size:12px;margin:0 0 8px}.engine-options .option-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:12px}.engine-options button{border:1px solid var(--line);border-radius:8px;background:#0b1117;color:var(--ink);padding:7px 4px;font-size:10px;min-width:0}.engine-options button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}.engine-options select,.engine-options textarea{width:100%;border:1px solid #34424a;border-radius:8px;background:#0b1117;color:var(--ink);padding:9px;font-size:11px;margin-bottom:8px}.engine-options textarea{min-height:65px;resize:vertical}.engine-options small{display:block;color:var(--muted);font-size:10px;margin:2px 0 10px}.poster[data-style=cinematic] .poster-grid{opacity:.22}.poster[data-style=surreal] .poster-orb{filter:blur(1px) drop-shadow(0 0 35px var(--poster-accent))}.poster[data-style=film]{filter:sepia(.12)}.poster[data-style=sound] .poster-grid{background-size:12px 12px;opacity:.65}.poster[data-style=nature] .poster-orb{border-radius:40% 60% 55% 45%}.poster[data-style=future] .poster-grid{background-size:16px 16px;opacity:.8}.poster[data-style=comic]{border:3px solid var(--poster-ink)}.poster[data-style=minimal] .poster-grid{opacity:.08}@media(max-width:480px){.engine-options .option-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style>
 </head>
 <body>
 <header class="top"><a class="brand" href="./" aria-label="返回 DAVYLAB Motion Lab"><span class="mark" aria-hidden="true">D</span><span>DAVYLAB<small>MOTION POSTER STUDIO</small></span></a><a class="back" href="./">← 返回 Motion Lab</a></header>
@@ -39,6 +40,17 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
 <section class="intro"><div><div class="eyebrow">CREATE / MOVE / SHARE</div><h1>让一个想法，变成动态作品。</h1><p>选择视觉风格，写下你的标题与文案，调整动效。你不需要会写代码，就能制作可分享的海报，并导出 PNG 或独立 HTML 文件。</p></div></section>
 <div class="workspace">
 <section class="editor" aria-labelledby="editTitle"><div class="panel-title"><h2 id="editTitle">编辑你的作品</h2><span class="tag">NO CODE REQUIRED</span></div>
+<div class="engine-options" id="engineOptions">
+<h3>AI 海报创作</h3><textarea id="aiPrompt" maxlength="500" placeholder="用一句话描述你想表达的画面，例如：雨后的海边，一个人听着旧歌，想起多年以前的夏天。"></textarea>
+<button class="btn primary" id="generateAI" type="button">AI 生成标题与文案 ↗</button><small id="aiStatus">调用已有 DeepSeek 服务端生成文案；若接口失败会明确提示，不会伪造生成结果。</small>
+<h3>视觉风格 · 9 种</h3><div class="option-grid" id="styleGrid">
+<button data-style="editorial" aria-pressed="true">编辑排版</button><button data-style="cinematic" aria-pressed="false">电影叙事</button><button data-style="surreal" aria-pressed="false">超现实梦境</button><button data-style="film" aria-pressed="false">复古胶片</button><button data-style="sound" aria-pressed="false">声音可视化</button><button data-style="nature" aria-pressed="false">自然治愈</button><button data-style="future" aria-pressed="false">未来数字</button><button data-style="comic" aria-pressed="false">彩色手绘</button><button data-style="minimal" aria-pressed="false">极简几何</button></div>
+<h3>配色风格 · 6 种</h3><div class="option-grid" id="paletteGrid">
+<button data-palette="lime" aria-pressed="true">石墨荧光</button><button data-palette="coastal" aria-pressed="false">海雾青绿</button><button data-palette="paper" aria-pressed="false">纸感陶土</button><button data-palette="midnight" aria-pressed="false">午夜冰蓝</button><button data-palette="rose" aria-pressed="false">莓果玫瑰</button><button data-palette="forest" aria-pressed="false">森林苔绿</button></div>
+<h3>字体选择</h3><label for="fontEn">英文字体</label><select id="fontEn"><option>Inter</option><option>DM Sans</option><option>Manrope</option><option>Space Grotesk</option><option>Plus Jakarta Sans</option><option>Source Sans 3</option><option>Playfair Display</option><option>JetBrains Mono</option><option>Liberation Sans</option></select>
+<label for="fontZh">中文字体</label><select id="fontZh"><option value="Noto Sans SC">Noto Sans SC</option><option value="Noto Serif SC">Noto Serif SC</option><option value="LXGW WenKai">LXGW WenKai</option><option value="system">系统中文字体</option></select>
+<small>字体选项已接入；字体二进制是否加载成功取决于资源部署。未加载时使用系统回退。第三方字体按其授权与嵌入条件分别核查。</small>
+</div>
 <div class="field"><label>选择视觉风格</label><div class="templates">
 <button class="template" type="button" data-theme="lime" aria-pressed="true"><span class="swatch" style="background:linear-gradient(135deg,#0d1718,#c7f36b)"></span>石墨荧光</button>
 <button class="template" type="button" data-theme="coastal" aria-pressed="false"><span class="swatch" style="background:linear-gradient(135deg,#102b2c,#79e2d0)"></span>海雾青绿</button>
@@ -64,13 +76,11 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
   const poster = $("#poster");
   const title = $("#titleInput"), subtitle = $("#subtitleInput"), signature = $("#signatureInput"), motion = $("#motionInput"), duration = $("#durationInput");
   const palettes = {
-    lime: {bg:"#0d1718",ink:"#f0f5e9",accent:"#c7f36b"},
-    coastal: {bg:"#102b2c",ink:"#eff9f6",accent:"#79e2d0"},
-    paper: {bg:"#f3efe4",ink:"#202c27",accent:"#a64d32"}
+    lime:{bg:"#0d1718",ink:"#f0f5e9",accent:"#c7f36b"},coastal:{bg:"#102b2c",ink:"#eff9f6",accent:"#79e2d0"},paper:{bg:"#f3efe4",ink:"#202c27",accent:"#a64d32"},midnight:{bg:"#0b1020",ink:"#eef6ff",accent:"#6bc5e8"},rose:{bg:"#251923",ink:"#fff1f4",accent:"#ef9eb9"},forest:{bg:"#15261d",ink:"#f1f3df",accent:"#d0d9a0"}
   };
   let theme = "lime";
   const safe = (value) => String(value || "");
-  const config = () => ({title:title.value,subtitle:subtitle.value,signature:signature.value,motion:motion.value,duration:Number(duration.value),theme});
+  const config = () => ({title:title.value,subtitle:subtitle.value,signature:signature.value,motion:motion.value,duration:Number(duration.value),theme,style:engineStyle,fontEn:engineFontEn,fontZh:engineFontZh,engineVersion:1});
   function render(replay=false) {
     const c=config(), p=palettes[theme];
     poster.style.setProperty("--poster-bg",p.bg);poster.style.setProperty("--poster-ink",p.ink);poster.style.setProperty("--poster-accent",p.accent);
@@ -91,18 +101,19 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
     try {
       const c=config(),p=palettes[theme],canvas=document.createElement("canvas");canvas.width=1080;canvas.height=1350;
       const ctx=canvas.getContext("2d");if(!ctx)throw new Error("当前浏览器无法创建画布");
+      const posterFont=(weight,size)=>weight+" "+size+"px \""+engineFontEn+"\", \""+engineFontZh+"\", sans-serif";
       ctx.fillStyle=p.bg;ctx.fillRect(0,0,canvas.width,canvas.height);
       const glow=ctx.createRadialGradient(850,240,10,850,240,520);glow.addColorStop(0,p.accent+"44");glow.addColorStop(1,p.bg+"00");ctx.fillStyle=glow;ctx.fillRect(0,0,1080,1350);
       ctx.strokeStyle="#ffffff12";ctx.lineWidth=1;for(let x=0;x<1080;x+=44){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,1350);ctx.stroke();}for(let y=0;y<1350;y+=44){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(1080,y);ctx.stroke();}
-      ctx.fillStyle=p.ink;ctx.font="700 26px Arial, sans-serif";ctx.fillText("DAVYLAB / CREATIVE SIGNAL",76,92);
-      ctx.strokeStyle=p.accent;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(824,57,180,54,27);ctx.stroke();ctx.fillStyle=p.accent;ctx.font="18px Arial, sans-serif";ctx.fillText("IDEA 001",865,90);
+      ctx.fillStyle=p.ink;ctx.font=posterFont(700,26);ctx.fillText("DAVYLAB / CREATIVE SIGNAL",76,92);
+      ctx.strokeStyle=p.accent;ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(824,57,180,54,27);ctx.stroke();ctx.fillStyle=p.accent;ctx.font=posterFont(400,18);ctx.fillText("IDEA 001",865,90);
       ctx.fillStyle=p.accent;ctx.globalAlpha=.18;ctx.beginPath();ctx.arc(840,420,200,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
-      const fontSize=c.title.length>28?68:c.title.length>16?82:102;ctx.fillStyle=p.ink;ctx.font="800 "+fontSize+"px Arial, sans-serif";
+      const fontSize=c.title.length>28?68:c.title.length>16?82:102;ctx.fillStyle=p.ink;ctx.font=posterFont(800,fontSize);
       const lines=wrappedLines(ctx,c.title,900);let y=560-(lines.length*fontSize*1.08)/2;
       lines.forEach((line,i)=>{ctx.fillStyle=i===lines.length-1?p.accent:p.ink;ctx.fillText(line,76,y);y+=fontSize*1.12;});
-      y+=38;ctx.fillStyle=p.ink;ctx.globalAlpha=.8;ctx.font="28px Arial, sans-serif";wrappedLines(ctx,c.subtitle,820).slice(0,4).forEach(line=>{ctx.fillText(line,78,y);y+=44;});ctx.globalAlpha=1;
+      y+=38;ctx.fillStyle=p.ink;ctx.globalAlpha=.8;ctx.font=posterFont(400,28);wrappedLines(ctx,c.subtitle,820).slice(0,4).forEach(line=>{ctx.fillText(line,78,y);y+=44;});ctx.globalAlpha=1;
       ctx.strokeStyle="#ffffff55";ctx.beginPath();ctx.moveTo(78,1168);ctx.lineTo(1002,1168);ctx.stroke();
-      ctx.fillStyle=p.ink;ctx.font="18px Arial, sans-serif";ctx.fillText("MAKE POSSIBILITIES HAPPEN",78,1210);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",1002,1210);ctx.textAlign="left";
+      ctx.fillStyle=p.ink;ctx.font=posterFont(400,18);ctx.fillText("MAKE POSSIBILITIES HAPPEN",78,1210);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",1002,1210);ctx.textAlign="left";
       canvas.toBlob(blob=>{if(!blob){$("#exportStatus").textContent="PNG 生成失败，请尝试其他浏览器。";return;}const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="davylab-motion-poster.png";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$("#exportStatus").textContent="PNG 海报已生成并开始下载。";},"image/png");
     } catch(error){$("#exportStatus").textContent="导出失败："+error.message;}
   });
@@ -118,6 +129,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
       const c=config(),p=palettes[theme],canvas=document.createElement("canvas");
       canvas.width=720;canvas.height=900;
       const ctx=canvas.getContext("2d");if(!ctx)throw new Error("无法创建视频画布");
+      const posterFont=(weight,size)=>weight+" "+size+"px \""+engineFontEn+"\", \""+engineFontZh+"\", sans-serif";
       const stream=canvas.captureStream(24);
       const chunks=[];
       const recorder=new MediaRecorder(stream,{mimeType,videoBitsPerSecond:2500000});
@@ -135,13 +147,13 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
         ctx.globalAlpha=.8;ctx.fillStyle=orb;ctx.beginPath();ctx.arc(orbX,orbY,112,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1;
         let alpha=c.motion==="fade"?ease:Math.min(1,progress*3.2);let yOffset=c.motion==="rise"?(1-ease)*52:0;let scale=c.motion==="zoom"?.88+.12*ease:1;
         ctx.save();ctx.globalAlpha=alpha;ctx.translate(62,455+yOffset);ctx.scale(scale,scale);
-        const fontSize=c.title.length>25?50:c.title.length>14?60:72;ctx.font="800 "+fontSize+"px Arial, sans-serif";
+        const fontSize=c.title.length>25?50:c.title.length>14?60:72;ctx.font=posterFont(800,fontSize);
         const lines=wrappedLines(ctx,c.title,595);let y=-(lines.length*fontSize*1.08)/2;
         lines.forEach((line,i)=>{ctx.fillStyle=i===lines.length-1?p.accent:p.ink;ctx.fillText(line,0,y);y+=fontSize*1.12;});
-        y+=25;ctx.fillStyle=p.ink;ctx.globalAlpha=alpha*.85;ctx.font="20px Arial, sans-serif";wrappedLines(ctx,c.subtitle,565).slice(0,4).forEach(line=>{ctx.fillText(line,0,y);y+=31;});
+        y+=25;ctx.fillStyle=p.ink;ctx.globalAlpha=alpha*.85;ctx.font=posterFont(400,20);wrappedLines(ctx,c.subtitle,565).slice(0,4).forEach(line=>{ctx.fillText(line,0,y);y+=31;});
         ctx.restore();ctx.globalAlpha=1;
         ctx.strokeStyle="#ffffff55";ctx.beginPath();ctx.moveTo(62,790);ctx.lineTo(658,790);ctx.stroke();
-        ctx.fillStyle=p.ink;ctx.font="12px Arial, sans-serif";ctx.fillText("MAKE POSSIBILITIES HAPPEN",62,820);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",658,820);ctx.textAlign="left";
+        ctx.fillStyle=p.ink;ctx.font=posterFont(400,12);ctx.fillText("MAKE POSSIBILITIES HAPPEN",62,820);ctx.fillStyle=p.accent;ctx.textAlign="right";ctx.fillText(c.signature||"YOUR SIGNATURE",658,820);ctx.textAlign="left";
       }
       recorder.start(150);
       function frame(now){draw(now);if(now-started<durationMs&&recorder.state==="recording")requestAnimationFrame(frame);else if(recorder.state==="recording")recorder.stop();}
@@ -161,15 +173,37 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
     const c=config(),p=palettes[theme],escaped=JSON.stringify(c).replace(/</g,"\\u003c");
     const animationRule = c.motion==="fade" ? "animation:fade "+(c.duration/1000)+"s ease both" : c.motion==="zoom" ? "animation:zoom "+(c.duration/1000)+"s cubic-bezier(.2,.75,.25,1) both" : c.motion==="orbit" ? "" : "animation:rise "+(c.duration/1000)+"s cubic-bezier(.2,.75,.25,1) both";
     const orbitRule = c.motion==="orbit" ? ".orb{animation:orbit "+(c.duration/1000)+"s linear infinite}" : "";
-    const html='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAVYLAB Motion Poster</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1117;font-family:Arial,sans-serif}.poster{width:min(92vw,430px);aspect-ratio:4/5;padding:32px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative;color:'+p.ink+';background:'+p.bg+';border:1px solid #ffffff22}.top,.bottom{display:flex;justify-content:space-between;gap:8px;font-size:10px;letter-spacing:.12em}.center{margin:auto 0;'+animationRule+'}.orb{position:absolute;width:160px;height:160px;border-radius:50%;right:-25px;top:25%;background:radial-gradient(circle at 30% 25%,#fff,'+p.accent+',#172423);opacity:.7;z-index:0}.center{position:relative;z-index:1}h1{font-size:clamp(42px,10vw,68px);line-height:.98;letter-spacing:-.06em;white-space:pre-line}h1 span{color:'+p.accent+'}.sub{line-height:1.8;white-space:pre-line}.accent{color:'+p.accent+'}@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes orbit{to{transform:rotate(360deg)}}'+orbitRule+'@media(prefers-reduced-motion:reduce){.center,.orb{animation:none!important}}</style><article class="poster"><div class="top"><span>DAVYLAB / CREATIVE SIGNAL</span><span>IDEA 001</span></div><div class="orb"></div><div class="center"><h1 id="title"></h1><p class="sub" id="sub"></p><hr><p>MAKE POSSIBILITIES HAPPEN</p></div><div class="bottom"><span>VISUAL DNA</span><span class="accent" id="signature"></span></div></article><script>const c='+escaped+';document.getElementById("title").textContent=c.title;document.getElementById("sub").textContent=c.subtitle;document.getElementById("signature").textContent=c.signature;<\/script></html>';
+    const html='<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DAVYLAB Motion Poster</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0b1117;font-family:&quot;'+engineFontEn+'&quot;,&quot;'+engineFontZh+'&quot;,sans-serif}.poster{width:min(92vw,430px);aspect-ratio:4/5;padding:32px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;position:relative;color:'+p.ink+';background:'+p.bg+';border:1px solid #ffffff22}.top,.bottom{display:flex;justify-content:space-between;gap:8px;font-size:10px;letter-spacing:.12em}.center{margin:auto 0;'+animationRule+'}.orb{position:absolute;width:160px;height:160px;border-radius:50%;right:-25px;top:25%;background:radial-gradient(circle at 30% 25%,#fff,'+p.accent+',#172423);opacity:.7;z-index:0}.center{position:relative;z-index:1}h1{font-size:clamp(42px,10vw,68px);line-height:.98;letter-spacing:-.06em;white-space:pre-line}h1 span{color:'+p.accent+'}.sub{line-height:1.8;white-space:pre-line}.accent{color:'+p.accent+'}@keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}@keyframes orbit{to{transform:rotate(360deg)}}'+orbitRule+'@media(prefers-reduced-motion:reduce){.center,.orb{animation:none!important}}</style><article class="poster"><div class="top"><span>DAVYLAB / CREATIVE SIGNAL</span><span>IDEA 001</span></div><div class="orb"></div><div class="center"><h1 id="title"></h1><p class="sub" id="sub"></p><hr><p>MAKE POSSIBILITIES HAPPEN</p></div><div class="bottom"><span>VISUAL DNA</span><span class="accent" id="signature"></span></div></article><script>const c='+escaped+';document.getElementById("title").textContent=c.title;document.getElementById("sub").textContent=c.subtitle;document.getElementById("signature").textContent=c.signature;<\/script></html>';
     const blob=new Blob([html],{type:"text/html;charset=utf-8"}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="davylab-motion-poster.html";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);$("#exportStatus").textContent="动态 HTML 文件已生成。它是独立网页文件，不是 MP4 视频。";
   });
   $("#share").addEventListener("click",async()=>{
     const url=new URL(location.href);url.hash="poster="+encodeURIComponent(JSON.stringify(config()));$("#exportStatus").textContent="分享链接已生成；打开链接可恢复文字、样式与动效设置。";
     try{await navigator.clipboard.writeText(url.href);$("#exportStatus").textContent="分享链接已生成并复制。";}catch(_){const input=document.createElement("input");input.value=url.href;input.style.position="fixed";input.style.opacity="0";document.body.append(input);input.select();try{document.execCommand("copy");$("#exportStatus").textContent="分享链接已复制。";}catch(__){$("#exportStatus").textContent=url.href;}input.remove();}
   });
-  try{const raw=location.hash.startsWith("#poster=")?decodeURIComponent(location.hash.slice(8)):null;if(raw){const c=JSON.parse(raw);if(typeof c.title==="string"&&typeof c.subtitle==="string"&&palettes[c.theme]){title.value=c.title;subtitle.value=c.subtitle;signature.value=c.signature||"";motion.value=["rise","fade","zoom","orbit"].includes(c.motion)?c.motion:"rise";duration.value=Math.min(1800,Math.max(300,Number(c.duration)||800));theme=c.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));}}else{const saved=JSON.parse(localStorage.getItem("davylab.motion-poster.v1")||"null");if(saved&&palettes[saved.theme]){title.value=saved.title||title.value;subtitle.value=saved.subtitle||subtitle.value;signature.value=saved.signature||signature.value;motion.value=saved.motion||motion.value;duration.value=saved.duration||duration.value;theme=saved.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));}}}catch(_){}
-  render();
+  try{const raw=location.hash.startsWith("#poster=")?decodeURIComponent(location.hash.slice(8)):null;if(raw){const c=JSON.parse(raw);if(typeof c.title==="string"&&typeof c.subtitle==="string"&&palettes[c.theme]){title.value=c.title;subtitle.value=c.subtitle;signature.value=c.signature||"";motion.value=["rise","fade","zoom","orbit"].includes(c.motion)?c.motion:"rise";duration.value=Math.min(1800,Math.max(300,Number(c.duration)||800));theme=c.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));if(typeof c.style==="string"&&["editorial","cinematic","surreal","film","sound","nature","future","comic","minimal"].includes(c.style)){engineStyle=c.style;document.querySelectorAll("[data-style]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.style===engineStyle)));}if(typeof c.fontEn==="string"&&$("#fontEn").querySelector("option[value="+JSON.stringify(c.fontEn)+"]")){engineFontEn=c.fontEn;$("#fontEn").value=c.fontEn;}if(typeof c.fontZh==="string"&&$("#fontZh").querySelector("option[value="+JSON.stringify(c.fontZh)+"]")){engineFontZh=c.fontZh;$("#fontZh").value=c.fontZh;}}}else{const saved=JSON.parse(localStorage.getItem("davylab.motion-poster.v1")||"null");if(saved&&palettes[saved.theme]){title.value=saved.title||title.value;subtitle.value=saved.subtitle||subtitle.value;signature.value=saved.signature||signature.value;motion.value=saved.motion||motion.value;duration.value=saved.duration||duration.value;theme=saved.theme;document.querySelectorAll("[data-theme]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.theme===theme)));}}}catch(_){}
+  let engineStyle="editorial",engineFontEn="Inter",engineFontZh="Noto Sans SC";
+  const styleLabels={editorial:"编辑排版",cinematic:"电影叙事",surreal:"超现实梦境",film:"复古胶片",sound:"声音可视化",nature:"自然治愈",future:"未来数字",comic:"彩色手绘",minimal:"极简几何"};
+  document.querySelectorAll("[data-style]").forEach(b=>b.addEventListener("click",()=>{engineStyle=b.dataset.style;document.querySelectorAll("[data-style]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));poster.dataset.style=engineStyle;render(true);}));
+  document.querySelectorAll("[data-palette]").forEach(b=>b.addEventListener("click",()=>{theme=b.dataset.palette;document.querySelectorAll("[data-palette]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));document.querySelectorAll("[data-theme]").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.theme===theme)));render(true);}));
+  $("#fontEn").addEventListener("change",e=>{engineFontEn=e.target.value;poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';});
+  $("#fontZh").addEventListener("change",e=>{engineFontZh=e.target.value;poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';});
+  $("#generateAI").addEventListener("click",async()=>{
+    const idea=$("#aiPrompt").value.trim(),status=$("#aiStatus"),button=$("#generateAI");
+    if(!idea){status.textContent="请先输入一句话。";$("#aiPrompt").focus();return;}
+    const endpoint=window.DAVYLAB_POSTER_AI_ENDPOINT||window.MELODYME_AI_ENDPOINT||"https://melodyme-ai.chenzhe223.workers.dev";
+    button.disabled=true;status.textContent="正在请求 AI…";
+    try{
+      const response=await fetch(endpoint,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({action:"generateMemoryStory",input:{story:idea,moods:[styleLabels[engineStyle],theme],song:"",artist:"",writing_style:"根据用户的一句话生成适合视觉海报的中文标题和短文案。语言自然、有画面感、简洁克制，不要营销腔，不虚构具体人物经历或事实。标题适合大字排版，正文不超过两句。视觉风格："+styleLabels[engineStyle]+"；配色："+theme+"。",selected_track:null}})});
+      if(!response.ok)throw new Error("HTTP "+response.status);
+      const payload=await response.json(),data=payload.result||payload;
+      if(!data||typeof data.story!=="string")throw new Error("AI 服务返回格式不符合预期");
+      title.value=String(data.poster_title||data.title||data.core_line||idea).slice(0,90);subtitle.value=String(data.poster_subtitle||data.core_line||data.story).slice(0,220);render(true);
+      status.textContent="AI 已生成海报文案。图片中的文字由前端排版。";
+    }catch(err){status.textContent="AI 生成失败："+err.message+"。请检查 AI 服务是否可用；未生成的内容不会被当作成功结果。";}
+    finally{button.disabled=false;}
+  });
+  render();poster.dataset.style=engineStyle;
+  poster.style.fontFamily='"'+engineFontZh+'","'+engineFontEn+'",system-ui,sans-serif';
 })();
 </script>
 </body>
