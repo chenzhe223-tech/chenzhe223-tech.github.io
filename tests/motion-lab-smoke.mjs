@@ -20,7 +20,7 @@ try {
   await springOption.click();
   if (await springOption.getAttribute("aria-pressed") !== "true") throw new Error("Selected motion preset did not become active");
   if (!(await page.locator("#previewName").textContent()).includes("弹性聚焦")) throw new Error("Selected motion name did not update");
-  if (!(await page.locator("#previewDescription").textContent()).includes("回弹")) throw new Error("Selected motion description did not update");
+  if (!(await page.locator("#previewDescription").textContent()).includes("放大")) throw new Error("Selected motion description did not update");
   const springAnimations = await page.locator("#previewObject").evaluate(el => el.getAnimations().length);
   if (springAnimations < 1) throw new Error("Selecting a motion did not start a real Web Animations API preview");
 
