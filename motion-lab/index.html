@@ -732,6 +732,84 @@ $("#downloadMotionConfig").addEventListener("click", () => {
   previewStatus.textContent = "已生成当前动效配置文件下载。";
 });
 
+
+const SAVED_MOTION_PRESETS_KEY = "davylab.visual-dna-motion.saved-presets.v1";
+function readSavedMotionPresets() {
+  try {
+    const raw = localStorage.getItem(SAVED_MOTION_PRESETS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(item => item && typeof item.id === "string" && typeof item.name === "string" && item.config && item.config.schema === "davylab.visual-dna-motion/v1").slice(0,30);
+  } catch (error) {
+    return [];
+  }
+}
+function persistSavedMotionPresets(presets) {
+  try {
+    localStorage.setItem(SAVED_MOTION_PRESETS_KEY, JSON.stringify(presets));
+    return true;
+  } catch (error) {
+    $("#savedPresetStatus").textContent = "无法保存：浏览器可能禁用了本地存储，或存储空间不足。当前配置仍可导出 JSON。";
+    return false;
+  }
+}
+function refreshSavedMotionPresets(selectedId) {
+  const select = $("#savedMotionPresets");
+  const presets = readSavedMotionPresets();
+  select.replaceChildren();
+  if (!presets.length) {
+    const empty = document.createElement("option");
+    empty.value = "";
+    empty.textContent = "暂无已保存预设";
+    select.appendChild(empty);
+    select.disabled = true;
+    $("#loadMotionPreset").disabled = true;
+    $("#deleteMotionPreset").disabled = true;
+    return;
+  }
+  select.disabled = false;
+  $("#loadMotionPreset").disabled = false;
+  $("#deleteMotionPreset").disabled = false;
+  presets.forEach(preset => {
+    const option = document.createElement("option");
+    option.value = preset.id;
+    option.textContent = preset.name + " · " + (motionDefinitions[preset.config.effect]?.name || preset.config.effect);
+    select.appendChild(option);
+  });
+  if (selectedId && presets.some(preset => preset.id === selectedId)) select.value = selectedId;
+}
+$("#saveMotionPreset").addEventListener("click", () => {
+  const name = $("#customPresetName").value.trim();
+  if (!name) { $("#savedPresetStatus").textContent = "请先填写预设名称。"; $("#customPresetName").focus(); return; }
+  const presets = readSavedMotionPresets();
+  const existing = presets.find(item => item.name.toLocaleLowerCase() === name.toLocaleLowerCase());
+  if (!existing && presets.length >= 30) { $("#savedPresetStatus").textContent = "最多保存 30 个预设。请删除不再需要的预设，或导出 JSON 归档。"; return; }
+  const id = existing ? existing.id : "preset-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,7);
+  const preset = { id, name, savedAt: new Date().toISOString(), config: readMotionConfig() };
+  const next = existing ? presets.map(item => item.id === existing.id ? preset : item) : presets.concat(preset);
+  if (!persistSavedMotionPresets(next)) return;
+  refreshSavedMotionPresets(id);
+  $("#savedPresetStatus").textContent = (existing ? "已更新预设「" : "已保存预设「") + name + "」。仅保存在此浏览器。";
+});
+$("#loadMotionPreset").addEventListener("click", () => {
+  const preset = readSavedMotionPresets().find(item => item.id === $("#savedMotionPresets").value);
+  if (!preset) { $("#savedPresetStatus").textContent = "请选择一个有效的已保存预设。"; return; }
+  $("#motionImportJson").value = JSON.stringify(preset.config);
+  applyImportedMotionConfig();
+  $("#savedPresetStatus").textContent = "已载入「" + preset.name + "」。你可以继续调整或另存为新预设。";
+});
+$("#deleteMotionPreset").addEventListener("click", () => {
+  const selectedId = $("#savedMotionPresets").value;
+  const presets = readSavedMotionPresets();
+  const preset = presets.find(item => item.id === selectedId);
+  if (!preset) { $("#savedPresetStatus").textContent = "请选择要删除的预设。"; return; }
+  const next = presets.filter(item => item.id !== selectedId);
+  if (!persistSavedMotionPresets(next)) return;
+  refreshSavedMotionPresets();
+  $("#savedPresetStatus").textContent = "已删除预设「" + preset.name + "」。";
+});
+refreshSavedMotionPresets();
+
 function applyControls() {
   state.speed = Number($("#speed").value);
   state.intensity = Number($("#intensity").value) / 100;
