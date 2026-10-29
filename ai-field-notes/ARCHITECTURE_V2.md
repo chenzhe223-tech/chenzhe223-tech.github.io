@@ -103,8 +103,8 @@ Cloudflare's current published Workers Free/D1 quotas include:
 
 - [x] Chosen a free-first alternative to Supabase.
 - [x] Created the isolated `ai-field-notes-dev` D1 database in APAC.
-- [x] Applied and re-checked migrations `0001` through `0007`.
-- [x] Seeded and validated eleven atlas regions, six tracks, six published releases and six lessons.
+- [x] Applied and re-checked migrations `0001` through `0008`.
+- [x] Seeded and validated twelve atlas regions, six tracks, six published releases and six lessons.
 - [x] Deployed Worker API v0.4.0 with D1 binding, live atlas metadata, ranked mixed course/brief keyword search, source-version endpoint and an hourly Cron Trigger.
 - [x] Added the V2 front-end integration for live atlas metadata, indexed DAVY Radar cards, source history panels, course + brief search results, and the live version/lesson catalog in the archive page.
 - [x] Added local personal-map event history, derived progress metrics, and JSON export/import backup without collecting personal data in the cloud.
