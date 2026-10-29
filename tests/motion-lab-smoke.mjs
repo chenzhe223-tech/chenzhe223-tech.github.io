@@ -255,7 +255,7 @@ try {
   posterPage.on("pageerror", error => posterErrors.push(error.message));
   await posterPage.goto("http://127.0.0.1:4173/motion-lab/motion-poster.html", { waitUntil: "domcontentloaded" });
   await posterPage.locator("#poster").waitFor();
-  if (await posterPage.locator("[data-style]").count() !== 9) throw new Error("Motion Poster should expose nine visual styles");
+  if (await posterPage.locator("#styleGrid [data-style]").count() !== 9) throw new Error("Motion Poster should expose nine visual styles");
   if (await posterPage.locator("[data-palette]").count() !== 6) throw new Error("Motion Poster should expose six palette choices");
   if (!(await posterPage.locator("#fontEn option").count()) || !(await posterPage.locator("#fontZh option").count())) throw new Error("Motion Poster font selectors are missing");
   if (!(await posterPage.locator("#aiStatus").textContent()).includes("已有 DeepSeek 服务端")) throw new Error("Motion Poster must disclose AI integration requirements");
