@@ -76,6 +76,19 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .three-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px;background:radial-gradient(circle,#1e3028,#090e13 70%)}.three-fallback[hidden]{display:none}
 
 .motion-picker{padding:52px 0 76px;border-top:1px solid #ffffff12}
+.motion-personalities{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.motion-personality{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:0;padding:15px;border:1px solid var(--line);border-radius:13px;background:#10161d;color:var(--ink)}
+.motion-personality[aria-pressed="true"]{border-color:var(--accent);background:#c7f36b0d;box-shadow:inset 0 0 0 1px #c7f36b20}
+.motion-personality strong{font-size:13px}.motion-personality small{font-size:11px;line-height:1.6;color:var(--muted)}
+.motion-workbench{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.motion-workbench-panel{min-width:0;padding:18px;border:1px solid var(--line);border-radius:16px;background:#10161d}
+.motion-workbench-panel h3{font-size:14px;margin:0 0 7px}.motion-workbench-panel p{font-size:11px;line-height:1.65;color:var(--muted);margin:0 0 12px}
+.motion-workbench-panel textarea{width:100%;min-height:135px;resize:vertical;border:1px solid var(--line);border-radius:9px;background:#090e13;color:#d4e3dd;padding:11px;font:11px/1.6 ui-monospace,SFMono-Regular,monospace}
+.motion-workbench-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.motion-workbench-panel select{width:100%;min-height:36px;padding:7px 9px;border:1px solid #34414a;border-radius:8px;background:#0b1117;color:var(--ink);margin-bottom:10px}
+.motion-file-input{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}
+.motion-workbench-status{min-height:18px;margin-top:8px;color:#8fa29f;font-size:11px;line-height:1.5}
+@media(max-width:900px){.motion-personalities{grid-template-columns:1fr}.motion-workbench{grid-template-columns:1fr}}
 .motion-picker-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(320px,.95fr);gap:18px;align-items:stretch}
 .motion-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;align-content:start}
 .motion-option{display:flex;flex-direction:column;align-items:flex-start;gap:7px;min-width:0;text-align:left;padding:14px;border:1px solid var(--line);border-radius:14px;background:#10161d;color:var(--ink);transition:border-color 180ms,background 180ms}
@@ -182,6 +195,11 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
   <section class="motion-picker" id="motionPicker" aria-labelledby="motionPickerTitle">
     <div class="section-head"><div><div class="section-index">04 / MOTION LIBRARY</div><h2 id="motionPickerTitle">先看效果，再决定怎么用。</h2></div><p>选择一种动效，右侧立即播放约 1–5 秒的对应预览。说明、调节参数和导出配置始终围绕当前选中的效果。</p></div>
+    <div class="motion-personalities" role="group" aria-label="动效性格预设">
+      <button class="motion-personality" type="button" data-personality="editorial" aria-pressed="true"><span class="option-index">STYLE / 01</span><strong>克制编辑</strong><small>低幅度、柔和减速。适合内容阅读、品牌官网和专业工具。</small></button>
+      <button class="motion-personality" type="button" data-personality="product" aria-pressed="false"><span class="option-index">STYLE / 02</span><strong>产品交互</strong><small>清晰响应、轻微弹性。适合按钮反馈、状态变化和操作引导。</small></button>
+      <button class="motion-personality" type="button" data-personality="immersive" aria-pressed="false"><span class="option-index">STYLE / 03</span><strong>沉浸空间</strong><small>更长节奏与空间旋转。适合主视觉、探索体验和展示场景。</small></button>
+    </div>
     <div class="motion-picker-grid">
       <div class="motion-options" role="group" aria-label="选择动效效果">
         <button class="motion-option" type="button" data-effect="fade-up" aria-pressed="true"><span class="option-index">MOTION / 01</span><strong>淡入上移</strong><small>柔和进入，适合内容区块与页面初始显现。</small></button>
@@ -211,6 +229,25 @@ input[type=range]{width:100%;accent-color:var(--accent)}
         <div class="control"><label for="previewDirection">运动方向</label><select id="previewDirection"><option value="up">向上</option><option value="down">向下</option><option value="left">向左</option><option value="right">向右</option></select></div>
         <div class="control"><label for="previewEasing">缓动曲线</label><select id="previewEasing"><option value="cubic-bezier(0.22,1,0.36,1)">柔和减速</option><option value="cubic-bezier(0.34,1.56,0.64,1)">轻弹回</option><option value="cubic-bezier(0.65,0,0.35,1)">平滑进出</option><option value="linear">匀速</option></select></div>
         <div class="control"><label for="previewRepeat">播放方式</label><select id="previewRepeat"><option value="once">单次播放</option><option value="loop">预览时长内循环</option></select></div>
+      </div>
+      <div class="motion-workbench">
+        <section class="motion-workbench-panel" aria-labelledby="importMotionTitle">
+          <h3 id="importMotionTitle">导入现有动效配置</h3>
+          <p>粘贴此前导出的 JSON，或导入 .json 文件。系统会校验配置结构，并将有效参数应用到当前预览；无效文件不会覆盖当前设置。</p>
+          <textarea id="motionImportJson" spellcheck="false" aria-label="粘贴要导入的动画 JSON" placeholder='在这里粘贴 davylab.visual-dna-motion/v1 配置…'></textarea>
+          <input class="motion-file-input" type="file" id="motionImportFile" accept=".json,application/json">
+          <div class="motion-workbench-actions"><button class="btn" type="button" id="chooseMotionFile">选择 JSON 文件</button><button class="btn primary" type="button" id="applyImportedMotionConfig">校验并应用</button></div>
+          <div class="motion-workbench-status" id="motionImportStatus" role="status">支持导入本实验室 schema 标记的动效配置。</div>
+        </section>
+        <section class="motion-workbench-panel" aria-labelledby="snippetTitle">
+          <h3 id="snippetTitle">生成接入代码</h3>
+          <p>将当前效果转成可复制的基础接入示例。选择你项目使用的引擎；正式接入时仍需检查选择器、生命周期和现有动画是否冲突。</p>
+          <label for="motionSnippetEngine" style="display:block;font-size:11px;color:#d5e0e1;margin-bottom:6px">目标引擎</label>
+          <select id="motionSnippetEngine"><option value="waapi">原生 Web Animations API</option><option value="gsap">GSAP</option><option value="motion">Motion（vanilla）</option></select>
+          <textarea id="motionIntegrationSnippet" readonly spellcheck="false" aria-label="生成的动效接入代码"></textarea>
+          <div class="motion-workbench-actions"><button class="btn primary" type="button" id="copyMotionSnippet">复制接入代码</button></div>
+          <div class="motion-workbench-status" id="motionSnippetStatus" role="status">代码随当前效果与参数自动更新。</div>
+        </section>
       </div>
       <div class="motion-export">
         <div><label for="motionConfig" style="display:block;font-size:11px;color:#d5e0e1;margin-bottom:8px">当前效果配置 JSON</label><textarea id="motionConfig" readonly spellcheck="false" aria-label="当前动画配置 JSON"></textarea><div class="motion-status" id="motionStatus" role="status">配置会随效果与参数调整自动更新。</div></div>
@@ -466,6 +503,7 @@ function updateMotionConfig() {
   $("#previewDistanceValue").textContent = config.distancePx + "px";
   $("#previewDirection").disabled = !motionDefinitions[selectedMotion].direction;
   $("#previewDirection").style.opacity = $("#previewDirection").disabled ? ".45" : "1";
+  if (typeof updateIntegrationSnippet === "function") updateIntegrationSnippet();
 }
 function cancelMotionPreview() {
   previewAnimations.forEach(animation => { try { animation.cancel(); } catch {} });
@@ -533,7 +571,123 @@ function selectMotion(effect, autoplay=true) {
   updateMotionConfig();
   if (autoplay) playSelectedMotion();
 }
-document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => selectMotion(button.dataset.effect)));
+
+const motionPersonalities = {
+  editorial: { name:"克制编辑", effect:"fade-up", durationMs:1800, intensityPercent:65, distancePx:24, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:0.85, staggerMs:90 },
+  product: { name:"产品交互", effect:"spring", durationMs:1500, intensityPercent:100, distancePx:24, direction:"up", easing:"cubic-bezier(0.34,1.56,0.64,1)", playback:"once", speed:1.1, staggerMs:60 },
+  immersive: { name:"沉浸空间", effect:"orbit", durationMs:4000, intensityPercent:80, distancePx:48, direction:"up", easing:"cubic-bezier(0.65,0,0.35,1)", playback:"loop", speed:0.8, staggerMs:120 }
+};
+function applyMotionValues(config) {
+  $("#previewDuration").value = String(Math.max(1000, Math.min(5000, Number(config.durationMs) || 2000)));
+  $("#previewIntensity").value = String(Math.max(0, Math.min(150, Number(config.intensityPercent) || 0)));
+  $("#previewDistance").value = String(Math.max(8, Math.min(80, Number(config.distancePx) || 32)));
+  const validDirections = ["up","down","left","right"];
+  if (validDirections.includes(config.direction)) $("#previewDirection").value = config.direction;
+  const validEasings = Array.from($("#previewEasing").options).map(option => option.value);
+  if (validEasings.includes(config.easing)) $("#previewEasing").value = config.easing;
+  $("#previewRepeat").value = config.playback === "loop" ? "loop" : "once";
+}
+function applyMotionPersonality(name) {
+  const preset = motionPersonalities[name];
+  if (!preset) return;
+  document.querySelectorAll(".motion-personality").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.personality === name)));
+  applyMotionValues(preset);
+  $("#speed").value = String(preset.speed);
+  $("#stagger").value = String(preset.staggerMs);
+  selectMotion(preset.effect, false);
+  applyControls();
+  playSelectedMotion();
+  previewStatus.textContent = "已应用「" + preset.name + "」性格预设，可继续微调任意参数。";
+}
+document.querySelectorAll(".motion-personality").forEach(button => button.addEventListener("click", () => applyMotionPersonality(button.dataset.personality)));
+
+function updateIntegrationSnippet() {
+  const config = readMotionConfig();
+  const effect = config.effect;
+  const duration = (config.durationMs / 1000).toFixed(2);
+  const distance = config.distancePx * config.intensityPercent / 100;
+  const directionOffset = { up:[0,-distance], down:[0,distance], left:[-distance,0], right:[distance,0] }[config.direction] || [0,-distance];
+  const x = Math.round(directionOffset[0]);
+  const y = Math.round(directionOffset[1]);
+  const easingMap = {
+    "cubic-bezier(0.22,1,0.36,1)": "power3.out",
+    "cubic-bezier(0.34,1.56,0.64,1)": "back.out(1.7)",
+    "cubic-bezier(0.65,0,0.35,1)": "sine.inOut",
+    "linear": "none"
+  };
+  let frames;
+  if (effect === "spring") frames = [{ transform:"scale(0.82)" },{ transform:"scale(1.08)" },{ transform:"scale(0.97)" },{ transform:"scale(1)" }];
+  else if (effect === "blur") frames = [{ opacity:0, filter:"blur(" + Math.round(10*config.intensityPercent/100) + "px)" },{ opacity:1, filter:"blur(0px)" }];
+  else if (effect === "orbit") frames = [{ transform:"rotate(-18deg)" },{ transform:"rotate(342deg)" }];
+  else frames = [{ opacity:0, transform:"translate(" + x + "px, " + y + "px)" },{ opacity:1, transform:"translate(0, 0)" }];
+  const waapiFrames = JSON.stringify(frames, null, 2);
+  const totalDuration = config.durationMs / 1000;
+  const cycleDuration = config.playback === "loop" ? totalDuration / 2 : totalDuration;
+  const repeatCount = config.playback === "loop" ? 1 : 0;
+  const waapi = 'const target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  const animation = target.animate(' + waapiFrames + ', {\\n    duration: ' + Math.round(config.playback === "loop" ? config.durationMs / 2 : config.durationMs) + ',\\n    easing: ' + JSON.stringify(config.easing) + ',\\n    fill: "both",\\n    iterations: ' + (config.playback === "loop" ? "2" : "1") + '\\n  });\\n}';
+  const gsapSteps = frames.slice(1).map((frame, index) => {
+    const serialized = JSON.stringify(frame);
+    return (index === 0 ? '  timeline.fromTo(target, ' + JSON.stringify(frames[0]) + ', { ...' + serialized + ', duration: ' + (cycleDuration / (frames.length - 1)).toFixed(3) + ', overwrite: "auto" });' : '  timeline.to(target, { ...' + serialized + ', duration: ' + (cycleDuration / (frames.length - 1)).toFixed(3) + ' });');
+  }).join('\\n');
+  const gsap = 'const target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  const timeline = gsap.timeline({ repeat: ' + repeatCount + ', defaults: { ease: ' + JSON.stringify(easingMap[config.easing] || "power3.out") + ' } });\\n' + gsapSteps + '\\n}';
+  let motionKeyframes;
+  if (effect === "spring") motionKeyframes = { transform:["scale(0.82)","scale(1.08)","scale(0.97)","scale(1)"] };
+  else if (effect === "blur") motionKeyframes = { opacity:[0,1], filter:["blur(" + Math.round(10*config.intensityPercent/100) + "px)","blur(0px)"] };
+  else if (effect === "orbit") motionKeyframes = { transform:["rotate(-18deg)","rotate(342deg)"] };
+  else motionKeyframes = { opacity:[0,1], transform:["translate(" + x + "px, " + y + "px)","translate(0px, 0px)"] };
+  const motion = 'import { animate } from "motion";\\n\\nconst target = document.querySelector(".your-target");\\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\\n  animate(target, ' + JSON.stringify(motionKeyframes, null, 2) + ', {\\n    duration: ' + cycleDuration.toFixed(3) + ',\\n    ease: ' + JSON.stringify(config.easing === "linear" ? "linear" : config.easing === "cubic-bezier(0.65,0,0.35,1)" ? "ease-in-out" : "ease-out") + ',\\n    repeat: ' + repeatCount + '\\n  });\\n}';
+  const engine = $("#motionSnippetEngine").value;
+  $("#motionIntegrationSnippet").value = engine === "gsap" ? gsap : engine === "motion" ? motion : waapi;
+}
+$("#motionSnippetEngine").addEventListener("change", updateIntegrationSnippet);
+$("#copyMotionSnippet").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("#motionIntegrationSnippet").value);
+    $("#motionSnippetStatus").textContent = "接入代码已复制。请将 .your-target 替换为你页面中的实际选择器。";
+  } catch {
+    $("#motionIntegrationSnippet").focus(); $("#motionIntegrationSnippet").select();
+    $("#motionSnippetStatus").textContent = "浏览器未允许直接复制；代码已选中，请使用 Ctrl/Cmd+C。";
+  }
+});
+function applyImportedMotionConfig() {
+  const status = $("#motionImportStatus");
+  try {
+    const config = JSON.parse($("#motionImportJson").value);
+    if (!config || config.schema !== "davylab.visual-dna-motion/v1") throw new Error("配置版本不匹配。请选择本实验室导出的 v1 JSON。");
+    if (!motionDefinitions[config.effect]) throw new Error("未知的动效标识。");
+    if (!Number.isFinite(Number(config.durationMs)) || Number(config.durationMs) < 1000 || Number(config.durationMs) > 5000) throw new Error("预览时长必须在 1000–5000ms 之间。");
+    if (!Number.isFinite(Number(config.intensityPercent)) || Number(config.intensityPercent) < 0 || Number(config.intensityPercent) > 150) throw new Error("运动幅度超出允许范围。");
+    if (!Number.isFinite(Number(config.distancePx)) || Number(config.distancePx) < 8 || Number(config.distancePx) > 80) throw new Error("位移距离超出允许范围。");
+    if (!["once","loop"].includes(config.playback)) throw new Error("播放方式不受支持。");
+    const allowedEasings = Array.from($("#previewEasing").options).map(option => option.value);
+    if (!allowedEasings.includes(config.easing)) throw new Error("缓动曲线不受支持。");
+    if (motionDefinitions[config.effect].direction && !["up","down","left","right"].includes(config.direction)) throw new Error("运动方向不受支持。");
+    applyMotionValues(config);
+    if (config.globalTokens && Number.isFinite(Number(config.globalTokens.speed))) {
+      $("#speed").value = String(Math.max(0.5, Math.min(1.8, Number(config.globalTokens.speed))));
+    }
+    if (config.globalTokens && Number.isFinite(Number(config.globalTokens.staggerMs))) {
+      $("#stagger").value = String(Math.max(20, Math.min(180, Number(config.globalTokens.staggerMs))));
+    }
+    selectMotion(config.effect, false);
+    document.querySelectorAll(".motion-personality").forEach(button => button.setAttribute("aria-pressed","false"));
+    applyControls();
+    playSelectedMotion();
+    status.textContent = "已成功应用「" + motionDefinitions[config.effect].name + "」。你可以继续微调，原始 JSON 不会被自动上传。";
+  } catch (error) {
+    status.textContent = "导入失败：" + error.message + " 当前设置未被更改。";
+  }
+}
+$("#applyImportedMotionConfig").addEventListener("click", applyImportedMotionConfig);
+$("#chooseMotionFile").addEventListener("click", () => $("#motionImportFile").click());
+$("#motionImportFile").addEventListener("change", async event => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (file.size > 1024 * 1024) { $("#motionImportStatus").textContent = "导入失败：JSON 文件不能超过 1MB。"; event.target.value = ""; return; }
+  $("#motionImportJson").value = await file.text();
+  $("#motionImportStatus").textContent = "文件已读取，点击「校验并应用」后才会更改当前设置。";
+});
+document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-personality").forEach(preset => preset.setAttribute("aria-pressed","false")); selectMotion(button.dataset.effect); }));
 $("#replaySelectedMotion").addEventListener("click", playSelectedMotion);
 $("#resetMotionTuning").addEventListener("click", () => {
   $("#previewDuration").value = "2000";
