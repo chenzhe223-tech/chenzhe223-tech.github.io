@@ -68,6 +68,10 @@ const path = require('node:path');
     await page.locator('.appearance-preset[data-appearance-navmode="top"]').click();
     await page.locator('#appearanceDone').click();
     await page.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
+    const restoredFocus = await page.evaluate(() => document.activeElement?.id || '');
+    if (restoredFocus !== 'appearanceTrigger') {
+      throw new Error('Closing appearance settings after leaving hidden mode did not restore focus to a visible trigger: ' + restoredFocus);
+    }
     results.push({ test: 'Visual DNA hidden navigation recovery, Escape, and link dismissal', status: 'PASS' });
 
     // Trigger the existing scroll-reveal enhancement before interacting with product tools.

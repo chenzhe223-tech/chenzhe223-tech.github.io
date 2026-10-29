@@ -821,7 +821,14 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  }
  function setTheme(name){const palette=themes[name];if(!palette)return;state={...state,theme:name,...palette};apply()}
  function open(source){activeTrigger=source||trigger;panel.hidden=false;backdrop.hidden=false;trigger.setAttribute('aria-expanded','true');emergencyTrigger.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';document.getElementById('appearanceClose').focus()}
- function close(){panel.hidden=true;backdrop.hidden=true;trigger.setAttribute('aria-expanded','false');emergencyTrigger.setAttribute('aria-expanded','false');document.body.style.overflow='';if(activeTrigger&&activeTrigger.isConnected&&activeTrigger.getClientRects().length)activeTrigger.focus();else emergencyTrigger.focus()}
+ function close(){
+  panel.hidden=true;backdrop.hidden=true;
+  trigger.setAttribute('aria-expanded','false');emergencyTrigger.setAttribute('aria-expanded','false');
+  document.body.style.overflow='';
+  const focusTarget=[activeTrigger,trigger,emergencyTrigger,document.getElementById('navEmergencyTrigger'),document.getElementById('navInlineTrigger')]
+   .find(element=>element&&element.isConnected&&element.getClientRects().length);
+  if(focusTarget)focusTarget.focus();
+ }
  trigger.addEventListener('click',()=>panel.hidden?open(trigger):close());
  emergencyTrigger.addEventListener('click',()=>panel.hidden?open(emergencyTrigger):close());
  const navEmergencyTrigger=document.getElementById('navEmergencyTrigger');
