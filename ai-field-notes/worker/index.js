@@ -1,5 +1,5 @@
 const ALLOWED_ORIGIN = "https://chenzhe223-tech.github.io";
-const API_VERSION = "0.3.3";
+const API_VERSION = "0.4.0";
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -22,6 +22,140 @@ function corsHeaders(origin) {
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin",
   };
+}
+
+
+const RADAR_PUBLIC_JSON = "https://chenzhe223-tech.github.io/radar/data/latest.json";
+const RADAR_DAILY_PAGE = "https://chenzhe223-tech.github.io/radar/daily/";
+
+function canonicalBriefUrl(raw) {
+  try {
+    const parsed = new URL(raw);
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return "";
+    parsed.hash = "";
+    for (const key of [...parsed.searchParams.keys()]) {
+      if (/^utm_/i.test(key) || ["fbclid", "gclid", "ref"].includes(key.toLowerCase())) parsed.searchParams.delete(key);
+    }
+    return parsed.toString();
+  } catch { return ""; }
+}
+
+// Lightweight content fingerprint for change detection; not an authentication hash.
+function briefContentHash(item) {
+  const value = JSON.stringify({
+    title: item.title, summary: item.summary, why_it_matters: item.why_it_matters,
+    source: item.source, url: item.url, published_at: item.published_at,
+    category: item.category, region: item.region, tags: item.tags,
+    collection_type: item.collection_type, is_top_pick: item.is_top_pick, sort_order: item.sort_order,
+  });
+  let a = 0x811c9dc5, b = 0x9e3779b9;
+  for (let i = 0; i < value.length; i++) {
+    const code = value.charCodeAt(i);
+    a = Math.imul(a ^ code, 0x01000193);
+    b = Math.imul(b ^ (code + i), 0x85ebca6b);
+  }
+  return (a >>> 0).toString(16).padStart(8, "0") + (b >>> 0).toString(16).padStart(8, "0");
+}
+
+function normalizeRadarFeed(feed) {
+  const reportDate = String(feed.report_date || new Date().toISOString().slice(0, 10));
+  const generatedAt = feed.generated_at || null;
+  const candidates = [
+    ...(Array.isArray(feed.top5) ? feed.top5.map((item, i) => ({ item, collection_type: "global_top5", is_top_pick: 1, sort_order: i })) : []),
+    ...(Array.isArray(feed.news) ? feed.news.map((item, i) => ({ item, collection_type: "global_news", is_top_pick: 0, sort_order: i })) : []),
+    ...(Array.isArray(feed.china_ai_news) ? feed.china_ai_news.map((item, i) => ({ item, collection_type: "china_ai_news", is_top_pick: 0, sort_order: i })) : []),
+  ];
+  const seen = new Set(), normalized = [];
+  for (const candidate of candidates) {
+    const item = candidate.item || {};
+    const url = canonicalBriefUrl(item.url || "");
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    const tags = Array.isArray(item.topics) ? item.topics : (Array.isArray(item.tags) ? item.tags : []);
+    const normalizedItem = {
+      item_id: "radar:" + url, url,
+      title: String(item.title_zh || item.title || item.title_en || "未命名简报线索").slice(0, 800),
+      summary: String(item.summary_zh || item.summary || item.summary_en || "").slice(0, 6000),
+      why_it_matters: String(item.why_it_matters_zh || item.why_it_matters || "").slice(0, 3000),
+      source: String(item.source || item.publisher || "DAVY Radar").slice(0, 300),
+      published_at: item.published || item.published_at || null,
+      category: String(item.category || item.daily_theme || "").slice(0, 200),
+      region: String(item.region || "").slice(0, 100),
+      tags, tags_json: JSON.stringify(tags),
+      report_date: reportDate, source_generated_at: generatedAt,
+      collection_type: candidate.collection_type,
+      is_top_pick: candidate.is_top_pick, sort_order: candidate.sort_order,
+    };
+    normalizedItem.content_hash = briefContentHash(normalizedItem);
+    normalized.push(normalizedItem);
+    if (normalized.length >= 60) break;
+  }
+  return { reportDate, generatedAt, items: normalized };
+}
+
+async function refreshRadarBriefIndex(env, trigger = "cron") {
+  const startedAt = new Date().toISOString();
+  const jobId = "radar-brief-refresh-" + Date.now().toString(36);
+  await env.DB.prepare(
+    "INSERT INTO refresh_jobs (id, job_type, target_key, status, attempt_count, source_manifest_json, error_message, created_at, updated_at, started_at) VALUES (?, 'radar_brief_refresh', 'latest', 'running', 1, ?, '', ?, ?, ?)"
+  ).bind(jobId, JSON.stringify({ trigger, source: RADAR_PUBLIC_JSON }), startedAt, startedAt, startedAt).run();
+
+  try {
+    const response = await fetch(RADAR_PUBLIC_JSON, { headers: { Accept: "application/json" }, cf: { cacheTtl: 60, cacheEverything: true } });
+    if (!response.ok) throw new Error("DAVY Radar source returned HTTP " + response.status);
+    const feed = await response.json();
+    const snapshot = normalizeRadarFeed(feed);
+    if (!snapshot.items.length) throw new Error("DAVY Radar source contained no valid public URLs");
+
+    const now = new Date().toISOString();
+    const statements = [env.DB.prepare("UPDATE brief_items SET status = 'archived' WHERE status = 'current'")];
+    const snapshotSql = `INSERT OR IGNORE INTO brief_item_versions (
+      version_id, item_id, version_seq, title, summary, why_it_matters, source, url,
+      published_at, category, region, tags_json, report_date, source_generated_at,
+      collection_type, is_top_pick, sort_order, content_hash, recorded_at
+    )
+    SELECT b.item_id || ':' || b.content_hash, b.item_id,
+      COALESCE((SELECT MAX(v.version_seq) + 1 FROM brief_item_versions v WHERE v.item_id = b.item_id), 1),
+      b.title, b.summary, b.why_it_matters, b.source, b.url, b.published_at,
+      b.category, b.region, b.tags_json, b.report_date, b.source_generated_at,
+      b.collection_type, b.is_top_pick, b.sort_order, b.content_hash, ?
+    FROM brief_items b
+    WHERE b.item_id = ? AND (
+      b.content_hash <> ? OR NOT EXISTS (
+        SELECT 1 FROM brief_item_versions v WHERE v.item_id = b.item_id AND v.content_hash = b.content_hash
+      )
+    )`;
+    for (const item of snapshot.items) {
+      statements.push(env.DB.prepare(
+        "INSERT OR IGNORE INTO brief_items (item_id, url, title, summary, why_it_matters, source, published_at, category, region, tags_json, report_date, source_generated_at, collection_type, is_top_pick, sort_order, content_hash, status, first_seen_at, last_seen_at, refreshed_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'current', ?, ?, ?)"
+      ).bind(item.item_id, item.url, item.title, item.summary, item.why_it_matters, item.source, item.published_at, item.category, item.region, item.tags_json, item.report_date, item.source_generated_at, item.collection_type, item.is_top_pick, item.sort_order, item.content_hash, now, now, now));
+      statements.push(env.DB.prepare(snapshotSql).bind(now, item.item_id, item.content_hash));
+      statements.push(env.DB.prepare(
+        "UPDATE brief_items SET url = ?, title = ?, summary = ?, why_it_matters = ?, source = ?, published_at = ?, category = ?, region = ?, tags_json = ?, report_date = ?, source_generated_at = ?, collection_type = ?, is_top_pick = ?, sort_order = ?, content_hash = ?, status = 'current', last_seen_at = ?, refreshed_at = ? WHERE item_id = ? AND content_hash <> ?"
+      ).bind(item.url, item.title, item.summary, item.why_it_matters, item.source, item.published_at, item.category, item.region, item.tags_json, item.report_date, item.source_generated_at, item.collection_type, item.is_top_pick, item.sort_order, item.content_hash, now, now, item.item_id, item.content_hash));
+      statements.push(env.DB.prepare(
+        "UPDATE brief_items SET status = 'current', last_seen_at = ?, refreshed_at = ?, report_date = ?, source_generated_at = ? WHERE item_id = ? AND content_hash = ?"
+      ).bind(now, now, item.report_date, item.source_generated_at, item.item_id, item.content_hash));
+      statements.push(env.DB.prepare(snapshotSql).bind(now, item.item_id, item.content_hash));
+    }
+
+    const results = await env.DB.batch(statements);
+    const changes = (results || []).reduce((sum, result) => sum + (result.meta?.changes || 0), 0);
+    const finishedAt = new Date().toISOString();
+    const manifest = { source: RADAR_PUBLIC_JSON, trigger, report_date: snapshot.reportDate, source_generated_at: snapshot.generatedAt, items_seen: snapshot.items.length, sql_statements: statements.length, d1_changes: changes };
+    await env.DB.prepare(
+      "UPDATE refresh_jobs SET status = 'published', source_manifest_json = ?, error_message = '', updated_at = ?, finished_at = ? WHERE id = ?"
+    ).bind(JSON.stringify(manifest), finishedAt, finishedAt, jobId).run();
+    return { ok: true, ...manifest, finished_at: finishedAt };
+  } catch (error) {
+    const finishedAt = new Date().toISOString();
+    const message = String(error?.message || error || "unknown error").slice(0, 800);
+    await env.DB.prepare(
+      "UPDATE refresh_jobs SET status = 'failed', error_message = ?, updated_at = ?, finished_at = ? WHERE id = ?"
+    ).bind(message, finishedAt, finishedAt, jobId).run();
+    console.error("Radar index refresh failed:", message);
+    return { ok: false, error: message, finished_at: finishedAt };
+  }
 }
 
 export default {
@@ -91,36 +225,73 @@ export default {
 
     if (url.pathname === "/api/brief/latest") {
       try {
-        const upstream = await fetch("https://chenzhe223-tech.github.io/radar/data/latest.json", {
-          headers: { Accept: "application/json" },
-          cf: { cacheTtl: 120, cacheEverything: true },
-        });
+        const result = await env.DB.prepare(
+          `SELECT b.item_id AS id, b.title, b.summary, b.why_it_matters, b.source, b.url,
+                  b.published_at, b.category, b.region, b.tags_json, b.report_date,
+                  b.source_generated_at, b.collection_type, b.is_top_pick, b.sort_order,
+                  (SELECT COUNT(*) FROM brief_item_versions v WHERE v.item_id = b.item_id) AS version_count
+           FROM brief_items b
+           WHERE b.status = 'current'
+             AND b.report_date = (SELECT MAX(report_date) FROM brief_items WHERE status = 'current')
+           ORDER BY b.is_top_pick DESC,
+             CASE b.collection_type WHEN 'global_top5' THEN 0 WHEN 'global_news' THEN 1 ELSE 2 END,
+             b.sort_order LIMIT 12`
+        ).all();
+        if ((result.results || []).length) {
+          const lastRefresh = await env.DB.prepare(
+            "SELECT finished_at FROM refresh_jobs WHERE job_type = 'radar_brief_refresh' AND status = 'published' ORDER BY created_at DESC LIMIT 1"
+          ).first();
+          const first = result.results[0];
+          return json({
+            report_date: first.report_date, generated_at: first.source_generated_at,
+            synced_at: lastRefresh?.finished_at || null, status: "ok", source: "DAVY Radar", source_url: RADAR_DAILY_PAGE,
+            items: result.results.map((item) => ({
+              id: item.id, title: item.title, summary: item.summary, why_it_matters: item.why_it_matters,
+              source: item.source, url: item.url, published_at: item.published_at, category: item.category,
+              region: item.region, tags: safeJson(item.tags_json), collection_type: item.collection_type,
+              is_top_pick: Boolean(item.is_top_pick), version_count: item.version_count,
+            })),
+          }, 200, { ...cors, "Cache-Control": "public, max-age=60" });
+        }
+      } catch {
+        // Fall back to the existing public briefing if the scheduled index is not ready.
+      }
+
+      try {
+        const upstream = await fetch(RADAR_PUBLIC_JSON, { headers: { Accept: "application/json" }, cf: { cacheTtl: 60, cacheEverything: true } });
         if (!upstream.ok) return json({ error: "brief_source_unavailable", upstream_status: upstream.status }, 502, cors);
         const brief = await upstream.json();
-        const articles = Array.isArray(brief.top5) && brief.top5.length
-          ? brief.top5
-          : (Array.isArray(brief.news) ? brief.news.slice(0, 5) : []);
+        const articles = Array.isArray(brief.top5) && brief.top5.length ? brief.top5 : (Array.isArray(brief.news) ? brief.news.slice(0, 5) : []);
         const items = articles.slice(0, 5).map((item, index) => ({
           id: String(item.canonical_id || item.id || item.url || ("radar-" + index)),
           title: item.title_zh || item.title || item.title_en || "未命名简报条目",
           summary: item.summary_zh || item.summary || item.summary_en || "",
           why_it_matters: item.why_it_matters_zh || item.why_it_matters || "",
-          source: item.source || item.publisher || "DAVY Radar",
-          url: item.url || "",
-          published_at: item.published || item.published_at || null,
-          category: item.category || item.daily_theme || "",
-          tags: Array.isArray(item.topics) ? item.topics : (Array.isArray(item.tags) ? item.tags : []),
+          source: item.source || item.publisher || "DAVY Radar", url: canonicalBriefUrl(item.url || ""),
+          published_at: item.published || item.published_at || null, category: item.category || item.daily_theme || "",
+          tags: Array.isArray(item.topics) ? item.topics : (Array.isArray(item.tags) ? item.tags : []), version_count: 0,
         })).filter((item) => item.url.startsWith("https://") || item.url.startsWith("http://"));
-        return json({
-          report_date: brief.report_date || null,
-          generated_at: brief.generated_at || null,
-          status: brief.status || "unknown",
-          source: "DAVY Radar",
-          source_url: "https://chenzhe223-tech.github.io/radar/daily/",
-          items,
-        }, 200, { ...cors, "Cache-Control": "public, max-age=120" });
+        return json({ report_date: brief.report_date || null, generated_at: brief.generated_at || null, synced_at: null, status: brief.status || "unknown", source: "DAVY Radar", source_url: RADAR_DAILY_PAGE, items }, 200, { ...cors, "Cache-Control": "public, max-age=60" });
       } catch {
         return json({ error: "brief_source_unavailable" }, 502, cors);
+      }
+    }
+
+    if (url.pathname === "/api/brief/versions") {
+      const canonical = canonicalBriefUrl(url.searchParams.get("url") || "");
+      if (!canonical) return json({ error: "valid_source_url_required" }, 400, cors);
+      try {
+        const result = await env.DB.prepare(
+          "SELECT version_seq, title, summary, why_it_matters, source, url, published_at, category, region, tags_json, report_date, collection_type, is_top_pick, content_hash, recorded_at FROM brief_item_versions WHERE item_id = ? ORDER BY version_seq DESC LIMIT 30"
+        ).bind("radar:" + canonical).all();
+        return json({ url: canonical, count: (result.results || []).length, versions: (result.results || []).map((item) => ({
+          version_seq: item.version_seq, title: item.title, summary: item.summary, why_it_matters: item.why_it_matters,
+          source: item.source, url: item.url, published_at: item.published_at, report_date: item.report_date,
+          category: item.category, region: item.region, tags: safeJson(item.tags_json),
+          is_top_pick: Boolean(item.is_top_pick), recorded_at: item.recorded_at,
+        })) }, 200, { ...cors, "Cache-Control": "public, max-age=60" });
+      } catch {
+        return json({ error: "brief_versions_unavailable" }, 503, cors);
       }
     }
 
@@ -192,43 +363,68 @@ export default {
           };
         });
         let briefs = [];
+        let briefIndexAvailable = false;
         if (terms.length) {
           try {
-            const sourceResponse = await fetch("https://chenzhe223-tech.github.io/radar/data/latest.json", {
-              headers: { Accept: "application/json" },
-              cf: { cacheTtl: 120, cacheEverything: true },
-            });
-            if (sourceResponse.ok) {
-              const sourceData = await sourceResponse.json();
-              const sourceItems = [
-                ...(Array.isArray(sourceData.top5) ? sourceData.top5 : []),
-                ...(Array.isArray(sourceData.news) ? sourceData.news : []),
-                ...(Array.isArray(sourceData.china_ai_news) ? sourceData.china_ai_news : []),
-              ];
-              const seen = new Set();
-              briefs = sourceItems.filter((item) => {
-                const key = item.url || item.title_zh || item.title;
-                if (!key || seen.has(key)) return false;
-                seen.add(key);
-                const haystack = [
-                  item.title_zh, item.title, item.title_en,
-                  item.summary_zh, item.summary, item.summary_en,
-                  item.why_it_matters_zh, item.source, item.category,
-                ].filter(Boolean).join(" ").toLowerCase();
-                return terms.some((term) => haystack.includes(term));
-              }).slice(0, 5).map((item, index) => ({
-                id: String(item.canonical_id || item.id || item.url || ("radar-search-" + index)),
-                title: item.title_zh || item.title || item.title_en || "未命名简报",
-                summary: item.summary_zh || item.summary || item.summary_en || "",
-                source: item.source || item.publisher || "DAVY Radar",
-                url: item.url || "",
-                published_at: item.published || item.published_at || null,
-                why_it_matters: item.why_it_matters_zh || item.why_it_matters || "",
-                type: "brief",
-              })).filter((item) => item.url.startsWith("https://") || item.url.startsWith("http://"));
+            const currentCount = await env.DB.prepare(
+              "SELECT COUNT(*) AS count FROM brief_items WHERE status = 'current' AND report_date = (SELECT MAX(report_date) FROM brief_items WHERE status = 'current')"
+            ).first();
+            if ((currentCount?.count || 0) > 0) {
+              const where = terms.map(() => "(lower(b.title) LIKE ? OR lower(b.summary) LIKE ? OR lower(b.why_it_matters) LIKE ? OR lower(b.source) LIKE ? OR lower(b.category) LIKE ? OR lower(b.tags_json) LIKE ?)").join(" OR ");
+              const searchParams = [];
+              for (const term of terms) {
+                const pattern = "%" + term + "%";
+                searchParams.push(pattern, pattern, pattern, pattern, pattern, pattern);
+              }
+              const result = await env.DB.prepare(
+                `SELECT b.item_id AS id, b.title, b.summary, b.why_it_matters, b.source, b.url,
+                        b.published_at, b.category, b.region, b.tags_json, b.report_date,
+                        b.collection_type, b.is_top_pick,
+                        (SELECT COUNT(*) FROM brief_item_versions v WHERE v.item_id = b.item_id) AS version_count
+                 FROM brief_items b
+                 WHERE b.status = 'current'
+                   AND b.report_date = (SELECT MAX(report_date) FROM brief_items WHERE status = 'current')
+                   AND (${where})
+                 ORDER BY b.is_top_pick DESC,
+                   CASE b.collection_type WHEN 'global_top5' THEN 0 WHEN 'global_news' THEN 1 ELSE 2 END,
+                   b.sort_order LIMIT 5`
+              ).bind(...searchParams).all();
+              briefs = (result.results || []).map((item) => ({
+                id: item.id, title: item.title, summary: item.summary, why_it_matters: item.why_it_matters,
+                source: item.source, url: item.url, published_at: item.published_at, category: item.category,
+                tags: safeJson(item.tags_json), version_count: item.version_count, type: "brief",
+              }));
+              briefIndexAvailable = true;
             }
-          } catch {
-            briefs = [];
+          } catch { briefIndexAvailable = false; }
+          if (!briefIndexAvailable) {
+            try {
+              const sourceResponse = await fetch(RADAR_PUBLIC_JSON, { headers: { Accept: "application/json" }, cf: { cacheTtl: 60, cacheEverything: true } });
+              if (sourceResponse.ok) {
+                const sourceData = await sourceResponse.json();
+                const sourceItems = [
+                  ...(Array.isArray(sourceData.top5) ? sourceData.top5 : []),
+                  ...(Array.isArray(sourceData.news) ? sourceData.news : []),
+                  ...(Array.isArray(sourceData.china_ai_news) ? sourceData.china_ai_news : []),
+                ];
+                const seen = new Set();
+                briefs = sourceItems.filter((item) => {
+                  const url = canonicalBriefUrl(item.url || ""), key = url || item.title_zh || item.title;
+                  if (!key || seen.has(key)) return false;
+                  seen.add(key);
+                  const haystack = [item.title_zh, item.title, item.title_en, item.summary_zh, item.summary, item.summary_en, item.why_it_matters_zh, item.source, item.category].filter(Boolean).join(" ").toLowerCase();
+                  return terms.some((term) => haystack.includes(term));
+                }).slice(0, 5).map((item, index) => ({
+                  id: String(item.canonical_id || item.id || item.url || ("radar-search-" + index)),
+                  title: item.title_zh || item.title || item.title_en || "未命名简报",
+                  summary: item.summary_zh || item.summary || item.summary_en || "",
+                  source: item.source || item.publisher || "DAVY Radar", url: canonicalBriefUrl(item.url || ""),
+                  published_at: item.published || item.published_at || null,
+                  why_it_matters: item.why_it_matters_zh || item.why_it_matters || "",
+                  type: "brief", version_count: 0,
+                })).filter((item) => item.url.startsWith("https://") || item.url.startsWith("http://"));
+              }
+            } catch { briefs = []; }
           }
         }
         const courseItems = items.map((item) => ({ ...item, type: "lesson" }));
@@ -326,6 +522,10 @@ export default {
     }
 
     return json({ error: "not_found" }, 404, cors);
+  },
+
+  async scheduled(controller, env, ctx) {
+    ctx.waitUntil(refreshRadarBriefIndex(env, "cron:" + String(controller.cron || "scheduled")));
   },
 };
 
