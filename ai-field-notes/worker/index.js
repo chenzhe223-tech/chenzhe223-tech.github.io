@@ -157,17 +157,17 @@ export default {
                    WHERE r.status = 'published' AND t.status = 'published' AND l.access_tier = 'free'`;
         const params = [];
         if (terms.length) {
-          const where = terms.map(() => "(lower(l.title) LIKE ? OR lower(l.summary) LIKE ? OR lower(l.content_markdown) LIKE ? OR lower(t.title) LIKE ?)").join(" OR ");
+          const where = terms.map(() => "(lower(l.title) LIKE ? OR lower(l.summary) LIKE ? OR lower(l.content_markdown) LIKE ? OR lower(l.content_json) LIKE ? OR lower(t.title) LIKE ?)").join(" OR ");
           sql += " AND (" + where + ")";
           for (const term of terms) {
             const pattern = "%" + term + "%";
-            params.push(pattern, pattern, pattern, pattern);
+            params.push(pattern, pattern, pattern, pattern, pattern);
           }
-          const ranking = terms.map(() => "(CASE WHEN lower(l.title) LIKE ? THEN 8 ELSE 0 END + CASE WHEN lower(t.title) LIKE ? THEN 6 ELSE 0 END + CASE WHEN lower(l.summary) LIKE ? THEN 3 ELSE 0 END + CASE WHEN lower(l.content_markdown) LIKE ? THEN 1 ELSE 0 END)").join(" + ");
+          const ranking = terms.map(() => "(CASE WHEN lower(l.title) LIKE ? THEN 8 ELSE 0 END + CASE WHEN lower(t.title) LIKE ? THEN 6 ELSE 0 END + CASE WHEN lower(l.summary) LIKE ? THEN 3 ELSE 0 END + CASE WHEN lower(l.content_markdown) LIKE ? THEN 1 ELSE 0 END + CASE WHEN lower(l.content_json) LIKE ? THEN 2 ELSE 0 END)").join(" + ");
           sql += " ORDER BY (" + ranking + ") DESC, t.sort_order, l.sort_order";
           for (const term of terms) {
             const pattern = "%" + term + "%";
-            params.push(pattern, pattern, pattern, pattern);
+            params.push(pattern, pattern, pattern, pattern, pattern);
           }
         } else {
           sql += " ORDER BY t.sort_order, l.sort_order";
@@ -191,7 +191,48 @@ export default {
             source_label: "AI Field Notes " + row.version_label,
           };
         });
-        return json({ query: rawQuery, count: items.length, items, mode: terms.length ? "keyword" : "catalog", terms }, 200, { ...cors, "Cache-Control": "public, max-age=30" });
+        let briefs = [];
+        if (terms.length) {
+          try {
+            const sourceResponse = await fetch("https://chenzhe223-tech.github.io/radar/data/latest.json", {
+              headers: { Accept: "application/json" },
+              cf: { cacheTtl: 120, cacheEverything: true },
+            });
+            if (sourceResponse.ok) {
+              const sourceData = await sourceResponse.json();
+              const sourceItems = [
+                ...(Array.isArray(sourceData.top5) ? sourceData.top5 : []),
+                ...(Array.isArray(sourceData.news) ? sourceData.news : []),
+                ...(Array.isArray(sourceData.china_ai_news) ? sourceData.china_ai_news : []),
+              ];
+              const seen = new Set();
+              briefs = sourceItems.filter((item) => {
+                const key = item.url || item.title_zh || item.title;
+                if (!key || seen.has(key)) return false;
+                seen.add(key);
+                const haystack = [
+                  item.title_zh, item.title, item.title_en,
+                  item.summary_zh, item.summary, item.summary_en,
+                  item.why_it_matters_zh, item.source, item.category,
+                ].filter(Boolean).join(" ").toLowerCase();
+                return terms.some((term) => haystack.includes(term));
+              }).slice(0, 5).map((item, index) => ({
+                id: String(item.canonical_id || item.id || item.url || ("radar-search-" + index)),
+                title: item.title_zh || item.title || item.title_en || "未命名简报",
+                summary: item.summary_zh || item.summary || item.summary_en || "",
+                source: item.source || item.publisher || "DAVY Radar",
+                url: item.url || "",
+                published_at: item.published || item.published_at || null,
+                why_it_matters: item.why_it_matters_zh || item.why_it_matters || "",
+                type: "brief",
+              })).filter((item) => item.url.startsWith("https://") || item.url.startsWith("http://"));
+            }
+          } catch {
+            briefs = [];
+          }
+        }
+        const courseItems = items.map((item) => ({ ...item, type: "lesson" }));
+        return json({ query: rawQuery, count: courseItems.length + briefs.length, items: courseItems, briefs, mode: terms.length ? "keyword" : "catalog", terms }, 200, { ...cors, "Cache-Control": "public, max-age=30" });
       } catch {
         return json({ error: "search_unavailable" }, 503, cors);
       }
