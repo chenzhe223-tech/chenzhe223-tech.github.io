@@ -62,6 +62,7 @@
 .map-manifesto{display:flex;align-items:center;gap:18px;margin:22px 0 3px;border-radius:17px;padding:22px 25px;background:#e9edf3;border:1px solid #dfe5ed}
 .manifesto-mark{font:62px/.8 Georgia,serif;color:#b6c1cf}.map-manifesto p{font-size:clamp(16px,2vw,21px);font-weight:700;letter-spacing:-.035em;margin:0 0 6px}.map-manifesto span{font-size:11px;color:#68758a}.manifesto-coordinates{margin-left:auto;flex:none;font:9px/1.8 ui-monospace,monospace;letter-spacing:.14em;color:#8b97a9;text-align:right}
 .map-route-cards .card{transition:transform .2s,border-color .2s,box-shadow .2s}.map-route-cards .card:hover{transform:translateY(-3px);border-color:#ced8e8;box-shadow:0 12px 28px rgba(18,34,62,.06)}
+.archive-course-expansion{margin-top:13px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.archive-course-expansion[hidden],.archive-lesson-list[hidden]{display:none}.archive-release-row{border:1px solid var(--line);border-radius:11px;padding:11px;display:grid;gap:8px}.archive-release-row strong{font-size:11px}.archive-release-row p{font-size:10px;color:var(--muted);margin:0}.archive-release-row .btn{justify-self:start}.archive-lesson-list{display:grid;gap:6px}.archive-lesson-link{border:1px solid #e3e8f1;background:#f8faff;color:#315caa;text-align:left;padding:10px;border-radius:8px;font-size:11px;min-height:42px}.archive-lesson-link:hover{border-color:#b6c8ec}
 @keyframes atlasPulse{0%,100%{opacity:.14}50%{opacity:.3}}@keyframes fogFloat{from{transform:translate(-2px,1px)}to{transform:translate(9px,-4px)}}@keyframes currentDrift{to{stroke-dashoffset:-160}}
 @media(max-width:1080px){.map-intro{align-items:flex-start;flex-direction:column;gap:15px}.map-intro-actions{justify-content:flex-start}.atlas-content{grid-template-columns:minmax(0,1fr) 258px}.atlas-bottom{grid-template-columns:auto minmax(80px,1fr) auto}.atlas-bottom-note{grid-column:1/3}.atlas-reset{grid-column:3;grid-row:1/3;align-self:center}.legend-note{margin-left:0}.atlas-legend{gap:12px}}
 @media(max-width:760px){.map-title{font-size:34px}.map-intro{margin-bottom:18px}.map-sub{font-size:12px}.map-intro-actions{width:100%;justify-content:space-between}.atlas-shell{border-radius:15px}.atlas-topline{padding:12px 14px;min-height:60px}.atlas-meta{display:none}.atlas-content{grid-template-columns:1fr}.atlas-map{min-height:0;height:450px}.atlas-canvas-scroll{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;touch-action:pan-x pan-y}.atlas-canvas-scroll .atlas-svg{position:relative;inset:auto;display:block;min-width:780px;width:780px;height:439px;min-height:0;max-height:none;transform:none}.atlas-map-toolbar{left:9px;right:9px;pointer-events:none}.atlas-map-toolbar>*{pointer-events:auto}.map-filters{gap:2px;padding:3px}.map-filter{padding:7px 8px;min-height:44px;font-size:9px}.map-scale{font-size:0}.map-scale:after{content:"左右滑动探索 →";font-size:9px;color:#aebbd0;letter-spacing:.04em}.coordinate-a{top:67px;left:12px;font-size:7px}.coordinate-b{right:11px;bottom:77px;font-size:7px}.compass{left:12px;bottom:49px}.map-bottom-note{left:46px;right:10px;font-size:9px;bottom:13px}.atlas-legend{padding:10px 13px;gap:10px;font-size:9px}.legend-note{width:100%;font-size:9px}.map-detail{border-top:1px solid #e4e9f0;padding:17px 15px 15px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);column-gap:14px;align-items:start}.detail-eyebrow{grid-column:1/-1}.detail-illustration{grid-column:1;grid-row:2/5;height:118px;margin:14px 0 0}.detail-status{grid-column:2;grid-row:2;margin:12px 0 0}.map-detail h2{grid-column:2;grid-row:3;font-size:21px;margin:3px 0 6px}.detail-desc{grid-column:2;grid-row:4}.detail-divider{grid-column:1/-1;margin:14px 0 12px}.detail-label,.detail-tags,.detail-next,.detail-action,.detail-secondary,.detail-footnote{grid-column:1/-1}.detail-tags{margin-top:8px}.detail-next{margin:13px 0 10px}.atlas-bottom{grid-template-columns:minmax(0,1fr) auto;gap:10px 13px;padding:14px}.atlas-progress-copy{grid-column:1;grid-row:1}.atlas-progress{grid-column:1/-1;grid-row:2}.atlas-bottom-note{grid-column:1/-1;grid-row:3}.atlas-reset{grid-column:2;grid-row:1}.map-manifesto{padding:17px;gap:11px;align-items:flex-start}.manifesto-mark{font-size:46px}.manifesto-coordinates{display:none}.map-manifesto p{font-size:16px}.map-manifesto span{font-size:10px;line-height:1.7;display:block}.map-route-cards .track{min-height:175px}}
@@ -264,6 +265,9 @@
         <article class="release"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h4>V1.1 · 专项知识扩展</h4><span class="tier">规划中</span></div><p>新增专项学习包，显示版本说明、变更内容、来源链接与建议复习内容。</p><div class="release-tags"><span>新增课程</span><span>内容差异</span><span>历史回看</span></div></div><button class="btn" data-toast="V1.1 尚未发布；当前仅展示版本规划">版本详情</button></article>
         <article class="release"><div><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><h4>V2.0 · 专业实操与知识搜索</h4><span class="tier pro">Pro 规划</span></div><p>面向真实任务的完整操作指南、可复用模板、验证样例与可追踪来源。</p><div class="release-tags"><span>实操项目</span><span>知识检索</span><span>专业档案</span></div></div><button class="btn" data-go="pro">了解 Pro</button></article>
       </div>
+      <div class="section-head"><div><h3>已发布知识与版本记录</h3><p>从开发数据库读取的真实课程目录和发布版本；V1 内容与未来规划分开显示。</p></div><span class="pill" id="archiveLiveState">正在读取目录</span></div>
+      <div class="grid track-grid" id="archiveCatalog"><article class="card empty">正在读取 D1 中已发布的课程与版本……</article></div>
+      <div class="notice">当前版本记录来自知识库数据库。每门课程的 V1.0 是第一版内容的发布快照；尚未发布的专项不会被显示成已上线课程。</div>
       <div class="section-head"><div><h3>个人学习档案</h3><p>当前存档用演示数据呈现，云端账号同步仍在开发中。</p></div><button class="btn" data-toast="云端同步尚未上线，当前不会收集或上传你的学习数据">同步状态</button></div>
       <div class="grid stats-grid">
         <div class="metric"><div class="metric-icon">▤</div><div><small>已存档笔记</small><strong>03</strong><div class="micro" style="color:var(--muted)">示例档案</div></div></div>
@@ -313,7 +317,7 @@
 </div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <dialog id="lessonDialog" style="max-width:560px;width:calc(100% - 28px);border:1px solid var(--line);border-radius:20px;padding:0;box-shadow:0 30px 100px #0c173455;color:var(--ink)">
-  <div style="padding:24px"><div class="overline">LEARNING NOTE · PREVIEW</div><h2 id="lessonTitle" style="font-size:25px;letter-spacing:-.04em;margin:9px 0">学习预览</h2><p id="lessonContent" style="font-size:13px;color:var(--muted);line-height:1.8"></p><div class="notice">此处为可交互页面原型。该内容未存入云端学习档案，账号同步正在后续开发计划中。</div><div class="lesson-dialog-actions"><button class="btn" id="closeDialog">关闭</button><button class="btn" data-go="archive" id="toArchive">查看版本记录</button><button class="btn primary" id="completeLesson">完成学习 · 更新地图</button></div></div>
+  <div style="padding:24px"><div class="overline">LEARNING NOTE · PREVIEW</div><h2 id="lessonTitle" style="font-size:25px;letter-spacing:-.04em;margin:9px 0">学习预览</h2><p id="lessonContent" style="font-size:13px;color:var(--muted);line-height:1.8;white-space:pre-line"></p><div class="notice">此处为可交互页面原型。该内容未存入云端学习档案，账号同步正在后续开发计划中。</div><div class="lesson-dialog-actions"><button class="btn" id="closeDialog">关闭</button><button class="btn" data-go="archive" id="toArchive">查看版本记录</button><button class="btn primary" id="completeLesson">完成学习 · 更新地图</button></div></div>
 </dialog>
 <script>
 const V1_URL = "https://chenzhe223-tech.github.io/ai-field-notes/";
@@ -328,7 +332,7 @@ const lessonData = {
  build:{title:"从念头到 AI 小应用",content:"选择一个高频且可验证的问题：写出输入、预期输出、约束条件和验收样例；先完成最小闭环，再加入 AI 自动化。每次迭代都保留可复现的输入、输出和变更记录。"}
 };
 function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove("show"),2800)}
-function go(name){if(!pages.includes(name))return;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+name));document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===name));document.getElementById("crumbTitle").textContent=titles[name];document.getElementById("sidebar").classList.remove("open");history.replaceState(null,"","#"+name);window.scrollTo({top:0,behavior:"smooth"})}
+function go(name){if(!pages.includes(name))return;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+name));document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===name));document.getElementById("crumbTitle").textContent=titles[name];document.getElementById("sidebar").classList.remove("open");history.replaceState(null,"","#"+name);window.scrollTo({top:0,behavior:"smooth"});if(name==="archive")loadArchiveCatalog();if(name==="brief")loadBriefItems();if(name==="search")search(document.getElementById("searchInput")?.value||"")}
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("sidebar").classList.toggle("open"));
@@ -592,6 +596,94 @@ async function loadBriefItems(){
  }catch{
   const metadata=document.getElementById("briefMeta");if(metadata)metadata.textContent="实时简报接口暂不可用；可直接打开 DAVY Radar 原始简报。";
   container.innerHTML='<article class="card brief-card"><h4>暂时无法读取最新条目</h4><p>已有简报与学习地图仍然独立可用。请通过上方原始简报入口查看最新信息。</p></article>';
+ }
+}
+
+async function loadArchiveCatalog(){
+ const container=document.getElementById("archiveCatalog"),status=document.getElementById("archiveLiveState");
+ if(!container||container.dataset.loading==="yes")return;
+ container.dataset.loading="yes";
+ try{
+  const response=await fetch(API_BASE+"/api/tracks",{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("tracks API "+response.status);
+  const data=await response.json(),tracks=Array.isArray(data.items)?data.items:[];
+  container.innerHTML="";
+  if(!tracks.length){container.innerHTML='<div class="card empty">当前没有已发布课程。</div>';status.textContent="目录为空";return;}
+  const releasesByTrack=await Promise.all(tracks.map(async track=>{
+    try{const r=await fetch(API_BASE+"/api/tracks/"+encodeURIComponent(track.slug)+"/releases",{headers:{Accept:"application/json"}});if(!r.ok)throw new Error("releases API "+r.status);const d=await r.json();return {track,releases:Array.isArray(d.releases)?d.releases:[]};}
+    catch{return {track,releases:[],error:true};}
+  }));
+  releasesByTrack.forEach(({track,releases,error})=>{
+   const card=document.createElement("article");card.className="card track";
+   const top=document.createElement("div");top.className="track-top";
+   const num=document.createElement("span");num.className="num";num.textContent=String(track.sort_order||0).padStart(2,"0");
+   const tier=document.createElement("span");tier.className="tier";tier.textContent=track.access_tier==="pro"?"PRO 专业":"公开课程";top.append(num,tier);
+   const title=document.createElement("h4");title.textContent=track.title;
+   const desc=document.createElement("p");desc.textContent=track.description||"该课程尚未填写简介。";
+   const meta=document.createElement("div");meta.className="progress-meta";
+   const label=document.createElement("span");label.textContent=error?"版本读取失败":"已发布版本";
+   const count=document.createElement("span");count.textContent=releases.length+" 个";meta.append(label,count);
+   const bar=document.createElement("div");bar.className="progress";const fill=document.createElement("span");fill.style.width=releases.length?"100%":"0%";bar.append(fill);
+   const foot=document.createElement("div");foot.className="track-foot";const version=document.createElement("small");version.textContent=releases[0]?"最新："+releases[0].version_label:"暂未发布";const btn=document.createElement("button");btn.className="link";btn.textContent="查看版本与课程 ↗";foot.append(version,btn);
+   const expanded=document.createElement("div");expanded.className="archive-course-expansion";expanded.hidden=true;
+   btn.addEventListener("click",async()=>{
+    expanded.hidden=!expanded.hidden;
+    if(expanded.hidden)return;
+    if(expanded.dataset.loaded==="yes")return;
+    expanded.textContent="正在读取版本与课程……";
+    try{
+     const live=await fetch(API_BASE+"/api/tracks/"+encodeURIComponent(track.slug)+"/releases",{headers:{Accept:"application/json"}});
+     if(!live.ok)throw new Error("版本接口不可用");const payload=await live.json();expanded.innerHTML="";
+     if(!payload.releases?.length){expanded.textContent="该专题目前没有已发布版本。";expanded.dataset.loaded="yes";return;}
+     payload.releases.forEach(release=>{
+      const row=document.createElement("div");row.className="archive-release-row";
+      const heading=document.createElement("strong");heading.textContent=release.version_label+" · "+(release.published_at?new Date(release.published_at).toLocaleDateString("zh-CN"):"已发布");
+      const note=document.createElement("p");note.textContent=release.release_notes||"该版本暂无发布说明。";row.append(heading,note);
+      const lessonsButton=document.createElement("button");lessonsButton.className="btn";lessonsButton.textContent="查看该版本课程";
+      const lessonsBox=document.createElement("div");lessonsBox.className="archive-lesson-list";lessonsBox.hidden=true;
+      lessonsButton.addEventListener("click",async()=>{
+       lessonsBox.hidden=!lessonsBox.hidden;if(lessonsBox.hidden||lessonsBox.dataset.loaded==="yes")return;
+       lessonsBox.textContent="正在读取课程章节……";
+       try{
+        const lr=await fetch(API_BASE+"/api/releases/"+encodeURIComponent(release.id)+"/lessons",{headers:{Accept:"application/json"}});
+        if(!lr.ok)throw new Error("课程接口不可用");const ld=await lr.json();lessonsBox.innerHTML="";
+        (ld.items||[]).forEach(item=>{
+         const lessonButton=document.createElement("button");lessonButton.className="archive-lesson-link";lessonButton.textContent=item.title+(item.locked?" · Pro":"")+" ↗";
+         lessonButton.addEventListener("click",()=>openCatalogLesson(item.id,track.slug));
+         lessonsBox.append(lessonButton);
+        });
+        if(!ld.items?.length)lessonsBox.textContent="该版本暂无章节记录。";lessonsBox.dataset.loaded="yes";
+       }catch{lessonsBox.textContent="暂时无法读取该版本课程，请稍后重试。";}
+      });
+      row.append(lessonsButton,lessonsBox);expanded.append(row);
+     });
+     expanded.dataset.loaded="yes";
+    }catch{expanded.textContent="暂时无法读取版本记录，请稍后重试。";}
+   });
+   card.append(top,title,desc,meta,bar,foot,expanded);container.append(card);
+  });
+  status.textContent=tracks.length+" 个专题 · 实时目录";
+ }catch{
+  container.innerHTML='<div class="card empty">无法读取实时课程目录。请检查 Worker API 状态，历史 V1 页面仍可继续访问。</div>';
+  status.textContent="目录暂不可用";
+ }finally{delete container.dataset.loading;}
+}
+async function openCatalogLesson(lessonId,trackSlug){
+ currentLessonRegion=({model:"models",agent:"agent",skill:"workflow",hook:"tools",mcp:"tools",harness:"knowledge"}[trackSlug]||"origin");
+ currentLessonKey=({model:"foundation",agent:"agent",skill:"systems",hook:"systems",mcp:"systems",harness:"systems"}[trackSlug]||"foundation");
+ document.getElementById("lessonTitle").textContent="正在打开课程……";
+ document.getElementById("lessonContent").textContent="正在读取已发布课程与版本信息。";
+ document.getElementById("lessonDialog").showModal();
+ try{
+  const response=await fetch(API_BASE+"/api/lessons/"+encodeURIComponent(lessonId),{headers:{Accept:"application/json"}});
+  if(response.status===401){document.getElementById("lessonTitle").textContent="专业内容需要会员权限";document.getElementById("lessonContent").textContent="该课程目前受权限保护。登录与付费授权尚未上线，因此不会绕过服务端权限显示专业内容。";return;}
+  if(!response.ok)throw new Error("lesson API "+response.status);
+  const data=await response.json();
+  document.getElementById("lessonTitle").textContent=data.lesson.title;
+  document.getElementById("lessonContent").textContent=[data.lesson.summary||"",data.lesson.content_markdown||"","版本："+(data.release?.version_label||"已发布")+" · 来自 AI Field Notes 知识库"].filter(Boolean).join("\\n\\n");
+ }catch{
+  document.getElementById("lessonTitle").textContent="课程暂时不可用";
+  document.getElementById("lessonContent").textContent="读取已发布课程时发生错误。请稍后重试；不会影响本地地图或原版学习内容。";
  }
 }
 async function checkApi(){const dot=document.getElementById("apiDot"),label=document.getElementById("apiText");try{const res=await fetch(API_BASE+"/health",{method:"GET",mode:"cors"});const data=await res.json();if(res.ok&&data.ok){dot.classList.add("ok");label.textContent="后端服务可达"}else{label.textContent="API 检查未通过"}}catch{label.textContent="后端状态待核验"}}
