@@ -503,6 +503,7 @@ function updateMotionConfig() {
   $("#previewDistanceValue").textContent = config.distancePx + "px";
   $("#previewDirection").disabled = !motionDefinitions[selectedMotion].direction;
   $("#previewDirection").style.opacity = $("#previewDirection").disabled ? ".45" : "1";
+  if (typeof updateIntegrationSnippet === "function") updateIntegrationSnippet();
 }
 function cancelMotionPreview() {
   previewAnimations.forEach(animation => { try { animation.cancel(); } catch {} });
@@ -570,6 +571,107 @@ function selectMotion(effect, autoplay=true) {
   updateMotionConfig();
   if (autoplay) playSelectedMotion();
 }
+
+const motionPersonalities = {
+  editorial: { name:"克制编辑", effect:"fade-up", durationMs:1800, intensityPercent:65, distancePx:24, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:0.85, staggerMs:90 },
+  product: { name:"产品交互", effect:"spring", durationMs:1200, intensityPercent:100, distancePx:24, direction:"up", easing:"cubic-bezier(0.34,1.56,0.64,1)", playback:"once", speed:1.1, staggerMs:60 },
+  immersive: { name:"沉浸空间", effect:"orbit", durationMs:4000, intensityPercent:80, distancePx:48, direction:"up", easing:"cubic-bezier(0.65,0,0.35,1)", playback:"loop", speed:0.8, staggerMs:120 }
+};
+function applyMotionValues(config) {
+  $("#previewDuration").value = String(Math.max(1000, Math.min(5000, Number(config.durationMs) || 2000)));
+  $("#previewIntensity").value = String(Math.max(0, Math.min(150, Number(config.intensityPercent) || 0)));
+  $("#previewDistance").value = String(Math.max(8, Math.min(80, Number(config.distancePx) || 32)));
+  const validDirections = ["up","down","left","right"];
+  if (validDirections.includes(config.direction)) $("#previewDirection").value = config.direction;
+  const validEasings = Array.from($("#previewEasing").options).map(option => option.value);
+  if (validEasings.includes(config.easing)) $("#previewEasing").value = config.easing;
+  $("#previewRepeat").value = config.playback === "loop" ? "loop" : "once";
+}
+function applyMotionPersonality(name) {
+  const preset = motionPersonalities[name];
+  if (!preset) return;
+  document.querySelectorAll(".motion-personality").forEach(button => button.setAttribute("aria-pressed", String(button.dataset.personality === name)));
+  applyMotionValues(preset);
+  $("#speed").value = String(preset.speed);
+  $("#stagger").value = String(preset.staggerMs);
+  selectMotion(preset.effect, false);
+  applyControls();
+  playSelectedMotion();
+  previewStatus.textContent = "已应用「" + preset.name + "」性格预设，可继续微调任意参数。";
+}
+document.querySelectorAll(".motion-personality").forEach(button => button.addEventListener("click", () => applyMotionPersonality(button.dataset.personality)));
+
+function updateIntegrationSnippet() {
+  const config = readMotionConfig();
+  const effect = config.effect;
+  const duration = (config.durationMs / 1000).toFixed(2);
+  const distance = config.distancePx * config.intensityPercent / 100;
+  const directionOffset = { up:[0,-distance], down:[0,distance], left:[-distance,0], right:[distance,0] }[config.direction] || [0,-distance];
+  const x = Math.round(directionOffset[0]);
+  const y = Math.round(directionOffset[1]);
+  const easingMap = {
+    "cubic-bezier(0.22,1,0.36,1)": "power3.out",
+    "cubic-bezier(0.34,1.56,0.64,1)": "back.out(1.7)",
+    "cubic-bezier(0.65,0,0.35,1)": "sine.inOut",
+    "linear": "none"
+  };
+  let frames;
+  if (effect === "spring") frames = [{ transform:"scale(0.82)" },{ transform:"scale(1.08)" },{ transform:"scale(0.97)" },{ transform:"scale(1)" }];
+  else if (effect === "blur") frames = [{ opacity:0, filter:"blur(" + Math.round(10*config.intensityPercent/100) + "px)" },{ opacity:1, filter:"blur(0px)" }];
+  else if (effect === "orbit") frames = [{ transform:"rotate(-18deg)" },{ transform:"rotate(342deg)" }];
+  else frames = [{ opacity:0, transform:"translate(" + x + "px, " + y + "px)" },{ opacity:1, transform:"translate(0, 0)" }];
+  const waapiFrames = JSON.stringify(frames, null, 2);
+  const waapi = 'const target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  const animation = target.animate(' + waapiFrames + ', {\n    duration: ' + config.durationMs + ',\n    easing: ' + JSON.stringify(config.easing) + ',\n    fill: "both",\n    iterations: ' + (config.playback === "loop" ? "2" : "1") + '\n  });\n}';
+  const gsap = 'const target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  gsap.fromTo(target, ' + JSON.stringify(frames[0]) + ', {\n    ...' + JSON.stringify(frames[frames.length-1]) + ',\n    duration: ' + duration + ',\n    ease: ' + JSON.stringify(easingMap[config.easing] || "power3.out") + ',\n    repeat: ' + (config.playback === "loop" ? "1" : "0") + ',\n    overwrite: "auto"\n  });\n}';
+  const motion = 'import { animate } from "motion";\n\nconst target = document.querySelector(".your-target");\nif (target && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {\n  animate(target, ' + waapiFrames + ', {\n    duration: ' + duration + ',\n    ease: ' + JSON.stringify(config.easing === "linear" ? "linear" : "ease-out") + ',\n    repeat: ' + (config.playback === "loop" ? "1" : "0") + '\n  });\n}';
+  const engine = $("#motionSnippetEngine").value;
+  $("#motionIntegrationSnippet").value = engine === "gsap" ? gsap : engine === "motion" ? motion : waapi;
+}
+$("#motionSnippetEngine").addEventListener("change", updateIntegrationSnippet);
+$("#copyMotionSnippet").addEventListener("click", async () => {
+  try {
+    await navigator.clipboard.writeText($("#motionIntegrationSnippet").value);
+    $("#motionSnippetStatus").textContent = "接入代码已复制。请将 .your-target 替换为你页面中的实际选择器。";
+  } catch {
+    $("#motionIntegrationSnippet").focus(); $("#motionIntegrationSnippet").select();
+    $("#motionSnippetStatus").textContent = "浏览器未允许直接复制；代码已选中，请使用 Ctrl/Cmd+C。";
+  }
+});
+function applyImportedMotionConfig() {
+  const status = $("#motionImportStatus");
+  try {
+    const config = JSON.parse($("#motionImportJson").value);
+    if (!config || config.schema !== "davylab.visual-dna-motion/v1") throw new Error("配置版本不匹配。请选择本实验室导出的 v1 JSON。");
+    if (!motionDefinitions[config.effect]) throw new Error("未知的动效标识。");
+    if (!Number.isFinite(Number(config.durationMs)) || Number(config.durationMs) < 1000 || Number(config.durationMs) > 5000) throw new Error("预览时长必须在 1000–5000ms 之间。");
+    if (!Number.isFinite(Number(config.intensityPercent)) || Number(config.intensityPercent) < 0 || Number(config.intensityPercent) > 150) throw new Error("运动幅度超出允许范围。");
+    if (!Number.isFinite(Number(config.distancePx)) || Number(config.distancePx) < 8 || Number(config.distancePx) > 80) throw new Error("位移距离超出允许范围。");
+    if (!["once","loop"].includes(config.playback)) throw new Error("播放方式不受支持。");
+    applyMotionValues(config);
+    if (config.globalTokens && Number.isFinite(Number(config.globalTokens.speed))) {
+      $("#speed").value = String(Math.max(0.5, Math.min(1.8, Number(config.globalTokens.speed))));
+    }
+    if (config.globalTokens && Number.isFinite(Number(config.globalTokens.staggerMs))) {
+      $("#stagger").value = String(Math.max(20, Math.min(180, Number(config.globalTokens.staggerMs))));
+    }
+    selectMotion(config.effect, false);
+    document.querySelectorAll(".motion-personality").forEach(button => button.setAttribute("aria-pressed","false"));
+    applyControls();
+    playSelectedMotion();
+    status.textContent = "已成功应用「" + motionDefinitions[config.effect].name + "」。你可以继续微调，原始 JSON 不会被自动上传。";
+  } catch (error) {
+    status.textContent = "导入失败：" + error.message + " 当前设置未被更改。";
+  }
+}
+$("#applyImportedMotionConfig").addEventListener("click", applyImportedMotionConfig);
+$("#chooseMotionFile").addEventListener("click", () => $("#motionImportFile").click());
+$("#motionImportFile").addEventListener("change", async event => {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  if (file.size > 1024 * 1024) { $("#motionImportStatus").textContent = "导入失败：JSON 文件不能超过 1MB。"; event.target.value = ""; return; }
+  $("#motionImportJson").value = await file.text();
+  $("#motionImportStatus").textContent = "文件已读取，点击「校验并应用」后才会更改当前设置。";
+});
 document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => selectMotion(button.dataset.effect)));
 $("#replaySelectedMotion").addEventListener("click", playSelectedMotion);
 $("#resetMotionTuning").addEventListener("click", () => {
