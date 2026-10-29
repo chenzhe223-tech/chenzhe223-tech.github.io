@@ -14,10 +14,10 @@ Do not use Supabase for this product. Keep the existing GitHub Pages learning bo
 - D1 database ID: `fd14c318-76ad-4071-ac54-b219f6b28380`
 - D1 primary region hint: APAC
 - Initial schema migration: `migrations/0001_initial_schema.sql`
-- Migrations `0001` through `0004` were applied and verified, including `0002_seed_v1_knowledge_and_atlas.sql`, neutral first-visit map defaults, and a correction to avoid linking lessons to unrelated map regions. The development database contains 9 AI atlas regions, 6 published V1 learning tracks, 6 V1 releases, and 6 lessons derived from the existing first-version knowledge content. Markdown line breaks and JSON lesson metadata were checked.
-- The Worker `ai-field-notes-api` is deployed with a D1 binding and its `workers.dev` subdomain enabled at `https://ai-field-notes-api.chenzhe223.workers.dev`. Read-only endpoints include `/health`, `/api/atlas/regions`, `/api/tracks`, `/api/tracks/:slug/releases`, `/api/releases/:id/lessons`, `/api/lessons/:id`, `/api/search?q=...`, and `/api/brief/latest`.
-- `/api/brief/latest` proxies the existing DAVY Radar public JSON; `/api/search` performs ranked keyword search across published/free D1 lessons and the public DAVY Radar `top5`, `news`, and `china_ai_news` title/summary/source fields. Results preserve original source URLs. This is not semantic AI search or full-web search.
-- No user or company learning data was imported. No payment integration, authenticated user sessions, cloud progress sync, or automatic publishing workflow is deployed.
+- Migrations `0001` through `0006` were applied and verified. The development database contains 9 AI atlas regions, 6 published V1 learning tracks, 6 V1 releases, 6 lessons derived from the existing first-version knowledge content, 28 de-duplicated public DAVY Radar records, and 28 initial source-version snapshots. Markdown line breaks and JSON lesson metadata were checked.
+- The Worker `ai-field-notes-api` v0.4.0 is deployed with a D1 binding and its `workers.dev` subdomain enabled at `https://ai-field-notes-api.chenzhe223.workers.dev`. Read endpoints include `/health`, `/api/atlas/regions`, `/api/tracks`, `/api/tracks/:slug/releases`, `/api/releases/:id/lessons`, `/api/lessons/:id`, `/api/search?q=...`, `/api/brief/latest`, and `/api/brief/versions?url=...`.
+- A Cloudflare Cron Trigger (`0 * * * *`, hourly) refreshes a versioned D1 index of the public DAVY Radar feed. It records source metadata, refresh jobs, and content-change snapshots; `/api/brief/latest` reads the indexed records and falls back to the public feed if the index is unavailable. `/api/search` performs ranked keyword search across published/free D1 lessons and indexed Radar title/summary/source fields, preserving original source URLs. This is not semantic AI search or full-web search.
+- No user or company learning data was imported. No payment integration, authenticated user sessions, cloud progress sync, or automatic creation/publishing of professional lessons is deployed. Only the public briefing metadata index refresh is automated.
 
 ## Free-first component map
 
@@ -26,7 +26,7 @@ Do not use Supabase for this product. Keep the existing GitHub Pages learning bo
 | Frontend | Existing GitHub Pages | Keep current URL and UI; do not redesign V1 while building V2. |
 | Backend API | Cloudflare Worker (Free) | Server-side validation, authentication, entitlements, content endpoints and usage limits. |
 | Database | Cloudflare D1 (Free) | Keep the dev DB isolated; use migrations committed to GitHub. |
-| Scheduled content pipeline | Existing GitHub Actions + a new V2 workflow | Reuse public brief JSON; validate and create draft releases before publishing. |
+| Scheduled content pipeline | Cloudflare Cron Trigger + D1 | Hourly index refresh of public Radar metadata and source-version snapshots is live. Course generation/review/publishing remains a separate future workflow. |
 | Course content and release records | D1; larger static lesson assets may remain in Git | Do not store secrets in the repository or public JSON. |
 | Knowledge search | Start with indexed keyword/title/tag/content search | Add semantic retrieval only after measuring quality and checking free inference quotas. |
 | AI provider | Configurable provider adapter | Never assume model API calls are free. Start with source-grounded search and a strict usage cap. |
@@ -103,14 +103,14 @@ Cloudflare's current published Workers Free/D1 quotas include:
 
 - [x] Chosen a free-first alternative to Supabase.
 - [x] Created the isolated `ai-field-notes-dev` D1 database in APAC.
-- [x] Applied and re-checked migrations `0001` through `0004`.
+- [x] Applied and re-checked migrations `0001` through `0006`.
 - [x] Seeded and validated nine atlas regions, six tracks, six published releases and six lessons.
-- [x] Deployed the read-only Worker API v0.3.3 with D1 binding, live atlas metadata, DAVY Radar proxy and ranked mixed course/brief keyword search.
-- [x] Added the V2 front-end integration for live atlas metadata, DAVY Radar cards, course + brief search results, and the live version/lesson catalog in the archive page.
+- [x] Deployed Worker API v0.4.0 with D1 binding, live atlas metadata, ranked mixed course/brief keyword search, source-version endpoint and an hourly Cron Trigger.
+- [x] Added the V2 front-end integration for live atlas metadata, indexed DAVY Radar cards, source history panels, course + brief search results, and the live version/lesson catalog in the archive page.
 - [x] Added local personal-map event history, derived progress metrics, and JSON export/import backup without collecting personal data in the cloud.
 - [x] Removed fake first-visit learning progress; new maps start at the camp with knowledge areas unexplored.
 - [ ] Complete browser-level runtime smoke tests after refreshing the public preview; the preview tab available during development had loaded an earlier build, and direct network access to the public Worker was unavailable from the validation runtime.
 - [ ] Authentication and cross-device sync are not implemented.
 - [ ] Semantic/vector search and source-aware search across news and external documents are not implemented.
-- [ ] Automated learning-content drafting, review, publishing and rollback are not implemented.
+- [ ] Automated learning-content drafting, review, publishing and rollback are not implemented. Hourly public-brief indexing does not auto-publish course material.
 - [ ] Products remain inactive; no payment gateway has been connected.
