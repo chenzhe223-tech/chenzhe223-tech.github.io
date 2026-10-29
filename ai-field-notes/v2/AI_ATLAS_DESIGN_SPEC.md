@@ -30,8 +30,9 @@ The states belong to the learner's personal map. In this preview they are stored
 7. 自动化边境 — workflow engineering and verification
 8. 触发机制台地 — Hook, events and automated checks
 9. 执行环境高原 — Harness, execution control and recovery
-10. 创造者之城 — personal projects and AI applications
-11. 未知海域 — future topics without a fixed syllabus
+10. 技能工坊 — reusable Skills and task methods
+11. 创造者之城 — personal projects and AI applications
+12. 未知海域 — future topics without a fixed syllabus
 
 These names are an authored metaphor for navigation. They are not claims that the listed taxonomy exhausts the AI field or that all areas are equally mature.
 
