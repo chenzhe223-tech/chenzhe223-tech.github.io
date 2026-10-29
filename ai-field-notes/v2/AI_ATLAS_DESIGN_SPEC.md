@@ -21,7 +21,7 @@ The states belong to the learner's personal map. In this preview they are stored
 
 ### Mapped regions in the current prototype
 
-1. 起点营地 — learning orientation and starting question
+1. 起点营地 — a starting marker, not a claimed completed knowledge area
 2. 模型山脉 — models, context and limits
 3. 提示词峡谷 — prompt and context design
 4. Agent 群岛 — agents, workflows and decisions
@@ -46,11 +46,13 @@ These names are an authored metaphor for navigation. They are not claims that th
 ## Interaction requirements
 
 - Selecting a region updates the detail panel without leaving the map.
+- Atlas metadata comes from the D1-backed `/api/atlas/regions` endpoint; the first visit starts at the base camp, while content regions begin unexplored. A saved browser map is not overwritten by late API defaults.
 - Filters apply a visible state change to nodes.
 - Starting an unknown region makes it `exploring`; marking an exploring region known updates the personal map and progress summary.
 - Completing a lesson updates its associated map region.
 - A known region can be reopened for deeper learning instead of becoming a dead end.
-- Persist preview state locally and clearly label that it is not cloud synced.
+- Persist region states and a bounded exploration event trail locally; derive progress metrics from these records rather than fake counters.
+- Offer JSON export/import to back up or move the personal map between browsers while cloud account sync is not yet implemented.
 - Confirm before resetting local map progress.
 - Keyboard users can focus each map region and activate it with Enter or Space.
 - Touch targets should be designed for touch use; reduce reliance on hover.
