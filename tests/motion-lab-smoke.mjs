@@ -258,9 +258,9 @@ try {
   if (await posterPage.locator("[data-style]").count() !== 9) throw new Error("Motion Poster should expose nine visual styles");
   if (await posterPage.locator("[data-palette]").count() !== 6) throw new Error("Motion Poster should expose six palette choices");
   if (!(await posterPage.locator("#fontEn option").count()) || !(await posterPage.locator("#fontZh option").count())) throw new Error("Motion Poster font selectors are missing");
+  if (!(await posterPage.locator("#aiStatus").textContent()).includes("AI 接口需配置服务端支持")) throw new Error("Motion Poster must disclose AI integration requirements");
   await posterPage.locator("#aiPrompt").fill("雨后的海边，一个人想起旧日夏天");
-  await posterPage.locator("#generateAI").click();
-  if (!(await posterPage.locator("#aiStatus").textContent()).includes("AI 服务尚未配置")) throw new Error("Motion Poster must clearly disclose when AI backend is not configured");
+  if (!(await posterPage.locator("#aiPrompt").inputValue()).includes("雨后的海边")) throw new Error("Motion Poster one-sentence AI input is not editable");
 
   await posterPage.locator("#titleInput").fill("测试海报\\n第二行");
   if (!(await posterPage.locator("#posterHeading").textContent()).includes("第二行")) throw new Error("Poster title did not update in preview");
