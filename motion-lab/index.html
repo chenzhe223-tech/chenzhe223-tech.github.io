@@ -366,7 +366,7 @@ function applyControls() {
     state.ambient?.forEach(t => t.pause());
     state.scene?.stop();
     note.textContent = "减少动态效果已开启：已停止持续动效；静态场景、内容和操作仍可用。";
-    if (window.gsap) window.gsap.set(".hero-visual .orbit,.hero-orb", { clearProps: "transform" });
+    if (window.gsap) window.gsap.set(".hero-copy .eyebrow,.hero h1,.hero p,.hero-actions,.hero-visual,.hero-visual .orbit,.hero-orb,.scroll-row", { clearProps: "all" });
   } else {
     if (!systemReduce.matches) {
       state.ambient?.forEach(t => t.play());
