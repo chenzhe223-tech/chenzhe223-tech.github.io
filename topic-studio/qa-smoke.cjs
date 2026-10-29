@@ -26,6 +26,7 @@ async function main() {
   assert.ok(html.includes('id="importGrowthFile"'), "growth data import control exists");
   assert.ok(html.includes('id="exportGrowthCsv"'), "growth metrics CSV export exists");
   assert.ok(html.includes('id="exportGrowthReview"'), "weekly review export exists");
+  assert.ok(html.includes('id="growthTrendChart"'), "subscriber trend chart container exists");
   assert.ok(!/AIza[0-9A-Za-z_-]{30,}|sk-[A-Za-z0-9]{20,}/.test(html), "no obvious provider API key is embedded");
   const archivePath = path.join(root, "topic-studio", "data", "published-articles.json");
   assert.ok(fs.existsSync(archivePath), "published content archive JSON exists");
@@ -202,6 +203,13 @@ async function main() {
       return !!x && x.target.latest === 135 && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录");
     });
     assert.ok(growthSaved, "Growth Lab target, experiments, poster tasks and metrics persist locally");
+    await page.locator("#metricDate").fill("2026-10-28");
+    await page.locator("#metricFollowers").fill("131");
+    await page.locator("#metricArticle").fill("QA 前一日订阅记录");
+    await page.locator("#growthMetricForm").locator("button[type=submit]").click();
+    await page.locator("#growthTrendChart svg polyline").waitFor();
+    assert.ok(await page.locator("#growthTrendChart svg circle").count() >= 2, "subscriber trend chart plots recorded metric points");
+
     page.once("dialog", dialog => dialog.accept());
     const importedGrowth = {
       schemaVersion: 1,
