@@ -80,7 +80,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
   };
   let theme = "lime";
   const safe = (value) => String(value || "");
-  const config = () => ({title:title.value,subtitle:subtitle.value,signature:signature.value,motion:motion.value,duration:Number(duration.value),theme});
+  const config = () => ({title:title.value,subtitle:subtitle.value,signature:signature.value,motion:motion.value,duration:Number(duration.value),theme,style:engineStyle,fontEn:engineFontEn,fontZh:engineFontZh,engineVersion:1});
   function render(replay=false) {
     const c=config(), p=palettes[theme];
     poster.style.setProperty("--poster-bg",p.bg);poster.style.setProperty("--poster-ink",p.ink);poster.style.setProperty("--poster-accent",p.accent);
@@ -129,6 +129,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
       const c=config(),p=palettes[theme],canvas=document.createElement("canvas");
       canvas.width=720;canvas.height=900;
       const ctx=canvas.getContext("2d");if(!ctx)throw new Error("无法创建视频画布");
+      const posterFont=(weight,size)=>weight+" "+size+"px \""+engineFontEn+"\", \""+engineFontZh+"\", sans-serif";
       const stream=canvas.captureStream(24);
       const chunks=[];
       const recorder=new MediaRecorder(stream,{mimeType,videoBitsPerSecond:2500000});
