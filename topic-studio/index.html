@@ -383,7 +383,7 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
 <section class="section" id="section-growth">
  <div class="hero">
   <div><div class="eyebrow">DAVYLAB · AUDIENCE GROWTH</div><h1>让每一篇内容，<br>都更接近下一位读者。</h1><p>记录订阅增长、验证爆款假设、管理每日新闻贴图任务。这里的数据由你手动记录并保存在当前浏览器，不会伪造微信后台数据，也不会自动发布。</p></div>
-  <div class="heroactions"><button class="btn" id="exportGrowth">导出增长数据</button><button class="btn" id="importGrowth">导入 / 合并数据</button><input type="file" id="importGrowthFile" accept=".json,application/json" hidden><button class="btn primary" id="growthJumpTopics">去选题发现</button></div>
+  <div class="heroactions"><button class="btn" id="exportGrowth">导出增长数据</button><button class="btn" id="exportGrowthReview">导出周复盘</button><button class="btn" id="exportGrowthCsv">导出指标 CSV</button><button class="btn" id="importGrowth">导入 / 合并数据</button><input type="file" id="importGrowthFile" accept=".json,application/json" hidden><button class="btn primary" id="growthJumpTopics">去选题发现</button></div>
  </div>
  <div class="growth-hero">
   <div class="growth-target">
@@ -679,6 +679,30 @@ $("viralExperimentForm").addEventListener("submit",e=>{e.preventDefault();const 
 $("posterTaskForm").addEventListener("submit",e=>{e.preventDefault();const editId=e.currentTarget.dataset.editId;const item={id:editId||growthId(),title:$("posterTitle").value.trim(),date:$("posterDate").value||todayLocal(),status:$("posterStatus").value,note:$("posterNote").value.trim(),createdAt:editId?(growth.posters.find(x=>x.id===editId)?.createdAt||new Date().toISOString()):new Date().toISOString(),updatedAt:new Date().toISOString()};if(!item.title){toast("请填写贴图任务名称");return}const i=growth.posters.findIndex(x=>x.id===item.id);if(i>=0)growth.posters[i]=item;else growth.posters.unshift(item);saveGrowth();resetGrowthForm(e.currentTarget);$("posterDate").value=todayLocal();toast(editId?"贴图任务已更新":"已添加贴图任务")});
 $("growthMetricForm").addEventListener("submit",e=>{e.preventDefault();const item={id:growthId(),date:$("metricDate").value||todayLocal(),followers:Number($("metricFollowers").value),article:$("metricArticle").value.trim(),reads:numOrBlank($("metricReads").value),shares:numOrBlank($("metricShares").value),newFollowers:numOrBlank($("metricNewFollowers").value),createdAt:new Date().toISOString()};if(!Number.isFinite(item.followers)||item.followers<0){toast("请填写有效的订阅人数");return}growth.metrics.unshift(item);growth.target.latest=item.followers;saveGrowth();resetGrowthForm(e.currentTarget);$("metricDate").value=todayLocal();$("growthLatest").value=item.followers;toast("真实数据已记录")});
 $("exportGrowth").addEventListener("click",()=>{const blob=new Blob([JSON.stringify({schemaVersion:1,exportedAt:new Date().toISOString(),data:growth},null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="davylab-growth-data-"+todayLocal()+".json";a.click();URL.revokeObjectURL(url);toast("已导出增长数据 JSON")});
+function downloadGrowthFile(name,content,type){const blob=new Blob(["\\uFEFF",content],{type});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function growthCsvCell(v){if(v===null||v===undefined)return "";const s=String(v);return /[",\\n\\r]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
+$("exportGrowthCsv").addEventListener("click",()=>{const headers=["日期","订阅总人数","内容标题","阅读量","分享/转发","净增订阅"];const rows=growth.metrics.slice().sort((a,b)=>(a.date||"").localeCompare(b.date||"")).map(x=>[x.date,x.followers,x.article,x.reads,x.shares,x.newFollowers]);downloadGrowthFile("davylab-growth-metrics-"+todayLocal()+".csv",[headers,...rows].map(r=>r.map(growthCsvCell).join(",")).join("\\r\\n"),"text/csv;charset=utf-8");toast("已导出增长指标 CSV")});
+$("exportGrowthReview").addEventListener("click",()=>{
+ const now=new Date(),since=new Date(now.getTime()-7*86400000),dateLabel=todayLocal();
+ const recent=growth.metrics.filter(x=>x.date&&new Date(x.date+"T00:00:00")>=since&&new Date(x.date+"T00:00:00")<=now).sort((a,b)=>(a.date||"").localeCompare(b.date||""));
+ const expRecent=growth.experiments.filter(x=>x.date&&new Date(x.date+"T00:00:00")>=since&&new Date(x.date+"T00:00:00")<=now);
+ const posterRecent=growth.posters.filter(x=>x.date&&new Date(x.date+"T00:00:00")>=since&&new Date(x.date+"T00:00:00")<=now);
+ const published=expRecent.filter(x=>x.status==="published"),withViews=published.filter(x=>x.views!==null&&x.views!==undefined&&x.views!=="");
+ const best=withViews.slice().sort((a,b)=>Number(b.views)-Number(a.views))[0];
+ const first=recent[0],last=recent[recent.length-1];
+ const lines=["# DAVYLAB 公众号增长周复盘","","> 生成日期："+dateLabel,"","## 1. 订阅增长"];
+ if(last)lines.push("- 最新记录："+last.date+"，订阅总人数 "+safeNum(last.followers));else lines.push("- 最近 7 天暂无订阅指标记录。");
+ if(first&&last&&first.id!==last.id)lines.push("- 本周记录区间变化："+(Number(last.followers)-Number(first.followers)>=0?"+":"")+safeNum(Number(last.followers)-Number(first.followers))+"（仅按已录入记录计算，不代表完整自然周净增）");
+ lines.push("","## 2. 内容实验","- 最近 7 天新增/更新的实验记录："+expRecent.length,"- 已发布实验："+published.length,"- 有阅读数据的已发布实验："+withViews.length);
+ if(best)lines.push("- 本周阅读最高的已记录实验："+best.title+"（阅读 "+safeNum(best.views)+"；不代表因果或保证爆款）");
+ else lines.push("- 暂无足够的已发布阅读数据用于比较。");
+ lines.push("","## 3. 新闻贴图任务","- 最近 7 天登记任务："+posterRecent.length,"- 已验收素材："+posterRecent.filter(x=>["qa_passed","ready_for_workbuddy","draft_saved","published"].includes(x.status)).length,"- 待修正/阻塞："+posterRecent.filter(x=>x.status==="blocked").length,"","## 4. 下周行动建议");
+ if(!recent.length)lines.push("- 从公众号后台补录真实订阅、阅读和分享数据。");
+ if(!published.length)lines.push("- 完成至少一个差异化选题实验并记录发布后 7 日数据。");
+ if(posterRecent.some(x=>x.status==="blocked"))lines.push("- 优先清理阻塞的新闻贴图任务，核对来源、图片文字和实际文件。");
+ lines.push("- 复核阅读中位数基线，并据真实数据调整实验方向。","- 仅在真实后台/执行回执核验后更新草稿与发表状态。","","## 数据口径说明","本报告只汇总当前浏览器已录入的数据；空缺不代表 0。实验记录数不等于已发表文章数。阅读最高值只作描述，不证明选题与阅读表现之间存在因果关系。");
+ downloadGrowthFile("davylab-growth-weekly-review-"+dateLabel+".md",lines.join("\\n"),"text/markdown;charset=utf-8");toast("已生成周复盘 Markdown")
+});
 
 function mergeGrowthImport(incoming){
  if(!incoming||incoming.schemaVersion!==1||!incoming.data||typeof incoming.data!=="object")throw new Error("文件格式不正确或版本不受支持");
