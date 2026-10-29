@@ -680,23 +680,25 @@ function updateIntegrationSnippet() {
   const waapi = [
     'const target = document.querySelector(".your-target");',
     'if (!target) throw new Error("Replace .your-target with an existing element selector.");',
-    'const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;',
-    'if (reduceMotion) { /* Keep the final UI state visible; do not animate. */ }',
-    'else {',
+    'function mountMotion() {',
+    '  const target = document.querySelector(".your-target");',
+    '  if (!target) throw new Error("Replace .your-target with an existing element selector.");',
+    '  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;',
+    '  if (reduceMotion) return () => {};',
     '  const frames = ' + JSON.stringify(frames, null, 2).replace(/\n/g, "\n  ") + ';',
     '  const animation = target.animate(frames, { duration: ' + Math.round(cycleMs) + ', easing: ' + JSON.stringify(easing) + ', fill: "both", iterations: ' + (config.playback === "loop" ? "2" : "1") + ' });',
-    '  // Call the returned cleanup function when the component unmounts or the effect is replaced.',
     '  return () => animation.cancel();',
-    '}'
+    '}',
+    'const cleanupMotion = mountMotion();',
+    '// Call cleanupMotion() when the component unmounts or the effect is replaced.'
   ].join("\n");
   const gsapFrames = JSON.stringify(frames);
   const gsap = [
     '// Requires GSAP 3.x to be loaded in your application.',
-    'const target = document.querySelector(".your-target");',
-    'if (!target) throw new Error("Replace .your-target with an existing element selector.");',
-    'const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;',
-    'if (reduceMotion) { /* Keep the final UI state visible; do not animate. */ }',
-    'else {',
+    'function mountMotion() {',
+    '  const target = document.querySelector(".your-target");',
+    '  if (!target) throw new Error("Replace .your-target with an existing element selector.");',
+    '  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};',
     '  const frames = ' + gsapFrames + ';',
     '  const timeline = gsap.timeline({ repeat: ' + repeats + ', defaults: { ease: ' + JSON.stringify(gsapEase) + ' } });',
     '  if (' + JSON.stringify(effect) + ' === "spring") {',
@@ -704,9 +706,10 @@ function updateIntegrationSnippet() {
     '    timeline.to(target, { ...frames[2], duration: ' + (cycleMs / 3000).toFixed(3) + ' });',
     '    timeline.to(target, { ...frames[3], duration: ' + (cycleMs / 3000).toFixed(3) + ' });',
     '  } else { timeline.fromTo(target, frames[0], { ...frames[1], duration: ' + (cycleMs / 1000).toFixed(3) + ', overwrite: "auto" }); }',
-    '  // Return this cleanup from your framework effect/unmount hook.',
     '  return () => timeline.kill();',
-    '}'
+    '}',
+    'const cleanupMotion = mountMotion();',
+    '// Call cleanupMotion() when the component unmounts or the effect is replaced.'
   ].join("\n");
   const motionFrames = effect === "spring"
     ? { scale:[0.72,1.08,0.97,1] }
@@ -721,15 +724,15 @@ function updateIntegrationSnippet() {
   const motion = [
     'import { animate } from "motion";',
     '',
-    'const target = document.querySelector(".your-target");',
-    'if (!target) throw new Error("Replace .your-target with an existing element selector.");',
-    'const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;',
-    'if (reduceMotion) { /* Keep the final UI state visible; do not animate. */ }',
-    'else {',
+    'function mountMotion() {',
+    '  const target = document.querySelector(".your-target");',
+    '  if (!target) throw new Error("Replace .your-target with an existing element selector.");',
+    '  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};',
     '  const controls = animate(target, ' + JSON.stringify(motionFrames, null, 2).replace(/\n/g, "\n  ") + ', { duration: ' + (cycleMs / 1000).toFixed(3) + ', ease: ' + JSON.stringify(motionEase) + ', repeat: ' + repeats + ' });',
-    '  // Call the returned cleanup function when the component unmounts or the effect is replaced.',
     '  return () => controls.stop();',
-    '}'
+    '}',
+    'const cleanupMotion = mountMotion();',
+    '// Call cleanupMotion() when the component unmounts or the effect is replaced.'
   ].join("\n");
   const engine = $("#motionSnippetEngine").value;
   $("#motionIntegrationSnippet").value = engine === "gsap" ? gsap : engine === "motion" ? motion : waapi;
