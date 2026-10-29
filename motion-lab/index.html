@@ -678,8 +678,6 @@ function updateIntegrationSnippet() {
   };
   const gsapEase = easingMap[easing] || "power3.out";
   const waapi = [
-    'const target = document.querySelector(".your-target");',
-    'if (!target) throw new Error("Replace .your-target with an existing element selector.");',
     'function mountMotion() {',
     '  const target = document.querySelector(".your-target");',
     '  if (!target) throw new Error("Replace .your-target with an existing element selector.");',
