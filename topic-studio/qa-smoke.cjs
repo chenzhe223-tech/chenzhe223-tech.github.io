@@ -55,6 +55,14 @@ async function main() {
     await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
     await page.locator(".feedcard").first().waitFor({ timeout: 12000 });
+    const radarFirstTitle = await page.locator(".feedcard").first().locator("h3").innerText();
+    assert.ok(await page.locator("#radarResultCount").innerText().includes("/"), "global AI radar shows visible/total result counts");
+    await page.locator("#radarSearch").fill(radarFirstTitle);
+    await page.locator(".feedcard").first().locator("h3").getByText(radarFirstTitle, { exact: true }).waitFor();
+    assert.equal(await page.locator(".feedcard").count(), 1, "global AI radar search narrows results to the matching story");
+    await page.locator("#radarSearch").fill("");
+    await page.locator("#radarSort").selectOption("source");
+    await page.locator("#radarSort").selectOption("fresh");
     // Desktop visual regression: the feed card has a dedicated visual, content and action column.
     const desktopCard = await page.locator(".feedcard").first().evaluate(card => {
       const style = getComputedStyle(card);
@@ -167,6 +175,36 @@ async function main() {
     // Growth Lab: target persistence, viral experiment threshold, poster queue and metrics.
     await page.locator('button[data-section="growth"]').click();
     await page.locator("#section-growth.active").waitFor();
+    await page.evaluate(() => {
+      const url = "https://mp.weixin.qq.com/s/qa-review-article";
+      publishedArticles = publishedArticles.filter(a => a.url !== url);
+      publishedArticles.unshift({ id: "qa-review-article", title: "QA 7/30 日复盘文章", url, publishedAt: "2026-09-01", column: "AI 实战手记", format: "文章", summary: "", coverUrl: "", linkedTopicId: "", source: "qa", addedAt: new Date().toISOString(), storageSource: "local" });
+      savePublishedArticles();
+      renderGrowthReviews();
+    });
+    await page.locator("#reviewArticle").selectOption("https://mp.weixin.qq.com/s/qa-review-article");
+    await page.locator("#reviewCheckpoint").selectOption("7");
+    await page.locator("#reviewDate").fill(new Date().toISOString().slice(0, 10));
+    await page.locator("#reviewReads").fill("240");
+    await page.locator("#reviewShares").fill("18");
+    await page.locator("#reviewFollows").fill("6");
+    await page.locator("#growthReviewForm button[type=submit]").click();
+    let reviewCount = await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "{}").reviews?.length || 0);
+    assert.equal(reviewCount, 1, "7-day review saves actual metrics");
+    await page.locator("#reviewArticle").selectOption("https://mp.weixin.qq.com/s/qa-review-article");
+    await page.locator("#reviewCheckpoint").selectOption("30");
+    await page.locator("#reviewDate").fill(new Date().toISOString().slice(0, 10));
+    await page.locator("#reviewReads").fill("520");
+    await page.locator("#reviewShares").fill("31");
+    await page.locator("#reviewFollows").fill("12");
+    await page.locator("#growthReviewForm button[type=submit]").click();
+    reviewCount = await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "{}").reviews?.length || 0);
+    assert.equal(reviewCount, 2, "30-day review is tracked separately from the 7-day review");
+    await page.locator('[data-review-edit="https://mp.weixin.qq.com/s/qa-review-article::7"]').click();
+    await page.locator("#reviewReads").fill("250");
+    await page.locator("#growthReviewForm button[type=submit]").click();
+    reviewCount = await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "{}").reviews?.length || 0);
+    assert.equal(reviewCount, 2, "editing a review updates the existing checkpoint instead of duplicating it");
     await page.locator("#growthActionPlan .growth-action-item").first().waitFor();
     assert.ok(await page.locator("#growthActionPlan .growth-action-item").count() >= 2, "Growth Lab renders data-driven next actions when initial data is missing");
     assert.ok((await page.locator("#growthActionPlan").innerText()).includes("当前真实订阅人数"), "action plan identifies the missing baseline without inventing values");
