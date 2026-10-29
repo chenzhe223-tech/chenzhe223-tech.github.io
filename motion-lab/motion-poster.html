@@ -197,7 +197,7 @@ main{width:100%;max-width:none;padding:clamp(18px,3vw,42px);margin:auto}.intro{d
       if(!response.ok)throw new Error("HTTP "+response.status);
       const payload=await response.json(),data=payload.result||payload;
       if(!data||typeof data.story!=="string")throw new Error("AI 服务返回格式不符合预期");
-      title.value=String(data.title||data.core_line||idea).slice(0,90);subtitle.value=String(data.core_line||data.story).slice(0,220);render(true);
+      title.value=String(data.poster_title||data.title||data.core_line||idea).slice(0,90);subtitle.value=String(data.poster_subtitle||data.core_line||data.story).slice(0,220);render(true);
       status.textContent="AI 已生成海报文案。图片中的文字由前端排版。";
     }catch(err){status.textContent="AI 生成失败："+err.message+"。请检查 AI 服务是否可用；未生成的内容不会被当作成功结果。";}
     finally{button.disabled=false;}
