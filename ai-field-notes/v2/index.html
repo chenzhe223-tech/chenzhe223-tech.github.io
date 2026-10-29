@@ -63,6 +63,7 @@
 .manifesto-mark{font:62px/.8 Georgia,serif;color:#b6c1cf}.map-manifesto p{font-size:clamp(16px,2vw,21px);font-weight:700;letter-spacing:-.035em;margin:0 0 6px}.map-manifesto span{font-size:11px;color:#68758a}.manifesto-coordinates{margin-left:auto;flex:none;font:9px/1.8 ui-monospace,monospace;letter-spacing:.14em;color:#8b97a9;text-align:right}
 .map-route-cards .card{transition:transform .2s,border-color .2s,box-shadow .2s}.map-route-cards .card:hover{transform:translateY(-3px);border-color:#ced8e8;box-shadow:0 12px 28px rgba(18,34,62,.06)}
 .archive-release-row{background:#fff}.archive-lesson-link{cursor:pointer}.atlasHistoryList .empty{padding:20px}
+.brief-history-panel{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.brief-history-panel[hidden]{display:none}.brief-history-title{font-size:11px;font-weight:750;color:#56657a}.brief-history-note{font-size:11px;line-height:1.7;color:var(--muted);margin:0}.brief-version-row{display:grid;gap:5px;padding:11px;border-radius:10px;background:#f6f8fb;border:1px solid #e7ebf2}.brief-version-row small{font-size:9px;color:#8a95a5}.brief-version-row strong{font-size:11px;line-height:1.6}.brief-version-row p{font-size:10px;line-height:1.7;color:#657287;margin:0}
 .archive-course-expansion{margin-top:13px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.archive-course-expansion[hidden],.archive-lesson-list[hidden]{display:none}.archive-release-row{border:1px solid var(--line);border-radius:11px;padding:11px;display:grid;gap:8px}.archive-release-row strong{font-size:11px}.archive-release-row p{font-size:10px;color:var(--muted);margin:0}.archive-release-row .btn{justify-self:start}.archive-lesson-list{display:grid;gap:6px}.archive-lesson-link{border:1px solid #e3e8f1;background:#f8faff;color:#315caa;text-align:left;padding:10px;border-radius:8px;font-size:11px;min-height:42px}.archive-lesson-link:hover{border-color:#b6c8ec}
 @keyframes atlasPulse{0%,100%{opacity:.14}50%{opacity:.3}}@keyframes fogFloat{from{transform:translate(-2px,1px)}to{transform:translate(9px,-4px)}}@keyframes currentDrift{to{stroke-dashoffset:-160}}
 @media(max-width:1080px){.map-intro{align-items:flex-start;flex-direction:column;gap:15px}.map-intro-actions{justify-content:flex-start}.atlas-content{grid-template-columns:minmax(0,1fr) 258px}.atlas-bottom{grid-template-columns:auto minmax(80px,1fr) auto}.atlas-bottom-note{grid-column:1/3}.atlas-reset{grid-column:3;grid-row:1/3;align-self:center}.legend-note{margin-left:0}.atlas-legend{gap:12px}}
@@ -666,16 +667,48 @@ function addBriefSignal(item){
  saveAtlasState();recordAtlasEvent(region,"brief_signal","简报线索："+item.title);selectedAtlasNode=region;currentAtlasFilter="all";renderAtlasMap();go("home");
  toast("已将简报线索加入探索路线："+atlasNodes[region].name);
 }
+async function loadBriefVersions(url,panel,button){
+ if(panel.dataset.loaded==="yes"){panel.hidden=!panel.hidden;return;}
+ panel.hidden=false;panel.innerHTML="";
+ const loading=document.createElement("p");loading.className="brief-history-note";loading.textContent="正在读取已归档的来源版本……";panel.append(loading);
+ button.disabled=true;
+ try{
+  const response=await fetch(API_BASE+"/api/brief/versions?url="+encodeURIComponent(url),{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("history API "+response.status);
+  const data=await response.json();panel.innerHTML="";
+  const versions=Array.isArray(data.versions)?data.versions:[];
+  if(!versions.length){
+   const empty=document.createElement("p");empty.className="brief-history-note";empty.textContent="当前来源还没有可回看的内容变更快照。定时索引会在内容发生变化时逐步建立历史版本。";panel.append(empty);
+  }else{
+   const title=document.createElement("div");title.className="brief-history-title";title.textContent="来源内容历史 · "+versions.length+" 个版本";panel.append(title);
+   versions.forEach(version=>{
+    const row=document.createElement("div");row.className="brief-version-row";
+    const meta=document.createElement("small");meta.textContent="V"+version.version_seq+" · 简报日期 "+(version.report_date||"未提供")+" · 收录于 "+(version.recorded_at||"未知时间");
+    const heading=document.createElement("strong");heading.textContent=version.title;
+    const description=document.createElement("p");description.textContent=version.summary||version.why_it_matters||"该版本没有摘要。";
+    const original=document.createElement("a");original.className="link";original.href=version.url;original.target="_blank";original.rel="noopener noreferrer";original.textContent="查看该版本来源 ↗";
+    row.append(meta,heading,description,original);panel.append(row);
+   });
+  }
+  panel.dataset.loaded="yes";
+ }catch{
+  panel.innerHTML="";
+  const error=document.createElement("p");error.className="brief-history-note";error.textContent="暂时无法读取版本历史。最新简报和原文入口仍可使用。";panel.append(error);
+ }finally{button.disabled=false;}
+}
 function renderBriefItems(items,meta){
  const container=document.getElementById("briefCards"),metadata=document.getElementById("briefMeta");if(!container||!metadata)return;
  container.innerHTML="";
- metadata.textContent="DAVY Radar · "+(meta.report_date||"最新可用日期")+" · "+items.length+" 条精选线索"+(meta.generated_at?" · 数据生成 "+meta.generated_at.replace("T"," ").slice(0,16):"");
+ metadata.textContent="DAVY Radar · "+(meta.report_date||"最新可用日期")+" · "+items.length+" 条可追溯线索"+
+  (meta.generated_at?" · 源数据 "+meta.generated_at.replace("T"," ").slice(0,16):"")+
+  (meta.synced_at?" · 索引同步 "+meta.synced_at.replace("T"," ").slice(0,16):"");
  if(!items.length){const empty=document.createElement("div");empty.className="card empty";empty.textContent="简报数据暂时不可用，请打开原始简报查看。";container.append(empty);return;}
  items.forEach((item,index)=>{
   const card=document.createElement("article");card.className="card brief-card";
   const top=document.createElement("div");top.className="brief-head";
   const source=document.createElement("span");source.className="source";source.textContent=item.source||"DAVY Radar";
-  const number=document.createElement("span");number.className="tier";number.textContent="线索 "+String(index+1).padStart(2,"0");top.append(source,number);
+  const number=document.createElement("span");number.className="tier";
+  number.textContent=(item.version_count>1?"版本 "+item.version_count:item.is_top_pick?"今日精选":"线索 "+String(index+1).padStart(2,"0"));top.append(source,number);
   const title=document.createElement("h4");title.textContent=item.title||"未命名线索";
   const summary=document.createElement("p");summary.textContent=item.summary||item.why_it_matters||"打开来源了解详细信息。";
   const foot=document.createElement("div");foot.className="foot";
@@ -683,7 +716,9 @@ function renderBriefItems(items,meta){
   const actions=document.createElement("div");actions.style.display="flex";actions.style.gap="12px";actions.style.flexWrap="wrap";
   const link=document.createElement("a");link.className="link";link.textContent="原文 ↗";link.href=item.url;link.target="_blank";link.rel="noopener noreferrer";
   const btn=document.createElement("button");btn.className="link";btn.textContent="加入地图 +";btn.addEventListener("click",()=>addBriefSignal(item));
-  actions.append(link,btn);foot.append(date,actions);card.append(top,title,summary,foot);container.append(card);
+  const historyPanel=document.createElement("div");historyPanel.className="brief-history-panel";historyPanel.hidden=true;
+  const historyBtn=document.createElement("button");historyBtn.className="link";historyBtn.textContent="历史版本";historyBtn.addEventListener("click",()=>loadBriefVersions(item.url,historyPanel,historyBtn));
+  actions.append(link,btn,historyBtn);foot.append(date,actions);card.append(top,title,summary,foot,historyPanel);container.append(card);
  });
 }
 async function loadBriefItems(){
