@@ -29,3 +29,8 @@ GitHub Actions 自动发布到 GitHub Pages。每次向 `main` 推送提交后�
 This repository now maintains project-level Agent Skills for image discovery and article illustration in `.agents/skills/`: Firecrawl web extraction guidance, Google Lens Pro reverse-image/OCR, Baoyu Article Illustrator, OpenAI ImageGen, and a DAVYLAB orchestration skill. Integration notes and local activation steps are in `.agents/skills/davylab-asset-intelligence/INSTALL.md`.
 
 The frontend remains static. Live provider API integration must run server-side (for example in a Cloudflare Worker) with secrets stored server-side. Never expose provider keys in public HTML, JSON, Git history, or browser requests. Skill files do not by themselves install local CLIs or prove live API access.
+
+
+## Visual DNA Motion Lab
+
+The interactive motion playground lives at [`/motion-lab/`](https://chenzhe223-tech.github.io/motion-lab/) and is maintained in `motion-lab/index.html`. It demonstrates GSAP choreography, Motion's vanilla interaction APIs, and an optional Three.js scene. The lab is a separate page and does not alter the production homepage behavior.
