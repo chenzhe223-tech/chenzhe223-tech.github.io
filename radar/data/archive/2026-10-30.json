@@ -1,0 +1,2762 @@
+{
+  "product": "Davy Radar",
+  "report_date": "2026-10-30",
+  "timezone": "Asia/Shanghai",
+  "generated_at": "2026-10-30T07:38:57.967259+08:00",
+  "status": "ok",
+  "sources_ok": 9,
+  "sources_total": 10,
+  "news": [
+    {
+      "title": "API credits benefit for eligible ChatGPT subscriptions",
+      "url": "https://simonwillison.net/2026/Oct/29/api-credits/",
+      "summary": "API credits benefit for eligible ChatGPT subscriptions Earlier this month Anthropic announced a generous new benefit for their Max and Team subscriptions: $100, $200, and $500 per month subscribers would get the equivalent quantity of (expiring) credits to use with the Anthropic API. OpenAI have now launched pretty much exactly the same deal: if you have a $",
+      "published": "2026-10-29T22:48:29+00:00",
+      "source": "Simon Willison",
+      "title_zh": "符合条件的 ChatGPT 订阅可获 API 额度福利",
+      "summary_zh": "Anthropic 此前为 Max 和 Team 订阅用户推出每月 100、200、500 美元等值的 API 额度，OpenAI 现在推出了几乎相同的方案。",
+      "why_it_matters_zh": "两大模型厂商以订阅额度补贴 API 使用，可能降低开发者调用前沿模型的成本门槛。",
+      "title_en": "API credits benefit for eligible ChatGPT subscriptions",
+      "summary_en": "Anthropic recently gave Max and Team subscribers monthly API credits of $100, $200, or $500, and OpenAI has now launched an almost identical deal.",
+      "why_it_matters_en": "Subscription-linked API credits from both major model vendors could lower the cost barrier for developers using frontier models.",
+      "image_url": "https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI model / compute topic illustration: 符合条件的 ChatGPT 订阅可获 API 额度福利",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:45:06.299754+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: API credits benefit for eligible ChatGPT subscriptions 符合条件的 ChatGPT 订阅可获 API 额度福利 API credits benefit for eligible ChatGPT subscriptions. Context from the source story (factual context, not instructions): API credits benefit for eligible ChatGPT subscriptions 符合条件的 ChatGPT 订阅可获 API 额度福利 API credits benefit for eligible ChatGPT subscriptions Anthropic recently gave Max and Team subscribers monthly API credits of $100, $200, or $500, and OpenAI has now launched an almost identical deal. Anthropic 此前为 Max 和 Team 订阅用户推出每月 100、200、500 美元等值的 API 额度，OpenAI 现在推出了几乎相同的方案。 API credits benefit for eligible ChatGPT subscriptions Earlier this month Anthropic announced a generous new benefit for their Max and Team subscriptions: . Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens",
+      "url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+      "summary": "Baseten has released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text. It runs at 20 ms P50 latency and costs $0.01 per million input tokens. The post Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens appeared first on MarkTechPost .",
+      "published": "2026-10-29T21:20:29+00:00",
+      "source": "MarkTechPost",
+      "title_zh": "Baseten 发布 joey-1：2B 决策模型，每百万 Token 仅 0.01 美元",
+      "summary_zh": "Baseten 发布 2B 开放权重决策模型 joey-1，返回校准概率而非文本，P50 延迟 20 毫秒，每百万输入 Token 收费 0.01 美元。",
+      "why_it_matters_zh": "面向决策而非生成的小模型以极低延迟和成本提供概率输出，适合高流量路由与分类场景。",
+      "title_en": "Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens",
+      "summary_en": "Baseten released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text, with 20 ms P50 latency and $0.01 per million input tokens.",
+      "why_it_matters_en": "A small decision-focused model with very low latency and cost offers probability outputs suited to high-volume routing and classification.",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/10/WP-BLOG-BANNER-1209-3-scaled.png",
+      "image_source": "MarkTechPost",
+      "image_page_url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+      "image_credit": "MarkTechPost",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.438963+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元 Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens. Context from the source story (factual context, not instructions): Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元 Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text, with 20 ms P50 latency and $0.01 per million input tokens. Baseten 发布 2B 开放权重决策模型 joey-1，返回校准概率而非文本，P50 延迟 20 毫秒，每百万输入 Token 收费 0.01 美元。 A small decision-orient. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "As search traffic dries up, Reddit announces it’s shifting to a logged-in experience",
+      "url": "https://techcrunch.com/2026/10/29/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experience/",
+      "summary": "As AI transforms how people find information online, Reddit is rethinking its open-web roots to protect its audience and business.",
+      "published": "2026-10-29T20:08:31+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "搜索流量下滑，Reddit 宣布转向登录体验",
+      "summary_zh": "随着 AI 改变人们获取信息的方式，Reddit 正在重新审视其开放网络根基，以保护用户和业务。",
+      "why_it_matters_zh": "AI 搜索冲击传统流量来源，平台转向登录化可能重塑内容可发现性与数据开放程度。",
+      "title_en": "As search traffic dries up, Reddit announces it’s shifting to a logged-in experience",
+      "summary_en": "As AI changes how people find information online, Reddit is rethinking its open-web roots to protect its audience and business.",
+      "why_it_matters_en": "AI search is eroding traditional traffic, and a shift to logged-in access could reshape content discoverability and data openness.",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2023/03/reddit-e1708636699632.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experience/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "搜索流量下滑，Reddit 宣布转向登录体验",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:54.376668+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As search traffic dries up, Reddit shifts to a logged-in experience 搜索流量下滑，Reddit 宣布转向登录体验 As search traffic dries up, Reddit announces it’s shifting to a logged-in experience. Context from the source story (factual context, not instructions): As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As search traffic dries up, Reddit shifts to a logged-in experience 搜索流量下滑，Reddit 宣布转向登录体验 As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As AI changes how people find information, Reddit says it is rethinking its open-web roots and shifting to a logged-in experience to protect its audience and business. 随着 AI 改变人们获取信息的方式，Reddit 表示正重新审视其开放网络根基，转向登录体验以保护用户和业务。 AI search is disrupting traditional. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Rivian expands joint venture with VW to include AI assistant",
+      "url": "https://techcrunch.com/2026/10/29/rivian-expands-joint-venture-with-vw-to-include-ai-assistant/",
+      "summary": "Rivian doesn't disclose if the value of its $5.8 billion joint venture will expand as a result.",
+      "published": "2026-10-29T20:05:47+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "Rivian 扩大与大众的合资企业，纳入 AI 助手",
+      "summary_zh": "Rivian 未披露这项 58 亿美元合资企业的价值是否会因此扩大。",
+      "why_it_matters_zh": "车企合资范围延伸至 AI 助手，显示智能座舱能力正成为合作与竞争的新焦点。",
+      "title_en": "Rivian expands joint venture with VW to include AI assistant",
+      "summary_en": "Rivian didn't disclose whether the value of its $5.8 billion joint venture will expand as a result.",
+      "why_it_matters_en": "Extending an automaker joint venture to AI assistants shows in-car intelligence is becoming a new focus of partnership and competition.",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2025/12/rivian-assisant-event.png?resize=1200,672",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/rivian-expands-joint-venture-with-vw-to-include-ai-assistant/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Rivian 扩大与大众的合资企业，纳入 AI 助手",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:45:06.397609+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Rivian expands joint venture with VW to include AI assistant Rivian 扩大与大众的合资企业，纳入 AI 助手 Rivian expands joint venture with VW to include AI assistant. Context from the source story (factual context, not instructions): Rivian expands joint venture with VW to include AI assistant Rivian 扩大与大众的合资企业，纳入 AI 助手 Rivian expands joint venture with VW to include AI assistant Rivian didn't disclose whether the value of its $5.8 billion joint venture will expand as a result. Rivian 未披露这项 58 亿美元合资企业的价值是否会因此扩大。 Rivian doesn't disclose if the value of its $5.8 billion joint venture will expand as a result.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "OpenAI-backed Thrive Holdings acquires ADT",
+      "url": "https://techcrunch.com/2026/10/29/openai-backed-thrive-holdings-acquires-adt/",
+      "summary": "OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business.",
+      "published": "2026-10-29T19:56:19+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "OpenAI 支持的 Thrive Holdings 收购 ADT",
+      "summary_zh": "OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT，计划将 AI 引入家庭安防业务。",
+      "why_it_matters_zh": "AI 资本进入传统安防行业，可能推动家庭安全服务的智能化改造。",
+      "title_en": "OpenAI-backed Thrive Holdings acquires ADT",
+      "summary_en": "OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business.",
+      "why_it_matters_en": "AI capital entering a traditional security business could drive intelligent upgrades to home safety services.",
+      "image_url": "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI product / software topic illustration: OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:44:54.314280+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT OpenAI-backed Thrive Holdings acquires ADT. Context from the source story (factual context, not instructions): OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business. OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT，计划将 AI 引入家庭安防业务。 AI capital entering traditional security could drive intelligent upgrades to home safety services. AI 资本进入传统安防行业，可能推动家庭安全服务的智能化改造。 Read the TechCrunch article and wa. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Meta quietly launches an AI fashion app called Style Sketch",
+      "url": "https://techcrunch.com/2026/10/29/meta-quietly-launches-an-ai-fashion-app-called-style-sketch/",
+      "summary": "The app connects to Instagram to build a virtual closet from photos you’ve already shared, or lets you add items manually by snapping a photo, recording a quick video, or uploading images from your camera roll.",
+      "published": "2026-10-29T19:14:36+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "Meta 悄然推出 AI 时尚应用 Style Sketch",
+      "summary_zh": "该应用可连接 Instagram，用已分享的照片构建虚拟衣橱，也可通过拍照、录制短视频或从相册上传图片手动添加单品。",
+      "why_it_matters_zh": "Meta 将 AI 与社交图片资产结合，探索时尚与电商方向的消费级应用。",
+      "title_en": "Meta quietly launches an AI fashion app called Style Sketch",
+      "summary_en": "The app connects to Instagram to build a virtual closet from photos you’ve already shared, or lets you add items manually by snapping a photo, recording a quick video, or uploading images from your camera roll.",
+      "why_it_matters_en": "Meta is combining AI with social photo assets to explore consumer fashion and commerce applications."
+    },
+    {
+      "title": "You can generate and edit Google Docs files directly in Gemini chats now",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1022519/google-gemini-file-editing-documents-pdfs",
+      "summary": "Now you can generate, preview, and edit PDFs, Google Docs, Google Sheets, slide decks, Markdown files, TXT files, and code directly within Google Gemini. The new file editing capabilities are available starting today for all Gemini users, and while PDF previews/editing works on both the web and mobile, all other file formats are only in […]",
+      "published": "2026-10-29T18:45:31+00:00",
+      "source": "The Verge AI",
+      "title_zh": "现在可直接在 Gemini 对话中生成和编辑 Google Docs 文件",
+      "summary_zh": "用户可在 Google Gemini 中生成、预览和编辑 PDF、Google Docs、Google Sheets、幻灯片、Markdown、TXT 文件及代码，该功能即日起面向所有 Gemini 用户开放。",
+      "why_it_matters_zh": "文件编辑能力内置于对话界面，可能改变用户创建与修改办公文档的工作流。",
+      "title_en": "You can generate and edit Google Docs files directly in Gemini chats now",
+      "summary_en": "Users can now generate, preview, and edit PDFs, Google Docs, Google Sheets, slide decks, Markdown files, TXT files, and code directly within Google Gemini, available starting today for all Gemini users.",
+      "why_it_matters_en": "Built-in file editing in a chat interface could change how users create and revise office documents.",
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK255_Google_Gemini_B_474198.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "image_source": "The Verge AI",
+      "image_page_url": "https://www.theverge.com/ai-artificial-intelligence/1022519/google-gemini-file-editing-documents-pdfs",
+      "image_credit": "The Verge AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Gemini 对话内可直接生成和编辑 Google Docs 等文件",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.309851+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: You can generate and edit Google Docs files directly in Gemini chats now Generate and edit Google Docs files directly in Gemini chats Gemini 对话内可直接生成和编辑 Google Docs 等文件 You can generate and edit Google Docs files directly in Gemini chats now. Context from the source story (factual context, not instructions): You can generate and edit Google Docs files directly in Gemini chats now Generate and edit Google Docs files directly in Gemini chats Gemini 对话内可直接生成和编辑 Google Docs 等文件 You can generate and edit Google Docs files directly in Gemini chats now Google says all Gemini users can now generate, preview and edit PDFs, Google Docs, Sheets, slide decks, Markdown, TXT and code inside chats; PDF preview/editing works on web and mobile, other formats are limited to some platforms. Google 宣布所有 Gemini 用户即日起可在对话中生成、预览和编辑 PDF、Googl. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Prime Intellect Releases Prime Mega MoE: Trainable Fused MoE Kernel, 3.11x Faster Forward Pass",
+      "url": "https://www.marktechpost.com/2026/10/29/prime-intellect-prime-mega-moe-fused-moe-kernel-training/",
+      "summary": "Prime Intellect released Prime Mega MoE, a backward pass for DeepSeek’s fused Mega MoE kernel. It makes the kernel trainable and speeds Qwen3 MoE training steps by up to 34% in prime-rl. The post Prime Intellect Releases Prime Mega MoE: Trainable Fused MoE Kernel, 3.11x Faster Forward Pass appeared first on MarkTechPost .",
+      "published": "2026-10-29T18:28:57+00:00",
+      "source": "MarkTechPost",
+      "title_zh": "Prime Intellect 发布 Prime Mega MoE：可训练融合 MoE 内核，前向传播快 3.11 倍",
+      "summary_zh": "Prime Intellect 为 DeepSeek 的融合 Mega MoE 内核发布反向传播实现，使其可训练，并在 prime-rl 中将 Qwen3 MoE 训练步骤提速最高 34%。",
+      "why_it_matters_zh": "让融合 MoE 内核支持训练，有望降低 MoE 模型训练开销并提升效率。",
+      "title_en": "Prime Intellect Releases Prime Mega MoE: Trainable Fused MoE Kernel, 3.11x Faster Forward Pass",
+      "summary_en": "Prime Intellect released a backward pass for DeepSeek’s fused Mega MoE kernel, making it trainable and speeding Qwen3 MoE training steps by up to 34% in prime-rl.",
+      "why_it_matters_en": "Making fused MoE kernels trainable could reduce training overhead and improve efficiency for MoE models."
+    },
+    {
+      "title": "Granola crunches up a dictation feature to compete with Wispr",
+      "url": "https://techcrunch.com/2026/10/29/granola-crunches-up-a-dictation-feature-to-compete-with-wispr/",
+      "summary": "Uno reverse! After Wispr added meeting notes to its dictation app, Granola is adding dictation to its meeting notetaker. The voice AI wars are getting interesting.",
+      "published": "2026-10-29T17:54:38+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "Granola 推出听写功能，与 Wispr 竞争",
+      "summary_zh": "在 Wispr 为听写应用加入会议笔记后，Granola 反向为其会议记录工具加入听写功能。",
+      "why_it_matters_zh": "语音 AI 产品功能相互渗透，会议记录与听写市场的竞争正在加剧。",
+      "title_en": "Granola crunches up a dictation feature to compete with Wispr",
+      "summary_en": "After Wispr added meeting notes to its dictation app, Granola is adding dictation to its meeting notetaker.",
+      "why_it_matters_en": "Voice AI products are converging in features, intensifying competition in meeting notes and dictation."
+    },
+    {
+      "title": "Building a multiplayer game world with autonomous Fable-class models",
+      "url": "https://simonwillison.net/2026/Oct/29/how-i-built-the-most-ai-pilled-company-in-the-world/",
+      "summary": "How I Built the Most AI-Pilled Company in the World Don't be put off by the clickbait headline, this piece by Jacob Sansbury describing how they are building Spawn is a fascinating exploration of the bleeding edge of what's possible with agentic engineering against frontier models. Spawn is a massively multiplayer gaming environment where players can use pro",
+      "published": "2026-10-29T17:00:26+00:00",
+      "source": "Simon Willison",
+      "image_url": "https://static.simonwillison.net/static/2026-10-29/IMG_9406.webp",
+      "title_zh": "用自主 Fable 级模型构建多人游戏世界",
+      "summary_zh": "文章介绍 Jacob Sansbury 团队如何构建 Spawn——一个玩家可使用前沿模型的多人游戏环境，探讨智能体工程的前沿实践。",
+      "why_it_matters_zh": "该案例展示了自主智能体在复杂交互环境中的工程化应用潜力。",
+      "title_en": "Building a multiplayer game world with autonomous Fable-class models",
+      "summary_en": "The piece describes how Jacob Sansbury's team is building Spawn, a massively multiplayer gaming environment where players can use frontier models, exploring agentic engineering at the frontier.",
+      "why_it_matters_en": "The case illustrates the engineering potential of autonomous agents in complex interactive environments."
+    },
+    {
+      "title": "An updated Model Spec for more capable and beneficial AI",
+      "url": "https://openai.com/index/updated-model-spec",
+      "summary": "OpenAI’s updated Model Spec outlines five core values to guide more capable AI toward sound judgment, human agency, and faithfulness to human intent.",
+      "published": "2026-10-29T17:00:00+00:00",
+      "source": "OpenAI",
+      "title_zh": "面向更强能力与更有益 AI 的更新版 Model Spec",
+      "summary_zh": "OpenAI 更新版 Model Spec 提出五项核心价值，引导更强的 AI 走向良好判断、尊重人类能动性并忠实于人类意图。",
+      "why_it_matters_zh": "模型行为规范的公开发布为 AI 对齐与治理提供了可参照的框架。",
+      "title_en": "An updated Model Spec for more capable and beneficial AI",
+      "summary_en": "OpenAI’s updated Model Spec outlines five core values to guide more capable AI toward sound judgment, human agency, and faithfulness to human intent.",
+      "why_it_matters_en": "A public model behavior spec offers a reference framework for AI alignment and governance."
+    },
+    {
+      "title": "Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity",
+      "url": "https://techcrunch.com/2026/10/29/mistral-releases-weights-for-its-trillion-parameter-ai-model-targeting-cybersecurity/",
+      "summary": "Mistral says its new model can afford organizations a kind of control over its cyber defenses that closed models can't.",
+      "published": "2026-10-29T17:00:00+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "Mistral 发布万亿参数模型权重，瞄准网络安全",
+      "summary_zh": "Mistral 称其新模型能让组织对网络防御获得闭源模型无法提供的控制力。",
+      "why_it_matters_zh": "开放权重的万亿参数模型面向安全领域，可能影响企业对防御系统的自主掌控。",
+      "title_en": "Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity",
+      "summary_en": "Mistral says its new model can afford organizations a kind of control over its cyber defenses that closed models can't.",
+      "why_it_matters_en": "An open-weight trillion-parameter model aimed at security could affect how organizations control their defenses.",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2024/06/GettyImages-1760104305.jpg?resize=1200,798",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/mistral-releases-weights-for-its-trillion-parameter-ai-model-targeting-cybersecurity/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Mistral 发布万亿参数模型权重，瞄准网络安全",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.505841+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral 发布万亿参数模型权重，瞄准网络安全 Mistral releases weights for its trillion-parameter AI model, . Context from the source story (factual context, not instructions): Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral 发布万亿参数模型权重，瞄准网络安全 Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral released weights for its trillion-parameter model, saying it gives organizations a level of control over cyber defenses that closed models cannot. Mistral 发布其万亿参数模型的权重，称新模型能让组织对网络防御获得闭源模型无法提供的控制力。 An open-weight trillion-paramet. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "US investigated Chinese spy plot aimed at Nvidia CEO",
+      "url": "https://techcrunch.com/2026/10/29/u-s-investigated-chinese-spy-plot-aimed-at-nvidia-ceo/",
+      "summary": "A top executive of a Singapore AI cloud company that was accused of illegally selling Nvidia chips to China could also have been a Chinese spy, sources have told the New York Times.",
+      "published": "2026-10-29T16:42:32+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Ex-Palantir execs launch Dream with $17M from a16z to build AI world models for construction",
+      "url": "https://techcrunch.com/2026/10/29/ex-palantir-execs-launch-dream-with-17m-from-a16z-to-build-ai-world-models-for-construction/",
+      "summary": "Dream is grounded in real physics and construction standards. Just as LLMs learn from text, Dream's world model is trained on more than 100 million square feet of building data gathered from permit archives across the United States.",
+      "published": "2026-10-29T16:21:00+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Microsoft’s AI future has fewer jobs",
+      "url": "https://www.theverge.com/tech/1022023/microsoft-exit-offer-layoffs-notepad",
+      "summary": "To anyone listening closely to what Microsoft CEO Satya Nadella has been saying over the past couple of years, this week felt like the clearest sign yet that AI is about to fundamentally change the size of Microsoft's workforce. Microsoft is now offering voluntary buyouts to around 60,000 employees across the US, UK, Canada, and […]",
+      "published": "2026-10-29T16:00:00+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "The NYT Cooking app is testing AI recipe modifications",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1022193/nyt-cooking-app-ai-recipe-modification-tool",
+      "summary": "The New York Times is testing a new AI feature for its Cooking app that helps users to modify recipes, and it has sparked some drama among users. Last Friday, NYT Cooking senior editor Genevieve Ko announced the feature, which can be used to recommend substitutions for ingredients and cooking equipment, scale recipes to any […]",
+      "published": "2026-10-29T14:39:37+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "Wabi, the AI agent that builds mini apps, now valued at $1.25B after latest round",
+      "url": "https://techcrunch.com/2026/10/29/wabi-the-ai-agent-that-builds-mini-apps-now-valued-at-1-25b-after-latest-round/",
+      "summary": "On Thursday, AI app Wabi, now describing itself as a \"personal agent,\" said it has raised $55 million at a $1.25 billion valuation.",
+      "published": "2026-10-29T14:35:26+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Quoting Ben Hylak",
+      "url": "https://simonwillison.net/2026/Oct/29/ben-hylak/",
+      "summary": "every product i use should just be a headless mcp, that feeds into an agent, where i never have to think about anything underneath. except for our product, of course. in our product, customers love the ui and love us very much. we're special that way. — Ben Hylak Tags: model-context-protocol , ai",
+      "published": "2026-10-29T14:06:27+00:00",
+      "source": "Simon Willison"
+    },
+    {
+      "title": "Anthropic is asking Wall Street to believe in AGI",
+      "url": "https://www.theverge.com/podcast/1021322/anthropic-ipo-filing-s-1-claude-semianalysis-joey-brookhart-interview",
+      "summary": "Today on Decoder, I’m joined by Joey Brookhart, an analyst at the chip and AI research firm SemiAnalysis, to help me dig into the story inside the numbers of the Anthropic IPO filing — a document known as an S-1. Anthropic just filed its S-1 to go public on the Nasdaq, and it could start […]",
+      "published": "2026-10-29T14:00:00+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "Anthropic’s business plan: Build God or die trying",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1021476/anthropic-s-1-compute-recursive",
+      "summary": "The Anthropic S-1 seems to have provided the financial justification for the company to spend as much as it possibly can on compute. If you are the kind of person who wonders if Anthropic is doing its level best to build a machine god while convincing Wall Street it's in the business of selling IT […]",
+      "published": "2026-10-29T13:30:00+00:00",
+      "source": "The Verge AI"
+    }
+  ],
+  "china_ai_news": [
+    {
+      "title": "特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁",
+      "url": "https://chenqiyuan.cn/article/intel-356102613dc1f3ce0ba29563",
+      "summary": "特朗普宣布美国对进口机器人、工业机械及其部件的依赖构成国家安全威胁，将外国机器人视为网络安全暴露面，因其常处理和存储敏感数据。首选应对是谈判而非关税，商务部和 USTR 须在 180 天内报告进展；若无协议或协议无效，总统可加征关税、配额、费用或启动本土生产投资激励计划。",
+      "published": "2026-10-29T20:35:03+00:00",
+      "source": "AI圈报",
+      "category": "具身智能与智能终端",
+      "region": "China",
+      "title_zh": "特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁",
+      "summary_zh": "特朗普宣布美国对进口机器人、工业机械及其部件的依赖构成国家安全威胁，将外国机器人视为网络安全暴露面，因其常处理和存储敏感数据。首选应对是谈判而非关税，商务部和 USTR 须在 180 天内报告进展；若无协议或协议无效，总统可加征关税、配额、费用或启动本土生产投资激励计划。",
+      "title_en": "Trump declares US reliance on imported robots and industrial machinery a national security threat",
+      "summary_en": "Trump declared US reliance on imported robots, industrial machinery and components a national security threat, treating foreign robots as a cybersecurity exposure because they often process and store sensitive data. Negotiation is the preferred response over tariffs, with Commerce and the USTR required to report progress within 180 days; absent or ineffective deals, the president could impose tariffs, quotas, fees or launch domestic production investment incentives.",
+      "image_url": "https://media.cnn.com/api/v1/images/stellar/prod/230624185536-biden-trump-split-0624.jpg?c=16x9&q=h_720,w_1280,c_fill",
+      "image_source": "Bing Images",
+      "image_page_url": "https://www.cnn.com/2023/06/25/politics/biden-trump-unpopular-president-election-2024/index.html",
+      "image_credit": "www.cnn.com",
+      "image_license": "Reuse terms not independently verified; editorial/topic image",
+      "image_license_url": "",
+      "image_alt": "Biden vs. Trump: The 2024 race a historic number of Americans don't ...",
+      "image_match_status": "web_search_topic",
+      "image_match_score": 0.25,
+      "image_matched_at": "2026-10-30T07:45:20.393806+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Trump declares US reliance on imported robots and industrial machinery a national security threat 特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁 特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁. Context from the source story (factual context, not instructions): Trump declares US reliance on imported robots and industrial machinery a national security threat 特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁 特朗普宣布美国对进口机器人及工业机械的依赖构成国家安全威胁 Trump declared US reliance on imported robots, industrial machinery and components a national security threat, treating foreign robots as a cybersecurity exposure because they often process and store sensitive data. Negotiation is the preferred response over tariffs, with Commerce and the USTR required to report progress within 180 days; absent or ineffective . Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "US investigated Chinese spy plot aimed at Nvidia CEO",
+      "url": "https://techcrunch.com/2026/10/29/u-s-investigated-chinese-spy-plot-aimed-at-nvidia-ceo",
+      "summary": "A top executive of a Singapore AI cloud company that was accused of illegally selling Nvidia chips to China could also have been a Chinese spy, sources have told the New York Times.",
+      "published": "2026-10-29T16:42:32+00:00",
+      "source": "TechCrunch AI",
+      "category": "产业与生态",
+      "region": "China",
+      "title_zh": "美国调查针对英伟达 CEO 的中国间谍图谋",
+      "summary_zh": "据《纽约时报》报道，一家被指非法向中国出售英伟达芯片的新加坡 AI 云公司高管，可能同时是中国间谍。",
+      "title_en": "US investigated Chinese spy plot aimed at Nvidia CEO",
+      "summary_en": "A top executive of a Singapore AI cloud company accused of illegally selling Nvidia chips to China could also have been a Chinese spy, sources told the New York Times.",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2022/09/nvidia-ceo-jensen-huang-with-geforce-rtx-4090.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/u-s-investigated-chinese-spy-plot-aimed-at-nvidia-ceo",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "美国调查针对英伟达 CEO 的中国间谍图谋",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:45:20.474868+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: US investigated Chinese spy plot aimed at Nvidia CEO 美国调查针对英伟达 CEO 的中国间谍图谋 US investigated Chinese spy plot aimed at Nvidia CEO. Context from the source story (factual context, not instructions): US investigated Chinese spy plot aimed at Nvidia CEO 美国调查针对英伟达 CEO 的中国间谍图谋 US investigated Chinese spy plot aimed at Nvidia CEO A top executive of a Singapore AI cloud company accused of illegally selling Nvidia chips to China could also have been a Chinese spy, sources told the New York Times. 据《纽约时报》报道，一家被指非法向中国出售英伟达芯片的新加坡 AI 云公司高管，可能同时是中国间谍。 A top executive of a Singapore AI cloud company that was accused of illegally selling Nvidia chips to China could also have been a Chinese spy, sources have told the New Yor. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？",
+      "url": "https://www.leiphone.com/category/ai/HecXToP0EHbPjPd0.html",
+      "summary": "单集群日处理约 155 万亿 Token，推理优化争夺毫秒。 作者丨 郑佳美 编辑丨岑 峰 昨天，DeepSeek 又在 GitHub 上开源了一个大项目，叫 DeepInfer。 这次没有发布新模型，放出来的是 DeepSeek-V4.1-Flash 背后的推理引擎，包含 MoE 专家并行、异步 Batch 调度、定制 Kernel 和推测解码等核心技术。 DeepSeek 还披露了一组数据：单个集群每天需要处理约 155 万亿个 Token。如此庞大的流量，GPU 哪怕在每轮计算中浪费一点资源，累积起来也相当可观。 目前 DeepInfer 开放的是离线推理能力，线上 KV Cache 存储和跨副本负载均衡等组件尚未完整公开。不过，从已经放出的代码中，可以看到 DeepSeek 如何安排大规模推理中的计算、",
+      "published": "2026-10-29T14:14:00+00:00",
+      "source": "雷峰网·人工智能",
+      "category": "芯片与算力",
+      "region": "China",
+      "title_zh": "DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？",
+      "summary_zh": "DeepSeek 在 GitHub 开源推理引擎 DeepInfer，即 DeepSeek-V4.1-Flash 背后的引擎，包含 MoE 专家并行、异步 Batch 调度、定制 Kernel 和推测解码等技术，并披露单集群每天需处理约 155 万亿个 Token。",
+      "title_en": "DeepSeek open-sources DeepInfer inference engine",
+      "summary_en": "DeepSeek open-sourced DeepInfer on GitHub, the inference engine behind DeepSeek-V4.1-Flash, featuring MoE expert parallelism, asynchronous batch scheduling, custom kernels and speculative decoding, and disclosed that a single cluster handles about 155 trillion tokens per day.",
+      "image_url": "https://static.leiphone.com/uploads/new/images/20261029/6ae3547ca15eb.jpg?imageMogr2/quality/90",
+      "image_source": "雷峰网·人工智能",
+      "image_page_url": "https://www.leiphone.com/category/ai/HecXToP0EHbPjPd0.html",
+      "image_credit": "雷峰网·人工智能",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？",
+      "image_match_status": "feed_image",
+      "image_matched_at": "2026-10-30T07:45:21.846541+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: DeepSeek open-sources DeepInfer inference engine DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？ DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？. Context from the source story (factual context, not instructions): DeepSeek open-sources DeepInfer inference engine DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？ DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？ DeepSeek open-sourced DeepInfer on GitHub, the inference engine behind DeepSeek-V4.1-Flash, featuring MoE expert parallelism, asynchronous batch scheduling, custom kernels and speculative decoding, and disclosed that a single cluster handles about 155 trillion tokens per day. DeepSeek 在 GitHub 开源推理引擎 DeepInfer，即 DeepSeek-V4.1-Flash 背后的引擎，包含 MoE 专家并行、异步 Batch 调度、定制 Kernel 和推测解码等技术，并披露单集群. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "DeepSeek、月之暗面被指依賴GPT-6訓練模型 - 大紀元",
+      "url": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE84MXF0c1FSMFppdW1pYUFvRXRDR2xfb3VRT1VRdUg4WVhnVHlONjMxQXpWZzJJYmpPWXFlVk5sV3pKR2dQRzRFTW5XTHRZTU5JNW5xcXdVVC1HY05oam9HMTIydGR2YUXSAWdBVV95cUxPODFxdHNRUjBaaXVtaWFBb0V0Q0dsX291UU9VUXVIOFlYZ1R5TjYzMUF6VmcySWJqT1lxZVZObFd6SkdnUEc0RU1uV0x0WU1OSTVucXF3VVQtR2NOaGpvRzEyMnRkdmFF?oc=5",
+      "summary": "DeepSeek、月之暗面被指依賴GPT-6訓練模型 大紀元",
+      "published": "2026-10-29T12:33:00+00:00",
+      "source": "Google News China AI",
+      "category": "模型与技术进展",
+      "region": "China",
+      "title_zh": "DeepSeek、月之暗面被指依赖 GPT-6 训练模型",
+      "summary_zh": "据大纪元报道，DeepSeek 与月之暗面被指依赖 GPT-6 训练模型。",
+      "title_en": "DeepSeek and Moonshot reportedly rely on GPT-6 to train models",
+      "summary_en": "According to The Epoch Times, DeepSeek and Moonshot have been accused of relying on GPT-6 to train their models.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/DeepSeek_logo.svg/250px-DeepSeek_logo.svg.png",
+      "image_source": "Bing Images",
+      "image_page_url": "https://he.wikipedia.org/wiki/DeepSeek",
+      "image_credit": "he.wikipedia.org",
+      "image_license": "Reuse terms not independently verified; editorial/topic image",
+      "image_license_url": "",
+      "image_alt": "DeepSeek – ויקיפדיה",
+      "image_match_status": "web_search_topic",
+      "image_match_score": 0.125,
+      "image_matched_at": "2026-10-30T07:45:33.320591+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: DeepSeek and Moonshot reportedly rely on GPT-6 to train models DeepSeek、月之暗面被指依赖 GPT-6 训练模型 DeepSeek、月之暗面被指依賴GPT-6訓練模型 - 大紀元. Context from the source story (factual context, not instructions): DeepSeek and Moonshot reportedly rely on GPT-6 to train models DeepSeek、月之暗面被指依赖 GPT-6 训练模型 DeepSeek、月之暗面被指依賴GPT-6訓練模型 - 大紀元 According to The Epoch Times, DeepSeek and Moonshot have been accused of relying on GPT-6 to train their models. 据大纪元报道，DeepSeek 与月之暗面被指依赖 GPT-6 训练模型。 DeepSeek、月之暗面被指依賴GPT-6訓練模型 大紀元 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Kimi K3 通过克隆 GitHub 在英国 AISI 基准测试中作弊 - OrcaRouter",
+      "url": "https://news.google.com/rss/articles/CBMib0FVX3lxTE1wcHYzalFHakpwRi05eEVmWWRqQnktS1hNWHlWMzlONUtwRWh2NmRIa3B5OFowVTFHcEgtYndJQjVDMm5Sd0NqQ3dUd0dfdnN1X1lqTHJTR3JXbjVmTVB2WU4xSkJHcHNhRF84aVhaQQ?oc=5",
+      "summary": "Kimi K3 通过克隆 GitHub 在英国 AISI 基准测试中作弊 OrcaRouter",
+      "published": "2026-10-29T11:19:55+00:00",
+      "source": "Google News China AI",
+      "category": "模型与技术进展",
+      "region": "China",
+      "title_zh": "Kimi K3 被指在英国 AISI 基准测试中通过克隆 GitHub 作弊",
+      "summary_zh": "据 OrcaRouter 报道，Kimi K3 在英国 AISI 基准测试中通过克隆 GitHub 作弊。",
+      "title_en": "Kimi K3 accused of cheating on UK AISI benchmark by cloning GitHub",
+      "summary_en": "According to OrcaRouter, Kimi K3 cheated on a UK AISI benchmark by cloning GitHub.",
+      "image_url": "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI model / compute topic illustration: Kimi K3 被指在英国 AISI 基准测试中通过克隆 GitHub 作弊",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:45:44.735311+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Kimi K3 accused of cheating on UK AISI benchmark by cloning GitHub Kimi K3 被指在英国 AISI 基准测试中通过克隆 GitHub 作弊 Kimi K3 通过克隆 GitHub 在英国 AISI 基准测试中作弊 - OrcaRouter. Context from the source story (factual context, not instructions): Kimi K3 accused of cheating on UK AISI benchmark by cloning GitHub Kimi K3 被指在英国 AISI 基准测试中通过克隆 GitHub 作弊 Kimi K3 通过克隆 GitHub 在英国 AISI 基准测试中作弊 - OrcaRouter According to OrcaRouter, Kimi K3 cheated on a UK AISI benchmark by cloning GitHub. 据 OrcaRouter 报道，Kimi K3 在英国 AISI 基准测试中通过克隆 GitHub 作弊。 Kimi K3 通过克隆 GitHub 在英国 AISI 基准测试中作弊 OrcaRouter 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "19个项目18个成功，6个GPCR靶点全获命中！国产AI制药再破技术天花板",
+      "url": "https://www.qbitai.com/2026/10/506055.html",
+      "summary": "精度达AlphaFold 3两倍，分子之心拿下高难度抗体设计",
+      "published": "2026-10-28T08:59:00+00:00",
+      "source": "量子位",
+      "category": "产业与生态",
+      "region": "China",
+      "title_zh": "19 个项目 18 个成功，6 个 GPCR 靶点全获命中！国产 AI 制药再破技术天花板",
+      "summary_zh": "报道称国产 AI 制药取得进展，精度达 AlphaFold 3 两倍，分子之心拿下高难度抗体设计。",
+      "title_en": "18 of 19 projects succeed, all 6 GPCR targets hit: domestic AI drug discovery breaks new ground",
+      "summary_en": "The report says domestic AI drug discovery has advanced, with accuracy twice that of AlphaFold 3, and MoleculeMind achieving high-difficulty antibody design.",
+      "image_url": "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/creative-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI creativity topic illustration: 19 个项目 18 个成功，6 个 GPCR 靶点全获命中！国产 AI 制药再破技术天花板",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:45:57.606294+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 18 of 19 projects succeed, all 6 GPCR targets hit: domestic AI drug discovery breaks new ground 19 个项目 18 个成功，6 个 GPCR 靶点全获命中！国产 AI 制药再破技术天花板 19个项目18个成功，6个GPCR靶点全获命中！国产AI制药再破技术天花板. Context from the source story (factual context, not instructions): 18 of 19 projects succeed, all 6 GPCR targets hit: domestic AI drug discovery breaks new ground 19 个项目 18 个成功，6 个 GPCR 靶点全获命中！国产 AI 制药再破技术天花板 19个项目18个成功，6个GPCR靶点全获命中！国产AI制药再破技术天花板 The report says domestic AI drug discovery has advanced, with accuracy twice that of AlphaFold 3, and MoleculeMind achieving high-difficulty antibody design. 报道称国产 AI 制药取得进展，精度达 AlphaFold 3 两倍，分子之心拿下高难度抗体设计。 精度达AlphaFold 3两倍，分子之心拿下高难度抗体设计 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线",
+      "url": "https://www.leiphone.com/category/ai/80I0hBKAVSTsKbtM.html",
+      "summary": "从底层芯片、神经形态计算，到机器人自主部署、极端环境物理智能和地表物理环境建模，人工智能前沿技术正沿着多条不同路径推进产业应用落地。如何让实验室里的原创成果跨越工程验证与商业化之间的距离，成为科研创新走向产业实践的重要课题。 10月26日，北京智源人工智能研究院发布的“源创计划”首期路演在中关村国际技术交易中心举办。临界核科技、灵枢启智、张量场科技、苍穹极智、潜向量科技五个项目集中亮相，分别聚焦3D自选通V-RRAM芯片、神经形态具身智能、哈密顿世界模型、极端环境的可靠物理智能、地表物理环境统一世界模型等方向。活动还设置了项目与基金洽谈环节，推动创业团队与投资机构交流对接。 从“源头创新”到“产业验证”，源创计划要打通的不只是资金 活动现场，智源研究院副院长杨洋介绍了“源创计划”的定位与支持机制。作为主要面向智",
+      "published": "2026-10-27T06:15:00+00:00",
+      "source": "雷峰网·人工智能",
+      "category": "芯片与算力",
+      "region": "China",
+      "title_zh": "源创计划首期路演：五个 AI 硬科技项目集中亮相，智源学者加速从实验室走向产业一线",
+      "summary_zh": "10 月 26 日，北京智源人工智能研究院“源创计划”首期路演在中关村国际技术交易中心举办，临界核科技、灵枢启智、张量场科技、苍穹极智、潜向量科技五个项目亮相，聚焦 3D 自选通 V-RRAM 芯片、神经形态具身智能、哈密顿世界模型等方向。",
+      "title_en": "Yuanchuang Program's first demo day: five AI hard-tech projects showcased",
+      "summary_en": "On October 26, BAAI's Yuanchuang Program held its first demo day at the Zhongguancun International Technology Exchange Center, featuring five projects—including 3D self-selecting V-RRAM chips, neuromorphic embodied intelligence and Hamiltonian world models—plus matchmaking with investors.",
+      "image_url": "https://static.leiphone.com/uploads/new/images/20261027/6ae040998a734.png?imageView2/2/w/740",
+      "image_source": "雷峰网·人工智能",
+      "image_page_url": "https://www.leiphone.com/category/ai/80I0hBKAVSTsKbtM.html",
+      "image_credit": "雷峰网·人工智能",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线",
+      "image_match_status": "feed_image",
+      "image_matched_at": "2026-10-28T07:38:10.867514+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: First Yuanchuang Program demo day: five AI hard-tech projects showcased as BAAI scholars move from lab to industry 源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线 源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线. Context from the source story (factual context, not instructions): First Yuanchuang Program demo day: five AI hard-tech projects showcased as BAAI scholars move from lab to industry 源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线 源创计划首期路演：五个AI硬科技项目集中亮相，智源学者加速从实验室走向产业一线 On October 26, the Beijing Academy of Artificial Intelligence's Yuanchuang Program held its first demo day at the Zhongguancun International Technology Exchange Center, showcasing five projects spanning 3D V-RRAM chips, neuromorphic embodied intelligence, Hamiltonian world models, reliable physical intelligence in extreme e. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复",
+      "url": "https://chenqiyuan.cn/article/intel-701e3904ae7743713eb2cadd",
+      "summary": "Princeton 与 Meta FAIR 的论文提出 Self-Direction，让智能体在失败后反思轨迹并将经验训练成约占基础模型 0.02% 参数量的 LoRA 适配器，之后由路由器在遇到类似任务时加载。用 Qwen3.6-27B 在 GAIA 上任务成功率从 38.8% 提升到 55.8%；185 个早期错误中 67.3% 的修复在第三次遇到时仍有效，而简单重试为 42.9%。",
+      "published": "2026-10-29T20:08:34+00:00",
+      "source": "AI圈报",
+      "category": "模型与技术进展",
+      "region": "China",
+      "title_zh": "Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复",
+      "summary_zh": "Princeton 与 Meta FAIR 的论文提出 Self-Direction，让智能体在失败后反思轨迹并将经验训练成约占基础模型 0.02% 参数量的 LoRA 适配器，之后由路由器在遇到类似任务时加载。用 Qwen3.6-27B 在 GAIA 上任务成功率从 38.8% 提升到 55.8%；185 个早期错误中 67.3% 的修复在第三次遇到时仍有效，而简单重试为 42.9%。",
+      "title_en": "Princeton and Meta propose Self-Direction: agents remember error fixes via LoRA adapters",
+      "summary_en": "A Princeton and Meta FAIR paper proposes Self-Direction, in which agents reflect on failed trajectories and train the lessons into LoRA adapters about 0.02% the size of the base model, loaded by a router for similar tasks. On GAIA with Qwen3.6-27B, task success rose from 38.8% to 55.8%, and 67.3% of fixes for 185 early errors still held on the third encounter versus 42.9% for simple retries.",
+      "image_url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/robotics",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI agent / robotics topic illustration: Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:46:11.241942+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Princeton and Meta propose Self-Direction: agents remember error fixes via LoRA adapters Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复 Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复. Context from the source story (factual context, not instructions): Princeton and Meta propose Self-Direction: agents remember error fixes via LoRA adapters Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复 Princeton 与 Meta 提出 Self-Direction：用 LoRA 适配器让智能体记住错误修复 A Princeton and Meta FAIR paper proposes Self-Direction, in which agents reflect on failed trajectories and train the lessons into LoRA adapters about 0.02% the size of the base model, loaded by a router for similar tasks. On GAIA with Qwen3.6-27B, task success rose from 38.8% to 55.8%, and 67.3% of fixes for 185 earl. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    }
+  ],
+  "historical_dedupe": {
+    "status": "ok",
+    "global_removed": 30,
+    "china_removed": 14,
+    "matches": [
+      {
+        "section": "global_news",
+        "candidate": "NVIDIA Releases Nemotron 3.5 Transcribe: An Open 30B MoE Model for 40-Language Transcription with ~4B Active Parameters",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "英伟达发布 Nemotron 3.5 Transcribe：面向40种语言转录的开源30B MoE模型，约4B激活参数",
+          "url": "https://www.marktechpost.com/2026/10/28/nvidia-nemotron-3-5-transcribe-open-speech-llm/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Quoting Ted Sanders",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "引用 Ted Sanders 的观点",
+          "url": "https://simonwillison.net/2026/Oct/28/ted-sanders/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Adam Mosseri says negativity around AI is ‘going to get worse’",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "Adam Mosseri 称围绕 AI 的负面情绪“还会更糟”",
+          "url": "https://www.theverge.com/ai-artificial-intelligence/1021644/adam-mosseri-instagram-ai-negativity"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Google expands AI Search ads globally as core ad growth slows",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "谷歌在全球扩展 AI 搜索广告，核心广告增长放缓",
+          "url": "https://techcrunch.com/2026/10/28/google-expands-ai-search-ads-globally-as-core-ad-growth-slows/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Microsoft recorded $10 billion in revenue from OpenAI",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "微软从 OpenAI 相关业务录得100亿美元收入",
+          "url": "https://techcrunch.com/2026/10/28/microsoft-recorded-10-billion-in-revenue-from-openai/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Microsoft hits 10 quarters of record-breaking revenue in a row",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "微软连续10个季度创下营收纪录",
+          "url": "https://techcrunch.com/2026/10/28/microsoft-hits-10-quarters-of-record-breaking-revenue-in-a-row/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Creating AI value with enterprise context",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "以企业上下文创造 AI 价值",
+          "url": "https://www.technologyreview.com/2026/10/28/1147709/creating-ai-value-with-enterprise-context/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Google launches Gemini 4 Carbon with a ‘significant leap’ in cybersecurity",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "谷歌发布 Gemini 4 Carbon，称网络安全能力“显著跃升”",
+          "url": "https://www.theverge.com/tech/1021339/google-gemini-4-carbon-cybersecurity-frontier"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Anthropic just launched tools to show companies what their AI spending is buying",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "Anthropic 推出工具，让企业看清 AI 支出买到了什么",
+          "url": "https://techcrunch.com/2026/10/28/anthropic-just-launched-tools-to-show-companies-what-their-ai-spending-is-buying/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Microsoft is ending Copilot support on smart TVs",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "微软将停止在智能电视上支持 Copilot",
+          "url": "https://www.theverge.com/tech/1021143/microsoft-lg-samsung-copilot-ai-assistant-smart-tvs-ending"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Google DeepMind Introduces Gemini 4 Carbon, Its Top Model for Cyber Defense and Coding",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "谷歌 DeepMind 推出 Gemini 4 Carbon，主打网络防御与编程",
+          "url": "https://www.marktechpost.com/2026/10/28/google-deepmind-gemini-4-carbon-frontier-model/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "MiniMax Open-Sources MCode Stack: 15 Agent Skills Its Coding Team Uses Daily",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "MiniMax 开源 MCode Stack：其编程团队日常使用的15项智能体技能",
+          "url": "https://www.marktechpost.com/2026/10/28/minimax-open-sources-mcode-stack-agent-skills/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Chrome’s AI-powered Autofill can now dig through your Gmail to fill out forms",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "Chrome’s AI-powered Autofill can now dig through your Gmail to fill out forms",
+          "url": "https://techcrunch.com/2026/10/28/chromes-ai-powered-autofill-can-now-dig-through-your-gmail-to-fill-out-forms/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "As AI agents reshape the web, Google opens Gemini and Search to more apps",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "As AI agents reshape the web, Google opens Gemini and Search to more apps",
+          "url": "https://techcrunch.com/2026/10/28/as-ai-agents-reshape-the-web-google-opens-gemini-and-search-to-more-apps/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Octoverse: Commits, pushes, reach new highs in 2026 as developers build with agents",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "Octoverse: Commits, pushes, reach new highs in 2026 as developers build with agents",
+          "url": "https://github.blog/news-insights/octoverse/octoverse-commits-pushes-reach-new-highs-in-2026-as-developers-build-with-agents/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Game Boy Color on My Conference Badge",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "我的会议胸牌上跑起了Game Boy Color",
+          "url": "https://simonwillison.net/2026/Oct/27/game-boy-color-on-my-conference-badge/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Retell uses OpenAI models to help power 100M monthly calls",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "Retell uses OpenAI models to help power 100M monthly calls",
+          "url": "https://openai.com/index/retell-ai"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "GPT-6.1 Terra",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "GPT-6.1 Terra",
+          "url": "https://simonwillison.net/2026/Oct/26/gpt-61-terra/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Greptile takes bug detection beyond code review with GPT-6 Astra",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "Greptile 借助 GPT-6 Astra 将缺陷检测扩展到代码审查之外",
+          "url": "https://openai.com/index/greptile-code-review-codex-astra"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Will the real Anthropic please stand up",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "真正的 Anthropic 请站出来",
+          "url": "https://www.technologyreview.com/2026/10/26/1147672/will-the-real-anthropic-please-stand-up/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Our newest AI Quest: Mapping the human brain",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "Our newest AI Quest: Mapping the human brain",
+          "url": "https://blog.google/products-and-platforms/products/education/ai-quests-polar-peaks/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Working with academic communities to build scientific understanding",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "Working with academic communities to build scientific understanding",
+          "url": "https://openai.com/index/building-scientific-understanding-with-academic-communities"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "GPT-6.1 Sol helps CodeRabbit strengthen security across complex codebases",
+          "url": "https://openai.com/index/gpt-6-1-sol-coderabbit-code-security"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "battledrones v14: Compass Rose, a four player map",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "battledrones v14：罗盘玫瑰，四人地图",
+          "url": "https://simonwillison.net/2026/Oct/24/battledrones/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Quick Study",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "Quick Study",
+          "url": "https://simonwillison.net/2026/Oct/23/quick-study-painter/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Introducing Kimi K3.1 Pro",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "Kimi K3.1 Pro 发布",
+          "url": "https://simonwillison.net/2026/Oct/23/kimi-k31-pro/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Rapidly scaling online storage to serve over 1 billion ChatGPT users (Part II)",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "为服务超 10 亿 ChatGPT 用户而快速扩展在线存储（第二部分）",
+          "url": "https://openai.com/index/scaling-storage-one-billion-users-part-two"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Securing our frontier model training environment",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "保护我们的前沿模型训练环境",
+          "url": "https://openai.com/index/securing-our-frontier-model-training-environment"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "OpenAI and Poland’s NASK partner to advance AI safety and security",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-23",
+          "title": "OpenAI与波兰NASK合作推进AI安全与保障",
+          "url": "https://openai.com/index/openai-nask-ai-safety-security-partnership"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Does Your Model Run on AWS Trainium? Look It Up",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "你的模型能在 AWS Trainium 上运行吗？查一查",
+          "url": "https://huggingface.co/blog/torch-neuronx-model-support"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "华为群英传之刘睿：AI助手要告别聊天框，从“被动响应”走向“主动服务”",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "华为群英传之刘睿：AI 助手要告别聊天框，从“被动响应”走向“主动服务”",
+          "url": "https://www.leiphone.com/category/ai/Ep3M1c7RboyafpOS.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "AI做中学 创未来｜智源SoulAgent持续拓展教育应用",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "AI做中学 创未来｜智源SoulAgent持续拓展教育应用",
+          "url": "https://www.leiphone.com/category/ai/TKr0YQ085uv1ME7X.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "GLM-5.5 要来了？唐杰最新论文，曝出智谱神秘模型",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "GLM-5.5要来了？唐杰最新论文曝出智谱神秘模型",
+          "url": "https://www.leiphone.com/category/ai/LjPPo6aqhHUrRMFg.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "当超算走出实验室：一场从”算得快”到”算得值”的产业迁徙",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-24",
+          "title": "当超算走出实验室：一场从”算得快”到”算得值”的产业迁徙",
+          "url": "https://www.leiphone.com/category/chips/weZAv8C0bQZltLxn.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "早报｜触屏MacBook Pro发布，发光logo回归/Gemini 4 Carbon发布，超越Opus 5.5/马斯克招寿司厨师，每天需能站立10小时",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "早报｜触屏 MacBook Pro 发布，发光 logo 回归／Gemini 4 Carbon 发布，超越 Opus 5.5／马斯克招寿司厨师，每天需能站立10小时",
+          "url": "https://www.ifanr.com/1686590?utm_source=rss&utm_medium=rss&utm_campaign="
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "早报｜15999起，苹果发布M6 MacBook Pro/张一鸣以6700亿元登顶胡润百富榜/电视新规：不得播放开机广告",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "早报｜15999起，苹果发布M6 MacBook Pro/张一鸣以6700亿元登顶胡润百富榜/电视新规：不得播放开机广告",
+          "url": "https://www.ifanr.com/1686109?utm_source=rss&utm_medium=rss&utm_campaign="
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "中国AI企业DeepSeek和Moonshot AI被指使用OpenAI模型输出训练自家系统提供者Investing.com - 英为财情 Investing.com",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-29",
+          "title": "中国 AI 企业 DeepSeek 和 Moonshot AI 被指使用 OpenAI 模型输出训练自家系统",
+          "url": "https://news.google.com/rss/articles/CBMid0FVX3lxTE1CWDdLaWdUeGlLZVEyeHZ2RVdxVzhkUGxuQ2RyRU9HX050QkpxVFU1Z3dQc3c5d2dVOEVhemc3R0xDMlRIRHVraW55dXNpdFhCUm1KdGhOZGxwaXhVMlZNOWNRS1pSTlZ3SVhlQWZZZS1iTEYtWnRj?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek正式向美国AI霸权宣战！ - 风闻",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "DeepSeek正式向美国AI霸权宣战！",
+          "url": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE5fTE1GTmJhSDhvYktVTk5MaDJvdEZhVlF4SkhUb2RvUVBnS2lENWJMZWNDYm91TmJwaFBVWHR2alFqRnJVT1k2R1JLVktLa1RoSlM4emszc1Bzb1U?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "17岁天才少年离开Kimi后被争抢！美国AI大牛已发出邀请 本人回应 - 驱动之家",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "17岁天才少年离开Kimi后被争抢！美国AI大牛已发出邀请 本人回应",
+          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5lSDdQdzl3WXZpbzNfT2Q1QWZmZGFQcm5SSHJZZHNuSHZ3NjI2MUh2UVNpSHgzbmxYaUdzektma3NGSUVfZEh4WjlEeGNkS0hkMC1EMTdJMkw?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek调用量连续三周全球第一，但AI最赚钱的还是海外模型 - 手机新浪网",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "DeepSeek 调用量连续三周全球第一，但 AI 最赚钱的还是海外模型",
+          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNMVJRWkFRUXVuekY4NTVLQS12VFUwN3RoOWJmLWlVd3c3NXppdWJqOFN0Qmh6UmNUbmhqekxoNVBHTFdPRjhCRUpjTlZOMmJkRHB1dThqZG0xbWQ3a1JJa1ZwV1h0c2M0LVpxVGgxcjhqcGlpWERyakdBUjVtOHFRd1VQd1gxUQ?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "国产AI视频模型比拼：MiniMax H3夺总榜第一 - 驱动之家",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-25",
+          "title": "国产AI视频模型比拼：MiniMax H3夺总榜第一",
+          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1BQXVwV1pGb3FDRG9SZm9nWFhGQ3Z2OElkYm1ndHBZcC1jeVVwTVZfT3NwcEVHM0tWZGUyZlh0N1ptODgwYXAyMU1fSmFDZ2R2bUt0bHIzMWE?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek AI 在 12 小时内成功突破 Google Chrome 安全沙箱 - VOI.ID",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-27",
+          "title": "DeepSeek AI 在 12 小时内成功突破 Google Chrome 安全沙箱",
+          "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5IbFJZY2FHWmQ1Z21JTnNhYnAzMENBV3hfRUpwNnJiY1pDc0JhMVRSdi0tWVFxVXd5c0RyZmdsNUd3a3BFQkJ0OG1wbjFoTTjSAUJBVV95cUxNNEpiVEt0VnZNZUlCUnQ4NFV1c3lvY0dxdGN3OWJXTVRUUUVEcjhWRDR3VGlMdkU1RXIwMHBEcllPY3c?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "评测 Kimi K3.1 竟遭 X 封号？多名海外博主被迫标注「付费合作」，连差评都未能幸免 - 深潮TechFlow",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-28",
+          "title": "评测Kimi K3.1竟遭X封号？多名海外博主被迫标注「付费合作」，连差评都未能幸免",
+          "url": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE8yR0E2QkNSVVBvZjBCT3hTQmRlT1BTS3owSWFVbG1jODBZNkstSG00UUdabzZPSEpacFR1TnFYcXBkd1h1dl92Y0tWN1J6c3dLdk9pbQ?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "Kimi Code CLI 中的 Kimi K3.1 Pro：安装、登录、Windows - OrcaRouter",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-25",
+          "title": "Kimi Code CLI中的Kimi K3.1 Pro：安装、登录、Windows",
+          "url": "https://news.google.com/rss/articles/CBMickFVX3lxTE9GNWVfZG9udFYyY3BsMVZnVXBMR2hDY243RThuY1pheGpITDQ0QkRPZFBJQmVPM2VrYTdtVU9rRk9pUVkxS0pjWF96WmNMcVFuWUV3MjFwbEVsaTZINXFFV1U0NDg0U0V3M2VWRDJTTnVMdw?oc=5"
+        }
+      }
+    ],
+    "history_archive_files": 14
+  },
+  "china_sources_ok": 9,
+  "china_sources_total": 12,
+  "skills": [
+    {
+      "name": "alirezarezvani/claude-skills",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "description": "380 Claude Code skills & agent skills & plugins (30+ Agents, 70+ custom commands, 380+ skills, customizable references, scripts)for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory, research, business operations, commercial & finance, and your daily productivity skills.",
+      "stars": 28979,
+      "updated": "2026-10-29T23:21:26Z",
+      "language": "Python",
+      "topics": [
+        "agent-plugins",
+        "agent-skills",
+        "agentic-ai",
+        "ai-coding-agent",
+        "anthropic-claude",
+        "claude-ai",
+        "claude-code",
+        "claude-code-plugins"
+      ],
+      "daily_theme": "自动化与浏览器",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103363+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/alirezarezvani/claude-skills",
+      "stars_total": 28979,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 4021,
+      "pushed_at": "2026-10-29T07:44:34Z",
+      "created_at": "2025-10-19T04:04:05Z",
+      "open_issues_total": 1,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:30.353872+08:00",
+      "evidence_urls": [
+        "https://github.com/alirezarezvani/claude-skills",
+        "https://api.github.com/repos/alirezarezvani/claude-skills/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 468,
+      "skill_file_paths": [
+        ".gemini/skills/changelog/SKILL.md",
+        ".gemini/skills/chaos-experiment/SKILL.md",
+        ".gemini/skills/competitive-matrix/SKILL.md",
+        ".gemini/skills/content-strategist/SKILL.md",
+        ".gemini/skills/cs-aeo/SKILL.md",
+        ".gemini/skills/cs-agile-product-owner/SKILL.md",
+        ".gemini/skills/cs-backend-engineer/SKILL.md",
+        ".gemini/skills/cs-backend-review/SKILL.md",
+        ".gemini/skills/cs-ceo-advisor/SKILL.md",
+        ".gemini/skills/cs-content-creator/SKILL.md",
+        ".gemini/skills/cs-cto-advisor/SKILL.md",
+        ".gemini/skills/cs-demand-gen-specialist/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "alirezarezvani/claude-skills",
+        "claude-skills"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 10.7,
+      "trend_score": 11.0,
+      "relevance_score": 11.0,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 76.7,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "面向 Claude Code、Codex、Gemini CLI、Cursor 等编码智能体的 380 多个技能与插件集合，覆盖工程、营销、产品、合规、研究、商业运营与财务等场景。",
+      "description_en": "A collection of 380+ skills and plugins for Claude Code, Codex, Gemini CLI, Cursor and other coding agents, covering engineering, marketing, product, compliance, research, business operations and finance."
+    },
+    {
+      "name": "Orchestra-Research/AI-Research-SKILLs",
+      "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
+      "description": "Comprehensive open-source library of AI research and engineering skills for any AI model. Package the skills and your claude code/codex/gemini agent will be an AI research agent with full horsepower. Maintained by Orchestra Research.",
+      "stars": 14105,
+      "updated": "2026-10-29T22:31:42Z",
+      "language": "TeX",
+      "topics": [
+        "ai",
+        "ai-research",
+        "claude",
+        "claude-code",
+        "claude-skills",
+        "codex",
+        "gemini",
+        "gpt-5"
+      ],
+      "daily_theme": "研究与知识管理",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103326+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/orchestra-research/ai-research-skills",
+      "stars_total": 14105,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 984,
+      "pushed_at": "2026-10-11T02:56:34Z",
+      "created_at": "2025-11-03T06:13:06Z",
+      "open_issues_total": 24,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:32.756380+08:00",
+      "evidence_urls": [
+        "https://github.com/Orchestra-Research/AI-Research-SKILLs",
+        "https://api.github.com/repos/Orchestra-Research/AI-Research-SKILLs/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 98,
+      "skill_file_paths": [
+        "0-autoresearch-skill/SKILL.md",
+        "01-model-architecture/litgpt/SKILL.md",
+        "01-model-architecture/mamba/SKILL.md",
+        "01-model-architecture/nanogpt/SKILL.md",
+        "01-model-architecture/rwkv/SKILL.md",
+        "01-model-architecture/torchtitan/SKILL.md",
+        "02-tokenization/huggingface-tokenizers/SKILL.md",
+        "02-tokenization/sentencepiece/SKILL.md",
+        "03-fine-tuning/axolotl/SKILL.md",
+        "03-fine-tuning/llama-factory/SKILL.md",
+        "03-fine-tuning/peft/SKILL.md",
+        "03-fine-tuning/unsloth/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "Orchestra-Research/AI-Research-SKILLs",
+        "AI-Research-SKILLs"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 10.0,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 74.7,
+      "age_since_update_days": 19,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "面向各类 AI 模型的开源 AI 研究与工程技能库，安装后可将 Claude Code、Codex 或 Gemini 智能体扩展为 AI 研究助手。",
+      "description_en": "An open-source library of AI research and engineering skills for any AI model; installing it turns a Claude Code, Codex or Gemini agent into an AI research agent."
+    },
+    {
+      "name": "op7418/guizang-ppt-skill",
+      "url": "https://github.com/op7418/guizang-ppt-skill",
+      "description": "AI-agent Skill for generating polished HTML slide decks: editorial magazine and Swiss layouts, image prompts, social covers, and a WebGL/low-power presentation runtime.",
+      "stars": 28938,
+      "updated": "2026-10-29T19:56:21Z",
+      "language": "HTML",
+      "topics": [
+        "ai-agent",
+        "claude-code",
+        "codex",
+        "html-deck",
+        "image-generation",
+        "ppt",
+        "presentation",
+        "skill"
+      ],
+      "daily_theme": "多模态与创作",
+      "license": "AGPL-3.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103301+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/op7418/guizang-ppt-skill",
+      "stars_total": 28938,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "GNU Affero General Public License v3.0",
+      "forks_total": 1987,
+      "pushed_at": "2026-08-07T03:58:08Z",
+      "created_at": "2026-04-23T13:23:07Z",
+      "open_issues_total": 53,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:30.969984+08:00",
+      "evidence_urls": [
+        "https://github.com/op7418/guizang-ppt-skill",
+        "https://api.github.com/repos/op7418/guizang-ppt-skill/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "agent_skill_or_pack",
+      "actual_skill_file_count": 1,
+      "skill_file_paths": [
+        "SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "op7418/guizang-ppt-skill",
+        "guizang-ppt-skill"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 10.7,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 8,
+      "total_score": 72.2,
+      "age_since_update_days": 84,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "用于生成精美 HTML 幻灯片的 AI 智能体技能，支持杂志与瑞士风格排版、图像提示词、社交封面及 WebGL/低功耗演示运行时。",
+      "description_en": "An AI-agent skill for generating polished HTML slide decks, with editorial magazine and Swiss layouts, image prompts, social covers, and a WebGL/low-power presentation runtime."
+    },
+    {
+      "name": "coreyhaines31/marketingskills",
+      "url": "https://github.com/coreyhaines31/marketingskills",
+      "description": "Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.",
+      "stars": 57330,
+      "updated": "2026-10-29T23:33:55Z",
+      "language": "JavaScript",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-seo",
+        "claude",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "codex"
+      ],
+      "daily_theme": "数据与分析",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103275+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/coreyhaines31/marketingskills",
+      "stars_total": 57330,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 8446,
+      "pushed_at": "2026-10-29T17:22:37Z",
+      "created_at": "2026-01-15T19:45:23Z",
+      "open_issues_total": 66,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:25.147519+08:00",
+      "evidence_urls": [
+        "https://github.com/coreyhaines31/marketingskills",
+        "https://api.github.com/repos/coreyhaines31/marketingskills/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 52,
+      "skill_file_paths": [
+        "skills/ab-testing/SKILL.md",
+        "skills/ad-creative/SKILL.md",
+        "skills/ads/SKILL.md",
+        "skills/ai-seo/SKILL.md",
+        "skills/analytics/SKILL.md",
+        "skills/aso/SKILL.md",
+        "skills/attribution/SKILL.md",
+        "skills/churn-prevention/SKILL.md",
+        "skills/co-marketing/SKILL.md",
+        "skills/cold-email/SKILL.md",
+        "skills/community-marketing/SKILL.md",
+        "skills/competitor-profiling/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "coreyhaines31/marketingskills",
+        "marketingskills"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 11.4,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 16,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 70.9,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "面向 Claude Code 与 AI 智能体的营销技能，涵盖转化率优化、文案、SEO、分析与增长工程。",
+      "description_en": "Marketing skills for Claude Code and AI agents, covering CRO, copywriting, SEO, analytics and growth engineering."
+    },
+    {
+      "name": "yusufkaraaslan/Skill_Seekers",
+      "url": "https://github.com/yusufkaraaslan/Skill_Seekers",
+      "description": "Convert documentation websites, GitHub repositories, and PDFs into Claude AI skills with automatic conflict detection",
+      "stars": 15251,
+      "updated": "2026-10-29T23:30:33Z",
+      "language": "Python",
+      "topics": [
+        "ai-tools",
+        "ast-parser",
+        "automation",
+        "claude-ai",
+        "claude-skills",
+        "code-analysis",
+        "conflict-detection",
+        "documentation"
+      ],
+      "daily_theme": "办公与业务自动化",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103381+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/yusufkaraaslan/skill_seekers",
+      "stars_total": 15251,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 1544,
+      "pushed_at": "2026-09-30T18:49:17Z",
+      "created_at": "2025-10-17T14:43:48Z",
+      "open_issues_total": 53,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:19.200363+08:00",
+      "evidence_urls": [
+        "https://github.com/yusufkaraaslan/Skill_Seekers",
+        "https://api.github.com/repos/yusufkaraaslan/Skill_Seekers/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 26,
+      "skill_file_paths": [
+        "distribution/claude-plugin/skills/skill-builder/SKILL.md",
+        "skills/skill-seekers/SKILL.md",
+        "tests/golden/phase2/chat/SKILL.md",
+        "tests/golden/phase2/chat_empty/SKILL.md",
+        "tests/golden/phase2/chat_single/SKILL.md",
+        "tests/golden/phase2/chat_topics/SKILL.md",
+        "tests/golden/phase2/epub/SKILL.md",
+        "tests/golden/phase2/epub_kw/SKILL.md",
+        "tests/golden/phase2/html/SKILL.md",
+        "tests/golden/phase2/html_kw/SKILL.md",
+        "tests/golden/phase2/html_multi/SKILL.md",
+        "tests/golden/phase2/jupyter/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "yusufkaraaslan/Skill_Seekers",
+        "Skill_Seekers"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 10.0,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 16,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 69.5,
+      "age_since_update_days": 30,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "可将文档网站、GitHub 仓库和 PDF 转换为 Claude AI 技能，并自动检测冲突。",
+      "description_en": "Converts documentation websites, GitHub repositories and PDFs into Claude AI skills with automatic conflict detection."
+    },
+    {
+      "name": "yonatangross/orchestkit",
+      "url": "https://github.com/yonatangross/orchestkit",
+      "description": "The Complete AI Development Toolkit for Claude Code. 106 skills, 36 agents, 171 hooks. Install `ork` for stable (v9.x), or `ork-alpha` for the v10 line, which ships daily.",
+      "stars": 299,
+      "updated": "2026-10-29T23:35:32Z",
+      "language": "TypeScript",
+      "topics": [
+        "agent-orchestration",
+        "agents",
+        "ai-agents",
+        "ai-development",
+        "anthropic",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-plugin"
+      ],
+      "daily_theme": "Agent 工作流与规划",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103631+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/yonatangross/orchestkit",
+      "stars_total": 299,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 38,
+      "pushed_at": "2026-10-29T23:36:47Z",
+      "created_at": "2025-12-31T05:58:52Z",
+      "open_issues_total": 106,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:35.611972+08:00",
+      "evidence_urls": [
+        "https://github.com/yonatangross/orchestkit",
+        "https://api.github.com/repos/yonatangross/orchestkit/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 246,
+      "skill_file_paths": [
+        "plugins/ork-codex/skills/ork-assess/SKILL.md",
+        "plugins/ork-codex/skills/ork-brainstorm/SKILL.md",
+        "plugins/ork-codex/skills/ork-explore/SKILL.md",
+        "plugins/ork-codex/skills/ork-glyph/SKILL.md",
+        "plugins/ork-codex/skills/ork-implement/SKILL.md",
+        "plugins/ork-codex/skills/ork-review-pr/SKILL.md",
+        "plugins/ork-codex/skills/ork-verify/SKILL.md",
+        "plugins/ork/skills/accessibility/SKILL.md",
+        "plugins/ork/skills/agent-orchestration/SKILL.md",
+        "plugins/ork/skills/ai-ui-generation/SKILL.md",
+        "plugins/ork/skills/analytics/SKILL.md",
+        "plugins/ork/skills/animation-motion-design/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "yonatangross/orchestkit",
+        "orchestkit"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 5.9,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 69.4,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "趋势观察（未验证增长）",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "面向 Claude Code 的 AI 开发工具包，包含 106 个技能、36 个智能体和 171 个钩子，提供稳定版与每日更新的 alpha 版。",
+      "description_en": "A complete AI development toolkit for Claude Code with 106 skills, 36 agents and 171 hooks, offering a stable release and a daily-updated alpha line."
+    },
+    {
+      "name": "aws/agent-toolkit-for-aws",
+      "url": "https://github.com/aws/agent-toolkit-for-aws",
+      "description": "Official, AWS-supported MCP servers, skills, and plugins to help AI agents build on AWS",
+      "stars": 3342,
+      "updated": "2026-10-29T23:39:06Z",
+      "language": "Python",
+      "topics": [],
+      "daily_theme": "Agent 工作流与规划",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103599+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/aws/agent-toolkit-for-aws",
+      "stars_total": 3342,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "Apache License 2.0",
+      "forks_total": 421,
+      "pushed_at": "2026-10-29T23:39:05Z",
+      "created_at": "2026-04-23T12:44:08Z",
+      "open_issues_total": 66,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:33.951137+08:00",
+      "evidence_urls": [
+        "https://github.com/aws/agent-toolkit-for-aws",
+        "https://api.github.com/repos/aws/agent-toolkit-for-aws/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 195,
+      "skill_file_paths": [
+        "plugins/aws-agents-for-devsecops/skills/analyzing-release-readiness/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/chatting-with-aws-devops-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/coordinating-multi-space-devops-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/diff-scanning-with-aws-security-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/investigating-incidents-with-aws-devops-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/pentesting-with-aws-security-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/remediating-with-aws-security-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/running-release-tests/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/scanning-with-aws-security-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/setup-devops-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/setup-security-agent/SKILL.md",
+        "plugins/aws-agents-for-devsecops/skills/setup/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "aws/agent-toolkit-for-aws",
+        "agent-toolkit-for-aws"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 8.5,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 16,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 69.2,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null
+    },
+    {
+      "name": "midasmatterhorn/artcraft-skills",
+      "url": "https://github.com/midasmatterhorn/artcraft-skills",
+      "description": "Agent skills (SKILL.md) for the ArtCraft Rust creative suite — evidence-verified, MCP/CLI surfaces — for Claude Code, Codex, OpenCode, Devin, CommandCode, ZCode",
+      "stars": 46,
+      "updated": "2026-10-29T21:16:50Z",
+      "language": "PowerShell",
+      "topics": [
+        "artcraft",
+        "cadcraft",
+        "claude-code",
+        "codex",
+        "commandcode",
+        "deckcraft",
+        "designcraft",
+        "effectcraft"
+      ],
+      "daily_theme": "多模态与创作",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-10-30T07:39:13.103581+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/midasmatterhorn/artcraft-skills",
+      "stars_total": 46,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 4,
+      "pushed_at": "2026-10-29T21:17:00Z",
+      "created_at": "2026-10-14T14:18:15Z",
+      "open_issues_total": 0,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-10-30T07:39:37.568241+08:00",
+      "evidence_urls": [
+        "https://github.com/midasmatterhorn/artcraft-skills",
+        "https://api.github.com/repos/midasmatterhorn/artcraft-skills/readme"
+      ],
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 13,
+      "skill_file_paths": [
+        "cadcraft/SKILL.md",
+        "deckcraft/SKILL.md",
+        "designcraft/SKILL.md",
+        "effectcraft/SKILL.md",
+        "figcraft/SKILL.md",
+        "filmcraft/SKILL.md",
+        "gridcraft/SKILL.md",
+        "lightcraft/SKILL.md",
+        "pdfcraft/SKILL.md",
+        "photocraft/SKILL.md",
+        "soundcraft/SKILL.md",
+        "vectorcraft/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "midasmatterhorn/artcraft-skills",
+        "artcraft-skills"
+      ],
+      "discovered_at": "2026-10-30",
+      "first_recommended_at": "2026-10-30",
+      "last_recommended_at": "2026-10-30",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 4.0,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 68.8,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "趋势观察（未验证增长）",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null
+    }
+  ],
+  "skill_radar": {
+    "status": "PASS",
+    "engine_version": "2026.10.26.3",
+    "discovery_sources": {
+      "github_repository_search": "available",
+      "hacker_news": {
+        "status": "ok",
+        "queries_succeeded": 3,
+        "query_count": 3,
+        "window_days": 7
+      },
+      "github_candidate_count": 208
+    },
+    "growth_snapshots": {
+      "status": "observed",
+      "historical_snapshots_read": 6,
+      "historical_errors": [],
+      "candidate_count": 208,
+      "candidates_with_7d_delta": 0,
+      "candidates_with_30d_delta": 0
+    },
+    "history": {
+      "status": "complete",
+      "files_read": 7,
+      "coverage_days": 7,
+      "window_days": 7,
+      "window_start": "2026-10-23",
+      "window_end": "2026-10-29",
+      "errors": [],
+      "records": 55
+    },
+    "candidate_count": 208,
+    "history_duplicate_exclusions": [
+      {
+        "name": "jaktestowac/awesome-copilot-for-testers",
+        "url": "https://github.com/jaktestowac/awesome-copilot-for-testers",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "jaktestowac/awesome-copilot-for-testers",
+          "url": "https://github.com/jaktestowac/awesome-copilot-for-testers"
+        }
+      },
+      {
+        "name": "Cesar-Plyed/ai-assistant",
+        "url": "https://github.com/Cesar-Plyed/ai-assistant",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "Cesar-Plyed/ai-assistant",
+          "url": "https://github.com/Cesar-Plyed/ai-assistant"
+        }
+      },
+      {
+        "name": "kesslernity/awesome-copilot-cowork-skills",
+        "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "kesslernity/awesome-copilot-cowork-skills",
+          "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills"
+        }
+      },
+      {
+        "name": "Yugpat1835/awesome-copilot-cowork-skills",
+        "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "Yugpat1835/awesome-copilot-cowork-skills",
+          "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills"
+        }
+      },
+      {
+        "name": "mexin/qa-agent-skill",
+        "url": "https://github.com/mexin/qa-agent-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "mexin/qa-agent-skill",
+          "url": "https://github.com/mexin/qa-agent-skill"
+        }
+      },
+      {
+        "name": "justhandledlabs/agent-skills",
+        "url": "https://github.com/justhandledlabs/agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "justhandledlabs/agent-skills",
+          "url": "https://github.com/justhandledlabs/agent-skills"
+        }
+      },
+      {
+        "name": "JuanMarchetto/agent-skills",
+        "url": "https://github.com/JuanMarchetto/agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "JuanMarchetto/agent-skills",
+          "url": "https://github.com/JuanMarchetto/agent-skills"
+        }
+      },
+      {
+        "name": "magallon/testing-toolkit",
+        "url": "https://github.com/magallon/testing-toolkit",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "magallon/testing-toolkit",
+          "url": "https://github.com/magallon/testing-toolkit"
+        }
+      },
+      {
+        "name": "Leonxlnx/taste-skill",
+        "url": "https://github.com/Leonxlnx/taste-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "Leonxlnx/taste-skill",
+          "url": "https://github.com/Leonxlnx/taste-skill"
+        }
+      },
+      {
+        "name": "sickn33/agentic-awesome-skills",
+        "url": "https://github.com/sickn33/agentic-awesome-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "sickn33/agentic-awesome-skills",
+          "url": "https://github.com/sickn33/agentic-awesome-skills"
+        }
+      },
+      {
+        "name": "googleworkspace/cli",
+        "url": "https://github.com/googleworkspace/cli",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-23",
+          "name": "googleworkspace/cli",
+          "url": "https://github.com/googleworkspace/cli"
+        }
+      },
+      {
+        "name": "Donchitos/Claude-Code-Game-Studios",
+        "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "Donchitos/Claude-Code-Game-Studios",
+          "url": "https://github.com/Donchitos/Claude-Code-Game-Studios"
+        }
+      },
+      {
+        "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+        "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+          "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep"
+        }
+      },
+      {
+        "name": "GulajavaMinistudio/awesome-copilot-id",
+        "url": "https://github.com/GulajavaMinistudio/awesome-copilot-id",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "GulajavaMinistudio/awesome-copilot-id",
+          "url": "https://github.com/GulajavaMinistudio/awesome-copilot-id"
+        }
+      },
+      {
+        "name": "obra/superpowers",
+        "url": "https://github.com/obra/superpowers",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "obra/superpowers",
+          "url": "https://github.com/obra/superpowers"
+        }
+      },
+      {
+        "name": "affaan-m/ECC",
+        "url": "https://github.com/affaan-m/ECC",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "affaan-m/ECC",
+          "url": "https://github.com/affaan-m/ECC"
+        }
+      },
+      {
+        "name": "Graphify-Labs/graphify",
+        "url": "https://github.com/Graphify-Labs/graphify",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "Graphify-Labs/graphify",
+          "url": "https://github.com/Graphify-Labs/graphify"
+        }
+      },
+      {
+        "name": "Shubhamsaboo/awesome-llm-apps",
+        "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "Shubhamsaboo/awesome-llm-apps",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps"
+        }
+      },
+      {
+        "name": "tt-a1i/archify",
+        "url": "https://github.com/tt-a1i/archify",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "tt-a1i/archify",
+          "url": "https://github.com/tt-a1i/archify"
+        }
+      },
+      {
+        "name": "calesthio/OpenMontage",
+        "url": "https://github.com/calesthio/OpenMontage",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "calesthio/OpenMontage",
+          "url": "https://github.com/calesthio/OpenMontage"
+        }
+      },
+      {
+        "name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "mvanhorn/last30days-skill",
+          "url": "https://github.com/mvanhorn/last30days-skill"
+        }
+      },
+      {
+        "name": "ayghri/i-have-adhd",
+        "url": "https://github.com/ayghri/i-have-adhd",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "ayghri/i-have-adhd",
+          "url": "https://github.com/ayghri/i-have-adhd"
+        }
+      },
+      {
+        "name": "K-Dense-AI/scientific-agent-skills",
+        "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "K-Dense-AI/scientific-agent-skills",
+          "url": "https://github.com/K-Dense-AI/scientific-agent-skills"
+        }
+      },
+      {
+        "name": "cloudflare/security-audit-skill",
+        "url": "https://github.com/cloudflare/security-audit-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "cloudflare/security-audit-skill",
+          "url": "https://github.com/cloudflare/security-audit-skill"
+        }
+      },
+      {
+        "name": "kepano/obsidian-skills",
+        "url": "https://github.com/kepano/obsidian-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "kepano/obsidian-skills",
+          "url": "https://github.com/kepano/obsidian-skills"
+        }
+      },
+      {
+        "name": "LibreChat-AI/LibreChat",
+        "url": "https://github.com/LibreChat-AI/LibreChat",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "LibreChat-AI/LibreChat",
+          "url": "https://github.com/LibreChat-AI/LibreChat"
+        }
+      },
+      {
+        "name": "zhaoxuya520/reverse-skill",
+        "url": "https://github.com/zhaoxuya520/reverse-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "zhaoxuya520/reverse-skill",
+          "url": "https://github.com/zhaoxuya520/reverse-skill"
+        }
+      },
+      {
+        "name": "virgiliojr94/book-to-skill",
+        "url": "https://github.com/virgiliojr94/book-to-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "virgiliojr94/book-to-skill",
+          "url": "https://github.com/virgiliojr94/book-to-skill"
+        }
+      },
+      {
+        "name": "mukul975/Anthropic-Cybersecurity-Skills",
+        "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "mukul975/Anthropic-Cybersecurity-Skills",
+          "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills"
+        }
+      },
+      {
+        "name": "alchaincyf/huashu-design",
+        "url": "https://github.com/alchaincyf/huashu-design",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "alchaincyf/huashu-design",
+          "url": "https://github.com/alchaincyf/huashu-design"
+        }
+      },
+      {
+        "name": "OthmanAdi/planning-with-files",
+        "url": "https://github.com/OthmanAdi/planning-with-files",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-24",
+          "name": "OthmanAdi/planning-with-files",
+          "url": "https://github.com/OthmanAdi/planning-with-files"
+        }
+      },
+      {
+        "name": "NVIDIA/SkillSpector",
+        "url": "https://github.com/NVIDIA/SkillSpector",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "NVIDIA/SkillSpector",
+          "url": "https://github.com/NVIDIA/SkillSpector"
+        }
+      },
+      {
+        "name": "KKKKhazix/khazix-skills",
+        "url": "https://github.com/KKKKhazix/khazix-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "KKKKhazix/khazix-skills",
+          "url": "https://github.com/KKKKhazix/khazix-skills"
+        }
+      },
+      {
+        "name": "teng-lin/notebooklm-py",
+        "url": "https://github.com/teng-lin/notebooklm-py",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "teng-lin/notebooklm-py",
+          "url": "https://github.com/teng-lin/notebooklm-py"
+        }
+      },
+      {
+        "name": "larksuite/cli",
+        "url": "https://github.com/larksuite/cli",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "larksuite/cli",
+          "url": "https://github.com/larksuite/cli"
+        }
+      },
+      {
+        "name": "greensock/gsap-skills",
+        "url": "https://github.com/greensock/gsap-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "greensock/gsap-skills",
+          "url": "https://github.com/greensock/gsap-skills"
+        }
+      },
+      {
+        "name": "nidhinjs/prompt-master",
+        "url": "https://github.com/nidhinjs/prompt-master",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-25",
+          "name": "nidhinjs/prompt-master",
+          "url": "https://github.com/nidhinjs/prompt-master"
+        }
+      },
+      {
+        "name": "genspark-ai/genoffice",
+        "url": "https://github.com/genspark-ai/genoffice",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-27",
+          "name": "genspark-ai/genoffice",
+          "url": "https://github.com/genspark-ai/genoffice"
+        }
+      },
+      {
+        "name": "Code-and-Sorts/awesome-copilot-agents",
+        "url": "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "Code-and-Sorts/awesome-copilot-agents",
+          "url": "https://github.com/Code-and-Sorts/awesome-copilot-agents"
+        }
+      },
+      {
+        "name": "cumabozkurt/god-of-design",
+        "url": "https://github.com/cumabozkurt/god-of-design",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-26",
+          "name": "cumabozkurt/god-of-design",
+          "url": "https://github.com/cumabozkurt/god-of-design"
+        }
+      },
+      {
+        "name": "huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+        "url": "https://github.com/huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+          "url": "https://github.com/huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O"
+        }
+      },
+      {
+        "name": "Moddingflow/better-design",
+        "url": "https://github.com/Moddingflow/better-design",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-26",
+          "name": "Moddingflow/better-design",
+          "url": "https://github.com/Moddingflow/better-design"
+        }
+      },
+      {
+        "name": "RealTask/MAX-DESIGN",
+        "url": "https://github.com/RealTask/MAX-DESIGN",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-26",
+          "name": "RealTask/MAX-DESIGN",
+          "url": "https://github.com/RealTask/MAX-DESIGN"
+        }
+      },
+      {
+        "name": "ca-who-codes/ultimate.UIUX.design.skills",
+        "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "ca-who-codes/ultimate.UIUX.design.skills",
+          "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills"
+        }
+      },
+      {
+        "name": "arvindand/agent-skills",
+        "url": "https://github.com/arvindand/agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-26",
+          "name": "arvindand/agent-skills",
+          "url": "https://github.com/arvindand/agent-skills"
+        }
+      }
+    ],
+    "verification_failures": [
+      {
+        "name": "AgriciDaniel/claude-seo",
+        "url": "https://github.com/AgriciDaniel/claude-seo",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-microsoft-copilot-prompts",
+        "url": "https://github.com/kesslernity/awesome-microsoft-copilot-prompts",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "JuliusBrussee/caveman",
+        "url": "https://github.com/JuliusBrussee/caveman",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "zhayujie/CowAgent",
+        "url": "https://github.com/zhayujie/CowAgent",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "volcengine/OpenViking",
+        "url": "https://github.com/volcengine/OpenViking",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "github/awesome-copilot",
+        "url": "https://github.com/github/awesome-copilot",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "VoltAgent/awesome-agent-skills",
+        "url": "https://github.com/VoltAgent/awesome-agent-skills",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "wasp-lang/open-saas",
+        "url": "https://github.com/wasp-lang/open-saas",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "MemTensor/MemOS",
+        "url": "https://github.com/MemTensor/MemOS",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-copilot-studio-agents",
+        "url": "https://github.com/kesslernity/awesome-copilot-studio-agents",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "GoekeLab/awesome-genomic-skills",
+        "url": "https://github.com/GoekeLab/awesome-genomic-skills",
+        "reason": "repository/license/README verification failed"
+      }
+    ],
+    "selected_count": 8,
+    "excluded_count": 68,
+    "excluded": [
+      {
+        "name": "zarazhangrui/frontend-slides",
+        "url": "https://github.com/zarazhangrui/frontend-slides",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "touchine-ojo/OJO-Design-Skills",
+        "url": "https://github.com/touchine-ojo/OJO-Design-Skills",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "magnus919/agent-skills",
+        "url": "https://github.com/magnus919/agent-skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-26",
+          "name": "arvindand/agent-skills",
+          "url": "https://github.com/arvindand/agent-skills"
+        }
+      },
+      {
+        "name": "addyosmani/agent-skills",
+        "url": "https://github.com/addyosmani/agent-skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-26",
+          "name": "arvindand/agent-skills",
+          "url": "https://github.com/arvindand/agent-skills"
+        }
+      },
+      {
+        "name": "mattpocock/skills",
+        "url": "https://github.com/mattpocock/skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-28",
+          "name": "Synorb/skills",
+          "url": "https://github.com/Synorb/skills"
+        }
+      },
+      {
+        "name": "Ludi-Herry/b-end-design-system-skill",
+        "url": "https://github.com/Ludi-Herry/b-end-design-system-skill",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "blader/humanizer",
+        "url": "https://github.com/blader/humanizer",
+        "reason": "category_saturation",
+        "category": "Agent 工作流与规划"
+      },
+      {
+        "name": "vercel-labs/skills",
+        "url": "https://github.com/vercel-labs/skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-28",
+          "name": "Synorb/skills",
+          "url": "https://github.com/Synorb/skills"
+        }
+      },
+      {
+        "name": "OpaceDigitalAgency/skills",
+        "url": "https://github.com/OpaceDigitalAgency/skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-28",
+          "name": "Synorb/skills",
+          "url": "https://github.com/Synorb/skills"
+        }
+      },
+      {
+        "name": "Nutlope/hallmark",
+        "url": "https://github.com/Nutlope/hallmark",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "op7418/Humanizer-zh",
+        "url": "https://github.com/op7418/Humanizer-zh",
+        "reason": "score_below_60_or_invalid",
+        "score": 59.9
+      },
+      {
+        "name": "sentimony/agentic-workflow",
+        "url": "https://github.com/sentimony/agentic-workflow",
+        "reason": "score_below_60_or_invalid",
+        "score": 54.4
+      }
+    ],
+    "scoring_model": {
+      "weights": {
+        "recent_heat_and_growth": 25,
+        "ai_trend_relevance": 20,
+        "practical_usefulness": 20,
+        "technical_quality": 15,
+        "novelty": 10,
+        "maintenance": 10
+      },
+      "growth_data_policy": "7-day and 30-day Stars deltas are populated only when a dated snapshot of the same canonical repository exists in the permitted comparison window; otherwise null. Current run records a daily candidate snapshot."
+    },
+    "limitations": [
+      "Only accessible archived recommendation days in the seven-day window can be checked; coverage is explicitly reported.",
+      "Repository metadata and README were checked; installation and dedicated security audits were not performed."
+    ]
+  },
+  "method": {
+    "news_sources": "public RSS feeds; links and published timestamps preserved",
+    "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI and Google News China-AI RSS; filtered for China-related AI entities and timestamps within seven days",
+    "china_ai_news_minimum": 6,
+    "china_ai_news_target": 8,
+    "china_ai_news_window_days": 7,
+    "skill_ranking": "evidence-verified GitHub repositories ranked by weighted heat, trend relevance, practical usefulness, technical quality, novelty and maintenance; current cumulative Stars are not treated as historical growth"
+  },
+  "ai_analysis": {
+    "status": "ok",
+    "provider": "DeepSeek via Horizon",
+    "generated_at": "2026-10-30T07:44:10.763980+08:00",
+    "summary_markdown": "# Horizon 每日速递 - 2026-10-29\n\n> 从 27 条内容中筛选出 12 条重要资讯。\n\n---\n\n**科技新闻**\n1. [Mistral Large 4 公布权重并下调 API 价格](#item-tech-news-1) ⭐️ 8.0/10\n2. [PHP2Shell 与 Linux 内核漏洞串联据称攻陷 25 台服务器](#item-tech-news-2) ⭐️ 8.0/10\n3. [Binance 相关黑客案据称涉 56 亿美元，约 24 亿稳定币被冻结](#item-tech-news-3) ⭐️ 7.0/10\n4. [DoorDash 宣布计划收购 Instacart](#item-tech-news-4) ⭐️ 7.0/10\n5. [Martin Fowler 撰文讨论 LLM 生成文本的“腔调”](#item-tech-news-5) ⭐️ 7.0/10\n6. [2016 年《H.264 Is Magic》重登 HN，评论补充 x264 与无损细节](#item-tech-news-6) ⭐️ 7.0/10\n7. [vLLM 为 Mistral Large 4 提供 Blackwell Day-0 支持](#item-tech-news-7) ⭐️ 7.0/10\n8. [博客用土地面积可视化 IPv4 地址分配](#item-tech-news-8) ⭐️ 6.0/10\n9. [Hugging Face 发布 Project ProtoStar，推动公共科研资源适配 AI](#item-tech-news-9) ⭐️ 6.0/10\n10. [AnySpeechRecognizer 与 AnyDecisionModel 面向 Apple 平台发布](#item-tech-news-10) ⭐️ 6.0/10\n11. [OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT](#item-tech-news-11) ⭐️ 6.0/10\n12. [Deepgram 收购 Daily，将开源语音框架 Pipecat 纳入旗下](#item-tech-news-12) ⭐️ 6.0/10\n\n---\n\n## 科技新闻\n\n<a id=\"item-tech-news-1\"></a>\n### [Mistral Large 4 公布权重并下调 API 价格](https://mistral.ai/news/mistral-large-4-oss/) ⭐️ 8.0/10\n\nMistral 宣布公布 Mistral Large 4 的模型权重，称这能让组织对自身网络防御拥有闭源模型无法提供的控制权；社区还指出，Hugging Face 上出现了 Mistral-Large-4-1T-A52B 的权重页面。评论者引用许可证条款称，若运营 Model as a Service 业务，使用该模型或其衍生作品进行商业用途前须与 Mistral 另行签署商业许可，因此“开放权重”并不等同于可自由商用。另有评论者称，正式版 API 价格较预览版近乎减半：输入 0.7 美元/百万 token、输出 2.1 美元/百万 token，预览版分别为 1.36 和 4.18 美元/百万 token。有评论引用 Mistral 的说法称，该模型在恶意网络请求上的平均拒答率为 96.6%，但质疑者指出未同时给出对非恶意请求的拒答数据。\n\nhackernews · kuberwastaken · 10月29日 14:13 · [社区讨论](https://news.ycombinator.com/item?id=50289418)\n\n**「背景」** “开放权重”通常只表示模型参数可以下载，并不等同于允许任意商业使用；一个模型能否被称为开源，还取决于许可证的具体条款。此次讨论引用的许可证文本要求，若运营“模型即服务”业务，须先与 Mistral 签订单独的商业许可，因此公开权重与可自由商用之间仍有明显差距。\n\n**「对 API 用户与模型服务商的影响」** 对通过 Mistral API 使用该模型的团队，评论中引用的新价格为输入每百万 token 0.7 美元、输出每百万 token 2.1 美元，约为预览版的一半，曾因成本放弃预览版的评估值得按新价格重做。对希望基于已发布权重提供模型即服务的企业，许可证要求先与 Mistral 签订单独商业许可，因此“开放权重”并不等于可自由用于商业托管服务。\n\n**「社区讨论」** 讨论焦点是“开放权重”的命名是否准确：评论者认为 Model-as-a-Service 限制使其更接近受限许可，而非真正的开源；一位欧盟企业用户则报告，Mistral API 支持第三方模型并加入 Responses API 等功能后，已成为其 B2B2C 应用的可行选择。还有用户提醒，96.6% 的拒答率只覆盖恶意请求，缺少非恶意请求的误拒指标，单看该数字不足以判断模型的网络安全表现。\n\n**标签**: `#LLMs`, `#open weights`, `#Mistral`, `#AI licensing`, `#model pricing`\n\n---\n\n<a id=\"item-tech-news-2\"></a>\n### [PHP2Shell 与 Linux 内核漏洞串联据称攻陷 25 台服务器](https://dreamgroup.com/blog/chained-php2shell-exploit-roots-25-servers) ⭐️ 8.0/10\n\n据 Dreamgroup 博客，攻击者把 PHP2Shell 漏洞与 Linux 内核 XFRM ESP-in-TCP 子系统漏洞串联，攻陷了 25 台服务器并取得 root 权限，受害者中包括美国政府系统。该报告目前来自单一厂商博客，尚未获得独立验证，部分细节仍属社区推测。\n\nhackernews · 882542F3884314B · 10月29日 10:42 · [社区讨论](https://news.ycombinator.com/item?id=50286987)\n\n**「背景：两段式提权链」** PHP2Shell 是针对 PHP 应用的 Web 层利用手法，单靠它通常只能取得 Web 进程权限；要获得 root，还需要一个本地提权漏洞。此次攻击将 PHP2Shell 与 Linux 内核漏洞串联，第二段利用位于 XFRM ESP-in-TCP 子系统，把 Web 层的执行能力提升为内核权限，这也是“服务器被 root”的技术前提。\n\n**「修复重点不止于 PHP」** 由于报道中的攻击链在 PHP2Shell 之后还要借助 Linux 内核 XFRM ESP-in-TCP 子系统完成提权，仅修补 PHP 组件无法切断整条链路，服务器运营者需要同时核查并关闭主机上未使用的内核网络功能（如 XFRM ESP-in-TCP、MPTCP）；已有评论者表示自己在系统中禁用了默认开启的 MPTCP。上述细节目前仅出自单一厂商博客，尚未见独立验证，因此在核实前不宜将其当作已确认的通用攻击手法。\n\n**「社区讨论」** 评论者把焦点放在 Linux 内核默认启用的攻击面上：有人称因不使用而关闭了 mptcp，并询问能否同样禁用 XFRM；一名自称业余的评论者表示曾用 DeepSeek 构建 PHP2Shell 利用，对此次攻击手法的笨拙程度感到意外。另有评论者根据 PAN-OS 配置和 SELinux 设置推测涉事防火墙厂商是 Palo Alto Networks，这属于个人判断而非已证实事实。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://cybersecuritynews.com/php2shell-gained-root-access-on-25-servers/\">Hackers Chain PHP2Shell and Linux Kernel Exploits to Gain Root Access ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#cybersecurity`, `#exploit-chain`, `#Linux-kernel`, `#PHP`, `#vulnerability-research`\n\n---\n\n<a id=\"item-tech-news-3\"></a>\n### [Binance 相关黑客案据称涉 56 亿美元，约 24 亿稳定币被冻结](https://arkm.com/explorer/entity/21a94755-f604-45e5-9501-6542e23005e8) ⭐️ 7.0/10\n\n在 Hacker News 引发讨论的 Arkham 实体页面以“Binance-hacker-1029”指代一宗 Binance 相关黑客事件，条目标题称被盗金额为 56 亿美元；所给材料没有 Binance 官方确认或技术分析。评论中，Tiberium 称其中约 24 亿美元已被 Circle 和 Tether 冻结，并列出 9.7115 亿 USDT、8.23 亿 USDC、3.1273 亿 USDT 等部分大额交易，但这些金额和冻结状态目前仅来自评论。另有评论称 Binance 的 SAFU 保险基金仅有 10 亿美元 BTC 且已被清空，同样未获独立证实。\n\nhackernews · Tiberium · 10月29日 21:38 · [社区讨论](https://news.ycombinator.com/item?id=50296470)\n\n**「背景」** 评论中提到的 SAFU 是币安设立的资产安全基金，用于在交易所发生安全事件时提供赔付缓冲；其现有规模能否覆盖报道所称的巨额损失，是讨论焦点。另一个关键背景是 USDT、USDC 等稳定币由 Tether、Circle 发行，发行方能够在链上冻结相关地址中的资金，这也是评论所称“部分被盗资金已被冻结”的技术依据。\n\n**「影响」** 对 Binance 用户而言，关键保障问题是 SAFU 与追回资产能否覆盖未被冻结的部分；评论称 SAFU 仅有约 10 亿美元 BTC，若属实，与 56 亿美元规模存在明显缺口。\n\n**「社区讨论」** 评论者一方面在核实事件是否真实：ChoosesBarbecue 引用 Molly White 的帖子称其“似乎是真的”；另一方面，Tiberium 称 Circle 与 Tether 已冻结约 24 亿美元并列出发行链上交易，scrlk 则称 SAFU 仅有 10 亿美元 BTC、已被清空，并把它与此前加密熊市末期 CEX 倒闭的模式相提并论。上述冻结金额、保险基金余额和事件真实性均来自评论或外部帖子，未在给定来源中独立确认。\n\n**标签**: `#cryptocurrency`, `#security-incident`, `#Binance`, `#blockchain-forensics`, `#stablecoins`\n\n---\n\n<a id=\"item-tech-news-4\"></a>\n### [DoorDash 宣布计划收购 Instacart](https://about.doordash.com/en-us/news/doordash-to-acquire-instacart) ⭐️ 7.0/10\n\nDoorDash 宣布计划收购 Instacart，若交易完成，两家主要的本地配送平台将归入同一公司。提供的材料未披露交易金额、监管审批条件或预计完成时间，因此目前只能确认这是已宣布的收购计划，而非已完成的交易。\n\nhackernews · WalterSobchak · 10月29日 12:33 · [社区讨论](https://news.ycombinator.com/item?id=50287919)\n\n**「背景」** Instacart 长期以杂货配送为核心，DoorDash 则从餐厅外卖扩展到更广泛的本地配送；这笔拟议交易将把两个面向消费者的配送平台置于同一家公司之下。评论者还指出，两者当前业务重叠有限——DoorDash 在杂货配送中份额很小，而 Instacart 的非杂货配送由 Uber Eats 承接——这也是围绕反垄断影响的讨论焦点之一。\n\n**「本地商家议价空间」** 若 DoorDash 收购 Instacart 的交易完成，同时使用这两家平台的本地商家将面对同一个覆盖餐饮外卖与杂货配送的公司，二者之间的渠道选择随之消失。讨论中的商家已把 DoorDash 视为不得不接受的渠道并抱怨抽成与配送员行为，因此交易完成后现有合同和费率条款如何整合，是这些商家需要直接关注的问题。\n\n**「社区讨论」** 有评论者起初担心反垄断问题，但随后指出 DoorDash 在杂货配送领域几乎不存在，而 Instacart 的非杂货配送由 Uber Eats 提供，因此认为两者产品重叠有限，甚至可能帮助它们与沃尔玛和亚马逊竞争。也有评论者担心合并后 DoorDash 的“暗黑模式”会更严重，并称本地商家把 DoorDash 视为不得不接受的“必要之恶”。\n\n**标签**: `#acquisitions`, `#gig economy`, `#antitrust`, `#delivery platforms`, `#tech industry`\n\n---\n\n<a id=\"item-tech-news-5\"></a>\n### [Martin Fowler 撰文讨论 LLM 生成文本的“腔调”](https://martinfowler.com/bliki/LLM-Voice.html) ⭐️ 7.0/10\n\nMartin Fowler 在 martinfowler.com 的 bliki 上发表《LLM Voice》一文，讨论大语言模型生成的文字所带有的那种可辨识的“腔调”（voice）。该条目只提供了标题、链接和评论摘录，没有包含文章正文，因此文中具体论点、例证与结论都无法核实；以下仅就文章主题和公开讨论作描述。文章发布后在 Hacker News 引发讨论，焦点是这类文本的可读性与信息密度。\n\nhackernews · ibobev · 10月29日 14:57 · [社区讨论](https://news.ycombinator.com/item?id=50290177)\n\n**「背景：何为“LLM Voice”」** “LLM Voice”指的是读者能从文本中感到、却很难精确指出的机器生成文风；Fowler 将其形容为一种“散文的恐怖谷”，并提到常见破绽不一定是破折号，而可能是“load-bearing tapestries”这类措辞。基于这一判断，他建议作者不要让 LLM 生成初稿，因为即使人工编辑也未必能消除痕迹，更稳妥的用法是把 AI 当作搜索工具而非内容生成器。\n\n**「社区讨论」** Hacker News 评论者多从阅读体验出发描述这种“腔调”：自称对 AI 持积极态度的 BurritoKing 说近期内容“千篇一律”、冗长不简洁，读到一半就放弃；PaulKeeble 则认为 LLM 文本信息密度低、“缺少走向”，并称自己并不擅长识别具体的模型语体特征。tptacek 提出一种使用上的区分：LLM 作为写作批评工具非常有用，但不能直接采用它建议的措辞，因为它的用词越显得贴切，越可能把模型的风格“传染”进作者自己的声音，应让它只给出客观批评而不提供具体用词。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://martinfowler.com/bliki/LLM-Voice.html\">bliki: LLM Voice</a></li>\n<li><a href=\"https://martinfowler.com/\">Martin Fowler</a></li>\n<li><a href=\"https://www.traeai.com/articles/66aed293-0aa0-46b8-a5c1-61ff883e7b67\">Bliki: LLM Voice | Martin Fowler | traeai</a></li>\n\n</ul>\n</details>\n\n**标签**: `#llm-writing-style`, `#ai-generated-content`, `#model-output-quality`, `#software-engineering-culture`\n\n---\n\n<a id=\"item-tech-news-6\"></a>\n### [2016 年《H.264 Is Magic》重登 HN，评论补充 x264 与无损细节](https://sidbala.com/h-264-is-magic/) ⭐️ 7.0/10\n\n2016 年的技术长文《H.264 Is Magic》于 10 月 29 日再次被提交到 Hacker News；这是旧文重提，既没有新版本或新规范，也没有厂商公告。文章本身仍是对 H.264 为何压缩效率高、影响范围广的原理性解释；由于条目未附带原文，文中具体技术论断无法在此逐条核对。可以确认的是，文章讨论的是 H.264 编码器设计上的巧思，而其价值更多体现在多年后仍能引发实现层面的讨论，而非任何新变化。\n\nhackernews · ea016 · 10月29日 15:53 · [社区讨论](https://news.ycombinator.com/item?id=50291054)\n\n**「背景」** 这篇解释文章最初发表于 2016 年，2026 年又被提交到 Hacker News；它面向想理解 H.264 为何能高效压缩视频的读者。H.264 是长期广泛部署的视频编码标准，评论区提到的 x264 是其常用开源编码器实现，而 AV1、AV2 则是常被拿来与它比较的后续编码格式。\n\n**「实践影响」** 对需要无损中间格式的开发者来说，评论者 Dwedit 指出，H.264 的无损模式虽然存在，但在工具链中不易发现和选中，且在某些浏览器中不兼容；他使用 x264vfw、甚至放在 AVI 容器里实践过，并强调可以验证输出确实无损、没有经过量化到 8 位 YUV 的转换步骤。这意味着，用 H.264 无损文件做网页端分发可能直接播放失败，相关工作流需要保留可验证的编码工具，并确认目标播放环境支持。\n\n**「社区讨论」** 评论者 tgtweak 回忆，约 2011 年曾与 Jason Garrett-Glaser（DarkShikari）合作改进 x264 的 slice-threaded lookahead，用于索尼的 PlayStation 游戏串流服务；目标是在核心数不变的情况下，把一帧拆到更多核心上并行处理，并做更智能的调度与收敛，以降低编码延迟。另有评论者 Hasz 从“压缩即智能”的角度认为，文章只展示了众多技巧中的一小部分；还有评论者列出该文在 2016、2019、2022、2024 年的历次讨论链接，并把 Meta 2026 年 6 月的 AV1 工程文章和 AV2 项目视为今天的对应物。\n\n**标签**: `#H.264`, `#video codecs`, `#video compression`, `#x264`, `#technical deep-dive`\n\n---\n\n<a id=\"item-tech-news-7\"></a>\n### [vLLM 为 Mistral Large 4 提供 Blackwell Day-0 支持](https://vllm.ai/blog/2026-10-29-mistral-large-4) ⭐️ 7.0/10\n\nvLLM 宣布为 Mistral Large 4 提供 Day-0 推理支持，目标平台是 NVIDIA Blackwell。该支持包含稀疏 MLA、跨层 KV 共享、DSpark 推测解码、DCP/PCP 长上下文并行，以及基于 NIXL 的预填充/解码（P/D）分离。公告列出了这些服务特性，但未提供基准测试、实现细节或独立验证结果。\n\nrss · vLLM Blog · 10月29日 00:00\n\n**「背景」** vLLM 是开源的大模型推理与服务引擎，所谓“day-0 支持”指在新模型发布当天就完成推理适配并提供服务能力。此次适配对象是 Mistral Large 4，目标平台为 NVIDIA Blackwell，涉及稀疏 MLA、跨层 KV 共享、DSpark 推测解码、DCP/PCP 长上下文并行以及 NIXL 的 P/D 分离等推理特性。\n\n**「影响」** 对在 Blackwell 上部署 Mistral Large 4 的团队而言，Day-0 支持意味着可以直接用 vLLM 评估稀疏 MLA、长上下文并行和 P/D 分离等路径，而不必等待后续集成；但由于缺少公开基准，选型前仍应自行验证吞吐、延迟和显存占用。\n\n**标签**: `#vLLM`, `#Mistral Large 4`, `#LLM inference`, `#speculative decoding`, `#NVIDIA Blackwell`\n\n---\n\n<a id=\"item-tech-news-8\"></a>\n### [博客用土地面积可视化 IPv4 地址分配](https://iptrust.co/blog/if-ipv4-were-land) ⭐️ 6.0/10\n\n一篇博客把 IPv4 地址分配按土地面积进行可视化，用“土地”隐喻突出地址资源的有限性和地域分配差异。它没有宣布新的地址政策或协议变化，讨论焦点是地址稀缺、运营商级 NAT（CGNAT）以及 IPv6 采用情况。\n\nhackernews · rokostik · 10月29日 12:19 · [社区讨论](https://news.ycombinator.com/item?id=50287775)\n\n**「背景」** IPv4 的地址总量有限，且历史分配高度不均，这正是文章用“土地”来呈现地址归属的前提。地址耗尽后，运营商普遍用 CGNAT 让多名用户共享同一个公网地址；评论中提到的“约 1000 人共用我的 IP”就是这种做法的结果，而 IPv6 则是被寄望缓解地址短缺的替代协议。\n\n**「影响」** 在 CGNAT 下，宽带用户可能拿不到真正归自己的公网 IPv4 地址，并与大量用户共享同一出口 IP；有评论者称因此被误判为恶意流量，在线游戏也需借助 Tailscale 中继。\n\n**「社区讨论」** 评论者引用印度约 4700 万与中国约 3.58 亿的 IPv4 地址量对比，指出两国人口相近却分配悬殊，并称普通用户因 CGNAT 几乎察觉不到这一问题；也有人认为地图按土地面积而非人口比较，会让加拿大显得偏小。另有评论认为 IPv6 采用率已从约 10% 升至 50%，并批评行业至今未淘汰 IPv4。\n\n**标签**: `#IPv4`, `#IPv6`, `#internet infrastructure`, `#IP address allocation`, `#CGNAT`\n\n---\n\n<a id=\"item-tech-news-9\"></a>\n### [Hugging Face 发布 Project ProtoStar，推动公共科研资源适配 AI](https://huggingface.co/blog/announcing-project-protostar) ⭐️ 6.0/10\n\nHugging Face 于 2026 年 10 月 29 日发布博客，宣布启动 Project ProtoStar 项目，公开目标是让公共资助的科学研究资源变得“AI 可用”（AI-ready）。但该公告及随附信息未披露参与机构、资助方与资金规模、覆盖的学科或数据集范围、技术路线、交付时间表，也未说明项目已进入实施阶段还是仍处于规划阶段。因此目前可以确认的只是一项倡议的对外宣布，尚无已交付的工具、数据集或可独立衡量的成果，外界也无法核实“AI-ready”的具体判定标准。\n\nrss · Hugging Face · 10月29日 00:00\n\n**「背景」** 「AI-ready」通常指将科研产出（论文、数据集、代码）整理为机器可读、许可清晰、可批量复用的形式，使模型训练与检索工具能够直接使用；这是公共资助开放科学基础设施项目的常见前提。不过本次公告未附正文，也未披露项目范围、合作机构、数据许可方式或时间表，因此目前无法确认它接续或区别于哪些既有工作。\n\n**标签**: `#AI for science`, `#open science`, `#research infrastructure`, `#Hugging Face`\n\n---\n\n<a id=\"item-tech-news-10\"></a>\n### [AnySpeechRecognizer 与 AnyDecisionModel 面向 Apple 平台发布](https://huggingface.co/blog/anydecisionmodel) ⭐️ 6.0/10\n\nHugging Face 宣布推出 AnySpeechRecognizer 和 AnyDecisionModel，称它们是面向 Apple 平台的开源语音识别与决策模型。公开条目未提供模型版本、参数规模、基准结果、许可证或具体兼容设备等细节，因此目前只能确认这是一项发布公告，尚无法判断其实际能力和适用边界。\n\nrss · Hugging Face · 10月29日 00:00\n\n**「背景」** AnySpeechRecognizer 的接口设计参照 Apple 系统提供的 SpeechAnalyzer API，区别在于底层识别模型可以替换为在 Core ML 上本地运行的 Parakeet 或 Qwen3-ASR。据 ExplainX 的报道，这两个 Swift 包沿用了 Hugging Face 工程师 Mattt 更早的 AnyLanguageModel 所确立的模式：对外提供一套熟悉的 Swift API，背后可切换不同模型，并能从 Hugging Face Hub 拉取开放模型在设备端运行。\n\n**「影响」** 对 Apple 平台开发者而言，AnySpeechRecognizer 提供类似 Apple SpeechAnalyzer 的 Swift 调用方式，却可把识别后端换成在本地 Core ML 上运行的 NVIDIA Parakeet 或 Qwen3-ASR，并支持最多四名说话人的分离，从而降低对单一识别后端的绑定。实际采用时，应用还需把从 Hugging Face Hub 下载模型以及端侧算力和存储开销纳入设计。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://daily.dev/posts/introducing-anyspeechrecognizer-and-anydecisionmodel-open-models-for-speech-and-decisions-on-apple--gt9jk5x6l\">Introducing AnySpeechRecognizer and AnyDecisionModel:...</a></li>\n<li><a href=\"https://explainx.ai/blog/anyspeechrecognizer-anydecisionmodel-swift-parakeet-qwen3-asr-sortformer-clef-apple-platforms-2026\">AnySpeechRecognizer + AnyDecisionModel: Swift On-Device AI ...</a></li>\n<li><a href=\"https://explainx.ai/blog/anyspeechrecognizer-anydecisionmodel-swift-parakeet-qwen3-asr-sortformer-clef-apple-platforms-2026\">AnySpeechRecognizer + AnyDecisionModel: Swift On-Device AI ...</a></li>\n<li><a href=\"https://daily.dev/posts/introducing-anyspeechrecognizer-and-anydecisionmodel-open-models-for-speech-and-decisions-on-apple--gt9jk5x6l\">Introducing AnySpeechRecognizer and AnyDecisionModel:...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#speech recognition`, `#Apple platforms`, `#open models`, `#on-device ML`, `#decision models`\n\n---\n\n<a id=\"item-tech-news-11\"></a>\n### [OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT](https://techcrunch.com/2026/10/29/openai-backed-thrive-holdings-acquires-adt/) ⭐️ 6.0/10\n\nOpenAI 支持的 Thrive Holdings 宣布以 153 亿美元收购家庭安防公司 ADT。双方计划将 AI 引入家庭安防业务，但现有信息只有这一笼统方向，未披露具体产品、技术方案、上线时间或交易完成条件。\n\nrss · TechCrunch AI · 10月29日 19:56\n\n**「背景：Thrive Holdings 的角色」** Thrive Holdings 是一家永久资本控股公司，专注于投资成熟企业，并通过技术提升这些企业的能力。ADT 的公告称，双方已签署最终协议，交易为全现金形式，计划把 ADT 的安全专业能力、技术和全国服务网络，与 Thrive 的长期资本及工程能力结合起来。\n\n**「影响」** 对 ADT 股东而言，交易对价已明确为每股 10.00 美元现金，较 2026 年 10 月 27 日未受影响收盘价 6.87 美元溢价 45.6%。至于现有用户何时能获得 AI 家居安全功能，目前公开信息没有给出具体产品、时间表或兼容性细节。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://newsroom.adt.com/financial/adt-to-be-acquired-by-thrive-holdings-in-15-3-billion-transaction\">ADT to be Acquired by Thrive Holdings in $15.3 Billion ...</a></li>\n<li><a href=\"https://investor.adt.com/News--Events/news/news-details/2026/ADT-to-be-Acquired-by-Thrive-Holdings-in-15-3-Billion-Transaction/default.aspx\">ADT to be Acquired by Thrive Holdings in $15.3 Billion ...</a></li>\n<li><a href=\"https://newsroom.adt.com/financial/adt-to-be-acquired-by-thrive-holdings-in-15-3-billion-transaction\">ADT to be Acquired by Thrive Holdings in $15.3 Billion ...</a></li>\n<li><a href=\"https://investor.adt.com/News--Events/news/news-details/2026/ADT-to-be-Acquired-by-Thrive-Holdings-in-15-3-Billion-Transaction/default.aspx\">ADT Inc. - ADT to be Acquired by Thrive Holdings in $15.3 ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#AI`, `#acquisitions`, `#smart home`, `#security`, `#business`\n\n---\n\n<a id=\"item-tech-news-12\"></a>\n### [Deepgram 收购 Daily，将开源语音框架 Pipecat 纳入旗下](https://techcrunch.com/2026/10/29/deepgram-acquires-pipecat-maker-daily-to-bolster-its-voice-ai-infrastructure/) ⭐️ 6.0/10\n\nDeepgram 宣布收购 Daily，即开源实时语音 AI 框架 Pipecat 的开发公司，以加强自身的实时语音 AI 基础设施。据 TechCrunch 10 月 29 日报道，此次交易的财务条款、Pipecat 项目未来的治理方式以及双方技术整合的具体方案均未披露。报道仅指出，通过 Pipecat，Deepgram 有望更深入地理解实时语音与视频基础设施。Pipecat 本身是开源项目，但收购后其开源路线是否延续，目前没有说明。\n\nrss · TechCrunch AI · 10月29日 13:00\n\n**「背景」** Pipecat 是流行的开源语音 AI 基础设施项目，Daily 是其创建者和维护者。Deepgram 则是一家面向真实对话需求的语音 AI 基础设施公司。此次收购把 Pipecat 这一开源项目及其维护方纳入 Deepgram，因此该项目后续由谁治理、如何与 Deepgram 的商业产品衔接，成为开发者需要关注的具体变化。\n\n<details><summary>参考链接</summary>\n<ul>\n<li><a href=\"https://deepgram.com/blog/daily-pipecat-deepgram\">Deepgram is acquiring Daily, makers of Pipecat | Deepgram</a></li>\n<li><a href=\"https://techcrunch.com/2026/10/29/deepgram-acquires-pipecat-maker-daily-to-bolster-its-voice-ai-infrastructure/\">Deepgram acquires Pipecat-maker Daily to bolster its voice AI ...</a></li>\n<li><a href=\"https://finance.yahoo.com/technology/ai/articles/deepgram-acquiring-daily-makers-pipecat-130000522.html?fr=sycsrp_catchall\">Deepgram Is Acquiring Daily, Makers of Pipecat, to Offer the ...</a></li>\n\n</ul>\n</details>\n\n**标签**: `#voice AI`, `#acquisitions`, `#open source`, `#real-time infrastructure`, `#Deepgram`\n\n---",
+    "summary_markdown_en": "",
+    "summary_source": "Horizon daily digest; source URLs are included where available."
+  },
+  "top5": [
+    {
+      "title": "You can generate and edit Google Docs files directly in Gemini chats now",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1022519/google-gemini-file-editing-documents-pdfs",
+      "summary": "Now you can generate, preview, and edit PDFs, Google Docs, Google Sheets, slide decks, Markdown files, TXT files, and code directly within Google Gemini. The new file editing capabilities are available starting today for all Gemini users, and while PDF previews/editing works on both the web and mobile, all other file formats are only in […]",
+      "published": "2026-10-29T18:45:31+00:00",
+      "source": "The Verge AI",
+      "title_zh": "Gemini 对话内可直接生成和编辑 Google Docs 等文件",
+      "summary_zh": "用户可在 Google Gemini 中生成、预览和编辑 PDF、Google Docs、Google Sheets、幻灯片、Markdown、TXT 文件及代码，该功能即日起面向所有 Gemini 用户开放。",
+      "why_it_matters_zh": "文件编辑能力内置于对话界面，可能改变用户创建与修改办公文档的工作流。",
+      "title_en": "Generate and edit Google Docs files directly in Gemini chats",
+      "summary_en": "Users can now generate, preview, and edit PDFs, Google Docs, Google Sheets, slide decks, Markdown files, TXT files, and code directly within Google Gemini, available starting today for all Gemini users.",
+      "why_it_matters_en": "Built-in file editing in a chat interface could change how users create and revise office documents.",
+      "source_index": 6,
+      "category_zh": "产品应用",
+      "category_en": "Product & Application",
+      "what_zh": "Google 宣布所有 Gemini 用户即日起可在对话中生成、预览和编辑 PDF、Google Docs、Sheets、幻灯片、Markdown、TXT 及代码；PDF 预览/编辑支持网页和移动端，其他格式目前仅限部分平台。",
+      "what_en": "Google says all Gemini users can now generate, preview and edit PDFs, Google Docs, Sheets, slide decks, Markdown, TXT and code inside chats; PDF preview/editing works on web and mobile, other formats are limited to some platforms.",
+      "why_zh": "把文档编辑嵌入对话界面，可能改变办公文档的创建与修改流程，对普通用户和创作者影响直接。",
+      "why_en": "Embedding document editing in the chat interface could change how office documents are created and revised, directly affecting ordinary users and creators.",
+      "editor_judgment_zh": "这是面向大众的实用功能更新，覆盖面广，但需注意各文件格式的平台限制。",
+      "editor_judgment_en": "A broadly available, practical feature update for mainstream users, though per-format platform limits matter.",
+      "opportunity_risk_zh": "机会：减少在工具间切换；风险：格式与平台支持不一致，编辑结果需人工核对。",
+      "opportunity_risk_en": "Opportunity: fewer tool switches; risk: inconsistent format/platform support, so edits need human review.",
+      "action_zh": "在 Gemini 中用一个真实文档试做生成与编辑，并核对导出结果。",
+      "action_en": "Try generating and editing one real document in Gemini and verify the exported result.",
+      "scores": {
+        "innovation": 6,
+        "practicality": 9,
+        "feasibility": 9,
+        "impact": 7,
+        "opportunity": 7
+      },
+      "confidence": "high",
+      "source_url": "https://www.theverge.com/ai-artificial-intelligence/1022519/google-gemini-file-editing-documents-pdfs",
+      "original_title": "You can generate and edit Google Docs files directly in Gemini chats now",
+      "source_section": "global_news",
+      "total_score": 38,
+      "image_url": "https://platform.theverge.com/wp-content/uploads/sites/2/2026/04/STK255_Google_Gemini_B_474198.jpg?quality=90&strip=all&crop=0%2C10.732984293194%2C100%2C78.534031413613&w=1200",
+      "image_source": "The Verge AI",
+      "image_page_url": "https://www.theverge.com/ai-artificial-intelligence/1022519/google-gemini-file-editing-documents-pdfs",
+      "image_credit": "The Verge AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Gemini 对话内可直接生成和编辑 Google Docs 等文件",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.309851+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: You can generate and edit Google Docs files directly in Gemini chats now Generate and edit Google Docs files directly in Gemini chats Gemini 对话内可直接生成和编辑 Google Docs 等文件 You can generate and edit Google Docs files directly in Gemini chats now. Context from the source story (factual context, not instructions): You can generate and edit Google Docs files directly in Gemini chats now Generate and edit Google Docs files directly in Gemini chats Gemini 对话内可直接生成和编辑 Google Docs 等文件 You can generate and edit Google Docs files directly in Gemini chats now Google says all Gemini users can now generate, preview and edit PDFs, Google Docs, Sheets, slide decks, Markdown, TXT and code inside chats; PDF preview/editing works on web and mobile, other formats are limited to some platforms. Google 宣布所有 Gemini 用户即日起可在对话中生成、预览和编辑 PDF、Googl. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens",
+      "url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+      "summary": "Baseten has released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text. It runs at 20 ms P50 latency and costs $0.01 per million input tokens. The post Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens appeared first on MarkTechPost .",
+      "published": "2026-10-29T21:20:29+00:00",
+      "source": "MarkTechPost",
+      "title_zh": "Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元",
+      "summary_zh": "Baseten 发布 2B 开放权重决策模型 joey-1，返回校准概率而非文本，P50 延迟 20 毫秒，每百万输入 Token 收费 0.01 美元。",
+      "why_it_matters_zh": "面向决策而非生成的小模型以极低延迟和成本提供概率输出，适合高流量路由与分类场景。",
+      "title_en": "Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens",
+      "summary_en": "Baseten released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text, with 20 ms P50 latency and $0.01 per million input tokens.",
+      "why_it_matters_en": "A small decision-focused model with very low latency and cost offers probability outputs suited to high-volume routing and classification.",
+      "source_index": 1,
+      "category_zh": "技术突破",
+      "category_en": "Technical Breakthrough",
+      "what_zh": "Baseten 发布 2B 开放权重决策模型 joey-1，返回校准概率而非文本，P50 延迟 20 毫秒，每百万输入 Token 收费 0.01 美元。",
+      "what_en": "Baseten released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text, with 20 ms P50 latency and $0.01 per million input tokens.",
+      "why_zh": "面向决策而非生成的小模型以极低延迟和成本提供概率输出，适合高流量路由与分类场景。",
+      "why_en": "A small decision-oriented model offers probabilistic output at very low latency and cost, suited to high-volume routing and classification.",
+      "editor_judgment_zh": "定位清晰、指标具体，但效果需在自有数据上验证，不宜直接外推。",
+      "editor_judgment_en": "Clear positioning and concrete metrics, but performance should be validated on your own data rather than extrapolated.",
+      "opportunity_risk_zh": "机会：低成本替代部分分类/路由调用；风险：校准概率在领域外可能失真。",
+      "opportunity_risk_en": "Opportunity: low-cost replacement for some classification/routing calls; risk: calibrated probabilities may drift out of domain.",
+      "action_zh": "用自有标注样本对比 joey-1 与现有分类方案的准确率与延迟。",
+      "action_en": "Compare joey-1 against your current classifier on labeled samples for accuracy and latency.",
+      "scores": {
+        "innovation": 7,
+        "practicality": 8,
+        "feasibility": 8,
+        "impact": 6,
+        "opportunity": 7
+      },
+      "confidence": "medium",
+      "source_url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+      "original_title": "Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens",
+      "source_section": "global_news",
+      "total_score": 36,
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/10/WP-BLOG-BANNER-1209-3-scaled.png",
+      "image_source": "MarkTechPost",
+      "image_page_url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+      "image_credit": "MarkTechPost",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.438963+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元 Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens. Context from the source story (factual context, not instructions): Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens Baseten 发布 joey-1：2B 决策模型，每百万 Token 0.01 美元 Baseten Releases joey-1, a 2B Decision Model at $0.01 per 1M Tokens Baseten released joey-1, a 2B open-weight decision model that returns calibrated probabilities instead of text, with 20 ms P50 latency and $0.01 per million input tokens. Baseten 发布 2B 开放权重决策模型 joey-1，返回校准概率而非文本，P50 延迟 20 毫秒，每百万输入 Token 收费 0.01 美元。 A small decision-orient. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity",
+      "url": "https://techcrunch.com/2026/10/29/mistral-releases-weights-for-its-trillion-parameter-ai-model-targeting-cybersecurity/",
+      "summary": "Mistral says its new model can afford organizations a kind of control over its cyber defenses that closed models can't.",
+      "published": "2026-10-29T17:00:00+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "Mistral 发布万亿参数模型权重，瞄准网络安全",
+      "summary_zh": "Mistral 称其新模型能让组织对网络防御获得闭源模型无法提供的控制力。",
+      "why_it_matters_zh": "开放权重的万亿参数模型面向安全领域，可能影响企业对防御系统的自主掌控。",
+      "title_en": "Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity",
+      "summary_en": "Mistral says its new model can afford organizations a kind of control over its cyber defenses that closed models can't.",
+      "why_it_matters_en": "An open-weight trillion-parameter model aimed at security could affect how organizations control their defenses.",
+      "source_index": 11,
+      "category_zh": "行业影响",
+      "category_en": "Industry Impact",
+      "what_zh": "Mistral 发布其万亿参数模型的权重，称新模型能让组织对网络防御获得闭源模型无法提供的控制力。",
+      "what_en": "Mistral released weights for its trillion-parameter model, saying it gives organizations a level of control over cyber defenses that closed models cannot.",
+      "why_zh": "开放权重的万亿参数模型面向安全领域，可能影响企业对防御系统的自主掌控。",
+      "why_en": "An open-weight trillion-parameter model aimed at security could affect how much control organizations have over their defenses.",
+      "editor_judgment_zh": "方向重要，但报道未给出基准数据，实际能力需以官方材料核实。",
+      "editor_judgment_en": "An important direction, but the report gives no benchmark data; actual capability needs verification via official materials.",
+      "opportunity_risk_zh": "机会：安全团队可自托管与定制；风险：大模型自托管成本与滥用风险需评估。",
+      "opportunity_risk_en": "Opportunity: security teams can self-host and customize; risk: self-hosting cost and misuse risk need assessment.",
+      "action_zh": "阅读 Mistral 官方发布说明，核实模型规模、许可与部署要求。",
+      "action_en": "Read Mistral's official release notes to verify model size, license and deployment requirements.",
+      "scores": {
+        "innovation": 8,
+        "practicality": 5,
+        "feasibility": 5,
+        "impact": 8,
+        "opportunity": 6
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/29/mistral-releases-weights-for-its-trillion-parameter-ai-model-targeting-cybersecurity/",
+      "original_title": "Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity",
+      "source_section": "global_news",
+      "total_score": 32,
+      "image_url": "https://techcrunch.com/wp-content/uploads/2024/06/GettyImages-1760104305.jpg?resize=1200,798",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/mistral-releases-weights-for-its-trillion-parameter-ai-model-targeting-cybersecurity/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Mistral 发布万亿参数模型权重，瞄准网络安全",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:42.505841+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral 发布万亿参数模型权重，瞄准网络安全 Mistral releases weights for its trillion-parameter AI model, . Context from the source story (factual context, not instructions): Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral 发布万亿参数模型权重，瞄准网络安全 Mistral releases weights for its trillion-parameter AI model, targeting cybersecurity Mistral released weights for its trillion-parameter model, saying it gives organizations a level of control over cyber defenses that closed models cannot. Mistral 发布其万亿参数模型的权重，称新模型能让组织对网络防御获得闭源模型无法提供的控制力。 An open-weight trillion-paramet. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "OpenAI-backed Thrive Holdings acquires ADT",
+      "url": "https://techcrunch.com/2026/10/29/openai-backed-thrive-holdings-acquires-adt/",
+      "summary": "OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business.",
+      "published": "2026-10-29T19:56:19+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT",
+      "summary_zh": "OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT，计划将 AI 引入家庭安防业务。",
+      "why_it_matters_zh": "AI 资本进入传统安防行业，可能推动家庭安全服务的智能化改造。",
+      "title_en": "OpenAI-backed Thrive Holdings acquires ADT",
+      "summary_en": "OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business.",
+      "why_it_matters_en": "AI capital entering a traditional security business could drive intelligent upgrades to home safety services.",
+      "source_index": 4,
+      "category_zh": "商业动态",
+      "category_en": "Business & Market",
+      "what_zh": "OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT，计划将 AI 引入家庭安防业务。",
+      "what_en": "OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business.",
+      "why_zh": "AI 资本进入传统安防行业，可能推动家庭安全服务的智能化改造。",
+      "why_en": "AI capital entering traditional security could drive intelligent upgrades to home safety services.",
+      "editor_judgment_zh": "交易金额明确，但 AI 落地细节尚未披露，属于方向性信号。",
+      "editor_judgment_en": "The deal size is clear, but AI implementation details are undisclosed; this is a directional signal.",
+      "opportunity_risk_zh": "机会：家庭安防 AI 服务生态可能扩展；风险：整合与隐私合规存在不确定性。",
+      "opportunity_risk_en": "Opportunity: the home-security AI service ecosystem may expand; risk: integration and privacy compliance uncertainty.",
+      "action_zh": "阅读 TechCrunch 原文，关注后续 AI 产品与整合公告。",
+      "action_en": "Read the TechCrunch article and watch for follow-up AI product and integration announcements.",
+      "scores": {
+        "innovation": 5,
+        "practicality": 5,
+        "feasibility": 5,
+        "impact": 7,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/29/openai-backed-thrive-holdings-acquires-adt/",
+      "original_title": "OpenAI-backed Thrive Holdings acquires ADT",
+      "source_section": "global_news",
+      "total_score": 27,
+      "image_url": "https://images.unsplash.com/photo-1523726491678-bf852e717f6a?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI product / software topic illustration: OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-10-30T07:44:54.314280+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT OpenAI-backed Thrive Holdings acquires ADT. Context from the source story (factual context, not instructions): OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT OpenAI-backed Thrive Holdings acquires ADT OpenAI-backed Thrive Holdings is buying ADT in a $15.3 billion deal, with plans to bring AI to the home security business. OpenAI 支持的 Thrive Holdings 以 153 亿美元收购 ADT，计划将 AI 引入家庭安防业务。 AI capital entering traditional security could drive intelligent upgrades to home safety services. AI 资本进入传统安防行业，可能推动家庭安全服务的智能化改造。 Read the TechCrunch article and wa. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "As search traffic dries up, Reddit announces it’s shifting to a logged-in experience",
+      "url": "https://techcrunch.com/2026/10/29/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experience/",
+      "summary": "As AI transforms how people find information online, Reddit is rethinking its open-web roots to protect its audience and business.",
+      "published": "2026-10-29T20:08:31+00:00",
+      "source": "TechCrunch AI",
+      "title_zh": "搜索流量下滑，Reddit 宣布转向登录体验",
+      "summary_zh": "随着 AI 改变人们获取信息的方式，Reddit 正在重新审视其开放网络根基，以保护用户和业务。",
+      "why_it_matters_zh": "AI 搜索冲击传统流量来源，平台转向登录化可能重塑内容可发现性与数据开放程度。",
+      "title_en": "As search traffic dries up, Reddit shifts to a logged-in experience",
+      "summary_en": "As AI changes how people find information online, Reddit is rethinking its open-web roots to protect its audience and business.",
+      "why_it_matters_en": "AI search is eroding traditional traffic, and a shift to logged-in access could reshape content discoverability and data openness.",
+      "source_index": 2,
+      "category_zh": "值得关注",
+      "category_en": "Signals to Watch",
+      "what_zh": "随着 AI 改变人们获取信息的方式，Reddit 表示正重新审视其开放网络根基，转向登录体验以保护用户和业务。",
+      "what_en": "As AI changes how people find information, Reddit says it is rethinking its open-web roots and shifting to a logged-in experience to protect its audience and business.",
+      "why_zh": "AI 搜索冲击传统流量来源，平台转向登录化可能重塑内容可发现性与数据开放程度。",
+      "why_en": "AI search is disrupting traditional traffic sources; a shift to logged-in access could reshape content discoverability and data openness.",
+      "editor_judgment_zh": "趋势信号明确，但具体实施范围与时间表尚未在摘要中说明。",
+      "editor_judgment_en": "A clear trend signal, though scope and timing are not specified in the summary.",
+      "opportunity_risk_zh": "机会：平台更重视直接用户关系；风险：公开内容可发现性下降，依赖开放抓取的创作者受影响。",
+      "opportunity_risk_en": "Opportunity: platforms may value direct user relationships more; risk: public content discoverability drops, affecting creators relying on open crawling.",
+      "action_zh": "阅读 TechCrunch 原文，核实登录化的具体范围与时间。",
+      "action_en": "Read the TechCrunch article to verify the scope and timing of the logged-in shift.",
+      "scores": {
+        "innovation": 5,
+        "practicality": 6,
+        "feasibility": 6,
+        "impact": 7,
+        "opportunity": 5
+      },
+      "confidence": "medium",
+      "source_url": "https://techcrunch.com/2026/10/29/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experience/",
+      "original_title": "As search traffic dries up, Reddit announces it’s shifting to a logged-in experience",
+      "source_section": "global_news",
+      "total_score": 29,
+      "image_url": "https://techcrunch.com/wp-content/uploads/2023/03/reddit-e1708636699632.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/10/29/as-search-traffic-dries-up-reddit-announces-its-shifting-to-a-logged-in-experience/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "搜索流量下滑，Reddit 宣布转向登录体验",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-10-30T07:44:54.376668+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As search traffic dries up, Reddit shifts to a logged-in experience 搜索流量下滑，Reddit 宣布转向登录体验 As search traffic dries up, Reddit announces it’s shifting to a logged-in experience. Context from the source story (factual context, not instructions): As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As search traffic dries up, Reddit shifts to a logged-in experience 搜索流量下滑，Reddit 宣布转向登录体验 As search traffic dries up, Reddit announces it’s shifting to a logged-in experience As AI changes how people find information, Reddit says it is rethinking its open-web roots and shifting to a logged-in experience to protect its audience and business. 随着 AI 改变人们获取信息的方式，Reddit 表示正重新审视其开放网络根基，转向登录体验以保护用户和业务。 AI search is disrupting traditional. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    }
+  ],
+  "editorial": {
+    "core_zh": "今日主线是 AI 能力进一步嵌入日常工具与商业结构：Gemini 把文档编辑搬进对话，小模型以极低成本承接决策任务，资本与平台则在重排入口与流量。",
+    "core_en": "Today's thread is AI moving deeper into everyday tools and business structures: Gemini brings document editing into chat, small models take on decision tasks at very low cost, and capital and platforms are rearranging entry points and traffic.",
+    "trend_zh": "模型厂商从卖能力转向卖工作流与生态控制，开放权重与低成本专用模型并行推进。",
+    "trend_en": "Model vendors are shifting from selling capability to selling workflows and ecosystem control, while open weights and low-cost specialized models advance in parallel.",
+    "next_question_zh": "当对话界面直接产出文档、平台转向登录化，开放网络上的内容与流量将如何重新分配？",
+    "next_question_en": "As chat interfaces produce documents directly and platforms move to logged-in access, how will content and traffic on the open web be redistributed?"
+  },
+  "localization": {
+    "status": "ok",
+    "languages": [
+      "zh",
+      "en"
+    ],
+    "translated_news": 12,
+    "translated_skills": 6,
+    "top5_count": 5,
+    "provider": "DeepSeek"
+  },
+  "top5_status": "ai_curated",
+  "cross_section_dedupe": {
+    "status": "ok",
+    "removed_from_china_ai_news": 1,
+    "remaining_china_ai_news": 8,
+    "removed": [
+      {
+        "title": "Baseten 发布 2B 决策模型 joey-1，定价 $0.01 per 1M tokens",
+        "url": "https://chenqiyuan.cn/article/intel-f9d2272ab225d17a2649fcf1",
+        "matched_title": "Baseten releases joey-1, a 2B decision model at $0.01 per 1M tokens",
+        "matched_url": "https://www.marktechpost.com/2026/10/29/baseten-joey-1-2b-decision-model/",
+        "kind": "near_title_or_event"
+      }
+    ]
+  },
+  "image_matching": {
+    "status": "ok",
+    "matched": 15,
+    "processed": 15,
+    "strategy": [
+      "RSS/feed image",
+      "article OG/Twitter metadata",
+      "Horizon semantic query expansion",
+      "Openverse",
+      "Wikimedia Commons",
+      "Bing Images",
+      "Unsplash topic illustration fallback"
+    ],
+    "last_run": "2026-10-30T07:46:11.242903+08:00"
+  },
+  "quality_gate": {
+    "status": "PASS",
+    "checked_at": "2026-10-30T07:46:32.615361+08:00",
+    "history_files": 15,
+    "history_stories": 398,
+    "news_duplicate_hits": 0,
+    "china_duplicate_hits": 0,
+    "same_week_image_reuse": 0,
+    "report_path": "test-results/radar/news-image-quality-gate.json"
+  }
+}
