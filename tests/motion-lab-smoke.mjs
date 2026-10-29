@@ -10,6 +10,18 @@ try {
   await page.locator("#labTitle").waitFor();
   if (!(await page.title()).includes("Visual DNA Motion Lab")) throw new Error("Motion Lab document title missing");
 
+  const guideLink = page.locator('a[href="./integration-guide.html"]');
+  if (!(await guideLink.isVisible())) throw new Error("Integration guide link is not visible");
+  const guidePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  await guidePage.goto("http://127.0.0.1:4173/motion-lab/integration-guide.html", { waitUntil: "domcontentloaded" });
+  if (!(await guidePage.title()).includes("Integration Guide")) throw new Error("Integration guide page did not load");
+  for (const text of ["React", "Vue 3", "prefers-reduced-motion", "onBeforeUnmount"]) {
+    if (!(await guidePage.locator("body").textContent()).includes(text)) throw new Error("Integration guide missing section: " + text);
+  }
+  const guideWidth = await guidePage.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
+  if (guideWidth.page > guideWidth.viewport + 1) throw new Error("Integration guide overflows at mobile width");
+  await guidePage.close();
+
   const card = page.locator("#motionCard");
   await card.click();
   if (await card.getAttribute("aria-pressed") !== "true") throw new Error("Motion card did not toggle to pressed state");
