@@ -43,6 +43,17 @@ try {
     throw new Error("Motion JSON download filename did not reflect the selected effect");
   }
 
+  for (const effect of ["fade-up", "slide", "blur", "stagger", "orbit"]) {
+    const option = page.locator(".motion-option[data-effect=" + String.fromCharCode(34) + effect + String.fromCharCode(34) + "]");
+    await option.click();
+    if (await option.getAttribute("aria-pressed") !== "true") throw new Error("Preset selection failed: " + effect);
+    const config = JSON.parse(await page.locator("#motionConfig").inputValue());
+    if (config.effect !== effect) throw new Error("Preset JSON mismatch: " + effect);
+    const count = await page.locator("#previewObject").evaluate(el => el.getAnimations().length);
+    if (count < 1) throw new Error("Preview did not animate: " + effect);
+    if (effect === "orbit" && !(await page.locator("#previewOrbit").isVisible())) throw new Error("Orbit path is hidden");
+    if (effect === "stagger" && !(await page.locator("#previewTrail").isVisible())) throw new Error("Stagger trail is hidden");
+  }
   await page.locator("#speed").evaluate(el => {
     el.value = "1.4";
     el.dispatchEvent(new Event("input", { bubbles: true }));
