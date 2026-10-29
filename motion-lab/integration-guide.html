@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1117">
+<title>Motion Lab · Integration Guide | DAVYLAB</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1117;--panel:#101820;--line:#2b3941;--ink:#edf3ef;--muted:#9aa9a8;--accent:#c7f36b;--cyan:#79e2d0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 85% 0%,#c7f36b0b,transparent 35%),var(--bg);color:var(--ink);font:16px/1.65 Inter,"Segoe UI",sans-serif}
+main{width:100%;max-width:none;padding:clamp(16px,3vw,44px);margin:auto}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:38px}.brand{font-size:12px;letter-spacing:.16em;color:var(--accent);font-weight:700}.back{color:var(--cyan);text-decoration:none;border:1px solid var(--line);padding:9px 13px;border-radius:9px;font-size:13px}
+.eyebrow{color:var(--cyan);font:11px ui-monospace,monospace;letter-spacing:.16em}h1{font-size:clamp(32px,5vw,60px);line-height:1.08;letter-spacing:-.04em;max-width:900px;margin:14px 0}header p{max-width:760px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:30px 0}.panel{min-width:0;border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:clamp(16px,2vw,24px);display:flex;flex-direction:column}.panel h2{font-size:18px;margin:0 0 5px}.panel p{color:var(--muted);font-size:13px;margin:0 0 14px}.tag{font:10px ui-monospace,monospace;color:var(--accent);letter-spacing:.12em}
+pre{white-space:pre;overflow:auto;max-width:100%;padding:15px;border:1px solid #29363d;border-radius:10px;background:#080d12;color:#d7e7df;font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}.checklist{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.check{border:1px solid var(--line);border-radius:12px;padding:14px}.check strong{display:block;font-size:13px;margin-bottom:5px}.check span{display:block;color:var(--muted);font-size:12px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.checklist{grid-template-columns:1fr}.top{margin-bottom:28px}pre{font-size:11px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body><main>
+<nav class="top" aria-label="页面导航"><div class="brand">DAVYLAB / VISUAL DNA</div><a class="back" href="./">← 返回 Motion Lab</a></nav>
+<header><div class="eyebrow">IMPLEMENTATION / FIELD GUIDE</div><h1>从动效预览，走到真实页面。</h1><p>示例聚焦可维护的生命周期：初始化、尊重系统减少动态效果偏好、组件卸载时取消动画。将选择器和状态更新接入自己的业务组件前，请确认不会覆盖组件已有的 transform。</p></header>
+<section class="grid" aria-label="集成示例">
+<article class="panel"><div class="tag">01 / VANILLA</div><h2>原生页面组件 · Web Animations API</h2><p>无额外依赖。返回清理函数，在页面切换或组件销毁时调用。</p><pre><code>const target = document.querySelector("[data-motion='intro']");
+let animation;
+
+if (target && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  animation = target.animate(
+    [
+      { opacity: 0, transform: "translateY(18px)" },
+      { opacity: 1, transform: "translateY(0)" }
+    ],
+    { duration: 520, easing: "cubic-bezier(0.22,1,0.36,1)", fill: "both" }
+  );
+}
+
+export function cleanupIntro() {
+  animation?.cancel();
+}</code></pre></article>
+<article class="panel"><div class="tag">02 / REACT</div><h2>React · useEffect 生命周期</h2><p>使用 ref 定位元素，effect cleanup 会在依赖变化和卸载时运行。</p><pre><code>import { useEffect, useRef } from "react";
+
+export function IntroPanel() {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const animation = el.animate(
+      [{ opacity: 0, transform: "translateY(16px)" },
+       { opacity: 1, transform: "translateY(0)" }],
+      { duration: 480, easing: "ease-out", fill: "both" }
+    );
+
+    return () => animation.cancel();
+  }, []);
+
+  return <section ref={ref}>真实业务内容</section>;
+}</code></pre></article>
+<article class="panel"><div class="tag">03 / VUE 3</div><h2>Vue 3 · onMounted / onBeforeUnmount</h2><p>在 DOM 挂载后启动，卸载前清理动画；避免对尚未渲染的节点操作。</p><pre><code>&lt;script setup&gt;
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+const panel = ref(null);
+let animation;
+
+onMounted(() => {
+  if (!panel.value ||
+      matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  animation = panel.value.animate(
+    [{ opacity: 0, transform: "translateX(20px)" },
+     { opacity: 1, transform: "translateX(0)" }],
+    { duration: 420, easing: "ease-out", fill: "both" }
+  );
+});
+
+onBeforeUnmount(() => animation?.cancel());
+&lt;/script&gt;
+
+&lt;template&gt;&lt;section ref="panel"&gt;真实业务内容&lt;/section&gt;&lt;/template&gt;</code></pre></article>
+<article class="panel"><div class="tag">04 / ENGINE CHOICE</div><h2>什么时候选哪个引擎</h2><p>根据复杂度与项目已有依赖选择，不要为一个简单入场效果额外引入整套引擎。</p><pre><code>Web Animations API
+  轻量入场、淡出、位移；浏览器原生支持。
+
+GSAP
+  复杂时间线、跨元素编排、ScrollTrigger 场景。
+
+Motion
+  React / vanilla 交互、手势与状态驱动动效。
+
+Three.js
+  3D 场景与粒子可视化；注意 GPU、帧率和电量成本。</code></pre></article>
+</section>
+<section aria-labelledby="qaTitle"><div class="eyebrow">BEFORE SHIPPING</div><h2 id="qaTitle">上线前检查</h2><div class="checklist">
+<div class="check"><strong>生命周期</strong><span>重复进入页面不会叠加动画；卸载时取消 animation、timeline、controls 和监听器。</span></div>
+<div class="check"><strong>可访问性</strong><span>尊重 prefers-reduced-motion；状态变化仍可见，不用动效传递唯一信息。</span></div>
+<div class="check"><strong>移动端性能</strong><span>优先 opacity / transform；减少模糊、超大阴影、持续 3D 渲染和高频布局测量。</span></div>
+</div></section>
+</main></body></html>
