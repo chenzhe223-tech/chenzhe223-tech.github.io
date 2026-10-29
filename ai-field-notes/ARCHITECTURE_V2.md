@@ -15,7 +15,7 @@ Do not use Supabase for this product. Keep the existing GitHub Pages learning bo
 - D1 primary region hint: APAC
 - Initial schema migration: `migrations/0001_initial_schema.sql`
 - Migrations `0001` through `0006` were applied and verified. The development database contains 9 AI atlas regions, 6 published V1 learning tracks, 6 V1 releases, 6 lessons derived from the existing first-version knowledge content, 28 de-duplicated public DAVY Radar records, and 28 initial source-version snapshots. Markdown line breaks and JSON lesson metadata were checked.
-- The Worker `ai-field-notes-api` v0.4.0 is deployed with a D1 binding and its `workers.dev` subdomain enabled at `https://ai-field-notes-api.chenzhe223.workers.dev`. Read endpoints include `/health`, `/api/atlas/regions`, `/api/tracks`, `/api/tracks/:slug/releases`, `/api/releases/:id/lessons`, `/api/lessons/:id`, `/api/search?q=...`, `/api/brief/latest`, and `/api/brief/versions?url=...`.
+- The Worker `ai-field-notes-api` v0.5.1 is deployed with a D1 binding and its `workers.dev` subdomain enabled at `https://ai-field-notes-api.chenzhe223.workers.dev`. Read endpoints include `/health`, `/api/atlas/regions`, `/api/tracks`, `/api/tracks/:slug/releases`, `/api/releases/:id/lessons`, `/api/lessons/:id`, `/api/search?q=...`, `/api/brief/latest`, and `/api/brief/versions?url=...`.
 - A Cloudflare Cron Trigger (`0 * * * *`, hourly) refreshes a versioned D1 index of the public DAVY Radar feed. It records source metadata, refresh jobs, and content-change snapshots; `/api/brief/latest` reads the indexed records and falls back to the public feed if the index is unavailable. `/api/search` performs ranked keyword search across published/free D1 lessons and indexed Radar title/summary/source fields, preserving original source URLs. This is not semantic AI search or full-web search.
 - No user or company learning data was imported. No payment integration, authenticated user sessions, cloud progress sync, or automatic creation/publishing of professional lessons is deployed. Only the public briefing metadata index refresh is automated.
 
@@ -105,7 +105,7 @@ Cloudflare's current published Workers Free/D1 quotas include:
 - [x] Created the isolated `ai-field-notes-dev` D1 database in APAC.
 - [x] Applied and re-checked migrations `0001` through `0008`.
 - [x] Seeded and validated twelve atlas regions, six tracks, six published releases and six lessons.
-- [x] Deployed Worker API v0.4.0 with D1 binding, live atlas metadata, ranked mixed course/brief keyword search, source-version endpoint and an hourly Cron Trigger.
+- [x] Deployed Worker API v0.5.1 with D1 binding, live atlas metadata, ranked mixed course/brief keyword search, source-version endpoint and an hourly Cron Trigger.
 - [x] Added the V2 front-end integration for live atlas metadata, indexed DAVY Radar cards, source history panels, course + brief search results, and the live version/lesson catalog in the archive page.
 - [x] Added local personal-map event history, derived progress metrics, and JSON export/import backup without collecting personal data in the cloud.
 - [x] Removed fake first-visit learning progress; new maps start at the camp with knowledge areas unexplored.
@@ -114,3 +114,8 @@ Cloudflare's current published Workers Free/D1 quotas include:
 - [ ] Semantic/vector search and source-aware search across news and external documents are not implemented.
 - [ ] Automated learning-content drafting, review, publishing and rollback are not implemented. Hourly public-brief indexing does not auto-publish course material.
 - [ ] Products remain inactive; no payment gateway has been connected.
+
+
+## Emerging topic queue
+
+Migrations 0009–0010 add a review queue and deduplicated public-source evidence. The hourly Radar refresh proposes topics via explicit keyword rules. It never creates or publishes course bodies. The public read-only candidate API returns only source-grounded candidate metadata and evidence; internal reviewer notes are not exposed. Approval workflows and authenticated reviewer actions remain future work.
