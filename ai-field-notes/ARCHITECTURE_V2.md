@@ -14,8 +14,10 @@ Do not use Supabase for this product. Keep the existing GitHub Pages learning bo
 - D1 database ID: `fd14c318-76ad-4071-ac54-b219f6b28380`
 - D1 primary region hint: APAC
 - Initial schema migration: `migrations/0001_initial_schema.sql`
-- The migration was applied and verified. It created the core tables for users/identities/sessions, tracks/releases/lessons, user progress/notes/bookmarks, sources and source-to-lesson links, products/orders/entitlements, usage metering, refresh jobs, audit events, and schema migration tracking.
-- No user or company learning data was imported. No payment integration or public API was deployed.
+- The initial migration and `0002_seed_v1_knowledge_and_atlas.sql` were applied and verified. The development database contains 9 AI atlas regions, 6 published V1 learning tracks, 6 V1 releases, and 6 lessons derived from the existing first-version knowledge content. Markdown line breaks and JSON lesson metadata were checked.
+- The Worker `ai-field-notes-api` is deployed with a D1 binding and read-only endpoints for `/health`, `/api/atlas/regions`, `/api/tracks`, `/api/tracks/:slug/releases`, `/api/releases/:id/lessons`, `/api/lessons/:id`, `/api/search?q=...`, and `/api/brief/latest`.
+- `/api/brief/latest` proxies the existing DAVY Radar public JSON; `/api/search` performs D1 keyword search on published/free lesson content. These are not semantic AI search or full-web search.
+- No user or company learning data was imported. No payment integration, authenticated user sessions, cloud progress sync, or automatic publishing workflow is deployed.
 
 ## Free-first component map
 
@@ -101,10 +103,12 @@ Cloudflare's current published Workers Free/D1 quotas include:
 
 - [x] Chosen a free-first alternative to Supabase.
 - [x] Created the isolated `ai-field-notes-dev` D1 database in APAC.
-- [x] Committed and applied the initial schema migration.
-- [x] Verified the migration record and created tables.
-- [ ] Worker API is not deployed.
+- [x] Applied and re-checked migrations `0001` and `0002`.
+- [x] Seeded and validated nine atlas regions, six tracks, six published releases and six lessons.
+- [x] Deployed the read-only Worker API with D1 binding.
+- [x] Added the V2 front-end integration for live atlas metadata, DAVY Radar cards, and D1 keyword search.
+- [ ] Perform browser-level HTTP smoke tests of the deployed Worker routes; network access to the public Worker was unavailable from the current validation runtime.
 - [ ] Authentication and cross-device sync are not implemented.
-- [ ] Davy Radar is not yet wired to V2 APIs.
-- [ ] Knowledge search and automated learning-content releases are not implemented.
+- [ ] Semantic/vector search and source-aware search across news and external documents are not implemented.
+- [ ] Automated learning-content drafting, review, publishing and rollback are not implemented.
 - [ ] Products remain inactive; no payment gateway has been connected.
