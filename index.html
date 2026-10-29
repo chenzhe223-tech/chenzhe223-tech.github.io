@@ -303,6 +303,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 <style id="davylab-appearance-controls">
 :root{--appearance-page:#f5f3ed;--appearance-panel:#fffefa;--appearance-text:#14263d;--appearance-muted:#586777;--appearance-border:#d9ddd7;--appearance-accent:#2457c5;--appearance-nav:#f5f3edf2}
 body{background:var(--appearance-page);color:var(--appearance-text)}
+html[data-appearance-theme="tech"] body{background:radial-gradient(ellipse at 12% 0%,#6c7bff24,transparent 38%),radial-gradient(ellipse at 92% 22%,#b7ff5a18,transparent 30%),var(--appearance-page)}
+html[data-appearance-theme="tech"] .gradient{background:linear-gradient(100deg,#b7ff5a,#6c7bff 58%,#5ee7df);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-appearance-theme="tech"] .brand-icon{background:linear-gradient(135deg,#b7ff5a,#5ee7df 48%,#6c7bff);color:#0b1020}
+html[data-appearance-theme="tech"] .visual{border-color:#6c7bff55;box-shadow:0 25px 80px #6c7bff18}
+html[data-appearance-theme="colorful"] body{background:radial-gradient(ellipse at 5% 0%,#ff5e7e18,transparent 35%),radial-gradient(ellipse at 95% 18%,#7c4dff18,transparent 32%),radial-gradient(ellipse at 55% 70%,#ffb84d12,transparent 40%),var(--appearance-page)}
+html[data-appearance-theme="colorful"] .gradient{background:linear-gradient(100deg,#ff5e7e,#ff9b42 42%,#7c4dff 78%,#21b7a8);-webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-appearance-theme="colorful"] .brand-icon{background:linear-gradient(135deg,#ff5e7e,#ffb84d 45%,#7c4dff);color:#fff}
+html[data-appearance-theme="colorful"] .visual{border-color:#ff5e7e55;box-shadow:0 25px 80px #ff5e7e12}
+html[data-appearance-theme="colorful"] .ticker{background:linear-gradient(90deg,#ff5e7e12,#ffb84d18,#7c4dff12);}
 .topbar{background:var(--appearance-nav);border-color:var(--appearance-border)}
 .hero h1,h2,.app-name,.value h3,.step h3,.offer h3,.modal-title{color:var(--appearance-text)}
 .hero p,.desc,.app-desc,.manifesto-copy,.value p,.step p,.offer p,.modal-body p{color:var(--appearance-muted)}
@@ -606,6 +615,8 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
       <button class="appearance-preset" type="button" data-appearance-theme="coastal" aria-pressed="false"><span class="appearance-swatch"><i style="background:#edf4f0"></i><i style="background:#176b63"></i><i style="background:#398c91"></i></span><span><strong>海雾青绿</strong><small>雾青 · 深海绿</small></span></button>
       <button class="appearance-preset" type="button" data-appearance-theme="midnight" aria-pressed="false"><span class="appearance-swatch"><i style="background:#101923"></i><i style="background:#eaf0f2"></i><i style="background:#65d7d0"></i></span><span><strong>午夜青蓝</strong><small>深石墨 · 冰川青</small></span></button>
       <button class="appearance-preset" type="button" data-appearance-theme="classic" aria-pressed="false"><span class="appearance-swatch"><i style="background:#f2f4fa"></i><i style="background:#202e50"></i><i style="background:#536bd5"></i></span><span><strong>经典蓝紫</strong><small>清晰 · 数字感</small></span></button>
+      <button class="appearance-preset" type="button" data-appearance-theme="tech" aria-pressed="false"><span class="appearance-swatch"><i style="background:#0b1020"></i><i style="background:#b7ff5a"></i><i style="background:#6c7bff"></i></span><span><strong>科技创新</strong><small>深空黑 · 酸橙荧光</small></span></button>
+      <button class="appearance-preset" type="button" data-appearance-theme="colorful" aria-pressed="false"><span class="appearance-swatch"><i style="background:#fff4ef"></i><i style="background:#ff5e7e"></i><i style="background:#7c4dff"></i></span><span><strong>时尚多彩</strong><small>珊瑚粉 · 活力橙 · 电光紫</small></span></button>
     </div>
   </section>
   <section class="appearance-section"><span class="appearance-label">自定义颜色</span><div class="appearance-colors">
@@ -632,7 +643,9 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
   editorial:{page:'#f5f3ed',surface:'#fffefa',text:'#14263d',border:'#d9ddd7',accent:'#2457c5',nav:'#f5f3ed'},
   coastal:{page:'#edf4f0',surface:'#fbfdf9',text:'#173b3b',border:'#cbdcd4',accent:'#176b63',nav:'#edf4f0'},
   midnight:{page:'#101923',surface:'#182631',text:'#eaf0f2',border:'#34454f',accent:'#65d7d0',nav:'#101923'},
-  classic:{page:'#f2f4fa',surface:'#ffffff',text:'#202e50',border:'#d6dced',accent:'#536bd5',nav:'#f2f4fa'}
+  classic:{page:'#f2f4fa',surface:'#ffffff',text:'#202e50',border:'#d6dced',accent:'#536bd5',nav:'#f2f4fa'},
+  tech:{page:'#0b1020',surface:'#121a2b',text:'#eef3ff',border:'#29344d',accent:'#b7ff5a',nav:'#0b1020'},
+  colorful:{page:'#fff4ef',surface:'#fffdfb',text:'#30213b',border:'#f0d5d8',accent:'#ff5e7e',nav:'#fff4ef'}
  };
  const inputs={page:document.getElementById('appearancePage'),surface:document.getElementById('appearancePanelColor'),text:document.getElementById('appearanceText'),border:document.getElementById('appearanceBorder'),accent:document.getElementById('appearanceAccent'),nav:document.getElementById('appearanceNav')};
  let state={...defaults};
@@ -640,6 +653,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  function safeLoad(){try{const raw=window.localStorage.getItem(storageKey);if(!raw)return {...defaults};const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return {...defaults};return {...defaults,...saved,theme:themes[saved.theme]?saved.theme:'custom',page:validColor(saved.page,defaults.page),surface:validColor(saved.surface,defaults.surface),text:validColor(saved.text,defaults.text),border:validColor(saved.border,defaults.border),accent:validColor(saved.accent,defaults.accent),nav:validColor(saved.nav,defaults.nav)}}catch(_){return {...defaults}}}
  function safeSave(){try{window.localStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
  function apply(){
+  root.dataset.appearanceTheme=state.theme;
   root.style.setProperty('--appearance-page',state.page);
   root.style.setProperty('--appearance-panel',state.surface);
   root.style.setProperty('--appearance-text',state.text);
