@@ -420,13 +420,13 @@ const atlasNodes = {
   unknown:{name:"未知海域",status:"unknown",desc:"这片海域尚未被画出明确边界。新的模型、新的能力与新的问题仍在出现。保持好奇，让下一次学习成为一次发现。",tags:["未知","想象力","未来探索"],next:"写下一个你还不知道答案的问题",chapter:"search",index:"THE UNMAPPED",icon:"unknown"}
 };
 let atlasState = loadAtlasState();
-const atlasHadSavedState = (()=>{try{return localStorage.getItem(ATLAS_KEY)!==null}catch{return false}})();
+let atlasHadSavedState = (()=>{try{return localStorage.getItem(ATLAS_KEY)!==null}catch{return false}})();
 let selectedAtlasNode = "origin";
 let currentAtlasFilter = "all";
 function loadAtlasState(){
   try{const stored=JSON.parse(localStorage.getItem(ATLAS_KEY)||"{}");const state={};Object.keys(atlasNodes).forEach(id=>{state[id]=stored[id]||atlasNodes[id].status;});return state;}catch{const state={};Object.keys(atlasNodes).forEach(id=>state[id]=atlasNodes[id].status);return state;}
 }
-function saveAtlasState(){try{localStorage.setItem(ATLAS_KEY,JSON.stringify(atlasState));}catch{toast("浏览器未能保存地图状态；当前页面仍可继续体验。");}}
+function saveAtlasState(){try{localStorage.setItem(ATLAS_KEY,JSON.stringify(atlasState));atlasHadSavedState=true;}catch{toast("浏览器未能保存地图状态；当前页面仍可继续体验。");}}
 
 function getAtlasHistory(){
  try{const value=JSON.parse(localStorage.getItem(ATLAS_HISTORY_KEY)||"[]");return Array.isArray(value)?value.filter(e=>e&&typeof e==="object"&&atlasNodes[e.region_id]&&typeof e.action==="string").slice(-200):[];}catch{return []}
@@ -479,7 +479,7 @@ async function importAtlasArchive(file){
   const next={};Object.keys(atlasNodes).forEach(id=>{const value=parsed.atlas_state[id];next[id]=["known","exploring","unknown"].includes(value)?value:atlasNodes[id].status;});
   const importedEvents=Array.isArray(parsed.events)?parsed.events.filter(e=>e&&atlasNodes[e.region_id]&&typeof e.action==="string"&&typeof e.created_at==="string").slice(-200).map(e=>({region_id:e.region_id,region_title:atlasNodes[e.region_id].name,action:e.action,detail:String(e.detail||"").slice(0,240),lesson_id:typeof e.lesson_id==="string"?e.lesson_id:null,created_at:e.created_at})):[];
   if(!confirm("即将用备份文件中的地图状态和探索足迹替换当前浏览器的个人地图。建议先导出当前备份。是否继续？"))return;
-  atlasState=next;selectedAtlasNode="origin";currentAtlasFilter="all";
+  atlasState=next;selectedAtlasNode="origin";currentAtlasFilter="all";atlasHadSavedState=true;
   localStorage.setItem(ATLAS_KEY,JSON.stringify(atlasState));localStorage.setItem(ATLAS_HISTORY_KEY,JSON.stringify(importedEvents));
   renderAtlasMap();toast("个人地图与探索足迹已从备份恢复。");
  }catch(error){toast("无法导入该备份："+(error?.message||"文件格式错误"));}
@@ -562,7 +562,7 @@ document.getElementById("mapSecondary").addEventListener("click",()=>{
 });
 document.getElementById("mapReset").addEventListener("click",()=>{
  if(!confirm("重置当前浏览器中的个人地图演示状态？这不会影响 V1、课程内容或任何云端数据。"))return;
- try{localStorage.removeItem(ATLAS_KEY);localStorage.removeItem(ATLAS_HISTORY_KEY)}catch{}
+ try{localStorage.removeItem(ATLAS_KEY);localStorage.removeItem(ATLAS_HISTORY_KEY);atlasHadSavedState=true}catch{}
  atlasState={};Object.keys(atlasNodes).forEach(id=>atlasState[id]=atlasNodes[id].status);
  selectedAtlasNode="origin";currentAtlasFilter="all";renderAtlasMap();toast("已恢复初始探索地图。");
 });
