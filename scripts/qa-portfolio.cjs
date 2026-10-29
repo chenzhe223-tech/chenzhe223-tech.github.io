@@ -151,10 +151,47 @@ const path = require('node:path');
       }
     }
     results.push({ test: 'six Visual DNA layouts apply without desktop horizontal overflow', status: 'PASS', detail: layoutModes });
-    // Restore the editorial default before the baseline desktop screenshot.
+    // Verify independent settings survive reload and corrupted storage degrades safely.
     await page.locator('#appearanceTrigger').click();
-    await page.locator('[data-appearance-layout="bento"]').click();
+    await page.locator('[data-appearance-layout="split"]').click();
+    await page.locator('[data-appearance-navmode="left"]').click();
+    await page.locator('#appearanceFontEn').selectOption('DM Sans');
+    await page.locator('#appearanceFontZh').selectOption('Noto Serif SC');
+    await page.locator('#appearanceWidth').evaluate(el => { el.value = '92'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+    await page.locator('#appearanceAccent').evaluate(el => { el.value = '#c2410c'; el.dispatchEvent(new Event('input', { bubbles: true })); });
     await page.locator('#appearanceDone').click();
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('#products').waitFor();
+    const persisted = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      fontEn: document.getElementById('appearanceFontEn').value,
+      fontZh: document.getElementById('appearanceFontZh').value,
+      width: getComputedStyle(document.documentElement).getPropertyValue('--vd-content-width').trim(),
+      accent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-accent').trim()
+    }));
+    if (persisted.layout !== 'split' || persisted.navmode !== 'left' || persisted.fontEn !== 'DM Sans' ||
+        persisted.fontZh !== 'Noto Serif SC' || persisted.width !== '92%' || persisted.accent.toLowerCase() !== '#c2410c') {
+      throw new Error('Visual DNA settings did not persist independently: ' + JSON.stringify(persisted));
+    }
+    await page.locator('#appearanceTrigger').click();
+    await page.locator('#appearanceReset').click();
+    await page.locator('#appearanceDone').click();
+    await page.evaluate(() => localStorage.setItem('davylab-appearance:v1', '{invalid-json'));
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('#products').waitFor();
+    const afterCorruptStorage = await page.evaluate(() => ({
+      layout: document.documentElement.dataset.appearanceLayout,
+      navmode: document.documentElement.dataset.appearanceNavmode,
+      fontEn: document.getElementById('appearanceFontEn').value,
+      fontZh: document.getElementById('appearanceFontZh').value
+    }));
+    if (afterCorruptStorage.layout !== 'bento' || afterCorruptStorage.navmode !== 'top' ||
+        afterCorruptStorage.fontEn !== 'Inter' || afterCorruptStorage.fontZh !== 'Noto Sans SC') {
+      throw new Error('Corrupted Visual DNA storage did not recover to safe defaults: ' + JSON.stringify(afterCorruptStorage));
+    }
+    results.push({ test: 'Visual DNA settings persist across reload and recover from corrupted storage', status: 'PASS', detail: { persisted, afterCorruptStorage } });
+    // Restore the editorial default before the baseline desktop screenshot.
 
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true
