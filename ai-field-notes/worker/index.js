@@ -126,7 +126,23 @@ export default {
 
     if (url.pathname === "/api/search") {
       const rawQuery = (url.searchParams.get("q") || "").trim().slice(0, 120);
-      const terms = rawQuery.toLowerCase().split(/\\s+/).filter((term) => term.length > 0).slice(0, 5);
+      const normalized = rawQuery.toLowerCase().replace(/[，。！？?!、,.;；:："'“”()（）]/g, " ");
+      const latinTerms = normalized.match(/[a-z0-9][a-z0-9._-]*/g) || [];
+      const cjkRuns = normalized.match(/[\\u3400-\\u9fff]+/g) || [];
+      const stopWords = new Set(["如何","怎么","怎样","什么","哪些","可以","能否","请问","一个","一种","这个","那个","以及","对于","进行","帮我","如何用","怎么用"]);
+      const cjkTerms = [];
+      for (const run of cjkRuns) {
+        if (run.length >= 2 && run.length <= 8 && !stopWords.has(run)) cjkTerms.push(run);
+        for (let i = 0; i < run.length - 2; i++) {
+          const tri = run.slice(i, i + 3);
+          if (!stopWords.has(tri)) cjkTerms.push(tri);
+        }
+        for (let i = 0; i < run.length - 1; i++) {
+          const pair = run.slice(i, i + 2);
+          if (!stopWords.has(pair)) cjkTerms.push(pair);
+        }
+      }
+      const terms = [...new Set([...latinTerms, ...cjkTerms].filter((term) => term.length >= 2 && !stopWords.has(term)))].slice(0, 12);
       try {
         let sql = `SELECT l.id, l.slug, l.title, l.summary, l.content_markdown, l.content_json,
                           l.access_tier, l.estimated_minutes, t.slug AS track_slug,
@@ -136,12 +152,23 @@ export default {
                    JOIN learning_tracks t ON t.id = r.track_id
                    WHERE r.status = 'published' AND t.status = 'published' AND l.access_tier = 'free'`;
         const params = [];
-        for (const term of terms) {
-          sql += " AND (lower(l.title) LIKE ? OR lower(l.summary) LIKE ? OR lower(l.content_markdown) LIKE ? OR lower(t.title) LIKE ?)";
-          const pattern = "%" + term + "%";
-          params.push(pattern, pattern, pattern, pattern);
+        if (terms.length) {
+          const where = terms.map(() => "(lower(l.title) LIKE ? OR lower(l.summary) LIKE ? OR lower(l.content_markdown) LIKE ? OR lower(t.title) LIKE ?)").join(" OR ");
+          sql += " AND (" + where + ")";
+          for (const term of terms) {
+            const pattern = "%" + term + "%";
+            params.push(pattern, pattern, pattern, pattern);
+          }
+          const ranking = terms.map(() => "(CASE WHEN lower(l.title) LIKE ? THEN 8 ELSE 0 END + CASE WHEN lower(t.title) LIKE ? THEN 6 ELSE 0 END + CASE WHEN lower(l.summary) LIKE ? THEN 3 ELSE 0 END + CASE WHEN lower(l.content_markdown) LIKE ? THEN 1 ELSE 0 END)").join(" + ");
+          sql += " ORDER BY (" + ranking + ") DESC, t.sort_order, l.sort_order";
+          for (const term of terms) {
+            const pattern = "%" + term + "%";
+            params.push(pattern, pattern, pattern, pattern);
+          }
+        } else {
+          sql += " ORDER BY t.sort_order, l.sort_order";
         }
-        sql += " ORDER BY t.sort_order, l.sort_order LIMIT 12";
+        sql += " LIMIT 12";
         const result = await env.DB.prepare(sql).bind(...params).all();
         const items = (result.results || []).map((row) => {
           const body = safeJson(row.content_json);
@@ -159,7 +186,7 @@ export default {
             source_label: "AI Field Notes " + row.version_label,
           };
         });
-        return json({ query: rawQuery, count: items.length, items, mode: terms.length ? "keyword" : "catalog" }, 200, { ...cors, "Cache-Control": "public, max-age=30" });
+        return json({ query: rawQuery, count: items.length, items, mode: terms.length ? "keyword" : "catalog", terms }, 200, { ...cors, "Cache-Control": "public, max-age=30" });
       } catch {
         return json({ error: "search_unavailable" }, 503, cors);
       }
