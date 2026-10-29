@@ -105,6 +105,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 .appearance-section-reset{display:inline-flex;align-items:center;justify-content:center;margin-top:10px;min-height:32px;padding:7px 10px;border:1px solid var(--appearance-border);border-radius:7px;background:transparent;color:var(--appearance-muted);font:inherit;font-size:10px;font-weight:750;cursor:pointer}
 .appearance-section-reset:hover{border-color:var(--appearance-accent);color:var(--appearance-text)}
 .appearance-section-reset:focus-visible{outline:2px solid var(--appearance-accent);outline-offset:2px}
+
+.appearance-contrast-status{margin:10px 0 0;padding:10px 11px;border:1px solid var(--appearance-border);border-radius:7px;background:var(--appearance-panel);color:var(--appearance-text);font-size:10px;line-height:1.6}
+.appearance-contrast-status[data-status="warning"]{border-color:#b45309}
+.appearance-contrast-status[data-status="pass"]{border-color:#3d8068}
 </style>
 <!-- Visual DNA Design · DAVYLAB editorial studio refresh v1 -->
 <style id="visual-dna-homepage-v1">
@@ -339,7 +343,7 @@ html[data-appearance-theme="colorful"] .ticker{background:linear-gradient(90deg,
 .manifesto,.ticker,.contact-wechat-card{background:color-mix(in srgb,var(--appearance-panel) 72%,var(--appearance-page));border-color:var(--appearance-border)}
 .navlinks,.section-side,.market-foot,.shelf-tools,.footer{color:var(--appearance-muted)}
 .eyebrow,.app-bottom,.open-skill-index{color:var(--appearance-accent)}
-.btn-primary,.pill-button,.filter.active,.open-mark:hover{background:var(--appearance-accent);border-color:var(--appearance-accent);color:#fff}
+.btn-primary,.pill-button,.filter.active,.open-mark:hover{background:var(--appearance-accent);border-color:var(--appearance-accent);color:var(--appearance-on-accent,#fff)}
 .btn-secondary,.arrow-btn,.filter,.detail-btn,.project-chip{border-color:var(--appearance-border);color:var(--appearance-text)}
 .searchbox input,.lead-form textarea,.lead-form input:not([type=checkbox]):not([type=hidden]),.lead-form select{background:var(--appearance-panel);color:var(--appearance-text);border-color:var(--appearance-border)}
 .searchbox input:focus,.lead-form textarea:focus,.lead-form input:focus,.lead-form select:focus{border-color:var(--appearance-accent);box-shadow:0 0 0 3px color-mix(in srgb,var(--appearance-accent) 13%,transparent)}
@@ -369,7 +373,7 @@ html[data-appearance-theme="colorful"] .ticker{background:linear-gradient(90deg,
 .appearance-panel-actions{display:flex;gap:8px;align-items:center;padding-top:14px}
 .appearance-reset,.appearance-done{min-height:38px;border-radius:7px;padding:9px 13px;font-size:11px;font-weight:800;cursor:pointer}
 .appearance-reset{border:1px solid var(--appearance-border);background:transparent;color:inherit}
-.appearance-done{border:1px solid var(--appearance-accent);background:var(--appearance-accent);color:#fff;flex:1}
+.appearance-done{border:1px solid var(--appearance-accent);background:var(--appearance-accent);color:var(--appearance-on-accent,#fff);flex:1}
 .appearance-note{font-size:9px;line-height:1.6;color:var(--appearance-muted);margin:10px 0 0}
 @media(max-width:700px){.appearance-trigger{min-height:36px;padding:8px 9px;font-size:10px}.appearance-trigger svg{width:14px;height:14px}.appearance-panel{top:auto;bottom:max(12px,env(safe-area-inset-bottom));right:12px;left:12px;width:auto;max-height:82dvh;padding:16px}.appearance-panel-head h2{font-size:18px}}
 @media(prefers-reduced-motion:reduce){.appearance-trigger{transition:none}}
@@ -757,7 +761,8 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
     <label class="appearance-color" for="appearanceBorder">边框分割线<input type="color" id="appearanceBorder" value="#d9ddd7"></label>
     <label class="appearance-color" for="appearanceAccent">强调色<input type="color" id="appearanceAccent" value="#2457c5"></label>
     <label class="appearance-color" for="appearanceNav">导航底色<input type="color" id="appearanceNav" value="#f5f3ed"></label>
-  </div><p class="appearance-note">颜色调整会即时预览。主题与自定义颜色独立于原有产品数据和联系表单。</p></section>
+  </div><p class="appearance-note">颜色调整会即时预览。主题与自定义颜色独立于原有产品数据和联系表单。</p>
+  <p class="appearance-contrast-status" id="appearanceContrastStatus" role="status" aria-live="polite"></p></section>
   <div class="appearance-panel-actions"><button class="appearance-reset" id="appearanceReset" type="button">全部恢复默认</button><button class="appearance-done" id="appearanceDone" type="button">完成</button></div>
 </aside>
 
@@ -783,6 +788,17 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
  const inputs={page:document.getElementById('appearancePage'),surface:document.getElementById('appearancePanelColor'),text:document.getElementById('appearanceText'),border:document.getElementById('appearanceBorder'),accent:document.getElementById('appearanceAccent'),nav:document.getElementById('appearanceNav')};
  let state={...defaults};
  function validColor(value,fallback){return typeof value==='string'&&/^#[0-9a-fA-F]{6}$/.test(value)?value:fallback}
+ function relativeLuminance(hex){
+  const channels=[1,3,5].map(index=>parseInt(hex.slice(index,index+2),16)/255).map(value=>value<=0.04045?value/12.92:Math.pow((value+0.055)/1.055,2.4));
+  return 0.2126*channels[0]+0.7152*channels[1]+0.0722*channels[2];
+ }
+ function contrastRatio(first,second){
+  const values=[relativeLuminance(first),relativeLuminance(second)].sort((a,b)=>b-a);
+  return (values[0]+0.05)/(values[1]+0.05);
+ }
+ function accentForeground(accent){
+  return contrastRatio('#ffffff',accent)>=contrastRatio('#14263d',accent)?'#ffffff':'#14263d';
+ }
  function safeLoad(){try{const raw=window.localStorage.getItem(storageKey);if(!raw)return {...defaults};const saved=JSON.parse(raw);if(!saved||typeof saved!=='object')return {...defaults};return {...defaults,...saved,theme:themes[saved.theme]?saved.theme:'custom',page:validColor(saved.page,defaults.page),surface:validColor(saved.surface,defaults.surface),text:validColor(saved.text,defaults.text),border:validColor(saved.border,defaults.border),accent:validColor(saved.accent,defaults.accent),nav:validColor(saved.nav,defaults.nav),layout:['editorial','balanced','vertical','compact','bento','split'].includes(saved.layout)?saved.layout:defaults.layout,navmode:['top','left','right','bottom','floating','hidden'].includes(saved.navmode)?saved.navmode:defaults.navmode,navCollapsed:!!saved.navCollapsed,fontEn:typeof saved.fontEn==='string'?saved.fontEn:defaults.fontEn,fontZh:typeof saved.fontZh==='string'?saved.fontZh:defaults.fontZh,width:Number.isFinite(Number(saved.width))?Math.min(100,Math.max(80,Number(saved.width))):defaults.width,gap:Number.isFinite(Number(saved.gap))?Math.min(40,Math.max(8,Number(saved.gap))):defaults.gap}}catch(_){return {...defaults}}}
  function safeSave(){try{window.localStorage.setItem(storageKey,JSON.stringify(state))}catch(_){}}
  function apply(){
@@ -809,6 +825,21 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
   root.style.setProperty('--appearance-text',state.text);
   root.style.setProperty('--appearance-border',state.border);
   root.style.setProperty('--appearance-accent',state.accent);
+  const onAccent=accentForeground(state.accent);
+  root.style.setProperty('--appearance-on-accent',onAccent);
+  const contrastStatus=document.getElementById('appearanceContrastStatus');
+  if(contrastStatus){
+   const pageRatio=contrastRatio(state.text,state.page);
+   const surfaceRatio=contrastRatio(state.text,state.surface);
+   const accentRatio=contrastRatio(onAccent,state.accent);
+   const issues=[];
+   if(pageRatio<4.5)issues.push('页面文字对比度低于 4.5:1');
+   if(surfaceRatio<4.5)issues.push('面板文字对比度低于 4.5:1');
+   if(accentRatio<4.5)issues.push('强调按钮文字对比度低于 4.5:1');
+   contrastStatus.dataset.status=issues.length?'warning':'pass';
+   contrastStatus.textContent=(issues.length?'⚠ 对比度提醒：'+issues.join('；')+'。':'✓ 文字与强调按钮对比度达到 WCAG AA。')+
+    ' 页面 '+pageRatio.toFixed(2)+':1 · 面板 '+surfaceRatio.toFixed(2)+':1 · 强调按钮 '+accentRatio.toFixed(2)+':1。';
+  }
   root.style.setProperty('--appearance-nav',state.nav+'f2');
   root.style.setProperty('--vd-paper',state.page);
   root.style.setProperty('--vd-surface',state.surface);

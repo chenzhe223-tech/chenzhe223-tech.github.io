@@ -51,6 +51,31 @@ const path = require('node:path');
     }
     results.push({ test: 'font selector clearly distinguishes CSS options from deployed font binaries', status: 'PASS' });
 
+    await page.locator('#appearanceTrigger').click();
+    const themeModes = ['editorial', 'coastal', 'midnight', 'classic', 'tech', 'colorful'];
+    for (const themeMode of themeModes) {
+      await page.locator('.appearance-preset[data-appearance-theme="' + themeMode + '"]').click();
+      const contrast = await page.evaluate(() => ({
+        theme: document.documentElement.dataset.appearanceTheme,
+        status: document.getElementById('appearanceContrastStatus').dataset.status,
+        message: document.getElementById('appearanceContrastStatus').innerText,
+        onAccent: getComputedStyle(document.documentElement).getPropertyValue('--appearance-on-accent').trim()
+      }));
+      if (contrast.status !== 'pass') throw new Error('Built-in theme failed contrast check: ' + JSON.stringify(contrast));
+      if (!contrast.onAccent) throw new Error('Theme did not provide a contrasting foreground for accent controls: ' + JSON.stringify(contrast));
+    }
+    await page.locator('#appearanceAccent').evaluate(el => { el.value = '#777777'; el.dispatchEvent(new Event('input', { bubbles: true })); });
+    const lowContrast = await page.evaluate(() => ({
+      status: document.getElementById('appearanceContrastStatus').dataset.status,
+      message: document.getElementById('appearanceContrastStatus').innerText
+    }));
+    if (lowContrast.status !== 'warning' || !lowContrast.message.includes('强调按钮文字对比度低于 4.5:1')) {
+      throw new Error('Custom low-contrast accent was not reported: ' + JSON.stringify(lowContrast));
+    }
+    await page.locator('.appearance-preset[data-appearance-theme="editorial"]').click();
+    await page.locator('#appearanceDone').click();
+    results.push({ test: 'built-in themes pass contrast checks and custom low contrast is flagged', status: 'PASS', detail: { themes: themeModes, lowContrast } });
+
     // Hidden navigation must retain a visible, keyboard-operable recovery entry.
     await page.locator('#appearanceTrigger').click();
     await page.locator('.appearance-preset[data-appearance-navmode="hidden"]').click();
