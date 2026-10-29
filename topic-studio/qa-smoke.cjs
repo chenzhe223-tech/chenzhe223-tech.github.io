@@ -218,7 +218,7 @@ async function main() {
         target: { latest: 140, medianViews: 40 },
         experiments: [{ id: "qa-import-experiment", title: "QA 导入实验", type: "海外信息差", status: "planned", views: null, shares: null, follows: null, date: "2026-10-29", note: "导入测试", createdAt: "2026-10-29T00:00:00.000Z" }],
         posters: [],
-        metrics: [{ id: "qa-missing-follower", date: "2026-10-29", followers: null, article: "缺失值不能当成零" }],
+        metrics: [{ id: "qa-missing-follower", date: "2026-10-30", followers: null, article: "缺失值不能当成零" }],
         tasks: { 0: true }
       }
     };
@@ -230,6 +230,7 @@ async function main() {
     await page.locator("#viralExperimentList").getByText("QA 导入实验", { exact: true }).waitFor();
     assert.equal((await page.locator("#growthCurrent").innerText()).trim(), "140", "Growth Lab imports target values");
     assert.equal(await page.locator("#growthTrendChart svg circle").count(), 2, "trend chart excludes imported metrics with missing subscriber values instead of plotting them as zero");
+    assert.ok(!(await page.locator("#growthMetricSummary").innerText()).includes("-131"), "growth summary does not calculate missing subscriber values as zero");
     const mergedGrowth = await page.evaluate(() => {
       const x = JSON.parse(localStorage.getItem("davylab-growth-lab-v1") || "null");
       return !!x && x.experiments.some(e => e.title === "QA 爆款实验记录") && x.experiments.some(e => e.title === "QA 导入实验") && x.posters.some(p => p.title === "QA 每日新闻贴图任务") && x.metrics.some(m => m.article === "QA 增长数据记录") && x.tasks[0] === true;
