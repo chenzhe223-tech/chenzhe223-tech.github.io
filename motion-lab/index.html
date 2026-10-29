@@ -633,7 +633,7 @@ function applyMotionPersonality(name) {
   playSelectedMotion();
   previewStatus.textContent = "已应用「" + preset.name + "」性格预设，可继续微调任意参数。";
 }
-document.querySelectorAll(".motion-personality").forEach(button => button.addEventListener("click", () => applyMotionPersonality(button.dataset.personality)));
+document.querySelectorAll(".motion-personality").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-scenario").forEach(scenario => scenario.setAttribute("aria-pressed","false")); applyMotionPersonality(button.dataset.personality); }));
 
 function updateIntegrationSnippet() {
   const config = readMotionConfig();
@@ -721,7 +721,7 @@ $("#motionImportFile").addEventListener("change", async event => {
   $("#motionImportJson").value = await file.text();
   $("#motionImportStatus").textContent = "文件已读取，点击「校验并应用」后才会更改当前设置。";
 });
-document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-personality").forEach(preset => preset.setAttribute("aria-pressed","false")); selectMotion(button.dataset.effect); }));
+document.querySelectorAll(".motion-option").forEach(button => button.addEventListener("click", () => { document.querySelectorAll(".motion-personality").forEach(preset => preset.setAttribute("aria-pressed","false")); document.querySelectorAll(".motion-scenario").forEach(scenario => scenario.setAttribute("aria-pressed","false")); selectMotion(button.dataset.effect); }));
 
 const motionScenarios = {
   content: { effect:"fade-up", durationMs:1800, intensityPercent:65, distancePx:24, direction:"up", easing:"cubic-bezier(0.22,1,0.36,1)", playback:"once", speed:.9, staggerMs:70 },
