@@ -1,5 +1,5 @@
 const ALLOWED_ORIGIN = "https://chenzhe223-tech.github.io";
-const API_VERSION = "0.5.0";
+const API_VERSION = "0.5.1";
 
 function json(data, status = 200, extraHeaders = {}) {
   return new Response(JSON.stringify(data), {
@@ -336,8 +336,8 @@ export default {
 
     if (url.pathname === "/api/learning/candidates") {
       try {
-        const result=await env.DB.prepare("SELECT c.candidate_key,c.region_key,r.title region_title,c.candidate_title,c.candidate_summary,c.rationale,c.source_manifest_json,c.matched_topics_json,c.status,c.source_count,c.occurrence_count,c.first_seen_at,c.last_seen_at,c.last_report_date,c.review_note,c.updated_at FROM knowledge_candidates c JOIN atlas_regions r ON r.region_key=c.region_key WHERE c.status IN ('needs_review','in_review') ORDER BY c.last_seen_at DESC,c.source_count DESC LIMIT 20").all();
-        const items=(result.results||[]).map(row=>({id:row.candidate_key,region:{key:row.region_key,title:row.region_title},title:row.candidate_title,summary:row.candidate_summary,rationale:row.rationale,matched_topics:safeJson(row.matched_topics_json),status:row.status,source_count:row.source_count,occurrence_count:row.occurrence_count,first_seen_at:row.first_seen_at,last_seen_at:row.last_seen_at,report_date:row.last_report_date,review_note:row.review_note,updated_at:row.updated_at,sources:safeJson(row.source_manifest_json),review_required:true,published_as_course:false}));
+        const result=await env.DB.prepare("SELECT c.candidate_key,c.region_key,r.title region_title,c.candidate_title,c.candidate_summary,c.rationale,c.source_manifest_json,c.matched_topics_json,c.status,c.source_count,c.occurrence_count,c.first_seen_at,c.last_seen_at,c.last_report_date,c.updated_at FROM knowledge_candidates c JOIN atlas_regions r ON r.region_key=c.region_key WHERE c.status IN ('needs_review','in_review') ORDER BY c.last_seen_at DESC,c.source_count DESC LIMIT 20").all();
+        const items=(result.results||[]).map(row=>({id:row.candidate_key,region:{key:row.region_key,title:row.region_title},title:row.candidate_title,summary:row.candidate_summary,rationale:row.rationale,matched_topics:safeJson(row.matched_topics_json),status:row.status,source_count:row.source_count,occurrence_count:row.occurrence_count,first_seen_at:row.first_seen_at,last_seen_at:row.last_seen_at,report_date:row.last_report_date,updated_at:row.updated_at,sources:safeJson(row.source_manifest_json),review_required:true,published_as_course:false}));
         return json({count:items.length,items,generated_at:new Date().toISOString(),mode:"source-grounded-rule-candidates"},200,{...cors,"Cache-Control":"public, max-age=60"});
       } catch { return json({error:"learning_candidates_unavailable"},503,cors); }
     }
