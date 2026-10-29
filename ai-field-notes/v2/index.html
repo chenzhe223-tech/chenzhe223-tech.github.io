@@ -65,6 +65,26 @@
 .archive-release-row{background:#fff}.archive-lesson-link{cursor:pointer}.atlasHistoryList .empty{padding:20px}
 .brief-card .foot .link{min-height:44px;display:inline-flex;align-items:center;padding:5px 0}.brief-card .foot .link:focus-visible{outline:2px solid #8daef5;outline-offset:3px;border-radius:4px}
 .brief-history-panel{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.brief-history-panel[hidden]{display:none}.brief-history-title{font-size:11px;font-weight:750;color:#56657a}.brief-history-note{font-size:11px;line-height:1.7;color:var(--muted);margin:0}.brief-version-row{display:grid;gap:5px;padding:11px;border-radius:10px;background:#f6f8fb;border:1px solid #e7ebf2}.brief-version-row small{font-size:9px;color:#8a95a5}.brief-version-row strong{font-size:11px;line-height:1.6}.brief-version-row p{font-size:10px;line-height:1.7;color:#657287;margin:0}
+
+.candidate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.candidate-card{display:flex;flex-direction:column;gap:10px;min-width:0}
+.candidate-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.candidate-region{font-size:10px;color:#8c671f;background:#fff6e6;border:1px solid #f3e3c4;padding:5px 8px;border-radius:7px}
+.candidate-count{font-size:10px;color:#62728a}
+.candidate-card h4{font-size:17px;line-height:1.4;margin:1px 0;letter-spacing:-.025em}
+.candidate-summary{font-size:12px;line-height:1.7;color:#596a82;margin:0}
+.candidate-rationale{font-size:11px;line-height:1.75;color:#7d8898;background:#f7f8fb;border-radius:10px;padding:11px;margin:0}
+.candidate-meta{display:flex;gap:10px;flex-wrap:wrap;font-size:9px;color:#929dad}
+.candidate-tags{display:flex;gap:6px;flex-wrap:wrap}.candidate-tags span{border:1px solid #e2e8f1;background:#fafbfd;border-radius:7px;padding:4px 7px;font-size:9px;color:#62728a}
+.candidate-evidence{border-top:1px solid var(--line);padding-top:11px;display:grid;gap:9px}
+.candidate-evidence-title{font-size:10px;font-weight:750;color:#56657a}
+.candidate-source-row{display:grid;gap:3px;padding:10px;border:1px solid #e8edf4;border-radius:10px;background:#fff}
+.candidate-source-row a{font-size:11px;line-height:1.5;color:#315caa;font-weight:700;overflow-wrap:anywhere}
+.candidate-source-row small{font-size:9px;color:#929dad}.candidate-source-row p{font-size:10px;line-height:1.65;color:#728096;margin:0}
+.candidate-no-source{font-size:10px;color:var(--muted);margin:0}
+.candidate-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding-top:10px;margin-top:auto}
+.candidate-footer span{font-size:9px;color:#8b96a5}
+@media(max-width:760px){.candidate-grid{grid-template-columns:1fr}.candidate-card{padding:15px}}
 .archive-course-expansion{margin-top:13px;padding-top:12px;border-top:1px solid var(--line);display:grid;gap:10px}.archive-course-expansion[hidden],.archive-lesson-list[hidden]{display:none}.archive-release-row{border:1px solid var(--line);border-radius:11px;padding:11px;display:grid;gap:8px}.archive-release-row strong{font-size:11px}.archive-release-row p{font-size:10px;color:var(--muted);margin:0}.archive-release-row .btn{justify-self:start}.archive-lesson-list{display:grid;gap:6px}.archive-lesson-link{border:1px solid #e3e8f1;background:#f8faff;color:#315caa;text-align:left;padding:10px;border-radius:8px;font-size:11px;min-height:42px}.archive-lesson-link:hover{border-color:#b6c8ec}
 @keyframes atlasPulse{0%,100%{opacity:.14}50%{opacity:.3}}@keyframes fogFloat{from{transform:translate(-2px,1px)}to{transform:translate(9px,-4px)}}@keyframes currentDrift{to{stroke-dashoffset:-160}}
 @media(max-width:1080px){.map-intro{align-items:flex-start;flex-direction:column;gap:15px}.map-intro-actions{justify-content:flex-start}.atlas-content{grid-template-columns:minmax(0,1fr) 258px}.atlas-bottom{grid-template-columns:auto minmax(80px,1fr) auto}.atlas-bottom-note{grid-column:1/3}.atlas-reset{grid-column:3;grid-row:1/3;align-self:center}.legend-note{margin-left:0}.atlas-legend{gap:12px}}
@@ -277,6 +297,9 @@
       <div class="section-head"><div><h3>已发布知识与版本记录</h3><p>从开发数据库读取的真实课程目录和发布版本；V1 内容与未来规划分开显示。</p></div><span class="pill" id="archiveLiveState">正在读取目录</span></div>
       <div class="grid track-grid" id="archiveCatalog"><article class="card empty">正在读取 D1 中已发布的课程与版本……</article></div>
       <div class="notice">当前版本记录来自知识库数据库。每门课程的 V1.0 是第一版内容的发布快照；尚未发布的专项不会被显示成已上线课程。</div>
+      <div class="section-head"><div><h3>正在出现的新大陆</h3><p>从 AI 简报中发现可能值得深入的专项知识。每个候选都附带来源证据，等待人工复核，不会自动变成已发布课程。</p></div><span class="pill" id="candidateQueueState">正在读取候选</span></div>
+      <div class="candidate-grid" id="learningCandidates"><article class="card empty">正在读取简报线索中发现的候选专题……</article></div>
+      <div class="notice">候选专题由明确的关键词规则从公开简报标题、摘要、类别与标签中发现。它只是一条研究线索；正式课程仍需核对原始来源、技术版本、实际操作过程和验收结果后才能发布。</div>
       <div class="section-head"><div><h3>个人学习档案</h3><p>统计来自此浏览器真实记录；地图、足迹和学习完成记录可以导出备份。</p></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn primary" id="exportAtlasArchive">导出个人地图</button><label class="btn" for="importAtlasFile">导入备份</label><input id="importAtlasFile" type="file" accept="application/json,.json" hidden></div></div>
       <div class="grid stats-grid">
         <div class="metric"><div class="metric-icon">◉</div><div><small>已探明区域</small><strong id="archiveKnownCount">0</strong><div class="micro" style="color:var(--muted)">个人地图状态</div></div></div>
@@ -345,7 +368,7 @@ const lessonData = {
  build:{title:"从念头到 AI 小应用",content:"选择一个高频且可验证的问题：写出输入、预期输出、约束条件和验收样例；先完成最小闭环，再加入 AI 自动化。每次迭代都保留可复现的输入、输出和变更记录。"}
 };
 function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(window.__toastTimer);window.__toastTimer=setTimeout(()=>el.classList.remove("show"),2800)}
-function go(name){if(!pages.includes(name))return;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+name));document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===name));document.getElementById("crumbTitle").textContent=titles[name];document.getElementById("sidebar").classList.remove("open");history.replaceState(null,"","#"+name);window.scrollTo({top:0,behavior:"smooth"});if(name==="archive")loadArchiveCatalog();if(name==="brief")loadBriefItems();if(name==="search")search(document.getElementById("searchInput")?.value||"")}
+function go(name){if(!pages.includes(name))return;document.querySelectorAll(".page").forEach(el=>el.classList.toggle("active",el.id==="page-"+name));document.querySelectorAll("[data-page]").forEach(el=>el.classList.toggle("active",el.dataset.page===name));document.getElementById("crumbTitle").textContent=titles[name];document.getElementById("sidebar").classList.remove("open");history.replaceState(null,"","#"+name);window.scrollTo({top:0,behavior:"smooth"});if(name==="archive"){loadArchiveCatalog();loadLearningCandidates();}if(name==="brief")loadBriefItems();if(name==="search")search(document.getElementById("searchInput")?.value||"")}
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.page)));
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>go(b.dataset.go)));
 document.getElementById("menuBtn").addEventListener("click",()=>document.getElementById("sidebar").classList.toggle("open"));
@@ -813,6 +836,64 @@ async function loadArchiveCatalog(){
  }catch{
   container.innerHTML='<div class="card empty">无法读取实时课程目录。请检查 Worker API 状态，历史 V1 页面仍可继续访问。</div>';
   status.textContent="目录暂不可用";
+ }finally{delete container.dataset.loading;}
+}
+async function loadLearningCandidates(){
+ const container=document.getElementById("learningCandidates"),status=document.getElementById("candidateQueueState");
+ if(!container||container.dataset.loading==="yes")return;
+ container.dataset.loading="yes";
+ try{
+  const response=await fetch(API_BASE+"/api/learning/candidates",{headers:{Accept:"application/json"}});
+  if(!response.ok)throw new Error("candidate API "+response.status);
+  const data=await response.json(),items=Array.isArray(data.items)?data.items:[];
+  container.innerHTML="";
+  status.textContent=items.length+" 个待复核候选";
+  if(!items.length){
+   const empty=document.createElement("div");empty.className="card empty";
+   empty.textContent="当前没有待复核的候选专题。新的简报线索会在定时索引刷新时继续被筛查。";container.append(empty);return;
+  }
+  items.forEach(candidate=>{
+   const card=document.createElement("article");card.className="card candidate-card";
+   const top=document.createElement("div");top.className="candidate-card-top";
+   const region=document.createElement("span");region.className="candidate-region";region.textContent=(candidate.region?.title||candidate.region?.key||"AI 知识地图")+" · 待人工复核";
+   const count=document.createElement("span");count.className="candidate-count";count.textContent=(candidate.source_count||0)+" 个来源";
+   top.append(region,count);
+   const title=document.createElement("h4");title.textContent=candidate.title;
+   const summary=document.createElement("p");summary.className="candidate-summary";summary.textContent=candidate.summary||"此候选由公开简报线索触发。";
+   const rationale=document.createElement("p");rationale.className="candidate-rationale";rationale.textContent=candidate.rationale||"本候选需要进一步核实。";
+   const meta=document.createElement("div");meta.className="candidate-meta";
+   const date=document.createElement("span");date.textContent="简报日期："+(candidate.report_date||"未提供");
+   const versions=document.createElement("span");versions.textContent=(candidate.occurrence_count||0)+" 条去重后的来源快照";
+   meta.append(date,versions);
+   const tags=document.createElement("div");tags.className="candidate-tags";
+   (Array.isArray(candidate.matched_topics)?candidate.matched_topics:[]).forEach(tag=>{const chip=document.createElement("span");chip.textContent=tag;tags.append(chip)});
+   const evidence=document.createElement("div");evidence.className="candidate-evidence";
+   const evidenceTitle=document.createElement("div");evidenceTitle.className="candidate-evidence-title";evidenceTitle.textContent="来源证据 · "+((candidate.sources||[]).length)+" 条展示（最多 12 条）";evidence.append(evidenceTitle);
+   const sources=Array.isArray(candidate.sources)?candidate.sources:[];
+   if(!sources.length){const none=document.createElement("p");none.className="candidate-no-source";none.textContent="尚无可展示的来源快照，请等待下一次索引或检查来源字段。";evidence.append(none);}
+   sources.slice(0,3).forEach(source=>{
+    const row=document.createElement("div");row.className="candidate-source-row";
+    const link=document.createElement("a");link.href=source.url;link.target="_blank";link.rel="noopener noreferrer";link.textContent=source.title||source.url;
+    const sourceMeta=document.createElement("small");sourceMeta.textContent=[source.source,source.published_at||source.report_date].filter(Boolean).join(" · ");
+    const text=document.createElement("p");text.textContent=source.summary||source.why_it_matters||"该来源未提供摘要。";
+    row.append(link,sourceMeta,text);evidence.append(row);
+   });
+   const footer=document.createElement("div");footer.className="candidate-footer";
+   const note=document.createElement("span");note.textContent="尚未发布为课程";
+   const map=document.createElement("button");map.className="link";map.textContent="在地图上探索 ↗";
+   map.addEventListener("click",()=>{
+    const id=candidate.region?.key||"unknown";
+    if(atlasNodes[id]){
+     if(atlasState[id]==="unknown"){atlasState[id]="exploring";saveAtlasState();recordAtlasEvent(id,"started","自动发现候选："+candidate.title);}
+     selectedAtlasNode=id;currentAtlasFilter="all";renderAtlasMap();go("home");
+    }else{go("search");document.getElementById("searchInput").value=candidate.title;search(candidate.title);}
+   });
+   footer.append(note,map);
+   card.append(top,title,summary,rationale,meta,tags,evidence,footer);container.append(card);
+  });
+ }catch{
+  container.innerHTML='<article class="card empty">暂时无法读取候选队列。地图与已发布课程仍可使用；这不会影响已保存的个人探索足迹。</article>';
+  status.textContent="候选队列暂不可用";
  }finally{delete container.dataset.loading;}
 }
 async function openCatalogLesson(lessonId,trackSlug){
