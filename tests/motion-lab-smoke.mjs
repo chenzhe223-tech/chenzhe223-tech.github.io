@@ -65,9 +65,21 @@ try {
     await page.locator("#motionSnippetEngine").selectOption(engine);
     const snippet = await page.locator("#motionIntegrationSnippet").inputValue();
     if (!snippet.includes(".your-target")) throw new Error("Integration snippet missing target placeholder: " + engine);
-    if (engine === "gsap" && !snippet.includes("gsap.fromTo")) throw new Error("GSAP snippet was not generated");
+    if (engine === "gsap" && !snippet.includes("timeline.fromTo")) throw new Error("GSAP snippet was not generated");
     if (engine === "motion" && !snippet.includes('from "motion"')) throw new Error("Motion vanilla import was not generated");
     if (engine === "waapi" && !snippet.includes(".animate(")) throw new Error("Web Animations API snippet was not generated");
+  }
+
+  // Engine snippets preserve multi-keyframe spring motion and keep loops inside the configured total duration.
+  await page.locator('.motion-personality[data-personality="product"]').click();
+  await page.locator("#motionSnippetEngine").selectOption("gsap");
+  const springGsapSnippet = await page.locator("#motionIntegrationSnippet").inputValue();
+  if (!springGsapSnippet.includes("timeline.to")) throw new Error("GSAP snippet did not preserve intermediate spring keyframes");
+  await page.locator('.motion-personality[data-personality="immersive"]').click();
+  await page.locator("#motionSnippetEngine").selectOption("waapi");
+  const loopSnippet = await page.locator("#motionIntegrationSnippet").inputValue();
+  if (!loopSnippet.includes("duration: 2000") || !loopSnippet.includes("iterations: 2")) {
+    throw new Error("Loop snippet must fit two cycles inside the configured 4-second total preview window");
   }
 
   const importConfig = {
