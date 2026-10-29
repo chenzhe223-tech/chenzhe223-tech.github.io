@@ -11,6 +11,27 @@ const path = require('node:path');
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
   page.on('pageerror', error => errors.push(error.message));
 
+  async function revealAllSections(targetPage) {
+    const selectors = [
+      '#products .section-head', '#products .market-tools', '#products .shelf-tools',
+      '#philosophy .manifesto', '#philosophy .value', '#process .step',
+      '#service .offer-main', '#service .offer-note', '#about .section-head',
+      '#contact .contact-section-head', '#contact .contact-form-card',
+      '#contact .contact-wechat-card', '#contact .contact-panel'
+    ];
+    for (const selector of selectors) {
+      const targets = targetPage.locator(selector);
+      const count = await targets.count();
+      for (let index = 0; index < count; index++) {
+        await targets.nth(index).scrollIntoViewIfNeeded();
+        await targetPage.waitForTimeout(70);
+      }
+    }
+    await targetPage.waitForTimeout(900);
+    await targetPage.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+    await targetPage.waitForTimeout(350);
+  }
+
   try {
     await page.goto('http://127.0.0.1:4173/', { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.locator('#products').waitFor();
@@ -162,6 +183,22 @@ const path = require('node:path');
     }
     results.push({ test: 'isolated Visual DNA preset integration in Open Skills section', status: 'PASS', detail: skillsMotion });
 
+    await revealAllSections(page);
+    const desktopRevealState = await page.evaluate(() => {
+      const selectors = ['#philosophy .manifesto', '#philosophy .value', '#process .step', '#service .offer-main', '#service .offer-note', '#about .section-head', '#contact .contact-section-head', '#contact .contact-form-card', '#contact .contact-wechat-card', '#contact .contact-panel'];
+      const targets = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
+      return {
+        targetCount: targets.length,
+        hiddenCount: targets.filter(element => {
+          const style = getComputedStyle(element);
+          return style.visibility === 'hidden' || Number(style.opacity) < 0.95;
+        }).length
+      };
+    });
+    if (desktopRevealState.targetCount < 10 || desktopRevealState.hiddenCount > 0) {
+      throw new Error('Full-page screenshot still contains unrevealed content: ' + JSON.stringify(desktopRevealState));
+    }
+    results.push({ test: 'full-page desktop screenshot reveals all scroll-triggered sections', status: 'PASS', detail: desktopRevealState });
     await page.screenshot({ path: path.join(outDir, 'desktop.png'), fullPage: true });
     const desktopOverflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
     if (desktopOverflow) throw new Error('Horizontal page overflow at 1440px desktop viewport');
@@ -446,6 +483,22 @@ const path = require('node:path');
     await mobilePage.locator('#appearanceDone').click();
     await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
     results.push({ test: 'mobile top/floating launchers and bottom navigation links remain usable', status: 'PASS', detail: bottomNavMetrics });
+    await revealAllSections(mobilePage);
+    const mobileRevealState = await mobilePage.evaluate(() => {
+      const selectors = ['#philosophy .manifesto', '#philosophy .value', '#process .step', '#service .offer-main', '#service .offer-note', '#about .section-head', '#contact .contact-section-head', '#contact .contact-form-card', '#contact .contact-wechat-card', '#contact .contact-panel'];
+      const targets = selectors.flatMap(selector => Array.from(document.querySelectorAll(selector)));
+      return {
+        targetCount: targets.length,
+        hiddenCount: targets.filter(element => {
+          const style = getComputedStyle(element);
+          return style.visibility === 'hidden' || Number(style.opacity) < 0.95;
+        }).length
+      };
+    });
+    if (mobileRevealState.targetCount < 10 || mobileRevealState.hiddenCount > 0) {
+      throw new Error('Full-page mobile screenshot still contains unrevealed content: ' + JSON.stringify(mobileRevealState));
+    }
+    results.push({ test: 'full-page mobile screenshot reveals all scroll-triggered sections', status: 'PASS', detail: mobileRevealState });
     await mobilePage.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
     results.push({ test: 'real touch-mobile layout and GSAP motion', status: 'PASS', detail: mobile });
     await mobilePage.close();
