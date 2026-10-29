@@ -722,7 +722,7 @@ function renderMetrics(){
  el.querySelectorAll("[data-metric-delete]").forEach(b=>b.addEventListener("click",()=>{if(confirm("删除这条指标记录？")){growth.metrics=growth.metrics.filter(x=>x.id!==b.dataset.metricDelete);saveGrowth()}}));
 }
 function growthReviewKey(url,checkpoint){return String(url||"")+"::"+String(checkpoint)}
-function publishedAgeDays(article){if(!article?.publishedAt||!/^\\d{4}-\\d{2}-\\d{2}$/.test(article.publishedAt))return null;const age=(new Date(todayLocal()+"T00:00:00")-new Date(article.publishedAt+"T00:00:00"))/86400000;return Number.isFinite(age)?Math.floor(age):null}
+function publishedAgeDays(article){if(!article?.publishedAt||!/^\d{4}-\d{2}-\d{2}$/.test(article.publishedAt))return null;const age=(new Date(todayLocal()+"T00:00:00")-new Date(article.publishedAt+"T00:00:00"))/86400000;return Number.isFinite(age)?Math.floor(age):null}
 function dueGrowthReviews(){const articles=allPublishedArticles(),out=[];for(const a of articles){const age=publishedAgeDays(a);if(age===null||age<0)continue;for(const checkpoint of [7,30]){const key=growthReviewKey(a.url,checkpoint),done=growth.reviews.some(r=>r.key===key);if(age>=checkpoint&&!done)out.push({article:a,checkpoint,age,key})}}return out.sort((a,b)=>a.checkpoint-b.checkpoint||b.age-a.age)}
 function renderGrowthReviews(){
  const select=$("reviewArticle");if(!select)return;const previous=select.value,articles=allPublishedArticles().slice().sort((a,b)=>String(b.publishedAt||"").localeCompare(String(a.publishedAt||"")));
@@ -788,7 +788,8 @@ $("exportGrowthReview").addEventListener("click",()=>{
  lines.push("","## 2. 内容实验","- 最近 7 天新增/更新的实验记录："+expRecent.length,"- 已发布实验："+published.length,"- 有阅读数据的已发布实验："+withViews.length);
  if(best)lines.push("- 本周阅读最高的已记录实验："+best.title+"（阅读 "+safeNum(best.views)+"；不代表因果或保证爆款）");
  else lines.push("- 暂无足够的已发布阅读数据用于比较。");
- lines.push("","## 3. 新闻贴图任务","- 最近 7 天登记任务："+posterRecent.length,"- 已验收素材："+posterRecent.filter(x=>["qa_passed","ready_for_workbuddy","draft_saved","published"].includes(x.status)).length,"- 待修正/阻塞："+posterRecent.filter(x=>x.status==="blocked").length,"","## 4. 下周行动建议");
+ lines.push("","## 3. 发布后 7 / 30 日复盘","- 已记录复盘节点："+growth.reviews.length);growth.reviews.slice().sort((a,b)=>String(b.reviewDate||"").localeCompare(String(a.reviewDate||""))).slice(0,8).forEach(r=>lines.push("- "+r.title+"｜第 "+r.checkpoint+" 日｜阅读 "+safeNum(r.reads)+"｜分享 "+safeNum(r.shares)+"｜新增订阅 "+safeNum(r.follows)+"｜数据日期 "+(r.reviewDate||"未填写")));
+ lines.push("","## 4. 新闻贴图任务","- 最近 7 天登记任务："+posterRecent.length,"- 已验收素材："+posterRecent.filter(x=>["qa_passed","ready_for_workbuddy","draft_saved","published"].includes(x.status)).length,"- 待修正/阻塞："+posterRecent.filter(x=>x.status==="blocked").length,"","## 5. 下周行动建议");
  if(!recent.length)lines.push("- 从公众号后台补录真实订阅、阅读和分享数据。");
  if(!published.length)lines.push("- 完成至少一个差异化选题实验并记录发布后 7 日数据。");
  if(posterRecent.some(x=>x.status==="blocked"))lines.push("- 优先清理阻塞的新闻贴图任务，核对来源、图片文字和实际文件。");
@@ -800,18 +801,19 @@ function mergeGrowthImport(incoming){
  if(!incoming||incoming.schemaVersion!==1||!incoming.data||typeof incoming.data!=="object")throw new Error("文件格式不正确或版本不受支持");
  const d=incoming.data;
  for(const key of ["experiments","posters","metrics"]){if(!Array.isArray(d[key]))throw new Error("缺少有效的 "+key+" 数组")}
- if(!confirm("将导入文件中的增长目标、爆款实验、贴图任务、指标与本机记录合并。相同 ID 的记录以导入文件为准，增长目标中非空字段会覆盖本机值。建议先导出当前数据备份。继续？"))return;
+ if(!confirm("将导入文件中的增长目标、爆款实验、贴图任务、指标、7/30 日复盘与本机记录合并。相同记录 ID / 复盘节点以导入文件为准，增长目标中非空字段会覆盖本机值。建议先导出当前数据备份。继续？"))return;
  const mergeList=(current,added)=>{const map=new Map(current.map(x=>[String(x.id),x]));added.forEach(x=>{if(x&&x.id)map.set(String(x.id),x)});return [...map.values()]};
  growth.target={...growth.target,...(d.target||{})};
  growth.experiments=mergeList(growth.experiments,d.experiments);
  growth.posters=mergeList(growth.posters,d.posters);
  growth.metrics=mergeList(growth.metrics,d.metrics);
+ const reviewMap=new Map((growth.reviews||[]).map(x=>[String(x.key||growthReviewKey(x.url,x.checkpoint)),x]));(Array.isArray(d.reviews)?d.reviews:[]).forEach(x=>{if(x&&x.url&&[7,30].includes(Number(x.checkpoint)))reviewMap.set(String(x.key||growthReviewKey(x.url,x.checkpoint)),{...x,key:String(x.key||growthReviewKey(x.url,x.checkpoint))})});growth.reviews=[...reviewMap.values()];
  growth.tasks={...(growth.tasks||{}),...(d.tasks||{})};
  saveGrowth();toast("增长数据已合并导入");
 }
 $("importGrowth").addEventListener("click",()=>$("importGrowthFile").click());
 $("importGrowthFile").addEventListener("change",e=>{const file=e.target.files&&e.target.files[0];if(!file)return;const reader=new FileReader();reader.onload=()=>{try{mergeGrowthImport(JSON.parse(String(reader.result||"{}")))}catch(err){toast("导入失败："+(err&&err.message?err.message:"文件无法读取"))}finally{e.target.value=""}};reader.onerror=()=>{toast("无法读取所选文件");e.target.value=""};reader.readAsText(file)});
-$("clearGrowthData").addEventListener("click",()=>{if(!confirm("这会删除当前浏览器中的增长目标、实验、贴图任务和指标记录。建议先导出备份。确定清空？"))return;growth=blankGrowth();saveGrowth();toast("本机增长记录已清空")});
+$("clearGrowthData").addEventListener("click",()=>{if(!confirm("这会删除当前浏览器中的增长目标、实验、贴图任务、指标和 7/30 日复盘记录。建议先导出备份。确定清空？"))return;growth=blankGrowth();saveGrowth();toast("本机增长记录已清空")});
 $("growthJumpTopics").addEventListener("click",()=>changeSection("discover"));
 renderGrowth();
 
