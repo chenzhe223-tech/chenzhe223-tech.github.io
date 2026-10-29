@@ -227,6 +227,25 @@ try {
     }
   }
 
+  // App Motion Kit: framework/scenario selection, generated code, AI prompt, and mobile layout.
+  const kitPage = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  const kitErrors = [];
+  kitPage.on("pageerror", error => kitErrors.push(error.message));
+  await kitPage.goto("http://127.0.0.1:4173/motion-lab/app-motion-kit.html", { waitUntil: "domcontentloaded" });
+  await kitPage.locator("#outputText").waitFor();
+  await kitPage.locator('[data-framework="react"]').click();
+  if (!(await kitPage.locator("#outputText").inputValue()).includes("useEffect")) throw new Error("App Motion Kit did not generate React lifecycle code");
+  await kitPage.locator('[data-scene="panel"]').click();
+  if (!(await kitPage.locator("#outputText").inputValue()).includes("translateX")) throw new Error("App Motion Kit panel scene did not generate horizontal motion");
+  await kitPage.locator('[data-output="prompt"]').click();
+  if (!(await kitPage.locator("#outputText").inputValue()).includes("先审计")) throw new Error("App Motion Kit AI handoff prompt missing audit-first instructions");
+  await kitPage.locator("#playPreview").click();
+  if (!(await kitPage.locator("#previewStatus").textContent()).includes("已播放")) throw new Error("App Motion Kit preview did not play");
+  const kitDimensions = await kitPage.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
+  if (kitDimensions.page > kitDimensions.viewport + 1) throw new Error("App Motion Kit overflows at mobile width");
+  if (kitErrors.length) throw new Error("App Motion Kit page errors: " + kitErrors.join(" | "));
+  await kitPage.close();
+
   // No-code poster studio: edit, theme, export, share, and mobile layout.
   const posterPage = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
   const posterErrors = [];
