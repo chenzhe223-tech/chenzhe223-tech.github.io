@@ -399,6 +399,19 @@ html[data-appearance-navmode="hidden"] #appearanceTrigger{display:none}
 html[data-appearance-navmode="hidden"] .navlinks{display:none}
 html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{white-space:normal}
 @media(max-width:700px){html[data-appearance-navmode="left"] .topbar,html[data-appearance-navmode="right"] .topbar{width:min(82vw,280px);z-index:60}html[data-appearance-navmode="left"] main,html[data-appearance-navmode="right"] main{margin-left:0;margin-right:0;padding-top:74px}html[data-appearance-navmode="left"] .navlinks,html[data-appearance-navmode="right"] .navlinks{display:flex}html[data-appearance-navmode="bottom"] .navlinks{gap:10px}html[data-appearance-layout="split"] .hero-grid,html[data-appearance-layout="balanced"] .hero-grid,html[data-appearance-layout="bento"] .hero-grid{grid-template-columns:1fr}}
+/* On narrow screens, side navigation becomes an explicit drawer so it cannot cover the reading canvas by default. */
+@media(max-width:700px){
+ html[data-appearance-navmode="left"] .nav-emergency-trigger,html[data-appearance-navmode="right"] .nav-emergency-trigger{display:inline-flex}
+ html[data-appearance-navmode="left"] .topbar,html[data-appearance-navmode="right"] .topbar{display:none;position:fixed;z-index:76;top:58px;bottom:8px;left:8px;right:auto;width:min(320px,calc(100vw - 16px));max-height:none;overflow:auto;border:1px solid var(--appearance-border);border-radius:16px;box-shadow:0 18px 56px #0003;background:var(--appearance-nav)}
+ html[data-appearance-navmode="right"] .topbar{left:auto;right:8px}
+ html[data-appearance-navmode="left"][data-appearance-nav-open="true"] .topbar,html[data-appearance-navmode="right"][data-appearance-nav-open="true"] .topbar{display:block}
+ html[data-appearance-navmode="left"] .topbar .wrap,html[data-appearance-navmode="right"] .topbar .wrap{width:100%;max-width:none;padding:18px}
+ html[data-appearance-navmode="left"] .topbar .nav,html[data-appearance-navmode="right"] .topbar .nav{height:auto;display:flex;align-items:stretch;flex-direction:column;gap:8px}
+ html[data-appearance-navmode="left"] .topbar .navlinks,html[data-appearance-navmode="right"] .topbar .navlinks{display:flex;flex-direction:column;gap:13px;margin:18px 0;white-space:normal}
+ html[data-appearance-navmode="left"] #appearanceTrigger,html[data-appearance-navmode="right"] #appearanceTrigger{display:inline-flex;position:static;align-self:flex-start;white-space:normal}
+ html[data-appearance-navmode="left"] .topbar .nav>.pill-button,html[data-appearance-navmode="right"] .topbar .nav>.pill-button{display:inline-flex;align-self:flex-start}
+ html[data-appearance-navmode="left"] main,html[data-appearance-navmode="right"] main{margin-left:0;margin-right:0;padding-top:0}
+}
 
 /* Hidden navigation must remain discoverable and operable on desktop and touch screens. */
 .nav-emergency-trigger{display:none;position:fixed;z-index:77;left:14px;top:14px;align-items:center;gap:8px;padding:10px 13px;border:1px solid var(--appearance-border);border-radius:999px;background:var(--appearance-panel);color:var(--appearance-text);box-shadow:0 8px 28px #14263d24;font:inherit;font-size:12px;font-weight:850;cursor:pointer}

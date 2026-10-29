@@ -133,6 +133,29 @@ const path = require('node:path');
     if (desktopOverflow) throw new Error('Horizontal page overflow at 1440px desktop viewport');
     results.push({ test: 'desktop layout overflow', status: 'PASS' });
 
+    const layoutModes = ['editorial', 'balanced', 'vertical', 'compact', 'bento', 'split'];
+    for (const layoutMode of layoutModes) {
+      const settingsTrigger = await page.locator('#appearanceTrigger').isVisible()
+        ? page.locator('#appearanceTrigger') : page.locator('#appearanceEmergencyTrigger');
+      await settingsTrigger.click();
+      await page.locator('[data-appearance-layout="' + layoutMode + '"]').click();
+      await page.locator('#appearanceDone').click();
+      await page.waitForFunction(mode => document.documentElement.dataset.appearanceLayout === mode, layoutMode);
+      const layoutMetrics = await page.evaluate(() => ({
+        mode: document.documentElement.dataset.appearanceLayout,
+        viewport: window.innerWidth,
+        documentWidth: document.documentElement.scrollWidth
+      }));
+      if (layoutMetrics.documentWidth > layoutMetrics.viewport + 2) {
+        throw new Error('Horizontal overflow in layout ' + layoutMode + ': ' + JSON.stringify(layoutMetrics));
+      }
+    }
+    results.push({ test: 'six Visual DNA layouts apply without desktop horizontal overflow', status: 'PASS', detail: layoutModes });
+    // Restore the editorial default before the baseline desktop screenshot.
+    await page.locator('#appearanceTrigger').click();
+    await page.locator('[data-appearance-layout="bento"]').click();
+    await page.locator('#appearanceDone').click();
+
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 }, deviceScaleFactor: 1, isMobile: true, hasTouch: true
     });
@@ -164,6 +187,44 @@ const path = require('node:path');
     if (mobile.gsapLoaded && !mobile.reducedMotion && mobile.heroOpacity < 0.99) {
       throw new Error('Mobile hero entrance did not finish: ' + JSON.stringify(mobile));
     }
+    // Side navigation must degrade to a drawer on phones instead of overlaying the reading canvas.
+    for (const sideMode of ['left', 'right']) {
+      if (await mobilePage.locator('#navEmergencyTrigger').isVisible()) {
+        await mobilePage.locator('#navEmergencyTrigger').click();
+      }
+      await mobilePage.locator('#appearanceTrigger').click();
+      await mobilePage.locator('[data-appearance-navmode="' + sideMode + '"]').click();
+      await mobilePage.locator('#appearanceDone').click();
+      await mobilePage.waitForFunction(mode => document.documentElement.dataset.appearanceNavmode === mode, sideMode);
+      const launcher = mobilePage.locator('#navEmergencyTrigger');
+      if (!(await launcher.isVisible())) throw new Error('Mobile ' + sideMode + ' navigation has no visible drawer launcher');
+      if (await mobilePage.locator('#topNavigation').isVisible()) throw new Error('Mobile ' + sideMode + ' navigation overlays content while closed');
+      const mobileNavMetrics = await mobilePage.evaluate(() => {
+        const launcherRect = document.querySelector('#navEmergencyTrigger').getBoundingClientRect();
+        const heroRect = document.querySelector('h1').getBoundingClientRect();
+        return {
+          width: window.innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          launcherBottom: launcherRect.bottom,
+          heroTop: heroRect.top,
+          mode: document.documentElement.dataset.appearanceNavmode
+        };
+      });
+      if (mobileNavMetrics.documentWidth > mobileNavMetrics.width + 2) throw new Error('Mobile side-nav overflow: ' + JSON.stringify(mobileNavMetrics));
+      if (mobileNavMetrics.heroTop < mobileNavMetrics.launcherBottom - 4) throw new Error('Mobile navigation launcher overlaps hero heading: ' + JSON.stringify(mobileNavMetrics));
+      await launcher.click();
+      await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen === 'true');
+      if (!(await mobilePage.locator('#topNavigation').isVisible())) throw new Error('Mobile ' + sideMode + ' drawer did not open');
+      await mobilePage.keyboard.press('Escape');
+      await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavOpen !== 'true');
+    }
+    // Restore top navigation so screenshots and later runs remain deterministic.
+    await mobilePage.locator('#navEmergencyTrigger').click();
+    await mobilePage.locator('#appearanceTrigger').click();
+    await mobilePage.locator('[data-appearance-navmode="top"]').click();
+    await mobilePage.locator('#appearanceDone').click();
+    await mobilePage.waitForFunction(() => document.documentElement.dataset.appearanceNavmode === 'top');
+    results.push({ test: 'mobile left/right navigation degrades to non-overlapping drawers', status: 'PASS' });
     await mobilePage.screenshot({ path: path.join(outDir, 'mobile.png'), fullPage: true });
     results.push({ test: 'real touch-mobile layout and GSAP motion', status: 'PASS', detail: mobile });
     await mobilePage.close();
