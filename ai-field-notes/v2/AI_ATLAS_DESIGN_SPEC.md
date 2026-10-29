@@ -47,12 +47,14 @@ These names are an authored metaphor for navigation. They are not claims that th
 
 - Selecting a region updates the detail panel without leaving the map.
 - Atlas metadata comes from the D1-backed `/api/atlas/regions` endpoint; the first visit starts at the base camp, while content regions begin unexplored. A saved browser map is not overwritten by late API defaults.
+- The archive page reads published course and version records from D1; the DAVY Radar page reads the versioned D1 index and shows a per-source history panel.
 - Filters apply a visible state change to nodes.
 - Starting an unknown region makes it `exploring`; marking an exploring region known updates the personal map and progress summary.
 - Completing a lesson updates its associated map region.
 - A known region can be reopened for deeper learning instead of becoming a dead end.
 - Persist region states and a bounded exploration event trail locally; derive progress metrics from these records rather than fake counters.
 - Offer JSON export/import to back up or move the personal map between browsers while cloud account sync is not yet implemented.
+- DAVY Radar's public JSON is indexed hourly by a Cloudflare Cron Trigger. Its metadata changes produce new D1 snapshots; this source-index refresh is separate from automatic generation or publication of lessons.
 - Confirm before resetting local map progress.
 - Keyboard users can focus each map region and activate it with Enter or Space.
 - Touch targets should be designed for touch use; reduce reliance on hover.
