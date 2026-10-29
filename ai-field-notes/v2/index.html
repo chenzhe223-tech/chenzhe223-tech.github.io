@@ -539,6 +539,7 @@ function renderAtlasDetail(){
  const action=document.getElementById("mapAction"),secondary=document.getElementById("mapSecondary");
  action.textContent=node.lesson?(status==="known"?"进入学习章节 ↗":status==="exploring"?"继续关联课程 ↗":"从相关课程开始 ↗"):(status==="known"?"查看探索建议 ↗":status==="exploring"?"继续这段探索 ↗":"开始探索这片未知 ↗");
  secondary.textContent=status==="known"?"从新问题再次出发":status==="exploring"?"标记为已探明":"先将区域加入探索路线";
+ secondary.style.display=selectedAtlasNode==="origin"?"none":"";
  document.getElementById("mapStatusLine").setAttribute("title",node.name+" · "+atlasStatusLabel(status));
 }
 function selectAtlasNode(id){if(!atlasNodes[id])return;selectedAtlasNode=id;renderAtlasMap()}
@@ -550,6 +551,7 @@ document.querySelectorAll("[data-map-filter]").forEach(b=>b.addEventListener("cl
 document.getElementById("mapAction").addEventListener("click",()=>{
  const id=selectedAtlasNode,node=atlasNodes[id],status=atlasState[id];
  if(node.lesson && node.lesson.id){openAtlasLesson(id);return;}
+ if(id==="origin"||id==="prompt"||id==="unknown"||id==="creator"||id==="knowledge"){go("search");toast("该区域的专属课程仍在扩展中；先搜索相关知识，再决定下一条路线。");return;}
  if(status==="unknown"){atlasState[id]="exploring";saveAtlasState();recordAtlasEvent(id,"started","将未知区域加入探索路线");renderAtlasMap();toast("新区域已加入你的探索路线。该区域的完整课程尚待发布。");return;}
  if(id==="unknown"||id==="creator"||id==="knowledge"){go("search");toast("可以先搜索相关知识，再把发现加入地图。");return;}
  toast("该区域尚未关联正式课程，可继续探索并记录你的问题。");
