@@ -107,6 +107,26 @@ try {
   if (await page.locator("#motionConfig").inputValue() !== beforeInvalidImport) throw new Error("Invalid JSON import modified current configuration");
   if (!(await page.locator("#motionImportStatus").textContent()).includes("导入失败")) throw new Error("Invalid JSON import did not explain the failure");
 
+  // Custom presets are stored locally, survive reload, and tolerate malformed storage.
+  await page.locator("#customPresetName").fill("My saved slide");
+  await page.locator("#saveMotionPreset").click();
+  if (!(await page.locator("#savedPresetStatus").textContent()).includes("已保存预设")) throw new Error("Custom motion preset was not saved");
+  if (await page.locator("#savedMotionPresets option").count() !== 1) throw new Error("Saved preset did not appear in the local preset list");
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator("#labTitle").waitFor();
+  if (await page.locator("#savedMotionPresets option").count() !== 1) throw new Error("Saved preset did not persist after reload");
+  await page.locator("#loadMotionPreset").click();
+  const loadedSavedPreset = JSON.parse(await page.locator("#motionConfig").inputValue());
+  if (loadedSavedPreset.effect !== "slide" || loadedSavedPreset.durationMs !== 3500) throw new Error("Saved custom preset did not restore its configuration");
+  await page.locator("#deleteMotionPreset").click();
+  if (await page.locator("#savedMotionPresets option").count() !== 1 || !(await page.locator("#savedMotionPresets option").first().textContent()).includes("暂无")) {
+    throw new Error("Deleting a custom preset did not restore the empty state");
+  }
+  await page.evaluate(() => localStorage.setItem("davylab.visual-dna-motion.saved-presets.v1", "{malformed"));
+  await page.reload({ waitUntil: "domcontentloaded" });
+  await page.locator("#labTitle").waitFor();
+  if (!(await page.locator("#savedMotionPresets option").first().textContent()).includes("暂无")) throw new Error("Malformed local storage broke the saved preset empty state");
+  await page.evaluate(() => localStorage.removeItem("davylab.visual-dna-motion.saved-presets.v1"));
   await page.locator("#speed").evaluate(el => {
     el.value = "1.4";
     el.dispatchEvent(new Event("input", { bubbles: true }));

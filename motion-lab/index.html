@@ -80,6 +80,13 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(-
 .motion-personality{display:flex;flex-direction:column;gap:7px;text-align:left;min-width:0;padding:15px;border:1px solid var(--line);border-radius:13px;background:#10161d;color:var(--ink)}
 .motion-personality[aria-pressed="true"]{border-color:var(--accent);background:#c7f36b0d;box-shadow:inset 0 0 0 1px #c7f36b20}
 .motion-personality strong{font-size:13px}.motion-personality small{font-size:11px;line-height:1.6;color:var(--muted)}
+.motion-saved-presets{display:grid;grid-template-columns:minmax(180px,1fr) minmax(180px,1fr) auto;gap:10px;align-items:end;padding:16px;margin:0 0 18px;border:1px solid var(--line);border-radius:14px;background:#10161d}
+.motion-saved-presets .control{min-width:0}
+.motion-saved-presets input,.motion-saved-presets select{width:100%;min-height:36px;padding:7px 9px;border:1px solid #34414a;border-radius:8px;background:#0b1117;color:var(--ink)}
+.motion-saved-presets label{display:block;font-size:11px;color:#d5e0e1;margin-bottom:7px}
+.motion-saved-presets-actions{display:flex;gap:7px;flex-wrap:wrap}
+@media(max-width:900px){.motion-saved-presets{grid-template-columns:1fr 1fr}.motion-saved-presets-actions{grid-column:1/-1}}
+@media(max-width:560px){.motion-saved-presets{grid-template-columns:1fr}.motion-saved-presets-actions{grid-column:auto}}
 .motion-workbench{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
 .motion-workbench-panel{min-width:0;padding:18px;border:1px solid var(--line);border-radius:16px;background:#10161d}
 .motion-workbench-panel h3{font-size:14px;margin:0 0 7px}.motion-workbench-panel p{font-size:11px;line-height:1.65;color:var(--muted);margin:0 0 12px}
@@ -195,6 +202,12 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 
   <section class="motion-picker" id="motionPicker" aria-labelledby="motionPickerTitle">
     <div class="section-head"><div><div class="section-index">04 / MOTION LIBRARY</div><h2 id="motionPickerTitle">先看效果，再决定怎么用。</h2></div><p>选择一种动效，右侧立即播放约 1–5 秒的对应预览。说明、调节参数和导出配置始终围绕当前选中的效果。</p></div>
+    <div class="motion-saved-presets" aria-label="我的动效预设">
+      <div class="control"><label for="customPresetName">保存当前配置为预设</label><input id="customPresetName" type="text" maxlength="48" placeholder="例如：产品卡片轻入场"></div>
+      <div class="control"><label for="savedMotionPresets">我的预设（仅保存在此浏览器）</label><select id="savedMotionPresets"><option value="">暂无已保存预设</option></select></div>
+      <div class="motion-saved-presets-actions"><button class="btn primary" type="button" id="saveMotionPreset">保存当前</button><button class="btn" type="button" id="loadMotionPreset">载入</button><button class="btn" type="button" id="deleteMotionPreset">删除</button></div>
+      <div class="motion-workbench-status" id="savedPresetStatus" role="status" style="grid-column:1/-1;margin-top:0">预设仅保存在本机浏览器，不会上传到服务器。</div>
+    </div>
     <div class="motion-personalities" role="group" aria-label="动效性格预设">
       <button class="motion-personality" type="button" data-personality="editorial" aria-pressed="true"><span class="option-index">STYLE / 01</span><strong>克制编辑</strong><small>低幅度、柔和减速。适合内容阅读、品牌官网和专业工具。</small></button>
       <button class="motion-personality" type="button" data-personality="product" aria-pressed="false"><span class="option-index">STYLE / 02</span><strong>产品交互</strong><small>清晰响应、轻微弹性。适合按钮反馈、状态变化和操作引导。</small></button>
@@ -718,6 +731,84 @@ $("#downloadMotionConfig").addEventListener("click", () => {
   document.body.appendChild(anchor); anchor.click(); anchor.remove(); URL.revokeObjectURL(url);
   previewStatus.textContent = "已生成当前动效配置文件下载。";
 });
+
+
+const SAVED_MOTION_PRESETS_KEY = "davylab.visual-dna-motion.saved-presets.v1";
+function readSavedMotionPresets() {
+  try {
+    const raw = localStorage.getItem(SAVED_MOTION_PRESETS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(item => item && typeof item.id === "string" && typeof item.name === "string" && item.config && item.config.schema === "davylab.visual-dna-motion/v1").slice(0,30);
+  } catch (error) {
+    return [];
+  }
+}
+function persistSavedMotionPresets(presets) {
+  try {
+    localStorage.setItem(SAVED_MOTION_PRESETS_KEY, JSON.stringify(presets));
+    return true;
+  } catch (error) {
+    $("#savedPresetStatus").textContent = "无法保存：浏览器可能禁用了本地存储，或存储空间不足。当前配置仍可导出 JSON。";
+    return false;
+  }
+}
+function refreshSavedMotionPresets(selectedId) {
+  const select = $("#savedMotionPresets");
+  const presets = readSavedMotionPresets();
+  select.replaceChildren();
+  if (!presets.length) {
+    const empty = document.createElement("option");
+    empty.value = "";
+    empty.textContent = "暂无已保存预设";
+    select.appendChild(empty);
+    select.disabled = true;
+    $("#loadMotionPreset").disabled = true;
+    $("#deleteMotionPreset").disabled = true;
+    return;
+  }
+  select.disabled = false;
+  $("#loadMotionPreset").disabled = false;
+  $("#deleteMotionPreset").disabled = false;
+  presets.forEach(preset => {
+    const option = document.createElement("option");
+    option.value = preset.id;
+    option.textContent = preset.name + " · " + (motionDefinitions[preset.config.effect]?.name || preset.config.effect);
+    select.appendChild(option);
+  });
+  if (selectedId && presets.some(preset => preset.id === selectedId)) select.value = selectedId;
+}
+$("#saveMotionPreset").addEventListener("click", () => {
+  const name = $("#customPresetName").value.trim();
+  if (!name) { $("#savedPresetStatus").textContent = "请先填写预设名称。"; $("#customPresetName").focus(); return; }
+  const presets = readSavedMotionPresets();
+  const existing = presets.find(item => item.name.toLocaleLowerCase() === name.toLocaleLowerCase());
+  if (!existing && presets.length >= 30) { $("#savedPresetStatus").textContent = "最多保存 30 个预设。请删除不再需要的预设，或导出 JSON 归档。"; return; }
+  const id = existing ? existing.id : "preset-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,7);
+  const preset = { id, name, savedAt: new Date().toISOString(), config: readMotionConfig() };
+  const next = existing ? presets.map(item => item.id === existing.id ? preset : item) : presets.concat(preset);
+  if (!persistSavedMotionPresets(next)) return;
+  refreshSavedMotionPresets(id);
+  $("#savedPresetStatus").textContent = (existing ? "已更新预设「" : "已保存预设「") + name + "」。仅保存在此浏览器。";
+});
+$("#loadMotionPreset").addEventListener("click", () => {
+  const preset = readSavedMotionPresets().find(item => item.id === $("#savedMotionPresets").value);
+  if (!preset) { $("#savedPresetStatus").textContent = "请选择一个有效的已保存预设。"; return; }
+  $("#motionImportJson").value = JSON.stringify(preset.config);
+  applyImportedMotionConfig();
+  $("#savedPresetStatus").textContent = "已载入「" + preset.name + "」。你可以继续调整或另存为新预设。";
+});
+$("#deleteMotionPreset").addEventListener("click", () => {
+  const selectedId = $("#savedMotionPresets").value;
+  const presets = readSavedMotionPresets();
+  const preset = presets.find(item => item.id === selectedId);
+  if (!preset) { $("#savedPresetStatus").textContent = "请选择要删除的预设。"; return; }
+  const next = presets.filter(item => item.id !== selectedId);
+  if (!persistSavedMotionPresets(next)) return;
+  refreshSavedMotionPresets();
+  $("#savedPresetStatus").textContent = "已删除预设「" + preset.name + "」。";
+});
+refreshSavedMotionPresets();
 
 function applyControls() {
   state.speed = Number($("#speed").value);
