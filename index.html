@@ -747,7 +747,7 @@ function toast(t){const el=document.getElementById('toast');el.textContent=t;el.
     <div class="appearance-fonts">
       <label>英文与数字<select id="appearanceFontEn"><option value="Inter">Inter · 默认 UI</option><option value="DM Sans">DM Sans</option><option value="Manrope">Manrope</option><option value="Space Grotesk">Space Grotesk</option><option value="Source Sans 3">Source Sans 3</option><option value="Plus Jakarta Sans">Plus Jakarta Sans</option><option value="JetBrains Mono">JetBrains Mono</option><option value="Liberation Sans">Liberation Sans · 兼容</option><option value="Liberation Serif">Liberation Serif · 兼容</option></select></label>
       <label>中文字体<select id="appearanceFontZh"><option value="Noto Sans SC">Noto Sans SC</option><option value="Noto Serif SC">Noto Serif SC</option><option value="LXGW WenKai">霞鹜文楷</option><option value="Smiley Sans">得意黑</option><option value="Alibaba PuHuiTi">阿里巴巴普惠体</option><option value="ZCOOL KuaiLe">站酷快乐体</option><option value="YouShe BiaoTiHei">优设标题黑</option><option value="Chiron GoRound TC">Chiron GoRound TC</option></select></label>
-    </div><p class="appearance-note">字体选项代表 CSS 字体族已接入；实际显示取决于系统字体或页面是否成功加载字体资源。</p>
+    </div><p class="appearance-note">字体族选项已接入 CSS，但当前主页未部署这些字体的 Web 字体文件；实际显示取决于设备已安装字体，缺失时会回退。选项不代表字体二进制已加载。</p>
     <button class="appearance-section-reset" type="button" data-appearance-reset="typography" aria-label="恢复字体默认值">重置字体</button>
   </section>
   <section class="appearance-section"><span class="appearance-label">自定义颜色</span><div class="appearance-colors">
