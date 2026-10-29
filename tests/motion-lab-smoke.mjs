@@ -226,6 +226,40 @@ try {
     }
   }
 
+  // No-code poster studio: edit, theme, export, share, and mobile layout.
+  const posterPage = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  const posterErrors = [];
+  posterPage.on("pageerror", error => posterErrors.push(error.message));
+  await posterPage.goto("http://127.0.0.1:4173/motion-lab/motion-poster.html", { waitUntil: "domcontentloaded" });
+  await posterPage.locator("#poster").waitFor();
+  await posterPage.locator("#titleInput").fill("测试海报\\n第二行");
+  if (!(await posterPage.locator("#posterHeading").textContent()).includes("第二行")) throw new Error("Poster title did not update in preview");
+  await posterPage.locator('[data-theme="coastal"]').click();
+  if (await posterPage.locator("#poster").evaluate(el => getComputedStyle(el).getPropertyValue("--poster-accent").trim()) !== "#79e2d0") throw new Error("Poster theme selection did not apply");
+  const pngDownloadPromise = posterPage.waitForEvent("download");
+  await posterPage.locator("#exportPng").click();
+  const pngDownload = await pngDownloadPromise;
+  if (!pngDownload.suggestedFilename().endsWith(".png")) throw new Error("Poster PNG export did not create a PNG download");
+  const htmlDownloadPromise = posterPage.waitForEvent("download");
+  await posterPage.locator("#exportHtml").click();
+  const htmlDownload = await htmlDownloadPromise;
+  if (!htmlDownload.suggestedFilename().endsWith(".html")) throw new Error("Poster HTML export did not create an HTML download");
+  await posterPage.locator("#share").click();
+  const shareStatus = await posterPage.locator("#exportStatus").textContent();
+  if (!shareStatus.includes("分享链接")) throw new Error("Poster share action did not report a share link");
+  const posterDimensions = await posterPage.evaluate(() => ({ viewport: document.documentElement.clientWidth, page: document.documentElement.scrollWidth }));
+  if (posterDimensions.page > posterDimensions.viewport + 1) throw new Error("Poster studio overflows at mobile width");
+  if (posterErrors.length) throw new Error("Poster page errors: " + posterErrors.join(" | "));
+  await posterPage.close();
+
+  // If animation CDN requests fail, the hero should fall back to native CSS motion instead of remaining static.
+  const fallbackPage = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: "no-preference" });
+  await fallbackPage.route("https://cdn.jsdelivr.net/**", route => route.abort());
+  await fallbackPage.goto("http://127.0.0.1:4173/motion-lab/", { waitUntil: "domcontentloaded" });
+  await fallbackPage.waitForTimeout(500);
+  if (!(await fallbackPage.locator("html").evaluate(el => el.classList.contains("motion-fallback")))) throw new Error("Native animation fallback did not activate when CDN scripts failed");
+  await fallbackPage.close();
+
   if (pageErrors.length) throw new Error("Uncaught page errors: " + pageErrors.join(" | "));
   console.log("PASS: Motion Lab loads, card interaction works, controls update, and 1440/1024/390px layouts have no horizontal overflow.");
 } finally {

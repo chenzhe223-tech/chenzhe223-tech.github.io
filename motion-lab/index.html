@@ -15,7 +15,7 @@ a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:poi
 button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
 .wrap{width:min(1440px,calc(100% - clamp(28px,5vw,76px)));margin-inline:auto}
 .topbar{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;z-index:20;background:#090c11df;backdrop-filter:blur(18px);padding-inline:clamp(18px,4vw,56px)}
-.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;width:34px;height:34px;background:var(--accent);color:#12180a;border-radius:11px;font-size:18px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.19em;font-weight:700}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;background:var(--accent);color:#12180a;border-radius:11px;overflow:hidden}.brand-mark svg{display:block;width:21px;height:21px;flex:none}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.19em;font-weight:700}
 .nav-right{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:12px}.live-dot{display:inline-block;width:7px;height:7px;background:var(--accent);border-radius:50%;margin-right:7px;box-shadow:0 0 12px #c7f36b70}
 .hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:36px;align-items:center;padding-block:clamp(58px,8vw,110px) 70px;min-height:560px}
 .eyebrow{display:flex;align-items:center;gap:10px;color:var(--accent);font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
@@ -144,11 +144,20 @@ input[type=range]{width:100%;accent-color:var(--accent)}
 @media(max-width:900px){.hero{grid-template-columns:1fr;gap:32px;padding-top:65px}.hero-visual{min-height:300px}.engine-grid{grid-template-columns:1fr 1fr}.control-grid{grid-template-columns:1fr 1fr}.control-grid .toggle{align-self:center}.section-head{align-items:start;flex-direction:column}.demo-grid{grid-template-columns:1fr}.demo.wide{grid-column:auto}}
 @media(max-width:560px){.topbar{height:62px}.nav-right .desktop-only{display:none}.hero{padding-top:52px;min-height:unset}.hero h1{font-size:clamp(42px,13vw,64px)}.hero-visual{min-height:270px}.hero-orb{width:120px;height:120px}.orbit{width:205px;height:90px}.orbit.two{width:220px;height:120px}.orbit-label{font-size:9px}.engine-grid{grid-template-columns:1fr}.engine{min-height:unset}.engine-top{margin-bottom:15px}.control-grid{grid-template-columns:1fr;padding:15px}.footer{flex-direction:column}.demo-head{padding:17px 16px 12px}.demo-stage{margin-inline:8px}.scroll-stage{padding-inline:12px}.three-stage,#threeCanvas{min-height:300px;height:300px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+
+/* Native fallback: keep the first-screen experience alive when third-party animation CDNs fail (notably on mobile networks). */
+@keyframes vdm-fallback-rise{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@keyframes vdm-fallback-orbit{to{rotate:360deg}}
+@keyframes vdm-fallback-float{50%{translate:0 -5px}}
+.motion-fallback .hero-copy .eyebrow,.motion-fallback .hero h1,.motion-fallback .hero p,.motion-fallback .hero-actions,.motion-fallback .hero-visual{animation:vdm-fallback-rise .65s cubic-bezier(.2,.75,.25,1) both}
+.motion-fallback .hero h1{animation-delay:.08s}.motion-fallback .hero p{animation-delay:.16s}.motion-fallback .hero-actions{animation-delay:.22s}.motion-fallback .hero-visual{animation-delay:.1s}
+.motion-fallback .hero-visual .orbit{animation:vdm-fallback-orbit 48s linear infinite}.motion-fallback .hero-orb{animation:vdm-fallback-float 2.8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.motion-fallback .hero-copy .eyebrow,.motion-fallback .hero h1,.motion-fallback .hero p,.motion-fallback .hero-actions,.motion-fallback .hero-visual,.motion-fallback .hero-visual .orbit,.motion-fallback .hero-orb{animation:none!important;opacity:1!important;transform:none!important;rotate:none!important;translate:none!important}}
 </style>
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="../" aria-label="DAVYLAB 首页"><span class="brand-mark">✳</span><span>DAVYLAB<small>VISUAL DNA MOTION</small></span></a>
+  <a class="brand" href="../" aria-label="DAVYLAB 首页"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" width="21" height="21" role="img" focusable="false"><path d="M16 3.5 18.7 12l8.8-3.2-5.2 7.3 6.2 5.2-9.1-.7L16 28.5l-3.4-8.1-9.1.7 6.2-5.2-5.2-7.3 8.8 3.2Z" fill="currentColor"/><circle cx="16" cy="16" r="3.2" fill="#c7f36b"/></svg></span><span>DAVYLAB<small>VISUAL DNA MOTION</small></span></a>
   <div class="nav-right"><span><i class="live-dot"></i>INTERACTIVE LAB</span><a class="desktop-only" href="https://github.com/chenzhe223-tech/davylab/tree/main/skills/visual-dna-motion">查看 Skill ↗</a><a href="#controls">动效控制</a></div>
 </header>
 <main class="wrap">
@@ -157,7 +166,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       <div class="eyebrow"><span>01 / MOTION IS A LANGUAGE</span></div>
       <h1>让界面有反应。<br><span>让想法有生命。</span></h1>
       <p>Visual DNA Motion System 是 DAVYLAB 的专属动效系统。以 GSAP 编排叙事，以 Motion 驱动交互，以 Three.js 探索空间；让动画表达状态、关系与可能，而不只是装饰。</p>
-      <div class="hero-actions"><a class="btn primary" href="#lab">开始探索 ↓</a><button class="btn" id="replayHero" type="button">重播主视觉 ↻</button></div>
+      <div class="hero-actions"><a class="btn primary" href="./motion-poster.html">制作动态海报 ↗</a><a class="btn" href="#lab">探索动效 ↓</a><button class="btn" id="replayHero" type="button">重播主视觉 ↻</button></div>
       <div class="hero-note"><span>GSAP / CHOREOGRAPHY</span><span></span><span>MOTION / INTERACTION</span><span></span><span>THREE.JS / SPATIAL</span></div>
     </div>
     <div class="hero-visual" aria-label="抽象动态球体主视觉">
@@ -325,7 +334,12 @@ const duration = value => reduced() ? 0 : value / state.speed;
 $("#year").textContent = new Date().getFullYear();
 
 function initGSAP() {
-  if (!window.gsap) { note.textContent = "GSAP CDN 未加载：滚动步骤仍可阅读，其他交互不受影响。"; return; }
+  if (!window.gsap) {
+    note.textContent = "动画引擎未加载：已启用原生动效回退。检查网络后可重新载入增强效果。";
+    document.documentElement.classList.add("motion-fallback");
+    return;
+  }
+  document.documentElement.classList.remove("motion-fallback");
   const gsap = window.gsap;
   if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
   const hero = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
