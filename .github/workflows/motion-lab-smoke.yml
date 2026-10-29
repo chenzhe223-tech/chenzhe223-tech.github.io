@@ -1,0 +1,43 @@
+name: Visual DNA Motion Lab Smoke Test
+
+on:
+  pull_request:
+    paths:
+      - "motion-lab/**"
+      - "tests/motion-lab-smoke.mjs"
+      - ".github/workflows/motion-lab-smoke.yml"
+  push:
+    branches: ["main"]
+    paths:
+      - "motion-lab/**"
+      - "tests/motion-lab-smoke.mjs"
+      - ".github/workflows/motion-lab-smoke.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Playwright
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+      - name: Start static server
+        run: |
+          python3 -m http.server 4173 --directory . > /tmp/motion-lab-http.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --silent --fail http://127.0.0.1:4173/motion-lab/ > /dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/motion-lab-http.log
+          exit 1
+      - name: Verify interactions and responsive widths
+        run: node tests/motion-lab-smoke.mjs

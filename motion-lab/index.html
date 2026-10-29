@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0d12">
+<meta name="description" content="DAVYLAB Visual DNA Motion Lab — GSAP, Motion and Three.js 动效实验室。">
+<title>Visual DNA Motion Lab — DAVYLAB</title>
+<style>
+:root{color-scheme:dark;--bg:#090c11;--panel:#111720;--panel-2:#151e29;--ink:#edf3f6;--muted:#9caeb8;--line:#28343d;--accent:#c7f36b;--cyan:#79e2d0;--violet:#b6a4ff;--ease:cubic-bezier(.2,.75,.25,1);--motion-duration:240ms;--motion-distance:18px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{margin:0;background:radial-gradient(ellipse at 78% -12%,#23483a38,transparent 38%),var(--bg);color:var(--ink);font:15px/1.6 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
+a{color:inherit;text-decoration:none}button,input{font:inherit}button{cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.wrap{width:min(1440px,calc(100% - clamp(28px,5vw,76px)));margin-inline:auto}
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffffff12;position:sticky;top:0;z-index:20;background:#090c11df;backdrop-filter:blur(18px);padding-inline:clamp(18px,4vw,56px)}
+.brand{display:flex;align-items:center;gap:11px;font-weight:850;letter-spacing:-.04em}.brand-mark{display:grid;place-items:center;width:34px;height:34px;background:var(--accent);color:#12180a;border-radius:11px;font-size:18px}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.19em;font-weight:700}
+.nav-right{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:12px}.live-dot{display:inline-block;width:7px;height:7px;background:var(--accent);border-radius:50%;margin-right:7px;box-shadow:0 0 12px #c7f36b70}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);gap:36px;align-items:center;padding-block:clamp(58px,8vw,110px) 70px;min-height:560px}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--accent);font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.14em;text-transform:uppercase}
+.hero h1{font-size:clamp(42px,6.7vw,88px);line-height:.99;letter-spacing:-.075em;margin:24px 0 22px;max-width:850px;font-weight:750}
+.hero h1 span{color:var(--accent);font-weight:550}
+.hero p{max-width:620px;color:#a8b6be;font-size:clamp(15px,1.4vw,18px);line-height:1.9;margin:0}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:30px}
+.btn{border:1px solid var(--line);background:transparent;color:var(--ink);padding:11px 16px;border-radius:999px;font-weight:700;font-size:12px;transition:transform 140ms var(--ease),background 180ms var(--ease),border-color 180ms var(--ease)}
+.btn:hover{transform:translateY(-2px);border-color:#7b9487;background:#ffffff08}.btn.primary{background:var(--accent);border-color:var(--accent);color:#10170a}.btn.primary:hover{background:#d7ff91}
+.hero-note{margin-top:20px;color:#71838d;font-size:11px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}.hero-note span:empty{width:1px;height:13px;flex:0 0 1px;background:var(--line)}.hero-note span:not(:empty){width:auto;height:auto;background:none}
+.hero-visual{min-height:330px;position:relative;border:1px solid #ffffff12;border-radius:28px;background:radial-gradient(circle at 50% 44%,#b6a4ff15,transparent 48%),linear-gradient(145deg,#111a21,#0b1016);overflow:hidden;isolation:isolate}
+.hero-visual:before{content:"";position:absolute;inset:0;background-image:linear-gradient(#ffffff06 1px,transparent 1px),linear-gradient(90deg,#ffffff06 1px,transparent 1px);background-size:28px 28px;mask-image:linear-gradient(to bottom,#000,transparent 90%);z-index:-1}
+.hero-orb{position:absolute;width:150px;height:150px;border-radius:50%;left:50%;top:48%;transform:translate(-50%,-50%);background:radial-gradient(circle at 32% 27%,#f4ffd9 0,#c7f36b 10%,#5c8966 36%,#263c42 61%,#121922 73%);box-shadow:inset -16px -18px 32px #03090b9c,0 0 60px #c7f36b22}
+.orbit{position:absolute;width:245px;height:105px;border:1px solid #c7f36b66;border-radius:50%;left:50%;top:48%;transform:translate(-50%,-50%) rotate(-26deg)}
+.orbit.two{width:260px;height:138px;transform:translate(-50%,-50%) rotate(48deg);border-color:#b6a4ff55}
+.orbit-label{position:absolute;border:1px solid #ffffff22;background:#111920e8;border-radius:9px;padding:7px 10px;font:10px ui-monospace,monospace;color:#d4e2e3}
+.orbit-label.a{top:17%;left:8%}.orbit-label.b{right:7%;top:27%}.orbit-label.c{bottom:14%;left:17%}
+.visual-caption{position:absolute;bottom:18px;right:20px;color:#687d86;font:9px ui-monospace,monospace;letter-spacing:.1em}
+.section-head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:22px}
+.section-index{color:var(--accent);font:11px ui-monospace,monospace;letter-spacing:.1em}
+.section-head h2{font-size:clamp(25px,3vw,39px);letter-spacing:-.055em;line-height:1.1;margin:9px 0 0}
+.section-head p{color:var(--muted);font-size:12px;max-width:420px;margin:0}
+.engines{padding:22px 0 72px}.engine-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.engine{border:1px solid var(--line);background:#0e141b;border-radius:18px;padding:20px;min-height:180px;display:flex;flex-direction:column;align-items:flex-start;transition:border-color 220ms,transform 220ms var(--ease)}
+.engine:hover{border-color:#6a8275}
+.engine-top{display:flex;justify-content:space-between;align-items:center;width:100%;margin-bottom:24px}
+.engine-icon{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line);border-radius:12px;color:var(--accent);font-size:18px}
+.engine-number{font:10px ui-monospace,monospace;color:#62757f}
+.engine h3{margin:0 0 6px;font-size:18px;letter-spacing:-.03em}.engine p{margin:0;color:var(--muted);font-size:12px;line-height:1.7}
+.engine-tag{margin-top:auto;padding-top:15px;color:#d3e0d8;font-size:10px;letter-spacing:.05em}
+.lab{padding:52px 0 78px;border-top:1px solid #ffffff12}
+.demo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.demo{border:1px solid var(--line);border-radius:20px;background:linear-gradient(145deg,#121a22,#0d1218);overflow:hidden;min-width:0}
+.demo.wide{grid-column:1/-1}
+.demo-head{display:flex;justify-content:space-between;gap:15px;align-items:start;padding:20px 21px 14px}
+.demo-kicker{font:10px ui-monospace,monospace;color:var(--accent);letter-spacing:.1em}
+.demo h3{margin:7px 0 5px;font-size:19px;letter-spacing:-.035em}.demo-head p{color:var(--muted);font-size:12px;margin:0;max-width:440px}
+.pill{white-space:nowrap;border:1px solid #ffffff1b;border-radius:999px;padding:5px 8px;color:#a9bbc1;font-size:10px}
+.demo-stage{margin:0 12px 12px;min-height:220px;border:1px solid #ffffff10;background:#090e13;border-radius:14px;position:relative;overflow:hidden}
+.stage-label{position:absolute;top:13px;left:14px;color:#637680;font:9px ui-monospace,monospace;letter-spacing:.1em;z-index:2}
+.scroll-stage{min-height:300px;padding:56px 20px 18px;display:flex;flex-direction:column;justify-content:center;gap:10px}
+.scroll-row{display:flex;align-items:center;gap:12px;padding:12px 13px;background:#131c24;border:1px solid #ffffff10;border-radius:11px;opacity:1}
+.scroll-row .num{font:11px ui-monospace,monospace;color:var(--accent)}.scroll-row strong{font-size:12px}.scroll-row small{display:block;color:#82949c;font-size:10px}
+.scroll-controls{display:flex;gap:8px;flex-wrap:wrap;padding:0 20px 18px}
+.small-btn{border:1px solid #34414a;background:#151e26;color:#d9e3e5;padding:7px 10px;border-radius:8px;font-size:11px}
+.small-btn:hover{border-color:#8aa58f}
+.motion-stage{display:grid;place-items:center;min-height:300px;padding:20px}
+.motion-card{width:min(300px,90%);padding:18px;border:1px solid #46524e;border-radius:15px;background:linear-gradient(145deg,#18251e,#11191b);box-shadow:0 15px 50px #0004;cursor:pointer;user-select:none;touch-action:manipulation}
+.motion-card:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+.motion-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}
+.mini-mark{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#c7f36b;color:#18200f;font-weight:900}
+.status{font:10px ui-monospace,monospace;color:var(--cyan)}.motion-card h4{font-size:17px;letter-spacing:-.04em;margin:0 0 5px}.motion-card p{color:var(--muted);font-size:11px;margin:0 0 16px}
+.card-footer{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #ffffff12;padding-top:12px;color:#9aabae;font-size:10px}
+.progress{height:3px;background:#26342d;border-radius:5px;overflow:hidden;margin-top:12px}.progress span{display:block;width:68%;height:100%;background:var(--accent);transform-origin:left}
+.three-stage{min-height:360px}
+#threeCanvas{display:block;width:100%;height:360px;touch-action:pan-y}
+.three-overlay{position:absolute;left:15px;bottom:14px;color:#73868d;font:10px ui-monospace,monospace;pointer-events:none}
+.three-fallback{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;color:var(--muted);font-size:12px;background:radial-gradient(circle,#1e3028,#090e13 70%)}.three-fallback[hidden]{display:none}
+.controls{padding:52px 0 76px;border-top:1px solid #ffffff12}
+.control-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:14px;align-items:end;padding:18px;border:1px solid var(--line);background:#10161d;border-radius:18px}
+.control label{display:flex;justify-content:space-between;gap:8px;color:#d5e0e1;font-size:11px;margin-bottom:10px}.control output{font:11px ui-monospace,monospace;color:var(--accent)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+.toggle{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:11px;white-space:nowrap}.toggle input{accent-color:var(--accent);width:16px;height:16px}
+.control-note{margin-top:12px;color:#75878e;font-size:11px;line-height:1.8}
+.footer{border-top:1px solid #ffffff12;padding:22px 0 30px;color:#6f828a;font-size:11px;display:flex;justify-content:space-between;gap:15px}
+[data-vdm-interactive]{transition:background-color var(--motion-duration) var(--ease),border-color var(--motion-duration) var(--ease)}
+@media(max-width:900px){.hero{grid-template-columns:1fr;gap:32px;padding-top:65px}.hero-visual{min-height:300px}.engine-grid{grid-template-columns:1fr 1fr}.control-grid{grid-template-columns:1fr 1fr}.control-grid .toggle{align-self:center}.section-head{align-items:start;flex-direction:column}.demo-grid{grid-template-columns:1fr}.demo.wide{grid-column:auto}}
+@media(max-width:560px){.topbar{height:62px}.nav-right .desktop-only{display:none}.hero{padding-top:52px;min-height:unset}.hero h1{font-size:clamp(42px,13vw,64px)}.hero-visual{min-height:270px}.hero-orb{width:120px;height:120px}.orbit{width:205px;height:90px}.orbit.two{width:220px;height:120px}.orbit-label{font-size:9px}.engine-grid{grid-template-columns:1fr}.engine{min-height:unset}.engine-top{margin-bottom:15px}.control-grid{grid-template-columns:1fr;padding:15px}.footer{flex-direction:column}.demo-head{padding:17px 16px 12px}.demo-stage{margin-inline:8px}.scroll-stage{padding-inline:12px}.three-stage,#threeCanvas{min-height:300px;height:300px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="../" aria-label="DAVYLAB 首页"><span class="brand-mark">✳</span><span>DAVYLAB<small>VISUAL DNA MOTION</small></span></a>
+  <div class="nav-right"><span><i class="live-dot"></i>INTERACTIVE LAB</span><a class="desktop-only" href="https://github.com/chenzhe223-tech/davylab/tree/main/skills/visual-dna-motion">查看 Skill ↗</a><a href="#controls">动效控制</a></div>
+</header>
+<main class="wrap">
+  <section class="hero" id="top">
+    <div class="hero-copy">
+      <div class="eyebrow"><span>01 / MOTION IS A LANGUAGE</span></div>
+      <h1>让界面有反应。<br><span>让想法有生命。</span></h1>
+      <p>Visual DNA Motion System 是 DAVYLAB 的专属动效系统。以 GSAP 编排叙事，以 Motion 驱动交互，以 Three.js 探索空间；让动画表达状态、关系与可能，而不只是装饰。</p>
+      <div class="hero-actions"><a class="btn primary" href="#lab">开始探索 ↓</a><button class="btn" id="replayHero" type="button">重播主视觉 ↻</button></div>
+      <div class="hero-note"><span>GSAP / CHOREOGRAPHY</span><span></span><span>MOTION / INTERACTION</span><span></span><span>THREE.JS / SPATIAL</span></div>
+    </div>
+    <div class="hero-visual" aria-label="抽象动态球体主视觉">
+      <div class="orbit"></div><div class="orbit two"></div><div class="hero-orb"></div>
+      <div class="orbit-label a">01 · SIGNAL</div><div class="orbit-label b">02 · RESPONSE</div><div class="orbit-label c">03 · POSSIBILITY</div>
+      <div class="visual-caption">SPARK → BUILD → PULSE</div>
+    </div>
+  </section>
+
+  <section class="engines" aria-labelledby="engineTitle">
+    <div class="section-head"><div><div class="section-index">02 / ENGINE ARCHITECTURE</div><h2 id="engineTitle">三种引擎，一套语言。</h2></div><p>每个引擎有明确职责。不是每个页面都需要全部引擎；选择最适合当前交互的工具。</p></div>
+    <div class="engine-grid">
+      <article class="engine" data-vdm-interactive><div class="engine-top"><span class="engine-icon">↗</span><span class="engine-number">ENGINE / 01</span></div><h3>GSAP</h3><p>时间轴、滚动叙事、SVG 路径与多元素编排。让页面内容有节奏地展开。</p><div class="engine-tag">CHOREOGRAPHY · SCROLL</div></article>
+      <article class="engine" data-vdm-interactive><div class="engine-top"><span class="engine-icon">⌁</span><span class="engine-number">ENGINE / 02</span></div><h3>Motion</h3><p>组件进入退出、布局变化、拖拽与手势。让每次操作都有直接反馈。</p><div class="engine-tag">INTERACTION · TRANSITION</div></article>
+      <article class="engine" data-vdm-interactive><div class="engine-top"><span class="engine-icon">◉</span><span class="engine-number">ENGINE / 03</span></div><h3>Three.js</h3><p>真实的三维空间、粒子与可探索场景。只在空间本身有意义时启用。</p><div class="engine-tag">SPATIAL · WEBGL</div></article>
+    </div>
+  </section>
+
+  <section class="lab" id="lab" aria-labelledby="labTitle">
+    <div class="section-head"><div><div class="section-index">03 / INTERACTION PLAYGROUND</div><h2 id="labTitle">动效实验场。</h2></div><p>点击、滚动、拖动或调节下方参数，直接观察不同动效模式。外部引擎加载失败时，基础内容仍保持可读。</p></div>
+    <div class="demo-grid">
+      <article class="demo">
+        <div class="demo-head"><div><div class="demo-kicker">GSAP / SCROLL CHOREOGRAPHY</div><h3>滚动叙事</h3><p>滚动到此区域时，步骤依次显现；可重播观察时间轴节奏。</p></div><span class="pill">TIMELINE</span></div>
+        <div class="demo-stage"><div class="stage-label">SPARK / BUILD / PULSE</div><div class="scroll-stage" id="scrollStage">
+          <div class="scroll-row"><span class="num">01</span><div><strong>捕捉一个念头</strong><small>Notice a possibility</small></div></div>
+          <div class="scroll-row"><span class="num">02</span><div><strong>构建可用原型</strong><small>Make it tangible</small></div></div>
+          <div class="scroll-row"><span class="num">03</span><div><strong>根据反馈进化</strong><small>Learn and iterate</small></div></div>
+        </div></div>
+        <div class="scroll-controls"><button class="small-btn" id="replaySteps">重播步骤 ↻</button><button class="small-btn" id="showSteps">全部显示</button></div>
+      </article>
+
+      <article class="demo">
+        <div class="demo-head"><div><div class="demo-kicker">MOTION / REACTIVE UI</div><h3>交互反馈</h3><p>点击或触摸卡片，体验轻微缩放、弹性反馈与状态变化。</p></div><span class="pill">MICRO-INTERACTION</span></div>
+        <div class="demo-stage motion-stage">
+          <div class="motion-card" id="motionCard" tabindex="0" role="button" aria-pressed="false" aria-label="切换交互卡片状态">
+            <div class="motion-card-top"><span class="mini-mark">✳</span><span class="status" id="cardStatus">● READY</span></div>
+            <h4 id="cardTitle">一个想法，正在成形。</h4><p id="cardDescription">触碰卡片，让界面回应你的动作。</p>
+            <div class="card-footer"><span>VISUAL DNA / 01</span><span id="cardAction">点击探索 ↗</span></div>
+            <div class="progress"><span id="cardProgress"></span></div>
+          </div>
+        </div>
+      </article>
+
+      <article class="demo wide">
+        <div class="demo-head"><div><div class="demo-kicker">THREE.JS / SPATIAL EXPLORATION</div><h3>空间与粒子</h3><p>拖动旋转、移动指针观察空间响应。此处为演示场景，不代表业务数据或真实知识关系。</p></div><span class="pill">WEBGL / 3D</span></div>
+        <div class="demo-stage three-stage" id="threeStage"><canvas id="threeCanvas" aria-label="可交互的抽象粒子球体"></canvas><div class="three-fallback" id="threeFallback" hidden>3D 场景当前不可用。其他动效仍可正常体验。</div><div class="three-overlay">DRAG TO ROTATE · SCENE DEMO</div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="controls" id="controls" aria-labelledby="controlsTitle">
+    <div class="section-head"><div><div class="section-index">04 / MOTION TOKENS</div><h2 id="controlsTitle">调节动效性格。</h2></div><p>统一控制实验场的节奏与强度。减少动态效果选项会停止非必要的持续运动。</p></div>
+    <div class="control-grid">
+      <div class="control"><label for="speed">动效速度 <output id="speedValue">1.0×</output></label><input id="speed" type="range" min=".5" max="1.8" step=".1" value="1"></div>
+      <div class="control"><label for="intensity">运动幅度 <output id="intensityValue">100%</output></label><input id="intensity" type="range" min="0" max="150" step="10" value="100"></div>
+      <div class="control"><label for="stagger">错峰间隔 <output id="staggerValue">90ms</output></label><input id="stagger" type="range" min="20" max="180" step="10" value="90"></div>
+      <label class="toggle"><input id="reduceMotion" type="checkbox"> 减少动态效果</label>
+    </div>
+    <p class="control-note" id="controlNote" role="status">当前参数仅用于本实验室预览，不会自动写入其他产品。系统级减少动态效果设置也会被尊重。</p>
+  </section>
+</main>
+<footer class="footer wrap"><span>© <span id="year"></span> DAVYLAB · SPARK & PULSE</span><span>Motion should explain, respond, and respect attention.</span></footer>
+
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script type="module">
+let motionApi = null;
+
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+const systemReduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+const state = { speed: 1, intensity: 1, stagger: 0.09, reduce: systemReduce.matches, scene: null, gsapIntro: null };
+const note = $("#controlNote");
+$("#reduceMotion").checked = systemReduce.matches;
+const reduced = () => state.reduce || systemReduce.matches;
+const duration = value => reduced() ? 0 : value / state.speed;
+$("#year").textContent = new Date().getFullYear();
+
+function initGSAP() {
+  if (!window.gsap) { note.textContent = "GSAP CDN 未加载：滚动步骤仍可阅读，其他交互不受影响。"; return; }
+  const gsap = window.gsap;
+  if (window.ScrollTrigger) gsap.registerPlugin(window.ScrollTrigger);
+  const hero = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+  hero.fromTo(".hero-copy .eyebrow", { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: duration(.45) })
+    .fromTo(".hero h1", { autoAlpha: 0, y: 22 }, { autoAlpha: 1, y: 0, duration: duration(.7) }, "-=.2")
+    .fromTo(".hero p", { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: duration(.55) }, "-=.3")
+    .fromTo(".hero-actions", { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: duration(.4) }, "-=.2")
+    .fromTo(".hero-visual", { autoAlpha: 0, scale: .97 }, { autoAlpha: 1, scale: 1, duration: duration(.75) }, 0);
+  state.gsapIntro = hero;
+  if (!reduced()) hero.play();
+  else gsap.set(".hero-copy .eyebrow,.hero h1,.hero p,.hero-actions,.hero-visual", { clearProps: "all" });
+
+  if (!reduced()) {
+    const orbit = gsap.to(".hero-visual .orbit", { rotation: "+=360", duration: 48, ease: "none", repeat: -1, transformOrigin: "50% 50%" });
+    const orb = gsap.to(".hero-orb", { y: -5 * state.intensity, duration: 2.8, ease: "sine.inOut", repeat: -1, yoyo: true });
+    state.ambient = [orbit, orb];
+  } else {
+    state.ambient = [];
+    gsap.set(".hero-visual .orbit,.hero-orb", { clearProps: "transform" });
+  }
+
+  const rows = $$(".scroll-row");
+  if (!reduced()) {
+    gsap.set(rows, { autoAlpha: .35, x: -10 });
+    if (window.ScrollTrigger) {
+      gsap.fromTo(rows, { autoAlpha: .35, x: -10 }, {
+        autoAlpha: 1, x: 0, duration: duration(.5), stagger: state.stagger,
+        ease: "power2.out", clearProps: "all",
+        scrollTrigger: { trigger: "#scrollStage", start: "top 82%", once: true }
+      });
+    }
+  }
+  $("#replayHero").addEventListener("click", () => {
+    if (reduced()) { note.textContent = "减少动态效果已开启：主视觉保持静止。"; return; }
+    hero.restart();
+  });
+  $("#replaySteps").addEventListener("click", () => {
+    if (reduced()) { gsap.set(rows, { clearProps: "all" }); return; }
+    gsap.killTweensOf(rows);
+    gsap.set(rows, { autoAlpha: 0, x: -10 });
+    gsap.to(rows, { autoAlpha: 1, x: 0, duration: duration(.45), stagger: state.stagger, ease: "power2.out", clearProps: "all" });
+  });
+  $("#showSteps").addEventListener("click", () => gsap.to(rows, { autoAlpha: 1, x: 0, duration: duration(.18), stagger: 0, clearProps: "all" }));
+}
+
+function initMotion() {
+  const card = $("#motionCard");
+  const title = $("#cardTitle"), description = $("#cardDescription"), status = $("#cardStatus"), action = $("#cardAction"), progress = $("#cardProgress");
+  let active = false;
+  const toggle = () => {
+    active = !active;
+    card.setAttribute("aria-pressed", String(active));
+    title.textContent = active ? "反馈已触发，状态已改变。" : "一个想法，正在成形。";
+    description.textContent = active ? "动效正在表达一次真实的界面状态切换。" : "触碰卡片，让界面回应你的动作。";
+    status.textContent = active ? "● EXPLORED" : "● READY";
+    status.style.color = active ? "#c7f36b" : "#79e2d0";
+    action.textContent = active ? "重置状态 ↺" : "点击探索 ↗";
+    if (reduced()) return;
+    motionApi?.animate?.(card, { scale: [1, .975, 1], rotate: active ? [0, -.5, 0] : [0, .5, 0] }, { duration: duration(.32), ease: [.2,.75,.25,1] });
+    motionApi?.animate?.(progress, { scaleX: active ? [.68, 1] : [1, .68] }, { duration: duration(.45), ease: [.2,.75,.25,1] });
+  };
+  // Keep the core interaction available immediately, even while the optional Motion module loads.
+  card.addEventListener("click", toggle);
+  card.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
+
+  import("https://cdn.jsdelivr.net/npm/motion@12/+esm").then(api => {
+    motionApi = api;
+    if (typeof motionApi.inView === "function") {
+      motionApi.inView(".engine", (element) => {
+        if (reduced()) return;
+        motionApi.animate(element, { opacity: [0, 1], y: [12, 0] }, { duration: duration(.42), delay: $$(".engine").indexOf(element) * state.stagger, ease: [.2,.75,.25,1] });
+      }, { amount: .15 });
+    }
+    // Motion's vanilla animate() powers feedback when the optional module is available.
+    $$(".engine").forEach(el => {
+      el.addEventListener("pointerenter", () => { if (!reduced()) motionApi.animate(el, { y: -3 }, { duration: duration(.18) }); });
+      el.addEventListener("pointerleave", () => { if (!reduced()) motionApi.animate(el, { y: 0 }, { duration: duration(.2) }); });
+    });
+  }).catch(error => {
+    console.warn("Visual DNA Motion Lab: Motion module unavailable; interactions remain functional without animation.", error);
+  });
+}
+
+async function initThree() {
+  const canvas = $("#threeCanvas"), fallback = $("#threeFallback"), stage = $("#threeStage");
+  try {
+    const THREE = await import("https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js");
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: "low-power" });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+    renderer.setSize(stage.clientWidth, stage.clientHeight, false);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(42, stage.clientWidth / stage.clientHeight, .1, 100);
+    camera.position.z = 5.1;
+    const group = new THREE.Group();
+    scene.add(group);
+
+    const count = window.matchMedia("(max-width: 600px)").matches ? 520 : 950;
+    const positions = new Float32Array(count * 3);
+    const colors = new Float32Array(count * 3);
+    const colorA = new THREE.Color("#c7f36b"), colorB = new THREE.Color("#79e2d0"), colorC = new THREE.Color("#b6a4ff");
+    for (let i = 0; i < count; i++) {
+      const u = Math.random(), v = Math.random();
+      const theta = 2 * Math.PI * u, phi = Math.acos(2 * v - 1);
+      const radius = 1.1 + Math.random() * .04;
+      positions[i*3] = radius * Math.sin(phi) * Math.cos(theta);
+      positions[i*3+1] = radius * Math.sin(phi) * Math.sin(theta);
+      positions[i*3+2] = radius * Math.cos(phi);
+      const c = colorA.clone().lerp(colorB, Math.random()).lerp(colorC, Math.random() * .25);
+      colors[i*3] = c.r; colors[i*3+1] = c.g; colors[i*3+2] = c.b;
+    }
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+    const material = new THREE.PointsMaterial({ size: .018, vertexColors: true, transparent: true, opacity: .9, sizeAttenuation: true });
+    const points = new THREE.Points(geometry, material);
+    group.add(points);
+
+    const wire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.07, 1),
+      new THREE.MeshBasicMaterial({ color: "#7ca28b", wireframe: true, transparent: true, opacity: .13 })
+    );
+    group.add(wire);
+    const ringMaterial = new THREE.MeshBasicMaterial({ color: "#c7f36b", transparent: true, opacity: .48 });
+    const ring = new THREE.Mesh(new THREE.TorusGeometry(1.42, .003, 4, 140), ringMaterial);
+    ring.rotation.x = .85; ring.rotation.y = -.3; group.add(ring);
+    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(1.55, .002, 4, 140), new THREE.MeshBasicMaterial({ color: "#b6a4ff", transparent: true, opacity: .32 }));
+    ring2.rotation.x = 1.35; ring2.rotation.y = .7; group.add(ring2);
+
+    let pointerX = 0, pointerY = 0, dragging = false, lastX = 0, lastY = 0, raf = 0, visible = true;
+    const reducedScene = () => reduced() || !visible || document.hidden;
+    const render = () => {
+      raf = 0;
+      if (!reducedScene()) {
+        group.rotation.y += .0018 * state.speed * state.intensity;
+        group.rotation.x += .0007 * state.speed * state.intensity;
+        group.rotation.y += pointerX * .00035;
+        group.rotation.x += pointerY * .00025;
+        renderer.render(scene, camera);
+        raf = requestAnimationFrame(render);
+      } else {
+        // Render one stable frame, then stop scheduling frames until motion is allowed again.
+        renderer.render(scene, camera);
+      }
+    };
+    const start = () => { if (!raf && !document.hidden && visible) raf = requestAnimationFrame(render); };
+    const stop = () => { if (raf) cancelAnimationFrame(raf); raf = 0; };
+    const resize = () => {
+      const w = Math.max(1, stage.clientWidth), h = Math.max(1, stage.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, window.matchMedia("(max-width: 600px)").matches ? 1.25 : 1.5));
+      renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); start();
+    };
+    const observer = new ResizeObserver(resize); observer.observe(stage);
+    const visibility = new IntersectionObserver(entries => { visible = entries[0].isIntersecting; visible ? start() : stop(); });
+    visibility.observe(stage);
+    stage.addEventListener("pointerdown", e => { dragging = true; lastX = e.clientX; lastY = e.clientY; stage.setPointerCapture?.(e.pointerId); });
+    stage.addEventListener("pointermove", e => {
+      const rect = stage.getBoundingClientRect(); pointerX = (e.clientX - rect.left) / rect.width - .5; pointerY = (e.clientY - rect.top) / rect.height - .5;
+      if (dragging) { group.rotation.y += (e.clientX-lastX)*.006; group.rotation.x += (e.clientY-lastY)*.006; lastX=e.clientX; lastY=e.clientY; }
+    });
+    const endDrag = () => { dragging = false; };
+    stage.addEventListener("pointerup", endDrag); stage.addEventListener("pointercancel", endDrag); stage.addEventListener("lostpointercapture", endDrag);
+    document.addEventListener("visibilitychange", () => document.hidden ? stop() : start());
+    systemReduce.addEventListener?.("change", () => { if (!reduced()) start(); else { stop(); renderer.render(scene, camera); } });
+    state.scene = { renderer, scene, camera, group, start, stop, dispose: () => { stop(); observer.disconnect(); visibility.disconnect(); geometry.dispose(); material.dispose(); wire.geometry.dispose(); wire.material.dispose(); ring.geometry.dispose(); ring.material.dispose(); ring2.geometry.dispose(); ring2.material.dispose(); renderer.dispose(); } };
+    if (!reduced()) start(); else renderer.render(scene, camera);
+  } catch (error) {
+    canvas.style.display = "none"; fallback.hidden = false;
+    console.warn("Visual DNA Motion Lab: Three.js scene unavailable", error);
+  }
+}
+
+function applyControls() {
+  state.speed = Number($("#speed").value);
+  state.intensity = Number($("#intensity").value) / 100;
+  state.stagger = Number($("#stagger").value) / 1000;
+  state.reduce = $("#reduceMotion").checked;
+  $("#speedValue").textContent = state.speed.toFixed(1) + "×";
+  $("#intensityValue").textContent = Math.round(state.intensity * 100) + "%";
+  $("#staggerValue").textContent = Math.round(state.stagger * 1000) + "ms";
+  document.documentElement.style.setProperty("--motion-duration", (240 / state.speed) + "ms");
+  if (window.gsap) window.gsap.globalTimeline.timeScale(state.speed);
+  document.documentElement.style.setProperty("--motion-distance", (18 * state.intensity) + "px");
+  if (state.reduce) {
+    state.ambient?.forEach(t => t.pause());
+    state.scene?.stop();
+    note.textContent = "减少动态效果已开启：已停止持续动效；静态场景、内容和操作仍可用。";
+    if (window.gsap) window.gsap.set(".hero-copy .eyebrow,.hero h1,.hero p,.hero-actions,.hero-visual,.hero-visual .orbit,.hero-orb,.scroll-row", { clearProps: "all" });
+  } else {
+    if (!systemReduce.matches) {
+      state.ambient?.forEach(t => t.play());
+      state.scene?.start();
+    }
+    note.textContent = systemReduce.matches ? "你的系统已设置减少动态效果；实验室将继续尊重系统偏好。" : "参数已应用于实验场。系统级减少动态效果设置优先级更高。";
+  }
+}
+["speed","intensity","stagger","reduceMotion"].forEach(id => $("#" + id).addEventListener("input", applyControls));
+systemReduce.addEventListener?.("change", applyControls);
+window.addEventListener("pagehide", () => state.scene?.dispose(), { once: true });
+try { initGSAP(); void initMotion(); void initThree(); applyControls(); }
+catch (error) { console.error("Visual DNA Motion Lab initialization failed", error); note.textContent = "部分动效引擎未能初始化；页面内容仍可阅读。请检查网络与浏览器支持。"; }
+</script>
+</body>
+</html>

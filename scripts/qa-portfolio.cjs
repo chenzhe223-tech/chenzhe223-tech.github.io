@@ -39,10 +39,20 @@ const path = require('node:path');
       ink: getComputedStyle(document.documentElement).getPropertyValue('--ink').trim(),
       canvas: getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()
     }));
-    if (!colors.canvas.toLowerCase().includes('#050813') || !colors.ink.toLowerCase().includes('#f5f7ff')) {
-      throw new Error('Tech-fashion dark design tokens are not active: ' + JSON.stringify(colors));
+    // The current Visual DNA homepage intentionally uses the editorial light palette.
+    // Keep this assertion aligned with the actual design tokens rather than the legacy dark theme.
+    if (!colors.canvas.toLowerCase().includes('#f5f3ed') || !colors.ink.toLowerCase().includes('#14263d')) {
+      throw new Error('Editorial light design tokens are not active: ' + JSON.stringify(colors));
     }
-    results.push({ test: 'Tech-fashion dark design tokens', status: 'PASS', detail: colors });
+    results.push({ test: 'Visual DNA editorial light design tokens', status: 'PASS', detail: colors });
+
+    // Trigger the existing scroll-reveal enhancement before interacting with product tools.
+    // A zero-opacity pre-reveal element is intentionally not actionable until it enters view.
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, document.querySelector('#products').offsetTop);
+    });
+    await page.waitForTimeout(900);
 
     const initialCount = await page.locator('#shelf .app-card').count();
     if (initialCount < 3) throw new Error('Expected at least 3 product cards, got ' + initialCount);
