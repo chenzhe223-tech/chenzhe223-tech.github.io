@@ -59,7 +59,7 @@ async function main() {
     await page.locator("#openVisualSettings").click();
     await page.locator("#visualSettingsDialog[open]").waitFor();
     await page.locator('[data-visual-theme="ocean"]').click();
-    await page.locator("#visualBgColor").fill("#e5f0ff");
+    await page.locator("#visualBgColor").evaluate(el => { el.value = "#e5f0ff"; el.dispatchEvent(new Event("input", { bubbles: true })); });
     await page.locator("#visualDensity").selectOption("compact");
     await page.locator("#visualRadius").selectOption("16");
     await page.locator("#visualNavMode").selectOption("top");
@@ -67,7 +67,7 @@ async function main() {
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-nav-top")), true, "top navigation mode applies immediately");
     await page.locator('[data-visual-tab="motion"]').click();
     await page.locator('[data-motion-effect="stagger"]').click();
-    await page.locator("#visualDuration").fill("1600");
+    await page.locator("#visualDuration").evaluate(el => { el.value = "1600"; el.dispatchEvent(new Event("input", { bubbles: true })); });
     await page.locator("#previewVisualMotion").click();
     assert.ok((await page.locator("#visualMotionStatus").innerText()).includes("错峰展开"), "selected Motion Lab effect previews in the embedded control panel");
     const motionDownloadPromise = page.waitForEvent("download");
