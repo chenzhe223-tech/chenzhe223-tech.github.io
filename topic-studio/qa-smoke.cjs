@@ -64,7 +64,7 @@ async function main() {
     await page.locator("#visualRadius").selectOption("16");
     await page.locator('[data-visual-tab="layout"]').click();
     for (const preset of ["editorial", "balanced", "vertical", "compact", "bento", "split"]) {
-      await page.locator(`[data-layout-preset="${preset}"]`).click();
+      await page.locator(`button[data-layout-preset="${preset}"]`).click();
       assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), preset, `layout preset ${preset} applies immediately`);
     }
     await page.locator("#visualContentWidth").selectOption("custom");
@@ -145,7 +145,7 @@ async function main() {
     await page.locator('[data-visual-tab="layout"]').click();
     await page.locator("#visualNavMode").selectOption("left");
     await page.locator("#visualNavCollapsed").uncheck();
-    await page.locator("[data-layout-preset=editorial]").click();
+    await page.locator("button[data-layout-preset=editorial]").click();
     await page.locator("#visualContentWidth").selectOption("full");
     await page.locator("#visualColumns").selectOption("auto");
     await page.locator("#saveVisualLayout").click();
