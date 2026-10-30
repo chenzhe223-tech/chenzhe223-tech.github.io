@@ -62,9 +62,40 @@ async function main() {
     await page.locator("#visualBgColor").evaluate(el => { el.value = "#e5f0ff"; el.dispatchEvent(new Event("input", { bubbles: true })); });
     await page.locator("#visualDensity").selectOption("compact");
     await page.locator("#visualRadius").selectOption("16");
+    await page.locator('[data-visual-tab="layout"]').click();
+    for (const preset of ["editorial", "balanced", "vertical", "compact", "bento", "split"]) {
+      await page.locator(`[data-layout-preset="${preset}"]`).click();
+      assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), preset, `layout preset ${preset} applies immediately`);
+    }
+    await page.locator("#visualContentWidth").selectOption("custom");
+    await page.locator("#visualCustomWidth").evaluate(el => { el.value = "1480"; el.dispatchEvent(new Event("input", { bubbles: true })); });
+    await page.locator("#visualGap").evaluate(el => { el.value = "22"; el.dispatchEvent(new Event("input", { bubbles: true })); });
+    await page.locator("#visualColumns").selectOption("2");
+    await page.locator("#visualSidebarWidth").evaluate(el => { el.value = "250"; el.dispatchEvent(new Event("input", { bubbles: true })); });
+    for (const mode of ["left", "right", "top", "bottom", "floating", "hidden"]) {
+      await page.locator("#visualNavMode").selectOption(mode);
+      assert.equal(await page.locator("body").evaluate(el => el.dataset.navigation), mode, `navigation mode ${mode} applies immediately`);
+      if (mode === "left" || mode === "right") {
+        await page.locator("#visualNavCollapsed").check();
+        assert.equal(await page.locator("body").evaluate(el => el.dataset.navCollapsed), "true", "side navigation collapse applies");
+        await page.locator("#visualNavCollapsed").uncheck();
+      }
+      if (mode === "floating" || mode === "hidden") {
+        await page.locator("#visualNavRecovery").click();
+        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, `${mode} navigation has a working recovery trigger`);
+        await page.keyboard.press("Escape");
+        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes with Escape`);
+      }
+    }
+    await page.locator("#visualNavMode").selectOption("hidden");
+    await page.locator("#visualNavRecovery").click();
+    await page.locator("#ideaInput").click();
+    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "hidden navigation closes after clicking outside");
     await page.locator("#visualNavMode").selectOption("top");
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-density-compact")), true, "compact density applies immediately");
+    assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), "split", "selected page layout applies immediately");
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-nav-top")), true, "top navigation mode applies immediately");
+    await page.locator("#saveVisualLayout").click();
     await page.locator('[data-visual-tab="motion"]').click();
     await page.locator('[data-motion-effect="stagger"]').click();
     await page.locator("#visualDuration").evaluate(el => { el.value = "1600"; el.dispatchEvent(new Event("input", { bubbles: true })); });
@@ -82,13 +113,26 @@ async function main() {
     assert.equal(visualSaved.theme, "custom", "manual color edits switch the selected preset into a custom theme");
     assert.equal(visualSaved.colors.bg, "#e5f0ff", "custom background color persists locally");
     assert.equal(visualSaved.motion.effect, "stagger", "motion effect persists locally");
+    assert.equal(visualSaved.layout.preset, "split", "selected layout persists locally");
+    assert.equal(visualSaved.layout.contentWidth, "custom", "custom content width persists locally");
+    assert.equal(visualSaved.layout.gap, 22, "module gap persists locally");
+    assert.equal(visualSaved.navigation.mode, "top", "navigation mode persists locally");
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.locator("#openVisualSettings").waitFor();
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-density-compact")), true, "density setting restores after reload");
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-nav-top")), true, "navigation setting restores after reload");
+    assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), "split", "layout preset restores after reload");
+    assert.equal(await page.locator("body").evaluate(el => el.dataset.contentWidth), "custom", "content width mode restores after reload");
     await page.locator("#openVisualSettings").click();
     await page.locator('[data-visual-theme="qore"]').click();
-    await page.locator("#visualNavMode").selectOption("side");
+    await page.locator('[data-visual-tab="layout"]').click();
+    await page.locator("#visualNavMode").selectOption("left");
+    await page.locator("#visualNavCollapsed").uncheck();
+    await page.locator("[data-layout-preset=editorial]").click();
+    await page.locator("#visualContentWidth").selectOption("full");
+    await page.locator("#visualColumns").selectOption("auto");
+    await page.locator("#saveVisualLayout").click();
+    await page.locator('[data-visual-tab="theme"]').click();
     await page.locator("#visualDensity").selectOption("comfortable");
     await page.locator("#saveVisualSettings").click();
     await page.locator("#closeVisualSettings").click();
