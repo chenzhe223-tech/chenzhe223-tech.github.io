@@ -345,6 +345,13 @@ body.visual-nav-top .navwrap{display:flex;flex-wrap:wrap;gap:5px}
 body.visual-nav-top .nav{width:auto;margin:0;padding:8px 11px}
 @media(max-width:760px){body.visual-nav-top aside{display:block;padding:11px 12px 9px}body.visual-nav-top .navwrap{display:flex;flex-wrap:nowrap;overflow-x:auto}}
 
+
+/* Ensure every editable token reaches its matching UI surface */
+aside{background-color:var(--nav)!important}
+.btn.primary{background:var(--blue)!important;border-color:var(--blue)!important}
+.nav.active{color:var(--blue)!important}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline-color:var(--blue)!important}
+
 </style></head>
 <body><div class="app">
 <aside>
