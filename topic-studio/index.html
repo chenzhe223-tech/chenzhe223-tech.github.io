@@ -944,7 +944,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  let settings=read();
  const $v=id=>document.getElementById(id);
  const dialog=$v("visualSettingsDialog");
- function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?{...defaults,...x,colors:{...defaults.colors,...(x.colors||{})},motion:{...defaults.motion,...(x.motion||{})}}:structuredClone(defaults)}catch{return structuredClone(defaults)}}
+ function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?{...defaults,...x,colors:{...defaults.colors,...(x.colors||{})},motion:{...defaults.motion,...(x.motion||{})}}:JSON.parse(JSON.stringify(defaults))}catch{return JSON.parse(JSON.stringify(defaults))}}
  function persist(){try{localStorage.setItem(KEY,JSON.stringify(settings));return true}catch{return false}}
  function setVar(k,v){document.documentElement.style.setProperty(k,v)}
  function apply(){
@@ -1014,7 +1014,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  $v("saveVisualSettings").addEventListener("click",()=>{const ok=persist();toast(ok?"视觉主题设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("saveVisualMotion").addEventListener("click",()=>{const ok=persist();toast(ok?"动效设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("exportVisualMotion").addEventListener("click",exportConfig);
- $v("resetVisualTheme").addEventListener("click",()=>{const m=settings.motion;settings={...structuredClone(defaults),motion:m};apply();persist();toast("视觉主题已恢复默认，动效设置未更改")});
+ $v("resetVisualTheme").addEventListener("click",()=>{const m=settings.motion;settings={...JSON.parse(JSON.stringify(defaults)),motion:m};apply();persist();toast("视觉主题已恢复默认，动效设置未更改")});
  document.querySelectorAll(".nav[data-section]").forEach(b=>b.addEventListener("click",()=>window.setTimeout(animateElements,60)));
  apply();setTab("theme");window.setTimeout(animateElements,120);
 })();
