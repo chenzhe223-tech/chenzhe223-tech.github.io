@@ -7,7 +7,7 @@
   layout:{preset:"editorial",contentWidth:"full",customWidth:1600,gap:18,columns:"auto"},
   navigation:{mode:"left",sidebarWidth:225,collapsed:false,drawerOpen:false}
  };
- function clamp(value,min,max,fallback){const n=Number(value);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):fallback}
+ function clamp(value,min,max,fallback){if(value===null||value===undefined||value==="")return fallback;const n=Number(value);return Number.isFinite(n)?Math.min(max,Math.max(min,n)):fallback}
  function normalize(input){
   const x=input&&typeof input==="object"?input:{};
   const l=x.layout&&typeof x.layout==="object"?x.layout:{};
