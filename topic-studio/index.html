@@ -330,6 +330,21 @@ aside{background:rgba(237,246,255,.72);color:#263b55;border-right:1px solid rgba
 @media(max-width:760px){.app{display:block}aside{background:rgba(239,247,255,.92);border-right:0;border-bottom:1px solid #fff}.content{padding:18px 12px 42px}.visual-settings-body{padding:12px}.visual-theme-grid,.visual-motion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-color-grid,.visual-control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-setting-heading{align-items:flex-start;flex-direction:column;gap:3px}.visual-settings-dialog .modalhead{padding:14px}.visual-tabs{padding-inline:14px}}
 @media(prefers-reduced-motion:reduce){.direction-card,.feedcard,.topiccard,.published-card,.btn{transition:none!important}.direction-card:hover,.feedcard:hover,.topiccard:hover,.published-card:hover{transform:none!important}}
 
+
+/* Visual DNA customization behavior refinements */
+body{background:radial-gradient(ellipse at 8% 2%,color-mix(in srgb,var(--paper) 65%,#a9ceff) 0,transparent 34%),radial-gradient(ellipse at 88% 4%,#f1dafa88 0,transparent 28%),linear-gradient(135deg,var(--paper),#f4f8ff 55%,#f8f3fb);background-attachment:fixed}
+body.visual-density-compact .content{padding-top:20px;padding-bottom:42px}
+body.visual-density-compact .panel{padding:15px;margin-bottom:13px}
+body.visual-density-compact .stat{padding:12px 14px}
+body.visual-density-compact .feedcard,body.visual-density-compact .topiccard,body.visual-density-compact .published-card{padding:10px;gap:10px}
+body.visual-nav-top .app{grid-template-columns:minmax(0,1fr)}
+body.visual-nav-top aside{position:relative;top:auto;height:auto;min-height:0;display:flex;flex-direction:row;align-items:center;flex-wrap:wrap;padding:12px 20px;gap:14px}
+body.visual-nav-top .sideintro,body.visual-nav-top .sidefoot{display:none}
+body.visual-nav-top aside>div:nth-child(2){display:none}
+body.visual-nav-top .navwrap{display:flex;flex-wrap:wrap;gap:5px}
+body.visual-nav-top .nav{width:auto;margin:0;padding:8px 11px}
+@media(max-width:760px){body.visual-nav-top aside{display:block;padding:11px 12px 9px}body.visual-nav-top .navwrap{display:flex;flex-wrap:nowrap;overflow-x:auto}}
+
 </style></head>
 <body><div class="app">
 <aside>
@@ -933,7 +948,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  function persist(){try{localStorage.setItem(KEY,JSON.stringify(settings));return true}catch{return false}}
  function setVar(k,v){document.documentElement.style.setProperty(k,v)}
  function apply(){
-  const c=settings.colors;setVar("--paper",c.bg);setVar("--card",c.card);setVar("--blue",c.accent);setVar("--ink",c.ink);setVar("--line",c.line);setVar("--nav",c.nav);setVar("--blue-soft",c.accent+"18");setVar("--r",settings.radius+"px");
+  const c=settings.colors;document.body.style.background="radial-gradient(ellipse at 8% 2%,"+c.bg+" 0,transparent 38%),radial-gradient(ellipse at 88% 4%,#f1dafa88 0,transparent 28%),linear-gradient(135deg,"+c.bg+",#f4f8ff 55%,#f8f3fb)";setVar("--paper",c.bg);setVar("--card",c.card);setVar("--blue",c.accent);setVar("--ink",c.ink);setVar("--line",c.line);setVar("--nav",c.nav);setVar("--blue-soft",c.accent+"18");setVar("--r",settings.radius+"px");
   document.documentElement.style.setProperty("--vd-font",settings.font==="serif"?' "Noto Serif SC", "Songti SC", serif':settings.font==="sans"?' "Noto Sans SC", "PingFang SC", sans-serif':"");
   document.body.style.fontFamily=settings.font==="serif"?' "Noto Serif SC","Songti SC",serif':settings.font==="sans"?' "Noto Sans SC","PingFang SC",sans-serif':'-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif';
   document.body.classList.toggle("visual-density-compact",settings.density==="compact");
@@ -971,7 +986,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
    if(!node.animate)return;
    const frames=effects[m.effect].frames(m.distance,m.intensity/100,m.direction);
    const delay=m.effect==="stagger"?Math.min(index*65,500):Math.min(index*24,160);
-   try{node.animate(frames,{duration:Math.max(180,Math.min(5000,m.duration)),delay,easing:m.effect==="spring"?"cubic-bezier(.2,1.4,.4,1)":"cubic-bezier(.22,1,.36,1)",fill:"both"}).onfinish=()=>{node.style.opacity="";node.style.transform="";node.style.filter=""}}catch{}
+   try{const animation=node.animate(frames,{duration:Math.max(180,Math.min(5000,m.duration)),delay,easing:m.effect==="spring"?"cubic-bezier(.2,1.4,.4,1)":"cubic-bezier(.22,1,.36,1)",fill:"both"});animation.onfinish=()=>animation.cancel()}catch{}
   });
  }
  function preview(){
