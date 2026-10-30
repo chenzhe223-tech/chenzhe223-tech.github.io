@@ -80,12 +80,6 @@ async function main() {
         assert.equal(await page.locator("body").evaluate(el => el.dataset.navCollapsed), "true", "side navigation collapse applies");
         await page.locator("#visualNavCollapsed").uncheck();
       }
-      if (mode === "floating" || mode === "hidden") {
-        await page.locator("#visualNavRecovery").click();
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, `${mode} navigation has a working recovery trigger`);
-        await page.keyboard.press("Escape");
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes with Escape`);
-      }
     }
     await page.locator("#visualNavMode").selectOption("hidden");
     await page.locator("#visualNavRecovery").click();
@@ -117,6 +111,33 @@ async function main() {
     assert.equal(visualSaved.layout.contentWidth, "custom", "custom content width persists locally");
     assert.equal(visualSaved.layout.gap, 22, "module gap persists locally");
     assert.equal(visualSaved.navigation.mode, "top", "navigation mode persists locally");
+
+    // Recovery controls are outside the modal, so exercise them after closing settings.
+    await page.locator("#openVisualSettings").click();
+    await page.locator('[data-visual-tab="layout"]').click();
+    await page.locator("#visualNavMode").selectOption("floating");
+    await page.locator("#saveVisualLayout").click();
+    await page.locator("#closeVisualSettings").click();
+    await page.locator("#visualNavRecovery").click();
+    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, "floating navigation opens from its recovery trigger");
+    await page.keyboard.press("Escape");
+    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "floating navigation closes with Escape");
+
+    await page.locator("#openVisualSettings").click();
+    await page.locator('[data-visual-tab="layout"]').click();
+    await page.locator("#visualNavMode").selectOption("hidden");
+    await page.locator("#saveVisualLayout").click();
+    await page.locator("#closeVisualSettings").click();
+    await page.locator("#visualNavRecovery").click();
+    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, "hidden navigation opens from its recovery trigger");
+    await page.locator("#ideaInput").click();
+    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "hidden navigation closes after clicking outside");
+
+    await page.locator("#openVisualSettings").click();
+    await page.locator('[data-visual-tab="layout"]').click();
+    await page.locator("#visualNavMode").selectOption("top");
+    await page.locator("#saveVisualLayout").click();
+    await page.locator("#closeVisualSettings").click();
     await page.reload({ waitUntil: "domcontentloaded" });
     await page.locator("#openVisualSettings").waitFor();
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-density-compact")), true, "density setting restores after reload");
