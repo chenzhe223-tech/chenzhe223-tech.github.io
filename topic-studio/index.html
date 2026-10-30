@@ -352,15 +352,67 @@ aside{background-color:var(--nav)!important}
 .nav.active{color:var(--blue)!important}
 button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,a:focus-visible{outline-color:var(--blue)!important}
 
+
+/* Visual DNA six-layout and six-navigation system */
+:root{--layout-gap:18px;--layout-content-width:100%;--layout-sidebar-width:225px}
+.content{width:min(var(--layout-content-width),100%);max-width:none;padding-inline:clamp(14px,2.1vw,34px)}
+.app{grid-template-columns:var(--layout-sidebar-width) minmax(0,1fr)}
+body[data-navigation="right"] .app{grid-template-columns:minmax(0,1fr) var(--layout-sidebar-width)}
+body[data-navigation="right"] aside{grid-column:2;grid-row:1}body[data-navigation="right"] main{grid-column:1;grid-row:1}
+body[data-navigation="top"] .app,body[data-navigation="bottom"] .app,body[data-navigation="floating"] .app,body[data-navigation="hidden"] .app{grid-template-columns:minmax(0,1fr)}
+body[data-navigation="top"] aside{min-height:0;height:auto;display:flex;flex-direction:row;align-items:center;flex-wrap:wrap;padding:10px 18px;gap:12px}
+body[data-navigation="top"] aside .sideintro,body[data-navigation="top"] aside .sidefoot,body[data-navigation="top"] aside>div:nth-child(2){display:none}
+body[data-navigation="top"] aside .navwrap{display:flex;flex-wrap:wrap;gap:5px}body[data-navigation="top"] aside .nav{width:auto;margin:0;padding:7px 10px}
+body[data-navigation="bottom"] aside{position:fixed;z-index:30;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));min-height:0;height:auto;padding:9px 12px;border:1px solid #ffffffb8;border-radius:18px;box-shadow:0 12px 38px #10233b25;backdrop-filter:blur(18px);display:flex;flex-direction:row;align-items:center;gap:8px}
+body[data-navigation="bottom"] aside>.brand,body[data-navigation="bottom"] aside>.sideintro,body[data-navigation="bottom"] aside>.sidefoot,body[data-navigation="bottom"] aside .navlabel,body[data-navigation="bottom"] aside>div:nth-child(4){display:none}
+body[data-navigation="bottom"] aside>div:nth-child(3){flex:1;min-width:0}body[data-navigation="bottom"] aside .navwrap{display:flex;justify-content:space-around;gap:4px}body[data-navigation="bottom"] aside .nav{flex:1;min-width:0;justify-content:center;padding:9px 5px;margin:0;font-size:11px}
+body[data-navigation="bottom"] .content{padding-bottom:110px}
+body[data-navigation="floating"] aside{position:fixed;z-index:28;left:16px;top:50%;transform:translateY(-50%);width:var(--layout-sidebar-width);min-height:0;height:auto;max-height:80vh;overflow:auto;border:1px solid #ffffffb8;border-radius:18px;box-shadow:0 18px 50px #10233b28}
+body[data-navigation="floating"] .app,body[data-navigation="hidden"] .app{display:block}
+body[data-navigation="floating"]:not(.nav-open) aside{transform:translate(-130%,-50%)}body[data-navigation="floating"].nav-open aside{transform:translateY(-50%)}body[data-navigation="floating"].nav-open .content{padding-left:calc(var(--layout-sidebar-width) + 38px)}
+body[data-navigation="hidden"] aside{display:none}body[data-navigation="hidden"].nav-open aside{display:flex;position:fixed;z-index:40;inset:0 auto 0 0;width:min(var(--layout-sidebar-width),86vw);height:100dvh;overflow:auto;box-shadow:18px 0 48px #10233b40}
+#visualNavRecovery{position:fixed;z-index:45;left:14px;bottom:18px;width:46px;height:46px;border:1px solid #d4e1f4;border-radius:15px;background:#fff;color:#1c3c60;box-shadow:0 8px 28px #10233b24;font-size:20px;display:none}
+body[data-navigation="hidden"] #visualNavRecovery,body[data-navigation="floating"] #visualNavRecovery{display:grid;place-items:center}
+body[data-navigation="hidden"].nav-open #visualNavRecovery{left:calc(min(var(--layout-sidebar-width),86vw) - 22px)}
+.source-nav{display:flex;align-items:center;gap:9px;min-width:0;min-height:40px}.source-nav .ico{flex:0 0 20px}.source-nav__label{display:block;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.source-nav__external{flex:0 0 auto;white-space:nowrap;font-size:11px;opacity:.8}
+body[data-content-width="full"]{--layout-content-width:100%}body[data-content-width="wide"]{--layout-content-width:1600px}body[data-content-width="standard"]{--layout-content-width:1320px}body[data-content-width="custom"]{--layout-content-width:var(--layout-custom-width)}
+body[data-layout-preset="editorial"] .section.active{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.75fr);gap:var(--layout-gap);align-items:start}
+body[data-layout-preset="balanced"] .section.active{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap);align-items:stretch}
+body[data-layout-preset="vertical"] .section.active{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--layout-gap)}
+body[data-layout-preset="compact"] .section.active{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--layout-gap);align-items:stretch}
+body[data-layout-preset="bento"] .section.active{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:var(--layout-gap);align-items:stretch}body[data-layout-preset="bento"] .section.active>.panel{grid-column:span 4}body[data-layout-preset="bento"] .section.active>.panel:first-of-type{grid-column:span 8}
+body[data-layout-preset="split"] .section.active{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:var(--layout-gap);align-items:start}
+body[data-layout-columns="2"] .section.active{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-layout-columns="3"] .section.active{grid-template-columns:repeat(3,minmax(0,1fr))}
+.section.active>.panel{min-width:0;align-self:stretch}
+body[data-layout-preset="compact"] .section.active>.panel{padding:14px}
+body[data-layout-preset="editorial"] #section-discover .discovery,body[data-layout-preset="bento"] #section-discover .discovery{grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:var(--layout-gap)}
+body[data-layout-preset="balanced"] #section-discover .discovery{grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--layout-gap)}body[data-layout-preset="split"] #section-discover .discovery{grid-template-columns:minmax(0,1.4fr) minmax(0,.6fr);gap:var(--layout-gap)}
+body[data-layout-preset="vertical"] #section-discover .discovery,body[data-layout-preset="compact"] #section-discover .discovery{grid-template-columns:minmax(0,1fr)}
+body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layout-preset="bento"] #section-discover>.ai-studio,body[data-layout-preset="editorial"] #section-discover>.discovery,body[data-layout-preset="bento"] #section-discover>.discovery{grid-column:1/-1}
+@media(max-width:980px){body[data-layout-preset="compact"] .section.active{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-layout-preset="bento"] .section.active{grid-template-columns:repeat(6,minmax(0,1fr))}body[data-layout-preset="bento"] .section.active>.panel{grid-column:span 3}}
+@media(max-width:760px){
+ .app{display:block}body[data-navigation="left"] aside,body[data-navigation="right"] aside{position:relative;inset:auto;width:auto;height:auto;min-height:0;display:block;padding:12px}
+ body[data-navigation="left"] aside .navwrap,body[data-navigation="right"] aside .navwrap{display:flex;overflow-x:auto;flex-wrap:nowrap;gap:5px}
+ body[data-navigation="left"] aside .nav,body[data-navigation="right"] aside .nav{flex:0 0 auto;width:auto;white-space:nowrap}
+ body[data-navigation="top"] aside{display:block;padding:11px 12px 9px}body[data-navigation="top"] aside .navwrap{display:flex;flex-wrap:nowrap;overflow-x:auto}
+ body[data-navigation="bottom"] aside{display:flex;left:8px;right:8px;bottom:max(8px,env(safe-area-inset-bottom));padding:7px}
+ body[data-navigation="floating"] aside{left:10px;top:auto;bottom:70px;transform:none;width:min(var(--layout-sidebar-width),88vw);max-height:65vh}body[data-navigation="floating"]:not(.nav-open) aside{transform:translateX(-130%)}body[data-navigation="floating"].nav-open aside{transform:none}body[data-navigation="floating"] .content{padding:18px 12px 42px}
+ body[data-navigation="hidden"].nav-open aside{width:min(var(--layout-sidebar-width),86vw)}body[data-navigation="left"][data-nav-collapsed="true"] .app{grid-template-columns:76px minmax(0,1fr)}body[data-navigation="right"][data-nav-collapsed="true"] .app{grid-template-columns:minmax(0,1fr) 76px}body[data-navigation="left"][data-nav-collapsed="true"] aside,body[data-navigation="right"][data-nav-collapsed="true"] aside{padding-inline:8px}body[data-navigation="left"][data-nav-collapsed="true"] aside .nav:not(.source-nav),body[data-navigation="right"][data-nav-collapsed="true"] aside .nav:not(.source-nav){justify-content:center;font-size:0}body[data-navigation="left"][data-nav-collapsed="true"] aside .nav .ico,body[data-navigation="right"][data-nav-collapsed="true"] aside .nav .ico{font-size:16px}body[data-navigation="left"][data-nav-collapsed="true"] aside .sideintro,body[data-navigation="left"][data-nav-collapsed="true"] aside .navlabel,body[data-navigation="left"][data-nav-collapsed="true"] aside .sidefoot,body[data-navigation="right"][data-nav-collapsed="true"] aside .sideintro,body[data-navigation="right"][data-nav-collapsed="true"] aside .navlabel,body[data-navigation="right"][data-nav-collapsed="true"] aside .sidefoot{display:none}body[data-layout-columns="2"] .section.active{grid-template-columns:repeat(2,minmax(0,1fr))}body[data-layout-columns="3"] .section.active{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .section.active,body[data-layout-preset] .section.active{display:block}
+ body[data-layout-preset="editorial"] #section-discover .discovery,body[data-layout-preset="balanced"] #section-discover .discovery,body[data-layout-preset="split"] #section-discover .discovery,body[data-layout-preset="bento"] #section-discover .discovery{grid-template-columns:minmax(0,1fr)}
+ body[data-layout-preset="compact"] .section.active,body[data-layout-preset="bento"] .section.active,body[data-layout-preset="editorial"] .section.active,body[data-layout-preset="balanced"] .section.active,body[data-layout-preset="split"] .section.active{display:grid;grid-template-columns:minmax(0,1fr)}
+}
+
+.visual-layout-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.visual-layout-choice{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);min-height:82px}.visual-layout-choice strong{font-size:12px}.visual-layout-choice small{font-size:10px;color:var(--muted);line-height:1.45}.visual-layout-choice.active{border-color:var(--blue);background:var(--blue-soft);box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 12%,transparent)}@media(max-width:560px){.visual-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style></head>
 <body><div class="app">
-<aside>
+<aside id="appNavigation">
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
   <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button>
  </div></div>
- <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span>AI 创造机会雷达 ↗</a><a class="nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span>内容生产流水线 ↗</a><a class="nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span>Dashboard Studio ↗</a><a class="nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span>AI 指令与完整交付 Skill ↗</a></div>
+ <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
 </aside>
 <main><header class="topbar"><div class="crumb">DAVYLAB / <strong id="crumbTitle">选题发现</strong></div><div class="actions"><button class="btn small" id="openVisualSettings" type="button" aria-haspopup="dialog">✧ 视觉与动效</button><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
@@ -578,7 +630,7 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 </div></main></div>
 <dialog id="visualSettingsDialog" class="visual-settings-dialog" aria-labelledby="visualSettingsTitle">
  <div class="modalhead"><div><h2 id="visualSettingsTitle">DAVYLAB · 视觉与动效设置</h2><p class="visual-dialog-sub">主题、排版与动效独立配置，实时预览并保存在本机</p></div><button class="close" type="button" id="closeVisualSettings" aria-label="关闭">×</button></div>
- <div class="visual-tabs" role="tablist" aria-label="视觉设置分类"><button type="button" class="visual-tab active" data-visual-tab="theme" role="tab" aria-selected="true">视觉主题</button><button type="button" class="visual-tab" data-visual-tab="motion" role="tab" aria-selected="false">动态效果</button></div>
+ <div class="visual-tabs" role="tablist" aria-label="视觉设置分类"><button type="button" class="visual-tab active" data-visual-tab="theme" role="tab" aria-selected="true">视觉主题</button><button type="button" class="visual-tab" data-visual-tab="motion" role="tab" aria-selected="false">动态效果</button><button type="button" class="visual-tab" data-visual-tab="layout" role="tab" aria-selected="false">页面布局</button></div>
  <div class="modalbody visual-settings-body">
   <section class="visual-pane active" data-visual-pane="theme">
    <div class="visual-setting-block"><div class="visual-setting-heading"><strong>主题基调</strong><span>选择预设后仍可继续自定义</span></div><div class="visual-theme-grid">
@@ -593,10 +645,28 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
     <label>内容密度<select id="visualDensity"><option value="comfortable">舒适</option><option value="compact">紧凑</option></select></label>
     <label>卡片圆角<select id="visualRadius"><option value="12">12 · 利落</option><option value="16">16 · 平衡</option><option value="20">20 · 柔和</option><option value="24">24 · 玻璃感</option></select></label>
     <label>中文字体<select id="visualFont"><option value="system">系统默认</option><option value="sans">Noto Sans SC / 无衬线回退</option><option value="serif">Noto Serif SC / 衬线回退</option></select></label>
-    <label>导航呈现<select id="visualNavMode"><option value="side">桌面侧栏 / 移动横向导航</option><option value="top">顶部工作区导航</option></select></label>
+
    </div></div>
-   <div class="visual-actions"><button class="btn small" id="resetVisualTheme" type="button">恢复主题默认</button><button class="btn small" id="resetVisualLayout" type="button">恢复界面细节默认</button><button class="btn small primary" id="saveVisualSettings" type="button">保存视觉设置</button></div>
+   <div class="visual-actions"><button class="btn small" id="resetVisualTheme" type="button">恢复主题默认</button><button class="btn small primary" id="saveVisualSettings" type="button">保存视觉设置</button></div>
   </section>
+<section class="visual-pane" data-visual-pane="layout" hidden>
+<div class="visual-setting-block"><div class="visual-setting-heading"><strong>页面结构</strong><span>选择后即时预览；不影响选题数据</span></div><div class="visual-layout-grid">
+<button type="button" class="visual-layout-choice active" data-layout-preset="editorial"><strong>编辑式布局</strong><small>主任务突出，辅助信息并列</small></button>
+<button type="button" class="visual-layout-choice" data-layout-preset="balanced"><strong>平衡网格</strong><small>模块均衡，适合总览</small></button>
+<button type="button" class="visual-layout-choice" data-layout-preset="vertical"><strong>纵向流程</strong><small>单列阅读，移动端友好</small></button>
+<button type="button" class="visual-layout-choice" data-layout-preset="compact"><strong>紧凑分析</strong><small>多列信息，提升密度</small></button>
+<button type="button" class="visual-layout-choice" data-layout-preset="bento"><strong>Bento 拼贴</strong><small>主次模块错落组合</small></button>
+<button type="button" class="visual-layout-choice" data-layout-preset="split"><strong>左右分栏</strong><small>两类工作区并行</small></button>
+</div></div>
+<div class="visual-setting-block"><div class="visual-setting-heading"><strong>画布与间距</strong><span>实时调整主内容空间</span></div><div class="visual-control-grid">
+<label>内容宽度<select id="visualContentWidth"><option value="full">满铺可用画布</option><option value="wide">宽屏 1600px</option><option value="standard">标准 1320px</option><option value="custom">自定义宽度</option></select></label>
+<label>自定义宽度 <output id="visualCustomWidthValue">1600 px</output><input id="visualCustomWidth" type="range" min="960" max="2400" step="20" value="1600"></label>
+<label>模块间距 <output id="visualGapValue">18 px</output><input id="visualGap" type="range" min="8" max="32" value="18"></label>
+<label>内容列数<select id="visualColumns"><option value="auto">自动</option><option value="2">两列</option><option value="3">三列</option></select></label>
+<label>侧栏宽度 <output id="visualSidebarWidthValue">225 px</output><input id="visualSidebarWidth" type="range" min="176" max="320" value="225"></label>
+<label>导航模式<select id="visualNavMode"><option value="left">左侧导航</option><option value="right">右侧导航</option><option value="top">顶部导航</option><option value="bottom">底部导航</option><option value="floating">悬浮导航</option><option value="hidden">隐藏导航（保留唤出入口）</option></select></label><label class="visual-motion-toggle"><input type="checkbox" id="visualNavCollapsed"> 折叠侧栏（仅左右侧导航）</label>
+</div></div>
+<div class="visual-actions"><button class="btn small" id="resetVisualLayout" type="button">恢复布局默认</button><button class="btn small primary" id="saveVisualLayout" type="button">保存布局设置</button></div></section>
   <section class="visual-pane" data-visual-pane="motion" hidden>
    <div class="visual-setting-block"><div class="visual-setting-heading"><strong>动效风格</strong><span>源自动画实验室六类效果，已适配内容工作台</span></div><div class="visual-motion-grid">
     <button type="button" class="visual-motion-choice active" data-motion-effect="fade-up"><strong>淡入上移</strong><small>内容进入、页面切换</small></button>
@@ -632,6 +702,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
   <div class="field"><label for="scBrand">品牌契合</label><select id="scBrand"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
  </div></div></div></div><div class="modalfoot"><button class="btn" type="button" id="cancelDialog">取消</button><button class="btn primary" type="submit">保存选题</button></div></form></dialog>
 <input type="file" id="jsonImport" accept=".json,application/json" hidden><div class="toast" id="toast"></div>
+<button id="visualNavRecovery" type="button" aria-label="打开导航" aria-controls="appNavigation" aria-expanded="false">☰</button>
+<script src="./visual-dna-layout.js"></script>
 <script>
 const RADAR_URL="/radar/data/latest.json",STORE_KEY="davylab-topic-studio-v1",NIANBOX_API="https://nianbox-cloud.chenzhe223.workers.dev",NIANBOX_TOKEN_KEY="davylab_nianbox_session",STATUS={inbox:"灵感收集",shortlist:"值得写",writing:"正在创作",ready:"待交稿",published:"已发布"};
 let radarData=null,feedType="all",feedQuery="",feedSort="fresh",feedTheme="all",libraryStatus="all",feedCache=[],topics=loadTopics(),toastTimer=null,directionSet=[],selectedDirection=-1,nianboxCandidates=[],nianboxIdeas=[],nianboxUser=null,nianboxToken=sessionStorage.getItem(NIANBOX_TOKEN_KEY)||"";
@@ -939,7 +1011,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
 /* DAVYLAB Visual DNA · Theme, customization and Motion Lab adaptation */
 (function initDavyVisualDNA(){
  const KEY="davylab-topic-visual-dna-v1";
- const defaults={theme:"qore",colors:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},density:"comfortable",radius:"20",font:"system",navMode:"side",motion:{enabled:true,effect:"fade-up",duration:1200,intensity:70,distance:24,direction:"up",reduce:false}};
+ const defaults={theme:"qore",colors:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},density:"comfortable",radius:"20",font:"system",navMode:"side",layout:{...DavyLayoutConfig.defaults.layout},navigation:{...DavyLayoutConfig.defaults.navigation},motion:{enabled:true,effect:"fade-up",duration:1200,intensity:70,distance:24,direction:"up",reduce:false}};
  const effects={
   "fade-up":{name:"淡入上移",description:"以轻微上移和透明度变化建立进入感，适合内容卡片与页面模块。",frames:(d,i)=>[{opacity:0,transform:"translateY("+d*i+"px)"},{opacity:1,transform:"translateY(0)"}]},
   spring:{name:"弹性聚焦",description:"先轻微放大再回到稳定尺寸，适合重点卡片与轻量状态反馈。",frames:(d,i)=>[{opacity:0,transform:"scale("+(1-.12*i)+")"},{opacity:1,transform:"scale(1)"}]},
@@ -951,7 +1023,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  let settings=read();
  const $v=id=>document.getElementById(id);
  const dialog=$v("visualSettingsDialog");
- function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?{...defaults,...x,colors:{...defaults.colors,...(x.colors||{})},motion:{...defaults.motion,...(x.motion||{})}}:JSON.parse(JSON.stringify(defaults))}catch{return JSON.parse(JSON.stringify(defaults))}}
+ function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");const legacyMode=x?.navigation?.mode||(x?.navMode==="top"?"top":"left");const merged={...defaults,...(x&&typeof x==="object"?x:{}),colors:{...defaults.colors,...(x?.colors||{})},motion:{...defaults.motion,...(x?.motion||{})}};merged.navigation={...defaults.navigation,...(x?.navigation||{}),mode:legacyMode};return {...merged,...DavyLayoutConfig.normalize(merged)}}catch{return {...JSON.parse(JSON.stringify(defaults)),...DavyLayoutConfig.normalize(defaults)}}}
  function persist(){try{localStorage.setItem(KEY,JSON.stringify(settings));return true}catch{return false}}
  function setVar(k,v){document.documentElement.style.setProperty(k,v)}
  function apply(){
@@ -959,17 +1031,16 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
   document.documentElement.style.setProperty("--vd-font",settings.font==="serif"?' "Noto Serif SC", "Songti SC", serif':settings.font==="sans"?' "Noto Sans SC", "PingFang SC", sans-serif':"");
   document.body.style.fontFamily=settings.font==="serif"?' "Noto Serif SC","Songti SC",serif':settings.font==="sans"?' "Noto Sans SC","PingFang SC",sans-serif':'-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif';
   document.body.classList.toggle("visual-density-compact",settings.density==="compact");
-  document.body.classList.toggle("visual-nav-top",settings.navMode==="top");
-  syncControls();
+  document.body.classList.toggle("visual-nav-top",settings.navigation.mode==="top");document.body.dataset.layoutPreset=settings.layout.preset;document.body.dataset.navigation=settings.navigation.mode;document.body.dataset.contentWidth=settings.layout.contentWidth;document.body.style.setProperty("--layout-gap",settings.layout.gap+"px");document.body.style.setProperty("--layout-sidebar-width",settings.navigation.sidebarWidth+"px");document.body.style.setProperty("--layout-custom-width",settings.layout.customWidth+"px");document.body.dataset.layoutColumns=String(settings.layout.columns);document.body.dataset.navCollapsed=String(!!settings.navigation.collapsed);document.body.classList.toggle("nav-open",!!settings.navigation.drawerOpen);const recovery=$v("visualNavRecovery");if(recovery){recovery.setAttribute("aria-expanded",String(!!settings.navigation.drawerOpen));recovery.setAttribute("aria-label",settings.navigation.drawerOpen?"关闭导航":"打开导航")}syncControls();
  }
  function syncControls(){
   const c=settings.colors,m=settings.motion;
   [["visualBgColor",c.bg],["visualCardColor",c.card],["visualAccentColor",c.accent],["visualInkColor",c.ink],["visualLineColor",c.line],["visualNavColor",c.nav]].forEach(([id,v])=>{if($v(id))$v(id).value=v});
-  [["visualDensity",settings.density],["visualRadius",settings.radius],["visualFont",settings.font],["visualNavMode",settings.navMode],["visualDuration",m.duration],["visualIntensity",m.intensity],["visualDistance",m.distance],["visualDirection",m.direction],["visualMotionEnabled",m.enabled],["visualReduceMotion",m.reduce]].forEach(([id,v])=>{if($v(id)){if($v(id).type==="checkbox")$v(id).checked=!!v;else $v(id).value=String(v)}});
+  [["visualDensity",settings.density],["visualRadius",settings.radius],["visualFont",settings.font],["visualContentWidth",settings.layout.contentWidth],["visualCustomWidth",settings.layout.customWidth],["visualGap",settings.layout.gap],["visualColumns",settings.layout.columns],["visualSidebarWidth",settings.navigation.sidebarWidth],["visualNavMode",settings.navigation.mode],["visualNavCollapsed",settings.navigation.collapsed],["visualDuration",m.duration],["visualIntensity",m.intensity],["visualDistance",m.distance],["visualDirection",m.direction],["visualMotionEnabled",m.enabled],["visualReduceMotion",m.reduce]].forEach(([id,v])=>{if($v(id)){if($v(id).type==="checkbox")$v(id).checked=!!v;else $v(id).value=String(v)}});
   if($v("visualDurationValue"))$v("visualDurationValue").textContent=(m.duration/1000).toFixed(1)+" 秒";
   if($v("visualIntensityValue"))$v("visualIntensityValue").textContent=m.intensity+"%";
   if($v("visualDistanceValue"))$v("visualDistanceValue").textContent=m.distance+" px";
-  document.querySelectorAll("[data-visual-theme]").forEach(b=>b.classList.toggle("active",b.dataset.visualTheme===settings.theme));
+  if($v("visualCustomWidthValue"))$v("visualCustomWidthValue").textContent=settings.layout.customWidth+" px";if($v("visualGapValue"))$v("visualGapValue").textContent=settings.layout.gap+" px";if($v("visualSidebarWidthValue"))$v("visualSidebarWidthValue").textContent=settings.navigation.sidebarWidth+" px";document.querySelectorAll("[data-layout-preset]").forEach(b=>b.classList.toggle("active",b.dataset.layoutPreset===settings.layout.preset));document.querySelectorAll("[data-visual-theme]").forEach(b=>b.classList.toggle("active",b.dataset.visualTheme===settings.theme));
   document.querySelectorAll("[data-motion-effect]").forEach(b=>b.classList.toggle("active",b.dataset.motionEffect===m.effect));
   if($v("visualMotionDescription"))$v("visualMotionDescription").textContent=effects[m.effect].description;
   updateContrast();
@@ -1004,7 +1075,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
   if($v("visualMotionStatus"))$v("visualMotionStatus").textContent="正在预览「"+effects[m.effect].name+"」；预览时长 "+(m.duration/1000).toFixed(1)+" 秒。";
  }
  function exportConfig(){
-  const payload={schema:"davylab.topic-studio.visual-dna/v1",exportedAt:new Date().toISOString(),theme:settings.theme,colors:settings.colors,density:settings.density,radius:settings.radius,font:settings.font,navMode:settings.navMode,motion:settings.motion};
+  const payload={schema:"davylab.topic-studio.visual-dna/v1",exportedAt:new Date().toISOString(),theme:settings.theme,colors:settings.colors,density:settings.density,radius:settings.radius,font:settings.font,layout:settings.layout,navigation:settings.navigation,motion:settings.motion};
   const blob=new Blob([JSON.stringify(payload,null,2)+"\n"],{type:"application/json;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="davylab-topic-studio-visual-dna.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
  }
  function setTab(tab){document.querySelectorAll("[data-visual-tab]").forEach(b=>{const active=b.dataset.visualTab===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});document.querySelectorAll("[data-visual-pane]").forEach(p=>{const active=p.dataset.visualPane===tab;p.classList.toggle("active",active);p.hidden=!active})}
@@ -1014,15 +1085,16 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  document.querySelectorAll("[data-visual-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.visualTab)));
  document.querySelectorAll("[data-visual-theme]").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.visualTheme)));
  [["visualBgColor","bg"],["visualCardColor","card"],["visualAccentColor","accent"],["visualInkColor","ink"],["visualLineColor","line"],["visualNavColor","nav"]].forEach(([id,key])=>$v(id).addEventListener("input",e=>{settings.theme="custom";settings.colors[key]=e.target.value;apply()}));
- [["visualDensity","density"],["visualRadius","radius"],["visualFont","font"],["visualNavMode","navMode"]].forEach(([id,key])=>$v(id).addEventListener("change",e=>{settings[key]=e.target.value;apply()}));
+ [["visualDensity","density"],["visualRadius","radius"],["visualFont","font"]].forEach(([id,key])=>$v(id).addEventListener("change",e=>{settings[key]=e.target.value;apply()}));$v("visualContentWidth").addEventListener("change",e=>{settings.layout.contentWidth=e.target.value;apply()});$v("visualColumns").addEventListener("change",e=>{settings.layout.columns=e.target.value==="auto"?"auto":Number(e.target.value);apply()});$v("visualNavMode").addEventListener("change",e=>{settings.navigation.mode=e.target.value;settings.navigation.drawerOpen=false;apply()});$v("visualNavCollapsed").addEventListener("change",e=>{settings.navigation.collapsed=e.target.checked;apply()});$v("visualCustomWidth").addEventListener("input",e=>{settings.layout.customWidth=Number(e.target.value);apply()});$v("visualGap").addEventListener("input",e=>{settings.layout.gap=Number(e.target.value);apply()});$v("visualSidebarWidth").addEventListener("input",e=>{settings.navigation.sidebarWidth=Number(e.target.value);apply()});document.querySelectorAll("[data-layout-preset]").forEach(b=>b.addEventListener("click",()=>{settings.layout.preset=b.dataset.layoutPreset;apply()}));$v("visualNavRecovery").addEventListener("click",()=>{settings.navigation.drawerOpen=!settings.navigation.drawerOpen;document.body.classList.toggle("nav-open",settings.navigation.drawerOpen);$v("visualNavRecovery").setAttribute("aria-expanded",String(settings.navigation.drawerOpen));$v("visualNavRecovery").setAttribute("aria-label",settings.navigation.drawerOpen?"关闭导航":"打开导航")});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&settings.navigation.drawerOpen){settings.navigation.drawerOpen=false;document.body.classList.remove("nav-open");$v("visualNavRecovery").setAttribute("aria-expanded","false");$v("visualNavRecovery").setAttribute("aria-label","打开导航")}});document.addEventListener("click",e=>{const nav=$v("appNavigation"),trigger=$v("visualNavRecovery");if(settings.navigation.drawerOpen&&nav&&!nav.contains(e.target)&&trigger&&!trigger.contains(e.target)){settings.navigation.drawerOpen=false;document.body.classList.remove("nav-open");trigger.setAttribute("aria-expanded","false");trigger.setAttribute("aria-label","打开导航")}});
  [["visualDuration","duration"],["visualIntensity","intensity"],["visualDistance","distance"],["visualDirection","direction"],["visualMotionEnabled","enabled"],["visualReduceMotion","reduce"]].forEach(([id,key])=>$v(id).addEventListener("input",e=>{settings.motion[key]=e.target.type==="checkbox"?e.target.checked:e.target.type==="range"?Number(e.target.value):e.target.value;syncControls()}));
  document.querySelectorAll("[data-motion-effect]").forEach(b=>b.addEventListener("click",()=>{settings.motion.effect=b.dataset.motionEffect;syncControls()}));
  $v("previewVisualMotion").addEventListener("click",preview);
  $v("saveVisualSettings").addEventListener("click",()=>{const ok=persist();toast(ok?"视觉主题设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("saveVisualMotion").addEventListener("click",()=>{const ok=persist();toast(ok?"动效设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("exportVisualMotion").addEventListener("click",exportConfig);
- $v("resetVisualTheme").addEventListener("click",()=>{setTheme("qore");toast("主题颜色已恢复默认，布局、字体与动效设置未更改")});$v("resetVisualLayout").addEventListener("click",()=>{settings.density=defaults.density;settings.radius=defaults.radius;settings.font=defaults.font;settings.navMode=defaults.navMode;apply();persist();toast("界面细节已恢复默认，主题颜色与动效设置未更改")});
+ $v("resetVisualTheme").addEventListener("click",()=>{setTheme("qore");toast("主题颜色已恢复默认，布局、字体与动效设置未更改")});$v("resetVisualLayout").addEventListener("click",()=>{settings={...settings,density:defaults.density,radius:defaults.radius,font:defaults.font,...DavyLayoutConfig.resetLayout(settings)};apply();persist();toast("布局、导航与界面细节已恢复默认，主题颜色与动效设置未更改")});$v("saveVisualLayout").addEventListener("click",()=>{const ok=persist();toast(ok?"布局与导航设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  document.querySelectorAll(".nav[data-section]").forEach(b=>b.addEventListener("click",()=>window.setTimeout(animateElements,60)));
+ document.querySelectorAll("#appNavigation a.nav, #appNavigation button.nav").forEach(a=>a.addEventListener("click",()=>{if(["hidden","floating"].includes(settings.navigation.mode)){settings.navigation.drawerOpen=false;document.body.classList.remove("nav-open");$v("visualNavRecovery").setAttribute("aria-expanded","false")}}));
  apply();setTab("theme");window.setTimeout(animateElements,120);
 })();
 
