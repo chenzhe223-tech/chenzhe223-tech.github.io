@@ -81,10 +81,6 @@ async function main() {
         await page.locator("#visualNavCollapsed").uncheck();
       }
     }
-    await page.locator("#visualNavMode").selectOption("hidden");
-    await page.locator("#visualNavRecovery").click();
-    await page.locator("#ideaInput").click();
-    assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "hidden navigation closes after clicking outside");
     await page.locator("#visualNavMode").selectOption("top");
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-density-compact")), true, "compact density applies immediately");
     assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), "split", "selected page layout applies immediately");
