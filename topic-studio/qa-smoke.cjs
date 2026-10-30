@@ -63,6 +63,7 @@ async function main() {
     await page.locator("#visualDensity").selectOption("compact");
     await page.locator("#visualRadius").selectOption("16");
     await page.locator('[data-visual-tab="layout"]').click();
+    assert.equal(await page.locator(".visual-layout-choice .layout-mini").count(), 6, "each layout preset includes a distinct visual wireframe preview");
     for (const preset of ["editorial", "balanced", "vertical", "compact", "bento", "split"]) {
       await page.locator(`button[data-layout-preset="${preset}"]`).click();
       assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), preset, `layout preset ${preset} applies immediately`);
@@ -85,6 +86,7 @@ async function main() {
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-density-compact")), true, "compact density applies immediately");
     assert.equal(await page.locator("body").evaluate(el => el.dataset.layoutPreset), "split", "selected page layout applies immediately");
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("visual-nav-top")), true, "top navigation mode applies immediately");
+    await page.screenshot({ path: path.join(screenshotDir, "topic-studio-layout-settings.png"), fullPage: false });
     await page.locator("#saveVisualLayout").click();
     await page.locator('[data-visual-tab="motion"]').click();
     await page.locator('[data-motion-effect="stagger"]').click();
