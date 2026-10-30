@@ -588,7 +588,7 @@ body.visual-nav-top .nav{width:auto;margin:0;padding:8px 11px}
     <label>中文字体<select id="visualFont"><option value="system">系统默认</option><option value="sans">Noto Sans SC / 无衬线回退</option><option value="serif">Noto Serif SC / 衬线回退</option></select></label>
     <label>导航呈现<select id="visualNavMode"><option value="side">桌面侧栏 / 移动横向导航</option><option value="top">顶部工作区导航</option></select></label>
    </div></div>
-   <div class="visual-actions"><button class="btn small" id="resetVisualTheme" type="button">恢复主题默认</button><button class="btn small primary" id="saveVisualSettings" type="button">保存视觉设置</button></div>
+   <div class="visual-actions"><button class="btn small" id="resetVisualTheme" type="button">恢复主题默认</button><button class="btn small" id="resetVisualLayout" type="button">恢复界面细节默认</button><button class="btn small primary" id="saveVisualSettings" type="button">保存视觉设置</button></div>
   </section>
   <section class="visual-pane" data-visual-pane="motion" hidden>
    <div class="visual-setting-block"><div class="visual-setting-heading"><strong>动效风格</strong><span>源自动画实验室六类效果，已适配内容工作台</span></div><div class="visual-motion-grid">
@@ -1014,7 +1014,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  $v("saveVisualSettings").addEventListener("click",()=>{const ok=persist();toast(ok?"视觉主题设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("saveVisualMotion").addEventListener("click",()=>{const ok=persist();toast(ok?"动效设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("exportVisualMotion").addEventListener("click",exportConfig);
- $v("resetVisualTheme").addEventListener("click",()=>{const m=settings.motion;settings={...JSON.parse(JSON.stringify(defaults)),motion:m};apply();persist();toast("视觉主题已恢复默认，动效设置未更改")});
+ $v("resetVisualTheme").addEventListener("click",()=>{setTheme("qore");toast("主题颜色已恢复默认，布局、字体与动效设置未更改")});$v("resetVisualLayout").addEventListener("click",()=>{settings.density=defaults.density;settings.radius=defaults.radius;settings.font=defaults.font;settings.navMode=defaults.navMode;apply();persist();toast("界面细节已恢复默认，主题颜色与动效设置未更改")});
  document.querySelectorAll(".nav[data-section]").forEach(b=>b.addEventListener("click",()=>window.setTimeout(animateElements,60)));
  apply();setTab("theme");window.setTimeout(animateElements,120);
 })();
