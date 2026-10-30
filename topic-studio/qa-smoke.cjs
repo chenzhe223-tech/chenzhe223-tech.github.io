@@ -79,7 +79,7 @@ async function main() {
     await page.locator("#saveVisualMotion").click();
     await page.locator("#closeVisualSettings").click();
     const visualSaved = await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-visual-dna-v1") || "null"));
-    assert.equal(visualSaved.theme, "ocean", "theme preset persists locally");
+    assert.equal(visualSaved.theme, "custom", "manual color edits switch the selected preset into a custom theme");
     assert.equal(visualSaved.colors.bg, "#e5f0ff", "custom background color persists locally");
     assert.equal(visualSaved.motion.effect, "stagger", "motion effect persists locally");
     await page.reload({ waitUntil: "domcontentloaded" });
