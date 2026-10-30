@@ -238,6 +238,30 @@ async function main() {
       }
     }
 
+    // Responsive navigation smoke: each navigation mode must fit a narrow phone viewport.
+    await page.setViewportSize({ width: 390, height: 850 });
+    for (const mode of ["right", "top", "bottom", "floating", "hidden", "left"]) {
+      await page.locator("#openVisualSettings").click();
+      await page.locator('[data-visual-tab="layout"]').click();
+      await page.locator("#visualNavMode").selectOption(mode);
+      await page.locator("#saveVisualLayout").click();
+      await page.locator("#closeVisualSettings").click();
+      await page.waitForTimeout(60);
+      const navViewport = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+      assert.ok(navViewport.document <= navViewport.viewport + 1, `no horizontal overflow for ${mode} navigation on mobile: ${JSON.stringify(navViewport)}`);
+      if (mode === "floating" || mode === "hidden") {
+        await page.locator("#visualNavRecovery").click();
+        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, `${mode} navigation opens on mobile`);
+        await page.keyboard.press("Escape");
+        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes on mobile`);
+      }
+    }
+    await page.locator("#openVisualSettings").click();
+    await page.locator('[data-visual-tab="layout"]').click();
+    await page.locator("#visualNavMode").selectOption("left");
+    await page.locator("#saveVisualLayout").click();
+    await page.locator("#closeVisualSettings").click();
+
     await page.locator("#ideaInput").fill("普通人如何用 AI 做出第一个小产品");
     await page.getByRole("button", { name: /分析并生成方向/ }).click();
     await page.locator("#aiState").waitFor();
