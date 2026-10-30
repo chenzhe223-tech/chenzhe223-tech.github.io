@@ -283,6 +283,53 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
  .published-cover{width:66px;height:58px}
 }
 
+
+/* DAVYLAB Visual DNA · Theme & Motion Controls */
+:root{--paper:#eaf3ff;--card:rgba(248,252,255,.88);--ink:#15243a;--muted:#718198;--line:#d8e5f4;--blue:#168cf0;--blue-soft:#e2f1ff;--nav:#e7f2ff;--shadow:0 12px 34px rgba(43,94,153,.085);--r:20px;--vd-glass:rgba(255,255,255,.62)}
+body{background:radial-gradient(ellipse at 8% 2%,#c5ddff 0,transparent 34%),radial-gradient(ellipse at 88% 4%,#f1dafa 0,transparent 28%),linear-gradient(135deg,#e8f2ff 0%,#f3f8ff 48%,#f7f2fb 100%);background-attachment:fixed}
+.app{grid-template-columns:236px minmax(0,1fr)}
+aside{background:rgba(237,246,255,.72);color:#263b55;border-right:1px solid rgba(255,255,255,.78);box-shadow:8px 0 30px rgba(55,103,157,.035);backdrop-filter:blur(22px)}
+.sideintro{background:rgba(255,255,255,.48);border-color:rgba(255,255,255,.88);color:#62758d}
+.sideintro strong{color:#1b3552}.navlabel{color:#8a9cb1}.nav{color:#536a84}.nav.active{background:rgba(255,255,255,.9);color:#116fc6;box-shadow:0 3px 14px rgba(45,111,178,.08)}.nav:hover{background:rgba(255,255,255,.62);color:#176ebc}
+.mark{background:linear-gradient(145deg,#0788ed,#8bdcff);color:white}
+.topbar{background:rgba(248,252,255,.72);border-bottom:1px solid rgba(255,255,255,.86);backdrop-filter:blur(22px)}
+.content{width:100%;max-width:none;padding:clamp(20px,2.4vw,38px) clamp(16px,2.5vw,42px) 68px}
+.stat,.panel,.ai-studio,.direction-card,.feedcard,.topiccard,.published-card,.growth-item,.method{background:var(--card);border-color:rgba(255,255,255,.88);box-shadow:var(--shadow);backdrop-filter:blur(16px)}
+.stat,.panel,.ai-studio{border-radius:var(--r)}
+.panel{padding:clamp(16px,1.6vw,24px)}
+.ai-studio{background:linear-gradient(130deg,rgba(255,255,255,.86),rgba(235,245,255,.76) 58%,rgba(250,240,255,.72));border-color:rgba(255,255,255,.92)}
+.btn.primary{background:linear-gradient(120deg,#168cf0,#49b5f6);border-color:#168cf0;box-shadow:0 6px 16px rgba(22,140,240,.18)}
+.btn.soft,.chip.active{background:#e3f2ff;border-color:#c4e2fb;color:#176fba}
+.statnum{letter-spacing:-.8px}
+.direction-card,.feedcard,.topiccard,.published-card{transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease}
+.direction-card:hover,.feedcard:hover,.topiccard:hover,.published-card:hover{transform:translateY(-2px);box-shadow:0 16px 36px rgba(43,94,153,.11)}
+.visual-settings-dialog{width:min(780px,calc(100% - 22px));background:rgba(247,251,255,.97);color:#182b43;border:1px solid #fff;border-radius:22px;backdrop-filter:blur(24px)}
+.visual-settings-dialog .modalhead{align-items:flex-start}.visual-dialog-sub{font-size:11px;color:#788ba2;margin:4px 0 0}
+.visual-tabs{display:flex;gap:7px;padding:12px 20px 0;border-bottom:1px solid #e3ebf5}.visual-tab{border:0;background:transparent;color:#71839a;padding:9px 13px;border-bottom:2px solid transparent;font-size:12px}.visual-tab.active{color:#1478ca;border-color:#168cf0;font-weight:800}
+.visual-settings-body{padding:17px 20px 20px}.visual-pane[hidden]{display:none}.visual-setting-block{padding:14px 0;border-bottom:1px solid #e7edf5}.visual-setting-block:last-child{border-bottom:0}
+.visual-setting-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.visual-setting-heading strong{font-size:13px}.visual-setting-heading span,.visual-setting-note{font-size:10.5px;color:#7c8da3}
+.visual-theme-grid,.visual-motion-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+.visual-theme-choice,.visual-motion-choice{min-width:0;text-align:left;padding:10px;border:1px solid #dce7f3;border-radius:12px;background:rgba(255,255,255,.72);color:#273b54;display:flex;flex-direction:column;gap:5px}
+.visual-theme-choice.active,.visual-motion-choice.active{border-color:#53a9ef;box-shadow:0 0 0 2px #168cf018;background:#fff}
+.visual-swatch{height:32px;width:100%;border-radius:8px;background:linear-gradient(110deg,#c9e4ff,#f7fbff 58%,#e8d9f5)}.editorial-swatch{background:linear-gradient(110deg,#f4f0e8,#fff,#cbd8e7)}.ocean-swatch{background:linear-gradient(110deg,#ccebe9,#f5fbfa,#b6d9ee)}
+.visual-theme-choice strong,.visual-motion-choice strong{font-size:11px}.visual-theme-choice small,.visual-motion-choice small{font-size:9px;color:#7d8da1;line-height:1.45}
+.visual-color-grid,.visual-control-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.visual-color-grid label,.visual-control-grid label{display:flex;flex-direction:column;gap:6px;color:#62758c;font-size:10.5px;min-width:0}
+.visual-color-grid input[type=color]{width:100%;height:36px;padding:3px;border:1px solid #dce6f1;border-radius:8px;background:#fff}
+.visual-control-grid select{width:100%;min-width:0;border:1px solid #dce6f1;border-radius:8px;padding:8px;background:#fff;color:#263b55}
+.visual-control-grid input[type=range]{width:100%;accent-color:#168cf0}
+.visual-control-grid output{color:#1679c6;font-weight:800}
+.visual-setting-note{line-height:1.65;margin:9px 0 0}
+.visual-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.visual-motion-toggle{display:flex;align-items:center;gap:8px;margin-top:10px;color:#526982;font-size:11px}.visual-motion-toggle input{accent-color:#168cf0}
+.visual-preview-stage{margin-top:14px;min-height:132px;border:1px solid #dce8f6;border-radius:14px;background:radial-gradient(circle at 80% 15%,#e7dff9,transparent 38%),linear-gradient(130deg,#e5f2ff,#fff);display:grid;place-items:center;overflow:hidden}
+.visual-preview-card{width:min(340px,88%);padding:16px;border:1px solid #ffffff;border-radius:13px;background:rgba(255,255,255,.72);box-shadow:0 10px 28px #5889b21c;display:flex;flex-direction:column;gap:5px;color:#1b3552}
+.visual-preview-card span,.visual-preview-card small{font-size:9px;letter-spacing:1.4px;color:#6e8eae}.visual-preview-card strong{font-size:14px}
+.visual-lab-link{font-size:11px;color:#1678c4;font-weight:800}
+.visual-settings-dialog .modalfoot{background:rgba(255,255,255,.55)}
+@media(max-width:760px){.app{display:block}aside{background:rgba(239,247,255,.92);border-right:0;border-bottom:1px solid #fff}.content{padding:18px 12px 42px}.visual-settings-body{padding:12px}.visual-theme-grid,.visual-motion-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-color-grid,.visual-control-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.visual-setting-heading{align-items:flex-start;flex-direction:column;gap:3px}.visual-settings-dialog .modalhead{padding:14px}.visual-tabs{padding-inline:14px}}
+@media(prefers-reduced-motion:reduce){.direction-card,.feedcard,.topiccard,.published-card,.btn{transition:none!important}.direction-card:hover,.feedcard:hover,.topiccard:hover,.published-card:hover{transform:none!important}}
+
 </style></head>
 <body><div class="app">
 <aside>
@@ -294,7 +341,7 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
  <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span>AI 创造机会雷达 ↗</a><a class="nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span>内容生产流水线 ↗</a><a class="nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span>Dashboard Studio ↗</a><a class="nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span>AI 指令与完整交付 Skill ↗</a></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
 </aside>
-<main><header class="topbar"><div class="crumb">DAVYLAB / <strong id="crumbTitle">选题发现</strong></div><div class="actions"><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
+<main><header class="topbar"><div class="crumb">DAVYLAB / <strong id="crumbTitle">选题发现</strong></div><div class="actions"><button class="btn small" id="openVisualSettings" type="button" aria-haspopup="dialog">✧ 视觉与动效</button><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
 <div class="content">
 <section class="hero"><div><div class="eyebrow">WECHAT CONTENT STUDIO · V1.0</div><h1>别让好选题，<br>只停留在脑子里。</h1><p>从 AI 热点和开源项目里找灵感，也把你每天做产品、遇到问题、学到的新方法收进来。先选一个值得讲的角度，再慢慢把它做成内容。</p></div><div class="heroactions"><button class="btn primary" id="newHero">＋ 记下一个念头</button><button class="btn" id="refreshRadar">↻ 刷新今日素材</button></div></section>
 <a href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener" aria-label="查看 DAVYLAB AI Instruction Standard Skill" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 20px;padding:17px 20px;border:1px solid #dce4f2;border-radius:15px;background:linear-gradient(110deg,#eef3ff,#fff 72%);text-decoration:none;box-shadow:0 5px 18px #182a4108">
@@ -507,6 +554,46 @@ footer{border-top:1px solid #e2e7ed!important;margin-top:20px;padding-top:20px!i
 
 <footer style="font-size:11px;color:#8591a2;padding:8px 2px 30px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><span>DAVYLAB · 把想法，做成能用的工具。</span><span>素材需核实 · 选题需判断 · 正式发布由作者确认</span></footer>
 </div></main></div>
+<dialog id="visualSettingsDialog" class="visual-settings-dialog" aria-labelledby="visualSettingsTitle">
+ <div class="modalhead"><div><h2 id="visualSettingsTitle">DAVYLAB · 视觉与动效设置</h2><p class="visual-dialog-sub">主题、排版与动效独立配置，实时预览并保存在本机</p></div><button class="close" type="button" id="closeVisualSettings" aria-label="关闭">×</button></div>
+ <div class="visual-tabs" role="tablist" aria-label="视觉设置分类"><button type="button" class="visual-tab active" data-visual-tab="theme" role="tab" aria-selected="true">视觉主题</button><button type="button" class="visual-tab" data-visual-tab="motion" role="tab" aria-selected="false">动态效果</button></div>
+ <div class="modalbody visual-settings-body">
+  <section class="visual-pane active" data-visual-pane="theme">
+   <div class="visual-setting-block"><div class="visual-setting-heading"><strong>主题基调</strong><span>选择预设后仍可继续自定义</span></div><div class="visual-theme-grid">
+    <button class="visual-theme-choice active" type="button" data-visual-theme="qore"><span class="visual-swatch qore-swatch"></span><strong>QORE 冰雾玻璃</strong><small>冰蓝 · 雾白 · 轻玻璃</small></button>
+    <button class="visual-theme-choice" type="button" data-visual-theme="editorial"><span class="visual-swatch editorial-swatch"></span><strong>Editorial 纸感</strong><small>暖白 · 石墨 · 克制蓝</small></button>
+    <button class="visual-theme-choice" type="button" data-visual-theme="ocean"><span class="visual-swatch ocean-swatch"></span><strong>Ocean Mist 海雾</strong><small>浅青 · 深海蓝 · 清透</small></button>
+   </div></div>
+   <div class="visual-setting-block"><div class="visual-setting-heading"><strong>颜色微调</strong><span>修改后立即作用于页面</span></div><div class="visual-color-grid">
+    <label>页面背景<input type="color" id="visualBgColor" value="#eaf3ff"></label><label>卡片表面<input type="color" id="visualCardColor" value="#f7fbff"></label><label>主强调色<input type="color" id="visualAccentColor" value="#168cf0"></label><label>主文字<input type="color" id="visualInkColor" value="#15243a"></label><label>边框颜色<input type="color" id="visualLineColor" value="#d8e5f4"></label><label>导航表面<input type="color" id="visualNavColor" value="#e9f3ff"></label>
+   </div><p id="visualContrastNote" class="visual-setting-note" role="status">对比度提示将在你调整颜色后更新。</p></div>
+   <div class="visual-setting-block"><div class="visual-setting-heading"><strong>界面细节</strong><span>布局与字体独立于颜色保存</span></div><div class="visual-control-grid">
+    <label>内容密度<select id="visualDensity"><option value="comfortable">舒适</option><option value="compact">紧凑</option></select></label>
+    <label>卡片圆角<select id="visualRadius"><option value="12">12 · 利落</option><option value="16">16 · 平衡</option><option value="20">20 · 柔和</option><option value="24">24 · 玻璃感</option></select></label>
+    <label>中文字体<select id="visualFont"><option value="system">系统默认</option><option value="sans">Noto Sans SC / 无衬线回退</option><option value="serif">Noto Serif SC / 衬线回退</option></select></label>
+    <label>导航呈现<select id="visualNavMode"><option value="side">桌面侧栏 / 移动横向导航</option><option value="top">顶部工作区导航</option></select></label>
+   </div></div>
+   <div class="visual-actions"><button class="btn small" id="resetVisualTheme" type="button">恢复主题默认</button><button class="btn small primary" id="saveVisualSettings" type="button">保存视觉设置</button></div>
+  </section>
+  <section class="visual-pane" data-visual-pane="motion" hidden>
+   <div class="visual-setting-block"><div class="visual-setting-heading"><strong>动效风格</strong><span>源自动画实验室六类效果，已适配内容工作台</span></div><div class="visual-motion-grid">
+    <button type="button" class="visual-motion-choice active" data-motion-effect="fade-up"><strong>淡入上移</strong><small>内容进入、页面切换</small></button>
+    <button type="button" class="visual-motion-choice" data-motion-effect="spring"><strong>弹性聚焦</strong><small>重点卡片、轻反馈</small></button>
+    <button type="button" class="visual-motion-choice" data-motion-effect="slide"><strong>方向滑入</strong><small>面板与模块切换</small></button>
+    <button type="button" class="visual-motion-choice" data-motion-effect="blur"><strong>清晰显影</strong><small>精选内容、焦点区域</small></button>
+    <button type="button" class="visual-motion-choice" data-motion-effect="stagger"><strong>错峰展开</strong><small>列表与卡片序列</small></button>
+    <button type="button" class="visual-motion-choice" data-motion-effect="orbit"><strong>空间回旋</strong><small>仅用于品牌装饰，不用于业务正文</small></button>
+   </div><p id="visualMotionDescription" class="visual-setting-note">以轻微上移和透明度变化建立进入感，适合内容卡片与页面模块。</p></div>
+   <div class="visual-setting-block"><div class="visual-setting-heading"><strong>动效参数</strong><span>预览时长 1–5 秒</span></div><div class="visual-control-grid">
+    <label>预览时长 <output id="visualDurationValue">1.2 秒</output><input id="visualDuration" type="range" min="1000" max="5000" step="100" value="1200"></label>
+    <label>运动幅度 <output id="visualIntensityValue">70%</output><input id="visualIntensity" type="range" min="20" max="150" step="5" value="70"></label>
+    <label>位移距离 <output id="visualDistanceValue">24 px</output><input id="visualDistance" type="range" min="8" max="80" step="2" value="24"></label>
+    <label>运动方向<select id="visualDirection"><option value="up">向上</option><option value="down">向下</option><option value="left">向左</option><option value="right">向右</option></select></label>
+   </div><label class="visual-motion-toggle"><input type="checkbox" id="visualMotionEnabled" checked> 启用页面进入动效</label><label class="visual-motion-toggle"><input type="checkbox" id="visualReduceMotion"> 减少动态效果（优先尊重系统设置）</label><div class="visual-preview-stage"><div class="visual-preview-card" id="visualPreviewCard"><span>DAVYLAB</span><strong>让好想法，逐步成为作品。</strong><small>LIVE MOTION PREVIEW</small></div></div><div class="visual-actions"><button class="btn small" id="previewVisualMotion" type="button">▶ 预览当前效果</button><button class="btn small" id="exportVisualMotion" type="button">导出动效 JSON</button><button class="btn small primary" id="saveVisualMotion" type="button">保存动效设置</button></div><p id="visualMotionStatus" class="visual-setting-note" role="status">选择效果后可预览；动效不会改变业务数据或操作逻辑。</p></div>
+   <div class="visual-setting-block"><a class="visual-lab-link" href="https://chenzhe223-tech.github.io/motion-lab/" target="_blank" rel="noopener">打开 DAVYLAB Visual DNA Motion Lab，使用完整实验、预设与接入代码 ↗</a></div>
+  </section>
+ </div>
+</dialog>
 <dialog id="importDialog"><div class="modalhead"><h2>从念头盒导入灵感</h2><button class="close" type="button" id="closeImportDialog">×</button></div><div class="modalbody"><p style="margin-top:0;color:var(--muted);font-size:12px">可连接念头盒账号，浏览本人云端灵感；也可导入 JSON、TXT、Markdown 或粘贴内容。账号令牌仅保存在当前标签页会话中，关闭标签页后自动清除。导入只复制到当前选题池，不会修改念头盒原始记录。</p><div class="formgrid"><div class="field"><label for="nianboxEmail">念头盒账号邮箱</label><input id="nianboxEmail" type="email" autocomplete="username" placeholder="登录念头盒使用的邮箱"></div><div class="field"><label for="nianboxPassword">念头盒密码</label><input id="nianboxPassword" type="password" autocomplete="current-password" placeholder="密码只发送至念头盒云端服务"></div></div><div class="formrow" style="margin:10px 0"><button class="btn primary" type="button" id="connectNianbox">连接念头盒</button><button class="btn" type="button" id="loadNianboxIdeas" disabled>读取我的念头</button><button class="btn" type="button" id="disconnectNianbox" hidden>断开连接</button><span id="nianboxConnectionStatus" class="import-hint">尚未连接</span></div><div id="nianboxCloudList" class="topiclist" style="margin-bottom:12px"></div><div class="field"><label for="nianboxFile">或选择念头盒导出文件</label><input id="nianboxFile" type="file" accept=".json,.txt,.md,.markdown,application/json,text/plain,text/markdown"></div><div class="field" style="margin-top:12px"><label for="nianboxPaste">或粘贴念头内容</label><textarea id="nianboxPaste" style="min-height:110px" placeholder="可粘贴一条或多条念头；每段内容会被当作独立灵感候选。"></textarea></div><div id="nianboxPreview" class="topiclist" style="margin-top:12px"></div></div><div class="modalfoot"><button class="btn" type="button" id="cancelImport">取消</button><button class="btn primary" type="button" id="confirmNianboxImport">导入选中灵感</button></div></dialog><dialog id="topicDialog"><form id="topicForm"><div class="modalhead"><h2 id="dialogTitle">新建选题</h2><button class="close" type="button" id="closeDialog">×</button></div><div class="modalbody"><input type="hidden" id="topicId"><div class="formgrid">
  <div class="field full"><label for="topicTitle">选题标题 *</label><input id="topicTitle" required maxlength="120" placeholder="例如：我如何把 AI 生成的页面，变成真正能用的产品"></div>
  <div class="field"><label for="topicColumn">内容栏目</label><select id="topicColumn"><option>从念头到产品</option><option>AI 实战手记</option><option>AI 创造机会雷达</option><option>普通人的 AI 创造力</option><option>产品复盘与实验室</option></select></div>
@@ -826,4 +913,95 @@ $("growthJumpTopics").addEventListener("click",()=>changeSection("discover"));
 renderGrowth();
 
 renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics();loadSharedPublishedArticles();
+
+/* DAVYLAB Visual DNA · Theme, customization and Motion Lab adaptation */
+(function initDavyVisualDNA(){
+ const KEY="davylab-topic-visual-dna-v1";
+ const defaults={theme:"qore",colors:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},density:"comfortable",radius:"20",font:"system",navMode:"side",motion:{enabled:true,effect:"fade-up",duration:1200,intensity:70,distance:24,direction:"up",reduce:false}};
+ const effects={
+  "fade-up":{name:"淡入上移",description:"以轻微上移和透明度变化建立进入感，适合内容卡片与页面模块。",frames:(d,i)=>[{opacity:0,transform:"translateY("+d*i+"px)"},{opacity:1,transform:"translateY(0)"}]},
+  spring:{name:"弹性聚焦",description:"先轻微放大再回到稳定尺寸，适合重点卡片与轻量状态反馈。",frames:(d,i)=>[{opacity:0,transform:"scale("+(1-.12*i)+")"},{opacity:1,transform:"scale(1)"}]},
+  slide:{name:"方向滑入",description:"从指定方向进入最终位置，适合模块与面板切换。",frames:(d,i,dir)=>{const x=dir==="left"?-d*i:dir==="right"?d*i:0,y=dir==="up"?d*i:dir==="down"?-d*i:0;return[{opacity:0,transform:"translate("+x+"px,"+y+"px)"},{opacity:1,transform:"translate(0,0)"}]}},
+  blur:{name:"清晰显影",description:"从柔和虚化过渡到清晰，适合精选内容，不建议用于密集长列表。",frames:(d,i)=>[{opacity:0,filter:"blur("+(10*i)+"px)",transform:"scale(.97)"},{opacity:1,filter:"blur(0)",transform:"scale(1)"}]},
+  stagger:{name:"错峰展开",description:"多个元素按间隔依次出现，适合列表、功能分组与流程步骤。",frames:(d,i)=>[{opacity:0,transform:"translateY("+(d*i)+"px)"},{opacity:1,transform:"translateY(0)"}]},
+  orbit:{name:"空间回旋",description:"以受控旋转表达探索感，仅建议用于品牌装饰或预览，不用于业务正文。",frames:(d,i)=>[{opacity:0,transform:"rotate(-"+(10*i)+"deg) scale(.94)"},{opacity:1,transform:"rotate(0) scale(1)"}]}
+ };
+ let settings=read();
+ const $v=id=>document.getElementById(id);
+ const dialog=$v("visualSettingsDialog");
+ function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?{...defaults,...x,colors:{...defaults.colors,...(x.colors||{})},motion:{...defaults.motion,...(x.motion||{})}}:structuredClone(defaults)}catch{return structuredClone(defaults)}}
+ function persist(){try{localStorage.setItem(KEY,JSON.stringify(settings));return true}catch{return false}}
+ function setVar(k,v){document.documentElement.style.setProperty(k,v)}
+ function apply(){
+  const c=settings.colors;setVar("--paper",c.bg);setVar("--card",c.card);setVar("--blue",c.accent);setVar("--ink",c.ink);setVar("--line",c.line);setVar("--nav",c.nav);setVar("--blue-soft",c.accent+"18");setVar("--r",settings.radius+"px");
+  document.documentElement.style.setProperty("--vd-font",settings.font==="serif"?' "Noto Serif SC", "Songti SC", serif':settings.font==="sans"?' "Noto Sans SC", "PingFang SC", sans-serif':"");
+  document.body.style.fontFamily=settings.font==="serif"?' "Noto Serif SC","Songti SC",serif':settings.font==="sans"?' "Noto Sans SC","PingFang SC",sans-serif':'-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif';
+  document.body.classList.toggle("visual-density-compact",settings.density==="compact");
+  document.body.classList.toggle("visual-nav-top",settings.navMode==="top");
+  syncControls();
+ }
+ function syncControls(){
+  const c=settings.colors,m=settings.motion;
+  [["visualBgColor",c.bg],["visualCardColor",c.card],["visualAccentColor",c.accent],["visualInkColor",c.ink],["visualLineColor",c.line],["visualNavColor",c.nav]].forEach(([id,v])=>{if($v(id))$v(id).value=v});
+  [["visualDensity",settings.density],["visualRadius",settings.radius],["visualFont",settings.font],["visualNavMode",settings.navMode],["visualDuration",m.duration],["visualIntensity",m.intensity],["visualDistance",m.distance],["visualDirection",m.direction],["visualMotionEnabled",m.enabled],["visualReduceMotion",m.reduce]].forEach(([id,v])=>{if($v(id)){if($v(id).type==="checkbox")$v(id).checked=!!v;else $v(id).value=String(v)}});
+  if($v("visualDurationValue"))$v("visualDurationValue").textContent=(m.duration/1000).toFixed(1)+" 秒";
+  if($v("visualIntensityValue"))$v("visualIntensityValue").textContent=m.intensity+"%";
+  if($v("visualDistanceValue"))$v("visualDistanceValue").textContent=m.distance+" px";
+  document.querySelectorAll("[data-visual-theme]").forEach(b=>b.classList.toggle("active",b.dataset.visualTheme===settings.theme));
+  document.querySelectorAll("[data-motion-effect]").forEach(b=>b.classList.toggle("active",b.dataset.motionEffect===m.effect));
+  if($v("visualMotionDescription"))$v("visualMotionDescription").textContent=effects[m.effect].description;
+  updateContrast();
+ }
+ function updateContrast(){
+  const c=settings.colors;const luminance=hex=>{const rgb=hex.match(/[a-f0-9]{2}/gi)||["00","00","00"];const vals=rgb.slice(0,3).map(s=>parseInt(s,16)/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4));return .2126*vals[0]+.7152*vals[1]+.0722*vals[2]};
+  const l1=luminance(c.bg),l2=luminance(c.ink),ratio=(Math.max(l1,l2)+.05)/(Math.min(l1,l2)+.05);
+  if($v("visualContrastNote"))$v("visualContrastNote").textContent="主文字 / 页面背景对比度："+ratio.toFixed(2)+":1。"+(ratio>=4.5?"符合普通文字 WCAG AA 对比度参考。":"对比度偏低，建议加深文字或提高背景亮度。");
+ }
+ function setTheme(name){
+  const themes={qore:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},editorial:{bg:"#f4f1eb",card:"#fffefa",accent:"#3567a8",ink:"#202b38",line:"#e4dfd6",nav:"#f2eee7"},ocean:{bg:"#e8f5f4",card:"#f7fcfb",accent:"#168a91",ink:"#17333d",line:"#d2e8e5",nav:"#e1f1ef"}};
+  settings.theme=name;settings.colors={...themes[name]};apply();persist();
+ }
+ function reduced(){return settings.motion.reduce||window.matchMedia("(prefers-reduced-motion: reduce)").matches}
+ function animateElements(){
+  const m=settings.motion;if(!m.enabled||reduced())return;
+  const section=document.querySelector(".section.active");if(!section)return;
+  const selector=m.effect==="stagger"?".panel,.stat,.feedcard,.topiccard,.published-card,.growth-item":".panel,.stat,.ai-studio";
+  const nodes=[...section.querySelectorAll(selector)].slice(0,14);
+  nodes.forEach((node,index)=>{
+   if(!node.animate)return;
+   const frames=effects[m.effect].frames(m.distance,m.intensity/100,m.direction);
+   const delay=m.effect==="stagger"?Math.min(index*65,500):Math.min(index*24,160);
+   try{node.animate(frames,{duration:Math.max(180,Math.min(5000,m.duration)),delay,easing:m.effect==="spring"?"cubic-bezier(.2,1.4,.4,1)":"cubic-bezier(.22,1,.36,1)",fill:"both"}).onfinish=()=>{node.style.opacity="";node.style.transform="";node.style.filter=""}}catch{}
+  });
+ }
+ function preview(){
+  const m=settings.motion;if(reduced()){if($v("visualMotionStatus"))$v("visualMotionStatus").textContent="已尊重减少动态效果设置：预览保持静态。";return}
+  const card=$v("visualPreviewCard");if(!card||!card.animate)return;
+  const frames=effects[m.effect].frames(m.distance,m.intensity/100,m.direction);
+  card.animate(frames,{duration:Math.max(1000,Math.min(5000,m.duration)),easing:m.effect==="spring"?"cubic-bezier(.2,1.4,.4,1)":"cubic-bezier(.22,1,.36,1)",fill:"both"});
+  if($v("visualMotionStatus"))$v("visualMotionStatus").textContent="正在预览「"+effects[m.effect].name+"」；预览时长 "+(m.duration/1000).toFixed(1)+" 秒。";
+ }
+ function exportConfig(){
+  const payload={schema:"davylab.topic-studio.visual-dna/v1",exportedAt:new Date().toISOString(),theme:settings.theme,colors:settings.colors,density:settings.density,radius:settings.radius,font:settings.font,navMode:settings.navMode,motion:settings.motion};
+  const blob=new Blob([JSON.stringify(payload,null,2)+"\n"],{type:"application/json;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="davylab-topic-studio-visual-dna.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }
+ function setTab(tab){document.querySelectorAll("[data-visual-tab]").forEach(b=>{const active=b.dataset.visualTab===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active))});document.querySelectorAll("[data-visual-pane]").forEach(p=>{const active=p.dataset.visualPane===tab;p.classList.toggle("active",active);p.hidden=!active})}
+ $v("openVisualSettings").addEventListener("click",()=>{syncControls();dialog.showModal()});
+ $v("closeVisualSettings").addEventListener("click",()=>dialog.close());
+ dialog.addEventListener("click",e=>{if(e.target===dialog)dialog.close()});
+ document.querySelectorAll("[data-visual-tab]").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.visualTab)));
+ document.querySelectorAll("[data-visual-theme]").forEach(b=>b.addEventListener("click",()=>setTheme(b.dataset.visualTheme)));
+ [["visualBgColor","bg"],["visualCardColor","card"],["visualAccentColor","accent"],["visualInkColor","ink"],["visualLineColor","line"],["visualNavColor","nav"]].forEach(([id,key])=>$v(id).addEventListener("input",e=>{settings.theme="custom";settings.colors[key]=e.target.value;apply()}));
+ [["visualDensity","density"],["visualRadius","radius"],["visualFont","font"],["visualNavMode","navMode"]].forEach(([id,key])=>$v(id).addEventListener("change",e=>{settings[key]=e.target.value;apply()}));
+ [["visualDuration","duration"],["visualIntensity","intensity"],["visualDistance","distance"],["visualDirection","direction"],["visualMotionEnabled","enabled"],["visualReduceMotion","reduce"]].forEach(([id,key])=>$v(id).addEventListener("input",e=>{settings.motion[key]=e.target.type==="checkbox"?e.target.checked:e.target.type==="range"?Number(e.target.value):e.target.value;syncControls()}));
+ document.querySelectorAll("[data-motion-effect]").forEach(b=>b.addEventListener("click",()=>{settings.motion.effect=b.dataset.motionEffect;syncControls()}));
+ $v("previewVisualMotion").addEventListener("click",preview);
+ $v("saveVisualSettings").addEventListener("click",()=>{const ok=persist();toast(ok?"视觉主题设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
+ $v("saveVisualMotion").addEventListener("click",()=>{const ok=persist();toast(ok?"动效设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
+ $v("exportVisualMotion").addEventListener("click",exportConfig);
+ $v("resetVisualTheme").addEventListener("click",()=>{const m=settings.motion;settings={...structuredClone(defaults),motion:m};apply();persist();toast("视觉主题已恢复默认，动效设置未更改")});
+ document.querySelectorAll(".nav[data-section]").forEach(b=>b.addEventListener("click",()=>window.setTimeout(animateElements,60)));
+ apply();setTab("theme");window.setTimeout(animateElements,120);
+})();
+
 </script></body></html>
