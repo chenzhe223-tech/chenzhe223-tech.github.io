@@ -10,6 +10,7 @@
     "status": "PASS",
     "evidence": "GitHub Actions verify-live job 124693373430; live daily page and assets matched origin/main."
   },
+  "wechat_editor_preview": "NOT_TESTED - not opened in the WeChat editor during this run.",
   "images": [
     {
       "file_name": "2026-11-01-main-poster.png",
@@ -46,8 +47,8 @@
     {
       "file_name": "2026-11-01-global-03-samaya-sterling.png",
       "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
-      "file_size_bytes": 82199, "file_size_kb": 80.3,
-      "sha256": "59847f64c45795dc71b7ccf2973c9b88ef0c18a77b88ff38f2544f6a1e193a9a",
+      "file_size_bytes": 85501, "file_size_kb": 83.5,
+      "sha256": "d06d326998351b13df78a7ccca7733bbf4142c9217fef1e2818106cd91e475cb",
       "theme": "Samaya AI 发布 Sterling",
       "material_type": "原创矢量主题插画；非新闻现场",
       "unique_image": true, "status": "PASS"
