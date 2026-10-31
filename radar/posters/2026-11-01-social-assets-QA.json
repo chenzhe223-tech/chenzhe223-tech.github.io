@@ -1,0 +1,80 @@
+{
+  "report_date": "2026-11-01",
+  "package": "DAVYLAB WeChat six-image package",
+  "required_size_px": [900, 1200],
+  "required_format": "PNG",
+  "brief_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "official_online_report_verification": {
+    "http_status": 200,
+    "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "status": "PASS",
+    "evidence": "GitHub Actions verify-live job 124693373430; live daily page and assets matched origin/main."
+  },
+  "images": [
+    {
+      "file_name": "2026-11-01-main-poster.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 153700, "file_size_kb": 150.1,
+      "sha256": "4df8b270c8c4901dd11a0b48b8c4f37036d937a1a1521fc381a4c230f7a872a1",
+      "theme": "主海报：五条精选新闻、DAVYLAB观察、OpenMontage Skill、正式入口二维码",
+      "material_type": "原创矢量山峦主视觉 + 信息排版；非新闻现场",
+      "unique_image": true, "status": "PASS",
+      "qr_decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+      "qr_exact_url_match": true, "qr_decode_status": "PASS",
+      "qr_quiet_zone_present": true, "qr_contrast_range": 255,
+      "qr_occlusion": "PASS - isolated white tile; no text or illustration overlaps the QR",
+      "qr_status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-global-01-agent-desktop.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 97658, "file_size_kb": 95.4,
+      "sha256": "42a331f0ded14425c440561e16a1a7d7b53c67dfe6992eb023db264771a03f9e",
+      "theme": "Vercel Labs 开源 agent-desktop",
+      "material_type": "原创矢量主题插画；非新闻现场",
+      "unique_image": true, "status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-global-02-factory-droid.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 96616, "file_size_kb": 94.4,
+      "sha256": "424135eafb617577b0decbb2b4ab1001c2fa624636865538c3eeff09ae6c1563",
+      "theme": "Factory Droid 1.0 发布",
+      "material_type": "原创矢量主题插画；非新闻现场",
+      "unique_image": true, "status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-global-03-samaya-sterling.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 82199, "file_size_kb": 80.3,
+      "sha256": "59847f64c45795dc71b7ccf2973c9b88ef0c18a77b88ff38f2544f6a1e193a9a",
+      "theme": "Samaya AI 发布 Sterling",
+      "material_type": "原创矢量主题插画；非新闻现场",
+      "unique_image": true, "status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-china-01-wechat-pay-robot.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 109616, "file_size_kb": 107.0,
+      "sha256": "85e1658b547625a6178b0d6d184fcd9fda98ab4ccd01e7f54852d7c88c73a229",
+      "theme": "微信支付智慧经营机器人首次进店",
+      "material_type": "原创矢量主题插画；非新闻现场",
+      "unique_image": true, "status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-china-02-deepseek-funding.png",
+      "width": 900, "height": 1200, "aspect_ratio": "3:4", "format": "PNG",
+      "file_size_bytes": 84695, "file_size_kb": 82.7,
+      "sha256": "46844b813dffbec28750a938a73ae1cc158867a05ff5f4270c1f994d2d1b5861",
+      "theme": "DeepSeek 融资细节：媒体报道",
+      "material_type": "原创矢量主题插画；非新闻现场",
+      "unique_image": true, "status": "PASS"
+    }
+  ],
+  "overall_status": "PASS",
+  "limitations": [
+    "The official repository poster remains 1200x1800 under the current radar/poster-rules.md and generator P0 contract; this separate WeChat six-image package is 900x1200.",
+    "The five story visuals are original thematic vector illustrations, explicitly not presented as news现场 photographs.",
+    "The six-image social package is delivered locally and is not uploaded to the GitHub repository in this run."
+  ]
+}
