@@ -59,6 +59,10 @@ CHINA_FEEDS = [
     ("动点科技 TechNode", "https://cn.technode.com/feed/"),
     ("TechCrunch AI", "https://techcrunch.com/category/artificial-intelligence/feed/"),
     ("Google News China AI", "https://news.google.com/rss/search?q=DeepSeek+OR+Kimi+OR+Qwen+OR+MiniMax+OR+Moonshot+AI+when%3A7d&hl=zh-CN&gl=CN&ceid=CN%3Azh-Hans"),
+    # Additional verified Chinese-language technology feeds to recover coverage when core publishers fail.
+    ("IT之家", "https://www.ithome.com/rss/"),
+    ("InfoQ 中文", "https://www.infoq.cn/feed.xml"),
+    ("开源中国", "https://www.oschina.net/news/rss"),
 ]
 CHINA_NEWS_MIN = 6
 CHINA_NEWS_TARGET = 8
@@ -919,7 +923,7 @@ def main() -> None:
         "skill_radar": SKILL_RADAR_DIAGNOSTICS,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
-            "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI and Google News China-AI RSS; filtered for China-related AI entities and timestamps within seven days",
+            "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI, Google News China-AI, IT Home, InfoQ China and OSChina RSS; filtered for China-related AI entities and timestamps within seven days",
             "china_ai_news_minimum": CHINA_NEWS_MIN,
             "china_ai_news_target": CHINA_NEWS_TARGET,
             "china_ai_news_window_days": CHINA_NEWS_WINDOW_DAYS,
