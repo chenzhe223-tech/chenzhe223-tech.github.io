@@ -64,7 +64,8 @@ const mark = (status, name, detail = '') => {
     await desktop.locator('#closeModal').click();
     await desktop.locator('#search').fill('Worktoon');
     const found = await desktop.locator('#shelf .app-card').count();
-    mark(found === 1 && (await desktop.locator('#shelf').innerText()).includes('Worktoon') ? 'PASS' : 'FAIL', '搜索功能', 'Worktoon 匹配数=' + found);
+    const worktoonCardCount = await desktop.locator('#shelf [data-id="worktoon"]').count();
+    mark(found === 1 && worktoonCardCount === 1 ? 'PASS' : 'FAIL', '搜索功能', JSON.stringify({ matches: found, worktoonCardCount }));
     await desktop.locator('#search').fill('');
     await desktop.locator('[data-filter="concepts"]').click();
     const cn = await desktop.locator('#shelf .app-card').count();
@@ -186,7 +187,7 @@ const mark = (status, name, detail = '') => {
     const request = await require('playwright').request.newContext({ timeout: 25000 });
     const links = await Promise.all(targets.map(async ([name, url, required = true]) => {
       try {
-        const r = await request.get(url, { maxRedirects: 5 });
+        const r = await request.get(url, { maxRedirects: 5, timeout: required ? 25000 : 10000 });
         const ok = r.status() >= 200 && r.status() < 400;
         mark(ok ? 'PASS' : required ? 'FAIL' : 'WARN', '产品入口 · ' + name, 'HTTP ' + r.status() + ' · ' + r.url());
         return { name, url, status: r.status(), ok, required };
