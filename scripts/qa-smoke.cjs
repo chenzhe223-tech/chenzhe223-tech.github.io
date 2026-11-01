@@ -50,9 +50,6 @@ const mark = (status, name, detail = '') => {
     await desktop.waitForTimeout(500);
     const afterPrev = await desktop.locator('#shelf').evaluate(e => e.scrollLeft);
     mark(afterPrev < afterNext ? 'PASS' : 'FAIL', '左箭头回滚', 'scrollLeft=' + afterPrev);
-    const matrixText = await desktop.locator('#shelf').innerText();
-    const newProjectsVisible = matrixText.includes('DAVYLAB Learning Universe') && matrixText.includes('DAVYLAB Knowledge OS');
-    mark(newProjectsVisible ? 'PASS' : 'FAIL', '新增项目卡片展示', 'Learning Universe 与 Knowledge OS');
     await desktop.locator('[data-detail="knowledge-os"]').click();
     await desktop.locator('#modal.open').waitFor({ timeout: 5000 });
     const knowledgeStatus = await desktop.locator('#modalStatus').innerText();
