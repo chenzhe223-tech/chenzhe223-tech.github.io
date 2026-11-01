@@ -179,3 +179,18 @@ https://chenzhe223-tech.github.io/radar/daily/
 - 未实际进入微信公众号编辑器预览时，必须标记「编辑器实机预览未测试」，不得宣称已通过平台展示验收。
 - 任一图片尺寸、二维码、来源一致性或素材真实性 P0 检查失败，不得标记六图包完整交付通过。
 
+
+
+## 9. Machine-enforced visual lock (V3.0)
+The approved 2026-10-31 user-confirmed mountain-editorial poster is the active visual baseline. Machine-readable controls live in `radar/config/`:
+- `baseline.json`: approval identity, reference screenshot SHA-256, production reference path and channel distinction.
+- `style-lock.json`: deterministic ISO-week style selection and retry lock.
+- `layout-spec.json`: website poster and WeChat social-pack dimensions and fixed region order.
+- `typography.json`: CJK font policy; production rendering must fail closed if a supported Chinese font is unavailable.
+- `color-tokens.json`: named mountain-editorial palette.
+- `qa-rules.json`: fail-closed checks and three-round maximum repair policy.
+- `poster-feedback-log.md`: approved feedback and regression history.
+
+The runtime gate `radar/scripts/visual_lock.py::validate_visual_lock` is called by `generate_poster.py` before rendering. It verifies configuration presence, the ISO-week style, website canvas dimensions, immutable QR destination, baseline identity, typography policy and repair limit. Any missing or inconsistent configuration blocks rendering. The website poster remains 1200×1800; the separate WeChat six-image pack remains 900×1200. Never infer one output size from the other.
+
+Any future change to the approved baseline requires explicit user approval. A newly generated poster, by itself, never becomes a baseline.
