@@ -47,7 +47,7 @@ def font(size, bold=False):
         if Path(path).exists():
             try: return ImageFont.truetype(path, size)
             except Exception: pass
-    return ImageFont.load_default()
+    raise RuntimeError('P0: no supported CJK font installed; refusing to render poster with silent fallback')
 
 def wrap(draw, text, fnt, max_width):
     words = list(str(text or ""))
@@ -276,7 +276,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     draw.text((680, 1614), "使用前核对权限", font=font(11), fill=muted)
 
     # Real, locally encoded QR. Keep its reserved tile fixed for the final-image verifier.
-    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
+    qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H, box_size=10, border=4)
     qr.add_data(PUBLIC_URL)
     qr.make(fit=True)
     qr_img = qr.make_image(fill_color="black", back_color="white").convert("RGB")
