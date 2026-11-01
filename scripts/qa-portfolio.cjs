@@ -177,7 +177,7 @@ const path = require('node:path');
         .reduce((count, element) => count + element.getAnimations().length, 0),
       reducedMotion: matchMedia('(prefers-reduced-motion: reduce)').matches
     }));
-    if (skillsMotion.targetCount !== 2) throw new Error('Expected two isolated Open Skills motion targets: ' + JSON.stringify(skillsMotion));
+    if (skillsMotion.targetCount !== 4) throw new Error('Expected four Open Skills motion targets (two cards × main and aside): ' + JSON.stringify(skillsMotion));
     if (!skillsMotion.reducedMotion && skillsMotion.activePreviewCount < 1) {
       throw new Error('Open Skills section did not use the Visual DNA preset adapter: ' + JSON.stringify(skillsMotion));
     }
