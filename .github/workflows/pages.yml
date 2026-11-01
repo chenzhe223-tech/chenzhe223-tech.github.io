@@ -155,19 +155,19 @@ jobs:
         run: |
           # Horizon enriches the report, but must never block the validated RSS/GitHub baseline.
           if [ ! -f /tmp/Horizon/src/main.py ]; then
-            if ! timeout 90s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
+            if ! timeout --kill-after=10s 90s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
               echo "::warning::Horizon clone unavailable or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
           fi
           if [ -f /tmp/Horizon/requirements.txt ]; then
-            if ! timeout 300s python -m pip install -r /tmp/Horizon/requirements.txt; then
+            if ! timeout --kill-after=10s 300s python -m pip install -r /tmp/Horizon/requirements.txt; then
               echo "::warning::Horizon requirements installation failed or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
           elif [ -f /tmp/Horizon/pyproject.toml ]; then
             # This upstream repository declares its runtime dependencies in pyproject.toml, not requirements.txt.
-            if ! timeout 300s python -m pip install -e /tmp/Horizon; then
+            if ! timeout --kill-after=10s 300s python -m pip install -e /tmp/Horizon; then
               echo "::warning::Horizon editable install failed or timed out; publishing will continue with source-backed baseline data."
               exit 0
             fi
@@ -178,7 +178,7 @@ jobs:
           # The Python runner retries each DeepSeek JSON request up to three times.
           # Retry the whole enrichment once more for transient Horizon/model failures.
           for attempt in 1 2; do
-            if timeout 600s python radar/scripts/run_horizon.py; then
+            if timeout --kill-after=10s 600s python radar/scripts/run_horizon.py; then
               break
             fi
             echo "::warning::Horizon/AI enrichment attempt $attempt failed."

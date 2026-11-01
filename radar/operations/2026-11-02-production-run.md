@@ -18,3 +18,9 @@
 ## Publication status
 
 Pending the succeeding GitHub Actions production run. A failed gate must not replace the last valid production version.
+
+
+## Horizon runtime hardening
+
+- The current production attempt remained inside the best-effort Horizon enrichment step longer than expected. The source-backed report generation had already completed; this enrichment must not hold the publication pipeline indefinitely.
+- Added GNU timeout kill-after guards to the Horizon clone, dependency installation and both enrichment attempts. This preserves bounded retries while ensuring a non-responsive child process is terminated and the source-backed baseline can continue.
