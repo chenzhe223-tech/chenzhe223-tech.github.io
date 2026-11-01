@@ -28,6 +28,21 @@ const mark = (status, name, detail = '') => {
     mark(titleOk ? 'PASS' : 'FAIL', '页面标题', await desktop.title());
     const n = await desktop.locator('#shelf .app-card').count();
     mark(n >= 17 ? 'PASS' : 'FAIL', '产品卡片渲染', '预期至少 17，实际 ' + n);
+    const matrixText = await desktop.locator('#shelf').innerText();
+    const newProjectsVisible = matrixText.includes('DAVYLAB Learning Universe') && matrixText.includes('DAVYLAB Knowledge OS');
+    mark(newProjectsVisible ? 'PASS' : 'FAIL', '新增项目卡片展示', 'Learning Universe 与 Knowledge OS');
+    await desktop.locator('[data-detail="knowledge-os"]').click();
+    await desktop.locator('#modal.open').waitFor({ timeout: 5000 });
+    const knowledgeStatus = await desktop.locator('#modalStatus').innerText();
+    const knowledgeState = await desktop.locator('#modalState').innerText();
+    const knowledgePreview = await desktop.locator('#modalPreview .concept-label').innerText();
+    mark(knowledgeStatus.includes('WP-09 开发中') && knowledgeState.includes('尚无公开运行入口') && knowledgePreview.includes('暂无公开运行页面') ? 'PASS' : 'FAIL', 'Knowledge OS 未部署状态披露', knowledgeStatus + ' · ' + knowledgePreview);
+    await desktop.locator('#closeModal').click();
+    await desktop.locator('[data-detail="learning-universe"]').click();
+    await desktop.locator('#modal.open').waitFor({ timeout: 5000 });
+    const learningLinks = await desktop.locator('#modalActions a[href]').evaluateAll(as => as.map(a => ({ text: a.innerText.trim(), href: a.href })));
+    mark(learningLinks.some(a => a.href === 'https://davylab-learning-universe.pages.dev/') && learningLinks.some(a => a.href === 'https://feat-teardown-3d-simulation.davylab-learning-universe.pages.dev/') ? 'PASS' : 'FAIL', 'Learning Universe 生产与分支预览入口', JSON.stringify(learningLinks));
+    await desktop.locator('#closeModal').click();
     await desktop.screenshot({ path: path.join(out, 'desktop-home.png'), fullPage: true });
     const dims = await desktop.locator('#shelf').evaluate(e => ({ viewport: e.clientWidth, content: e.scrollWidth }));
     mark(dims.content > dims.viewport + 8 ? 'PASS' : 'FAIL', '横向应用货架', JSON.stringify(dims));
@@ -76,7 +91,9 @@ const mark = (status, name, detail = '') => {
     await desktop.locator('#closeModal').click();
 
     // Contact intake UI and QR asset are checked without sending a real email.
-    await desktop.locator('#contact').scrollIntoViewIfNeeded();
+    await desktop.locator('#contact .contact-section-head').scrollIntoViewIfNeeded();
+    await desktop.waitForTimeout(900);
+    await desktop.locator('#contact h2').waitFor({ state: 'visible', timeout: 5000 });
     const formExists = await desktop.locator('#leadForm').count();
     mark(formExists === 1 ? 'PASS' : 'FAIL', '需求表单渲染', '表单数量=' + formExists);
     const contactHeading = await desktop.locator('#contact h2').innerText();
@@ -149,22 +166,30 @@ const mark = (status, name, detail = '') => {
       ['随调轻应用', 'https://chenzhe223-tech.github.io/SipSpark/app.html'],
       ['随调品牌站', 'https://chenzhe223-tech.github.io/SipSpark/'],
       ['音乐人生地图 MelodyMe', 'https://chenzhe223-tech.github.io/melodyme/'],
-      ['Dashboard Studio', 'https://ds.dashboard-studio-1dp.pages.dev/'],
+      ['Dashboard Studio 正式入口', 'https://dashboard-studio-1dp.pages.dev/'],
+      ['Dashboard Studio Graphify 页面', 'https://dashboard-studio-1dp.pages.dev/graphify-studio.html'],
+      ['Graphify API health', 'https://graphify-studio-api.onrender.com/health', false],
+      ['DAVYLAB Learning Universe 生产版', 'https://davylab-learning-universe.pages.dev/'],
+      ['Learning Universe 3D 分支预览', 'https://feat-teardown-3d-simulation.davylab-learning-universe.pages.dev/'],
+      ['DAVYLAB AI Brief', 'https://chenzhe223-tech.github.io/radar/daily/'],
+      ['公众号选题工作台', 'https://chenzhe223-tech.github.io/topic-studio/'],
       ['DAVYLAB DesignOS', 'https://davylab-designos.pages.dev/'],
+      ['DAVYLAB DesignOS 源码仓库', 'https://github.com/chenzhe223-tech/davylab-designos'],
       ['TrustLoop 源码仓库', 'https://github.com/chenzhe223-tech/davy-lab-trustloop'],
+      ['付款填报助手源码仓库', 'https://github.com/chenzhe223-tech/payment-apply-agent'],
       ['山姆全球购工具', 'https://chenzhe223-tech.github.io/sam-global-buy/'],
       ['山姆数据导入', 'https://chenzhe223-tech.github.io/sam-global-buy/sam-app-import.html']
     ];
     const request = await require('playwright').request.newContext({ timeout: 25000 });
-    const links = await Promise.all(targets.map(async ([name, url]) => {
+    const links = await Promise.all(targets.map(async ([name, url, required = true]) => {
       try {
         const r = await request.get(url, { maxRedirects: 5 });
         const ok = r.status() >= 200 && r.status() < 400;
-        mark(ok ? 'PASS' : 'WARN', '产品入口 · ' + name, 'HTTP ' + r.status() + ' · ' + r.url());
-        return { name, url, status: r.status(), ok };
+        mark(ok ? 'PASS' : required ? 'FAIL' : 'WARN', '产品入口 · ' + name, 'HTTP ' + r.status() + ' · ' + r.url());
+        return { name, url, status: r.status(), ok, required };
       } catch (e) {
-        mark('WARN', '产品入口 · ' + name, e.message);
-        return { name, url, ok: false, error: e.message };
+        mark(required ? 'FAIL' : 'WARN', '产品入口 · ' + name, e.message);
+        return { name, url, ok: false, required, error: e.message };
       }
     }));
     await request.dispose();
