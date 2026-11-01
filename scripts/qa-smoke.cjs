@@ -62,6 +62,12 @@ const mark = (status, name, detail = '') => {
     const learningLinks = await desktop.locator('#modalActions a[href]').evaluateAll(as => as.map(a => ({ text: a.innerText.trim(), href: a.href })));
     mark(learningLinks.some(a => a.href === 'https://davylab-learning-universe.pages.dev/') && learningLinks.some(a => a.href === 'https://feat-teardown-3d-simulation.davylab-learning-universe.pages.dev/') ? 'PASS' : 'FAIL', 'Learning Universe 生产与分支预览入口', JSON.stringify(learningLinks));
     await desktop.locator('#closeModal').click();
+    await desktop.locator('[data-detail="payment-agent"]').click();
+    await desktop.locator('#modal.open').waitFor({ timeout: 5000 });
+    const paymentState = await desktop.locator('#modalState').innerText();
+    const paymentLinks = await desktop.locator('#modalActions a[href]').evaluateAll(as => as.map(a => a.href));
+    mark(paymentState.includes('暂无公开演示入口') && !paymentLinks.some(href => href.includes('payment-apply-agent')) ? 'PASS' : 'FAIL', '付款填报助手不暴露未脱敏源码入口', paymentState);
+    await desktop.locator('#closeModal').click();
     await desktop.locator('#search').fill('Worktoon');
     const found = await desktop.locator('#shelf .app-card').count();
     const worktoonCardCount = await desktop.locator('#shelf [data-id="worktoon"]').count();
@@ -180,7 +186,6 @@ const mark = (status, name, detail = '') => {
       ['DAVYLAB DesignOS', 'https://davylab-designos.pages.dev/'],
       ['DAVYLAB DesignOS 源码仓库', 'https://github.com/chenzhe223-tech/davylab-designos'],
       ['TrustLoop 源码仓库', 'https://github.com/chenzhe223-tech/davy-lab-trustloop'],
-      ['付款填报助手源码仓库', 'https://github.com/chenzhe223-tech/payment-apply-agent'],
       ['山姆全球购工具', 'https://chenzhe223-tech.github.io/sam-global-buy/'],
       ['山姆数据导入', 'https://chenzhe223-tech.github.io/sam-global-buy/sam-app-import.html']
     ];
