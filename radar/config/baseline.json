@@ -1,0 +1,28 @@
+{
+  "schema_version": "1.0.0",
+  "baseline_id": "DAVYLAB-APPROVED-2026-10-31-MOUNTAIN-EDITORIAL",
+  "approved_at": "2026-10-31",
+  "approved_by": "user-explicit-approval-in-conversation",
+  "reference_image": {
+    "conversation_upload": "f9ca420883567449d5df00ca33ee87aa.jpg",
+    "sha256": "7ec1b618ff78cf40b8a46c346aff23a80f6dfe11b83b30485546cd5483e406bd",
+    "dimensions": [
+      1086,
+      1448
+    ],
+    "format": "JPEG",
+    "role": "visual-reference-screenshot"
+  },
+  "production_reference": {
+    "path": "radar/posters/2026-10-31.png",
+    "git_blob_sha": "not-computed-by-runtime",
+    "role": "website-poster-baseline",
+    "expected_dimensions": [
+      1200,
+      1800
+    ]
+  },
+  "design_version": "mountain-editorial-approved-2026-10-31",
+  "iso_week": "2026-W44",
+  "notes": "The conversation-uploaded image is the user's explicit visual approval reference. The repo PNG is the dated production artifact; do not claim their byte identity. The screenshot reference has a 3:4 ratio while the website production poster contract is 2:3. Keep channel outputs separate."
+}
