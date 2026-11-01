@@ -280,20 +280,20 @@ jobs:
         if: steps.preflight.outputs.skip != 'true'
         run: |
           # Hard cap the Python renderer so remote image hosts cannot hang the entire daily workflow.
-          timeout 180s python radar/scripts/generate_poster.py
+          timeout 180s python -m radar.scripts.generate_poster
           test -s radar/posters/latest.png
           test -s radar/posters/latest.json
           test -s "radar/posters/$(python -c "import json; print(json.load(open('radar/posters/latest.json'))['report_date'])").png"
       - name: Mandatory final-image QR and destination gate
-        run: python radar/scripts/verify_poster.py
+        run: python -m radar.scripts.verify_poster
         if: steps.preflight.outputs.skip != 'true'
       - name: Generate and verify six-image WeChat social pack
         if: steps.preflight.outputs.skip != 'true'
         run: |
           python -m py_compile radar/scripts/generate_social_pack.py radar/scripts/verify_social_pack.py radar/scripts/test_social_pack.py
           python -m unittest radar.scripts.test_social_pack -v
-          python radar/scripts/generate_social_pack.py
-          python radar/scripts/verify_social_pack.py
+          python -m radar.scripts.generate_social_pack
+          python -m radar.scripts.verify_social_pack
       - name: Cache Playwright browser and npm downloads
         uses: actions/cache@v4
         with:
