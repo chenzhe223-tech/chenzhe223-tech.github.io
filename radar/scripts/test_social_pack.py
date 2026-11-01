@@ -46,7 +46,7 @@ class SocialPackTests(unittest.TestCase):
             self.assertIn(required, wechat)
         for story in stories:
             self.assertIn(story_title(story), wechat)
-        self.assertIn("正式简报", moments if "正式简报" in moments else wechat)
+        self.assertIn("https://chenzhe223-tech.github.io/radar/daily/", wechat)
 
 
 if __name__ == "__main__":

@@ -554,6 +554,23 @@ def verify_skill_candidate(item: dict) -> dict | None:
             print(f"[skill-warning] README missing or too small: {name}")
             return None
         readme_text=readme.decode("utf-8",errors="replace") if isinstance(readme,bytes) else str(readme)
+        # Verify the project-declared homepage when present. If no separate homepage is
+        # declared, use the canonical GitHub repository page as the official project home.
+        declared_homepage=str(metadata.get("homepage") or "").strip()
+        official_website=declared_homepage or str(metadata.get("html_url") or "")
+        if not official_website.startswith("https://"):
+            return None
+        try:
+            homepage_req=urllib.request.Request(official_website,headers={"User-Agent":USER_AGENT,"Accept":"text/html,application/xhtml+xml,*/*;q=0.8"})
+            with urllib.request.urlopen(homepage_req,timeout=8) as homepage_resp:
+                homepage_status=int(homepage_resp.getcode())
+                homepage_final_url=homepage_resp.geturl()
+                homepage_sample=homepage_resp.read(512)
+            if homepage_status < 200 or homepage_status >= 400 or len(homepage_sample) < 80:
+                return None
+        except Exception as homepage_exc:
+            print(f"[skill-warning] official homepage unavailable: {name}: {type(homepage_exc).__name__}")
+            return None
         skill_type=classify_skill_type(name,str(metadata.get("description") or item.get("description") or ""),readme_text)
         if not skill_type:
             print(f"[skill-warning] repository does not prove it contains installable Agent Skill files: {name}")
@@ -587,6 +604,11 @@ def verify_skill_candidate(item: dict) -> dict | None:
             "readme_verified": True,
             "evidence_checked_at": dt.datetime.now(TZ).isoformat(),
             "evidence_urls": [metadata.get("html_url", item.get("url", "")), base + "/readme"],
+            "official_website": official_website,
+            "official_website_final_url": homepage_final_url,
+            "official_website_http_status": homepage_status,
+            "official_website_type": "declared_project_homepage" if declared_homepage else "official_github_repository_page",
+            "official_website_verified": True,
             "quality_status": "PASS",
             "skill_type": skill_type,
             "actual_skill_file_count": len(paths),
@@ -839,7 +861,7 @@ def collect_skills() -> list[dict]:
             if result["rare_value_verified"] else None
         )
         result["rare_value_evidence_url"] = (result.get("evidence_urls") or ["", ""])[1] if result["rare_value_verified"] else None
-        result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") else "FAIL"
+        result["quality_status"] = "PASS" if result.get("license") and result.get("readme_verified") and result.get("evidence_verified") and result.get("official_website_verified") else "FAIL"
         verified.append(result)
         if len(verified) >= 20:
             break

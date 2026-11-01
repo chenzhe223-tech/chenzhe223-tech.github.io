@@ -92,6 +92,9 @@ def main() -> int:
             fail(f"Social style mismatch: {key}")
     if manifest.get("canvas") != [W, H] or manifest.get("required_count") != 6:
         fail("Social canvas/count contract mismatch")
+    featured_skill = manifest.get("skill") or {}
+    if not (featured_skill.get("official_website_verified") and featured_skill.get("official_website") and featured_skill.get("license")):
+        fail("Featured Skill official project page or license verification is missing")
     top = report.get("top5") or []
     if len(top) != 5:
         fail("Formal report Top 5 count is not five")

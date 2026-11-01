@@ -58,7 +58,7 @@ def local_date(value: str, fallback: str) -> str:
             parsed = parsed.replace(tzinfo=dt.timezone.utc)
         return parsed.astimezone(TZ).date().isoformat()
     except Exception:
-        return fallback
+        return "发布日期未标注"
 
 
 def domain(value: str) -> str:
@@ -259,7 +259,7 @@ def draw_main_poster(report: dict, top: list[dict], skill: dict, report_date: st
     observation = str(editorial.get("core_zh") or editorial.get("trend_zh") or "AI 正从能力展示走向可落地的实际工作。")
     card(draw, (40, 708, 860, 820), fill=(237, 241, 239), outline=(215, 222, 220), radius=15)
     draw.rectangle((40, 708, 50, 820), fill=ORANGE)
-    draw.text((68, 726), "💡 DAVYLAB 观察", font=font(19, True), fill=BLUE)
+    draw.text((68, 726), "DAVYLAB 观察", font=font(19, True), fill=BLUE)
     write_text(draw, observation, (68, 761), font(16), INK, 760, 2, 4)
 
     card(draw, (40, 840, 515, 1120), fill=(246, 235, 216), outline=(232, 216, 187), radius=16)
@@ -270,7 +270,7 @@ def draw_main_poster(report: dict, top: list[dict], skill: dict, report_date: st
     license_name = str(skill.get("license_name") or skill.get("license") or "许可证信息待核验")
     draw.text((62, 1040), f"许可证：{license_name[:36]}", font=font(12, True), fill=BLUE)
     draw.text((62, 1065), "未实测安装；未完成专项安全审计", font=font(11, True), fill=MUTED)
-    draw.text((62, 1090), domain(str(skill.get("url") or "")), font=font(11), fill=MUTED)
+    draw.text((62, 1090), domain(str(skill.get("official_website") or skill.get("url") or "")), font=font(11), fill=MUTED)
 
     card(draw, (540, 840, 860, 1120), fill=WHITE, outline=LINE, radius=16)
     qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
@@ -320,7 +320,8 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
         "🧰 今日实用 Skill",
         f"{skill.get('name') or '开源 Skill'}：{skill.get('description_zh') or skill.get('description') or '详见项目仓库。'}",
         f"许可证：{skill.get('license_name') or skill.get('license') or '待核验'}；项目仓库：{skill.get('url') or '见正式简报'}。",
-        "已核验仓库、README 与许可证；未实测安装，未完成专项安全审计，使用请自行评估。",
+        f"官方项目主页：{skill.get('official_website') or skill.get('url') or '见正式简报'}（{'独立官网' if skill.get('official_website_type') == 'declared_project_homepage' else '未声明独立官网，使用官方 GitHub 项目页'}）。",
+        "已核验官方项目主页、仓库 README、实际 SKILL.md 文件及许可证；未实测安装，未完成专项安全审计，使用请自行评估。",
         "",
         "💡 DAVYLAB 观察",
         str(editorial.get("trend_zh") or editorial.get("core_zh") or "AI 正在从单点能力走向可执行、可管理的工作流程。"),
@@ -368,6 +369,8 @@ def main() -> int:
     skill = skills[0]
     if not (skill.get("license") or skill.get("license_name")):
         raise SystemExit("Social pack blocked: featured Skill has no verified license evidence")
+    if not (skill.get("official_website_verified") and skill.get("official_website") and skill.get("readme_verified") and skill.get("evidence_verified") and skill.get("skill_file_paths")):
+        raise SystemExit("Social pack blocked: official project page, README, actual SKILL.md and repository evidence must all be verified")
 
     out = OUT_ROOT / report_date
     out.mkdir(parents=True, exist_ok=True)
@@ -401,7 +404,7 @@ def main() -> int:
         "required_count": 6,
         "story_urls": [story_url(s) for s in top],
         "story_titles": [story_title(s) for s in top],
-        "skill": {"name": skill.get("name"), "url": skill.get("url"), "license": skill.get("license_name") or skill.get("license")},
+        "skill": {"name": skill.get("name"), "url": skill.get("url"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "license": skill.get("license_name") or skill.get("license")},
         "images": images,
         "phone_camera_scan": "NOT_TESTED",
         "wechat_editor_preview": "NOT_TESTED"
