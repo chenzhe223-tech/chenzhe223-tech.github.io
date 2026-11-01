@@ -27,6 +27,46 @@
     const mm = gsap.matchMedia();
 
     mm.add("(prefers-reduced-motion: no-preference)", () => {
+      // Add a visible animated light field around the hero mark.
+      const visual = document.querySelector(".visual");
+      if (visual && !visual.querySelector(".motion-ambient")) {
+        const ambient = document.createElement("div");
+        ambient.className = "motion-ambient";
+        Object.assign(ambient.style, {
+          position: "absolute", inset: "4%", borderRadius: "50%", pointerEvents: "none",
+          zIndex: "0", opacity: ".72", filter: "blur(18px)",
+          background: "radial-gradient(circle at 35% 35%,rgba(91,190,255,.42),transparent 35%),radial-gradient(circle at 70% 65%,rgba(184,137,255,.38),transparent 42%),radial-gradient(circle at 50% 50%,rgba(215,255,116,.14),transparent 62%)"
+        });
+        visual.prepend(ambient);
+        const particleSpecs = [
+          { left: "13%", top: "27%", size: "9px", color: "#8be6ff" },
+          { left: "78%", top: "24%", size: "6px", color: "#d6a9d9" },
+          { left: "72%", top: "78%", size: "8px", color: "#d7ff74" },
+          { left: "20%", top: "75%", size: "5px", color: "#b8a7ff" }
+        ];
+        particleSpecs.forEach((spec, index) => {
+          const particle = document.createElement("span");
+          particle.className = "motion-particle";
+          Object.assign(particle.style, {
+            position: "absolute", left: spec.left, top: spec.top, width: spec.size,
+            height: spec.size, borderRadius: "50%", background: spec.color, zIndex: "2",
+            pointerEvents: "none", boxShadow: "0 0 18px " + spec.color,
+            opacity: ".95", willChange: "transform,opacity"
+          });
+          visual.appendChild(particle);
+          gsap.to(particle, {
+            x: index % 2 ? -18 : 18, y: index % 2 ? 22 : -22,
+            scale: index % 2 ? 1.55 : .72, opacity: .42,
+            duration: coarsePointer ? 2.1 + index * .18 : 1.7 + index * .16,
+            ease: "sine.inOut", repeat: -1, yoyo: true, delay: index * .12
+          });
+        });
+        gsap.to(ambient, {
+          scale: 1.13, opacity: .94, duration: coarsePointer ? 2.8 : 2.2,
+          ease: "sine.inOut", repeat: -1, yoyo: true
+        });
+      }
+
       // A slim scroll progress rail gives the long-form portfolio a clear sense of movement.
       let progress = document.querySelector(".motion-progress");
       if (!progress) {
@@ -53,9 +93,9 @@
       gsap.set(".hero .eyebrow, .hero h1, .hero p, .hero .actions, .hero .hero-note", {
         autoAlpha: 0, y: coarsePointer ? 12 : 18
       });
-      gsap.set(".visual .orbit-tag", { autoAlpha: 0, y: 12 });
-      gsap.set(".visual .core", { autoAlpha: 0, scale: 0.88, transformOrigin: "50% 50%" });
-      gsap.set(".visual .orbit", { autoAlpha: 0, scale: 0.9, transformOrigin: "50% 50%" });
+      gsap.set(".visual .orbit-tag", { autoAlpha: 0, y: 18, zIndex: 4 });
+      gsap.set(".visual .core", { autoAlpha: 0, scale: 0.78, transformOrigin: "50% 50%", zIndex: 3 });
+      gsap.set(".visual .orbit", { autoAlpha: 0, scale: 0.84, transformOrigin: "50% 50%", zIndex: 1 });
 
       const intro = gsap.timeline({ defaults: { ease: "power3.out" } });
       intro.to(".hero .eyebrow", { autoAlpha: 1, y: 0, duration: 0.48 })
@@ -68,13 +108,13 @@
         .to(".visual .orbit-tag", { autoAlpha: 1, y: 0, duration: 0.42, stagger: 0.075 }, 0.45);
 
       // The hero stays alive after the intro. Coarse pointers get gentler movement.
-      gsap.to(".visual .orbit", { rotation: "+=360", duration: coarsePointer ? 72 : 48, ease: "none", repeat: -1 });
+      gsap.to(".visual .orbit", { rotation: "+=360", duration: coarsePointer ? 26 : 34, ease: "none", repeat: -1 });
       gsap.to(".visual .core", {
-        y: coarsePointer ? -5 : -9, rotation: coarsePointer ? 2 : 4,
+        y: coarsePointer ? -10 : -14, rotation: coarsePointer ? 4 : 7,
         duration: coarsePointer ? 3.4 : 2.7, ease: "sine.inOut", repeat: -1, yoyo: true
       });
       gsap.to(".visual .orbit-tag", {
-        y: (i) => (i % 2 ? -5 : 5), duration: coarsePointer ? 3.8 : 2.8,
+        y: (i) => (i % 2 ? -10 : 10), duration: coarsePointer ? 2.7 : 2.3,
         ease: "sine.inOut", repeat: -1, yoyo: true, stagger: { each: 0.24, from: "edges" }
       });
       gsap.to(".ticker i", {
