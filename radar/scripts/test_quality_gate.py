@@ -1,7 +1,12 @@
 import unittest
-from radar.scripts.quality_gate import compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
+from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
 
 class QualityGateTests(unittest.TestCase):
+    def test_one_verified_skill_is_enough_for_daily_featured_recommendation(self):
+        self.assertEqual(MIN_QUALIFIED_SKILLS, 1)
+        self.assertEqual(validate_skill_count([{"name": "demo/skill"}]), [])
+        self.assertEqual(validate_skill_count([])[0]["minimum"], 1)
+
     def test_unreachable_historical_image_is_reported_but_does_not_block_clean_current_assets(self):
         self.assertEqual(evaluate_quality_gate([],[],[],[],[],[{"url":"https://old.example/missing.jpg"}],[]),"PASS")
         self.assertEqual(evaluate_quality_gate([],[],[{"type":"image_unverifiable"}],[],[],[],[]),"FAIL")

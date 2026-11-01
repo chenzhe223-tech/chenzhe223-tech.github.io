@@ -162,6 +162,15 @@ def download_fingerprints(url):
     return sha,phash
 def hamming(a,b):
     return sum(x!=y for x,y in zip(a,b)) if a and b and len(a)==len(b) else 999
+MIN_QUALIFIED_SKILLS = 1  # The daily deliverable features one Skill; evidence quality, not shortlist count, is the publication gate.
+
+
+def validate_skill_count(skills):
+    if len(skills) < MIN_QUALIFIED_SKILLS:
+        return [{"type": "insufficient_qualified_skill_recommendations", "selected_count": len(skills), "minimum": MIN_QUALIFIED_SKILLS}]
+    return []
+
+
 def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_image_hits, unreadable_history, historical_image_failures, skill_errors):
     """Historical image URL fetch failures are explicit coverage gaps, not proof of current reuse.
     Current image fetch failures, known reuse, unreadable archives and Skill errors still block publication.
@@ -303,13 +312,15 @@ def main():
     # Skill recommendations are a separate quality domain and must pass before the report can publish.
     skill_radar=report.get("skill_radar") if isinstance(report.get("skill_radar"),dict) else {}
     skills=report.get("skills") if isinstance(report.get("skills"),list) else []
-    skill_errors=[]
+    skill_errors=validate_skill_count(skills)
     if skill_radar.get("status")!="PASS": skill_errors.append({"type":"skill_radar_status","status":skill_radar.get("status","missing")})
-    if len(skills)<5: skill_errors.append({"type":"insufficient_qualified_skill_recommendations","selected_count":len(skills),"minimum":5})
     for skill in skills:
         if not isinstance(skill,dict): skill_errors.append({"type":"invalid_skill_record"}); continue
         if not skill.get("canonical_id"): skill_errors.append({"type":"missing_canonical_id","name":skill.get("name")})
         if not skill.get("license"): skill_errors.append({"type":"missing_verified_license","name":skill.get("name")})
+        if not skill.get("official_website_verified") or not str(skill.get("official_website") or "").startswith("https://"): skill_errors.append({"type":"missing_verified_official_project_homepage","name":skill.get("name")})
+        if not skill.get("readme_verified"): skill_errors.append({"type":"missing_verified_readme","name":skill.get("name")})
+        if not skill.get("skill_file_paths"): skill_errors.append({"type":"missing_actual_skill_file_evidence","name":skill.get("name")})
         if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
         if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})

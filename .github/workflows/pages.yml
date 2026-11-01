@@ -86,7 +86,7 @@ jobs:
                   and report.get('top5_status') == 'ai_curated'
                   and report.get('quality_gate', {}).get('status') == 'PASS'
                   and report.get('skill_radar', {}).get('engine_version') == '2026.10.26.3'
-                  and len(report.get('skills', [])) >= 5
+                  and len(report.get('skills', [])) >= 1
                   and len(report.get('top5', [])) == 5
                   and all(str(story.get('image_url') or '').startswith('https://') for story in report.get('china_ai_news', []) if isinstance(story, dict))
                   and len(report.get('china_ai_news', [])) >= 6
@@ -595,13 +595,14 @@ jobs:
                   latest_qr = json.loads(latest_qr_bytes.decode('utf-8'))
                   assert latest_qr.get('status') == 'PASS' and latest_qr.get('expected_url') == qr_target, 'latest QR manifest is not a matching PASS'
                   skills = data.get('skills') or []
-                  assert len(skills) >= 5, f'expected at least five verified Skill recommendations, got {len(skills)}'
+                  assert len(skills) >= 1, f'expected at least one fully verified Skill recommendation, got {len(skills)}'
                   for skill in skills:
                       assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
                       assert skill.get('quality_status') == 'PASS', 'unverified Skill recommendation is published'
                       assert skill.get('official_website_verified') is True, 'daily Skill official project page was not HTTP-verified'
                       assert skill.get('official_website','').startswith('https://'), 'daily Skill official project page URL missing'
                       assert skill.get('skill_file_paths'), 'daily Skill actual SKILL.md evidence missing'
+                      assert skill.get('readme_verified') is True, 'daily Skill README was not verified'
                   # Download every WeChat asset from the live Pages site and compare it byte-for-byte with origin/main.
                   social_rel = 'social/' + today + '/'
                   social_verification_url = base + social_rel + 'verification.json?verify=' + stamp

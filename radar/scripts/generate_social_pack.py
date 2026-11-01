@@ -404,7 +404,7 @@ def main() -> int:
         "required_count": 6,
         "story_urls": [story_url(s) for s in top],
         "story_titles": [story_title(s) for s in top],
-        "skill": {"name": skill.get("name"), "url": skill.get("url"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "license": skill.get("license_name") or skill.get("license")},
+        "skill": {"name": skill.get("name"), "url": skill.get("url"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "readme_verified": skill.get("readme_verified"), "skill_file_paths": skill.get("skill_file_paths"), "evidence_verified": skill.get("evidence_verified"), "license": skill.get("license_name") or skill.get("license")},
         "images": images,
         "phone_camera_scan": "NOT_TESTED",
         "wechat_editor_preview": "NOT_TESTED"

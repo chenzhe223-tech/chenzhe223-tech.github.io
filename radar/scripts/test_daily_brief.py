@@ -11,7 +11,11 @@ from radar.scripts.run_horizon import build_selection_pool, ensure_story_fallbac
 class _FakeHttpResponse:
     def __enter__(self): return self
     def __exit__(self, exc_type, exc, tb): return False
-    def read(self): return b'{}'
+    def getcode(self): return 200
+    def geturl(self): return "https://github.com/example/verified-skill"
+    def read(self, size=-1):
+        payload = b"<html><body>Official project repository page and installation documentation.</body></html>"
+        return payload[:size] if size and size > 0 else payload
 
 
 class DailyBriefContractTests(unittest.TestCase):
@@ -70,7 +74,8 @@ class DailyBriefContractTests(unittest.TestCase):
         readme = b"# Verified Skill\n\nInstall the agent skill by copying skills/browser/SKILL.md into your agent's skills directory.\n" + b"Details. " * 30
         candidate = {"name": "example/verified-skill", "url": metadata["html_url"], "description": "candidate"}
         with patch("radar.scripts.build_daily.http_get", side_effect=[json.dumps(metadata).encode(), readme, json.dumps({"tree":[{"path":"skills/browser/SKILL.md"}]}).encode()]) as mocked:
-            result = verify_skill_candidate(candidate)
+            with patch.object(build_daily.urllib.request, "urlopen", return_value=_FakeHttpResponse()):
+                result = verify_skill_candidate(candidate)
         self.assertIsNotNone(result)
         self.assertEqual(result["license"], "MIT")
         self.assertEqual(result["license_name"], "MIT License")

@@ -93,8 +93,8 @@ def main() -> int:
     if manifest.get("canvas") != [W, H] or manifest.get("required_count") != 6:
         fail("Social canvas/count contract mismatch")
     featured_skill = manifest.get("skill") or {}
-    if not (featured_skill.get("official_website_verified") and featured_skill.get("official_website") and featured_skill.get("license")):
-        fail("Featured Skill official project page or license verification is missing")
+    if not (featured_skill.get("official_website_verified") and featured_skill.get("official_website") and featured_skill.get("readme_verified") and featured_skill.get("skill_file_paths") and featured_skill.get("evidence_verified") and featured_skill.get("license")):
+        fail("Featured Skill official project page, README, SKILL.md evidence or license verification is missing")
     top = report.get("top5") or []
     if len(top) != 5:
         fail("Formal report Top 5 count is not five")
