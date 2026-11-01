@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "font_policy": "fail-closed-for-cjk",
+  "cjk_candidates": [
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"
+  ],
+  "cjk_bold_candidates": [
+    "/usr/share/fonts/opentype/noto/NotoSansCJK-Bold.ttc",
+    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc"
+  ],
+  "fallback_allowed_for_cjk": false,
+  "fallback_allowed_for_latin": true,
+  "min_body_px": 13
+}
