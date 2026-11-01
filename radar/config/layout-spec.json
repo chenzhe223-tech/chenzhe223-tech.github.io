@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "website_poster": {
+    "width": 1200,
+    "height": 1800,
+    "ratio": "2:3",
+    "template": "mountain-editorial"
+  },
+  "wechat_social_pack": {
+    "width": 900,
+    "height": 1200,
+    "ratio": "3:4",
+    "count": 6,
+    "separate_files": true
+  },
+  "mountain_editorial": {
+    "regions": [
+      "masthead",
+      "hero-title-date",
+      "five-column-news-grid",
+      "today-insight-banner",
+      "skill-recommendation",
+      "right-qr-panel",
+      "brand-footer"
+    ],
+    "news_columns": 5,
+    "preserve_region_order": true,
+    "allow_content_reflow_inside_region": true,
+    "allow_region_reorder": false
+  },
+  "reference_alignment": "structure_and_visual_language_not_pixel_identity"
+}
