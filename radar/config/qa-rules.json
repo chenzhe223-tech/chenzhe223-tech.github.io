@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "max_repair_rounds": 3,
+  "fail_closed": true,
+  "website_poster": {
+    "width": 1200,
+    "height": 1800,
+    "format": "PNG",
+    "required_news": 5,
+    "required_skill": true,
+    "required_qr": true,
+    "qr_url": "https://chenzhe223-tech.github.io/radar/daily/"
+  },
+  "wechat_pack": {
+    "count": 6,
+    "width": 900,
+    "height": 1200,
+    "format": "PNG",
+    "each_file_independent": true
+  },
+  "checks": [
+    "file_exists",
+    "png_integrity",
+    "dimensions",
+    "font_coverage",
+    "text_bounds",
+    "region_presence",
+    "news_data_consistency",
+    "image_relevance_label",
+    "qr_decode_final_png",
+    "qr_exact_url",
+    "http_status",
+    "redirect_target",
+    "deployed_asset_matches"
+  ],
+  "phone_camera_scan": "manual_only_unless_device_test_performed",
+  "p0_blockers": [
+    "wrong_date",
+    "wrong_weekly_style",
+    "wrong_dimensions",
+    "missing_news",
+    "missing_skill",
+    "qr_decode_failure",
+    "qr_target_mismatch",
+    "font_missing",
+    "text_overflow",
+    "invalid_source",
+    "deployment_failure"
+  ]
+}
