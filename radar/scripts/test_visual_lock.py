@@ -13,6 +13,11 @@ class VisualLockTests(unittest.TestCase):
         self.assertEqual(a["design_variant"], b["design_variant"])
         self.assertEqual(a["style_cycle_index"], b["style_cycle_index"])
 
+    def test_w45_uses_geometric_navy(self):
+        result = validate_visual_lock("2026-11-02")
+        self.assertEqual(result["design_variant"], "geometric-navy")
+        self.assertEqual(result["canvas"], [1200, 1800])
+
     def test_adjacent_iso_week_alternates(self):
         a = validate_visual_lock("2026-11-01")
         b = validate_visual_lock("2026-11-02")

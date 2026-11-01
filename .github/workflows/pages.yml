@@ -71,6 +71,9 @@ jobs:
               report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
               qr_check = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+              social_dir = Path('radar/social') / today
+              social_check = json.loads((social_dir / 'verification.json').read_text(encoding='utf-8'))
+              social_zip = social_dir / f'wechat-pack-{today}.zip'
               generated_at = dt.datetime.fromisoformat(str(report.get('generated_at', '')).replace('Z', '+00:00'))
               if generated_at.tzinfo is None:
                   generated_at = generated_at.replace(tzinfo=dt.timezone.utc)
@@ -99,6 +102,10 @@ jobs:
                   and qr_check.get('status') == 'PASS'
                   and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
                   and all(qr_check.get(key) == value for key, value in expected_style.items())
+                  and social_check.get('report_date') == today
+                  and social_check.get('status') == 'PASS'
+                  and len(social_check.get('images', [])) == 6
+                  and social_zip.is_file()
               )
           except Exception:
               complete = False
@@ -202,7 +209,7 @@ jobs:
           python -m radar.scripts.quality_gate
       - name: Validate today's date, fresh news and data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py radar/scripts/generate_social_pack.py radar/scripts/verify_social_pack.py radar/scripts/test_social_pack.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_historical_dedupe -v
           python -m unittest radar.scripts.test_skill_radar -v
@@ -276,6 +283,13 @@ jobs:
       - name: Mandatory final-image QR and destination gate
         run: python radar/scripts/verify_poster.py
         if: steps.preflight.outputs.skip != 'true'
+      - name: Generate and verify six-image WeChat social pack
+        if: steps.preflight.outputs.skip != 'true'
+        run: |
+          python -m py_compile radar/scripts/generate_social_pack.py radar/scripts/verify_social_pack.py radar/scripts/test_social_pack.py
+          python -m unittest radar.scripts.test_social_pack -v
+          python radar/scripts/generate_social_pack.py
+          python radar/scripts/verify_social_pack.py
       - name: Cache Playwright browser and npm downloads
         uses: actions/cache@v4
         with:
@@ -325,6 +339,8 @@ jobs:
           cp radar/posters/latest.png "$SNAPSHOT/latest.png"
           cp radar/posters/latest.json "$SNAPSHOT/latest-poster.json"
           cp radar/posters/latest.qr-verification.json "$SNAPSHOT/latest-qr-verification.json"
+          mkdir -p "$SNAPSHOT/social"
+          cp -a "radar/social/$TODAY" "$SNAPSHOT/social/$TODAY"
 
           git fetch origin main
           git reset --hard HEAD
@@ -393,6 +409,8 @@ jobs:
           cp "$SNAPSHOT/latest.png" radar/posters/latest.png
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
           cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
+          mkdir -p radar/social
+          cp -a "$SNAPSHOT/social/$TODAY" "radar/social/$TODAY"
           mkdir -p radar/data/skill-candidates
           cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
 
@@ -411,7 +429,7 @@ jobs:
           days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
           Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
           PY
-          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json "radar/social/$TODAY/"
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main

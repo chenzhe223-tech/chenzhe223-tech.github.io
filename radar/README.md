@@ -17,6 +17,7 @@ GitHub Actions refreshes and publishes the report daily starting at 23:30 UTC (0
 ## Published data
 - Latest report: `data/latest.json`
 - Daily snapshots: `data/archive/`
+- WeChat social pack: `radar/social/YYYY-MM-DD/` (six independent 900×1200 PNGs, copy, manifest, QA record and ZIP package).
 - Horizon runtime summaries: `data/horizon-data/summaries/` (generated in Actions; not required to be committed)
 - Public page: https://chenzhe223-tech.github.io/radar/daily/
 
