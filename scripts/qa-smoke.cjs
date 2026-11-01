@@ -158,6 +158,52 @@ const mark = (status, name, detail = '') => {
     mark(md.shelfContent > md.shelf ? 'PASS' : 'FAIL', '手机端横向滑动货架', JSON.stringify(md));
     await mobile.screenshot({ path: path.join(out, 'mobile-home.png'), fullPage: true });
     mark(mobileErrors.length === 0 ? 'PASS' : 'FAIL', '手机端 JavaScript 异常', mobileErrors.length ? JSON.stringify(mobileErrors) : '未发现 pageerror');
+    
+    // Visual DNA Motion Lab: verify the public mobile workspace, JSON export, and poster editor.
+    const motionLabMobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+    const motionLabErrors = [];
+    motionLabMobile.on('pageerror', e => motionLabErrors.push(e.message));
+    const motionLabResponse = await motionLabMobile.goto(base + 'motion-lab/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await motionLabMobile.locator('#labTitle').waitFor({ timeout: 20000 });
+    await motionLabMobile.waitForFunction(() => {
+      const field = document.querySelector('#motionConfig');
+      if (!field || !field.value.trim()) return false;
+      try { return JSON.parse(field.value).schema === 'davylab.visual-dna-motion/v1'; } catch (_) { return false; }
+    }, null, { timeout: 10000 });
+    const motionLabMetrics = await motionLabMobile.evaluate(() => ({
+      width: innerWidth,
+      document: document.documentElement.scrollWidth,
+      title: document.title,
+      posterLink: !!document.querySelector('a[href="./motion-poster.html"]')
+    }));
+    mark(motionLabResponse && motionLabResponse.status() < 400 ? 'PASS' : 'FAIL', 'Motion Lab 手机端页面加载', 'HTTP ' + (motionLabResponse && motionLabResponse.status()));
+    mark(motionLabMetrics.document <= motionLabMetrics.width + 2 ? 'PASS' : 'FAIL', 'Motion Lab 手机端无横向溢出', JSON.stringify(motionLabMetrics));
+    mark(motionLabMetrics.posterLink ? 'PASS' : 'FAIL', 'Motion Lab 动态海报入口', motionLabMetrics.posterLink ? '入口可见' : '入口缺失');
+    const motionDownloadPromise = motionLabMobile.waitForEvent('download', { timeout: 10000 });
+    await motionLabMobile.locator('#downloadMotionConfig').click();
+    const motionDownload = await motionDownloadPromise;
+    mark(motionDownload.suggestedFilename().endsWith('.json') ? 'PASS' : 'FAIL', 'Motion Lab JSON 配置导出', motionDownload.suggestedFilename());
+    mark(motionLabErrors.length === 0 ? 'PASS' : 'FAIL', 'Motion Lab 手机端 JavaScript 异常', motionLabErrors.length ? JSON.stringify(motionLabErrors) : '未发现 pageerror');
+    await motionLabMobile.close();
+
+    const posterMobile = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true, deviceScaleFactor: 1 });
+    const posterErrors = [];
+    posterMobile.on('pageerror', e => posterErrors.push(e.message));
+    const posterResponse = await posterMobile.goto(base + 'motion-lab/motion-poster.html', { waitUntil: 'domcontentloaded', timeout: 45000 });
+    await posterMobile.locator('#poster').waitFor({ timeout: 15000 });
+    const posterMetrics = await posterMobile.evaluate(() => ({
+      width: innerWidth,
+      document: document.documentElement.scrollWidth,
+      title: document.title,
+      hasTitleInput: !!document.querySelector('#titleInput'),
+      hasPngExport: !!document.querySelector('#exportPng')
+    }));
+    mark(posterResponse && posterResponse.status() < 400 ? 'PASS' : 'FAIL', 'Motion Poster 手机端页面加载', 'HTTP ' + (posterResponse && posterResponse.status()));
+    mark(posterMetrics.document <= posterMetrics.width + 2 ? 'PASS' : 'FAIL', 'Motion Poster 手机端无横向溢出', JSON.stringify(posterMetrics));
+    mark(posterMetrics.hasTitleInput && posterMetrics.hasPngExport ? 'PASS' : 'FAIL', 'Motion Poster 编辑与 PNG 导出控件', JSON.stringify(posterMetrics));
+    mark(posterErrors.length === 0 ? 'PASS' : 'FAIL', 'Motion Poster 手机端 JavaScript 异常', posterErrors.length ? JSON.stringify(posterErrors) : '未发现 pageerror');
+    await posterMobile.close();
+
 
     const targets = [
       ['念头盒', 'https://chenzhe223-tech.github.io/niantou-box-app/'],
@@ -178,6 +224,10 @@ const mark = (status, name, detail = '') => {
       ['DAVYLAB AI Brief', 'https://chenzhe223-tech.github.io/radar/daily/'],
       ['公众号选题工作台', 'https://chenzhe223-tech.github.io/topic-studio/'],
       ['DAVYLAB DesignOS', 'https://davylab-designos.pages.dev/'],
+      ['Visual DNA Motion Lab', 'https://chenzhe223-tech.github.io/motion-lab/'],
+      ['Motion Poster Studio', 'https://chenzhe223-tech.github.io/motion-lab/motion-poster.html'],
+      ['Motion Lab App Motion Kit', 'https://chenzhe223-tech.github.io/motion-lab/app-motion-kit.html'],
+      ['Motion Lab Integration Guide', 'https://chenzhe223-tech.github.io/motion-lab/integration-guide.html'],
       ['DAVYLAB DesignOS 源码仓库', 'https://github.com/chenzhe223-tech/davylab-designos'],
       ['TrustLoop 源码仓库', 'https://github.com/chenzhe223-tech/davy-lab-trustloop'],
       ['付款填报助手源码仓库', 'https://github.com/chenzhe223-tech/payment-apply-agent'],
