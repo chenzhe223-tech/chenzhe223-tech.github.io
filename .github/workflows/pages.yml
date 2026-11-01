@@ -599,6 +599,56 @@ jobs:
                   for skill in skills:
                       assert skill.get('url','').startswith('https://github.com/'), 'daily Skill recommendation missing a GitHub URL'
                       assert skill.get('quality_status') == 'PASS', 'unverified Skill recommendation is published'
+                      assert skill.get('official_website_verified') is True, 'daily Skill official project page was not HTTP-verified'
+                      assert skill.get('official_website','').startswith('https://'), 'daily Skill official project page URL missing'
+                      assert skill.get('skill_file_paths'), 'daily Skill actual SKILL.md evidence missing'
+                  # Download every WeChat asset from the live Pages site and compare it byte-for-byte with origin/main.
+                  social_rel = 'social/' + today + '/'
+                  social_verification_url = base + social_rel + 'verification.json?verify=' + stamp
+                  with urllib.request.urlopen(urllib.request.Request(social_verification_url, headers=headers), timeout=15) as social_meta_response:
+                      social_meta_bytes = social_meta_response.read()
+                  assert_matches_repo('radar/social/' + today + '/verification.json', social_meta_bytes)
+                  social_verification = json.loads(social_meta_bytes.decode('utf-8'))
+                  assert social_verification.get('report_date') == today and social_verification.get('status') == 'PASS', 'live social verification manifest is not PASS'
+                  assert len(social_verification.get('images', [])) == 6, 'live social manifest does not contain six images'
+                  live_images = []
+                  for entry in social_verification['images']:
+                      filename = entry['filename']
+                      image_url = base + social_rel + filename + '?verify=' + stamp
+                      with urllib.request.urlopen(urllib.request.Request(image_url, headers=headers), timeout=20) as image_response:
+                          image_bytes = image_response.read()
+                          assert image_response.status == 200 and image_response.headers.get('Content-Type','').startswith('image/png'), f'{filename} missing or not PNG on Pages'
+                      relative = 'radar/social/' + today + '/' + filename
+                      assert_matches_repo(relative, image_bytes)
+                      decoded_image = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
+                      assert decoded_image is not None and decoded_image.shape[:2] == (1200, 900), f'{filename} is not a valid 900x1200 PNG'
+                      if filename == '01-main-poster.png':
+                          social_qr, social_points, _ = cv2.QRCodeDetector().detectAndDecode(decoded_image)
+                          assert social_qr == qr_target and social_points is not None, f'Live social main-poster QR mismatch: {social_qr!r}'
+                      live_images.append({'filename': filename, 'http_status': 200, 'width': 900, 'height': 1200, 'sha256': hashlib.sha256(image_bytes).hexdigest(), 'status': 'PASS'})
+                  for copy_name in ('wechat-copy.md', 'moments-copy.md', 'manifest.json', 'verification.json'):
+                      copy_url = base + social_rel + copy_name + '?verify=' + stamp
+                      with urllib.request.urlopen(urllib.request.Request(copy_url, headers=headers), timeout=15) as copy_response:
+                          copy_bytes = copy_response.read()
+                          assert copy_response.status == 200, f'{copy_name} missing on Pages'
+                      assert_matches_repo('radar/social/' + today + '/' + copy_name, copy_bytes)
+                  zip_name = 'wechat-pack-' + today + '.zip'
+                  with urllib.request.urlopen(urllib.request.Request(base + social_rel + zip_name + '?verify=' + stamp, headers=headers), timeout=20) as zip_response:
+                      zip_bytes = zip_response.read()
+                      assert zip_response.status == 200, 'WeChat ZIP package missing on Pages'
+                  assert_matches_repo('radar/social/' + today + '/' + zip_name, zip_bytes)
+                  live_record = {
+                      'report_date': today,
+                      'checked_at_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
+                      'status': 'PASS',
+                      'live_images': live_images,
+                      'copy_files': ['wechat-copy.md', 'moments-copy.md', 'manifest.json', 'verification.json'],
+                      'zip': {'filename': zip_name, 'http_status': 200, 'file_size_bytes': len(zip_bytes), 'sha256': hashlib.sha256(zip_bytes).hexdigest(), 'status': 'PASS'},
+                      'phone_camera_scan': 'NOT_TESTED',
+                      'wechat_editor_preview': 'NOT_TESTED'
+                  }
+                  Path('test-results/radar').mkdir(parents=True, exist_ok=True)
+                  Path('test-results/radar/live-social-verification.json').write_text(json.dumps(live_record, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
                   old_days = [x for x in history.get('days',[]) if x != today + '.json']
                   if old_days:
                       old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
@@ -607,7 +657,7 @@ jobs:
                       assert_matches_repo('radar/data/archive/' + old_days[0], old_bytes)
                       old_data = json.loads(old_bytes.decode('utf-8'))
                       assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
-                  print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
+                  print(f"PASS: automatic Pages deployment and six-image social pack verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; social_images={len(live_images)}; social_zip_bytes={len(zip_bytes)}; generated_at={data['generated_at']}")
                   break
               except NameError as exc:
                   raise SystemExit(f'Non-retryable verification code error: {type(exc).__name__}: {exc}') from exc
@@ -618,3 +668,11 @@ jobs:
           else:
               raise SystemExit('Post-deploy verification failed: ' + last_error)
           PY
+      - name: Upload live social-pack deployment verification
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-social-deployment-verification
+          path: test-results/radar/live-social-verification.json
+          if-no-files-found: warn
+          retention-days: 14
