@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "lock_mode": "deterministic",
+  "weekly_style_source": "radar/scripts/poster_style.py::poster_style_metadata",
+  "retry_must_preserve_style": true,
+  "approved_weekly_style": "mountain-editorial",
+  "approved_iso_week": "2026-W44",
+  "allowed_design_variants": [
+    "geometric-navy",
+    "mountain-editorial"
+  ],
+  "disallow_ai_full_poster_generation": true,
+  "disallow_random_redesign": true,
+  "reference_baseline": "radar/config/baseline.json"
+}
