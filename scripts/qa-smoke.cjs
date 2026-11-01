@@ -31,6 +31,11 @@ const mark = (status, name, detail = '') => {
     await desktop.screenshot({ path: path.join(out, 'desktop-home.png'), fullPage: true });
     const dims = await desktop.locator('#shelf').evaluate(e => ({ viewport: e.clientWidth, content: e.scrollWidth }));
     mark(dims.content > dims.viewport + 8 ? 'PASS' : 'FAIL', '横向应用货架', JSON.stringify(dims));
+    // The product controls use GSAP scroll-reveal; bring them into view before asserting visibility or clicking.
+    await desktop.locator('#products .shelf-tools').scrollIntoViewIfNeeded();
+    await desktop.waitForTimeout(900);
+    await desktop.locator('#next').waitFor({ state: 'visible', timeout: 5000 });
+    if (!(await desktop.locator('#next').isEnabled())) throw new Error('Right shelf arrow is disabled before any horizontal scrolling');
     await desktop.locator('#next').click();
     await desktop.waitForTimeout(500);
     const afterNext = await desktop.locator('#shelf').evaluate(e => e.scrollLeft);
