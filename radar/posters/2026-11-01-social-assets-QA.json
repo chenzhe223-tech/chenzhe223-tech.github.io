@@ -7,11 +7,23 @@
   ],
   "required_format": "PNG",
   "brief_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "style": {
+    "design_variant": "mountain-editorial",
+    "iso_year": 2026,
+    "iso_week": 44,
+    "iso_weekday": 7,
+    "style_cycle_index": 43,
+    "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+    "template_version": "2.3.0"
+  },
   "official_online_report_verification": {
     "http_status": 200,
     "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
     "status": "PASS",
-    "evidence": "GitHub Actions verify-live job 124693373430; live daily page and assets matched origin/main."
+    "verified_at": "2026-11-01T07:58:51+08:00",
+    "workflow_run_id": 41254644404,
+    "job_id": 124695282222,
+    "evidence": "GitHub Actions verify-live checked the daily page and latest.json; both returned HTTP 200, final URL matched the fixed entry, and live asset hashes matched origin/main."
   },
   "wechat_editor_preview": "NOT_TESTED - not opened in the WeChat editor during this run.",
   "images": [
@@ -21,19 +33,26 @@
       "height": 1200,
       "aspect_ratio": "3:4",
       "format": "PNG",
-      "file_size_bytes": 153700,
-      "file_size_kb": 150.1,
-      "sha256": "4df8b270c8c4901dd11a0b48b8c4f37036d937a1a1521fc381a4c230f7a872a1",
+      "file_size_bytes": 529799,
+      "file_size_kb": 517.4,
+      "sha256": "80fae24cf44cad9dc9671a138b0c852893841ed881b6ee6f3bc95a480275d56e",
       "theme": "主海报：五条精选新闻、DAVYLAB观察、OpenMontage Skill、正式入口二维码",
-      "material_type": "原创矢量山峦主视觉 + 信息排版；非新闻现场",
+      "material_type": "AI生成山峦主题视觉 + 信息排版；非新闻现场",
       "unique_image": true,
       "status": "PASS",
       "qr_decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
       "qr_exact_url_match": true,
       "qr_decode_status": "PASS",
+      "qr_quiet_zone_modules": 4,
+      "qr_quiet_zone_px": 15,
+      "qr_module_count": 33,
+      "qr_code_px": [
+        152,
+        152
+      ],
       "qr_quiet_zone_present": true,
       "qr_contrast_range": 255,
-      "qr_occlusion": "PASS - isolated white tile; no text or illustration overlaps the QR",
+      "qr_occlusion": "PASS - isolated white tile; no text or illustration overlaps QR",
       "qr_status": "PASS"
     },
     {
@@ -42,11 +61,11 @@
       "height": 1200,
       "aspect_ratio": "3:4",
       "format": "PNG",
-      "file_size_bytes": 107185,
-      "file_size_kb": 104.7,
-      "sha256": "cc878e242bc7410c4602b3f183931b9d01c2542f6b795359d5441365587f9493",
+      "file_size_bytes": 679302,
+      "file_size_kb": 663.4,
+      "sha256": "f11a5fa30a0e0f598fba9875ed6d75afb2b8755c96b0f0a493cb93af99c37c66",
       "theme": "Vercel Labs 开源 agent-desktop",
-      "material_type": "原创矢量主题插画；非新闻现场",
+      "material_type": "原创生成式主题插画；非新闻现场",
       "unique_image": true,
       "status": "PASS"
     },
@@ -56,25 +75,11 @@
       "height": 1200,
       "aspect_ratio": "3:4",
       "format": "PNG",
-      "file_size_bytes": 96616,
-      "file_size_kb": 94.4,
-      "sha256": "424135eafb617577b0decbb2b4ab1001c2fa624636865538c3eeff09ae6c1563",
+      "file_size_bytes": 753114,
+      "file_size_kb": 735.5,
+      "sha256": "a5fe51a1a40159824d3195ea0cc76f1dfb779b953b5b075b97e19308955036da",
       "theme": "Factory Droid 1.0 发布",
-      "material_type": "原创矢量主题插画；非新闻现场",
-      "unique_image": true,
-      "status": "PASS"
-    },
-    {
-      "file_name": "2026-11-01-global-03-samaya-sterling.png",
-      "width": 900,
-      "height": 1200,
-      "aspect_ratio": "3:4",
-      "format": "PNG",
-      "file_size_bytes": 85501,
-      "file_size_kb": 83.5,
-      "sha256": "d06d326998351b13df78a7ccca7733bbf4142c9217fef1e2818106cd91e475cb",
-      "theme": "Samaya AI 发布 Sterling",
-      "material_type": "原创矢量主题插画；非新闻现场",
+      "material_type": "原创生成式主题插画；非新闻现场",
       "unique_image": true,
       "status": "PASS"
     },
@@ -84,11 +89,11 @@
       "height": 1200,
       "aspect_ratio": "3:4",
       "format": "PNG",
-      "file_size_bytes": 109616,
-      "file_size_kb": 107,
-      "sha256": "85e1658b547625a6178b0d6d184fcd9fda98ab4ccd01e7f54852d7c88c73a229",
+      "file_size_bytes": 788251,
+      "file_size_kb": 769.8,
+      "sha256": "2ee07b0933655736f49876ad6888738edb911eec89942006376dedf188bb4bc0",
       "theme": "微信支付智慧经营机器人首次进店",
-      "material_type": "原创矢量主题插画；非新闻现场",
+      "material_type": "原创生成式主题插画；非新闻现场",
       "unique_image": true,
       "status": "PASS"
     },
@@ -98,25 +103,141 @@
       "height": 1200,
       "aspect_ratio": "3:4",
       "format": "PNG",
-      "file_size_bytes": 84695,
-      "file_size_kb": 82.7,
-      "sha256": "46844b813dffbec28750a938a73ae1cc158867a05ff5f4270c1f994d2d1b5861",
-      "theme": "DeepSeek 融资细节：媒体报道",
-      "material_type": "原创矢量主题插画；非新闻现场",
+      "file_size_bytes": 869491,
+      "file_size_kb": 849.1,
+      "sha256": "b935816a70a789cc03ea217af46c5d49b8f63dfb21ab90cd955b1d40b16b8f45",
+      "theme": "DeepSeek 融资报道（低置信度、待官方确认）",
+      "material_type": "原创生成式主题插画；非新闻现场",
+      "unique_image": true,
+      "status": "PASS"
+    },
+    {
+      "file_name": "2026-11-01-skill.png",
+      "width": 900,
+      "height": 1200,
+      "aspect_ratio": "3:4",
+      "format": "PNG",
+      "file_size_bytes": 850549,
+      "file_size_kb": 830.6,
+      "sha256": "d2323b7645b3b36de98d697f0c689991a3b9617175b27e7700444fb8816789a6",
+      "theme": "OpenMontage 视频制作 Skill",
+      "material_type": "原创生成式主题插画；非产品截图",
       "unique_image": true,
       "status": "PASS"
     }
   ],
-  "overall_status": "PASS",
-  "limitations": [
-    "The official repository poster remains 1200x1800 under the current radar/poster-rules.md and generator P0 contract; this separate WeChat six-image package is 900x1200.",
-    "The five story visuals are original thematic vector illustrations, explicitly not presented as news现场 photographs.",
-    "The six-image social package is delivered locally and is not uploaded to the GitHub repository in this run."
+  "skill_verification": {
+    "name": "OpenMontage",
+    "repository_url": "https://github.com/calesthio/OpenMontage",
+    "official_website": "https://openmontage.video/",
+    "repository_verified": true,
+    "website_verified": true,
+    "license": "AGPL-3.0",
+    "capabilities": "Repository self-description: 12 production pipelines, 100+ tools, 700+ agent skills and production-knowledge files.",
+    "studio_status": "Windows desktop app; private alpha; beta invitations via waitlist.",
+    "install_test": "NOT_TESTED",
+    "security_audit": "NOT_PERFORMED",
+    "recommendation_note": "已核验仓库和官网，未实测安装，使用请自行评估。商业集成前审阅 AGPL-3.0 义务及媒体服务商条款。"
+  },
+  "editorial_fact_boundaries": [
+    {
+      "topic": "Factory Droid 1.0",
+      "boundary": "Programmatic tool calling and up-to-20% efficiency are described by Factory; benchmark results are vendor-run, not independent replication."
+    },
+    {
+      "topic": "Samaya Sterling",
+      "boundary": "58.9% and $0.61 are from Samaya FrontierFinance; the benchmark is vendor-maintained and cross-system cost accounting is not fully symmetric."
+    },
+    {
+      "topic": "WeChat Pay smart retail robot",
+      "boundary": "First commercial deployment was reported at a Guangdong 7-ELEVEN store; no public store-level ROI or rollout scale was found."
+    },
+    {
+      "topic": "DeepSeek financing",
+      "boundary": "Secondhand report relayed by OSChina from The Information; no official confirmation from DeepSeek or investors located. Figures remain unconfirmed."
+    },
+    {
+      "topic": "Generated visuals",
+      "boundary": "All generated visual assets are clearly labeled as thematic illustrations, not news-site photographs or documentary evidence."
+    }
   ],
+  "source_links": [
+    {
+      "topic": "agent-desktop",
+      "url": "https://github.com/vercel-labs/agent-desktop"
+    },
+    {
+      "topic": "Factory Droid 1.0",
+      "url": "https://factory.com/news/frontier-harness"
+    },
+    {
+      "topic": "Samaya Sterling",
+      "url": "https://samaya.ai/blog/rl-post-trained-agentic-model"
+    },
+    {
+      "topic": "Samaya FrontierFinance",
+      "url": "https://samaya.ai/benchmarks/frontier-finance"
+    },
+    {
+      "topic": "WeChat Pay robot",
+      "url": "https://www.mpaypass.com.cn/news/202610/30165231.html"
+    },
+    {
+      "topic": "DeepSeek financing report",
+      "url": "https://www.oschina.net/news/503318"
+    },
+    {
+      "topic": "OpenMontage repository",
+      "url": "https://github.com/calesthio/OpenMontage"
+    },
+    {
+      "topic": "OpenMontage official website",
+      "url": "https://openmontage.video/"
+    }
+  ],
+  "quality_gate": {
+    "status": "PASS",
+    "history_files": 17,
+    "history_stories": 464,
+    "global_duplicate_hits": 0,
+    "china_duplicate_hits": 0,
+    "image_errors": 0,
+    "same_week_image_reuse": 0,
+    "top5_status": "ai_curated"
+  },
   "site_wide_browser_smoke": {
     "status": "FAIL",
     "job": "browser-smoke",
     "reason": "The separate homepage smoke test could not find the #next carousel button in the tested page state. The daily-report-specific verify-live job passed; this failure is unrelated to /radar/daily/.",
     "impact": "Does not invalidate the daily report HTTP 200, final URL, QR verification, or the six-image package; site-wide browser QA is not fully green."
-  }
+  },
+  "repository_storage_status": {
+    "binary_images_committed_to_github": false,
+    "reason": "The six PNG binaries are delivered as downloadable conversation files; the repository stores the complete SHA256, dimensions, file sizes and QA manifest without claiming the image binaries were uploaded.",
+    "manifest_repository_path": "radar/posters/2026-11-01-social-assets-QA.json",
+    "local_package_zip": "DAVYLAB_Wechat_2026-11-01.zip"
+  },
+  "local_delivery": {
+    "folder": "DAVYLAB_Wechat_2026-11-01/",
+    "zip": "DAVYLAB_Wechat_2026-11-01.zip",
+    "copy_file": "2026-11-01-wechat.md",
+    "all_six_pngs_individually_saved": true
+  },
+  "overall_status": "PASS_WITH_LIMITATIONS",
+  "limitations": [
+    "WeChat editor real-device preview was not performed; layout is file-level verified only.",
+    "OpenMontage was not installed or security-audited; review AGPL-3.0 and provider terms before commercial integration.",
+    "DeepSeek financing details remain a secondhand media report without official confirmation; the copy labels the item as unconfirmed.",
+    "The six PNG binaries are delivered locally; repository records contain QA metadata and SHA256 values, not the binary files.",
+    "The separate homepage browser-smoke test failed to find the #next carousel button; daily-report verify-live passed."
+  ],
+  "qr_validation": {
+    "library": "qrcode",
+    "decoder": "OpenCV QRCodeDetector",
+    "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "exact_match": true,
+    "status": "PASS"
+  },
+  "images_count": 6
 }

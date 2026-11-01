@@ -1,56 +1,71 @@
 # DAVYLAB AI 前沿简报｜2026-11-01 编辑核验记录
 
 生成日期：2026-11-01（Asia/Shanghai）
-状态：研究候选与去重记录；正式发布数据以当日 GitHub Actions 构建、质量门禁和线上验收为准。
+发布状态：已发布。正式数据以 radar/data/latest.json 为准；本记录对齐当日已发布 Top 5 与 Skill。
 
-## 历史去重基线
+## 历史去重与质量门禁
 
-- 已读取 `radar/data/archive/2026-10-31.json` 与 `radar/data/latest.json`。
-- 2026-10-31 已报道：Apple × Alibaba / Qwen 接入 Apple Intelligence、Microsoft TokenEconomizer、AI 抓取退出机制、AI 支出压力、Google AI 卫星等；当日中国 AI 模块还包含 Kimi K3.1、联想天禧 AI 4.5、国产芯片/模型等条目。
-- 本日编辑候选避开上述已报道事件；是否最终入选由 build_daily.py 的全量历史去重与质量门禁决定。
-- 本日 ISO 周：2026-W44；poster_style.py 固定锚点算法应输出 mountain-editorial，cycle index 43，模板版本 2.3.0。
+- 已执行全量历史去重：17 个历史文件、464 条新闻。
+- global duplicate hits = 0；China duplicate hits = 0；image errors = 0；same-week image reuse = 0。
+- 正式报告：top5_status = ai_curated；quality_gate.status = PASS。
+- 当日 ISO 周：2026-W44；poster_style.py 计算 mountain-editorial，cycle index 43，template 2.3.0。
 
-## 可追溯新闻候选
+## 最终入选 Top 5
 
-### 1. OpenAI 新一轮融资目标下调（全球/资本）
-- 原始报道：Reuters，2026-10-31。
-- 链接：https://www.reuters.com/business/openai-cuts-funding-target-by-10-billion-ft-reports-2026-10-31/
-- 可证实边界：Reuters 转述 Financial Times 报道，OpenAI 将本轮融资目标下调约 100 亿美元至约 200 亿美元；估值与认购安排均属媒体报道，不是 OpenAI 官方确认。报道指出原始报道的此前估值数字存在内部不一致，不在摘要中重复使用不确定估值。
-- 编辑提示：写成“据 FT 报道、Reuters 转述”，不能写成 OpenAI 官方宣布。
+### 1. Vercel Labs agent-desktop（全球 / 桌面智能体）
+- 报道日期：2026-10-31。
+- 官方仓库：https://github.com/vercel-labs/agent-desktop
+- 可确认事实：提供 Rust CLI 与 C library；通过操作系统 Accessibility Tree 读取界面元素并执行操作；仓库列出 macOS、Windows、Linux 支持；许可证 Apache-2.0。
+- 使用边界：macOS 需要授予辅助功能权限；Linux 需要图形会话和 AT-SPI 支持；具体应用能否被稳定操作取决于其无障碍接口。
+- 编辑判断：桌面 Agent 正从截图坐标操作走向结构化界面理解；不应将其描述为可无条件控制所有桌面软件。
 
-### 2. Foxconn 与 OpenAI 探索新合作（全球/产业）
-- 原始报道：Reuters，2026-10-30。
-- 链接：https://www.reuters.com/world/china/foxconn-working-new-tie-up-with-openai-says-there-is-no-ai-bubble-2026-10-30/
-- 可证实边界：鸿海董事长刘扬伟表示双方正在推进新合作，具体细节及正式公告尚待公布；Reuters 报道鸿海在德州设施已部署十余台人形机器人供内部使用。不得把探索合作写成已签约或已量产。
+### 2. Factory Droid 1.0（全球 / 编程 Agent）
+- 官方来源：https://factory.com/news/frontier-harness
+- 发布日期：2026-10-29。
+- 可确认事实：Factory 将程序化工具调用设为默认工作方式；模型可编写 JavaScript 脚本，在一次模型请求中批量执行工具操作；官方文章说明脚本运行于受限沙箱。
+- 企业说法：Factory 声称其 Terminal-Bench 4 测试中效率最高提升约 20%。该数据来自 Factory 自测，未作为独立第三方结论。
+- 编辑判断：Agent 的运行框架、工具调度与安全沙箱，正在成为影响执行成本和可靠性的关键部分。
 
-### 3. SAP 按任务选择更经济的 AI 模型（全球/企业应用）
-- 原始报道：Reuters，2026-10-28。
-- 链接：https://www.reuters.com/world/china/sap-swaps-costly-ai-models-cheaper-alternatives-targets-over-2-bln-gains-2026-10-28/
-- 可证实边界：SAP CFO Dominik Asam 告诉 Reuters，公司在满足性能要求时以更低成本模型替换部分昂贵模型；SAP 使用 70 多个模型。超过 20 亿欧元的效率收益是公司目标/管理层预期，不是已实现收益。
+### 3. Samaya Sterling（全球 / 金融垂直模型）
+- 官方发布：https://samaya.ai/blog/rl-post-trained-agentic-model
+- 官方基准：https://samaya.ai/benchmarks/frontier-finance
+- 发布/基准日期：2026-10-28。
+- 可确认事实：Samaya 介绍 Sterling 为 30B MoE、约 3B active parameters 的金融研究模型；Samaya 自有 FrontierFinance 榜单显示 58.9% 得分、约 0.61 美元/题。
+- 重要限制：FrontierFinance 由 Samaya 维护；成本口径并不完全对称，Sterling 的成本包含模型、工具和辅助模型，其他系统部分成本未计入。因此 58.9% 与 0.61 美元不能直接当作完全可比的横向排名。
+- 编辑判断：垂直模型值得关注，但必须先看任务边界、数据来源和评测口径。
 
-### 4. 蚂蚁灵光 2.0 转向主动式个人 Agent（中国/产品）
-- 官方来源：Ant Group，2026-10-27。
-- 链接：https://www.antgroup.com/en/news-media/press-releases/1793066400000
-- 可证实边界：蚂蚁集团宣布 LingGuang 2.0，产品在用户明确授权下，可利用连接信息识别潜在事项、发起分析和后续跟进；官方称其 APASS 机制包含身份验证、意图安全和隐私保护。功能能力属于企业官方发布口径，未做独立实测。
+### 4. 微信支付智慧经营机器人首次进店（中国 / 零售应用）
+- 来源：移动支付网，2026-10-30；IT之家于 2026-11-01 跟进报道。
+- 链接：https://www.mpaypass.com.cn/news/202610/30165231.html
+- 可确认事实：机器人于 2026-10-29 在广东 7-ELEVEN 第 2000 家门店（深圳腾讯总部园区店）投入商用；报道描述其基于腾讯混元多轮对话与 Agent 能力，支持迎宾、导购、优惠咨询和点单。
+- 重要限制：公开报道未给出门店经营提升、转化率、成本节约或规模化铺开数据。
+- 编辑判断：这是实体零售场景的落地案例，但不能据此推断已形成可量化经营收益。
 
-### 5. 腾讯地图开放 Agent 能力（中国/产业应用）
-- 原始报道：IT之家，2026-10-31。
-- 链接：https://www.ithome.com/1/020/457.htm
-- 可证实边界：IT之家报道腾讯地图于 2026-10-30 的腾讯全球数字生态大会公布 Agent 能力全景图；元宝、微信小微、OPPO 小布助手、乐奇 AI 眼镜、光帆 AI 全感穿戴设备等已接入。车图 Agent 包含出行规划、地图渲染、生态内容、智能领航、停车攻略五个 Agent。具体接入能力以该报道为准，不能将“即将上线”的打车功能写成已上线。
+### 5. DeepSeek 融资名单报道（中国 / 资本动态，低置信度）
+- 来源：开源中国，2026-10-30，转引 The Information。
+- 链接：https://www.oschina.net/news/503318
+- 媒体报道内容：称新一轮融资规模约 1055 亿元人民币，国资占比从 2% 升至 27%。
+- 重要限制：未找到 DeepSeek 或相关投资方的正式确认；金额、名单和比例均保持“媒体称”口径，不能写成公司官方事实。
+- 编辑判断：仅作为低置信度资本动态保留，并在主海报、贴图文案和正式简报中明确“待官方确认”。
 
-## 实用 Skill 候选
+## 实用 Skill：OpenMontage
 
-- 仓库：https://github.com/exa-labs/agent-skills
-- 官网/产品文档：https://exa.ai/
-- 指定技能：`exa-search`（同仓库另含 build-with-exa、exa-contents、company-research、lead-generation）。
-- 已核验：GitHub 仓库归属 Exa Labs 官方组织；README 明确列出技能功能；LICENSE 为 MIT；`skills/exa-search/SKILL.md` 说明使用 Exa Search API 进行语义检索、结果排序、过滤、内容提取与结构化输出。
-- 重要限制：README 与 SKILL.md 均要求 Exa API Key（`EXA_API_KEY`）；未实测安装，未进行独立安全审计。推荐文案必须写明：“已核验仓库和官网，未实测安装，使用请自行评估”。
+- 仓库：https://github.com/calesthio/OpenMontage
+- 官网：https://openmontage.video/
+- 许可证：AGPL-3.0。
+- 能力边界：仓库自述列出 12 条制作流水线、100+ 工具、700+ 技能与制作知识文件，覆盖研究、脚本、分镜、素材、配音、剪辑、渲染和质检。
+- 官网状态：OpenMontage Studio 为 Windows desktop app，目前处于 Private Alpha。
+- 核验状态：已核验仓库、官网和许可证；未实测安装，未进行独立安全审计。推荐文案明确写明“已核验仓库和官网，未实测安装，使用请自行评估”。
 
-## 当日共同观察（分析，不是事实）
-AI 产品的竞争重心继续从“能回答”转向“能在授权范围内执行任务”；与此同时，企业开始把模型成本、工具调用权限和业务结果纳入同一套经营问题。对普通用户而言，下一步不只是比较模型能力，还要看它能否安全地接入真实工作流。
+## 当日共同观察（DAVYLAB 分析）
 
-## 编辑与发布边界
-- 正式简报必须由当日生产流水线生成，保留原始来源 URL、发布日期和来源名称。
-- 对媒体转述、管理层预测、未上线功能必须保留限定语。
-- 历史重复、来源不可追溯、少于中国 AI 最低条数、图片复用/失配或质量门禁失败时，不得覆盖有效线上版本。
-- 本记录不代表上述五条均已进入正式 Top 5；最终入选以正式数据文件为准。
+桌面操作、程序化工具调用、多任务执行框架和实体零售机器人，指向同一变化：AI 竞争正在从“会回答”转向“能持续执行”。但厂商自测、单一基准和二手媒体传闻都必须保留验证边界；真正的产品门槛仍是权限、稳定性、成本和可量化业务收益。
+
+## 图片与发布边界
+
+- 当周视觉：mountain-editorial；ISO 2026-W44；cycle index 43。
+- 六张社交图片统一 900 × 1200 px、3:4、PNG；1 张主海报 + 2 张全球专题图 + 2 张中国专题图 + 1 张 Skill 图。
+- 所有生成式视觉均标注为主题插画，不冒充新闻现场、真实门店照片或产品截图。
+- 社交版主海报按 900 × 1200 画布重新排版；网站正式海报仍保留独立的 1200 × 1800 标准。
+- 固定入口：https://chenzhe223-tech.github.io/radar/daily/
+- 公众号编辑器内实机预览未测试；图片文件级、尺寸、二维码和线上简报 HTTP 检查通过。
