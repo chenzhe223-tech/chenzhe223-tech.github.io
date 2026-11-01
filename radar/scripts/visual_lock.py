@@ -38,6 +38,28 @@ def validate_visual_lock(report_date: str) -> dict:
         raise RuntimeError("P0: QR target drift")
     if not baseline.get("reference_image", {}).get("sha256"):
         raise RuntimeError("P0: approved visual reference SHA256 missing")
+    reference = baseline.get("reference_image", {})
+    if reference.get("sha256") != "7ec1b618ff78cf40b8a46c346aff23a80f6dfe11b83b30485546cd5483e406bd":
+        raise RuntimeError("P0: approved 2026-10-31 reference fingerprint changed")
+    production_reference = baseline.get("production_reference", {})
+    production_path = ROOT / str(production_reference.get("path") or "")
+    if not production_path.is_file():
+        raise RuntimeError(f"P0: approved production reference image missing: {production_path}")
+    if production_reference.get("expected_dimensions") != [1200, 1800]:
+        raise RuntimeError("P0: production reference dimensions conflict with the website poster contract")
+    regions = layout.get("mountain_editorial", {}).get("regions", [])
+    required_regions = ["masthead", "hero-title-date", "five-column-news-grid", "today-insight-banner", "skill-recommendation", "right-qr-panel", "brand-footer"]
+    if regions != required_regions:
+        raise RuntimeError("P0: approved mountain-editorial region order changed")
+    if layout.get("mountain_editorial", {}).get("news_columns") != 5:
+        raise RuntimeError("P0: mountain-editorial must retain five news columns")
+    social = layout.get("wechat_social_pack", {})
+    if [social.get("width"), social.get("height"), social.get("count")] != [900, 1200, 6]:
+        raise RuntimeError("P0: WeChat six-image output contract changed")
+    if not typography.get("cjk_candidates") or not typography.get("cjk_bold_candidates"):
+        raise RuntimeError("P0: no approved CJK font candidates configured")
+    if any("DejaVuSans" in str(p) for p in typography.get("cjk_candidates", []) + typography.get("cjk_bold_candidates", [])):
+        raise RuntimeError("P0: Latin-only DejaVu font cannot be used as a CJK fallback")
     if typography.get("fallback_allowed_for_cjk") is not False:
         raise RuntimeError("P0: CJK font fallback must fail closed")
     if "mountain-editorial" not in colors:
