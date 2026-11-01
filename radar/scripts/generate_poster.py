@@ -14,6 +14,10 @@ try:
     from radar.scripts.poster_style import poster_style_metadata
 except ModuleNotFoundError:
     from poster_style import poster_style_metadata
+try:
+    from radar.scripts.visual_lock import validate_visual_lock
+except ModuleNotFoundError:
+    from visual_lock import validate_visual_lock
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 import qrcode
 
@@ -324,6 +328,8 @@ def main():
     today = dt.datetime.now(TZ).date().isoformat()
     if date != today:
         raise SystemExit(f"Refusing to generate poster for stale report {date}; expected {today}")
+    lock = validate_visual_lock(date)
+    print("Visual lock PASS: " + lock["baseline_id"] + " / " + lock["design_variant"] + " / " + str(lock["canvas"]))
 
     raw_top = report.get("top5") or []
     news_by_url = {str(item.get("url") or "").rstrip("/"): item for item in (report.get("news") or [])}
