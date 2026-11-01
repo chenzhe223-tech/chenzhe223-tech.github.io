@@ -175,20 +175,24 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
 
     date_obj = dt.date.fromisoformat(date)
     weekdays = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"]
-    # Masthead and hero hierarchy follow the supplied DAVYLAB reference.
-    draw.text((48, 24), "DAVYLAB", font=font(36, True), fill=ink)
-    draw.line((48, 77, 104, 77), fill=blue, width=5)
-    draw.text((48, 89), "A I   F R O N T I E R   B R I E F", font=font(13, True), fill=ink)
-    draw.text((1150, 28), "每日一分钟", font=font(17, True), fill=ink, anchor="ra")
-    draw.text((1150, 56), "看懂 AI 新变化", font=font(16), fill=ink, anchor="ra")
-    draw.line((1090, 88, 1150, 88), fill=orange, width=3)
-    draw.text((48, 132), "AI 前沿简报", font=font(86, True), fill=ink)
-    draw.text((52, 234), "全球视野  |  深度精选  |  实用洞察  |  创作机会", font=font(20, True), fill=ink)
-    draw.text((48, 302), date_obj.strftime("%m.%d"), font=font(91, True), fill=blue)
-    draw.text((315, 321), weekdays[date_obj.weekday()], font=font(24, True), fill=ink)
-    draw.line((315, 358, 410, 358), fill=blue, width=2)
-    draw.text((315, 369), date_obj.strftime("%Y"), font=font(22, True), fill=ink)
-    draw.text((48, 432), "TECHNOLOGY SHAPES A MORE HUMAN FUTURE", font=font(12, True), fill=ink)
+    # Locked 2026-10-31 approved masthead hierarchy, adapted to the 1200x1800 website canvas.
+    hero_white = (255, 253, 248)
+    hero_soft = (244, 247, 250)
+    draw.text((48, 24), "DAVYLAB", font=font(36, True), fill=hero_white)
+    draw.text((50, 70), f"AI FRONTIER BRIEF  ·  {date_obj.strftime('%Y.%m.%d')}", font=font(16, True), fill=hero_soft)
+    draw.line((50, 104, 96, 104), fill=orange, width=5)
+    draw.text((1150, 30), "用 AI 打开更大的世界", font=font(18, True), fill=hero_white, anchor="ra")
+    draw.text((1150, 61), "A WIDER WORLD", font=font(12, True), fill=hero_soft, anchor="ra")
+    draw.text((1150, 79), "A BRIGHTER YOU", font=font(12, True), fill=hero_soft, anchor="ra")
+    draw.text((48, 145), "AI 前沿简报", font=font(96, True), fill=hero_white)
+    draw.text((52, 250), "AI FRONTIER BRIEF", font=font(29, True), fill=hero_white)
+    draw.text((52, 305), "全球视野  ·  中国力量  ·  每日精选  ·  实用指南", font=font(20, True), fill=hero_soft)
+    draw.text((1150, 150), date_obj.strftime("%Y"), font=font(25, True), fill=ink, anchor="ra")
+    draw.text((1150, 180), date_obj.strftime("%m.%d"), font=font(50, True), fill=ink, anchor="ra")
+    draw.text((1150, 236), weekdays[date_obj.weekday()], font=font(19, True), fill=ink, anchor="ra")
+    draw.line((1075, 270, 1150, 270), fill=orange, width=5)
+    draw.text((52, 405), "让 AI 成为更好的自己", font=font(31, True), fill=hero_white)
+    draw.line((55, 454, 250, 454), fill=orange, width=6)
 
     editorial = report.get("editorial") or {}
     headline = str(editorial.get("headline_zh") or editorial.get("core_zh") or "AI 竞赛进入深水区：资本扩张与智能体安全并进")
