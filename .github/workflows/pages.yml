@@ -208,6 +208,8 @@ jobs:
           python -m unittest radar.scripts.test_skill_radar -v
           python -m unittest radar.scripts.test_poster_style -v
           python -m unittest radar.scripts.test_poster_generation -v
+          python -m py_compile radar/scripts/visual_lock.py radar/scripts/test_visual_lock.py
+          python -m unittest radar.scripts.test_visual_lock -v
           python -m unittest radar.scripts.test_news_image_match -v
           python - <<'PY'
           import datetime as dt, json
