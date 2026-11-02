@@ -68,7 +68,7 @@ class PosterGenerationTests(unittest.TestCase):
 
     def test_manifest_layout_rejects_truncated_text(self):
         manifest = {
-            "design_variant": "geometric-navy",
+            "design": "geometric-navy",
             "layout_regions": poster.layout_regions_for("geometric-navy"),
             "text_bounds": [{
                 "x": 20, "y": 20, "width": 300, "height": 30,
