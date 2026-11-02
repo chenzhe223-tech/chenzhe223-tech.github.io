@@ -396,7 +396,24 @@ def apply_manual_editorial_override(report):
     report["localization"] = localization
     report["editorial"] = editorial
     if isinstance(override.get("skills"), list) and override["skills"]:
-        report["skills"] = override["skills"]
+        existing_skills = report.get("skills") if isinstance(report.get("skills"), list) else []
+        merged_skills = []
+        for manual_skill in override["skills"]:
+            if not isinstance(manual_skill, dict):
+                continue
+            manual_url = str(manual_skill.get("url") or manual_skill.get("repository_url") or "")
+            manual_canonical = str(manual_skill.get("canonical_id") or "")
+            existing = next((
+                item for item in existing_skills
+                if isinstance(item, dict) and (
+                    (manual_canonical and str(item.get("canonical_id") or "") == manual_canonical)
+                    or (manual_url and str(item.get("url") or "") == manual_url)
+                )
+            ), {})
+            merged = dict(existing)
+            merged.update(manual_skill)
+            merged_skills.append(merged)
+        report["skills"] = merged_skills or existing_skills
     report["manual_editorial_override"] = {
         "applied": True,
         "source_file": f"radar/data/manual-editorial/{report_date}.json",
