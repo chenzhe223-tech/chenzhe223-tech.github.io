@@ -396,12 +396,16 @@ jobs:
               current = json.loads(current_path.read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
               qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
-              social_dir = Path('radar/social') / today
+          except Exception as exc:
+              print(f'No complete main-branch report/poster/QR bundle to protect yet: {type(exc).__name__}')
+              raise SystemExit(1)
+          social_dir = Path('radar/social') / today
+          try:
               social_manifest = json.loads((social_dir / 'manifest.json').read_text(encoding='utf-8'))
               social_verification = json.loads((social_dir / 'verification.json').read_text(encoding='utf-8'))
-          except Exception as exc:
-              print(f'No complete main-branch bundle to protect yet: {type(exc).__name__}')
-              raise SystemExit(1)
+          except Exception:
+              social_manifest = {}
+              social_verification = {}
           def parse_stamp(value):
               try:
                   return dt.datetime.fromisoformat(str(value).replace('Z', '+00:00'))
