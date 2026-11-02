@@ -103,7 +103,7 @@ jobs:
                   and report.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
                   and report.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
                   and len(report.get('editorial', {}).get('source_basis', [])) >= 3
-                  and report.get('quality_gate', {}).get('claims', {}).get('editorial_source_basis_count', 0) >= 3
+                  and sum(1 for story in report.get('top5', []) if isinstance(story, dict) and str(story.get('source_url') or '').startswith('https://') and story.get('source') and story.get('published')) == 5
                   and report.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
                   and len(report.get('skills', [])) >= 1
                   and len(report.get('top5', [])) == 5
@@ -445,7 +445,7 @@ jobs:
               and current.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
               and current.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
               and len(current.get('editorial', {}).get('source_basis', [])) >= 3
-              and current.get('quality_gate', {}).get('claims', {}).get('editorial_source_basis_count', 0) >= 3
+              and sum(1 for story in current.get('top5', []) if isinstance(story, dict) and str(story.get('source_url') or '').startswith('https://') and story.get('source') and story.get('published')) == 5
               and current.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
               and current.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
               and current.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
@@ -577,8 +577,9 @@ jobs:
               raise SystemExit('Candidate report quality/claim-provenance gate is not PASS')
           if editorial.get('analysis_label_zh') != 'DAVYLAB 分析' or len(editorial.get('source_basis') or []) < 3:
               raise SystemExit('Candidate DAVYLAB analysis is missing traceable source basis')
-          if quality.get('claims', {}).get('editorial_source_basis_count', 0) < 3:
-              raise SystemExit('Candidate quality gate did not validate editorial source basis')
+          source_backed_count = sum(1 for story in report.get('top5', []) if isinstance(story, dict) and str(story.get('source_url') or '').startswith('https://') and story.get('source') and story.get('published'))
+          if source_backed_count != 5:
+              raise SystemExit('Candidate Top 5 source basis is incomplete')
           if report.get('image_matching', {}).get('relevance_policy_version') != '2026-11-02.1' or quality.get('image_relevance_policy_version') != '2026-11-02.1':
               raise SystemExit('Candidate image relevance policy is outdated')
           if report.get('skill_radar', {}).get('engine_version') != '2026.11.02.1':
@@ -645,7 +646,8 @@ jobs:
                   assert quality.get('status') == 'PASS', 'live quality gate is not PASS'
                   assert quality.get('claim_provenance_policy_version') == '2026-11-02.2', 'live claim-provenance policy mismatch'
                   assert editorial.get('analysis_label_zh') == 'DAVYLAB 分析' and len(editorial.get('source_basis') or []) >= 3, 'live DAVYLAB analysis source basis missing'
-                  assert quality.get('claims', {}).get('editorial_source_basis_count', 0) >= 3, 'live editorial source-basis count was not validated'
+                  source_backed_count = sum(1 for story in data.get('top5', []) if isinstance(story, dict) and str(story.get('source_url') or '').startswith('https://') and story.get('source') and story.get('published'))
+          assert source_backed_count == 5, 'live Top 5 source basis is incomplete'
                   assert data.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1', 'live image relevance policy mismatch'
                   assert quality.get('image_relevance_policy_version') == '2026-11-02.1', 'live quality gate image policy mismatch'
                   assert data.get('skill_radar', {}).get('engine_version') == '2026.11.02.1', 'live Skill Radar engine version mismatch'
