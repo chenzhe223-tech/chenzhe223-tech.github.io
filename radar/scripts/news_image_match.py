@@ -21,7 +21,7 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 5
-CACHE_VERSION = 3
+CACHE_VERSION = 4
 IMAGE_FIELDS = (
     "image_url", "image_source", "image_page_url", "image_credit",
     "image_license", "image_license_url", "image_alt", "image_match_status",
@@ -166,7 +166,9 @@ def candidate_relevance(story_title: str, candidate_title: str) -> tuple[bool, f
     overlap = story & candidate
     entities = overlap & ENTITY_TERMS
     score = len(overlap) / max(2, min(len(story), 8))
-    accepted = bool(entities) or (len(overlap) >= 2 and score >= 0.22)
+    # A shared brand token alone is not semantic relevance: Apple fruit must not match
+    # Apple Intelligence, and a lone OpenAI logo is not a ServiceNow workflow image.
+    accepted = score >= 0.35 and (bool(entities) or len(overlap) >= 2)
     return accepted, round(score, 3)
 
 def extract_image_candidates(document: str, page_url: str) -> list[str]:
@@ -369,8 +371,15 @@ def derive_visual_search_queries(story: dict) -> list[str]:
 
 def story_fallback_topic(story: dict) -> str:
     value = (story_context(story) + " " + str(story.get("original_title") or "")).lower()
-    if re.search(r"(robot|agent|robotics|智能体|机器人|具身智能|automation|自动驾驶)", value):
+    # Physical robotics only; software agents and coding agents are not robot photography.
+    if re.search(r"(robot|robotics|机器人|具身智能|人形机器人|机器狗|自动驾驶)", value):
         return "robot"
+    if re.search(r"(apple intelligence|iphone|siri|smartphone|mobile|手机|写作工具|视觉智能|平板)", value):
+        return "product"
+    if re.search(r"(servicenow|enterprise workflow|business workflow|企业工作流|企业软件|工单|it service management|业务流程)", value):
+        return "business"
+    if re.search(r"(coding agent|software agent|code agent|developer tool|github|飞书|代码智能体|编码智能体|工作器|路由|开发者工具|智能体|agent)", value):
+        return "product"
     if re.search(r"(chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|大模型|模型|推理)", value):
         return "compute"
     if re.search(r"(image|video|design|creative|visual|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频)", value):
@@ -504,10 +513,10 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
             license_name = " ".join(str(candidate.get("license") or "").split())
             version = str(candidate.get("license_version") or "").strip()
             return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Openverse","image_page_url":page_url,"image_credit":str(candidate.get("creator") or "Openverse contributor"),
+                "image_source":"Openverse topic image","image_page_url":page_url,"image_credit":str(candidate.get("creator") or "Openverse contributor"),
                 "image_license":(license_name + (" "+version if version else "")).strip() or "License not listed",
                 "image_license_url":normalize_url(candidate.get("license_url") or ""),
-                "image_alt":str(candidate.get("title") or query),"image_match_status":"openverse_topic",
+                "image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic",
                 "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
     for query in queries[:2]:
         for candidate in _wikimedia_candidates(query):
@@ -526,11 +535,11 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
                 raw = str((metadata.get(key) or {}).get("value") or "")
                 return html.unescape(re.sub(r"<[^>]*>", " ", raw)).strip()
             return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Wikimedia Commons","image_page_url":page_url,
+                "image_source":"Wikimedia Commons topic image","image_page_url":page_url,
                 "image_credit":ext_value("Artist") or ext_value("Credit") or "Wikimedia Commons contributor",
                 "image_license":ext_value("LicenseShortName") or "Wikimedia Commons license",
                 "image_license_url":normalize_url(ext_value("LicenseUrl")),
-                "image_alt":title.removeprefix("File:"),"image_match_status":"wikimedia_topic",
+                "image_alt":f"主题配图（非新闻现场）：{title.removeprefix('File:')}","image_match_status":"wikimedia_topic",
                 "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
     # Public web-image search is the next rung; use a relevance gate and preserve the landing page.
     for query in queries[:3]:
@@ -542,9 +551,9 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
                 continue
             host = urllib.parse.urlparse(page_url).hostname or "Web image result"
             return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Bing Images","image_page_url":page_url,"image_credit":host,
+                "image_source":"Bing Images topic image","image_page_url":page_url,"image_credit":host,
                 "image_license":"Reuse terms not independently verified; editorial/topic image","image_license_url":"",
-                "image_alt":str(candidate.get("title") or query),"image_match_status":"web_search_topic",
+                "image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"web_search_topic",
                 "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
     return None
 
