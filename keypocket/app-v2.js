@@ -76,6 +76,7 @@ function kp2LocalSnapshotSchedule() {
       await kp2CreateLocalSnapshot('monthly', new Date().toISOString().slice(0, 7));
       kp2Status('kp2BackupStatus', '自动保存成功：本地加密检查点已更新。', false);
       kp2ScheduleCloudSync();
+      if (kp2GitHubSession()?.token) kp2GitHubBackup().catch(e => kp2Status('kp2GitHubStatus', 'GitHub 自动备份待重试：' + e.message, true));
     } catch (e) {
       kp2Status('kp2BackupStatus', '本地自动备份失败：' + (e.message || '请检查存储空间'), true);
     }
@@ -293,6 +294,12 @@ async function kp2ApplyRemote(row, shared) {
   const trashId = kp2Id('trash', type + ':' + id);
   const existing = await kp2RawGet(trashId);
   if (row.deleted_at) {
+    const deletedAt = Date.parse(row.deleted_at) || Date.now();
+    if (deletedAt + 30 * 86400000 <= Date.now()) {
+      await kp2DeleteItemRaw(dbId);
+      if (type === 'project') projects = projects.filter(x => x.id !== id); else records = records.filter(x => x.id !== id);
+      return;
+    }
     const wrapped = type === 'project' ? await sealProject(plain) : await sealRecord(plain);
     await kp2RawPut({ id:trashId, kind:'kp2-trash', entityType:type, entityId:id, deletedAt:Date.parse(row.deleted_at) || Date.now(), expiresAt:(Date.parse(row.deleted_at) || Date.now())+30*86400000, version:Number(row.version), deviceId:row.device_id, wrapped });
     await kp2DeleteItemRaw(dbId);
@@ -470,6 +477,20 @@ async function kp2SaveRadar(id) {
 }
 
 /* GitHub App bridge: stateless signed session, no third-party cookie dependency. */
+(function captureGitHubCallback() {
+  try {
+    const fragment = new URLSearchParams(location.hash.replace(/^#/, ''));
+    const token = fragment.get('kp_v2_github_session');
+    const error = fragment.get('kp_v2_github_error');
+    if (token) {
+      localStorage.setItem('kp.v2.github-session', JSON.stringify({ token, connectedAt: Date.now() }));
+      history.replaceState({}, '', location.pathname + location.search);
+    } else if (error) {
+      sessionStorage.setItem('kp.v2.github-error', error);
+      history.replaceState({}, '', location.pathname + location.search);
+    }
+  } catch (e) { console.warn('KeyPocket GitHub callback could not be stored', e); }
+})();
 function kp2GitHubSession() { try{return JSON.parse(localStorage.getItem('kp.v2.github-session')||'null');}catch{return null;} }
 function kp2GitHubStore(value) { if(value)localStorage.setItem('kp.v2.github-session',JSON.stringify(value));else localStorage.removeItem('kp.v2.github-session'); }
 function kp2GitHubHeaders() { const s=kp2GitHubSession();if(!s?.token)throw Error('请先绑定 GitHub App。');return {Authorization:'Bearer '+s.token,'Content-Type':'application/json'}; }
@@ -635,6 +656,7 @@ function kp2Unlock(locked) {
   kp2CreateLocalSnapshot('monthly',new Date().toISOString().slice(0,7)).catch(()=>{});
   kp2RenderEverything();
   if(kpSession()?.access_token&&navigator.onLine)kp2ScheduleCloudSync();
+  if(kp2GitHubSession()?.token&&KP2.workerUrl)kp2GitHubStatus().catch(e=>kp2Status('kp2GitHubStatus','GitHub 连接检查失败：'+e.message,true));
 }
 const kp2SetView=setView;
 setView=function(locked){kp2SetView(locked);if(!locked)setTimeout(()=>kp2Unlock(false),0);};
