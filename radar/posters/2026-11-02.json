@@ -4,31 +4,31 @@
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.ithome.com/1/020/809.htm",
-    "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+    "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
+    "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
     "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
-    "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
-    "https://openai.com/index/openai-servicenow-partnership-expansion"
+    "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+    "https://simonwillison.net/2026/Oct/31/datasette-llm/"
   ],
   "news_titles": [
-    "赛迪研究院：我国AI推理数据量首超训练数据量，日均词元调用量超175万亿",
-    "DeepSeek开源dsh-superagent：路由-工作器式编码智能体",
-    "Nace AI开源Drex Max v1：可在Apple Silicon本地运行的27B决策模型",
-    "Apple Intelligence中国区功能12月上线，千问接入Siri、写作工具和视觉智能",
-    "OpenAI与ServiceNow扩大企业工作流合作"
+    "OpenAI might rebrand its data centers as ‘AI compute campuses’",
+    "AI can make tech CEOs’ lives easier. What about everyone else?",
+    "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
+    "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
+    "datasette-llm 0.1a9"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.ithome.com/1/020/809.htm",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
+      "story_url": "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
     },
     {
-      "story_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
-      "image_source": "MarkTechPost",
+      "story_url": "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
+      "image_source": "TechCrunch AI",
       "image_match_status": "article_image",
       "label_required": false,
       "label_applied": false,
@@ -43,15 +43,15 @@
       "label": null
     },
     {
-      "story_url": "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
+      "story_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
     },
     {
-      "story_url": "https://openai.com/index/openai-servicenow-partnership-expansion",
+      "story_url": "https://simonwillison.net/2026/Oct/31/datasette-llm/",
       "image_source": "Unsplash topic illustration",
       "image_match_status": "thematic_fallback",
       "label_required": true,
@@ -123,7 +123,7 @@
       "y": 329,
       "width": 1070,
       "height": 25,
-      "actual_width": 638.0,
+      "actual_width": 934.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -134,7 +134,7 @@
       "y": 469,
       "width": 850,
       "height": 56,
-      "actual_width": 838.7,
+      "actual_width": 840.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -145,7 +145,7 @@
       "y": 823,
       "width": 318,
       "height": 75,
-      "actual_width": 315.0,
+      "actual_width": 313.8,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -155,9 +155,9 @@
       "x": 66,
       "y": 906,
       "width": 318,
-      "height": 84,
-      "actual_width": 316.1,
-      "line_count": 4,
+      "height": 42,
+      "actual_width": 317.0,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -167,7 +167,7 @@
       "y": 823,
       "width": 318,
       "height": 50,
-      "actual_width": 303.3,
+      "actual_width": 311.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -177,9 +177,9 @@
       "x": 441,
       "y": 881,
       "width": 318,
-      "height": 84,
-      "actual_width": 314.8,
-      "line_count": 4,
+      "height": 42,
+      "actual_width": 310.8,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -189,7 +189,7 @@
       "y": 823,
       "width": 318,
       "height": 75,
-      "actual_width": 312.3,
+      "actual_width": 314.7,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -200,9 +200,9 @@
       "y": 906,
       "width": 318,
       "height": 84,
-      "actual_width": 316.1,
+      "actual_width": 316.7,
       "line_count": 4,
-      "truncated": false,
+      "truncated": true,
       "overflow": false
     },
     {
@@ -222,7 +222,7 @@
       "y": 1222,
       "width": 372,
       "height": 34,
-      "actual_width": 370.0,
+      "actual_width": 371.6,
       "line_count": 2,
       "truncated": true,
       "overflow": false
@@ -233,7 +233,7 @@
       "y": 1176,
       "width": 372,
       "height": 21,
-      "actual_width": 335.4,
+      "actual_width": 155.4,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -244,9 +244,9 @@
       "y": 1201,
       "width": 372,
       "height": 34,
-      "actual_width": 358.9,
+      "actual_width": 371.2,
       "line_count": 2,
-      "truncated": false,
+      "truncated": true,
       "overflow": false
     },
     {
@@ -265,9 +265,9 @@
       "x": 82,
       "y": 1434,
       "width": 550,
-      "height": 38,
-      "actual_width": 545.4,
-      "line_count": 2,
+      "height": 57,
+      "actual_width": 549.5,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -290,5 +290,5 @@
   "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-02T09:12:54.527126+08:00"
+  "generated_at": "2026-11-02T10:25:34.785281+08:00"
 }
