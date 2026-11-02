@@ -71,25 +71,26 @@ class SocialPackTests(unittest.TestCase):
         self.assertIn("source_footer", social_layout_regions("topic_illustration"))
         self.assertIn("skill_content", social_layout_regions("skill_feature"))
 
-    def test_topic_selection_is_two_global_two_china(self):
+    def test_topic_selection_preserves_all_five_top5_stories_in_order(self):
         top = [
             {"source_section": "global_news", "url": "https://global.example/1"},
-            {"source_section": "china_ai_news", "url": "https://china.example/1"},
             {"source_section": "global_news", "url": "https://global.example/2"},
+            {"source_section": "unclassified", "url": "https://other.example/1"},
             {"source_section": "global_news", "url": "https://global.example/3"},
-            {"source_section": "china_ai_news", "url": "https://china.example/2"},
+            {"url": "https://other.example/2"},
         ]
         selected = select_topic_stories(top)
         self.assertEqual([category for category, _ in selected],
-                         ["global_news", "global_news", "china_ai_news", "china_ai_news"])
+                         ["global_news", "global_news", "unclassified", "global_news", "unclassified"])
         self.assertEqual([story["url"] for _, story in selected],
-                         ["https://global.example/1", "https://global.example/2",
-                          "https://china.example/1", "https://china.example/2"])
+                         [story["url"] for story in top])
 
-    def test_topic_selection_fails_closed_when_category_is_missing(self):
-        top = [{"source_section": "global_news"} for _ in range(5)]
-        with self.assertRaises(ValueError):
-            select_topic_stories(top)
+    def test_topic_selection_does_not_invent_missing_categories(self):
+        top = [{"source_section": "global_news", "url": f"https://global.example/{i}"} for i in range(5)]
+        selected = select_topic_stories(top)
+        self.assertEqual(len(selected), 5)
+        self.assertTrue(all(category == "global_news" for category, _ in selected))
+        self.assertFalse(any(category == "china_ai_news" for category, _ in selected))
 
     def test_topic_image_is_independent_900x1200(self):
         story = {
