@@ -1,22 +1,24 @@
-# KeyPocket V2.0 — Skill Radar 数据规范
+# KeyPocket Skill Radar
 
-## 数据原则
-GitHub 公开仓库为主要来源。仓库名、原生作者、URL、Stars、Forks、更新时间、语言、Topics、README 相关性与每日历史快照必须有真实来源。不得把当前 Stars 当作历史增长。
+最后更新：2026-11-02（UTC+8）
 
-月榜 30 天、季榜 90 天、年榜 365 天的增长必须由当前日快照减去对应窗口起点的历史快照计算。样本不足时标记“数据积累中”，不能倒算。累计榜按当前 Stars 排名并注明口径。每榜最多 Top 10。
+## 数据来源与采集
+- 采集对象：GitHub 公开仓库中与 Skill/Agent/工具生态相关的项目。
+- collector：`scripts/build-keypocket-skill-radar.cjs`。
+- 产物：`keypocket/api/skill-radar.json`。
+- 历史：`keypocket/data/skill-radar/snapshots/`。
+- 定时工作流：`.github/workflows/keypocket-skill-radar.yml`，每日执行并将可追溯指标快照写回仓库。
+- GitHub 仓库指标包含真实公开 API 返回的 Stars/Forks/语言/Topics/更新时间等；数据不得凭空补齐。
 
-## 快照字段
-schemaVersion、historyStartedAt、updatedAt、boards(month/quarter/year/all)、repositories 数组；每个仓库包括 id、fullName、owner、url、stars、forks、pushedAt、language、topics、description、readmeRelevance、firstObservedAt、history(date/stars/forks)。
+## 当前真实状态
+- collector 语法检查和 self-test 已通过。
+- Daily Collector workflow run `41406777376`（commit `d15f8a64833891ef8cfff1f1027fa9a019db01bb`）成功。
+- 已发布的榜单 JSON 包含 132 个候选仓库，当前可确认历史采样只有 1 天。
+- 日榜可展示采集时的当前 Stars；月、季、年增长趋势由于历史不足，必须继续显示“历史积累中”。
+- 累计 Stars 不等于近期增长量；不得将累计星标排序描述为“最近爆发/增长最快”。
+- 原生官方仓库、上游作者、第三方适配、教程及同名无关项目必须区分；不得用无关项目凑数。
 
-## 过滤
-- 仅规范 GitHub owner/repo 地址。
-- 优先上游原生作者与官方组织。
-- 排除 archived、disabled、教程、列表聚合、同名无关和无效仓库。
-- 明确区分 fork/第三方适配/原生项目。
-- Stars/Forks 不等于安装量或活跃用户数。
-
-## 自动采集
-每日 GitHub Actions 采集并保存历史快照。失败保留最近一次有效数据。Token 只能在服务端 GitHub Actions/Worker 中使用，不得进前端。权重须在 UI 公开。首次历史起始日必须显示。
-
-## 当前状态
-页面四个榜单周期入口已加入，读取 `./api/skill-radar.json`。该文件、采集脚本和每日快照 workflow 尚未创建，因此页面无数据时应显示空态，不得伪造榜单。
+## 验收与限制
+- KeyPocket 专项 Skill Handoff QA `41408780134` 成功，包含 collector self-test 与线上一键收录 E2E。
+- collector 的持续运行和历史跨度仍需长期观察；达到足够数据前不宣布四周期趋势榜正式验收。
+- Skills 的一键收录是将公开仓库元数据保存到 KeyPocket 本地加密项目库，不会自动安装代码或执行 Skill。
