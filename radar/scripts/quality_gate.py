@@ -22,6 +22,23 @@ OUT_DIR = ROOT / "test-results" / "radar"
 TZ = ZoneInfo("Asia/Shanghai")
 IMAGE_TIMEOUT = 8
 MAX_IMAGE_BYTES = 8 * 1024 * 1024
+QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
+
+def load_image_relevance_policy():
+    if not QA_RULES_PATH.is_file():
+        raise RuntimeError(f"P0 image relevance config missing: {QA_RULES_PATH}")
+    config = json.loads(QA_RULES_PATH.read_text(encoding="utf-8"))
+    policy = config.get("image_relevance")
+    if not isinstance(policy, dict):
+        raise RuntimeError("P0 image_relevance policy missing from qa-rules.json")
+    minimum = float(policy.get("minimum_score", 0))
+    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True:
+        raise RuntimeError("P0 image relevance policy invalid")
+    return policy
+
+IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
+MIN_IMAGE_RELEVANCE_SCORE = float(IMAGE_RELEVANCE_POLICY["minimum_score"])
+TOPIC_IMAGE_STATUSES = {"openverse_topic", "wikimedia_topic", "web_search_topic"}
 STOP = {"the","and","for","with","from","into","over","after","before","says","said","will","its","their","this","that","have","has","been","are","was","were","not","but","how","why","what","when","latest","first","new","more","most","report","reports","news","update","updates","ai","artificial","intelligence","model","models","company","companies","announces","announced"}
 def norm_text(s):
     s = (s or "").lower()
@@ -170,12 +187,39 @@ def validate_skill_count(skills):
         return [{"type": "insufficient_qualified_skill_recommendations", "selected_count": len(skills), "minimum": MIN_QUALIFIED_SKILLS}]
     return []
 
+def image_relevance_error(story):
+    status = str(story.get("image_match_status") or "")
+    alt = str(story.get("image_alt") or "")
+    label_ok = bool(re.search(r"(主题配图|主题插画|topic image|topic illustration|非新闻现场|not news footage)", alt, re.I))
+    if status in TOPIC_IMAGE_STATUSES:
+        try:
+            score = float(story.get("image_match_score"))
+        except (TypeError, ValueError):
+            score = 0.0
+        if score < MIN_IMAGE_RELEVANCE_SCORE:
+            return {"type": "low_image_relevance", "title": story_title(story), "score": score, "minimum": MIN_IMAGE_RELEVANCE_SCORE}
+        if not label_ok:
+            return {"type": "topic_image_missing_non_news_label", "title": story_title(story), "status": status}
+    if status == "thematic_fallback" and not label_ok:
+        return {"type": "thematic_fallback_missing_non_news_label", "title": story_title(story)}
+    return None
 
-def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_image_hits, unreadable_history, historical_image_failures, skill_errors):
+
+def claim_provenance_error(story):
+    if str(story.get("confidence") or "").lower() != "low":
+        return None
+    text_zh = str(story.get("what_zh") or "")
+    if not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", text_zh):
+        return {"type": "low_confidence_without_explicit_caveat", "title": story_title(story)}
+    return None
+
+
+
+def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_image_hits, unreadable_history, historical_image_failures, skill_errors, claim_errors=None):
     """Historical image URL fetch failures are explicit coverage gaps, not proof of current reuse.
     Current image fetch failures, known reuse, unreadable archives and Skill errors still block publication.
     """
-    blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors)
+    blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors or claim_errors)
     return "FAIL" if blocking else "PASS"
 
 def main():
@@ -250,6 +294,9 @@ def main():
     unique_story={}
     for s in image_stories: unique_story[story_id(s)]=s
     for s in unique_story.values():
+        relevance_error = image_relevance_error(s)
+        if relevance_error:
+            image_errors.append(relevance_error)
         url=image_url(s); canonical=norm_url(url)
         if canonical in image_seen:
             image_errors.append({"type":"same_day_url_duplicate","title":story_title(s),"url":url,"other_title":image_seen[canonical]})
@@ -313,6 +360,12 @@ def main():
     skill_radar=report.get("skill_radar") if isinstance(report.get("skill_radar"),dict) else {}
     skills=report.get("skills") if isinstance(report.get("skills"),list) else []
     skill_errors=validate_skill_count(skills)
+    claim_errors=[]
+    for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
+        if isinstance(story, dict):
+            error = claim_provenance_error(story)
+            if error:
+                claim_errors.append(error)
     if skill_radar.get("status")!="PASS": skill_errors.append({"type":"skill_radar_status","status":skill_radar.get("status","missing")})
     for skill in skills:
         if not isinstance(skill,dict): skill_errors.append({"type":"invalid_skill_record"}); continue
@@ -321,6 +374,7 @@ def main():
         if not skill.get("official_website_verified") or not str(skill.get("official_website") or "").startswith("https://"): skill_errors.append({"type":"missing_verified_official_project_homepage","name":skill.get("name")})
         if not skill.get("readme_verified"): skill_errors.append({"type":"missing_verified_readme","name":skill.get("name")})
         if not skill.get("skill_file_paths"): skill_errors.append({"type":"missing_actual_skill_file_evidence","name":skill.get("name")})
+        if not str(skill.get("compatibility_status") or "").strip(): skill_errors.append({"type":"missing_agent_compatibility_disclosure","name":skill.get("name")})
         if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
         if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})
@@ -337,10 +391,11 @@ def main():
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files",
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
-      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
-      "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors),
-      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
+      "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
+      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"low_confidence_claims_require_explicit_caveat":True,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -354,7 +409,7 @@ def main():
             "same_week_image_reuse": len(week_image_hits), "report_path": "test-results/radar/news-image-quality-gate.json"
         }
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print(json.dumps({"status":result["status"],"image_error_details":image_errors,"skill_errors":skill_errors,"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"report":str(out)},ensure_ascii=False))
+    print(json.dumps({"status":result["status"],"image_error_details":image_errors,"skill_errors":skill_errors,"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"claim_errors":claim_errors,"report":str(out)},ensure_ascii=False))
     if result["status"]!="PASS":
         raise SystemExit("FAIL: news/image freshness gate blocked publication; see test-results/radar/news-image-quality-gate.json")
     return 0
