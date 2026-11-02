@@ -1,0 +1,38 @@
+name: KeyPocket Skill Radar Daily Collector
+
+on:
+  schedule:
+    - cron: "10 2 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "keypocket/scripts/collect-skill-radar.cjs"
+      - ".github/workflows/keypocket-skill-radar.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keypocket-skill-radar-collector
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate collector syntax
+        run: node --check keypocket/scripts/collect-skill-radar.cjs
+      - name: Collect public GitHub Skill repositories and daily snapshots
+        env:
+          GITHUB_TOKEN: \${{ github.token }}
+          SUPABASE_URL: \${{ secrets.KEYPOCKET_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: \${{ secrets.KEYPOCKET_SUPABASE_SERVICE_ROLE_KEY }}
+        run: node keypocket/scripts/collect-skill-radar.cjs
