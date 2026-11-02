@@ -45,8 +45,8 @@ const { chromium } = require('playwright');
     try {
       await keyPocket.waitForFunction(() => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes('kp-v2-radar-basis-20261102-8')
-          && window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
+        return script && script.src.includes('kp-v2-scope-fix-20261102-9')
+          && window.__kpBuildVersion === 'kp-v2-scope-fix-20261102-9'
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
@@ -75,7 +75,7 @@ const { chromium } = require('playwright');
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-scope-fix-20261102-9'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
