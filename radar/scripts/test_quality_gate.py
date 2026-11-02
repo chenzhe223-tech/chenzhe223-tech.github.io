@@ -88,7 +88,7 @@ class QualityGateTests(unittest.TestCase):
     def test_low_confidence_story_requires_explicit_verification_caveat(self):
         story={"title_zh":"Drex Max v1","confidence":"low","what_zh":"Nace AI 发布 27B 模型，评分 67.52。"}
         self.assertEqual(claim_provenance_error(story)["type"],"low_confidence_without_explicit_caveat")
-        story["what_zh"] += "（相关评分尚未独立验证。）"
+        story["what_zh"] = "据MarkTechPost报道，Nace AI 发布27B模型，项目方披露评分67.52，相关评分尚未独立验证。"
         self.assertIsNone(claim_provenance_error(story))
 
     def test_tokenizer_has_signal(self):
