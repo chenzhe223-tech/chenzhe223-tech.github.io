@@ -90,6 +90,8 @@ async function kp2CreateLocalSnapshot(type, key) {
     createdAt: now, items: rows
   }, cryptoKey);
   const id = kp2Id('snapshot', type + ':' + key);
+  const existing = await kp2RawGet(id);
+  if (existing && type !== 'autosave') return id;
   await kp2WriteRaw([{
     id, kind: 'kp2-snapshot', snapshotType: type, periodKey: key,
     createdAt: now, itemCount: rows.length,
@@ -258,7 +260,7 @@ function kp2Compare(a, b) {
   const at = String(a?.updated_at || ''), bt = String(b?.updated_at || '');
   if (at !== bt) return at > bt ? 1 : -1;
   const ad = String(a?.device_id || ''), bd = String(b?.device_id || '');
-  return ad === bd ? 1 : ad === bd ? 0 : ad > bd ? 1 : -1;
+  return ad === bd ? 0 : ad > bd ? 1 : -1;
 }
 async function kp2LocalStates(shared) {
   const rows = await kp2AllItemsRaw(), result = new Map();
@@ -267,7 +269,7 @@ async function kp2LocalStates(shared) {
     const type = raw.kind === 'project' || String(raw.id).startsWith('project:') ? 'project' : 'key';
     const plain = type === 'project' ? await openProject(raw) : await openRecord(raw);
     const version = Math.max(1, Math.trunc(Number(plain.updatedAt) || Date.now()));
-    const state = { entity_type:type, entity_id:String(plain.id), version, updated_at:new Date(version).toISOString(), device_id:kp2Device(), deleted_at:null, plain };
+    const state = { entity_type:type, entity_id:String(plain.id), version, updated_at:new Date(version).toISOString(), device_id:plain._kpSyncDeviceId || kp2Device(), deleted_at:null, plain };
     const key = type + ':' + plain.id;
     if (!result.has(key) || kp2Compare(state, result.get(key)) > 0) result.set(key, state);
   }
@@ -285,6 +287,7 @@ async function kp2ApplyRemote(row, shared) {
   const plain = await decryptJson(row.payload, shared.key);
   if (!plain || typeof plain.id !== 'string') throw Error('云端密文无法解密；本地数据未修改。');
   plain.updatedAt = Number(row.version) || Date.parse(row.updated_at) || Date.now();
+  plain._kpSyncDeviceId = row.device_id;
   const type = row.entity_type, id = String(row.entity_id);
   const dbId = type === 'project' ? 'project:' + id : id;
   const trashId = kp2Id('trash', type + ':' + id);
@@ -328,7 +331,7 @@ async function kp2CloudSnapshot(shared, type) {
     user_id:kpSession().user.id, device_id:kp2Device(), snapshot_type:type, period_key:period,
     schema_version:2, record_count:records.length+projects.length,
     payload:{ salt:shared.salt, iterations:shared.iterations, iv:encrypted.iv, data:encrypted.data }, created_at:now.toISOString()
-  }, { Prefer:'resolution=merge-duplicates,return=minimal' });
+  }, { Prefer:'resolution=ignore-duplicates,return=minimal' });
 }
 async function kp2PruneCloudSnapshots() {
   const rows = await kp2Rest(KP2.backupTable, 'GET', 'select=id,snapshot_type,created_at&order=created_at.desc&limit=500');
@@ -646,4 +649,3 @@ deleteItem=async function(id){
 };
 window.addEventListener('online',()=>{if(cryptoKey&&kpSession()?.access_token)kp2ScheduleCloudSync();});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cryptoKey&&kpSession()?.access_token)kp2ScheduleCloudSync();});
-kpSetModuleStatus?.();
