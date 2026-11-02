@@ -39,7 +39,7 @@ jobs:
 
       - name: Collect verified public Skill repositories and historical snapshots
         env:
-          GITHUB_TOKEN: \${{ github.token }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: node scripts/build-keypocket-skill-radar.cjs
 
       - name: Commit daily Skill Radar data

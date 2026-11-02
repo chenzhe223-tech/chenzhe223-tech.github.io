@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-build-marker-20261102-7';
+window.__kpBuildVersion='kp-v2-radar-basis-20261102-8';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -676,11 +676,30 @@ async function renderSyncCenter(){
 async function renderGithubCenter(){const el=$('#githubAccountStatus');if(el)el.textContent='未绑定 KeyPocket GitHub App。当前 GitHub 连接器只用于仓库开发，不代表应用内 OAuth 授权。';}
 $('#githubConnectBtn')?.addEventListener('click',()=>showToast('KeyPocket GitHub App 尚未配置，暂不能绑定私有备份仓库。'));
 async function renderSkillRadar(){
- const host=$('#radarCards'),meta=$('#radarMeta');if(!host)return;const period=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month';
- try{const res=await fetch('./api/skill-radar.json',{cache:'no-store'});if(!res.ok)throw Error('尚无历史快照服务数据。');const data=await res.json(),xs=(data.boards?.[period]||[]).slice(0,10);
- meta.textContent='数据更新时间：'+new Date(data.updatedAt).toLocaleString()+' · 历史起始：'+data.historyStartedAt+' · 口径：'+period;
- host.innerHTML=xs.map((x,i)=>'<article class="card"><div class="cardtop"><div class="provider-icon">#'+(i+1)+'</div><div class="cardtitle"><h3>'+esc(x.fullName)+'</h3><p>'+esc(x.owner)+' · ★ '+Number(x.stars||0).toLocaleString()+' · Fork '+Number(x.forks||0).toLocaleString()+'</p></div></div><p class="project-note">'+esc(x.description||'')+'</p><div class="cardactions"><a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" data-radar-save="'+i+'">收录 Skill</button></div></article>').join('')||'<div class="empty"><h3>暂无真实榜单数据</h3><p>首次采集前不展示虚构 Top 10。</p></div>';
- }catch(err){meta.textContent='榜单暂不可用：'+err.message+'。首次采集日期和真实历史快照建立后才会产生周期榜。';host.innerHTML='<div class="empty"><h3>等待首次采集</h3><p>不以当前 Stars 冒充历史增量。</p></div>';}
+ const host=$('#radarCards'),meta=$('#radarMeta');if(!host)return;
+ const period=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month';
+ const periodLabels={month:'近 30 天',quarter:'近 90 天',year:'近 365 天',all:'当前 Stars'};
+ try{
+  const res=await fetch('./api/skill-radar.json',{cache:'no-store'});
+  if(!res.ok)throw Error('历史采集服务暂不可用（HTTP '+res.status+'）。');
+  const data=await res.json(),xs=(data.boards?.[period]||[]).slice(0,10),status=data.periodStatus?.[period]|| (xs.length?'available':'collecting_history');
+  meta.textContent='数据更新：'+new Date(data.updatedAt).toLocaleString()+' · 历史起始：'+data.historyStartedAt+' · 已采集 '+Number(data.snapshotCount||0)+' 天 · '+periodLabels[period]+' · 来源：GitHub API';
+  if(!xs.length){
+   const title=status==='collecting_history'?'历史样本积累中':'暂无可用榜单数据';
+   const detail=period==='all'?'首次 GitHub 采集完成后会生成当前 Stars 排名。':'周期榜需要足够长的真实历史快照：'+periodLabels[period]+' 的起点样本尚未建立，当前不会把累计 Stars 误报为周期增长。';
+   host.innerHTML='<div class="empty"><h3>'+title+'</h3><p>'+esc(detail)+'</p></div>';
+   return;
+  }
+  host.innerHTML=xs.map((x,i)=>{
+   const growth=period==='all'?'当前 Stars 排名':'近 '+Number(x.growthWindowDays||0)+' 天增长 '+(Number(x.starGrowth)>0?'+':'')+Number(x.starGrowth||0)+' Stars';
+   const forks=period==='all'?'Fork '+Number(x.forks||0).toLocaleString():'Fork 增长 '+(Number(x.forkGrowth)>0?'+':'')+Number(x.forkGrowth||0);
+   const files=(x.skillFiles||[]).slice(0,2).map(file=>'<span class="tag">'+esc(file)+'</span>').join('');
+   return '<article class="card"><div class="cardtop"><div class="provider-icon">#'+(i+1)+'</div><div class="cardtitle"><h3>'+esc(x.fullName)+'</h3><p>'+esc(x.owner)+' · 当前 ★ '+Number(x.stars||0).toLocaleString()+' · '+esc(growth)+' · '+esc(forks)+'</p></div></div><p class="project-note">'+esc(x.description||'该仓库已通过公开 Git Tree 中 SKILL.md 路径验证。')+'</p><div class="tags">'+files+'</div><div class="cardactions"><a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" data-radar-save="'+i+'">收录 Skill</button></div></article>';
+  }).join('');
+ }catch(err){
+  meta.textContent='榜单暂不可用：'+err.message;
+  host.innerHTML='<div class="empty"><h3>等待真实数据源</h3><p>采集失败不会覆盖上一份有效榜单，也不会展示模拟热度。</p></div>';
+ }
 }
 document.querySelectorAll('[data-radar-period]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-radar-period]').forEach(x=>x.classList.toggle('active',x===b));renderSkillRadar();}));
 $('#refreshRadarBtn')?.addEventListener('click',renderSkillRadar);

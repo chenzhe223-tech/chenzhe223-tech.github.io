@@ -44,8 +44,8 @@ const { chromium } = require('playwright');
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     await keyPocket.waitForFunction(() => {
       const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-      return script && script.src.includes('kp-v2-build-marker-20261102-7')
-        && window.__kpBuildVersion === 'kp-v2-build-marker-20261102-7'
+      return script && script.src.includes('kp-v2-radar-basis-20261102-8')
+        && window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function'
         && document.querySelector('#recycleView')
@@ -54,7 +54,7 @@ const { chromium } = require('playwright');
     }, null, { timeout: 30000 });
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-build-marker-20261102-7'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
