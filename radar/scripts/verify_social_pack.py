@@ -170,15 +170,18 @@ def main() -> int:
     try:
         selected_topics = select_topic_stories(top)
     except Exception as exc:
-        fail(f"Top 5 cannot satisfy the 2-global/2-China topic-image contract: {exc}")
+        fail(f"Five independent topic images cannot map to the formal Top 5: {exc}")
     expected_topic_urls = [story_url(story) for _, story in selected_topics]
     if manifest.get("topic_story_urls") != expected_topic_urls:
-        fail("Topic image story selection differs from the required two global and two China Top 5 stories")
-    if manifest.get("topic_categories") != {"global_news": 2, "china_ai_news": 2, "skill": 1}:
-        fail("Topic image category counts are not 2 global + 2 China + 1 Skill")
+        fail("Five topic image URLs do not match the formal Top 5 order")
+    expected_categories = {}
+    for category, _story in selected_topics:
+        expected_categories[category] = expected_categories.get(category, 0) + 1
+    if manifest.get("topic_categories") != expected_categories:
+        fail("Topic category metadata does not reflect the actual Top 5; no category may be fabricated")
     skill = (report.get("skills") or [{}])[0]
     if (manifest.get("skill") or {}).get("url") != skill.get("url") or (manifest.get("skill") or {}).get("name") != skill.get("name"):
-        fail("Skill feature metadata does not match the formal report recommendation")
+        fail("Skill metadata does not match the formal report recommendation")
     if (manifest.get("skill", {}).get("compatibility_status") != skill.get("compatibility_status") or manifest.get("skill", {}).get("actual_skill_file_count") != skill.get("actual_skill_file_count")):
         fail("Skill compatibility or actual SKILL.md count differs from the formal report")
 
@@ -206,17 +209,14 @@ def main() -> int:
         if index == 0:
             if entry.get("image_type") != "main_poster":
                 fail(f"Main poster manifest type mismatch: {path.name}")
-        elif 1 <= index <= 4:
+        elif 1 <= index <= 5:
             expected_category, expected_story = selected_topics[index - 1]
             if entry.get("image_type") != "topic_illustration" or entry.get("label") != "主题插画 · 非新闻现场":
                 fail(f"News topic illustration disclosure missing: {path.name}")
             if entry.get("source_url") != story_url(expected_story) or entry.get("category") != expected_category:
                 fail(f"Topic image source/category mismatch: {path.name}")
         else:
-            if entry.get("image_type") != "skill_feature" or entry.get("label") != "主题插画 · 非产品截图":
-                fail(f"Standalone Skill illustration disclosure missing: {path.name}")
-            if entry.get("source_url") != skill.get("url"):
-                fail(f"Skill image source mismatch: {path.name}")
+            fail(f"Unexpected image beyond the main poster and five Top 5 topic illustrations: {path.name}")
         layout_results.append({"filename": path.name, **verify_image_layout(entry)})
         verified_images.append({
             "filename": path.name, "width": W, "height": H, "format": "PNG",
@@ -249,6 +249,11 @@ def main() -> int:
                 fail(f"WeChat copy omits the low-confidence caveat for {title}")
     if skill.get("compatibility_status") and skill.get("compatibility_status") not in copy:
         fail("WeChat copy omits Skill platform compatibility disclosure")
+    if skill.get("name") and skill.get("name") not in copy:
+        fail("WeChat copy omits the featured Skill name")
+    skill_license = str(skill.get("license") or skill.get("license_name") or "")
+    if skill_license and skill_license not in copy:
+        fail("WeChat copy omits the featured Skill license")
     editorial = report.get("editorial") or {}
     if "💡 DAVYLAB 观察" not in copy or (editorial.get("analysis_scope_zh") and editorial.get("analysis_scope_zh") not in copy):
         fail("WeChat copy does not explicitly label and scope DAVYLAB analysis")
@@ -275,9 +280,9 @@ def main() -> int:
             {"name": "six_independent_png_files", "status": "PASS"},
             {"name": "900x1200_3x4_dimensions", "status": "PASS"},
             {"name": "unique_image_hashes", "status": "PASS"},
-            {"name": "two_global_two_china_one_skill_topic_distribution", "status": "PASS"},
+            {"name": "five_topic_images_one_to_one_with_formal_top5", "status": "PASS"},
             {"name": "topic_story_source_consistency", "status": "PASS"},
-            {"name": "skill_feature_source_consistency", "status": "PASS"},
+            {"name": "skill_metadata_and_copy_consistency", "status": "PASS"},
             {"name": "final_png_qr_exact_decode", "status": "PASS"},
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},
             {"name": "formal_url_http_and_redirect", "status": "PASS"},
