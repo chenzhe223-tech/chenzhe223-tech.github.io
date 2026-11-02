@@ -154,6 +154,7 @@ def main() -> int:
         verified_images.append({
             "filename": path.name, "width": W, "height": H, "format": "PNG",
             "file_size_bytes": size, "sha256": digest, "theme": entry.get("theme"),
+            "image_type": entry.get("image_type"), "category": entry.get("category"),
             "material_type": entry.get("material_type"), "status": "PASS"
         })
     main_path = folder / entries[0]["filename"]

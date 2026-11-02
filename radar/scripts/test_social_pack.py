@@ -12,6 +12,9 @@ class SocialPackTests(unittest.TestCase):
         self.assertEqual(classify_topic({"title_zh": "DeepSeek Router-Worker 智能体"}, 0), "agent")
         self.assertEqual(classify_topic({"title_zh": "微信支付智慧经营机器人首次进店"}, 1), "retail")
         self.assertEqual(classify_topic({"title_zh": "ChatGPT 与 Codex 共享用量"}, 2), "usage")
+        self.assertEqual(classify_topic({"title_zh": "中国人形机器人具身智能产业"}, 3), "robotics")
+        self.assertEqual(classify_topic({"title_zh": "Meta Muse 智能购物代理"}, 4), "commerce")
+        self.assertEqual(classify_topic({"title_zh": "Gemini 4 Carbon 网络安全漏洞检测"}, 0), "cybersecurity")
 
     def test_wrapped_text_respects_width(self):
         image = Image.new("RGB", (400, 120), "white")

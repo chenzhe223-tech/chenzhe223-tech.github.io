@@ -118,8 +118,13 @@ def card(draw, box, fill=WHITE, outline=LINE, radius=16, width=2):
 def classify_topic(story: dict, index: int) -> str:
     value = " ".join(str(story.get(k) or "") for k in ("title", "title_zh", "title_en", "summary", "summary_zh")).lower()
     patterns = [
-        (("deepseek", "super-agent", "superagent", "router", "worker", "智能体", "并行任务"), "agent"),
-        (("腾讯", "微信支付", "门店", "零售", "7-eleven", "迎宾", "导购", "机器人"), "retail"),
+        (("cybersecurity", "cyber security", "vulnerability", "prompt injection", "credential exfiltration", "网络安全", "漏洞", "攻防", "安全防护"), "cybersecurity"),
+        (("humanoid", "robotics", "robot", "embodied ai", "physical ai", "机器人", "具身智能", "人形"), "robotics"),
+        (("shopping", "commerce", "e-commerce", "muse", "retail", "购物", "电商", "零售", "消费代理"), "commerce"),
+        (("coding", "code generation", "developer", "software engineering", "编程", "代码", "开发者"), "coding"),
+        (("compute", "gpu", "tpu", "chip", "data center", "算力", "芯片", "数据中心", "智算"), "compute"),
+        (("deepseek", "super-agent", "superagent", "router", "worker", "智能体", "并行任务", "agent"), "agent"),
+        (("腾讯", "微信支付", "门店", "7-eleven", "迎宾", "导购"), "retail"),
         (("codex", "chatgpt", "usage", "用量", "额度", "openai"), "usage"),
         (("sap", "成本", "cost", "model routing", "模型路由", "企业效率"), "routing"),
         (("forty", "forest", "森林", "deepmind", "卫星", "毁林"), "forest"),
@@ -127,7 +132,7 @@ def classify_topic(story: dict, index: int) -> str:
     for needles, kind in patterns:
         if any(n in value for n in needles):
             return kind
-    return ["agent", "retail", "usage", "routing", "forest"][index % 5]
+    return ["agent", "robotics", "commerce", "cybersecurity", "compute"][index % 5]
 
 
 def topic_label(kind: str) -> str:
@@ -137,6 +142,11 @@ def topic_label(kind: str) -> str:
         "usage": "AI 使用额度",
         "routing": "企业模型路由",
         "forest": "卫星森林识别",
+        "robotics": "具身智能",
+        "commerce": "智能购物",
+        "cybersecurity": "智能体安全",
+        "coding": "AI 编程",
+        "compute": "AI 算力",
     }.get(kind, "AI 应用场景")
 
 
@@ -187,6 +197,72 @@ def draw_topic_art(draw, kind: str):
             draw.line((450, 305, x, 355), fill=tone, width=8)
             card(draw, (x - 95, 345, x + 95, 420), fill=(250, 252, 252), outline=tone, radius=14)
             draw.text((x, 382), label, font=font(18, True), fill=NAVY, anchor="mm")
+    elif kind == "robotics":
+        # Generic humanoid robot and industrial workcell, not a documentary scene.
+        draw.rectangle((70, 340, 830, 420), fill=(31, 62, 83))
+        for x in range(100, 820, 90):
+            draw.ellipse((x, 365, x + 26, 391), fill=(155, 184, 198))
+        draw.rounded_rectangle((355, 155, 545, 350), radius=58, fill=(242, 247, 248), outline=(121, 165, 194), width=8)
+        draw.ellipse((365, 70, 535, 225), fill=(246, 249, 249), outline=(121, 165, 194), width=8)
+        draw.ellipse((405, 125, 430, 150), fill=BLUE)
+        draw.ellipse((470, 125, 495, 150), fill=BLUE)
+        draw.arc((415, 140, 485, 195), 15, 165, fill=ORANGE, width=7)
+        draw.line((355, 205, 260, 300), fill=(180, 205, 215), width=26)
+        draw.line((545, 205, 640, 300), fill=(180, 205, 215), width=26)
+        draw.ellipse((235, 280, 285, 330), fill=ORANGE)
+        draw.ellipse((615, 280, 665, 330), fill=ORANGE)
+        draw.line((405, 345, 385, 410), fill=(180, 205, 215), width=24)
+        draw.line((495, 345, 515, 410), fill=(180, 205, 215), width=24)
+    elif kind == "commerce":
+        # Storefront, product cards and an agent-driven shopping cart.
+        card(draw, (75, 105, 390, 370), fill=(245, 248, 250), outline=(117, 157, 187), radius=16)
+        draw.rectangle((95, 145, 370, 195), fill=(228, 236, 241))
+        draw.text((230, 170), "SHOP", font=font(25, True), fill=NAVY, anchor="mm")
+        for x, tone in ((125, (239, 169, 111)), (215, (118, 174, 207)), (305, (151, 181, 155))):
+            card(draw, (x, 225, x + 58, 325), fill=(255, 253, 248), outline=tone, radius=8)
+            draw.rectangle((x + 12, 245, x + 46, 290), fill=tone)
+        draw.line((500, 165, 740, 165), fill=(130, 177, 207), width=9)
+        draw.line((530, 165, 570, 330), fill=(130, 177, 207), width=9)
+        draw.line((570, 330, 760, 330), fill=(130, 177, 207), width=9)
+        draw.line((760, 330, 790, 205), fill=(130, 177, 207), width=9)
+        draw.ellipse((585, 345, 630, 390), fill=ORANGE)
+        draw.ellipse((710, 345, 755, 390), fill=ORANGE)
+        draw.rectangle((585, 210, 745, 300), fill=(246, 233, 214), outline=ORANGE, width=5)
+    elif kind == "cybersecurity":
+        # Shield and lock represent defensive security controls.
+        draw.regular_polygon((450, 250, 190), 6, rotation=30, fill=(240, 246, 249), outline=(125, 166, 195), width=8)
+        draw.rounded_rectangle((365, 225, 535, 355), radius=20, fill=(8, 35, 65), outline=ORANGE, width=7)
+        draw.arc((390, 135, 510, 275), 180, 360, fill=(8, 35, 65), width=18)
+        draw.ellipse((430, 265, 470, 305), fill=ORANGE)
+        draw.rectangle((444, 292, 456, 325), fill=ORANGE)
+        for x, y in ((220, 160), (680, 160), (220, 360), (680, 360)):
+            draw.ellipse((x - 24, y - 24, x + 24, y + 24), fill=(245, 248, 250), outline=(124, 170, 198), width=5)
+            draw.line((x, y, 450, 250), fill=(133, 179, 210), width=5)
+    elif kind == "coding":
+        # Abstract code editor, not a screenshot of any real product.
+        card(draw, (85, 100, 815, 390), fill=(245, 248, 250), outline=(117, 157, 187), radius=18)
+        draw.rectangle((85, 100, 815, 155), fill=(225, 234, 240))
+        for x, tone in ((120, ORANGE), (155, (118, 174, 207)), (190, (151, 181, 155))):
+            draw.ellipse((x, 120, x + 18, 138), fill=tone)
+        draw.text((450, 220), "</>", font=font(76, True), fill=BLUE, anchor="mm")
+        for i, width in enumerate((380, 510, 300, 455)):
+            y = 285 + i * 24
+            draw.rounded_rectangle((180, y, 180 + width, y + 10), radius=5, fill=(126, 161, 184) if i % 2 else ORANGE)
+    elif kind == "compute":
+        # Accelerator chip connected to a compact data-centre grid.
+        card(draw, (80, 120, 320, 365), fill=(245, 248, 250), outline=(117, 157, 187), radius=16)
+        for y in (155, 220, 285):
+            draw.rounded_rectangle((110, y, 290, y + 36), radius=7, fill=(8, 35, 65))
+            for x in (135, 175, 215, 255):
+                draw.ellipse((x, y + 12, x + 10, y + 22), fill=(130, 183, 213))
+        draw.rounded_rectangle((465, 145, 665, 345), radius=22, fill=(246, 233, 214), outline=ORANGE, width=8)
+        draw.text((565, 245), "AI", font=font(64, True), fill=NAVY, anchor="mm")
+        for x in range(485, 650, 40):
+            draw.line((x, 120, x, 145), fill=(130, 183, 213), width=6)
+            draw.line((x, 345, x, 370), fill=(130, 183, 213), width=6)
+        for y in range(165, 330, 40):
+            draw.line((440, y, 465, y), fill=(130, 183, 213), width=6)
+            draw.line((665, y, 690, y), fill=(130, 183, 213), width=6)
     elif kind == "forest":
         # Satellite over a classified forest mosaic.
         draw.polygon([(95, 125), (230, 125), (260, 170), (125, 170)], fill=(224, 235, 240), outline=(126, 168, 194))
