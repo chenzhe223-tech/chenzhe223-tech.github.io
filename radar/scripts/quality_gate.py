@@ -392,8 +392,16 @@ def main():
     source_basis = [item for item in (editorial.get("source_basis") or []) if isinstance(item, dict) and str(item.get("url") or "").startswith("https://") and item.get("source") and (item.get("title_zh") or item.get("title_en"))]
     if editorial.get("analysis_label_zh") != "DAVYLAB 分析" or not editorial.get("core_zh") or not editorial.get("trend_zh") or len(source_basis) < 3:
         claim_errors.append({"type":"editorial_analysis_missing_traceable_source_basis","valid_source_count":len(source_basis)})
+    localization = report.get("localization") if isinstance(report.get("localization"), dict) else {}
+    if localization.get("status") != "ok":
+        claim_errors.append({"type": "top5_localization_not_ok", "status": localization.get("status", "missing")})
+    if report.get("top5_status") != "ai_curated":
+        claim_errors.append({"type": "top5_not_ai_curated", "status": report.get("top5_status", "missing")})
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
         if isinstance(story, dict):
+            for field in ("title_zh", "what_zh", "why_zh"):
+                if not re.search(r"[\\u4e00-\\u9fff]", str(story.get(field) or "")):
+                    claim_errors.append({"type": "missing_chinese_localization", "field": field, "title": story_title(story)})
             error = claim_provenance_error(story)
             if error:
                 claim_errors.append(error)
