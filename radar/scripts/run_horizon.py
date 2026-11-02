@@ -395,6 +395,16 @@ def apply_claim_provenance(report):
                 summary = str(item.get("summary_zh") or item.get("summary") or "")
                 if summary and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary):
                     item["summary_zh"] = summary.rstrip("。 ") + caveat
+    editorial = report.setdefault("editorial", {})
+    editorial["analysis_label_zh"] = "DAVYLAB 分析"
+    editorial["analysis_label_en"] = "DAVYLAB analysis"
+    editorial["analysis_scope_zh"] = "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。"
+    editorial["analysis_scope_en"] = "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company."
+    editorial["source_basis"] = [
+        {"title_zh": story.get("title_zh") or story.get("title"), "title_en": story.get("title_en") or story.get("title"), "source": story.get("source"), "url": story.get("source_url")}
+        for story in (report.get("top5") or [])
+        if isinstance(story, dict) and str(story.get("source_url") or "").startswith("https://")
+    ]
 
 
 def main():
