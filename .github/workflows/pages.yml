@@ -183,7 +183,7 @@ jobs:
           print('DeepSeek API key configured:', configured)
           print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
-              output.write(f"deepseek_configured={'true' if configured else 'false'}\\n")
+              output.write(f"deepseek_configured={'true' if configured else 'false'}\n")
           PY
         if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
