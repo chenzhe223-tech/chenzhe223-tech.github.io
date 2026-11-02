@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-device-session-refresh-20261102-18';
+window.__kpBuildVersion='kp-v2-radar-csp-github-status-20261102-19';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -1072,8 +1072,11 @@ $('#syncDeviceList')?.addEventListener('click',async event=>{
   kpSyncStatus('设备撤销未完成：'+error.message,true);
  }
 });
-async function renderGithubCenter(){const el=$('#githubAccountStatus');if(el)el.textContent='未绑定 KeyPocket GitHub App。当前 GitHub 连接器只用于仓库开发，不代表应用内 OAuth 授权。';}
-$('#githubConnectBtn')?.addEventListener('click',()=>showToast('KeyPocket GitHub App 尚未配置，暂不能绑定私有备份仓库。'));
+async function renderGithubCenter(){
+ const el=$('#githubAccountStatus'),button=$('#githubConnectBtn');
+ if(el)el.innerHTML='<strong>尚未连接 KeyPocket GitHub App</strong><p>应用内 GitHub 授权服务尚未开放，因此当前不能绑定账号或创建私有备份仓库。</p><p>Cloudflare 中已有 Worker 占位脚本，但 workers.dev 公网子域名尚未启用，且没有绑定 GitHub App / OAuth Secrets。完成 GitHub App 注册、最小权限配置和服务端密钥部署后，才可以开放连接。</p><p>ChatGPT 的 GitHub 连接器只用于仓库开发，不会自动授权 KeyPocket 应用。</p><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/keypocket/docs/github-app.md" target="_blank" rel="noopener noreferrer">查看 GitHub App 配置与安全要求 ↗</a>';
+ if(button){button.disabled=true;button.textContent='授权服务待配置';button.title='GitHub App 与 OAuth Worker 尚未完成配置。';}
+}
 async function renderSkillRadar(){
  const host=$('#radarCards'),meta=$('#radarMeta');if(!host)return;
  const period=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month';

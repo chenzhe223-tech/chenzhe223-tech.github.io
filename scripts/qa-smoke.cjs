@@ -291,13 +291,20 @@ const mark = (status, name, detail = '') => {
       const kp = await kpContext.newPage();
       const kpErrors = [];
       const kpConsoleErrors = [];
+      let kpRadarResponse = null;
+      kp.on('response', response => {
+        try {
+          const url = new URL(response.url());
+          if (url.pathname === '/keypocket/api/skill-radar.json') kpRadarResponse = { status: response.status(), contentType: response.headers()['content-type'] || '' };
+        } catch {}
+      });
       kp.on('pageerror', e => kpErrors.push(e.message));
       kp.on('console', message => { if (message.type() === 'error') kpConsoleErrors.push(message.text()); });
       const kpResp = await kp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
       mark(kpResp && kpResp.status() < 400 ? 'PASS' : 'FAIL', 'KeyPocket 页面可打开', 'HTTP ' + (kpResp && kpResp.status()));
       await kp.waitForSelector('#unlockForm', { timeout: 10000 });
       const csp = await kp.locator('meta[http-equiv="Content-Security-Policy"]').getAttribute('content');
-      mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
+      mark(csp && csp.includes("connect-src 'self'") && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket 同源 Radar / GitHub / Supabase CSP', csp || 'CSP missing');
       // The browser context above is isolated. Wait for app initialization and branch
       // according to actual UI state instead of assuming first-run setup every time.
       try {
@@ -347,6 +354,29 @@ const mark = (status, name, detail = '') => {
         error: window.__kpUnlockError || null
       }));
       if (initialUnlockState.error) throw new Error('KeyPocket first-run setup did not complete: ' + JSON.stringify(initialUnlockState));
+      // Skill Radar fetches a same-origin static JSON API. Its CSP must explicitly allow 'self'.
+      await kp.locator('[data-module="radar"]').click();
+      await kp.waitForSelector('#radarView:not(.hidden)', { timeout: 5000 });
+      await kp.waitForFunction(() => (document.querySelector('#radarMeta')?.innerText || '').includes('数据更新：')
+        || (document.querySelector('#radarMeta')?.innerText || '').includes('暂不可用'), null, { timeout: 8000 });
+      const radarMetaText = await kp.locator('#radarMeta').innerText();
+      await kp.locator('[data-radar-period="all"]').click();
+      await kp.waitForFunction(() => document.querySelectorAll('#radarCards .card').length > 0, null, { timeout: 8000 });
+      const radarCardCount = await kp.locator('#radarCards .card').count();
+      const radarFetchPassed = kpRadarResponse?.status === 200
+        && radarMetaText.includes('数据更新：')
+        && !radarMetaText.includes('Failed to fetch')
+        && radarCardCount > 0;
+      mark(radarFetchPassed ? 'PASS' : 'FAIL', 'KeyPocket Skill Radar 同源 JSON 加载', JSON.stringify({ response: kpRadarResponse, meta: radarMetaText, allTimeCards: radarCardCount }));
+      if (!radarFetchPassed) throw new Error('Skill Radar same-origin API did not load: ' + JSON.stringify({ response: kpRadarResponse, meta: radarMetaText, allTimeCards: radarCardCount }));
+      // GitHub App is intentionally unavailable until its OAuth Worker and secrets are configured.
+      await kp.locator('[data-module="github"]').click();
+      await kp.waitForSelector('#githubView:not(.hidden)', { timeout: 5000 });
+      const githubStatus = await kp.locator('#githubAccountStatus').innerText();
+      const githubConnectDisabled = await kp.locator('#githubConnectBtn').isDisabled();
+      mark(githubConnectDisabled && githubStatus.includes('Worker') && githubStatus.includes('尚未启用') ? 'PASS' : 'FAIL',
+        'KeyPocket GitHub App 未配置状态如实提示', '连接按钮禁用，清楚说明 OAuth Worker/Secrets 前置条件');
+      await kp.locator('[data-module="keys"]').click();
       // Regression: adding multiple provider keys must remain available when the vault is non-empty.
       const addKeyButton = kp.locator('#addKeyBtn');
       mark(await addKeyButton.count() === 1 && await addKeyButton.isVisible() ? 'PASS' : 'FAIL', 'KeyPocket 始终可见的新增 API Key 入口', '新增按钮必须在已有记录前后均可访问');
