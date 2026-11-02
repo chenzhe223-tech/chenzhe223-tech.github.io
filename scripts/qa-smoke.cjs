@@ -848,7 +848,11 @@ const mark = (status, name, detail = '') => {
         && new URL(qaRecoveryRequest.url).searchParams.get('redirect_to') === 'https://chenzhe223-tech.github.io/keypocket/';
       mark(recoveryRequestValid ? 'PASS' : 'FAIL', 'KeyPocket 密码找回邮件请求', 'POST /auth/v1/recover，邮箱与正式回跳地址正确');
       await kp.goto(base + 'keypocket/#access_token=qa.recovery.access.token&type=recovery', { waitUntil: 'domcontentloaded', timeout: 45000 });
-      await kp.waitForSelector('#syncPasswordRecoveryPanel:not(.hidden)', { timeout: 8000 });
+      try { await kp.waitForSelector('#syncPasswordRecoveryPanel:not(.hidden)', { timeout: 8000 }); }
+      catch (error) {
+        const recoveryDiagnostics = await kp.evaluate(() => ({ hash: location.hash, build: window.__kpBuildVersion, state: window.__kpRecoveryDiagnostic, panelClass: document.querySelector('#syncPasswordRecoveryPanel')?.className, status: document.querySelector('#syncStatus')?.innerText }));
+        throw new Error('Recovery callback diagnostics=' + JSON.stringify(recoveryDiagnostics) + '; ' + error.message);
+      }
       await kp.locator('#syncNewPassword').fill('QA-Recovered-Password-2026');
       await kp.locator('#syncConfirmNewPassword').fill('QA-Recovered-Password-2026');
       await kp.locator('#syncResetPasswordBtn').click();
