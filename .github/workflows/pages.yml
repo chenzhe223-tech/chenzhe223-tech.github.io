@@ -558,6 +558,22 @@ jobs:
           qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
           if report.get('report_date') != today:
               raise SystemExit(f'Candidate main report is not today: {report.get("report_date")!r} != {today}')
+          if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
+              raise SystemExit('Candidate main report does not contain five AI-curated stories')
+          if report.get('editorial_policy_version') != '2026-11-02.2':
+              raise SystemExit('Candidate report editorial claim-provenance policy is outdated')
+          quality = report.get('quality_gate') or {}
+          editorial = report.get('editorial') or {}
+          if quality.get('status') != 'PASS' or quality.get('claim_provenance_policy_version') != '2026-11-02.2':
+              raise SystemExit('Candidate report quality/claim-provenance gate is not PASS')
+          if editorial.get('analysis_label_zh') != 'DAVYLAB 分析' or len(editorial.get('source_basis') or []) < 3:
+              raise SystemExit('Candidate DAVYLAB analysis is missing traceable source basis')
+          if quality.get('claims', {}).get('editorial_source_basis_count', 0) < 3:
+              raise SystemExit('Candidate quality gate did not validate editorial source basis')
+          if report.get('image_matching', {}).get('relevance_policy_version') != '2026-11-02.1' or quality.get('image_relevance_policy_version') != '2026-11-02.1':
+              raise SystemExit('Candidate image relevance policy is outdated')
+          if report.get('skill_radar', {}).get('engine_version') != '2026.11.02.1':
+              raise SystemExit('Candidate Skill Radar engine version is outdated')
           if poster.get('report_date') != today or qr.get('report_date') != today or qr.get('status') != 'PASS':
               raise SystemExit('Candidate main poster bundle is incomplete or QR verification did not PASS')
           print(f'Candidate bundle selected from origin/main: {today}; report generated_at={report.get("generated_at")}')
