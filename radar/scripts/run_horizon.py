@@ -355,6 +355,8 @@ def apply_verified_skill_metadata(skills):
             item["description_zh"] = description
             description_en = str(item.get("description_en") or item.get("description") or "")
             description_en = re.sub(r"(?<!\d)\d+(?=\s+workflow skills)", str(actual_count), description_en, flags=re.I)
+            if not re.search(rf"\b{actual_count}\s+workflow skills\b", description_en, re.I):
+                description_en = f"{description_en.rstrip('. ')} {actual_count} workflow skills"
             if "SKILL.md" not in description_en:
                 description_en = f"{description_en.rstrip('. ')} ({actual_count} SKILL.md files found in the repository scan.)"
             item["description_en"] = description_en
