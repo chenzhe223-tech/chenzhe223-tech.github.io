@@ -45,8 +45,8 @@ const { chromium } = require('playwright');
     try {
       await keyPocket.waitForFunction(() => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes('kp-v2-sync-client-20261102-10')
-          && window.__kpBuildVersion === 'kp-v2-sync-client-20261102-10'
+        return script && script.src.includes('kp-v2-sync-client-20261102-11')
+          && window.__kpBuildVersion === 'kp-v2-sync-client-20261102-11'
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
@@ -75,7 +75,7 @@ const { chromium } = require('playwright');
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-sync-client-20261102-10'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-sync-client-20261102-11'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
@@ -230,6 +230,36 @@ const { chromium } = require('playwright');
     assert.ok(persisted.projects.some(item => item.iv && item.data), 'project metadata must be stored in an encrypted envelope');
     assert.ok(!persisted.serializedProjectEnvelopes.includes(repositoryUrl), 'repository URL must not appear in plaintext in the project envelope');
     assert.deepEqual(pageErrors, [], 'KeyPocket should not raise browser JavaScript errors during import');
+
+    // Confirm the project deletion and recovery path leaves the encrypted item intact.
+    keyPocket.on('dialog', dialog => dialog.accept());
+    await keyPocket.locator('#projectCards [data-project-action="delete"]').first().click();
+    await keyPocket.locator('[data-module="recycle"]').click();
+    await keyPocket.locator('#recycleCards [data-trash-restore]').first().waitFor({ state: 'visible', timeout: 10000 });
+    await keyPocket.locator('#recycleCards [data-trash-restore]').first().click();
+    await keyPocket.locator('#projectView').waitFor({ state: 'visible', timeout: 10000 }).catch(async () => {
+      await keyPocket.locator('[data-module="projects"]').click();
+    });
+    await keyPocket.locator('#projectCards').getByText(skillName, { exact: false }).waitFor({ state: 'visible', timeout: 10000 });
+    const restored = await keyPocket.evaluate(async () => {
+      const db = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('keypocket-local-v1');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const rows = await new Promise((resolve, reject) => {
+        const request = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return rows.filter(item => item.kind === 'project').map(item => ({ iv: item.iv, data: item.data }));
+    });
+    assert.ok(restored.some(item => item.iv && item.data), 'restored project must remain encrypted in IndexedDB');
+
+    await keyPocket.locator('[data-module="backup"]').click();
+    await keyPocket.locator('#backupCards').waitFor({ state: 'visible', timeout: 10000 });
+    assert.ok((await keyPocket.locator('#backupCards').innerText()).length > 0, 'local backup history should render after unlock');
 
     console.log('PASS: clicked a Skill in the live AI brief');
     console.log('PASS: opened KeyPocket and displayed an explicit confirmation dialog');
