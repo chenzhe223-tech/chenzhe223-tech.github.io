@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-radar-csp-github-status-20261102-19';
+window.__kpBuildVersion='kp-v2-password-recovery-20261102-20';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -502,6 +502,57 @@ async function kpAuth(action,email,password){
  if(body.access_token)kpSetSession(body);
  return body;
 }
+
+let kpRecoveryAccessToken=null;
+function kpRecoveryRedirectUrl(){return window.location.origin+window.location.pathname;}
+async function kpRequestPasswordRecovery(email){
+ const endpoint=KP_SUPABASE_URL+'/auth/v1/recover?redirect_to='+encodeURIComponent(kpRecoveryRedirectUrl());
+ const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json','apikey':KP_SUPABASE_KEY},body:JSON.stringify({email})});
+ const body=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(body.msg||body.message||body.error_description||body.error||'暂时无法提交密码找回请求，请稍后重试。');
+ return body;
+}
+async function kpVerifyRecoveryTokenHash(tokenHash){
+ const response=await fetch(KP_SUPABASE_URL+'/auth/v1/verify',{method:'POST',headers:{'Content-Type':'application/json','apikey':KP_SUPABASE_KEY},body:JSON.stringify({token_hash:tokenHash,type:'recovery'})});
+ const body=await response.json().catch(()=>({}));
+ if(!response.ok||!body.access_token)throw Error(body.msg||body.message||body.error_description||body.error||'恢复链接无效或已过期，请重新申请。');
+ return body.access_token;
+}
+function kpShowPasswordRecovery(token){
+ kpRecoveryAccessToken=token||null;
+ $('#syncPasswordRecoveryPanel')?.classList.remove('hidden');
+ $('#syncNewPassword')?.focus();
+ kpSyncStatus(token?'已验证密码找回链接。请设置新的同步账号密码。':'恢复链接缺少有效授权，请重新申请密码找回。',!token);
+}
+async function kpHandlePasswordRecoveryRedirect(){
+ const query=new URLSearchParams(window.location.search),hash=new URLSearchParams(window.location.hash.replace(/^#/,''));
+ const type=hash.get('type')||query.get('type');
+ if(type!=='recovery'&&!query.has('token_hash'))return;
+ let token=hash.get('access_token')||query.get('access_token');
+ try{
+  const tokenHash=query.get('token_hash')||hash.get('token_hash');
+  if(!token&&tokenHash)token=await kpVerifyRecoveryTokenHash(tokenHash);
+  if(!token){kpShowPasswordRecovery(null);return;}
+  kpShowPasswordRecovery(token);
+ }catch(error){kpShowPasswordRecovery(null);kpSyncStatus('密码恢复链接验证失败：'+error.message,true);}
+}
+async function kpSubmitPasswordRecovery(){
+ const button=$('#syncResetPasswordBtn'),password=$('#syncNewPassword').value,confirm=$('#syncConfirmNewPassword').value;
+ if(!kpRecoveryAccessToken)throw Error('恢复授权已失效，请重新申请密码找回邮件。');
+ if(password.length<10)throw Error('新密码至少需要 10 位。');
+ if(password!==confirm)throw Error('两次输入的新密码不一致。');
+ button.disabled=true;button.textContent='正在安全更新…';
+ try{
+  const response=await fetch(KP_SUPABASE_URL+'/auth/v1/user',{method:'PATCH',headers:{'Content-Type':'application/json','apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+kpRecoveryAccessToken},body:JSON.stringify({password})});
+  const body=await response.json().catch(()=>({}));
+  if(!response.ok)throw Error(body.msg||body.message||body.error_description||body.error||'密码更新失败，请重新申请恢复链接。');
+  kpRecoveryAccessToken=null;
+  $('#syncPasswordRecoveryPanel')?.classList.add('hidden');
+  $('#syncPassword').value='';$('#syncNewPassword').value='';$('#syncConfirmNewPassword').value='';
+  window.history.replaceState(null,document.title,window.location.pathname);
+  kpSyncStatus('同步账号密码已更新。请使用新密码登录；本地密钥库和跨设备加密口令均未更改。');
+ }finally{button.disabled=false;button.textContent='确认重置密码';}
+}
 async function kpCloudRequest(method,payload){
  const s=kpSession();if(!s?.access_token)throw Error('请先登录同步账号。');
  const endpoint=KP_SUPABASE_URL+'/rest/v1/keypocket_vault_sync'+(method==='POST'?'?on_conflict=user_id':'?select=user_id,payload,schema_version,revision,updated_at');
@@ -548,10 +599,24 @@ async function kpMergeAndSync(){
  }finally{status.disabled=!kpSession()?.access_token;status.textContent='合并并同步加密资料';}
 }
 $('#syncSignUpBtn')?.addEventListener('click',async()=>{try{const email=$('#syncEmail').value.trim(),password=$('#syncPassword').value;if(!email||password.length<10)throw Error('请输入邮箱及至少 10 位的账号密码。');await kpAuth('signup',email,password);kpSyncStatus('账号请求已提交。若邮箱验证已开启，请先查收验证邮件，再返回登录。');}catch(e){kpSyncStatus(e.message,true)}});
+$('#syncForgotPasswordBtn')?.addEventListener('click',async()=>{
+ const button=$('#syncForgotPasswordBtn'),email=$('#syncEmail').value.trim();
+ if(!email){kpSyncStatus('请先填写注册同步账号时使用的邮箱。',true);$('#syncEmail').focus();return;}
+ const old=button.textContent;button.disabled=true;button.textContent='正在提交…';
+ try{await kpRequestPasswordRecovery(email);kpSyncStatus('如果该邮箱对应有效账号，系统将发送密码重置邮件。请检查收件箱、垃圾邮件，并使用最新邮件中的链接。');}
+ catch(error){kpSyncStatus('密码找回请求失败：'+error.message,true);}
+ finally{button.disabled=false;button.textContent=old;}
+});
+$('#syncResetPasswordBtn')?.addEventListener('click',async()=>{
+ const button=$('#syncResetPasswordBtn');if(button.disabled)return;
+ try{await kpSubmitPasswordRecovery();}
+ catch(error){kpSyncStatus('密码重置未完成：'+error.message,true);}
+});
 $('#syncSignInBtn')?.addEventListener('click',async()=>{const btn=$('#syncSignInBtn');if(btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.textContent='正在登录…';try{const email=$('#syncEmail').value.trim(),password=$('#syncPassword').value;if(!email||!password)throw Error('请输入邮箱和账号密码。');const body=await kpAuth('token?grant_type=password',email,password);if(!body.access_token)throw Error('登录请求未返回有效会话，请检查邮箱验证状态或同步服务配置。');kpSyncStatus('登录成功。请点击“合并并同步加密资料”完成同步。');}catch(e){const msg=String(e.message||'登录失败');kpSyncStatus(msg.includes('Invalid login credentials')?'邮箱或密码不正确。':msg.includes('Email not confirmed')?'邮箱尚未验证，请先完成验证，或检查同步服务的邮箱验证设置。':msg.includes('Failed to fetch')?'无法连接同步服务，请检查网络或后端服务状态。':'登录失败：'+msg,true);}finally{btn.disabled=!!kpSession()?.access_token;btn.textContent=old;}});
 $('#syncSignOutBtn')?.addEventListener('click',async()=>{try{const s=kpSession();if(s?.access_token)await fetch(KP_SUPABASE_URL+'/auth/v1/logout',{method:'POST',headers:{'apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+s.access_token}});}catch{}kpSetSession(null);kpSyncStatus('已退出同步账号。本地加密库未受影响。');});
 $('#syncNowBtn')?.addEventListener('click',async()=>{try{await kpV2SyncNow()}catch(e){kpSyncStatus('同步未完成：'+e.message+' 本地数据保持不变。',true)}});
 kpSetSession(kpSession());
+kpHandlePasswordRecoveryRedirect().catch(error=>kpSyncStatus('无法处理密码恢复链接：'+error.message,true));
 
 // KeyPocket V2.0 local recovery foundation. Existing record envelopes are unchanged.
 
