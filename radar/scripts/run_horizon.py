@@ -364,7 +364,7 @@ def apply_claim_provenance(report):
     policy_path = ROOT / "radar" / "config" / "qa-rules.json"
     policy = json.loads(policy_path.read_text(encoding="utf-8")).get("claim_provenance") or {}
     policy_version = str(policy.get("policy_version") or "")
-    if not policy_version or policy.get("low_confidence_requires_explicit_caveat") is not True or policy.get("self_reported_benchmarks_require_attribution") is not True or policy.get("prototype_status_must_be_preserved") is not True or policy.get("superlatives_require_metric_scope_and_date") is not True:
+    if not policy_version or policy.get("low_confidence_requires_explicit_caveat") is not True or policy.get("self_reported_benchmarks_require_attribution") is not True or policy.get("prototype_status_must_be_preserved") is not True or policy.get("superlatives_require_metric_scope_and_date") is not True or policy.get("company_and_management_claims_require_attribution") is not True:
         raise RuntimeError("P0 editorial claim provenance policy missing or invalid")
     report["editorial_policy_version"] = policy_version
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
