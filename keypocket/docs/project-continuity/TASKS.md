@@ -1,25 +1,18 @@
-# KeyPocket — 连续性试运行任务清单
+# KeyPocket V2.0 — 任务清单
 
-## 优先级定义
-- P0：影响安全、数据正确性、关键用户流程或发布判断
-- P1：核心产品与连续性能力
-- P2：可延期优化
+状态：PLANNED / IN_PROGRESS / IMPLEMENTED / TESTED / BLOCKED / DEPLOYED / ACCEPTED。
 
-| ID | 优先级 | 任务 | 状态 | 完成定义 | 下一步 |
-|---|---|---|---|---|---|
-| KP-CONT-001 | P1 | 安装项目连续性档案 | TESTED | 9 份文件已写入并从 GitHub 回读成功 | 完成 |
-| KP-CONT-002 | P0 | 修正文档与同步实现不一致 | IMPLEMENTED | README、安全验收和交付报告已修正；需回读及验证 | 回读文档，继续核查 Supabase RLS |
-| KP-CONT-003 | P1 | 核对最新代码与生产部署 | IN_PROGRESS | 记录 HEAD SHA、CI 结果、Pages 部署及线上版本 | 查询 Actions 和部署记录 |
-| KP-CONT-004 | P1 | 运行项目现有 QA | PLANNED | 记录实际执行的语法、静态、E2E 检查及结果 | 检查 workflow 和测试脚本 |
-| KP-CONT-005 | P1 | 新对话恢复演练 | PLANNED | 新聊天只依赖档案与仓库，能正确指出下一任务且不重复已完成工作 | 按 RESUME_PROMPT 执行 |
-| KP-CONT-006 | P2 | 为档案加入轻量 CI 完整性检查 | PLANNED | 检查必需文件、更新时间和明显占位符；不误报未执行测试 | 待试运行通过后再实施 |
-
-## 本轮完成定义
-- [x] 连续性文件已添加到项目独立目录。
-- [x] 已回读所有新增文件并确认写入成功。
-- [x] 已核实连续性档案提交 SHA。
-- [x] 已更新 README、安全验收与交付报告中的明显过期同步描述（需回读确认）。
-- [ ] 已核对最新生产部署。
-- [ ] 已核实 Supabase RLS 与生产访问策略。
-- [ ] 已重新运行当前版本 QA。
-- [ ] 已完成新对话恢复演练。
+| ID | 优先级 | 事项 | 状态 | 下一步 |
+|---|---|---|---|---|
+| KP-001 | P0 | 保留旧 IndexedDB/AES解密 | IMPLEMENTED | 旧数据回归 |
+| KP-002 | P0 | 本地加密快照/防抖 | IMPLEMENTED | 快照创建/恢复 E2E |
+| KP-003 | P0 | API Key/项目软删除与回收站 | IMPLEMENTED | 单条/批量/永久删除 E2E |
+| KP-004 | P1 | 项目/Skill 写入接入快照队列 | IMPLEMENTED | 功能回归 |
+| KP-005 | P0 | Replace 导入保护快照 | IMPLEMENTED | 导入恢复 E2E |
+| KP-006 | P0 | V2 增量同步 API/schema/RLS | PLANNED | Supabase live schema/RLS 核查 |
+| KP-007 | P1 | Skill Radar collector/daily history | PLANNED | 建立 GitHub API采集脚本与快照 workflow |
+| KP-008 | P1 | GitHub App + Worker private vault | BLOCKED | 创建 KeyPocket App、OAuth callback、配置 secrets |
+| KP-009 | P0 | 最新 HEAD 语法/功能/E2E | IN_PROGRESS | 检查 e30311f 后续 run 与最新 HEAD |
+| KP-010 | P0 | 最新 HEAD Pages 部署核验 | IN_PROGRESS | 线上资源与 HEAD SHA一致后标记 |
+| KP-011 | P1 | 12个月归档策略 | PLANNED | 实现并测试 |
+| KP-012 | P1 | iOS Safari/微信/多设备验收 | PLANNED | 真实设备测试 |
