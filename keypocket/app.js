@@ -652,3 +652,4 @@ $('#radarCards')?.addEventListener('click',async e=>{
 window.addEventListener('online',()=>{const x=$('#backupStatus');if(x)x.textContent='网络已恢复。本地保存正常；当前云同步尚未改为自动增量模式。'});
 window.addEventListener('offline',()=>{const x=$('#backupStatus');if(x)x.textContent='当前离线。本地加密保存正常；云同步等待联网。'});
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&cryptoKey)kpMaybeDailySnapshot();});
+}
