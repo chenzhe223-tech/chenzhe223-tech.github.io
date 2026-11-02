@@ -4,29 +4,73 @@
   "account_ghid": "",
   "sync_method": "workbuddy-browser",
   "sync_status": "synced_via_browser",
-  "last_synced_at": "2026-10-29T17:20:00+08:00",
-  "notes": "Records verified against DAVYLAB WeChat Official Account backend 发表记录 (共发表 7 次) on 2026-10-29 via browser session; permanent links extracted from backend list. Drafts and previews excluded. Optional fields left empty when not verifiable.",
+  "last_synced_at": "2026-11-02T12:07:32.000+08:00",
+  "notes": "Auto-synced from DAVYLAB WeChat Official Account backend 发表记录 via logged-in browser session. Drafts and previews excluded.",
   "articles": [
     {
+      "id": "UfTp9qQQJNcSVmY2s4iF1A",
+      "title": "你不必是天才，也能用上天才们的成果：普通人的 AI 成长路径",
+      "url": "https://mp.weixin.qq.com/s/UfTp9qQQJNcSVmY2s4iF1A",
+      "publishedAt": "2026-11-01",
+      "column": "DAVYLAB 的 AI 实验室",
+      "format": "文章",
+      "summary": "你不需要顶尖智商，也能用上顶尖团队的成果。四项研究告诉我们：AI 对新手帮助更大，但有前提。附小白四级成长路径、三句方法和现实的成果预期。",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5K090UOvzVwDtjkuORiaSDhKvj18qXwpjoUgkg81OTVjlvTWlM6dmNiceGUmwGajZcA1TxzIzbNibttnORj3EUQRxJDP34vtHicM1c/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "k8s3f5wh_4Bf_7zMsLB8Fg",
+      "title": "AI 不只要更强，还得真能干活",
+      "url": "https://mp.weixin.qq.com/s/k8s3f5wh_4Bf_7zMsLB8Fg",
+      "publishedAt": "2026-10-31",
+      "column": "DAVYLAB的AI简报",
+      "format": "贴图",
+      "summary": "过去两年，我们习惯用参数、榜单、发布会衡量 AI。\n现在问题变了：它能不能真的干活？\n\n10 月 30 日前后的几条动态，都指向同一个方向 👇\n\n🏭 Foxconn × OpenAI\n双方正探索新合作，细节待公布。Foxconn 德州工厂已有十余台人形机器人投入内部使用。AI 正在走进工厂。\n\n📄 小米开源 Xiaomi-OCR-0\n0.8B 小模型，能做文档解析、关键信息抽取和文档问答。发票、报价单、合同，有机会变成「机器先读，人工复核异常」。\n\n💻 腾讯 WorkBuddy\n支持直接打开、编辑 Word、Excel、PPT、PDF 等文件，并在同一环境调用 AI。从「对话助手」走向「任务伙伴」。\n\n🎨 Taste Skill\n给 AI 编码智能体用的界面设计规则，让生成的网页更有设计感。（已核验仓库和官网，未实测安装，使用请自行评估）\n\n💡 DAVYLAB 观察\nAI 的竞争重点，正从能力展示转向实际应用：能不能融入流程、降低成本、创造真实价值。\n真正拉开差距的，不是谁有最多的 AI 工具，而是谁更懂得让 AI 创造价值。\n\n❓ 如果让 AI 优先接管你的一项重复工作，你选哪个？\nA 读合同提信息　B 整理报价分析成本\nC 处理 Excel 数据　D 自动跟进项目\n\n评论区聊聊你的真实场景 👇\n\nhttps://chenzhe223-tech.github.io/radar/daily/\n作者：DAVYLAB｜让可能发生\n<a class=\"wx_topic_link\" topic-id=\"mvvr9en7-oos7qm\" style=\"color: var(--weui-LINK) !important;\" data-topic=\"1\" data-recommend=\"\">#AI</a> <a class=\"wx_topic_link\" topic-id=\"mvvr9en7-h0xcgu\" style=\"color: var(--weui-LINK) !important;\" data-topic=\"1\" data-recommend=\"\">#人工智能</a> <a class=\"wx_topic_link\" topic-id=\"mvvr9en7-y7kaev\" style=\"color: var(--weui-LINK) !important;\" data-topic=\"1\" data-recommend=\"\">#AI工具</a> <a class=\"wx_topic_link\" topic-id=\"mvvr9en7-w5mwdd\" style=\"color: var(--weui-LINK) !important;\" data-topic=\"1\" data-recommend=\"\">#职场效率</a>",
+      "coverUrl": "http://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5LYdpJibCfhEWfUAPee5rAbB3ibIctOZfT3HtDoxiaZmWicicmu9eianT0H4Go0peLoyF8Yh1s1qpU42U4veudX1W46r4MRxWDkdFevM/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "pcWil3JoJc1-5Fh6x-IHFg",
+      "title": "AI 时代，你的专业经验正在增值：从 FDE 说",
+      "url": "https://mp.weixin.qq.com/s/pcWil3JoJc1-5Fh6x-IHFg",
+      "publishedAt": "2026-10-30",
+      "column": "",
+      "format": "贴图",
+      "summary": "最近行业收缩，大家都在焦虑岗位变化。我一个非程序员，读了一篇数据清洗案例，第一次想明白“前线部署工程师”到底在干嘛。\n\nFDE 不是卖标准家具的，是上门全屋定制的师傅。AI 演示得再惊艳，真塞进公司日常流程里全是坑。他们驻场到客户身边，量尺寸、做定制、装好教会你用，最后对结果负责。\n\n这活儿最难的压根不是写代码。而是听懂真实需求、搭出方案、落地验证。拿数据清洗来说，铁律就三条：原件只读，处理结果另存；结论必须附出处，能追查原始证据；验收按版本，每次改规则都用固定样本重测。\n\n说白了，这些做事规矩全靠专业经验撑着。财务的对账凭证、老师的评分标准、工厂的质检清单，这才是锚点。AI 只是杠杆，没经验它放大不出啥。\n\n普通人怎么开始？挑一件每周重复、有明确对错的小事。写清目标和验收标准，让 AI 做第一版，但别覆盖原稿。最后抽样检查，带上出处记录改动。\n\nFDE 思维不是让你立刻转型当程序员。它是让你先把专业变成 AI 能用的标准，从一件小事开始。",
+      "coverUrl": "http://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5LcIfkdywpznvR9wEMtXV9q13pbOxnEHQlMJr4e8NfXqvH19Eyv50F2n7z8nd0DWQaxu38rSg6xqMVDIzMhfRah8HraCiaMwxBo/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "OvbpQscbE-9cdFY5eh07hw",
+      "title": "AI 时代，你的专业经验正在增值：从 FDE 说起",
+      "url": "https://mp.weixin.qq.com/s/OvbpQscbE-9cdFY5eh07hw",
+      "publishedAt": "2026-10-30",
+      "column": "DAVYLAB 的 AI 实验室",
+      "format": "文章",
+      "summary": "FDE 是什么？为什么 AI 公司都在招？读完一个数据清洗案例，我发现：专业经验在 AI 时代不但没过时，还能增值。附零基础 4 步起步法。",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5K6VibicyDCwtdV2I6hXk6ttibwMOO2pBk1muxKRYt2zTOqjvbsoNCnEYPch4v9Fq8WUPcYgibLIX8rJO9kez85VCGhVwNliaQUePsI/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
       "id": "SMWlJtkpBiCvuF5n7fuXZw",
-      "title": "网红已死，「经验时代」已来：AI 越强，普通人越要建立自己的作品体系",
+      "title": "网红已死，「经验时代」已来：AI 越强，普通人越要建立自己的作品体系",
       "url": "https://mp.weixin.qq.com/s/SMWlJtkpBiCvuF5n7fuXZw",
       "publishedAt": "2026-10-29",
-      "column": "",
+      "column": "DAVYLAB 的 AI 实验室",
       "format": "文章",
-      "summary": "",
-      "coverUrl": "",
+      "summary": "当所有人都能用 AI 生产内容，真正稀缺的就不再是内容本身，而是你为什么要创造，以及你能持续创造什么。读完 Dan Koe 的长文，我整理了普通人的应对思路。",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5Jj8ePuxoT2CeQ1pYzwD7B1SlmU9FCfsFTdLiatgsQ4YPeJEV9EWcu3HgCDaKicwjDJ6W3tKJmKEyO70MhopbuufPUVoMRer9mAc/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
       "id": "24WhuMQ7GxLAUUH7xeTxag",
-      "title": "我学到了：想放手让 AI 干活，先把「信任」搭起来",
+      "title": "我学到了：想放手让 AI 干活，先把「信任」搭起来",
       "url": "https://mp.weixin.qq.com/s/24WhuMQ7GxLAUUH7xeTxag",
       "publishedAt": "2026-10-28",
-      "column": "",
+      "column": "DAVYLAB 的 AI 实验室",
       "format": "文章",
-      "summary": "",
-      "coverUrl": "",
+      "summary": "这两年，大家都在问同一个问题：一个人，到底能同时带多少个 AI Agent？看完 Lauren Tan 一场 57 分钟的线上分享，我最大的收获是：这个问题问反了。",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5KExJhib7dCNicdesCAUgSKfp5AdSj4TUsdBO62TO1RX1zSce5iazg0KGHOc7wBIElHPdQkvfHyOMpjNlJf8iaxpLXrMnWTYsN9mdY/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
@@ -34,10 +78,10 @@
       "title": "别再对 AI 客气了：Claude Code 负责人教你，把目标定到「不合理」",
       "url": "https://mp.weixin.qq.com/s/0qXUdoETzba3FlJ9TMbu1Q",
       "publishedAt": "2026-10-27",
-      "column": "",
-      "format": "贴图",
-      "summary": "",
-      "coverUrl": "",
+      "column": "DAVYLAB 的 AI 实验室",
+      "format": "文章",
+      "summary": "想把 10 秒加载降到 5 秒？Claude Code 负责人直接要 0.2 秒。目标定得「不合理」，AI 才会给你超出预期的结果。四个方向：速度、高度、深度、广度。",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5LurJEwCYxzheYxft89aUBCr82jADVtGRR4lHp6BTQKVcv7Uu4cj5Ucxwl3xKAXSQDdx66jVqv6NDO5QUAAY0D5RSgzScey80A/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
@@ -47,8 +91,8 @@
       "publishedAt": "2026-10-25",
       "column": "",
       "format": "贴图",
-      "summary": "",
-      "coverUrl": "",
+      "summary": "成功不只是更努力，而是让能力、行动与长期积累彼此放大。Sam Altman 在《How To Be Successful》中分享了 13 条思考：复利、自信与独立思考、表达与风险、聚焦与努力、勇气与坚持、竞争优势、人才网络、拥有资产，以及内在驱动。它们不是保证成功的公式；作者也提醒，这些建议更适合已经具备一定基础、希望继续突破的人。本文按主题梳理，帮助你抓住原文逻辑，而非照单全收。原文：https://blog.samaltman.com/how-to-be-successful\n<a class=\"wx_topic_link\" topic-id=\"mvnislig-qbdbk3\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#SamAltman</a> <a class=\"wx_topic_link\" topic-id=\"mvnislig-1vzd3y\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#个人成长</a> <a class=\"wx_topic_link\" topic-id=\"mvnislig-mhyqe7\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#创业思考</a>",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5IHmWh82lrC1cNQCkafwwP34AarNjlHicoplxrlKd3FTx3zJQtkZd01T5YSL0RObDF05c6kJSQcODqvEibNEsd9ic9qb3UDX6dTEA/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
@@ -58,8 +102,8 @@
       "publishedAt": "2026-10-22",
       "column": "",
       "format": "贴图",
-      "summary": "",
-      "coverUrl": "",
+      "summary": "想做个看板，却不知道从哪下手？很正常，先不用急着挑图表。想想这张看板给谁看、要帮你判断什么、哪些指标最重要。Dashboard Studio 可以从需求描述开始，试试 6 种布局、6 种视觉风格和 6 种内容密度，边选边看实际预览；也能整理需求规划、数据源规划和适配开发工具的指令。你不必一开始就把所有细节想明白，先有个方向，再慢慢调整。\n小提醒：预览数字是示例；AI 深度分析需配置服务，真实业务数据需单独接入验证。\n来体验：https://ds.dashboard-studio-1dp.pages.dev/\n\n<a class=\"wx_topic_link\" topic-id=\"mvj5b7g2-dcs9ad\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#DashboardStudio</a> <a class=\"wx_topic_link\" topic-id=\"mvj5b7g2-nqk27u\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#看板设计</a> <a class=\"wx_topic_link\" topic-id=\"mvj5b7g2-ucu5f0\" style=\"color: #576B95 !important;\" data-topic=\"1\" data-recommend=\"\">#AI实战</a>",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5J5AcehH9mhugibcbzdSgBmCTo6vUmAd9upPr4MP5sAQAll0hgjiapXm740Zhw3asq6KjgHicwZEGc7ic9QuzoO7dWtswnCYoncD0Q/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
@@ -67,10 +111,10 @@
       "title": "我用 AI 做了几个应用后，才发现：能生成，不等于能用",
       "url": "https://mp.weixin.qq.com/s/RSLSWp1q6-c6iXUPEAgk3Q",
       "publishedAt": "2026-10-21",
-      "column": "",
+      "column": "DAVYLAB 的 AI 实验室",
       "format": "文章",
-      "summary": "",
-      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5JUrGcETeiatIh24bhq0p4NGy0TGAzxsicqgIzVQtoV24M5oUKhB2wIqOH6nd5sjQc1IhspC2ZKS7fFwHWq794Rkr2OdmCN7KvWo/0?wx_fmt=jpeg",
+      "summary": "一个从 AI 小白起步的人，如何从着急生成，走向先规划、再开发、持续验证。",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5JTvzhXPu56xMr112jkUkricKKNVSjYm4ebibRmrp9mL8TtAX2ClIqicQksKQ7D4pHHVmghicXMk5zZOX6WcFavEOEwVCfib5UgcI94/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     },
     {
@@ -79,9 +123,9 @@
       "url": "https://mp.weixin.qq.com/s/d0QM0FArSpI3OIQzyPbVeA",
       "publishedAt": "2026-10-20",
       "column": "",
-      "format": "文章",
-      "summary": "",
-      "coverUrl": "",
+      "format": "贴图",
+      "summary": "最近一直在尝试用 AI 把一些想法做成真正能用的工具。从念头到产品，有惊喜，也有不少反复修改的过程。\n\n想把这些真实实践记录下来，也和更多人一起探索 AI 带来的创造可能。\n\n把想法，做成能用的工具。\n\n第一步，从这里开始。",
+      "coverUrl": "http://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5I4fLtprwF4ibdMbO3WEuhfnlaJOGas9aj1nMI9mVd5ErluUibUIZSRictnl5MgdyKo8YDrGibI1nia2QVyZibIQSDffoJws1XmIahR4/0?wx_fmt=jpeg",
       "source": "WeChat Official Account backend"
     }
   ]
