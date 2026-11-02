@@ -247,6 +247,13 @@ def main() -> int:
         fail("WeChat intro does not accurately reflect the actual Top 5 geographic coverage")
     if not all(title in copy for title in titles):
         fail("WeChat copy does not match all five selected stories")
+    expected_headline = str((report.get("editorial") or {}).get("headline_zh") or "")
+    if expected_headline and not copy.startswith(expected_headline):
+        fail("WeChat copy headline does not use the approved DAVYLAB editorial headline")
+    for story in top:
+        expected_social_summary = str(story.get("social_what_zh") or story.get("what_zh") or "")
+        if expected_social_summary and expected_social_summary not in copy:
+            fail(f"WeChat copy does not use the approved concise summary for {story.get('title_zh')}")
     for story in top:
         if str(story.get("confidence") or "").lower() == "low":
             caveat = str(story.get("what_zh") or "")
@@ -299,6 +306,7 @@ def main() -> int:
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},
             {"name": "formal_url_http_and_redirect", "status": "PASS"},
             {"name": "wechat_copy_matches_top5", "status": "PASS"},
+            {"name": "social_copy_uses_editorial_headline_and_concise_fields", "status": "PASS"},
             {"name": "source_report_timestamp_and_hash_match", "status": "PASS"},
             {"name": "story_title_and_order_match_formal_report", "status": "PASS"},
             {"name": "low_confidence_caveats_and_skill_compatibility_in_copy", "status": "PASS"},
