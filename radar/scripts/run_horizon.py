@@ -386,7 +386,7 @@ def apply_claim_provenance(report):
         summary_zh = str(story.get("summary_zh") or "")
         what_en = str(story.get("what_en") or "")
         claim_text = " ".join(str(story.get(key) or "") for key in ("title_zh", "title_en", "original_title", "what_zh", "what_en"))
-        benchmark_pattern = r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\\d|提升\\d|\\d+多倍)"
+        benchmark_pattern = r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\d|提升\d|\d+多倍)"
         attribution_pattern = r"(自测|其自身|项目方|媒体披露|来源披露|公司称|官方称|报告称|据.{0,30}报道|称|披露|reported|according to|in its own|self[- ]reported|company says|project says|measured by)"
         has_benchmark = bool(re.search(benchmark_pattern, claim_text, re.I))
         has_attribution = bool(re.search(attribution_pattern, what_zh + " " + what_en, re.I))
