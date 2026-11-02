@@ -8,7 +8,7 @@ import math
 import re
 import urllib.parse
 
-ENGINE_VERSION = "2026.10.26.3"
+ENGINE_VERSION = "2026.11.02.1"
 from pathlib import Path
 
 STOP={"the","and","for","with","from","this","that","into","your","using","use","skill","skills","agent","agents","ai","open","source","tool","tools","project","github","claude","codex","mcp"}
