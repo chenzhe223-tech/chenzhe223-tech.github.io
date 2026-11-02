@@ -1,0 +1,11 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "keypocket-vault-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-02",
+  "workers_dev": true,
+  "vars": {
+    "APP_ORIGIN": "https://chenzhe223-tech.github.io",
+    "GITHUB_APP_SLUG": "REPLACE_WITH_GITHUB_APP_SLUG"
+  }
+}
