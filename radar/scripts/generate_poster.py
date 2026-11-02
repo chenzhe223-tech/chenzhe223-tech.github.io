@@ -120,11 +120,14 @@ def news_image_evidence(stories):
         status = str(story.get("image_match_status") or "")
         label_required = (
             story.get("poster_image_material_type") == "thematic_fallback"
-            or status == "thematic_fallback"
+            or status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
+            or "topic image" in source.lower()
             or "topic illustration" in source.lower()
         )
         label_applied = bool(story.get("poster_image_label_applied")) or (
-            status == "thematic_fallback" or "topic illustration" in source.lower()
+            status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
+            or "topic image" in source.lower()
+            or "topic illustration" in source.lower()
         )
         evidence.append({
             "story_url": str(story.get("source_url") or story.get("url") or ""),
@@ -140,7 +143,7 @@ def mark_topic_illustration(image, story):
     """Label generic thematic fallback images so they cannot be mistaken for event photography."""
     image_source = str(story.get("image_source") or "")
     status = str(story.get("image_match_status") or "")
-    if status != "thematic_fallback" and image_source.lower() != "unsplash topic illustration":
+    if status not in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} and "topic image" not in image_source.lower() and "topic illustration" not in image_source.lower():
         return image
     canvas = image.convert("RGBA")
     band_h = min(38, canvas.height)
@@ -166,10 +169,11 @@ def image_for_story(story, idx):
     title = " ".join(str(story.get(k) or "") for k in ("title_zh", "title_en", "original_title", "title")).lower()
     photo_ids = []
     patterns = [
-        (r"robot|agent|智能体|机器人|具身智能|automation|自动驾驶", "photo-1485827404703-89b55fcc595e"),
+        (r"robot|robotics|机器人|具身智能|人形机器人|机器狗|自动驾驶", "photo-1485827404703-89b55fcc595e"),
+        (r"apple intelligence|iphone|siri|smartphone|mobile|手机|写作工具|视觉智能", "photo-1512941937669-90a1b58e7e9c"),
+        (r"servicenow|enterprise workflow|business workflow|企业工作流|企业软件|工单|业务流程|business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司", "photo-1519389950473-47ba0277781c"),
+        (r"coding agent|software agent|code agent|github|飞书|代码智能体|编码智能体|工作器|路由|开发者工具|智能体|agent|phone|mobile|app|software|product|platform|应用|手机|软件|产品", "photo-1512941937669-90a1b58e7e9c"),
         (r"chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|模型|推理", "photo-1518770660439-4636190af475"),
-        (r"phone|mobile|app|software|product|platform|应用|手机|软件|产品", "photo-1512941937669-90a1b58e7e9c"),
-        (r"business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司", "photo-1519389950473-47ba0277781c"),
         (r"image|video|design|creative|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频", "photo-1470252649378-9c29740c9fa8"),
     ]
     for pattern, photo_id in patterns:
@@ -528,7 +532,10 @@ def main():
         yy = paragraph(draw, title, (x + 16, card_y + 151), font(21, True), ink, card_w - 32, 4, 4)
         summary = story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
         yy = paragraph(draw, summary, (x + 16, yy + 8), font(16), muted, card_w - 32, 4, 5)
-        source = str(story.get("source") or "公开来源")[:25]
+        source = str(story.get("source") or "公开来源")
+        if str(story.get("confidence") or "").lower() == "low":
+            source += " · 低置信度"
+        source = source[:25]
         draw.line((x + 16, card_y + card_h - 48, x + card_w - 16, card_y + card_h - 48), fill=(228, 229, 224), width=1)
         draw.text((x + 16, card_y + card_h - 36), source, font=font(13, True), fill=blue)
         draw.text((x + card_w - 16, card_y + card_h - 36), "阅读原文 ↗", font=font(13), fill=orange, anchor="ra")
