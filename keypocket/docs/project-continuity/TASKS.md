@@ -1,25 +1,37 @@
-# KeyPocket — 连续性试运行任务清单
+# KeyPocket V2.0 — 实施任务与验收清单
 
-## 优先级定义
-- P0：影响安全、数据正确性、关键用户流程或发布判断
-- P1：核心产品与连续性能力
-- P2：可延期优化
+状态更新时间：2026-11-02
 
-| ID | 优先级 | 任务 | 状态 | 完成定义 | 下一步 |
-|---|---|---|---|---|---|
-| KP-CONT-001 | P1 | 安装项目连续性档案 | TESTED | 9 份文件已写入并从 GitHub 回读成功 | 完成 |
-| KP-CONT-002 | P0 | 修正文档与同步实现不一致 | IMPLEMENTED | README、安全验收和交付报告已修正；需回读及验证 | 回读文档，继续核查 Supabase RLS |
-| KP-CONT-003 | P1 | 核对最新代码与生产部署 | IN_PROGRESS | 记录 HEAD SHA、CI 结果、Pages 部署及线上版本 | 查询 Actions 和部署记录 |
-| KP-CONT-004 | P1 | 运行项目现有 QA | PLANNED | 记录实际执行的语法、静态、E2E 检查及结果 | 检查 workflow 和测试脚本 |
-| KP-CONT-005 | P1 | 新对话恢复演练 | PLANNED | 新聊天只依赖档案与仓库，能正确指出下一任务且不重复已完成工作 | 按 RESUME_PROMPT 执行 |
-| KP-CONT-006 | P2 | 为档案加入轻量 CI 完整性检查 | PLANNED | 检查必需文件、更新时间和明显占位符；不误报未执行测试 | 待试运行通过后再实施 |
+## P0 — 安全与数据正确性
+| ID | 工作项 | 当前状态 | 证据/未完成 |
+|---|---|---|---|
+| KP2-001 | 保留 V1 IndexedDB/加密兼容 | CODE_COMPLETE / BUILD_PASSED | Node 契约测试通过；真实旧用户数据迁移待测 |
+| KP2-002 | V2 Supabase schema/RLS/RPC | RUNTIME_VERIFIED | 已部署并核查个人 RLS、Skill 只读策略和 sequence grant；真实账号读写隔离待测 |
+| KP2-003 | 逐记录增量同步/冲突/墓碑 | CODE_COMPLETE / BUILD_PASSED | 静态契约测试通过；双设备并发/离线 E2E 待测 |
+| KP2-004 | 回收站/恢复/永久删除传播 | CODE_COMPLETE / BUILD_PASSED | 静态契约测试通过；真实设备恢复和冲突待测 |
+| KP2-005 | 本地自动检查点/云端快照 | CODE_COMPLETE / BUILD_PASSED | 代码与静态检查完成；本机浏览器运行/云端真实恢复待测 |
 
-## 本轮完成定义
-- [x] 连续性文件已添加到项目独立目录。
-- [x] 已回读所有新增文件并确认写入成功。
-- [x] 已核实连续性档案提交 SHA。
-- [x] 已更新 README、安全验收与交付报告中的明显过期同步描述（需回读确认）。
-- [ ] 已核对最新生产部署。
-- [ ] 已核实 Supabase RLS 与生产访问策略。
-- [ ] 已重新运行当前版本 QA。
-- [ ] 已完成新对话恢复演练。
+## P1 — 资产发现与备份
+| ID | 工作项 | 当前状态 | 证据/未完成 |
+|---|---|---|---|
+| KP2-006 | Skill Radar schema/页面/采集器 | CODE_COMPLETE / BUILD_PASSED | Supabase 表已部署；Actions Secrets 缺失，首次采集待运行 |
+| KP2-007 | GitHub App Worker | DEPLOYED / CONFIG_PENDING | Cloudflare Worker 部署 ID 229ccd2b797f405a97934b7f5f3fb5ff；App ID/Slug/PEM/Session Secret 未设置 |
+| KP2-008 | 私有 keypocket-cloud-vault 仓库 | BLOCKED | 需用户创建仓库并仅安装该 App |
+| KP2-009 | GitHub Pages V2 正式发布 | PENDING | V2 分支未创建/合并 PR，尚未进入 main |
+
+## P2 — 全面验收
+| ID | 工作项 | 当前状态 |
+|---|---|---|
+| KP2-010 | 虚构数据双设备 E2E（3 Keys/7 Projects/5 Skills） | PENDING |
+| KP2-011 | 网络中断、重复同步、并发、删除恢复冲突 | PENDING |
+| KP2-012 | 云端备份恢复/密文网络抓包 | PENDING |
+| KP2-013 | iPhone Safari / 微信浏览器验收 | PENDING |
+| KP2-014 | Worker 公网健康检查与 GitHub App 权限核验 | PENDING |
+| KP2-015 | 独立安全审计 | PENDING |
+
+## 五级交付状态
+- Code Completed：V2 核心代码和技术文档已形成在 feature/keypocket-v2。
+- Build Passed：当前 CI run 41379299165 成功（Node 语法 + 6 静态契约测试）；无独立 bundler 构建。
+- Runtime Verified：Supabase schema/RLS 和 Worker 部署元数据已确认；前端浏览器运行未验证。
+- Functional Tested：尚未完成真实账号、双设备和移动端功能测试。
+- Production Deployed：Supabase V2 表和 Cloudflare Worker 已部署；KeyPocket GitHub Pages V2 未部署。
