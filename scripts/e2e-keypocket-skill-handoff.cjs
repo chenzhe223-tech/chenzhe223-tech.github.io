@@ -6,7 +6,11 @@ const { chromium } = require('playwright');
 (async () => {
   const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
   try {
-    const context = await browser.newContext({ viewport: { width: 1365, height: 900 } });
+    const context = await browser.newContext({
+      viewport: { width: 1365, height: 900 },
+      // Isolate IndexedDB/localStorage so repeated CI runs always exercise first-time vault creation.
+      storageState: { cookies: [], origins: [] }
+    });
     const radar = await context.newPage();
 
     await radar.goto('https://chenzhe223-tech.github.io/radar/daily/?e2e-keypocket=' + Date.now(), {
