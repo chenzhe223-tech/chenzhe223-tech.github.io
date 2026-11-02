@@ -465,7 +465,14 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
     opening = (
         "过去我们习惯用参数、榜单和发布会衡量 AI。现在更值得问的是：它能不能接入工具、完成任务，还能把权限和成本管住？"
     )
-    intro = f"{report_date} 这期简报，挑出五条值得关注的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
+    china_count = sum(1 for story in top if str(story.get("source_section") or "") == "china_ai_news")
+    global_count = sum(1 for story in top if str(story.get("source_section") or "") == "global_news")
+    if china_count and global_count:
+        intro = f"{report_date} 这期简报，挑出五条值得关注的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
+    elif china_count:
+        intro = f"{report_date} 这期简报，聚焦五条经过核验的中国 AI 与产业动态，看看 AI 正怎样走进真实场景 👇"
+    else:
+        intro = f"{report_date} 这期简报，聚焦五条经过来源核验的 AI 动态；中国 AI 暂无足够可靠的新闻进入本期 Top 5，我们不为了凑数硬塞 👇"
     emojis = {"agent": "🤖", "retail": "🏪", "usage": "🧮", "routing": "💼", "forest": "🌳"}
     parts = [headline, "", opening, "", intro, ""]
     for i, story in enumerate(top[:5]):
