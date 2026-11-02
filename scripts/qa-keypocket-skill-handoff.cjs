@@ -31,7 +31,7 @@ assert.match(radarHtml, /hostname\.toLowerCase\(\)!=="github\.com"/, 'Radar hand
 
 assert.match(app, /function canonicalSkillRepoUrl/, 'KeyPocket must validate incoming repository URLs');
 assert.match(app, /function readPendingRadarSkills/, 'KeyPocket must validate the pending queue');
-assert.match(app, /await putItem\(await sealProject\(project\)\)/, 'Skill project metadata must use the existing encrypted project store');
+assert.match(app, /await (?:putItem\(await sealProject\(project\)\)|persistProject\(project\))/, 'Skill project metadata must use the existing encrypted project store and persistence queue');
 assert.match(app, /projects\.find\(p=>canonicalSkillRepoUrl\(p\.repoUrl\)\.toLowerCase\(\)===repoUrl\.toLowerCase\(\)\)/, 'imports must deduplicate by canonical repository URL');
 assert.match(app, /window\.addEventListener\('storage'/, 'an already-open KeyPocket tab must notice new handoffs');
 assert.match(app, /if\(!cryptoKey\).*请先解锁 KeyPocket/s, 'incoming Skills must wait for vault unlock before import UI');
