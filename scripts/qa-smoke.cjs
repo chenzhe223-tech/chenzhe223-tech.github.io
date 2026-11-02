@@ -660,6 +660,7 @@ const mark = (status, name, detail = '') => {
           await kp.waitForFunction(name => !document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
           await kp.locator('[data-module="recycle"]').click();
           await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
+          await kp.waitForFunction(() => document.querySelectorAll('#recycleCards [data-kind="project"][data-trash-restore]').length === 1, null, { timeout: 5000 });
           const restoreProjectButton = kp.locator('#recycleCards [data-kind="project"][data-trash-restore]').first();
           mark(await restoreProjectButton.count() === 1 ? 'PASS' : 'FAIL', 'KeyPocket 项目软删除进入回收站', '项目 tombstone 恢复入口存在');
           await restoreProjectButton.click();
