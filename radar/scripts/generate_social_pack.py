@@ -454,31 +454,26 @@ def draw_main_poster(report: dict, top: list[dict], skill: dict, report_date: st
 
 def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> tuple[str, str]:
     editorial = report.get("editorial") or {}
-    agent_like = any(classify_topic(s, i) == "agent" for i, s in enumerate(top))
-    cost_like = any(classify_topic(s, i) == "routing" for i, s in enumerate(top))
-    if agent_like:
-        headline = "AI 不只会回答，开始接手一整段工作"
-    elif cost_like:
-        headline = "AI 不只要更强，也得把成本算清楚"
-    else:
-        headline = str(editorial.get("headline_zh") or "AI 正从会回答，走向能落地")
-    opening = (
-        "过去我们习惯用参数、榜单和发布会衡量 AI。现在更值得问的是：它能不能接入工具、完成任务，还能把权限和成本管住？"
-    )
+    headline = str(editorial.get("headline_zh") or "AI 不只要更强，还得真能干活")
+    opening = str(editorial.get("opening_zh") or "过去我们习惯用参数、榜单和发布会衡量 AI。现在问题变了：它能不能在真实流程里执行任务、验证结果、处理复杂环境？")
+    try:
+        date_label = dt.date.fromisoformat(report_date).strftime("%-m月%-d日")
+    except ValueError:
+        date_label = report_date
     china_count = sum(1 for story in top if str(story.get("source_section") or "") == "china_ai_news")
     global_count = sum(1 for story in top if str(story.get("source_section") or "") == "global_news")
     if china_count and global_count:
-        intro = f"{report_date} 这期简报，挑出五条值得关注的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
+        intro = f"{date_label} 这期简报，挑出五条值得关注的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
     elif china_count:
-        intro = f"{report_date} 这期简报，聚焦五条经过核验的中国 AI 与产业动态，看看 AI 正怎样走进真实场景 👇"
+        intro = f"{date_label} 这期简报，聚焦五条经过核验的中国 AI 与产业动态，看看 AI 正怎样走进真实场景 👇"
     else:
-        intro = f"{report_date} 这期简报，聚焦五条经过来源核验的 AI 动态；中国 AI 暂无足够可靠的新闻进入本期 Top 5，我们不为了凑数硬塞 👇"
+        intro = f"{date_label} 这期简报，聚焦五条经过来源核验的 AI 动态；中国 AI 暂无足够可靠的新闻进入本期 Top 5，我们不为了凑数硬塞 👇"
     emojis = {"agent": "🤖", "retail": "🏪", "usage": "🧮", "routing": "💼", "forest": "🌳"}
     parts = [headline, "", opening, "", intro, ""]
     for i, story in enumerate(top[:5]):
         kind = classify_topic(story, i)
-        summary = story_summary(story).strip()
-        why = story_why(story).strip()
+        summary = str(story.get("social_what_zh") or story_summary(story)).strip()
+        why = str(story.get("social_why_zh") or story_why(story)).strip()
         line = f"{emojis.get(kind, '🔎')} {story_title(story)}"
         parts.append(line)
         body = summary
@@ -489,11 +484,11 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
         parts.append("")
     parts.extend([
         "🧰 今日实用 Skill",
-        f"{skill.get('name') or '开源 Skill'}：{skill.get('description_zh') or skill.get('description') or '详见项目仓库。'}",
+        f"{skill.get('name_zh') or skill.get('name') or '开源 Skill'}：{skill.get('social_description_zh') or skill.get('description_zh') or skill.get('description') or '详见项目仓库。'}",
         f"许可证：{skill.get('license_name') or skill.get('license') or '待核验'}；项目仓库：{skill.get('url') or '见正式简报'}。",
         f"官方项目主页：{skill.get('official_website') or skill.get('url') or '见正式简报'}（{'独立官网' if skill.get('official_website_type') == 'declared_project_homepage' else '未声明独立官网，使用官方 GitHub 项目页'}）。",
-        f"适用范围：{skill.get('compatibility_status') or '宿主兼容性未实测'}。",
-        "已核验官方项目主页、仓库 README、实际 SKILL.md 文件及许可证；未实测安装，未完成专项安全审计，使用请自行评估。",
+        f"适用范围：{str(skill.get('compatibility_status') or '宿主兼容性未实测').rstrip('。.! ')}。",
+        f"安全说明：{str(skill.get('security_status') or '未完成独立安全审计').rstrip('。.! ')}。",
         "",
         "💡 DAVYLAB 观察",
         str(editorial.get("trend_zh") or editorial.get("core_zh") or "AI 正在从单点能力走向可执行、可管理的工作流程。"),
