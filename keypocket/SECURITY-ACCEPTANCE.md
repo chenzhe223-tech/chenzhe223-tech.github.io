@@ -1,51 +1,32 @@
 # KeyPocket 安全边界与验收状态
 
-> 本文件区分代码中可见的实现、已有历史检查记录和仍需重新验证的项目。代码检查不等于独立安全审计。
+最后更新：2026-11-02
 
-## 1. 从当前代码中可见的实现
-- [x] API Key 记录在客户端使用 AES-GCM 加密后保存至 IndexedDB。
-- [x] 本地密码通过 PBKDF2-HMAC-SHA-256 派生 AES-GCM 密钥；当前代码默认迭代次数为 310,000。
-- [x] 派生密钥不可导出，并在解锁期间保存在内存中。
-- [x] UI 默认遮蔽密钥，显示/复制需要明确操作。
-- [x] 备份使用独立密码加密；导入流程包含文件大小、迭代次数、字段和记录数量等校验。
-- [x] 简报到 KeyPocket 的待收录队列只接受经过验证的公开 GitHub 仓库资料；保存前需要解锁和用户确认。
-- [x] 项目记录通过现有 AES-GCM 路径加密后保存到 IndexedDB。
-- [x] 当前页面有可选同步账号 UI。客户端使用 Supabase Auth / REST API；同步前会将 records 与 projects 快照用 AES-GCM 加密，再发送 envelope。
-- [x] 当前 index.html CSP 的 connect-src 允许 GitHub API 和 Supabase 域名；这与旧版 connect-src 'none' 描述不同。
+## 当前源码可确认
+- 原 IndexedDB `keypocket-local-v1` / store `vault` / DB version 1 未改。
+- 原 API Key/project AES-GCM envelope 与 PBKDF2-HMAC-SHA-256 派生流程保留；默认 310,000 次。
+- 本地快照 payload 使用当前客户端 AES-GCM 函数加密后才写入 IndexedDB。
+- 常规 API Key/项目/Skill 保存入口接入快照防抖队列。
+- API Key/项目软删除使用原记录 ID 保存加密删除内容，并写 encrypted tombstone。
+- 回收站 UI 提供恢复和永久删除入口。
+- Replace import 前会尝试创建保护快照。
+- UI 明确说明旧 Supabase 仍为手动整库合并；V2 自动增量同步未启用。
+- 未配置 GitHub App 时明确展示未绑定。
 
-## 2. 同步模型的已知边界
+## 不能据此声称已完成
+- 本地快照与密钥库同处一份浏览器数据；清除站点数据/设备丢失可能同时失去二者。
+- 每日快照依赖用户当天打开并解锁页面，不是后台常驻任务。
+- 尚无备份/回收站恢复 E2E。
+- Supabase schema/RLS/生产 Auth/双设备冲突测试未完成。
+- 尚无远程云端加密备份和增量多端同步。
+- 尚无 KeyPocket GitHub App、Worker OAuth 回调和私有 vault 仓库。
+- 尚无 Skill Radar 历史采集与榜单 workflow。
 
-从当前客户端代码可见：
-- Supabase 请求会包含认证信息；客户端配置包含 publishable 项目键，该类客户端键本身不是服务端秘密，但必须依赖正确的服务端访问策略。
-- 同步 payload 包含加密的快照 envelope；云端记录另有 user ID、schema version、revision 和更新时间等元数据。
-- 客户端使用本地解锁密码派生用于同步快照的加密密钥，因此跨设备同步需要用户在各设备使用兼容的本地解锁密码。
-- 代码可见的客户端加密并不能单独证明服务端表策略配置正确。
+## Actions 证据
+- Run 41382408180（commit e27d535）：node syntax PASS、source contract PASS、live asset PASS；Playwright handoff E2E FAIL，原因是测试重用旧 IndexedDB context，导致首次创建的确认密码栏隐藏。
+- E2E 已在 e30311f 增加空 storageState；该修复的后续运行仍需检查。
+- e27d535 后有后续代码变更；必须对最新 HEAD 重跑语法/E2E。
+- iOS Safari 与微信浏览器未测试。
 
-以下项目仍未核实：
-- [ ] Supabase keypocket_vault_sync 表的 RLS 是否启用，以及 SELECT/INSERT/UPDATE 策略是否严格限制到当前认证用户。
-- [ ] 生产项目配置、认证会话生命周期、账号删除/恢复策略和服务端日志保留情况。
-- [ ] 真实浏览器网络面板中请求与预期一致，未发送明文 records/projects。
-- [ ] 云端 envelope 在生产环境中的实际存储形态与权限隔离。
-- [ ] 同步冲突、并发更新、请求失败、重复点击和恢复场景的 E2E 测试。
-- [ ] 独立安全审计。
-
-## 3. 已有历史检查记录（需在本轮重新执行前视为历史证据）
-
-历史交付资料记录过 JavaScript 语法、AES-GCM 往返、错误密码拒绝、备份往返和简报收录流程检查。由于这些记录不等于对当前提交重新运行测试，本文件不把它们计作本次验证结果。
-
-## 4. 本次连续性试运行检查
-- [x] 读取当前 README、index.html、app.js 片段和既有交付/安全文档。
-- [x] 发现并记录旧文档与当前页面/代码之间的同步及 CSP 描述冲突。
-- [ ] 对当前 HEAD 重新运行 JavaScript 语法检查。
-- [ ] 运行现有静态检查与 Skill handoff 测试。
-- [ ] 运行完整浏览器 E2E。
-- [ ] 核对 Supabase RLS / 访问策略。
-- [ ] 核对 GitHub Pages 当前部署并执行生产冒烟测试。
-- [ ] 在真实 iOS / Android 浏览器完成移动端验收。
-
-## 5. 安全验收原则
-- 不要将“页面能打开”视为完整功能验收。
-- 不要将“payload 在客户端加密”视为服务端权限策略已验证。
-- 不要把“CI 曾通过”当作当前提交已通过。
-- 不要把客户端 publishable key 当作用户 API Key 或服务端秘密；也不要将任何真正的秘密写入仓库。
-- 任何安全结论都应附带对应代码、测试、配置或运行证据。
+## 安全红线
+不上传解锁密码、派生密钥或 API Key 明文。所有云端表必须 RLS 并完成跨用户拒绝测试。GitHub App 只访问用户授权的专用 vault。
