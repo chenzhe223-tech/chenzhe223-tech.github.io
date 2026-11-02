@@ -50,19 +50,23 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          page_url='https://chenzhe223-tech.github.io/keypocket/?handoff-check=kp-v2-radar-diagnostics-20261102-4'
           app_url='https://chenzhe223-tech.github.io/keypocket/app.js?v=kp-v2-radar-diagnostics-20261102-4'
           radar_url='https://chenzhe223-tech.github.io/radar/daily/'
-          for attempt in $(seq 1 24); do
+          for attempt in $(seq 1 36); do
+            page="$(curl --fail --silent --show-error --max-time 20 "$page_url&attempt=$attempt" 2>/dev/null || true)"
             app="$(curl --fail --silent --show-error --max-time 20 "$app_url" 2>/dev/null || true)"
             radar="$(curl --fail --silent --show-error --max-time 20 "$radar_url?handoff-check=$attempt" 2>/dev/null || true)"
-            if [[ -n "$app" ]] && grep -q 'kp.radar.pending-skills.v1' <<<"$app" && grep -q 'data-kp-skill-save' <<<"$radar"; then
-              echo "PASS: live KeyPocket bundle and Radar handoff markup are published."
+            if [[ -n "$page" ]] && grep -q 'app.js?v=kp-v2-radar-diagnostics-20261102-4' <<<"$page" \
+              && [[ -n "$app" ]] && grep -q 'window.__kpRadarQueueDiagnostic' <<<"$app" \
+              && grep -q 'data-kp-skill-save' <<<"$radar"; then
+              echo "PASS: live KeyPocket HTML references the expected V2 bundle; bundle and Radar handoff markup are published."
               exit 0
             fi
-            echo "Waiting for GitHub Pages assets (attempt $attempt/24)..."
+            echo "Waiting for matching KeyPocket HTML, JS bundle and Radar handoff (attempt $attempt/36)..."
             sleep 10
           done
-          echo "::error::Live KeyPocket/Radar handoff assets did not appear after retry window."
+          echo "::error::Matching KeyPocket HTML/JS and Radar handoff assets did not appear after retry window."
           exit 1
 
       - name: Install Playwright
