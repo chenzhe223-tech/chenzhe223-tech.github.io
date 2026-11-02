@@ -737,7 +737,7 @@ jobs:
                   assert social_verification.get('source_report_generated_at') == data.get('generated_at'), 'live social verification report timestamp mismatch'
                   assert social_verification.get('source_report_sha256') == report_sha, 'live social verification report hash mismatch'
                   assert [x.get('filename') for x in social_verification.get('images', [])] == [x.get('filename') for x in social_manifest.get('images', [])], 'live social verification image list differs from manifest'
-                  required_social_checks = {'five_topic_images_one_to_one_with_formal_top5', 'skill_metadata_and_copy_consistency', 'editorial_analysis_labeled_and_sourced', 'qr_decodes_to_exact_formal_entry', 'all_six_images_are_independent_pngs'}
+                  required_social_checks = {'five_topic_images_one_to_one_with_formal_top5', 'skill_metadata_and_copy_consistency', 'editorial_analysis_labeled_and_sourced', 'final_png_qr_exact_decode', 'six_independent_png_files', 'formal_url_http_and_redirect', 'source_report_timestamp_and_hash_match', 'image_file_size_hash_and_individual_status'}
                   actual_social_checks = {x.get('name') for x in social_verification.get('checks', []) if x.get('status') == 'PASS'}
                   assert required_social_checks.issubset(actual_social_checks), f'live social verification is missing required checks: {sorted(required_social_checks - actual_social_checks)}'
                   live_images = []
