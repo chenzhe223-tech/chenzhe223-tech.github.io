@@ -444,6 +444,48 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#modalRoot [data-action="delete"]').click();
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
       mark('PASS', 'KeyPocket 单条删除与统计更新', '删除测试记录后仍保留另外两条密钥');
+
+      // Delete a second synthetic API Key and verify both tombstones can be batch-restored.
+      const secondDeleteCard = kp.locator('#cards .card').filter({ hasText: 'QA Synthetic OpenAI Key' });
+      await secondDeleteCard.locator('[data-action="menu"]').click();
+      await kp.waitForSelector('#modalRoot [data-action="delete"]', { timeout: 5000 });
+      kp.once('dialog', dialog => dialog.accept());
+      await kp.locator('#modalRoot [data-action="delete"]').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '1', null, { timeout: 5000 });
+      await kp.locator('[data-module="recycle"]').click();
+      await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
+      await kp.waitForFunction(() => document.querySelectorAll('#recycleCards [data-trash-restore]').length >= 2, null, { timeout: 5000 });
+      const tombstoneIds = await kp.evaluate(async () => {
+        const db = await new Promise((resolve, reject) => {
+          const req = indexedDB.open('keypocket-local-v1');
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        const rows = await new Promise((resolve, reject) => {
+          const req = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        db.close();
+        return rows.filter(row => String(row.id || '').startsWith('kp.tombstone.record:')).map(row => row.id);
+      });
+      mark(tombstoneIds.length >= 2 ? 'PASS' : 'FAIL', 'KeyPocket API Key 删除 tombstone', '仅检查合成数据的 tombstone 数量=' + tombstoneIds.length);
+      await kp.locator('#restoreAllBtn').click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '3', null, { timeout: 10000 });
+      const restoredKeyText = await kp.locator('#cards').innerText();
+      mark(restoredKeyText.includes('QA Synthetic DeepSeek Key') && restoredKeyText.includes('QA Synthetic OpenAI Key') && restoredKeyText.includes('QA Synthetic Custom Key Edited') ? 'PASS' : 'FAIL', 'KeyPocket 回收站批量恢复', '恢复后保留三条合成 API Key');
+
+      // Verify encrypted local snapshot creation and restoration through the real UI.
+      await kp.locator('[data-module="backup"]').click();
+      await kp.waitForSelector('#backupView:not(.hidden)', { timeout: 5000 });
+      await kp.locator('#backupNowBtn').click();
+      await kp.waitForFunction(() => document.querySelectorAll('#backupCards [data-snapshot-restore]').length > 0, null, { timeout: 10000 });
+      const snapshotsBeforeRestore = await kp.locator('#backupCards [data-snapshot-restore]').count();
+      kp.once('dialog', dialog => dialog.accept());
+      await kp.locator('#backupCards [data-snapshot-restore]').first().click();
+      await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '3', null, { timeout: 10000 });
+      mark(snapshotsBeforeRestore > 0 ? 'PASS' : 'FAIL', 'KeyPocket 本地加密快照创建与恢复', '恢复后仍有三条合成 API Key');
+
       // On mobile, ensure the permanent add button remains visible and has no horizontal overflow.
       const mobileKp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
       const mobileErrors = [];
@@ -478,6 +520,22 @@ const mark = (status, name, detail = '') => {
           await kp.locator('#githubImportSelectedBtn').click();
           await kp.waitForFunction(name => document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
           mark('PASS', 'KeyPocket 仓库导入与项目卡片渲染', '测试仓库已导入：' + selectedRepoName);
+
+          // Verify project soft-delete and restoration retain the original project ID.
+          const importedProjectCard = kp.locator('#projectCards [data-project-id]').filter({ hasText: selectedRepoName }).first();
+          const originalProjectId = await importedProjectCard.getAttribute('data-project-id');
+          await importedProjectCard.locator('[data-project-action="delete"]').click();
+          kp.once('dialog', dialog => dialog.accept());
+          await kp.waitForFunction(name => !document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
+          await kp.locator('[data-module="recycle"]').click();
+          await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
+          const restoreProjectButton = kp.locator('#recycleCards [data-kind="project"][data-trash-restore]').first();
+          mark(await restoreProjectButton.count() === 1 ? 'PASS' : 'FAIL', 'KeyPocket 项目软删除进入回收站', '项目 tombstone 恢复入口存在');
+          await restoreProjectButton.click();
+          await kp.locator('[data-module="projects"]').click();
+          await kp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 });
+          const restoredProjectId = await kp.locator('#projectCards [data-project-id]').filter({ hasText: selectedRepoName }).first().getAttribute('data-project-id');
+          mark(restoredProjectId === originalProjectId ? 'PASS' : 'FAIL', 'KeyPocket 项目恢复保留原 ID', '原 ID 与恢复 ID 一致=' + String(restoredProjectId === originalProjectId));
         }
       }
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
