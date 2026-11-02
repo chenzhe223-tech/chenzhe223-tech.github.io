@@ -6,7 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { chromium } = require('playwright');
 const appSource = fs.readFileSync(path.join(__dirname, '..', 'keypocket', 'app.js'), 'utf8');
-const expectedBuild = appSource.match(/window\\.__kpBuildVersion='([^']+)'/)?.[1];
+const expectedBuild = appSource.match(/window\.__kpBuildVersion='([^']+)'/)?.[1];
 if (!expectedBuild) throw new Error('KeyPocket build marker missing from source');
 
 (async () => {
