@@ -1,19 +1,12 @@
-# KeyPocket — 变更记录
+# KeyPocket CHANGELOG
 
-## 2026-11-02 · V2.0 partial implementation
-- 增加 V2 七个模块入口：我的密钥、我的 Skills/项目、Skill Radar、回收站、自动备份、同步中心、GitHub账户。
-- 增加本地 AES-GCM 快照、防抖、首次解锁保护快照、每日打开后检查。
-- 增加 API Key/项目软删除、encrypted tombstone、回收站恢复/永久删除入口。
-- 项目新增/编辑/收藏/删除、Skill收录与热度更新接入加密持久化队列。
-- Replace导入前尝试创建保护快照。
-- 增加备份恢复、同步架构、Skill Radar、GitHub App技术说明。
-- 更新 README、SECURITY-ACCEPTANCE 和 continuity docs。
-- 更新 QA：push静态检查；成功Pages部署后/手动触发线上Playwright。
-
-### 验证
-- HEAD `022232f`：KeyPocket QA run `41385211674` syntax/source contract PASS。
-- HEAD `022232f`：Pages run `41385211770` build/deploy SUCCESS。
-- 最新HEAD的Playwright尚无成功运行证据；旧失败主要是 push/Pages 部署竞态。
-
-### 尚未交付
-V2增量同步/RLS、异地云备份、Skill Radar采集/历史数据、GitHub App/Worker、12个月归档、回收站/快照完整E2E、移动端验收。
+## 2026-11-02 — V2.0 继续交付与生产同步安全收敛
+- 确认本地 IndexedDB 加密格式保持兼容；保留本地快照、30 天回收站与 Skill 收录路径。
+- V2 增量同步已实现逐条加密、CAS 版本比较、设备注册、独立同步口令验证及云端每日/月度密文快照。
+- Skill Radar 每日 collector 与历史 snapshot workflow 已实现；目前只有单日数据，月/季/年趋势继续显示历史积累中。
+- KeyPocket 专项 Skill handoff QA run 41408780134 成功；Pages run 41408779662 成功。
+- 修复 Supabase KeyPocket 专属表权限：收回不必要 TRUNCATE/REFERENCES/TRIGGER、旧 RPC EXECUTE，sync_items 客户端只读，唯一写入由受限 RPC 承担。
+- 唯一写入 RPC 显式要求 auth.uid、校验设备归属及 revoked_at，并以当前用户范围执行 SQL；函数使用 SECURITY DEFINER 和空 search_path；authenticated 可调用，anon 不可调用。
+- 删除 sync_items 旧 INSERT/UPDATE RLS policies，防止将来误授表写权限时打开旁路。
+- 为整站 QA 重载解锁失败增加 unlock 状态与 IndexedDB 快照诊断；具体根因待运行日志回传。
+- 同步文档与唯一项目状态，标记真实账号双设备与 iOS/微信尚未验收。
