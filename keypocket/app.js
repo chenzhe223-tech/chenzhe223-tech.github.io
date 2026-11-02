@@ -309,7 +309,7 @@ function skillImportModal(){
     b.disabled=true;const original=b.textContent;b.textContent='正在保存…';
     try{
      const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now();
-     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\\n应用建议：'+skillUseCase(r)+'\\n关键词：'+q+'\\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\\n热度：'+h.level+'；'+h.freshness+'。\\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
+     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\n关键词：'+q+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
      await persistProject(p);projects.push(p);window.renderProjects();closeModal();showToast('Skill 已加密保存：'+r.full_name);
     }catch(err){b.disabled=false;b.textContent=original;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}
    }));
