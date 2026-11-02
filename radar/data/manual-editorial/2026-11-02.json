@@ -104,7 +104,7 @@
       "what_en": "On Oct. 28, OpenAI and ServiceNow announced an expanded partnership. The ServiceNow app is available in ChatGPT's app directory, allowing users to invoke ServiceNow workflows within enterprise permissions and process controls. The companies also outlined planned Codex integration with ServiceNow AI Workflow Factory and future security, risk and voice capabilities; some items are scheduled for phased rollout through late 2026 and 2027, not all generally available today.",
       "why_en": "Enterprise AI is moving from answering questions to taking actions within permission, approval and audit boundaries. The practical value lies in connecting models to existing ticketing, knowledge, IT operations and security workflows rather than adding another chat surface.",
       "editor_judgment_zh": "已开放的 ChatGPT 应用与后续路线图分开表述；2026 年底至 2027 年的能力均按官方计划描述。",
-      "poster_summary_zh": "ServiceNow 已进 ChatGPT；Codex、安全和语音能力按官方路线图推进。",
+      "poster_summary_zh": "ServiceNow 已接入 ChatGPT；其他能力按路线图推进。",
       "poster_why_zh": "企业 AI 正走进权限和审批流程。",
       "social_what_zh": "OpenAI 与 ServiceNow 扩大合作，ServiceNow 应用已进入 ChatGPT 应用目录；Codex、安全和语音能力按官方路线图分阶段推进。部分能力要到 2026 年底至 2027 年，不能当成现在全部可用。",
       "social_why_zh": "企业 AI 正从回答问题，走向在权限、审批和审计边界内完成实际流程。"
@@ -129,7 +129,7 @@
       "what_en": "On Oct. 31, Simon Willison published datasette-llm 0.1a9. Datasette Agent now inherits the default model configured for the LLM CLI, so developers no longer need to repeat the `default_model` setting. This is a configuration improvement for developers using Datasette.",
       "why_en": "It does not introduce a new model or a performance breakthrough, but removes duplicate configuration for Datasette-based data applications and agents. The repository is licensed under Apache-2.0.",
       "editor_judgment_zh": "属于小版本配置优化，不应夸大为模型能力升级。",
-      "poster_summary_zh": "0.1a9 继承 LLM CLI 默认模型，减少重复配置。",
+      "poster_summary_zh": "0.1a9 自动继承 LLM CLI 默认模型。",
       "poster_why_zh": "小幅配置优化，适合 Datasette 开发者。",
       "social_what_zh": "datasette-llm 0.1a9 让 Datasette Agent 自动继承 LLM CLI 的默认模型，不必重复配置 `default_model`。",
       "social_why_zh": "这是小幅但实用的开发体验优化，适合正在用 Datasette 搭数据应用的人。"
