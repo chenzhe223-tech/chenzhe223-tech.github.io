@@ -1,4 +1,4 @@
-AI 正从会回答，走向能落地
+AI 不只会回答，开始接手一整段工作
 
 过去我们习惯用参数、榜单和发布会衡量 AI。现在更值得问的是：它能不能接入工具、完成任务，还能把权限和成本管住？
 
@@ -20,15 +20,15 @@ Nace AI open-sources Drex Max v1, a 27B multimodal decision model scoring 67.52 
 DeepSeek released dsh-superagent, an MIT-licensed research prototype that turns GitHub and Feishu requests into parallel worker sessions. In DeepSeek’s own simulation, p95 task completion fell to 15.7 minutes from 29.5 minutes. The post DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent appeared first on MarkTechPost .；据项目方/媒体披露，相关性能数据尚无独立评测。
 来源：MarkTechPost
 
-🔎 datasette-llm 0.1a9
+🤖 datasette-llm 0.1a9
 Release: datasette-llm 0.1a9 I have some big upgrades to Datasette Agent in the pipeline, but in the meantime here's a tiny user experience improvement to the underlying datasette-llm plugin. It now picks up the default model used by LLM , which means you can start using Datasette Agent without needing to explicitly configure a default model: uvx --with data
 来源：Simon Willison
 
 🧰 今日实用 Skill
-Donchitos/Claude-Code-Game-Studios：Turn Claude Code into a full game dev studio — 49 AI agents, 72 workflow skills, and a complete coordination system mirroring real studio hierarchy.（仓库实际扫描到74个SKILL.md文件）
-许可证：MIT License；项目仓库：https://github.com/Donchitos/Claude-Code-Game-Studios。
-官方项目主页：https://github.com/Donchitos/Claude-Code-Game-Studios（未声明独立官网，使用官方 GitHub 项目页）。
-适用范围：Claude Code 专用；Codex/WorkBuddy 需适配；未实测安装。
+cloudflare/security-audit-skill：A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings（仓库实际扫描到1个SKILL.md文件）
+许可证：MIT License；项目仓库：https://github.com/cloudflare/security-audit-skill。
+官方项目主页：https://github.com/cloudflare/security-audit-skill（未声明独立官网，使用官方 GitHub 项目页）。
+适用范围：文档及仓库元数据已核验；未执行安装测试。
 已核验官方项目主页、仓库 README、实际 SKILL.md 文件及许可证；未实测安装，未完成专项安全审计，使用请自行评估。
 
 💡 DAVYLAB 观察

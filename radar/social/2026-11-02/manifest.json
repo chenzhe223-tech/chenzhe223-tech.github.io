@@ -1,8 +1,8 @@
 {
   "report_date": "2026-11-02",
-  "generated_at": "2026-11-02T10:25:37.039097+08:00",
-  "source_report_generated_at": "2026-11-02T10:21:11.296657+08:00",
-  "source_report_sha256": "3ceee1a22f7e840a8ce74f82909460540cb51c8a4a9ff0c71eecdb463803921c",
+  "generated_at": "2026-11-02T10:35:28.792317+08:00",
+  "source_report_generated_at": "2026-11-02T10:30:50.780183+08:00",
+  "source_report_sha256": "c1569f3eba923580ddbbcd013e53851da124df9ea20f44cda9c07fa6df9b44a7",
   "public_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "style": {
     "design_variant": "geometric-navy",
@@ -48,30 +48,19 @@
     "unclassified": 5
   },
   "skill": {
-    "name": "Donchitos/Claude-Code-Game-Studios",
-    "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
-    "description_zh": "Turn Claude Code into a full game dev studio — 49 AI agents, 72 workflow skills, and a complete coordination system mirroring real studio hierarchy.（仓库实际扫描到74个SKILL.md文件）",
-    "compatibility_status": "Claude Code 专用；Codex/WorkBuddy 需适配；未实测安装",
-    "actual_skill_file_count": 74,
+    "name": "cloudflare/security-audit-skill",
+    "url": "https://github.com/cloudflare/security-audit-skill",
+    "description_zh": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings（仓库实际扫描到1个SKILL.md文件）",
+    "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+    "actual_skill_file_count": 1,
     "security_status": "未完成专项安全审计",
-    "official_website": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+    "official_website": "https://github.com/cloudflare/security-audit-skill",
     "official_website_verified": true,
     "official_website_http_status": 200,
     "official_website_type": "official_github_repository_page",
     "readme_verified": true,
     "skill_file_paths": [
-      ".claude/skills/adopt/SKILL.md",
-      ".claude/skills/architecture-decision/SKILL.md",
-      ".claude/skills/architecture-review/SKILL.md",
-      ".claude/skills/art-bible/SKILL.md",
-      ".claude/skills/asset-audit/SKILL.md",
-      ".claude/skills/asset-spec/SKILL.md",
-      ".claude/skills/balance-check/SKILL.md",
-      ".claude/skills/brainstorm/SKILL.md",
-      ".claude/skills/bug-report/SKILL.md",
-      ".claude/skills/bug-triage/SKILL.md",
-      ".claude/skills/changelog/SKILL.md",
-      ".claude/skills/code-review/SKILL.md"
+      "skills/security-audit/SKILL.md"
     ],
     "evidence_verified": true,
     "license": "MIT License"
@@ -248,7 +237,7 @@
           "y": 895,
           "width": 430,
           "height": 28,
-          "actual_width": 413.9,
+          "actual_width": 314.1,
           "line_count": 1,
           "truncated": false,
           "overflow": false
@@ -258,7 +247,7 @@
           "y": 955,
           "width": 430,
           "height": 57,
-          "actual_width": 424.1,
+          "actual_width": 422.7,
           "line_count": 3,
           "truncated": false,
           "overflow": false
@@ -267,8 +256,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 156944,
-      "sha256": "5397f824556c13268099d9252991823cbd6231756c1c3de4e48c5c18e2856e75",
+      "file_size_bytes": 153505,
+      "sha256": "d6ad2f2c9fcfb318edecdda67f3ae3f53b5fdfd5d2aa83483f1f37d0167d382f",
       "qa_status": "PASS"
     },
     {
@@ -592,13 +581,13 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 54006,
-      "sha256": "8daa219ad9e992a31ba082c07bbf50cf8b06c42b02bf3eb4fce5ab8c93e92ae2",
+      "file_size_bytes": 56865,
+      "sha256": "b86354d671f8084f43ef1a9bbd79b4e2048dc889a0b09c8f194f63628411d57f",
       "qa_status": "PASS"
     }
   ],
   "phone_camera_scan": "NOT_TESTED",
   "wechat_editor_preview": "NOT_TESTED",
-  "verified_at": "2026-11-02T10:25:37.354255+08:00",
+  "verified_at": "2026-11-02T10:35:29.189889+08:00",
   "qa_status": "PASS"
 }
