@@ -37,3 +37,12 @@
 3. 使用独立测试账号和两个隔离 profile 完成双设备新增/编辑/删除、错口令、并发冲突、设备撤销、云备份跨设备恢复。
 4. 完成 iPhone Safari 和微信浏览器实机测试。
 5. 不把 mock 测试写成真实账号验收；每次实质开发更新项目状态文件和交接文档。
+
+
+## 2026-11-02 最新故障接手记录
+1. 用户反馈 Skill Radar 与 GitHub 账户页不可用。
+2. 已定位 Radar 根因：CSP `connect-src` 缺少 `'self'`，阻止同源 `/keypocket/api/skill-radar.json` 请求；a1a4127 已修复。
+3. 最新真实 Browser QA `41435352026` 通过：同源 JSON HTTP 200 / JSON content type、累计 Stars 榜 10 条；GitHub 未配置状态提示及禁用按钮 PASS。
+4. GitHub App 只读基础设施核验：Cloudflare Worker `keypocket-vault-api` 存在，但 workers.dev subdomain disabled、Secrets 为空。未完成 App 注册、OAuth callback、Worker Secrets 和私有 vault 接口。
+5. 最新 Pages `41435348472`、Browser QA `41435352026`、Skill Handoff `41435352002` 全部 SUCCESS；代码 commit `a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
+6. 下次优先完成 GitHub App 注册与 Worker 安全部署；在真实 OAuth/installation E2E 通过前，不得启用连接按钮，也不得把 GitHub connector 描述为 KeyPocket 授权。

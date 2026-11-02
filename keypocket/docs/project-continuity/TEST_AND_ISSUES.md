@@ -43,3 +43,21 @@
 - iPhone Safari 与微信内置浏览器实机。
 - Skill Radar 月/季/年历史不足，不能展示伪增长。
 - GitHub App / Worker OAuth / 私有 Vault 未配置。
+
+
+## 2026-11-02 新增用户反馈与修复证据
+### Skill Radar Failed to fetch
+- 用户反馈：Skill Radar 显示“榜单暂不可用：Failed to fetch”。
+- 根因：KeyPocket `index.html` CSP 的 `connect-src` 仅列出 GitHub API 与 Supabase，没有包含 `'self'`；`renderSkillRadar()` 请求的是同源 `./api/skill-radar.json`，被 CSP 阻断。
+- 修复：commit `a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25` 将 `'self'` 加入 `connect-src`，不扩大到通配域名。
+- Pages run `41435348472` SUCCESS；Browser QA run `41435352026` SUCCESS；Skill Handoff run `41435352002` SUCCESS。
+- Browser QA 日志确认：CSP 有 `connect-src 'self'`；`/keypocket/api/skill-radar.json` 返回 HTTP 200 / `application/json`；累计 Stars 榜渲染 10 条卡片。
+- 月/季/年仍只有 1 天真实历史，因此这些周期榜应继续显示“历史积累中”；不是网络故障。
+
+### GitHub 账户入口状态
+- 用户指出“未绑定 KeyPocket GitHub App”，并正确区分 ChatGPT GitHub connector 与应用内 OAuth。
+- Cloudflare 只读核验：Worker `keypocket-vault-api` 存在；workers.dev subdomain `enabled=false`；Worker Secrets 列表为空；当前 settings 仅见普通 `APP_ORIGIN` binding。
+- 结论：该项不是前端 fetch 故障，而是 GitHub App/OAuth 后端未完成配置。
+- UI 修复：禁用无效“连接 GitHub”入口，改为“授权服务待配置”，解释缺少的 Worker 公网入口/Secrets 并提供配置文档。
+- 本轮没有伪造 OAuth 成功、没有把 ChatGPT connector 当作用户授权，也没有向 Worker 暴露未配置的后端。
+- 后续依赖：注册 GitHub App、确定 callback URL、启用 Worker 公网入口、部署并配置 App secrets/private key/state signing key，之后再做 OAuth/installation/vault 跨设备 E2E。

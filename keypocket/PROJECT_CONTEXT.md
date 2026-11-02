@@ -31,9 +31,9 @@ KeyPocket（By DAVYLAB）是本地优先的 AI 工具、GitHub Skill、开发项
 | V2 多端增量同步 | 已实现：逐条加密、版本比较、冲突处理、设备注册、401 自动续期与 refresh token 轮换 | Skill Handoff 与 Browser QA 通过 | Supabase schema/RLS/权限已核验；正式页面运行 | **部分通过**：401→refresh→令牌轮换由 mock E2E 通过；真实账号双设备同步/并发冲突未验收 | a05d4bb 对应 Pages 成功 |
 | 云端加密备份 | 已实现：成功同步后刷新当日/月度加密快照 | JS/CI 检查通过 | 表、RLS、权限、唯一索引已核验 | 真实账号上传、跨设备查看与恢复未执行 | a05d4bb 对应 Pages 成功 |
 | 设备管理/撤销 | 已实现：设备列表、撤销其他设备、当前设备自撤销保护 | CI 通过 | 正式页面运行 | **模拟 REST E2E 通过**：用户/设备/未撤销行过滤和服务端响应校验；真实 RPC 拒绝已撤销设备待测 | a05d4bb 对应 Pages 成功 |
-| Skill Radar | collector、公开榜单数据与每日 workflow 已实现 | collector self-test 与专项 QA 通过 | 真实 JSON/单日 snapshot 已发布 | **趋势排名暂不验收**：月/季/年历史仍在积累 | 已部署 |
+| Skill Radar | collector、公开榜单数据与每日 workflow 已实现；CSP 已允许同源 JSON | collector self-test 与 Browser QA 通过 | 正式站 GET `/keypocket/api/skill-radar.json` 返回 200 | **累计 Stars 榜浏览器 E2E 通过**（本次加载 10 条）；月/季/年因仅 1 天历史仍显示积累中 | a1a4127 对应 Pages 成功 |
 | 简报 Skill 一键收录 | URL 校验、确认、去重、加密保存已实现 | 专项 QA 通过 | 正式页面和 bundle 已核验 | Playwright 线上一键收录 E2E 通过 | 已部署 |
-| GitHub App / OAuth / 私有 Vault | 待开发/授权 | — | — | — | 未部署 |
+| GitHub App / OAuth / 私有 Vault | 页面状态已如实说明；授权后端仍待配置 | UI/静态检查通过 | Cloudflare Worker `keypocket-vault-api` 存在，但 workers.dev disabled、Secrets 为空 | 未实现 OAuth/installation/vault E2E | 未部署；连接按钮禁用 |
 | iPhone Safari / 微信浏览器专项兼容 | 待专项验收 | — | 390px Chromium 视口通过；非实机 | 未验收 | 页面已部署 |
 
 
@@ -51,7 +51,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 以上为代码、数据库安全配置与模拟请求验收；仍未使用真实测试账号完成双设备双向同步、并发冲突、撤销后 RPC 拒绝及云端恢复，不能宣称真实多端同步已验收。
 
 ### Skill Radar 数据边界
-每日采集工作流与历史快照已上线；目前可核实到 1 天历史。当前 Stars 是累计量，不能伪装成增长速度；月度、季度、年度趋势需要足够历史数据后才能展示有效排名，现阶段应显示“历史积累中”。
+每日采集工作流与历史快照已上线；当前可核实到 1 天历史。正式页面的 `connect-src` 现已包含 `'self'`，允许从同源 `/keypocket/api/skill-radar.json` 读取静态榜单数据；最新 Browser QA 已实际收到 HTTP 200 并渲染累计 Stars 卡片。当前 Stars 是累计量，不能伪装成增长速度；月度、季度、年度趋势需要足够历史数据后才能展示有效排名，现阶段应显示“历史积累中”。
 
 ## 4. Supabase 生产安全核验（2026-11-02）
 
@@ -68,7 +68,9 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 
 ## 5. 最近验证证据
 
-- 最新已核验 main：`a05d4bb0a83edf8fe37c26f26cdae353799978c5`。
+- 最新已核验 main：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
+- Radar 故障原因：`index.html` 的 CSP `connect-src` 未包含 `'self'`，阻止 `renderSkillRadar()` 请求同源 `/keypocket/api/skill-radar.json`，浏览器因此呈现 `Failed to fetch`。已在 a1a4127 添加 `'self'` 并通过整站 Browser QA 实际请求验证。
+- GitHub 账户状态复核：Cloudflare 中 `keypocket-vault-api` Worker 已存在，但 `workers.dev` subdomain `enabled=false`，Worker Secret 列表为空，当前不能执行 OAuth。页面连接按钮现已禁用并解释前置条件。
 - GitHub Pages build/deploy：run `41432733771`，同一 SHA，SUCCESS。
 - DAVYLAB Browser QA：run `41432732355`，同一 SHA，SUCCESS。KeyPocket 日志逐项通过：本地密钥库初始化、新增首条与多条 API Key、刷新后原密码解锁、搜索/筛选/编辑、加密备份导出/导入、收藏/复制、API Key 删除 tombstone/回收站批量恢复、本地快照创建/恢复、GitHub 公开仓库导入、项目软删除/恢复且 ID 不变、390px Chromium 布局、401 会话续期和设备撤销；未发现 pageerror。
 - KeyPocket 会话续期 E2E：模拟旧 access token 返回 401，客户端发送 refresh_token grant，保存新 access token 与轮换后的 refresh token，随后设备撤销请求使用新 token。
@@ -79,6 +81,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 - 已定位的历史测试故障：`41431598666` 的 mock 未处理 PostgREST `eq.<id>` 格式；修正后 `41432048440` 通过。`41432496710` 因 HTML cache-bust 与 app.js 内部 build marker 不一致而失败，统一版本后 `41432732267` 通过。`41432642680` 等待的 Pages deployment 被后续提交取消，属于 superseded run，不是应用功能错误。
 - Supabase 生产表权限/RLS 核验：`keypocket_devices` authenticated UPDATE 与 user-scoped RLS 可用；`keypocket_backup_snapshots` 用户范围 grants/RLS 和周期唯一索引可用。`keypocket_sync_items` 继续只读，写入走 active-device CAS RPC。本轮未新增 DDL 或放宽权限。
 - Security Advisor 仍有两项 WARN：Auth 泄露密码保护未开启；authenticated 可执行受限 SECURITY DEFINER CAS RPC。后者作为唯一同步写入口，已检查 auth.uid、user scope、active-device、固定 search_path 与 sync_items 直接写权限撤销状态。
+- 最新 Radar / GitHub 页面修复 QA：Pages run `41435348472` SUCCESS；DAVYLAB Browser QA `41435352026` SUCCESS；KeyPocket Skill Handoff QA `41435352002` SUCCESS，均对应 `a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。Browser QA 中 Radar JSON HTTP 200、`application/json`、累计榜 10 张卡片 PASS；GitHub 未配置状态提示 PASS。
 
 **仍未证明**：真实账号双设备登录/双向同步、错同步口令拒绝、并发冲突、撤销设备后 CAS RPC 真实拒绝、云端快照跨设备恢复，以及 iPhone Safari/微信内置浏览器实机兼容。
 
@@ -93,7 +96,7 @@ P1：
 4. 完成 iPhone Safari 与微信内置浏览器实机测试（创建/解锁、输入、复制、IndexedDB、导出/导入、页面恢复）。
 5. 补测回收站 30 天到期边界、云端 daily/monthly snapshot 保留清理及网络中断恢复行为。
 6. 继续采集 Skill Radar 历史；跨度充足前，月/季/年增长排名必须显示“数据积累中”。
-7. 评估 GitHub App + OAuth/Worker + 私有 Vault；配置前 UI 必须保持未绑定。
+7. 完成 GitHub App 注册和最小权限配置；启用 Cloudflare Worker 公网入口、配置 App/ OAuth/state secrets、实现 callback/installation/vault routes。完成真实 OAuth E2E 前，UI 必须保持未绑定且连接按钮禁用。
 
 P2：
 8. 完善冲突可视化、账号恢复引导、云备份恢复演练与用户可读的安全说明。
