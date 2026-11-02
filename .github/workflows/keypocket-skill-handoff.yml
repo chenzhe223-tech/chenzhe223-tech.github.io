@@ -55,17 +55,19 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          page_url='https://chenzhe223-tech.github.io/keypocket/?handoff-check=kp-v2-device-cloud-20261102-15'
-          app_url='https://chenzhe223-tech.github.io/keypocket/app.js?v=kp-v2-device-cloud-20261102-15'
+          expected_build="$(node -e "const fs=require('fs');const s=fs.readFileSync('keypocket/app.js','utf8');const m=s.match(/window\\.__kpBuildVersion='([^']+)'/);if(!m)process.exit(1);process.stdout.write(m[1]);")"
+          echo "Expected KeyPocket build: $expected_build"
+          page_url="https://chenzhe223-tech.github.io/keypocket/?handoff-check=$expected_build"
+          app_url="https://chenzhe223-tech.github.io/keypocket/app.js?v=$expected_build"
           radar_url='https://chenzhe223-tech.github.io/radar/daily/'
           for attempt in $(seq 1 36); do
             page="$(curl --fail --silent --show-error --max-time 20 "$page_url&attempt=$attempt" 2>/dev/null || true)"
             app="$(curl --fail --silent --show-error --max-time 20 "$app_url" 2>/dev/null || true)"
             radar="$(curl --fail --silent --show-error --max-time 20 "$radar_url?handoff-check=$attempt" 2>/dev/null || true)"
-            if [[ -n "$page" ]] && grep -q 'app.js?v=kp-v2-device-cloud-20261102-15' <<<"$page" \
-              && [[ -n "$app" ]] && grep -q "window.__kpBuildVersion='kp-v2-device-cloud-20261102-15'" <<<"$app" \
-              && grep -q 'window.__kpProjectRendererReady = true' <<<"$app" \
-              && grep -q 'data-kp-skill-save' <<<"$radar"; then
+            if [[ -n "$page" ]] && grep -Fq "app.js?v=$expected_build" <<<"$page" \
+              && [[ -n "$app" ]] && grep -Fq "window.__kpBuildVersion='$expected_build'" <<<"$app" \
+              && grep -Fq 'window.__kpProjectRendererReady = true' <<<"$app" \
+              && grep -Fq 'data-kp-skill-save' <<<"$radar"; then
               echo "PASS: live KeyPocket HTML references the expected V2 bundle; bundle and Radar handoff markup are published."
               exit 0
             fi
