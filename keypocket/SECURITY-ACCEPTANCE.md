@@ -49,3 +49,41 @@
 - 不要把“CI 曾通过”当作当前提交已通过。
 - 不要把客户端 publishable key 当作用户 API Key 或服务端秘密；也不要将任何真正的秘密写入仓库。
 - 任何安全结论都应附带对应代码、测试、配置或运行证据。
+
+
+## 5. V2.0 安全边界与真实部署状态（2026-11-02）
+
+### 5.1 已部署到 Supabase 的隔离数据层
+- [x] 在现有 KeyPocket Supabase 项目 urzgghdwawpwqliafrzv 中新增 keypocket_sync_meta、keypocket_sync_items、keypocket_backup_snapshots、keypocket_devices。
+- [x] 新增 keypocket_upsert_sync_item，使用 SECURITY INVOKER；写入时要求有效 auth.uid()，服务端按 version、updated_at、device_id 比较，不接受旧版本覆盖新版本。
+- [x] 新增 keypocket_skill_repos、keypocket_skill_snapshots；RLS 开启，浏览器角色仅有公开只读权限，采集任务需使用服务端 service_role 凭据。
+- [x] 已核对新增个人资料表的 RLS：SELECT/INSERT/UPDATE 均限制到 auth.uid() = user_id；备份表另允许用户删除自己的快照。
+- [x] 已核对 Skill Radar identity sequence 对 service_role 的 USAGE 权限。
+- [x] 旧表 keypocket_vault_sync 未删除、未修改；其既有 RLS 仍保留。
+- [ ] 尚未通过真实用户账号做两设备认证、读写隔离和密文抓包验收。
+
+### 5.2 本地与云端加密
+- V1 IndexedDB 名称、对象仓库、旧 AES-GCM 密文和 PBKDF2 迭代次数未更改；V2 作为附加脚本接入。
+- V2 同步载荷在浏览器内使用用户本地解锁密码派生的共享密钥再次进行 AES-GCM 加密；服务器只比较明文版本元数据，读取不到记录内容。
+- 明文 API Key 不应进入日志、Worker 请求或 Supabase payload。当前静态契约测试已验证 V2 代码包含客户端加密路径，但尚未完成真实浏览器网络抓包，故“生产环境无明文外传”仍标记为待运行验收。
+- 跨设备首次初始化需要各设备使用相同 KeyPocket 本地解锁密码。Supabase 登录密码与 KeyPocket 本地解锁密码分离。
+- GitHub Vault Worker 只接受固定文件路径和带 salt/iterations/iv/data 的加密封包；App installation token 在 Worker 服务端临时生成并限定为 keypocket-cloud-vault 一个仓库。
+
+### 5.3 已完成与未完成的安全验证
+- [x] Supabase RLS 开启及策略核验。
+- [x] 新增同步 RPC 使用 SECURITY INVOKER，按用户认证身份执行。
+- [x] GitHub Worker 已部署，App 私钥和 SESSION_SECRET 未写入仓库。
+- [x] 静态契约测试覆盖 V1 加密兼容、V2 快照/回收站、增量同步/RLS、真实历史榜单和 Worker 固定仓库边界。
+- [ ] Cloudflare Worker 外部 /health 网络探测（当前执行容器 DNS 解析失败，不能标记通过）。
+- [ ] 配置 GitHub App ID/Slug/私钥与 SESSION_SECRET。
+- [ ] 配置 GitHub Actions 的 KEYPOCKET_SUPABASE_URL 与 KEYPOCKET_SUPABASE_SERVICE_ROLE_KEY。
+- [ ] 创建并授权 keypocket-cloud-vault 私有仓库。
+- [ ] 使用虚构数据完成双设备并发、离线恢复、删除冲突与云端恢复 E2E。
+- [ ] 在 iPhone Safari 与微信浏览器完成真实操作验收。
+- [ ] 独立安全审计。
+
+### 5.4 当前禁止做出的结论
+- 不得称 V2.0 已完成生产上线；分支尚未合并到 main。
+- 不得称 GitHub App 已绑定；用户授权与 Worker Secrets 尚未配置。
+- 不得称 Skill Radar 已有真实榜单；采集任务需要 Actions Secrets，尚未成功执行首次每日采集。
+- 不得称云端备份/跨设备已通过真实双设备测试；当前只完成后端数据层和客户端代码/静态契约测试。
