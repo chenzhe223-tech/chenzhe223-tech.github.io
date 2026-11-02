@@ -275,7 +275,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
 
     editorial = report.get("editorial") or {}
     headline = str(editorial.get("headline_zh") or editorial.get("core_zh") or "AI 竞赛进入深水区：资本扩张与智能体安全并进")
-    subline = str(editorial.get("trend_zh") or "智能体正在从能力展示走向可部署、可隔离、可审计的工程化阶段。")
+    subline = str(editorial.get("poster_trend_zh") or editorial.get("trend_zh") or "AI 正从模型能力比拼走向任务执行、结果验证与真实场景落地。")
     draw.rectangle((48, 538, 118, 544), fill=orange)
     def clamped_lines(text, fnt, width, max_lines):
         lines = wrap(draw, str(text or ""), fnt, width)
@@ -319,7 +319,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         for line_text in title_lines:
             draw.text((x, ty), line_text, font=title_font, fill=ink)
             ty += 22
-        summary = str(story.get("what_zh") or story.get("summary_zh") or story.get("summary") or "")
+        summary = str(story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or "")
         sy = 889
         summary_font = font(14)
         summary_lines = clamped_lines(summary, summary_font, col_w - 4, 4)
@@ -327,7 +327,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         for line_text in summary_lines:
             draw.text((x, sy), line_text, font=summary_font, fill=muted)
             sy += 18
-        why = str(story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
+        why = str(story.get("poster_why_zh") or story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
         wy = 968
         why_font = font(13, True)
         why_lines = clamped_lines(why, why_font, col_w - 4, 3)
@@ -345,7 +345,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     draw.rounded_rectangle((48, 1290, 868, 1425), radius=12, fill=(231, 242, 250), outline=(211, 226, 238), width=1)
     draw.rounded_rectangle((64, 1306, 172, 1342), radius=4, fill=blue)
     draw.text((78, 1311), "今日观察", font=font(18, True), fill=WHITE)
-    observation = str(editorial.get("trend_zh") or "智能体正从能力展示走向可部署、可隔离、可审计的工程化阶段。")
+    observation = str(editorial.get("poster_trend_zh") or editorial.get("trend_zh") or "AI 正从模型能力比拼走向任务执行、结果验证与真实场景落地。")
     paragraph(draw, observation, (190, 1305), font(19, True), ink, 650, 2, 4)
     next_q = str(editorial.get("next_question_zh") or "真正的价值，取决于能否在真实场景中完成任务并守住权限边界。")
     paragraph(draw, next_q, (66, 1362), font(14), muted, 780, 2, 3)
@@ -507,7 +507,7 @@ def main():
     draw.text((64, 224), "看见趋势  ·  发现机会  ·  打开新可能", font=font(23), fill=(227, 236, 240))
     draw.rounded_rectangle((62, 276, 220, 313), radius=6, fill=orange)
     draw.text((80, 282), "TODAY'S SIGNALS", font=font(15, True), fill=dark)
-    hero_signal = str((report.get("editorial") or {}).get("trend_zh") or (top[0].get("title_zh") if top else "") or "从最新 AI 新闻中发现值得关注的变化。")
+    hero_signal = str((report.get("editorial") or {}).get("poster_trend_zh") or (report.get("editorial") or {}).get("trend_zh") or (top[0].get("title_zh") if top else "") or "从最新 AI 新闻中发现值得关注的变化。")
     paragraph(draw, hero_signal, (64, 329), font(22, True), (255, 253, 248), 1070, 2, 3)
 
     # Today's observation is the editorial synthesis of the source-linked shortlist.
