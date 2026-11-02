@@ -341,6 +341,12 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#unlockBtn').click();
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      await kp.waitForFunction(() => window.__kpUnlockStep === 'complete' || !!window.__kpUnlockError, null, { timeout: 20000 });
+      const initialUnlockState = await kp.evaluate(() => ({
+        step: window.__kpUnlockStep || null,
+        error: window.__kpUnlockError || null
+      }));
+      if (initialUnlockState.error) throw new Error('KeyPocket first-run setup did not complete: ' + JSON.stringify(initialUnlockState));
       // Regression: adding multiple provider keys must remain available when the vault is non-empty.
       const addKeyButton = kp.locator('#addKeyBtn');
       mark(await addKeyButton.count() === 1 && await addKeyButton.isVisible() ? 'PASS' : 'FAIL', 'KeyPocket 始终可见的新增 API Key 入口', '新增按钮必须在已有记录前后均可访问');
@@ -465,12 +471,20 @@ const mark = (status, name, detail = '') => {
             .slice(0, 5).map(x => ({
               kind: typeof x.kind,
               iv: describe(x.iv), data: describe(x.data)
-            }))
+            })),
+          supportItems: {
+            metadata: rows.filter(x => String(x.id || '').startsWith('kp.meta.')).length,
+            snapshots: rows.filter(x => String(x.id || '').startsWith('kp.snapshot.')).length,
+            tombstones: rows.filter(x => String(x.id || '').startsWith('kp.tombstone.')).length
+          }
         };
       });
       if (unlockDiagnostics.unlockError) throw new Error('KeyPocket reload unlock failed: ' + JSON.stringify(unlockDiagnostics));
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
+      const supportItemsPresent = unlockDiagnostics.supportItems.metadata > 0 && unlockDiagnostics.supportItems.snapshots > 0;
+      mark(supportItemsPresent ? 'PASS' : 'FAIL', 'KeyPocket 自动备份元数据与 API Key 解锁隔离',
+        'Key 数量=2；备份元数据=' + unlockDiagnostics.supportItems.metadata + '；加密快照=' + unlockDiagnostics.supportItems.snapshots);
       mark('PASS', 'KeyPocket 多个 API Key 本地加密持久化', await kp.locator('#totalCount').innerText() + ' 条解锁后记录');
       // Add a third independent custom-provider key and verify the earlier records remain intact.
       await kp.locator('#addKeyBtn').click();
