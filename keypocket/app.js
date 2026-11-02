@@ -1,4 +1,5 @@
 'use strict';
+window.__kpBuildVersion='kp-v2-build-marker-20261102-7';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -109,6 +110,7 @@ function renderProjects(){
  host.innerHTML=groups.length?groups.map(g=>'<section class="project-group project-group-'+g.key+'"><div class="project-group-head"><div><h3>'+g.title+'</h3><p>'+g.desc+'</p></div><span>'+g.items.length+'</span></div><div class="cards">'+g.items.map(cards).join('')+'</div></section>').join(''):'<div class="empty"><div class="big">⌘</div><h3>'+(projects.length?'没有匹配的项目':'还没有收录项目')+'</h3><p>可尝试更换来源或分类筛选，也可以收录新的应用和 Skill。</p><button class="btn primary" data-project-action="add">＋ 收录项目</button></div>';
 }
 window.renderProjects = renderProjects;
+window.__kpProjectRendererReady = true;
 $('#projectCards')?.addEventListener('click',async e=>{
  const b=e.target.closest('[data-project-action]');if(!b)return;
  const action=b.dataset.projectAction,card=b.closest('[data-project-id]'),id=card?.dataset.projectId;

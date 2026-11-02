@@ -44,14 +44,19 @@ const { chromium } = require('playwright');
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     await keyPocket.waitForFunction(() => {
       const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-      return script && script.src.includes('kp-v2-render-projects-20261102-6')
+      return script && script.src.includes('kp-v2-build-marker-20261102-7')
+        && window.__kpBuildVersion === 'kp-v2-build-marker-20261102-7'
+        && window.__kpProjectRendererReady === true
+        && typeof window.renderProjects === 'function'
         && document.querySelector('#recycleView')
         && document.querySelector('#backupView')
         && document.querySelector('#radarView');
     }, null, { timeout: 30000 });
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => typeof window.renderProjects === 'function', null, { timeout: 10000 });
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-build-marker-20261102-7'
+        && window.__kpProjectRendererReady === true
+        && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
       const renderDiagnostics = await keyPocket.evaluate(() => ({
         readyState: document.readyState,
