@@ -93,6 +93,7 @@ jobs:
                   and report.get('report_date') == today
                   and report.get('generated_at', '').startswith(today)
                   and report.get('top5_status') == 'ai_curated'
+                  and (report.get('localization') or {}).get('status') == 'ok'
                   and report.get('quality_gate', {}).get('status') == 'PASS'
                   and report.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
                   and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
@@ -233,7 +234,7 @@ jobs:
           print('localization.status:', (report.get('localization') or {}).get('status'))
           print('top5_status:', report.get('top5_status'))
           print('top5_count:', len(report.get('top5') or []))
-          if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
+          if report.get('top5_status') != 'ai_curated' or (report.get('localization') or {}).get('status') != 'ok' or len(report.get('top5') or []) != 5:
               print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
           PY
       - name: Match story-specific images (free sources first; optional Firecrawl fallback)
@@ -430,6 +431,7 @@ jobs:
           core_bundle_ok = (
               current.get('report_date') == today
               and current.get('top5_status') == 'ai_curated'
+              and (current.get('localization') or {}).get('status') == 'ok'
               and len(current.get('top5') or []) == 5
               and current.get('localization', {}).get('status') == 'ok'
               and current.get('editorial_policy_version') == '2026-11-02.2'
@@ -558,7 +560,7 @@ jobs:
           qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
           if report.get('report_date') != today:
               raise SystemExit(f'Candidate main report is not today: {report.get("report_date")!r} != {today}')
-          if report.get('top5_status') != 'ai_curated' or len(report.get('top5') or []) != 5:
+          if report.get('top5_status') != 'ai_curated' or (report.get('localization') or {}).get('status') != 'ok' or len(report.get('top5') or []) != 5:
               raise SystemExit('Candidate main report does not contain five AI-curated stories')
           if report.get('editorial_policy_version') != '2026-11-02.2':
               raise SystemExit('Candidate report editorial claim-provenance policy is outdated')
@@ -627,7 +629,7 @@ jobs:
                   data = json.loads(report_bytes.decode('utf-8'))
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
-                  assert data.get('top5_status') == 'ai_curated' and len(data.get('top5') or []) == 5, 'live report is missing five AI-curated stories'
+                  assert data.get('top5_status') == 'ai_curated' and (data.get('localization') or {}).get('status') == 'ok' and len(data.get('top5') or []) == 5, 'live report is missing five localized AI-curated stories'
                   assert data.get('editorial_policy_version') == '2026-11-02.2', 'live editorial claim-provenance policy mismatch'
                   quality = data.get('quality_gate') or {}
                   editorial = data.get('editorial') or {}
