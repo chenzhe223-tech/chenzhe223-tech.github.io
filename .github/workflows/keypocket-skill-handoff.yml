@@ -7,14 +7,19 @@ on:
       - "keypocket/**"
       - "radar/daily/index.html"
       - "scripts/qa-keypocket-skill-handoff.cjs"
+      - "scripts/e2e-keypocket-skill-handoff.cjs"
       - ".github/workflows/keypocket-skill-handoff.yml"
   pull_request:
     paths:
       - "keypocket/**"
       - "radar/daily/index.html"
       - "scripts/qa-keypocket-skill-handoff.cjs"
+      - "scripts/e2e-keypocket-skill-handoff.cjs"
       - ".github/workflows/keypocket-skill-handoff.yml"
   workflow_dispatch:
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -40,7 +45,7 @@ jobs:
         run: node scripts/qa-keypocket-skill-handoff.cjs
 
       - name: Verify published assets
-        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_run'
         shell: bash
         run: |
           set -euo pipefail
