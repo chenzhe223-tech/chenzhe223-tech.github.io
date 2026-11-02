@@ -4,7 +4,7 @@
     "status": "manual_editorial_verified",
     "provider": "DAVYLAB editorial review",
     "method": "Direct verification of primary public documents and independent reporting; manual Chinese translation and editorial synthesis",
-    "reviewed_at": "2026-11-03T07:48:00+08:00",
+    "reviewed_at": "2026-11-03T07:49:00+08:00",
     "sources_checked": 5,
     "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。此文件为人工编辑稿，不标记为 AI 生成。 已根据微信主海报版式将五条新闻标题和短摘要压缩为独立短版，避免主海报卡片截断；专题图继续使用完整社交摘要。"
   },
@@ -151,7 +151,10 @@
     "analysis_scope_zh": "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。",
     "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company.",
     "poster_trend_zh": "AI 正从对话走进能源、金融与机器人现场；规模化落地同时考验成本、权限和可靠性。",
-    "opening_zh": "过去我们习惯用参数、榜单和发布会衡量 AI。现在更值得看的是：它能不能进入真实流程，把事情做好，还能把权限、成本和风险管住？"
+    "opening_zh": "过去我们习惯用参数、榜单和发布会衡量 AI。现在更值得看的是：它能不能进入真实流程，把事情做好，还能把权限、成本和风险管住？",
+    "question_zh": "如果 AI Agent 真能接入真实系统，你最愿意先让它在哪类场景里承担任务？",
+    "options_zh": "A. 能源与制造  B. 金融与支付  C. 机器人与现场作业  D. 个人办公与研究",
+    "interaction_invitation_zh": "欢迎在评论区分享一个你真正想交给 AI 的任务。"
   },
   "skills": [
     {
@@ -196,7 +199,17 @@
         "github",
         "web-search",
         "agent-skill"
-      ]
+      ],
+      "evidence_verified": true,
+      "evidence": {
+        "repository_metadata": "https://api.github.com/repos/mvanhorn/last30days-skill",
+        "readme": "https://github.com/mvanhorn/last30days-skill/blob/main/README.md",
+        "skill_file": "https://github.com/mvanhorn/last30days-skill/blob/main/skills/last30days/SKILL.md",
+        "license": "https://github.com/mvanhorn/last30days-skill/blob/main/LICENSE"
+      },
+      "license_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/LICENSE",
+      "readme_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/README.md",
+      "skill_file_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/skills/last30days/SKILL.md"
     }
   ]
 }
