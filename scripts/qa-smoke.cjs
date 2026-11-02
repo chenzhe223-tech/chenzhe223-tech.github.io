@@ -299,19 +299,19 @@ const mark = (status, name, detail = '') => {
       // The browser context above is isolated. Wait for app initialization and branch
       // according to actual UI state instead of assuming first-run setup every time.
       await kp.waitForFunction(() => {
-        const wrap = document.querySelector('#confirmWrap');
-        const btn = document.querySelector('#unlockBtn');
-        const title = document.querySelector('#lockTitle')?.textContent || '';
-        // The HTML contains a static placeholder label before async IndexedDB init.
-        // Wait for the app to replace it with a definitive initialized state.
-        return wrap && btn && (
-          btn.disabled ||
-          btn.textContent.trim() === '创建本地密钥库' ||
-          btn.textContent.trim() === '解锁密钥库' ||
-          title.includes('检测到本地数据') ||
-          title.includes('本地密钥库暂时无法读取')
-        );
+        const state = window.__kpInitDiagnostic;
+        return state === 'ready' || state === 'unsupported'
+          || state === 'vault-meta-missing-with-data'
+          || String(state || '').startsWith('error:');
       }, null, { timeout: 20000 });
+      const initState = await kp.evaluate(() => ({
+        state: window.__kpInitDiagnostic,
+        title: document.querySelector('#lockTitle')?.textContent,
+        button: document.querySelector('#unlockBtn')?.textContent,
+        confirmVisible: !document.querySelector('#confirmWrap')?.classList.contains('hidden')
+      }));
+      mark(initState.state === 'ready' ? 'PASS' : 'FAIL', 'KeyPocket IndexedDB 初始化', JSON.stringify(initState));
+      if (initState.state !== 'ready') throw new Error('KeyPocket initialization did not reach ready state: ' + JSON.stringify(initState));
       const firstRun = await kp.locator('#confirmWrap').evaluate(el => !el.classList.contains('hidden'));
       if (!firstRun) {
         // Do not guess a user's password. A non-empty isolated vault is a test fixture issue,
@@ -348,6 +348,8 @@ const mark = (status, name, detail = '') => {
       const keyCardText = await kp.locator('#cards').innerText();
       mark(keyCardText.includes('QA Synthetic DeepSeek Key') && keyCardText.includes('QA Synthetic OpenAI Key') ? 'PASS' : 'FAIL', 'KeyPocket 多平台 API Key 分别保存与展示', keyCardText.slice(0, 500));
       await kp.reload({ waitUntil: 'domcontentloaded' });
+      await kp.waitForFunction(() => window.__kpInitDiagnostic === 'ready'
+        && document.querySelector('#unlockBtn')?.textContent.trim() === '解锁密钥库', null, { timeout: 20000 });
       await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#unlockBtn').click();
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
@@ -402,6 +404,8 @@ const mark = (status, name, detail = '') => {
       const restoreErrors = [];
       restoreKp.on('pageerror', e => restoreErrors.push(e.message));
       await restoreKp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await restoreKp.waitForFunction(() => window.__kpInitDiagnostic === 'ready'
+        && !document.querySelector('#confirmWrap')?.classList.contains('hidden'), null, { timeout: 20000 });
       await restoreKp.locator('#masterPassword').fill('QA-only-restore-password-2026');
       await restoreKp.locator('#confirmPassword').fill('QA-only-restore-password-2026');
       await restoreKp.locator('#unlockBtn').click();
@@ -445,6 +449,8 @@ const mark = (status, name, detail = '') => {
       const mobileErrors = [];
       mobileKp.on('pageerror', e => mobileErrors.push(e.message));
       await mobileKp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await mobileKp.waitForFunction(() => window.__kpInitDiagnostic === 'ready'
+        && !document.querySelector('#confirmWrap')?.classList.contains('hidden'), null, { timeout: 20000 });
       await mobileKp.locator('#masterPassword').fill('QA-only-demo-password-2026');
       await mobileKp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await mobileKp.locator('#unlockBtn').click();
