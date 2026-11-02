@@ -1,0 +1,160 @@
+{
+  "report_date": "2026-11-02",
+  "localization": {
+    "status": "manual_editorial_verified",
+    "provider": "DAVYLAB editorial review",
+    "method": "Direct source verification, manual Chinese translation and editorial synthesis",
+    "reviewed_at": "2026-11-02T10:47:10+08:00",
+    "sources_checked": 5,
+    "note": "DEEPSEEK_API_KEY is not configured in GitHub Actions. This issue is manually curated from traceable public sources; it is not represented as AI-generated localization."
+  },
+  "top5": [
+    {
+      "id": "deepseek-dsh-superagent-20261101",
+      "title": "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
+      "title_en": "DeepSeek open-sources a Router-Worker coding-agent prototype",
+      "title_zh": "DeepSeek 开源 Router-Worker 编码代理原型",
+      "original_title": "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
+      "source": "MarkTechPost；DeepSeek 官方 GitHub",
+      "source_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+      "additional_sources": [
+        "https://github.com/DeepSeek-ai/dsh-superagent-prototype"
+      ],
+      "published": "2026-11-01",
+      "source_section": "china_ai_news",
+      "category": "中国 AI / Agent 工程",
+      "confidence": "medium",
+      "what_zh": "11月1日，DeepSeek Harness 团队公开 dsh-superagent-prototype，一个采用 MIT 许可的研究原型。它用 Router 接收 GitHub、可选飞书事件，再把获授权任务拆成独立 Ticket，由各自的 Worker 会话和工作目录执行；据 MarkTechPost 报道，DeepSeek 的合成消息流模拟测试给出 p95 15.7 分钟，对照单会话基线 29.5 分钟，但测试使用合成消息和模拟工具，并未测量真实编码质量。",
+      "why_zh": "它的价值在于把多任务 Agent 拆成授权、派单和隔离执行，减少上下文串扰与人工盯任务的成本；但官方仓库明确标注为研究原型，不是生产就绪产品，也不是可直接代表 DeepSeek 内部系统的正式产品。模拟性能数据不能等同于真实代码质量。",
+      "what_en": "On Nov. 1, the DeepSeek Harness team published dsh-superagent-prototype, an MIT-licensed research prototype. A Router receives GitHub and optional Feishu events, then dispatches authorized work as separate tickets to isolated Worker sessions and directories. MarkTechPost reports a 15.7-minute p95 in DeepSeek's synthetic message-stream simulation versus 29.5 minutes for a single-session baseline; the test used synthetic messages and simulated tools and did not measure real coding quality.",
+      "why_en": "Its value is the authorization, routing and isolated-execution design, which can reduce context interference in multi-task agents. The repository explicitly labels it research code, not production-ready software or an official DeepSeek product; simulated performance is not evidence of real-world coding quality.",
+      "editor_judgment_zh": "性能数字为二手报道转述的合成模拟结果，已注明测试边界；真实编码质量尚未验证。"
+    },
+    {
+      "id": "tsinghua-algebraic-world-model-20261029",
+      "title": "清华姚期智团队新作：代数世界模型，让 AI 像牛顿一样思考",
+      "title_en": "Tsinghua team presents an Algebraic World Model for proof-backed exploration",
+      "title_zh": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+      "original_title": "清华姚期智团队新作：代数世界模型，让AI像牛顿一样思考",
+      "source": "量子位；arXiv 论文",
+      "source_url": "https://www.qbitai.com/2026/11/507031.html",
+      "additional_sources": [
+        "https://arxiv.org/abs/2610.40503"
+      ],
+      "published": "2026-10-29",
+      "source_section": "china_ai_news",
+      "category": "中国 AI / 世界模型与形式化验证",
+      "confidence": "medium",
+      "what_zh": "10月29日发布在 arXiv 的论文介绍 Algebraic World Model（AWM），由清华大学与上海期智研究院团队提出。系统把未知环境中的探索记录转成可执行的 Python 假设，再整理为结构化规则并用 Lean 4 做机器检查；论文作者报告称，在 25 个 ARC-AGI-3 公开游戏、183 个关卡上取得 99.9 分，认证轨迹使用的动作数约为人类基线的 43%。",
+      "why_zh": "看点不只是分数，而是把探索得到的规则转成可检查模型，再用 Lean 4 对可达性或不可达性进行机器证明；这条“先建模、再验证”的路线，对机器人、自动化测试和复杂软件操作都有参考价值。论文目前是 arXiv 预印本，实验结果为作者报告，仍需独立复现。",
+      "what_en": "An Oct. 29 arXiv preprint from a Tsinghua University and Shanghai QiZhi Institute team introduces the Algebraic World Model (AWM). It converts exploration in an unfamiliar environment into executable Python hypotheses, organizes them as structured rules and checks them with Lean 4. The authors report a 99.9 score across 25 public ARC-AGI-3 games and 183 levels, with certified trajectories using about 43% of the human baseline's actions.",
+      "why_en": "The key idea is not just the score: it turns exploration into an inspectable model and machine-checked proofs of reachability or impossibility. The paper is a preprint and the results are author-reported, so independent replication is still needed.",
+      "editor_judgment_zh": "指标来自论文作者的预印本实验报告，未独立复现；不可写成已获同行评审的定论。"
+    },
+    {
+      "id": "cmg-robot-mount-tai-20261102",
+      "title": "首届 CMG 世界机器人登泰山大赛今日开赛，记者一路小跑跟不上",
+      "title_en": "The first CMG World Robot Climbing Mount Tai competition opens today",
+      "title_zh": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
+      "original_title": "首届 CMG 世界机器人登泰山大赛今日开赛，记者一路小跑跟不上",
+      "source": "IT之家；快科技（引用央视新闻）",
+      "source_url": "https://www.ithome.com/1/020/890.htm",
+      "additional_sources": [
+        "https://news.mydrivers.com/1/1162/1162298.htm"
+      ],
+      "published": "2026-11-02",
+      "source_section": "china_ai_news",
+      "category": "中国 AI / 具身智能与机器人",
+      "confidence": "medium",
+      "what_zh": "11月2日，首届 CMG 世界机器人登泰山大赛在山东泰安开赛。媒体报道显示，足式机器人赛段约 3.9 公里，需攀爬 3100 余级台阶、累计高差约 600 米；赛事设置 4 个正式赛项和 1 个特色挑战，涉及人形、足式、负重和外骨骼等项目。",
+      "why_zh": "真实山地环境比平地演示更能检验机器人的环境感知、步态控制、平衡与负重能力；目前核实到的是开赛安排和赛道设计，尚未看到最终比赛结果，不能把赛前信息写成比赛成绩。",
+      "what_en": "The first CMG World Robot Climbing Mount Tai competition opens in Tai'an, Shandong, on Nov. 2. Media reports describe a roughly 3.9 km legged-robot course with more than 3,100 steps and about 600 m of cumulative elevation gain, plus four formal events and one special challenge involving humanoid, legged, load-carrying and exoskeleton categories.",
+      "why_en": "Real mountain terrain tests perception, locomotion, balance and load handling more rigorously than flat-floor demonstrations. The verified information is the opening schedule and course design; final competition results had not yet been reported.",
+      "editor_judgment_zh": "仅确认开赛安排与赛道设计；未核实最终赛果。"
+    },
+    {
+      "id": "openai-servicenow-partnership-20261028",
+      "title": "OpenAI and ServiceNow expand partnership across enterprise workflows",
+      "title_en": "OpenAI and ServiceNow expand their enterprise AI partnership",
+      "title_zh": "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
+      "original_title": "OpenAI and ServiceNow expand partnership across enterprise workflows",
+      "source": "OpenAI 官方公告；ServiceNow Newsroom",
+      "source_url": "https://openai.com/index/openai-servicenow-partnership-expansion",
+      "additional_sources": [
+        "https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-and-OpenAI-accelerate-enterprise-AI-from-models-and-operations-to-cybersecurity-and-agentic-development/default.aspx"
+      ],
+      "published": "2026-10-28",
+      "source_section": "global_news",
+      "category": "全球 AI / 企业应用",
+      "confidence": "high",
+      "what_zh": "10月28日，OpenAI 与 ServiceNow 官方公告披露双方扩大合作，ServiceNow 应用已进入 ChatGPT 应用目录，帮助用户在企业权限与流程约束下调用 ServiceNow 工作流。双方还公布了 Codex 与 ServiceNow AI Workflow Factory 的集成计划，以及安全、风险和语音能力的后续安排；公告列出的部分能力将在 2026 年底至 2027 年分阶段推出，并非全部已经开放。",
+      "why_zh": "企业 AI 的竞争正从“能回答问题”转向“能否在权限、审批和审计边界内完成动作”；对企业而言，真正的落地点是把模型接入已有工单、知识、IT 运维和安全流程，而不是只增加一个聊天入口。",
+      "what_en": "On Oct. 28, OpenAI and ServiceNow announced an expanded partnership. The ServiceNow app is available in ChatGPT's app directory, allowing users to invoke ServiceNow workflows within enterprise permissions and process controls. The companies also outlined planned Codex integration with ServiceNow AI Workflow Factory and future security, risk and voice capabilities; some items are scheduled for phased rollout through late 2026 and 2027, not all generally available today.",
+      "why_en": "Enterprise AI is moving from answering questions to taking actions within permission, approval and audit boundaries. The practical value lies in connecting models to existing ticketing, knowledge, IT operations and security workflows rather than adding another chat surface.",
+      "editor_judgment_zh": "已开放的 ChatGPT 应用与后续路线图分开表述；2026 年底至 2027 年的能力均按官方计划描述。"
+    },
+    {
+      "id": "datasette-llm-0-1a9-20261031",
+      "title": "datasette-llm 0.1a9",
+      "title_en": "datasette-llm 0.1a9 inherits the LLM CLI default model",
+      "title_zh": "Datasette Agent 更新：自动继承 LLM CLI 默认模型",
+      "original_title": "datasette-llm 0.1a9",
+      "source": "Simon Willison's Weblog；datasette/datasette-llm GitHub",
+      "source_url": "https://simonwillison.net/2026/Oct/31/datasette-llm/",
+      "additional_sources": [
+        "https://github.com/datasette/datasette-llm"
+      ],
+      "published": "2026-10-31",
+      "source_section": "global_news",
+      "category": "全球 AI / 开发工具",
+      "confidence": "high",
+      "what_zh": "10月31日，Simon Willison 发布 datasette-llm 0.1a9。更新后，Datasette Agent 会直接沿用 LLM CLI 的默认模型配置，不必再重复设置 `default_model`；这是面向 Datasette 开发者的一项配置体验优化。",
+      "why_zh": "它没有带来新模型或性能突破，但减少了工具链里的重复配置；如果你用 Datasette 搭建数据应用和 Agent，可以少维护一份模型设置。项目仓库采用 Apache-2.0 许可证。",
+      "what_en": "On Oct. 31, Simon Willison published datasette-llm 0.1a9. Datasette Agent now inherits the default model configured for the LLM CLI, so developers no longer need to repeat the `default_model` setting. This is a configuration improvement for developers using Datasette.",
+      "why_en": "It does not introduce a new model or a performance breakthrough, but removes duplicate configuration for Datasette-based data applications and agents. The repository is licensed under Apache-2.0.",
+      "editor_judgment_zh": "属于小版本配置优化，不应夸大为模型能力升级。"
+    }
+  ],
+  "editorial": {
+    "headline_zh": "AI 不只要更强，还得真能干活",
+    "headline_en": "AI needs to do more than talk—it needs to get work done",
+    "trend_zh": "从 DeepSeek 的多任务 Agent、清华团队的可验证世界模型，到泰山真实地形机器人赛，本期中国 AI 的共同方向是把能力从演示推进到执行与验证；OpenAI 与 ServiceNow 的合作则显示，企业 AI 正在接入权限、审批和安全流程。",
+    "core_zh": "企业可以先挑选权限边界清晰的工作流，验证模型能否稳定执行、记录证据并允许人工接管；普通人则从一项可重复的 Skill 入手，把 AI 用进真实任务，而不是只追逐榜单。",
+    "trend_en": "From DeepSeek's multi-task agent and Tsinghua's proof-backed world model to a robot competition on real mountain terrain, China's AI activity is pushing from demonstrations toward execution and verification. OpenAI and ServiceNow's expanded partnership shows enterprise AI moving into permissioned workflows, approvals and security processes.",
+    "core_en": "Organizations can start with a bounded workflow and measure reliable execution, evidence and human handoff. Individuals can learn one repeatable Skill and apply AI to a real task instead of chasing every model ranking.",
+    "analysis_label_zh": "DAVYLAB 分析",
+    "analysis_label_en": "DAVYLAB analysis",
+    "analysis_scope_zh": "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。",
+    "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company."
+  },
+  "skills": [
+    {
+      "name": "Cloudflare Security Audit Skill",
+      "name_zh": "Cloudflare 安全审计 Skill",
+      "description_zh": "面向支持 Agent Skills 标准的编码代理，按多阶段流程检查代码仓库、API、服务和工具，生成结构化发现项，并对关键问题做独立复核。适合在隔离环境中辅助开展代码安全检查。",
+      "description_en": "A multi-phase security-audit skill for coding agents. It reviews repositories, APIs, services and tools, produces structured findings, and independently verifies key issues.",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "official_website": "https://github.com/cloudflare/security-audit-skill",
+      "repository_url": "https://github.com/cloudflare/security-audit-skill",
+      "official_website_verified": true,
+      "readme_verified": true,
+      "capabilities_verified": true,
+      "license": "MIT",
+      "license_name": "MIT",
+      "license_verified": true,
+      "actual_skill_file_count": 1,
+      "skill_file_paths": [
+        "skills/security-audit/SKILL.md"
+      ],
+      "compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
+      "security_status": "未对该 Skill 本身进行独立安全审计；建议在隔离沙箱中运行。",
+      "installation_status": "未实测安装",
+      "compatibility": "Agent Skills 标准；需由支持该标准的编码代理加载。",
+      "source": "Cloudflare 官方 GitHub 仓库；Cloudflare 工程博客",
+      "source_url": "https://github.com/cloudflare/security-audit-skill",
+      "additional_sources": [
+        "https://blog.cloudflare.com/build-your-own-vulnerability-harness/"
+      ]
+    }
+  ]
+}
