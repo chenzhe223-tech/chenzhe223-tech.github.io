@@ -46,3 +46,14 @@
 4. GitHub App 只读基础设施核验：Cloudflare Worker `keypocket-vault-api` 存在，但 workers.dev subdomain disabled、Secrets 为空。未完成 App 注册、OAuth callback、Worker Secrets 和私有 vault 接口。
 5. 最新 Pages `41435348472`、Browser QA `41435352026`、Skill Handoff `41435352002` 全部 SUCCESS；代码 commit `a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
 6. 下次优先完成 GitHub App 注册与 Worker 安全部署；在真实 OAuth/installation E2E 通过前，不得启用连接按钮，也不得把 GitHub connector 描述为 KeyPocket 授权。
+
+
+## 2026-11-02 同步账号密码找回专项交接
+1. 用户反馈同步账号登录提示邮箱或密码不正确；Supabase Auth 日志确认 invalid_credentials，原邮箱账号存在且已验证，但无法据此恢复旧密码。
+2. 已在同步中心新增“忘记密码”按钮、邮件恢复请求、恢复链接处理（hash access token / token_hash）、设置新密码表单。
+3. 安全实现：/auth/v1/recover 只请求邮件；恢复 access token 只驻留页面内存；PATCH /auth/v1/user 更新 Supabase 账号密码。不会改变本地解锁密码、跨设备加密口令、IndexedDB 或云端密文。
+4. 修复 hashchange 场景，支持邮件链接在当前页面 hash 跳转时展示恢复表单。
+5. 最新代码 commit：1bd229675c164d3e825a73088ba36665f60e48ec。
+6. Pages run 41478020574 SUCCESS；DAVYLAB Browser QA 41478022304 SUCCESS；KeyPocket Skill Handoff QA 41478022270 SUCCESS。密码找回请求、恢复回跳、更新密码均由 mock E2E 覆盖。
+7. 未完成的外部依赖：真实 SMTP 邮件投递未验证；需检查 Supabase Auth SMTP，配置生产自定义 SMTP，并在 URL Configuration 允许 https://chenzhe223-tech.github.io/keypocket/。默认 SMTP 对非团队邮箱有限制，QQ 邮箱可能因此收不到邮件；实际项目配置尚未确认。
+8. 下一步先完成 SMTP 与 Redirect URL 配置，再使用用户本人邮箱做一次真实找回邮件验收；切勿要求用户重复注册或修改跨设备加密口令。

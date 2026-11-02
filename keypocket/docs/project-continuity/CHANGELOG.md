@@ -1,3 +1,10 @@
+## 2026-11-02 — 同步账号密码找回
+- 同步中心新增“忘记密码”入口，接入 Supabase Auth recover 邮件请求与自定义回跳地址。
+- 新增恢复链接解析（recovery access token / token_hash）、新密码确认和 Auth user PATCH。
+- 恢复令牌只在页面内存中使用；不改变本地库密码、跨设备加密口令或加密数据；采用不暴露账号是否存在的提示。
+- Browser QA 41478022304、Pages 41478020574、KeyPocket Skill Handoff QA 41478022270 均 SUCCESS；合成 E2E 覆盖恢复请求、回跳和密码更新。
+- 真实邮件投递尚未验证；需配置 Supabase 自定义 SMTP 和 Redirect URL 白名单。
+
 # KeyPocket CHANGELOG
 
 ## 2026-11-02 — V2.0 继续交付与生产同步安全收敛

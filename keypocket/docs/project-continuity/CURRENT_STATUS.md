@@ -2,17 +2,17 @@
 
 最后更新：2026-11-02（UTC+8）
 版本目标：V2.0
-总体状态：IN_PROGRESS。本地 API Key、自动快照、回收站、设备撤销 UI 与 Supabase 会话续期已通过合成数据 Chromium E2E；真实双设备云同步、云端跨设备恢复和手机实机兼容仍待验收。
+总体状态：IN_PROGRESS。本地 API Key、自动快照、回收站、设备撤销 UI、Supabase 会话续期与同步账号密码找回已通过合成数据 Chromium E2E；真实邮箱投递、双设备云同步、云端跨设备恢复和手机实机兼容仍待验收。
 正式入口：https://chenzhe223-tech.github.io/keypocket/
 唯一状态源：`keypocket/PROJECT_CONTEXT.md`。
 
 ## 最新核验基准
 - 仓库：`chenzhe223-tech/chenzhe223-tech.github.io`
 - 分支：`main`
-- 最近一次应用代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`
-- Pages build/deploy：`41435348472`，SUCCESS。
-- DAVYLAB Browser QA：`41435352026`，SUCCESS。
-- KeyPocket Skill Handoff QA：`41435352002`，SUCCESS。
+- 最近一次应用代码 commit：`1bd229675c164d3e825a73088ba36665f60e48ec`
+- Pages build/deploy：`41478020574`，SUCCESS。
+- DAVYLAB Browser QA：`41478022304`，SUCCESS。
+- KeyPocket Skill Handoff QA：`41478022270`，SUCCESS。
 
 ## 五级交付状态
 
@@ -30,10 +30,10 @@
 | iOS Safari / 微信 | 页面已部署 | — | 390px Chromium 视口通过 | 真机专项未验收 | 页面已部署 |
 
 ## 最新 Browser QA 已通过
-run `41435352026`：本地多 Key 新建与刷新解锁、加密备份导出/导入、误删恢复、本地快照恢复、GitHub 公开仓库导入、项目恢复、390px 布局、401 会话续期/令牌轮换、设备撤销 UI/PATCH/状态刷新均 PASS；本轮新增 Radar 同源 JSON HTTP 200 与累计 Stars 卡片（10 条）检查、GitHub App 未配置提示/禁用按钮检查均 PASS；无 JavaScript pageerror。
+run `41478022304`（commit `1bd2296`）：本地多 Key 新建与刷新解锁、加密备份导出/导入、误删恢复、本地快照恢复、GitHub 公开仓库导入、项目恢复、390px 布局、401 会话续期/令牌轮换、设备撤销 UI/PATCH/状态刷新均 PASS；本轮新增 Radar 同源 JSON HTTP 200 与累计 Stars 卡片（10 条）检查、GitHub App 未配置提示/禁用按钮检查均 PASS；无 JavaScript pageerror。
 
 ## 当前最高优先级
-P0：独立真实测试账号和两个隔离浏览器 profile/设备，完成双向新增/编辑/删除同步、错口令、并发冲突、设备撤销后 RPC 拒绝、云备份跨设备恢复；禁止使用真实 API Key。
+P0：完成 Supabase 自定义 SMTP 与 KeyPocket Redirect URL 配置，并用真实 QQ 邮箱验证密码找回邮件投递；随后使用独立真实测试账号和两个隔离浏览器 profile/设备，完成双向新增/编辑/删除同步、错口令、并发冲突、设备撤销后 RPC 拒绝、云备份跨设备恢复；禁止使用真实 API Key。
 P1：iPhone Safari 与微信内置浏览器专项；回收站 30 天边界和云备份保留清理测试；继续采集 Skill Radar 历史。
 P2：冲突可视化、账号恢复引导、GitHub App/OAuth/私有 Vault 评估、migration history 只读对比。
 

@@ -66,6 +66,16 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 - Supabase Security Advisor 当前仍报告两项需要如实披露的 WARN：① Auth 泄露密码防护未启用；② 面向 authenticated 的 `SECURITY DEFINER` RPC 警告。第二项为有意设计的唯一写入端点，函数已显式鉴权、检查有效设备、用户范围过滤、固定 search_path，且直接表写入权限已撤销；需持续安全复核。不要为消除告警而重新开放同步表写入。
 - Supabase 管理工具为本次远端 DDL 自动生成版本号；repo 中新增 SQL migration 文件作为可复现的最终状态。未来使用 Supabase CLI 前必须先对比远端 migration history 和仓库文件，禁止盲目 db push。
 
+## 4.1 同步账号密码找回（2026-11-02）
+
+- 同步中心新增“忘记密码”入口，使用 Supabase Auth POST /auth/v1/recover?redirect_to=... 请求发送恢复邮件。
+- 恢复回跳地址固定为 https://chenzhe223-tech.github.io/keypocket/。Supabase Auth 的 Redirect URLs 必须显式允许该精确地址；如果邮件模板自定义，恢复链接必须正确使用 RedirectTo 或 ConfirmationURL。
+- 支持恢复回跳 hash 中的 access_token&type=recovery，以及 token_hash 通过 /auth/v1/verify 换取恢复会话；恢复令牌仅保存在页面内存，不写入 localStorage。
+- 用户提交新密码后，以恢复 access token 调用 PATCH /auth/v1/user。不会修改本地密钥库密码、跨设备加密口令、IndexedDB 数据或云端加密 envelope。
+- 对外提示采用不暴露账号是否存在的通用文案。
+- Browser QA 41478022304 已通过模拟 Supabase Auth 的恢复邮件请求、恢复回跳和密码更新 E2E；Pages run 41478020574、Skill Handoff QA 41478022270 均 SUCCESS，代码 commit 1bd229675c164d3e825a73088ba36665f60e48ec。
+- 尚未验证真实邮箱投递。当前工具无法读取/修改 Supabase Auth SMTP 与 URL Configuration。Supabase 官方默认 SMTP 只向项目组织团队预授权邮箱投递，且有严格速率限制；若用户 QQ 邮箱不在团队成员列表，默认 SMTP 可能拒发。生产环境应配置自定义 SMTP，并将上述 KeyPocket 回跳地址加入 Redirect URLs。官方说明：https://supabase.com/docs/guides/auth/auth-smtp、https://supabase.com/docs/guides/auth/redirect-urls。
+
 ## 5. 最近验证证据
 
 - 最近一次已验证应用代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`（后续 `6e843dc` 为本轮状态/交接文档同步，不修改应用代码）。
@@ -88,6 +98,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 ## 6. 未完成事项与优先级
 
 P0：
+0. 完成 Supabase 自定义 SMTP、KeyPocket 精确 Redirect URL 白名单和 QQ 邮箱真实投递验收；当前只完成代码与模拟 E2E，不得标记真实邮件已验证。
 1. 使用独立真实测试账号和两个隔离浏览器 profile/设备，完成双向新增、编辑、删除同步、tombstone 传播、错口令拒绝、并发冲突与云端快照跨设备恢复；严禁使用真实 API Key。
 2. 真实验证设备撤销后 `keypocket_sync_put_item` 拒绝写入，并验证未登录请求被拒绝、错误不会覆盖云端密文。
 3. 验证 refresh token 真实轮换后两设备登录连续性、退出登录及设备状态行为；不要用 mock 代替账号验收。
