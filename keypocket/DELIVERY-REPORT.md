@@ -42,3 +42,28 @@
     python -m http.server 8000
 
 打开 http://localhost:8000/keypocket/。Web Crypto 和剪贴板能力需要安全上下文；现代浏览器通常将 localhost 视为安全上下文。
+
+
+## 2026-11-02 — KeyPocket V2.0 升级分支
+
+### 代码完成（feature/keypocket-v2）
+- 新增 app-v2.js，保留 V1 IndexedDB 与 AES-GCM/PBKDF2 解密路径。
+- 新增自动快照、回收站、版本化增量同步、Skill Radar 客户端和 GitHub App Worker 客户端。
+- 新增 Supabase migrations、每日 Skill Radar 采集器、GitHub App Worker、CI 和契约测试。
+
+### 后端配置完成
+- Supabase 项目已创建 V2 专属同步、备份、设备和 Skill 历史表；RLS 已开启并核验。
+- Cloudflare Worker keypocket-vault-api 已通过 Cloudflare API 部署，部署 ID：229ccd2b797f405a97934b7f5f3fb5ff。
+- Worker 外网运行探测尚未完成；GitHub App Secrets 与 App 安装未配置。
+
+### 当前测试证据
+- GitHub Actions：KeyPocket V2 CI run 41378870974 于 2026-11-02 02:39 UTC 成功；对应 commit eaddaa8bd4f19b545d6ae0eb398cb60354371518。
+- 该 run 覆盖 Node 语法与 6 项静态契约测试；它早于后续版本修复提交，不能代替最新 HEAD 的 CI 结果。
+- 真实双设备、浏览器 E2E、iOS/微信浏览器和生产线上版本尚未通过验收。
+
+### 发布状态
+- Code Completed：V2 升级分支主要代码已形成，仍需最新 CI 与审查。
+- Build Passed：仅静态 Node 语法检查通过；无独立前端构建系统。
+- Runtime Verified：Cloudflare API 确认 Worker 部署成功，但外部健康检查未验证。
+- Functional Tested：仅 6 项静态契约测试通过，核心真实业务 E2E 未完成。
+- Production Deployed：Supabase schema 和 Worker 已部署；KeyPocket GitHub Pages V2 尚未部署。
