@@ -98,6 +98,9 @@ jobs:
                   and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
                   and report.get('editorial_policy_version') == '2026-11-02.2'
                   and report.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
+                  and report.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
+                  and len(report.get('editorial', {}).get('source_basis', [])) >= 3
+                  and report.get('quality_gate', {}).get('claims', {}).get('editorial_source_basis_count', 0) >= 3
                   and report.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
                   and len(report.get('skills', [])) >= 1
                   and len(report.get('top5', [])) == 5
@@ -425,6 +428,9 @@ jobs:
               and current.get('localization', {}).get('status') == 'ok'
               and current.get('editorial_policy_version') == '2026-11-02.2'
               and current.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
+              and current.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
+              and len(current.get('editorial', {}).get('source_basis', [])) >= 3
+              and current.get('quality_gate', {}).get('claims', {}).get('editorial_source_basis_count', 0) >= 3
               and current.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
               and current.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
               and current.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
