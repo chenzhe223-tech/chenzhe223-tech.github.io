@@ -246,6 +246,9 @@ def main() -> int:
                 fail("WeChat copy omits low-confidence verification caveat")
     if skill.get("compatibility_status") and skill.get("compatibility_status") not in copy:
         fail("WeChat copy omits Skill platform compatibility disclosure")
+    editorial = report.get("editorial") or {}
+    if "💡 DAVYLAB 观察" not in copy or (editorial.get("analysis_scope_zh") and editorial.get("analysis_scope_zh") not in copy):
+        fail("WeChat copy does not explicitly label and scope DAVYLAB analysis")
 
     result = {
         "report_date": report_date,
@@ -279,6 +282,7 @@ def main() -> int:
             {"name": "source_report_timestamp_and_hash_match", "status": "PASS"},
             {"name": "story_title_and_order_match_formal_report", "status": "PASS"},
             {"name": "low_confidence_caveats_and_skill_compatibility_in_copy", "status": "PASS"},
+            {"name": "editorial_analysis_labeled_and_sourced", "status": "PASS"},
             {"name": "image_file_size_hash_and_individual_status", "status": "PASS"}
         ],
         "phone_camera_scan": "NOT_TESTED",
