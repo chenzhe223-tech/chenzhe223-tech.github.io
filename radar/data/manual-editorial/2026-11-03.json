@@ -4,9 +4,9 @@
     "status": "manual_editorial_verified",
     "provider": "DAVYLAB editorial review",
     "method": "Direct verification of primary public documents and independent reporting; manual Chinese translation and editorial synthesis",
-    "reviewed_at": "2026-11-03T07:35:00+08:00",
+    "reviewed_at": "2026-11-03T07:47:36+08:00",
     "sources_checked": 5,
-    "note": "本期五条重点新闻逐条核对了原始公告、监管机构文件、SEC 申报文件或独立报道；企业目标、机构统计口径与独立验证结果分别表述。此文件为人工编辑稿，不标记为 AI 生成。"
+    "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。此文件为人工编辑稿，不标记为 AI 生成。"
   },
   "top5": [
     {
@@ -109,28 +109,34 @@
     },
     {
       "id": "china-ccid-inference-token-calls-175t-20261102",
-      "title": "China touts AI milestone: models generate more tokens than used in training",
-      "title_en": "CCID says AI inference data has overtaken training data in China",
-      "title_zh": "中国 AI 推理调用量升至日均175万亿：应用规模正在扩大",
-      "original_title": "China touts AI milestone: models generate more tokens than used in training",
+      "title": "CCID reports more than 175 trillion daily AI token calls in China",
+      "title_en": "CCID reports more than 175 trillion daily AI token calls in China",
+      "title_zh": "CCID 称中国日均 Token 调用量超175万亿，推理需求持续扩大",
+      "original_title": "China's AI token calls top 175 trillion daily, CCID report says",
       "source": "South China Morning Post；Pandaily；中国电子信息产业发展研究院（CCID）报告",
       "source_url": "https://www.scmp.com/tech/big-tech/article/3372961/china-touts-ai-milestone-running-models-now-uses-more-data-training-them",
       "additional_sources": [
-        "https://pandaily.com/ccid-china-ai-inference-data-surpasses-training-data-175-trillion-daily-token-calls"
+        "https://pandaily.com/ccid-china-ai-inference-data-surpasses-training-data-175-trillion-daily-token-calls",
+        "https://www.nda.gov.cn/sjj/swdt/mtsy/0429/20260429115354770941372_pc.html"
       ],
       "published": "2026-11-02",
       "source_section": "china_ai_news",
       "category": "中国 AI / 推理应用与算力需求",
       "confidence": "medium",
-      "what_zh": "中国电子信息产业发展研究院（CCID）10月31日发布的报告称，截至2026年6月，中国日均 Token 调用量超过175万亿，较2024年初增长逾1000倍，并称推理数据量首次超过训练数据量。SCMP 于11月2日报道这一结论；Pandaily 指出，报告未充分披露推理与训练数据的具体统计方法，且不同机构对同月调用量的估算存在差异。",
-      "why_zh": "这条数据说明 AI 推理使用正在扩大，但统计口径仍需更多公开说明。Token 调用量不能直接等同于付费收入、活跃用户数或模型质量，也不能据此单独判断产业商业化已经成熟。",
-      "what_en": "A report released on Oct. 31 by China's Center for Information Industry Development (CCID) says average daily token calls exceeded 175 trillion as of June 2026, more than 1,000 times the early-2024 level, and says inference data surpassed training data for the first time. The South China Morning Post reported the finding on Nov. 2; Pandaily noted that the report did not fully disclose its measurement method and that estimates from different institutions vary.",
-      "why_en": "The figure points to expanding AI inference usage, but the measurement method needs more disclosure. Token calls are not the same as paid revenue, active users or model quality, and cannot alone prove that commercialisation is mature.",
-      "editor_judgment_zh": "175万亿为 CCID 报告口径；统计方法披露有限，且不同机构估算存在差异，不能与收入或用户数直接等同。",
-      "poster_summary_zh": "CCID 称日均 Token 调用量超175万亿；统计口径仍需更多公开说明。",
-      "poster_why_zh": "推理需求升温，但调用量不等于商业收入。",
-      "social_what_zh": "CCID 报告称，中国2026年6月日均 Token 调用量超过175万亿，推理数据首次超过训练数据。SCMP 11月2日报道了这一结论；报告统计方法披露有限，不同机构估算也有差异。",
-      "social_why_zh": "应用规模正在扩大，但 Token 调用量不等于付费收入、活跃用户或模型质量。"
+      "what_zh": "中国电子信息产业发展研究院（CCID）10月31日发布的报告称，截至2026年6月，中国日均 Token 调用量超过175万亿，较2024年初增长逾1000倍。需要补充一个重要背景：国家数据局4月29日公布的《全国数据资源调查报告（2025年）》已显示，2025年推理数据量101.34EB、超过训练数据量；因此，CCID 报告中“首次超过”的说法只能按其自身统计口径理解，不能直接当作新的全国性里程碑。",
+      "why_zh": "Token 调用量增长说明推理服务需求扩大，但不同机构对同月调用量的估算差异明显，CCID 的175万亿与 CAICT 另报的约500万亿不可直接比较。真正值得追踪的是可复现的统计口径、推理成本和企业付费，而不只是数字大小。",
+      "what_en": "A report released on Oct. 31 by China's Center for Information Industry Development (CCID) says average daily token calls exceeded 175 trillion as of June 2026, more than 1,000 times the early-2024 level. Important context: China's National Data Administration had already reported on April 29 that inference data reached 101.34 exabytes in 2025, exceeding training data. CCID's 'first time' wording therefore needs to be understood within its own measurement scope, not treated as a new nationwide first without reconciling the definitions.",
+      "why_en": "The token-call figure points to expanding inference demand, but estimates from different institutions vary materially: CCID's 175 trillion and a separate CAICT estimate of about 500 trillion are not directly comparable. The useful questions are reproducible measurement, inference cost and actual enterprise payment—not just the headline number.",
+      "editor_judgment_zh": "175万亿为 CCID 报告口径；国家数据局4月29日公布的2025年数据已显示推理数据101.34EB超过训练数据，因此 CCID“首次”表述需限定为其自身口径。CCID 统计方法披露有限，CAICT 另报约500万亿/日，不能直接比较。",
+      "poster_summary_zh": "CCID 称日均 Token 调用超175万亿；“首次”说法需对照国家数据局既有数据。",
+      "poster_why_zh": "不同统计口径不可直接比较。",
+      "social_what_zh": "CCID 报告称，中国2026年6月日均 Token 调用量超过175万亿，较2024年初增长逾1000倍。还要补一句背景：国家数据局4月29日公布的2025年报告，已经显示推理数据101.34EB超过训练数据；两份报告的统计口径并未充分说明，不能把“首次”直接当作新的全国里程碑。",
+      "social_why_zh": "Token 调用量能反映使用规模，但不能直接等同收入、活跃用户或模型质量；不同机构估算也不能简单比较。",
+      "editorial_sources_checked": [
+        "SCMP",
+        "Pandaily",
+        "National Data Administration / People's Daily"
+      ]
     }
   ],
   "editorial": {
