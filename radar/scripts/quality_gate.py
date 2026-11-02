@@ -388,6 +388,10 @@ def main():
     claim_errors=[]
     if report.get("editorial_policy_version") != CLAIM_PROVENANCE_POLICY_VERSION:
         claim_errors.append({"type":"outdated_editorial_policy","report_version":report.get("editorial_policy_version"),"required_version":CLAIM_PROVENANCE_POLICY_VERSION})
+    editorial = report.get("editorial") or {}
+    source_basis = [item for item in (editorial.get("source_basis") or []) if isinstance(item, dict) and str(item.get("url") or "").startswith("https://") and item.get("source") and (item.get("title_zh") or item.get("title_en"))]
+    if editorial.get("analysis_label_zh") != "DAVYLAB 分析" or not editorial.get("core_zh") or not editorial.get("trend_zh") or len(source_basis) < 3:
+        claim_errors.append({"type":"editorial_analysis_missing_traceable_source_basis","valid_source_count":len(source_basis)})
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
         if isinstance(story, dict):
             error = claim_provenance_error(story)
@@ -425,7 +429,7 @@ def main():
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
       "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
-      "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors,"policy_version":CLAIM_PROVENANCE_POLICY_VERSION},
+      "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors,"policy_version":CLAIM_PROVENANCE_POLICY_VERSION,"editorial_source_basis_count":len(source_basis),"editorial_analysis_label":editorial.get("analysis_label_zh")},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
       "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
       "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"low_confidence_claims_require_explicit_caveat":True,"claim_provenance_policy_version":CLAIM_PROVENANCE_POLICY_VERSION,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
