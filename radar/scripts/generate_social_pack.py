@@ -580,12 +580,24 @@ def main() -> int:
         "layout_regions": social_layout_regions("skill_feature"), "text_bounds": skill_text_bounds
     })
 
+    source_report_sha256 = hashlib.sha256(DATA.read_bytes()).hexdigest()
+    for entry in images:
+        image_path = out / entry["filename"]
+        with Image.open(image_path) as saved_image:
+            entry["width"], entry["height"] = saved_image.size
+            entry["format"] = saved_image.format
+        entry["file_size_bytes"] = image_path.stat().st_size
+        entry["sha256"] = hashlib.sha256(image_path.read_bytes()).hexdigest()
+        entry["qa_status"] = "PENDING_FINAL_VERIFICATION"
+
     wechat, moments = make_copy(report, top, skill, report_date)
     (out / "wechat-copy.md").write_text(wechat, encoding="utf-8")
     (out / "moments-copy.md").write_text(moments, encoding="utf-8")
     manifest = {
         "report_date": report_date,
         "generated_at": dt.datetime.now(TZ).isoformat(),
+        "source_report_generated_at": report.get("generated_at"),
+        "source_report_sha256": source_report_sha256,
         "public_url": PUBLIC_URL,
         "style": visual,
         "canvas": [W, H],
@@ -594,7 +606,7 @@ def main() -> int:
         "story_titles": [story_title(s) for s in top],
         "topic_story_urls": [story_url(s) for _, s in topic_news],
         "topic_categories": {"global_news": 2, "china_ai_news": 2, "skill": 1},
-        "skill": {"name": skill.get("name"), "url": skill.get("url"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "readme_verified": skill.get("readme_verified"), "skill_file_paths": skill.get("skill_file_paths"), "evidence_verified": skill.get("evidence_verified"), "license": skill.get("license_name") or skill.get("license")},
+        "skill": {"name": skill.get("name"), "url": skill.get("url"), "description_zh": skill.get("description_zh"), "compatibility_status": skill.get("compatibility_status"), "actual_skill_file_count": skill.get("actual_skill_file_count"), "security_status": skill.get("security_status"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "readme_verified": skill.get("readme_verified"), "skill_file_paths": skill.get("skill_file_paths"), "evidence_verified": skill.get("evidence_verified"), "license": skill.get("license_name") or skill.get("license")},
         "images": images,
         "phone_camera_scan": "NOT_TESTED",
         "wechat_editor_preview": "NOT_TESTED"
