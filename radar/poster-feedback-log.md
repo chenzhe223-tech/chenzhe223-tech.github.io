@@ -52,3 +52,11 @@
 - 发现：当 Horizon 未完成时，日报保留了基于已核验来源的 DAVYLAB 分析；旧浏览器测试却把整个 `editorialCore` 误判为内部 AI 不可用提示，导致有效的来源分析被错误阻断。
 - 修复：浏览器测试改为验证内部 `#aiList` 状态容器保持隐藏，不再要求公开、带来源依据的 DAVYLAB 分析隐藏。
 - 验收：等待下一轮桌面与移动端 Playwright 复测。
+
+
+## 2026-11-02 — 中文本地化与人工编辑兜底门禁
+
+- 发现：GitHub Actions 未配置 `DEEPSEEK_API_KEY`，自动本地化/Top 5 选择不可用；旧流程仍会保留英文 source-fallback，不能作为中文正式简报发布。
+- 修复：增加日期限定的 `radar/data/manual-editorial/YYYY-MM-DD.json` 人工编辑稿机制；本期 5 条新闻逐条核验来源、日期与限定条件，人工完成中文标题、事实摘要和意义分析，并明确标记 `manual_editorial_verified` / `editorial_curated`，不冒称 AI 生成。
+- 门禁：质量门禁要求五条新闻均具备中文标题、事实摘要和意义说明；无 DeepSeek API 且无当日人工编辑稿时，阻断发布并保留上一有效版本。
+- 后续：若要恢复全自动中文选题与本地化，需要在 GitHub Actions Secrets 配置 `DEEPSEEK_API_KEY`；本期人工稿不替代后续日期的自动化密钥配置。
