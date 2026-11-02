@@ -29,6 +29,10 @@ def validate_visual_lock(report_date: str) -> dict:
         raise RuntimeError("P0: image relevance threshold/fallback policy invalid or outdated")
     if image_policy.get("thematic_fallback_label") != "主题配图 · 非新闻现场":
         raise RuntimeError("P0: thematic fallback must have the approved non-news label")
+    claim_policy = qa.get("claim_provenance")
+    required_claim_flags = ("low_confidence_requires_explicit_caveat", "self_reported_benchmarks_require_attribution", "prototype_status_must_be_preserved", "superlatives_require_metric_scope_and_date", "company_and_management_claims_require_attribution")
+    if not isinstance(claim_policy, dict) or claim_policy.get("policy_version") != "2026-11-02.2" or any(claim_policy.get(key) is not True for key in required_claim_flags):
+        raise RuntimeError("P0: editorial claim provenance policy missing or outdated")
     typography = load_json("typography.json")
     colors = load_json("color-tokens.json")
     meta = poster_style_metadata(report_date)
