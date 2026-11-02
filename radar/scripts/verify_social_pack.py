@@ -242,8 +242,11 @@ def main() -> int:
             caveat = str(story.get("what_zh") or "")
             if not any(term in caveat for term in ("尚未独立验证", "待独立验证", "尚无独立评测", "无独立评测")):
                 fail(f"Low-confidence story lacks a source caveat: {story.get('title_zh')}")
-            if not any(term in copy for term in ("尚未独立验证", "待独立验证", "尚无独立评测", "无独立评测")):
-                fail("WeChat copy omits low-confidence verification caveat")
+            title = str(story.get("title_zh") or story.get("title") or "")
+            position = copy.find(title)
+            story_copy = copy[position:position + 900] if position >= 0 else ""
+            if not any(term in story_copy for term in ("尚未独立验证", "待独立验证", "尚无独立评测", "无独立评测")):
+                fail(f"WeChat copy omits the low-confidence caveat for {title}")
     if skill.get("compatibility_status") and skill.get("compatibility_status") not in copy:
         fail("WeChat copy omits Skill platform compatibility disclosure")
     editorial = report.get("editorial") or {}
