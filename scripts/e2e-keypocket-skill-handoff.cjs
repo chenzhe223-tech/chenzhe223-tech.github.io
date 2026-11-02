@@ -46,6 +46,14 @@ const { chromium } = require('playwright');
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
+    // app.js runs init() asynchronously after DOM parsing and opens IndexedDB before
+    // it switches the lock title/confirm field from their static HTML defaults.
+    await keyPocket.waitForFunction(() => {
+      const title = document.querySelector('#lockTitle')?.textContent?.trim();
+      return title === '创建你的本地密钥库' || title === '欢迎回来'
+        || title === '检测到本地数据，但密钥库信息缺失'
+        || title === '本地密钥库暂时无法读取';
+    }, null, { timeout: 15000 });
     const initialState = await keyPocket.evaluate(async () => {
       const dbs = typeof indexedDB.databases === 'function' ? await indexedDB.databases() : [];
       const db = await new Promise((resolve, reject) => {
