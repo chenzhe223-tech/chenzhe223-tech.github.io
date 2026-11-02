@@ -42,16 +42,37 @@ const { chromium } = require('playwright');
     const keyPocket = await popupPromise;
     // The popup may be fulfilled by an older cached page during a Pages deployment.
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
-    await keyPocket.waitForFunction(() => {
-      const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-      return script && script.src.includes('kp-v2-radar-basis-20261102-8')
-        && window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
-        && window.__kpProjectRendererReady === true
-        && typeof window.renderProjects === 'function'
-        && document.querySelector('#recycleView')
-        && document.querySelector('#backupView')
-        && document.querySelector('#radarView');
-    }, null, { timeout: 30000 });
+    try {
+      await keyPocket.waitForFunction(() => {
+        const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
+        return script && script.src.includes('kp-v2-radar-basis-20261102-8')
+          && window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
+          && window.__kpProjectRendererReady === true
+          && typeof window.renderProjects === 'function'
+          && document.querySelector('#recycleView')
+          && document.querySelector('#backupView')
+          && document.querySelector('#radarView');
+      }, null, { timeout: 30000 });
+    } catch (error) {
+      const popupDiagnostics = await keyPocket.evaluate(() => ({
+        readyState: document.readyState,
+        href: location.href,
+        scripts: [...document.scripts].map(script => script.src).filter(Boolean),
+        buildVersion: window.__kpBuildVersion,
+        rendererReady: window.__kpProjectRendererReady,
+        rendererType: typeof window.renderProjects,
+        initDiagnostic: window.__kpInitDiagnostic,
+        initStep: window.__kpUnlockStep,
+        lockTitle: document.querySelector('#lockTitle')?.textContent,
+        moduleViews: ['#recycleView','#backupView','#radarView'].map(selector => ({
+          selector, exists: !!document.querySelector(selector)
+        }))
+      })).catch(e => ({ evaluateError: e.message }));
+      console.error('KEYPOCKET_POPUP_DIAGNOSTICS ' + JSON.stringify({
+        popupDiagnostics, pageErrors, consoleErrors
+      }));
+      throw error;
+    }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
       await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-radar-basis-20261102-8'
