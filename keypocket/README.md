@@ -49,3 +49,20 @@ GitHub Pages：https://chenzhe223-tech.github.io/keypocket/
 - 复制密钥会把完整值放入系统剪贴板，请留意共享设备。
 - 任何云同步功能都应结合实际代码、Supabase 表策略、浏览器网络请求和部署配置进行验证。
 - 详见 SECURITY-ACCEPTANCE.md；其中标记为待验证的项目不得视为已通过。
+
+
+## V2.0 新增能力（feature/keypocket-v2）
+
+V2.0 在保留旧版 IndexedDB、AES-GCM/PBKDF2 解密兼容性的基础上增加：
+- 本地自动保存检查点、每日快照、月度归档和重要操作快照。每日最多保留 30 个、月度最多 12 个；浏览器数据被清理前，应先确保云端备份成功。
+- API Key、Skill 和项目删除默认进入 30 天回收站，恢复保留原始 ID 与关联数据；永久删除标记会通过同步传播。
+- Supabase 逐记录加密增量同步，包含版本、设备、更新时间、软删除墓碑和冲突比较。首次同步会尝试读取旧版整库快照并迁移；不会删除旧版同步表。
+- Skill Radar 采集公开 GitHub 仓库当前 Stars/Forks 与每日历史快照。月/季/年榜只在有足够历史跨度后计算真实增长；累计榜按当前 Stars。
+- GitHub App Worker 将加密保险库文件写入用户单独授权的 keypocket-cloud-vault 私有仓库，Worker 服务端持有 App 私钥，不向浏览器下发安装访问令牌。
+
+### 使用与兼容提醒
+- 多设备首次绑定时，请在每台设备使用相同的 KeyPocket 本地解锁密码，以派生同一用户的共享云端加密密钥；同步账号密码与本地解锁密码仍然是两套凭据。
+- 本地快照受当前浏览器站点存储保护；只有 Supabase 登录并成功同步后才会产生云端快照。云端备份成功状态必须在应用中确认。
+- Skill Radar 首次采集日为真实历史起点。历史周期尚未积累完整时，榜单显示“数据积累中”，不展示伪造增长。
+- GitHub App 和 Skill Radar 依赖一次性外部配置。完成 GitHub Actions secrets、Cloudflare Worker secrets、GitHub App 安装和私有保险库仓库配置前，不应显示或宣称已连接。
+- V2 客户端代码当前在 feature/keypocket-v2 分支。生产 GitHub Pages 地址在合并与部署前仍运行 main 分支版本。
