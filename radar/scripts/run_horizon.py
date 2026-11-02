@@ -471,6 +471,16 @@ def main():
     if '--provenance-only' in sys.argv:
         if not isinstance(report.get('ai_analysis'), dict):
             report['ai_analysis'] = {'status':'unavailable','message':'Horizon enrichment did not complete; the source-backed news baseline is retained.'}
+        top5 = report.get('top5') if isinstance(report.get('top5'), list) else []
+        localized_top5 = len(top5) == 5 and all(
+            re.search(r'[\\u4e00-\\u9fff]', str(story.get('title_zh') or ""))
+            and re.search(r'[\\u4e00-\\u9fff]', str(story.get('what_zh') or ""))
+            and re.search(r'[\\u4e00-\\u9fff]', str(story.get('why_zh') or ""))
+            for story in top5 if isinstance(story, dict)
+        )
+        localization = report.get('localization') if isinstance(report.get('localization'), dict) else {}
+        if localization.get('status') != 'ok' or report.get('top5_status') != 'ai_curated' or not localized_top5:
+            localize(report)
         ensure_story_fallback(report)
         remove_top5_duplicates_from_china(report)
         apply_verified_skill_metadata(report.get('skills') or [])
