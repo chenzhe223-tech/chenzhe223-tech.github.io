@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-device-cloud-20261102-16';
+window.__kpBuildVersion='kp-v2-device-revoke-cloudbackup-20261102-17';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -734,20 +734,22 @@ async function kpV2ApplyRemote(row,key){
 }
 async function kpV2SaveCloudBackups(key,salt,deviceId){
  const session=kpSession(),today=kpDateKey(),month=today.slice(0,7);
- const snapshots=await kpV2Api('keypocket_backup_snapshots?select=id,snapshot_type,period_key&device_id=eq.'+encodeURIComponent(deviceId)+'&limit=200');
- const have=new Set((snapshots||[]).map(x=>x.snapshot_type+':'+x.period_key));
  const local=await kpV2LocalEntities();
  const live=local.filter(x=>!x.deletedAt);
  const deleted=local.filter(x=>x.deletedAt).map(x=>({kind:x.kind,id:x.id,deletedAt:x.deletedAt,permanent:x.permanent===true,plain:x.plain}));
  const snapshot={schemaVersion:KP_V2_SYNC_SCHEMA,createdAt:new Date().toISOString(),records:live.filter(x=>x.kind==='key').map(x=>x.plain),projects:live.filter(x=>x.kind==='project').map(x=>x.plain),deleted};
  const encrypted=await encryptJson(snapshot,key);
  const payload={salt:salt,iv:encrypted.iv,data:encrypted.data};
+ const now=new Date().toISOString();
  const types=[{type:'daily',period:today},{type:'monthly',period:month}];
+ // Refresh the current period's encrypted snapshot on every successful sync.
+ // This keeps today's/month's latest edits recoverable instead of freezing the
+ // first state captured after midnight or on the first sync of a new month.
  for(const x of types){
-  if(have.has(x.type+':'+x.period))continue;
   await kpV2Api('keypocket_backup_snapshots?on_conflict=user_id,device_id,snapshot_type,period_key','POST',{
-   user_id:session.user.id,device_id:deviceId,snapshot_type:x.type,period_key:x.period,schema_version:KP_V2_SYNC_SCHEMA,
-   record_count:live.filter(v=>v.kind==='key').length,payload
+   user_id:session.user.id,device_id:deviceId,snapshot_type:x.type,period_key:x.period,
+   schema_version:KP_V2_SYNC_SCHEMA,record_count:live.filter(v=>v.kind==='key').length,
+   payload,created_at:now
   },'resolution=merge-duplicates,return=minimal');
  }
  const dailyCutoff=new Date(Date.now()-35*86400000).toISOString();
@@ -1011,13 +1013,33 @@ async function renderSyncCenter(){
  try{
   const rows=await kpV2Api('keypocket_devices?select=device_id,device_label,created_at,last_seen_at,revoked_at&order=last_seen_at.desc&limit=50');
   const current=kpV2DeviceId();
-  meta.textContent='设备 ID 保存在每台设备本地；只有当前账号下的设备能够读取此列表。撤销设备状态由服务端 CAS 写入函数强制检查。';
+  meta.textContent='设备 ID 保存在每台设备本地。可撤销不再使用的其他设备；当前设备不能从自身会话中撤销。撤销后，该设备后续云同步写入将被服务端拒绝。';
   host.innerHTML=(rows||[]).map(x=>{
-   const isCurrent=String(x.device_id)===current;
-   return '<article class="card"><div class="cardtop"><div class="provider-icon">DEV</div><div class="cardtitle"><h3>'+esc(x.device_label||'KeyPocket 设备')+(isCurrent?' · 当前设备':'')+'</h3><p>设备 ID '+esc(String(x.device_id||'').slice(0,8))+' · 最近同步 '+(x.last_seen_at?new Date(x.last_seen_at).toLocaleString():'尚未同步')+'</p><p>'+ (x.revoked_at?'已撤销，不能写入云端':'有效设备')+'</p></div></div></article>';
+   const deviceId=String(x.device_id||''),isCurrent=deviceId===current,revoked=!!x.revoked_at;
+   const state=revoked?'已撤销，不能写入云端':(isCurrent?'当前设备，不能在此撤销':'有效设备');
+   const action=!isCurrent&&!revoked?'<div class="cardactions"><button class="btn danger" type="button" data-revoke-device="'+esc(deviceId)+'">撤销此设备</button></div>':'';
+   return '<article class="card" data-device-id="'+esc(deviceId)+'"><div class="cardtop"><div class="provider-icon">DEV</div><div class="cardtitle"><h3>'+esc(x.device_label||'KeyPocket 设备')+(isCurrent?' · 当前设备':'')+'</h3><p>设备 ID '+esc(deviceId.slice(0,8))+' · 最近同步 '+(x.last_seen_at?new Date(x.last_seen_at).toLocaleString():'尚未同步')+'</p><p>'+state+'</p></div></div>'+action+'</article>';
   }).join('')||'<div class="empty"><p>尚未注册设备；完成首次同步后自动登记。</p></div>';
  }catch(error){meta.textContent='设备列表暂不可用：'+error.message;host.innerHTML='';}
 }
+$('#syncDeviceList')?.addEventListener('click',async event=>{
+ const button=event.target.closest('[data-revoke-device]');if(!button)return;
+ const deviceId=String(button.dataset.revokeDevice||''),session=kpSession();
+ if(!session?.access_token||!session?.user?.id){showToast('登录状态已失效，请重新登录。');return;}
+ if(!deviceId||deviceId===kpV2DeviceId()){showToast('为防止当前设备失去控制，不能在本设备撤销自身。');return;}
+ if(!confirm('确认撤销这台设备？\n撤销后，该设备将无法继续向 KeyPocket 云端写入同步数据。'))return;
+ button.disabled=true;button.textContent='正在撤销…';
+ try{
+  const rows=await kpV2Api('keypocket_devices?user_id=eq.'+encodeURIComponent(session.user.id)+'&device_id=eq.'+encodeURIComponent(deviceId)+'&revoked_at=is.null&select=device_id,revoked_at','PATCH',{revoked_at:new Date().toISOString()},'return=representation');
+  if(!Array.isArray(rows)||rows.length!==1||String(rows[0].device_id)!==deviceId||!rows[0].revoked_at)throw Error('服务端未确认设备撤销，可能该设备已被撤销或不属于当前账号。');
+  showToast('设备已撤销，后续云同步写入将被拒绝。');
+  await renderSyncCenter();
+ }catch(error){
+  button.disabled=false;button.textContent='撤销此设备';
+  showToast('撤销失败：'+error.message);
+  kpSyncStatus('设备撤销未完成：'+error.message,true);
+ }
+});
 async function renderGithubCenter(){const el=$('#githubAccountStatus');if(el)el.textContent='未绑定 KeyPocket GitHub App。当前 GitHub 连接器只用于仓库开发，不代表应用内 OAuth 授权。';}
 $('#githubConnectBtn')?.addEventListener('click',()=>showToast('KeyPocket GitHub App 尚未配置，暂不能绑定私有备份仓库。'));
 async function renderSkillRadar(){

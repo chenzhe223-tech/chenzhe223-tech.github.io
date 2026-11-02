@@ -670,6 +670,65 @@ const mark = (status, name, detail = '') => {
           mark(restoredProjectId === originalProjectId ? 'PASS' : 'FAIL', 'KeyPocket 项目恢复保留原 ID', '原 ID 与恢复 ID 一致=' + String(restoredProjectId === originalProjectId));
         }
       }
+      // Device revocation uses a fake authenticated session and mocked REST responses.
+      // No live user credentials or production Key data are used in this regression.
+      const qaUserId = '11111111-1111-4111-8111-111111111111';
+      const qaOtherDeviceId = '22222222-2222-4222-8222-222222222222';
+      const qaCurrentDeviceId = await kp.evaluate(() => {
+        let id = localStorage.getItem('kp.v2.device-id');
+        if (!id) { id = '33333333-3333-4333-8333-333333333333'; localStorage.setItem('kp.v2.device-id', id); }
+        return id;
+      });
+      let qaOtherDeviceRevokedAt = null;
+      let qaRevokeRequest = null;
+      await kp.route('https://urzgghdwawpwqliafrzv.supabase.co/rest/v1/keypocket_devices**', async route => {
+        const request = route.request();
+        const url = new URL(request.url());
+        if (request.method() === 'GET') {
+          const rows = [
+            { user_id: qaUserId, device_id: qaCurrentDeviceId, device_label: 'QA 当前设备', created_at: '2026-11-02T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: null },
+            { user_id: qaUserId, device_id: qaOtherDeviceId, device_label: 'QA 另一台设备', created_at: '2026-11-01T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: qaOtherDeviceRevokedAt }
+          ];
+          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rows) });
+          return;
+        }
+        if (request.method() === 'PATCH') {
+          const payload = request.postDataJSON();
+          qaRevokeRequest = { method: request.method(), userId: url.searchParams.get('user_id'), deviceId: url.searchParams.get('device_id'), onlyActive: url.searchParams.get('revoked_at'), payload };
+          if (qaRevokeRequest.userId !== qaUserId || qaRevokeRequest.deviceId !== qaOtherDeviceId || qaRevokeRequest.onlyActive !== 'is.null'
+            || Object.keys(payload || {}).join(',') !== 'revoked_at' || !payload.revoked_at) {
+            await route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'Unexpected test request shape' }) });
+            return;
+          }
+          qaOtherDeviceRevokedAt = payload.revoked_at;
+          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([{ device_id: qaOtherDeviceId, revoked_at: qaOtherDeviceRevokedAt }]) });
+          return;
+        }
+        await route.fulfill({ status: 405, contentType: 'application/json', body: JSON.stringify({ message: 'Unexpected method' }) });
+      });
+      await kp.evaluate(userId => localStorage.setItem('kp.sync.session.v1', JSON.stringify({
+        access_token: 'qa.synthetic.access.token',
+        token_type: 'bearer',
+        user: { id: userId, email: 'keypocket-qa@example.invalid' }
+      })), qaUserId);
+      await kp.locator('[data-module="sync"]').click();
+      await kp.waitForSelector('#syncView:not(.hidden)', { timeout: 5000 });
+      await kp.waitForSelector('#syncDeviceList [data-revoke-device]', { timeout: 8000 });
+      const currentDeviceActions = await kp.locator('#syncDeviceList [data-device-id="' + qaCurrentDeviceId + '"] [data-revoke-device]').count();
+      const otherDeviceActions = await kp.locator('#syncDeviceList [data-device-id="' + qaOtherDeviceId + '"] [data-revoke-device]').count();
+      mark(currentDeviceActions === 0 && otherDeviceActions === 1 ? 'PASS' : 'FAIL',
+        'KeyPocket 设备撤销保护', '当前设备不可撤销；其他有效设备提供撤销入口');
+      kp.once('dialog', dialog => dialog.accept());
+      await kp.locator('#syncDeviceList [data-device-id="' + qaOtherDeviceId + '"] [data-revoke-device]').click();
+      await kp.waitForFunction(id => {
+        const row = document.querySelector('#syncDeviceList [data-device-id="' + id + '"]');
+        return row && row.innerText.includes('已撤销，不能写入云端') && !row.querySelector('[data-revoke-device]');
+      }, qaOtherDeviceId, { timeout: 8000 });
+      const revokeRequestValid = !!qaRevokeRequest && qaRevokeRequest.method === 'PATCH'
+        && qaRevokeRequest.userId === qaUserId && qaRevokeRequest.deviceId === qaOtherDeviceId
+        && qaRevokeRequest.onlyActive === 'is.null' && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
+      mark(revokeRequestValid && !!qaOtherDeviceRevokedAt ? 'PASS' : 'FAIL',
+        'KeyPocket 撤销设备接口与状态刷新', 'PATCH 限定当前账号、指定设备和未撤销状态；服务端返回更新行后才显示成功');
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
       await kp.screenshot({ path: path.join(out, 'keypocket-home.png'), fullPage: true });
       await kp.close();
