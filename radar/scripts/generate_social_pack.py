@@ -51,6 +51,21 @@ def story_url(story: dict) -> str:
     return str(story.get("source_url") or story.get("url") or "")
 
 
+def select_topic_stories(top: list[dict]) -> list[tuple[str, dict]]:
+    """Select exactly two international and two China stories from the formal Top 5."""
+    global_stories = [s for s in top if str(s.get("source_section") or "") == "global_news"]
+    china_stories = [s for s in top if str(s.get("source_section") or "") == "china_ai_news"]
+    if len(global_stories) < 2 or len(china_stories) < 2:
+        raise ValueError(
+            "WeChat topic pack requires at least two global_news and two china_ai_news "
+            f"stories inside the formal Top 5; found global={len(global_stories)}, china={len(china_stories)}"
+        )
+    return (
+        [("global_news", s) for s in global_stories[:2]]
+        + [("china_ai_news", s) for s in china_stories[:2]]
+    )
+
+
 def local_date(value: str, fallback: str) -> str:
     try:
         parsed = dt.datetime.fromisoformat(str(value).replace("Z", "+00:00"))
@@ -194,14 +209,15 @@ def draw_topic_art(draw, kind: str):
     draw.text((50, 411), "主题插画 · 非新闻现场", font=font(17, True), fill=(255, 250, 240))
 
 
-def render_topic_image(story: dict, index: int, report_date: str) -> Image.Image:
+def render_topic_image(story: dict, index: int, report_date: str, category: str = "global_news") -> Image.Image:
     kind = classify_topic(story, index)
     image = Image.new("RGB", (W, H), PAPER)
     draw = ImageDraw.Draw(image)
     draw_topic_art(draw, kind)
     draw.text((38, 30), "DAVYLAB", font=font(25, True), fill=WHITE)
     draw.text((860, 35), report_date.replace("-", "."), font=font(17, True), fill=WHITE, anchor="ra")
-    draw.text((40, 475), f"TOPIC  /  {index + 1:02d}  ·  {topic_label(kind)}", font=font(17, True), fill=ORANGE)
+    region_label = "GLOBAL AI" if category == "global_news" else "CHINA AI"
+    draw.text((40, 475), f"TOPIC  /  {index + 1:02d}  ·  {region_label}  ·  {topic_label(kind)}", font=font(16, True), fill=ORANGE)
     y = write_text(draw, story_title(story), (40, 515), font(32, True), INK, 820, 3, 7)
     y = write_text(draw, story_summary(story), (42, y + 12), font(21), MUTED, 810, 4, 7)
     if story_why(story):
@@ -214,6 +230,42 @@ def render_topic_image(story: dict, index: int, report_date: str) -> Image.Image
     draw.text((42, 1108), f"来源：{source}  ·  {published}", font=font(16, True), fill=BLUE)
     draw.text((42, 1142), domain(story_url(story)), font=font(13), fill=MUTED)
     draw.text((858, 1170), "AI FRONTIER BRIEF", font=font(12, True), fill=MUTED, anchor="ra")
+    return image
+
+
+def render_skill_image(skill: dict, report_date: str) -> Image.Image:
+    """Create a standalone Skill feature illustration; it is not a product screenshot."""
+    image = Image.new("RGB", (W, H), PAPER)
+    draw = ImageDraw.Draw(image)
+    draw.rectangle((0, 0, W, 450), fill=NAVY)
+    draw.ellipse((700, 35, 835, 170), fill=(234, 156, 101))
+    card(draw, (335, 115, 565, 205), fill=(245, 248, 250), outline=(117, 157, 187), radius=18)
+    draw.text((450, 142), "SKILL", font=font(28, True), fill=NAVY, anchor="mm")
+    for x, label in ((145, "INPUT"), (450, "WORKFLOW"), (755, "OUTPUT")):
+        draw.line((450, 205, x, 300), fill=(124, 177, 215), width=7)
+        card(draw, (x - 110, 300, x + 110, 385), fill=(255, 253, 248), outline=(129, 170, 201), radius=16)
+        draw.text((x, 342), label, font=font(19, True), fill=BLUE, anchor="mm")
+    draw.rounded_rectangle((35, 405, 315, 440), radius=8, fill=(8, 35, 65))
+    draw.text((50, 411), "主题插画 · 非产品截图", font=font(17, True), fill=(255, 250, 240))
+
+    draw.text((40, 30), "DAVYLAB", font=font(25, True), fill=WHITE)
+    draw.text((860, 35), report_date.replace("-", "."), font=font(17, True), fill=WHITE, anchor="ra")
+    draw.text((40, 475), "TODAY'S PRACTICAL SKILL", font=font(17, True), fill=ORANGE)
+    y = write_text(draw, str(skill.get("name") or "Open-source Skill"), (40, 515), font(34, True), INK, 820, 3, 7)
+    description = str(skill.get("description_zh") or skill.get("description") or "项目能力以官方仓库说明为准。")
+    y = write_text(draw, description, (42, y + 14), font(21), MUTED, 810, 5, 7)
+    license_name = str(skill.get("license_name") or skill.get("license") or "许可证待核验")
+    draw.line((42, 900, 858, 900), fill=LINE, width=2)
+    draw.text((42, 925), f"许可证：{license_name[:44]}", font=font(17, True), fill=BLUE)
+    repo_url = str(skill.get("url") or "")
+    website = str(skill.get("official_website") or repo_url)
+    draw.text((42, 966), f"项目：{domain(repo_url)}", font=font(15), fill=INK)
+    draw.text((42, 1000), f"主页：{domain(website)}", font=font(15), fill=INK)
+    draw.text((42, 1060), "已核验仓库、官网/官方项目页、README、SKILL.md 与许可证", font=font(13, True), fill=MUTED)
+    draw.text((42, 1090), "未实测安装；未完成专项安全审计，使用请自行评估", font=font(13, True), fill=MUTED)
+    draw.rectangle((0, 1140, W, H), fill=NAVY)
+    draw.text((40, 1160), "DAVYLAB  ·  让可能发生", font=font(17, True), fill=WHITE)
+    draw.text((860, 1167), "SKILL FEATURE  |  EDITORIAL ILLUSTRATION", font=font(11, True), fill=(220, 231, 238), anchor="ra")
     return image
 
 
@@ -382,15 +434,25 @@ def main() -> int:
         "material_type": "程序绘制的品牌编辑版式与几何主题视觉", "image_type": "main_poster",
         "source_url": PUBLIC_URL, "label": "主题视觉 · 非新闻现场"
     })
-    for index, story in enumerate(top, start=1):
-        filename = f"{index + 1:02d}-story-{index:02d}-{safe_slug(story_title(story), index)}.png"
-        render_topic_image(story, index - 1, report_date).save(out / filename, format="PNG", optimize=True)
+    topic_news = select_topic_stories(top)
+    for index, (category, story) in enumerate(topic_news, start=1):
+        region_slug = "global" if category == "global_news" else "china"
+        filename = f"{index + 1:02d}-{region_slug}-story-{index:02d}-{safe_slug(story_title(story), index)}.png"
+        render_topic_image(story, index - 1, report_date, category).save(out / filename, format="PNG", optimize=True)
         images.append({
             "filename": filename, "theme": story_title(story),
             "material_type": "程序绘制的原创主题插画", "image_type": "topic_illustration",
-            "source": story.get("source"), "source_url": story_url(story),
+            "category": category, "source": story.get("source"), "source_url": story_url(story),
             "published": story.get("published"), "label": "主题插画 · 非新闻现场"
         })
+
+    skill_filename = "06-skill-feature.png"
+    render_skill_image(skill, report_date).save(out / skill_filename, format="PNG", optimize=True)
+    images.append({
+        "filename": skill_filename, "theme": f"今日推荐 Skill：{skill.get('name') or 'Open-source Skill'}",
+        "material_type": "程序绘制的原创技能工作流主题插画", "image_type": "skill_feature",
+        "source_url": skill.get("url"), "label": "主题插画 · 非产品截图"
+    })
 
     wechat, moments = make_copy(report, top, skill, report_date)
     (out / "wechat-copy.md").write_text(wechat, encoding="utf-8")
@@ -404,6 +466,8 @@ def main() -> int:
         "required_count": 6,
         "story_urls": [story_url(s) for s in top],
         "story_titles": [story_title(s) for s in top],
+        "topic_story_urls": [story_url(s) for _, s in topic_news],
+        "topic_categories": {"global_news": 2, "china_ai_news": 2, "skill": 1},
         "skill": {"name": skill.get("name"), "url": skill.get("url"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "readme_verified": skill.get("readme_verified"), "skill_file_paths": skill.get("skill_file_paths"), "evidence_verified": skill.get("evidence_verified"), "license": skill.get("license_name") or skill.get("license")},
         "images": images,
         "phone_camera_scan": "NOT_TESTED",

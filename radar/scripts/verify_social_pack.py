@@ -15,6 +15,7 @@ import numpy as np
 from PIL import Image
 
 from radar.scripts.poster_style import poster_style_metadata
+from radar.scripts.generate_social_pack import select_topic_stories, story_url
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data" / "latest.json"
@@ -104,6 +105,18 @@ def main() -> int:
     entries = manifest.get("images") or []
     if len(entries) != 6 or len({e.get("filename") for e in entries}) != 6:
         fail("Six independent image entries are required")
+    try:
+        selected_topics = select_topic_stories(top)
+    except Exception as exc:
+        fail(f"Top 5 cannot satisfy the 2-global/2-China topic-image contract: {exc}")
+    expected_topic_urls = [story_url(story) for _, story in selected_topics]
+    if manifest.get("topic_story_urls") != expected_topic_urls:
+        fail("Topic image story selection differs from the required two global and two China Top 5 stories")
+    if manifest.get("topic_categories") != {"global_news": 2, "china_ai_news": 2, "skill": 1}:
+        fail("Topic image category counts are not 2 global + 2 China + 1 Skill")
+    skill = (report.get("skills") or [{}])[0]
+    if (manifest.get("skill") or {}).get("url") != skill.get("url"):
+        fail("Skill feature metadata does not match the formal report recommendation")
 
     checks = []
     hashes = set()
@@ -124,11 +137,20 @@ def main() -> int:
         if digest in hashes:
             fail(f"Duplicate image content detected: {path.name}")
         hashes.add(digest)
-        if index > 0:
+        if index == 0:
+            if entry.get("image_type") != "main_poster":
+                fail(f"Main poster manifest type mismatch: {path.name}")
+        elif 1 <= index <= 4:
+            expected_category, expected_story = selected_topics[index - 1]
             if entry.get("image_type") != "topic_illustration" or entry.get("label") != "主题插画 · 非新闻现场":
-                fail(f"Topic illustration disclosure missing: {path.name}")
-            if entry.get("source_url") != urls[index - 1]:
-                fail(f"Topic image source mismatch: {path.name}")
+                fail(f"News topic illustration disclosure missing: {path.name}")
+            if entry.get("source_url") != story_url(expected_story) or entry.get("category") != expected_category:
+                fail(f"Topic image source/category mismatch: {path.name}")
+        else:
+            if entry.get("image_type") != "skill_feature" or entry.get("label") != "主题插画 · 非产品截图":
+                fail(f"Standalone Skill illustration disclosure missing: {path.name}")
+            if entry.get("source_url") != skill.get("url"):
+                fail(f"Skill image source mismatch: {path.name}")
         verified_images.append({
             "filename": path.name, "width": W, "height": H, "format": "PNG",
             "file_size_bytes": size, "sha256": digest, "theme": entry.get("theme"),
@@ -160,6 +182,7 @@ def main() -> int:
             {"name": "six_independent_png_files", "status": "PASS"},
             {"name": "900x1200_3x4_dimensions", "status": "PASS"},
             {"name": "unique_image_hashes", "status": "PASS"},
+            {"name": "two_global_two_china_one_skill_topic_distribution", "status": "PASS"},
             {"name": "topic_story_source_consistency", "status": "PASS"},
             {"name": "final_png_qr_exact_decode", "status": "PASS"},
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},

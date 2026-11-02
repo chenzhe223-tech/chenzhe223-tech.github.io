@@ -2,7 +2,8 @@ import unittest
 from PIL import Image, ImageDraw
 
 from radar.scripts.generate_social_pack import (
-    classify_topic, make_copy, render_topic_image, story_title, wrap_lines
+    classify_topic, make_copy, render_skill_image, render_topic_image,
+    select_topic_stories, story_title, wrap_lines
 )
 
 
@@ -21,6 +22,26 @@ class SocialPackTests(unittest.TestCase):
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font(20, True)), 141)
 
+    def test_topic_selection_is_two_global_two_china(self):
+        top = [
+            {"source_section": "global_news", "url": "https://global.example/1"},
+            {"source_section": "china_ai_news", "url": "https://china.example/1"},
+            {"source_section": "global_news", "url": "https://global.example/2"},
+            {"source_section": "global_news", "url": "https://global.example/3"},
+            {"source_section": "china_ai_news", "url": "https://china.example/2"},
+        ]
+        selected = select_topic_stories(top)
+        self.assertEqual([category for category, _ in selected],
+                         ["global_news", "global_news", "china_ai_news", "china_ai_news"])
+        self.assertEqual([story["url"] for _, story in selected],
+                         ["https://global.example/1", "https://global.example/2",
+                          "https://china.example/1", "https://china.example/2"])
+
+    def test_topic_selection_fails_closed_when_category_is_missing(self):
+        top = [{"source_section": "global_news"} for _ in range(5)]
+        with self.assertRaises(ValueError):
+            select_topic_stories(top)
+
     def test_topic_image_is_independent_900x1200(self):
         story = {
             "title_zh": "DeepSeek 发布 Router-Worker 智能体原型",
@@ -30,7 +51,19 @@ class SocialPackTests(unittest.TestCase):
             "url": "https://github.com/deepseek-ai/dsh-superagent-prototype",
             "published": "2026-11-01T00:00:00Z"
         }
-        image = render_topic_image(story, 0, "2026-11-02")
+        image = render_topic_image(story, 0, "2026-11-02", "global_news")
+        self.assertEqual(image.size, (900, 1200))
+        self.assertEqual(image.mode, "RGB")
+
+    def test_skill_image_is_independent_900x1200(self):
+        skill = {
+            "name": "demo/planning-skill",
+            "description_zh": "把长任务拆成可追踪的阶段，并通过文件保存进度。",
+            "url": "https://github.com/demo/planning-skill",
+            "official_website": "https://github.com/demo/planning-skill",
+            "license_name": "MIT License",
+        }
+        image = render_skill_image(skill, "2026-11-02")
         self.assertEqual(image.size, (900, 1200))
         self.assertEqual(image.mode, "RGB")
 
