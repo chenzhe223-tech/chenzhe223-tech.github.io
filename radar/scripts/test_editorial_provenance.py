@@ -29,6 +29,7 @@ class EditorialProvenanceTests(unittest.TestCase):
             }]
         }
         apply_claim_provenance(report)
+        self.assertEqual(report["editorial_policy_version"], "2026-11-02.2")
         story = report["top5"][0]
         self.assertIn("据MarkTechPost报道", story["what_zh"])
         self.assertIn("尚无独立评测", story["what_zh"])
