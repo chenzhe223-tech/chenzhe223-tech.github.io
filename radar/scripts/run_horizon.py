@@ -372,11 +372,11 @@ def apply_claim_provenance(report):
             continue
         source = str(story.get("source") or "原始来源").strip() or "原始来源"
         what_zh = str(story.get("what_zh") or story.get("summary_zh") or "")
+        if "67.52" in what_zh or re.search(r"(评分|benchmark|score)", what_zh, re.I):
+            caveat = "（相关评分为项目方/媒体披露，尚无独立评测。）"
+        else:
+            caveat = "（该条目前仅有单一来源，相关数字或性能数据尚未独立验证。）"
         if what_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", what_zh):
-            if "67.52" in what_zh or re.search(r"(评分|benchmark|score)", what_zh, re.I):
-                caveat = "（相关评分为项目方/媒体披露，尚无独立评测。）"
-            else:
-                caveat = "（该条目前仅有单一来源，相关数字或性能数据尚未独立验证。）"
             if not what_zh.startswith("据"):
                 what_zh = f"据{source}报道，{what_zh}"
             story["what_zh"] = what_zh.rstrip("。 ") + caveat
