@@ -5,7 +5,7 @@ from radar.scripts.generate_social_pack import (
     TEXT_BOUNDS, classify_topic, make_copy, render_skill_image, render_topic_image,
     select_topic_stories, social_layout_regions, story_title, wrap_lines, write_text
 )
-from radar.scripts.verify_social_pack import verify_manifest_matches_report
+from radar.scripts.verify_social_pack import verify_manifest_matches_report, verify_image_layout
 
 
 class SocialPackTests(unittest.TestCase):
@@ -70,6 +70,18 @@ class SocialPackTests(unittest.TestCase):
         self.assertIn("right_qr_panel", social_layout_regions("main_poster"))
         self.assertIn("source_footer", social_layout_regions("topic_illustration"))
         self.assertIn("skill_content", social_layout_regions("skill_feature"))
+
+    def test_social_image_layout_rejects_truncated_text(self):
+        entry = {
+            "filename": "01-main-poster.png",
+            "layout_regions": social_layout_regions("main_poster"),
+            "text_bounds": [{
+                "x": 40, "y": 40, "width": 300, "height": 30,
+                "actual_width": 290, "truncated": True, "overflow": False
+            }]
+        }
+        with self.assertRaisesRegex(RuntimeError, "contains truncated text"):
+            verify_image_layout(entry)
 
     def test_topic_selection_preserves_all_five_top5_stories_in_order(self):
         top = [
