@@ -16,7 +16,8 @@ const KP2 = {
   syncBusy: false,
   initialized: false,
   board: 'monthly',
-  workerUrl: window.KP_V2_GITHUB_WORKER_URL || '',
+  workerUrl: window.KP_V2_GITHUB_WORKER_URL || 'https://keypocket-vault-api.chenzhe223.workers.dev',
+  syncRetries: 0,
   radarRows: [],
   radarHistory: [],
   cloudKey: null
@@ -124,7 +125,22 @@ async function kp2RestoreLocalSnapshot(id) {
   await kp2ImportantSnapshot('restore-before');
   const all = await kp2AllItemsRaw();
   const snapshots = all.filter(x => x.kind === 'kp2-snapshot');
-  await kp2WriteRaw([{ ...vault }, ...decoded.items, ...snapshots], true);
+  const restoreAt = Date.now(), restored = [];
+  for (const raw of decoded.items) {
+    if (raw.kind === 'kp2-trash') {
+      const plain = raw.entityType === 'project' ? await openProject(raw.wrapped) : await openRecord(raw.wrapped);
+      plain._kp2PermanentDelete = !!raw.permanentlyDeleted;
+      const wrapped = raw.entityType === 'project' ? await sealProject(plain) : await sealRecord(plain);
+      restored.push({ ...raw, deletedAt: restoreAt, expiresAt: restoreAt + 30 * 86400000, version: restoreAt, deviceId: kp2Device(), wrapped });
+    } else {
+      const isProject = raw.kind === 'project' || String(raw.id).startsWith('project:');
+      const plain = isProject ? await openProject(raw) : await openRecord(raw);
+      plain.updatedAt = restoreAt;
+      delete plain._kp2PermanentDelete;
+      restored.push(isProject ? await sealProject(plain) : await sealRecord(plain));
+    }
+  }
+  await kp2WriteRaw([{ ...vault }, ...restored, ...snapshots], true);
   await kp2Reload();
   kp2RenderEverything();
   showToast('已从本地历史版本恢复 ' + decoded.items.length + ' 项数据');
@@ -172,11 +188,16 @@ async function kp2RestoreTrash(id) {
   showToast('记录已恢复，原 ID 和关联信息保留');
 }
 async function kp2PermanentlyDelete(id) {
-  if (!confirm('永久删除后无法从回收站恢复。确定继续吗？')) return;
+  if (!confirm('永久删除后所有已同步设备都将移除该记录。确定继续吗？')) return;
+  const row = await kp2RawGet(id);
+  if (!row || row.kind !== 'kp2-trash') return;
   await kp2ImportantSnapshot('before-permanent-delete');
-  await kp2DeleteItemRaw(id);
+  const plain = row.entityType === 'project' ? await openProject(row.wrapped) : await openRecord(row.wrapped);
+  plain._kp2PermanentDelete = true;
+  const wrapped = row.entityType === 'project' ? await sealProject(plain) : await sealRecord(plain);
+  await kp2RawPut({ ...row, wrapped, permanentlyDeleted: true, version: Date.now(), deviceId: kp2Device() });
   kp2RenderTrash(); kp2LocalSnapshotSchedule();
-  showToast('此设备的回收站副本已永久删除；云端墓碑保留以防旧设备重新上传。');
+  showToast('永久删除标记已保存；联网后会传播到其他设备。');
 }
 async function kp2BatchRestore() {
   const ids = [...document.querySelectorAll('[data-kp2-trash-check]:checked')].map(x => x.value);
@@ -188,7 +209,7 @@ async function kp2RenderTrash() {
   const host = document.getElementById('kp2TrashRows');
   if (!host) return;
   try {
-    const rows = (await kp2AllItemsRaw()).filter(x => x.kind === 'kp2-trash').sort((a, b) => b.deletedAt - a.deletedAt);
+    const rows = (await kp2AllItemsRaw()).filter(x => x.kind === 'kp2-trash' && !x.permanentlyDeleted).sort((a, b) => b.deletedAt - a.deletedAt);
     if (!rows.length) { host.innerHTML = '<div class="kp2-empty">回收站为空。删除项目、Skill 和 API Key 会保留 30 天。</div>'; return; }
     const cards = await Promise.all(rows.map(async row => {
       let label = row.entityId;
@@ -277,6 +298,7 @@ async function kp2LocalStates(shared) {
   for (const trash of rows.filter(x => x.kind === 'kp2-trash')) {
     const plain = trash.entityType === 'project' ? await openProject(trash.wrapped) : await openRecord(trash.wrapped);
     const version = Math.max(Number(trash.version) || 0, Number(trash.deletedAt) || 1);
+    plain._kp2PermanentDelete = !!trash.permanentlyDeleted;
     const state = { entity_type:trash.entityType, entity_id:String(trash.entityId), version, updated_at:new Date(version).toISOString(), device_id:trash.deviceId || kp2Device(), deleted_at:new Date(trash.deletedAt).toISOString(), plain };
     const key = state.entity_type + ':' + state.entity_id;
     if (!result.has(key) || kp2Compare(state, result.get(key)) > 0) result.set(key, state);
@@ -294,6 +316,11 @@ async function kp2ApplyRemote(row, shared) {
   const trashId = kp2Id('trash', type + ':' + id);
   const existing = await kp2RawGet(trashId);
   if (row.deleted_at) {
+    if (plain._kp2PermanentDelete) {
+      await kp2DeleteItemRaw(dbId); await kp2DeleteItemRaw(trashId);
+      if (type === 'project') projects = projects.filter(x => x.id !== id); else records = records.filter(x => x.id !== id);
+      return;
+    }
     const deletedAt = Date.parse(row.deleted_at) || Date.now();
     if (deletedAt + 30 * 86400000 <= Date.now()) {
       await kp2DeleteItemRaw(dbId);
@@ -308,6 +335,7 @@ async function kp2ApplyRemote(row, shared) {
     const wrapped = type === 'project' ? await sealProject(plain) : await sealRecord(plain);
     await kp2RawPut(wrapped);
     if (existing) await kp2DeleteItemRaw(trashId);
+    delete plain._kp2PermanentDelete;
     if (type === 'project') { projects = projects.filter(x => x.id !== id); projects.push(plain); }
     else { records = records.filter(x => x.id !== id); records.push(plain); }
   }
@@ -371,6 +399,7 @@ async function kp2SyncNow() {
     }
     render(); renderProjects();
     await kp2CloudSnapshot(shared,'daily'); await kp2CloudSnapshot(shared,'monthly'); await kp2PruneCloudSnapshots();
+    KP2.syncRetries=0;
     const message='同步完成：上传 '+pushed+' 条，下载 '+pulled+' 条，未变化 '+unchanged+' 条。服务器只保存客户端加密密文。';
     kp2Status('kp2SyncStatus',message); kpSyncStatus(message);
     kp2RenderEverything(); kp2RenderDevices();
@@ -380,7 +409,14 @@ async function kp2SyncNow() {
 function kp2ScheduleCloudSync() {
   if (localStorage.getItem(KP2.autoSyncKey)==='0' || !kpSession()?.access_token || !navigator.onLine || !cryptoKey) return;
   clearTimeout(KP2.syncTimer);
-  KP2.syncTimer=setTimeout(()=>kp2SyncNow().catch(e=>kp2Status('kp2SyncStatus','自动同步待重试：'+e.message,true)),1600);
+  KP2.syncTimer=setTimeout(()=>kp2SyncNow().catch(e=>{
+    kp2Status('kp2SyncStatus','自动同步失败，等待重试：'+e.message,true);
+    const authFailure=/登录|认证|refresh token|session expired|invalid jwt/i.test(e.message||'');
+    if (!authFailure && navigator.onLine && KP2.syncRetries < 5) {
+      const delay=Math.min(60000,2000*Math.pow(2,KP2.syncRetries++));
+      KP2.syncTimer=setTimeout(kp2ScheduleCloudSync,delay);
+    }
+  }),1600);
 }
 async function kp2RestoreCloudSnapshot(id) {
   if (!confirm('云端快照会替换当前设备数据。恢复前会自动创建当前版本快照。确定继续？')) return;
