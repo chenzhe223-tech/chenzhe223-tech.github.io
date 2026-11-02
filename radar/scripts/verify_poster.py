@@ -157,8 +157,11 @@ def verify_manifest_layout(manifest: dict) -> dict:
             fail(f"Poster text block outside canvas: {block}")
         if float(block.get("actual_width", 0)) > width + 1:
             fail(f"Poster text line exceeds available width: {block}")
+    truncated = [block for block in blocks if block.get("truncated")]
+    if truncated:
+        fail(f"Poster contains truncated text blocks: {truncated}")
     return {"region_count": len(regions), "text_block_count": len(blocks),
-            "truncated_text_blocks": sum(1 for b in blocks if b.get("truncated")), "status": "PASS"}
+            "truncated_text_blocks": 0, "status": "PASS"}
 
 
 def verify_news_evidence(manifest: dict, report: dict) -> dict:
