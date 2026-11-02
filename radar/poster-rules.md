@@ -194,3 +194,13 @@ The approved 2026-10-31 user-confirmed mountain-editorial poster is the active v
 The runtime gate `radar/scripts/visual_lock.py::validate_visual_lock` is called by `generate_poster.py` before rendering. It verifies configuration presence, the ISO-week style, website canvas dimensions, immutable QR destination, baseline identity, typography policy and repair limit. Any missing or inconsistent configuration blocks rendering. The website poster remains 1200×1800; the separate WeChat six-image pack remains 900×1200. Never infer one output size from the other.
 
 Any future change to the approved baseline requires explicit user approval. A newly generated poster, by itself, never becomes a baseline.
+
+
+## 10. 新闻配图相关性与信息可信度门禁（P0）
+
+- 仅当图片候选的主题相关性分数达到 `radar/config/qa-rules.json` 中的 `image_relevance.minimum_score`（当前 0.35）时，才允许使用 Openverse、Wikimedia 或 Web 搜索图片。
+- 低于阈值时必须放弃该候选，改用与新闻主题匹配的主题配图；不得因为图片 URL 可访问就视为相关。
+- 主题配图、搜索配图必须在页面与海报上明确标注“主题配图 · 非新闻现场”，不得暗示为真实新闻现场照片。
+- “智能体 / agent”默认指软件代理，不得自动映射为实体机器人；只有机器人、具身智能、人形机器人等明确语义才使用机器人素材。
+- 低置信度新闻必须在摘要中注明来源归属及“尚未独立验证”，企业自报分数、性能或预测不得写成独立验证事实。
+- Skill 必须展示许可证、官方项目主页、实际文件证据、适用 Agent/平台兼容性，以及未实测安装或未完成安全审计的限制。
