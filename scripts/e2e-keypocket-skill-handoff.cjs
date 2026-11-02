@@ -22,6 +22,14 @@ const { chromium } = require('playwright');
       timeout: 60000
     });
 
+    const pageErrors = [];
+    const consoleErrors = [];
+    context.on('page', page => {
+      page.on('pageerror', error => pageErrors.push(error.message));
+      page.on('console', message => {
+        if (message.type() === 'error') consoleErrors.push(message.text());
+      });
+    });
     const collectButton = radar.locator('[data-kp-skill-save]').first();
     await collectButton.waitFor({ state: 'visible', timeout: 45000 });
     const repositoryUrl = await collectButton.getAttribute('data-skill-url');
@@ -32,12 +40,6 @@ const { chromium } = require('playwright');
     const popupPromise = radar.waitForEvent('popup', { timeout: 20000 });
     await collectButton.click();
     const keyPocket = await popupPromise;
-    const pageErrors = [];
-    const consoleErrors = [];
-    keyPocket.on('pageerror', error => pageErrors.push(error.message));
-    keyPocket.on('console', message => {
-      if (message.type() === 'error') consoleErrors.push(message.text());
-    });
     // The popup may be fulfilled by an older cached page during a Pages deployment.
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     await keyPocket.waitForFunction(() => {
