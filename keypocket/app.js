@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-init-order-20261102-14';
+window.__kpBuildVersion='kp-v2-device-cloud-20261102-15';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -630,8 +630,10 @@ async function kpV2EnsureMeta(passphrase){
 async function kpV2RegisterDevice(){
  const session=kpSession(),deviceId=kpV2DeviceId(),now=new Date().toISOString();
  if(!session?.user?.id)throw Error('同步账号缺少用户信息，请重新登录。');
+ const ua=navigator.userAgent||'';
+ const label=/iPhone|iPad|iPod/i.test(ua)?'iOS / iPadOS 浏览器':/Android/i.test(ua)?'Android 浏览器':'桌面浏览器';
  await kpV2Api('keypocket_devices?on_conflict=user_id,device_id','POST',{
-  user_id:session.user.id,device_id:deviceId,device_label:'KeyPocket · Web Browser',last_seen_at:now
+  user_id:session.user.id,device_id:deviceId,device_label:'KeyPocket · '+label,last_seen_at:now
  },'resolution=merge-duplicates,return=minimal');
  return deviceId;
 }
@@ -953,14 +955,14 @@ async function renderCloudBackupCenter(){
  if(!window.kpV2Passphrase||!kpV2SyncKey){status.textContent='请先在“同步中心”完成一次 V2 同步，解锁本会话云备份口令。';host.innerHTML='';return;}
  try{
   const deviceId=kpV2DeviceId();
-  const rows=await kpV2Api('keypocket_backup_snapshots?select=id,device_id,snapshot_type,period_key,record_count,created_at&device_id=eq.'+encodeURIComponent(deviceId)+'&order=created_at.desc&limit=100');
-  status.textContent='仅展示本设备生成的云端加密快照；每日快照保留 35 天，月度归档保留 400 天。云端只存密文。';
+  const rows=await kpV2Api('keypocket_backup_snapshots?select=id,device_id,snapshot_type,period_key,record_count,created_at&order=created_at.desc&limit=200');
+  status.textContent='展示本账号所有设备生成的云端加密快照；每日快照保留 35 天，月度归档保留 400 天。可在新设备恢复旧设备备份，云端只存密文。';
   host.innerHTML=(rows||[]).map(x=>'<article class="card"><div class="cardtop"><div class="provider-icon">☁</div><div class="cardtitle"><h3>'+esc(x.snapshot_type==='daily'?'每日快照':'月度归档')+' · '+esc(x.period_key)+'</h3><p>'+new Date(x.created_at).toLocaleString()+' · '+Number(x.record_count||0)+' 条密钥</p></div></div><div class="cardactions"><button class="btn primary" data-cloud-restore="'+esc(x.id)+'">恢复云备份</button></div></article>').join('')||'<div class="empty"><h3>暂无云端快照</h3><p>完成 V2 同步后会生成每日快照和月度归档。</p></div>';
  }catch(error){status.textContent='读取云端快照失败：'+error.message;host.innerHTML='';}
 }
 async function kpV2RestoreCloudBackup(snapshotId){
  if(!kpV2SyncKey||!window.kpV2Passphrase)throw Error('请先在同步中心解锁云端加密口令。');
- const rows=await kpV2Api('keypocket_backup_snapshots?select=id,payload,schema_version,record_count&device_id=eq.'+encodeURIComponent(kpV2DeviceId())+'&id=eq.'+encodeURIComponent(snapshotId)+'&limit=1');
+ const rows=await kpV2Api('keypocket_backup_snapshots?select=id,payload,schema_version,record_count,device_id&id=eq.'+encodeURIComponent(snapshotId)+'&limit=1');
  const row=Array.isArray(rows)?rows[0]:null;if(!row)throw Error('云端快照不存在或不属于当前设备。');
  if(Number(row.schema_version)!==KP_V2_SYNC_SCHEMA)throw Error('云端快照版本不兼容，未修改本地数据。');
  if(row.payload?.salt!==kpV2SyncSalt)throw Error('云端快照加密 Salt 与当前口令不一致。');
@@ -1002,7 +1004,19 @@ $('#backupCards')?.addEventListener('click',async e=>{
 });
 async function kpMaybeDailySnapshot(){const d=await getItem(KP_META_PREFIX+'daily-date');if(d?.value===kpDateKey())return;const ok=await kpWriteEncryptedSnapshot('daily');if(ok)await putItem({id:KP_META_PREFIX+'daily-date',value:kpDateKey()});}
 async function renderSyncCenter(){
- const el=$('#syncCenterStatus');if(el)el.textContent=kpSession()?'已登录 V2 同步账号。输入独立跨设备加密口令后，点击“同步并备份”。后续本设备的更改会在口令仍留在当前页面内存时自动同步。':'未登录 V2 同步账号。数据使用独立加密口令加密后再上传。';
+ const el=$('#syncCenterStatus'),host=$('#syncDeviceList'),meta=$('#syncDeviceStatus');
+ if(!kpSession()?.access_token){if(el)el.textContent='未登录 V2 同步账号。数据使用独立加密口令加密后再上传。';if(host)host.innerHTML='';if(meta)meta.textContent='登录同步账号后查看此账号已关联的设备。';return;}
+ if(el)el.textContent='已登录 V2 同步账号。输入独立跨设备加密口令后，点击“同步并备份”。后续本设备的更改会在口令仍留在当前页面内存时自动同步。';
+ if(!host||!meta)return;
+ try{
+  const rows=await kpV2Api('keypocket_devices?select=device_id,device_label,created_at,last_seen_at,revoked_at&order=last_seen_at.desc&limit=50');
+  const current=kpV2DeviceId();
+  meta.textContent='设备 ID 保存在每台设备本地；只有当前账号下的设备能够读取此列表。撤销设备状态由服务端 CAS 写入函数强制检查。';
+  host.innerHTML=(rows||[]).map(x=>{
+   const isCurrent=String(x.device_id)===current;
+   return '<article class="card"><div class="cardtop"><div class="provider-icon">DEV</div><div class="cardtitle"><h3>'+esc(x.device_label||'KeyPocket 设备')+(isCurrent?' · 当前设备':'')+'</h3><p>设备 ID '+esc(String(x.device_id||'').slice(0,8))+' · 最近同步 '+(x.last_seen_at?new Date(x.last_seen_at).toLocaleString():'尚未同步')+'</p><p>'+ (x.revoked_at?'已撤销，不能写入云端':'有效设备')+'</p></div></div></article>';
+  }).join('')||'<div class="empty"><p>尚未注册设备；完成首次同步后自动登记。</p></div>';
+ }catch(error){meta.textContent='设备列表暂不可用：'+error.message;host.innerHTML='';}
 }
 async function renderGithubCenter(){const el=$('#githubAccountStatus');if(el)el.textContent='未绑定 KeyPocket GitHub App。当前 GitHub 连接器只用于仓库开发，不代表应用内 OAuth 授权。';}
 $('#githubConnectBtn')?.addEventListener('click',()=>showToast('KeyPocket GitHub App 尚未配置，暂不能绑定私有备份仓库。'));
