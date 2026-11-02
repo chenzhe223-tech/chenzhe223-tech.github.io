@@ -278,6 +278,9 @@ class DailyBriefContractTests(unittest.TestCase):
         for removed in cross_section.get("removed", []) if isinstance(cross_section, dict) else []:
             if isinstance(removed, dict):
                 urls.update(url for url in (removed.get("url"), removed.get("matched_url")) if url)
+        for reference in cross_section.get("top5_source_references", []) if isinstance(cross_section, dict) else []:
+            if isinstance(reference, dict) and reference.get("url"):
+                urls.add(reference.get("url"))
         top5=data.get("top5", [])
         self.assertLessEqual(len(top5), 5)
         seen=set()
