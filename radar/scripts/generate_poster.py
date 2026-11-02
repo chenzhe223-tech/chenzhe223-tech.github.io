@@ -532,7 +532,7 @@ def main():
         draw.text((x + 25, card_y + 16), f"{i+1:02d}", font=font(21, True), fill=dark)
         title = story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻"
         yy = paragraph(draw, title, (x + 16, card_y + 151), font(21, True), ink, card_w - 32, 4, 4)
-        summary = story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
+        summary = story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
         yy = paragraph(draw, summary, (x + 16, yy + 8), font(16), muted, card_w - 32, 4, 5)
         source = str(story.get("source") or "公开来源")
         if str(story.get("confidence") or "").lower() == "low":
