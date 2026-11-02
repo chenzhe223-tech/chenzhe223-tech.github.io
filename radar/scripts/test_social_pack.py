@@ -82,6 +82,33 @@ class SocialPackTests(unittest.TestCase):
         self.assertEqual(image.size, (900, 1200))
         self.assertEqual(image.mode, "RGB")
 
+    def test_copy_preserves_low_confidence_caveat_and_skill_compatibility(self):
+        stories = [
+            {
+                "title_zh": f"核验新闻{i}",
+                "summary_zh": "据单一来源披露，相关评分尚无独立评测。",
+                "what_zh": "据单一来源披露，相关评分尚无独立评测。",
+                "why_zh": "这提醒读者区分项目方披露与独立验证。",
+                "source": "来源",
+                "url": f"https://example.com/{i}",
+                "confidence": "low" if i == 0 else "medium",
+            }
+            for i in range(5)
+        ]
+        report = {"editorial": {"trend_zh": "先核验，再判断。", "core_zh": "这是 DAVYLAB 分析。"}}
+        skill = {
+            "name": "demo/skill",
+            "description_zh": "一个实用技能。",
+            "url": "https://github.com/demo/skill",
+            "official_website": "https://github.com/demo/skill",
+            "license_name": "MIT",
+            "compatibility_status": "Claude Code 专用；Codex/WorkBuddy 需适配；未实测安装",
+        }
+        wechat, _ = make_copy(report, stories, skill, "2026-11-02")
+        self.assertIn("尚无独立评测", wechat)
+        self.assertIn(skill["compatibility_status"], wechat)
+        self.assertIn("MIT", wechat)
+
     def test_copy_contains_required_structure_and_all_five_stories(self):
         stories = [
             {"title_zh": f"测试新闻{i}", "summary_zh": "事实摘要。", "why_zh": "实际意义。", "source": "来源", "url": f"https://example.com/{i}"}
