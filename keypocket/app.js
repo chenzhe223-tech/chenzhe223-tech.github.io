@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-sync-client-20261102-11';
+window.__kpBuildVersion='kp-v2-sync-client-20261102-12';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -828,16 +828,18 @@ async function kpSaveTombstone(kind,id,deletedAt=kpNow(),deletedItem=null,option
  kpQueueCloudSync();
 }
 async function softDeleteRecord(record){
+ await kpWriteEncryptedSnapshot('before-delete');
  const deletedAt=kpNow();kpBumpVersion(record);record.deletedAt=deletedAt;record.deletedFrom='records';
  const payload=await encryptJson(record);
  await putItem({id:record.id,kind:'record',iv:payload.iv,data:payload.data,updatedAt:deletedAt});
- await kpSaveTombstone('record',record.id,deletedAt,record);await kpWriteEncryptedSnapshot('before-delete');kpQueueSnapshot('delete');kpQueueCloudSync();
+ await kpSaveTombstone('record',record.id,deletedAt,record);kpQueueSnapshot('delete');kpQueueCloudSync();
 }
 async function softDeleteProject(project){
+ await kpWriteEncryptedSnapshot('before-delete');
  const key='project:'+project.id,deletedAt=kpNow();kpBumpVersion(project);project.deletedAt=deletedAt;project.deletedFrom='projects';
  const payload=await encryptJson(project);
  await putItem({id:key,kind:'project',iv:payload.iv,data:payload.data,updatedAt:deletedAt});
- await kpSaveTombstone('project',project.id,deletedAt,project);await kpWriteEncryptedSnapshot('before-delete');kpQueueSnapshot('delete');kpQueueCloudSync();
+ await kpSaveTombstone('project',project.id,deletedAt,project);kpQueueSnapshot('delete');kpQueueCloudSync();
 }
 async function kpPruneExpiredTrash(){
  if(!cryptoKey)return 0;

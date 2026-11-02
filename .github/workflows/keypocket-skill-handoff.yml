@@ -42,6 +42,11 @@ jobs:
       - name: Check KeyPocket JavaScript syntax
         run: node --check keypocket/app.js
 
+      - name: Validate Skill Radar collector and historical ranking
+        run: |
+          node --check scripts/build-keypocket-skill-radar.cjs
+          node scripts/build-keypocket-skill-radar.cjs --self-test
+
       - name: Check Radar-to-KeyPocket integration contract
         run: node scripts/qa-keypocket-skill-handoff.cjs
 

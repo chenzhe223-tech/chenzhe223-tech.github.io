@@ -141,21 +141,22 @@ function addSnapshotHistory(snapshots, current) {
     .filter(item => item.date >= dateOffset(current.date, RETENTION_DAYS));
 }
 function buildRepositoryIndex(snapshots) {
-  const map = new Map();
+  const currentSnapshot = snapshots[snapshots.length - 1];
+  if (!currentSnapshot) return [];
+  const historyByRepo = new Map();
   for (const snapshot of snapshots) {
     for (const repo of snapshot.repos || []) {
       const key = repo.fullName.toLowerCase();
-      if (!map.has(key)) map.set(key, { current: repo, history: [] });
-      const entry = map.get(key);
-      entry.current = repo;
-      entry.history.push({ date: snapshot.date, stars: repo.stars, forks: repo.forks });
+      if (!historyByRepo.has(key)) historyByRepo.set(key, []);
+      historyByRepo.get(key).push({ date: snapshot.date, stars: repo.stars, forks: repo.forks });
     }
   }
-  return [...map.values()].map(entry => ({
-    ...entry.current,
-    firstObservedAt: entry.history[0].date,
-    history: entry.history
-  }));
+  // Current boards only include repositories verified in the latest daily run.
+  // Older repositories remain in daily archives but do not masquerade as current results.
+  return (currentSnapshot.repos || []).map(repo => {
+    const history = historyByRepo.get(repo.fullName.toLowerCase()) || [];
+    return { ...repo, firstObservedAt: history[0]?.date || currentSnapshot.date, history };
+  });
 }
 function buildBoards(snapshots, date) {
   const index = buildRepositoryIndex(snapshots);

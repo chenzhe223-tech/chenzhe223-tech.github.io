@@ -1,6 +1,11 @@
 name: KeyPocket Skill Radar Daily Collector
 
 on:
+  push:
+    branches: ["main"]
+    paths:
+      - ".github/workflows/keypocket-skill-radar.yml"
+      - "scripts/build-keypocket-skill-radar.cjs"
   schedule:
     - cron: "25 0 * * *"
   workflow_dispatch:
