@@ -445,7 +445,7 @@ jobs:
           )
           bundle_ok = core_bundle_ok and social_ok
           if bundle_ok and current_time and candidate_time and candidate.get('report_date') == today and current_time >= candidate_time:
-              print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at']}.")
+              print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at')}.")
               raise SystemExit(0)
           if current_time and candidate_time and current_time > candidate_time and candidate.get('report_date') == today:
               if core_bundle_ok and not social_ok:
