@@ -18,6 +18,12 @@ class VisualLockTests(unittest.TestCase):
         self.assertEqual(result["design_variant"], "geometric-navy")
         self.assertEqual(result["canvas"], [1200, 1800])
 
+    def test_both_weekly_styles_have_style_specific_layout_and_colors(self):
+        mountain = validate_visual_lock("2026-11-01")
+        geometric = validate_visual_lock("2026-11-02")
+        self.assertEqual(mountain["design_variant"], "mountain-editorial")
+        self.assertEqual(geometric["design_variant"], "geometric-navy")
+
     def test_adjacent_iso_week_alternates(self):
         a = validate_visual_lock("2026-11-01")
         b = validate_visual_lock("2026-11-02")

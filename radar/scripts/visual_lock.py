@@ -47,12 +47,24 @@ def validate_visual_lock(report_date: str) -> dict:
         raise RuntimeError(f"P0: approved production reference image missing: {production_path}")
     if production_reference.get("expected_dimensions") != [1200, 1800]:
         raise RuntimeError("P0: production reference dimensions conflict with the website poster contract")
-    regions = layout.get("mountain_editorial", {}).get("regions", [])
-    required_regions = ["masthead", "hero-title-date", "five-column-news-grid", "today-insight-banner", "skill-recommendation", "right-qr-panel", "brand-footer"]
-    if regions != required_regions:
-        raise RuntimeError("P0: approved mountain-editorial region order changed")
-    if layout.get("mountain_editorial", {}).get("news_columns") != 5:
-        raise RuntimeError("P0: mountain-editorial must retain five news columns")
+    if website.get("template") != "ISO-week-selected":
+        raise RuntimeError("P0: website poster template must follow the shared ISO-week style algorithm")
+    if meta["design_variant"] == "mountain-editorial":
+        style_layout = layout.get("mountain_editorial", {})
+        required_regions = ["masthead", "hero-title-date", "five-column-news-grid", "today-insight-banner", "skill-recommendation", "right-qr-panel", "brand-footer"]
+        if style_layout.get("regions") != required_regions:
+            raise RuntimeError("P0: approved mountain-editorial region order changed")
+        if style_layout.get("news_columns") != 5:
+            raise RuntimeError("P0: mountain-editorial must retain five news columns")
+    elif meta["design_variant"] == "geometric-navy":
+        style_layout = layout.get("geometric_navy", {})
+        required_regions = ["masthead", "geometric-hero", "editorial-observation", "three-column-news-grid", "two-news-summary-row", "skill-recommendation", "right-qr-panel", "brand-footer"]
+        if style_layout.get("regions") != required_regions:
+            raise RuntimeError("P0: geometric-navy region order missing or changed")
+        if [style_layout.get("news_cards"), style_layout.get("secondary_news_cards")] != [3, 2]:
+            raise RuntimeError("P0: geometric-navy must retain three primary and two secondary news cards")
+    else:
+        raise RuntimeError(f"P0: unsupported ISO-selected poster style: {meta['design_variant']}")
     social = layout.get("wechat_social_pack", {})
     if [social.get("width"), social.get("height"), social.get("count")] != [900, 1200, 6]:
         raise RuntimeError("P0: WeChat six-image output contract changed")
@@ -62,8 +74,10 @@ def validate_visual_lock(report_date: str) -> dict:
         raise RuntimeError("P0: Latin-only DejaVu font cannot be used as a CJK fallback")
     if typography.get("fallback_allowed_for_cjk") is not False:
         raise RuntimeError("P0: CJK font fallback must fail closed")
-    if "mountain-editorial" not in colors:
-        raise RuntimeError("P0: mountain-editorial color tokens missing")
+    style_colors = colors.get(meta["design_variant"])
+    required_color_tokens = ["navy", "ink", "warm_white", "blue", "orange", "muted", "card"]
+    if not isinstance(style_colors, dict) or any(not style_colors.get(token) for token in required_color_tokens):
+        raise RuntimeError(f"P0: complete color tokens missing for {meta['design_variant']}")
     if qa.get("max_repair_rounds") != 3 or qa.get("fail_closed") is not True:
         raise RuntimeError("P0: repair/production gate policy invalid")
     return {**meta, "baseline_id": baseline["baseline_id"], "canvas": [website["width"], website["height"]], "template_version": meta["template_version"]}

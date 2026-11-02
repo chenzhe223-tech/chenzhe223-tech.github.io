@@ -4,7 +4,8 @@
     "width": 1200,
     "height": 1800,
     "ratio": "2:3",
-    "template": "mountain-editorial"
+    "template": "ISO-week-selected",
+    "style_source": "radar/scripts/poster_style.py::poster_style_metadata"
   },
   "wechat_social_pack": {
     "width": 900,
@@ -28,5 +29,22 @@
     "allow_content_reflow_inside_region": true,
     "allow_region_reorder": false
   },
-  "reference_alignment": "structure_and_visual_language_not_pixel_identity"
+  "reference_alignment": "structure_and_visual_language_not_pixel_identity",
+  "geometric_navy": {
+    "regions": [
+      "masthead",
+      "geometric-hero",
+      "editorial-observation",
+      "three-column-news-grid",
+      "two-news-summary-row",
+      "skill-recommendation",
+      "right-qr-panel",
+      "brand-footer"
+    ],
+    "news_cards": 3,
+    "secondary_news_cards": 2,
+    "preserve_region_order": true,
+    "allow_content_reflow_inside_region": true,
+    "allow_region_reorder": false
+  }
 }
