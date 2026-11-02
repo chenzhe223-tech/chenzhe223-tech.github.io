@@ -495,6 +495,7 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
         "💡 DAVYLAB 观察",
         str(editorial.get("trend_zh") or editorial.get("core_zh") or "AI 正在从单点能力走向可执行、可管理的工作流程。"),
         str(editorial.get("core_zh") or "对普通人来说，先从一个可验证的小任务开始，比追逐所有新模型更实际。"),
+        str(editorial.get("analysis_scope_zh") or "以上为 DAVYLAB 基于本期公开来源的综合判断。"),
         "",
         "❓ 如果把 AI 接进你的日常工作，你最希望它先接手哪一步？",
         "A. 查资料与做研究  B. 写代码与做产品  C. 门店与客户服务  D. 流程、审批与成本管理",
