@@ -282,6 +282,8 @@ section{margin-bottom:40px}
 .top5-card:nth-child(4),.top5-card:nth-child(5){grid-column:span 3}
 .story-image{width:100%;height:160px;overflow:hidden;background:#dce2e8}
 .story-image{position:relative}
+.story-image-badge{position:absolute;z-index:2;top:8px;right:8px;padding:4px 7px;border-radius:4px;background:rgba(8,25,48,.88);color:#fff;font-size:9px;letter-spacing:.02em;line-height:1.2;pointer-events:none}
+.skill-compatibility{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.5}
 .story-image.image-placeholder{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#edf1f3,#e1e6e9);color:#6d7c8c;font-size:12px;letter-spacing:.04em}
 .story-image.image-placeholder span{padding:12px;text-align:center}
 .story-image .image-credit{position:absolute;left:7px;bottom:7px;max-width:calc(100% - 14px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 6px;background:rgba(15,30,49,.72);border-radius:2px;color:#fff;font-size:9px;text-decoration:none}
@@ -898,12 +900,14 @@ function storyImageMarkup(x){
  const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:themeFallback;
  const storedFallback=typeof x.image_fallback_url==="string"&&x.image_fallback_url.startsWith("https://")?x.image_fallback_url:"";
  const fallback=storedFallback&&storedFallback!==supplied?storedFallback:(themeFallback!==supplied?themeFallback:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82");
- const isIllustration=!x.image_url||x.image_match_status==="thematic_fallback";
+ const topicStatuses=["thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"];
+ const isIllustration=!x.image_url||topicStatuses.includes(String(x.image_match_status||""))||String(x.image_source||"").toLowerCase().includes("topic image")||String(x.image_source||"").toLowerCase().includes("topic illustration");
  const alt=x.image_alt||(isIllustration?(currentLang==="en"?"Topic illustration: ":"主题示意图：")+(title||"AI news"):(title|| (currentLang==="en"?"News image":"新闻配图")));
  const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"https://unsplash.com/s/photos/artificial-intelligence";
   // Image credits are displayed in story metadata, never overlaid on thumbnails.
 
- return '<div class="story-image"><img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}"></div>';
+ const badge=isIllustration?'<span class="story-image-badge">'+(currentLang==="en"?"TOPIC IMAGE · NOT EVENT PHOTO":"主题配图 · 非新闻现场")+'</span>':"";
+ return '<div class="story-image">'+badge+'<img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}"></div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
@@ -925,7 +929,9 @@ function renderTop5(items){
    const category=currentLang==="en"?(x.category_en||"AI signal"):(x.category_zh||"AI 情报");
    const what=currentLang==="en"?(x.what_en||""):(x.what_zh||"");const why=currentLang==="en"?(x.why_en||""):(x.why_zh||"");const action=currentLang==="en"?(x.action_en||""):(x.action_zh||"");
    const scores=x.scores||{};
-   return '<article class="top5-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(category)+'</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(x.confidence||"medium")+'</span><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
+   const confidence=String(x.confidence||"medium").toLowerCase();
+   const confidenceText=confidence==="low"?(currentLang==="en"?"LOW · VERIFY":"低置信度 · 待独立验证"):confidence==="medium"?(currentLang==="en"?"MEDIUM":"中置信度"):(currentLang==="en"?"HIGH":"高置信度");
+   return '<article class="top5-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(category)+'</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(confidenceText)+'</span><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
  }).join("");
 }
 function renderFeaturedSkill(items){
@@ -938,7 +944,7 @@ function renderFeaturedSkill(items){
  const theme=x.daily_theme||"开发提效";
  const useCase=topics.length?topics.join(" · "):(x.language||"AI 工作流与创作辅助");
  const reason=currentLang==="en"?"Daily pick rotates across practical themes and avoids projects featured in recent reports where possible. Check the README, permissions and setup steps before installing.":"推荐会按日轮换不同实用主题，并尽量避开最近几期已经推荐过的项目。安装前请阅读 README，检查权限与配置要求。";
- root.innerHTML='<div><div class="story-label">✦ '+esc(currentLang==="en"?"TODAY\\'S SKILL PICK":"今日实用 Skill · 每日主题")+'</div><div class="skill-tags"><span>'+esc(theme)+'</span><span>'+esc(currentLang==="en"?"Fresh daily pick":"今日轮换推荐")+'</span></div><h3>'+esc(name)+'</h3><p>'+esc(desc||"打开项目了解功能与使用方法。")+'</p><div class="skill-tags">'+topics.map(t=>'<span>'+esc(t)+'</span>').join("")+'</div></div><div><p><strong>'+esc(currentLang==="en"?"Why recommend it":"为什么值得一试")+' · </strong>'+esc(reason)+'</p><p><strong>'+esc(currentLang==="en"?"Try it today":"今天可以这样试")+' · </strong>'+esc(useCase)+'；'+esc(currentLang==="en"?"pick one small task and compare the result with your usual workflow.":"挑一个小任务试用，再和你平时的做法对比效果。")+'</p><p><strong>'+esc(currentLang==="en"?"Project activity":"项目活跃度")+' · </strong>'+(x.stars != null && x.stars !== "" ? Number(x.stars).toLocaleString("en-US")+' ★' : (currentLang==="en"?"Popularity unverified":"热度未核实"))+' · '+esc((x.updated||"").slice(0,10)||(currentLang==="en"?"update date unverified":"更新时间未核实"))+'</p><div class="skill-actions"><a class="skill-cta" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Open GitHub project ↗":"查看 GitHub 项目 ↗")+'</a>'+skillSaveLink(x)+'</div></div>';
+ root.innerHTML='<div><div class="story-label">✦ '+esc(currentLang==="en"?"TODAY\\'S SKILL PICK":"今日实用 Skill · 每日主题")+'</div><div class="skill-tags"><span>'+esc(theme)+'</span><span>'+esc(currentLang==="en"?"Fresh daily pick":"今日轮换推荐")+'</span></div><h3>'+esc(name)+'</h3><p>'+esc(desc||"打开项目了解功能与使用方法。")+'</p><p class="skill-compatibility"><strong>'+esc(currentLang==="en"?"Compatibility · ":"适用范围 · ")+'</strong>'+esc(x.compatibility_status||"宿主兼容性未实测")+' · <strong>'+esc(currentLang==="en"?"License · ":"许可证 · ")+'</strong>'+esc(x.license_name||x.license||"待核验")+'</p><div class="skill-tags">'+topics.map(t=>'<span>'+esc(t)+'</span>').join("")+'</div></div><div><p><strong>'+esc(currentLang==="en"?"Why recommend it":"为什么值得一试")+' · </strong>'+esc(reason)+'</p><p><strong>'+esc(currentLang==="en"?"Try it today":"今天可以这样试")+' · </strong>'+esc(useCase)+'；'+esc(currentLang==="en"?"pick one small task and compare the result with your usual workflow.":"挑一个小任务试用，再和你平时的做法对比效果。")+'</p><p><strong>'+esc(currentLang==="en"?"Project activity":"项目活跃度")+' · </strong>'+(x.stars != null && x.stars !== "" ? Number(x.stars).toLocaleString("en-US")+' ★' : (currentLang==="en"?"Popularity unverified":"热度未核实"))+' · '+esc((x.updated||"").slice(0,10)||(currentLang==="en"?"update date unverified":"更新时间未核实"))+'</p><div class="skill-actions"><a class="skill-cta" href="'+esc(x.url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Open GitHub project ↗":"查看 GitHub 项目 ↗")+'</a>'+skillSaveLink(x)+'</div></div>';
 }
 async function loadArchiveOptions(selectedDate){
  const select=$("archiveDate");if(!select)return;
