@@ -159,6 +159,19 @@ class SocialPackTests(unittest.TestCase):
         self.assertIn("💡 DAVYLAB 观察", wechat)
         self.assertIn("DAVYLAB 基于本期公开来源的综合判断", wechat)
 
+    def test_mixed_top5_intro_does_not_claim_all_stories_are_china_news(self):
+        stories = [
+            {"title_zh": f"新闻{i}", "summary_zh": "事实摘要。", "source": "来源",
+             "url": f"https://example.com/{i}",
+             "source_section": "china_ai_news" if i in (3, 4) else "global_news"}
+            for i in range(5)
+        ]
+        report = {"editorial": {"trend_zh": "全球与中国 AI 都在进入真实业务。", "core_zh": "这是 DAVYLAB 分析。"}}
+        skill = {"name": "demo/skill", "description_zh": "一个实用技能。", "url": "https://github.com/demo/skill", "license_name": "MIT"}
+        wechat, _ = make_copy(report, stories, skill, "2026-11-03")
+        self.assertIn("五条经过来源核验的全球与中国 AI 动态", wechat)
+        self.assertNotIn("五条经过核验的中国 AI 与产业动态", wechat)
+
     def test_copy_uses_issue_specific_interaction_question_and_options(self):
         stories = [
             {"title_zh": f"测试新闻{i}", "summary_zh": "事实摘要。", "why_zh": "实际意义。", "source": "来源", "url": f"https://example.com/{i}"}
