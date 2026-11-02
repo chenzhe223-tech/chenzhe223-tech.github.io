@@ -406,7 +406,7 @@ def main():
         if isinstance(actual_count, int) and actual_count > 0:
             if str(actual_count) not in str(skill.get("description_zh") or "") or "SKILL.md" not in str(skill.get("description_zh") or ""):
                 skill_errors.append({"type":"skill_chinese_count_not_matched_to_repository_scan","name":skill.get("name"),"actual_count":actual_count})
-            if not re.search(rf"\\b{actual_count}\\s+workflow skills\\b", str(skill.get("description_en") or ""), re.I) or "SKILL.md" not in str(skill.get("description_en") or ""):
+            if not re.search(rf"\b{actual_count}\s+workflow skills\b", str(skill.get("description_en") or ""), re.I) or "SKILL.md" not in str(skill.get("description_en") or ""):
                 skill_errors.append({"type":"skill_english_count_not_matched_to_repository_scan","name":skill.get("name"),"actual_count":actual_count})
         if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
