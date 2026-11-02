@@ -66,6 +66,18 @@ class PosterGenerationTests(unittest.TestCase):
         self.assertEqual(len(poster.layout_regions_for("geometric-navy")), 8)
         self.assertEqual(len(poster.layout_regions_for("mountain-editorial")), 7)
 
+    def test_manifest_layout_rejects_truncated_text(self):
+        manifest = {
+            "design_variant": "geometric-navy",
+            "layout_regions": poster.layout_regions_for("geometric-navy"),
+            "text_bounds": [{
+                "x": 20, "y": 20, "width": 300, "height": 30,
+                "actual_width": 290, "truncated": True, "overflow": False
+            }]
+        }
+        with self.assertRaisesRegex(RuntimeError, "truncated text blocks"):
+            verify_poster.verify_manifest_layout(manifest)
+
     def test_chinese_text_wrap_respects_available_width(self):
         image = Image.new("RGB", (240, 100), "white")
         draw = ImageDraw.Draw(image)
