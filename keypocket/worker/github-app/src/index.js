@@ -22,9 +22,31 @@ function toB64(bytes) {
   for (let i=0;i<bytes.length;i+=0x8000) raw += String.fromCharCode(...bytes.subarray(i,i+0x8000));
   return btoa(raw);
 }
+function derLength(length) {
+  if (length < 128) return Uint8Array.of(length);
+  const bytes = [];
+  while (length > 0) { bytes.unshift(length & 255); length >>>= 8; }
+  return Uint8Array.of(0x80 | bytes.length, ...bytes);
+}
+function concatBytes(...parts) {
+  const out = new Uint8Array(parts.reduce((n, part) => n + part.length, 0));
+  let offset = 0; for (const part of parts) { out.set(part, offset); offset += part.length; }
+  return out;
+}
+function derWrap(tag, body) { return concatBytes(Uint8Array.of(tag), derLength(body.length), body); }
 function fromPem(pem) {
-  const body = String(pem).replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\s/g,'');
-  return Uint8Array.from(atob(body), c => c.charCodeAt(0));
+  const match = String(pem).match(/-----BEGIN ([A-Z ]+)-----([\s\S]+?)-----END \1-----/);
+  if (!match) throw new Error('GitHub App private key PEM format is invalid.');
+  const body = match[2].replace(/\s/g,'');
+  const der = Uint8Array.from(atob(body), c => c.charCodeAt(0));
+  if (match[1] === 'PRIVATE KEY') return der;
+  if (match[1] === 'RSA PRIVATE KEY') {
+    const algorithm = Uint8Array.from([0x30,0x0d,0x06,0x09,0x2a,0x86,0x48,0x86,0xf7,0x0d,0x01,0x01,0x01,0x05,0x00]);
+    const version = Uint8Array.from([0x02,0x01,0x00]);
+    const privateOctets = derWrap(0x04, der);
+    return derWrap(0x30, concatBytes(version, algorithm, privateOctets));
+  }
+  throw new Error('Unsupported GitHub App private key PEM type: ' + match[1]);
 }
 async function hmacKey(secret) {
   return crypto.subtle.importKey('raw', enc.encode(secret), { name:'HMAC', hash:'SHA-256' }, false, ['sign','verify']);
@@ -130,7 +152,7 @@ async function handler(request, env) {
   if(request.method==='OPTIONS') return new Response(null,{status:204,headers:cors(request,env)});
   if(path==='/health'&&request.method==='GET') return json({ok:true,service:'keypocket-vault-api',version:2});
   if(path==='/github/install'&&request.method==='GET') {
-    if(!env.GITHUB_APP_SLUG||!env.SESSION_SECRET) return json({error:'GitHub App Worker is not configured.'},503);
+    if(!env.GITHUB_APP_SLUG||!env.SESSION_SECRET||String(env.SESSION_SECRET).length<32) return json({error:'GitHub App Worker is not configured.'},503);
     const returnUrl=new URL(url.searchParams.get('return_url')||'/keypocket/',env.APP_ORIGIN);
     if(returnUrl.origin!==env.APP_ORIGIN||!returnUrl.pathname.startsWith('/keypocket/')) return json({error:'Invalid application return URL.'},400);
     const state=await signToken({kind:'install-state',returnUrl:returnUrl.href,nonce:crypto.randomUUID(),exp:Math.floor(Date.now()/1000)+600},env.SESSION_SECRET);
@@ -145,9 +167,14 @@ async function handler(request, env) {
       const jwt=await appJwt(env);
       const installation=await githubFetch('/app/installations/'+encodeURIComponent(installationId),jwt);
       const account=installation.account?.login;
-      const repos=await repositories(env,installationId);
-      const vault=repos.find(x=>x.name===VAULT_REPO && x.private===true);
-      if(!vault) {
+      const scopedToken=await installationToken(env,installationId);
+      let vault=null;
+      try { vault=await githubFetch('/repos/'+encodeURIComponent(account)+'/'+VAULT_REPO,scopedToken); }
+      catch(e) {
+        if (String(e.message).includes('HTTP 404') || String(e.message).includes('HTTP 422')) vault=null;
+        else throw e;
+      }
+      if(!vault||vault.private!==true) {
         const returnUrl=new URL(state.returnUrl);
         returnUrl.hash='kp_v2_github_error='+encodeURIComponent('请先创建私有仓库 '+VAULT_REPO+'，再将 GitHub App 安装到该仓库。');
         return Response.redirect(returnUrl.href,302);
