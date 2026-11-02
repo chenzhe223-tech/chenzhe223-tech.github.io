@@ -44,12 +44,13 @@ const { chromium } = require('playwright');
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     await keyPocket.waitForFunction(() => {
       const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-      return script && script.src.includes('kp-v2-unlock-diagnostics-20261102-5')
+      return script && script.src.includes('kp-v2-render-projects-20261102-6')
         && document.querySelector('#recycleView')
         && document.querySelector('#backupView')
         && document.querySelector('#radarView');
     }, null, { timeout: 30000 });
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
+    await keyPocket.waitForFunction(() => typeof window.renderProjects === 'function', null, { timeout: 10000 });
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
     // app.js runs init() asynchronously after DOM parsing and opens IndexedDB before
@@ -125,6 +126,7 @@ const { chromium } = require('playwright');
         captureStillInUrl: new URLSearchParams(location.search).has('kp_capture'),
         queueCount: Array.isArray(parsed) ? parsed.length : -1,
         queueItems: Array.isArray(parsed) ? parsed.map(x => ({id:x.id,name:x.name,url:x.url,source:x.source})) : [],
+        renderProjectsReady: typeof window.renderProjects === 'function',
         queueDiagnostic: window.__kpRadarQueueDiagnostic,
         captureDiagnostic: window.__kpRadarCaptureDiagnostic,
         unlockQueueCount: window.__kpUnlockQueueCount,
@@ -139,6 +141,10 @@ const { chromium } = require('playwright');
       };
     });
     console.log('KEYPOCKET_E2E_POST_UNLOCK_STATE ' + JSON.stringify(postUnlockState));
+    assert.equal(postUnlockState.renderProjectsReady, true, 'project renderer must be exposed to the unlock flow');
+    assert.equal(postUnlockState.unlockError ?? null, null, 'unlock should complete without a project-rendering error');
+    assert.equal(postUnlockState.unlockStep, 'complete', 'unlock flow should finish its snapshot and pending-Skill steps');
+    assert.equal(postUnlockState.modalDiagnostic, 'opened', 'pending Radar Skill confirmation dialog should open after unlock');
     await keyPocket.locator('#saveRadarSkillBtn').waitFor({ state: 'visible', timeout: 15000 });
     const modalRepository = await keyPocket.locator('#modalRoot a[href^="https://github.com/"]').first().getAttribute('href');
     assert.equal(modalRepository, repositoryUrl, 'KeyPocket preview repository must match the selected Radar Skill');
