@@ -349,7 +349,7 @@ def apply_verified_skill_metadata(skills):
         actual_count = item.get("actual_skill_file_count")
         if isinstance(actual_count, int) and actual_count > 0:
             description = str(item.get("description_zh") or item.get("description") or "")
-            description = re.sub(r"(?<!\\d)\\d+(?=\\s*(?:个)?(?:工作流)?技能)", str(actual_count), description)
+            description = re.sub(r"(?<!\d)\d+(?=\s*(?:个)?(?:工作流)?技能)", str(actual_count), description)
             if "SKILL.md" not in description:
                 description = f"{description.rstrip('。； ')}（仓库实际扫描到{actual_count}个SKILL.md文件）"
             if claude_only and "Codex/WorkBuddy" not in description:
