@@ -230,6 +230,7 @@ def main() -> int:
             {"name": "unique_image_hashes", "status": "PASS"},
             {"name": "two_global_two_china_one_skill_topic_distribution", "status": "PASS"},
             {"name": "topic_story_source_consistency", "status": "PASS"},
+            {"name": "skill_feature_source_consistency", "status": "PASS"},
             {"name": "final_png_qr_exact_decode", "status": "PASS"},
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},
             {"name": "formal_url_http_and_redirect", "status": "PASS"},

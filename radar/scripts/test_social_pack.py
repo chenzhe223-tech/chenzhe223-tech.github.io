@@ -28,8 +28,9 @@ class SocialPackTests(unittest.TestCase):
     def test_social_text_bounds_fail_closed_outside_canvas(self):
         image = Image.new("RGB", (900, 1200), "white")
         draw = ImageDraw.Draw(image)
+        from radar.scripts.generate_poster import font as poster_font
         with self.assertRaisesRegex(ValueError, "Social text bounds overflow"):
-            write_text(draw, "越界测试", (850, 20), ImageDraw.ImageFont.load_default(), "black", 100)
+            write_text(draw, "越界测试", (850, 20), poster_font(16, True), "black", 100)
 
     def test_social_layout_regions_cover_all_three_image_types(self):
         self.assertIn("right_qr_panel", social_layout_regions("main_poster"))

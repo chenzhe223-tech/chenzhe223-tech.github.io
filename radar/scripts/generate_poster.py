@@ -118,13 +118,20 @@ def news_image_evidence(stories):
     for story in stories[:5]:
         source = str(story.get("image_source") or "")
         status = str(story.get("image_match_status") or "")
-        label_required = status == "thematic_fallback" or "topic illustration" in source.lower()
+        label_required = (
+            story.get("poster_image_material_type") == "thematic_fallback"
+            or status == "thematic_fallback"
+            or "topic illustration" in source.lower()
+        )
+        label_applied = bool(story.get("poster_image_label_applied")) or (
+            status == "thematic_fallback" or "topic illustration" in source.lower()
+        )
         evidence.append({
             "story_url": str(story.get("source_url") or story.get("url") or ""),
             "image_source": source,
             "image_match_status": status,
             "label_required": label_required,
-            "label_applied": label_required,
+            "label_applied": label_applied,
             "label": "主题插画 · 非新闻现场" if label_required else None,
         })
     return evidence
@@ -183,17 +190,24 @@ def image_for_story(story, idx):
             primary = str(story.get("image_url") or "").strip()
             if url != primary and ("unsplash.com" in url or url == str(story.get("image_fallback_url") or "").strip()):
                 fallback_story = {**story, "image_match_status": "thematic_fallback", "image_source": "Unsplash topic illustration"}
+                story["poster_image_material_type"] = "thematic_fallback"
+                story["poster_image_label_applied"] = True
                 return mark_topic_illustration(image, fallback_story)
             return mark_topic_illustration(image, story)
         except Exception:
             continue
     # Keep a polished editorial composition when network images are unavailable.
+    story["poster_image_material_type"] = "thematic_fallback"
+    story["poster_image_label_applied"] = True
     img = Image.new("RGB", (700, 380), (232, 237, 239))
     d = ImageDraw.Draw(img)
     d.rounded_rectangle((20, 20, 680, 360), radius=22, outline=(194, 205, 213), width=3)
     d.text((42, 48), "DAVYLAB  /  AI TOPIC VISUAL", font=font(25, True), fill=(58, 79, 99))
     title_text = str(story.get("title_zh") or story.get("original_title") or story.get("title_en") or "AI topic illustration")
-    paragraph(d, title_text, (42, 112), font(24, True), (36, 55, 73), 600, 4, 8)
+    title_font = font(24, True)
+    fallback_lines = wrap(d, title_text, title_font, 600)[:4]
+    for line_index, line_text in enumerate(fallback_lines):
+        d.text((42, 112 + line_index * 32), line_text, font=title_font, fill=(36, 55, 73))
     d.text((42, 310), "主题插画 · 非新闻现场", font=font(18, True), fill=(99, 117, 131))
     return img
 
