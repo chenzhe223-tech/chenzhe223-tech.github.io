@@ -400,7 +400,7 @@ def main():
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
         if isinstance(story, dict):
             for field in ("title_zh", "what_zh", "why_zh"):
-                if not re.search(r"[\\u4e00-\\u9fff]", str(story.get(field) or "")):
+                if not re.search(r"[\u4e00-\u9fff]", str(story.get(field) or "")):
                     claim_errors.append({"type": "missing_chinese_localization", "field": field, "title": story_title(story)})
             error = claim_provenance_error(story)
             if error:
