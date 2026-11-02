@@ -411,6 +411,13 @@ def apply_claim_provenance(report):
 
 def main():
     report=json.loads(REPORT.read_text(encoding='utf-8'))
+    if '--provenance-only' in sys.argv:
+        ensure_story_fallback(report)
+        remove_top5_duplicates_from_china(report)
+        apply_verified_skill_metadata(report.get('skills') or [])
+        apply_claim_provenance(report)
+        REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')
+        return 0
     if not os.environ.get('DEEPSEEK_API_KEY'):
         report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；基础新闻与 Skill 榜单仍可正常更新。'}
         ensure_story_fallback(report)
