@@ -334,12 +334,68 @@ def localize(report):
         'provider':'DeepSeek'
     }
 
+def apply_verified_skill_metadata(skills):
+    for item in skills if isinstance(skills, list) else []:
+        if not isinstance(item, dict):
+            continue
+        paths = [str(path).lower() for path in (item.get("skill_file_paths") or [])]
+        claude_only = any(path.startswith(".claude/skills/") for path in paths) and not any(
+            path.startswith((".agents/skills/", ".codex/skills/", "skills/")) for path in paths
+        )
+        if claude_only:
+            item["compatibility_status"] = "Claude Code 专用；Codex/WorkBuddy 需适配；未实测安装"
+        else:
+            item["compatibility_status"] = item.get("compatibility_status") or "Agent Skill 文件已核验；宿主兼容性未实测"
+        actual_count = item.get("actual_skill_file_count")
+        if isinstance(actual_count, int) and actual_count > 0:
+            description = str(item.get("description_zh") or item.get("description") or "")
+            description = re.sub(r"(?<!\\d)\\d+(?=\\s*(?:个)?(?:工作流)?技能)", str(actual_count), description)
+            if "SKILL.md" not in description:
+                description = f"{description.rstrip('。； ')}（仓库实际扫描到{actual_count}个SKILL.md文件）"
+            if claude_only and "Codex/WorkBuddy" not in description:
+                description = f"{description.rstrip('。； ')}；仅面向Claude Code，Codex/WorkBuddy需适配"
+            item["description_zh"] = description
+
+
+def apply_claim_provenance(report):
+    for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
+        if not isinstance(story, dict) or str(story.get("confidence") or "").lower() != "low":
+            continue
+        source = str(story.get("source") or "原始来源").strip() or "原始来源"
+        what_zh = str(story.get("what_zh") or story.get("summary_zh") or "")
+        if what_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", what_zh):
+            if "67.52" in what_zh or re.search(r"(评分|benchmark|score)", what_zh, re.I):
+                caveat = "（相关评分为项目方/媒体披露，尚无独立评测。）"
+            else:
+                caveat = "（该条目前仅有单一来源，相关数字或性能数据尚未独立验证。）"
+            if not what_zh.startswith("据"):
+                what_zh = f"据{source}报道，{what_zh}"
+            story["what_zh"] = what_zh.rstrip("。 ") + caveat
+            summary_zh = str(story.get("summary_zh") or "")
+            if summary_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary_zh):
+                story["summary_zh"] = summary_zh.rstrip("。 ") + caveat
+        what_en = str(story.get("what_en") or "")
+        if what_en and "not independently verified" not in what_en.lower():
+            story["what_en"] = f"According to {source}, {what_en.rstrip('. ')} (reported figures or performance have not been independently verified)."
+        judgement = str(story.get("editor_judgment_zh") or "")
+        if "低置信度" not in judgement:
+            story["editor_judgment_zh"] = f"{judgement.rstrip('。； ')}；低置信度，相关指标尚需独立复核。"
+        source_url = str(story.get("source_url") or "")
+        for item in report.get("news", []) if isinstance(report.get("news"), list) else []:
+            if isinstance(item, dict) and source_url and str(item.get("url") or item.get("link") or "") == source_url:
+                summary = str(item.get("summary_zh") or item.get("summary") or "")
+                if summary and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary):
+                    item["summary_zh"] = summary.rstrip("。 ") + caveat
+
+
 def main():
     report=json.loads(REPORT.read_text(encoding='utf-8'))
     if not os.environ.get('DEEPSEEK_API_KEY'):
         report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；基础新闻与 Skill 榜单仍可正常更新。'}
         ensure_story_fallback(report)
         remove_top5_duplicates_from_china(report)
+        apply_verified_skill_metadata(report.get('skills') or [])
+        apply_claim_provenance(report)
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8'); return 0
     if not (HORIZON_DIR/'src'/'main.py').exists():
         report['ai_analysis']={'status':'unavailable','message':'Horizon 运行目录未就绪；基础日报已保留。'}
@@ -393,6 +449,8 @@ def main():
         report['top5_status']='unavailable'
         if isinstance(report.get('localization'),dict): report['localization']['status']='partial'
     remove_top5_duplicates_from_china(report)
+    apply_verified_skill_metadata(report.get('skills') or [])
+    apply_claim_provenance(report)
     REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     return 0
 if __name__=='__main__': raise SystemExit(main())
