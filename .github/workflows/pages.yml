@@ -255,6 +255,7 @@ jobs:
           python -m unittest radar.scripts.test_visual_lock -v
           python -m unittest radar.scripts.test_news_image_match -v
           python -m unittest radar.scripts.test_editorial_provenance -v
+          python -m unittest radar.scripts.test_social_pack -v
           python - <<'PY'
           import datetime as dt, json
           from pathlib import Path
