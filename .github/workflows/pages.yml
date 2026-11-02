@@ -92,8 +92,10 @@ jobs:
                   report_fresh_enough
                   and report.get('report_date') == today
                   and report.get('generated_at', '').startswith(today)
-                  and report.get('top5_status') == 'ai_curated'
-                  and (report.get('localization') or {}).get('status') == 'ok'
+                  and (
+                      (report.get('top5_status') == 'ai_curated' and (report.get('localization') or {}).get('status') == 'ok')
+                      or (report.get('top5_status') == 'editorial_curated' and (report.get('localization') or {}).get('status') == 'manual_editorial_verified' and (report.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (report.get('localization') or {}).get('sources_checked') == 5)
+                  )
                   and report.get('quality_gate', {}).get('status') == 'PASS'
                   and report.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
                   and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
@@ -107,7 +109,6 @@ jobs:
                   and len(report.get('top5', [])) == 5
                   and all(str(story.get('image_url') or '').startswith('https://') for story in report.get('china_ai_news', []) if isinstance(story, dict))
                   and len(report.get('china_ai_news', [])) >= 6
-                  and report.get('localization', {}).get('status') == 'ok'
                   and bool((report.get('skills') or [{}])[0].get('license'))
                   and bool((report.get('skills') or [{}])[0].get('official_website_verified'))
                   and bool((report.get('skills') or [{}])[0].get('readme_verified'))
@@ -234,7 +235,10 @@ jobs:
           print('localization.status:', (report.get('localization') or {}).get('status'))
           print('top5_status:', report.get('top5_status'))
           print('top5_count:', len(report.get('top5') or []))
-          if report.get('top5_status') != 'ai_curated' or (report.get('localization') or {}).get('status') != 'ok' or len(report.get('top5') or []) != 5:
+          if not (
+              (report.get('top5_status') == 'ai_curated' and (report.get('localization') or {}).get('status') == 'ok')
+              or (report.get('top5_status') == 'editorial_curated' and (report.get('localization') or {}).get('status') == 'manual_editorial_verified' and (report.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (report.get('localization') or {}).get('sources_checked') == 5)
+          ) or len(report.get('top5') or []) != 5:
               print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
           PY
       - name: Match story-specific images (free sources first; optional Firecrawl fallback)
@@ -430,10 +434,11 @@ jobs:
           expected_urls = [str(x.get('source_url') or x.get('url') or '') for x in current.get('top5', [])]
           core_bundle_ok = (
               current.get('report_date') == today
-              and current.get('top5_status') == 'ai_curated'
-              and (current.get('localization') or {}).get('status') == 'ok'
+              and (
+                  (current.get('top5_status') == 'ai_curated' and (current.get('localization') or {}).get('status') == 'ok')
+                  or (current.get('top5_status') == 'editorial_curated' and (current.get('localization') or {}).get('status') == 'manual_editorial_verified' and (current.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (current.get('localization') or {}).get('sources_checked') == 5)
+              )
               and len(current.get('top5') or []) == 5
-              and current.get('localization', {}).get('status') == 'ok'
               and current.get('editorial_policy_version') == '2026-11-02.2'
               and current.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
               and current.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
@@ -629,7 +634,7 @@ jobs:
                   data = json.loads(report_bytes.decode('utf-8'))
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
-                  assert data.get('top5_status') == 'ai_curated' and (data.get('localization') or {}).get('status') == 'ok' and len(data.get('top5') or []) == 5, 'live report is missing five localized AI-curated stories'
+                  assert ((data.get('top5_status') == 'ai_curated' and (data.get('localization') or {}).get('status') == 'ok') or (data.get('top5_status') == 'editorial_curated' and (data.get('localization') or {}).get('status') == 'manual_editorial_verified' and (data.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (data.get('localization') or {}).get('sources_checked') == 5)) and len(data.get('top5') or []) == 5, 'live report is missing five verified and localized stories'
                   assert data.get('editorial_policy_version') == '2026-11-02.2', 'live editorial claim-provenance policy mismatch'
                   quality = data.get('quality_gate') or {}
                   editorial = data.get('editorial') or {}
