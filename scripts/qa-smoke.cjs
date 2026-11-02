@@ -703,20 +703,21 @@ const mark = (status, name, detail = '') => {
       // Mobile Skill search modal lifecycle: mock GitHub; never call live API or use real keys.
       const originalViewport = kp.viewportSize();
       await kp.setViewportSize({ width: 390, height: 844 });
-      let skillSearchRequests = 0;
+      let skillSearchRequests = 0, exactSkillRepoRequests = 0;
+      await kp.route('https://api.github.com/repos/Oldcircle/geo-sleuth', async route => {
+        exactSkillRepoRequests++;
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+          id: 910001, name: 'geo-sleuth', full_name: 'Oldcircle/geo-sleuth',
+          html_url: 'https://github.com/Oldcircle/geo-sleuth',
+          description: 'Agent skill for photo geolocation.',
+          owner: { login: 'Oldcircle' }, stargazers_count: 11, forks_count: 1,
+          pushed_at: '2026-10-07T00:00:00Z', language: 'Python', topics: ['agent','skill'],
+          homepage: null, private: false, fork: false
+        }) });
+      });
       await kp.route('https://api.github.com/search/repositories**', async route => {
         skillSearchRequests++;
-        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
-          total_count: 1,
-          items: [{
-            id: 910001, name: 'geo-sleuth', full_name: 'Oldcircle/geo-sleuth',
-            html_url: 'https://github.com/Oldcircle/geo-sleuth',
-            description: 'Agent skill for photo geolocation.',
-            owner: { login: 'Oldcircle' }, stargazers_count: 11, forks_count: 1,
-            pushed_at: '2026-10-07T00:00:00Z', language: 'Python', topics: ['agent','skill'],
-            homepage: null, private: false, fork: false
-          }]
-        }) });
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ total_count: 0, items: [] }) });
       });
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
@@ -728,8 +729,8 @@ const mark = (status, name, detail = '') => {
         height: el.getBoundingClientRect().height, viewport: innerHeight,
         scrollable: el.scrollHeight >= el.clientHeight
       }));
-      mark(skillSearchRequests === 3 && mobileModalBounds.top >= 0 && mobileModalBounds.bottom <= 844
-        ? 'PASS' : 'FAIL', 'KeyPocket iPhone 宽度 Skill 搜索弹窗布局', JSON.stringify(mobileModalBounds));
+      mark(exactSkillRepoRequests === 1 && skillSearchRequests === 0 && mobileModalBounds.top >= 0 && mobileModalBounds.bottom <= 844
+        ? 'PASS' : 'FAIL', 'KeyPocket iPhone 宽度精确仓库 URL 搜索', JSON.stringify({ exactSkillRepoRequests, skillSearchRequests, bounds: mobileModalBounds }));
       await kp.locator('#modalRoot [data-save-skill]').click();
       await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal'), null, { timeout: 10000 });
       const savedSkillVisible = await kp.locator('#projectCards').innerText().then(t => t.includes('geo-sleuth'));
