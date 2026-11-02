@@ -426,12 +426,48 @@ const mark = (status, name, detail = '') => {
         });
         throw new Error('KeyPocket reload unlock did not settle: ' + JSON.stringify(diagnostics) + '; ' + unlockWaitError.message);
       }
-      const unlockDiagnostics = await kp.evaluate(() => ({
-        unlockStep: window.__kpUnlockStep || null,
-        unlockError: window.__kpUnlockError || null,
-        lockNotice: document.querySelector('#lockNotice')?.textContent || '',
-        mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden')
-      }));
+      const unlockDiagnostics = await kp.evaluate(async () => {
+        const db = await new Promise((resolve, reject) => {
+          const req = indexedDB.open('keypocket-local-v1');
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => reject(req.error);
+        });
+        const rows = await new Promise((resolve, reject) => {
+          const req = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+          req.onsuccess = () => { db.close(); resolve(req.result); };
+          req.onerror = () => { db.close(); reject(req.error); };
+        });
+        const describe = value => {
+          const isString = typeof value === 'string';
+          const base64 = isString && value.length > 0
+            && /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value);
+          let decodedLength = null;
+          if (base64) { try { decodedLength = atob(value).length; } catch {} }
+          return { type: value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value,
+            length: isString ? value.length : null, base64, decodedLength };
+        };
+        const meta = rows.find(x => x.id === 'vault-meta');
+        return {
+          unlockStep: window.__kpUnlockStep || null,
+          unlockError: window.__kpUnlockError || null,
+          lockNotice: document.querySelector('#lockNotice')?.textContent || '',
+          mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden'),
+          vaultMetaShape: meta ? {
+            salt: describe(meta.salt),
+            verifier: {
+              type: meta.verifier === null ? 'null' : typeof meta.verifier,
+              iv: describe(meta.verifier?.iv),
+              data: describe(meta.verifier?.data)
+            },
+            iterations: meta.iterations
+          } : null,
+          recordEnvelopeShape: rows.filter(x => x.id !== 'vault-meta' && !String(x.id || '').startsWith('kp.'))
+            .slice(0, 5).map(x => ({
+              kind: typeof x.kind,
+              iv: describe(x.iv), data: describe(x.data)
+            }))
+        };
+      });
       if (unlockDiagnostics.unlockError) throw new Error('KeyPocket reload unlock failed: ' + JSON.stringify(unlockDiagnostics));
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
