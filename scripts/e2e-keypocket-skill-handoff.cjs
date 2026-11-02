@@ -49,20 +49,22 @@ const { chromium } = require('playwright');
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
       });
-      const rows = await new Promise((resolve, reject) => {
+      const hasStore = Array.from(db.objectStoreNames).includes('vault');
+      const rows = hasStore ? await new Promise((resolve, reject) => {
         const request = db.transaction('vault', 'readonly').objectStore('vault').getAll();
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);
-      });
+      }) : [];
       db.close();
       return {
+        hasStore,
         hasVault: rows.some(row => row.id === 'vault-meta'),
         ids: rows.map(row => String(row.id || ''))
       };
     });
     // This Playwright context is disposable; clear only its isolated test database when
     // stale test rows exist, then reload to exercise the actual first-time vault flow.
-    if (vaultState.hasVault || vaultState.ids.length > 0) {
+    if (!vaultState.hasStore || vaultState.hasVault || vaultState.ids.length > 0) {
       await keyPocket.evaluate(async () => {
         await new Promise((resolve, reject) => {
           const request = indexedDB.deleteDatabase('keypocket-local-v1');
