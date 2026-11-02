@@ -700,6 +700,46 @@ const mark = (status, name, detail = '') => {
           mark(restoredProjectId === originalProjectId ? 'PASS' : 'FAIL', 'KeyPocket 项目恢复保留原 ID', '原 ID 与恢复 ID 一致=' + String(restoredProjectId === originalProjectId));
         }
       }
+      // Mobile Skill search modal lifecycle: mock GitHub; never call live API or use real keys.
+      const originalViewport = kp.viewportSize();
+      await kp.setViewportSize({ width: 390, height: 844 });
+      let skillSearchRequests = 0;
+      await kp.route('https://api.github.com/search/repositories**', async route => {
+        skillSearchRequests++;
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({
+          total_count: 1,
+          items: [{
+            id: 910001, name: 'geo-sleuth', full_name: 'Oldcircle/geo-sleuth',
+            html_url: 'https://github.com/Oldcircle/geo-sleuth',
+            description: 'Agent skill for photo geolocation.',
+            owner: { login: 'Oldcircle' }, stargazers_count: 11, forks_count: 1,
+            pushed_at: '2026-10-07T00:00:00Z', language: 'Python', topics: ['agent','skill'],
+            homepage: null, private: false, fork: false
+          }]
+        }) });
+      });
+      await kp.locator('#importSkillBtn').click();
+      await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
+      await kp.locator('#skillNameInput').fill('https://github.com/Oldcircle/geo-sleuth');
+      await kp.locator('#skillSearchForm button[type="submit"]').click();
+      await kp.waitForSelector('#modalRoot [data-save-skill]', { timeout: 12000 });
+      const mobileModalBounds = await kp.locator('#modalRoot .modal').evaluate(el => ({
+        top: el.getBoundingClientRect().top, bottom: el.getBoundingClientRect().bottom,
+        height: el.getBoundingClientRect().height, viewport: innerHeight,
+        scrollable: el.scrollHeight >= el.clientHeight
+      }));
+      mark(skillSearchRequests === 3 && mobileModalBounds.top >= 0 && mobileModalBounds.bottom <= 844
+        ? 'PASS' : 'FAIL', 'KeyPocket iPhone 宽度 Skill 搜索弹窗布局', JSON.stringify(mobileModalBounds));
+      await kp.locator('#modalRoot [data-save-skill]').click();
+      await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal'), null, { timeout: 10000 });
+      const savedSkillVisible = await kp.locator('#projectCards').innerText().then(t => t.includes('geo-sleuth'));
+      mark(savedSkillVisible ? 'PASS' : 'FAIL', 'KeyPocket 手机端收录 Skill 并正常返回', '保存后弹窗关闭且项目卡片可见=' + savedSkillVisible);
+      await kp.locator('#importSkillBtn').click();
+      await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
+      await kp.locator('#modalRoot [data-action="close"]').last().click();
+      mark(await kp.locator('#modalRoot .modal').count() === 0 ? 'PASS' : 'FAIL', 'KeyPocket 手机端弹窗关闭与再次打开', '重复打开/关闭后主页面仍可操作');
+      await kp.unroute('https://api.github.com/search/repositories**');
+      await kp.setViewportSize(originalViewport);
       // Device revocation uses a fake authenticated session and mocked REST responses.
       // No live user credentials or production Key data are used in this regression.
       const qaUserId = '11111111-1111-4111-8111-111111111111';
