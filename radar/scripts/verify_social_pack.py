@@ -259,7 +259,8 @@ def main() -> int:
                 fail(f"WeChat copy omits the low-confidence caveat for {title}")
     if skill.get("compatibility_status") and skill.get("compatibility_status") not in copy:
         fail("WeChat copy omits Skill platform compatibility disclosure")
-    if skill.get("name") and skill.get("name") not in copy:
+    skill_names = [str(value) for value in (skill.get("name_zh"), skill.get("name")) if value]
+    if not any(name in copy for name in skill_names):
         fail("WeChat copy omits the featured Skill name")
     skill_license = str(skill.get("license") or skill.get("license_name") or "")
     if skill_license and skill_license not in copy:
