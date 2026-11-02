@@ -43,6 +43,40 @@ const { chromium } = require('playwright');
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
     const testPassword = 'Handoff-Test-Password-2026';
+    const vaultState = await keyPocket.evaluate(async () => {
+      const db = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('keypocket-local-v1');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const rows = await new Promise((resolve, reject) => {
+        const request = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      db.close();
+      return {
+        hasVault: rows.some(row => row.id === 'vault-meta'),
+        ids: rows.map(row => String(row.id || ''))
+      };
+    });
+    // This Playwright context is disposable; clear only its isolated test database when
+    // stale test rows exist, then reload to exercise the actual first-time vault flow.
+    if (vaultState.hasVault || vaultState.ids.length > 0) {
+      await keyPocket.evaluate(async () => {
+        await new Promise((resolve, reject) => {
+          const request = indexedDB.deleteDatabase('keypocket-local-v1');
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+          request.onblocked = () => reject(new Error('Isolated E2E IndexedDB remained blocked'));
+        });
+      });
+      await keyPocket.reload({ waitUntil: 'domcontentloaded' });
+      await keyPocket.waitForFunction(() => {
+        const confirm = document.querySelector('#confirmWrap');
+        return confirm && !confirm.classList.contains('hidden');
+      }, null, { timeout: 15000 });
+    }
     await keyPocket.locator('#masterPassword').fill(testPassword);
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
