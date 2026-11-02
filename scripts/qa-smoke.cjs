@@ -707,7 +707,7 @@ const mark = (status, name, detail = '') => {
         if (request.method() === 'PATCH') {
           const payload = request.postDataJSON();
           qaRevokeRequest = { method: request.method(), userId: url.searchParams.get('user_id'), deviceId: url.searchParams.get('device_id'), onlyActive: url.searchParams.get('revoked_at'), payload };
-          if (qaRevokeRequest.userId !== qaUserId || qaRevokeRequest.deviceId !== qaOtherDeviceId || qaRevokeRequest.onlyActive !== 'is.null'
+          if (qaRevokeRequest.userId !== 'eq.' + qaUserId || qaRevokeRequest.deviceId !== 'eq.' + qaOtherDeviceId || qaRevokeRequest.onlyActive !== 'is.null'
             || Object.keys(payload || {}).join(',') !== 'revoked_at' || !payload.revoked_at) {
             await route.fulfill({ status: 400, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected test request shape' }) });
             return;
@@ -747,7 +747,7 @@ const mark = (status, name, detail = '') => {
         throw new Error('Device revoke diagnostics=' + JSON.stringify({ syncDiagnostics, qaRevokeRequest, qaOtherDeviceRevokedAt, qaRouteEvents }) + '; ' + error.message);
       }
       const revokeRequestValid = !!qaRevokeRequest && qaRevokeRequest.method === 'PATCH'
-        && qaRevokeRequest.userId === qaUserId && qaRevokeRequest.deviceId === qaOtherDeviceId
+        && qaRevokeRequest.userId === 'eq.' + qaUserId && qaRevokeRequest.deviceId === 'eq.' + qaOtherDeviceId
         && qaRevokeRequest.onlyActive === 'is.null' && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
       mark(revokeRequestValid && !!qaOtherDeviceRevokedAt ? 'PASS' : 'FAIL',
         'KeyPocket 撤销设备接口与状态刷新', 'PATCH 限定当前账号、指定设备和未撤销状态；服务端返回更新行后才显示成功');
