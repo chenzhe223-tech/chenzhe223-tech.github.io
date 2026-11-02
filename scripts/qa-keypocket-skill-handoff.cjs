@@ -32,6 +32,13 @@ assert.match(radarHtml, /hostname\.toLowerCase\(\)!=="github\.com"/, 'Radar hand
 assert.match(app, /function canonicalSkillRepoUrl/, 'KeyPocket must validate incoming repository URLs');
 assert.match(app, /function readPendingRadarSkills/, 'KeyPocket must validate the pending queue');
 assert.match(app, /await (?:putItem\(await sealProject\(project\)\)|persistProject\(project\))/, 'Skill project metadata must use the existing encrypted project store and persistence queue');
+
+assert.match(app, /if\(a==='favorite'&&r\).*?persistRecord\(r\)/, 'API Key favourites must use the same encrypted autosave queue');
+assert.match(app, /async function kpPruneExpiredTrash/, 'expired recycle-bin records must be safely purged');
+assert.match(app, /Number\(item\.deletedAt\)===Number\(d\.deletedAt\)/, 'expiry cleanup must not purge a newer record reusing the same ID');
+assert.match(app, /after-import-replace/, 'replace import must snapshot the resulting imported vault');
+assert.match(app, /after-import-merge/, 'merge import must snapshot the resulting merged vault');
+assert.match(app, /await kpPruneExpiredTrash\(\)/, 'recycle-bin display must process expired tombstones');
 assert.match(app, /projects\.find\(p=>canonicalSkillRepoUrl\(p\.repoUrl\)\.toLowerCase\(\)===repoUrl\.toLowerCase\(\)\)/, 'imports must deduplicate by canonical repository URL');
 assert.match(app, /window\.addEventListener\('storage'/, 'an already-open KeyPocket tab must notice new handoffs');
 assert.match(app, /if\(!cryptoKey\).*请先解锁 KeyPocket/s, 'incoming Skills must wait for vault unlock before import UI');
