@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
-    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity,
+    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity, MIN_IMAGE_RELEVANCE_SCORE,
 )
 
 
@@ -116,6 +116,20 @@ class NewsImageMatchTests(unittest.TestCase):
         for topic in ("robot", "compute", "product", "business", "creative"):
             self.assertGreaterEqual(len(set(THEME_PHOTOS[topic])), 5)
         self.assertTrue(all(photo_id.startswith("photo-") for values in THEME_PHOTOS.values() for photo_id in values))
+
+    def test_single_brand_overlap_does_not_accept_unrelated_image(self):
+        ok, score = candidate_relevance(
+            "Apple Intelligence China rollout with Qwen in Siri and writing tools",
+            "Fresh red apple fruit on a table",
+        )
+        self.assertFalse(ok)
+        self.assertLess(score, MIN_IMAGE_RELEVANCE_SCORE)
+
+    def test_fallback_topic_distinguishes_software_agents_from_physical_robots(self):
+        self.assertEqual(story_fallback_topic({"title_zh":"DeepSeek dsh-superagent 编码智能体路由工作器"}), "product")
+        self.assertEqual(story_fallback_topic({"title_zh":"Apple Intelligence 接入 Siri 和 iPhone 写作工具"}), "product")
+        self.assertEqual(story_fallback_topic({"title_zh":"OpenAI 与 ServiceNow 扩大企业工作流合作"}), "business")
+        self.assertEqual(story_fallback_topic({"title_zh":"中国具身智能人形机器人产业"}), "robot")
 
     def test_firecrawl_requires_explicit_opt_in_and_key(self):
         from unittest.mock import patch
