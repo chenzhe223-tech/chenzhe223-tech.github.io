@@ -207,3 +207,4 @@ Any future change to the approved baseline requires explicit user approval. A ne
 - 微信六图包必须记录 `source_report_generated_at` 与 `source_report_sha256`；六图清单、五条新闻标题/来源 URL、Skill 名称及兼容性必须与 `radar/data/latest.json` 完全一致。任何旧包或时间戳不匹配均阻断发布。
 - “首次、首个、最高、最大、纪录”等表述必须同时给出可核实的指标口径与日期/范围；研究原型、非正式产品、未量产状态必须保留；基准分数、性能提升和预测必须注明由谁测得或披露。
 - DAVYLAB 趋势判断必须明确标记为分析观点，并在正式数据中提供至少 3 条可点击的 `source_basis` 新闻来源；网页展示依据来源，贴图文案说明这是基于本期公开来源的综合判断。
+- 微信六图中的 5 张专题配图必须与正式 Top 5 五条新闻一一对应、顺序一致；分类按真实 `source_section` 展示，不强制凑足全球/中国配额。某类没有可靠新闻时不得编造或挪用，Skill 信息保留在主海报与贴图文案中。
