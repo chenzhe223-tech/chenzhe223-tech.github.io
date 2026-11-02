@@ -243,7 +243,36 @@ function kp2Headers(extra = {}) {
   if (!session?.access_token) throw Error('请先登录同步账号。');
   return Object.assign({ apikey: KP_SUPABASE_KEY, Authorization: 'Bearer ' + session.access_token, 'Content-Type': 'application/json' }, extra);
 }
+function kp2TokenExpiry(token) {
+  try {
+    const part = String(token || '').split('.')[1];
+    if (!part) return 0;
+    const normalized = part.replace(/-/g,'+').replace(/_/g,'/');
+    const payload = JSON.parse(atob(normalized + '='.repeat((4-normalized.length%4)%4)));
+    return Number(payload.exp) || 0;
+  } catch { return 0; }
+}
+async function kp2EnsureAuthSession() {
+  const current = kpSession();
+  if (!current?.access_token || !current?.refresh_token) throw Error('同步会话已失效，请重新登录。');
+  const expiry = Number(current.expires_at) || kp2TokenExpiry(current.access_token);
+  if (expiry && expiry * 1000 > Date.now() + 90000) return current;
+  const response = await fetch(KP_SUPABASE_URL + '/auth/v1/token?grant_type=refresh_token', {
+    method:'POST',
+    headers:{ 'Content-Type':'application/json', apikey:KP_SUPABASE_KEY },
+    body:JSON.stringify({ refresh_token:current.refresh_token })
+  });
+  const body = await response.json().catch(()=>({}));
+  if (!response.ok || !body.access_token) {
+    throw Error(body.msg || body.message || body.error_description || '同步会话刷新失败，请重新登录。');
+  }
+  const next = { ...current, ...body, user:body.user || current.user };
+  if (!next.access_token || !next.refresh_token) throw Error('同步服务未返回完整的刷新会话。');
+  kpSetSession(next);
+  return next;
+}
 async function kp2Rest(table, method = 'GET', query = '', body, extra = {}) {
+  await kp2EnsureAuthSession();
   const response = await fetch(KP_SUPABASE_URL + '/rest/v1/' + table + (query ? '?' + query : ''), {
     method, headers: kp2Headers(extra), body: body === undefined ? undefined : JSON.stringify(body)
   });
@@ -342,13 +371,26 @@ async function kp2ApplyRemote(row, shared) {
 }
 async function kp2MigrateLegacy(shared) {
   if (localStorage.getItem(KP2.migratedKey) === '1') return;
+  await kp2EnsureAuthSession();
   const response = await kpCloudRequest('GET'), legacy = Array.isArray(response) ? response[0] : null;
   if (legacy?.payload) {
     const old = legacy.payload, key = await deriveKey(window.kpSyncMasterPassword, fromB64(old.salt), Number(old.iterations) || 310000);
     const decoded = await decryptJson({ iv:old.iv, data:old.data }, key);
     if (decoded?.schemaVersion !== 1 || !Array.isArray(decoded.records) || !Array.isArray(decoded.projects)) throw Error('旧版云端资料无法识别，未改动任何数据。');
-    for (const item of decoded.records) if (!records.some(x => x.id === item.id)) { await kp2PutItem(await sealRecord(item)); records.push(item); }
-    for (const item of decoded.projects) if (!projects.some(x => x.id === item.id)) { await kp2PutItem(await sealProject(item)); projects.push(item); }
+    for (const item of decoded.records) {
+      const current = records.find(x => x.id === item.id);
+      if (!current || Number(item.updatedAt || 0) > Number(current.updatedAt || 0)) {
+        await kp2PutItem(await sealRecord(item));
+        records = records.filter(x => x.id !== item.id); records.push(item);
+      }
+    }
+    for (const item of decoded.projects) {
+      const current = projects.find(x => x.id === item.id);
+      if (!current || Number(item.updatedAt || 0) > Number(current.updatedAt || 0)) {
+        await kp2PutItem(await sealProject(item));
+        projects = projects.filter(x => x.id !== item.id); projects.push(item);
+      }
+    }
     showToast('旧版云端资料已导入本机，正在转入 V2 增量同步');
   }
   localStorage.setItem(KP2.migratedKey, '1');
@@ -418,6 +460,33 @@ function kp2ScheduleCloudSync() {
     }
   }),1600);
 }
+async function kp2BuildRestoredRows(body) {
+  const restoredAt = Date.now(), next = [{ ...vault }];
+  for (const record of body.records || []) {
+    const restored = { ...record, updatedAt:restoredAt };
+    delete restored._kp2PermanentDelete;
+    next.push(await sealRecord(restored));
+  }
+  for (const project of body.projects || []) {
+    const restored = { ...project, updatedAt:restoredAt };
+    delete restored._kp2PermanentDelete;
+    next.push(await sealProject(restored));
+  }
+  for (const item of body.trash || []) {
+    const entity = item.value || item.plain;
+    if (!entity) continue;
+    const permanent = !!(item.permanentlyDeleted || entity._kp2PermanentDelete);
+    const restored = { ...entity, updatedAt:restoredAt, _kp2PermanentDelete:permanent };
+    const wrapped = item.entityType === 'project' ? await sealProject(restored) : await sealRecord(restored);
+    next.push({
+      id:kp2Id('trash',item.entityType+':'+item.entityId),kind:'kp2-trash',
+      entityType:item.entityType,entityId:item.entityId,
+      deletedAt:restoredAt,expiresAt:restoredAt+30*86400000,
+      version:restoredAt,deviceId:kp2Device(),permanentlyDeleted:permanent,wrapped
+    });
+  }
+  return next;
+}
 async function kp2RestoreCloudSnapshot(id) {
   if (!confirm('云端快照会替换当前设备数据。恢复前会自动创建当前版本快照。确定继续？')) return;
   const shared=await kp2SharedKey();
@@ -426,13 +495,7 @@ async function kp2RestoreCloudSnapshot(id) {
   const body=await decryptJson({ iv:rows[0].payload.iv, data:rows[0].payload.data },shared.key);
   if (body.schemaVersion!==2 || !Array.isArray(body.records) || !Array.isArray(body.projects)) throw Error('云端快照格式不兼容。');
   await kp2ImportantSnapshot('before-cloud-restore');
-  const next=[{...vault}];
-  for (const x of body.records) next.push(await sealRecord(x));
-  for (const x of body.projects) next.push(await sealProject(x));
-  for (const x of (body.trash||[])) {
-    const wrapped=x.entityType==='project'?await sealProject(x.value):await sealRecord(x.value);
-    next.push({ id:kp2Id('trash',x.entityType+':'+x.entityId),kind:'kp2-trash',entityType:x.entityType,entityId:x.entityId,deletedAt:x.deletedAt,expiresAt:x.expiresAt,version:x.deletedAt,deviceId:kp2Device(),wrapped });
-  }
+  const next=await kp2BuildRestoredRows(body);
   const snapshots=(await kp2AllItemsRaw()).filter(x=>x.kind==='kp2-snapshot');
   await kp2WriteRaw([...next,...snapshots],true); await kp2Reload(); render(); renderProjects(); await kp2SyncNow();
   showToast('已从云端加密快照恢复并同步');
@@ -575,11 +638,7 @@ async function kp2GitHubRestore() {
   const decoded=await decryptJson({iv:file.iv,data:file.data},shared.key);
   if(decoded.schemaVersion!==2||!Array.isArray(decoded.records)||!Array.isArray(decoded.projects))throw Error('GitHub 备份文件格式无效。');
   await kp2ImportantSnapshot('before-github-restore');
-  const next=[{...vault},...await Promise.all(decoded.records.map(sealRecord)),...await Promise.all(decoded.projects.map(sealProject))];
-  for(const x of decoded.trash||[]){
-    const wrapped=x.entityType==='project'?await sealProject(x.plain):await sealRecord(x.plain);
-    next.push({id:kp2Id('trash',x.entityType+':'+x.entityId),kind:'kp2-trash',entityType:x.entityType,entityId:x.entityId,deletedAt:x.deletedAt,expiresAt:x.expiresAt,version:x.deletedAt,deviceId:kp2Device(),wrapped});
-  }
+  const next=await kp2BuildRestoredRows({records:decoded.records,projects:decoded.projects,trash:(decoded.trash||[]).map(x=>({...x,value:x.plain}))});
   const snapshots=(await kp2AllItemsRaw()).filter(x=>x.kind==='kp2-snapshot');
   await kp2WriteRaw([...next,...snapshots],true);await kp2Reload();render();renderProjects();
   kp2Status('kp2GitHubStatus','GitHub 私有加密备份已恢复。');kp2LocalSnapshotSchedule();
@@ -696,6 +755,11 @@ function kp2Unlock(locked) {
 }
 const kp2SetView=setView;
 setView=function(locked){kp2SetView(locked);if(!locked)setTimeout(()=>kp2Unlock(false),0);};
+const kp2OriginalSetSession = kpSetSession;
+kpSetSession = function(session) {
+  kp2OriginalSetSession(session);
+  if (session?.access_token && cryptoKey && KP2.initialized) kp2ScheduleCloudSync();
+};
 allItems=async function(){return (await kp2AllItemsRaw()).filter(x=>!kp2System(x));};
 putItem=async function(item){const result=await kp2PutItem(item);if(item?.id!=='vault-meta'&&!kp2System(item))kp2LocalSnapshotSchedule();return result;};
 writeItems=async function(items,clear=false){if(clear&&cryptoKey)await kp2ImportantSnapshot('before-replace');const result=await kp2WriteItems(items,clear);kp2LocalSnapshotSchedule();return result;};
