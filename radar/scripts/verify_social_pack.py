@@ -235,6 +235,16 @@ def main() -> int:
     required = ["💡 DAVYLAB 观察", "❓", "作者：DAVYLAB｜让可能发生", PUBLIC_URL]
     if any(item not in copy for item in required):
         fail("WeChat copy is missing a required section")
+    china_count = sum(1 for category, _story in selected_topics if category == "china_ai_news")
+    global_count = sum(1 for category, _story in selected_topics if category == "global_news")
+    if china_count and global_count:
+        expected_intro = "全球与中国 AI 动态"
+    elif china_count:
+        expected_intro = "中国 AI 与产业动态"
+    else:
+        expected_intro = "中国 AI 暂无足够可靠的新闻进入本期 Top 5"
+    if expected_intro not in copy:
+        fail("WeChat intro does not accurately reflect the actual Top 5 geographic coverage")
     if not all(title in copy for title in titles):
         fail("WeChat copy does not match all five selected stories")
     for story in top:
@@ -283,6 +293,7 @@ def main() -> int:
             {"name": "five_topic_images_one_to_one_with_formal_top5", "status": "PASS"},
             {"name": "topic_story_source_consistency", "status": "PASS"},
             {"name": "skill_metadata_and_copy_consistency", "status": "PASS"},
+            {"name": "social_intro_matches_actual_top5_coverage", "status": "PASS"},
             {"name": "final_png_qr_exact_decode", "status": "PASS"},
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},
             {"name": "formal_url_http_and_redirect", "status": "PASS"},
