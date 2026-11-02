@@ -54,9 +54,9 @@ function openModal(html){$('#modalRoot').innerHTML=`<div class="modal-backdrop" 
 function closeModal(){$('#modalRoot').innerHTML='';editId=null;}
 function providerOptions(selected){return PROVIDERS.map(p=>`<option value="${p.id}" ${p.id===selected?'selected':''}>${esc(p.name)}</option>`).join('');}
 function addEditModal(rec=null,rawKey=''){editId=rec?.id||null;const guessed=identifyProvider(rawKey||rec?.key||'');const provider=rec?.provider||(guessed.confidence==='high'?guessed.provider:'custom');openModal(`<h2>${rec?'编辑密钥':'新增 API Key'}</h2><p class="sub">密钥仅在本地加密保存。不要把生产密钥粘贴到公共或共享设备。</p><form id="recordForm"><div class="field"><label for="keyInput">API Key <span style="color:#b93636">*</span></label><textarea id="keyInput" required autocomplete="off" spellcheck="false" placeholder="粘贴 API Key" rows="3">${esc(rec?.key||rawKey)}</textarea><div id="detectHint" class="hint">${esc(guessed.reason||'粘贴后将尝试在本地识别服务商')}</div></div><div class="grid2"><div class="field"><label for="providerInput">服务商</label><select id="providerInput">${providerOptions(provider)}</select></div><div class="field"><label for="nameInput">密钥名称</label><input id="nameInput" maxlength="80" placeholder="例如：个人开发 Key" value="${esc(rec?.name||'')}"></div></div><div class="grid2"><div class="field"><label for="purposeInput">用途</label><input id="purposeInput" maxlength="100" placeholder="例如：测试 / 生产 / Agent" value="${esc(rec?.purpose||'')}"></div><div class="field"><label for="projectInput">项目（可选）</label><input id="projectInput" maxlength="100" placeholder="例如：KeyPocket" value="${esc(rec?.project||'')}"></div></div><div class="field"><label for="tagsInput">标签（可选，用逗号分隔）</label><input id="tagsInput" maxlength="160" placeholder="开发, 个人, 测试" value="${esc((rec?.tags||[]).join(', '))}"></div><div class="field"><label for="notesInput">备注（可选）</label><input id="notesInput" maxlength="240" placeholder="控制台地址、轮换提示等，不要写入其他密码" value="${esc(rec?.notes||'')}"></div><div id="formNotice" class="notice info">自动识别仅依据本地格式规则；格式相似时请手动确认服务商。</div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary">${rec?'保存修改':'加密保存'}</button></div></form>`);
-$('#keyInput').addEventListener('input',()=>{const g=identifyProvider($('#keyInput').value);$('#detectHint').textContent=g.reason;$('#detectHint').style.color=g.confidence==='high'?'#147d55':'#788293';if(g.confidence==='high'&&!editId)$('#providerInput').value=g.provider;});$('#providerInput').addEventListener('change',()=>{$('#detectHint').textContent='已由你选择服务商：'+providerById($('#providerInput').value).name;});$('#recordForm').addEventListener('submit',async e=>{e.preventDefault();const key=$('#keyInput').value.trim();if(!key){$('#keyInput').focus();return;}const provider=$('#providerInput').value,p=providerById(provider);const now=Date.now();const item={id:editId||crypto.randomUUID(),key,provider,providerName:p.name,name:$('#nameInput').value.trim()||p.name,purpose:$('#purposeInput').value.trim(),project:$('#projectInput').value.trim(),tags:$('#tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,12),notes:$('#notesInput').value.trim(),favorite:rec?.favorite||false,createdAt:rec?.createdAt||now,updatedAt:now};try{await putItem(await sealRecord(item));records=records.filter(x=>x.id!==item.id);records.push(item);closeModal();render();showToast(rec?'修改已加密保存':'密钥已加密保存');}catch(err){$('#formNotice').className='notice error';$('#formNotice').textContent='保存失败：'+(err.message||'请重试');}});}
-$('#cards').addEventListener('click',async e=>{const btn=e.target.closest('[data-action]');if(!btn)return;const action=btn.dataset.action;if(action==='add'){addEditModal();return;}const card=btn.closest('[data-id]');if(!card)return;const r=records.find(x=>x.id===card.dataset.id);if(!r)return;if(action==='copy'){try{await navigator.clipboard.writeText(r.key);showToast('已复制完整 Key 到剪贴板');}catch{openModal(`<h2>复制未获授权</h2><p class="sub">浏览器未允许直接写入剪贴板。你可以手动复制下面的密钥。</p><div class="field"><textarea readonly rows="4">${esc(r.key)}</textarea></div><div class="modal-actions"><button class="btn primary" data-action="close">完成</button></div>`);}}else if(action==='edit')addEditModal(r);else if(action==='favorite'){r.favorite=!r.favorite;r.updatedAt=Date.now();await putItem(await sealRecord(r));render();showToast(r.favorite?'已加入收藏':'已取消收藏');}else if(action==='reveal'){openModal(`<h2>查看完整密钥</h2><p class="sub">请确认当前屏幕没有被他人看到。关闭窗口后会重新隐藏。</p><div class="field"><textarea readonly rows="4">${esc(r.key)}</textarea></div><div class="modal-actions"><button class="btn" data-action="close">关闭</button><button class="btn primary" data-action="modalcopy" data-id="${esc(r.id)}">复制 Key</button></div>`);}else if(action==='menu'){openModal(`<h2>${esc(r.name)}</h2><p class="sub">${esc(providerById(r.provider).name)} · ${esc(r.purpose||'未填写用途')}</p><div class="cardactions" style="flex-wrap:wrap"><button class="btn" data-action="edit" data-id="${esc(r.id)}">编辑信息</button><button class="btn" data-action="favorite" data-id="${esc(r.id)}">${r.favorite?'取消收藏':'加入收藏'}</button><button class="btn danger" data-action="delete" data-id="${esc(r.id)}">删除密钥</button></div><div class="modal-actions"><button class="btn" data-action="close">关闭</button></div>`);}});
-$('#modalRoot').addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;if(a==='close'||a==='backdrop'&&e.target===b){closeModal();return;}const id=b.dataset.id,r=records.find(x=>x.id===id);if(a==='modalcopy'&&r){try{await navigator.clipboard.writeText(r.key);closeModal();showToast('已复制完整 Key 到剪贴板');}catch{showToast('复制失败，请检查浏览器权限');}}if(a==='edit'&&r){addEditModal(r);return;}if(a==='favorite'&&r){r.favorite=!r.favorite;r.updatedAt=Date.now();await putItem(await sealRecord(r));closeModal();render();showToast(r.favorite?'已加入收藏':'已取消收藏');}if(a==='delete'&&r){if(confirm(`确定删除「${r.name}」？删除后无法撤销，请确保已有备份（如需要）。`)){await deleteItem(r.id);records=records.filter(x=>x.id!==r.id);closeModal();render();showToast('密钥已从本地删除');}}});
+$('#keyInput').addEventListener('input',()=>{const g=identifyProvider($('#keyInput').value);$('#detectHint').textContent=g.reason;$('#detectHint').style.color=g.confidence==='high'?'#147d55':'#788293';if(g.confidence==='high'&&!editId)$('#providerInput').value=g.provider;});$('#providerInput').addEventListener('change',()=>{$('#detectHint').textContent='已由你选择服务商：'+providerById($('#providerInput').value).name;});$('#recordForm').addEventListener('submit',async e=>{e.preventDefault();const key=$('#keyInput').value.trim();if(!key){$('#keyInput').focus();return;}const provider=$('#providerInput').value,p=providerById(provider),now=Date.now();const item={id:editId||crypto.randomUUID(),key,provider,providerName:p.name,name:$('#nameInput').value.trim()||p.name,purpose:$('#purposeInput').value.trim(),project:$('#projectInput').value.trim(),tags:$('#tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,12),notes:$('#notesInput').value.trim(),favorite:rec?.favorite||false,createdAt:rec?.createdAt||now,updatedAt:now};try{await persistRecord(item);records=records.filter(x=>x.id!==item.id);records.push(item);closeModal();render();showToast(rec?'修改已加密保存':'密钥已加密保存');}catch(err){$('#formNotice').className='notice error';$('#formNotice').textContent='保存失败：'+(err.message||'请重试');}});
+$('#cards').addEventListener('click',async e=>{const btn=e.target.closest('[data-action]');if(!btn)return;const action=btn.dataset.action;if(action==='add'){addEditModal();return;}const card=btn.closest('[data-id]');if(!card)return;const r=records.find(x=>x.id===card.dataset.id);if(!r)return;if(action==='copy'){try{await navigator.clipboard.writeText(r.key);showToast('已复制完整 Key 到剪贴板');}catch{openModal(`<h2>复制未获授权</h2><p class="sub">浏览器未允许直接写入剪贴板。你可以手动复制下面的密钥。</p><div class="field"><textarea readonly rows="4">${esc(r.key)}</textarea></div><div class="modal-actions"><button class="btn primary" data-action="close">完成</button></div>`);}}else if(action==='edit')addEditModal(r);else if(action==='favorite'){r.favorite=!r.favorite;r.updatedAt=Date.now();await persistRecord(r);render();showToast(r.favorite?'已加入收藏':'已取消收藏');}else if(action==='reveal'){openModal(`<h2>查看完整密钥</h2><p class="sub">请确认当前屏幕没有被他人看到。关闭窗口后会重新隐藏。</p><div class="field"><textarea readonly rows="4">${esc(r.key)}</textarea></div><div class="modal-actions"><button class="btn" data-action="close">关闭</button><button class="btn primary" data-action="modalcopy" data-id="${esc(r.id)}">复制 Key</button></div>`);}else if(action==='menu'){openModal(`<h2>${esc(r.name)}</h2><p class="sub">${esc(providerById(r.provider).name)} · ${esc(r.purpose||'未填写用途')}</p><div class="cardactions" style="flex-wrap:wrap"><button class="btn" data-action="edit" data-id="${esc(r.id)}">编辑信息</button><button class="btn" data-action="favorite" data-id="${esc(r.id)}">${r.favorite?'取消收藏':'加入收藏'}</button><button class="btn danger" data-action="delete" data-id="${esc(r.id)}">删除密钥</button></div><div class="modal-actions"><button class="btn" data-action="close">关闭</button></div>`);}});
+$('#modalRoot').addEventListener('click',async e=>{const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action;if(a==='close'||a==='backdrop'&&e.target===b){closeModal();return;}const id=b.dataset.id,r=records.find(x=>x.id===id);if(a==='modalcopy'&&r){try{await navigator.clipboard.writeText(r.key);closeModal();showToast('已复制完整 Key 到剪贴板');}catch{showToast('复制失败，请检查浏览器权限');}}if(a==='edit'&&r){addEditModal(r);return;}if(a==='favorite'&&r){r.favorite=!r.favorite;r.updatedAt=Date.now();await putItem(await sealRecord(r));closeModal();render();showToast(r.favorite?'已加入收藏':'已取消收藏');}if(a==='delete'&&r){if(confirm(`确定将「${r.name}」移入回收站？可在 30 天内恢复。`)){await softDeleteRecord(r);records=records.filter(x=>x.id!==r.id);closeModal();render();showToast('已移入回收站，可在 30 天内恢复');}}});
 $('#addKeyBtn')?.addEventListener('click',()=>addEditModal());$('#searchInput').addEventListener('input',render);$('#providerFilter').addEventListener('change',render);$('#exportBtn').addEventListener('click',()=>openModal(`<h2>导出加密备份</h2><p class="sub">备份包含全部密钥记录，并使用独立备份密码加密。建议使用不同于本地解锁密码的长密码。</p><form id="exportForm"><div class="field"><label for="backupPassword">备份密码</label><input id="backupPassword" type="password" minlength="10" required autocomplete="new-password" placeholder="至少 10 位"></div><div class="field"><label for="backupConfirm">确认备份密码</label><input id="backupConfirm" type="password" minlength="10" required autocomplete="new-password" placeholder="再次输入"></div><div class="notice warn">丢失备份密码将无法恢复备份。导出的文件请保存到可信位置。</div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary">生成加密备份</button></div></form>`));
 $('#modalRoot').addEventListener('submit',async e=>{if(e.target.id!=='exportForm')return;e.preventDefault();const p=$('#backupPassword').value,c=$('#backupConfirm').value;if(p.length<10||p!==c){showToast(p!==c?'两次备份密码不一致':'备份密码至少 10 位');return;}try{const salt=randomBytes(16),key=await deriveKey(p,salt),payload=await encryptJson({format:'keypocket-backup',version:1,createdAt:new Date().toISOString(),records,projects},key);const file={app:'KeyPocket',version:1,createdAt:new Date().toISOString(),kdf:{name:'PBKDF2-SHA-256',iterations:310000,salt:toB64(salt)},cipher:{name:'AES-256-GCM',...payload}};const blob=new Blob([JSON.stringify(file,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`keypocket-backup-${new Date().toISOString().slice(0,10)}.keypocket`;a.click();URL.revokeObjectURL(url);closeModal();showToast('加密备份已生成');}catch(err){showToast('备份失败：'+err.message);}});
 $('#importBtn').addEventListener('click',()=>$('#backupFile').click());$('#backupFile').addEventListener('change',async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{if(file.size>10*1024*1024)throw Error('备份文件不能超过 10 MB。');const raw=JSON.parse(await file.text());if(raw.app!=='KeyPocket'||raw.version!==1||raw.cipher?.name!=='AES-256-GCM'||raw.kdf?.name!=='PBKDF2-SHA-256')throw Error('这不是受支持的 KeyPocket 备份文件。');if(!Number.isInteger(raw.kdf.iterations)||raw.kdf.iterations<100000||raw.kdf.iterations>1000000)throw Error('备份加密参数无效。');if(fromB64(raw.kdf.salt).length!==16||fromB64(raw.cipher.iv).length!==12||fromB64(raw.cipher.data).length<16)throw Error('备份数据结构无效。');openModal(`<h2>恢复加密备份</h2><p class="sub">文件创建时间：${esc(raw.cipher?new Date(raw.createdAt||Date.now()).toLocaleString():'未知')}。解密将在本地完成。</p><form id="importForm"><div class="field"><label for="importPassword">备份密码</label><input id="importPassword" type="password" required autocomplete="current-password" placeholder="输入导出时设置的密码"></div><div class="field"><label>导入方式</label><select id="importMode"><option value="merge">合并到现有密钥库（同 ID 覆盖）</option><option value="replace">替换当前所有记录</option></select></div><div class="notice warn">替换会删除当前密钥库中的所有记录。建议先导出当前备份。</div><div id="importNotice" class="notice hidden"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary">解密并导入</button></div></form>`);$('#importForm').addEventListener('submit',async ev=>{ev.preventDefault();const pass=$('#importPassword').value;try{const key=await deriveKey(pass,fromB64(raw.kdf.salt),raw.kdf.iterations||310000),data=await decryptJson(raw.cipher,key);if(data.format!=='keypocket-backup'||data.version!==1)throw Error('备份结构不正确。');const incoming=normalizeBackupRecords(data.records),incomingProjects=(Array.isArray(data.projects)?data.projects:[]).map(normalizeProject),mode=$('#importMode').value,encrypted=await Promise.all(incoming.map(sealRecord)),encryptedProjects=await Promise.all(incomingProjects.map(sealProject));if(mode==='replace'){await writeItems([vault,...encrypted,...encryptedProjects],true);records=incoming;projects=incomingProjects;}else{await writeItems([...encrypted,...encryptedProjects]);for(const r of incoming){records=records.filter(x=>x.id!==r.id);records.push(r);}for(const p of incomingProjects){projects=projects.filter(x=>x.id!==p.id);projects.push(p);}}closeModal();render();renderProjects();showToast(`成功导入 ${incoming.length} 条密钥与 ${incomingProjects.length} 个项目`);}catch(err){const n=$('#importNotice');n.textContent='无法解密或备份无效，请检查密码与文件。';n.className='notice error';}});}catch(err){showToast(err.message||'读取备份失败');}});
@@ -106,17 +106,25 @@ function renderProjects(){
  };
  host.innerHTML=groups.length?groups.map(g=>'<section class="project-group project-group-'+g.key+'"><div class="project-group-head"><div><h3>'+g.title+'</h3><p>'+g.desc+'</p></div><span>'+g.items.length+'</span></div><div class="cards">'+g.items.map(cards).join('')+'</div></section>').join(''):'<div class="empty"><div class="big">⌘</div><h3>'+(projects.length?'没有匹配的项目':'还没有收录项目')+'</h3><p>可尝试更换来源或分类筛选，也可以收录新的应用和 Skill。</p><button class="btn primary" data-project-action="add">＋ 收录项目</button></div>';
 }
-function setModule(name){const projectsMode=name==='projects';$('#projectView').classList.toggle('hidden',!projectsMode);document.querySelectorAll('[data-module]').forEach(b=>b.classList.toggle('active',b.dataset.module===name));const keyNodes=['.stats','.list-head','#cards','.footer'];keyNodes.forEach(sel=>document.querySelectorAll('#mainView '+sel).forEach(n=>n.classList.toggle('hidden',projectsMode)));$('#searchInput').closest('.toolbar').classList.toggle('hidden',projectsMode);if(projectsMode)renderProjects();}
+function setModule(name){
+ const views={keys:'#keysView',projects:'#projectView',radar:'#radarView',recycle:'#recycleView',backup:'#backupView',sync:'#syncView',github:'#githubView'};
+ Object.entries(views).forEach(([key,selector])=>{const n=$(selector);if(n)n.classList.toggle('hidden',key!==name);});
+ document.querySelectorAll('[data-module]').forEach(b=>b.classList.toggle('active',b.dataset.module===name));
+ if(name==='projects')renderProjects();
+ if(name==='recycle')renderRecycleBin();
+ if(name==='backup')renderBackupCenter();
+ if(name==='radar')renderSkillRadar();
+ if(name==='sync')renderSyncCenter();
+ if(name==='github')renderGithubCenter();
+}
 document.querySelectorAll('[data-module]').forEach(b=>b.addEventListener('click',()=>setModule(b.dataset.module)));
-
-
 function githubCategory(repo){const s=((repo.name||'')+' '+(repo.description||'')+' '+(repo.language||'')+' '+(repo.topics||[]).join(' ')).toLowerCase();if(/ai|llm|gpt|agent|model|prompt|deepseek/.test(s))return 'AI 工具';if(/portfolio|personal site|个人网站|homepage/.test(s))return '个人网站';if(/mini.?program|小程序|wechat/.test(s))return '小程序';if(/dashboard|看板|analytics|chart/.test(s))return 'Web 应用';return 'Web 应用';}
 function githubImportModal(){openModal('<h2>从 GitHub 导入公开仓库</h2><p class="sub">无需 Token。KeyPocket 只读取公开仓库元数据，不读取仓库代码或私有文件。</p><div class="field"><label for="githubOwner">GitHub 用户名或组织</label><input id="githubOwner" maxlength="100" value="chenzhe223-tech" placeholder="GitHub 用户名"></div><div class="field"><label for="githubRepoSearch">筛选仓库</label><input id="githubRepoSearch" maxlength="100" placeholder="搜索仓库名称、描述或语言…"></div><div id="githubImportStatus" class="notice info">点击加载公开仓库。</div><div id="githubRepoList" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button id="githubLoadBtn" type="button" class="btn">加载仓库</button><button id="githubImportSelectedBtn" type="button" class="btn primary" disabled>导入所选（0）</button></div>');
 const status=$('#githubImportStatus'),list=$('#githubRepoList'),load=$('#githubLoadBtn'),submit=$('#githubImportSelectedBtn');let loaded=[];
 function paint(){const q=$('#githubRepoSearch').value.trim().toLowerCase(),visible=loaded.filter(r=>(r.name+' '+(r.description||'')+' '+(r.language||'')).toLowerCase().includes(q));list.innerHTML=visible.length?visible.map(r=>'<label class="github-repo-row"><input type="checkbox" data-github-repo="'+esc(r.full_name)+'"><span class="github-repo-meta"><strong>'+esc(r.name)+'</strong><small>'+esc(r.description||'暂无描述')+'</small><small>'+esc(r.language||'未标注语言')+' · '+esc(r.updated_at?.slice(0,10)||'')+'</small></span><a href="'+esc(r.html_url)+'" target="_blank" rel="noopener noreferrer">查看 ↗</a></label>').join(''):'<div class="notice">没有匹配的公开仓库。</div>';function update(){const n=list.querySelectorAll('input[type=checkbox]:checked').length;submit.textContent='导入所选（'+n+'）';submit.disabled=n===0;}list.querySelectorAll('input[type=checkbox]').forEach(c=>c.addEventListener('change',update));update();}
 load.addEventListener('click',async()=>{const owner=$('#githubOwner').value.trim();if(!/^[a-zA-Z0-9-]{1,100}$/.test(owner)){status.textContent='请输入有效的 GitHub 用户名或组织名。';status.className='notice error';return;}load.disabled=true;status.textContent='正在加载公开仓库…';status.className='notice info';try{const response=await fetch('https://api.github.com/users/'+encodeURIComponent(owner)+'/repos?per_page=100&sort=updated&type=owner',{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});if(!response.ok)throw Error(response.status===404?'未找到该用户或组织。':'GitHub API 请求失败（HTTP '+response.status+'）。');const data=await response.json();loaded=data.filter(r=>!r.private&&r.html_url&&r.full_name);status.textContent='找到 '+loaded.length+' 个公开仓库。选择要导入的项目。';status.className='notice ok';paint();}catch(e){status.textContent=e.message||'加载失败，请稍后重试。';status.className='notice error';}finally{load.disabled=false;}});
 $('#githubRepoSearch').addEventListener('input',paint);
-submit.addEventListener('click',async()=>{const selectedNames=[...list.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.dataset.githubRepo),selected=loaded.filter(r=>selectedNames.includes(r.full_name));submit.disabled=true;let added=0,skipped=0;try{for(const r of selected){const normalized=r.html_url.replace(/\.git$/,'').replace(/\/$/,'').toLowerCase();if(projects.some(p=>p.repoUrl.replace(/\.git$/,'').replace(/\/$/,'').toLowerCase()===normalized)){skipped++;continue;}const now=Date.now(),p=normalizeProject({id:crypto.randomUUID(),name:r.name,repoUrl:r.html_url,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:[r.language,...(r.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160),notes:r.description||'',tags:suggestedProjectTags(r).join(', '),favorite:false,createdAt:now,updatedAt:now});await putItem(await sealProject(p));projects.push(p);added++;}closeModal();renderProjects();showToast('导入 '+added+' 个项目'+(skipped?'，跳过重复 '+skipped+' 个':''));}catch(e){status.textContent='已导入 '+added+' 个；保存中断：'+(e.message||'未知错误');status.className='notice error';submit.disabled=false;}});}
+submit.addEventListener('click',async()=>{const selectedNames=[...list.querySelectorAll('input[type=checkbox]:checked')].map(c=>c.dataset.githubRepo),selected=loaded.filter(r=>selectedNames.includes(r.full_name));submit.disabled=true;let added=0,skipped=0;try{for(const r of selected){const normalized=r.html_url.replace(/\.git$/,'').replace(/\/$/,'').toLowerCase();if(projects.some(p=>p.repoUrl.replace(/\.git$/,'').replace(/\/$/,'').toLowerCase()===normalized)){skipped++;continue;}const now=Date.now(),p=normalizeProject({id:crypto.randomUUID(),name:r.name,repoUrl:r.html_url,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:[r.language,...(r.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160),notes:r.description||'',tags:suggestedProjectTags(r).join(', '),favorite:false,createdAt:now,updatedAt:now});await persistProject(p);projects.push(p);added++;}closeModal();renderProjects();showToast('导入 '+added+' 个项目'+(skipped?'，跳过重复 '+skipped+' 个':''));}catch(e){status.textContent='已导入 '+added+' 个；保存中断：'+(e.message||'未知错误');status.className='notice error';submit.disabled=false;}});}
 $('#importGithubBtn')?.addEventListener('click',githubImportModal);
 
 /* Skill discovery: public GitHub repository metadata only; no token or private repo access. */
@@ -404,7 +412,7 @@ function openPendingRadarSkillModal(){
      tags:['Skill','AI 前沿简报',item.license?'License '+item.license:''].filter(Boolean).join(', ').slice(0,200),
      favorite:true,createdAt:now,updatedAt:now
     });
-    await putItem(await sealProject(project));
+    await persistProject(project);
     projects.push(project);
    }
    removePendingRadarSkill(item.id);
@@ -484,7 +492,7 @@ async function kpMergeAndSync(){
   const sealed=[];
   for(const rec of records)sealed.push(await sealRecord(rec));
   for(const project of projects)sealed.push(await sealProject(project));
-  await writeItems(sealed,true);await putItem(vault);
+  await writeItems([...sealed,...(await allItems()).filter(x=>x.id.startsWith('kp.meta.')||x.id.startsWith('kp.snapshot.')||x.id.startsWith('kp.tombstone.'))],false);await putItem(vault);
   render();renderProjects();kpSyncStatus('同步完成：已合并 '+records.length+' 条密钥、'+projects.length+' 个项目。云端仅保存加密密文。');
  }finally{status.disabled=!kpSession()?.access_token;status.textContent='合并并同步加密资料';}
 }
@@ -493,3 +501,124 @@ $('#syncSignInBtn')?.addEventListener('click',async()=>{const btn=$('#syncSignIn
 $('#syncSignOutBtn')?.addEventListener('click',async()=>{try{const s=kpSession();if(s?.access_token)await fetch(KP_SUPABASE_URL+'/auth/v1/logout',{method:'POST',headers:{'apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+s.access_token}});}catch{}kpSetSession(null);kpSyncStatus('已退出同步账号。本地加密库未受影响。');});
 $('#syncNowBtn')?.addEventListener('click',async()=>{try{await kpMergeAndSync()}catch(e){kpSyncStatus('同步未完成：'+e.message+' 本地数据保持不变；请确认所有设备使用相同的本地解锁密码。',true)}});
 kpSetSession(kpSession());
+
+// KeyPocket V2.0 local recovery foundation. Existing record envelopes are unchanged.
+const KP_META_PREFIX='kp.meta.',KP_SNAPSHOT_PREFIX='kp.snapshot.',KP_TOMBSTONE_PREFIX='kp.tombstone.',KP_SNAPSHOT_KEEP=30,KP_TRASH_DAYS=30,KP_AUTOSAVE_DELAY=850;
+let kpSnapshotTimer=null,kpSnapshotBusy=false,kpSnapshotRequested=false;
+function kpNow(){return Date.now();}
+function kpDateKey(ts=kpNow()){return new Date(ts).toISOString().slice(0,10);}
+async function kpVaultPlainSnapshot(){
+ const stored=(await allItems()).filter(x=>x.id!=='vault-meta');
+ const plain={schemaVersion:2,createdAt:kpNow(),records:[],projects:[]};
+ for(const item of stored){
+  if(item.id.startsWith(KP_META_PREFIX)||item.id.startsWith(KP_SNAPSHOT_PREFIX)||item.id.startsWith(KP_TOMBSTONE_PREFIX))continue;
+  if(item.id.startsWith('project:')||item.kind==='project'){
+   const x=await openProject(item);if(!x.deletedAt)plain.projects.push(x);
+  }else{const x=await openRecord(item);if(!x.deletedAt)plain.records.push(x);}
+ }
+ return plain;
+}
+async function kpWriteEncryptedSnapshot(reason='auto'){
+ if(!cryptoKey||kpSnapshotBusy){kpSnapshotRequested=true;return false;}
+ kpSnapshotBusy=true;
+ try{
+  const data=await kpVaultPlainSnapshot(),payload=await encryptJson(data),now=kpNow();
+  const id=KP_SNAPSHOT_PREFIX+String(now).padStart(13,'0')+'-'+crypto.randomUUID();
+  await putItem({id,kind:'local-encrypted-snapshot',createdAt:now,reason,iv:payload.iv,data:payload.data,recordCount:data.records.length,projectCount:data.projects.length});
+  const snapshots=(await allItems()).filter(x=>x.id.startsWith(KP_SNAPSHOT_PREFIX)).sort((a,b)=>b.createdAt-a.createdAt);
+  const keep=[],seen=new Set();for(const x of snapshots){const day=kpDateKey(x.createdAt);if(!seen.has(day)&&keep.length<KP_SNAPSHOT_KEEP){seen.add(day);keep.push(x.id);}}
+  for(const x of snapshots)if(!keep.includes(x.id)&&x.createdAt<now-35*86400000)await deleteItem(x.id);
+  await putItem({id:KP_META_PREFIX+'backup-state',lastSnapshotAt:now,lastSnapshotType:reason,lastError:null});
+  const n=$('#backupStatus');if(n)n.textContent='最近本地快照：'+new Date(now).toLocaleString()+' · '+data.records.length+' 条密钥 · '+data.projects.length+' 个项目';
+  return true;
+ }catch(err){
+  try{await putItem({id:KP_META_PREFIX+'backup-state',lastError:String(err.message||err),failedAt:kpNow()});}catch{}
+  const n=$('#backupStatus');if(n)n.textContent='快照失败：'+(err.message||'未知错误')+'。原记录保持不变。';return false;
+ }finally{kpSnapshotBusy=false;if(kpSnapshotRequested){kpSnapshotRequested=false;queueMicrotask(()=>kpWriteEncryptedSnapshot('queued'));}}
+}
+function kpQueueSnapshot(reason='auto'){if(!cryptoKey)return;clearTimeout(kpSnapshotTimer);kpSnapshotTimer=setTimeout(()=>kpWriteEncryptedSnapshot(reason),KP_AUTOSAVE_DELAY);}
+async function kpPersist(item,reason){await putItem(item);kpQueueSnapshot(reason);}
+async function persistRecord(record){record.updatedAt=kpNow();await kpPersist(await sealRecord(record),'record');}
+async function persistProject(project){project.updatedAt=kpNow();await kpPersist(await sealProject(project),'project');}
+async function kpSaveTombstone(kind,id,deletedAt=kpNow()){
+ const item={id,kind,deletedAt,expiresAt:deletedAt+KP_TRASH_DAYS*86400000,version:deletedAt};
+ const payload=await encryptJson(item);await putItem({id:KP_TOMBSTONE_PREFIX+kind+':'+id,iv:payload.iv,data:payload.data,updatedAt:deletedAt});
+}
+async function softDeleteRecord(record){
+ const deletedAt=kpNow(),payload=await encryptJson({...record,deletedAt,deletedFrom:'records'});
+ await putItem({id:record.id,kind:'record',iv:payload.iv,data:payload.data,updatedAt:deletedAt});
+ await kpSaveTombstone('record',record.id,deletedAt);await kpWriteEncryptedSnapshot('before-delete');kpQueueSnapshot('delete');
+}
+async function softDeleteProject(project){
+ const key='project:'+project.id,deletedAt=kpNow(),payload=await encryptJson({...project,deletedAt,deletedFrom:'projects'});
+ await putItem({id:key,kind:'project',iv:payload.iv,data:payload.data,updatedAt:deletedAt});
+ await kpSaveTombstone('project',project.id,deletedAt);await kpWriteEncryptedSnapshot('before-delete');kpQueueSnapshot('delete');
+}
+async function kpReadTrash(){
+ const stored=await allItems(),out=[];
+ for(const t of stored.filter(x=>x.id.startsWith(KP_TOMBSTONE_PREFIX))){
+  try{const d=await decryptJson({iv:t.iv,data:t.data});if(d.expiresAt<kpNow())continue;
+   const key=d.kind==='record'?d.id:'project:'+d.id,wrapped=stored.find(x=>x.id===key);if(!wrapped)continue;
+   const item=d.kind==='record'?await openRecord(wrapped):await openProject(wrapped);if(!item.deletedAt)continue;
+   out.push({kind:d.kind,id:d.id,deletedAt:d.deletedAt,expiresAt:d.expiresAt,item});
+  }catch{}
+ }
+ return out.sort((a,b)=>b.deletedAt-a.deletedAt);
+}
+async function kpRestoreTrash(id,kind){
+ const key=kind==='record'?id:'project:'+id,wrapped=await getItem(key);if(!wrapped)throw Error('待恢复记录不存在。');
+ const item=kind==='record'?await openRecord(wrapped):await openProject(wrapped);if(!item.deletedAt)throw Error('记录已恢复。');
+ delete item.deletedAt;delete item.deletedFrom;item.updatedAt=kpNow();
+ await putItem(kind==='record'?await sealRecord(item):await sealProject(item));await deleteItem(KP_TOMBSTONE_PREFIX+kind+':'+id);
+ if(kind==='record'){records=records.filter(x=>x.id!==id);records.push(item);render();}else{projects=projects.filter(x=>x.id!==id);projects.push(item);renderProjects();}
+ await kpWriteEncryptedSnapshot('restore');
+}
+async function kpPurgeTrash(id,kind){await deleteItem(kind==='record'?id:'project:'+id);await deleteItem(KP_TOMBSTONE_PREFIX+kind+':'+id);await kpWriteEncryptedSnapshot('permanent-delete');}
+async function renderRecycleBin(){
+ const host=$('#recycleCards');if(!host)return;const items=await kpReadTrash();
+ host.innerHTML=items.length?items.map(x=>'<article class="card"><div class="cardtop"><div class="provider-icon">'+(x.kind==='record'?'KEY':'APP')+'</div><div class="cardtitle"><h3>'+esc(x.kind==='record'?(x.item.name||providerById(x.item.provider).name):x.item.name)+'</h3><p>删除于 '+new Date(x.deletedAt).toLocaleString()+'</p><p>剩余 '+Math.max(0,Math.ceil((x.expiresAt-kpNow())/86400000))+' 天</p></div></div><div class="cardactions"><button class="btn primary" data-trash-restore="'+esc(x.id)+'" data-kind="'+x.kind+'">恢复</button><button class="btn danger" data-trash-purge="'+esc(x.id)+'" data-kind="'+x.kind+'">永久删除</button></div></article>').join(''):'<div class="empty"><h3>回收站是空的</h3><p>删除的密钥、项目与 Skill 将在这里保留 30 天。</p></div>';
+}
+$('#recycleCards')?.addEventListener('click',async e=>{const a=e.target.closest('[data-trash-restore]'),b=e.target.closest('[data-trash-purge]');try{if(a){await kpRestoreTrash(a.dataset.trashRestore,a.dataset.kind);showToast('记录已恢复');}if(b&&confirm('永久删除后无法恢复，确认继续？')){await kpPurgeTrash(b.dataset.trashPurge,b.dataset.kind);showToast('记录已永久删除');}await renderRecycleBin();}catch(err){showToast('操作失败：'+err.message);}});
+$('#restoreAllBtn')?.addEventListener('click',async()=>{const xs=await kpReadTrash();for(const x of xs)await kpRestoreTrash(x.id,x.kind);await renderRecycleBin();showToast('已恢复 '+xs.length+' 条记录');});
+$('#emptyRecycleBtn')?.addEventListener('click',async()=>{const xs=await kpReadTrash();if(!xs.length||!confirm('永久删除 '+xs.length+' 条记录？'))return;for(const x of xs)await kpPurgeTrash(x.id,x.kind);await renderRecycleBin();showToast('回收站已清空');});
+async function renderBackupCenter(){
+ const xs=(await allItems()).filter(x=>x.id.startsWith(KP_SNAPSHOT_PREFIX)).sort((a,b)=>b.createdAt-a.createdAt),meta=await getItem(KP_META_PREFIX+'backup-state');
+ const n=$('#backupStatus');if(n)n.textContent=meta?.lastSnapshotAt?'最近快照：'+new Date(meta.lastSnapshotAt).toLocaleString()+(meta.lastError?' · 失败：'+meta.lastError:''):'尚未生成历史快照。';
+ $('#backupCards').innerHTML=xs.map(x=>'<article class="card"><div class="cardtop"><div class="provider-icon">BK</div><div class="cardtitle"><h3>'+new Date(x.createdAt).toLocaleString()+'</h3><p>'+esc(x.reason||'快照')+' · '+x.recordCount+' 条密钥 · '+x.projectCount+' 个项目</p></div></div><div class="cardactions"><button class="btn primary" data-snapshot-restore="'+esc(x.id)+'">恢复该版本</button></div></article>').join('')||'<div class="empty"><h3>暂无快照</h3><p>数据变更后自动创建。</p></div>';
+}
+$('#backupNowBtn')?.addEventListener('click',async()=>{const ok=await kpWriteEncryptedSnapshot('manual');showToast(ok?'加密快照已生成':'快照失败');await renderBackupCenter();});
+$('#backupCards')?.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-snapshot-restore]');if(!b||!confirm('恢复会先为当前内容创建保护快照，再替换活动记录。'))return;
+ try{
+  await kpWriteEncryptedSnapshot('before-restore');const snap=await decryptJson({iv:(await getItem(b.dataset.snapshotRestore)).iv,data:(await getItem(b.dataset.snapshotRestore)).data});
+  const sealed=[];for(const x of snap.records)sealed.push(await sealRecord(x));for(const x of snap.projects)sealed.push(await sealProject(x));
+  const keep=(await allItems()).filter(x=>x.id==='vault-meta'||x.id.startsWith(KP_SNAPSHOT_PREFIX)||x.id.startsWith(KP_TOMBSTONE_PREFIX)||x.id.startsWith(KP_META_PREFIX));
+  await writeItems([...keep,...sealed],true);records=snap.records;projects=snap.projects;render();renderProjects();await renderBackupCenter();showToast('历史版本已恢复');
+ }catch(err){showToast('恢复失败：'+err.message);}
+});
+async function kpMaybeDailySnapshot(){const d=await getItem(KP_META_PREFIX+'daily-date');if(d?.value===kpDateKey())return;const ok=await kpWriteEncryptedSnapshot('daily');if(ok)await putItem({id:KP_META_PREFIX+'daily-date',value:kpDateKey()});}
+async function renderSyncCenter(){
+ const el=$('#syncCenterStatus');if(el)el.textContent=kpSession()?'旧版 Supabase 账号已登录；当前同步仍为手动整库合并，V2.0 增量同步未启用。':'未登录旧版 Supabase 同步账号。V2.0 增量同步需后端迁移与策略验证。';
+}
+async function renderGithubCenter(){const el=$('#githubAccountStatus');if(el)el.textContent='未绑定 KeyPocket GitHub App。当前 GitHub 连接器只用于仓库开发，不代表应用内 OAuth 授权。';}
+$('#githubConnectBtn')?.addEventListener('click',()=>showToast('KeyPocket GitHub App 尚未配置，暂不能绑定私有备份仓库。'));
+async function renderSkillRadar(){
+ const host=$('#radarCards'),meta=$('#radarMeta');if(!host)return;const period=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month';
+ try{const res=await fetch('./api/skill-radar.json',{cache:'no-store'});if(!res.ok)throw Error('尚无历史快照服务数据。');const data=await res.json(),xs=(data.boards?.[period]||[]).slice(0,10);
+ meta.textContent='数据更新时间：'+new Date(data.updatedAt).toLocaleString()+' · 历史起始：'+data.historyStartedAt+' · 口径：'+period;
+ host.innerHTML=xs.map((x,i)=>'<article class="card"><div class="cardtop"><div class="provider-icon">#'+(i+1)+'</div><div class="cardtitle"><h3>'+esc(x.fullName)+'</h3><p>'+esc(x.owner)+' · ★ '+Number(x.stars||0).toLocaleString()+' · Fork '+Number(x.forks||0).toLocaleString()+'</p></div></div><p class="project-note">'+esc(x.description||'')+'</p><div class="cardactions"><a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" data-radar-save="'+i+'">收录 Skill</button></div></article>').join('')||'<div class="empty"><h3>暂无真实榜单数据</h3><p>首次采集前不展示虚构 Top 10。</p></div>';
+ }catch(err){meta.textContent='榜单暂不可用：'+err.message+'。首次采集日期和真实历史快照建立后才会产生周期榜。';host.innerHTML='<div class="empty"><h3>等待首次采集</h3><p>不以当前 Stars 冒充历史增量。</p></div>';}
+}
+document.querySelectorAll('[data-radar-period]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-radar-period]').forEach(x=>x.classList.toggle('active',x===b));renderSkillRadar();}));
+$('#refreshRadarBtn')?.addEventListener('click',renderSkillRadar);
+$('#radarCards')?.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-radar-save]');if(!b)return;
+ try{const data=await (await fetch('./api/skill-radar.json',{cache:'no-store'})).json(),p=(data.boards?.[document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month']||[])[Number(b.dataset.radarSave)];if(!p)return;
+  if(projects.some(x=>canonicalSkillRepoUrl(x.repoUrl)===canonicalSkillRepoUrl(p.url))){showToast('该 Skill 已收录');return;}
+  const item=normalizeProject({id:crypto.randomUUID(),name:p.fullName+' · Skill',repoUrl:p.url,appUrl:'',category:'AI 工具',stack:p.language||'',notes:'Skill Radar 收录；周期增长基于首次历史快照。',tags:'Skill, Skill Radar, GitHub',favorite:true,createdAt:kpNow(),updatedAt:kpNow()});
+  await persistProject(item);projects.push(item);showToast('Skill 已收录');
+ }catch(err){showToast('收录失败：'+err.message);}
+});
+window.addEventListener('online',()=>{const x=$('#backupStatus');if(x)x.textContent='网络已恢复。本地保存正常；当前云同步尚未改为自动增量模式。'});
+window.addEventListener('offline',()=>{const x=$('#backupStatus');if(x)x.textContent='当前离线。本地加密保存正常；云同步等待联网。'});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&cryptoKey)kpMaybeDailySnapshot();});
