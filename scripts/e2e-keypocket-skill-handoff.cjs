@@ -53,16 +53,17 @@ const { chromium } = require('playwright');
     // app.js runs init() asynchronously after DOM parsing and opens IndexedDB before
     // it switches the lock title/confirm field from their static HTML defaults.
     try {
+      await keyPocket.waitForFunction(() => Boolean(window.__kpInitDiagnostic), null, { timeout: 15000 });
       await keyPocket.waitForFunction(() => {
-        const title = document.querySelector('#lockTitle')?.textContent?.trim();
-        return title === '创建你的本地密钥库' || title === '欢迎回来'
-          || title === '检测到本地数据，但密钥库信息缺失'
-          || title === '本地密钥库暂时无法读取';
+        const state = window.__kpInitDiagnostic;
+        return state === 'ready' || state === 'vault-meta-missing-with-data'
+          || state === 'unsupported' || String(state).startsWith('error:');
       }, null, { timeout: 15000 });
     } catch (error) {
       const debugState = await keyPocket.evaluate(() => ({
         readyState: document.readyState,
         initFunction: typeof window.init,
+        initDiagnostic: window.__kpInitDiagnostic,
         lockTitle: document.querySelector('#lockTitle')?.textContent,
         lockDescription: document.querySelector('#lockDesc')?.textContent,
         confirmWrapClass: document.querySelector('#confirmWrap')?.className,
