@@ -142,6 +142,8 @@ class SocialPackTests(unittest.TestCase):
         self.assertIn("尚无独立评测", wechat)
         self.assertIn(skill["compatibility_status"], wechat)
         self.assertIn("MIT", wechat)
+        self.assertIn("💡 DAVYLAB 观察", wechat)
+        self.assertIn("DAVYLAB 基于本期公开来源的综合判断", wechat)
 
     def test_copy_contains_required_structure_and_all_five_stories(self):
         stories = [
