@@ -159,7 +159,34 @@ const { chromium } = require('playwright');
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
     await keyPocket.waitForSelector('#mainView:not(.hidden)', { timeout: 15000 });
-    await keyPocket.waitForFunction(() => window.__kpUnlockStep === 'complete', null, { timeout: 20000 });
+    try {
+      await keyPocket.waitForFunction(() => window.__kpUnlockStep === 'complete', null, { timeout: 20000 });
+    } catch (error) {
+      const unlockDiagnostics = await keyPocket.evaluate(async () => {
+        const rows = await new Promise((resolve, reject) => {
+          const request = indexedDB.open('keypocket-local-v1');
+          request.onsuccess = () => {
+            const db = request.result;
+            const read = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+            read.onsuccess = () => { db.close(); resolve(read.result.map(x => ({ id: x.id, kind: x.kind, reason: x.reason, lastError: x.lastError }))); };
+            read.onerror = () => { db.close(); reject(read.error); };
+          };
+          request.onerror = () => reject(request.error);
+        }).catch(e => ({ error: e.message }));
+        return {
+          unlockStep: window.__kpUnlockStep,
+          unlockError: window.__kpUnlockError,
+          initDiagnostic: window.__kpInitDiagnostic,
+          lockNotice: document.querySelector('#lockNotice')?.textContent,
+          backupStatus: document.querySelector('#backupStatus')?.textContent,
+          backupRows: rows,
+          mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden'),
+          modalVisible: !!document.querySelector('#modalRoot')?.innerHTML.trim()
+        };
+      });
+      console.error('KEYPOCKET_UNLOCK_COMPLETION_DIAGNOSTICS ' + JSON.stringify(unlockDiagnostics));
+      throw error;
+    }
     const postUnlockState = await keyPocket.evaluate(() => {
       const raw = localStorage.getItem('kp.radar.pending-skills.v1');
       let parsed = [];
