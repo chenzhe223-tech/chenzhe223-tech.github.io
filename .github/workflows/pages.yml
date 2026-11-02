@@ -187,7 +187,7 @@ jobs:
           PY
         if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
-        if: steps.preflight.outputs.skip != 'true' && steps.ai_diagnostic.outputs.deepseek_configured == 'true'
+        if: ${{ steps.preflight.outputs.skip != 'true' && steps.ai_diagnostic.outputs.deepseek_configured == 'true' }}
         continue-on-error: true
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
