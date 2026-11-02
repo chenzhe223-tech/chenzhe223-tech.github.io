@@ -53,18 +53,14 @@ def story_url(story: dict) -> str:
 
 
 def select_topic_stories(top: list[dict]) -> list[tuple[str, dict]]:
-    """Select exactly two international and two China stories from the formal Top 5."""
-    global_stories = [s for s in top if str(s.get("source_section") or "") == "global_news"]
-    china_stories = [s for s in top if str(s.get("source_section") or "") == "china_ai_news"]
-    if len(global_stories) < 2 or len(china_stories) < 2:
-        raise ValueError(
-            "WeChat topic pack requires at least two global_news and two china_ai_news "
-            f"stories inside the formal Top 5; found global={len(global_stories)}, china={len(china_stories)}"
-        )
-    return (
-        [("global_news", s) for s in global_stories[:2]]
-        + [("china_ai_news", s) for s in china_stories[:2]]
-    )
+    """Map one independent topic image to each verified Top 5 story; never invent a category."""
+    if len(top) != 5:
+        raise ValueError(f"Five topic illustrations require the formal Top 5; found {len(top)}")
+    selected = []
+    for story in top:
+        category = str(story.get("source_section") or "unclassified")
+        selected.append((category, story))
+    return selected
 
 
 def local_date(value: str, fallback: str) -> str:
@@ -332,7 +328,7 @@ def render_topic_image(story: dict, index: int, report_date: str, category: str 
     draw_topic_art(draw, kind)
     draw.text((38, 30), "DAVYLAB", font=font(25, True), fill=WHITE)
     draw.text((860, 35), report_date.replace("-", "."), font=font(17, True), fill=WHITE, anchor="ra")
-    region_label = "GLOBAL AI" if category == "global_news" else "CHINA AI"
+    region_label = "GLOBAL AI" if category == "global_news" else ("CHINA AI" if category == "china_ai_news" else "AI FRONTIER")
     draw.text((40, 475), f"TOPIC  /  {index + 1:02d}  ·  {region_label}  ·  {topic_label(kind)}", font=font(16, True), fill=ORANGE)
     y = write_text(draw, story_title(story), (40, 515), font(32, True), INK, 820, 3, 7)
     y = write_text(draw, story_summary(story), (42, y + 12), font(21), MUTED, 810, 4, 7)
@@ -556,8 +552,10 @@ def main() -> int:
         "layout_regions": social_layout_regions("main_poster"), "text_bounds": main_text_bounds
     })
     topic_news = select_topic_stories(top)
+    topic_category_counts = {}
     for index, (category, story) in enumerate(topic_news, start=1):
-        region_slug = "global" if category == "global_news" else "china"
+        topic_category_counts[category] = topic_category_counts.get(category, 0) + 1
+        region_slug = "global" if category == "global_news" else ("china" if category == "china_ai_news" else "topic")
         filename = f"{index + 1:02d}-{region_slug}-story-{index:02d}-{safe_slug(story_title(story), index)}.png"
         TEXT_BOUNDS.clear()
         render_topic_image(story, index - 1, report_date, category).save(out / filename, format="PNG", optimize=True)
@@ -569,17 +567,6 @@ def main() -> int:
             "published": story.get("published"), "label": "主题插画 · 非新闻现场",
             "layout_regions": social_layout_regions("topic_illustration"), "text_bounds": topic_text_bounds
         })
-
-    skill_filename = "06-skill-feature.png"
-    TEXT_BOUNDS.clear()
-    render_skill_image(skill, report_date).save(out / skill_filename, format="PNG", optimize=True)
-    skill_text_bounds = list(TEXT_BOUNDS)
-    images.append({
-        "filename": skill_filename, "theme": f"今日推荐 Skill：{skill.get('name') or 'Open-source Skill'}",
-        "material_type": "程序绘制的原创技能工作流主题插画", "image_type": "skill_feature",
-        "source_url": skill.get("url"), "label": "主题插画 · 非产品截图",
-        "layout_regions": social_layout_regions("skill_feature"), "text_bounds": skill_text_bounds
-    })
 
     source_report_sha256 = hashlib.sha256(DATA.read_bytes()).hexdigest()
     for entry in images:
@@ -606,7 +593,7 @@ def main() -> int:
         "story_urls": [story_url(s) for s in top],
         "story_titles": [story_title(s) for s in top],
         "topic_story_urls": [story_url(s) for _, s in topic_news],
-        "topic_categories": {"global_news": 2, "china_ai_news": 2, "skill": 1},
+        "topic_categories": topic_category_counts,
         "skill": {"name": skill.get("name"), "url": skill.get("url"), "description_zh": skill.get("description_zh"), "compatibility_status": skill.get("compatibility_status"), "actual_skill_file_count": skill.get("actual_skill_file_count"), "security_status": skill.get("security_status"), "official_website": skill.get("official_website"), "official_website_verified": skill.get("official_website_verified"), "official_website_http_status": skill.get("official_website_http_status"), "official_website_type": skill.get("official_website_type"), "readme_verified": skill.get("readme_verified"), "skill_file_paths": skill.get("skill_file_paths"), "evidence_verified": skill.get("evidence_verified"), "license": skill.get("license_name") or skill.get("license")},
         "images": images,
         "phone_camera_scan": "NOT_TESTED",
