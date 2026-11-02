@@ -8,12 +8,15 @@ class EditorialProvenanceTests(unittest.TestCase):
         skills = [{
             "name": "Donchitos/Claude-Code-Game-Studios",
             "description_zh": "包含49个AI智能体、72个工作流技能。",
+            "description_en": "49 AI agents, 72 workflow skills.",
             "actual_skill_file_count": 74,
             "skill_file_paths": [".claude/skills/game-design/SKILL.md"],
         }]
         apply_verified_skill_metadata(skills)
         self.assertIn("74个工作流技能", skills[0]["description_zh"])
         self.assertIn("74个SKILL.md文件", skills[0]["description_zh"])
+        self.assertIn("74 workflow skills", skills[0]["description_en"])
+        self.assertIn("74 SKILL.md files", skills[0]["description_en"])
         self.assertIn("Claude Code 专用", skills[0]["compatibility_status"])
         self.assertIn("Codex/WorkBuddy", skills[0]["compatibility_status"])
 
