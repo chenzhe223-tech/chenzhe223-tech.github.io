@@ -565,8 +565,8 @@ jobs:
           qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
           if report.get('report_date') != today:
               raise SystemExit(f'Candidate main report is not today: {report.get("report_date")!r} != {today}')
-          if report.get('top5_status') != 'ai_curated' or (report.get('localization') or {}).get('status') != 'ok' or len(report.get('top5') or []) != 5:
-              raise SystemExit('Candidate main report does not contain five AI-curated stories')
+          if not ((report.get('top5_status') == 'ai_curated' and (report.get('localization') or {}).get('status') == 'ok') or (report.get('top5_status') == 'editorial_curated' and (report.get('localization') or {}).get('status') == 'manual_editorial_verified' and (report.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (report.get('localization') or {}).get('sources_checked') == 5)) or len(report.get('top5') or []) != 5:
+              raise SystemExit('Candidate main report does not contain five verified and localized stories')
           if report.get('editorial_policy_version') != '2026-11-02.2':
               raise SystemExit('Candidate report editorial claim-provenance policy is outdated')
           quality = report.get('quality_gate') or {}
