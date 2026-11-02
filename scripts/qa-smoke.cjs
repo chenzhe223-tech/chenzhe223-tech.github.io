@@ -524,8 +524,8 @@ const mark = (status, name, detail = '') => {
           // Verify project soft-delete and restoration retain the original project ID.
           const importedProjectCard = kp.locator('#projectCards [data-project-id]').filter({ hasText: selectedRepoName }).first();
           const originalProjectId = await importedProjectCard.getAttribute('data-project-id');
-          await importedProjectCard.locator('[data-project-action="delete"]').click();
           kp.once('dialog', dialog => dialog.accept());
+          await importedProjectCard.locator('[data-project-action="delete"]').click();
           await kp.waitForFunction(name => !document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
           await kp.locator('[data-module="recycle"]').click();
           await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
