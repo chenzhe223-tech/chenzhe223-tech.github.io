@@ -353,6 +353,11 @@ def apply_verified_skill_metadata(skills):
             if "SKILL.md" not in description:
                 description = f"{description.rstrip('。； ')}（仓库实际扫描到{actual_count}个SKILL.md文件）"
             item["description_zh"] = description
+            description_en = str(item.get("description_en") or item.get("description") or "")
+            description_en = re.sub(r"(?<!\d)\d+(?=\s+workflow skills)", str(actual_count), description_en, flags=re.I)
+            if "SKILL.md" not in description_en:
+                description_en = f"{description_en.rstrip('. ')} ({actual_count} SKILL.md files found in the repository scan.)"
+            item["description_en"] = description_en
 
 
 def apply_claim_provenance(report):
