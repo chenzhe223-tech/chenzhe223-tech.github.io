@@ -31,6 +31,27 @@ def fail(message: str):
     raise RuntimeError(message)
 
 
+def verify_manifest_matches_report(report: dict, manifest: dict, report_sha256: str) -> tuple[list[str], list[str]]:
+    if manifest.get("source_report_generated_at") != report.get("generated_at"):
+        fail("Social pack was not generated from the current formal report timestamp")
+    if manifest.get("source_report_sha256") != report_sha256:
+        fail("Social pack source report hash does not match the current formal report")
+    top = report.get("top5") or []
+    titles = [str(story.get("title_zh") or story.get("title") or "") for story in top]
+    urls = [str(story.get("source_url") or story.get("url") or "") for story in top]
+    if manifest.get("story_titles") != titles:
+        fail("Social pack story titles/order differ from the formal Top 5")
+    if manifest.get("story_urls") != urls:
+        fail("Social pack story URLs differ from the formal Top 5")
+    skill = (report.get("skills") or [{}])[0] or {}
+    featured = manifest.get("skill") or {}
+    if featured.get("name") != skill.get("name") or featured.get("url") != skill.get("url"):
+        fail("Social pack Skill identity differs from the formal report")
+    if featured.get("compatibility_status") != skill.get("compatibility_status") or featured.get("actual_skill_file_count") != skill.get("actual_skill_file_count"):
+        fail("Social pack Skill compatibility or actual SKILL.md count differs from the formal report")
+    return titles, urls
+
+
 def check_destination(url: str) -> dict:
     request = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Social-Pack-QA/1.0", "Cache-Control": "no-cache"})
     with urllib.request.urlopen(request, timeout=20) as response:
@@ -124,10 +145,7 @@ def main() -> int:
         raise SystemExit("Social pack manifest missing")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     source_report_sha256 = hashlib.sha256(DATA.read_bytes()).hexdigest()
-    if manifest.get("source_report_generated_at") != report.get("generated_at"):
-        fail("Social pack was not generated from the current formal report timestamp")
-    if manifest.get("source_report_sha256") != source_report_sha256:
-        fail("Social pack source report hash does not match the current formal report")
+    verified_titles, verified_urls = verify_manifest_matches_report(report, manifest, source_report_sha256)
     expected_style = poster_style_metadata(report_date)
     if manifest.get("public_url") != PUBLIC_URL:
         fail("Social manifest public URL drift")
@@ -144,10 +162,8 @@ def main() -> int:
         fail("Formal report Top 5 count is not five")
     urls = [str(s.get("source_url") or s.get("url") or "") for s in top]
     titles = [str(s.get("title_zh") or s.get("title") or "") for s in top]
-    if manifest.get("story_urls") != urls:
-        fail("Social pack story URLs differ from the formal Top 5")
-    if manifest.get("story_titles") != titles:
-        fail("Social pack story titles/order differ from the formal Top 5")
+    if urls != verified_urls or titles != verified_titles:
+        fail("Social pack story metadata changed during verification")
     entries = manifest.get("images") or []
     if len(entries) != 6 or len({e.get("filename") for e in entries}) != 6:
         fail("Six independent image entries are required")
