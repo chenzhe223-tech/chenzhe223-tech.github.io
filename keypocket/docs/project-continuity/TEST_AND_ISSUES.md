@@ -1,37 +1,64 @@
 # KeyPocket — 测试与问题记录
 
-## KP-ISSUE-001 — CSP 与安全验收文档冲突
-- 状态：DOCS_UPDATED_NEEDS_RUNTIME_VERIFICATION
-- 严重级别：HIGH（文档准确性与安全审查优先级；不等于已确认漏洞）
-- 发现日期：2026-10-25
-- 原始证据：
-  - index.html CSP 的 connect-src 包含 GitHub API 和 Supabase URL。
-  - 旧版 SECURITY-ACCEPTANCE.md 声称 connect-src 'none'。
-- 处理：已更新 SECURITY-ACCEPTANCE.md，明确当前客户端网络依赖和未核实项。
-- 尚需验证：实际部署 CSP、浏览器网络请求和服务端访问策略。
+更新：2026-11-02（UTC+8）
 
-## KP-ISSUE-002 — 本地优先与跨设备同步描述不一致
-- 状态：DOCS_UPDATED_NEEDS_RUNTIME_VERIFICATION
-- 严重级别：HIGH（用户预期与数据安全模型）
-- 发现日期：2026-10-25
-- 原始证据：
-  - 旧 README 声称不提供云同步。
-  - index.html 展示跨设备加密同步、创建账号、登录和合并同步按钮。
-  - app.js 包含 Supabase Auth/REST 请求，并先加密 records/projects 快照，再写入同步记录。
-- 处理：已更新 README.md 与 DELIVERY-REPORT.md，说明客户端同步实现、云端元数据和未核验的服务端策略。
-- 尚需验证：Supabase keypocket_vault_sync 的 RLS/访问策略、生产网络请求、账号生命周期及同步冲突处理。
+## 1. 本轮自动化测试
 
-## 连续性档案安装检查
-| 检查 | 结果 | 证据/备注 |
-|---|---|---|
-| 读取 README | PASS | GitHub 文件读取成功 |
-| 读取 index.html | PASS | 已确认当前页面结构、CSP 和同步 UI |
-| 读取 app.js | PARTIAL | 已读取加密、Skill 收录和同步函数相关片段；尚未完成全量审查 |
-| 读取 SECURITY-ACCEPTANCE.md | PASS | 已发现并修正文档冲突 |
-| 读取 DELIVERY-REPORT.md | PASS | 已更新旧同步状态描述 |
-| 连续性档案写入/回读 | PASS | 9/9 文件写入并回读 |
-| 本次语法检查 | NOT RUN | 本次没有执行 Node |
-| 本次浏览器 E2E | NOT RUN | 本次没有执行浏览器测试 |
-| 本次生产部署验证 | NOT RUN | 尚未核实最新部署 |
-| Supabase RLS 核验 | NOT RUN | 当前未读取服务端策略配置 |
-| 独立安全审计 | NOT COMPLETED | 不应声称已完成 |
+### GitHub Actions V2 CI
+- Workflow：KeyPocket V2 CI
+- Run：41379299165
+- Commit：1e8086f6686c6647678a60aec0f8bf2d3c2f101e
+- 结果：completed / success
+- Job：contract-and-syntax
+- 步骤：Node 语法检查、V2 静态契约测试均成功。
+
+覆盖语法文件：
+- keypocket/app.js
+- keypocket/app-v2.js
+- keypocket/scripts/collect-skill-radar.cjs
+- keypocket/worker/github-app/src/index.js
+
+六项静态契约：
+1. V1 IndexedDB 与加密入口保持存在。
+2. V2 自动快照/回收站使用原有加密数据库路径。
+3. V2 逐记录同步与 SECURITY INVOKER RPC。
+4. Skill Radar 每日快照和历史增长口径。
+5. GitHub Worker 固定仓库、固定文件和加密 envelope。
+6. HTML V1/V2 脚本顺序和 Worker CSP。
+
+注意：这是静态代码契约，不是浏览器业务流程 E2E。
+
+## 2. Supabase 核查
+- 项目：urzgghdwawpwqliafrzv。
+- V2 表已部署：sync_meta、sync_items、backup_snapshots、devices、skill_repos、skill_snapshots。
+- keypocket_sync_meta、keypocket_sync_items、keypocket_backup_snapshots、keypocket_devices RLS 已启用。
+- 个人数据表策略限定 auth.uid() = user_id。
+- Skill Radar 表对 anon/authenticated 只读，service_role 可写。
+- keypocket_upsert_sync_item 为 SECURITY INVOKER，包含版本条件更新。
+- Skill snapshots identity sequence 的 service_role USAGE 已核验。
+- 旧 keypocket_vault_sync 未修改；核查时该表没有同步行。
+- 尚未用真实账号验证用户 A 无法读写用户 B 数据，也未做 API Key 密文抓包。
+
+## 3. Cloudflare Worker
+- Worker 名：keypocket-vault-api。
+- 部署 ID：229ccd2b797f405a97934b7f5f3fb5ff。
+- Cloudflare API 返回部署成功与模块入口 index.js。
+- 当前容器访问外网时 DNS 暂时失败，无法访问 /health；故 Runtime Verified 仅限部署元数据，不代表公网请求已经成功。
+- Worker secrets 与 GitHub App 账户授权尚未完成。
+
+## 4. 当前问题/阻塞
+- Actions secrets 未设置，Skill Radar 首次采集没有运行。
+- GitHub App 未建立；没有 app id/private key/slug/Session Secret。
+- keypocket-cloud-vault 尚未建立与 App installation。
+- Supabase Auth 用户真实会话与 token refresh 尚未做运行测试。
+- V2 页面尚未部署，不能对线上界面验收。
+- 真实 Safari/微信浏览器与设备间数据恢复未测。
+- 独立安全审计未完成。
+
+## 5. 处理纪律
+- 不把 CI success 写成 E2E success。
+- 不把 Supabase schema created 写成 sync functional tested。
+- 不把 Worker deployment metadata 写成 public health check passed。
+- 不把 GitHub App Worker code 写成 account connected。
+- 不把累计 Stars 写成月/季/年增长。
+- 失败或缺失配置时保留上一次有效 Skill Radar 数据。
