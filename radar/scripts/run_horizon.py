@@ -82,15 +82,28 @@ def remove_top5_duplicates_from_china(report: dict) -> dict:
                 "source_section": card.get("source_section") or "",
                 "additional_sources": card.get("additional_sources") or [],
             })
-    if removed or top5_source_references:
+    previous_dedupe = report.get("cross_section_dedupe") if isinstance(report.get("cross_section_dedupe"), dict) else {}
+    removed_by_key = {}
+    for item in (previous_dedupe.get("removed") or []) + removed:
+        if isinstance(item, dict):
+            key = (str(item.get("url") or ""), str(item.get("matched_url") or ""))
+            if any(key):
+                removed_by_key[key] = item
+    refs_by_url = {}
+    for item in (previous_dedupe.get("top5_source_references") or []) + top5_source_references:
+        if isinstance(item, dict) and item.get("url"):
+            refs_by_url[str(item["url"])] = item
+    removed_audit = list(removed_by_key.values())
+    source_reference_audit = list(refs_by_url.values())
+    if removed_audit or source_reference_audit:
         report["cross_section_dedupe"] = {
             "status": "ok" if len(report["china_ai_news"]) >= 6 else "insufficient_unique_china_stories",
-            "removed_from_china_ai_news": len(removed),
+            "removed_from_china_ai_news": len(removed_audit),
             "remaining_china_ai_news": len(report["china_ai_news"]),
-            "removed": removed,
-            "top5_source_references": top5_source_references,
+            "removed": removed_audit,
+            "top5_source_references": source_reference_audit,
         }
-        print(f"[cross-section-dedupe] removed={len(removed)} overlapping China AI story/stories; top5_source_refs={len(top5_source_references)}; remaining={len(report['china_ai_news'])}")
+        print(f"[cross-section-dedupe] removed={len(removed_audit)} overlapping China AI story/stories; top5_source_refs={len(source_reference_audit)}; remaining={len(report['china_ai_news'])}")
     return report
 
 def _safe_error_detail(exc: Exception) -> str:
