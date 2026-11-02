@@ -25,6 +25,8 @@ class EditorialProvenanceTests(unittest.TestCase):
             "top5": [{
                 "confidence": "low",
                 "source": "MarkTechPost",
+                "source_url": "https://marktechpost.com/example",
+                "title_zh": "Nace AI Drex Max v1",
                 "what_zh": "Nace AI 发布27B模型，评分67.52。",
                 "summary_zh": "Nace AI 发布了新的多模态决策模型。",
                 "what_en": "Nace AI released a 27B multimodal decision model with a reported score of 67.52.",
@@ -33,6 +35,8 @@ class EditorialProvenanceTests(unittest.TestCase):
         }
         apply_claim_provenance(report)
         self.assertEqual(report["editorial_policy_version"], "2026-11-02.2")
+        self.assertEqual(report["editorial"]["analysis_label_zh"], "DAVYLAB 分析")
+        self.assertEqual(report["editorial"]["source_basis"][0]["url"], "https://marktechpost.com/example")
         story = report["top5"][0]
         self.assertIn("据MarkTechPost报道", story["what_zh"])
         self.assertIn("尚无独立评测", story["what_zh"])
