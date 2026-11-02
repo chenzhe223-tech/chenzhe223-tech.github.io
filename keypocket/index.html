@@ -56,8 +56,9 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,220,255,.52),transpare
 <strong>跨设备同步（加密）</strong>
 <p style="margin:6px 0 12px">先解锁本地库，再使用同一账号登录各浏览器。云端只保存客户端加密后的资料。</p>
 <div class="grid2"><div class="field"><label for="syncEmail">账号邮箱</label><input id="syncEmail" type="email" autocomplete="email" placeholder="you@example.com"></div><div class="field"><label for="syncPassword">账号密码</label><input id="syncPassword" type="password" autocomplete="current-password" placeholder="登录账号密码"></div></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap"><button id="syncSignUpBtn" class="btn" type="button">创建同步账号</button><button id="syncSignInBtn" class="btn" type="button">登录</button><button id="syncNowBtn" class="btn primary" type="button" disabled>合并并同步加密资料</button><button id="syncSignOutBtn" class="btn ghost" type="button" disabled>退出同步账号</button></div>
-<p id="syncStatus" role="status" style="margin:10px 0 0">尚未登录。请勿将本地解锁密码与账号密码设置为相同密码。</p>
+<div class="field"><label for="syncEncryptionPassword">跨设备加密口令（至少 10 位）</label><input id="syncEncryptionPassword" type="password" minlength="10" autocomplete="off" placeholder="在你所有设备上使用相同的独立口令"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button id="syncSignUpBtn" class="btn" type="button">创建同步账号</button><button id="syncSignInBtn" class="btn" type="button">登录</button><button id="syncNowBtn" class="btn primary" type="button" disabled>同步并备份</button><button id="syncSignOutBtn" class="btn ghost" type="button" disabled>退出同步账号</button></div>
+<p id="syncStatus" role="status" style="margin:10px 0 0">尚未登录。跨设备加密口令只在当前页面内存使用，不会上传或保存在浏览器。</p>
 </section></section>
 <nav class="module-tabs" aria-label="管理模块"><button class="module-tab active" data-module="keys" type="button">🔑 我的密钥</button><button class="module-tab" data-module="projects" type="button">▣ 我的 Skills / 项目</button><button class="module-tab" data-module="radar" type="button">✦ Skill Radar</button><button class="module-tab" data-module="recycle" type="button">♻ 回收站</button><button class="module-tab" data-module="backup" type="button">◈ 自动备份</button><button class="module-tab" data-module="sync" type="button">⇄ 同步中心</button><button class="module-tab" data-module="github" type="button">⌘ GitHub 账户</button></nav>
 <section id="projectView" class="hidden">

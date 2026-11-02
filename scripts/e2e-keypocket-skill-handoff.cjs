@@ -45,8 +45,8 @@ const { chromium } = require('playwright');
     try {
       await keyPocket.waitForFunction(() => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes('kp-v2-scope-fix-20261102-9')
-          && window.__kpBuildVersion === 'kp-v2-scope-fix-20261102-9'
+        return script && script.src.includes('kp-v2-sync-client-20261102-10')
+          && window.__kpBuildVersion === 'kp-v2-sync-client-20261102-10'
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
@@ -75,7 +75,7 @@ const { chromium } = require('playwright');
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-scope-fix-20261102-9'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-sync-client-20261102-10'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
@@ -159,6 +159,7 @@ const { chromium } = require('playwright');
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
     await keyPocket.waitForSelector('#mainView:not(.hidden)', { timeout: 15000 });
+    await keyPocket.waitForFunction(() => window.__kpUnlockStep === 'complete', null, { timeout: 20000 });
     const postUnlockState = await keyPocket.evaluate(() => {
       const raw = localStorage.getItem('kp.radar.pending-skills.v1');
       let parsed = [];
