@@ -159,12 +159,12 @@ def classify_topic(story: dict, index: int) -> str:
     value = " ".join(str(story.get(k) or "") for k in ("title", "title_zh", "title_en", "summary", "summary_zh")).lower()
     patterns = [
         (("cybersecurity", "cyber security", "vulnerability", "prompt injection", "credential exfiltration", "网络安全", "漏洞", "攻防", "安全防护"), "cybersecurity"),
+        (("腾讯", "微信支付", "门店", "零售", "7-eleven", "迎宾", "导购"), "retail"),
         (("humanoid", "robotics", "robot", "embodied ai", "physical ai", "机器人", "具身智能", "人形"), "robotics"),
         (("shopping", "commerce", "e-commerce", "muse", "retail", "购物", "电商", "零售", "消费代理"), "commerce"),
         (("coding", "code generation", "developer", "software engineering", "编程", "代码", "开发者"), "coding"),
         (("compute", "gpu", "tpu", "chip", "data center", "算力", "芯片", "数据中心", "智算"), "compute"),
         (("deepseek", "super-agent", "superagent", "router", "worker", "智能体", "并行任务", "agent"), "agent"),
-        (("腾讯", "微信支付", "门店", "7-eleven", "迎宾", "导购"), "retail"),
         (("codex", "chatgpt", "usage", "用量", "额度", "openai"), "usage"),
         (("sap", "成本", "cost", "model routing", "模型路由", "企业效率"), "routing"),
         (("forty", "forest", "森林", "deepmind", "卫星", "毁林"), "forest"),
