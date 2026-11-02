@@ -113,7 +113,26 @@ const { chromium } = require('playwright');
     await keyPocket.locator('#masterPassword').fill(testPassword);
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
-
+    await keyPocket.waitForSelector('#mainView:not(.hidden)', { timeout: 15000 });
+    const postUnlockState = await keyPocket.evaluate(() => {
+      const raw = localStorage.getItem('kp.radar.pending-skills.v1');
+      let parsed = [];
+      try { parsed = raw ? JSON.parse(raw) : []; } catch {}
+      return {
+        initDiagnostic: window.__kpInitDiagnostic,
+        mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden'),
+        lockHidden: document.querySelector('#lockView')?.classList.contains('hidden'),
+        captureStillInUrl: new URLSearchParams(location.search).has('kp_capture'),
+        queueCount: Array.isArray(parsed) ? parsed.length : -1,
+        queueItems: Array.isArray(parsed) ? parsed.map(x => ({id:x.id,name:x.name,url:x.url,source:x.source})) : [],
+        normalizedCount: typeof window.readPendingRadarSkills === 'function' ? window.readPendingRadarSkills().length : -1,
+        importButtonText: document.querySelector('#importRadarSkillsBtn')?.textContent,
+        modalRootEmpty: !document.querySelector('#modalRoot')?.innerHTML.trim(),
+        modalRootPreview: document.querySelector('#modalRoot')?.innerText?.slice(0,300),
+        vaultUnlocked: typeof window.openPendingRadarSkillModal === 'function'
+      };
+    });
+    console.log('KEYPOCKET_E2E_POST_UNLOCK_STATE ' + JSON.stringify(postUnlockState));
     await keyPocket.locator('#saveRadarSkillBtn').waitFor({ state: 'visible', timeout: 15000 });
     const modalRepository = await keyPocket.locator('#modalRoot a[href^="https://github.com/"]').first().getAttribute('href');
     assert.equal(modalRepository, repositoryUrl, 'KeyPocket preview repository must match the selected Radar Skill');
