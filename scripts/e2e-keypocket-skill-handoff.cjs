@@ -125,11 +125,15 @@ const { chromium } = require('playwright');
         captureStillInUrl: new URLSearchParams(location.search).has('kp_capture'),
         queueCount: Array.isArray(parsed) ? parsed.length : -1,
         queueItems: Array.isArray(parsed) ? parsed.map(x => ({id:x.id,name:x.name,url:x.url,source:x.source})) : [],
-        normalizedCount: typeof window.readPendingRadarSkills === 'function' ? window.readPendingRadarSkills().length : -1,
+        queueDiagnostic: window.__kpRadarQueueDiagnostic,
+        captureDiagnostic: window.__kpRadarCaptureDiagnostic,
+        unlockQueueCount: window.__kpUnlockQueueCount,
+        unlockQueueStage: window.__kpUnlockQueueStage,
+        modalDiagnostic: window.__kpRadarModalDiagnostic,
+        vaultUnlocked: window.__kpVaultUnlocked,
         importButtonText: document.querySelector('#importRadarSkillsBtn')?.textContent,
         modalRootEmpty: !document.querySelector('#modalRoot')?.innerHTML.trim(),
-        modalRootPreview: document.querySelector('#modalRoot')?.innerText?.slice(0,300),
-        vaultUnlocked: typeof window.openPendingRadarSkillModal === 'function'
+        modalRootPreview: document.querySelector('#modalRoot')?.innerText?.slice(0,300)
       };
     });
     console.log('KEYPOCKET_E2E_POST_UNLOCK_STATE ' + JSON.stringify(postUnlockState));
