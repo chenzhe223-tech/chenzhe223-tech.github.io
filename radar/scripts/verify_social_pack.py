@@ -123,6 +123,11 @@ def main() -> int:
     if not manifest_path.is_file():
         raise SystemExit("Social pack manifest missing")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    source_report_sha256 = hashlib.sha256(DATA.read_bytes()).hexdigest()
+    if manifest.get("source_report_generated_at") != report.get("generated_at"):
+        fail("Social pack was not generated from the current formal report timestamp")
+    if manifest.get("source_report_sha256") != source_report_sha256:
+        fail("Social pack source report hash does not match the current formal report")
     expected_style = poster_style_metadata(report_date)
     if manifest.get("public_url") != PUBLIC_URL:
         fail("Social manifest public URL drift")
@@ -138,8 +143,11 @@ def main() -> int:
     if len(top) != 5:
         fail("Formal report Top 5 count is not five")
     urls = [str(s.get("source_url") or s.get("url") or "") for s in top]
+    titles = [str(s.get("title_zh") or s.get("title") or "") for s in top]
     if manifest.get("story_urls") != urls:
         fail("Social pack story URLs differ from the formal Top 5")
+    if manifest.get("story_titles") != titles:
+        fail("Social pack story titles/order differ from the formal Top 5")
     entries = manifest.get("images") or []
     if len(entries) != 6 or len({e.get("filename") for e in entries}) != 6:
         fail("Six independent image entries are required")
@@ -153,8 +161,10 @@ def main() -> int:
     if manifest.get("topic_categories") != {"global_news": 2, "china_ai_news": 2, "skill": 1}:
         fail("Topic image category counts are not 2 global + 2 China + 1 Skill")
     skill = (report.get("skills") or [{}])[0]
-    if (manifest.get("skill") or {}).get("url") != skill.get("url"):
+    if (manifest.get("skill") or {}).get("url") != skill.get("url") or (manifest.get("skill") or {}).get("name") != skill.get("name"):
         fail("Skill feature metadata does not match the formal report recommendation")
+    if (manifest.get("skill", {}).get("compatibility_status") != skill.get("compatibility_status") or manifest.get("skill", {}).get("actual_skill_file_count") != skill.get("actual_skill_file_count"):
+        fail("Skill compatibility or actual SKILL.md count differs from the formal report")
 
     font_result = verify_cjk_font()
     checks = []
@@ -209,11 +219,26 @@ def main() -> int:
     required = ["💡 DAVYLAB 观察", "❓", "作者：DAVYLAB｜让可能发生", PUBLIC_URL]
     if any(item not in copy for item in required):
         fail("WeChat copy is missing a required section")
-    if not all(title in copy for title in manifest.get("story_titles", [])):
+    if not all(title in copy for title in titles):
         fail("WeChat copy does not match all five selected stories")
+    for story in top:
+        if str(story.get("confidence") or "").lower() == "low":
+            caveat = str(story.get("what_zh") or "")
+            if not any(term in caveat for term in ("尚未独立验证", "待独立验证", "尚无独立评测", "无独立评测")):
+                fail(f"Low-confidence story lacks a source caveat: {story.get('title_zh')}")
+            if not any(term in copy for term in ("尚未独立验证", "待独立验证", "尚无独立评测", "无独立评测")):
+                fail("WeChat copy omits low-confidence verification caveat")
+    if skill.get("compatibility_status") and skill.get("compatibility_status") not in copy:
+        fail("WeChat copy omits Skill platform compatibility disclosure")
 
     result = {
         "report_date": report_date,
+        "source_report_generated_at": report.get("generated_at"),
+        "source_report_sha256": source_report_sha256,
+        "story_titles": titles,
+        "story_urls": urls,
+        "skill_name": skill.get("name"),
+        "skill_compatibility_status": skill.get("compatibility_status"),
         "checked_at": dt.datetime.now(TZ).isoformat(),
         "style": manifest["style"],
         "expected_url": PUBLIC_URL,
@@ -240,6 +265,18 @@ def main() -> int:
         "wechat_editor_preview": "NOT_TESTED",
         "status": "PASS"
     }
+    verified_by_name = {item["filename"]: item for item in verified_images}
+    for entry in entries:
+        verified = verified_by_name[str(entry.get("filename") or "")]
+        entry.update({
+            "width": verified["width"], "height": verified["height"], "format": verified["format"],
+            "file_size_bytes": verified["file_size_bytes"], "sha256": verified["sha256"], "qa_status": "PASS"
+        })
+    manifest["verified_at"] = result["checked_at"]
+    manifest["source_report_generated_at"] = report.get("generated_at")
+    manifest["source_report_sha256"] = source_report_sha256
+    manifest["qa_status"] = "PASS"
+    manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (folder / "verification.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     archive = folder / f"wechat-pack-{report_date}.zip"
     with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=8) as zf:
