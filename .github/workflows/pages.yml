@@ -689,7 +689,7 @@ jobs:
                   assert_matches_repo('radar/posters/' + today + '.qr-verification.json', verification_bytes)
                   verification = json.loads(verification_bytes.decode('utf-8'))
                   assert verification.get('status') == 'PASS', 'QR verification manifest is not PASS'
-          assert (verification.get('layout') or {}).get('truncated_text_blocks', 0) == 0, 'live poster contains truncated text blocks'
+                  assert (verification.get('layout') or {}).get('truncated_text_blocks', 0) == 0, 'live poster contains truncated text blocks'
                   assert verification.get('expected_url') == qr_target, 'QR manifest destination mismatch'
                   assert verification.get('report_date') == today, 'QR verification date mismatch'
                   for key, expected in expected_style.items():
