@@ -393,10 +393,17 @@ def main():
     if editorial.get("analysis_label_zh") != "DAVYLAB 分析" or not editorial.get("core_zh") or not editorial.get("trend_zh") or len(source_basis) < 3:
         claim_errors.append({"type":"editorial_analysis_missing_traceable_source_basis","valid_source_count":len(source_basis)})
     localization = report.get("localization") if isinstance(report.get("localization"), dict) else {}
-    if localization.get("status") != "ok":
-        claim_errors.append({"type": "top5_localization_not_ok", "status": localization.get("status", "missing")})
-    if report.get("top5_status") != "ai_curated":
-        claim_errors.append({"type": "top5_not_ai_curated", "status": report.get("top5_status", "missing")})
+    localization_status = localization.get("status")
+    top5_status = report.get("top5_status")
+    if localization_status not in {"ok", "manual_editorial_verified"}:
+        claim_errors.append({"type": "top5_localization_not_verified", "status": localization_status or "missing"})
+    if top5_status not in {"ai_curated", "editorial_curated"}:
+        claim_errors.append({"type": "top5_not_curated", "status": top5_status or "missing"})
+    if localization_status == "manual_editorial_verified":
+        if localization.get("provider") != "DAVYLAB editorial review" or localization.get("sources_checked") != 5:
+            claim_errors.append({"type": "manual_editorial_verification_record_invalid"})
+        if top5_status != "editorial_curated":
+            claim_errors.append({"type": "manual_editorial_status_mismatch"})
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
         if isinstance(story, dict):
             for field in ("title_zh", "what_zh", "why_zh"):
