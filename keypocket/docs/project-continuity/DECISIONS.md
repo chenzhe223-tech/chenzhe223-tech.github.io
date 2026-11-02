@@ -1,21 +1,22 @@
 # KeyPocket — 决策记录
 
-## ADR-KP-001 — 连续性档案与应用文件分离
-- 状态：`ACCEPTED`
-- 日期：2026-10-25
-- 决定：连续性档案放在 `keypocket/docs/project-continuity/`，不修改应用运行入口和现有功能文件。
-- 原因：先验证工作流，不把项目管理文件混入客户端运行逻辑；降低试运行风险。
-- 验证：档案均位于独立 docs 子目录。
+## ADR-KP-001：连续性档案
+已确认：状态文件位于 `keypocket/docs/project-continuity/`。
 
-## ADR-KP-002 — 仓库代码与档案需相互核验
-- 状态：`ACCEPTED`
-- 日期：2026-10-25
-- 决定：档案是交接入口，不凌驾于实际代码、当前用户指令和可验证的测试/部署证据。
-- 原因：避免旧状态被当作当前事实。
+## ADR-KP-002：代码/证据优先
+已确认：代码、Actions、线上资源优先于历史聊天或旧文档。
 
-## ADR-KP-003 — 同步安全模型在证据充分前保持未决
-- 状态：`ACCEPTED`
-- 日期：2026-10-25
-- 背景：页面当前显示 Supabase 账号及跨设备加密同步 UI，但 README 和安全验收文档仍含本地-only / `connect-src 'none'` 描述。
-- 决定：不擅自修改产品同步功能，也不直接断言旧文档或页面哪一方完全正确；先检查完整实现、RLS/服务端配置和线上版本。
-- 验收：形成代码路径、数据加密边界、网络请求范围、账号数据策略和线上版本的证据记录后，再修正文档或实现。
+## ADR-KP-003：旧同步不等于 V2
+已确认：Supabase 单行全量 envelope + updatedAt last-write-wins 不满足增量同步/tombstone冲突要求；V2未通过验证前不能宣称自动同步。
+
+## ADR-KP-004：保留本地加密兼容
+2026-11-02：保留 IndexedDB v1 与旧 AES-GCM/PBKDF2 格式；本地快照用当前解锁密钥加密，软删除保留原ID并使用 encrypted tombstone。
+
+## ADR-KP-005：V2同步事件模型
+目标架构：eventId、recordId、entityType、operation、recordVersion、deviceId、server cursor；delete tombstone 和 restore 事件必须参与合并，禁止整库覆盖。
+
+## ADR-KP-006：Skill Radar真实历史
+目标架构：周期增长仅用每日快照计算；公开首次采集日；样本不足显示空态；累计榜按当前 Stars 标注。
+
+## ADR-KP-007：GitHub vault隔离
+目标架构：只访问用户明确安装授权给 KeyPocket 的专用私有 vault 仓库；GitHub授权与本地解锁独立。
