@@ -619,6 +619,7 @@ $('#syncSignOutBtn')?.addEventListener('click',async()=>{try{const s=kpSession()
 $('#syncNowBtn')?.addEventListener('click',async()=>{try{await kpV2SyncNow()}catch(e){kpSyncStatus('同步未完成：'+e.message+' 本地数据保持不变。',true)}});
 kpSetSession(kpSession());
 kpHandlePasswordRecoveryRedirect().catch(error=>kpSyncStatus('无法处理密码恢复链接：'+error.message,true));
+window.addEventListener('hashchange',()=>kpHandlePasswordRecoveryRedirect().catch(error=>kpSyncStatus('无法处理密码恢复链接：'+error.message,true)));
 
 // KeyPocket V2.0 local recovery foundation. Existing record envelopes are unchanged.
 
