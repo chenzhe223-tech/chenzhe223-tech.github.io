@@ -1,47 +1,69 @@
-# KeyPocket — 项目长期基准
+# KeyPocket — 项目长期基准与 V2.0 架构
 
-- 文档版本：DPCS 1.0 / KeyPocket 初始化
-- 最后核实：2026-10-25（UTC+8）
-- 产品目录：`keypocket/`
-- 仓库：`https://github.com/chenzhe223-tech/chenzhe223-tech.github.io`
-- 默认分支：`main`
-- 线上地址：`https://chenzhe223-tech.github.io/keypocket/`
-- 部署方式：GitHub Pages；仓库根目录还包含 DAVYLAB 官网和其他应用
-- 产品类型：本地优先的 API Key 管理网页应用，并包含“我的应用与仓库”、Skill 收录和页面中可见的加密同步入口
+- 最近核实：2026-11-02（UTC+8）
+- 仓库：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io
+- 应用目录：keypocket/
+- 正式地址：https://chenzhe223-tech.github.io/keypocket/
+- 生产分支：main；V2 升级分支：feature/keypocket-v2
+- 产品定位：本地优先的个人 AI 资产管理中心，管理 API Key、Skills、项目和加密备份。
 
-## 1. 产品目标
-为用户提供轻量的 API Key 本地加密管理、加密备份/恢复、应用与 GitHub 仓库资料管理，以及从 DAVYLAB AI 前沿简报收录公开 Skill 元数据的工作流。
+## 1. 既有基线（不可随意破坏）
+- IndexedDB 数据库 keypocket-local-v1，object store vault。
+- AES-GCM 加密 JSON；PBKDF2-HMAC-SHA-256，默认 310,000 次。
+- 原 V1 sealRecord/openRecord、sealProject/openProject、手动导出导入流程继续保留。
+- 原 Supabase keypocket_vault_sync 表不删除、不覆盖，作为旧版首次迁移读取源。
+- 原页面视觉基础和密钥/项目管理模块保留；V2 通过附加脚本增加导航模块。
 
-## 2. 已核实的关键文件
-- `keypocket/index.html`：页面结构、样式、CSP、同步 UI、模块入口和脚本引用。
-- `keypocket/app.js`：客户端加密、IndexedDB、密钥/项目记录、备份及相关交互逻辑。
-- `keypocket/README.md`：产品说明、运行方式、数据边界和简报收录说明。
-- `keypocket/SECURITY-ACCEPTANCE.md`：安全控制和验收记录（需要与现有实现复核）。
-- `keypocket/DELIVERY-REPORT.md`：交付及 QA 记录（部分内容与当前页面存在潜在冲突，见 CURRENT_STATUS 和 TEST_AND_ISSUES）。
+## 2. V2 新增客户端
+- app-v2.js：自动检查点、本地每日/月度/重要快照、回收站、逐记录增量同步、设备状态、Skill Radar、GitHub Vault 前端。
+- 系统行以 kpv2: 前缀隔离，不参与 V1 业务记录遍历。
+- 自动本地检查点防抖约 900ms；保留自动检查点 1、每日 30、月度 12、里程碑 24。
+- 回收站默认 30 天，墓碑参与同步；永久删除以加密标记传播。
+- 云端备份只有在 Supabase 认证并成功同步后才形成；GitHub App 备份需要授权。
+- 不允许将本机 IndexedDB 副本描述为云端备份。
 
-## 3. 已知技术事实
-- 页面通过 `./app.js?v=kp-sync-20261025-3` 引入应用脚本。
-- JS 使用 Web Crypto：AES-GCM 加密 JSON；PBKDF2-HMAC-SHA-256 派生密钥，代码默认迭代次数 310,000。
-- IndexedDB 数据库常量为 `keypocket-local-v1`，对象仓库为 `vault`。
-- 项目记录通过 `sealProject` 加密后写入 IndexedDB。
-- 备份、导入与恢复属于产品关键数据路径。
-- 简报到 KeyPocket 的待收录队列键为 `kp.radar.pending-skills.v1`，队列设计为公开 Skill 元数据，不应包含 API Key、Token 或保险库秘密。
-- `index.html` 当前 CSP 的 `connect-src` 包含 GitHub API 和 Supabase URL；因此不能直接沿用旧安全文档中“connect-src 'none' / 应用完全不发起网络请求”的陈述。
-- 页面当前展示“跨设备同步（加密）”和账号注册/登录/同步按钮；必须进一步核实 `app.js` 中实际实现、Supabase RLS/策略、加密边界及交付文档后，才能准确描述同步安全模型。
+## 3. Supabase
+KeyPocket 使用现有项目 ref urzgghdwawpwqliafrzv（该项目还承载其他产品，不可清理/重建非 KeyPocket 表）。
+V2 表：
+- keypocket_sync_meta
+- keypocket_sync_items
+- keypocket_backup_snapshots
+- keypocket_devices
+- keypocket_skill_repos
+- keypocket_skill_snapshots
 
-## 4. 产品安全与数据边界
-- 不把 API Key、密码、访问令牌、Cookie、加密备份内容或用户生产数据写入本项目档案、日志、Issue 或交接单。
-- 不要把公开 Skill 元数据队列误当作云同步；本地队列与账户同步是不同机制。
-- 不要宣称已完成独立安全审计，除非存在可核查的独立审计报告。
-- 不要将代码已修改、CI 通过、Pages 部署和真实设备验收混为一谈。
-- 涉及删除本地库、备份恢复、账号数据合并、生产数据迁移等操作时，先核实备份和授权边界。
+同步 RPC：keypocket_upsert_sync_item，SECURITY INVOKER。个人表 RLS 以 auth.uid() 隔离；Skill Radar 表浏览器只读，collector 用 service_role 写入。
+旧表 keypocket_vault_sync 保留。
 
-## 5. 当前必须澄清的冲突
-1. README 的安全说明称“不会提供云同步”，但 index 页面已显示 Supabase 加密同步 UI。
-2. README 对 CSP 的描述与 index 当前 CSP 不完全一致。
-3. SECURITY-ACCEPTANCE.md 记载 `connect-src 'none'`，与 index 当前内容冲突。
-4. DELIVERY-REPORT.md 的状态/测试时间及“无云同步”描述可能未随当前同步 UI 更新。
-在核实实际 `app.js`、部署版本和 Supabase 配置前，不要自行断定哪份旧文档代表当前真实状态。
+## 4. Skill Radar
+- GitHub 公共仓库搜索为主要来源；过滤 fork、归档和无关教程。
+- 保存仓库当前元数据与每日历史 Stars/Forks 快照。
+- 月度 30 天、季度 90 天、年度 365 天增长榜；累计榜按当前 Stars。
+- 评分：Stars 增长 70%、Forks 增长 20%、README 相关性 10%；不代表安装量。
+- 不足完整历史周期时显示数据积累中；首次采集日是历史统计起点。
+- workflow: .github/workflows/keypocket-skill-radar.yml；依赖 GitHub Actions Secrets。
 
-## 6. 验收原则
-以当前代码、实际 GitHub Actions 运行记录、线上资源和明确测试证据为依据。每个结论标记为已核实、未核实或存在冲突。
+## 5. GitHub App Vault
+- Worker: https://keypocket-vault-api.chenzhe223.workers.dev
+- Worker 固定操作用户授权的 keypocket-cloud-vault 私有仓库和 keypocket-vault.v2.json 文件。
+- Contents 读写、Metadata 只读；Installation Token 服务端生成并只限定此仓库。
+- App 私钥、App ID、Session Secret 必须存 Cloudflare Worker Secrets。
+- 当前 Worker 已部署，App 未配置/安装；不得显示为已连接。
+
+## 6. 数据迁移与冲突策略
+- 首次 V2 同步尝试解密旧整库快照，按记录 ID/更新时间合并，不直接覆盖更高版本本地记录。
+- 逐条同步按 version、updated_at、device_id 确定胜出版本。
+- 并发编辑同一记录使用 LWW，非字段级合并。
+- 软删除形成 tombstone；恢复会以新时间版本写回。
+- 永久删除标记参与同步；墓碑保留以防旧设备复活资产。
+
+## 7. 安全边界
+- API Key 明文不得上传；客户端加密后才写入 Supabase/GitHub。
+- 服务端能看到必要的用户/实体/版本/删除元数据，但不应获得本地密码或密钥明文。
+- Supabase publishable key 可在客户端使用；service_role key 只允许 GitHub Actions Secret。
+- Worker 私钥与 Session Secret 不得写入仓库、浏览器或日志。
+- 本地密码与 Supabase 登录密码分离；不同设备需要相同本地密码生成共享云端密钥。
+- 独立安全审计尚未完成。
+
+## 8. 连续性文件
+HANDOFF.md、CURRENT_STATUS.md、DECISIONS.md、TASKS.md、TEST_AND_ISSUES.md、CHANGELOG.md 是最新交接事实入口；但与代码冲突时必须核实实际代码和服务状态。
