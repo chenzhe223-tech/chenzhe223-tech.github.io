@@ -2,46 +2,39 @@
 
 最后更新：2026-11-02（UTC+8）
 版本目标：V2.0
-状态：IN_PROGRESS — 本地恢复基础和模块 UI 已提交并部署，未完成全量功能验收。
+总体状态：IN_PROGRESS。核心 V2 功能已有真实代码与数据库结构，但本地库重载解锁及真实双设备同步仍未验收。
+正式入口：https://chenzhe223-tech.github.io/keypocket/
+唯一状态源：`keypocket/PROJECT_CONTEXT.md`。
 
-## 当前线上/仓库基准
-- 仓库：chenzhe223-tech/chenzhe223-tech.github.io
-- 分支：main
-- HEAD：`022232f278763afcac8dbd327a638a9632b9d999`
-- 正式入口：https://chenzhe223-tech.github.io/keypocket/
-- Pages run：`41385211770`，该 HEAD build/deploy SUCCESS
-- KeyPocket static QA：`41385211674`，syntax/source contract SUCCESS
-- app.js blob SHA：`2d16fdaa1d2f253721d769df42f0c56317074bb5`
-- index.html blob SHA：`d8940124d90e12b27580ea456770d39f0a776c36`
-- cache key：`kp-v2-init-debug-20261102-1`
-
-## 已写入代码但仍需验收
-- 保留 IndexedDB `keypocket-local-v1` / store `vault` / DB version 1；旧 AES-GCM/PBKDF2 格式保留。
-- 七模块 UI：我的密钥、我的 Skills/项目、Skill Radar、回收站、自动备份、同步中心、GitHub 账户。
-- 本地加密快照、防抖、首次解锁保护快照、每日打开后检查。
-- API Key/项目软删除与 tombstone，回收站恢复/永久删除入口。
-- 项目新增/编辑/收藏/删除及 Skill 收录/更新接入持久化队列。
-- Replace 导入前尝试生成保护快照。
-- Skill Radar UI有四周期入口；真实采集数据未配置时显示空态。
-- 同步/GitHub 页面明确显示 V2 同步未启用/KeyPocket App 未绑定。
+## 最新核验基准
+- 仓库：`chenzhe223-tech/chenzhe223-tech.github.io`
+- 分支：`main`
+- 最新已核验代码提交（本轮 QA 诊断改动）：`3848c1b857deac58020c14d971e5933e8acc75b1`
+- 随后新增生产同步权限 migration 文件提交：`2633e58be38e9a52dff0fb4f3bbed72ca8a1cf47`
+- 最近已确认成功的 KeyPocket 专项 QA：`41408780134`（b90db14），SUCCESS
+- 最近已确认成功的 Pages 部署：`41408779662`（b90db14），SUCCESS
+- 最近一轮整站 QA：`41415872653`（3848c1b），读取时仍在运行；最终结论待 Actions 日志。
+- App 正式入口已在 b90db14 的 Pages run 部署成功；之后新提交会再次触发 Pages。
 
 ## 五级交付状态
+
 | 模块 | Code Completed | Build Passed | Runtime Verified | Functional Tested | Production Deployed |
 |---|---|---|---|---|---|
-| 本地快照 | 基础代码已写，边界/保留策略未完全实现 | 静态检查通过 | 页面随 HEAD 已部署 | 快照创建/解密/恢复未验收 | HEAD Pages成功 |
-| 回收站 | API Key/项目软删除 UI/代码已写 | 静态检查通过 | 页面随 HEAD 已部署 | 单条/批量/过期/tombstone未验收 | HEAD Pages成功 |
-| 项目保存/Skill handoff | 保存路径已接入持久化队列 | source contract PASS | HEAD 页面已部署 | 最新线上 Playwright待手动触发 | HEAD Pages成功 |
-| V2增量同步 | 未实现 | — | — | — | — |
-| 云端加密备份 | 未实现 | — | — | — | — |
-| Skill Radar collector | 未实现（只有UI） | — | — | — | — |
-| GitHub App/Worker | 未实现/待授权 | — | — | — | — |
-| 导航 UI | 已实现 | 静态检查通过 | Pages部署成功 | 全模块 E2E未做 | HEAD Pages成功 |
+| API Key 本地加密管理 | 是 | JS 语法通过 | 页面/IndexedDB 初始化、合成记录创建与显示通过 | 否：刷新后的解锁等待失败，待诊断 | 是 |
+| 本地自动快照 | 是 | 专项检查通过 | 备份 UI 在专项 E2E 中可显示 | API Key 数据恢复未完整通过 | 是 |
+| 回收站 | 是 | 专项检查通过 | Skill 项目删除/恢复 E2E 通过 | API Key 回收站仍需单独通过 | 是 |
+| V2 增量云同步 | 是 | JS/契约检查通过 | 表、RLS、权限、RPC 已在生产核验 | 双设备账号 E2E 未执行 | 前后端配置已部署 |
+| 云端加密备份 | 是 | 静态检查通过 | 表/RLS/权限已核验 | 上传、恢复未用真实测试账号验收 | 前端与后端表已部署 |
+| Skill Radar | 是 | collector 自测通过 | 真实 JSON/每日工作流运行成功 | 只有 1 天历史，趋势暂不验收 | 已部署 |
+| Skill 简报一键收录 | 是 | 专项 QA 通过 | 线上流程可用 | Playwright E2E 成功 | 已部署 |
+| GitHub App / Worker / 私有 Vault | 否 | — | — | — | 未部署 |
+| iOS Safari / 微信 | 待专项 | — | 部分桌面/390px 检查 | 未验收 | 页面部署 |
 
-## 测试证据
-- KeyPocket run `41385211674` / HEAD `022232f`：Node syntax PASS、source contract PASS；push运行按新workflow设计跳过Playwright。
-- Pages run `41385211770` / HEAD `022232f`：build/deploy SUCCESS。
-- 旧 E2E run曾因部署前加载旧缓存脚本失败；已识别为部署/测试时序问题并修改 workflow，但当前没有最新HEAD的E2E success。
-- iOS Safari/微信未测试；本地快照/回收站恢复未进行专项E2E。
+## 当前主要阻塞
+1. Browser QA 重载后解锁失败：先看 run `41415872653` 的诊断日志，不可直接假设是密码错误。
+2. 双设备云同步未真实测试。
+3. 本地 API Key 快照/回收站的端到端覆盖需要补齐。
+4. Skill Radar 月/季/年趋势需要更多历史采样。
+5. iOS Safari 与微信浏览器未专项验收。
 
-## 阻塞
-Supabase event schema/RLS/双设备同步；Skill Radar GitHub历史采集；KeyPocket GitHub App/Worker OAuth及 secrets；本地恢复完整测试；移动端验收。
+详细事实、技术架构、数据库安全和后续优先级见根目录 `PROJECT_CONTEXT.md`。
