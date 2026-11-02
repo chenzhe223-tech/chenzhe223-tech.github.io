@@ -41,11 +41,11 @@ def story_title(story: dict) -> str:
 
 
 def story_summary(story: dict) -> str:
-    return str(story.get("what_zh") or story.get("summary_zh") or story.get("summary") or story.get("description_zh") or "")
+    return str(story.get("social_what_zh") or story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or story.get("description_zh") or "")
 
 
 def story_why(story: dict) -> str:
-    return str(story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
+    return str(story.get("social_why_zh") or story.get("poster_why_zh") or story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
 
 
 def story_url(story: dict) -> str:
@@ -364,7 +364,7 @@ def render_skill_image(skill: dict, report_date: str) -> Image.Image:
     draw.text((860, 35), report_date.replace("-", "."), font=font(17, True), fill=WHITE, anchor="ra")
     draw.text((40, 475), "TODAY'S PRACTICAL SKILL", font=font(17, True), fill=ORANGE)
     y = write_text(draw, str(skill.get("name") or "Open-source Skill"), (40, 515), font(34, True), INK, 820, 3, 7)
-    description = str(skill.get("description_zh") or skill.get("description") or "项目能力以官方仓库说明为准。")
+    description = str(skill.get("poster_description_zh") or skill.get("description_zh") or skill.get("description") or "项目能力以官方仓库说明为准。")
     y = write_text(draw, description, (42, y + 14), font(21), MUTED, 810, 5, 7)
     license_name = str(skill.get("license_name") or skill.get("license") or "许可证待核验")
     draw.line((42, 900, 858, 900), fill=LINE, width=2)
@@ -429,7 +429,7 @@ def draw_main_poster(report: dict, top: list[dict], skill: dict, report_date: st
     card(draw, (40, 840, 515, 1120), fill=(246, 235, 216), outline=(232, 216, 187), radius=16)
     draw.text((62, 860), "今日 Skill  /  OPEN-SOURCE", font=font(17, True), fill=BLUE)
     write_text(draw, str(skill.get("name") or "Open-source Skill"), (62, 895), font(24, True), INK, 430, 2, 4)
-    desc = str(skill.get("description_zh") or skill.get("description") or "")
+    desc = str(skill.get("poster_description_zh") or skill.get("description_zh") or skill.get("description") or "")
     write_text(draw, desc, (62, 955), font(15), INK, 430, 3, 4)
     license_name = str(skill.get("license_name") or skill.get("license") or "许可证信息待核验")
     draw.text((62, 1040), f"许可证：{license_name[:36]}", font=font(12, True), fill=BLUE)
