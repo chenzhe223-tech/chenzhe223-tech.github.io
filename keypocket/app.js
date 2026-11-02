@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-device-revoke-cloudbackup-20261102-17';
+window.__kpBuildVersion='kp-v2-device-session-refresh-20261102-18';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
