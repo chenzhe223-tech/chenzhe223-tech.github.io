@@ -32,8 +32,8 @@ def load_image_relevance_policy():
     if not isinstance(policy, dict):
         raise RuntimeError("P0 image_relevance policy missing from qa-rules.json")
     minimum = float(policy.get("minimum_score", 0))
-    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True:
-        raise RuntimeError("P0 image relevance policy invalid")
+    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True or policy.get("policy_version") != "2026-11-02.1":
+        raise RuntimeError("P0 image relevance policy invalid or outdated")
     return policy
 
 IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
@@ -720,6 +720,9 @@ def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
     matched = sum(bool(normalize_url(str(x.get("image_url") or ""))) for x in processed_stories if isinstance(x, dict))
     report["image_matching"] = {
         "status": "ok" if matched == total else "partial", "matched": matched, "processed": total,
+        "relevance_threshold": MIN_IMAGE_RELEVANCE_SCORE,
+        "relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"],
+        "thematic_fallback_count": sum(1 for x in processed_stories if isinstance(x, dict) and x.get("image_match_status") == "thematic_fallback"),
         "strategy": ["RSS/feed image", "article OG/Twitter metadata", "Horizon semantic query expansion", "Openverse", "Wikimedia Commons", "Bing Images", "Unsplash topic illustration fallback"],
         "last_run": dt.datetime.now(TZ).isoformat(),
     }
