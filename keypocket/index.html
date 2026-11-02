@@ -37,15 +37,18 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,220,255,.52),transpare
 .source-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.source-badge{display:inline-flex;align-items:center;width:max-content;max-width:100%;padding:4px 8px;border-radius:7px;font-size:10px;line-height:1.4;font-weight:750;background:#f0f2f8;color:#6e7890}.source-mine{background:#e8edff;color:#414dc4}.source-external{background:#e4f8ef;color:#18734f}.source-category{background:#fff1df;color:#95601a}.project-filters{align-items:center;flex-wrap:wrap;gap:10px}.project-filters .search{min-width:230px}.project-filters .filter{height:46px;max-width:220px}.project-group{margin:24px 0 30px}.project-group-head{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 13px;padding:0 2px 12px;border-bottom:1px solid #e4e8f2}.project-group-head h3{font-size:17px;margin:0;color:#273454;letter-spacing:-.3px}.project-group-head p{margin:4px 0 0;font-size:11px;color:#8791a7}.project-group-head>span{display:grid;place-items:center;min-width:30px;height:30px;padding:0 8px;border-radius:10px;background:#eef0ff;color:#4d55d8;font-size:11px;font-weight:800}.project-group-external .project-group-head>span{background:#e4f8ef;color:#18734f}.project-group .cards{align-items:stretch}.project-group .card{height:100%;display:flex;flex-direction:column}.project-group .cardactions{margin-top:auto;padding-top:12px}.skill-insights{margin:12px 0;padding:11px 12px;border-radius:12px;background:#f6f8fd;border:1px solid #e9edf7}.skill-insights strong{font-size:11px;color:#37466d}.skill-insights p{font-size:10px;margin:4px 0 0;color:#727e96;overflow-wrap:anywhere}.skill-purpose{line-height:1.7;background:#f8f9fd;border-radius:10px;padding:9px 10px}.project-group .project-note{overflow-wrap:anywhere}
 @media(max-width:700px){.project-filters{align-items:stretch}.project-filters .search{min-width:100%;flex-basis:100%}.project-filters .filter{max-width:none;width:100%;height:44px}.project-group{margin-top:20px}.project-group-head h3{font-size:16px}.project-group .cardactions{margin-top:10px}.source-badge{font-size:9px}}
 
-/* Mobile Skill search recovery: keep the dialog viewport-bound and allow results to scroll. */
+/* Mobile modal stability: keep the backdrop fixed and scroll the dialog itself. */
+body.kp-modal-open{overflow:hidden;touch-action:none}
+#modalRoot .modal-backdrop{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#modalRoot .modal{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 @media(max-width:700px){
- #modalRoot .modal-backdrop{position:fixed;inset:0;overflow-y:auto;align-items:flex-start;padding:14px 10px;overscroll-behavior:contain}
- #modalRoot .modal{width:min(100%,680px);max-height:none;margin:8px auto 24px;overflow:visible}
- #modalRoot .github-repo-list{max-height:42vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
- #modalRoot .github-repo-row{min-width:0;overflow-wrap:anywhere}
- #modalRoot .github-repo-meta{min-width:0;overflow-wrap:anywhere}
+ #modalRoot .modal-backdrop{position:fixed;inset:0;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:12px 10px calc(12px + env(safe-area-inset-bottom))}
+ #modalRoot .modal{width:100%;max-width:680px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);margin:0 auto;overflow-y:auto;overflow-x:hidden;padding:20px 16px}
+ #modalRoot .github-repo-list{max-height:38vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+ #modalRoot .github-repo-row,#modalRoot .github-repo-meta{min-width:0;overflow-wrap:anywhere}
  #modalRoot .github-repo-meta strong,#modalRoot .github-repo-meta small{overflow-wrap:anywhere;word-break:break-word}
- #modalRoot .modal-actions{position:sticky;bottom:0;background:#fff;padding:8px 0;z-index:2}
+ #modalRoot .modal-actions{display:flex;flex-wrap:wrap;position:static;background:#fff;padding:8px 0;z-index:auto}
+ #modalRoot .modal-actions .btn{min-height:44px}
 }
 
 @media(max-width:700px){.module-tabs{width:100%;overflow-x:auto;justify-content:flex-start}.module-tab{white-space:nowrap;flex:0 0 auto}.radar-period-tabs{width:100%;overflow-x:auto}}\n</style></head>
@@ -78,4 +81,4 @@ body{background:radial-gradient(ellipse at 8% 0%,rgba(221,220,255,.52),transpare
 <div class="stats"><div class="stat"><b id="totalCount">0</b><span>已保存密钥</span></div><div class="stat"><b id="providerCount">0</b><span>服务商</span></div><div class="stat"><b id="favoriteCount">0</b><span>常用收藏</span></div></div>
 <div class="list-head"><h2>我的密钥</h2><div class="list-head-actions"><small id="listCount">0 条记录</small><button id="addKeyBtn" class="btn primary" type="button">＋ 新增 API Key</button></div></div><section id="cards" class="cards" aria-live="polite"></section>
 </section><footer class="footer"><span>KeyPocket V2.0 · 本地加密资产管理</span><span>本地自动保存与历史恢复 · 云端授权状态独立显示</span></footer></section></main><div id="modalRoot"></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
-<script src="./app.js?v=kp-v2-password-recovery-20261102-20" defer></script></body></html>
+<script src="./app.js?v=kp-v2-mobile-modal-stability-20261103-21" defer></script></body></html>
