@@ -185,6 +185,7 @@ jobs:
         if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
         continue-on-error: true
+        timeout-minutes: 5
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         shell: bash
