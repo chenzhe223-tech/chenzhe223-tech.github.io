@@ -1,30 +1,26 @@
 # KeyPocket V2.0 — 测试与问题
 
 ## KP-ISSUE-001 — 初始语法错误
-已修复。Actions 在 e27d535 对 `node --check keypocket/app.js` 执行 PASS。
+已修复。Actions在 e27d535 对 `node --check keypocket/app.js` 执行 PASS。当前 app.js 后续无改动，最新仍需再次专项检查。
 
-## KP-ISSUE-002 — E2E 首次库测试数据泄漏
-原因：Playwright 复用浏览器上下文已有 IndexedDB，导致密码确认框隐藏。commit e30311f 已为测试增加空 storageState；需确认后续运行结果。
+## KP-ISSUE-002 — E2E confirmPassword 隐藏
+- Run 41383221465 / commit 2513ed8。
+- Node syntax、source contract、published assets均 PASS；Playwright在填充 `#confirmPassword` 时失败，元素按页面逻辑被隐藏。
+- 先前仅加入空 storageState不足以解决。
+- 最新 E2E script 0dcac99 增加读取隔离测试 IndexedDB的 vault/记录 ID，并仅对一次性测试 context删除该DB，再 reload 创建测试密钥库；还没有新的 KeyPocket QA run。
+- 下一步必须 workflow_dispatch运行 KeyPocket Skill Handoff QA并查看锁屏状态，不能把测试脚本修改等同测试通过。
 
-## KP-ISSUE-003 — Pages队列取消
-连续提交时中间 pages build/deployment jobs 被后续 commit 取消。必须以最新 main HEAD 对应 run 和线上资源作为部署证据。
+## KP-ISSUE-003 — Pages部署队列取消
+旧提交中间 Pages runs会被后续提交取消；最新 HEAD 6f2b9e6对应 run 41383453487 build/deploy已SUCCESS。
 
 ## KP-ISSUE-004 — V2同步未实现
-旧 Supabase 仍是单行全量snapshot/last-write-wins；RLS和云端schema未读取/验证。
+旧Supabase仍为单行全量snapshot/last-write-wins；生产 schema/RLS和双设备冲突未验证。
 
 ## KP-ISSUE-005 — Skill Radar无真实榜单
-页面尝试读取 `./api/skill-radar.json`，仓库暂无 collector/每日快照workflow；显示空态是预期行为。
+页面读取 `./api/skill-radar.json`，尚无collector与每日历史快照workflow；空态为预期。
 
 ## KP-ISSUE-006 — GitHub私有备份授权缺失
-未创建 KeyPocket GitHub App/Worker OAuth callback/secret；应用内GitHub连接尚不可用。
+尚无KeyPocket GitHub App/Worker OAuth callback/secret与专用私有 vault。
 
-## 尚未执行的测试
-- 本地快照创建、解密、恢复和恢复前快照。
-- API Key/项目删除、保留ID恢复、批量恢复、永久删除、30天过期。
-- 本地写入失败不阻断原数据保存。
-- Offline/online、快照并发、页面刷新。
-- 旧版备份导入 merge/replace。
-- Supabase RLS跨用户拒绝、增量事件、tombstone冲突、两设备同步。
-- Skill Radar历史增量/过滤/限流/失败保留。
-- GitHub App安装/取消/撤销/多设备/私有仓库恢复。
-- iOS Safari、微信浏览器。
+## 未执行测试
+本地快照解密/恢复、回收站单条/批量/删除过期、导入保护回滚、同步离线/并发/删除冲突、RLS跨用户拒绝、两设备、Radar周期增长/限流失败保留、GitHub App授权撤销与恢复、iOS Safari/微信。
