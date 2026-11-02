@@ -62,6 +62,12 @@ function relevanceScore(repo, paths) {
   if (/skill/.test(repo.repoName.toLowerCase())) score += 10;
   return Math.max(0, Math.min(100, score));
 }
+function isBroadCollection(repo) {
+  const text = [repo.fullName, repo.description, ...(repo.topics || [])].join(' ').toLowerCase();
+  return /^awesome[-/]/i.test(repo.repoName)
+    || /(?:definitive list|curated list|awesome list|collection of resources|resource list|tutorial|course|open book|textbook|从零开始构建|教程|课程|教材)/i.test(text);
+}
+
 async function githubJson(endpoint) {
   const headers = {
     Accept: 'application/vnd.github+json',
@@ -206,7 +212,10 @@ function selfTest() {
   assert.equal(validSkillPath('.claude/skills/reviewer/SKILL.md'), true);
   assert.equal(validSkillPath('docs/tutorial/SKILL.md'), false);
   assert.equal(validSkillPath('README.md'), false);
-  console.log('PASS: Skill Radar ranking, historical baseline and SKILL.md path validation.');
+  assert.equal(isBroadCollection({fullName:'vinta/awesome-python',repoName:'awesome-python',description:'The definitive list',topics:[]}), true);
+  assert.equal(isBroadCollection({fullName:'anthropics/skills',repoName:'skills',description:'Public repository for Agent Skills',topics:[]}), false);
+  assert.ok(relevanceScore({fullName:'anthropics/skills',repoName:'skills',description:'Public repository for Agent Skills',topics:[]},['skills/pdf/SKILL.md']) >= 55);
+  console.log('PASS: Skill Radar relevance, collection exclusion, historical baseline and SKILL.md path validation.');
 }
 async function main() {
   if (process.argv.includes('--self-test')) return selfTest();
@@ -216,8 +225,10 @@ async function main() {
   fs.mkdirSync(path.dirname(API_FILE), { recursive: true });
   const candidates = await searchCandidates();
   if (!candidates.length) throw new Error('GitHub repository search returned no verified candidates.');
-  const verified = await mapLimit(candidates, 8, verifySkillRepository);
-  if (!verified.length) throw new Error('No repositories with a verified SKILL.md path were found; previous published data is preserved.');
+  const checked = await mapLimit(candidates, 8, verifySkillRepository);
+  const verified = checked.filter(repo => repo.readmeRelevance >= 55 && !isBroadCollection(repo));
+  if (!verified.length) throw new Error('No focused Skill repositories passed relevance checks; previous published data is preserved.');
+  console.log('Excluded ' + (checked.length - verified.length) + ' broad or weakly relevant repositories.');
   const snapshot = {
     schemaVersion: 1,
     date,

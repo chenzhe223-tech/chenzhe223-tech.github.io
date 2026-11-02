@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-sync-client-20261102-12';
+window.__kpBuildVersion='kp-v2-sync-client-20261102-13';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -573,19 +573,22 @@ async function kpV2Api(path,method='GET',payload=null,prefer=null){
 }
 async function kpV2EnsureMeta(passphrase){
  if(typeof passphrase!=='string'||passphrase.length<10)throw Error('跨设备加密口令至少需要 10 位。');
- let rows=await kpV2Api('keypocket_sync_meta?select=user_id,key_salt,iterations,schema_version&limit=1');
+ const session=kpSession(),user=session?.user?.id;
+ if(!user)throw Error('同步账号会话缺少用户 ID，请退出后重新登录。');
+ let rows=await kpV2Api('keypocket_sync_meta?select=user_id,key_salt,iterations,schema_version,key_verifier&limit=1');
  let meta=Array.isArray(rows)?rows[0]:null;
  if(!meta){
-  const salt=randomBytes(16),user=kpSession()?.user?.id;
-  if(!user)throw Error('同步账号会话缺少用户 ID，请退出后重新登录。');
+  const salt=randomBytes(16),iterations=310000,key=await deriveKey(passphrase,salt,iterations);
+  const verifier=await encryptJson({app:'KeyPocket',schemaVersion:KP_V2_SYNC_SCHEMA,purpose:'sync-passphrase-check'},key);
   try{
    await kpV2Api('keypocket_sync_meta?on_conflict=user_id','POST',{
-    user_id:user,key_salt:toB64(salt),iterations:310000,schema_version:KP_V2_SYNC_SCHEMA,updated_at:new Date().toISOString()
+    user_id:user,key_salt:toB64(salt),iterations,schema_version:KP_V2_SYNC_SCHEMA,
+    key_verifier:verifier,updated_at:new Date().toISOString()
    },'resolution=ignore-duplicates,return=minimal');
   }catch(error){
    if(!String(error.message).includes('duplicate'))throw error;
   }
-  rows=await kpV2Api('keypocket_sync_meta?select=user_id,key_salt,iterations,schema_version&limit=1');
+  rows=await kpV2Api('keypocket_sync_meta?select=user_id,key_salt,iterations,schema_version,key_verifier&limit=1');
   meta=Array.isArray(rows)?rows[0]:null;
  }
  if(!meta?.key_salt)throw Error('无法初始化云端加密元数据。');
@@ -594,6 +597,33 @@ async function kpV2EnsureMeta(passphrase){
  const iterations=Number(meta.iterations)||310000;
  if(iterations<100000||iterations>1000000)throw Error('云端加密参数超出安全范围。');
  kpV2SyncKey=await deriveKey(passphrase,salt,iterations);kpV2SyncSalt=meta.key_salt;
+ const verifierValue={app:'KeyPocket',schemaVersion:KP_V2_SYNC_SCHEMA,purpose:'sync-passphrase-check'};
+ if(meta.key_verifier){
+  try{
+   const verified=await decryptJson(meta.key_verifier,kpV2SyncKey);
+   if(verified?.app!=='KeyPocket'||verified?.purpose!=='sync-passphrase-check')throw Error('口令校验内容不匹配。');
+  }catch{
+   kpV2SyncKey=null;kpV2SyncSalt=null;
+   throw Error('跨设备加密口令不正确。为保护云端数据，已阻止本次同步写入。');
+  }
+ }else{
+  // Older V2 metadata can be upgraded only after the supplied passphrase decrypts
+  // at least one existing encrypted sync row. Empty accounts can initialize safely.
+  const existing=await kpV2FetchRemoteItems();
+  if(existing.length){
+   try{
+    const probe=await decryptJson(existing[0].payload,kpV2SyncKey);
+    if(!probe||String(probe.id)!==String(existing[0].entity_id))throw Error('同步记录身份不匹配。');
+   }catch{
+    kpV2SyncKey=null;kpV2SyncSalt=null;
+    throw Error('跨设备加密口令无法解密现有云端记录，已阻止写入。');
+   }
+  }
+  const verifier=await encryptJson(verifierValue,kpV2SyncKey);
+  await kpV2Api('keypocket_sync_meta?user_id=eq.'+encodeURIComponent(user),'PATCH',{
+   key_verifier:verifier,schema_version:KP_V2_SYNC_SCHEMA,updated_at:new Date().toISOString()
+  },'return=minimal');
+ }
  return {key:kpV2SyncKey,salt:kpV2SyncSalt,iterations};
 }
 async function kpV2RegisterDevice(){
