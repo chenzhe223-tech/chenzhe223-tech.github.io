@@ -445,6 +445,25 @@ def apply_claim_provenance(report):
         for story in (report.get("top5") or [])
         if isinstance(story, dict) and str(story.get("source_url") or story.get("url") or "").startswith("https://")
     ]
+    story_text = " ".join(" ".join(str(story.get(key) or "") for key in ("title_zh", "title_en", "what_zh", "what_en")) for story in (report.get("top5") or []) if isinstance(story, dict))
+    has_agent = bool(re.search(r"(agent|superagent|智能体|代理|工作流)", story_text, re.I))
+    has_enterprise = bool(re.search(r"(企业|enterprise|合作|客服|业务流程)", story_text, re.I))
+    has_inference = bool(re.search(r"(推理|token|调用量|inference)", story_text, re.I))
+    if not str(editorial.get("trend_zh") or "").strip():
+        if has_agent and has_enterprise and has_inference:
+            editorial["trend_zh"] = "从智能体研究原型、企业服务合作到推理调用增长，本期动态显示 AI 正从单点问答走向可嵌入真实流程的执行工具；规模化应用也把成本、可靠性与治理推到台前。"
+        elif has_agent and has_enterprise:
+            editorial["trend_zh"] = "从智能体工具到企业服务合作，本期动态显示 AI 正从单点问答走向可嵌入业务流程的执行工具，实际价值越来越取决于稳定交付。"
+        elif has_inference:
+            editorial["trend_zh"] = "本期动态显示 AI 模型能力与推理应用同步推进，规模化使用正在把成本、可靠性与治理推到台前。"
+        else:
+            editorial["trend_zh"] = "本期动态显示 AI 创新正从模型发布延伸到工具与业务应用，实际价值取决于能否解决具体任务。"
+    if not str(editorial.get("core_zh") or "").strip():
+        editorial["core_zh"] = "企业可先选边界清晰的流程做小规模验证，记录质量、成本和人工接管；普通人则先掌握一套可复用的 AI 工作流，把工具用在真实任务上。"
+    if not str(editorial.get("trend_en") or "").strip():
+        editorial["trend_en"] = "This issue points to AI moving beyond standalone answers toward tools that can execute work inside real workflows; wider adoption also raises questions about cost, reliability and governance."
+    if not str(editorial.get("core_en") or "").strip():
+        editorial["core_en"] = "Organizations can start with a bounded workflow and measure quality, cost and human handoff. Individuals can learn one reusable AI workflow and apply it to a real task instead of chasing every model release."
 
 
 def main():
