@@ -28,7 +28,11 @@
       "why_zh": "它的价值在于把多任务 Agent 拆成授权、派单和隔离执行，减少上下文串扰与人工盯任务的成本；但官方仓库明确标注为研究原型，不是生产就绪产品，也不是可直接代表 DeepSeek 内部系统的正式产品。模拟性能数据不能等同于真实代码质量。",
       "what_en": "On Nov. 1, the DeepSeek Harness team published dsh-superagent-prototype, an MIT-licensed research prototype. A Router receives GitHub and optional Feishu events, then dispatches authorized work as separate tickets to isolated Worker sessions and directories. MarkTechPost reports a 15.7-minute p95 in DeepSeek's synthetic message-stream simulation versus 29.5 minutes for a single-session baseline; the test used synthetic messages and simulated tools and did not measure real coding quality.",
       "why_en": "Its value is the authorization, routing and isolated-execution design, which can reduce context interference in multi-task agents. The repository explicitly labels it research code, not production-ready software or an official DeepSeek product; simulated performance is not evidence of real-world coding quality.",
-      "editor_judgment_zh": "性能数字为二手报道转述的合成模拟结果，已注明测试边界；真实编码质量尚未验证。"
+      "editor_judgment_zh": "性能数字为二手报道转述的合成模拟结果，已注明测试边界；真实编码质量尚未验证。",
+      "poster_summary_zh": "Router 接收授权任务，隔离 Worker 分别执行；模拟指标不代表真实编码质量。",
+      "poster_why_zh": "看点是授权、派单与隔离执行，不是模拟分数。",
+      "social_what_zh": "DeepSeek Harness 团队公开了 dsh-superagent-prototype：Router 接收 GitHub/飞书任务，再交给隔离 Worker 执行。报道中的 p95 15.7 分钟来自合成模拟，不代表真实编码质量。",
+      "social_why_zh": "看点是授权、派单和隔离执行的工程设计；仓库明确标注为研究原型，暂不适合直接上生产。"
     },
     {
       "id": "tsinghua-algebraic-world-model-20261029",
@@ -49,7 +53,11 @@
       "why_zh": "看点不只是分数，而是把探索得到的规则转成可检查模型，再用 Lean 4 对可达性或不可达性进行机器证明；这条“先建模、再验证”的路线，对机器人、自动化测试和复杂软件操作都有参考价值。论文目前是 arXiv 预印本，实验结果为作者报告，仍需独立复现。",
       "what_en": "An Oct. 29 arXiv preprint from a Tsinghua University and Shanghai QiZhi Institute team introduces the Algebraic World Model (AWM). It converts exploration in an unfamiliar environment into executable Python hypotheses, organizes them as structured rules and checks them with Lean 4. The authors report a 99.9 score across 25 public ARC-AGI-3 games and 183 levels, with certified trajectories using about 43% of the human baseline's actions.",
       "why_en": "The key idea is not just the score: it turns exploration into an inspectable model and machine-checked proofs of reachability or impossibility. The paper is a preprint and the results are author-reported, so independent replication is still needed.",
-      "editor_judgment_zh": "指标来自论文作者的预印本实验报告，未独立复现；不可写成已获同行评审的定论。"
+      "editor_judgment_zh": "指标来自论文作者的预印本实验报告，未独立复现；不可写成已获同行评审的定论。",
+      "poster_summary_zh": "探索转成 Python 假设，再由 Lean 4 机器检查；论文数据仍待复现。",
+      "poster_why_zh": "把探索结果变成可验证模型，值得关注。",
+      "social_what_zh": "清华与上海期智研究院团队提出 AWM，把环境探索转成 Python 假设，再用 Lean 4 做机器检查。作者在 25 个 ARC-AGI-3 游戏、183 个关卡上报告 99.9 分，结果仍待独立复现。",
+      "social_why_zh": "它展示了“先建模、再验证”的路线，可能影响机器人、自动化测试和复杂软件操作。"
     },
     {
       "id": "cmg-robot-mount-tai-20261102",
@@ -70,7 +78,11 @@
       "why_zh": "真实山地环境比平地演示更能检验机器人的环境感知、步态控制、平衡与负重能力；目前核实到的是开赛安排和赛道设计，尚未看到最终比赛结果，不能把赛前信息写成比赛成绩。",
       "what_en": "On Nov. 2, 2026, the first CMG World Robot Climbing Mount Tai competition opened in Tai'an, Shandong. The course data reported by media include a roughly 3.9 km legged-robot course, more than 3,100 steps and about 600 m of cumulative elevation gain, plus four formal events and one special challenge involving humanoid, legged, load-carrying and exoskeleton categories.",
       "why_en": "Real mountain terrain tests perception, locomotion, balance and load handling more rigorously than flat-floor demonstrations. The verified information is the opening schedule and course design; final competition results had not yet been reported.",
-      "editor_judgment_zh": "仅确认开赛安排与赛道设计；未核实最终赛果。"
+      "editor_judgment_zh": "仅确认开赛安排与赛道设计；未核实最终赛果。",
+      "poster_summary_zh": "足式机器人挑战 3.9 公里、3100 级台阶和约 600 米高差；赛果待公布。",
+      "poster_why_zh": "真实山地更能检验感知、步态和平衡。",
+      "social_what_zh": "首届 CMG 世界机器人登泰山大赛今天开赛，足式机器人赛段约 3.9 公里、3100 余级台阶、约 600 米高差。当前确认的是赛道与开赛安排，赛果尚未公布。",
+      "social_why_zh": "真实山地比平地演示更能检验感知、步态控制和平衡能力。"
     },
     {
       "id": "openai-servicenow-partnership-20261028",
@@ -91,7 +103,11 @@
       "why_zh": "企业 AI 的竞争正从“能回答问题”转向“能否在权限、审批和审计边界内完成动作”；对企业而言，真正的落地点是把模型接入已有工单、知识、IT 运维和安全流程，而不是只增加一个聊天入口。",
       "what_en": "On Oct. 28, OpenAI and ServiceNow announced an expanded partnership. The ServiceNow app is available in ChatGPT's app directory, allowing users to invoke ServiceNow workflows within enterprise permissions and process controls. The companies also outlined planned Codex integration with ServiceNow AI Workflow Factory and future security, risk and voice capabilities; some items are scheduled for phased rollout through late 2026 and 2027, not all generally available today.",
       "why_en": "Enterprise AI is moving from answering questions to taking actions within permission, approval and audit boundaries. The practical value lies in connecting models to existing ticketing, knowledge, IT operations and security workflows rather than adding another chat surface.",
-      "editor_judgment_zh": "已开放的 ChatGPT 应用与后续路线图分开表述；2026 年底至 2027 年的能力均按官方计划描述。"
+      "editor_judgment_zh": "已开放的 ChatGPT 应用与后续路线图分开表述；2026 年底至 2027 年的能力均按官方计划描述。",
+      "poster_summary_zh": "ServiceNow 已进 ChatGPT；Codex、安全和语音能力按官方路线图推进。",
+      "poster_why_zh": "企业 AI 正走进权限和审批流程。",
+      "social_what_zh": "OpenAI 与 ServiceNow 扩大合作，ServiceNow 应用已进入 ChatGPT 应用目录；Codex、安全和语音能力按官方路线图分阶段推进。部分能力要到 2026 年底至 2027 年，不能当成现在全部可用。",
+      "social_why_zh": "企业 AI 正从回答问题，走向在权限、审批和审计边界内完成实际流程。"
     },
     {
       "id": "datasette-llm-0-1a9-20261031",
@@ -112,7 +128,11 @@
       "why_zh": "它没有带来新模型或性能突破，但减少了工具链里的重复配置；如果你用 Datasette 搭建数据应用和 Agent，可以少维护一份模型设置。项目仓库采用 Apache-2.0 许可证。",
       "what_en": "On Oct. 31, Simon Willison published datasette-llm 0.1a9. Datasette Agent now inherits the default model configured for the LLM CLI, so developers no longer need to repeat the `default_model` setting. This is a configuration improvement for developers using Datasette.",
       "why_en": "It does not introduce a new model or a performance breakthrough, but removes duplicate configuration for Datasette-based data applications and agents. The repository is licensed under Apache-2.0.",
-      "editor_judgment_zh": "属于小版本配置优化，不应夸大为模型能力升级。"
+      "editor_judgment_zh": "属于小版本配置优化，不应夸大为模型能力升级。",
+      "poster_summary_zh": "0.1a9 继承 LLM CLI 默认模型，减少重复配置。",
+      "poster_why_zh": "小幅配置优化，适合 Datasette 开发者。",
+      "social_what_zh": "datasette-llm 0.1a9 让 Datasette Agent 自动继承 LLM CLI 的默认模型，不必重复配置 `default_model`。",
+      "social_why_zh": "这是小幅但实用的开发体验优化，适合正在用 Datasette 搭数据应用的人。"
     }
   ],
   "editorial": {
@@ -125,7 +145,9 @@
     "analysis_label_zh": "DAVYLAB 分析",
     "analysis_label_en": "DAVYLAB analysis",
     "analysis_scope_zh": "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。",
-    "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company."
+    "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company.",
+    "poster_trend_zh": "AI 正从模型能力比拼，走向任务执行、结果验证与真实场景落地。",
+    "opening_zh": "过去我们习惯用参数、榜单、发布会衡量 AI。现在问题变了：它能不能在真实流程里执行任务、验证结果、处理复杂环境？"
   },
   "skills": [
     {
@@ -146,15 +168,17 @@
       "skill_file_paths": [
         "skills/security-audit/SKILL.md"
       ],
-      "compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
-      "security_status": "未对该 Skill 本身进行独立安全审计；建议在隔离沙箱中运行。",
+      "compatibility_status": "已核验官方 GitHub 项目页、README、SKILL.md 与 MIT 许可证；未实测安装，使用请自行评估",
+      "security_status": "未对该 Skill 本身做独立安全审计；建议在隔离沙箱中运行",
       "installation_status": "未实测安装",
       "compatibility": "Agent Skills 标准；需由支持该标准的编码代理加载。",
       "source": "Cloudflare 官方 GitHub 仓库；Cloudflare 工程博客",
       "source_url": "https://github.com/cloudflare/security-audit-skill",
       "additional_sources": [
         "https://blog.cloudflare.com/build-your-own-vulnerability-harness/"
-      ]
+      ],
+      "poster_description_zh": "多阶段安全审计流程，输出结构化发现，并独立复核关键问题。",
+      "social_description_zh": "面向支持 Agent Skills 标准的编码代理，可分阶段检查代码仓库、API、服务与工具，输出结构化发现并复核关键问题。"
     }
   ]
 }
