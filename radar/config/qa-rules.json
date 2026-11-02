@@ -53,5 +53,13 @@
     "fallback_on_low_score": true,
     "thematic_fallback_label": "主题配图 · 非新闻现场",
     "policy_version": "2026-11-02.1"
+  },
+  "claim_provenance": {
+    "policy_version": "2026-11-02.2",
+    "low_confidence_requires_explicit_caveat": true,
+    "self_reported_benchmarks_require_attribution": true,
+    "prototype_status_must_be_preserved": true,
+    "superlatives_require_metric_scope_and_date": true,
+    "company_and_management_claims_require_attribution": true
   }
 }
