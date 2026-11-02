@@ -526,15 +526,17 @@ function kpShowPasswordRecovery(token){
 }
 async function kpHandlePasswordRecoveryRedirect(){
  const query=new URLSearchParams(window.location.search),hash=new URLSearchParams(window.location.hash.replace(/^#/,''));
- const type=hash.get('type')||query.get('type');
- if(type!=='recovery'&&!query.has('token_hash'))return;
+ const type=(hash.get('type')||query.get('type')||'').toLowerCase();
  let token=hash.get('access_token')||query.get('access_token');
+ const tokenHash=query.get('token_hash')||hash.get('token_hash');
+ window.__kpRecoveryDiagnostic={type,hasAccessToken:!!token,hasTokenHash:!!tokenHash,hasRecoveryIntent:type==='recovery'||!!tokenHash||!!token};
+ if(type!=='recovery'&&!tokenHash&&!token)return;
  try{
-  const tokenHash=query.get('token_hash')||hash.get('token_hash');
   if(!token&&tokenHash)token=await kpVerifyRecoveryTokenHash(tokenHash);
   if(!token){kpShowPasswordRecovery(null);return;}
+  window.__kpRecoveryDiagnostic.validated=true;
   kpShowPasswordRecovery(token);
- }catch(error){kpShowPasswordRecovery(null);kpSyncStatus('密码恢复链接验证失败：'+error.message,true);}
+ }catch(error){window.__kpRecoveryDiagnostic.error=String(error?.message||error);kpShowPasswordRecovery(null);kpSyncStatus('密码恢复链接验证失败：'+error.message,true);}
 }
 async function kpSubmitPasswordRecovery(){
  const button=$('#syncResetPasswordBtn'),password=$('#syncNewPassword').value,confirm=$('#syncConfirmNewPassword').value;
