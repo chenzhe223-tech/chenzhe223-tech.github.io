@@ -45,8 +45,8 @@ const { chromium } = require('playwright');
     try {
       await keyPocket.waitForFunction(() => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes('kp-v2-sync-client-20261102-12')
-          && window.__kpBuildVersion === 'kp-v2-sync-client-20261102-12'
+        return script && script.src.includes('kp-v2-device-cloud-20261102-15')
+          && window.__kpBuildVersion === 'kp-v2-device-cloud-20261102-15'
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
@@ -75,7 +75,7 @@ const { chromium } = require('playwright');
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-sync-client-20261102-12'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-device-cloud-20261102-15'
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {
