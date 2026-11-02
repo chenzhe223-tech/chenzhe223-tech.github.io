@@ -7,25 +7,29 @@ KeyPocket 是本地优先的 AI 资产管理工具，管理 API Key、GitHub Ski
 ## V2.0 当前状态（2026-11-02）
 
 - 本地 API Key 与项目沿用 IndexedDB `keypocket-local-v1` 和 AES-GCM/PBKDF2 加密 envelope。
-- 已实现本地自动加密快照、删除前保护、回收站/tombstone 和 30 天恢复入口；本地快照与密钥库处于同一浏览器存储，不是异地备份。
-- 已实现 V2 逐条加密同步、独立同步口令验证、设备登记、版本冲突处理和云端每日/月度加密快照。生产 Supabase 权限已收敛到受限 RPC 写入；**真实账号双设备同步尚未 E2E 验收**。
-- Skill Radar collector 和每日历史快照 workflow 已上线；目前只有单日历史，月/季/年增长榜仍在数据积累中，不能把累计 Stars 当作增长速度。
+- 本地自动加密快照、删除前保护、回收站/tombstone 和 30 天恢复入口已实现；最新整站 Browser QA 用合成数据通过刷新解锁、加密备份导入/恢复、误删恢复与本地快照恢复。
+- V2 使用独立同步口令逐条加密、版本比较和设备注册；HTTP 401 会触发 Supabase refresh_token grant，保存轮换后的 refresh token，降低长时间运行后会话过期导致同步停止的风险。
+- 同步中心可撤销其他有效设备，不允许当前设备自撤销；操作限定当前用户、目标设备和未撤销记录，并检查服务端更新结果。
+- 云端 daily/monthly 加密快照在每次成功同步后更新当前周期内容；生产表权限、RLS 和唯一索引已核验。**真实账号双设备同步和跨设备恢复仍未验收**。
+- 最新 Browser QA `41432732355`、KeyPocket Skill Handoff QA `41432732267`、Pages 部署 `41432733771` 均通过。模拟请求 E2E 不等于真实账号网络验收。
+- Skill Radar collector 和每日历史快照 workflow 已上线；目前历史跨度仍不足，月/季/年增长榜保持数据积累中，不把累计 Stars 当作增长速度。
 - 简报 Skill 一键收录已通过线上 Playwright E2E。
-- GitHub App / Worker OAuth / 私有 Vault 尚未配置，页面状态必须保持“未绑定”。
-- iPhone Safari 与微信浏览器仍需专项验收；整站 Browser QA 中“创建后刷新解锁”存在待诊断失败，不能声称本地密钥库功能已全量验收。
+- GitHub App / Worker OAuth / 私有 Vault 尚未配置，页面状态必须保持未绑定。
+- 390px Chromium 视口检查通过；iPhone Safari 和微信内置浏览器实机专项仍未验收。
 
 ## 数据安全
 
 - IndexedDB：`keypocket-local-v1`，object store：`vault`，DB version 1。
 - 本地 API Key/project envelope：AES-GCM；PBKDF2-HMAC-SHA-256 默认 310,000 次。
 - 本地解锁密码、跨设备同步口令、派生密钥和 API Key 明文不得上传或写日志。
-- 云端只保存独立同步口令加密后的密文 envelope；同步记录表只开放按用户 RLS 限制的读取，写入通过校验登录用户和有效设备的 RPC。
-- 不要清理浏览器站点数据来“重置”应用；本地快照与密钥库同处 IndexedDB，站点数据清除可能同时删除二者。
+- 云端只保存独立同步口令加密后的密文 envelope；同步记录表仅按用户 RLS 限制读取，写入通过校验用户与有效设备的 RPC。
+- refresh token 是认证凭据，仅用于 Supabase Auth 续期；不得写入 console、测试报告或错误日志。
+- 不要清理浏览器站点数据来重置应用；本地快照与密钥库同处 IndexedDB，清除站点数据可能同时删除二者。
 
 ## 目录
 
 - `index.html`：页面、样式与 CSP。
-- `app.js`：本地加密、IndexedDB、API Key/项目管理、回收站、自动快照、V2 云同步、Skill 收录逻辑。
+- `app.js`：本地加密、IndexedDB、API Key/项目管理、回收站、自动快照、V2 云同步、会话续期和 Skill 收录。
 - `api/skill-radar.json`：真实 Skill Radar 数据 API。
 - `data/skill-radar/snapshots/`：历史采集快照。
 - `supabase/migrations/`：KeyPocket 同步数据库迁移。
@@ -34,4 +38,4 @@ KeyPocket 是本地优先的 AI 资产管理工具，管理 API Key、GitHub Ski
 
 ## 验收规则
 
-采用 Code Completed、Build Passed、Runtime Verified、Functional Tested、Production Deployed 五级交付；每一级必须有实际证据。代码提交和 Pages 部署成功不代表功能验收通过。
+采用 Code Completed、Build Passed、Runtime Verified、Functional Tested、Production Deployed 五级交付；每一级必须有实际证据。代码提交或 Pages 部署成功不代表功能验收通过，合成 E2E 也不等于真实双设备已验收。
