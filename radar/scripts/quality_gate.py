@@ -231,7 +231,7 @@ def claim_provenance_error(story):
         if not has_date or not has_metric:
             return {"type": "superlative_missing_date_or_metric_scope", "title": title, "has_date": has_date, "has_metric": has_metric}
     if re.search(r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\d|提升\d|\d+多倍)", text, re.I):
-        attributed = bool(re.search(r"(自测|其自身|项目方|公司称|官方称|报告称|据.{0,30}报道|称|披露|reported|according to|in its own|self[- ]reported|company says|project says|measured by)", what_zh + " " + what_en, re.I))
+        attributed = bool(re.search(r"(自测|其自身|项目方|媒体披露|来源披露|公司称|官方称|报告称|据.{0,30}报道|称|披露|announced|official announcement|company states|company said|reported|according to|in its own|self[- ]reported|company says|project says|measured by)", what_zh + " " + what_en, re.I))
         if not attributed:
             return {"type": "benchmark_or_performance_claim_without_attribution", "title": title}
     if re.search(r"(research prototype|prototype|研究原型|原型)", title_text, re.I) and not re.search(r"(research prototype|prototype|研究原型|原型)", what_zh + " " + what_en, re.I):
