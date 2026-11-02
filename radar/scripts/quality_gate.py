@@ -39,6 +39,18 @@ def load_image_relevance_policy():
 IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
 MIN_IMAGE_RELEVANCE_SCORE = float(IMAGE_RELEVANCE_POLICY["minimum_score"])
 TOPIC_IMAGE_STATUSES = {"openverse_topic", "wikimedia_topic", "web_search_topic"}
+def load_claim_provenance_policy():
+    if not QA_RULES_PATH.is_file():
+        raise RuntimeError(f"P0 editorial claim policy missing: {QA_RULES_PATH}")
+    config = json.loads(QA_RULES_PATH.read_text(encoding="utf-8"))
+    policy = config.get("claim_provenance")
+    required = ("low_confidence_requires_explicit_caveat", "self_reported_benchmarks_require_attribution", "prototype_status_must_be_preserved", "superlatives_require_metric_scope_and_date", "company_and_management_claims_require_attribution")
+    if not isinstance(policy, dict) or not policy.get("policy_version") or any(policy.get(key) is not True for key in required):
+        raise RuntimeError("P0 editorial claim provenance policy missing or invalid")
+    return policy
+
+CLAIM_PROVENANCE_POLICY = load_claim_provenance_policy()
+CLAIM_PROVENANCE_POLICY_VERSION = CLAIM_PROVENANCE_POLICY["policy_version"]
 STOP = {"the","and","for","with","from","into","over","after","before","says","said","will","its","their","this","that","have","has","been","are","was","were","not","but","how","why","what","when","latest","first","new","more","most","report","reports","news","update","updates","ai","artificial","intelligence","model","models","company","companies","announces","announced"}
 def norm_text(s):
     s = (s or "").lower()
@@ -361,6 +373,8 @@ def main():
     skills=report.get("skills") if isinstance(report.get("skills"),list) else []
     skill_errors=validate_skill_count(skills)
     claim_errors=[]
+    if report.get("editorial_policy_version") != CLAIM_PROVENANCE_POLICY_VERSION:
+        claim_errors.append({"type":"outdated_editorial_policy","report_version":report.get("editorial_policy_version"),"required_version":CLAIM_PROVENANCE_POLICY_VERSION})
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
         if isinstance(story, dict):
             error = claim_provenance_error(story)
@@ -392,10 +406,10 @@ def main():
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
       "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
-      "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors},
+      "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors,"policy_version":CLAIM_PROVENANCE_POLICY_VERSION},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
       "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
-      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"low_confidence_claims_require_explicit_caveat":True,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
+      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"low_confidence_claims_require_explicit_caveat":True,"claim_provenance_policy_version":CLAIM_PROVENANCE_POLICY_VERSION,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -403,7 +417,7 @@ def main():
     # requires this marker, so a failed run is retried instead of incorrectly skipped tomorrow.
     if result["status"] == "PASS":
         report["quality_gate"] = {
-            "status": "PASS", "checked_at": result["generated_at"], "image_relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"],
+            "status": "PASS", "checked_at": result["generated_at"], "image_relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"], "claim_provenance_policy_version": CLAIM_PROVENANCE_POLICY_VERSION,
             "history_files": len(archive_files), "history_stories": len(history),
             "news_duplicate_hits": len(duplicate_hits), "china_duplicate_hits": len(china_hits),
             "same_week_image_reuse": len(week_image_hits), "report_path": "test-results/radar/news-image-quality-gate.json"
