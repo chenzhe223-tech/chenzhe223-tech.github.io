@@ -1,15 +1,39 @@
 {
-  "report_date": "2026-11-01",
+  "report_date": "2026-11-02",
   "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
-  "checked_at": "2026-11-01T07:48:14.506257+08:00",
-  "design_variant": "mountain-editorial",
+  "checked_at": "2026-11-02T08:38:17.552612+08:00",
+  "design_variant": "geometric-navy",
   "iso_year": 2026,
-  "iso_week": 44,
-  "iso_weekday": 7,
-  "style_cycle_index": 43,
+  "iso_week": 45,
+  "iso_weekday": 1,
+  "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
-  "template_version": "2.3.0",
+  "template_version": "2.4.0",
   "checks": [
+    {
+      "name": "exact_canvas_1200x1800",
+      "status": "PASS"
+    },
+    {
+      "name": "font_coverage",
+      "status": "PASS"
+    },
+    {
+      "name": "text_bounds",
+      "status": "PASS"
+    },
+    {
+      "name": "region_presence",
+      "status": "PASS"
+    },
+    {
+      "name": "news_data_consistency",
+      "status": "PASS"
+    },
+    {
+      "name": "image_relevance_label",
+      "status": "PASS"
+    },
     {
       "name": "destination_reachable",
       "status": "PASS"
@@ -36,6 +60,28 @@
     }
   ],
   "status": "PASS",
+  "font_coverage": {
+    "font_family": "WenQuanYi Micro Hei",
+    "sample": "中文字体覆盖验证",
+    "bbox": [
+      0,
+      3,
+      192,
+      26
+    ],
+    "status": "PASS"
+  },
+  "layout": {
+    "region_count": 8,
+    "text_block_count": 15,
+    "truncated_text_blocks": 1,
+    "status": "PASS"
+  },
+  "news_evidence": {
+    "news_count": 5,
+    "image_evidence_count": 5,
+    "status": "PASS"
+  },
   "destination": {
     "requested_url": "https://chenzhe223-tech.github.io/radar/daily/",
     "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
@@ -44,7 +90,7 @@
   },
   "images": [
     {
-      "path": "radar/posters/2026-11-01.png",
+      "path": "radar/posters/2026-11-02.png",
       "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
       "url_matches": true,
       "width": 1200,

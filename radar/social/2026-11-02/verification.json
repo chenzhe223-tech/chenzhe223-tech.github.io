@@ -1,0 +1,232 @@
+{
+  "report_date": "2026-11-02",
+  "checked_at": "2026-11-02T08:38:19.540475+08:00",
+  "style": {
+    "design_variant": "geometric-navy",
+    "iso_year": 2026,
+    "iso_week": 45,
+    "iso_weekday": 1,
+    "style_cycle_index": 44,
+    "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+    "template_version": "2.4.0",
+    "baseline_id": "DAVYLAB-APPROVED-2026-10-31-MOUNTAIN-EDITORIAL",
+    "canvas": [
+      1200,
+      1800
+    ]
+  },
+  "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "destination": {
+    "requested_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "http_status": 200,
+    "final_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "status": "PASS"
+  },
+  "qr": {
+    "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
+    "qr_tile_px": [
+      180,
+      180
+    ],
+    "detected_qr_px": [
+      143.0,
+      143.0
+    ],
+    "contrast_percentile_range": 255,
+    "quiet_zone_px": {
+      "top_px": 18,
+      "bottom_px": 18,
+      "left_px": 18,
+      "right_px": 18
+    },
+    "status": "PASS"
+  },
+  "font_coverage": {
+    "font_family": "WenQuanYi Micro Hei",
+    "sample": "中文字体覆盖验证",
+    "bbox": [
+      0,
+      3,
+      192,
+      26
+    ],
+    "status": "PASS"
+  },
+  "layout_results": [
+    {
+      "filename": "01-main-poster.png",
+      "region_count": 6,
+      "text_block_count": 14,
+      "truncated_text_blocks": 3,
+      "status": "PASS"
+    },
+    {
+      "filename": "02-global-story-01-deepseek-dsh-superagent.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "03-global-story-02-openai-servicenow.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "04-china-story-03-story-03.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "05-china-story-04-apple-intelligence-12-siri.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "06-skill-feature.png",
+      "region_count": 4,
+      "text_block_count": 2,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    }
+  ],
+  "images": [
+    {
+      "filename": "01-main-poster.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 208844,
+      "sha256": "ede02480582a47118857cc6ca7b17b1aa10604b6e0082fa2394325f9e94bf226",
+      "theme": "当日主海报：五条精选新闻、DAVYLAB观察、Skill与二维码",
+      "image_type": "main_poster",
+      "category": null,
+      "material_type": "程序绘制的品牌编辑版式与几何主题视觉",
+      "status": "PASS"
+    },
+    {
+      "filename": "02-global-story-01-deepseek-dsh-superagent.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 83252,
+      "sha256": "ed706fc933135078f0623d0245eb0c34d7ff8a342040f247f590ba96839fcfc5",
+      "theme": "DeepSeek 开源 dsh-superagent：路由-工作器式编码智能体",
+      "image_type": "topic_illustration",
+      "category": "global_news",
+      "material_type": "程序绘制的原创主题插画",
+      "status": "PASS"
+    },
+    {
+      "filename": "03-global-story-02-openai-servicenow.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 70201,
+      "sha256": "0bcc8e27f1fc63af6a13aa9ab2bc8c2142b12ecd467d5e8412945e4e8395faf5",
+      "theme": "OpenAI 与 ServiceNow 扩大企业工作流合作",
+      "image_type": "topic_illustration",
+      "category": "global_news",
+      "material_type": "程序绘制的原创主题插画",
+      "status": "PASS"
+    },
+    {
+      "filename": "04-china-story-03-story-03.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 84869,
+      "sha256": "0ea66b1239c65480400c051d0d8a42d587ffbd5eb68e8e40e74e9ee17892f0d3",
+      "theme": "工信部赛迪研究院：我国人工智能推理数据量首超训练数据量",
+      "image_type": "topic_illustration",
+      "category": "china_ai_news",
+      "material_type": "程序绘制的原创主题插画",
+      "status": "PASS"
+    },
+    {
+      "filename": "05-china-story-04-apple-intelligence-12-siri.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 102795,
+      "sha256": "d92961fa0738683473008941855016ba7285d674f594df776670396f748bea54",
+      "theme": "Apple Intelligence 中国区功能12月上线，千问接入 Siri、写作工具和视觉智能",
+      "image_type": "topic_illustration",
+      "category": "china_ai_news",
+      "material_type": "程序绘制的原创主题插画",
+      "status": "PASS"
+    },
+    {
+      "filename": "06-skill-feature.png",
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 75169,
+      "sha256": "3526164155916fa9bc3a64857a434c0c1b01d7b8fa831c785604a664d779ad2b",
+      "theme": "今日推荐 Skill：Donchitos/Claude-Code-Game-Studios",
+      "image_type": "skill_feature",
+      "category": null,
+      "material_type": "程序绘制的原创技能工作流主题插画",
+      "status": "PASS"
+    }
+  ],
+  "checks": [
+    {
+      "name": "font_coverage",
+      "status": "PASS"
+    },
+    {
+      "name": "text_bounds_and_region_presence",
+      "status": "PASS"
+    },
+    {
+      "name": "six_independent_png_files",
+      "status": "PASS"
+    },
+    {
+      "name": "900x1200_3x4_dimensions",
+      "status": "PASS"
+    },
+    {
+      "name": "unique_image_hashes",
+      "status": "PASS"
+    },
+    {
+      "name": "two_global_two_china_one_skill_topic_distribution",
+      "status": "PASS"
+    },
+    {
+      "name": "topic_story_source_consistency",
+      "status": "PASS"
+    },
+    {
+      "name": "skill_feature_source_consistency",
+      "status": "PASS"
+    },
+    {
+      "name": "final_png_qr_exact_decode",
+      "status": "PASS"
+    },
+    {
+      "name": "qr_contrast_quiet_zone_and_size",
+      "status": "PASS"
+    },
+    {
+      "name": "formal_url_http_and_redirect",
+      "status": "PASS"
+    },
+    {
+      "name": "wechat_copy_matches_top5",
+      "status": "PASS"
+    }
+  ],
+  "phone_camera_scan": "NOT_TESTED",
+  "wechat_editor_preview": "NOT_TESTED",
+  "status": "PASS"
+}
