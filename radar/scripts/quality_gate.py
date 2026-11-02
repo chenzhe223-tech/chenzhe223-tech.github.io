@@ -402,6 +402,12 @@ def main():
         if not skill.get("readme_verified"): skill_errors.append({"type":"missing_verified_readme","name":skill.get("name")})
         if not skill.get("skill_file_paths"): skill_errors.append({"type":"missing_actual_skill_file_evidence","name":skill.get("name")})
         if not str(skill.get("compatibility_status") or "").strip(): skill_errors.append({"type":"missing_agent_compatibility_disclosure","name":skill.get("name")})
+        actual_count = skill.get("actual_skill_file_count")
+        if isinstance(actual_count, int) and actual_count > 0:
+            if str(actual_count) not in str(skill.get("description_zh") or "") or "SKILL.md" not in str(skill.get("description_zh") or ""):
+                skill_errors.append({"type":"skill_chinese_count_not_matched_to_repository_scan","name":skill.get("name"),"actual_count":actual_count})
+            if not re.search(rf"\\b{actual_count}\\s+workflow skills\\b", str(skill.get("description_en") or ""), re.I) or "SKILL.md" not in str(skill.get("description_en") or ""):
+                skill_errors.append({"type":"skill_english_count_not_matched_to_repository_scan","name":skill.get("name"),"actual_count":actual_count})
         if skill.get("skill_type") not in ("agent_skill_or_pack","skill_pack"): skill_errors.append({"type":"not_proven_actual_skill","name":skill.get("name")})
         if skill.get("quality_status")!="PASS": skill_errors.append({"type":"skill_quality_not_pass","name":skill.get("name")})
         if skill.get("confidence_level")=="low": skill_errors.append({"type":"low_confidence_skill","name":skill.get("name")})
