@@ -108,7 +108,8 @@ function check(ok, name, detail = '') {
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
         check(cardsText.every(x => !x.includes('/50') && !x.includes('/10')), viewport.name + ': source fallback does not display fabricated scores');
-        check(!(await page.locator('#editorialCore').isVisible()), viewport.name + ': internal AI-unavailable note stays hidden');
+        const internalAIStatus = page.locator('#aiList');
+        check(!(await internalAIStatus.isVisible()), viewport.name + ': internal AI-unavailable note stays hidden');
       }
       const contrastAudit = await page.evaluate(() => {
         const parseColor = value => {
