@@ -226,11 +226,11 @@ def claim_provenance_error(story):
     if str(story.get("confidence") or "").lower() == "low" and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证|not independently verified)", what_zh + " " + what_en, re.I):
         return {"type": "low_confidence_without_explicit_caveat", "title": title}
     if re.search(r"(首次|首个|第一|最高|最大|纪录|首超|first-ever|first to|record|highest|largest)", text, re.I):
-        has_date = bool(re.search(r"(20\\d{2}|\\d{4}年|as of 20\\d{2}|in 20\\d{2})", text, re.I))
+        has_date = bool(re.search(r"(20\d{2}|\d{4}年|as of 20\d{2}|in 20\d{2})", text, re.I))
         has_metric = bool(re.search(r"(日均|词元|token|调用量|份额|市场|收入|用户|模型|benchmark|评分|latency|p95|volume|revenue|data)", text, re.I))
         if not has_date or not has_metric:
             return {"type": "superlative_missing_date_or_metric_scope", "title": title, "has_date": has_date, "has_metric": has_metric}
-    if re.search(r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\\d|提升\\d|\\d+多倍)", text, re.I):
+    if re.search(r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\d|提升\d|\d+多倍)", text, re.I):
         attributed = bool(re.search(r"(自测|其自身|项目方|公司称|官方称|报告称|据.{0,30}报道|称|披露|reported|according to|in its own|self[- ]reported|company says|project says|measured by)", what_zh + " " + what_en, re.I))
         if not attributed:
             return {"type": "benchmark_or_performance_claim_without_attribution", "title": title}
