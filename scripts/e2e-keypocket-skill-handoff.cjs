@@ -46,7 +46,37 @@ const { chromium } = require('playwright');
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
+    const initialState = await keyPocket.evaluate(async () => {
+      const dbs = typeof indexedDB.databases === 'function' ? await indexedDB.databases() : [];
+      const db = await new Promise((resolve, reject) => {
+        const request = indexedDB.open('keypocket-local-v1');
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+      const hasStore = Array.from(db.objectStoreNames).includes('vault');
+      const rows = hasStore ? await new Promise((resolve, reject) => {
+        const request = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      }) : [];
+      const state = {
+        url: location.href,
+        databases: dbs.map(item => ({ name: item.name, version: item.version })),
+        hasStore,
+        ids: rows.map(item => String(item.id || '')),
+        hasVault: rows.some(item => item.id === 'vault-meta'),
+        confirmWrapClass: document.querySelector('#confirmWrap')?.className,
+        lockTitle: document.querySelector('#lockTitle')?.textContent,
+        unlockButton: document.querySelector('#unlockBtn')?.textContent
+      };
+      db.close();
+      return state;
+    });
+    console.log('KEYPOCKET_E2E_INITIAL_STATE ' + JSON.stringify(initialState));
     const testPassword = 'Handoff-Test-Password-2026';
+    assert.equal(initialState.hasVault, false, 'fresh E2E profile unexpectedly contains a KeyPocket vault');
+    assert.equal(initialState.ids.length, 0, 'fresh E2E profile unexpectedly contains vault records');
+    assert.ok(!String(initialState.confirmWrapClass).includes('hidden'), 'new-vault confirmation input should be visible');
     await keyPocket.locator('#masterPassword').fill(testPassword);
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
