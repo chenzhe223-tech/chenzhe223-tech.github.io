@@ -62,6 +62,29 @@ class QualityGateTests(unittest.TestCase):
             "image_alt":"AI compute topic illustration: AI inference",
         }))
 
+    def test_superlative_requires_date_and_metric_scope(self):
+        story = {
+            "title_zh":"某项指标首次超过历史纪录",
+            "what_zh":"该指标首次超过此前水平。",
+            "confidence":"medium",
+        }
+        error = claim_provenance_error(story)
+        self.assertEqual(error["type"], "superlative_missing_date_or_metric_scope")
+        story["what_zh"] = "研究院报告称，截至2026年6月，日均词元调用量首次超过训练数据量。"
+        self.assertIsNone(claim_provenance_error(story))
+
+    def test_benchmark_requires_source_attribution(self):
+        story = {"title_zh":"模型性能测试","what_zh":"评分达到98.2分。","confidence":"medium"}
+        self.assertEqual(claim_provenance_error(story)["type"], "benchmark_or_performance_claim_without_attribution")
+        story["what_zh"] = "项目方披露，其内部测试评分达到98.2分。"
+        self.assertIsNone(claim_provenance_error(story))
+
+    def test_prototype_status_must_be_preserved(self):
+        story = {"title_zh":"Research prototype release","what_zh":"团队发布了一个模型。","confidence":"medium"}
+        self.assertEqual(claim_provenance_error(story)["type"], "prototype_status_not_preserved")
+        story["what_zh"] = "团队发布了研究原型模型。"
+        self.assertIsNone(claim_provenance_error(story))
+
     def test_low_confidence_story_requires_explicit_verification_caveat(self):
         story={"title_zh":"Drex Max v1","confidence":"low","what_zh":"Nace AI 发布 27B 模型，评分 67.52。"}
         self.assertEqual(claim_provenance_error(story)["type"],"low_confidence_without_explicit_caveat")
