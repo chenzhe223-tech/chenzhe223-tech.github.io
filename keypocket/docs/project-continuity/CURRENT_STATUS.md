@@ -1,44 +1,47 @@
 # KeyPocket — 当前状态
 
 最后更新：2026-11-02（UTC+8）
-目标版本：V2.0
-状态：IN_PROGRESS — 已部署本地恢复基础，尚未完成整体功能验收。
+版本目标：V2.0
+状态：IN_PROGRESS — 本地恢复基础和模块 UI 已提交并部署，未完成全量功能验收。
 
 ## 当前线上/仓库基准
 - 仓库：chenzhe223-tech/chenzhe223-tech.github.io
 - 分支：main
-- HEAD：`6f2b9e62f67d8f2e808f257ae398a1293f7c8b74`
+- HEAD：`022232f278763afcac8dbd327a638a9632b9d999`
 - 正式入口：https://chenzhe223-tech.github.io/keypocket/
-- Pages run：`41383453487`，该 HEAD build/deploy SUCCESS
-- app.js：`76d10a8a3ebd21dc080964cdca4f06e64984d01d`
-- index.html：`4778579552ee0d665d47876b97448d6fd65ef4bd`
+- Pages run：`41385211770`，该 HEAD build/deploy SUCCESS
+- KeyPocket static QA：`41385211674`，syntax/source contract SUCCESS
+- app.js blob SHA：`2d16fdaa1d2f253721d769df42f0c56317074bb5`
+- index.html blob SHA：`d8940124d90e12b27580ea456770d39f0a776c36`
+- cache key：`kp-v2-init-debug-20261102-1`
 
-## 已实现但未完整验收
-- 原 IndexedDB `keypocket-local-v1` / store `vault` / DB version 1 保留；原 AES-GCM/PBKDF2 兼容保留。
+## 已写入代码但仍需验收
+- 保留 IndexedDB `keypocket-local-v1` / store `vault` / DB version 1；旧 AES-GCM/PBKDF2 格式保留。
 - 七模块 UI：我的密钥、我的 Skills/项目、Skill Radar、回收站、自动备份、同步中心、GitHub 账户。
 - 本地加密快照、防抖、首次解锁保护快照、每日打开后检查。
 - API Key/项目软删除与 tombstone，回收站恢复/永久删除入口。
-- 项目新增/编辑/收藏/删除与 Skill 收录/更新接入持久化队列。
-- 替换导入前尝试创建保护快照。
-- Radar UI有四个周期入口，数据缺失时显示空态。
-- 同步/GitHub 页面明确展示未启用/未绑定。
+- 项目新增/编辑/收藏/删除及 Skill 收录/更新接入持久化队列。
+- Replace 导入前尝试生成保护快照。
+- Skill Radar UI有四周期入口；真实采集数据未配置时显示空态。
+- 同步/GitHub 页面明确显示 V2 同步未启用/KeyPocket App 未绑定。
 
 ## 五级交付状态
 | 模块 | Code Completed | Build Passed | Runtime Verified | Functional Tested | Production Deployed |
 |---|---|---|---|---|---|
-| 本地快照 | 部分实现 | Node syntax在旧提交PASS；HEAD需专项QA复核 | 页面已部署 | 创建/恢复E2E未通过/未做 | HEAD Pages成功 |
-| 回收站 | 部分实现 | 同上 | 页面已部署 | API Key/项目/批量恢复未测 | HEAD Pages成功 |
-| 项目保存/Skill收录 | 已实现路径 | 旧提交 source contract PASS | HEAD 页面部署成功 | 最新E2E未通过/未获得新 run | HEAD Pages成功 |
+| 本地快照 | 基础代码已写，边界/保留策略未完全实现 | 静态检查通过 | 页面随 HEAD 已部署 | 快照创建/解密/恢复未验收 | HEAD Pages成功 |
+| 回收站 | API Key/项目软删除 UI/代码已写 | 静态检查通过 | 页面随 HEAD 已部署 | 单条/批量/过期/tombstone未验收 | HEAD Pages成功 |
+| 项目保存/Skill handoff | 保存路径已接入持久化队列 | source contract PASS | HEAD 页面已部署 | 最新线上 Playwright待手动触发 | HEAD Pages成功 |
 | V2增量同步 | 未实现 | — | — | — | — |
-| Skill Radar collector | 未实现（只有 UI） | — | — | — | — |
+| 云端加密备份 | 未实现 | — | — | — | — |
+| Skill Radar collector | 未实现（只有UI） | — | — | — | — |
 | GitHub App/Worker | 未实现/待授权 | — | — | — | — |
-| 导航 UI | 已实现 | 旧提交静态检查通过 | HEAD部署成功 | 全模块 E2E未做 | HEAD Pages成功 |
+| 导航 UI | 已实现 | 静态检查通过 | Pages部署成功 | 全模块 E2E未做 | HEAD Pages成功 |
 
-## 最新测试证据
-- Run `41383221465` / commit `2513ed8`：Node syntax PASS、source contract PASS、published assets PASS；Playwright FAIL，confirmPassword 不可见。
-- E2E 脚本现为 `0dcac99`，增加读取隔离测试 IndexedDB 并仅在测试 context 清理数据库；但当前没有该版本对应的专项 QA run。
-- Run `41383453487` / HEAD `6f2b9e6`：Pages build/deploy SUCCESS。
-- iOS Safari/微信未测；快照/回收站恢复未 E2E。
+## 测试证据
+- KeyPocket run `41385211674` / HEAD `022232f`：Node syntax PASS、source contract PASS；push运行按新workflow设计跳过Playwright。
+- Pages run `41385211770` / HEAD `022232f`：build/deploy SUCCESS。
+- 旧 E2E run曾因部署前加载旧缓存脚本失败；已识别为部署/测试时序问题并修改 workflow，但当前没有最新HEAD的E2E success。
+- iOS Safari/微信未测试；本地快照/回收站恢复未进行专项E2E。
 
 ## 阻塞
-V2 Supabase event schema/RLS及双设备同步；Skill Radar真实 GitHub 历史采集；KeyPocket GitHub App/Worker OAuth及 secrets；完整本地恢复和移动端验收。
+Supabase event schema/RLS/双设备同步；Skill Radar GitHub历史采集；KeyPocket GitHub App/Worker OAuth及 secrets；本地恢复完整测试；移动端验收。
