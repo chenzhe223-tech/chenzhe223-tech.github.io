@@ -1,57 +1,30 @@
-# KeyPocket — 最新交接
+# KeyPocket — 最近一次对话交接
 
-更新：2026-11-02（UTC+8）
-当前阶段：V2.0 partial implementation / IN_PROGRESS；本次未完成全量验收。
+更新时间：2026-11-02（UTC+8）
+交接主题：接手 KeyPocket V2.0 升级；核验真实代码、生产数据库安全、QA 失败原因，并更新项目状态。
 
-- 仓库：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io
-- 项目路径：`keypocket/`
-- 正式应用：https://chenzhe223-tech.github.io/keypocket/
-- 分支：main
-- 当前已核验 HEAD：`022232f278763afcac8dbd327a638a9632b9d999`
-- Pages run：`41385211770`，该 HEAD build / deploy SUCCESS
-- KeyPocket static QA：`41385211674`，该 HEAD syntax + source contract SUCCESS
-- 当前 app.js blob SHA：`2d16fdaa1d2f253721d769df42f0c56317074bb5`
-- 当前 index.html blob SHA：`d8940124d90e12b27580ea456770d39f0a776c36`
-- E2E harness blob SHA：`4c8663c2f400d5616df2aeca3fb85295bea65d0b`
-- QA workflow blob SHA：`14293166233b9cbae08e8a115070b4fef50ae2e0`
-- 当前缓存键：`kp-v2-init-debug-20261102-1`
+## 已做的事
+1. 以 GitHub `main` 为唯一事实源检查项目目录、代码、连续性文档、最近 commit 和 Actions。
+2. 确认项目已有大量 V2 代码，不是“只剩静态页面”：本地加密快照、tombstone 回收站、V2 逐条同步、设备注册、同步口令校验、每日 Skill Radar collector 和 Skill handoff E2E 均已有实现。
+3. 核对 KeyPocket 专项 QA run `41408780134` 与 Pages run `41408779662` 均 SUCCESS。
+4. 找到整站 Browser QA run `41408780125` 在页面刷新后解锁阶段失败；已提交 `3848c1b` 让后续日志暴露真实 unlock error/step。
+5. 生产 Supabase 核验后收回同步表无用权限、旧 RPC 权限。
+6. 进一步发现新 RPC INVOKER 设计要求给 authenticated 直接写表权限，导致 CAS/设备校验可被 REST 直写绕过；已改为唯一 authenticated SECURITY DEFINER RPC、空 search_path、显式 auth.uid/active device/user_id 约束，sync_items 表只读，并移除旧 INSERT/UPDATE policy。
+7. 数据库查询复验：RLS 开启、sync_items 只保留 authenticated SELECT，RPC 对 authenticated 可执行、anon 不可执行；旧 RPC 禁止执行。
+8. 将最终权限迁移文件加入 `keypocket/supabase/migrations/20261102140000_keypocket_sync_rpc_only_mutations.sql`，并准备同步状态文档。
 
-## 已写代码
-- 保留 IndexedDB v1、旧 AES-GCM envelope 与 PBKDF2 派生格式。
-- 新增七个导航/视图入口。
-- 本地加密快照、防抖、首次解锁保护快照、每日打开后检查。
-- API Key/项目软删除、加密 tombstone、回收站恢复/永久删除入口。
-- 项目新增/编辑/收藏/删除、Skill 收录/导入/热度更新已接入加密持久化队列。
-- Replace 导入前尝试创建保护快照。
-- Skill Radar UI读取 `./api/skill-radar.json`；无数据时显示空态。
-- 同步中心明确提示 V2 增量同步未启用；GitHub 账户页明确提示 KeyPocket App 未绑定。
-- 新增 backup-recovery / sync-architecture / skill-radar / github-app 技术说明。
+## 尚未证明
+- 本地密钥库刷新后再次解锁的稳定性（QA 失败诊断运行尚需查完）。
+- 多设备真实登录与完整增量同步 E2E。
+- 云端备份真实上传/恢复。
+- iPhone Safari 与微信浏览器。
+- Skill Radar 有效增长率：当前只有 1 天历史，月/季/年不应声称具备统计意义。
+- Supabase Auth 泄露密码检查尚未打开；SECURITY DEFINER Advisor 对唯一受限 RPC 仍会 WARN，属于需持续审查的设计告警。
 
-## 真实限制
-- 本地快照与密钥库同处 IndexedDB，浏览器清理/设备丢失可能一起丢失，不是云备份。
-- 每日快照要求当天打开并解锁页面；没有浏览器关闭后的后台执行能力。
-- 尚未实现 12 个月归档。
-- 快照/回收站恢复尚无通过的 E2E。
-- V2 增量同步、Supabase RLS、两设备冲突处理未完成；旧 Supabase 单行全量快照流程仍在。
-- Skill Radar collector/API/每日历史快照未完成。
-- KeyPocket GitHub App/Cloudflare Worker/OAuth/Secrets 未配置。
-- iOS Safari/微信浏览器未测。
-
-## CI / 部署证据
-- Pages run `41385211770` / HEAD `022232f`：build SUCCESS、deploy SUCCESS。
-- KeyPocket QA run `41385211674` / HEAD `022232f`：Node syntax PASS、Radar-to-KeyPocket source contract PASS。该 push 运行按新配置跳过线上 Playwright。
-- 旧 run `41384700603` 在旧 bundle 下 Playwright FAIL；诊断证明测试运行于 Pages 部署前的旧 app.js 缓存版本（而非 V2 当前 bundle）。
-- QA workflow 已改为：push 只做静态检查；Playwright 仅在 workflow_dispatch 或成功的 Pages workflow_run 后运行。但 Pages 成功后没有看到 KeyPocket 自身 workflow_run 记录；需要手动触发下方工作流来确认线上 E2E。
-- 不能把静态检查和部署成功替代回收站/快照/云同步功能验收。
-
-## 下一步
-1. GitHub Actions 页面手动运行 `KeyPocket Skill Handoff QA` 的 workflow_dispatch，核验当前生产 V2 bundle 的简报→KeyPocket 收录链路。
-2. 为自动快照创建/恢复、API Key/项目软删除/恢复/批量操作建立独立 E2E。
-3. 建立 Skill Radar collector + daily snapshot workflow。
-4. 连接 Supabase 项目检查 live schema/RLS，创建 event-based sync API 并先 dry-run。
-5. 创建 KeyPocket GitHub App + Worker OAuth callback，最后集中配置 secrets。
-6. 做 iOS Safari / 微信浏览器 / 双设备验收。
-7. 每项按五级交付证据逐一更新。
-
-## 安全红线
-不要清理或覆盖用户真实 IndexedDB；不要将 API Key、解锁密码、派生密钥、Supabase service role 或 GitHub App 私钥提交到仓库。没有 RLS/两设备测试证据不得宣称同步完成。
+## 下一个对话必须先做
+1. 读取 `keypocket/PROJECT_CONTEXT.md`。
+2. 查询最新 Actions，重点读取 `41415872653`（如尚未完成则查后续同 SHA/最新运行）；获取 `KeyPocket reload unlock` 诊断。
+3. 按诊断修复 app.js，不允许仅扩大 timeout。
+4. 增加 API Key 刷新解锁、备份恢复、回收站恢复专项 E2E。
+5. 使用测试账号完成双设备同步 E2E，禁止使用真实 API Key。
+6. 每次实质开发更新根项目状态文件和本交接文档。
