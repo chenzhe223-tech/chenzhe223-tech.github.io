@@ -135,7 +135,7 @@ def news_image_evidence(stories):
             "image_match_status": status,
             "label_required": label_required,
             "label_applied": label_applied,
-            "label": "主题插画 · 非新闻现场" if label_required else None,
+            "label": "主题配图 · 非新闻现场" if label_required else None,
         })
     return evidence
 
@@ -150,7 +150,7 @@ def mark_topic_illustration(image, story):
     band = Image.new("RGBA", (canvas.width, band_h), (8, 25, 48, 220))
     canvas.alpha_composite(band, (0, canvas.height - band_h))
     overlay_draw = ImageDraw.Draw(canvas)
-    overlay_draw.text((14, canvas.height - band_h + 7), "主题插画 · 非新闻现场", font=font(15, True), fill=WHITE)
+    overlay_draw.text((14, canvas.height - band_h + 7), "主题配图 · 非新闻现场", font=font(15, True), fill=WHITE)
     return canvas.convert("RGB")
 
 def composite_same_size(background: Image.Image, overlay: Image.Image) -> Image.Image:
@@ -308,6 +308,8 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
             draw.line((x - 7, col_top, x - 7, col_bottom), fill=line, width=1)
         draw.text((x, 748), f"{idx + 1:02d}", font=font(43, True), fill=blue)
         source = str(story.get("source") or "公开来源")
+        if str(story.get("confidence") or "").lower() == "low":
+            source += " · 低置信度"
         draw.text((x, 794), source[:24], font=font(11, True), fill=orange)
         title = str(story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻")
         ty = 817
