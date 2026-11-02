@@ -113,3 +113,9 @@
 ## 2026-11-02 — 主海报底部两栏摘要二次收紧
 
 - P0 截断门禁定位到网站主海报底部两条新闻摘要超出两行限制；进一步缩短 ServiceNow 与 Datasette 的 poster-only 摘要，不改正式新闻正文和微信长文案。
+
+
+## 2026-11-02 — 线上复验改为读取已提交的来源证据
+
+- 发现：主生产工作流已通过完整来源核验，但线上复验错误地读取未随 `latest.json` 持久化的 `quality_gate.claims` 子对象，造成候选包误报失败。
+- 修复：候选、提交保护和线上复验统一读取已提交报告中的五条 Top 5 `source_url`、来源名称、发布日期及 DAVYLAB `source_basis`，并继续要求 claim-provenance policy 版本与总质量门禁 PASS。
