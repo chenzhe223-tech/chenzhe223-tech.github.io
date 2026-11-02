@@ -18,6 +18,17 @@ def validate_visual_lock(report_date: str) -> dict:
     style_lock = load_json("style-lock.json")
     layout = load_json("layout-spec.json")
     qa = load_json("qa-rules.json")
+    image_policy = qa.get("image_relevance")
+    if not isinstance(image_policy, dict):
+        raise RuntimeError("P0: image relevance policy missing from qa-rules.json")
+    try:
+        image_threshold = float(image_policy.get("minimum_score", 0))
+    except (TypeError, ValueError):
+        image_threshold = 0
+    if image_threshold < 0.35 or image_threshold > 1.0 or image_policy.get("fallback_on_low_score") is not True:
+        raise RuntimeError("P0: image relevance threshold/fallback policy invalid")
+    if image_policy.get("thematic_fallback_label") != "主题配图 · 非新闻现场":
+        raise RuntimeError("P0: thematic fallback must have the approved non-news label")
     typography = load_json("typography.json")
     colors = load_json("color-tokens.json")
     meta = poster_style_metadata(report_date)
