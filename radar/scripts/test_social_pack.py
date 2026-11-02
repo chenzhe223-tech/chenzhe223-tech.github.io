@@ -167,7 +167,7 @@ class SocialPackTests(unittest.TestCase):
         report = {"editorial": {"trend_zh": "智能体走进真实工作。", "core_zh": "这是 DAVYLAB 分析。"}}
         skill = {"name": "demo/skill", "description_zh": "一个实用技能。", "url": "https://github.com/demo/skill", "license_name": "MIT License"}
         wechat, moments = make_copy(report, stories, skill, "2026-11-02")
-        for required in ("2026-11-02", "💡 DAVYLAB 观察", "❓", "作者：DAVYLAB｜让可能发生", "demo/skill"):
+        for required in ("2026年11月2日", "💡 DAVYLAB 观察", "❓", "作者：DAVYLAB｜让可能发生", "demo/skill"):
             self.assertIn(required, wechat)
         for story in stories:
             self.assertIn(story_title(story), wechat)
