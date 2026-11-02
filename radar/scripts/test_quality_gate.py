@@ -1,5 +1,5 @@
 import unittest
-from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
+from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
 
 class QualityGateTests(unittest.TestCase):
     def test_one_verified_skill_is_enough_for_daily_featured_recommendation(self):
@@ -38,6 +38,36 @@ class QualityGateTests(unittest.TestCase):
         old={"title":"Pathos AI teams up with Bristol Myers and Tempus","url":"https://example.com/news"}
         new={"title":"Pathos AI 携手 Bristol Myers 与 Tempus 推进药物研发","url":"https://example.com/news?utm_campaign=daily"}
         self.assertEqual(compare_story(new,[old])["kind"],"exact_url")
+    def test_low_relevance_web_search_image_blocks(self):
+        error = image_relevance_error({
+            "title_zh":"Apple Intelligence 中国上线",
+            "image_match_status":"web_search_topic",
+            "image_match_score":0.125,
+            "image_alt":"apple fruit photo",
+        })
+        self.assertEqual(error["type"], "low_image_relevance")
+        self.assertEqual(MIN_IMAGE_RELEVANCE_SCORE, 0.35)
+
+    def test_topic_image_requires_non_news_label(self):
+        error = image_relevance_error({
+            "title_zh":"OpenAI ServiceNow workflow",
+            "image_match_status":"web_search_topic",
+            "image_match_score":0.8,
+            "image_alt":"OpenAI logo",
+        })
+        self.assertEqual(error["type"], "topic_image_missing_non_news_label")
+        self.assertIsNone(image_relevance_error({
+            "title_zh":"AI inference",
+            "image_match_status":"thematic_fallback",
+            "image_alt":"AI compute topic illustration: AI inference",
+        }))
+
+    def test_low_confidence_story_requires_explicit_verification_caveat(self):
+        story={"title_zh":"Drex Max v1","confidence":"low","what_zh":"Nace AI 发布 27B 模型，评分 67.52。"}
+        self.assertEqual(claim_provenance_error(story)["type"],"low_confidence_without_explicit_caveat")
+        story["what_zh"] += "（相关评分尚未独立验证。）"
+        self.assertIsNone(claim_provenance_error(story))
+
     def test_tokenizer_has_signal(self):
         self.assertIn("openai",tokens("OpenAI announces a new AI model"))
 if __name__=="__main__": unittest.main()
