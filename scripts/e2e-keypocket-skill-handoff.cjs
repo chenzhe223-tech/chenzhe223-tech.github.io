@@ -29,6 +29,15 @@ const { chromium } = require('playwright');
     await collectButton.click();
     const keyPocket = await popupPromise;
     const pageErrors = [];
+    // The popup may be fulfilled by an older cached page during a Pages deployment.
+    // Do not continue until the exact V2 bundle expected by the repository is loaded.
+    await keyPocket.waitForFunction(() => {
+      const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
+      return script && script.src.includes('kp-v2-recovery-20261102-1')
+        && document.querySelector('#recycleView')
+        && document.querySelector('#backupView')
+        && document.querySelector('#radarView');
+    }, null, { timeout: 30000 });
     keyPocket.on('pageerror', error => pageErrors.push(error.message));
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
