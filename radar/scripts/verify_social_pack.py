@@ -179,7 +179,7 @@ def main() -> int:
     skill = (report.get("skills") or [{}])[0]
     if (manifest.get("skill") or {}).get("url") != skill.get("url") or (manifest.get("skill") or {}).get("name") != skill.get("name"):
         fail("Skill feature metadata does not match the formal report recommendation")
-    if (manifest.get("skill", {}).get("compatibility_status") != skill.get("compatibility_status") or manifest.get("skill", {}).get("actual_skill_file_count") != skill.get("actual_skill_file_count"):
+    if (manifest.get("skill", {}).get("compatibility_status") != skill.get("compatibility_status") or manifest.get("skill", {}).get("actual_skill_file_count") != skill.get("actual_skill_file_count")):
         fail("Skill compatibility or actual SKILL.md count differs from the formal report")
 
     font_result = verify_cjk_font()
