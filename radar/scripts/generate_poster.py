@@ -552,7 +552,7 @@ def main():
         draw.text((x + 145, mini_y + 14), f"{index+1:02d}  /  {str(story.get('source') or '公开来源')[:22]}", font=font(13, True), fill=blue)
         title = story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻"
         yy = paragraph(draw, title, (x + 145, mini_y + 40), font(18, True), ink, mini_w - 165, 2, 3)
-        summary = story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
+        summary = story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
         paragraph(draw, summary, (x + 145, yy + 4), font(14), muted, mini_w - 165, 2, 3)
 
     # Compact open-source recommendation panel with a reserved right-side QR column.
