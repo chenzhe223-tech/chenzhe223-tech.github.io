@@ -46,5 +46,11 @@
     "text_overflow",
     "invalid_source",
     "deployment_failure"
-  ]
+  ],
+  "image_relevance": {
+    "minimum_score": 0.35,
+    "web_search_topic_requires_score": true,
+    "fallback_on_low_score": true,
+    "thematic_fallback_label": "主题配图 · 非新闻现场"
+  }
 }
