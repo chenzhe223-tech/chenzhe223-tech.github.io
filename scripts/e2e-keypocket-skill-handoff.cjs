@@ -129,6 +129,8 @@ const { chromium } = require('playwright');
         captureDiagnostic: window.__kpRadarCaptureDiagnostic,
         unlockQueueCount: window.__kpUnlockQueueCount,
         unlockQueueStage: window.__kpUnlockQueueStage,
+        unlockStep: window.__kpUnlockStep,
+        unlockError: window.__kpUnlockError,
         modalDiagnostic: window.__kpRadarModalDiagnostic,
         vaultUnlocked: window.__kpVaultUnlocked,
         importButtonText: document.querySelector('#importRadarSkillsBtn')?.textContent,
