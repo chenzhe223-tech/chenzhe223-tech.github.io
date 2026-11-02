@@ -181,6 +181,7 @@ jobs:
           PY
         if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
+        continue-on-error: true
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         shell: bash
@@ -217,6 +218,9 @@ jobs:
             if [ "$attempt" = "1" ]; then sleep 8; fi
           done
         if: steps.preflight.outputs.skip != 'true'
+      - name: Apply deterministic claim provenance and source basis
+        run: python radar/scripts/run_horizon.py --provenance-only
+
       - name: Record AI selection health for recovery scheduling
         if: steps.preflight.outputs.skip != 'true'
         run: |
