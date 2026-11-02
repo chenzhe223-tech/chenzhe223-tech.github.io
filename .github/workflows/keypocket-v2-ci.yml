@@ -1,0 +1,33 @@
+name: KeyPocket V2 CI
+
+on:
+  push:
+    branches: [feature/keypocket-v2]
+    paths:
+      - "keypocket/**"
+      - ".github/workflows/keypocket-v2-ci.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "keypocket/**"
+
+permissions:
+  contents: read
+
+jobs:
+  contract-and-syntax:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript syntax
+        run: |
+          node --check keypocket/app.js
+          node --check keypocket/app-v2.js
+          node --check keypocket/scripts/collect-skill-radar.cjs
+          node --check keypocket/worker/github-app/src/index.js
+      - name: Run V2 contract tests
+        run: node --test keypocket/tests/v2-contract.test.cjs
