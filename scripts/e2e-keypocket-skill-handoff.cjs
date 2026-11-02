@@ -46,16 +46,16 @@ if (!expectedBuild) throw new Error('KeyPocket build marker missing from source'
     // The popup may be fulfilled by an older cached page during a Pages deployment.
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     try {
-      await keyPocket.waitForFunction(() => {
+      await keyPocket.waitForFunction(expected => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes(expectedBuild)
-          && window.__kpBuildVersion === expectedBuild
+        return script && script.src.includes(expected)
+          && window.__kpBuildVersion === expected
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
           && document.querySelector('#backupView')
           && document.querySelector('#radarView');
-      }, null, { timeout: 30000 });
+      }, expectedBuild, { timeout: 30000 });
     } catch (error) {
       const popupDiagnostics = await keyPocket.evaluate(() => ({
         readyState: document.readyState,
@@ -78,9 +78,9 @@ if (!expectedBuild) throw new Error('KeyPocket build marker missing from source'
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === expectedBuild
+      await keyPocket.waitForFunction(expected => window.__kpBuildVersion === expected
         && window.__kpProjectRendererReady === true
-        && typeof window.renderProjects === 'function', null, { timeout: 15000 });
+        && typeof window.renderProjects === 'function', expectedBuild, { timeout: 15000 });
     } catch (error) {
       const renderDiagnostics = await keyPocket.evaluate(() => ({
         readyState: document.readyState,
