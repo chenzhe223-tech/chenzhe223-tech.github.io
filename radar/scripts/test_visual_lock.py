@@ -1,4 +1,6 @@
 import unittest
+from unittest.mock import patch
+import radar.scripts.visual_lock as visual_lock
 from radar.scripts.visual_lock import validate_visual_lock
 
 class VisualLockTests(unittest.TestCase):
@@ -23,6 +25,18 @@ class VisualLockTests(unittest.TestCase):
         geometric = validate_visual_lock("2026-11-02")
         self.assertEqual(mountain["design_variant"], "mountain-editorial")
         self.assertEqual(geometric["design_variant"], "geometric-navy")
+
+    def test_missing_image_relevance_policy_fails_closed(self):
+        original = visual_lock.load_json
+        def without_image_policy(name):
+            data = original(name)
+            if name == "qa-rules.json":
+                data = dict(data)
+                data.pop("image_relevance", None)
+            return data
+        with patch("radar.scripts.visual_lock.load_json", side_effect=without_image_policy):
+            with self.assertRaises(RuntimeError):
+                visual_lock.validate_visual_lock("2026-11-02")
 
     def test_adjacent_iso_week_alternates(self):
         a = validate_visual_lock("2026-11-01")
