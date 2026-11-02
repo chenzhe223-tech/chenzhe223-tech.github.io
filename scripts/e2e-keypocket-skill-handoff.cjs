@@ -5,6 +5,9 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { chromium } = require('playwright');
+const appSource = fs.readFileSync(path.join(__dirname, '..', 'keypocket', 'app.js'), 'utf8');
+const expectedBuild = appSource.match(/window\\.__kpBuildVersion='([^']+)'/)?.[1];
+if (!expectedBuild) throw new Error('KeyPocket build marker missing from source');
 
 (async () => {
   const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'keypocket-e2e-'));
@@ -45,8 +48,8 @@ const { chromium } = require('playwright');
     try {
       await keyPocket.waitForFunction(() => {
         const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-        return script && script.src.includes('kp-v2-device-cloud-20261102-15')
-          && window.__kpBuildVersion === 'kp-v2-device-cloud-20261102-15'
+        return script && script.src.includes(expectedBuild)
+          && window.__kpBuildVersion === expectedBuild
           && window.__kpProjectRendererReady === true
           && typeof window.renderProjects === 'function'
           && document.querySelector('#recycleView')
@@ -75,7 +78,7 @@ const { chromium } = require('playwright');
     }
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
     try {
-      await keyPocket.waitForFunction(() => window.__kpBuildVersion === 'kp-v2-device-cloud-20261102-15'
+      await keyPocket.waitForFunction(() => window.__kpBuildVersion === expectedBuild
         && window.__kpProjectRendererReady === true
         && typeof window.renderProjects === 'function', null, { timeout: 15000 });
     } catch (error) {

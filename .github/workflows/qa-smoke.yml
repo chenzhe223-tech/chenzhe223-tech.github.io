@@ -63,8 +63,19 @@ jobs:
             });
           }
           async function main() {
+            let consecutiveLookupFailures = 0;
             while (Date.now() - started < timeoutMs) {
-              const data = await getRuns();
+              let data;
+              try {
+                data = await getRuns();
+                consecutiveLookupFailures = 0;
+              } catch (error) {
+                consecutiveLookupFailures += 1;
+                console.warn('GitHub Actions lookup failed (' + consecutiveLookupFailures + '/5): ' + error.message);
+                if (consecutiveLookupFailures >= 5) throw error;
+                await pause(Math.min(5000 * consecutiveLookupFailures, 20000));
+                continue;
+              }
               const pages = (data.workflow_runs || [])
                 .filter(run => run.name === 'pages build and deployment' && run.head_sha === target)
                 .sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at))[0];
