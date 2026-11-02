@@ -290,7 +290,9 @@ const mark = (status, name, detail = '') => {
       const kpContext = await browser.newContext({ viewport: { width: 1280, height: 900 } });
       const kp = await kpContext.newPage();
       const kpErrors = [];
+      const kpConsoleErrors = [];
       kp.on('pageerror', e => kpErrors.push(e.message));
+      kp.on('console', message => { if (message.type() === 'error') kpConsoleErrors.push(message.text()); });
       const kpResp = await kp.goto(base + 'keypocket/', { waitUntil: 'domcontentloaded', timeout: 45000 });
       mark(kpResp && kpResp.status() < 400 ? 'PASS' : 'FAIL', 'KeyPocket 页面可打开', 'HTTP ' + (kpResp && kpResp.status()));
       await kp.waitForSelector('#unlockForm', { timeout: 10000 });
@@ -298,12 +300,28 @@ const mark = (status, name, detail = '') => {
       mark(csp && csp.includes('https://api.github.com') ? 'PASS' : 'FAIL', 'KeyPocket GitHub API CSP', csp || 'CSP missing');
       // The browser context above is isolated. Wait for app initialization and branch
       // according to actual UI state instead of assuming first-run setup every time.
-      await kp.waitForFunction(() => {
-        const state = window.__kpInitDiagnostic;
-        return state === 'ready' || state === 'unsupported'
-          || state === 'vault-meta-missing-with-data'
-          || String(state || '').startsWith('error:');
-      }, null, { timeout: 20000 });
+      try {
+        await kp.waitForFunction(() => {
+          const state = window.__kpInitDiagnostic;
+          return state === 'ready' || state === 'unsupported'
+            || state === 'vault-meta-missing-with-data'
+            || String(state || '').startsWith('error:');
+        }, null, { timeout: 20000 });
+      } catch (error) {
+        const initDiagnostics = await kp.evaluate(() => ({
+          readyState: document.readyState,
+          initFunction: typeof window.init,
+          initDiagnostic: window.__kpInitDiagnostic,
+          lockTitle: document.querySelector('#lockTitle')?.textContent,
+          lockDesc: document.querySelector('#lockDesc')?.textContent,
+          unlockButton: document.querySelector('#unlockBtn')?.textContent,
+          confirmWrapClass: document.querySelector('#confirmWrap')?.className,
+          scriptResources: performance.getEntriesByType('resource')
+            .filter(item => item.name.includes('/keypocket/app.js'))
+            .map(item => ({ name: item.name, duration: item.duration, transferSize: item.transferSize }))
+        }));
+        throw new Error('KeyPocket init diagnostics=' + JSON.stringify({ initDiagnostics, kpErrors, kpConsoleErrors }) + '; ' + error.message);
+      }
       const initState = await kp.evaluate(() => ({
         state: window.__kpInitDiagnostic,
         title: document.querySelector('#lockTitle')?.textContent,
