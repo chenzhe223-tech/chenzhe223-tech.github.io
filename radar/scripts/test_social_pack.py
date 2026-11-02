@@ -5,9 +5,43 @@ from radar.scripts.generate_social_pack import (
     TEXT_BOUNDS, classify_topic, make_copy, render_skill_image, render_topic_image,
     select_topic_stories, social_layout_regions, story_title, wrap_lines, write_text
 )
+from radar.scripts.verify_social_pack import verify_manifest_matches_report
 
 
 class SocialPackTests(unittest.TestCase):
+    def test_social_manifest_must_match_exact_source_report(self):
+        report = {
+            "generated_at": "2026-11-02T09:30:00+08:00",
+            "top5": [
+                {"title_zh": f"新闻{i}", "source_url": f"https://example.com/{i}"}
+                for i in range(5)
+            ],
+            "skills": [{
+                "name": "demo/skill",
+                "url": "https://github.com/demo/skill",
+                "compatibility_status": "Claude Code only",
+                "actual_skill_file_count": 74,
+            }],
+        }
+        manifest = {
+            "source_report_generated_at": report["generated_at"],
+            "source_report_sha256": "abc123",
+            "story_titles": [f"新闻{i}" for i in range(5)],
+            "story_urls": [f"https://example.com/{i}" for i in range(5)],
+            "skill": {
+                "name": "demo/skill",
+                "url": "https://github.com/demo/skill",
+                "compatibility_status": "Claude Code only",
+                "actual_skill_file_count": 74,
+            },
+        }
+        titles, urls = verify_manifest_matches_report(report, manifest, "abc123")
+        self.assertEqual(titles, manifest["story_titles"])
+        self.assertEqual(urls, manifest["story_urls"])
+        manifest["source_report_generated_at"] = "2026-11-02T08:38:00+08:00"
+        with self.assertRaisesRegex(RuntimeError, "current formal report timestamp"):
+            verify_manifest_matches_report(report, manifest, "abc123")
+
     def test_topic_classifier_uses_story_context(self):
         self.assertEqual(classify_topic({"title_zh": "DeepSeek Router-Worker 智能体"}, 0), "agent")
         self.assertEqual(classify_topic({"title_zh": "微信支付智慧经营机器人首次进店"}, 1), "retail")
