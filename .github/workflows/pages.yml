@@ -166,7 +166,7 @@ jobs:
       - name: Refresh today's AI news and Skill shortlist
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: python radar/scripts/build_daily.py
+        run: timeout --kill-after=10s 300s python radar/scripts/build_daily.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Diagnose AI enrichment configuration (without exposing secrets)
         env:
