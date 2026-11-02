@@ -50,7 +50,25 @@ const { chromium } = require('playwright');
         && document.querySelector('#radarView');
     }, null, { timeout: 30000 });
     await keyPocket.waitForLoadState('domcontentloaded', { timeout: 30000 });
-    await keyPocket.waitForFunction(() => typeof window.renderProjects === 'function', null, { timeout: 10000 });
+    try {
+      await keyPocket.waitForFunction(() => typeof window.renderProjects === 'function', null, { timeout: 10000 });
+    } catch (error) {
+      const renderDiagnostics = await keyPocket.evaluate(() => ({
+        readyState: document.readyState,
+        initDiagnostic: window.__kpInitDiagnostic,
+        renderProjectsType: typeof window.renderProjects,
+        scriptUrls: [...document.scripts].map(script => script.src).filter(Boolean),
+        mainViewExists: !!document.querySelector('#mainView'),
+        modalRootExists: !!document.querySelector('#modalRoot'),
+        projectCardsExists: !!document.querySelector('#projectCards'),
+        lockViewClass: document.querySelector('#lockView')?.className,
+        bodyText: document.body?.innerText?.slice(0, 1200)
+      })).catch(e => ({ evaluateError: e.message }));
+      console.error('KEYPOCKET_RENDER_DIAGNOSTICS ' + JSON.stringify({
+        renderDiagnostics, pageErrors, consoleErrors
+      }));
+      throw error;
+    }
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
     // app.js runs init() asynchronously after DOM parsing and opens IndexedDB before
