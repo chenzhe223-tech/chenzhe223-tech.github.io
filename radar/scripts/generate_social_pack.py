@@ -33,6 +33,7 @@ ORANGE = (244, 91, 48)
 MUTED = (83, 101, 119)
 LINE = (211, 218, 221)
 WHITE = (255, 255, 255)
+TEXT_BOUNDS: list[dict] = []
 
 
 def story_title(story: dict) -> str:
@@ -105,10 +106,49 @@ def wrap_lines(draw, text: str, fnt, max_width: int, max_lines: int | None = Non
 
 def write_text(draw, text: str, xy: tuple[int, int], fnt, fill, width: int, max_lines: int = 3, gap: int = 5) -> int:
     x, y = xy
-    for line in wrap_lines(draw, text, fnt, width, max_lines):
+    y0 = y
+    all_lines = wrap_lines(draw, text, fnt, width, None)
+    lines = all_lines[:max_lines] if max_lines else all_lines
+    for line in lines:
         draw.text((x, y), line, font=fnt, fill=fill)
         y += fnt.size + gap
+    actual_width = max((float(draw.textlength(line, font=fnt)) for line in lines), default=0)
+    height = y - y0
+    if x < 0 or y0 < 0 or x + width > W or y > H or actual_width > width + 1:
+        raise ValueError(f"Social text bounds overflow: x={x}, y={y0}, width={width}, height={height}, actual_width={actual_width}")
+    TEXT_BOUNDS.append({
+        "x": int(x), "y": int(y0), "width": int(width), "height": int(height),
+        "actual_width": round(actual_width, 1), "line_count": len(lines),
+        "truncated": len(all_lines) > len(lines), "overflow": False
+    })
     return y
+
+
+def social_layout_regions(image_type: str) -> dict:
+    if image_type == "main_poster":
+        return {
+            "masthead": [40, 24, 860, 245],
+            "news_grid": [40, 267, 860, 692],
+            "observation": [40, 708, 860, 820],
+            "skill_recommendation": [40, 840, 515, 1120],
+            "right_qr_panel": [540, 840, 860, 1120],
+            "brand_footer": [0, 1140, 900, 1200],
+        }
+    if image_type == "topic_illustration":
+        return {
+            "hero_art": [0, 0, 900, 450],
+            "masthead": [40, 30, 860, 60],
+            "topic_content": [40, 475, 860, 1080],
+            "source_footer": [40, 1090, 860, 1180],
+        }
+    if image_type == "skill_feature":
+        return {
+            "hero_art": [0, 0, 900, 450],
+            "masthead": [40, 30, 860, 60],
+            "skill_content": [40, 475, 860, 1120],
+            "brand_footer": [0, 1140, 900, 1200],
+        }
+    raise ValueError(f"Unknown social image type: {image_type}")
 
 
 def card(draw, box, fill=WHITE, outline=LINE, radius=16, width=2):
@@ -504,30 +544,39 @@ def main() -> int:
     out.mkdir(parents=True, exist_ok=True)
     images = []
     main_name = "01-main-poster.png"
+    TEXT_BOUNDS.clear()
     draw_main_poster(report, top, skill, report_date).save(out / main_name, format="PNG", optimize=True)
+    main_text_bounds = list(TEXT_BOUNDS)
     images.append({
         "filename": main_name, "theme": "当日主海报：五条精选新闻、DAVYLAB观察、Skill与二维码",
         "material_type": "程序绘制的品牌编辑版式与几何主题视觉", "image_type": "main_poster",
-        "source_url": PUBLIC_URL, "label": "主题视觉 · 非新闻现场"
+        "source_url": PUBLIC_URL, "label": "主题视觉 · 非新闻现场",
+        "layout_regions": social_layout_regions("main_poster"), "text_bounds": main_text_bounds
     })
     topic_news = select_topic_stories(top)
     for index, (category, story) in enumerate(topic_news, start=1):
         region_slug = "global" if category == "global_news" else "china"
         filename = f"{index + 1:02d}-{region_slug}-story-{index:02d}-{safe_slug(story_title(story), index)}.png"
+        TEXT_BOUNDS.clear()
         render_topic_image(story, index - 1, report_date, category).save(out / filename, format="PNG", optimize=True)
+        topic_text_bounds = list(TEXT_BOUNDS)
         images.append({
             "filename": filename, "theme": story_title(story),
             "material_type": "程序绘制的原创主题插画", "image_type": "topic_illustration",
             "category": category, "source": story.get("source"), "source_url": story_url(story),
-            "published": story.get("published"), "label": "主题插画 · 非新闻现场"
+            "published": story.get("published"), "label": "主题插画 · 非新闻现场",
+            "layout_regions": social_layout_regions("topic_illustration"), "text_bounds": topic_text_bounds
         })
 
     skill_filename = "06-skill-feature.png"
+    TEXT_BOUNDS.clear()
     render_skill_image(skill, report_date).save(out / skill_filename, format="PNG", optimize=True)
+    skill_text_bounds = list(TEXT_BOUNDS)
     images.append({
         "filename": skill_filename, "theme": f"今日推荐 Skill：{skill.get('name') or 'Open-source Skill'}",
         "material_type": "程序绘制的原创技能工作流主题插画", "image_type": "skill_feature",
-        "source_url": skill.get("url"), "label": "主题插画 · 非产品截图"
+        "source_url": skill.get("url"), "label": "主题插画 · 非产品截图",
+        "layout_regions": social_layout_regions("skill_feature"), "text_bounds": skill_text_bounds
     })
 
     wechat, moments = make_copy(report, top, skill, report_date)

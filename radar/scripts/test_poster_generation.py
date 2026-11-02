@@ -56,6 +56,16 @@ class PosterGenerationTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "size mismatch"):
             poster.composite_same_size(background, Image.new("RGBA", (31, 24), (255, 255, 255, 80)))
 
+    def test_text_bounds_fail_closed_outside_canvas(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        with self.assertRaisesRegex(RuntimeError, "text bounds overflow"):
+            poster.record_text_bounds(draw, ["中文测试"], (1190, 100), poster.font(16, True), 20, 22, "test")
+
+    def test_style_layout_regions_are_complete(self):
+        self.assertEqual(len(poster.layout_regions_for("geometric-navy")), 8)
+        self.assertEqual(len(poster.layout_regions_for("mountain-editorial")), 7)
+
     def test_chinese_text_wrap_respects_available_width(self):
         image = Image.new("RGB", (240, 100), "white")
         draw = ImageDraw.Draw(image)

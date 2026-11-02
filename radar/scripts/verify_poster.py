@@ -17,10 +17,14 @@ except ModuleNotFoundError:
 
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
+
+from radar.scripts.generate_poster import font as poster_font, layout_regions_for
+from radar.scripts.visual_lock import validate_visual_lock
 
 ROOT = Path.cwd().resolve() if (Path.cwd() / "radar" / "data" / "latest.json").exists() else Path(__file__).resolve().parents[2]
 POSTERS = ROOT / "radar" / "posters"
+DATA = ROOT / "radar" / "data" / "latest.json"
 PUBLIC_URL = "https://chenzhe223-tech.github.io/radar/daily/"
 QR_SIZE = 240
 QR_X, QR_Y = 912, 1302
@@ -34,12 +38,15 @@ def fail(message: str) -> None:
 def decode_poster(path: Path, expected_url: str) -> dict:
     if not path.is_file() or path.stat().st_size < 10_000:
         fail(f"Poster missing or suspiciously small: {path}")
+    with Image.open(path) as pil:
+        if pil.format != "PNG" or pil.size != (1200, 1800):
+            fail(f"Website poster must be exactly 1200x1800 PNG: {path} has {pil.format} {pil.size}")
     image = cv2.imread(str(path), cv2.IMREAD_COLOR)
     if image is None:
         fail(f"Final poster cannot be opened by OpenCV: {path}")
     height, width = image.shape[:2]
-    if width < 1080 or height < 1600:
-        fail(f"Poster dimensions are too small: {width}x{height}")
+    if (width, height) != (1200, 1800):
+        fail(f"Poster dimensions must be exactly 1200x1800: {width}x{height}")
 
     decoded, points, _ = cv2.QRCodeDetector().detectAndDecode(image)
     if not decoded:
@@ -117,6 +124,58 @@ def check_destination(url: str) -> dict:
     return {"requested_url": url, "final_url": final_url, "http_status": status, "status": "PASS"}
 
 
+def verify_cjk_font() -> dict:
+    sample = "中文字体覆盖验证"
+    fnt = poster_font(24, True)
+    image = Image.new("RGB", (420, 80), "white")
+    draw = ImageDraw.Draw(image)
+    bbox = draw.textbbox((0, 0), sample, font=fnt)
+    if bbox[2] <= bbox[0] or bbox[3] <= bbox[1]:
+        fail("CJK font did not render the verification sample")
+    return {"font_family": fnt.getname()[0], "sample": sample, "bbox": list(bbox), "status": "PASS"}
+
+
+def verify_manifest_layout(manifest: dict) -> dict:
+    design = str(manifest.get("design") or "")
+    expected = layout_regions_for(design)
+    regions = manifest.get("layout_regions") or {}
+    if set(regions) != set(expected):
+        fail(f"Poster layout region set mismatch for {design}: {sorted(regions)}")
+    for name, box in regions.items():
+        if not isinstance(box, list) or len(box) != 4:
+            fail(f"Invalid layout region geometry: {name}")
+        x1, y1, x2, y2 = [int(v) for v in box]
+        if x1 < 0 or y1 < 0 or x2 > 1200 or y2 > 1800 or x2 <= x1 or y2 <= y1:
+            fail(f"Poster layout region outside canvas: {name}={box}")
+    blocks = manifest.get("text_bounds") or []
+    if not blocks:
+        fail("Poster text-bounds manifest is missing")
+    for block in blocks:
+        x, y = int(block.get("x", -1)), int(block.get("y", -1))
+        width, height = int(block.get("width", -1)), int(block.get("height", -1))
+        if block.get("overflow") or x < 0 or y < 0 or width <= 0 or height <= 0 or x + width > 1200 or y + height > 1800:
+            fail(f"Poster text block outside canvas: {block}")
+        if float(block.get("actual_width", 0)) > width + 1:
+            fail(f"Poster text line exceeds available width: {block}")
+    return {"region_count": len(regions), "text_block_count": len(blocks),
+            "truncated_text_blocks": sum(1 for b in blocks if b.get("truncated")), "status": "PASS"}
+
+
+def verify_news_evidence(manifest: dict, report: dict) -> dict:
+    top = report.get("top5") or []
+    expected_urls = [str(s.get("source_url") or s.get("url") or "") for s in top[:5]]
+    expected_titles = [str(s.get("title_zh") or s.get("original_title") or s.get("title") or "") for s in top[:5]]
+    if len(top) != 5 or manifest.get("news_urls") != expected_urls or manifest.get("news_titles") != expected_titles:
+        fail("Poster news titles/URLs do not match the formal Top 5 data")
+    evidence = manifest.get("news_image_evidence") or []
+    if len(evidence) != 5:
+        fail("Poster must record image relevance evidence for all five stories")
+    for item in evidence:
+        if item.get("label_required") and not item.get("label_applied"):
+            fail(f"Thematic image is missing its disclosure label: {item}")
+    return {"news_count": 5, "image_evidence_count": len(evidence), "status": "PASS"}
+
+
 def main() -> int:
     manifest_path = POSTERS / "latest.json"
     if not manifest_path.is_file():
@@ -138,14 +197,36 @@ def main() -> int:
             fail(f"Poster manifest date {manifest.get('report_date')!r} is not today ({today})")
         if manifest.get("qr_url") != PUBLIC_URL:
             fail(f"Manifest QR target mismatch: {manifest.get('qr_url')!r}")
+        if manifest.get("design") != expected_style.get("design_variant"):
+            fail("Poster design does not match the ISO-week-selected style")
+        if manifest.get("format") != "PNG" or manifest.get("canvas") != [1200, 1800]:
+            fail("Poster manifest canvas/format contract mismatch")
+        visual_lock = validate_visual_lock(today)
+        if visual_lock.get("design_variant") != expected_style.get("design_variant"):
+            fail("Runtime visual lock and ISO-week style algorithm disagree")
         for key, expected in expected_style.items():
             if manifest.get(key) != expected:
                 fail(f"Poster style metadata mismatch for {key}: got {manifest.get(key)!r}, expected {expected!r}")
         dated_path = ROOT / str(manifest.get("poster", ""))
         if dated_path.resolve().parent != POSTERS.resolve() or dated_path.suffix.lower() != ".png":
             fail(f"Manifest poster path is outside radar/posters or is not a PNG: {dated_path}")
+        report = json.loads(DATA.read_text(encoding="utf-8"))
+        font_result = verify_cjk_font()
+        layout_result = verify_manifest_layout(manifest)
+        news_result = verify_news_evidence(manifest, report)
+        record["font_coverage"] = font_result
+        record["layout"] = layout_result
+        record["news_evidence"] = news_result
         record["destination"] = check_destination(PUBLIC_URL)
-        record["checks"].append({"name": "destination_reachable", "status": "PASS"})
+        record["checks"].extend([
+            {"name": "exact_canvas_1200x1800", "status": "PASS"},
+            {"name": "font_coverage", "status": "PASS"},
+            {"name": "text_bounds", "status": "PASS"},
+            {"name": "region_presence", "status": "PASS"},
+            {"name": "news_data_consistency", "status": "PASS"},
+            {"name": "image_relevance_label", "status": "PASS"},
+            {"name": "destination_reachable", "status": "PASS"},
+        ])
         image_results = [
             decode_poster(dated_path, PUBLIC_URL),
             decode_poster(POSTERS / "latest.png", PUBLIC_URL),

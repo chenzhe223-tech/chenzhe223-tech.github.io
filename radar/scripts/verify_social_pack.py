@@ -12,10 +12,11 @@ from zoneinfo import ZoneInfo
 
 import cv2
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 
+from radar.scripts.generate_poster import font as poster_font
 from radar.scripts.poster_style import poster_style_metadata
-from radar.scripts.generate_social_pack import select_topic_stories, story_url
+from radar.scripts.generate_social_pack import select_topic_stories, story_url, social_layout_regions
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data" / "latest.json"
@@ -74,6 +75,43 @@ def verify_main_qr(path: Path) -> dict:
             "contrast_percentile_range": contrast, "quiet_zone_px": quiet, "status": "PASS"}
 
 
+def verify_cjk_font() -> dict:
+    sample = "中文字体覆盖验证"
+    fnt = poster_font(24, True)
+    image = Image.new("RGB", (420, 80), "white")
+    draw = ImageDraw.Draw(image)
+    bbox = draw.textbbox((0, 0), sample, font=fnt)
+    if bbox[2] <= bbox[0] or bbox[3] <= bbox[1]:
+        fail("CJK font did not render the verification sample")
+    return {"font_family": fnt.getname()[0], "sample": sample, "bbox": list(bbox), "status": "PASS"}
+
+
+def verify_image_layout(entry: dict) -> dict:
+    image_type = str(entry.get("image_type") or "")
+    expected_regions = social_layout_regions(image_type)
+    regions = entry.get("layout_regions") or {}
+    if regions != expected_regions:
+        fail(f"Social image region specification mismatch for {image_type}")
+    for name, box in regions.items():
+        if not isinstance(box, list) or len(box) != 4:
+            fail(f"Invalid social image region: {name}")
+        x1, y1, x2, y2 = [int(v) for v in box]
+        if x1 < 0 or y1 < 0 or x2 > W or y2 > H or x2 <= x1 or y2 <= y1:
+            fail(f"Social image region outside canvas: {name}={box}")
+    blocks = entry.get("text_bounds") or []
+    if not blocks:
+        fail(f"Social image text-bounds metadata missing: {entry.get('filename')}")
+    for block in blocks:
+        x, y = int(block.get("x", -1)), int(block.get("y", -1))
+        width, height = int(block.get("width", -1)), int(block.get("height", -1))
+        if block.get("overflow") or x < 0 or y < 0 or width <= 0 or height <= 0 or x + width > W or y + height > H:
+            fail(f"Social image text overflow: {entry.get('filename')} / {block}")
+        if float(block.get("actual_width", 0)) > width + 1:
+            fail(f"Social image text exceeds width: {entry.get('filename')} / {block}")
+    return {"region_count": len(regions), "text_block_count": len(blocks),
+            "truncated_text_blocks": sum(1 for b in blocks if b.get("truncated")), "status": "PASS"}
+
+
 def main() -> int:
     report = json.loads(DATA.read_text(encoding="utf-8"))
     report_date = str(report.get("report_date") or "")
@@ -118,9 +156,11 @@ def main() -> int:
     if (manifest.get("skill") or {}).get("url") != skill.get("url"):
         fail("Skill feature metadata does not match the formal report recommendation")
 
+    font_result = verify_cjk_font()
     checks = []
     hashes = set()
     verified_images = []
+    layout_results = []
     for index, entry in enumerate(entries):
         path = folder / str(entry.get("filename") or "")
         if path.parent.resolve() != folder.resolve() or not path.is_file():
@@ -151,6 +191,7 @@ def main() -> int:
                 fail(f"Standalone Skill illustration disclosure missing: {path.name}")
             if entry.get("source_url") != skill.get("url"):
                 fail(f"Skill image source mismatch: {path.name}")
+        layout_results.append({"filename": path.name, **verify_image_layout(entry)})
         verified_images.append({
             "filename": path.name, "width": W, "height": H, "format": "PNG",
             "file_size_bytes": size, "sha256": digest, "theme": entry.get("theme"),
@@ -178,8 +219,12 @@ def main() -> int:
         "expected_url": PUBLIC_URL,
         "destination": destination,
         "qr": qr,
+        "font_coverage": font_result,
+        "layout_results": layout_results,
         "images": verified_images,
         "checks": [
+            {"name": "font_coverage", "status": "PASS"},
+            {"name": "text_bounds_and_region_presence", "status": "PASS"},
             {"name": "six_independent_png_files", "status": "PASS"},
             {"name": "900x1200_3x4_dimensions", "status": "PASS"},
             {"name": "unique_image_hashes", "status": "PASS"},

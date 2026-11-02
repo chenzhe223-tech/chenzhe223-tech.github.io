@@ -2,8 +2,8 @@ import unittest
 from PIL import Image, ImageDraw
 
 from radar.scripts.generate_social_pack import (
-    classify_topic, make_copy, render_skill_image, render_topic_image,
-    select_topic_stories, story_title, wrap_lines
+    TEXT_BOUNDS, classify_topic, make_copy, render_skill_image, render_topic_image,
+    select_topic_stories, social_layout_regions, story_title, wrap_lines, write_text
 )
 
 
@@ -24,6 +24,17 @@ class SocialPackTests(unittest.TestCase):
         self.assertLessEqual(len(lines), 3)
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font(20, True)), 141)
+
+    def test_social_text_bounds_fail_closed_outside_canvas(self):
+        image = Image.new("RGB", (900, 1200), "white")
+        draw = ImageDraw.Draw(image)
+        with self.assertRaisesRegex(ValueError, "Social text bounds overflow"):
+            write_text(draw, "越界测试", (850, 20), ImageDraw.ImageFont.load_default(), "black", 100)
+
+    def test_social_layout_regions_cover_all_three_image_types(self):
+        self.assertIn("right_qr_panel", social_layout_regions("main_poster"))
+        self.assertIn("source_footer", social_layout_regions("topic_illustration"))
+        self.assertIn("skill_content", social_layout_regions("skill_feature"))
 
     def test_topic_selection_is_two_global_two_china(self):
         top = [

@@ -27,6 +27,7 @@ POSTERS = ROOT / "radar" / "posters"
 TZ = ZoneInfo("Asia/Shanghai")
 PUBLIC_URL = "https://chenzhe223-tech.github.io/radar/daily/"
 W, H = 1200, 1800
+TEXT_BOUNDS: list[dict] = []
 QR_SIZE = 240
 QR_X, QR_Y = 912, 1302
 NAVY = (8, 25, 48)
@@ -60,13 +61,73 @@ def wrap(draw, text, fnt, max_width):
     if line: lines.append(line)
     return lines
 
+def record_text_bounds(draw, lines, xy, fnt, width, line_step, block, truncated=False):
+    x, y = xy
+    if not lines:
+        return
+    actual_width = max(float(draw.textlength(line, font=fnt)) for line in lines)
+    height = len(lines) * line_step
+    if x < 0 or y < 0 or x + width > W or y + height > H or actual_width > width + 1:
+        raise RuntimeError(f"P0 text bounds overflow in {block}: x={x}, y={y}, width={width}, height={height}, actual_width={actual_width}")
+    TEXT_BOUNDS.append({
+        "block": block, "x": int(x), "y": int(y), "width": int(width),
+        "height": int(height), "actual_width": round(actual_width, 1),
+        "line_count": len(lines), "truncated": bool(truncated), "overflow": False
+    })
+
+
 def paragraph(draw, text, xy, fnt, fill, width, max_lines=3, line_gap=5):
     x, y = xy
-    lines = wrap(draw, text, fnt, width)[:max_lines]
+    y0 = y
+    all_lines = wrap(draw, text, fnt, width)
+    lines = all_lines[:max_lines]
     for line in lines:
         draw.text((x, y), line, font=fnt, fill=fill)
         y += fnt.size + line_gap
+    record_text_bounds(draw, lines, (x, y0), fnt, width, fnt.size + line_gap, "paragraph", len(all_lines) > len(lines))
     return y
+
+
+def layout_regions_for(style):
+    if style == "geometric-navy":
+        return {
+            "masthead": [58, 42, 1152, 110],
+            "geometric-hero": [0, 0, 1200, 425],
+            "editorial-observation": [48, 450, 1152, 575],
+            "three-column-news-grid": [50, 608, 1150, 1122],
+            "two-news-summary-row": [50, 1136, 1150, 1280],
+            "skill-recommendation": [48, 1324, 868, 1538],
+            "right-qr-panel": [900, 1290, 1164, 1664],
+            "brand-footer": [0, 1700, 1200, 1800],
+        }
+    if style == "mountain-editorial":
+        return {
+            "masthead": [48, 24, 1152, 104],
+            "hero-title-date": [48, 145, 1152, 520],
+            "five-column-news-grid": [48, 750, 1152, 1278],
+            "today-insight-banner": [48, 1290, 868, 1425],
+            "skill-recommendation": [48, 1440, 868, 1688],
+            "right-qr-panel": [900, 1290, 1164, 1664],
+            "brand-footer": [48, 1720, 1152, 1800],
+        }
+    raise RuntimeError(f"Unsupported poster layout style: {style}")
+
+
+def news_image_evidence(stories):
+    evidence = []
+    for story in stories[:5]:
+        source = str(story.get("image_source") or "")
+        status = str(story.get("image_match_status") or "")
+        label_required = status == "thematic_fallback" or "topic illustration" in source.lower()
+        evidence.append({
+            "story_url": str(story.get("source_url") or story.get("url") or ""),
+            "image_source": source,
+            "image_match_status": status,
+            "label_required": label_required,
+            "label_applied": label_required,
+            "label": "主题插画 · 非新闻现场" if label_required else None,
+        })
+    return evidence
 
 def mark_topic_illustration(image, story):
     """Label generic thematic fallback images so they cannot be mistaken for event photography."""
@@ -208,8 +269,11 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
             lines[-1] = (last or "") + "…"
         return lines
     y = 557
-    for line_text in clamped_lines(headline, font(38, True), 1100, 2):
-        draw.text((48, y), line_text, font=font(38, True), fill=ink)
+    headline_font = font(38, True)
+    headline_lines = clamped_lines(headline, headline_font, 1100, 2)
+    record_text_bounds(draw, headline_lines, (48, y), headline_font, 1100, 46, "hero_headline", len(wrap(draw, headline, headline_font, 1100)) > 2)
+    for line_text in headline_lines:
+        draw.text((48, y), line_text, font=headline_font, fill=ink)
         y += 46
     paragraph(draw, subline, (50, 651), font(18), muted, 1090, 2, 4)
     draw.text((48, 704), "今日精选", font=font(25, True), fill=ink)
@@ -229,18 +293,27 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         draw.text((x, 794), source[:24], font=font(11, True), fill=orange)
         title = str(story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻")
         ty = 817
-        for line_text in clamped_lines(title, font(18, True), col_w - 4, 3):
-            draw.text((x, ty), line_text, font=font(18, True), fill=ink)
+        title_font = font(18, True)
+        title_lines = clamped_lines(title, title_font, col_w - 4, 3)
+        record_text_bounds(draw, title_lines, (x, ty), title_font, col_w - 4, 22, f"story_{idx + 1}_title", len(wrap(draw, title, title_font, col_w - 4)) > 3)
+        for line_text in title_lines:
+            draw.text((x, ty), line_text, font=title_font, fill=ink)
             ty += 22
         summary = str(story.get("what_zh") or story.get("summary_zh") or story.get("summary") or "")
         sy = 889
-        for line_text in clamped_lines(summary, font(14), col_w - 4, 4):
-            draw.text((x, sy), line_text, font=font(14), fill=muted)
+        summary_font = font(14)
+        summary_lines = clamped_lines(summary, summary_font, col_w - 4, 4)
+        record_text_bounds(draw, summary_lines, (x, sy), summary_font, col_w - 4, 18, f"story_{idx + 1}_summary", len(wrap(draw, summary, summary_font, col_w - 4)) > 4)
+        for line_text in summary_lines:
+            draw.text((x, sy), line_text, font=summary_font, fill=muted)
             sy += 18
         why = str(story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
         wy = 968
-        for line_text in clamped_lines(why, font(13, True), col_w - 4, 3):
-            draw.text((x, wy), line_text, font=font(13, True), fill=(52, 71, 96))
+        why_font = font(13, True)
+        why_lines = clamped_lines(why, why_font, col_w - 4, 3)
+        record_text_bounds(draw, why_lines, (x, wy), why_font, col_w - 4, 17, f"story_{idx + 1}_why", len(wrap(draw, why, why_font, col_w - 4)) > 3)
+        for line_text in why_lines:
+            draw.text((x, wy), line_text, font=why_font, fill=(52, 71, 96))
             wy += 17
         image_y, image_h = 1034, 154
         photo = crop_cover(image_for_story(story, idx), (col_w, image_h))
@@ -262,10 +335,12 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     draw.rounded_rectangle((48, 1440, 226, 1478), radius=5, fill=orange)
     draw.text((63, 1447), "本期推荐 Skill", font=font(18, True), fill=WHITE)
     skill_name = str(skill.get("name") or "Open-source AI Skill")
-    name_lines = clamped_lines(skill_name, font(25, True), 555, 2)
+    skill_name_font = font(25, True)
+    name_lines = clamped_lines(skill_name, skill_name_font, 555, 2)
     ny = 1490
+    record_text_bounds(draw, name_lines, (80, ny), skill_name_font, 555, 30, "skill_name", len(wrap(draw, skill_name, skill_name_font, 555)) > 2)
     for line_text in name_lines:
-        draw.text((80, ny), line_text, font=font(25, True), fill=ink)
+        draw.text((80, ny), line_text, font=skill_name_font, fill=ink)
         ny += 30
     desc = str(skill.get("description_zh") or skill.get("description") or "一个可用于日常研发的开源 AI 工作流技能。")
     paragraph(draw, desc, (80, 1554), font(15), muted, 565, 3, 4)
@@ -306,8 +381,15 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         "poster": str(out.relative_to(ROOT)),
         "qr_url": PUBLIC_URL,
         "news_count": 5,
+        "news_urls": [str(s.get("source_url") or s.get("url") or "") for s in top[:5]],
+        "news_titles": [str(s.get("title_zh") or s.get("original_title") or s.get("title") or "") for s in top[:5]],
+        "news_image_evidence": news_image_evidence(top),
         "skill": skill_name,
         "design": "mountain-editorial",
+        "format": "PNG",
+        "canvas": [W, H],
+        "layout_regions": layout_regions_for("mountain-editorial"),
+        "text_bounds": list(TEXT_BOUNDS),
         **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
@@ -327,6 +409,7 @@ def render_alternating_template(report: dict, date: str, top: list[dict], skill:
     raise RuntimeError(f"Unknown weekly poster style: {selected!r}")
 
 def main():
+    TEXT_BOUNDS.clear()
     report = json.loads((DATA / "latest.json").read_text(encoding="utf-8"))
     date = report.get("report_date", "")
     today = dt.datetime.now(TZ).date().isoformat()
@@ -493,8 +576,15 @@ def main():
         "poster": str(out.relative_to(ROOT)),
         "qr_url": PUBLIC_URL,
         "news_count": 5,
+        "news_urls": [str(s.get("source_url") or s.get("url") or "") for s in top[:5]],
+        "news_titles": [str(s.get("title_zh") or s.get("original_title") or s.get("title") or "") for s in top[:5]],
+        "news_image_evidence": news_image_evidence(top),
         "skill": skill_name,
         "design": "geometric-navy",
+        "format": "PNG",
+        "canvas": [W, H],
+        "layout_regions": layout_regions_for("geometric-navy"),
+        "text_bounds": list(TEXT_BOUNDS),
         **poster_style_metadata(date),
         "generated_at": dt.datetime.now(TZ).isoformat(),
     }
