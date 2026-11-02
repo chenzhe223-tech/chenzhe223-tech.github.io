@@ -12,7 +12,7 @@
 6. 生产 Supabase keypocket_devices authenticated UPDATE grants/RLS、keypocket_backup_snapshots grants/RLS/唯一索引已核验；本轮未新增 DDL 或放宽权限。
 
 ## 最新代码与自动化验收
-- 最新 main commit：`a05d4bb0a83edf8fe37c26f26cdae353799978c5`。
+- 本轮应用代码提交：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
 - Pages build/deploy：run `41432733771` SUCCESS。
 - DAVYLAB Browser QA：run `41432732355` SUCCESS；多 Key 保存/刷新解锁、加密备份导出导入、tombstone/批量恢复、本地快照恢复、390px、token refresh rotation、设备撤销 mock 全部通过。
 - KeyPocket Skill Handoff QA：run `41432732267` SUCCESS；包括真实线上 Radar→KeyPocket 一键收录浏览器流程。

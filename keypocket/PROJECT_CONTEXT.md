@@ -68,7 +68,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 
 ## 5. 最近验证证据
 
-- 最新已核验 main：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
+- 最近一次已验证应用代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`（后续 `6e843dc` 为本轮状态/交接文档同步，不修改应用代码）。
 - Radar 故障原因：`index.html` 的 CSP `connect-src` 未包含 `'self'`，阻止 `renderSkillRadar()` 请求同源 `/keypocket/api/skill-radar.json`，浏览器因此呈现 `Failed to fetch`。已在 a1a4127 添加 `'self'` 并通过整站 Browser QA 实际请求验证。
 - GitHub 账户状态复核：Cloudflare 中 `keypocket-vault-api` Worker 已存在，但 `workers.dev` subdomain `enabled=false`，Worker Secret 列表为空，当前不能执行 OAuth。页面连接按钮现已禁用并解释前置条件。
 - GitHub Pages build/deploy：run `41432733771`，同一 SHA，SUCCESS。

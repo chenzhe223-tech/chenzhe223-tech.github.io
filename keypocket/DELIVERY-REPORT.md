@@ -4,7 +4,7 @@
 正式入口：https://chenzhe223-tech.github.io/keypocket/
 代码事实源：GitHub main / `keypocket/`。
 
-## 最新代码与部署
+## 最近一次应用代码与部署
 - 已核验 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`。
 - Pages build/deploy：run `41435348472`，SUCCESS。
 - DAVYLAB Browser QA：run `41435352026`，SUCCESS。

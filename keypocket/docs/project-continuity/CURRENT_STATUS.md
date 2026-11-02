@@ -9,7 +9,7 @@
 ## 最新核验基准
 - 仓库：`chenzhe223-tech/chenzhe223-tech.github.io`
 - 分支：`main`
-- 最新代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`
+- 最近一次应用代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`
 - Pages build/deploy：`41435348472`，SUCCESS。
 - DAVYLAB Browser QA：`41435352026`，SUCCESS。
 - KeyPocket Skill Handoff QA：`41435352002`，SUCCESS。
