@@ -366,46 +366,84 @@ def apply_claim_provenance(report):
     policy_path = ROOT / "radar" / "config" / "qa-rules.json"
     policy = json.loads(policy_path.read_text(encoding="utf-8")).get("claim_provenance") or {}
     policy_version = str(policy.get("policy_version") or "")
-    if not policy_version or policy.get("low_confidence_requires_explicit_caveat") is not True or policy.get("self_reported_benchmarks_require_attribution") is not True or policy.get("prototype_status_must_be_preserved") is not True or policy.get("superlatives_require_metric_scope_and_date") is not True or policy.get("company_and_management_claims_require_attribution") is not True:
+    required_flags = (
+        "low_confidence_requires_explicit_caveat",
+        "self_reported_benchmarks_require_attribution",
+        "prototype_status_must_be_preserved",
+        "superlatives_require_metric_scope_and_date",
+        "company_and_management_claims_require_attribution",
+    )
+    if not policy_version or any(policy.get(flag) is not True for flag in required_flags):
         raise RuntimeError("P0 editorial claim provenance policy missing or invalid")
     report["editorial_policy_version"] = policy_version
+
+    stories_by_url = {}
     for story in report.get("top5", []) if isinstance(report.get("top5"), list) else []:
-        if not isinstance(story, dict) or str(story.get("confidence") or "").lower() != "low":
+        if not isinstance(story, dict):
             continue
         source = str(story.get("source") or "原始来源").strip() or "原始来源"
         what_zh = str(story.get("what_zh") or story.get("summary_zh") or "")
-        if "67.52" in what_zh or re.search(r"(评分|benchmark|score)", what_zh, re.I):
-            caveat = "（相关评分为项目方/媒体披露，尚无独立评测。）"
-        else:
-            caveat = "（该条目前仅有单一来源，相关数字或性能数据尚未独立验证。）"
-        if what_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", what_zh):
-            if not what_zh.startswith("据"):
-                what_zh = f"据{source}报道，{what_zh}"
-            story["what_zh"] = what_zh.rstrip("。 ") + caveat
-            summary_zh = str(story.get("summary_zh") or "")
-            if summary_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary_zh):
-                story["summary_zh"] = summary_zh.rstrip("。 ") + caveat
+        summary_zh = str(story.get("summary_zh") or "")
         what_en = str(story.get("what_en") or "")
-        if what_en and "not independently verified" not in what_en.lower():
-            story["what_en"] = f"According to {source}, {what_en.rstrip('. ')} (reported figures or performance are not independently verified)."
-        judgement = str(story.get("editor_judgment_zh") or "")
-        if "低置信度" not in judgement:
-            story["editor_judgment_zh"] = f"{judgement.rstrip('。； ')}；低置信度，相关指标尚需独立复核。"
-        source_url = str(story.get("source_url") or "")
-        for item in report.get("news", []) if isinstance(report.get("news"), list) else []:
-            if isinstance(item, dict) and source_url and str(item.get("url") or item.get("link") or "") == source_url:
-                summary = str(item.get("summary_zh") or item.get("summary") or "")
-                if summary and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary):
-                    item["summary_zh"] = summary.rstrip("。 ") + caveat
+        claim_text = " ".join(str(story.get(key) or "") for key in ("title_zh", "title_en", "original_title", "what_zh", "what_en"))
+        benchmark_pattern = r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\\d|提升\\d|\\d+多倍)"
+        attribution_pattern = r"(自测|其自身|项目方|媒体披露|来源披露|公司称|官方称|报告称|据.{0,30}报道|称|披露|reported|according to|in its own|self[- ]reported|company says|project says|measured by)"
+        has_benchmark = bool(re.search(benchmark_pattern, claim_text, re.I))
+        has_attribution = bool(re.search(attribution_pattern, what_zh + " " + what_en, re.I))
+        if has_benchmark and not has_attribution:
+            attribution_zh = "据项目方/媒体披露，相关性能数据尚无独立评测。"
+            if what_zh and attribution_zh not in what_zh:
+                what_zh = what_zh.rstrip("。； ") + "；" + attribution_zh
+            elif not what_zh:
+                what_zh = attribution_zh
+            story["what_zh"] = what_zh
+            if summary_zh and not re.search(attribution_pattern, summary_zh, re.I):
+                summary_zh = summary_zh.rstrip("。； ") + "；" + attribution_zh
+                story["summary_zh"] = summary_zh
+            if what_en and not re.search(attribution_pattern, what_en, re.I):
+                story["what_en"] = what_en.rstrip(". ") + " (reported by the project or media; not independently evaluated.)"
+
+        confidence = str(story.get("confidence") or "").lower()
+        if confidence == "low":
+            if has_benchmark or re.search(r"(评分|benchmark|score)", what_zh, re.I):
+                caveat = "（相关评分为项目方/媒体披露，尚无独立评测。）"
+            else:
+                caveat = "（该条目前仅有单一来源，相关数字或性能数据尚未独立验证。）"
+            if what_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", what_zh):
+                if not what_zh.startswith("据"):
+                    what_zh = f"据{source}报道，{what_zh}"
+                what_zh = what_zh.rstrip("。 ") + caveat
+                story["what_zh"] = what_zh
+            if summary_zh and not re.search(r"(尚未独立验证|待独立验证|无独立评测|未独立验证)", summary_zh):
+                summary_zh = summary_zh.rstrip("。 ") + caveat
+                story["summary_zh"] = summary_zh
+            if what_en and "not independently verified" not in what_en.lower():
+                story["what_en"] = f"According to {source}, {what_en.rstrip('. ')} (reported figures or performance are not independently verified)."
+            judgement = str(story.get("editor_judgment_zh") or "")
+            if "低置信度" not in judgement:
+                story["editor_judgment_zh"] = f"{judgement.rstrip('。； ')}；低置信度，相关指标尚需独立复核。"
+
+        source_url = str(story.get("source_url") or story.get("url") or "")
+        if source_url:
+            stories_by_url[source_url] = story
+
+    for item in report.get("news", []) if isinstance(report.get("news"), list) else []:
+        if not isinstance(item, dict):
+            continue
+        item_url = str(item.get("url") or item.get("link") or "")
+        source_story = stories_by_url.get(item_url)
+        if source_story:
+            item["summary_zh"] = str(source_story.get("summary_zh") or source_story.get("what_zh") or item.get("summary_zh") or "")
+
     editorial = report.setdefault("editorial", {})
     editorial["analysis_label_zh"] = "DAVYLAB 分析"
     editorial["analysis_label_en"] = "DAVYLAB analysis"
     editorial["analysis_scope_zh"] = "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。"
     editorial["analysis_scope_en"] = "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company."
     editorial["source_basis"] = [
-        {"title_zh": story.get("title_zh") or story.get("title"), "title_en": story.get("title_en") or story.get("title"), "source": story.get("source"), "url": story.get("source_url")}
+        {"title_zh": story.get("title_zh") or story.get("title"), "title_en": story.get("title_en") or story.get("title"), "source": story.get("source"), "url": story.get("source_url") or story.get("url")}
         for story in (report.get("top5") or [])
-        if isinstance(story, dict) and str(story.get("source_url") or "").startswith("https://")
+        if isinstance(story, dict) and str(story.get("source_url") or story.get("url") or "").startswith("https://")
     ]
 
 
