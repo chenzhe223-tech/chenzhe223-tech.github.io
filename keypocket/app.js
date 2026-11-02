@@ -106,6 +106,36 @@ function renderProjects(){
  };
  host.innerHTML=groups.length?groups.map(g=>'<section class="project-group project-group-'+g.key+'"><div class="project-group-head"><div><h3>'+g.title+'</h3><p>'+g.desc+'</p></div><span>'+g.items.length+'</span></div><div class="cards">'+g.items.map(cards).join('')+'</div></section>').join(''):'<div class="empty"><div class="big">⌘</div><h3>'+(projects.length?'没有匹配的项目':'还没有收录项目')+'</h3><p>可尝试更换来源或分类筛选，也可以收录新的应用和 Skill。</p><button class="btn primary" data-project-action="add">＋ 收录项目</button></div>';
 }
+$('#projectCards')?.addEventListener('click',async e=>{
+ const b=e.target.closest('[data-project-action]');if(!b)return;
+ const action=b.dataset.projectAction,card=b.closest('[data-project-id]'),id=card?.dataset.projectId;
+ if(action==='add'){openProjectEditor();return;}
+ const p=projects.find(x=>x.id===id);if(!p)return;
+ if(action==='favorite'){
+  p.favorite=!p.favorite;
+  try{await persistProject(p);renderProjects();showToast(p.favorite?'已收藏项目':'已取消收藏');}
+  catch(err){showToast('保存失败：'+err.message);}
+  return;
+ }
+ if(action==='delete'){
+  if(!confirm('确定将「'+p.name+'」移入回收站？可在 30 天内恢复。'))return;
+  try{await softDeleteProject(p);projects=projects.filter(x=>x.id!==id);renderProjects();showToast('已移入回收站');}
+  catch(err){showToast('删除失败：'+err.message);}
+  return;
+ }
+ if(action==='menu'||action==='edit')openProjectEditor(p);
+});
+function openProjectEditor(project=null){
+ const p=project||null;
+ openModal('<h2>'+(p?'编辑项目':'收录项目')+'</h2><p class="sub">项目信息将在本地使用当前 KeyPocket 加密密钥保存。</p><form id="projectEditForm"><div class="field"><label for="projectNameInput">项目名称</label><input id="projectNameInput" maxlength="100" required value="'+esc(p?.name||'')+'"></div><div class="field"><label for="projectRepoInput">GitHub 仓库 URL</label><input id="projectRepoInput" maxlength="500" type="url" placeholder="https://github.com/owner/repo" value="'+esc(p?.repoUrl||'')+'"></div><div class="field"><label for="projectAppInput">应用地址</label><input id="projectAppInput" maxlength="500" type="url" placeholder="https://..." value="'+esc(p?.appUrl||'')+'"></div><div class="grid2"><div class="field"><label for="projectCategoryInput">分类</label><input id="projectCategoryInput" maxlength="50" value="'+esc(p?.category||'Web 应用')+'"></div><div class="field"><label for="projectStackInput">技术栈</label><input id="projectStackInput" maxlength="160" value="'+esc(p?.stack||'')+'"></div></div><div class="field"><label for="projectTagsInput">标签（逗号分隔）</label><input id="projectTagsInput" maxlength="200" value="'+esc(p?.tags||'')+'"></div><div class="field"><label for="projectNotesInput">备注</label><textarea id="projectNotesInput" maxlength="500">'+esc(p?.notes||'')+'</textarea></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">加密保存</button></div></form>');
+ $('#projectEditForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();
+  try{
+   const now=kpNow(),item=normalizeProject({id:p?.id||crypto.randomUUID(),name:$('#projectNameInput').value,repoUrl:$('#projectRepoInput').value.trim(),appUrl:$('#projectAppInput').value.trim(),category:$('#projectCategoryInput').value,stack:$('#projectStackInput').value,tags:$('#projectTagsInput').value,notes:$('#projectNotesInput').value,favorite:p?.favorite===true,createdAt:p?.createdAt||now,updatedAt:now});
+   await persistProject(item);projects=projects.filter(x=>x.id!==item.id);projects.push(item);closeModal();renderProjects();showToast(p?'项目已更新':'项目已加密收录');
+  }catch(err){const n=$('#modalRoot .modal');if(n){const msg=document.createElement('div');msg.className='notice error';msg.textContent='保存失败：'+(err.message||'请重试');n.prepend(msg);}}
+ });
+}
 function setModule(name){
  const views={keys:'#keysView',projects:'#projectView',radar:'#radarView',recycle:'#recycleView',backup:'#backupView',sync:'#syncView',github:'#githubView'};
  Object.entries(views).forEach(([key,selector])=>{const n=$(selector);if(n)n.classList.toggle('hidden',key!==name);});
@@ -256,7 +286,7 @@ function skillImportModal(){
     try{
      const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now();
      const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\n关键词：'+q+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
-     await putItem(await sealProject(p));projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已加密保存');status.className='notice ok';status.textContent='已收录 '+r.full_name+'。你可以继续搜索其他 Skill。';
+     await persistProject(p);projects.push(p);renderProjects();b.textContent='已收录';showToast('Skill 已加密保存');status.className='notice ok';status.textContent='已收录 '+r.full_name+'。你可以继续搜索其他 Skill。';
     }catch(err){b.disabled=false;b.textContent=original;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}
    }));
   }catch(err){
@@ -283,7 +313,7 @@ async function refreshSavedSkillHeat(){
     if(meta.homepage&&validWebUrl(meta.homepage))p.appUrl=meta.homepage;
     p.category=githubCategory(meta);p.stack=[meta.language,...(meta.topics||[]).slice(0,4)].filter(Boolean).join(', ').slice(0,160);
     if(!p.tags.trim())p.tags=suggestedProjectTags(meta).join(', ');
-    p.updatedAt=Date.now();await putItem(await sealProject(p));updated++;
+    p.updatedAt=Date.now();await persistProject(p);updated++;
    }catch(err){failed++;}
    await new Promise(resolve=>setTimeout(resolve,100));
   }
