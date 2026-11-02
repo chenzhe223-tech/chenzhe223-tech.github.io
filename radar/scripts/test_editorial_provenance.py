@@ -20,6 +20,26 @@ class EditorialProvenanceTests(unittest.TestCase):
         self.assertIn("Claude Code 专用", skills[0]["compatibility_status"])
         self.assertIn("Codex/WorkBuddy", skills[0]["compatibility_status"])
 
+    def test_source_grounded_editorial_fallback_is_created_when_missing(self):
+        report = {
+            "top5": [
+                {"title_zh": "企业 Agent 合作", "what_zh": "企业服务合作推进智能体工作流。", "source": "A", "source_url": "https://a.example/1"},
+                {"title_zh": "推理调用增长", "what_zh": "推理 token 调用量增长。", "source": "B", "source_url": "https://b.example/2"},
+                {"title_zh": "开源智能体工具", "what_zh": "发布 Agent 研究原型。", "source": "C", "source_url": "https://c.example/3"},
+                {"title_zh": "第四条", "what_zh": "工具更新。", "source": "D", "source_url": "https://d.example/4"},
+                {"title_zh": "第五条", "what_zh": "产品应用。", "source": "E", "source_url": "https://e.example/5"},
+            ],
+            "editorial": {},
+        }
+        apply_claim_provenance(report)
+        editorial = report["editorial"]
+        self.assertTrue(editorial["core_zh"])
+        self.assertTrue(editorial["trend_zh"])
+        self.assertTrue(editorial["core_en"])
+        self.assertTrue(editorial["trend_en"])
+        self.assertEqual(len(editorial["source_basis"]), 5)
+        self.assertEqual(editorial["analysis_label_zh"], "DAVYLAB 分析")
+
     def test_medium_confidence_benchmark_still_gets_source_attribution(self):
         report = {
             "top5": [{
