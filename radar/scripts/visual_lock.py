@@ -80,4 +80,15 @@ def validate_visual_lock(report_date: str) -> dict:
         raise RuntimeError(f"P0: complete color tokens missing for {meta['design_variant']}")
     if qa.get("max_repair_rounds") != 3 or qa.get("fail_closed") is not True:
         raise RuntimeError("P0: repair/production gate policy invalid")
+    image_policy = qa.get("image_relevance")
+    if not isinstance(image_policy, dict):
+        raise RuntimeError("P0: image relevance policy missing from qa-rules.json")
+    try:
+        image_threshold = float(image_policy.get("minimum_score", 0))
+    except (TypeError, ValueError):
+        image_threshold = 0
+    if image_threshold < 0.35 or image_threshold > 1.0 or image_policy.get("fallback_on_low_score") is not True:
+        raise RuntimeError("P0: image relevance threshold/fallback policy invalid")
+    if image_policy.get("thematic_fallback_label") != "主题配图 · 非新闻现场":
+        raise RuntimeError("P0: thematic fallback must have the approved non-news label")
     return {**meta, "baseline_id": baseline["baseline_id"], "canvas": [website["width"], website["height"]], "template_version": meta["template_version"]}
