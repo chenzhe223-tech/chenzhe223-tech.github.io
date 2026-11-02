@@ -685,7 +685,9 @@ function kp2InstallUi() {
     const period=e.target.closest('[data-kp2-period]');
     if(period){KP2.board=period.dataset.kp2Period;holder.querySelectorAll('[data-kp2-period]').forEach(x=>x.classList.toggle('active',x===period));kp2RenderRadar();}
   });
-  /* Capture destructive actions from the existing key and project cards before v1 handlers. */
+  document.getElementById('addProjectBtn')?.addEventListener('click',()=>kp2ProjectModal());
+  document.getElementById('projectCards')?.addEventListener('click',kp2HandleProjectAction);
+    /* Capture destructive actions from the existing key and project cards before v1 handlers. */
   document.addEventListener('click',async e=>{
     const button=e.target.closest('[data-action="delete"],[data-project-action="delete"]');if(!button)return;
     e.preventDefault();e.stopImmediatePropagation();
@@ -716,6 +718,79 @@ function kp2RenderSync() {
   const node=document.getElementById('kp2SyncStatus');
   if(node&&!kpSession()?.access_token)node.textContent='尚未登录同步账号。登录后启用跨设备增量同步；本地保存不受网络影响。';
 }
+function kp2ProjectModal(existing = null) {
+  const item = existing ? { ...existing } : {
+    id: crypto.randomUUID(), name:'', repoUrl:'', appUrl:'', category:'AI 工具',
+    stack:'', notes:'', tags:'', favorite:false, createdAt:Date.now(), updatedAt:Date.now()
+  };
+  const categories=['AI 工具','Web 应用','小程序','个人网站','Agent 与自动化','编程与开发','UI/UX 设计','数据与看板','写作与内容','测试与质量','安全与隐私','多媒体创作','效率与知识管理','其他 Skill','其他'];
+  const options=categories.map(x=>'<option value="'+esc(x)+'" '+(item.category===x?'selected':'')+'>'+esc(x)+'</option>').join('');
+  openModal(
+    '<h2>'+(existing?'编辑项目 / Skill':'收录项目 / Skill')+'</h2>'+
+    '<p class="sub">项目信息使用现有 AES-GCM 加密保存在本机。GitHub 仓库链接需指向公开或你有权访问的项目。</p>'+
+    '<form id="kp2ProjectForm">'+
+    '<div class="field"><label for="kp2ProjectName">项目名称</label><input id="kp2ProjectName" required maxlength="100" value="'+esc(item.name)+'" placeholder="例如：KeyPocket"></div>'+
+    '<div class="field"><label for="kp2ProjectRepo">GitHub 仓库 URL</label><input id="kp2ProjectRepo" type="url" maxlength="500" value="'+esc(item.repoUrl)+'" placeholder="https://github.com/owner/repository"></div>'+
+    '<div class="field"><label for="kp2ProjectApp">应用地址</label><input id="kp2ProjectApp" type="url" maxlength="500" value="'+esc(item.appUrl)+'" placeholder="https://example.com"></div>'+
+    '<div class="grid2"><div class="field"><label for="kp2ProjectCategory">分类</label><select id="kp2ProjectCategory">'+options+'</select></div><div class="field"><label for="kp2ProjectStack">技术栈 / Topics</label><input id="kp2ProjectStack" maxlength="160" value="'+esc(item.stack)+'" placeholder="TypeScript, React, MCP"></div></div>'+
+    '<div class="field"><label for="kp2ProjectTags">标签（逗号分隔）</label><input id="kp2ProjectTags" maxlength="200" value="'+esc(item.tags)+'" placeholder="Skill, Agent, GitHub"></div>'+
+    '<div class="field"><label for="kp2ProjectNotes">备注</label><textarea id="kp2ProjectNotes" maxlength="500" rows="4" placeholder="项目用途、来源、评估记录">'+esc(item.notes)+'</textarea></div>'+
+    '<label class="kp2-toggle"><input id="kp2ProjectFavorite" type="checkbox" '+(item.favorite?'checked':'')+'> 收藏此项目</label>'+
+    '<div id="kp2ProjectNotice" class="notice info">保存后会自动生成本地加密检查点；登录同步后进入增量同步队列。</div>'+
+    '<div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary" id="kp2ProjectSave">加密保存</button></div></form>'
+  );
+  document.getElementById('kp2ProjectForm')?.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=document.getElementById('kp2ProjectSave'),notice=document.getElementById('kp2ProjectNotice');
+    btn.disabled=true;btn.textContent='正在加密保存…';
+    try{
+      const now=Date.now();
+      const normalized=normalizeProject({
+        ...item,
+        name:document.getElementById('kp2ProjectName').value.trim(),
+        repoUrl:document.getElementById('kp2ProjectRepo').value.trim(),
+        appUrl:document.getElementById('kp2ProjectApp').value.trim(),
+        category:document.getElementById('kp2ProjectCategory').value,
+        stack:document.getElementById('kp2ProjectStack').value.trim(),
+        tags:document.getElementById('kp2ProjectTags').value.trim(),
+        notes:document.getElementById('kp2ProjectNotes').value.trim(),
+        favorite:document.getElementById('kp2ProjectFavorite').checked,
+        createdAt:existing?.createdAt||now,updatedAt:now
+      });
+      const duplicate=projects.find(x=>x.id!==normalized.id&&normalized.repoUrl&&canonicalSkillRepoUrl(x.repoUrl)===canonicalSkillRepoUrl(normalized.repoUrl));
+      if(duplicate)throw Error('此 GitHub 仓库已存在于「'+duplicate.name+'」，请编辑现有记录以避免重复。');
+      await kp2PutItem(await sealProject(normalized));
+      projects=projects.filter(x=>x.id!==normalized.id);projects.push(normalized);
+      closeModal();renderProjects();kp2LocalSnapshotSchedule();
+      showToast(existing?'项目修改已加密保存':'项目已加密收录');
+    }catch(err){
+      notice.textContent='保存失败：'+(err.message||'请重试。');notice.className='notice error';
+      btn.disabled=false;btn.textContent='加密保存';
+    }
+  });
+}
+async function kp2ToggleProjectFavorite(id) {
+  const current=projects.find(x=>x.id===id);
+  if(!current)throw Error('项目记录不存在。');
+  const updated={...current,favorite:!current.favorite,updatedAt:Date.now()};
+  await kp2PutItem(await sealProject(updated));
+  projects=projects.filter(x=>x.id!==id);projects.push(updated);
+  renderProjects();kp2LocalSnapshotSchedule();
+  showToast(updated.favorite?'已收藏此项目':'已取消收藏');
+}
+function kp2HandleProjectAction(event) {
+  const button=event.target.closest('[data-project-action]');
+  if(!button)return;
+  const action=button.dataset.projectAction;
+  if(action==='add'){event.preventDefault();kp2ProjectModal();return;}
+  const card=button.closest('[data-project-id]');
+  const id=card?.dataset.projectId;
+  const item=projects.find(x=>x.id===id);
+  if(!item)return;
+  if(action==='edit'||action==='menu'){event.preventDefault();kp2ProjectModal(item);return;}
+  if(action==='favorite'){event.preventDefault();kp2ToggleProjectFavorite(id).catch(e=>showToast('收藏状态保存失败：'+e.message));}
+}
+
 function kp2Module(name) {
   const panels={radar:'kp2RadarPanel',trash:'kp2TrashPanel',backups:'kp2BackupPanel',sync:'kp2SyncPanel',github:'kp2GitHubPanel'};
   const panel=panels[name],active=!!panel;
