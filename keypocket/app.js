@@ -562,14 +562,46 @@ function kpV2DeviceId(){
 }
 function kpV2Iso(ts){return new Date(Number(ts)||kpNow()).toISOString();}
 function kpV2Version(item){return Math.max(1,Number.isSafeInteger(item?.syncVersion)?item.syncVersion:0);}
+let kpV2RefreshPromise=null;
+async function kpV2RefreshSession(previousSession){
+ if(kpV2RefreshPromise)return kpV2RefreshPromise;
+ kpV2RefreshPromise=(async()=>{
+  const current=kpSession();
+  if(!current?.refresh_token)throw Error('同步账号会话已过期，请重新登录。');
+  if(previousSession?.access_token&&current.access_token&&current.access_token!==previousSession.access_token)return current;
+  const response=await fetch(KP_SUPABASE_URL+'/auth/v1/token?grant_type=refresh_token',{
+   method:'POST',
+   headers:{'Content-Type':'application/json','apikey':KP_SUPABASE_KEY},
+   body:JSON.stringify({refresh_token:current.refresh_token})
+  });
+  const body=await response.json().catch(()=>({}));
+  if(!response.ok||!body.access_token){
+   const latest=kpSession();
+   if(latest?.access_token&&latest.access_token!==current.access_token)return latest;
+   kpSetSession(null);
+   throw Error('同步账号会话已过期，请重新登录。');
+  }
+  const next={...current,...body,user:body.user||current.user};
+  kpSetSession(next);
+  return next;
+ })().finally(()=>{kpV2RefreshPromise=null;});
+ return kpV2RefreshPromise;
+}
 async function kpV2Api(path,method='GET',payload=null,prefer=null){
- const session=kpSession();if(!session?.access_token)throw Error('请先登录同步账号。');
- const headers={'apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+session.access_token,'Accept':'application/json'};
- if(payload!==null){headers['Content-Type']='application/json';}
- if(prefer)headers.Prefer=prefer;
- const response=await fetch(KP_SUPABASE_URL+'/rest/v1/'+path,{method,headers,body:payload===null?undefined:JSON.stringify(payload)});
+ let session=kpSession();if(!session?.access_token)throw Error('请先登录同步账号。');
+ const send=activeSession=>{
+  const headers={'apikey':KP_SUPABASE_KEY,'Authorization':'Bearer '+activeSession.access_token,'Accept':'application/json'};
+  if(payload!==null)headers['Content-Type']='application/json';
+  if(prefer)headers.Prefer=prefer;
+  return fetch(KP_SUPABASE_URL+'/rest/v1/'+path,{method,headers,body:payload===null?undefined:JSON.stringify(payload)});
+ };
+ let response=await send(session);
+ if(response.status===401&&session.refresh_token){
+  session=await kpV2RefreshSession(session);
+  response=await send(session);
+ }
  const raw=await response.text();let data=null;try{data=raw?JSON.parse(raw):null;}catch{data=raw;}
- if(!response.ok)throw Error((data&& (data.message||data.details||data.hint))||'云端请求失败（HTTP '+response.status+'）');
+ if(!response.ok)throw Error((data&&(data.message||data.details||data.hint))||'云端请求失败（HTTP '+response.status+'）');
  return data;
 }
 async function kpV2EnsureMeta(passphrase){

@@ -681,6 +681,8 @@ const mark = (status, name, detail = '') => {
       });
       let qaOtherDeviceRevokedAt = null;
       let qaRevokeRequest = null;
+      let qaRefreshRequest = null;
+      let qaSawExpiredAccessToken = false;
       const qaRouteEvents = [];
       const qaCorsHeaders = {
         'access-control-allow-origin': '*',
@@ -688,15 +690,37 @@ const mark = (status, name, detail = '') => {
         'access-control-allow-headers': 'apikey, authorization, content-type, prefer',
         'access-control-max-age': '60'
       };
-      await kp.route('https://urzgghdwawpwqliafrzv.supabase.co/rest/v1/keypocket_devices**', async route => {
+      await kp.route('https://urzgghdwawpwqliafrzv.supabase.co/**', async route => {
         const request = route.request();
         const url = new URL(request.url());
         qaRouteEvents.push({ method: request.method(), path: url.pathname });
-        if (request.method() === 'OPTIONS') {
-          await route.fulfill({ status: 204, headers: qaCorsHeaders });
+        if (url.pathname === '/auth/v1/token' && url.searchParams.get('grant_type') === 'refresh_token') {
+          const body = request.postDataJSON();
+          qaRefreshRequest = { refreshToken: body.refresh_token, method: request.method() };
+          if (request.method() !== 'POST' || body.refresh_token !== 'qa.synthetic.refresh.token') {
+            await route.fulfill({ status: 400, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected refresh request' }) });
+            return;
+          }
+          await route.fulfill({ status: 200, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({
+            access_token: 'qa.refreshed.access.token', refresh_token: 'qa.rotated.refresh.token',
+            token_type: 'bearer', expires_in: 3600,
+            user: { id: qaUserId, email: 'keypocket-qa@example.invalid' }
+          }) });
           return;
         }
+        if (url.pathname !== '/rest/v1/keypocket_devices') { await route.continue(); return; }
+        if (request.method() === 'OPTIONS') { await route.fulfill({ status: 204, headers: qaCorsHeaders }); return; }
         if (request.method() === 'GET') {
+          const auth = request.headers()['authorization'] || '';
+          if (auth === 'Bearer qa.expired.access.token') {
+            qaSawExpiredAccessToken = true;
+            await route.fulfill({ status: 401, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'JWT expired' }) });
+            return;
+          }
+          if (auth !== 'Bearer qa.refreshed.access.token') {
+            await route.fulfill({ status: 401, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected access token' }) });
+            return;
+          }
           const rows = [
             { user_id: qaUserId, device_id: qaCurrentDeviceId, device_label: 'QA 当前设备', created_at: '2026-11-02T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: null },
             { user_id: qaUserId, device_id: qaOtherDeviceId, device_label: 'QA 另一台设备', created_at: '2026-11-01T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: qaOtherDeviceRevokedAt }
@@ -706,8 +730,9 @@ const mark = (status, name, detail = '') => {
         }
         if (request.method() === 'PATCH') {
           const payload = request.postDataJSON();
-          qaRevokeRequest = { method: request.method(), userId: url.searchParams.get('user_id'), deviceId: url.searchParams.get('device_id'), onlyActive: url.searchParams.get('revoked_at'), payload };
+          qaRevokeRequest = { method: request.method(), userId: url.searchParams.get('user_id'), deviceId: url.searchParams.get('device_id'), onlyActive: url.searchParams.get('revoked_at'), payload, authorization: request.headers()['authorization'] };
           if (qaRevokeRequest.userId !== 'eq.' + qaUserId || qaRevokeRequest.deviceId !== 'eq.' + qaOtherDeviceId || qaRevokeRequest.onlyActive !== 'is.null'
+            || qaRevokeRequest.authorization !== 'Bearer qa.refreshed.access.token'
             || Object.keys(payload || {}).join(',') !== 'revoked_at' || !payload.revoked_at) {
             await route.fulfill({ status: 400, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected test request shape' }) });
             return;
@@ -719,13 +744,22 @@ const mark = (status, name, detail = '') => {
         await route.fulfill({ status: 405, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected method: ' + request.method() }) });
       });
       await kp.evaluate(userId => localStorage.setItem('kp.sync.session.v1', JSON.stringify({
-        access_token: 'qa.synthetic.access.token',
+        access_token: 'qa.expired.access.token',
+        refresh_token: 'qa.synthetic.refresh.token',
         token_type: 'bearer',
         user: { id: userId, email: 'keypocket-qa@example.invalid' }
       })), qaUserId);
       await kp.locator('[data-module="sync"]').click();
       await kp.waitForSelector('#syncView:not(.hidden)', { timeout: 5000 });
       await kp.waitForSelector('#syncDeviceList [data-revoke-device]', { timeout: 8000 });
+      const refreshedSession = await kp.evaluate(() => JSON.parse(localStorage.getItem('kp.sync.session.v1') || 'null'));
+      const tokenRefreshPassed = qaSawExpiredAccessToken && qaRefreshRequest?.method === 'POST'
+        && qaRefreshRequest.refreshToken === 'qa.synthetic.refresh.token'
+        && refreshedSession?.access_token === 'qa.refreshed.access.token'
+        && refreshedSession?.refresh_token === 'qa.rotated.refresh.token';
+      mark(tokenRefreshPassed ? 'PASS' : 'FAIL', 'KeyPocket Supabase 会话自动刷新与令牌轮换',
+        '401 触发 refresh_token grant；新 access_token 与 refresh_token 已持久化');
+
       const currentDeviceActions = await kp.locator('#syncDeviceList [data-device-id="' + qaCurrentDeviceId + '"] [data-revoke-device]').count();
       const otherDeviceActions = await kp.locator('#syncDeviceList [data-device-id="' + qaOtherDeviceId + '"] [data-revoke-device]').count();
       mark(currentDeviceActions === 0 && otherDeviceActions === 1 ? 'PASS' : 'FAIL',
@@ -748,7 +782,8 @@ const mark = (status, name, detail = '') => {
       }
       const revokeRequestValid = !!qaRevokeRequest && qaRevokeRequest.method === 'PATCH'
         && qaRevokeRequest.userId === 'eq.' + qaUserId && qaRevokeRequest.deviceId === 'eq.' + qaOtherDeviceId
-        && qaRevokeRequest.onlyActive === 'is.null' && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
+        && qaRevokeRequest.onlyActive === 'is.null' && qaRevokeRequest.authorization === 'Bearer qa.refreshed.access.token'
+        && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
       mark(revokeRequestValid && !!qaOtherDeviceRevokedAt ? 'PASS' : 'FAIL',
         'KeyPocket 撤销设备接口与状态刷新', 'PATCH 限定当前账号、指定设备和未撤销状态；服务端返回更新行后才显示成功');
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
