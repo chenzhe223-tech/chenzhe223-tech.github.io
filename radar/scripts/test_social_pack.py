@@ -74,6 +74,7 @@ class SocialPackTests(unittest.TestCase):
     def test_social_image_layout_rejects_truncated_text(self):
         entry = {
             "filename": "01-main-poster.png",
+            "image_type": "main_poster",
             "layout_regions": social_layout_regions("main_poster"),
             "text_bounds": [{
                 "x": 40, "y": 40, "width": 300, "height": 30,
