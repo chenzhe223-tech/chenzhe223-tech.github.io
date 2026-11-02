@@ -737,7 +737,8 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
       await kp.locator('#modalRoot [data-action="close"]').last().click();
-      mark(await kp.locator('#modalRoot .modal').count() === 0 ? 'PASS' : 'FAIL', 'KeyPocket 手机端弹窗关闭与再次打开', '重复打开/关闭后主页面仍可操作');
+      const modalCleanupValid = await kp.locator('#modalRoot .modal').count() === 0 && await kp.locator('body').evaluate(el => !el.classList.contains('kp-modal-open'));
+      mark(modalCleanupValid ? 'PASS' : 'FAIL', 'KeyPocket 手机端弹窗关闭与再次打开', '重复打开/关闭后主页面可操作，body 滚动锁已清理');
       await kp.unroute('https://api.github.com/search/repositories**');
       await kp.setViewportSize(originalViewport);
       // Device revocation uses a fake authenticated session and mocked REST responses.
