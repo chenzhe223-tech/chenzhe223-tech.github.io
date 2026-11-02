@@ -204,3 +204,4 @@ Any future change to the approved baseline requires explicit user approval. A ne
 - “智能体 / agent”默认指软件代理，不得自动映射为实体机器人；只有机器人、具身智能、人形机器人等明确语义才使用机器人素材。
 - 低置信度新闻必须在摘要中注明来源归属及“尚未独立验证”，企业自报分数、性能或预测不得写成独立验证事实。
 - Skill 必须展示许可证、官方项目主页、实际文件证据、适用 Agent/平台兼容性，以及未实测安装或未完成安全审计的限制。
+- 微信六图包必须记录 `source_report_generated_at` 与 `source_report_sha256`；六图清单、五条新闻标题/来源 URL、Skill 名称及兼容性必须与 `radar/data/latest.json` 完全一致。任何旧包或时间戳不匹配均阻断发布。
