@@ -627,6 +627,17 @@ jobs:
                   data = json.loads(report_bytes.decode('utf-8'))
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
+                  assert data.get('top5_status') == 'ai_curated' and len(data.get('top5') or []) == 5, 'live report is missing five AI-curated stories'
+                  assert data.get('editorial_policy_version') == '2026-11-02.2', 'live editorial claim-provenance policy mismatch'
+                  quality = data.get('quality_gate') or {}
+                  editorial = data.get('editorial') or {}
+                  assert quality.get('status') == 'PASS', 'live quality gate is not PASS'
+                  assert quality.get('claim_provenance_policy_version') == '2026-11-02.2', 'live claim-provenance policy mismatch'
+                  assert editorial.get('analysis_label_zh') == 'DAVYLAB 分析' and len(editorial.get('source_basis') or []) >= 3, 'live DAVYLAB analysis source basis missing'
+                  assert quality.get('claims', {}).get('editorial_source_basis_count', 0) >= 3, 'live editorial source-basis count was not validated'
+                  assert data.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1', 'live image relevance policy mismatch'
+                  assert quality.get('image_relevance_policy_version') == '2026-11-02.1', 'live quality gate image policy mismatch'
+                  assert data.get('skill_radar', {}).get('engine_version') == '2026.11.02.1', 'live Skill Radar engine version mismatch'
                   assert len(data.get('news', [])) >= 5, 'fewer than five general news items'
                   assert sum(1 for x in data['news'] if x.get('url', '').startswith('https://')) >= 5, 'general news source links missing'
                   china_news = data.get('china_ai_news', [])
