@@ -129,8 +129,11 @@ def verify_image_layout(entry: dict) -> dict:
             fail(f"Social image text overflow: {entry.get('filename')} / {block}")
         if float(block.get("actual_width", 0)) > width + 1:
             fail(f"Social image text exceeds width: {entry.get('filename')} / {block}")
+    truncated = [block for block in blocks if block.get("truncated")]
+    if truncated:
+        fail(f"Social image contains truncated text: {entry.get('filename')} / {truncated}")
     return {"region_count": len(regions), "text_block_count": len(blocks),
-            "truncated_text_blocks": sum(1 for b in blocks if b.get("truncated")), "status": "PASS"}
+            "truncated_text_blocks": 0, "status": "PASS"}
 
 
 def main() -> int:
@@ -295,6 +298,7 @@ def main() -> int:
         "checks": [
             {"name": "font_coverage", "status": "PASS"},
             {"name": "text_bounds_and_region_presence", "status": "PASS"},
+            {"name": "social_images_have_no_truncated_text", "status": "PASS"},
             {"name": "six_independent_png_files", "status": "PASS"},
             {"name": "900x1200_3x4_dimensions", "status": "PASS"},
             {"name": "unique_image_hashes", "status": "PASS"},
