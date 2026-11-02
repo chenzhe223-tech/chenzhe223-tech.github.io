@@ -62,14 +62,35 @@ def remove_top5_duplicates_from_china(report: dict) -> dict:
         else:
             kept.append(story)
     report["china_ai_news"] = kept[:CHINA_NEWS_PUBLIC_TARGET]
-    if removed:
+    source_urls = {
+        str(item.get("url") or "")
+        for item in (report.get("news") or []) + (report.get("china_ai_news") or [])
+        if isinstance(item, dict) and item.get("url")
+    }
+    top5_source_references = []
+    for card in top5:
+        if not isinstance(card, dict):
+            continue
+        source_url = str(card.get("source_url") or card.get("url") or "")
+        if source_url.startswith("https://") and source_url not in source_urls:
+            top5_source_references.append({
+                "title_zh": card.get("title_zh") or "",
+                "title_en": card.get("title_en") or card.get("title") or "",
+                "url": source_url,
+                "source": card.get("source") or "",
+                "published": card.get("published") or "",
+                "source_section": card.get("source_section") or "",
+                "additional_sources": card.get("additional_sources") or [],
+            })
+    if removed or top5_source_references:
         report["cross_section_dedupe"] = {
             "status": "ok" if len(report["china_ai_news"]) >= 6 else "insufficient_unique_china_stories",
             "removed_from_china_ai_news": len(removed),
             "remaining_china_ai_news": len(report["china_ai_news"]),
             "removed": removed,
+            "top5_source_references": top5_source_references,
         }
-        print(f"[cross-section-dedupe] removed={len(removed)} overlapping China AI story/stories; remaining={len(report['china_ai_news'])}")
+        print(f"[cross-section-dedupe] removed={len(removed)} overlapping China AI story/stories; top5_source_refs={len(top5_source_references)}; remaining={len(report['china_ai_news'])}")
     return report
 
 def _safe_error_detail(exc: Exception) -> str:
