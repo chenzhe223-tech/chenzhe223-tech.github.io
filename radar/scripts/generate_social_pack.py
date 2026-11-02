@@ -416,7 +416,7 @@ def draw_main_poster(report: dict, top: list[dict], skill: dict, report_date: st
         draw.text((x + 31, y + 31), f"{i + 1:02d}", font=font(15, True), fill=NAVY, anchor="mm")
         title_x = x + 62
         title_y = write_text(draw, story_title(story), (title_x, y + 13), font(18, True), INK, width - 80, 2, 3)
-        summary = story_summary(story)
+        summary = str(story.get("poster_summary_zh") or story_summary(story))
         write_text(draw, summary, (x + 18, max(title_y + 2, y + 59)), font(13), MUTED, width - 36, 2, 2)
         draw.text((x + 18, y + height - 20), str(story.get("source") or "公开来源")[:35], font=font(10, True), fill=BLUE)
 
