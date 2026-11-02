@@ -90,6 +90,8 @@ jobs:
                   and report.get('generated_at', '').startswith(today)
                   and report.get('top5_status') == 'ai_curated'
                   and report.get('quality_gate', {}).get('status') == 'PASS'
+                  and report.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
+                  and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
                   and report.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
                   and len(report.get('skills', [])) >= 1
                   and len(report.get('top5', [])) == 5
