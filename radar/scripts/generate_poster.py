@@ -561,7 +561,7 @@ def main():
     draw.text((82, 1345), "今日推荐  /  OPEN-SOURCE SKILL", font=font(19, True), fill=blue)
     skill_name = str(skill.get("name") or "Open-source AI Skill")
     paragraph(draw, skill_name, (82, 1380), font(24, True), ink, 550, 2, 3)
-    desc = str(skill.get("description_zh") or skill.get("description") or "开源 AI 工作流与智能体工具。")
+    desc = str(skill.get("poster_description_zh") or skill.get("description_zh") or skill.get("description") or "开源 AI 工作流与智能体工具。")
     paragraph(draw, desc, (82, 1434), font(15), ink, 550, 3, 4)
     topics = "适用方向： " + " · ".join((skill.get("topics") or [])[:4]) or (skill.get("language") or "AI 工作流")
     paragraph(draw, topics, (82, 1500), font(12, True), muted, 550, 2, 2)
