@@ -394,7 +394,34 @@ const mark = (status, name, detail = '') => {
             backupStatus: document.querySelector('#backupStatus')?.textContent || '',
             mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden'),
             recordCount: rows.filter(x => x.id !== 'vault-meta' && !String(x.id || '').startsWith('kp.')).length,
-            vaultMetaPresent: rows.some(x => x.id === 'vault-meta')
+            vaultMetaPresent: rows.some(x => x.id === 'vault-meta'),
+            vaultMetaShape: (() => {
+              const meta = rows.find(x => x.id === 'vault-meta');
+              const describe = value => {
+                const isString = typeof value === 'string';
+                const base64 = isString && value.length > 0
+                  && /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/.test(value);
+                let decodedLength = null;
+                if (base64) { try { decodedLength = atob(value).length; } catch {} }
+                return { type: value === null ? 'null' : Array.isArray(value) ? 'array' : typeof value,
+                  length: isString ? value.length : null, base64, decodedLength };
+              };
+              return meta ? {
+                salt: describe(meta.salt),
+                verifier: {
+                  type: meta.verifier === null ? 'null' : typeof meta.verifier,
+                  iv: describe(meta.verifier?.iv),
+                  data: describe(meta.verifier?.data)
+                },
+                iterations: meta.iterations
+              } : null;
+            })(),
+            recordEnvelopeShape: rows.filter(x => x.id !== 'vault-meta' && !String(x.id || '').startsWith('kp.'))
+              .slice(0, 5).map(x => ({
+                idType: typeof x.id, kind: typeof x.kind,
+                ivType: typeof x.iv, ivLength: typeof x.iv === 'string' ? x.iv.length : null,
+                dataType: typeof x.data, dataLength: typeof x.data === 'string' ? x.data.length : null
+              }))
           };
         });
         throw new Error('KeyPocket reload unlock did not settle: ' + JSON.stringify(diagnostics) + '; ' + unlockWaitError.message);
