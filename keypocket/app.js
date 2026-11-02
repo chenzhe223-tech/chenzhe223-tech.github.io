@@ -253,16 +253,16 @@ function isClearlyRelevantSkill(r,q){
  const tokens=query.split(' ').filter(Boolean);
  return tokens.length>0&&tokens.some(t=>(full+' '+name+' '+desc+' '+topics).includes(t));
 }
-function skillResultHtml(r,i,items,q){
+function skillResultHtml(r,i,items,q,exactMatch=false){
  const h=skillHeat(r,i+1,items.length),repo=canonicalSkillRepoUrl(r.html_url);
  const existing=projects.some(p=>canonicalSkillRepoUrl(p.repoUrl)===repo);
- const description=String(r.description||'暂无描述').replace(/\s+/g,' ').slice(0,220);
+ const description=String(r.description||'暂无描述').replace(/\\s+/g,' ').slice(0,220);
  const owner=String(r.owner?.login||r.full_name.split('/')[0]||'');
- const nativeHint=(/microsoft|playwright|lemomo-ai|nextlevelbuilder/i.test(owner+' '+r.full_name))?'优先关注的上游/原作者候选':'第三方候选，请核对作者与 README';
- return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(description)+(String(r.description||'').length>220?'…':'')+'</small><small>'+esc(nativeHint)+' · ★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+'</small><small>本次关键词相关度排序 #'+(i+1)+'/'+items.length+'；不是全网安装量排名</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(repo||r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';
+ const nativeHint=exactMatch?'用户指定的 GitHub 仓库 · 精确匹配':(/microsoft|playwright|lemomo-ai|nextlevelbuilder/i.test(owner+' '+r.full_name)?'优先关注的上游/原作者候选':'第三方候选，请核对作者与 README');
+ return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(description)+(String(r.description||'').length>220?'…':'')+'</small><small>'+esc(nativeHint)+' · ★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+'</small><small>'+(exactMatch?'按指定仓库地址精确匹配；不是关键词搜索结果。':'本次关键词相关度排序 #'+(i+1)+'/'+items.length+'；不是全网安装量排名')+'</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(repo||r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';
 }
 function skillImportModal(){
- openModal('<h2>按 Skill 名称导入</h2><p class="sub">优先精确匹配仓库名和原作者候选，再展示相关项目。结果按关键词相关度排序，热度仅作参考。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、lemo opuscar、all design"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">输入具体名称可优先匹配原作者仓库；收录前请核对来源。</div><div id="skillSearchResults" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">关闭导入窗口</button></div>');
+ openModal('<h2>按 Skill 名称导入</h2><p class="sub">优先精确匹配仓库名和原作者候选，再展示相关项目。结果按关键词相关度排序，热度仅作参考。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、lemo opuscar、all design"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">输入完整 GitHub 仓库地址时，将直接精确读取该仓库；名称或关键词则执行相关搜索。</div><div id="skillSearchResults" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">关闭导入窗口</button></div>');
  const form=$('#skillSearchForm'),status=$('#skillSearchStatus'),results=$('#skillSearchResults');
  form.addEventListener('submit',async e=>{
   e.preventDefault();const q=$('#skillNameInput').value.trim();if(!q)return;
@@ -273,33 +273,43 @@ function skillImportModal(){
   status.className='notice info';status.textContent='正在搜索 GitHub 公开仓库…';results.innerHTML='';
   searchingButton.disabled=true;
   try{
-   const plans=skillQueryPlans(q),merged=new Map();
-   for(const plan of plans){
+   const exactRepo=canonicalSkillRepoUrl(q);
+   let items=[],exactMatch=false;
+   if(exactRepo){
+    const meta=await fetchGithubRepoMeta(exactRepo,12000);
     if(sequence!==kpSkillSearchSequence)return;
-    const url='https://api.github.com/search/repositories?q='+encodeURIComponent(plan)+'&sort=stars&order=desc&per_page=15';
-    const timer=setTimeout(()=>{timedOut=true;controller.abort();},12000);
-    let response;
-    try{response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});}
-    finally{clearTimeout(timer);}
+    if(meta.private||meta.disabled)throw Error('指定仓库当前不可公开读取，未收录。');
+    if(canonicalSkillRepoUrl(meta.html_url)!==exactRepo)throw Error('GitHub 返回的仓库地址与输入地址不一致，已停止收录。');
+    items=[meta];exactMatch=true;
+   }else{
+    const plans=skillQueryPlans(q),merged=new Map();
+    for(const plan of plans){
+     if(sequence!==kpSkillSearchSequence)return;
+     const url='https://api.github.com/search/repositories?q='+encodeURIComponent(plan)+'&sort=stars&order=desc&per_page=15';
+     const timer=setTimeout(()=>{timedOut=true;controller.abort();},12000);
+     let response;
+     try{response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});}
+     finally{clearTimeout(timer);}
+     if(sequence!==kpSkillSearchSequence)return;
+     if(!response.ok){
+      if(response.status===403)throw Error('GitHub API 搜索次数已达限制，请稍后再试。');
+      if(response.status===422)continue;
+      throw Error('GitHub 搜索失败（HTTP '+response.status+'）。');
+     }
+     const data=await response.json();
+     for(const r of (data.items||[])){
+      if(!r||r.private||!r.html_url||!canonicalSkillRepoUrl(r.html_url))continue;
+      const key=canonicalSkillRepoUrl(r.html_url);if(!merged.has(key))merged.set(key,r);
+     }
+    }
     if(sequence!==kpSkillSearchSequence)return;
-    if(!response.ok){
-     if(response.status===403)throw Error('GitHub API 搜索次数已达限制，请稍后再试。');
-     if(response.status===422)continue;
-     throw Error('GitHub 搜索失败（HTTP '+response.status+'）。');
-    }
-    const data=await response.json();
-    for(const r of (data.items||[])){
-     if(!r||r.private||!r.html_url||!canonicalSkillRepoUrl(r.html_url))continue;
-     const key=canonicalSkillRepoUrl(r.html_url);if(!merged.has(key))merged.set(key,r);
-    }
+    items=[...merged.values()].filter(r=>isClearlyRelevantSkill(r,q));
+    items.sort((a,b)=>scoreSkillResult(b,q)-scoreSkillResult(a,q)||Number(b.stargazers_count||0)-Number(a.stargazers_count||0));
+    items=items.slice(0,10);
    }
-   if(sequence!==kpSkillSearchSequence)return;
-   let items=[...merged.values()].filter(r=>isClearlyRelevantSkill(r,q));
-   items.sort((a,b)=>scoreSkillResult(b,q)-scoreSkillResult(a,q)||Number(b.stargazers_count||0)-Number(a.stargazers_count||0));
-   items=items.slice(0,10);
    if(!items.length){status.className='notice';status.textContent='没有找到足够相关的公开仓库。试试官方仓库名、作者名或更准确的英文关键词。';return;}
-   status.className='notice ok';status.textContent='找到 '+items.length+' 个相关候选，已按名称和关键词相关度排序。请优先核对上游作者与仓库内容。';
-   results.innerHTML=items.map((r,i)=>skillResultHtml(r,i,items,q)).join('');
+   status.className='notice ok';status.textContent=exactMatch?'已精确读取你指定的 GitHub 仓库。请核对作者与 README 后收录。':'找到 '+items.length+' 个相关候选，已按名称和关键词相关度排序。请优先核对上游作者与仓库内容。';
+   results.innerHTML=items.map((r,i)=>skillResultHtml(r,i,items,q,exactMatch)).join('');
    results.querySelectorAll('[data-save-skill]').forEach(b=>b.addEventListener('click',async()=>{
     const r=items[Number(b.dataset.saveSkill)];if(!r||b.disabled)return;
     const repo=canonicalSkillRepoUrl(r.html_url);
@@ -309,7 +319,7 @@ function skillImportModal(){
     b.disabled=true;const original=b.textContent;b.textContent='正在保存…';
     try{
      const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now();
-     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\n关键词：'+q+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
+     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\\n应用建议：'+skillUseCase(r)+'\\n关键词：'+q+'\\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\\n热度：'+h.level+'；'+h.freshness+'。\\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
      await persistProject(p);projects.push(p);window.renderProjects();closeModal();showToast('Skill 已加密保存：'+r.full_name);
     }catch(err){b.disabled=false;b.textContent=original;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}
    }));
