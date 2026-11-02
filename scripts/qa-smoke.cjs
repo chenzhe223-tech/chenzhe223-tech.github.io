@@ -370,6 +370,42 @@ const mark = (status, name, detail = '') => {
         && document.querySelector('#unlockBtn')?.textContent.trim() === '解锁密钥库', null, { timeout: 20000 });
       await kp.locator('#masterPassword').fill('QA-only-demo-password-2026');
       await kp.locator('#unlockBtn').click();
+      // Wait for the actual unlock flow to settle, then surface crypto/snapshot errors
+      // instead of reporting only a generic hidden-main-view timeout.
+      try {
+        await kp.waitForFunction(() => window.__kpUnlockStep === 'complete' || !!window.__kpUnlockError, null, { timeout: 20000 });
+      } catch (unlockWaitError) {
+        const diagnostics = await kp.evaluate(async () => {
+          const db = await new Promise((resolve, reject) => {
+            const req = indexedDB.open('keypocket-local-v1');
+            req.onsuccess = () => resolve(req.result);
+            req.onerror = () => reject(req.error);
+          });
+          const rows = await new Promise((resolve, reject) => {
+            const req = db.transaction('vault', 'readonly').objectStore('vault').getAll();
+            req.onsuccess = () => { db.close(); resolve(req.result); };
+            req.onerror = () => { db.close(); reject(req.error); };
+          });
+          return {
+            initDiagnostic: window.__kpInitDiagnostic,
+            unlockStep: window.__kpUnlockStep || null,
+            unlockError: window.__kpUnlockError || null,
+            lockNotice: document.querySelector('#lockNotice')?.textContent || '',
+            backupStatus: document.querySelector('#backupStatus')?.textContent || '',
+            mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden'),
+            recordCount: rows.filter(x => x.id !== 'vault-meta' && !String(x.id || '').startsWith('kp.')).length,
+            vaultMetaPresent: rows.some(x => x.id === 'vault-meta')
+          };
+        });
+        throw new Error('KeyPocket reload unlock did not settle: ' + JSON.stringify(diagnostics) + '; ' + unlockWaitError.message);
+      }
+      const unlockDiagnostics = await kp.evaluate(() => ({
+        unlockStep: window.__kpUnlockStep || null,
+        unlockError: window.__kpUnlockError || null,
+        lockNotice: document.querySelector('#lockNotice')?.textContent || '',
+        mainVisible: !document.querySelector('#mainView')?.classList.contains('hidden')
+      }));
+      if (unlockDiagnostics.unlockError) throw new Error('KeyPocket reload unlock failed: ' + JSON.stringify(unlockDiagnostics));
       await kp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '2', null, { timeout: 5000 });
       mark('PASS', 'KeyPocket 多个 API Key 本地加密持久化', await kp.locator('#totalCount').innerText() + ' 条解锁后记录');
