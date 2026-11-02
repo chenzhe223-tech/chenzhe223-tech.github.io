@@ -819,6 +819,45 @@ const mark = (status, name, detail = '') => {
         && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
       mark(revokeRequestValid && !!qaOtherDeviceRevokedAt ? 'PASS' : 'FAIL',
         'KeyPocket 撤销设备接口与状态刷新', 'PATCH 限定当前账号、指定设备和未撤销状态；服务端返回更新行后才显示成功');
+      // Password recovery is exercised only against mocked Supabase Auth endpoints.
+      let qaRecoveryRequest = null, qaPasswordUpdate = null;
+      const qaAuthCors = {
+        'access-control-allow-origin': 'https://chenzhe223-tech.github.io',
+        'access-control-allow-methods': 'POST,PATCH,OPTIONS',
+        'access-control-allow-headers': 'apikey,authorization,content-type,x-client-info',
+        'access-control-max-age': '86400'
+      };
+      await kp.route('**/auth/v1/recover**', async route => {
+        const request = route.request();
+        if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: qaAuthCors });
+        qaRecoveryRequest = { method: request.method(), email: request.postDataJSON()?.email, url: request.url() };
+        await route.fulfill({ status: 200, headers: { ...qaAuthCors, 'content-type': 'application/json' }, body: '{}' });
+      });
+      await kp.route('**/auth/v1/user', async route => {
+        const request = route.request();
+        if (request.method() === 'OPTIONS') return route.fulfill({ status: 204, headers: qaAuthCors });
+        qaPasswordUpdate = { method: request.method(), authorization: request.headers().authorization, password: request.postDataJSON()?.password };
+        await route.fulfill({ status: 200, headers: { ...qaAuthCors, 'content-type': 'application/json' }, body: JSON.stringify({ id: 'qa-recovery-user' }) });
+      });
+      await kp.locator('[data-module="sync"]').click();
+      await kp.locator('#syncEmail').fill('keypocket-qa@example.invalid');
+      await kp.locator('#syncForgotPasswordBtn').click();
+      await kp.waitForFunction(() => document.querySelector('#syncStatus')?.innerText.includes('如果该邮箱对应有效账号'), null, { timeout: 5000 });
+      const recoveryRequestValid = qaRecoveryRequest?.method === 'POST'
+        && qaRecoveryRequest.email === 'keypocket-qa@example.invalid'
+        && new URL(qaRecoveryRequest.url).searchParams.get('redirect_to') === 'https://chenzhe223-tech.github.io/keypocket/';
+      mark(recoveryRequestValid ? 'PASS' : 'FAIL', 'KeyPocket 密码找回邮件请求', 'POST /auth/v1/recover，邮箱与正式回跳地址正确');
+      await kp.goto(base + 'keypocket/#access_token=qa.recovery.access.token&type=recovery', { waitUntil: 'domcontentloaded', timeout: 45000 });
+      await kp.waitForSelector('#syncPasswordRecoveryPanel:not(.hidden)', { timeout: 8000 });
+      await kp.locator('#syncNewPassword').fill('QA-Recovered-Password-2026');
+      await kp.locator('#syncConfirmNewPassword').fill('QA-Recovered-Password-2026');
+      await kp.locator('#syncResetPasswordBtn').click();
+      await kp.waitForFunction(() => document.querySelector('#syncStatus')?.innerText.includes('同步账号密码已更新'), null, { timeout: 8000 });
+      const passwordUpdateValid = qaPasswordUpdate?.method === 'PATCH'
+        && qaPasswordUpdate.authorization === 'Bearer qa.recovery.access.token'
+        && qaPasswordUpdate.password === 'QA-Recovered-Password-2026'
+        && await kp.locator('#syncPasswordRecoveryPanel').evaluate(el => el.classList.contains('hidden'));
+      mark(passwordUpdateValid ? 'PASS' : 'FAIL', 'KeyPocket 安全重置密码', '仅使用恢复 access token 更新账号密码；未写入同步口令或本地密钥库');
       mark(kpErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 页面 JavaScript 异常', kpErrors.length ? JSON.stringify(kpErrors) : '未发现 pageerror');
       await kp.screenshot({ path: path.join(out, 'keypocket-home.png'), fullPage: true });
       await kp.close();
