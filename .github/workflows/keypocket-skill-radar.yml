@@ -1,0 +1,51 @@
+name: KeyPocket Skill Radar Daily Collector
+
+on:
+  schedule:
+    - cron: "25 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: keypocket-skill-radar
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout latest main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate collector syntax and ranking rules
+        run: |
+          node --check scripts/build-keypocket-skill-radar.cjs
+          node scripts/build-keypocket-skill-radar.cjs --self-test
+
+      - name: Collect verified public Skill repositories and historical snapshots
+        env:
+          GITHUB_TOKEN: \${{ github.token }}
+        run: node scripts/build-keypocket-skill-radar.cjs
+
+      - name: Commit daily Skill Radar data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add keypocket/api/skill-radar.json keypocket/data/skill-radar/snapshots/
+          if git diff --cached --quiet; then
+            echo "No Skill Radar data changes."
+          else
+            git commit -m "chore(keypocket): collect daily Skill Radar snapshot"
+            git push origin HEAD:main
+          fi
