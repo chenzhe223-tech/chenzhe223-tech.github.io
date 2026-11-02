@@ -527,18 +527,22 @@ def main():
             and re.search(r'[\u4e00-\u9fff]', str(story.get('why_zh') or ""))
             for story in top5 if isinstance(story, dict)
         )
+        manual_applied = apply_manual_editorial_override(report)
         localization = report.get('localization') if isinstance(report.get('localization'), dict) else {}
-        if localization.get('status') != 'ok' or report.get('top5_status') != 'ai_curated' or not localized_top5:
-            localize(report)
-        ensure_story_fallback(report)
+        if not manual_applied:
+            if localization.get('status') != 'ok' or report.get('top5_status') != 'ai_curated' or not localized_top5:
+                localize(report)
+            ensure_story_fallback(report)
         remove_top5_duplicates_from_china(report)
         apply_verified_skill_metadata(report.get('skills') or [])
         apply_claim_provenance(report)
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
         return 0
     if not os.environ.get('DEEPSEEK_API_KEY'):
-        report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；基础新闻与 Skill 榜单仍可正常更新。'}
-        ensure_story_fallback(report)
+        report['ai_analysis']={'status':'unavailable','message':'未检测到 DEEPSEEK_API_KEY；本期使用已核验的人工编辑稿，不将其标记为 AI 生成。'}
+        manual_applied = apply_manual_editorial_override(report)
+        if not manual_applied:
+            ensure_story_fallback(report)
         remove_top5_duplicates_from_china(report)
         apply_verified_skill_metadata(report.get('skills') or [])
         apply_claim_provenance(report)
@@ -570,7 +574,9 @@ def main():
         except subprocess.TimeoutExpired: report['ai_analysis']={'status':'unavailable','message':'AI 分析运行超时，基础新闻与 Skill 榜单已保留。'}
         except Exception as exc: report['ai_analysis']={'status':'unavailable','message':'AI 分析暂时不可用，基础新闻与 Skill 榜单已保留。'}; print(f'[horizon-warning] {type(exc).__name__}')
     localize(report)
-    ensure_story_fallback(report)
+    manual_applied = apply_manual_editorial_override(report)
+    if not manual_applied:
+        ensure_story_fallback(report)
     # Final post-AI guard: localization can make a previously missed event match
     # historical Chinese headlines. Remove it before poster generation and refill
     # only from the already history-filtered source-backed news pool.
