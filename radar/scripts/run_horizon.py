@@ -352,8 +352,6 @@ def apply_verified_skill_metadata(skills):
             description = re.sub(r"(?<!\d)\d+(?=\s*(?:个)?(?:工作流)?技能)", str(actual_count), description)
             if "SKILL.md" not in description:
                 description = f"{description.rstrip('。； ')}（仓库实际扫描到{actual_count}个SKILL.md文件）"
-            if claude_only and "Codex/WorkBuddy" not in description:
-                description = f"{description.rstrip('。； ')}；仅面向Claude Code，Codex/WorkBuddy需适配"
             item["description_zh"] = description
 
 
