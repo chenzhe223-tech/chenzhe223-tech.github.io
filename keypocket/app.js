@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-password-recovery-20261102-20';
+window.__kpBuildVersion='kp-v2-mobile-modal-stability-20261103-21';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -8,6 +8,7 @@ const KP_V2_DEVICE_KEY='kp.v2.device-id',KP_V2_SYNC_SCHEMA=2;
 let kpSnapshotTimer=null,kpSnapshotBusy=false,kpSnapshotRequested=false;
 let kpV2SyncBusy=false,kpV2SyncTimer=null,kpV2SyncKey=null,kpV2SyncSalt=null;
 const $=s=>document.querySelector(s); let db, cryptoKey=null, vault=null, records=[], projects=[], editId=null, toastTimer=null;
+let kpSkillSearchController=null,kpSkillSearchSequence=0;
 const PROVIDERS=[
  {id:'openai',name:'OpenAI',short:'OA',category:'AI 模型',patterns:[/^sk-proj-/,/^sk-[A-Za-z0-9_-]{20,}$/],urls:['platform.openai.com']},
  {id:'anthropic',name:'Anthropic',short:'AN',category:'AI 模型',patterns:[/^sk-ant-/],urls:['console.anthropic.com']},
@@ -57,8 +58,19 @@ $('#lockBtn').addEventListener('click',()=>{cryptoKey=null;window.kpSyncMasterPa
 function render(){const query=$('#searchInput').value.trim().toLowerCase(),filter=$('#providerFilter').value;const shown=records.filter(r=>(!filter||r.provider===filter)&&(!query||[r.name,r.providerName,r.purpose,r.project,r.notes,...(r.tags||[])].join(' ').toLowerCase().includes(query))).sort((a,b)=>Number(b.favorite)-Number(a.favorite)||b.updatedAt-a.updatedAt);$('#totalCount').textContent=records.length;$('#providerCount').textContent=new Set(records.map(r=>r.provider)).size;$('#favoriteCount').textContent=records.filter(r=>r.favorite).length;$('#listCount').textContent=`${shown.length} 条记录`;const select=$('#providerFilter'),old=select.value;select.innerHTML='<option value="">全部服务商</option>'+[...new Set(records.map(r=>r.provider))].map(id=>`<option value="${esc(id)}">${esc(providerById(id).name)}</option>`).join('');select.value=records.some(r=>r.provider===old)?old:'';const cards=$('#cards');if(!shown.length){cards.innerHTML=`<div class="empty"><div class="big">⌘</div><h3>${records.length?'没有找到匹配的密钥':'你的口袋还是空的'}</h3><p>${records.length?'试试更换关键词或筛选条件。':'添加第一个 API Key，之后就能快速查找和复制。'}</p>${records.length?'':'<button class="btn primary" data-action="add">＋ 新增 API Key</button>'}</div>`;return;}cards.innerHTML=shown.map(r=>{const p=providerById(r.provider);return `<article class="card" data-id="${esc(r.id)}"><div class="cardtop"><div class="provider-icon">${esc(p.short)}</div><div class="cardtitle"><h3>${esc(r.name||p.name)} ${r.favorite?'★':''}</h3><p>${esc(p.name)} · ${esc(r.purpose||'未填写用途')}</p></div><button class="dots" data-action="menu" aria-label="更多操作" title="更多操作">⋯</button></div><div class="secret"><code>${esc(mask(r.key))}</code><button data-action="reveal" title="临时显示密钥" aria-label="临时显示密钥">◉</button></div><div class="tags">${r.project?`<span class="tag">项目：${esc(r.project)}</span>`:''}${(r.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}<span class="tag">更新于 ${new Date(r.updatedAt).toLocaleDateString()}</span></div><div class="cardactions"><button class="btn primary copy" data-action="copy">复制 Key</button><button class="btn" data-action="edit">编辑</button><button class="btn" data-action="favorite">${r.favorite?'取消收藏':'收藏'}</button></div></article>`}).join('');}
 function mask(k){if(!k)return '未填写密钥';if(k.length<9)return '•'.repeat(k.length);return k.slice(0,4)+'•'.repeat(Math.min(18,k.length-8))+k.slice(-4);}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-function openModal(html){$('#modalRoot').innerHTML=`<div class="modal-backdrop" data-action="backdrop"><section class="modal" role="dialog" aria-modal="true">${html}</section></div>`;const first=$('#modalRoot input:not([type=hidden]),#modalRoot select');if(first)first.focus();}
-function closeModal(){$('#modalRoot').innerHTML='';editId=null;}
+function openModal(html){
+ if(kpSkillSearchController){kpSkillSearchSequence++;kpSkillSearchController.abort();kpSkillSearchController=null;}
+ $('#modalRoot').innerHTML=`<div class="modal-backdrop" data-action="backdrop"><section class="modal" role="dialog" aria-modal="true" tabindex="-1">${html}</section></div>`;
+ document.body.classList.add('kp-modal-open');
+ const first=$('#modalRoot input:not([type=hidden]),#modalRoot select');
+ // Do not auto-open the iOS keyboard or force a visual-viewport jump on phones.
+ if(first&&!window.matchMedia('(max-width: 700px)').matches)first.focus();
+}
+function closeModal(){
+ kpSkillSearchSequence++;
+ if(kpSkillSearchController){kpSkillSearchController.abort();kpSkillSearchController=null;}
+ $('#modalRoot').innerHTML='';document.body.classList.remove('kp-modal-open');editId=null;
+}
 function providerOptions(selected){return PROVIDERS.map(p=>`<option value="${p.id}" ${p.id===selected?'selected':''}>${esc(p.name)}</option>`).join('');}
 function addEditModal(rec=null,rawKey=''){editId=rec?.id||null;const guessed=identifyProvider(rawKey||rec?.key||'');const provider=rec?.provider||(guessed.confidence==='high'?guessed.provider:'custom');openModal(`<h2>${rec?'编辑密钥':'新增 API Key'}</h2><p class="sub">密钥仅在本地加密保存。不要把生产密钥粘贴到公共或共享设备。</p><form id="recordForm"><div class="field"><label for="keyInput">API Key <span style="color:#b93636">*</span></label><textarea id="keyInput" required autocomplete="off" spellcheck="false" placeholder="粘贴 API Key" rows="3">${esc(rec?.key||rawKey)}</textarea><div id="detectHint" class="hint">${esc(guessed.reason||'粘贴后将尝试在本地识别服务商')}</div></div><div class="grid2"><div class="field"><label for="providerInput">服务商</label><select id="providerInput">${providerOptions(provider)}</select></div><div class="field"><label for="nameInput">密钥名称</label><input id="nameInput" maxlength="80" placeholder="例如：个人开发 Key" value="${esc(rec?.name||'')}"></div></div><div class="grid2"><div class="field"><label for="purposeInput">用途</label><input id="purposeInput" maxlength="100" placeholder="例如：测试 / 生产 / Agent" value="${esc(rec?.purpose||'')}"></div><div class="field"><label for="projectInput">项目（可选）</label><input id="projectInput" maxlength="100" placeholder="例如：KeyPocket" value="${esc(rec?.project||'')}"></div></div><div class="field"><label for="tagsInput">标签（可选，用逗号分隔）</label><input id="tagsInput" maxlength="160" placeholder="开发, 个人, 测试" value="${esc((rec?.tags||[]).join(', '))}"></div><div class="field"><label for="notesInput">备注（可选）</label><input id="notesInput" maxlength="240" placeholder="控制台地址、轮换提示等，不要写入其他密码" value="${esc(rec?.notes||'')}"></div><div id="formNotice" class="notice info">自动识别仅依据本地格式规则；格式相似时请手动确认服务商。</div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button type="submit" class="btn primary">${rec?'保存修改':'加密保存'}</button></div></form>`);
 $('#keyInput').addEventListener('input',()=>{const g=identifyProvider($('#keyInput').value);$('#detectHint').textContent=g.reason;$('#detectHint').style.color=g.confidence==='high'?'#147d55':'#788293';if(g.confidence==='high'&&!editId)$('#providerInput').value=g.provider;});$('#providerInput').addEventListener('change',()=>{$('#detectHint').textContent='已由你选择服务商：'+providerById($('#providerInput').value).name;});$('#recordForm').addEventListener('submit',async e=>{e.preventDefault();const key=$('#keyInput').value.trim();if(!key){$('#keyInput').focus();return;}const provider=$('#providerInput').value,p=providerById(provider),now=Date.now();const item={id:editId||crypto.randomUUID(),key,provider,providerName:p.name,name:$('#nameInput').value.trim()||p.name,purpose:$('#purposeInput').value.trim(),project:$('#projectInput').value.trim(),tags:$('#tagsInput').value.split(',').map(s=>s.trim()).filter(Boolean).slice(0,12),notes:$('#notesInput').value.trim(),favorite:rec?.favorite||false,createdAt:rec?.createdAt||now,updatedAt:now};try{await persistRecord(item);records=records.filter(x=>x.id!==item.id);records.push(item);closeModal();render();showToast(rec?'修改已加密保存':'密钥已加密保存');}catch(err){$('#formNotice').className='notice error';$('#formNotice').textContent='保存失败：'+(err.message||'请重试');}});}
@@ -250,22 +262,26 @@ function skillResultHtml(r,i,items,q){
  return '<article class="github-repo-row" style="align-items:flex-start"><span class="github-repo-meta"><strong>'+esc(r.full_name)+'</strong><small>'+esc(description)+(String(r.description||'').length>220?'…':'')+'</small><small>'+esc(nativeHint)+' · ★ '+h.stars.toLocaleString()+' · Fork '+h.forks.toLocaleString()+'</small><small>本次关键词相关度排序 #'+(i+1)+'/'+items.length+'；不是全网安装量排名</small><small>建议方向：'+esc(skillUseCase(r))+'</small><small>最近更新：'+esc((r.pushed_at||r.updated_at||'').slice(0,10))+' · '+esc(r.language||'未标注语言')+'</small><span style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px"><a href="'+esc(repo||r.html_url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" type="button" data-save-skill="'+i+'" '+(existing?'disabled':'')+'>'+(existing?'已收录':'收录 Skill')+'</button></span></span></article>';
 }
 function skillImportModal(){
- openModal('<h2>按 Skill 名称导入</h2><p class="sub">优先精确匹配仓库名和原作者候选，再展示相关项目。结果按关键词相关度排序，热度仅作参考。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、lemo opuscar、all design"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">输入具体名称可优先匹配原作者仓库；收录前请核对来源。</div><div id="skillSearchResults" class="github-repo-list"></div>');
+ openModal('<h2>按 Skill 名称导入</h2><p class="sub">优先精确匹配仓库名和原作者候选，再展示相关项目。结果按关键词相关度排序，热度仅作参考。</p><form id="skillSearchForm"><div class="field"><label for="skillNameInput">Skill 名称 / 关键词</label><input id="skillNameInput" required maxlength="120" placeholder="例如：playwright、lemo opuscar、all design"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">搜索 Skills</button></div></form><div id="skillSearchStatus" class="notice info">输入具体名称可优先匹配原作者仓库；收录前请核对来源。</div><div id="skillSearchResults" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">关闭导入窗口</button></div>');
  const form=$('#skillSearchForm'),status=$('#skillSearchStatus'),results=$('#skillSearchResults');
- let searchSequence=0,activeController=null,searching=false;
  form.addEventListener('submit',async e=>{
-  e.preventDefault();const q=$('#skillNameInput').value.trim();if(!q||searching)return;
-  const sequence=++searchSequence;searching=true;
-  if(activeController)activeController.abort();
-  activeController=new AbortController();
+  e.preventDefault();const q=$('#skillNameInput').value.trim();if(!q)return;
+  if(kpSkillSearchController)kpSkillSearchController.abort();
+  const sequence=++kpSkillSearchSequence,controller=new AbortController();
+  kpSkillSearchController=controller;
+  let timedOut=false,searchingButton=form.querySelector('button[type=submit]');
   status.className='notice info';status.textContent='正在搜索 GitHub 公开仓库…';results.innerHTML='';
-  const btn=form.querySelector('button[type=submit]');btn.disabled=true;
+  searchingButton.disabled=true;
   try{
    const plans=skillQueryPlans(q),merged=new Map();
    for(const plan of plans){
-    if(sequence!==searchSequence)return;
+    if(sequence!==kpSkillSearchSequence)return;
     const url='https://api.github.com/search/repositories?q='+encodeURIComponent(plan)+'&sort=stars&order=desc&per_page=15';
-    const response=await fetch(url,{signal:activeController.signal,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
+    const timer=setTimeout(()=>{timedOut=true;controller.abort();},12000);
+    let response;
+    try{response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});}
+    finally{clearTimeout(timer);}
+    if(sequence!==kpSkillSearchSequence)return;
     if(!response.ok){
      if(response.status===403)throw Error('GitHub API 搜索次数已达限制，请稍后再试。');
      if(response.status===422)continue;
@@ -274,11 +290,10 @@ function skillImportModal(){
     const data=await response.json();
     for(const r of (data.items||[])){
      if(!r||r.private||!r.html_url||!canonicalSkillRepoUrl(r.html_url))continue;
-     const key=canonicalSkillRepoUrl(r.html_url);
-     if(!merged.has(key))merged.set(key,r);
+     const key=canonicalSkillRepoUrl(r.html_url);if(!merged.has(key))merged.set(key,r);
     }
    }
-   if(sequence!==searchSequence)return;
+   if(sequence!==kpSkillSearchSequence)return;
    let items=[...merged.values()].filter(r=>isClearlyRelevantSkill(r,q));
    items.sort((a,b)=>scoreSkillResult(b,q)-scoreSkillResult(a,q)||Number(b.stargazers_count||0)-Number(a.stargazers_count||0));
    items=items.slice(0,10);
@@ -294,15 +309,16 @@ function skillImportModal(){
     b.disabled=true;const original=b.textContent;b.textContent='正在保存…';
     try{
      const h=skillHeat(r,Number(b.dataset.saveSkill)+1,items.length),now=Date.now();
-     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\n应用建议：'+skillUseCase(r)+'\n关键词：'+q+'\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\n热度：'+h.level+'；'+h.freshness+'。\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
-     await persistProject(p);projects.push(p);window.renderProjects();b.textContent='已收录';showToast('Skill 已加密保存');status.className='notice ok';status.textContent='已收录 '+r.full_name+'。你可以继续搜索其他 Skill。';
+     const p=normalizeProject({id:crypto.randomUUID(),name:r.name+' · Skill',repoUrl:repo,appUrl:r.homepage&&validWebUrl(r.homepage)?r.homepage:'',category:githubCategory(r),stack:r.language||'',notes:'主要作用：'+skillPurpose(r)+'\\n应用建议：'+skillUseCase(r)+'\\n关键词：'+q+'\\nGitHub Stars：'+h.stars+'；Forks：'+h.forks+'。\\n热度：'+h.level+'；'+h.freshness+'。\\n热度采集时间：'+new Date().toISOString(),tags:['Skill',...suggestedProjectTags(r).filter(t=>t.toLowerCase()!=='skill')].slice(0,6).join(', '),favorite:true,createdAt:now,updatedAt:now});
+     await persistProject(p);projects.push(p);window.renderProjects();closeModal();showToast('Skill 已加密保存：'+r.full_name);
     }catch(err){b.disabled=false;b.textContent=original;status.className='notice error';status.textContent='收录失败：'+(err.message||'请重试');}
    }));
   }catch(err){
-   if(err.name==='AbortError')return;
-   if(sequence===searchSequence){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}
+   if(sequence!==kpSkillSearchSequence)return;
+   if(err.name==='AbortError'&&timedOut){status.className='notice error';status.textContent='GitHub 搜索响应超时（12 秒），请检查网络后重试。';}
+   else if(err.name!=='AbortError'){status.className='notice error';status.textContent=err.message||'搜索失败，请稍后重试。';}
   }finally{
-   if(sequence===searchSequence){searching=false;btn.disabled=false;activeController=null;}
+   if(sequence===kpSkillSearchSequence){searchingButton.disabled=false;kpSkillSearchController=null;}
   }
  });
 }
