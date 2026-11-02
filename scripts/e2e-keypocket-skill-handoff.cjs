@@ -1,16 +1,20 @@
 'use strict';
 
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const os = require('node:os');
+const path = require('node:path');
 const { chromium } = require('playwright');
 
 (async () => {
-  const browser = await chromium.launch({ headless: true, args: ['--no-sandbox'] });
+  const userDataDir = fs.mkdtempSync(path.join(os.tmpdir(), 'keypocket-e2e-'));
+  const context = await chromium.launchPersistentContext(userDataDir, {
+    headless: true,
+    args: ['--no-sandbox'],
+    viewport: { width: 1365, height: 900 }
+  });
   try {
-    const context = await browser.newContext({
-      viewport: { width: 1365, height: 900 },
-      // Isolate IndexedDB/localStorage so repeated CI runs always exercise first-time vault creation.
-      storageState: { cookies: [], origins: [] }
-    });
+    // A fresh browser profile isolates cookies, localStorage and IndexedDB across CI runs.
     const radar = await context.newPage();
 
     await radar.goto('https://chenzhe223-tech.github.io/radar/daily/?e2e-keypocket=' + Date.now(), {
@@ -43,42 +47,6 @@ const { chromium } = require('playwright');
     await keyPocket.locator('#unlockForm').waitFor({ state: 'visible', timeout: 30000 });
 
     const testPassword = 'Handoff-Test-Password-2026';
-    const vaultState = await keyPocket.evaluate(async () => {
-      const db = await new Promise((resolve, reject) => {
-        const request = indexedDB.open('keypocket-local-v1');
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      });
-      const hasStore = Array.from(db.objectStoreNames).includes('vault');
-      const rows = hasStore ? await new Promise((resolve, reject) => {
-        const request = db.transaction('vault', 'readonly').objectStore('vault').getAll();
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
-      }) : [];
-      db.close();
-      return {
-        hasStore,
-        hasVault: rows.some(row => row.id === 'vault-meta'),
-        ids: rows.map(row => String(row.id || ''))
-      };
-    });
-    // This Playwright context is disposable; clear only its isolated test database when
-    // stale test rows exist, then reload to exercise the actual first-time vault flow.
-    if (!vaultState.hasStore || vaultState.hasVault || vaultState.ids.length > 0) {
-      await keyPocket.evaluate(async () => {
-        await new Promise((resolve, reject) => {
-          const request = indexedDB.deleteDatabase('keypocket-local-v1');
-          request.onsuccess = () => resolve();
-          request.onerror = () => reject(request.error);
-          request.onblocked = () => reject(new Error('Isolated E2E IndexedDB remained blocked'));
-        });
-      });
-      await keyPocket.reload({ waitUntil: 'domcontentloaded' });
-      await keyPocket.waitForFunction(() => {
-        const confirm = document.querySelector('#confirmWrap');
-        return confirm && !confirm.classList.contains('hidden');
-      }, null, { timeout: 15000 });
-    }
     await keyPocket.locator('#masterPassword').fill(testPassword);
     await keyPocket.locator('#confirmPassword').fill(testPassword);
     await keyPocket.locator('#unlockBtn').click();
@@ -130,7 +98,8 @@ const { chromium } = require('playwright');
     console.log('PASS: cleared the pending item without plaintext repository metadata in the stored envelope');
     await context.close();
   } finally {
-    await browser.close();
+    await context.close();
+    fs.rmSync(userDataDir, { recursive: true, force: true });
   }
 })().catch(error => {
   console.error(error);
