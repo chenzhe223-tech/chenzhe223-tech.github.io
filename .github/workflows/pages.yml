@@ -425,6 +425,9 @@ jobs:
               and current.get('localization', {}).get('status') == 'ok'
               and current.get('editorial_policy_version') == '2026-11-02.2'
               and current.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
+              and current.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
+              and current.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
+              and current.get('skill_radar', {}).get('engine_version') == '2026.11.02.1'
               and poster.get('report_date') == today
               and poster.get('skill') == skill
               and poster.get('qr_url') == target
