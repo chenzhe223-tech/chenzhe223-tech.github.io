@@ -681,15 +681,27 @@ const mark = (status, name, detail = '') => {
       });
       let qaOtherDeviceRevokedAt = null;
       let qaRevokeRequest = null;
+      const qaRouteEvents = [];
+      const qaCorsHeaders = {
+        'access-control-allow-origin': '*',
+        'access-control-allow-methods': 'GET, PATCH, OPTIONS',
+        'access-control-allow-headers': 'apikey, authorization, content-type, prefer',
+        'access-control-max-age': '60'
+      };
       await kp.route('https://urzgghdwawpwqliafrzv.supabase.co/rest/v1/keypocket_devices**', async route => {
         const request = route.request();
         const url = new URL(request.url());
+        qaRouteEvents.push({ method: request.method(), path: url.pathname });
+        if (request.method() === 'OPTIONS') {
+          await route.fulfill({ status: 204, headers: qaCorsHeaders });
+          return;
+        }
         if (request.method() === 'GET') {
           const rows = [
             { user_id: qaUserId, device_id: qaCurrentDeviceId, device_label: 'QA 当前设备', created_at: '2026-11-02T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: null },
             { user_id: qaUserId, device_id: qaOtherDeviceId, device_label: 'QA 另一台设备', created_at: '2026-11-01T00:00:00Z', last_seen_at: '2026-11-02T00:00:00Z', revoked_at: qaOtherDeviceRevokedAt }
           ];
-          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(rows) });
+          await route.fulfill({ status: 200, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify(rows) });
           return;
         }
         if (request.method() === 'PATCH') {
@@ -697,14 +709,14 @@ const mark = (status, name, detail = '') => {
           qaRevokeRequest = { method: request.method(), userId: url.searchParams.get('user_id'), deviceId: url.searchParams.get('device_id'), onlyActive: url.searchParams.get('revoked_at'), payload };
           if (qaRevokeRequest.userId !== qaUserId || qaRevokeRequest.deviceId !== qaOtherDeviceId || qaRevokeRequest.onlyActive !== 'is.null'
             || Object.keys(payload || {}).join(',') !== 'revoked_at' || !payload.revoked_at) {
-            await route.fulfill({ status: 400, contentType: 'application/json', body: JSON.stringify({ message: 'Unexpected test request shape' }) });
+            await route.fulfill({ status: 400, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected test request shape' }) });
             return;
           }
           qaOtherDeviceRevokedAt = payload.revoked_at;
-          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([{ device_id: qaOtherDeviceId, revoked_at: qaOtherDeviceRevokedAt }]) });
+          await route.fulfill({ status: 200, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify([{ device_id: qaOtherDeviceId, revoked_at: qaOtherDeviceRevokedAt }]) });
           return;
         }
-        await route.fulfill({ status: 405, contentType: 'application/json', body: JSON.stringify({ message: 'Unexpected method' }) });
+        await route.fulfill({ status: 405, headers: { ...qaCorsHeaders, 'content-type': 'application/json' }, body: JSON.stringify({ message: 'Unexpected method: ' + request.method() }) });
       });
       await kp.evaluate(userId => localStorage.setItem('kp.sync.session.v1', JSON.stringify({
         access_token: 'qa.synthetic.access.token',
@@ -720,10 +732,20 @@ const mark = (status, name, detail = '') => {
         'KeyPocket 设备撤销保护', '当前设备不可撤销；其他有效设备提供撤销入口');
       kp.once('dialog', dialog => dialog.accept());
       await kp.locator('#syncDeviceList [data-device-id="' + qaOtherDeviceId + '"] [data-revoke-device]').click();
-      await kp.waitForFunction(id => {
-        const row = document.querySelector('#syncDeviceList [data-device-id="' + id + '"]');
-        return row && row.innerText.includes('已撤销，不能写入云端') && !row.querySelector('[data-revoke-device]');
-      }, qaOtherDeviceId, { timeout: 8000 });
+      try {
+        await kp.waitForFunction(id => {
+          const row = document.querySelector('#syncDeviceList [data-device-id="' + id + '"]');
+          return row && row.innerText.includes('已撤销，不能写入云端') && !row.querySelector('[data-revoke-device]');
+        }, qaOtherDeviceId, { timeout: 8000 });
+      } catch (error) {
+        const syncDiagnostics = await kp.evaluate(id => ({
+          status: document.querySelector('#syncStatus')?.innerText,
+          deviceStatus: document.querySelector('#syncDeviceStatus')?.innerText,
+          deviceRows: document.querySelector('#syncDeviceList')?.innerText,
+          rowHtml: document.querySelector('#syncDeviceList [data-device-id="' + id + '"]')?.outerHTML
+        }), qaOtherDeviceId);
+        throw new Error('Device revoke diagnostics=' + JSON.stringify({ syncDiagnostics, qaRevokeRequest, qaOtherDeviceRevokedAt, qaRouteEvents }) + '; ' + error.message);
+      }
       const revokeRequestValid = !!qaRevokeRequest && qaRevokeRequest.method === 'PATCH'
         && qaRevokeRequest.userId === qaUserId && qaRevokeRequest.deviceId === qaOtherDeviceId
         && qaRevokeRequest.onlyActive === 'is.null' && Object.keys(qaRevokeRequest.payload || {}).join(',') === 'revoked_at';
