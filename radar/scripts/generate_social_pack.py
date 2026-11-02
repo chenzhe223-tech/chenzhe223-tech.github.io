@@ -489,6 +489,7 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
         f"{skill.get('name') or '开源 Skill'}：{skill.get('description_zh') or skill.get('description') or '详见项目仓库。'}",
         f"许可证：{skill.get('license_name') or skill.get('license') or '待核验'}；项目仓库：{skill.get('url') or '见正式简报'}。",
         f"官方项目主页：{skill.get('official_website') or skill.get('url') or '见正式简报'}（{'独立官网' if skill.get('official_website_type') == 'declared_project_homepage' else '未声明独立官网，使用官方 GitHub 项目页'}）。",
+        f"适用范围：{skill.get('compatibility_status') or '宿主兼容性未实测'}。",
         "已核验官方项目主页、仓库 README、实际 SKILL.md 文件及许可证；未实测安装，未完成专项安全审计，使用请自行评估。",
         "",
         "💡 DAVYLAB 观察",
