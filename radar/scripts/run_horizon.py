@@ -285,7 +285,7 @@ def localize(report):
         'Act as a restrained AI-news editor for ordinary users, builders and creators. Select up to five distinct real stories from the supplied list. '
         'If at least five sources exist, return exactly five, prioritizing recency, evidence and usefulness. Use these category labels in order where evidence supports them: '
         '技术突破/Technical Breakthrough, 产品应用/Product & Application, 行业影响/Industry Impact, 商业动态/Business & Market, 值得关注/Signals to Watch. '
-        'Do not invent events, statistics, quotes or facts. Each story must cite its exact source_index from input and include concise Chinese and English text: '
+        'Do not invent events, statistics, quotes or facts. Attribute company, management and report claims to the named source. For first-ever, first-to, record, highest or largest claims, state the metric and date/scope, and do not present the superlative as an established trend unless corroborated by earlier authoritative evidence. Preserve explicit source disclaimers that a release is a research prototype, not an official product or not production-ready. Clearly distinguish self-reported benchmarks from independent evaluations. Each story must cite its exact source_index from input and include concise Chinese and English text: '
         'title_zh,title_en,category_zh,category_en,what_zh,what_en,why_zh,why_en,editor_judgment_zh,editor_judgment_en,opportunity_risk_zh,opportunity_risk_en,action_zh,action_en,'
         'scores with integer 1-10 values for innovation, practicality, feasibility, impact, opportunity, and confidence high/medium/low. '
         'Use a concrete action only when grounded; otherwise say to read/verify the source. Also return editorial with core_zh,core_en,trend_zh,trend_en,next_question_zh,next_question_en. '
@@ -374,7 +374,7 @@ def apply_claim_provenance(report):
                 story["summary_zh"] = summary_zh.rstrip("。 ") + caveat
         what_en = str(story.get("what_en") or "")
         if what_en and "not independently verified" not in what_en.lower():
-            story["what_en"] = f"According to {source}, {what_en.rstrip('. ')} (reported figures or performance have not been independently verified)."
+            story["what_en"] = f"According to {source}, {what_en.rstrip('. ')} (reported figures or performance are not independently verified)."
         judgement = str(story.get("editor_judgment_zh") or "")
         if "低置信度" not in judgement:
             story["editor_judgment_zh"] = f"{judgement.rstrip('。； ')}；低置信度，相关指标尚需独立复核。"
