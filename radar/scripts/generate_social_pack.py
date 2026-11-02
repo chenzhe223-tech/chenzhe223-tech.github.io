@@ -457,7 +457,7 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
     headline = str(editorial.get("headline_zh") or "AI 不只要更强，还得真能干活")
     opening = str(editorial.get("opening_zh") or "过去我们习惯用参数、榜单和发布会衡量 AI。现在问题变了：它能不能在真实流程里执行任务、验证结果、处理复杂环境？")
     try:
-        date_label = dt.date.fromisoformat(report_date).strftime("%-m月%-d日")
+        date_label = dt.date.fromisoformat(report_date).strftime("%Y年%-m月%-d日")
     except ValueError:
         date_label = report_date
     china_count = sum(1 for story in top if str(story.get("source_section") or "") == "china_ai_news")
