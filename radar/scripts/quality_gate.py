@@ -32,8 +32,8 @@ def load_image_relevance_policy():
     if not isinstance(policy, dict):
         raise RuntimeError("P0 image_relevance policy missing from qa-rules.json")
     minimum = float(policy.get("minimum_score", 0))
-    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True:
-        raise RuntimeError("P0 image relevance policy invalid")
+    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True or policy.get("policy_version") != "2026-11-02.1":
+        raise RuntimeError("P0 image relevance policy invalid or outdated")
     return policy
 
 IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
@@ -391,11 +391,11 @@ def main():
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files",
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
-      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
       "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
       "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
-      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"low_confidence_claims_require_explicit_caveat":True,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
+      "policy":{"china_ai_history_repeat_target":0,"same_day_image_reuse":0,"same_iso_week_image_reuse":0,"image_relevance_minimum_score":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"low_confidence_claims_require_explicit_caveat":True,"skill_compatibility_disclosure_required":True,"unreadable_history_blocks_publish":True,"unverifiable_historical_images_are_reported_as_coverage_gaps":True}
     }
     out=OUT_DIR/"news-image-quality-gate.json"
     out.write_text(json.dumps(result,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
@@ -403,7 +403,7 @@ def main():
     # requires this marker, so a failed run is retried instead of incorrectly skipped tomorrow.
     if result["status"] == "PASS":
         report["quality_gate"] = {
-            "status": "PASS", "checked_at": result["generated_at"],
+            "status": "PASS", "checked_at": result["generated_at"], "image_relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"],
             "history_files": len(archive_files), "history_stories": len(history),
             "news_duplicate_hits": len(duplicate_hits), "china_duplicate_hits": len(china_hits),
             "same_week_image_reuse": len(week_image_hits), "report_path": "test-results/radar/news-image-quality-gate.json"
