@@ -284,6 +284,7 @@ section{margin-bottom:40px}
 .story-image{position:relative}
 .story-image-badge{position:absolute;z-index:2;top:8px;right:8px;padding:4px 7px;border-radius:4px;background:rgba(8,25,48,.88);color:#fff;font-size:9px;letter-spacing:.02em;line-height:1.2;pointer-events:none}
 .skill-compatibility{margin-top:8px;color:var(--muted);font-size:12px;line-height:1.5}
+.editorial-sources{margin-top:10px;color:var(--muted);font-size:11px;line-height:1.5}.editorial-sources a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}.editorial-scope{display:block;margin-top:8px;color:var(--muted)}
 .story-image.image-placeholder{display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#edf1f3,#e1e6e9);color:#6d7c8c;font-size:12px;letter-spacing:.04em}
 .story-image.image-placeholder span{padding:12px;text-align:center}
 .story-image .image-credit{position:absolute;left:7px;bottom:7px;max-width:calc(100% - 14px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 6px;background:rgba(15,30,49,.72);border-radius:2px;color:#fff;font-size:9px;text-decoration:none}
@@ -879,9 +880,12 @@ function renderEditorial(data){
  const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
  const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
  const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
+ const scope=currentLang==="en"?(e.analysis_scope_en||""):(e.analysis_scope_zh||"");
+ const basis=Array.isArray(e.source_basis)?e.source_basis.slice(0,5):[];
+ const basisMarkup=basis.length?'<div class="editorial-sources"><small>'+esc(currentLang==="en"?"Source basis: ":"依据来源：")+basis.map(item=>'<a href="'+esc(item.url||"#")+'" target="_blank" rel="noopener noreferrer" title="'+esc(currentLang==="en"?(item.title_en||item.title_zh||""):(item.title_zh||item.title_en||""))+'">'+esc(item.source||item.title_zh||item.title_en||"Source")+'</a>').join(" · ")+'</small></div>':"";
  if(!core&&!trend&&!next){root.hidden=true;root.innerHTML="";return}
  root.hidden=false;
- root.innerHTML='<strong>'+esc(currentLang==="en"?"THE EDITORIAL TAKE":"今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
+ root.innerHTML='<strong>'+esc(currentLang==="en"?"DAVYLAB ANALYSIS · EDITORIAL TAKE":"DAVYLAB 分析｜今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(scope?'<small class="editorial-scope">'+esc(scope)+'</small>':'')+(basisMarkup)+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
 function themeFallbackUrl(x){
  const title=[x?.title_zh,x?.title_en,x?.original_title,x?.title,x?.what_zh,x?.what_en,x?.summary].filter(Boolean).join(" ").toLowerCase();
