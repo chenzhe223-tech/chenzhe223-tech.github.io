@@ -1,8 +1,8 @@
 {
   "report_date": "2026-11-02",
-  "generated_at": "2026-11-02T10:35:28.792317+08:00",
-  "source_report_generated_at": "2026-11-02T10:30:50.780183+08:00",
-  "source_report_sha256": "c1569f3eba923580ddbbcd013e53851da124df9ea20f44cda9c07fa6df9b44a7",
+  "generated_at": "2026-11-02T11:07:46.384198+08:00",
+  "source_report_generated_at": "2026-11-02T11:02:23.002248+08:00",
+  "source_report_sha256": "ee1c4ee4d3170dab0b0ac6d026533232d956746646ef01ae72a7cadad16b3a32",
   "public_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "style": {
     "design_variant": "geometric-navy",
@@ -24,36 +24,37 @@
   ],
   "required_count": 6,
   "story_urls": [
-    "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
-    "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
-    "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
     "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+    "https://www.qbitai.com/2026/11/507031.html",
+    "https://www.ithome.com/1/020/890.htm",
+    "https://openai.com/index/openai-servicenow-partnership-expansion",
     "https://simonwillison.net/2026/Oct/31/datasette-llm/"
   ],
   "story_titles": [
-    "OpenAI might rebrand its data centers as ‘AI compute campuses’",
-    "AI can make tech CEOs’ lives easier. What about everyone else?",
-    "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
-    "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
-    "datasette-llm 0.1a9"
+    "DeepSeek 开源 Router-Worker 编码代理原型",
+    "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+    "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
+    "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
+    "Datasette Agent 更新：自动继承 LLM CLI 默认模型"
   ],
   "topic_story_urls": [
-    "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
-    "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
-    "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
     "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+    "https://www.qbitai.com/2026/11/507031.html",
+    "https://www.ithome.com/1/020/890.htm",
+    "https://openai.com/index/openai-servicenow-partnership-expansion",
     "https://simonwillison.net/2026/Oct/31/datasette-llm/"
   ],
   "topic_categories": {
-    "unclassified": 5
+    "china_ai_news": 3,
+    "global_news": 2
   },
   "skill": {
-    "name": "cloudflare/security-audit-skill",
+    "name": "Cloudflare Security Audit Skill",
     "url": "https://github.com/cloudflare/security-audit-skill",
-    "description_zh": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings（仓库实际扫描到1个SKILL.md文件）",
-    "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+    "description_zh": "面向支持 Agent Skills 标准的编码代理，按多阶段流程检查代码仓库、API、服务和工具，生成结构化发现项，并对关键问题做独立复核。适合在隔离环境中辅助开展代码安全检查（仓库实际扫描到1个SKILL.md文件）",
+    "compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
     "actual_skill_file_count": 1,
-    "security_status": "未完成专项安全审计",
+    "security_status": "未对该 Skill 本身进行独立安全审计；建议在隔离沙箱中运行。",
     "official_website": "https://github.com/cloudflare/security-audit-skill",
     "official_website_verified": true,
     "official_website_http_status": 200,
@@ -63,7 +64,7 @@
       "skills/security-audit/SKILL.md"
     ],
     "evidence_verified": true,
-    "license": "MIT License"
+    "license": "MIT"
   },
   "images": [
     {
@@ -117,7 +118,7 @@
           "y": 177,
           "width": 800,
           "height": 20,
-          "actual_width": 721.8,
+          "actual_width": 224.3,
           "line_count": 1,
           "truncated": false,
           "overflow": false
@@ -127,7 +128,7 @@
           "y": 323,
           "width": 320,
           "height": 42,
-          "actual_width": 315.3,
+          "actual_width": 303.1,
           "line_count": 2,
           "truncated": false,
           "overflow": false
@@ -137,9 +138,9 @@
           "y": 369,
           "width": 364,
           "height": 30,
-          "actual_width": 352.9,
+          "actual_width": 361.8,
           "line_count": 2,
-          "truncated": false,
+          "truncated": true,
           "overflow": false
         },
         {
@@ -147,7 +148,7 @@
           "y": 323,
           "width": 320,
           "height": 42,
-          "actual_width": 305.8,
+          "actual_width": 314.2,
           "line_count": 2,
           "truncated": false,
           "overflow": false
@@ -157,9 +158,9 @@
           "y": 369,
           "width": 364,
           "height": 30,
-          "actual_width": 360.6,
+          "actual_width": 362.4,
           "line_count": 2,
-          "truncated": false,
+          "truncated": true,
           "overflow": false
         },
         {
@@ -167,9 +168,9 @@
           "y": 455,
           "width": 320,
           "height": 42,
-          "actual_width": 319.8,
+          "actual_width": 306.0,
           "line_count": 2,
-          "truncated": true,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -177,7 +178,7 @@
           "y": 501,
           "width": 364,
           "height": 30,
-          "actual_width": 359.1,
+          "actual_width": 362.5,
           "line_count": 2,
           "truncated": true,
           "overflow": false
@@ -187,7 +188,7 @@
           "y": 455,
           "width": 320,
           "height": 42,
-          "actual_width": 312.1,
+          "actual_width": 316.9,
           "line_count": 2,
           "truncated": false,
           "overflow": false
@@ -197,7 +198,7 @@
           "y": 501,
           "width": 364,
           "height": 30,
-          "actual_width": 361.7,
+          "actual_width": 362.3,
           "line_count": 2,
           "truncated": true,
           "overflow": false
@@ -207,7 +208,7 @@
           "y": 587,
           "width": 740,
           "height": 21,
-          "actual_width": 155.4,
+          "actual_width": 404.0,
           "line_count": 1,
           "truncated": false,
           "overflow": false
@@ -217,9 +218,9 @@
           "y": 633,
           "width": 784,
           "height": 30,
-          "actual_width": 782.1,
+          "actual_width": 783.4,
           "line_count": 2,
-          "truncated": true,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -227,7 +228,7 @@
           "y": 761,
           "width": 760,
           "height": 40,
-          "actual_width": 759.3,
+          "actual_width": 752.0,
           "line_count": 2,
           "truncated": false,
           "overflow": false
@@ -237,7 +238,7 @@
           "y": 895,
           "width": 430,
           "height": 28,
-          "actual_width": 314.1,
+          "actual_width": 316.9,
           "line_count": 1,
           "truncated": false,
           "overflow": false
@@ -247,268 +248,8 @@
           "y": 955,
           "width": 430,
           "height": 57,
-          "actual_width": 422.7,
+          "actual_width": 429.1,
           "line_count": 3,
-          "truncated": false,
-          "overflow": false
-        }
-      ],
-      "width": 900,
-      "height": 1200,
-      "format": "PNG",
-      "file_size_bytes": 153505,
-      "sha256": "d6ad2f2c9fcfb318edecdda67f3ae3f53b5fdfd5d2aa83483f1f37d0167d382f",
-      "qa_status": "PASS"
-    },
-    {
-      "filename": "02-topic-story-01-openai-might-rebrand-its-data-centers-as-a.png",
-      "theme": "OpenAI might rebrand its data centers as ‘AI compute campuses’",
-      "material_type": "程序绘制的原创主题插画",
-      "image_type": "topic_illustration",
-      "category": "unclassified",
-      "source": "TechCrunch AI",
-      "source_url": "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
-      "published": "2026-11-01T21:55:23+00:00",
-      "label": "主题插画 · 非新闻现场",
-      "layout_regions": {
-        "hero_art": [
-          0,
-          0,
-          900,
-          450
-        ],
-        "masthead": [
-          40,
-          30,
-          860,
-          60
-        ],
-        "topic_content": [
-          40,
-          475,
-          860,
-          1080
-        ],
-        "source_footer": [
-          40,
-          1090,
-          860,
-          1180
-        ]
-      },
-      "text_bounds": [
-        {
-          "x": 40,
-          "y": 515,
-          "width": 820,
-          "height": 78,
-          "actual_width": 806.5,
-          "line_count": 2,
-          "truncated": false,
-          "overflow": false
-        },
-        {
-          "x": 42,
-          "y": 605,
-          "width": 810,
-          "height": 28,
-          "actual_width": 745.8,
-          "line_count": 1,
-          "truncated": false,
-          "overflow": false
-        }
-      ],
-      "width": 900,
-      "height": 1200,
-      "format": "PNG",
-      "file_size_bytes": 42189,
-      "sha256": "a6dfb2ad4b150bc7581ec4fe6797355482eb22c39287f6f408c866c108bee3ce",
-      "qa_status": "PASS"
-    },
-    {
-      "filename": "03-topic-story-02-ai-can-make-tech-ceos-lives-easier-what-ab.png",
-      "theme": "AI can make tech CEOs’ lives easier. What about everyone else?",
-      "material_type": "程序绘制的原创主题插画",
-      "image_type": "topic_illustration",
-      "category": "unclassified",
-      "source": "TechCrunch AI",
-      "source_url": "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
-      "published": "2026-11-01T20:57:58+00:00",
-      "label": "主题插画 · 非新闻现场",
-      "layout_regions": {
-        "hero_art": [
-          0,
-          0,
-          900,
-          450
-        ],
-        "masthead": [
-          40,
-          30,
-          860,
-          60
-        ],
-        "topic_content": [
-          40,
-          475,
-          860,
-          1080
-        ],
-        "source_footer": [
-          40,
-          1090,
-          860,
-          1180
-        ]
-      },
-      "text_bounds": [
-        {
-          "x": 40,
-          "y": 515,
-          "width": 820,
-          "height": 78,
-          "actual_width": 815.5,
-          "line_count": 2,
-          "truncated": false,
-          "overflow": false
-        },
-        {
-          "x": 42,
-          "y": 605,
-          "width": 810,
-          "height": 28,
-          "actual_width": 670.8,
-          "line_count": 1,
-          "truncated": false,
-          "overflow": false
-        }
-      ],
-      "width": 900,
-      "height": 1200,
-      "format": "PNG",
-      "file_size_bytes": 43496,
-      "sha256": "269f7d243aa1a44fcfe571497a822403baaacdb20d1d45efd20b73ce82067c40",
-      "qa_status": "PASS"
-    },
-    {
-      "filename": "04-topic-story-03-nace-ai-open-sources-drex-max-v1-a-27b-dec.png",
-      "theme": "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
-      "material_type": "程序绘制的原创主题插画",
-      "image_type": "topic_illustration",
-      "category": "unclassified",
-      "source": "MarkTechPost",
-      "source_url": "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
-      "published": "2026-11-01T08:10:07+00:00",
-      "label": "主题插画 · 非新闻现场",
-      "layout_regions": {
-        "hero_art": [
-          0,
-          0,
-          900,
-          450
-        ],
-        "masthead": [
-          40,
-          30,
-          860,
-          60
-        ],
-        "topic_content": [
-          40,
-          475,
-          860,
-          1080
-        ],
-        "source_footer": [
-          40,
-          1090,
-          860,
-          1180
-        ]
-      },
-      "text_bounds": [
-        {
-          "x": 40,
-          "y": 515,
-          "width": 820,
-          "height": 78,
-          "actual_width": 810.5,
-          "line_count": 2,
-          "truncated": false,
-          "overflow": false
-        },
-        {
-          "x": 42,
-          "y": 605,
-          "width": 810,
-          "height": 84,
-          "actual_width": 803.7,
-          "line_count": 3,
-          "truncated": false,
-          "overflow": false
-        }
-      ],
-      "width": 900,
-      "height": 1200,
-      "format": "PNG",
-      "file_size_bytes": 64452,
-      "sha256": "ca4ec944b6b11e321292987c46c86e3ffecf29a52b8982946b261e9320685f75",
-      "qa_status": "PASS"
-    },
-    {
-      "filename": "05-topic-story-04-deepseek-open-sources-dsh-superagent-a-rou.png",
-      "theme": "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
-      "material_type": "程序绘制的原创主题插画",
-      "image_type": "topic_illustration",
-      "category": "unclassified",
-      "source": "MarkTechPost",
-      "source_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
-      "published": "2026-11-01T07:47:17+00:00",
-      "label": "主题插画 · 非新闻现场",
-      "layout_regions": {
-        "hero_art": [
-          0,
-          0,
-          900,
-          450
-        ],
-        "masthead": [
-          40,
-          30,
-          860,
-          60
-        ],
-        "topic_content": [
-          40,
-          475,
-          860,
-          1080
-        ],
-        "source_footer": [
-          40,
-          1090,
-          860,
-          1180
-        ]
-      },
-      "text_bounds": [
-        {
-          "x": 40,
-          "y": 515,
-          "width": 820,
-          "height": 78,
-          "actual_width": 808.3,
-          "line_count": 2,
-          "truncated": false,
-          "overflow": false
-        },
-        {
-          "x": 42,
-          "y": 605,
-          "width": 810,
-          "height": 112,
-          "actual_width": 807.9,
-          "line_count": 4,
           "truncated": true,
           "overflow": false
         }
@@ -516,19 +257,19 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 65650,
-      "sha256": "9216aba5ba3360122033ce91a7696ad74f18a7af0b693d3d3ab4034c557940a8",
+      "file_size_bytes": 231407,
+      "sha256": "543e2cf5074b3641b882e9fcf5873489e13124b8c19339053abaf7a10f8ab786",
       "qa_status": "PASS"
     },
     {
-      "filename": "06-topic-story-05-datasette-llm-0-1a9.png",
-      "theme": "datasette-llm 0.1a9",
+      "filename": "02-china-story-01-deepseek-router-worker.png",
+      "theme": "DeepSeek 开源 Router-Worker 编码代理原型",
       "material_type": "程序绘制的原创主题插画",
       "image_type": "topic_illustration",
-      "category": "unclassified",
-      "source": "Simon Willison",
-      "source_url": "https://simonwillison.net/2026/Oct/31/datasette-llm/",
-      "published": "2026-10-31T22:10:01+00:00",
+      "category": "china_ai_news",
+      "source": "MarkTechPost；DeepSeek 官方 GitHub",
+      "source_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+      "published": "2026-11-01",
       "label": "主题插画 · 非新闻现场",
       "layout_regions": {
         "hero_art": [
@@ -562,7 +303,7 @@
           "y": 515,
           "width": 820,
           "height": 39,
-          "actual_width": 276.2,
+          "actual_width": 634.8,
           "line_count": 1,
           "truncated": false,
           "overflow": false
@@ -572,22 +313,332 @@
           "y": 566,
           "width": 810,
           "height": 112,
-          "actual_width": 808.8,
+          "actual_width": 809.0,
           "line_count": 4,
           "truncated": true,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 920,
+          "width": 810,
+          "height": 75,
+          "actual_width": 800.1,
+          "line_count": 3,
+          "truncated": false,
           "overflow": false
         }
       ],
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 56865,
-      "sha256": "b86354d671f8084f43ef1a9bbd79b4e2048dc889a0b09c8f194f63628411d57f",
+      "file_size_bytes": 136723,
+      "sha256": "1726ab24dd1c137a82743d226ba399183d1b541377f4575ac666cd870aa76163",
+      "qa_status": "PASS"
+    },
+    {
+      "filename": "03-china-story-02-ai.png",
+      "theme": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+      "material_type": "程序绘制的原创主题插画",
+      "image_type": "topic_illustration",
+      "category": "china_ai_news",
+      "source": "量子位；arXiv 论文",
+      "source_url": "https://www.qbitai.com/2026/11/507031.html",
+      "published": "2026-10-29",
+      "label": "主题插画 · 非新闻现场",
+      "layout_regions": {
+        "hero_art": [
+          0,
+          0,
+          900,
+          450
+        ],
+        "masthead": [
+          40,
+          30,
+          860,
+          60
+        ],
+        "topic_content": [
+          40,
+          475,
+          860,
+          1080
+        ],
+        "source_footer": [
+          40,
+          1090,
+          860,
+          1180
+        ]
+      },
+      "text_bounds": [
+        {
+          "x": 40,
+          "y": 515,
+          "width": 820,
+          "height": 39,
+          "actual_width": 814.6,
+          "line_count": 1,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 566,
+          "width": 810,
+          "height": 112,
+          "actual_width": 803.1,
+          "line_count": 4,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 920,
+          "width": 810,
+          "height": 75,
+          "actual_width": 807.0,
+          "line_count": 3,
+          "truncated": false,
+          "overflow": false
+        }
+      ],
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 155773,
+      "sha256": "7e8a7c7bdea0370ceb8d32699581acdb49a515da984109271fba66d010f62564",
+      "qa_status": "PASS"
+    },
+    {
+      "filename": "04-china-story-03-story-03.png",
+      "theme": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
+      "material_type": "程序绘制的原创主题插画",
+      "image_type": "topic_illustration",
+      "category": "china_ai_news",
+      "source": "IT之家；快科技（引用央视新闻）",
+      "source_url": "https://www.ithome.com/1/020/890.htm",
+      "published": "2026-11-02",
+      "label": "主题插画 · 非新闻现场",
+      "layout_regions": {
+        "hero_art": [
+          0,
+          0,
+          900,
+          450
+        ],
+        "masthead": [
+          40,
+          30,
+          860,
+          60
+        ],
+        "topic_content": [
+          40,
+          475,
+          860,
+          1080
+        ],
+        "source_footer": [
+          40,
+          1090,
+          860,
+          1180
+        ]
+      },
+      "text_bounds": [
+        {
+          "x": 40,
+          "y": 515,
+          "width": 820,
+          "height": 78,
+          "actual_width": 800.0,
+          "line_count": 2,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 605,
+          "width": 810,
+          "height": 84,
+          "actual_width": 809.2,
+          "line_count": 3,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 920,
+          "width": 810,
+          "height": 50,
+          "actual_width": 798.0,
+          "line_count": 2,
+          "truncated": false,
+          "overflow": false
+        }
+      ],
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 124740,
+      "sha256": "851f479338667910eeba8091e364465cd5c49b2856053b44cd93f69af5804833",
+      "qa_status": "PASS"
+    },
+    {
+      "filename": "05-global-story-04-openai-servicenow-ai.png",
+      "theme": "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
+      "material_type": "程序绘制的原创主题插画",
+      "image_type": "topic_illustration",
+      "category": "global_news",
+      "source": "OpenAI 官方公告；ServiceNow Newsroom",
+      "source_url": "https://openai.com/index/openai-servicenow-partnership-expansion",
+      "published": "2026-10-28",
+      "label": "主题插画 · 非新闻现场",
+      "layout_regions": {
+        "hero_art": [
+          0,
+          0,
+          900,
+          450
+        ],
+        "masthead": [
+          40,
+          30,
+          860,
+          60
+        ],
+        "topic_content": [
+          40,
+          475,
+          860,
+          1080
+        ],
+        "source_footer": [
+          40,
+          1090,
+          860,
+          1180
+        ]
+      },
+      "text_bounds": [
+        {
+          "x": 40,
+          "y": 515,
+          "width": 820,
+          "height": 39,
+          "actual_width": 795.7,
+          "line_count": 1,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 566,
+          "width": 810,
+          "height": 112,
+          "actual_width": 807.3,
+          "line_count": 4,
+          "truncated": true,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 920,
+          "width": 810,
+          "height": 75,
+          "actual_width": 806.7,
+          "line_count": 3,
+          "truncated": false,
+          "overflow": false
+        }
+      ],
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 135327,
+      "sha256": "414d2a5edcdaa76f7d628008ee3e87a62f3987925e852bbba84a8c30fc16218b",
+      "qa_status": "PASS"
+    },
+    {
+      "filename": "06-global-story-05-datasette-agent-llm-cli.png",
+      "theme": "Datasette Agent 更新：自动继承 LLM CLI 默认模型",
+      "material_type": "程序绘制的原创主题插画",
+      "image_type": "topic_illustration",
+      "category": "global_news",
+      "source": "Simon Willison's Weblog；datasette/datasette-llm GitHub",
+      "source_url": "https://simonwillison.net/2026/Oct/31/datasette-llm/",
+      "published": "2026-10-31",
+      "label": "主题插画 · 非新闻现场",
+      "layout_regions": {
+        "hero_art": [
+          0,
+          0,
+          900,
+          450
+        ],
+        "masthead": [
+          40,
+          30,
+          860,
+          60
+        ],
+        "topic_content": [
+          40,
+          475,
+          860,
+          1080
+        ],
+        "source_footer": [
+          40,
+          1090,
+          860,
+          1180
+        ]
+      },
+      "text_bounds": [
+        {
+          "x": 40,
+          "y": 515,
+          "width": 820,
+          "height": 39,
+          "actual_width": 718.3,
+          "line_count": 1,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 566,
+          "width": 810,
+          "height": 84,
+          "actual_width": 807.2,
+          "line_count": 3,
+          "truncated": false,
+          "overflow": false
+        },
+        {
+          "x": 42,
+          "y": 920,
+          "width": 810,
+          "height": 50,
+          "actual_width": 794.3,
+          "line_count": 2,
+          "truncated": false,
+          "overflow": false
+        }
+      ],
+      "width": 900,
+      "height": 1200,
+      "format": "PNG",
+      "file_size_bytes": 108602,
+      "sha256": "02f7e27c01934d2a4ce3f4d20050f498703f7f59f87df8edb137abfcd778df4a",
       "qa_status": "PASS"
     }
   ],
   "phone_camera_scan": "NOT_TESTED",
   "wechat_editor_preview": "NOT_TESTED",
-  "verified_at": "2026-11-02T10:35:29.189889+08:00",
+  "verified_at": "2026-11-02T11:07:46.743402+08:00",
   "qa_status": "PASS"
 }

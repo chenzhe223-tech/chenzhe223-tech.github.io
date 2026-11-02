@@ -1,24 +1,24 @@
 {
   "report_date": "2026-11-02",
-  "source_report_generated_at": "2026-11-02T10:30:50.780183+08:00",
-  "source_report_sha256": "c1569f3eba923580ddbbcd013e53851da124df9ea20f44cda9c07fa6df9b44a7",
+  "source_report_generated_at": "2026-11-02T11:02:23.002248+08:00",
+  "source_report_sha256": "ee1c4ee4d3170dab0b0ac6d026533232d956746646ef01ae72a7cadad16b3a32",
   "story_titles": [
-    "OpenAI might rebrand its data centers as ‘AI compute campuses’",
-    "AI can make tech CEOs’ lives easier. What about everyone else?",
-    "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
-    "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
-    "datasette-llm 0.1a9"
+    "DeepSeek 开源 Router-Worker 编码代理原型",
+    "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+    "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
+    "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
+    "Datasette Agent 更新：自动继承 LLM CLI 默认模型"
   ],
   "story_urls": [
-    "https://techcrunch.com/2026/11/01/openai-might-rebrand-its-data-centers-as-ai-compute-campuses/",
-    "https://techcrunch.com/2026/11/01/ai-can-make-tech-ceos-lives-easier-what-about-everyone-else/",
-    "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
     "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
+    "https://www.qbitai.com/2026/11/507031.html",
+    "https://www.ithome.com/1/020/890.htm",
+    "https://openai.com/index/openai-servicenow-partnership-expansion",
     "https://simonwillison.net/2026/Oct/31/datasette-llm/"
   ],
-  "skill_name": "cloudflare/security-audit-skill",
-  "skill_compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
-  "checked_at": "2026-11-02T10:35:29.189889+08:00",
+  "skill_name": "Cloudflare Security Audit Skill",
+  "skill_compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
+  "checked_at": "2026-11-02T11:07:46.743402+08:00",
   "style": {
     "design_variant": "geometric-navy",
     "iso_year": 2026,
@@ -75,42 +75,42 @@
       "filename": "01-main-poster.png",
       "region_count": 6,
       "text_block_count": 14,
-      "truncated_text_blocks": 4,
+      "truncated_text_blocks": 5,
       "status": "PASS"
     },
     {
-      "filename": "02-topic-story-01-openai-might-rebrand-its-data-centers-as-a.png",
+      "filename": "02-china-story-01-deepseek-router-worker.png",
       "region_count": 4,
-      "text_block_count": 2,
-      "truncated_text_blocks": 0,
-      "status": "PASS"
-    },
-    {
-      "filename": "03-topic-story-02-ai-can-make-tech-ceos-lives-easier-what-ab.png",
-      "region_count": 4,
-      "text_block_count": 2,
-      "truncated_text_blocks": 0,
-      "status": "PASS"
-    },
-    {
-      "filename": "04-topic-story-03-nace-ai-open-sources-drex-max-v1-a-27b-dec.png",
-      "region_count": 4,
-      "text_block_count": 2,
-      "truncated_text_blocks": 0,
-      "status": "PASS"
-    },
-    {
-      "filename": "05-topic-story-04-deepseek-open-sources-dsh-superagent-a-rou.png",
-      "region_count": 4,
-      "text_block_count": 2,
+      "text_block_count": 3,
       "truncated_text_blocks": 1,
       "status": "PASS"
     },
     {
-      "filename": "06-topic-story-05-datasette-llm-0-1a9.png",
+      "filename": "03-china-story-02-ai.png",
       "region_count": 4,
-      "text_block_count": 2,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "04-china-story-03-story-03.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
+      "status": "PASS"
+    },
+    {
+      "filename": "05-global-story-04-openai-servicenow-ai.png",
+      "region_count": 4,
+      "text_block_count": 3,
       "truncated_text_blocks": 1,
+      "status": "PASS"
+    },
+    {
+      "filename": "06-global-story-05-datasette-agent-llm-cli.png",
+      "region_count": 4,
+      "text_block_count": 3,
+      "truncated_text_blocks": 0,
       "status": "PASS"
     }
   ],
@@ -120,8 +120,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 153505,
-      "sha256": "d6ad2f2c9fcfb318edecdda67f3ae3f53b5fdfd5d2aa83483f1f37d0167d382f",
+      "file_size_bytes": 231407,
+      "sha256": "543e2cf5074b3641b882e9fcf5873489e13124b8c19339053abaf7a10f8ab786",
       "theme": "当日主海报：五条精选新闻、DAVYLAB观察、Skill与二维码",
       "image_type": "main_poster",
       "category": null,
@@ -129,67 +129,67 @@
       "status": "PASS"
     },
     {
-      "filename": "02-topic-story-01-openai-might-rebrand-its-data-centers-as-a.png",
+      "filename": "02-china-story-01-deepseek-router-worker.png",
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 42189,
-      "sha256": "a6dfb2ad4b150bc7581ec4fe6797355482eb22c39287f6f408c866c108bee3ce",
-      "theme": "OpenAI might rebrand its data centers as ‘AI compute campuses’",
+      "file_size_bytes": 136723,
+      "sha256": "1726ab24dd1c137a82743d226ba399183d1b541377f4575ac666cd870aa76163",
+      "theme": "DeepSeek 开源 Router-Worker 编码代理原型",
       "image_type": "topic_illustration",
-      "category": "unclassified",
+      "category": "china_ai_news",
       "material_type": "程序绘制的原创主题插画",
       "status": "PASS"
     },
     {
-      "filename": "03-topic-story-02-ai-can-make-tech-ceos-lives-easier-what-ab.png",
+      "filename": "03-china-story-02-ai.png",
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 43496,
-      "sha256": "269f7d243aa1a44fcfe571497a822403baaacdb20d1d45efd20b73ce82067c40",
-      "theme": "AI can make tech CEOs’ lives easier. What about everyone else?",
+      "file_size_bytes": 155773,
+      "sha256": "7e8a7c7bdea0370ceb8d32699581acdb49a515da984109271fba66d010f62564",
+      "theme": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
       "image_type": "topic_illustration",
-      "category": "unclassified",
+      "category": "china_ai_news",
       "material_type": "程序绘制的原创主题插画",
       "status": "PASS"
     },
     {
-      "filename": "04-topic-story-03-nace-ai-open-sources-drex-max-v1-a-27b-dec.png",
+      "filename": "04-china-story-03-story-03.png",
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 64452,
-      "sha256": "ca4ec944b6b11e321292987c46c86e3ffecf29a52b8982946b261e9320685f75",
-      "theme": "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
+      "file_size_bytes": 124740,
+      "sha256": "851f479338667910eeba8091e364465cd5c49b2856053b44cd93f69af5804833",
+      "theme": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
       "image_type": "topic_illustration",
-      "category": "unclassified",
+      "category": "china_ai_news",
       "material_type": "程序绘制的原创主题插画",
       "status": "PASS"
     },
     {
-      "filename": "05-topic-story-04-deepseek-open-sources-dsh-superagent-a-rou.png",
+      "filename": "05-global-story-04-openai-servicenow-ai.png",
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 65650,
-      "sha256": "9216aba5ba3360122033ce91a7696ad74f18a7af0b693d3d3ab4034c557940a8",
-      "theme": "DeepSeek Open-Sources dsh-superagent, a Router-Worker Coding Agent",
+      "file_size_bytes": 135327,
+      "sha256": "414d2a5edcdaa76f7d628008ee3e87a62f3987925e852bbba84a8c30fc16218b",
+      "theme": "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
       "image_type": "topic_illustration",
-      "category": "unclassified",
+      "category": "global_news",
       "material_type": "程序绘制的原创主题插画",
       "status": "PASS"
     },
     {
-      "filename": "06-topic-story-05-datasette-llm-0-1a9.png",
+      "filename": "06-global-story-05-datasette-agent-llm-cli.png",
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 56865,
-      "sha256": "b86354d671f8084f43ef1a9bbd79b4e2048dc889a0b09c8f194f63628411d57f",
-      "theme": "datasette-llm 0.1a9",
+      "file_size_bytes": 108602,
+      "sha256": "02f7e27c01934d2a4ce3f4d20050f498703f7f59f87df8edb137abfcd778df4a",
+      "theme": "Datasette Agent 更新：自动继承 LLM CLI 默认模型",
       "image_type": "topic_illustration",
-      "category": "unclassified",
+      "category": "global_news",
       "material_type": "程序绘制的原创主题插画",
       "status": "PASS"
     }
@@ -225,6 +225,10 @@
     },
     {
       "name": "skill_metadata_and_copy_consistency",
+      "status": "PASS"
+    },
+    {
+      "name": "social_intro_matches_actual_top5_coverage",
       "status": "PASS"
     },
     {
