@@ -694,6 +694,10 @@ const mark = (status, name, detail = '') => {
         const request = route.request();
         const url = new URL(request.url());
         qaRouteEvents.push({ method: request.method(), path: url.pathname });
+        if (request.method() === 'OPTIONS') {
+          await route.fulfill({ status: 204, headers: qaCorsHeaders });
+          return;
+        }
         if (url.pathname === '/auth/v1/token' && url.searchParams.get('grant_type') === 'refresh_token') {
           const body = request.postDataJSON();
           qaRefreshRequest = { refreshToken: body.refresh_token, method: request.method() };
@@ -709,7 +713,6 @@ const mark = (status, name, detail = '') => {
           return;
         }
         if (url.pathname !== '/rest/v1/keypocket_devices') { await route.continue(); return; }
-        if (request.method() === 'OPTIONS') { await route.fulfill({ status: 204, headers: qaCorsHeaders }); return; }
         if (request.method() === 'GET') {
           const auth = request.headers()['authorization'] || '';
           if (auth === 'Bearer qa.expired.access.token') {
