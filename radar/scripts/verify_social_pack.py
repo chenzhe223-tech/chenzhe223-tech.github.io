@@ -259,7 +259,11 @@ def main() -> int:
             {"name": "final_png_qr_exact_decode", "status": "PASS"},
             {"name": "qr_contrast_quiet_zone_and_size", "status": "PASS"},
             {"name": "formal_url_http_and_redirect", "status": "PASS"},
-            {"name": "wechat_copy_matches_top5", "status": "PASS"}
+            {"name": "wechat_copy_matches_top5", "status": "PASS"},
+            {"name": "source_report_timestamp_and_hash_match", "status": "PASS"},
+            {"name": "story_title_and_order_match_formal_report", "status": "PASS"},
+            {"name": "low_confidence_caveats_and_skill_compatibility_in_copy", "status": "PASS"},
+            {"name": "image_file_size_hash_and_individual_status", "status": "PASS"}
         ],
         "phone_camera_scan": "NOT_TESTED",
         "wechat_editor_preview": "NOT_TESTED",
