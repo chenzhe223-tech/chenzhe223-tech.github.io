@@ -20,6 +20,25 @@ class EditorialProvenanceTests(unittest.TestCase):
         self.assertIn("Claude Code 专用", skills[0]["compatibility_status"])
         self.assertIn("Codex/WorkBuddy", skills[0]["compatibility_status"])
 
+    def test_medium_confidence_benchmark_still_gets_source_attribution(self):
+        report = {
+            "top5": [{
+                "confidence": "medium",
+                "source": "MarkTechPost",
+                "source_url": "https://marktechpost.com/benchmark",
+                "title_zh": "Nace AI Drex Max v1",
+                "what_zh": "Nace AI 发布27B模型，评分67.52。",
+                "summary_zh": "该模型在测试中取得67.52分。",
+                "what_en": "The model achieved a score of 67.52.",
+            }]
+        }
+        apply_claim_provenance(report)
+        story = report["top5"][0]
+        self.assertIn("项目方/媒体披露", story["what_zh"])
+        self.assertIn("尚无独立评测", story["what_zh"])
+        self.assertIn("项目方/媒体披露", story["summary_zh"])
+        self.assertIn("reported by the project or media", story["what_en"])
+
     def test_low_confidence_claim_is_attributed_and_caveated(self):
         report = {
             "top5": [{
