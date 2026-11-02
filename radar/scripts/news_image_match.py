@@ -22,6 +22,22 @@ TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 5
 CACHE_VERSION = 4
+QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
+
+def load_image_relevance_policy():
+    if not QA_RULES_PATH.is_file():
+        raise RuntimeError(f"P0 image relevance config missing: {QA_RULES_PATH}")
+    config = json.loads(QA_RULES_PATH.read_text(encoding="utf-8"))
+    policy = config.get("image_relevance")
+    if not isinstance(policy, dict):
+        raise RuntimeError("P0 image_relevance policy missing from qa-rules.json")
+    minimum = float(policy.get("minimum_score", 0))
+    if not 0.35 <= minimum <= 1.0 or policy.get("fallback_on_low_score") is not True:
+        raise RuntimeError("P0 image relevance policy invalid")
+    return policy
+
+IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
+MIN_IMAGE_RELEVANCE_SCORE = float(IMAGE_RELEVANCE_POLICY["minimum_score"])
 IMAGE_FIELDS = (
     "image_url", "image_source", "image_page_url", "image_credit",
     "image_license", "image_license_url", "image_alt", "image_match_status",
@@ -168,7 +184,7 @@ def candidate_relevance(story_title: str, candidate_title: str) -> tuple[bool, f
     score = len(overlap) / max(2, min(len(story), 8))
     # A shared brand token alone is not semantic relevance: Apple fruit must not match
     # Apple Intelligence, and a lone OpenAI logo is not a ServiceNow workflow image.
-    accepted = score >= 0.35 and (bool(entities) or len(overlap) >= 2)
+    accepted = score >= MIN_IMAGE_RELEVANCE_SCORE and (bool(entities) or len(overlap) >= 2)
     return accepted, round(score, 3)
 
 def extract_image_candidates(document: str, page_url: str) -> list[str]:
