@@ -1,7 +1,7 @@
 {
   "report_date": "2026-11-02",
-  "source_report_generated_at": "2026-11-02T11:02:23.002248+08:00",
-  "source_report_sha256": "ee1c4ee4d3170dab0b0ac6d026533232d956746646ef01ae72a7cadad16b3a32",
+  "source_report_generated_at": "2026-11-02T12:22:54.778982+08:00",
+  "source_report_sha256": "5b963707b8cc84466a806c3fc5698c75842485efb62b25bfe182ded3ac315db3",
   "story_titles": [
     "DeepSeek 开源 Router-Worker 编码代理原型",
     "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
@@ -17,8 +17,8 @@
     "https://simonwillison.net/2026/Oct/31/datasette-llm/"
   ],
   "skill_name": "Cloudflare Security Audit Skill",
-  "skill_compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
-  "checked_at": "2026-11-02T11:07:46.743402+08:00",
+  "skill_compatibility_status": "已核验官方 GitHub 项目页、README、SKILL.md 与 MIT 许可证；未实测安装，使用请自行评估",
+  "checked_at": "2026-11-02T12:28:08.106833+08:00",
   "style": {
     "design_variant": "geometric-navy",
     "iso_year": 2026,
@@ -75,14 +75,14 @@
       "filename": "01-main-poster.png",
       "region_count": 6,
       "text_block_count": 14,
-      "truncated_text_blocks": 5,
+      "truncated_text_blocks": 0,
       "status": "PASS"
     },
     {
       "filename": "02-china-story-01-deepseek-router-worker.png",
       "region_count": 4,
       "text_block_count": 3,
-      "truncated_text_blocks": 1,
+      "truncated_text_blocks": 0,
       "status": "PASS"
     },
     {
@@ -103,7 +103,7 @@
       "filename": "05-global-story-04-openai-servicenow-ai.png",
       "region_count": 4,
       "text_block_count": 3,
-      "truncated_text_blocks": 1,
+      "truncated_text_blocks": 0,
       "status": "PASS"
     },
     {
@@ -120,8 +120,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 231407,
-      "sha256": "543e2cf5074b3641b882e9fcf5873489e13124b8c19339053abaf7a10f8ab786",
+      "file_size_bytes": 186248,
+      "sha256": "759749f81e38a97b180643216be925fd463d73498824f7665b1904cf72331b03",
       "theme": "当日主海报：五条精选新闻、DAVYLAB观察、Skill与二维码",
       "image_type": "main_poster",
       "category": null,
@@ -133,8 +133,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 136723,
-      "sha256": "1726ab24dd1c137a82743d226ba399183d1b541377f4575ac666cd870aa76163",
+      "file_size_bytes": 89802,
+      "sha256": "bd30cbb2e9ee78e34c2e59945b71092f25bde7fc135a7901e0b8fe5a08946195",
       "theme": "DeepSeek 开源 Router-Worker 编码代理原型",
       "image_type": "topic_illustration",
       "category": "china_ai_news",
@@ -146,8 +146,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 155773,
-      "sha256": "7e8a7c7bdea0370ceb8d32699581acdb49a515da984109271fba66d010f62564",
+      "file_size_bytes": 97232,
+      "sha256": "9858824d7b37ad5d288bec2229aad871a2539c615122d3221d1719b306225aa7",
       "theme": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
       "image_type": "topic_illustration",
       "category": "china_ai_news",
@@ -159,8 +159,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 124740,
-      "sha256": "851f479338667910eeba8091e364465cd5c49b2856053b44cd93f69af5804833",
+      "file_size_bytes": 89770,
+      "sha256": "e476f2c618314bc973dade9478e3c9eef6cc94d435a563bef6bad0dc52496640",
       "theme": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
       "image_type": "topic_illustration",
       "category": "china_ai_news",
@@ -172,8 +172,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 135327,
-      "sha256": "414d2a5edcdaa76f7d628008ee3e87a62f3987925e852bbba84a8c30fc16218b",
+      "file_size_bytes": 92227,
+      "sha256": "657bb6899a8176128ea546e6b63f98eccfa82164ba5f98d7d42a37a5cb4f72a4",
       "theme": "OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
       "image_type": "topic_illustration",
       "category": "global_news",
@@ -185,8 +185,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 108602,
-      "sha256": "02f7e27c01934d2a4ce3f4d20050f498703f7f59f87df8edb137abfcd778df4a",
+      "file_size_bytes": 76385,
+      "sha256": "847037902991ef704ea3164ca63f819d52c8d69076ecb81ac1df0fdacf7b3939",
       "theme": "Datasette Agent 更新：自动继承 LLM CLI 默认模型",
       "image_type": "topic_illustration",
       "category": "global_news",
@@ -201,6 +201,10 @@
     },
     {
       "name": "text_bounds_and_region_presence",
+      "status": "PASS"
+    },
+    {
+      "name": "social_images_have_no_truncated_text",
       "status": "PASS"
     },
     {
@@ -245,6 +249,10 @@
     },
     {
       "name": "wechat_copy_matches_top5",
+      "status": "PASS"
+    },
+    {
+      "name": "social_copy_uses_editorial_headline_and_concise_fields",
       "status": "PASS"
     },
     {

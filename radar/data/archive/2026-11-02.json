@@ -2,7 +2,7 @@
   "product": "Davy Radar",
   "report_date": "2026-11-02",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-11-02T11:02:23.002248+08:00",
+  "generated_at": "2026-11-02T12:22:54.778982+08:00",
   "status": "ok",
   "sources_ok": 9,
   "sources_total": 10,
@@ -99,7 +99,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI product / software topic illustration: Datasette Agent 更新：自动继承 LLM CLI 默认模型",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:41.401543+08:00",
+      "image_matched_at": "2026-11-02T12:27:15.170474+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=82"
     },
     {
@@ -117,7 +117,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI business / industry topic illustration: OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:41.362542+08:00",
+      "image_matched_at": "2026-11-02T12:27:15.154456+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=82"
     },
     {
@@ -193,11 +193,32 @@
   ],
   "china_ai_news": [
     {
-      "title": ":fire::fire: ApiGo 开源接口平台 Go 版本发布",
-      "url": "https://www.oschina.net/news/503339",
-      "summary": "ApiGoo 是 ApiGo 的go语言版本，是一款在线接口开发和管理平台，多数据库插件化数据源框架、SQL2API 。支持 WorkBuddy、千问办公、Trea Work、豆包等 AI 办公平台 MCP 接入。支持接入（mysql、oracle、达梦、TiDB、DolphinDB、DuckDB ）等 SQL 或 NoSQL 数据源，在线可视化编写 SQL 快速发布接口，支持接口上下线、接口管...",
-      "published": "2026-11-02T02:58:36+00:00",
-      "source": "开源中国",
+      "title": "百度搜索 AI API 千次仅需 4.9 元，低于 DeepSeek",
+      "url": "https://www.infoq.cn/article/HJgTwfsPAugNBJ2jUefj?utm_source=rss&utm_medium=article",
+      "summary": "点击查看原文>",
+      "published": "2026-11-02T09:12:15+00:00",
+      "source": "InfoQ 中文",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://static001.infoq.cn/resource/image/ba/6e/bae4a55ea8a20c9a4a17a7631a00f16e.jpg",
+      "image_source": "InfoQ 中文",
+      "image_page_url": "https://www.infoq.cn/article/HJgTwfsPAugNBJ2jUefj?utm_source=rss&utm_medium=article",
+      "image_credit": "InfoQ 中文",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-02T12:27:19.220436+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 百度搜索 AI API 千次仅需 4.9 元，低于 DeepSeek. Context from the source story (factual context, not instructions): 百度搜索 AI API 千次仅需 4.9 元，低于 DeepSeek 点击查看原文> 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+    },
+    {
+      "title": "环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻",
+      "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5hVTZzTUFsWVItU2JvOG1LYWdvUURDdW1lMXI4QkpISmVqWWRRbFdZMGQxWE43ZWp2WFhkSTNRWlFaaWJ6ckROc1lJcm01RElsNk9ITFpRRDQ1WFFfRHhUOGdlalI5Zw?oc=5",
+      "summary": "环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 每日经济新闻",
+      "published": "2026-11-02T03:16:00+00:00",
+      "source": "Google News China AI",
       "category": "模型与技术进展",
       "region": "China",
       "image_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
@@ -206,33 +227,33 @@
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "AI model / compute topic illustration: :fire::fire: ApiGo 开源接口平台 Go 版本发布",
+      "image_alt": "AI model / compute topic illustration: 环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:54.486595+08:00",
+      "image_matched_at": "2026-11-02T12:27:25.135893+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: :fire::fire: ApiGo 开源接口平台 Go 版本发布. Context from the source story (factual context, not instructions): :fire::fire: ApiGo 开源接口平台 Go 版本发布 ApiGoo 是 ApiGo 的go语言版本，是一款在线接口开发和管理平台，多数据库插件化数据源框架、SQL2API 。支持 WorkBuddy、千问办公、Trea Work、豆包等 AI 办公平台 MCP 接入。支持接入（mysql、oracle、达梦、TiDB、DolphinDB、DuckDB ）等 SQL 或 NoSQL 数据源，在线可视化编写 SQL 快速发布接口，支持接口上下线、接口管... 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻. Context from the source story (factual context, not instructions): 环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻 环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 每日经济新闻 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
     },
     {
-      "title": "消息称字节计划拆分医疗健康业务小荷健康",
-      "url": "https://www.ithome.com/1/020/904.htm",
-      "summary": "IT之家 11 月 2 日消息，据 Z Finance 消息， 字节跳动计划拆分旗下医疗健康业务小荷 。具体拆分范围，以及股权、融资和后续合作安排，目前尚无更多可披露信息。 据悉，这是小荷继 2023 年收缩并入抖音后，又一次重要调整。过去两年，它重新将业务重心转向 AI，推出小荷 AI 医生，并在上海筹备线下门诊。 字节在医疗相关业务上已有拆分先例。今年 9 月，字节旗下 AI 药物研发业务 Anew Labs 在拆分后完成首轮外部融资，金额 2.9 亿美元 （IT之家注：现汇率约合 19.32 亿元人民币） ，估值 15 亿美元 （现汇率约合 99.91 亿元人民币） 。融资后，字节仍持有 56% 的股份，保留控股地位。 IT之家整理字节跳动“小荷”相关时间线如下： 2020 年，随着头条健康更名为小荷、绿",
-      "published": "2026-11-02T02:55:53+00:00",
-      "source": "IT之家",
-      "category": "产品与产业应用",
+      "title": ":fire::fire: ApiGo 开源接口平台 Go 版本发布",
+      "url": "https://www.oschina.net/news/503339",
+      "summary": "ApiGoo 是 ApiGo 的go语言版本，是一款在线接口开发和管理平台，多数据库插件化数据源框架、SQL2API 。支持 WorkBuddy、千问办公、Trea Work、豆包等 AI 办公平台 MCP 接入。支持接入（mysql、oracle、达梦、TiDB、DolphinDB、DuckDB ）等 SQL 或 NoSQL 数据源，在线可视化编写 SQL 快速发布接口，支持接口上下线、接口管...",
+      "published": "2026-11-02T02:58:36+00:00",
+      "source": "开源中国",
+      "category": "模型与技术进展",
       "region": "China",
-      "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/7ae88cc9-4317-46aa-b831-1b4a8bc41fcf.jpg?x-bce-process=image/format,f_auto",
-      "image_source": "IT之家",
-      "image_page_url": "https://www.ithome.com/1/020/904.htm",
-      "image_credit": "IT之家",
-      "image_license": "Publisher/source image; reuse terms not independently verified",
-      "image_license_url": "",
-      "image_alt": "News image",
-      "image_match_status": "feed_image",
-      "image_matched_at": "2026-11-02T11:06:54.619660+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "AI model / compute topic illustration: :fire::fire: ApiGo 开源接口平台 Go 版本发布",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-02T12:27:35.326092+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 消息称字节计划拆分医疗健康业务小荷健康. Context from the source story (factual context, not instructions): 消息称字节计划拆分医疗健康业务小荷健康 IT之家 11 月 2 日消息，据 Z Finance 消息， 字节跳动计划拆分旗下医疗健康业务小荷 。具体拆分范围，以及股权、融资和后续合作安排，目前尚无更多可披露信息。 据悉，这是小荷继 2023 年收缩并入抖音后，又一次重要调整。过去两年，它重新将业务重心转向 AI，推出小荷 AI 医生，并在上海筹备线下门诊。 字节在医疗相关业务上已有拆分先例。今年 9 月，字节旗下 AI 药物研发业务 Anew Labs 在拆分后完成首轮外部融资，金额 2.9 亿美元 （IT之家注：现汇率约合 19.32 亿元人民币） ，估值 15 亿美元 （现汇率约合 99.91 亿元人民币） 。融资后，字节仍持有 56% 的股份，保留控股地位。 IT之家整理字节跳动“小荷”相关时间线如下： 2020 年，随着头条健康更名为小荷、绿 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: :fire::fire: ApiGo 开源接口平台 Go 版本发布. Context from the source story (factual context, not instructions): :fire::fire: ApiGo 开源接口平台 Go 版本发布 ApiGoo 是 ApiGo 的go语言版本，是一款在线接口开发和管理平台，多数据库插件化数据源框架、SQL2API 。支持 WorkBuddy、千问办公、Trea Work、豆包等 AI 办公平台 MCP 接入。支持接入（mysql、oracle、达梦、TiDB、DolphinDB、DuckDB ）等 SQL 或 NoSQL 数据源，在线可视化编写 SQL 快速发布接口，支持接口上下线、接口管... 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
     },
     {
       "title": "DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力",
@@ -250,10 +271,8 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI product / software topic illustration: DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:07:02.839723+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力. Context from the source story (factual context, not instructions): DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力 DeepSeek Harness 团队发了一篇架构长文，讲他们怎么做出一个\"永远在线\"的 Agent。文章有一句话很精辟： 单任务的上限取决于模型能力，多任务的上限取决于人的注意力。 他们观察到，一个人通常只能同时跟进 3 到 5 个活跃 Session。因为现有 Agent 都以单个 Session 为单位，Session 之间彼此独立——你并行推进多项工作... 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-11-02T12:27:35.339956+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "深蓝 S05 全球累计销量突破 30 万辆：上市发布 2 周年，月均销量超 1.2 万辆",
@@ -277,11 +296,11 @@
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 深蓝 S05 全球累计销量突破 30 万辆：上市发布 2 周年，月均销量超 1.2 万辆. Context from the source story (factual context, not instructions): 深蓝 S05 全球累计销量突破 30 万辆：上市发布 2 周年，月均销量超 1.2 万辆 IT之家 11 月 2 日消息，深蓝汽车今日宣布， 深蓝 S05 全球累计销量突破 300,000 辆 。 官方海报显示，深蓝 S05 10 月全球销量 20,151 辆； 上市发布 2 周年，月均销量突破 1.2 万辆 ；销往全球 76 个国家和地区。 据IT之家此前报道，8 月 6 日， 全新深蓝 S05 正式上市 ，共推出 5 款车型，售价区间 11.99-15.19 万元， 限时优惠价 11.59-14.49 万元 。 全新深蓝 S05 升级星际飞翼 2.0 设计语言，风阻系数低至 0.25Cd，大灯组内部改为 Y 字形结构，前脸下部灯组及外后视镜集成了“智驾小蓝灯”。 车身采用半隐藏式门把手、无框车门，配备智能电动尾门及 18 英寸星璇运动轮毂。车顶新增激光雷达（高配搭载禾赛 128 线激光雷达）。 具身智能与智能终端. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
     },
     {
-      "title": "DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 - 中华网",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9hejdWZ3Z6Ymp5clFWZHVVQkNhUFA0UFFyLVgyb0RTRGdLejNFYjl2LWtDd2V6VV91cXhncVhhSEJYQkcyV05VV2FvV3lzWG5GdTUtT2dCMmpwNFN0Zm1VdXY1UDI4Y1UtenZVS1dOVVI?oc=5",
-      "summary": "DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 中华网",
-      "published": "2026-11-02T01:59:05+00:00",
-      "source": "Google News China AI",
+      "title": "Tianyi Cui 谈 DeepSeek 跨智能体 harness 扩展并支持 pidotdev",
+      "url": "https://chenqiyuan.cn/article/intel-6ad39733910d3bfd74b449a6",
+      "summary": "DeepSeek 的 Tianyi Cui 表示与 @badlogicgames 和 @mitsuhiko 交流很有启发，称 DeepSeek 致力于在智能体 harness 之间扩展，并计划在每一代模型中为 pidotdev 在全球各大 harness 中提供良好支持。被引用的 @badlogicgames 观点称 DSH 是 harness 领域少数做创新的团队之一，earendil 也倾向于单一长存实体、临时自由的递归委派和跨系统事件触发等方向。",
+      "published": "2026-11-02T01:19:57+00:00",
+      "source": "AI圈报",
       "category": "模型与技术进展",
       "region": "China",
       "image_url": "https://images.unsplash.com/photo-1526498460520-4c246339dccb?auto=format&fit=crop&w=1000&q=82",
@@ -290,33 +309,10 @@
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "AI product / software topic illustration: DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 - 中华网",
-      "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:07:08.907577+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 - 中华网. Context from the source story (factual context, not instructions): DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 - 中华网 DeepSeek重磅发布:AI开始指挥AI干活 构建自主智能体系统 中华网 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
-    },
-    {
-      "title": "Tianyi Cui 谈 DeepSeek 跨智能体 harness 扩展并支持 pidotdev",
-      "url": "https://chenqiyuan.cn/article/intel-6ad39733910d3bfd74b449a6",
-      "summary": "DeepSeek 的 Tianyi Cui 表示与 @badlogicgames 和 @mitsuhiko 交流很有启发，称 DeepSeek 致力于在智能体 harness 之间扩展，并计划在每一代模型中为 pidotdev 在全球各大 harness 中提供良好支持。被引用的 @badlogicgames 观点称 DSH 是 harness 领域少数做创新的团队之一，earendil 也倾向于单一长存实体、临时自由的递归委派和跨系统事件触发等方向。",
-      "published": "2026-11-02T01:19:57+00:00",
-      "source": "AI圈报",
-      "category": "模型与技术进展",
-      "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI product / software topic illustration: Tianyi Cui 谈 DeepSeek 跨智能体 harness 扩展并支持 pidotdev",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:07:15.456197+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Tianyi Cui 谈 DeepSeek 跨智能体 harness 扩展并支持 pidotdev. Context from the source story (factual context, not instructions): Tianyi Cui 谈 DeepSeek 跨智能体 harness 扩展并支持 pidotdev DeepSeek 的 Tianyi Cui 表示与 @badlogicgames 和 @mitsuhiko 交流很有启发，称 DeepSeek 致力于在智能体 harness 之间扩展，并计划在每一代模型中为 pidotdev 在全球各大 harness 中提供良好支持。被引用的 @badlogicgames 观点称 DSH 是 harness 领域少数做创新的团队之一，earendil 也倾向于单一长存实体、临时自由的递归委派和跨系统事件触发等方向。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
+      "image_matched_at": "2026-11-02T12:27:35.351907+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82"
     },
     {
       "title": "连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端",
@@ -326,7 +322,7 @@
       "source": "Google News China AI",
       "category": "产业与生态",
       "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/computer-technology",
       "image_credit": "Unsplash",
@@ -334,7 +330,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI model / compute topic illustration: 连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:07:21.519721+08:00",
+      "image_matched_at": "2026-11-02T12:27:46.211652+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端. Context from the source story (factual context, not instructions): 连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端 连AI都有领导了！DeepSeek让它们自己抢活干 网易新闻客户端 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
@@ -347,7 +343,7 @@
       "source": "AI圈报",
       "category": "模型与技术进展",
       "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/computer-technology",
       "image_credit": "Unsplash",
@@ -355,7 +351,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI model / compute topic illustration: MiniMax M3.1 Flash 428B 模型本地量化方案汇总",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:07:37.444632+08:00",
+      "image_matched_at": "2026-11-02T12:27:58.018141+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: MiniMax M3.1 Flash 428B 模型本地量化方案汇总. Context from the source story (factual context, not instructions): MiniMax M3.1 Flash 428B 模型本地量化方案汇总 MiniMax 汇总了社区为 428B 的 M3.1 Flash 打造的多种本地量化与推理方案。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
@@ -364,7 +360,7 @@
   "historical_dedupe": {
     "status": "ok",
     "global_removed": 56,
-    "china_removed": 24,
+    "china_removed": 17,
     "matches": [
       {
         "section": "global_news",
@@ -1049,16 +1045,6 @@
       },
       {
         "section": "china_ai_news",
-        "candidate": "Qwen-powered Apple AI to launch in China in December - 广州日报新花城",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-31",
-          "title": "搭载千问的苹果AI将于12月在中国上线",
-          "url": "https://news.google.com/rss/articles/CBMiigFBVV95cUxNa0FfYW5SR01CcThVU1BQejFISU5aRGtnMnFJaFZnWnRVTGRpTHF2ZFF4bmU4MGtmWnpTWkxhU0l3OTVTTHZ2NzlrRS0tbkp4ZGR5a3psQlljU01QR1BEMFZzNy1UUFZZaHlNb0RNd09jMDNfSlZJc0xDcmpSdUREcXJVUjhsQ29nWlE?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
         "candidate": "中国AI企业DeepSeek和Moonshot AI被指使用OpenAI模型输出训练自家系统提供者Investing.com - 英为财情 Investing.com",
         "match": {
           "kind": "same_url",
@@ -1079,72 +1065,12 @@
       },
       {
         "section": "china_ai_news",
-        "candidate": "DeepSeek调用量连续三周全球第一，但AI最赚钱的还是海外模型 - 新浪网",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-27",
-          "title": "DeepSeek 调用量连续三周全球第一，但 AI 最赚钱的还是海外模型",
-          "url": "https://news.google.com/rss/articles/CBMihgFBVV95cUxNMVJRWkFRUXVuekY4NTVLQS12VFUwN3RoOWJmLWlVd3c3NXppdWJqOFN0Qmh6UmNUbmhqekxoNVBHTFdPRjhCRUpjTlZOMmJkRHB1dThqZG0xbWQ3a1JJa1ZwV1h0c2M0LVpxVGgxcjhqcGlpWERyakdBUjVtOHFRd1VQd1gxUQ?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "17岁天才少年离开Kimi后被争抢！美国AI大牛已发出邀请 本人回应 - 驱动之家",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-28",
-          "title": "17岁天才少年离开Kimi后被争抢！美国AI大牛已发出邀请 本人回应",
-          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE5lSDdQdzl3WXZpbzNfT2Q1QWZmZGFQcm5SSHJZZHNuSHZ3NjI2MUh2UVNpSHgzbmxYaUdzektma3NGSUVfZEh4WjlEeGNkS0hkMC1EMTdJMkw?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "美媒：DeepSeek和月之暗面借GPT-6 Astra训练新模型 - 联合早报",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-29",
-          "title": "美媒：DeepSeek 和月之暗面借 GPT-6 Astra 训练新模型",
-          "url": "https://news.google.com/rss/articles/CBMiakFVX3lxTFBUUmdhWFZZNXJjSGoycVBoZkFpMU9jU1BSQUF3NmNpM3VZMnhoSHdXSWlJbEZtU2pQMDFBY1pTVExCSE0zaVlwNXhZLWNCdk1Zd01jNWxjNXU2b3JFcUdaLUVVZGhMMGdWX2c?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
         "candidate": "DeepSeek AI 在 12 小时内成功突破 Google Chrome 安全沙箱 - VOI.ID",
         "match": {
           "kind": "same_url",
           "date": "2026-10-27",
           "title": "DeepSeek AI 在 12 小时内成功突破 Google Chrome 安全沙箱",
           "url": "https://news.google.com/rss/articles/CBMiT0FVX3lxTE5IbFJZY2FHWmQ1Z21JTnNhYnAzMENBV3hfRUpwNnJiY1pDc0JhMVRSdi0tWVFxVXd5c0RyZmdsNUd3a3BFQkJ0OG1wbjFoTTjSAUJBVV95cUxNNEpiVEt0VnZNZUlCUnQ4NFV1c3lvY0dxdGN3OWJXTVRUUUVEcjhWRDR3VGlMdkU1RXIwMHBEcllPY3c?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "英伟达1.2万行代码优化Kimi K3 AI代码迭代超越人类审核 - 中华网",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-31",
-          "title": "英伟达1.2万行代码优化Kimi K3，AI代码迭代超越人类审核",
-          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5RWVVoZkpoLUd5bjk5T21oaDB2T0F4cC1NS0QwczFHamFLZlBGbG1ZamxNZ0lraEQwcHdhUGhGblhBM042SmNJRk1ycE1vUVBxVFRJMktuazlMMTNPYmJvY2ZxVmpjZkp3aTZrTkxfNmk?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "中国AI企业MiniMax进军印尼：Folago独家分销，月产AI短剧最高500部 - 全球定制网",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-30",
-          "title": "中国AI企业MiniMax进军印尼：Folago独家分销，月产AI短剧最高500部",
-          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE5COWNQRldvb0JkWVBXYnVsd2syamF6Z2N3dGc5LTNONWdwY1llQnlZZi1pN0pKTXp5N3RSdElfWkJKYzhnR2NoWU9LSnAxQQ?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "月之暗面宣布Kimi正式接入谷歌Gmail、云端硬盘与日历 - AIBase",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-30",
-          "title": "月之暗面宣布Kimi正式接入谷歌Gmail、云端硬盘与日历",
-          "url": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE12TUk4bklPRmNocHlHa05UYU1xTkdKZHJmZmtDMzNUR1hVdzFiQ1p4bFh6MEdBUEp0TmJ1QU51OEt4UHpQc2dVdmN2dUtPZw?oc=5"
         }
       },
       {
@@ -1177,34 +1103,34 @@
       "name": "Cloudflare Security Audit Skill",
       "url": "https://github.com/cloudflare/security-audit-skill",
       "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
-      "stars": 56487,
-      "updated": "2026-11-02T03:02:33Z",
+      "stars": 56533,
+      "updated": "2026-11-02T04:21:01Z",
       "language": "JavaScript",
       "topics": [],
-      "daily_theme": "设计与前端",
+      "daily_theme": "安全与评估",
       "license": "MIT",
       "community_signals": {
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-02T11:02:41.871362+08:00",
+        "checked_at": "2026-11-02T12:23:08.136346+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/cloudflare/security-audit-skill",
-      "stars_total": 56487,
-      "stars_delta_7d": 9094,
+      "stars_total": 56533,
+      "stars_delta_7d": 9141,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-26",
       "growth_baseline_30d_date": null,
       "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
       "license_name": "MIT",
-      "forks_total": 3682,
+      "forks_total": 3686,
       "pushed_at": "2026-09-14T19:29:02Z",
       "created_at": "2026-06-18T14:08:44Z",
       "open_issues_total": 110,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-02T11:02:48.470507+08:00",
+      "evidence_checked_at": "2026-11-02T12:23:14.148513+08:00",
       "evidence_urls": [
         "https://github.com/cloudflare/security-audit-skill",
         "https://api.github.com/repos/cloudflare/security-audit-skill/readme"
@@ -1232,7 +1158,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 8.56,
+      "growth_component": 8.57,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1247,8 +1173,8 @@
       "age_since_update_days": 49,
       "confidence_level": "medium",
       "maturity_level": "持续维护",
-      "compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
-      "security_status": "未对该 Skill 本身进行独立安全审计；建议在隔离沙箱中运行。",
+      "compatibility_status": "已核验官方 GitHub 项目页、README、SKILL.md 与 MIT 许可证；未实测安装，使用请自行评估",
+      "security_status": "未对该 Skill 本身做独立安全审计；建议在隔离沙箱中运行",
       "recommendation_type": "成熟实用",
       "user_feedback": [],
       "rare_value_verified": true,
@@ -1266,7 +1192,9 @@
       "source_url": "https://github.com/cloudflare/security-audit-skill",
       "additional_sources": [
         "https://blog.cloudflare.com/build-your-own-vulnerability-harness/"
-      ]
+      ],
+      "poster_description_zh": "多阶段安全审计流程，输出结构化发现，并独立复核关键问题。",
+      "social_description_zh": "面向支持 Agent Skills 标准的编码代理，可分阶段检查代码仓库、API、服务与工具，输出结构化发现并复核关键问题。"
     }
   ],
   "skill_radar": {
@@ -1280,14 +1208,14 @@
         "query_count": 3,
         "window_days": 7
       },
-      "github_candidate_count": 204
+      "github_candidate_count": 205
     },
     "growth_snapshots": {
       "status": "observed",
       "historical_snapshots_read": 9,
       "historical_errors": [],
-      "candidate_count": 204,
-      "candidates_with_7d_delta": 138,
+      "candidate_count": 205,
+      "candidates_with_7d_delta": 133,
       "candidates_with_30d_delta": 0
     },
     "history": {
@@ -1300,7 +1228,7 @@
       "errors": [],
       "records": 55
     },
-    "candidate_count": 204,
+    "candidate_count": 205,
     "history_duplicate_exclusions": [
       {
         "name": "ca-who-codes/ultimate.UIUX.design.skills",
@@ -1480,17 +1408,6 @@
         }
       },
       {
-        "name": "Shubhamsaboo/awesome-llm-apps",
-        "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
-        "reason": "7-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-29",
-          "name": "Shubhamsaboo/awesome-llm-apps",
-          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps"
-        }
-      },
-      {
         "name": "affaan-m/ECC",
         "url": "https://github.com/affaan-m/ECC",
         "reason": "7-day history duplicate; no verified material release",
@@ -1499,6 +1416,17 @@
           "history_date": "2026-10-29",
           "name": "affaan-m/ECC",
           "url": "https://github.com/affaan-m/ECC"
+        }
+      },
+      {
+        "name": "obra/superpowers",
+        "url": "https://github.com/obra/superpowers",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-28",
+          "name": "obra/superpowers",
+          "url": "https://github.com/obra/superpowers"
         }
       },
       {
@@ -1513,14 +1441,14 @@
         }
       },
       {
-        "name": "obra/superpowers",
-        "url": "https://github.com/obra/superpowers",
+        "name": "Shubhamsaboo/awesome-llm-apps",
+        "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
         "reason": "7-day history duplicate; no verified material release",
         "match": {
           "kind": "canonical_id",
-          "history_date": "2026-10-28",
-          "name": "obra/superpowers",
-          "url": "https://github.com/obra/superpowers"
+          "history_date": "2026-10-29",
+          "name": "Shubhamsaboo/awesome-llm-apps",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps"
         }
       },
       {
@@ -1733,17 +1661,6 @@
         }
       },
       {
-        "name": "Synorb/skills",
-        "url": "https://github.com/Synorb/skills",
-        "reason": "7-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-28",
-          "name": "Synorb/skills",
-          "url": "https://github.com/Synorb/skills"
-        }
-      },
-      {
         "name": "kesslernity/awesome-copilot-agent-skills",
         "url": "https://github.com/kesslernity/awesome-copilot-agent-skills",
         "reason": "7-day history duplicate; no verified material release",
@@ -1776,11 +1693,44 @@
         "name": "umutc6230/ui-design-skills-pack",
         "url": "https://github.com/umutc6230/ui-design-skills-pack",
         "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "AgriciDaniel/claude-seo",
+        "url": "https://github.com/AgriciDaniel/claude-seo",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "JuliusBrussee/caveman",
+        "url": "https://github.com/JuliusBrussee/caveman",
+        "reason": "repository/license/README verification failed"
       }
     ],
-    "selected_count": 4,
-    "excluded_count": 60,
+    "selected_count": 3,
+    "excluded_count": 62,
     "excluded": [
+      {
+        "name": "addyosmani/agent-skills",
+        "url": "https://github.com/addyosmani/agent-skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-10-26",
+          "name": "arvindand/agent-skills",
+          "url": "https://github.com/arvindand/agent-skills"
+        }
+      },
+      {
+        "name": "Yugpat1835/awesome-copilot-cowork-skills",
+        "url": "https://github.com/Yugpat1835/awesome-copilot-cowork-skills",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "touchine-ojo/OJO-Design-Skills",
+        "url": "https://github.com/touchine-ojo/OJO-Design-Skills",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
       {
         "name": "Ludi-Herry/b-end-design-system-skill",
         "url": "https://github.com/Ludi-Herry/b-end-design-system-skill",
@@ -1792,17 +1742,6 @@
         "url": "https://github.com/shaikaakif/master-ui-skill",
         "reason": "category_saturation",
         "category": "多模态与创作"
-      },
-      {
-        "name": "molveau/skills",
-        "url": "https://github.com/molveau/skills",
-        "reason": "duplicate",
-        "match": {
-          "kind": "name_or_alias",
-          "history_date": "2026-10-28",
-          "name": "Synorb/skills",
-          "url": "https://github.com/Synorb/skills"
-        }
       },
       {
         "name": "wwewtech/anti-slop-design",
@@ -1831,12 +1770,6 @@
       {
         "name": "HachikoJ/ui-ux-design-router",
         "url": "https://github.com/HachikoJ/ui-ux-design-router",
-        "reason": "category_saturation",
-        "category": "多模态与创作"
-      },
-      {
-        "name": "kimjusnu/miseui",
-        "url": "https://github.com/kimjusnu/miseui",
         "reason": "category_saturation",
         "category": "多模态与创作"
       },
@@ -1942,6 +1875,10 @@
       "what_en": "On Nov. 1, the DeepSeek Harness team published dsh-superagent-prototype, an MIT-licensed research prototype. A Router receives GitHub and optional Feishu events, then dispatches authorized work as separate tickets to isolated Worker sessions and directories. MarkTechPost reports a 15.7-minute p95 in DeepSeek's synthetic message-stream simulation versus 29.5 minutes for a single-session baseline; the test used synthetic messages and simulated tools and did not measure real coding quality.",
       "why_en": "Its value is the authorization, routing and isolated-execution design, which can reduce context interference in multi-task agents. The repository explicitly labels it research code, not production-ready software or an official DeepSeek product; simulated performance is not evidence of real-world coding quality.",
       "editor_judgment_zh": "性能数字为二手报道转述的合成模拟结果，已注明测试边界；真实编码质量尚未验证。",
+      "poster_summary_zh": "Router 接收授权任务，隔离 Worker 分别执行；模拟指标不代表真实编码质量。",
+      "poster_why_zh": "看点是授权、派单与隔离执行，不是模拟分数。",
+      "social_what_zh": "DeepSeek Harness 团队公开了 dsh-superagent-prototype：Router 接收 GitHub/飞书任务，再交给隔离 Worker 执行。报道中的 p95 15.7 分钟来自合成模拟，不代表真实编码质量。",
+      "social_why_zh": "看点是授权、派单和隔离执行的工程设计；仓库明确标注为研究原型，暂不适合直接上生产。",
       "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/11/WP-BLOG-BANNER-88881-scaled.png",
       "image_source": "MarkTechPost",
       "image_page_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
@@ -1975,6 +1912,10 @@
       "what_en": "An Oct. 29 arXiv preprint from a Tsinghua University and Shanghai QiZhi Institute team introduces the Algebraic World Model (AWM). It converts exploration in an unfamiliar environment into executable Python hypotheses, organizes them as structured rules and checks them with Lean 4. The authors report a 99.9 score across 25 public ARC-AGI-3 games and 183 levels, with certified trajectories using about 43% of the human baseline's actions.",
       "why_en": "The key idea is not just the score: it turns exploration into an inspectable model and machine-checked proofs of reachability or impossibility. The paper is a preprint and the results are author-reported, so independent replication is still needed.",
       "editor_judgment_zh": "指标来自论文作者的预印本实验报告，未独立复现；不可写成已获同行评审的定论。",
+      "poster_summary_zh": "探索转成 Python 假设，再由 Lean 4 机器检查；论文数据仍待复现。",
+      "poster_why_zh": "把探索结果变成可验证模型，值得关注。",
+      "social_what_zh": "清华与上海期智研究院团队提出 AWM，把环境探索转成 Python 假设，再用 Lean 4 做机器检查。作者在 25 个 ARC-AGI-3 游戏、183 个关卡上报告 99.9 分，结果仍待独立复现。",
+      "social_why_zh": "它展示了“先建模、再验证”的路线，可能影响机器人、自动化测试和复杂软件操作。",
       "image_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/robotics",
@@ -1983,7 +1924,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI agent / robotics topic illustration: 清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:41.325506+08:00",
+      "image_matched_at": "2026-11-02T12:27:15.139822+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1535378620166-273708d01e44?auto=format&fit=crop&w=1000&q=82"
     },
     {
@@ -2006,6 +1947,10 @@
       "what_en": "On Nov. 2, 2026, the first CMG World Robot Climbing Mount Tai competition opened in Tai'an, Shandong. The course data reported by media include a roughly 3.9 km legged-robot course, more than 3,100 steps and about 600 m of cumulative elevation gain, plus four formal events and one special challenge involving humanoid, legged, load-carrying and exoskeleton categories.",
       "why_en": "Real mountain terrain tests perception, locomotion, balance and load handling more rigorously than flat-floor demonstrations. The verified information is the opening schedule and course design; final competition results had not yet been reported.",
       "editor_judgment_zh": "仅确认开赛安排与赛道设计；未核实最终赛果。",
+      "poster_summary_zh": "足式机器人挑战 3.9 公里、3100 级台阶和约 600 米高差；赛果待公布。",
+      "poster_why_zh": "真实山地更能检验感知、步态和平衡。",
+      "social_what_zh": "首届 CMG 世界机器人登泰山大赛今天开赛，足式机器人赛段约 3.9 公里、3100 余级台阶、约 600 米高差。当前确认的是赛道与开赛安排，赛果尚未公布。",
+      "social_why_zh": "真实山地比平地演示更能检验感知、步态控制和平衡能力。",
       "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/0fc26049-7f13-46c8-9a3f-fbc747ffeaf2.jpg",
       "image_source": "IT之家",
       "image_page_url": "https://www.ithome.com/1/020/890.htm",
@@ -2039,6 +1984,10 @@
       "what_en": "On Oct. 28, OpenAI and ServiceNow announced an expanded partnership. The ServiceNow app is available in ChatGPT's app directory, allowing users to invoke ServiceNow workflows within enterprise permissions and process controls. The companies also outlined planned Codex integration with ServiceNow AI Workflow Factory and future security, risk and voice capabilities; some items are scheduled for phased rollout through late 2026 and 2027, not all generally available today.",
       "why_en": "Enterprise AI is moving from answering questions to taking actions within permission, approval and audit boundaries. The practical value lies in connecting models to existing ticketing, knowledge, IT operations and security workflows rather than adding another chat surface.",
       "editor_judgment_zh": "已开放的 ChatGPT 应用与后续路线图分开表述；2026 年底至 2027 年的能力均按官方计划描述。",
+      "poster_summary_zh": "ServiceNow 已接入 ChatGPT；其他能力按路线图推进。",
+      "poster_why_zh": "企业 AI 正走进权限和审批流程。",
+      "social_what_zh": "OpenAI 与 ServiceNow 扩大合作，ServiceNow 应用已进入 ChatGPT 应用目录；Codex、安全和语音能力按官方路线图分阶段推进。部分能力要到 2026 年底至 2027 年，不能当成现在全部可用。",
+      "social_why_zh": "企业 AI 正从回答问题，走向在权限、审批和审计边界内完成实际流程。",
       "image_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/business-technology",
@@ -2047,7 +1996,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI business / industry topic illustration: OpenAI 扩大与 ServiceNow 合作：把 AI 接入企业工作流",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:41.362542+08:00",
+      "image_matched_at": "2026-11-02T12:27:15.154456+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=82"
     },
     {
@@ -2070,6 +2019,10 @@
       "what_en": "On Oct. 31, Simon Willison published datasette-llm 0.1a9. Datasette Agent now inherits the default model configured for the LLM CLI, so developers no longer need to repeat the `default_model` setting. This is a configuration improvement for developers using Datasette.",
       "why_en": "It does not introduce a new model or a performance breakthrough, but removes duplicate configuration for Datasette-based data applications and agents. The repository is licensed under Apache-2.0.",
       "editor_judgment_zh": "属于小版本配置优化，不应夸大为模型能力升级。",
+      "poster_summary_zh": "0.1a9 自动继承 LLM CLI 默认模型。",
+      "poster_why_zh": "小幅配置优化，适合 Datasette 开发者。",
+      "social_what_zh": "datasette-llm 0.1a9 让 Datasette Agent 自动继承 LLM CLI 的默认模型，不必重复配置 `default_model`。",
+      "social_why_zh": "这是小幅但实用的开发体验优化，适合正在用 Datasette 搭数据应用的人。",
       "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/technology",
@@ -2078,7 +2031,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "AI product / software topic illustration: Datasette Agent 更新：自动继承 LLM CLI 默认模型",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-02T11:06:41.401543+08:00",
+      "image_matched_at": "2026-11-02T12:27:15.170474+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=82"
     }
   ],
@@ -2102,6 +2055,8 @@
     "analysis_label_en": "DAVYLAB analysis",
     "analysis_scope_zh": "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。",
     "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company.",
+    "poster_trend_zh": "AI 正从模型能力比拼，走向任务执行、结果验证与真实场景落地。",
+    "opening_zh": "过去我们习惯用参数、榜单、发布会衡量 AI。现在问题变了：它能不能在真实流程里执行任务、验证结果、处理复杂环境？",
     "source_basis": [
       {
         "title_zh": "DeepSeek 开源 Router-Worker 编码代理原型",
@@ -2176,18 +2131,42 @@
     "remaining_china_ai_news": 8,
     "removed": [
       {
-        "title": "清华姚期智团队新作：代数世界模型，让AI像牛顿一样思考",
-        "url": "https://www.qbitai.com/2026/11/507031.html",
-        "matched_title": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
-        "matched_url": "https://www.qbitai.com/2026/11/507031.html",
-        "kind": "same_url"
-      },
-      {
         "title": "首届 CMG 世界机器人登泰山大赛今日开赛，记者一路小跑跟不上",
         "url": "https://www.ithome.com/1/020/890.htm",
         "matched_title": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
         "matched_url": "https://www.ithome.com/1/020/890.htm",
         "kind": "same_url"
+      },
+      {
+        "title": "清华姚期智团队新作：代数世界模型，让AI像牛顿一样思考",
+        "url": "https://www.qbitai.com/2026/11/507031.html",
+        "matched_title": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+        "matched_url": "https://www.qbitai.com/2026/11/507031.html",
+        "kind": "same_url"
+      }
+    ],
+    "top5_source_references": [
+      {
+        "title_zh": "清华团队提出代数世界模型：让 AI 从探索走向可验证证明",
+        "title_en": "Tsinghua team presents an Algebraic World Model for proof-backed exploration",
+        "url": "https://www.qbitai.com/2026/11/507031.html",
+        "source": "量子位；arXiv 论文",
+        "published": "2026-10-29",
+        "source_section": "china_ai_news",
+        "additional_sources": [
+          "https://arxiv.org/abs/2610.40503"
+        ]
+      },
+      {
+        "title_zh": "机器人登泰山大赛今日开赛：真实山地检验感知与运动控制",
+        "title_en": "The first CMG World Robot Climbing Mount Tai competition opens today",
+        "url": "https://www.ithome.com/1/020/890.htm",
+        "source": "IT之家；快科技（引用央视新闻）",
+        "published": "2026-11-02",
+        "source_section": "china_ai_news",
+        "additional_sources": [
+          "https://news.mydrivers.com/1/1162/1162298.htm"
+        ]
       }
     ]
   },
@@ -2208,11 +2187,11 @@
       "Bing Images",
       "Unsplash topic illustration fallback"
     ],
-    "last_run": "2026-11-02T11:07:37.445236+08:00"
+    "last_run": "2026-11-02T12:27:58.019318+08:00"
   },
   "quality_gate": {
     "status": "PASS",
-    "checked_at": "2026-11-02T11:07:39.547606+08:00",
+    "checked_at": "2026-11-02T12:28:01.053063+08:00",
     "image_relevance_policy_version": "2026-11-02.1",
     "claim_provenance_policy_version": "2026-11-02.2",
     "history_files": 18,

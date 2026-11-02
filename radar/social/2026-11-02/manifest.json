@@ -1,8 +1,8 @@
 {
   "report_date": "2026-11-02",
-  "generated_at": "2026-11-02T11:07:46.384198+08:00",
-  "source_report_generated_at": "2026-11-02T11:02:23.002248+08:00",
-  "source_report_sha256": "ee1c4ee4d3170dab0b0ac6d026533232d956746646ef01ae72a7cadad16b3a32",
+  "generated_at": "2026-11-02T12:28:07.786474+08:00",
+  "source_report_generated_at": "2026-11-02T12:22:54.778982+08:00",
+  "source_report_sha256": "5b963707b8cc84466a806c3fc5698c75842485efb62b25bfe182ded3ac315db3",
   "public_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "style": {
     "design_variant": "geometric-navy",
@@ -52,9 +52,9 @@
     "name": "Cloudflare Security Audit Skill",
     "url": "https://github.com/cloudflare/security-audit-skill",
     "description_zh": "面向支持 Agent Skills 标准的编码代理，按多阶段流程检查代码仓库、API、服务和工具，生成结构化发现项，并对关键问题做独立复核。适合在隔离环境中辅助开展代码安全检查（仓库实际扫描到1个SKILL.md文件）",
-    "compatibility_status": "已核验 Agent Skills 文档与仓库结构；未实测安装。",
+    "compatibility_status": "已核验官方 GitHub 项目页、README、SKILL.md 与 MIT 许可证；未实测安装，使用请自行评估",
     "actual_skill_file_count": 1,
-    "security_status": "未对该 Skill 本身进行独立安全审计；建议在隔离沙箱中运行。",
+    "security_status": "未对该 Skill 本身做独立安全审计；建议在隔离沙箱中运行",
     "official_website": "https://github.com/cloudflare/security-audit-skill",
     "official_website_verified": true,
     "official_website_http_status": 200,
@@ -138,9 +138,9 @@
           "y": 369,
           "width": 364,
           "height": 30,
-          "actual_width": 361.8,
+          "actual_width": 352.1,
           "line_count": 2,
-          "truncated": true,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -158,9 +158,9 @@
           "y": 369,
           "width": 364,
           "height": 30,
-          "actual_width": 362.4,
+          "actual_width": 353.0,
           "line_count": 2,
-          "truncated": true,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -178,9 +178,9 @@
           "y": 501,
           "width": 364,
           "height": 30,
-          "actual_width": 362.5,
+          "actual_width": 357.8,
           "line_count": 2,
-          "truncated": true,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -197,10 +197,10 @@
           "x": 478,
           "y": 501,
           "width": 364,
-          "height": 30,
-          "actual_width": 362.3,
-          "line_count": 2,
-          "truncated": true,
+          "height": 15,
+          "actual_width": 319.9,
+          "line_count": 1,
+          "truncated": false,
           "overflow": false
         },
         {
@@ -217,9 +217,9 @@
           "x": 58,
           "y": 633,
           "width": 784,
-          "height": 30,
-          "actual_width": 783.4,
-          "line_count": 2,
+          "height": 15,
+          "actual_width": 205.0,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         },
@@ -247,18 +247,18 @@
           "x": 62,
           "y": 955,
           "width": 430,
-          "height": 57,
-          "actual_width": 429.1,
-          "line_count": 3,
-          "truncated": true,
+          "height": 19,
+          "actual_width": 420.0,
+          "line_count": 1,
+          "truncated": false,
           "overflow": false
         }
       ],
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 231407,
-      "sha256": "543e2cf5074b3641b882e9fcf5873489e13124b8c19339053abaf7a10f8ab786",
+      "file_size_bytes": 186248,
+      "sha256": "759749f81e38a97b180643216be925fd463d73498824f7665b1904cf72331b03",
       "qa_status": "PASS"
     },
     {
@@ -312,19 +312,19 @@
           "x": 42,
           "y": 566,
           "width": 810,
-          "height": 112,
-          "actual_width": 809.0,
-          "line_count": 4,
-          "truncated": true,
+          "height": 84,
+          "actual_width": 801.9,
+          "line_count": 3,
+          "truncated": false,
           "overflow": false
         },
         {
           "x": 42,
           "y": 920,
           "width": 810,
-          "height": 75,
-          "actual_width": 800.1,
-          "line_count": 3,
+          "height": 25,
+          "actual_width": 779.0,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         }
@@ -332,8 +332,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 136723,
-      "sha256": "1726ab24dd1c137a82743d226ba399183d1b541377f4575ac666cd870aa76163",
+      "file_size_bytes": 89802,
+      "sha256": "bd30cbb2e9ee78e34c2e59945b71092f25bde7fc135a7901e0b8fe5a08946195",
       "qa_status": "PASS"
     },
     {
@@ -387,9 +387,9 @@
           "x": 42,
           "y": 566,
           "width": 810,
-          "height": 112,
-          "actual_width": 803.1,
-          "line_count": 4,
+          "height": 84,
+          "actual_width": 800.5,
+          "line_count": 3,
           "truncated": false,
           "overflow": false
         },
@@ -397,9 +397,9 @@
           "x": 42,
           "y": 920,
           "width": 810,
-          "height": 75,
-          "actual_width": 807.0,
-          "line_count": 3,
+          "height": 25,
+          "actual_width": 722.0,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         }
@@ -407,8 +407,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 155773,
-      "sha256": "7e8a7c7bdea0370ceb8d32699581acdb49a515da984109271fba66d010f62564",
+      "file_size_bytes": 97232,
+      "sha256": "9858824d7b37ad5d288bec2229aad871a2539c615122d3221d1719b306225aa7",
       "qa_status": "PASS"
     },
     {
@@ -462,9 +462,9 @@
           "x": 42,
           "y": 605,
           "width": 810,
-          "height": 84,
-          "actual_width": 809.2,
-          "line_count": 3,
+          "height": 56,
+          "actual_width": 798.7,
+          "line_count": 2,
           "truncated": false,
           "overflow": false
         },
@@ -472,9 +472,9 @@
           "x": 42,
           "y": 920,
           "width": 810,
-          "height": 50,
-          "actual_width": 798.0,
-          "line_count": 2,
+          "height": 25,
+          "actual_width": 494.0,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         }
@@ -482,8 +482,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 124740,
-      "sha256": "851f479338667910eeba8091e364465cd5c49b2856053b44cd93f69af5804833",
+      "file_size_bytes": 89770,
+      "sha256": "e476f2c618314bc973dade9478e3c9eef6cc94d435a563bef6bad0dc52496640",
       "qa_status": "PASS"
     },
     {
@@ -537,19 +537,19 @@
           "x": 42,
           "y": 566,
           "width": 810,
-          "height": 112,
+          "height": 84,
           "actual_width": 807.3,
-          "line_count": 4,
-          "truncated": true,
+          "line_count": 3,
+          "truncated": false,
           "overflow": false
         },
         {
           "x": 42,
           "y": 920,
           "width": 810,
-          "height": 75,
-          "actual_width": 806.7,
-          "line_count": 3,
+          "height": 25,
+          "actual_width": 597.7,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         }
@@ -557,8 +557,8 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 135327,
-      "sha256": "414d2a5edcdaa76f7d628008ee3e87a62f3987925e852bbba84a8c30fc16218b",
+      "file_size_bytes": 92227,
+      "sha256": "657bb6899a8176128ea546e6b63f98eccfa82164ba5f98d7d42a37a5cb4f72a4",
       "qa_status": "PASS"
     },
     {
@@ -612,9 +612,9 @@
           "x": 42,
           "y": 566,
           "width": 810,
-          "height": 84,
-          "actual_width": 807.2,
-          "line_count": 3,
+          "height": 56,
+          "actual_width": 807.0,
+          "line_count": 2,
           "truncated": false,
           "overflow": false
         },
@@ -622,9 +622,9 @@
           "x": 42,
           "y": 920,
           "width": 810,
-          "height": 50,
-          "actual_width": 794.3,
-          "line_count": 2,
+          "height": 25,
+          "actual_width": 623.3,
+          "line_count": 1,
           "truncated": false,
           "overflow": false
         }
@@ -632,13 +632,13 @@
       "width": 900,
       "height": 1200,
       "format": "PNG",
-      "file_size_bytes": 108602,
-      "sha256": "02f7e27c01934d2a4ce3f4d20050f498703f7f59f87df8edb137abfcd778df4a",
+      "file_size_bytes": 76385,
+      "sha256": "847037902991ef704ea3164ca63f819d52c8d69076ecb81ac1df0fdacf7b3939",
       "qa_status": "PASS"
     }
   ],
   "phone_camera_scan": "NOT_TESTED",
   "wechat_editor_preview": "NOT_TESTED",
-  "verified_at": "2026-11-02T11:07:46.743402+08:00",
+  "verified_at": "2026-11-02T12:28:08.106833+08:00",
   "qa_status": "PASS"
 }
