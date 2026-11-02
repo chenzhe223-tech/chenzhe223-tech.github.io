@@ -42,7 +42,7 @@ const { chromium } = require('playwright');
     // Do not continue until the exact V2 bundle expected by the repository is loaded.
     await keyPocket.waitForFunction(() => {
       const script = [...document.scripts].find(item => item.src.includes('/keypocket/app.js'));
-      return script && script.src.includes('kp-v2-recovery-20261102-1')
+      return script && script.src.includes('kp-v2-recovery-fix-20261102-2')
         && document.querySelector('#recycleView')
         && document.querySelector('#backupView')
         && document.querySelector('#radarView');
