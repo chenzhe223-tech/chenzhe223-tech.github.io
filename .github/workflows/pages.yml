@@ -498,7 +498,9 @@ jobs:
           fi
           # Restore the verified candidate snapshot after resetting to the latest main.
           # Without this step, git add would stage the old main files and silently publish nothing.
-          mkdir -p radar/data/archive radar/data/skill-candidates radar/posters "radar/social/$TODAY"
+          mkdir -p radar/data/archive radar/posters
+          rm -rf radar/data/skill-candidates "radar/social/$TODAY"
+          mkdir -p radar/data/skill-candidates "radar/social/$TODAY"
           cp "$SNAPSHOT/latest.json" radar/data/latest.json
           cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
           cp "$SNAPSHOT/history.json" radar/data/history.json
