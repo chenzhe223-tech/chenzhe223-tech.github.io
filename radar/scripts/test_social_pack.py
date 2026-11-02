@@ -114,7 +114,7 @@ class SocialPackTests(unittest.TestCase):
             "url": "https://github.com/deepseek-ai/dsh-superagent-prototype",
             "published": "2026-11-01T00:00:00Z"
         }
-        image = render_topic_image(story, 0, "2026-11-02", "global_news")
+        image = render_topic_image(story, 0, "2026年11月2日", "global_news")
         self.assertEqual(image.size, (900, 1200))
         self.assertEqual(image.mode, "RGB")
 
