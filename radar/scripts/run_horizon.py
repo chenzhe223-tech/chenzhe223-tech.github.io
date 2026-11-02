@@ -362,6 +362,49 @@ def apply_verified_skill_metadata(skills):
             item["description_en"] = description_en
 
 
+def apply_manual_editorial_override(report):
+    report_date = str(report.get("report_date") or "")
+    if not report_date:
+        return False
+    override_path = ROOT / "radar" / "data" / "manual-editorial" / f"{report_date}.json"
+    if not override_path.exists():
+        return False
+    override = json.loads(override_path.read_text(encoding="utf-8"))
+    if str(override.get("report_date") or "") != report_date:
+        raise RuntimeError("Manual editorial override date does not match the current report")
+    stories = override.get("top5")
+    if not isinstance(stories, list) or len(stories) != 5:
+        raise RuntimeError("Manual editorial override must contain exactly five reviewed stories")
+    for index, story in enumerate(stories, start=1):
+        if not isinstance(story, dict):
+            raise RuntimeError(f"Manual editorial story {index} is invalid")
+        if not str(story.get("source_url") or "").startswith("https://"):
+            raise RuntimeError(f"Manual editorial story {index} has no HTTPS source URL")
+        for field in ("title_zh", "what_zh", "why_zh"):
+            if not re.search(r"[\u4e00-\u9fff]", str(story.get(field) or "")):
+                raise RuntimeError(f"Manual editorial story {index} is missing Chinese {field}")
+        if not str(story.get("published") or "").strip():
+            raise RuntimeError(f"Manual editorial story {index} is missing a publication/event date")
+    localization = override.get("localization") or {}
+    if localization.get("status") != "manual_editorial_verified" or localization.get("sources_checked") != 5:
+        raise RuntimeError("Manual editorial override lacks its five-source verification record")
+    editorial = override.get("editorial") or {}
+    if not editorial.get("core_zh") or not editorial.get("trend_zh"):
+        raise RuntimeError("Manual editorial override is missing today's observation")
+    report["top5"] = stories
+    report["top5_status"] = "editorial_curated"
+    report["localization"] = localization
+    report["editorial"] = editorial
+    if isinstance(override.get("skills"), list) and override["skills"]:
+        report["skills"] = override["skills"]
+    report["manual_editorial_override"] = {
+        "applied": True,
+        "source_file": f"radar/data/manual-editorial/{report_date}.json",
+        "method": "manual source verification and Chinese editorial review",
+    }
+    return True
+
+
 def apply_claim_provenance(report):
     policy_path = ROOT / "radar" / "config" / "qa-rules.json"
     policy = json.loads(policy_path.read_text(encoding="utf-8")).get("claim_provenance") or {}
@@ -440,11 +483,17 @@ def apply_claim_provenance(report):
     editorial["analysis_label_en"] = "DAVYLAB analysis"
     editorial["analysis_scope_zh"] = "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。"
     editorial["analysis_scope_en"] = "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company."
-    editorial["source_basis"] = [
-        {"title_zh": story.get("title_zh") or story.get("title"), "title_en": story.get("title_en") or story.get("title"), "source": story.get("source"), "url": story.get("source_url") or story.get("url")}
-        for story in (report.get("top5") or [])
-        if isinstance(story, dict) and str(story.get("source_url") or story.get("url") or "").startswith("https://")
-    ]
+    source_basis = []
+    for story in (report.get("top5") or []):
+        if not isinstance(story, dict):
+            continue
+        title_zh = story.get("title_zh") or story.get("title")
+        title_en = story.get("title_en") or story.get("title")
+        urls = [story.get("source_url") or story.get("url")] + list(story.get("additional_sources") or [])
+        for url in urls:
+            if str(url or "").startswith("https://"):
+                source_basis.append({"title_zh": title_zh, "title_en": title_en, "source": story.get("source"), "url": url})
+    editorial["source_basis"] = source_basis
     story_text = " ".join(" ".join(str(story.get(key) or "") for key in ("title_zh", "title_en", "what_zh", "what_en")) for story in (report.get("top5") or []) if isinstance(story, dict))
     has_agent = bool(re.search(r"(agent|superagent|智能体|代理|工作流)", story_text, re.I))
     has_enterprise = bool(re.search(r"(企业|enterprise|合作|客服|业务流程)", story_text, re.I))
