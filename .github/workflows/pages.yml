@@ -382,7 +382,7 @@ jobs:
           # Never let a slower recovery run roll back a newer, already-verified same-day bundle.
           # Skip only when main already contains a coherent newer/equal report + poster + PASS QR gate.
           if python - "$SNAPSHOT/latest.json" <<'PY'
-          import datetime as dt, json, sys
+          import datetime as dt, hashlib, json, sys
           from pathlib import Path
           from zoneinfo import ZoneInfo
           from radar.scripts.poster_style import poster_style_metadata
@@ -390,9 +390,13 @@ jobs:
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
           candidate = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
           try:
-              current = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+              current_path = Path('radar/data/latest.json')
+              current = json.loads(current_path.read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
               qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
+              social_dir = Path('radar/social') / today
+              social_manifest = json.loads((social_dir / 'manifest.json').read_text(encoding='utf-8'))
+              social_verification = json.loads((social_dir / 'verification.json').read_text(encoding='utf-8'))
           except Exception as exc:
               print(f'No complete main-branch bundle to protect yet: {type(exc).__name__}')
               raise SystemExit(1)
@@ -405,7 +409,10 @@ jobs:
           candidate_time = parse_stamp(candidate.get('generated_at'))
           expected_style = poster_style_metadata(today)
           skill = ((current.get('skills') or [{}])[0] or {}).get('name')
-          bundle_ok = (
+          report_sha256 = hashlib.sha256(current_path.read_bytes()).hexdigest()
+          expected_titles = [str(x.get('title_zh') or x.get('title') or '') for x in current.get('top5', [])]
+          expected_urls = [str(x.get('source_url') or x.get('url') or '') for x in current.get('top5', [])]
+          core_bundle_ok = (
               current.get('report_date') == today
               and current.get('top5_status') == 'ai_curated'
               and len(current.get('top5') or []) == 5
@@ -422,8 +429,29 @@ jobs:
               and qr.get('expected_url') == target
               and all(qr.get(key) == value for key, value in expected_style.items())
           )
+          social_ok = (
+              social_manifest.get('source_report_generated_at') == current.get('generated_at')
+              and social_manifest.get('source_report_sha256') == report_sha256
+              and social_manifest.get('story_titles') == expected_titles
+              and social_manifest.get('story_urls') == expected_urls
+              and social_manifest.get('qa_status') == 'PASS'
+              and len(social_manifest.get('images', [])) == 6
+              and all(x.get('qa_status') == 'PASS' and x.get('width') == 900 and x.get('height') == 1200 and x.get('file_size_bytes', 0) > 8000 and x.get('sha256') for x in social_manifest.get('images', []))
+              and social_verification.get('status') == 'PASS'
+              and social_verification.get('source_report_generated_at') == current.get('generated_at')
+              and social_verification.get('source_report_sha256') == report_sha256
+              and social_verification.get('story_titles') == expected_titles
+              and social_verification.get('story_urls') == expected_urls
+          )
+          bundle_ok = core_bundle_ok and social_ok
           if bundle_ok and current_time and candidate_time and candidate.get('report_date') == today and current_time >= candidate_time:
-              print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at')}.")
+              print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at']}.")
+              raise SystemExit(0)
+          if current_time and candidate_time and current_time > candidate_time and candidate.get('report_date') == today:
+              if core_bundle_ok and not social_ok:
+                  print('Main has a newer verified report/poster/QR but its social pack is stale; request social-only repair.')
+                  raise SystemExit(2)
+              print('Main has a newer report than this snapshot; refusing to roll it back.')
               raise SystemExit(0)
           print('Current main bundle is incomplete or candidate is newer; this run may update the bundle.')
           raise SystemExit(1)
@@ -431,36 +459,20 @@ jobs:
           then
             echo 'A coherent newer/equal daily bundle already exists on main; keeping it instead of overwriting with an older run.'
             exit 0
+          else
+            guard_status=$?
+            if [ "$guard_status" -eq 2 ]; then
+              echo 'Repairing only the stale social pack against the newer main-branch report; preserving report and poster.'
+              python radar/scripts/generate_social_pack.py
+              python radar/scripts/verify_social_pack.py
+              git add "radar/social/$TODAY/"
+              if ! git diff --cached --quiet; then
+                git commit -m "fix(radar): sync social pack with latest verified report"
+                git push origin HEAD:main
+              fi
+              exit 0
+            fi
           fi
-          cp "$SNAPSHOT/latest.json" radar/data/latest.json
-          cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
-          cp "$SNAPSHOT/today.json" "radar/data/archive/$TODAY.json"
-          cp "$SNAPSHOT/today.png" "radar/posters/$TODAY.png"
-          cp "$SNAPSHOT/today-poster.json" "radar/posters/$TODAY.json"
-          cp "$SNAPSHOT/today-qr-verification.json" "radar/posters/$TODAY.qr-verification.json"
-          cp "$SNAPSHOT/latest.png" radar/posters/latest.png
-          cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
-          cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
-          mkdir -p radar/social
-          cp -a "$SNAPSHOT/social/$TODAY" "radar/social/$TODAY"
-          mkdir -p radar/data/skill-candidates
-          cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
-
-          # Rebuild the history index from the merged archive directory so
-          # this run cannot delete history added by another run.
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          from zoneinfo import ZoneInfo
-          import datetime as dt
-          today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
-          archives = Path('radar/data/archive')
-          archives.mkdir(parents=True, exist_ok=True)
-          if not (archives / f'{today}.json').is_file():
-              raise SystemExit(f'Missing archive after sync: {today}.json')
-          days = sorted((p.name for p in archives.glob('*.json')), reverse=True)[:30]
-          Path('radar/data/history.json').write_text(json.dumps({'days': days}, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
-          PY
           git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json "radar/social/$TODAY/"
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
