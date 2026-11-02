@@ -1,21 +1,52 @@
-# KeyPocket — 决策记录
+# KeyPocket — 架构决策记录
 
 ## ADR-KP-001 — 连续性档案与应用文件分离
-- 状态：`ACCEPTED`
+- 状态：ACCEPTED
 - 日期：2026-10-25
-- 决定：连续性档案放在 `keypocket/docs/project-continuity/`，不修改应用运行入口和现有功能文件。
-- 原因：先验证工作流，不把项目管理文件混入客户端运行逻辑；降低试运行风险。
-- 验证：档案均位于独立 docs 子目录。
+- 决定：连续性档案放在 docs/project-continuity/。
 
 ## ADR-KP-002 — 仓库代码与档案需相互核验
-- 状态：`ACCEPTED`
+- 状态：ACCEPTED
 - 日期：2026-10-25
-- 决定：档案是交接入口，不凌驾于实际代码、当前用户指令和可验证的测试/部署证据。
-- 原因：避免旧状态被当作当前事实。
+- 决定：实际代码、运行配置与测试证据高于历史档案的状态描述。
 
-## ADR-KP-003 — 同步安全模型在证据充分前保持未决
-- 状态：`ACCEPTED`
+## ADR-KP-003 — 以 Supabase Auth/RLS 为多用户访问边界
+- 状态：ACCEPTED
 - 日期：2026-10-25
-- 背景：页面当前显示 Supabase 账号及跨设备加密同步 UI，但 README 和安全验收文档仍含本地-only / `connect-src 'none'` 描述。
-- 决定：不擅自修改产品同步功能，也不直接断言旧文档或页面哪一方完全正确；先检查完整实现、RLS/服务端配置和线上版本。
-- 验收：形成代码路径、数据加密边界、网络请求范围、账号数据策略和线上版本的证据记录后，再修正文档或实现。
+- 决定：浏览器使用 Supabase Auth，个人同步数据必须通过 auth.uid() RLS 隔离；不能以客户端加密替代行级访问控制。
+
+## ADR-KP-004 — V2 保留 V1 IndexedDB 与加密格式
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：保留 keypocket-local-v1、store vault、AES-GCM/PBKDF2 和旧密文解密入口。V2 以附加脚本与 kpv2: 系统行实现。
+- 原因：避免升级时数据迁移风险与旧密文不可解密。
+- 回滚：V2 脚本可从 index.html 移除，原 app.js 和原数据库保持兼容。
+
+## ADR-KP-005 — 逐记录增量同步与版本墓碑
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：V2 主同步表使用 (user_id,entity_type,entity_id) 主键，按 version/updated_at/device_id 决胜；软删除以 deleted_at tombstone 传播。旧整库表保留作迁移源。
+- 限制：采用确定性 LWW，不提供字段级 CRDT 合并。
+
+## ADR-KP-006 — 共享云端密钥派生
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：以每用户随机盐和 PBKDF2 从 KeyPocket 本地解锁密码派生共享同步密钥；各设备必须使用相同本地密码。Supabase 登录密码独立。
+- 原因：服务端不持有密钥明文；同一用户多个设备可派生一致密钥。
+
+## ADR-KP-007 — Skill Radar 历史口径
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：Stars/Forks 必须每日快照。月/季/年榜基于真实历史快照，不允许用当前 Stars 伪造增长；累计榜明确标注当前 Stars。
+- 评分：Stars 增长 70%、Forks 增长 20%、README 相关性 10%。
+
+## ADR-KP-008 — GitHub App 专用私有仓库
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：Worker 只允许访问 keypocket-cloud-vault 固定私有仓库和固定文件；Contents 写入、Metadata 只读；App 私钥只存 Worker Secrets。
+- 原因：最小权限，不同步用户其他私有仓库源码。
+
+## ADR-KP-009 — V2 发布采用五级交付
+- 状态：ACCEPTED
+- 日期：2026-11-02
+- 决定：Code Completed、Build Passed、Runtime Verified、Functional Tested、Production Deployed 分别记录，不能互相替代。
