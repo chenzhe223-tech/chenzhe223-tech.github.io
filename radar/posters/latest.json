@@ -5,47 +5,31 @@
   "news_count": 5,
   "news_urls": [
     "https://www.ithome.com/1/020/809.htm",
-    "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
     "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
-    "https://openai.com/index/openai-servicenow-partnership-expansion",
-    "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/"
+    "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/",
+    "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
+    "https://openai.com/index/openai-servicenow-partnership-expansion"
   ],
   "news_titles": [
-    "工信部赛迪研究院：我国人工智能推理数据量首超训练数据量",
-    "Apple Intelligence 中国区功能12月上线，千问接入 Siri、写作工具和视觉智能",
-    "DeepSeek 开源 dsh-superagent：路由-工作器式编码智能体",
-    "OpenAI 与 ServiceNow 扩大企业工作流合作",
-    "Nace AI 开源 Drex Max v1：可在 Apple Silicon 本地运行的 27B 决策模型"
+    "赛迪研究院：我国AI推理数据量首超训练数据量，日均词元调用量超175万亿",
+    "DeepSeek开源dsh-superagent：路由-工作器式编码智能体",
+    "Nace AI开源Drex Max v1：可在Apple Silicon本地运行的27B决策模型",
+    "Apple Intelligence中国区功能12月上线，千问接入Siri、写作工具和视觉智能",
+    "OpenAI与ServiceNow扩大企业工作流合作"
   ],
   "news_image_evidence": [
     {
       "story_url": "https://www.ithome.com/1/020/809.htm",
-      "image_source": "Bing Images",
-      "image_match_status": "web_search_topic",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
-      "image_source": "Bing Images",
-      "image_match_status": "web_search_topic",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
     },
     {
       "story_url": "https://www.marktechpost.com/2026/11/01/deepseek-dsh-superagent-router-worker-coding-agent/",
       "image_source": "MarkTechPost",
       "image_match_status": "article_image",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://openai.com/index/openai-servicenow-partnership-expansion",
-      "image_source": "Bing Images",
-      "image_match_status": "web_search_topic",
       "label_required": false,
       "label_applied": false,
       "label": null
@@ -57,6 +41,22 @@
       "label_required": false,
       "label_applied": false,
       "label": null
+    },
+    {
+      "story_url": "https://chenqiyuan.cn/article/intel-0a37c0c21a852a84998583ca",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://openai.com/index/openai-servicenow-partnership-expansion",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
     }
   ],
   "skill": "Donchitos/Claude-Code-Game-Studios",
@@ -123,7 +123,7 @@
       "y": 329,
       "width": 1070,
       "height": 25,
-      "actual_width": 770.0,
+      "actual_width": 638.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -144,43 +144,43 @@
       "x": 66,
       "y": 823,
       "width": 318,
-      "height": 50,
-      "actual_width": 315.0,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 66,
-      "y": 881,
-      "width": 318,
-      "height": 84,
-      "actual_width": 317.7,
-      "line_count": 4,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 823,
-      "width": 318,
       "height": 75,
-      "actual_width": 308.4,
+      "actual_width": 315.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
-      "x": 441,
+      "x": 66,
       "y": 906,
       "width": 318,
       "height": 84,
-      "actual_width": 310.8,
+      "actual_width": 316.1,
       "line_count": 4,
-      "truncated": true,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 303.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 881,
+      "width": 318,
+      "height": 84,
+      "actual_width": 314.8,
+      "line_count": 4,
+      "truncated": false,
       "overflow": false
     },
     {
@@ -188,19 +188,19 @@
       "x": 816,
       "y": 823,
       "width": 318,
-      "height": 50,
-      "actual_width": 314.2,
-      "line_count": 2,
+      "height": 75,
+      "actual_width": 312.3,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
       "x": 816,
-      "y": 881,
+      "y": 906,
       "width": 318,
       "height": 84,
-      "actual_width": 315.0,
+      "actual_width": 316.1,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -210,21 +210,21 @@
       "x": 195,
       "y": 1176,
       "width": 372,
-      "height": 21,
-      "actual_width": 349.4,
-      "line_count": 1,
+      "height": 42,
+      "actual_width": 362.8,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
       "x": 195,
-      "y": 1201,
+      "y": 1222,
       "width": 372,
       "height": 34,
-      "actual_width": 358.9,
+      "actual_width": 370.0,
       "line_count": 2,
-      "truncated": false,
+      "truncated": true,
       "overflow": false
     },
     {
@@ -232,19 +232,19 @@
       "x": 758,
       "y": 1176,
       "width": 372,
-      "height": 42,
-      "actual_width": 370.0,
-      "line_count": 2,
+      "height": 21,
+      "actual_width": 335.4,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
       "x": 758,
-      "y": 1222,
+      "y": 1201,
       "width": 372,
       "height": 34,
-      "actual_width": 360.5,
+      "actual_width": 358.9,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -290,5 +290,5 @@
   "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-02T08:38:17.376886+08:00"
+  "generated_at": "2026-11-02T09:12:54.527126+08:00"
 }
