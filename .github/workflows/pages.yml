@@ -719,6 +719,27 @@ jobs:
                   social_verification = json.loads(social_meta_bytes.decode('utf-8'))
                   assert social_verification.get('report_date') == today and social_verification.get('status') == 'PASS', 'live social verification manifest is not PASS'
                   assert len(social_verification.get('images', [])) == 6, 'live social manifest does not contain six images'
+                  manifest_url = base + social_rel + 'manifest.json?verify=' + stamp
+                  with urllib.request.urlopen(urllib.request.Request(manifest_url, headers=headers), timeout=15) as social_manifest_response:
+                      social_manifest_bytes = social_manifest_response.read()
+                  assert_matches_repo('radar/social/' + today + '/manifest.json', social_manifest_bytes)
+                  social_manifest = json.loads(social_manifest_bytes.decode('utf-8'))
+                  report_sha = hashlib.sha256(report_bytes).hexdigest()
+                  expected_titles = [str(story.get('title_zh') or story.get('title') or '') for story in data.get('top5', [])]
+                  expected_urls = [str(story.get('source_url') or story.get('url') or '') for story in data.get('top5', [])]
+                  assert social_manifest.get('qa_status') == 'PASS', 'live social pack manifest QA status is not PASS'
+                  assert social_manifest.get('source_report_generated_at') == data.get('generated_at'), 'live social pack is not tied to the live report timestamp'
+                  assert social_manifest.get('source_report_sha256') == report_sha, 'live social pack source-report hash mismatch'
+                  assert social_manifest.get('story_titles') == expected_titles, 'live social story titles differ from formal Top 5'
+                  assert social_manifest.get('story_urls') == expected_urls, 'live social story URLs differ from formal Top 5'
+                  assert social_manifest.get('topic_story_urls') == expected_urls, 'five topic images do not map one-to-one to formal Top 5'
+                  assert len(social_manifest.get('images', [])) == 6, 'live social manifest does not contain six image records'
+                  assert social_verification.get('source_report_generated_at') == data.get('generated_at'), 'live social verification report timestamp mismatch'
+                  assert social_verification.get('source_report_sha256') == report_sha, 'live social verification report hash mismatch'
+                  assert [x.get('filename') for x in social_verification.get('images', [])] == [x.get('filename') for x in social_manifest.get('images', [])], 'live social verification image list differs from manifest'
+                  required_social_checks = {'five_topic_images_one_to_one_with_formal_top5', 'skill_metadata_and_copy_consistency', 'editorial_analysis_labeled_and_sourced', 'qr_decodes_to_exact_formal_entry', 'all_six_images_are_independent_pngs'}
+                  actual_social_checks = {x.get('name') for x in social_verification.get('checks', []) if x.get('status') == 'PASS'}
+                  assert required_social_checks.issubset(actual_social_checks), f'live social verification is missing required checks: {sorted(required_social_checks - actual_social_checks)}'
                   live_images = []
                   for entry in social_verification['images']:
                       filename = entry['filename']
