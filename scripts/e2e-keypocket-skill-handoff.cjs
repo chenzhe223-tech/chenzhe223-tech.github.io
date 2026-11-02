@@ -257,6 +257,7 @@ const { chromium } = require('playwright');
     assert.ok(persisted.projects.some(item => item.iv && item.data), 'project metadata must be stored in an encrypted envelope');
     assert.ok(!persisted.serializedProjectEnvelopes.includes(repositoryUrl), 'repository URL must not appear in plaintext in the project envelope');
     assert.deepEqual(pageErrors, [], 'KeyPocket should not raise browser JavaScript errors during import');
+    assert.ok(!pageErrors.some(message => /Cannot access .* before initialization/.test(message)), 'application script must finish initialization without temporal-dead-zone errors');
 
     // Confirm the project deletion and recovery path leaves the encrypted item intact.
     keyPocket.on('dialog', dialog => dialog.accept());
