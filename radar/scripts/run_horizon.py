@@ -412,6 +412,8 @@ def apply_claim_provenance(report):
 def main():
     report=json.loads(REPORT.read_text(encoding='utf-8'))
     if '--provenance-only' in sys.argv:
+        if not isinstance(report.get('ai_analysis'), dict):
+            report['ai_analysis'] = {'status':'unavailable','message':'Horizon enrichment did not complete; the source-backed news baseline is retained.'}
         ensure_story_fallback(report)
         remove_top5_duplicates_from_china(report)
         apply_verified_skill_metadata(report.get('skills') or [])
