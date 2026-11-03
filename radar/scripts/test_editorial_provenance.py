@@ -1,5 +1,10 @@
+import json
+import tempfile
 import unittest
+from pathlib import Path
+from unittest.mock import patch
 
+from radar.scripts import run_horizon
 from radar.scripts.run_horizon import apply_claim_provenance, apply_verified_skill_metadata
 
 
@@ -19,6 +24,49 @@ class EditorialProvenanceTests(unittest.TestCase):
         self.assertIn("74 SKILL.md files", skills[0]["description_en"])
         self.assertIn("Claude Code 专用", skills[0]["compatibility_status"])
         self.assertIn("Codex/WorkBuddy", skills[0]["compatibility_status"])
+
+    def test_manual_editorial_cannot_override_skill_radar_with_unverified_skill(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            override_path = root / "radar" / "data" / "manual-editorial" / "2026-11-03.json"
+            override_path.parent.mkdir(parents=True)
+            stories = [
+                {
+                    "title_zh": f"核验新闻 {index}",
+                    "what_zh": "公开来源确认的事实。",
+                    "why_zh": "该变化值得持续观察。",
+                    "source_url": f"https://source.example/{index}",
+                    "published": "2026-11-02",
+                }
+                for index in range(1, 6)
+            ]
+            override_path.write_text(json.dumps({
+                "report_date": "2026-11-03",
+                "localization": {
+                    "status": "manual_editorial_verified",
+                    "provider": "DAVYLAB editorial review",
+                    "sources_checked": 5,
+                },
+                "top5": stories,
+                "editorial": {"core_zh": "核心观察", "trend_zh": "共同趋势"},
+                "skills": [{
+                    "name": "last30days",
+                    "url": "https://github.com/mvanhorn/last30days-skill",
+                    "license": "MIT",
+                }],
+            }, ensure_ascii=False), encoding="utf-8")
+            verified_skill = {
+                "name": "verified/data-skill",
+                "url": "https://github.com/verified/data-skill",
+                "canonical_id": "github.com/verified/data-skill",
+                "quality_status": "PASS",
+            }
+            report = {"report_date": "2026-11-03", "skills": [verified_skill]}
+            with patch.object(run_horizon, "ROOT", root):
+                applied = run_horizon.apply_manual_editorial_override(report)
+            self.assertTrue(applied)
+            self.assertEqual(report["skills"], [verified_skill])
+            self.assertEqual(report["top5"], stories)
 
     def test_source_grounded_editorial_fallback_is_created_when_missing(self):
         report = {
