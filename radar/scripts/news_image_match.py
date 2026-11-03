@@ -10,6 +10,7 @@ import os
 from html.parser import HTMLParser
 import re
 import sys
+import time
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -20,8 +21,10 @@ REPORT = ROOT / "radar" / "data" / "latest.json"
 CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
-TIMEOUT = 5
-CACHE_VERSION = 4
+TIMEOUT = 3
+CACHE_VERSION = 5
+IMAGE_MATCH_BUDGET_SECONDS = 150
+STORY_IMAGE_BUDGET_SECONDS = 10
 QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
 
 def load_image_relevance_policy():
@@ -256,7 +259,7 @@ def fetch_article_html_firecrawl(page_url: str) -> str:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=15) as response:
+        with urllib.request.urlopen(request, timeout=3) as response:
             raw = response.read(2_500_000)
         body = json.loads(raw.decode("utf-8", errors="replace"))
         if body.get("success") is False:
@@ -418,44 +421,16 @@ def _theme_backup_url(story: dict, exclude_url: str = "") -> str:
     return _theme_photo_url(THEME_PHOTOS["general"][0])
 
 def _thematic_fallback(story: dict, used: set[str]) -> dict:
-    """Last-resort subject-matched topic illustration; never a claim of actual event photography."""
+    """Fast deterministic topic illustration fallback; no network calls."""
     topic = story_fallback_topic(story)
     ids = list(THEME_PHOTOS.get(topic, ())) + list(THEME_PHOTOS["general"])
-    checked = []
-    for photo_id in ids:
-        url = _theme_photo_url(photo_id)
-        if url in checked:
-            continue
-        checked.append(url)
-        if _image_identity(url) not in used and valid_image_url(url):
-            break
-    else:
-        # Never recycle a prior weekly asset merely because the candidate pool is exhausted.
-        title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI news")
-        return {
-            "image_url": "", "image_source": "No verified unique image available",
-            "image_page_url": "", "image_credit": "", "image_license": "",
-            "image_license_url": "", "image_alt": "配图暂缺 · 未找到符合本周去重规则的唯一图片",
-            "image_match_status": "image_unavailable", "image_matched_at": dt.datetime.now(TZ).isoformat(),
-            "image_is_generated": False, "image_generation_prompt": build_illustration_prompt(story),
-        }
+    url = next((_theme_photo_url(pid) for pid in ids if _image_identity(_theme_photo_url(pid)) not in used), "")
     title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI news")
-    labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration",
-              "product":"AI product / software topic illustration","business":"AI business / industry topic illustration",
-              "creative":"AI creativity topic illustration","general":"AI technology topic illustration"}
-    slugs = {"robot":"robotics","compute":"computer-technology","product":"technology",
-             "business":"business-technology","creative":"creative-technology","general":"artificial-intelligence"}
-    return {
-        "image_url": url, "image_fallback_url": _theme_backup_url(story, url),
-        "image_source": "Unsplash topic illustration",
-        "image_page_url": "https://unsplash.com/s/photos/" + slugs[topic],
-        "image_credit": "Unsplash",
-        "image_license": "Unsplash License; review source terms before reuse",
-        "image_license_url": "https://unsplash.com/license",
-        "image_alt": labels[topic] + ": " + title,
-        "image_match_status": "thematic_fallback",
-        "image_matched_at": dt.datetime.now(TZ).isoformat(),
-    }
+    if not url:
+        return {"image_url":"","image_source":"No verified unique image available","image_page_url":"","image_credit":"","image_license":"","image_license_url":"","image_alt":"配图暂缺 · 未找到符合本周去重规则的唯一图片","image_match_status":"image_unavailable","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
+    labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration","product":"AI product / software topic illustration","business":"AI business / industry topic illustration","creative":"AI creativity topic illustration","general":"AI technology topic illustration"}
+    slugs = {"robot":"robotics","compute":"computer-technology","product":"technology","business":"business-technology","creative":"creative-technology","general":"artificial-intelligence"}
+    return {"image_url":url,"image_fallback_url":_theme_backup_url(story,url),"image_source":"Unsplash topic illustration","image_page_url":"https://unsplash.com/s/photos/"+slugs[topic],"image_credit":"Unsplash","image_license":"Unsplash License; review source terms before reuse","image_license_url":"https://unsplash.com/license","image_alt":"主题配图（非新闻现场）："+labels[topic]+": "+title,"image_match_status":"thematic_fallback","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
 
 def _openverse_candidates(query: str) -> list[dict]:
     url = "https://api.openverse.org/v1/images/?" + urllib.parse.urlencode({"q": query[:180], "page_size": 12, "mature": "false"})
@@ -512,112 +487,57 @@ def _bing_candidates(query: str) -> list[dict]:
         return []
 
 def _free_image_search(story: dict, used: set[str]) -> dict | None:
+    """One bounded Openverse lookup; no multi-provider serial fan-out."""
     queries = derive_visual_search_queries(story)
     if not queries:
         return None
-    context = story_context(story) + " " + " ".join(queries)
-    # Open-license imagery first, searched with the exact headline and an AI-expanded topic phrase.
-    for query in queries[:2]:
-        for candidate in _openverse_candidates(query):
-            relevance, score = candidate_relevance(context, " ".join(str(candidate.get(k) or "") for k in ("title", "creator", "foreign_landing_url")))
-            if not relevance:
-                continue
-            image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
-            page_url = normalize_url(candidate.get("foreign_landing_url") or "")
-            if not image_url or _image_identity(image_url) in used or not valid_image_url(image_url):
-                continue
-            license_name = " ".join(str(candidate.get("license") or "").split())
-            version = str(candidate.get("license_version") or "").strip()
-            return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Openverse topic image","image_page_url":page_url,"image_credit":str(candidate.get("creator") or "Openverse contributor"),
-                "image_license":(license_name + (" "+version if version else "")).strip() or "License not listed",
-                "image_license_url":normalize_url(candidate.get("license_url") or ""),
-                "image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic",
-                "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
-    for query in queries[:2]:
-        for candidate in _wikimedia_candidates(query):
-            title = str(candidate.get("title") or "")
-            relevance, score = candidate_relevance(context, title)
-            infos = candidate.get("imageinfo") or []
-            if not relevance or not infos:
-                continue
-            info = infos[0]
-            metadata = info.get("extmetadata") or {}
-            image_url = normalize_url(info.get("thumburl") or info.get("url") or "")
-            page_url = normalize_url(info.get("descriptionurl") or "")
-            if not image_url or image_url in used or not valid_image_url(image_url):
-                continue
-            def ext_value(key: str) -> str:
-                raw = str((metadata.get(key) or {}).get("value") or "")
-                return html.unescape(re.sub(r"<[^>]*>", " ", raw)).strip()
-            return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Wikimedia Commons topic image","image_page_url":page_url,
-                "image_credit":ext_value("Artist") or ext_value("Credit") or "Wikimedia Commons contributor",
-                "image_license":ext_value("LicenseShortName") or "Wikimedia Commons license",
-                "image_license_url":normalize_url(ext_value("LicenseUrl")),
-                "image_alt":f"主题配图（非新闻现场）：{title.removeprefix('File:')}","image_match_status":"wikimedia_topic",
-                "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
-    # Public web-image search is the next rung; use a relevance gate and preserve the landing page.
-    for query in queries[:3]:
-        for candidate in _bing_candidates(query):
-            relevance, score = candidate_relevance(context, " ".join(str(candidate.get(k) or "") for k in ("title","description","page_url")))
-            image_url = normalize_url(candidate.get("url") or "")
-            page_url = normalize_url(candidate.get("page_url") or "")
-            if not relevance or not image_url or image_url in used or not valid_image_url(image_url):
-                continue
-            host = urllib.parse.urlparse(page_url).hostname or "Web image result"
-            return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),
-                "image_source":"Bing Images topic image","image_page_url":page_url,"image_credit":host,
-                "image_license":"Reuse terms not independently verified; editorial/topic image","image_license_url":"",
-                "image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"web_search_topic",
-                "image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
+    query = queries[0]
+    context = story_context(story) + " " + query
+    for candidate in _openverse_candidates(query)[:2]:
+        relevance, score = candidate_relevance(context, " ".join(str(candidate.get(k) or "") for k in ("title","creator","foreign_landing_url")))
+        image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
+        if not relevance or not image_url or _image_identity(image_url) in used or not valid_image_url(image_url):
+            continue
+        license_name = " ".join(str(candidate.get("license") or "").split())
+        version = str(candidate.get("license_version") or "").strip()
+        return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),"image_source":"Openverse topic image","image_page_url":normalize_url(candidate.get("foreign_landing_url") or ""),"image_credit":str(candidate.get("creator") or "Openverse contributor"),"image_license":(license_name+" "+version).strip() or "License not listed","image_license_url":normalize_url(candidate.get("license_url") or ""),"image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic","image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
     return None
 
 def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
-    key = _cache_key(story)
-    cached = cache.get(key) if key else None
-    # Version 2 deliberately retries cached "none" results with expanded web/image search.
-    if isinstance(cached, dict) and cached.get("cache_version") == CACHE_VERSION and _fresh(cached, 72):
-        if cached.get("image_url") and _image_identity(cached.get("image_url", "")) not in used and not is_generic_brand_asset(cached.get("image_url", "")):
-            if cached.get("image_match_status") == "thematic_fallback":
-                # Refresh topic artwork if taxonomy improves; don't repeat remote searches.
-                result = _thematic_fallback(story, used)
-                if key:
-                    cache[key] = {**result, "checked_at": _now().isoformat(), "cache_version": CACHE_VERSION}
-                return result
-            return {k: v for k, v in cached.items() if k not in {"checked_at", "cache_version"}}
-
-    article_url = normalize_url(key)
-    existing = normalize_url(story.get("image_url") or "")
-    result = {}
-    if existing and _image_identity(existing) not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
-        result = _metadata_result(existing, story)
-        result["image_match_status"] = "feed_image"
-    else:
-        if article_url:
-            document = fetch_article_html(article_url)
-            for candidate_url in extract_image_candidates(document, article_url):
+    started=time.monotonic()
+    key=_cache_key(story)
+    cached=cache.get(key) if key else None
+    if isinstance(cached,dict) and cached.get("cache_version")==CACHE_VERSION and _fresh(cached,72):
+        if cached.get("image_url") and _image_identity(cached.get("image_url","")) not in used and not is_generic_brand_asset(cached.get("image_url","")):
+            if cached.get("image_match_status")=="thematic_fallback":
+                return _thematic_fallback(story,used)
+            return {k:v for k,v in cached.items() if k not in {"checked_at","cache_version"}}
+    article_url=normalize_url(key)
+    existing=normalize_url(story.get("image_url") or "")
+    result={}
+    try:
+        if existing and _image_identity(existing) not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
+            result=_metadata_result(existing,story); result["image_match_status"]="feed_image"
+        elif article_url and time.monotonic()-started<STORY_IMAGE_BUDGET_SECONDS:
+            document=fetch_article_html(article_url)
+            for candidate_url in extract_image_candidates(document,article_url)[:1]:
                 if _image_identity(candidate_url) not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
-                    result = _metadata_result(candidate_url, story)
-                    break
-            # Use Firecrawl only after direct extraction fails and opt-in is explicit.
-            if not result and firecrawl_enabled():
-                firecrawl_document = fetch_article_html_firecrawl(article_url)
-                for candidate_url in extract_image_candidates(firecrawl_document, article_url):
+                    result=_metadata_result(candidate_url,story); break
+            if not result and firecrawl_enabled() and time.monotonic()-started<6:
+                firecrawl_document=fetch_article_html_firecrawl(article_url)
+                for candidate_url in extract_image_candidates(firecrawl_document,article_url)[:1]:
                     if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
-                        result = _metadata_result(candidate_url, story)
-                        break
-        if not result:
-            result = _free_image_search(story, used) or {}
-    if not result:
-        result = _thematic_fallback(story, used)
-    if result.get("image_url"):
-        result.setdefault("image_fallback_url", _theme_backup_url(story, result["image_url"]))
-    # This is a handoff prompt for an agent skill; scheduled CI does not generate images.
-    result.setdefault("image_is_generated", False)
-    result.setdefault("image_generation_prompt", build_illustration_prompt(story))
-    if key:
-        cache[key] = {**result, "checked_at": _now().isoformat(), "cache_version": CACHE_VERSION}
+                        result=_metadata_result(candidate_url,story); break
+        if not result and time.monotonic()-started<STORY_IMAGE_BUDGET_SECONDS:
+            result=_free_image_search(story,used) or {}
+    except Exception as exc:
+        print(f"[image-match] story fallback: {type(exc).__name__}",file=sys.stderr)
+    if not result: result=_thematic_fallback(story,used)
+    if result.get("image_url"): result.setdefault("image_fallback_url",_theme_backup_url(story,result["image_url"]))
+    result.setdefault("image_is_generated",False)
+    result.setdefault("image_generation_prompt",build_illustration_prompt(story))
+    result["image_match_duration_seconds"]=round(time.monotonic()-started,2)
+    if key: cache[key]={**result,"checked_at":_now().isoformat(),"cache_version":CACHE_VERSION}
     return result
 
 def _apply_result(story: dict, result: dict) -> None:
@@ -665,68 +585,46 @@ def enforce_unique_story_images(report: dict, used: set[str]) -> None:
                 used.add(identity)
 
 
-def enrich_report(report: dict, cache: dict) -> tuple[int, int]:
-    used: set[str] = _weekly_used_images(str(report.get("report_date") or dt.datetime.now(TZ).date().isoformat()))
-    processed_urls: dict[str, dict] = {}
-    matched = 0
-    total = 0
-
-    def enrich(story: dict, source_story: dict | None = None) -> None:
-        nonlocal matched, total
-        if not isinstance(story, dict):
-            return
-        story_for_matching = dict(source_story or {})
-        story_for_matching.update(story)
-        url = _cache_key(story_for_matching)
-        total += 1
-        previous = processed_urls.get(url) if url else None
-        if previous and previous.get("image_url") and _image_identity(previous.get("image_url", "")) not in used:
-            result = dict(previous)
-        else:
-            result = resolve_story_image(story_for_matching, cache, used)
-        _apply_result(story, result)
-        if source_story is not None:
-            _apply_result(source_story, result)
-        image_url = result.get("image_url")
-        if image_url:
-            used.add(_image_identity(image_url))
-            matched += 1
-        if url:
-            processed_urls[url] = result
-
-    news = report.get("news") if isinstance(report.get("news"), list) else []
-    top5 = report.get("top5") if isinstance(report.get("top5"), list) else []
+def enrich_report(report: dict, cache: dict) -> tuple[int,int]:
+    started=time.monotonic(); deadline=started+IMAGE_MATCH_BUDGET_SECONDS
+    used=_weekly_used_images(str(report.get("report_date") or dt.datetime.now(TZ).date().isoformat()))
+    processed_urls={}
+    def enrich(story:dict,source_story:dict|None=None):
+        if not isinstance(story,dict): return
+        item=dict(source_story or {}); item.update(story); url=_cache_key(item)
+        previous=processed_urls.get(url) if url else None
+        if previous and previous.get("image_url") and _image_identity(previous.get("image_url","")) not in used: result=dict(previous)
+        elif time.monotonic()>=deadline:
+            result=_thematic_fallback(item,used)
+            if result.get("image_url"): result["image_match_status"]="thematic_fallback_budget_exhausted"
+            print("[image-match] global budget exhausted; deterministic fallback",file=sys.stderr)
+        else: result=resolve_story_image(item,cache,used)
+        _apply_result(story,result)
+        if source_story is not None: _apply_result(source_story,result)
+        if result.get("image_url"): used.add(_image_identity(result["image_url"]))
+        if url: processed_urls[url]=result
+        print(f"[image-match] {str(story.get('title_zh') or story.get('title') or url)[:72]} | {result.get('image_match_status')} | {result.get('image_match_duration_seconds',0)}s")
+    news=report.get("news") if isinstance(report.get("news"),list) else []
+    top5=report.get("top5") if isinstance(report.get("top5"),list) else []
     for story in top5:
-        source_story = None
+        source_story=None
         try:
-            idx = int(story.get("source_index", -1))
-            if 0 <= idx < len(news) and news[idx].get("url") == story.get("source_url"):
-                source_story = news[idx]
-        except (TypeError, ValueError):
-            source_story = None
-        if source_story is None:
-            source_story = next((n for n in news if n.get("url") == story.get("source_url")), None)
-        enrich(story, source_story)
-    top_urls = {x.get("source_url") for x in top5 if isinstance(x, dict)}
+            idx=int(story.get("source_index",-1))
+            if 0<=idx<len(news) and news[idx].get("url")==story.get("source_url"): source_story=news[idx]
+        except (TypeError,ValueError): pass
+        if source_story is None: source_story=next((n for n in news if n.get("url")==story.get("source_url")),None)
+        enrich(story,source_story)
+    top_urls={x.get("source_url") for x in top5 if isinstance(x,dict)}
     for story in news[:5]:
-        if story.get("url") not in top_urls:
-            enrich(story)
-    china_news = report.get("china_ai_news") if isinstance(report.get("china_ai_news"), list) else []
-    for story in china_news:
-        enrich(story)
-    enforce_unique_story_images(report, used)
-    processed_stories = list(top5) + [x for x in news[:5] if x.get("url") not in top_urls] + list(china_news)
-    total = len(processed_stories)
-    matched = sum(bool(normalize_url(str(x.get("image_url") or ""))) for x in processed_stories if isinstance(x, dict))
-    report["image_matching"] = {
-        "status": "ok" if matched == total else "partial", "matched": matched, "processed": total,
-        "relevance_threshold": MIN_IMAGE_RELEVANCE_SCORE,
-        "relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"],
-        "thematic_fallback_count": sum(1 for x in processed_stories if isinstance(x, dict) and x.get("image_match_status") == "thematic_fallback"),
-        "strategy": ["RSS/feed image", "article OG/Twitter metadata", "Horizon semantic query expansion", "Openverse", "Wikimedia Commons", "Bing Images", "Unsplash topic illustration fallback"],
-        "last_run": dt.datetime.now(TZ).isoformat(),
-    }
-    return matched, total
+        if story.get("url") not in top_urls: enrich(story)
+    china=report.get("china_ai_news") if isinstance(report.get("china_ai_news"),list) else []
+    for story in china: enrich(story)
+    enforce_unique_story_images(report,used)
+    stories=list(top5)+[x for x in news[:5] if x.get("url") not in top_urls]+list(china)
+    total=len(stories); matched=sum(bool(normalize_url(str(x.get("image_url") or ""))) for x in stories if isinstance(x,dict))
+    report["image_matching"]={"status":"ok" if matched==total else "partial","matched":matched,"processed":total,"relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"thematic_fallback_count":sum(1 for x in stories if isinstance(x,dict) and str(x.get("image_match_status","")).startswith("thematic_fallback")),"strategy":["RSS/feed image","article OG/Twitter metadata","single bounded Openverse lookup","deterministic Unsplash topic illustration fallback"],"budget_seconds":IMAGE_MATCH_BUDGET_SECONDS,"duration_seconds":round(time.monotonic()-started,2),"last_run":dt.datetime.now(TZ).isoformat()}
+    print(f"[image-match] finished in {report['image_matching']['duration_seconds']}s: {matched}/{total} images")
+    return matched,total
 
 def main() -> int:
     if not REPORT.exists():
