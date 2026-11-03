@@ -1,3 +1,10 @@
+## 2026-11-03 — KeyPocket Skill 导入与 iOS 缓存修复
+- Skill 导入使用字符串标签格式写入本地加密项目；GitHub owner/repo 比较大小写不敏感，完整仓库 URL 走精确仓库 API，不回退到 Fork 搜索结果。
+- 移动端弹窗关闭时取消请求并清理 body 滚动锁；弹窗内部触摸滚动；收录成功后关闭并返回项目列表。
+- app.js 与 index.html cache-bust 同步更新为 `kp-v2-skill-import-fix-20261103-23`。
+- 最终 Pages `41550827155`、Browser QA `41550827588`、Skill Handoff QA `41550827587` 均 SUCCESS。
+- Playwright 覆盖搜索/收录、390px 精确仓库 URL、收录后返回、弹窗再次打开/关闭、无 pageerror；真实 iPhone Safari/微信真机仍待验收。
+
 ## 2026-11-03 — iPhone Skill 导入卡顿与仓库 URL 精确匹配
 - 修复手机端 Skill 导入弹窗滚动与生命周期：关闭时取消请求、清理滚动锁，防止输入框自动聚焦引起键盘/视口跳动；保存成功自动返回项目列表。
 - GitHub 搜索增加请求超时提示。

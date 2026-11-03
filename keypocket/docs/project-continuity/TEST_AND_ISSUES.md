@@ -1,6 +1,6 @@
 # KeyPocket — 测试证据与问题
 
-最后更新：2026-11-02（UTC+8）
+最后更新：2026-11-03（UTC+8）
 
 ## 最新成功证据
 ### GitHub Pages build/deploy
@@ -80,3 +80,16 @@
 - Browser QA run 41548966622 SUCCESS：390px 视口弹窗边界、mock 收录后弹窗关闭且项目卡片可见、重新打开/关闭与 body scroll lock 清理均 PASS；未发现 pageerror。
 - 指定 URL 精确查询 mock 已写入 scripts/qa-smoke.cjs；最新代码 commit 38c88377 的 Skill Handoff QA 41549386767 SUCCESS，Pages build 对包含该代码的 main commit f67ec5d run 41549584320 SUCCESS。由于连续的 AI 简报生产部署使同 SHA Browser QA 被取消/跳过，精确 URL 的专项 E2E 尚待补跑。
 - 不能仅凭 390px Chromium 视口声称 iPhone Safari 真机兼容已通过；仍需真机验证。不要让用户清除 Safari 网站数据、IndexedDB 或 localStorage。
+
+
+## 2026-11-03 Skill 导入与 iPhone 弹窗稳定性修复
+
+- 完整 GitHub 仓库 URL 走 GitHub `GET /repos/{owner}/{repo}` 精确读取；不再把完整 URL 当作关键词搜索。仓库名/owner 比较采用大小写不敏感，兼容 GitHub URL 大小写规范化。
+- 移动端弹窗：取消输入框自动聚焦；弹窗本身在视觉视口内滚动；关闭时取消进行中的搜索并清理 body 滚动锁；收录成功后关闭弹窗并返回项目列表；搜索请求有 12 秒超时提示。
+- 修复 Skill 收录数据规范化与错误反馈，项目标签保持 `normalizeProject()` 要求的字符串格式（逗号分隔）。
+- HTML 与 app.js 资源版本同步更新为 `kp-v2-skill-import-fix-20261103-23`，强制 Safari 获取最新脚本，避免继续使用旧缓存。
+- Browser QA run `41550563288`（commit `164d8b096890726750429541370f92062065fdc3`）SUCCESS；Pages run `41550562420` SUCCESS；Skill Handoff QA run `41550563395` SUCCESS。验证了 Skill 搜索/加密收录、390px iPhone 宽度精确仓库 URL 查询（精确请求 1 次、关键词搜索 0 次）、移动端收录后关闭、弹窗再次打开/关闭、页面可操作、无 KeyPocket JavaScript pageerror。
+- 随后资源缓存版本更新至 `kp-v2-skill-import-fix-20261103-23`；Pages run `41550827155`、Browser QA `41550827588`、Skill Handoff QA `41550827587` 均 SUCCESS。该组结果为当前正式资源的最终部署验收。
+- **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
+- 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
+

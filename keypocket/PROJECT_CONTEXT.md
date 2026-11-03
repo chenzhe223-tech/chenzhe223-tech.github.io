@@ -1,6 +1,6 @@
 # KeyPocket｜项目唯一状态文件
 
-最后更新：2026-11-02（UTC+8）
+最后更新：2026-11-03（UTC+8）
 产品版本目标：V2.0
 正式应用：https://chenzhe223-tech.github.io/keypocket/
 代码仓库：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io（应用目录：`keypocket/`）
@@ -109,7 +109,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 
 P0：
 0. 完成 Supabase 自定义 SMTP、KeyPocket 精确 Redirect URL 白名单和 QQ 邮箱真实投递验收；当前只完成代码与模拟 E2E，不得标记真实邮件已验证。
-0. 在最新 Pages 部署稳定后补跑 iPhone 宽度 Skill 导入专项 Browser QA，重点验收精确仓库 URL 查询、弹窗重开、收录后返回与页面初始化；再用真实 iPhone Safari 复测。
+0. 使用真实 iPhone Safari 与微信内置浏览器复测白屏、弹窗滚动、精确仓库 URL、收录后返回；390px Chromium E2E 已通过，但不能替代真机验收。
 1. 使用独立真实测试账号和两个隔离浏览器 profile/设备，完成双向新增、编辑、删除同步、tombstone 传播、错口令拒绝、并发冲突与云端快照跨设备恢复；严禁使用真实 API Key。
 2. 真实验证设备撤销后 `keypocket_sync_put_item` 拒绝写入，并验证未登录请求被拒绝、错误不会覆盖云端密文。
 3. 验证 refresh token 真实轮换后两设备登录连续性、退出登录及设备状态行为；不要用 mock 代替账号验收。
@@ -136,3 +136,16 @@ P2：
 4. 完成 iPhone Safari 和微信内置浏览器实机测试。
 5. 继续核对 Skill Radar 历史采集；历史不足时不展示伪增长数据。
 6. 每次实质开发更新本文件和交接文档，并按 Code Completed、Build Passed、Runtime Verified、Functional Tested、Production Deployed 五级分别报告。
+
+
+## 2026-11-03 Skill 导入与 iPhone 弹窗稳定性修复
+
+- 完整 GitHub 仓库 URL 走 GitHub `GET /repos/{owner}/{repo}` 精确读取；不再把完整 URL 当作关键词搜索。仓库名/owner 比较采用大小写不敏感，兼容 GitHub URL 大小写规范化。
+- 移动端弹窗：取消输入框自动聚焦；弹窗本身在视觉视口内滚动；关闭时取消进行中的搜索并清理 body 滚动锁；收录成功后关闭弹窗并返回项目列表；搜索请求有 12 秒超时提示。
+- 修复 Skill 收录数据规范化与错误反馈，项目标签保持 `normalizeProject()` 要求的字符串格式（逗号分隔）。
+- HTML 与 app.js 资源版本同步更新为 `kp-v2-skill-import-fix-20261103-23`，强制 Safari 获取最新脚本，避免继续使用旧缓存。
+- Browser QA run `41550563288`（commit `164d8b096890726750429541370f92062065fdc3`）SUCCESS；Pages run `41550562420` SUCCESS；Skill Handoff QA run `41550563395` SUCCESS。验证了 Skill 搜索/加密收录、390px iPhone 宽度精确仓库 URL 查询（精确请求 1 次、关键词搜索 0 次）、移动端收录后关闭、弹窗再次打开/关闭、页面可操作、无 KeyPocket JavaScript pageerror。
+- 随后资源缓存版本更新至 `kp-v2-skill-import-fix-20261103-23`；Pages run `41550827155`、Browser QA `41550827588`、Skill Handoff QA `41550827587` 均 SUCCESS。该组结果为当前正式资源的最终部署验收。
+- **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
+- 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
+

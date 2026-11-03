@@ -66,3 +66,21 @@
 4. 390px Chromium Browser QA run 41548966622 SUCCESS：弹窗布局、收录后返回、再次打开/关闭均通过；精确 URL 专项测试已写入 QA 脚本，但尚未在同 SHA Browser QA 跑通。
 5. 当前正式入口：https://chenzhe223-tech.github.io/keypocket/。Pages build 41549584320 SUCCESS，commit f67ec5d 包含本轮修复。仍需等待稳定部署后补跑 Browser QA，并由用户在真实 iPhone Safari 复测。
 6. 保护数据：不得清除 Safari 网站数据、IndexedDB 或 localStorage；如仍白屏，关闭旧标签页后新开正式 URL，保留原设备与数据。
+
+
+## 2026-11-03 Skill 导入与 iPhone 弹窗稳定性修复
+
+- 完整 GitHub 仓库 URL 走 GitHub `GET /repos/{owner}/{repo}` 精确读取；不再把完整 URL 当作关键词搜索。仓库名/owner 比较采用大小写不敏感，兼容 GitHub URL 大小写规范化。
+- 移动端弹窗：取消输入框自动聚焦；弹窗本身在视觉视口内滚动；关闭时取消进行中的搜索并清理 body 滚动锁；收录成功后关闭弹窗并返回项目列表；搜索请求有 12 秒超时提示。
+- 修复 Skill 收录数据规范化与错误反馈，项目标签保持 `normalizeProject()` 要求的字符串格式（逗号分隔）。
+- HTML 与 app.js 资源版本同步更新为 `kp-v2-skill-import-fix-20261103-23`，强制 Safari 获取最新脚本，避免继续使用旧缓存。
+- Browser QA run `41550563288`（commit `164d8b096890726750429541370f92062065fdc3`）SUCCESS；Pages run `41550562420` SUCCESS；Skill Handoff QA run `41550563395` SUCCESS。验证了 Skill 搜索/加密收录、390px iPhone 宽度精确仓库 URL 查询（精确请求 1 次、关键词搜索 0 次）、移动端收录后关闭、弹窗再次打开/关闭、页面可操作、无 KeyPocket JavaScript pageerror。
+- 随后资源缓存版本更新至 `kp-v2-skill-import-fix-20261103-23`；Pages run `41550827155`、Browser QA `41550827588`、Skill Handoff QA `41550827587` 均 SUCCESS。该组结果为当前正式资源的最终部署验收。
+- **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
+- 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
+
+
+## 下一轮接手事项
+1. 请用户在原 iPhone Safari 设备和原网址重新打开最新资源，测试 Skill URL `https://github.com/Oldcircle/geo-sleuth`、弹窗取消/再次打开、收录成功返回列表；不要清除网站数据。
+2. 若仍白屏，优先收集 Safari Web Inspector 的 `window.__kpInitDiagnostic`、`window.__kpBuildVersion` 与 Console 首条异常；不能要求用户重置 IndexedDB。
+3. 后续按 P0 完成真实 QQ 邮箱 SMTP 投递、双设备云同步及云备份恢复；这些不属于本轮 Skill UI 验收范围。
