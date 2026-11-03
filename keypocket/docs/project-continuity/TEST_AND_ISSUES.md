@@ -71,3 +71,12 @@
 - Pages 41478020574 SUCCESS；KeyPocket Skill Handoff QA 41478022270 SUCCESS；应用代码 commit 1bd229675c164d3e825a73088ba36665f60e48ec。
 - 真实邮件投递尚未验收。需在 Supabase Dashboard → Authentication → URL Configuration 添加精确 Redirect URL：https://chenzhe223-tech.github.io/keypocket/；在 Authentication → SMTP Settings 配置生产自定义 SMTP，并检查 Reset Password 邮件模板使用有效确认链接。
 - Supabase 官方默认 SMTP 只向组织团队预授权地址投递，并有较低速率限制；这可能解释 QQ 邮箱收不到邮件，但当前未读取项目实际 SMTP 配置，不能断言项目一定使用默认 SMTP。参考官方文档：https://supabase.com/docs/guides/auth/auth-smtp、https://supabase.com/docs/guides/auth/redirect-urls。
+
+
+## 2026-11-03 iPhone Skill 导入卡顿 / 白屏反馈
+- 截图场景：用户在 iPhone 上输入完整 GitHub URL Oldcircle/geo-sleuth，页面显示一个第三方复制仓库候选，弹窗遮罩占据页面；用户反馈操作卡住，重新打开页面白屏。
+- 已实施移动端弹窗恢复改造：取消搜索输入框自动聚焦；弹窗高度限制在视觉视口内、弹窗内容本身滚动；关闭时中止 Skill 搜索并清理 body 滚动锁；收录成功后自动关闭弹窗；搜索请求 12 秒超时并提示重试。
+- 已实施 URL 精确查询：完整 github.com/owner/repo 走 GitHub GET /repos/{owner}/{repo}，关键词仍走 Search API；指定仓库不存在/不可公开读取时不再回退到相似 Fork。
+- Browser QA run 41548966622 SUCCESS：390px 视口弹窗边界、mock 收录后弹窗关闭且项目卡片可见、重新打开/关闭与 body scroll lock 清理均 PASS；未发现 pageerror。
+- 指定 URL 精确查询 mock 已写入 scripts/qa-smoke.cjs；最新代码 commit 38c88377 的 Skill Handoff QA 41549386767 SUCCESS，Pages build 对包含该代码的 main commit f67ec5d run 41549584320 SUCCESS。由于连续的 AI 简报生产部署使同 SHA Browser QA 被取消/跳过，精确 URL 的专项 E2E 尚待补跑。
+- 不能仅凭 390px Chromium 视口声称 iPhone Safari 真机兼容已通过；仍需真机验证。不要让用户清除 Safari 网站数据、IndexedDB 或 localStorage。

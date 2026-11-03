@@ -57,3 +57,12 @@
 6. Pages run 41478020574 SUCCESS；DAVYLAB Browser QA 41478022304 SUCCESS；KeyPocket Skill Handoff QA 41478022270 SUCCESS。密码找回请求、恢复回跳、更新密码均由 mock E2E 覆盖。
 7. 未完成的外部依赖：真实 SMTP 邮件投递未验证；需检查 Supabase Auth SMTP，配置生产自定义 SMTP，并在 URL Configuration 允许 https://chenzhe223-tech.github.io/keypocket/。默认 SMTP 对非团队邮箱有限制，QQ 邮箱可能因此收不到邮件；实际项目配置尚未确认。
 8. 下一步先完成 SMTP 与 Redirect URL 配置，再使用用户本人邮箱做一次真实找回邮件验收；切勿要求用户重复注册或修改跨设备加密口令。
+
+
+## 2026-11-03 iPhone Skill 导入故障专项交接
+1. 用户截图显示 iPhone Skill 导入弹窗搜索 GitHub URL Oldcircle/geo-sleuth 后，返回的是第三方复制仓库；随后反馈页面卡住，重新打开白屏。
+2. 已修复移动端弹窗：搜索请求可取消，旧异步响应失效；关闭清理 body scroll lock；手机不自动聚焦输入框；弹窗内部滚动并限制在视口内；保存成功自动关闭并返回项目列表；GitHub Search 每个请求 12 秒超时。
+3. 已修复完整 GitHub URL 查询：直接 GET /repos/{owner}/{repo}，不再当关键词搜索；目标不可公开读取时提示失败，不推荐同名 fork 代替。
+4. 390px Chromium Browser QA run 41548966622 SUCCESS：弹窗布局、收录后返回、再次打开/关闭均通过；精确 URL 专项测试已写入 QA 脚本，但尚未在同 SHA Browser QA 跑通。
+5. 当前正式入口：https://chenzhe223-tech.github.io/keypocket/。Pages build 41549584320 SUCCESS，commit f67ec5d 包含本轮修复。仍需等待稳定部署后补跑 Browser QA，并由用户在真实 iPhone Safari 复测。
+6. 保护数据：不得清除 Safari 网站数据、IndexedDB 或 localStorage；如仍白屏，关闭旧标签页后新开正式 URL，保留原设备与数据。

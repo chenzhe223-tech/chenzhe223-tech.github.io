@@ -1,3 +1,10 @@
+## 2026-11-03 — iPhone Skill 导入卡顿与仓库 URL 精确匹配
+- 修复手机端 Skill 导入弹窗滚动与生命周期：关闭时取消请求、清理滚动锁，防止输入框自动聚焦引起键盘/视口跳动；保存成功自动返回项目列表。
+- GitHub 搜索增加请求超时提示。
+- 输入完整 GitHub 仓库 URL 时，改用 /repos/{owner}/{repo} 精确读取，不再把 URL 当关键词并返回第三方 Fork。
+- 390px Chromium Browser QA 41548966622 SUCCESS：弹窗布局、保存返回、再次打开/关闭通过。
+- 精确 URL 的专项 mock 已加入 Browser QA；代码语法/Skill Handoff QA 41549386767 SUCCESS，Pages 41549584320 SUCCESS；同 SHA Browser QA 尚待补跑，iPhone Safari 真机仍待验收。
+
 ## 2026-11-02 — 同步账号密码找回
 - 同步中心新增“忘记密码”入口，接入 Supabase Auth recover 邮件请求与自定义回跳地址。
 - 新增恢复链接解析（recovery access token / token_hash）、新密码确认和 Auth user PATCH。

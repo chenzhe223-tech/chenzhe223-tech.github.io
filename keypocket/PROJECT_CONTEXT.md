@@ -76,6 +76,16 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 - Browser QA 41478022304 已通过模拟 Supabase Auth 的恢复邮件请求、恢复回跳和密码更新 E2E；Pages run 41478020574、Skill Handoff QA 41478022270 均 SUCCESS，代码 commit 1bd229675c164d3e825a73088ba36665f60e48ec。
 - 尚未验证真实邮箱投递。当前工具无法读取/修改 Supabase Auth SMTP 与 URL Configuration。Supabase 官方默认 SMTP 只向项目组织团队预授权邮箱投递，且有严格速率限制；若用户 QQ 邮箱不在团队成员列表，默认 SMTP 可能拒发。生产环境应配置自定义 SMTP，并将上述 KeyPocket 回跳地址加入 Redirect URLs。官方说明：https://supabase.com/docs/guides/auth/auth-smtp、https://supabase.com/docs/guides/auth/redirect-urls。
 
+## 4.2 iPhone Skill 导入卡顿与精确仓库 URL（2026-11-03）
+
+- 用户反馈：iPhone Safari 在“按 Skill 名称导入”搜索结果页卡住，离开后重新打开应用出现白屏；截图显示已成功返回一个第三方复制仓库，但用户输入的是上游仓库 URL https://github.com/Oldcircle/geo-sleuth。
+- 已修复移动端弹窗生命周期：关闭弹窗时取消待处理搜索、使旧异步响应失效、清理 body 滚动锁；手机端不再自动 focus 搜索输入框以避免强制弹出键盘和 visual viewport 跳动；弹窗内部滚动并受视口高度限制；收录成功后自动关闭弹窗并返回项目列表；GitHub 搜索请求设置 12 秒超时并显示可恢复提示。
+- 已修复 URL 搜索逻辑：输入有效 GitHub owner/repo URL 时，直接请求 GET /repos/{owner}/{repo} 精确读取目标仓库，不再将完整 URL 当作普通关键词并返回相似 Fork。指定仓库不可公开读取时明确报错，不降级推荐同名复制仓库。
+- iPhone 宽度 390px Chromium E2E：弹窗视口布局、Skill 收录后关闭、再次打开/关闭及滚动锁清理均 PASS（Browser QA run 41548966622，commit 4bb640dc）。
+- 精确 URL 查询的专项 mock 已加入 Browser QA（输入 Oldcircle/geo-sleuth 必须命中 /repos/Oldcircle/geo-sleuth，且不调用 search/repositories）；应用语法/Skill Handoff 检查已通过对应 commit 38c8837，但此专项 Browser QA 尚未在同一 SHA 完成，不能标记为 E2E 已通过。
+- GitHub Pages build/deploy：41549584320 SUCCESS（commit f67ec5d，包含本轮代码）。Browser QA 对该提交尚未取得最终成功证据，需在最新部署后补跑。
+- 当前不清理 localStorage、IndexedDB 或网站数据；不要卸载/清除 Safari 网站数据，以免影响本地加密库。白屏恢复先关闭旧标签页并重新打开正式 URL；若仍白屏，保留现场和原设备数据再排查。
+
 ## 5. 最近验证证据
 
 - 最近一次已验证应用代码 commit：`a1a4127e9d2e48c2044158a1c7a7e4bc27fccd25`（后续 `6e843dc` 为本轮状态/交接文档同步，不修改应用代码）。
@@ -99,6 +109,7 @@ V2 REST 请求遇到 HTTP 401 时会使用 refresh_token grant 自动获取新 a
 
 P0：
 0. 完成 Supabase 自定义 SMTP、KeyPocket 精确 Redirect URL 白名单和 QQ 邮箱真实投递验收；当前只完成代码与模拟 E2E，不得标记真实邮件已验证。
+0. 在最新 Pages 部署稳定后补跑 iPhone 宽度 Skill 导入专项 Browser QA，重点验收精确仓库 URL 查询、弹窗重开、收录后返回与页面初始化；再用真实 iPhone Safari 复测。
 1. 使用独立真实测试账号和两个隔离浏览器 profile/设备，完成双向新增、编辑、删除同步、tombstone 传播、错口令拒绝、并发冲突与云端快照跨设备恢复；严禁使用真实 API Key。
 2. 真实验证设备撤销后 `keypocket_sync_put_item` 拒绝写入，并验证未登录请求被拒绝、错误不会覆盖云端密文。
 3. 验证 refresh token 真实轮换后两设备登录连续性、退出登录及设备状态行为；不要用 mock 代替账号验收。
