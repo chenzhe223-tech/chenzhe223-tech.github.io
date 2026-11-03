@@ -723,8 +723,10 @@ def collect_skills() -> list[dict]:
     # noisy or exhausted search result set cannot leave the daily report without
     # any usable Skill. It still goes through the same history, license, README,
     # actual-SKILL-file, scoring and rare-value gates as every discovered project.
-    fallback_repo = "cloudflare/security-audit-skill"
-    if fallback_repo.lower() not in repos:
+    fallback_repos = ("cloudflare/security-audit-skill", "QinghongLin/data2story-skill")
+    for fallback_repo in fallback_repos:
+        if fallback_repo.lower() in repos:
+            continue
         try:
             metadata = json.loads(http_get(
                 f"https://api.github.com/repos/{fallback_repo}",
@@ -749,7 +751,7 @@ def collect_skills() -> list[dict]:
                     "license": spdx,
                 }
         except Exception as exc:
-            print(f"[skill-warning] curated fallback metadata unavailable: {type(exc).__name__}")
+            print(f"[skill-warning] curated fallback metadata unavailable for {fallback_repo}: {type(exc).__name__}")
 
     community_report = collect_hackernews_skill_signals(list(repos.keys()))
     for repo_name, signals in community_report["signals"].items():
@@ -825,7 +827,7 @@ def collect_skills() -> list[dict]:
     # Verify the practical security-audit fallback first if it is not in the seven-day
     # recommendation history. The final rank is still determined by evidence-backed
     # quality scores; this only ensures the fallback is actually evaluated.
-    fallback_keys = {"cloudflare/security-audit-skill"}
+    fallback_keys = {x.lower() for x in fallback_repos}
     eligible = [x for x in eligible if str(x.get("name") or "").lower() in fallback_keys] + [
         x for x in eligible if str(x.get("name") or "").lower() not in fallback_keys
     ]
