@@ -36,6 +36,7 @@ class EditorialProvenanceTests(unittest.TestCase):
                     "what_zh": "公开来源确认的事实。",
                     "why_zh": "该变化值得持续观察。",
                     "source_url": f"https://source.example/{index}",
+                    "source_section": "global_news",
                     "published": "2026-11-02",
                 }
                 for index in range(1, 6)
@@ -61,12 +62,85 @@ class EditorialProvenanceTests(unittest.TestCase):
                 "canonical_id": "github.com/verified/data-skill",
                 "quality_status": "PASS",
             }
-            report = {"report_date": "2026-11-03", "skills": [verified_skill]}
+            second_verified_skill = {
+                "name": "verified/design-skill",
+                "url": "https://github.com/verified/design-skill",
+                "canonical_id": "github.com/verified/design-skill",
+                "quality_status": "PASS",
+            }
+            report = {"report_date": "2026-11-03", "skills": [verified_skill, second_verified_skill]}
             with patch.object(run_horizon, "ROOT", root):
                 applied = run_horizon.apply_manual_editorial_override(report)
             self.assertTrue(applied)
-            self.assertEqual(report["skills"], [verified_skill])
+            self.assertEqual(report["skills"], [verified_skill, second_verified_skill])
             self.assertEqual(report["top5"], stories)
+
+    def test_manual_editorial_enriches_one_skill_without_dropping_other_verified_skills(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            override_path = root / "radar" / "data" / "manual-editorial" / "2026-11-03.json"
+            override_path.parent.mkdir(parents=True)
+            stories = [
+                {
+                    "title_zh": f"核验新闻 {index}",
+                    "what_zh": "公开来源确认的事实。",
+                    "why_zh": "该变化值得持续观察。",
+                    "source_url": f"https://source.example/{index}",
+                    "source_section": "global_news",
+                    "published": "2026-11-02",
+                }
+                for index in range(1, 6)
+            ]
+            manual_skill = {
+                "name": "verified/data-skill",
+                "url": "https://github.com/verified/data-skill",
+                "canonical_id": "github.com/verified/data-skill",
+                "license": "MIT",
+                "official_website": "https://github.com/verified/data-skill",
+                "official_website_verified": True,
+                "readme_verified": True,
+                "skill_file_paths": ["SKILL.md"],
+                "skill_type": "agent_skill_or_pack",
+                "quality_status": "PASS",
+                "confidence_level": "medium",
+                "evidence_urls": ["https://github.com/verified/data-skill"],
+                "evidence_checked_at": "2026-11-03T08:00:00+08:00",
+                "compatibility_status": "Agent Skill 文件已核验；宿主兼容性未实测",
+                "total_score": 80,
+                "security_status": "PASS",
+                "description_zh": "人工核准后的简短描述。",
+            }
+            override_path.write_text(json.dumps({
+                "report_date": "2026-11-03",
+                "localization": {
+                    "status": "manual_editorial_verified",
+                    "provider": "DAVYLAB editorial review",
+                    "sources_checked": 5,
+                },
+                "top5": stories,
+                "editorial": {"core_zh": "核心观察", "trend_zh": "共同趋势"},
+                "skills": [manual_skill],
+            }, ensure_ascii=False), encoding="utf-8")
+            first = {
+                "name": "verified/data-skill",
+                "url": "https://github.com/verified/data-skill",
+                "canonical_id": "github.com/verified/data-skill",
+                "quality_status": "PASS",
+                "description_zh": "原始描述",
+            }
+            second = {
+                "name": "verified/design-skill",
+                "url": "https://github.com/verified/design-skill",
+                "canonical_id": "github.com/verified/design-skill",
+                "quality_status": "PASS",
+            }
+            report = {"report_date": "2026-11-03", "skills": [first, second]}
+            with patch.object(run_horizon, "ROOT", root):
+                applied = run_horizon.apply_manual_editorial_override(report)
+            self.assertTrue(applied)
+            self.assertEqual(len(report["skills"]), 2)
+            self.assertEqual(report["skills"][0]["description_zh"], "人工核准后的简短描述。")
+            self.assertEqual(report["skills"][1], second)
 
     def test_source_grounded_editorial_fallback_is_created_when_missing(self):
         report = {
