@@ -723,7 +723,7 @@ def collect_skills() -> list[dict]:
     # noisy or exhausted search result set cannot leave the daily report without
     # any usable Skill. It still goes through the same history, license, README,
     # actual-SKILL-file, scoring and rare-value gates as every discovered project.
-    fallback_repos = ("cloudflare/security-audit-skill", "QinghongLin/data2story-skill")
+    fallback_repos = ("pablodiegoo/Data-Pro-Skill", "QinghongLin/data2story-skill", "cloudflare/security-audit-skill")
     for fallback_repo in fallback_repos:
         if fallback_repo.lower() in repos:
             continue
