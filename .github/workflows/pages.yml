@@ -71,17 +71,8 @@ jobs:
               report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
               poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
               qr_check = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
-              social_dir = Path('radar/social') / today
-              social_check = json.loads((social_dir / 'verification.json').read_text(encoding='utf-8'))
-              social_manifest = json.loads((social_dir / 'manifest.json').read_text(encoding='utf-8'))
-              social_zip = social_dir / f'wechat-pack-{today}.zip'
-              report_sha256 = hashlib.sha256(Path('radar/data/latest.json').read_bytes()).hexdigest()
-              expected_story_titles = [str(story.get('title_zh') or story.get('title') or '') for story in report.get('top5', [])]
-              expected_story_urls = [str(story.get('source_url') or story.get('url') or '') for story in report.get('top5', [])]
               required_poster_checks = {'exact_canvas_1200x1800', 'font_coverage', 'text_bounds', 'region_presence', 'news_data_consistency', 'image_relevance_label'}
               poster_check_names = {item.get('name') for item in qr_check.get('checks', []) if item.get('status') == 'PASS'}
-              required_social_checks = {'font_coverage', 'text_bounds_and_region_presence', 'five_topic_images_one_to_one_with_formal_top5', 'topic_story_source_consistency', 'skill_metadata_and_copy_consistency', 'social_intro_matches_actual_top5_coverage', 'social_copy_uses_editorial_headline_and_concise_fields', 'social_images_have_no_truncated_text', 'wechat_copy_matches_top5', 'source_report_timestamp_and_hash_match', 'story_title_and_order_match_formal_report', 'low_confidence_caveats_and_skill_compatibility_in_copy', 'editorial_analysis_labeled_and_sourced', 'image_file_size_hash_and_individual_status', 'topic_story_source_consistency', 'wechat_copy_matches_top5', 'story_title_and_order_match_formal_report', 'low_confidence_caveats_and_skill_compatibility_in_copy'}
-              social_check_names = {item.get('name') for item in social_check.get('checks', []) if item.get('status') == 'PASS'}
               generated_at = dt.datetime.fromisoformat(str(report.get('generated_at', '')).replace('Z', '+00:00'))
               if generated_at.tzinfo is None:
                   generated_at = generated_at.replace(tzinfo=dt.timezone.utc)
@@ -118,7 +109,6 @@ jobs:
                   and poster.get('canvas') == [1200, 1800]
                   and required_poster_checks.issubset(poster_check_names)
                   and (qr_check.get('layout') or {}).get('truncated_text_blocks', 0) == 0
-                  and required_social_checks.issubset(social_check_names)
                   and poster.get('skill') == ((report.get('skills') or [{}])[0] or {}).get('name')
                   and poster.get('generated_at', '') >= report.get('generated_at', '')
                   and poster.get('template_version') == expected_style.get('template_version')
@@ -127,22 +117,6 @@ jobs:
                   and qr_check.get('status') == 'PASS'
                   and qr_check.get('expected_url') == 'https://chenzhe223-tech.github.io/radar/daily/'
                   and all(qr_check.get(key) == value for key, value in expected_style.items())
-                  and social_check.get('report_date') == today
-                  and social_check.get('status') == 'PASS'
-                  and len(social_check.get('images', [])) == 6
-                  and social_check.get('source_report_generated_at') == report.get('generated_at')
-                  and social_check.get('source_report_sha256') == report_sha256
-                  and social_check.get('story_titles') == expected_story_titles
-                  and social_check.get('story_urls') == expected_story_urls
-                  and social_check.get('skill_name') == ((report.get('skills') or [{}])[0] or {}).get('name')
-                  and social_manifest.get('source_report_generated_at') == report.get('generated_at')
-                  and social_manifest.get('source_report_sha256') == report_sha256
-                  and social_manifest.get('story_titles') == expected_story_titles
-                  and social_manifest.get('story_urls') == expected_story_urls
-                  and social_manifest.get('qa_status') == 'PASS'
-                  and len(social_manifest.get('images', [])) == 6
-                  and all(item.get('qa_status') == 'PASS' and item.get('width') == 900 and item.get('height') == 1200 and item.get('file_size_bytes', 0) > 8000 and item.get('sha256') for item in social_manifest.get('images', []))
-                  and social_zip.is_file()
               )
           except Exception:
               complete = False
@@ -256,7 +230,7 @@ jobs:
           python -m radar.scripts.quality_gate
       - name: Validate today's date, fresh news and data contract
         run: |
-          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py radar/scripts/generate_social_pack.py radar/scripts/verify_social_pack.py radar/scripts/test_social_pack.py radar/scripts/test_editorial_provenance.py
+          python -m py_compile radar/scripts/build_daily.py radar/scripts/run_horizon.py radar/scripts/news_image_match.py radar/scripts/reverse_image_search.py radar/scripts/generate_poster.py radar/scripts/verify_poster.py radar/scripts/poster_style.py radar/scripts/test_poster_generation.py radar/scripts/test_editorial_provenance.py
           python -m unittest radar.scripts.test_daily_brief
           python -m unittest radar.scripts.test_historical_dedupe -v
           python -m unittest radar.scripts.test_skill_radar -v
@@ -266,7 +240,6 @@ jobs:
           python -m unittest radar.scripts.test_visual_lock -v
           python -m unittest radar.scripts.test_news_image_match -v
           python -m unittest radar.scripts.test_editorial_provenance -v
-          python -m unittest radar.scripts.test_social_pack -v
           python - <<'PY'
           import datetime as dt, json
           from pathlib import Path
@@ -332,13 +305,6 @@ jobs:
       - name: Mandatory final-image QR and destination gate
         run: python -m radar.scripts.verify_poster
         if: steps.preflight.outputs.skip != 'true'
-      - name: Generate and verify six-image WeChat social pack
-        if: steps.preflight.outputs.skip != 'true'
-        run: |
-          python -m py_compile radar/scripts/generate_social_pack.py radar/scripts/verify_social_pack.py radar/scripts/test_social_pack.py
-          python -m unittest radar.scripts.test_social_pack -v
-          python -m radar.scripts.generate_social_pack
-          python -m radar.scripts.verify_social_pack
       - name: Cache Playwright browser and npm downloads
         uses: actions/cache@v4
         with:
@@ -389,8 +355,6 @@ jobs:
           cp radar/posters/latest.png "$SNAPSHOT/latest.png"
           cp radar/posters/latest.json "$SNAPSHOT/latest-poster.json"
           cp radar/posters/latest.qr-verification.json "$SNAPSHOT/latest-qr-verification.json"
-          mkdir -p "$SNAPSHOT/social"
-          cp -a "radar/social/$TODAY" "$SNAPSHOT/social/$TODAY"
 
           git fetch origin main
           git reset --hard HEAD
@@ -415,13 +379,6 @@ jobs:
           except Exception as exc:
               print(f'No complete main-branch report/poster/QR bundle to protect yet: {type(exc).__name__}')
               raise SystemExit(1)
-          social_dir = Path('radar/social') / today
-          try:
-              social_manifest = json.loads((social_dir / 'manifest.json').read_text(encoding='utf-8'))
-              social_verification = json.loads((social_dir / 'verification.json').read_text(encoding='utf-8'))
-          except Exception:
-              social_manifest = {}
-              social_verification = {}
           def parse_stamp(value):
               try:
                   return dt.datetime.fromisoformat(str(value).replace('Z', '+00:00'))
@@ -461,28 +418,11 @@ jobs:
               and qr.get('expected_url') == target
               and all(qr.get(key) == value for key, value in expected_style.items())
           )
-          social_ok = (
-              social_manifest.get('source_report_generated_at') == current.get('generated_at')
-              and social_manifest.get('source_report_sha256') == report_sha256
-              and social_manifest.get('story_titles') == expected_titles
-              and social_manifest.get('story_urls') == expected_urls
-              and social_manifest.get('qa_status') == 'PASS'
-              and len(social_manifest.get('images', [])) == 6
-              and all(x.get('qa_status') == 'PASS' and x.get('width') == 900 and x.get('height') == 1200 and x.get('file_size_bytes', 0) > 8000 and x.get('sha256') for x in social_manifest.get('images', []))
-              and social_verification.get('status') == 'PASS'
-              and social_verification.get('source_report_generated_at') == current.get('generated_at')
-              and social_verification.get('source_report_sha256') == report_sha256
-              and social_verification.get('story_titles') == expected_titles
-              and social_verification.get('story_urls') == expected_urls
-          )
-          bundle_ok = core_bundle_ok and social_ok
+          bundle_ok = core_bundle_ok
           if bundle_ok and current_time and candidate_time and candidate.get('report_date') == today and current_time >= candidate_time:
               print(f"Refusing rollback: main report generated_at={current.get('generated_at')} is newer than or equal to this run's snapshot {candidate.get('generated_at')}.")
               raise SystemExit(0)
           if current_time and candidate_time and current_time > candidate_time and candidate.get('report_date') == today:
-              if core_bundle_ok and not social_ok:
-                  print('Main has a newer verified report/poster/QR but its social pack is stale; request social-only repair.')
-                  raise SystemExit(2)
               print('Main has a newer report than this snapshot; refusing to roll it back.')
               raise SystemExit(0)
           print('Current main bundle is incomplete or candidate is newer; this run may update the bundle.')
@@ -493,23 +433,12 @@ jobs:
             exit 0
           else
             guard_status=$?
-            if [ "$guard_status" -eq 2 ]; then
-              echo 'Repairing only the stale social pack against the newer main-branch report; preserving report and poster.'
-              python radar/scripts/generate_social_pack.py
-              python radar/scripts/verify_social_pack.py
-              git add "radar/social/$TODAY/"
-              if ! git diff --cached --quiet; then
-                git commit -m "fix(radar): sync social pack with latest verified report"
-                git push origin HEAD:main
-              fi
-              exit 0
-            fi
           fi
           # Restore the verified candidate snapshot after resetting to the latest main.
           # Without this step, git add would stage the old main files and silently publish nothing.
           mkdir -p radar/data/archive radar/posters
-          rm -rf radar/data/skill-candidates "radar/social/$TODAY"
-          mkdir -p radar/data/skill-candidates "radar/social/$TODAY"
+          rm -rf radar/data/skill-candidates
+          mkdir -p radar/data/skill-candidates
           cp "$SNAPSHOT/latest.json" radar/data/latest.json
           cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
           cp "$SNAPSHOT/history.json" radar/data/history.json
@@ -521,8 +450,7 @@ jobs:
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
           cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
           cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
-          cp -a "$SNAPSHOT/social/$TODAY/." "radar/social/$TODAY/"
-          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json "radar/social/$TODAY/"
+          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
@@ -724,74 +652,6 @@ jobs:
                       assert skill.get('official_website','').startswith('https://'), 'daily Skill official project page URL missing'
                       assert skill.get('skill_file_paths'), 'daily Skill actual SKILL.md evidence missing'
                       assert skill.get('readme_verified') is True, 'daily Skill README was not verified'
-                  # Download every WeChat asset from the live Pages site and compare it byte-for-byte with origin/main.
-                  social_rel = 'social/' + today + '/'
-                  social_verification_url = base + social_rel + 'verification.json?verify=' + stamp
-                  with urllib.request.urlopen(urllib.request.Request(social_verification_url, headers=headers), timeout=15) as social_meta_response:
-                      social_meta_bytes = social_meta_response.read()
-                  assert_matches_repo('radar/social/' + today + '/verification.json', social_meta_bytes)
-                  social_verification = json.loads(social_meta_bytes.decode('utf-8'))
-                  assert social_verification.get('report_date') == today and social_verification.get('status') == 'PASS', 'live social verification manifest is not PASS'
-                  assert len(social_verification.get('images', [])) == 6, 'live social manifest does not contain six images'
-                  manifest_url = base + social_rel + 'manifest.json?verify=' + stamp
-                  with urllib.request.urlopen(urllib.request.Request(manifest_url, headers=headers), timeout=15) as social_manifest_response:
-                      social_manifest_bytes = social_manifest_response.read()
-                  assert_matches_repo('radar/social/' + today + '/manifest.json', social_manifest_bytes)
-                  social_manifest = json.loads(social_manifest_bytes.decode('utf-8'))
-                  report_sha = hashlib.sha256(report_bytes).hexdigest()
-                  expected_titles = [str(story.get('title_zh') or story.get('title') or '') for story in data.get('top5', [])]
-                  expected_urls = [str(story.get('source_url') or story.get('url') or '') for story in data.get('top5', [])]
-                  assert social_manifest.get('qa_status') == 'PASS', 'live social pack manifest QA status is not PASS'
-                  assert social_manifest.get('source_report_generated_at') == data.get('generated_at'), 'live social pack is not tied to the live report timestamp'
-                  assert social_manifest.get('source_report_sha256') == report_sha, 'live social pack source-report hash mismatch'
-                  assert social_manifest.get('story_titles') == expected_titles, 'live social story titles differ from formal Top 5'
-                  assert social_manifest.get('story_urls') == expected_urls, 'live social story URLs differ from formal Top 5'
-                  assert social_manifest.get('topic_story_urls') == expected_urls, 'five topic images do not map one-to-one to formal Top 5'
-                  assert len(social_manifest.get('images', [])) == 6, 'live social manifest does not contain six image records'
-                  assert social_verification.get('source_report_generated_at') == data.get('generated_at'), 'live social verification report timestamp mismatch'
-                  assert social_verification.get('source_report_sha256') == report_sha, 'live social verification report hash mismatch'
-                  assert [x.get('filename') for x in social_verification.get('images', [])] == [x.get('filename') for x in social_manifest.get('images', [])], 'live social verification image list differs from manifest'
-                  required_social_checks = {'five_topic_images_one_to_one_with_formal_top5', 'skill_metadata_and_copy_consistency', 'editorial_analysis_labeled_and_sourced', 'final_png_qr_exact_decode', 'six_independent_png_files', 'formal_url_http_and_redirect', 'source_report_timestamp_and_hash_match', 'image_file_size_hash_and_individual_status'}
-                  actual_social_checks = {x.get('name') for x in social_verification.get('checks', []) if x.get('status') == 'PASS'}
-                  assert required_social_checks.issubset(actual_social_checks), f'live social verification is missing required checks: {sorted(required_social_checks - actual_social_checks)}'
-                  live_images = []
-                  for entry in social_verification['images']:
-                      filename = entry['filename']
-                      image_url = base + social_rel + filename + '?verify=' + stamp
-                      with urllib.request.urlopen(urllib.request.Request(image_url, headers=headers), timeout=20) as image_response:
-                          image_bytes = image_response.read()
-                          assert image_response.status == 200 and image_response.headers.get('Content-Type','').startswith('image/png'), f'{filename} missing or not PNG on Pages'
-                      relative = 'radar/social/' + today + '/' + filename
-                      assert_matches_repo(relative, image_bytes)
-                      decoded_image = cv2.imdecode(np.frombuffer(image_bytes, dtype=np.uint8), cv2.IMREAD_COLOR)
-                      assert decoded_image is not None and decoded_image.shape[:2] == (1200, 900), f'{filename} is not a valid 900x1200 PNG'
-                      if filename == '01-main-poster.png':
-                          social_qr, social_points, _ = cv2.QRCodeDetector().detectAndDecode(decoded_image)
-                          assert social_qr == qr_target and social_points is not None, f'Live social main-poster QR mismatch: {social_qr!r}'
-                      live_images.append({'filename': filename, 'http_status': 200, 'width': 900, 'height': 1200, 'sha256': hashlib.sha256(image_bytes).hexdigest(), 'status': 'PASS'})
-                  for copy_name in ('wechat-copy.md', 'moments-copy.md', 'manifest.json', 'verification.json'):
-                      copy_url = base + social_rel + copy_name + '?verify=' + stamp
-                      with urllib.request.urlopen(urllib.request.Request(copy_url, headers=headers), timeout=15) as copy_response:
-                          copy_bytes = copy_response.read()
-                          assert copy_response.status == 200, f'{copy_name} missing on Pages'
-                      assert_matches_repo('radar/social/' + today + '/' + copy_name, copy_bytes)
-                  zip_name = 'wechat-pack-' + today + '.zip'
-                  with urllib.request.urlopen(urllib.request.Request(base + social_rel + zip_name + '?verify=' + stamp, headers=headers), timeout=20) as zip_response:
-                      zip_bytes = zip_response.read()
-                      assert zip_response.status == 200, 'WeChat ZIP package missing on Pages'
-                  assert_matches_repo('radar/social/' + today + '/' + zip_name, zip_bytes)
-                  live_record = {
-                      'report_date': today,
-                      'checked_at_utc': dt.datetime.now(dt.timezone.utc).isoformat(),
-                      'status': 'PASS',
-                      'live_images': live_images,
-                      'copy_files': ['wechat-copy.md', 'moments-copy.md', 'manifest.json', 'verification.json'],
-                      'zip': {'filename': zip_name, 'http_status': 200, 'file_size_bytes': len(zip_bytes), 'sha256': hashlib.sha256(zip_bytes).hexdigest(), 'status': 'PASS'},
-                      'phone_camera_scan': 'NOT_TESTED',
-                      'wechat_editor_preview': 'NOT_TESTED'
-                  }
-                  Path('test-results/radar').mkdir(parents=True, exist_ok=True)
-                  Path('test-results/radar/live-social-verification.json').write_text(json.dumps(live_record, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
                   old_days = [x for x in history.get('days',[]) if x != today + '.json']
                   if old_days:
                       old_url = base + 'data/archive/' + old_days[0] + '?verify=' + stamp
@@ -800,7 +660,7 @@ jobs:
                       assert_matches_repo('radar/data/archive/' + old_days[0], old_bytes)
                       old_data = json.loads(old_bytes.decode('utf-8'))
                       assert old_data.get('report_date') == old_days[0][:10], 'archive date/content mismatch'
-                  print(f"PASS: automatic Pages deployment and six-image social pack verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; social_images={len(live_images)}; social_zip_bytes={len(zip_bytes)}; generated_at={data['generated_at']}")
+                  print(f"PASS: automatic Pages deployment verified; date={today}; global_news={len(data['news'])}; china_ai_news={len(china_news)}; generated_at={data['generated_at']}")
                   break
               except NameError as exc:
                   raise SystemExit(f'Non-retryable verification code error: {type(exc).__name__}: {exc}') from exc
@@ -811,11 +671,3 @@ jobs:
           else:
               raise SystemExit('Post-deploy verification failed: ' + last_error)
           PY
-      - name: Upload live social-pack deployment verification
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: live-social-deployment-verification
-          path: test-results/radar/live-social-verification.json
-          if-no-files-found: warn
-          retention-days: 14
