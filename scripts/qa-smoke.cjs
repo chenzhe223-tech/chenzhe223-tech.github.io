@@ -373,8 +373,21 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#skillSearchForm button[type="submit"]').click();
       await kp.waitForSelector('#skillSearchResults [data-save-skill]', { timeout: 8000 });
       await kp.locator('#skillSearchResults [data-save-skill]').first().click();
-      await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop')
-        && (document.querySelector('#projectCards')?.innerText || '').includes('geo-sleuth · Skill'), null, { timeout: 10000 });
+      try {
+        await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop')
+          && (document.querySelector('#projectCards')?.innerText || '').includes('geo-sleuth · Skill'), null, { timeout: 10000 });
+      } catch (error) {
+        const state = await kp.evaluate(() => ({
+          status: document.querySelector('#skillSearchStatus')?.textContent || '',
+          saveButton: document.querySelector('#skillSearchResults [data-save-skill]')?.textContent || '',
+          modalOpen: !!document.querySelector('#modalRoot .modal-backdrop'),
+          modalText: document.querySelector('#modalRoot .modal')?.innerText || '',
+          projectText: document.querySelector('#projectCards')?.innerText || '',
+          unlockStep: window.__kpUnlockStep || null,
+          projectRendererReady: window.__kpProjectRendererReady === true
+        }));
+        throw new Error('Skill collect diagnostic=' + JSON.stringify(state) + '; ' + error.message);
+      }
       const skillImportPassed = await kp.locator('#projectCards').innerText().then(text => text.includes('geo-sleuth · Skill'));
       mark(skillImportPassed ? 'PASS' : 'FAIL', 'KeyPocket GitHub Skill 搜索结果一键加密收录',
         'mock GitHub 搜索 → 收录按钮 → 项目卡片显示；不触碰真实用户数据');
