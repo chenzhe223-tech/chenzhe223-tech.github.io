@@ -431,7 +431,9 @@ def apply_manual_editorial_override(report):
     report["editorial"] = editorial
     if isinstance(override.get("skills"), list) and override["skills"]:
         existing_skills = report.get("skills") if isinstance(report.get("skills"), list) else []
-        merged_skills = []
+        # Manual editorial records enrich or replace matching verified recommendations;
+        # they must never collapse the full automatically selected Skill list.
+        merged_skills = [dict(item) for item in existing_skills if isinstance(item, dict)]
         for manual_skill in override["skills"]:
             if not isinstance(manual_skill, dict):
                 continue
@@ -464,17 +466,18 @@ def apply_manual_editorial_override(report):
             if not valid_manual_skill:
                 print(f"[manual-editorial-warning] skipped unverified manual Skill record: {manual_skill.get('name') or 'unnamed'}")
                 continue
-            existing = next((
-                item for item in existing_skills
-                if isinstance(item, dict) and (
-                    (manual_canonical and str(item.get("canonical_id") or "") == manual_canonical)
-                    or (manual_url and str(item.get("url") or "") == manual_url)
-                )
-            ), {})
-            merged = dict(existing)
-            merged.update(manual_skill)
-            merged_skills.append(merged)
-        report["skills"] = merged_skills or existing_skills
+            match_index = next((
+                index for index, item in enumerate(merged_skills)
+                if (manual_canonical and str(item.get("canonical_id") or "") == manual_canonical)
+                or (manual_url and str(item.get("url") or "") == manual_url)
+            ), None)
+            if match_index is None:
+                merged_skills.append(dict(manual_skill))
+            else:
+                merged = dict(merged_skills[match_index])
+                merged.update(manual_skill)
+                merged_skills[match_index] = merged
+        report["skills"] = merged_skills
     report["manual_editorial_override"] = {
         "applied": True,
         "source_file": f"radar/data/manual-editorial/{report_date}.json",
