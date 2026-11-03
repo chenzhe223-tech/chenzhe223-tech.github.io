@@ -437,6 +437,33 @@ def apply_manual_editorial_override(report):
                 continue
             manual_url = str(manual_skill.get("url") or manual_skill.get("repository_url") or "")
             manual_canonical = str(manual_skill.get("canonical_id") or "")
+            try:
+                manual_score = float(manual_skill.get("total_score"))
+            except (TypeError, ValueError):
+                manual_score = -1
+            # A manual editorial file may choose among verified Skills, but it must
+            # never bypass the same evidence and quality requirements as Skill Radar.
+            valid_manual_skill = bool(
+                manual_canonical
+                and manual_skill.get("license")
+                and manual_skill.get("official_website_verified") is True
+                and str(manual_skill.get("official_website") or "").startswith("https://")
+                and manual_skill.get("readme_verified") is True
+                and isinstance(manual_skill.get("skill_file_paths"), list)
+                and manual_skill.get("skill_file_paths")
+                and manual_skill.get("skill_type") in ("agent_skill_or_pack", "skill_pack")
+                and manual_skill.get("quality_status") == "PASS"
+                and manual_skill.get("confidence_level") != "low"
+                and isinstance(manual_skill.get("evidence_urls"), list)
+                and manual_skill.get("evidence_urls")
+                and manual_skill.get("evidence_checked_at")
+                and str(manual_skill.get("compatibility_status") or "").strip()
+                and 60 <= manual_score <= 100
+                and str(manual_skill.get("security_status") or "").lower() not in ("critical", "high_risk", "critical_risk")
+            )
+            if not valid_manual_skill:
+                print(f"[manual-editorial-warning] skipped unverified manual Skill record: {manual_skill.get('name') or 'unnamed'}")
+                continue
             existing = next((
                 item for item in existing_skills
                 if isinstance(item, dict) and (
