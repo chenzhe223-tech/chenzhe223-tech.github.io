@@ -1,6 +1,6 @@
 # DAVYLAB AI 前沿简报海报生成与发布规则
 
-版本：2026-10-27
+版本：2026-11-03
 权威实现：radar/scripts/poster_style.py、generate_poster.py、verify_poster.py 与 .github/workflows/pages.yml。
 
 本规则适用于每日简报的海报生成、检查与发布。文档、程序和工作流必须执行同一套规则；发生冲突时必须修正代码和自动化测试，不能只改说明。
@@ -74,54 +74,14 @@ https://chenzhe223-tech.github.io/radar/daily/
 8. 重新检查线上数据与图片，核对日期、风格、二维码和历史归档。
 9. 发布朋友圈短文案及正式链接，并如实说明未完成测试。
 
-## 8. 微信公众号文章贴图与专题配图交付（新增 P0）
+## 8. 社交图片生产状态与文字文案（2026-11-03 更新）
 
-本节是在原有每日海报规则上的发布渠道适配扩展，不得替代、删减或弱化第 1–7 节既有要求。每日交付从单张简报海报扩展为「1 张主海报 + 5 张独立专题配图 + 1 份配套文案」。
+**当前生产决策：微信公众号六图已停用。** 用户已取消每日「1 张主海报 + 5 张独立专题配图」社交图片包。
 
-### 8.1 主海报：1 张独立完整图片
-- 主海报用于微信公众号文章正文的贴图/图片模块，不是公众号文章封面。生成前必须按微信公众号正文图片的实际展示区域适配画布宽度和比例；以正文栏宽完整显示为目标，不得把封面比例直接套用到正文贴图。
-- 输出高分辨率 PNG；优先使用适配正文栏宽的纵向画布。画布宽度、长宽比和文件体积须由当前微信公众号编辑器/官方规范验证后确定，并记录在当日 QA 中；不得未经验证就宣称某个固定尺寸是平台硬性要求。
-- 保留原有主海报全部视觉与内容规则：当周 ISO 风格轮换、品牌标识、真实日期、五条精选新闻、Skill、今日观察、真实二维码、正式简报 URL、新闻来源、版式层级与配色均不变。仅针对正文贴图展示做尺寸与排版适配。
-- 主海报必须是一张独立完整图片，禁止与五张专题配图拼接、合并或做成九宫格/多宫格。
-
-### 8.2 微信公众号配套文案：1 份
-- 与当日正式简报和主海报内容严格一致，交付可直接复制到微信公众号文章的标题、正文和重点概要。
-- 标题须有吸引力、准确反映当日核心趋势，不得标题党或夸大新闻。
-- 正文应包括开篇导语、当日重点概要、精选新闻的背景与意义、趋势观察、Skill 推荐及适合的结尾互动；篇幅和段落便于手机阅读。
-- 重点概要提炼当天最重要的 3–5 个信息点；所有事实、数字、企业名称和判断均须能追溯来源，并区分已证实事实、厂商说法和分析观点。
-- 文案中的新闻顺序、标题、主题、Skill 名称和链接必须与海报、数据文件及正式简报一致；不得出现跨日期内容错配。
-- 朋友圈短文案可作为附加项提供，但不能替代公众号文章标题和正文。
-
-### 8.3 五张独立专题配图：必须逐张生成
-每日另生成且仅按以下内容结构交付五张独立图片：
-1. 国外 AI 新闻配图 A：选择当天最重要的一条国际 AI 新闻。
-2. 国外 AI 新闻配图 B：选择另一条重要国际 AI 新闻。
-3. 中国 AI 新闻配图 A：选择当天最重要的一条中国 AI 发展动态。
-4. 中国 AI 新闻配图 B：选择另一条重要中国 AI 发展动态。
-5. 今日推荐 Skill 配图：展示 Skill 名称、核心用途及主要应用价值。
-
-- 五张图必须分别生成、分别保存、分别验收；每张图片只讲述一个对应主题。
-- 严禁拼图、拼版、五宫格、九宫格、把五张配图放进同一张画布，或用一张综合图代替五张独立文件。
-- 五张专题配图与主海报共享同一套 DAVYLAB 视觉语言、当周风格、字体、配色、图像质感和品牌识别；但每张须有独立构图和明确视觉主体，不能只是复制主海报后裁切。
-- 新闻配图标题与说明必须准确对应所选新闻；优先使用可追溯的真实图片。若使用生成式视觉素材或主题插画，须避免伪装成真实新闻现场，并按第 3 节规则标注。
-- Skill 配图须核实仓库、许可证、能力说明和链接；未经测试不得暗示已安装或验证可用。
-
-### 8.4 文件命名与交付结构
-- 主海报：`radar/posters/YYYY-MM-DD.png`
-- 国外新闻配图：`radar/posters/YYYY-MM-DD-global-01.png`、`radar/posters/YYYY-MM-DD-global-02.png`
-- 中国新闻配图：`radar/posters/YYYY-MM-DD-china-01.png`、`radar/posters/YYYY-MM-DD-china-02.png`
-- Skill 配图：`radar/posters/YYYY-MM-DD-skill.png`
-- 配套公众号文案：`radar/editorial/YYYY-MM-DD-wechat.md`（若仓库已有等价目录或命名规范，沿用现有结构，不另建重复体系）。
-- 每日交付清单和 QA 必须列出上述 6 张图片的文件名、尺寸、文件大小、主题、来源/素材类型和验收状态，并列出公众号标题、正文和重点概要。
-
-### 8.5 新增发布验收门禁（P0）
-- [ ] 主海报适配微信公众号正文贴图展示，不误用文章封面尺寸；实际编辑器预览无裁切、无模糊、文字可读。
-- [ ] 原有海报视觉、ISO 周轮换、新闻/Skill 内容、二维码及正式入口规则全部保留并通过。
-- [ ] 五张专题配图全部存在且为五个独立文件；数量、主题分组正确，不存在拼图替代。
-- [ ] 五张配图分别检查尺寸、清晰度、标题、新闻/Skill 对应关系、来源与文字溢出。
-- [ ] 公众号标题、正文、重点概要均已生成，且与当日正式简报及六张图片一致。
-- [ ] 六张图片和公众号文案均已纳入当日归档与发布清单；任一 P0 项失败，不得标记完整交付通过。
-- [ ] 未经微信公众号编辑器实测的尺寸适配不得标记为实机验收通过，须明确记录待实测项。
+- 每日只生成网站正式主海报 `radar/posters/YYYY-MM-DD.png`，规格固定为 **1200 × 1800 px、PNG**，并按第 1–7 节完成二维码、视觉和线上发布验收。
+- 不得生成、上传、归档或验收 900 × 1200 的微信六图、五张独立专题配图或社交图片 ZIP；这些项目也不得成为正式网页发布的 P0 门禁。
+- 保留文字版贴图短文案和朋友圈推广文案。文案必须与当日正式简报数据、新闻来源和 Skill 完全一致。
+- 只有用户今后明确重新提出社交图片制作要求，才可重新规划并启用该生产链路；不得由定时任务或旧规则自动恢复。
 
 ### 8.2.1 每日贴图短文案：固定表达结构（新增 P0）
 
@@ -154,44 +114,17 @@ https://chenzhe223-tech.github.io/radar/daily/
 - [ ] 以指定品牌署名收尾，并含 3–5 个相关标签。
 - [ ] 所有新闻与 Skill 内容均可追溯，并与当日正式简报、图片一致。
 - [ ] 文案语气自然、短段落、手机阅读友好，可直接复制发布。
-
-### 8.2.2 每日微信公众号六图社交包：900 × 1200 px（新增 P0）
-
-本条专指每日交付的「1 张主海报 + 5 张独立专题配图」社交图片包。它与网站正式简报海报属于两个独立输出，不得混用。
-
-**尺寸与文件：**
-- 六张图片统一为 **900 × 1200 px、3:4、PNG**。这是本项目当前明确指定的社交图片交付规格，不得表述为微信公众号官方强制尺寸。
-- 六张图片必须分别生成、分别保存、分别验收；禁止拼图、九宫格或用综合图替代独立专题配图。
-- 主海报须包含真实日期、五条精选新闻、DAVYLAB 观察、一个实用 Skill、来源、正式简报入口及二维码。
-- 五张专题配图须逐一对应正式简报 Top 5 中的一条新闻；每张均需标注来源/日期及事实边界。
-- 使用原创生成式素材或主题插画时，必须明确标注「主题插画 · 非新闻现场」，不得伪装成真实新闻现场照片。
-
-**与网站正式海报的双版本边界：**
-- 网站正式海报 `radar/posters/YYYY-MM-DD.png` 继续遵循本文件第 1 节和现有生成器的 **1200 × 1800 px、2:3** P0 标准。
-- 900 × 1200 px 六图社交包是独立导出版本，不得覆盖、替换或降低网站正式海报的既有 P0 标准。
-- 若未来要把网站正式海报也改为 900 × 1200 px，必须同步升级生成器、二维码验收脚本、质量门禁和测试，并通过完整回归后才能切换。
-
-**二维码与验收：**
-- 主海报二维码必须使用标准二维码库生成并合成到最终 PNG；解码结果必须逐字符等于正式简报入口。
-- 从最终保存的主海报 PNG 再次解码，检查二维码尺寸、对比度、四边静区和遮挡；不能只验证内存中的二维码对象。
-- 每张图片分别记录文件名、实际尺寸、文件大小、SHA-256、主题、素材类型及验收状态。
-- 记录正式简报入口的实际 HTTP 状态和最终跳转 URL；若无法完成，明确标记未验证。
-- 未实际进入微信公众号编辑器预览时，必须标记「编辑器实机预览未测试」，不得宣称已通过平台展示验收。
-- 任一图片尺寸、二维码、来源一致性或素材真实性 P0 检查失败，不得标记六图包完整交付通过。
-
-
-
 ## 9. Machine-enforced visual lock (V3.0)
 The approved 2026-10-31 user-confirmed mountain-editorial poster is the active visual baseline. Machine-readable controls live in `radar/config/`:
 - `baseline.json`: approval identity, reference screenshot SHA-256, production reference path and channel distinction.
 - `style-lock.json`: deterministic ISO-week style selection and retry lock.
-- `layout-spec.json`: website poster and WeChat social-pack dimensions and fixed region order.
+- `layout-spec.json`: website poster dimensions and fixed region order; the legacy WeChat social-pack block is inactive and not used by daily production.
 - `typography.json`: CJK font policy; production rendering must fail closed if a supported Chinese font is unavailable.
 - `color-tokens.json`: named mountain-editorial palette.
 - `qa-rules.json`: fail-closed checks and three-round maximum repair policy.
 - `poster-feedback-log.md`: approved feedback and regression history.
 
-The runtime gate `radar/scripts/visual_lock.py::validate_visual_lock` is called by `generate_poster.py` before rendering. It verifies configuration presence, the ISO-week style, website canvas dimensions, immutable QR destination, baseline identity, typography policy and repair limit. Any missing or inconsistent configuration blocks rendering. The website poster remains 1200×1800; the separate WeChat six-image pack remains 900×1200. Never infer one output size from the other.
+The runtime gate `radar/scripts/visual_lock.py::validate_visual_lock` is called by `generate_poster.py` before rendering. It verifies configuration presence, the ISO-week style, website canvas dimensions, immutable QR destination, baseline identity, typography policy and repair limit. Any missing or inconsistent configuration blocks rendering. The website poster remains 1200×1800. WeChat six-image production is disabled as of 2026-11-03 and is not generated, uploaded, or required by the daily publish gate.
 
 Any future change to the approved baseline requires explicit user approval. A newly generated poster, by itself, never becomes a baseline.
 
@@ -204,7 +137,7 @@ Any future change to the approved baseline requires explicit user approval. A ne
 - “智能体 / agent”默认指软件代理，不得自动映射为实体机器人；只有机器人、具身智能、人形机器人等明确语义才使用机器人素材。
 - 低置信度新闻必须在摘要中注明来源归属及“尚未独立验证”，企业自报分数、性能或预测不得写成独立验证事实。
 - Skill 必须展示许可证、官方项目主页、实际文件证据、适用 Agent/平台兼容性，以及未实测安装或未完成安全审计的限制。
-- 微信六图包必须记录 `source_report_generated_at` 与 `source_report_sha256`；六图清单、五条新闻标题/来源 URL、Skill 名称及兼容性必须与 `radar/data/latest.json` 完全一致。任何旧包或时间戳不匹配均阻断发布。
+- 每日不生成或验收微信六图包。文字贴图短文案必须与 `radar/data/latest.json` 的日期、五条新闻、来源和 Skill 一致。
 - “首次、首个、最高、最大、纪录”等表述必须同时给出可核实的指标口径与日期/范围；研究原型、非正式产品、未量产状态必须保留；基准分数、性能提升和预测必须注明由谁测得或披露。
 - DAVYLAB 趋势判断必须明确标记为分析观点，并在正式数据中提供至少 3 条可点击的 `source_basis` 新闻来源；网页展示依据来源，贴图文案说明这是基于本期公开来源的综合判断。
-- 微信六图中的 5 张专题配图必须与正式 Top 5 五条新闻一一对应、顺序一致；分类按真实 `source_section` 展示，不强制凑足全球/中国配额。某类没有可靠新闻时不得编造或挪用，Skill 信息保留在主海报与贴图文案中。
+- 每日不生成五张独立专题配图；五条精选新闻、Skill 和来源继续完整展示在网站正式海报与文字贴图文案中。
