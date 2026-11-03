@@ -6,7 +6,7 @@
     "method": "Direct verification of primary public documents and independent reporting; manual Chinese translation and editorial synthesis",
     "reviewed_at": "2026-11-03T07:49:00+08:00",
     "sources_checked": 5,
-    "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。贴图短文案采用已核验新闻的短版摘要；微信公众号六图及独立专题配图已停用，不纳入本期生产。"
+    "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。Skill 推荐已核验官方 GitHub 仓库、README、SKILL.md 和 MIT 许可证，未实测安装或完成独立安全审计；微信公众号六图及独立专题配图已停用，不纳入本期生产。"
   },
   "top5": [
     {
@@ -155,5 +155,113 @@
     "question_zh": "如果 AI Agent 真能接入真实系统，你最愿意先让它在哪类场景里承担任务？",
     "options_zh": "A. 能源与制造  B. 金融与支付  C. 机器人与现场作业  D. 个人办公与研究",
     "interaction_invitation_zh": "欢迎在评论区分享一个你真正想交给 AI 的任务。"
-  }
+  },
+  "skills": [
+    {
+      "name": "pablodiegoo/Data-Pro-Skill",
+      "name_zh": "Data-Pro-Skill｜调查数据分析与报告",
+      "canonical_id": "github.com/pablodiegoo/data-pro-skill",
+      "url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+      "repository_url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+      "official_website": "https://github.com/pablodiegoo/Data-Pro-Skill#readme",
+      "official_website_final_url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+      "official_website_type": "declared_project_homepage",
+      "official_website_http_status": 200,
+      "official_website_verified": true,
+      "readme_verified": true,
+      "capabilities_verified": true,
+      "license": "MIT",
+      "license_name": "MIT License",
+      "license_verified": true,
+      "description": "Autonomous survey science, data grilling, native LaTeX math typography, and multi-school print-ready HTML reporting skill for AI agents.",
+      "description_zh": "将 CSV、XLSX、ODS、Parquet 调查与行为数据转为经过统计核验、可直接打印为 PDF 的独立 HTML 报告，支持五种数据设计风格与 SVG 图表。",
+      "description_en": "Transforms CSV, XLSX, ODS and Parquet survey/behavioral datasets into statistically verified, print-ready HTML reports with five data design schools and native SVG charts.",
+      "poster_description_zh": "把调查数据转成统计核验后的 HTML 报告，支持五种设计风格。",
+      "social_description_zh": "面向调查与行为数据，输出统计核验和可打印 HTML 报告，适合市场调研、用户反馈与业务分析。",
+      "daily_theme": "数据与看板",
+      "category": "数据与分析",
+      "stars": 8,
+      "stars_total": 8,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_component": 0,
+      "growth_data_status": "暂无可靠历史 Stars 快照，未推算近期增长",
+      "heat_data_status": "GitHub 当前累计 Stars；未观察到可用历史快照，不推算近期增长",
+      "heat_score": 2.3,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 67.1,
+      "age_since_update_days": 2,
+      "updated": "2026-11-01",
+      "pushed_at": "2026-11-01T13:27:16Z",
+      "created_at": "2026-01-30T20:13:37Z",
+      "language": "JavaScript",
+      "topics": [
+        "agent-skills",
+        "ai-skills",
+        "data-analysis",
+        "data-science",
+        "statistics",
+        "survey-analysis",
+        "visualization"
+      ],
+      "maturity_level": "持续维护",
+      "recommendation_type": "新发现（社区采用度较低）",
+      "confidence_level": "medium",
+      "quality_status": "PASS",
+      "skill_type": "agent_skill_or_pack",
+      "actual_skill_file_count": 1,
+      "skill_file_paths": [
+        "SKILL.md"
+      ],
+      "compatibility_status": "已核验 Agent Skill 文件；README 列出 OpenCode、Gemini CLI、Antigravity CLI、Claude Code、Codex CLI、GitHub Copilot；未实测安装，WorkBuddy 兼容性未验证。",
+      "compatibility": "README 列出 OpenCode、Gemini CLI、Antigravity CLI、Claude Code、Codex CLI、GitHub Copilot；WorkBuddy 未列出。安装需 Python 3.8+、Node.js 18+。",
+      "installation_status": "未实测安装",
+      "security_status": "未完成独立安全审计；安装前应审阅 bin/install.js 与 scripts，建议在隔离环境测试。",
+      "evidence_verified": true,
+      "evidence_checked_at": "2026-11-03T08:24:19+08:00",
+      "evidence_urls": [
+        "https://github.com/pablodiegoo/Data-Pro-Skill",
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/README.md",
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/SKILL.md",
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/LICENSE"
+      ],
+      "evidence_provenance": {
+        "repository_metadata": "https://api.github.com/repos/pablodiegoo/Data-Pro-Skill",
+        "readme": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/README.md",
+        "skill_file": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/SKILL.md",
+        "license": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/LICENSE"
+      },
+      "license_evidence_url": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/LICENSE",
+      "readme_evidence_url": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/README.md",
+      "skill_file_evidence_url": "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/SKILL.md",
+      "source": "项目官方 GitHub 仓库元数据、README、SKILL.md 与 MIT LICENSE",
+      "source_url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+      "additional_sources": [
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/README.md",
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/SKILL.md",
+        "https://github.com/pablodiegoo/Data-Pro-Skill/blob/main/LICENSE"
+      ],
+      "aliases": [
+        "pablodiegoo/Data-Pro-Skill",
+        "Data-Pro-Skill"
+      ],
+      "discovered_at": "2026-11-03",
+      "first_recommended_at": "2026-11-03",
+      "last_recommended_at": "2026-11-03",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "community_signals": {
+        "count_7d": 0,
+        "evidence_urls": []
+      },
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "user_feedback": []
+    }
+  ]
 }
