@@ -6,7 +6,7 @@ from unittest.mock import patch
 import os
 from radar.scripts import build_daily
 from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
-from radar.scripts.run_horizon import build_selection_pool, ensure_story_fallback
+from radar.scripts.run_horizon import build_selection_pool, ensure_story_fallback, merge_manual_editorial_sources
 
 class _FakeHttpResponse:
     def __enter__(self): return self
@@ -48,6 +48,43 @@ class DailyBriefContractTests(unittest.TestCase):
         self.assertEqual([item["selection_section"] for item in pool].count("global_news"), 2)
         self.assertEqual([item["selection_section"] for item in pool].count("china_ai_news"), 3)
         self.assertEqual(len({item["url"] for item in pool}), 5)
+
+    def test_manual_editorial_sources_are_added_to_traceable_report_pools(self):
+        report = {
+            "news": [{"url": "https://example.com/existing", "source": "RSS"}],
+            "china_ai_news": [],
+        }
+        stories = [
+            {
+                "source_section": "global_news",
+                "source_url": "https://example.com/verified-global",
+                "source": "Official source",
+                "published": "2026-11-03",
+                "title_zh": "全球新闻",
+                "title_en": "Global story",
+                "what_zh": "经人工核验的事实。",
+                "what_en": "Manually verified facts.",
+            },
+            {
+                "source_section": "china_ai_news",
+                "source_url": "https://example.cn/verified-china",
+                "source": "Chinese source",
+                "published": "2026-11-03",
+                "title_zh": "中国新闻",
+                "title_en": "China story",
+                "what_zh": "经人工核验的中国 AI 新闻。",
+                "what_en": "Manually verified China AI news.",
+            },
+        ]
+        added = merge_manual_editorial_sources(report, stories)
+        self.assertEqual(len(added), 2)
+        self.assertEqual(report["news"][-1]["url"], "https://example.com/verified-global")
+        self.assertTrue(report["news"][-1]["manual_editorial_source"])
+        self.assertEqual(report["china_ai_news"][0]["url"], "https://example.cn/verified-china")
+        # Re-running the merge is idempotent and does not create duplicate source records.
+        self.assertEqual(merge_manual_editorial_sources(report, stories), [])
+        self.assertEqual(len(report["news"]), 2)
+        self.assertEqual(len(report["china_ai_news"]), 1)
 
     def test_china_near_duplicate_headlines_are_collapsed(self):
         candidates = [
