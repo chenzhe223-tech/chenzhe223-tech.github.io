@@ -217,11 +217,12 @@ jobs:
           ) or len(report.get('top5') or []) != 5:
               print('::warning::AI-curated shortlist is incomplete; later scheduled recovery runs will retry because preflight requires a complete AI-curated report.')
           PY
-      - name: Match story-specific images (free sources first; optional Firecrawl fallback)
+      - name: Match story-specific images (bounded optional enrichment with deterministic fallback)
+        timeout-minutes: 4
         env:
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
           RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
-        run: python radar/scripts/news_image_match.py
+        run: timeout --kill-after=5s 180s python radar/scripts/news_image_match.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Enforce historical news and image freshness gate
         run: |
