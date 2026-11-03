@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-skill-import-fix-20261103-22';
+window.__kpBuildVersion='kp-v2-skill-import-fix-20261103-23';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
