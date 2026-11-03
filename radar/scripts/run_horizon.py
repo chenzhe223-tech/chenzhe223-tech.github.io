@@ -396,6 +396,50 @@ def apply_verified_skill_metadata(skills):
             item["description_en"] = description_en
 
 
+def merge_manual_editorial_sources(report, stories):
+    """Ensure independently reviewed manual highlights remain in the report's source pools.
+
+    The editorial desk may verify a primary source that was not present in an RSS feed.
+    Keep that source visible in the report data contract instead of publishing an
+    untraceable Top-5 card or silently dropping the story.
+    """
+    added = []
+    for story in stories if isinstance(stories, list) else []:
+        section = str(story.get("source_section") or "")
+        if section not in ("global_news", "china_ai_news"):
+            raise RuntimeError("Manual editorial story has an invalid source_section")
+        target = "china_ai_news" if section == "china_ai_news" else "news"
+        source_url = str(story.get("source_url") or "").strip()
+        source_key = _story_url_key({"url": source_url})
+        if not source_key:
+            raise RuntimeError("Manual editorial source URL is invalid")
+        pool = report.get(target) if isinstance(report.get(target), list) else []
+        if any(_story_url_key(item) == source_key for item in pool if isinstance(item, dict)):
+            report[target] = pool
+            continue
+        title_zh = str(story.get("title_zh") or story.get("title") or "").strip()
+        title_en = str(story.get("title_en") or story.get("title") or "").strip()
+        record = {
+            "title": str(story.get("original_title") or title_zh or title_en),
+            "title_zh": title_zh,
+            "title_en": title_en,
+            "summary": str(story.get("what_zh") or story.get("what_en") or ""),
+            "summary_zh": str(story.get("what_zh") or ""),
+            "summary_en": str(story.get("what_en") or ""),
+            "source": str(story.get("source") or ""),
+            "url": source_url,
+            "published": str(story.get("published") or ""),
+            "manual_editorial_source": True,
+            "additional_sources": list(story.get("additional_sources") or []),
+        }
+        pool.append(record)
+        report[target] = pool
+        added.append({"section": target, "url": source_url})
+    if added:
+        print(f"[manual-editorial-source-pool] added={len(added)} independently reviewed source(s)")
+    return added
+
+
 def apply_manual_editorial_override(report):
     report_date = str(report.get("report_date") or "")
     if not report_date:
@@ -425,6 +469,7 @@ def apply_manual_editorial_override(report):
     editorial = override.get("editorial") or {}
     if not editorial.get("core_zh") or not editorial.get("trend_zh"):
         raise RuntimeError("Manual editorial override is missing today's observation")
+    merge_manual_editorial_sources(report, stories)
     report["top5"] = stories
     report["top5_status"] = "editorial_curated"
     report["localization"] = localization
