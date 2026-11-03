@@ -607,7 +607,7 @@ def main():
         try:
             DATA_DIR.mkdir(parents=True,exist_ok=True)
             cmd=[sys.executable,'-m','src.main','--config',str(CONFIG),'--data-dir',str(DATA_DIR),'--hours','24','--log-level','WARNING']
-            result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=480,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+            result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=180,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
             if result.returncode!=0:
                 tail='\n'.join((result.stdout or '').splitlines()[-35:])
                 tail=re.sub(r'''(?i)Bearer\s+[^\s"']+''', 'Bearer [REDACTED]', tail)
