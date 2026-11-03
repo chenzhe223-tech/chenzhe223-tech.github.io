@@ -6,7 +6,7 @@
     "method": "Direct verification of primary public documents and independent reporting; manual Chinese translation and editorial synthesis",
     "reviewed_at": "2026-11-03T07:49:00+08:00",
     "sources_checked": 5,
-    "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。此文件为人工编辑稿，不标记为 AI 生成。 已根据微信主海报版式将五条新闻标题和短摘要压缩为独立短版，避免主海报卡片截断；专题图继续使用完整社交摘要。"
+    "note": "本期五条重点新闻逐条核对原始公告、监管机构文件、SEC 申报文件或独立报道；对企业目标、机构统计口径与独立验证结果分别表述。中国 Token 统计已补充对照国家数据局 2025 年官方报告，避免重复或误写“首次”结论。贴图短文案采用已核验新闻的短版摘要；微信公众号六图及独立专题配图已停用，不纳入本期生产。"
   },
   "top5": [
     {
@@ -155,61 +155,5 @@
     "question_zh": "如果 AI Agent 真能接入真实系统，你最愿意先让它在哪类场景里承担任务？",
     "options_zh": "A. 能源与制造  B. 金融与支付  C. 机器人与现场作业  D. 个人办公与研究",
     "interaction_invitation_zh": "欢迎在评论区分享一个你真正想交给 AI 的任务。"
-  },
-  "skills": [
-    {
-      "name": "last30days",
-      "name_zh": "last30days 多平台近况研究 Skill",
-      "description_zh": "给定主题或人物后，跨 Reddit、X、YouTube、TikTok、Hacker News、GitHub、网页等来源检索近30天讨论和互动信号，并汇总成带来源的研究简报。部分平台需要单独配置 API 凭据或登录会话；运行环境要求 Python 3.12+，并可能调用 Node 工具。",
-      "description_en": "A multi-source research skill that searches recent discussion and engagement signals across Reddit, X, YouTube, TikTok, Hacker News, GitHub and the web, then synthesizes a sourced brief. Some sources require separate credentials or authenticated sessions; the runtime requires Python 3.12+ and may use Node-based tools.",
-      "url": "https://github.com/mvanhorn/last30days-skill",
-      "official_website": "https://github.com/mvanhorn/last30days-skill",
-      "repository_url": "https://github.com/mvanhorn/last30days-skill",
-      "official_website_verified": true,
-      "readme_verified": true,
-      "capabilities_verified": true,
-      "license": "MIT",
-      "license_name": "MIT",
-      "license_verified": true,
-      "actual_skill_file_count": 1,
-      "skill_file_paths": [
-        "skills/last30days/SKILL.md"
-      ],
-      "compatibility_status": "已核验官方 GitHub 仓库、README、SKILL.md 与 MIT 许可证；未实测安装，使用请自行评估。",
-      "security_status": "未对该 Skill 执行独立安全审计；安装前应审阅脚本与权限，建议先在隔离环境中测试。",
-      "installation_status": "未实测安装",
-      "compatibility": "Agent Skills 标准；README 列出 Codex、Cursor、Copilot、Gemini CLI 等 50 多种宿主。运行要求 Python 3.12+，部分信息源需要额外凭据或已登录会话。",
-      "source": "项目官方 GitHub 仓库 README、SKILL.md、仓库元数据及 MIT LICENSE",
-      "source_url": "https://github.com/mvanhorn/last30days-skill",
-      "additional_sources": [
-        "https://agentskills.io/"
-      ],
-      "poster_description_zh": "跨多个社交平台与开发者社区检索近30天讨论，输出带来源的研究简报。",
-      "social_description_zh": "输入一个主题，跨 Reddit、X、YouTube、GitHub 等来源搜集近30天信号并整理成研究简报；部分平台需配置凭据。",
-      "stars": 66366,
-      "updated": "2026-11-02",
-      "language": "Python",
-      "topics": [
-        "research",
-        "deep-research",
-        "reddit",
-        "x",
-        "youtube",
-        "hacker-news",
-        "github",
-        "web-search",
-        "agent-skill"
-      ],
-      "evidence_verified": true,
-      "evidence": {
-        "repository_metadata": "https://api.github.com/repos/mvanhorn/last30days-skill",
-        "readme": "https://github.com/mvanhorn/last30days-skill/blob/main/README.md",
-        "skill_file": "https://github.com/mvanhorn/last30days-skill/blob/main/skills/last30days/SKILL.md",
-        "license": "https://github.com/mvanhorn/last30days-skill/blob/main/LICENSE"
-      },
-      "license_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/LICENSE",
-      "readme_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/README.md",
-      "skill_file_evidence_url": "https://github.com/mvanhorn/last30days-skill/blob/main/skills/last30days/SKILL.md"
-    }
-  ]
+  }
 }
