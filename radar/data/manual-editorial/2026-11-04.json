@@ -11,9 +11,9 @@
   "top5": [
     {
       "id": "mit-weight-space-programming-qwen-20261102",
-      "title": "MIT CSAIL研究者展示LLM直接读写神经网络权重",
-      "title_zh": "GPT-6 Astra尝试直接读写模型权重",
-      "title_en": "MIT CSAIL researchers demonstrate early weight-space programming with GPT-6 Astra",
+      "title": "MIT CSAIL研究者展示模型权重直接编辑实验",
+      "title_zh": "MIT研究者展示模型权重直接编辑实验",
+      "title_en": "MIT CSAIL researchers report early experiments in direct neural-weight editing",
       "original_title": "Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights",
       "source": "MIT CSAIL研究者原始博客",
       "source_url": "https://rikiyat.github.io/blog/weight-space-programming/",
@@ -24,15 +24,15 @@
       "source_section": "global_news",
       "category": "全球 AI / 模型研究与优化",
       "confidence": "medium",
-      "what_zh": "2026年11月2日，四位 MIT CSAIL 研究者发布早期研究博客，称 GPT-6 Astra 在不使用梯度下降或重新训练的情况下，直接修改 Qwen3.5-0.8B 约0.016%的权重；在最多50次前向测试的实验设置下，MATH-500 得分从7.9%升至48.1%。作者解释，主要修复的是模型反复推理、无法正常结束答案的循环问题，并非给模型凭空增加数学知识。这是研究博客和公开实验日志，不是同行评审论文，仍需独立复现。",
+      "what_zh": "2026年11月2日，四位 MIT CSAIL 研究者发布早期研究博客，称他们使用 GPT-6 Astra 在不做梯度下降或重新训练的情况下，直接修改 Qwen3.5-0.8B 的131,072个权重（约占总权重0.016%）。在50次前向测试预算下，MATH-500 得分从7.9%升至48.1%，主要原因是修复了模型反复推理、无法结束答案的循环问题。作者还报告，Astra未能提升一个本来很少循环的 Gemma 3 270M 模型，说明这更像针对特定故障的修复，而非普遍增加模型能力。这是研究博客和公开实验日志，不是同行评审论文，仍需独立复现。",
       "why_zh": "如果大模型能把另一个模型的权重当作可分析、可修改的对象，模型调试、可解释性和优化方式可能出现新路径。但单一小模型上的故障修复，不等于已经具备通用的自我改进能力。",
-      "what_en": "On Nov. 2, 2026, four MIT CSAIL researchers published an early research blog reporting that GPT-6 Astra directly edited about 0.016% of Qwen3.5-0.8B's weights without gradient descent or retraining. With a budget of up to 50 forward passes, the reported MATH-500 score rose from 7.9% to 48.1%. The authors say the edit mainly removed a reasoning loop that prevented the model from finishing answers; it did not add new mathematical knowledge. This is an early blog post with public experiment logs, not a peer-reviewed paper, and independent replication is still needed.",
+      "what_en": "On Nov. 2, 2026, four MIT CSAIL researchers published an early research blog reporting that they used GPT-6 Astra to edit 131,072 weights in Qwen3.5-0.8B—about 0.016% of the model—without gradient descent or retraining. With a budget of 50 forward passes, the reported MATH-500 score rose from 7.9% to 48.1%, mainly by fixing a reasoning loop that prevented the model from finishing answers. The authors also report that Astra could not improve a Gemma 3 270M model that rarely looped, suggesting a targeted failure fix rather than a general increase in capability. This is an early blog post with public experiment logs, not a peer-reviewed paper, and independent replication is still needed.",
       "why_en": "If a frontier model can inspect and edit another model's weights, debugging, interpretability and optimization may gain a new route. But repairing one failure mode in a small model does not establish general self-improvement.",
-      "editor_judgment_zh": "实验结果和限制均来自研究者原文；应将其理解为早期的权重编辑实验，而不是已验证的通用模型自我进化能力。",
-      "poster_summary_zh": "直接修改约0.016%权重，修复推理循环",
-      "poster_why_zh": "早期研究结果，仍需独立复现",
-      "social_what_zh": "MIT CSAIL 研究者称，GPT-6 Astra 在不训练的情况下修改了 Qwen3.5-0.8B 的一小部分权重，修复重复推理问题，MATH-500 得分在特定实验设置下从7.9%升至48.1%。",
-      "social_why_zh": "这是模型调试方式的新探索，不代表 AI 已经能普遍、自主地改进自己。"
+      "editor_judgment_zh": "研究者原文明确指出，修复循环问题不等于增加模型原本不具备的能力；他们在较少循环的 Gemma 3 270M 上未能取得实质提升。结果应视为早期研究线索，不宜写成通用模型自我进化已实现。",
+      "poster_summary_zh": "直接编辑约0.016%权重，修复推理循环",
+      "poster_why_zh": "针对性实验，尚非通用自我改进",
+      "social_what_zh": "MIT CSAIL 研究者报告，GPT-6 Astra 在不训练的情况下修改了 Qwen3.5-0.8B 约0.016%的权重，修复重复推理问题，MATH-500 得分在50次前向测试设置下从7.9%升至48.1%。",
+      "social_why_zh": "这是针对特定故障的早期实验，不代表模型已经具备普遍自我改进能力。"
     },
     {
       "id": "baidu-apollo-world-20261103",
