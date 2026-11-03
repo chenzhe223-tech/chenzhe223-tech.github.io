@@ -7,11 +7,23 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
-    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity, MIN_IMAGE_RELEVANCE_SCORE,
+    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity, MIN_IMAGE_RELEVANCE_SCORE, _thematic_fallback, IMAGE_MATCH_BUDGET_SECONDS, STORY_IMAGE_BUDGET_SECONDS,
 )
 
 
 class NewsImageMatchTests(unittest.TestCase):
+    def test_image_matching_budgets_are_bounded(self):
+        self.assertLessEqual(IMAGE_MATCH_BUDGET_SECONDS, 150)
+        self.assertLessEqual(STORY_IMAGE_BUDGET_SECONDS, 10)
+
+    def test_thematic_fallback_does_not_make_network_requests(self):
+        with patch("news_image_match.valid_image_url", side_effect=AssertionError("fallback must not call network")):
+            result = _thematic_fallback({"title_zh": "AI 模型发布"}, set())
+        self.assertTrue(result.get("image_url"))
+        self.assertEqual(result.get("image_match_status"), "thematic_fallback")
+        self.assertIn("主题配图", result.get("image_alt", ""))
+
+
     def test_duplicate_image_is_replaced_for_different_story_but_kept_for_crosslist(self):
         shared = "https://cdn.example.com/shared.jpg"
         unique = "https://cdn.example.com/unique.jpg"
