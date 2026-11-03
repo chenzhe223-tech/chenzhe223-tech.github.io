@@ -45,7 +45,7 @@ IMAGE_FIELDS = (
     "image_url", "image_source", "image_page_url", "image_credit",
     "image_license", "image_license_url", "image_alt", "image_match_status",
     "image_match_score", "image_matched_at", "image_fallback_url",
-    "image_is_generated", "image_generation_prompt",
+    "image_is_generated", "image_generation_prompt", "image_match_duration_seconds",
 )
 
 def _image_identity(value: str) -> str:
