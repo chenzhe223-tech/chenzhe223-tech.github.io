@@ -354,6 +354,31 @@ const mark = (status, name, detail = '') => {
         error: window.__kpUnlockError || null
       }));
       if (initialUnlockState.error) throw new Error('KeyPocket first-run setup did not complete: ' + JSON.stringify(initialUnlockState));
+      // Skill import regression: mocked GitHub results exercise the real save UI and encrypted local persistence.
+      await kp.route('https://api.github.com/search/repositories**', async route => {
+        const repo = {
+          id: 990001, name: 'geo-sleuth', full_name: 'aibrahamdrbaa-dot/geo-sleuth',
+          html_url: 'https://github.com/aibrahamdrbaa-dot/geo-sleuth',
+          description: 'Independent copy of Oldcircle/geo-sleuth — agent skill for photo geolocation.',
+          owner: { login: 'aibrahamdrbaa-dot', type: 'User' }, private: false, disabled: false,
+          fork: true, stargazers_count: 11, forks_count: 1, pushed_at: '2026-10-07T00:00:00Z',
+          language: 'Python', homepage: null, topics: ['agent', 'geolocation']
+        };
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ total_count: 1, incomplete_results: false, items: [repo] }) });
+      });
+      await kp.locator('[data-module="projects"]').click();
+      await kp.locator('#importSkillBtn').click();
+      await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
+      await kp.locator('#skillNameInput').fill('geo-sleuth');
+      await kp.locator('#skillSearchForm button[type="submit"]').click();
+      await kp.waitForSelector('#skillSearchResults [data-save-skill]', { timeout: 8000 });
+      await kp.locator('#skillSearchResults [data-save-skill]').first().click();
+      await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop')
+        && (document.querySelector('#projectCards')?.innerText || '').includes('geo-sleuth · Skill'), null, { timeout: 10000 });
+      const skillImportPassed = await kp.locator('#projectCards').innerText().then(text => text.includes('geo-sleuth · Skill'));
+      mark(skillImportPassed ? 'PASS' : 'FAIL', 'KeyPocket GitHub Skill 搜索结果一键加密收录',
+        'mock GitHub 搜索 → 收录按钮 → 项目卡片显示；不触碰真实用户数据');
+
       // Skill Radar fetches a same-origin static JSON API. Its CSP must explicitly allow 'self'.
       await kp.locator('[data-module="radar"]').click();
       await kp.waitForSelector('#radarView:not(.hidden)', { timeout: 5000 });
