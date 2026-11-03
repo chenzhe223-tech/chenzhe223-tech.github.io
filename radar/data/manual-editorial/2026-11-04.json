@@ -42,9 +42,7 @@
       "original_title": "China's Baidu launches AI model simulating road environment for robotaxis",
       "source": "Reuters",
       "source_url": "https://www.reuters.com/technology/chinas-baidu-launches-ai-model-simulating-road-environment-robotaxis-2026-11-03/",
-      "additional_sources": [
-        "https://www.36kr.com/newsflashes/4054026915189896"
-      ],
+      "additional_sources": [],
       "published": "2026-11-03",
       "source_section": "china_ai_news",
       "category": "中国 AI / 世界模型与自动驾驶",
@@ -90,24 +88,23 @@
       "title_zh": "Soniox STT v6让语音 Agent 听懂自己刚说过的话",
       "title_en": "Soniox STT v6 adds agent text context and voice echo cancellation",
       "original_title": "Introducing Soniox STT v6",
-      "source": "Soniox官方产品公告",
-      "source_url": "https://soniox.com/blog/soniox-stt-v6",
+      "source": "MarkTechPost；Soniox官方公告",
+      "source_url": "https://www.marktechpost.com/2026/11/03/soniox-stt-v6-agent-text-input-echo-cancellation/",
       "additional_sources": [
-        "https://docs.soniox.com/stt/rt/agent-text-input",
-        "https://www.marktechpost.com/2026/11/03/soniox-stt-v6-agent-text-input-echo-cancellation/"
+        "https://soniox.com/blog/soniox-stt-v6"
       ],
       "published": "2026-11-03",
       "source_section": "global_news",
       "category": "全球 AI / 语音 Agent 工具",
       "confidence": "medium",
-      "what_zh": "2026年11月3日，Soniox发布 STT v6。新功能 Agent text input 允许开发者把语音 Agent 正在说的文字同步提供给语音识别模型，让它结合上下文理解用户的简短回答；Agent voice echo cancellation 则过滤扬声器回传的 Agent 自身声音，同时继续识别用户打断。Soniox称其覆盖60多种语言并提升多项识别能力，但目前尚未公布 STT v6 可独立核验的 WER 和延迟基准。",
+      "what_zh": "2026年11月3日，Soniox发布 STT v6。MarkTechPost核对官方公告后介绍，新功能 Agent text input 允许开发者把语音 Agent 正在说的文字同步提供给语音识别模型，让它结合上下文理解用户的简短回答；Agent voice echo cancellation 则过滤扬声器回传的 Agent 自身声音，同时继续识别用户打断。该产品为云端 API；Soniox称其覆盖60多种语言，但目前尚未公布 STT v6 可独立核验的 WER 和延迟基准。",
       "why_zh": "语音 Agent 的问题不只是“听得准不准”，还包括能不能听懂对话上下文、避免把自己的声音当成用户输入。这个改进更接近真实通话和会议场景，但仍需用实际噪声、打断和多语言场景测试。",
-      "what_en": "On Nov. 3, 2026, Soniox released STT v6. Agent text input lets developers stream the voice agent's own words to the speech recognizer so it can interpret short user replies in context. Agent voice echo cancellation filters the agent's playback while continuing to listen for user interruptions. Soniox says the model supports more than 60 languages and improves several recognition tasks, but it has not yet published independently verifiable WER or latency benchmarks for v6.",
+      "what_en": "On Nov. 3, 2026, Soniox released STT v6. MarkTechPost, referencing the official announcement, reports that Agent text input lets developers stream the voice agent's own words to the speech recognizer so it can interpret short user replies in context. Agent voice echo cancellation filters the agent's playback while continuing to listen for user interruptions. The product is a hosted cloud API; Soniox says it supports more than 60 languages, but it has not published independently verifiable WER or latency benchmarks for v6.",
       "why_en": "Voice agents need more than accurate transcription: they must understand conversational context and avoid treating their own playback as user input. This is closer to real call and meeting workflows, but should still be tested under noise, interruptions and multilingual conditions.",
-      "editor_judgment_zh": "新功能和语言覆盖来自 Soniox 官方公告；v6 的准确率提升属于企业表述，尚无公开的 v6 独立基准可供比较。",
-      "poster_summary_zh": "识别 Agent 自身语音，减少回声误触发",
-      "poster_why_zh": "v6 独立准确率基准尚未公布",
-      "social_what_zh": "Soniox STT v6 可同步接收语音 Agent 正在说的话，并过滤 Agent 自身回声，同时继续识别用户打断。官方称支持60多种语言，但 v6 尚无公开独立 WER/延迟基准。",
+      "editor_judgment_zh": "功能与覆盖语言来自 Soniox 官方公告；MarkTechPost指出 v6 尚无公开准确率和延迟基准，且产品为云端 API。Soniox关于准确率提升的说法应归因于企业，不作为独立测评结论。",
+      "poster_summary_zh": "同步Agent文本，过滤自身回声",
+      "poster_why_zh": "云端API，v6独立基准尚未公布",
+      "social_what_zh": "Soniox STT v6 可同步接收语音 Agent 正在说的话，并过滤 Agent 自身回声，同时继续识别用户打断。产品为云端 API，官方称支持60多种语言，但 v6 尚无公开独立 WER/延迟基准。",
       "social_why_zh": "语音 Agent 正在从“听见声音”走向“理解对话轮次”。"
     },
     {
