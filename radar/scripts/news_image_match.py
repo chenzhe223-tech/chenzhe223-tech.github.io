@@ -345,7 +345,7 @@ SEARCH_EXPANSIONS = (
 THEME_PHOTOS = {
     # Topic illustrations are labelled as illustrations, never represented as actual event photographs.
     # Keep a large, cross-topic pool so the weekly no-reuse rule does not leave otherwise valid stories blank.
-    "robot": ("photo-1485827404703-89b55fcc595e", "photo-1486406146926-c627a92ad1ab", "photo-1518770660439-4636190af475", "photo-1526374965328-7f61d4dc18c5"),
+    "robot": ("photo-1485827404703-89b55fcc595e", "photo-1486406146926-c627a92ad1ab", "photo-1518770660439-4636190af475", "photo-1526374965328-7f61d4dc18c5", "photo-1550745165-9bc0b252726f"),
     "compute": ("photo-1518770660439-4636190af475", "photo-1531297484001-80022131f5a1", "photo-1526374965328-7f61d4dc18c5", "photo-1550745165-9bc0b252726f", "photo-1516321318423-f06f85e504b3", "photo-1498050108023-c5249f4df085"),
     "product": ("photo-1512941937669-90a1b58e7e9c", "photo-1498050108023-c5249f4df085", "photo-1526498460520-4c246339dccb", "photo-1516321318423-f06f85e504b3", "photo-1523726491678-bf852e717f6a"),
     "business": ("photo-1519389950473-47ba0277781c", "photo-1551288049-bebda4e38f71", "photo-1504384308090-c894fdcc538d", "photo-1521737711867-e3b97375f902", "photo-1460925895917-afdab827c52f"),
