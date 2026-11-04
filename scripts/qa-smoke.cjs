@@ -712,10 +712,15 @@ const mark = (status, name, detail = '') => {
       await kp.locator('#backupNowBtn').click();
       await kp.waitForFunction(() => document.querySelectorAll('#backupCards [data-snapshot-restore]').length > 0, null, { timeout: 10000 });
       const snapshotsBeforeRestore = await kp.locator('#backupCards [data-snapshot-restore]').count();
+      const firstLatestBackupId = await kp.locator('#backupCards [data-snapshot-restore]').first().getAttribute('data-snapshot-restore');
+      await kp.locator('#backupNowBtn').click();
+      await kp.waitForFunction(() => document.querySelectorAll('#backupCards [data-snapshot-restore]').length === 1, null, { timeout: 10000 });
+      const secondLatestBackupId = await kp.locator('#backupCards [data-snapshot-restore]').first().getAttribute('data-snapshot-restore');
+      mark(snapshotsBeforeRestore === 1 && firstLatestBackupId === secondLatestBackupId ? 'PASS' : 'FAIL', 'KeyPocket 自动备份全量覆盖且仅保留一份', '重复更新前后备份数量='+snapshotsBeforeRestore+'→1；稳定备份 ID='+ (firstLatestBackupId === secondLatestBackupId));
       kp.once('dialog', dialog => dialog.accept());
       await kp.locator('#backupCards [data-snapshot-restore]').first().click();
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '3', null, { timeout: 10000 });
-      mark(snapshotsBeforeRestore > 0 ? 'PASS' : 'FAIL', 'KeyPocket 本地加密快照创建与恢复', '恢复后仍有三条合成 API Key');
+      mark(snapshotsBeforeRestore === 1 ? 'PASS' : 'FAIL', 'KeyPocket 最新本地加密备份恢复', '恢复后仍有三条合成 API Key');
 
       // On mobile, ensure the permanent add button remains visible and has no horizontal overflow.
       const mobileKp = await browser.newPage({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
