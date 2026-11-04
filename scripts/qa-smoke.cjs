@@ -356,6 +356,7 @@ const mark = (status, name, detail = '') => {
       if (initialUnlockState.error) throw new Error('KeyPocket first-run setup did not complete: ' + JSON.stringify(initialUnlockState));
 
       // Visual & Motion Studio: exercise real controls in an isolated synthetic vault.
+      await kp.locator('#settingsBtn').click();
       await kp.locator('#visualSettingsBtn').click();
       await kp.waitForSelector('#kpVisualContent', { timeout: 5000 });
       const visualTabs = await kp.locator('[data-vtab]').count();
@@ -455,6 +456,9 @@ const mark = (status, name, detail = '') => {
       const autoScanSkillCategory = await kp.locator('#projectCards').innerText().then(t => t.includes('Agent 与自动化'));
       mark(autoScanSkillCategory ? 'PASS' : 'FAIL', '自动扫描的自有 Skill 分类展示', 'Skill 标签与用途分类可见');
       const scanCountBefore = await kp.locator('#projectCards .kp-resource-row').filter({ hasText: 'qa-auto-scan-app' }).count();
+      const settingsTiles = await kp.locator('#settingsView .settings-tile').count();
+      const coreTabs = await kp.locator('.module-tabs[aria-label="核心功能"] .module-tab').count();
+      mark(settingsTiles >= 6 && coreTabs === 3 ? 'PASS' : 'FAIL', 'KeyPocket 统一设置中心与精简核心导航', '设置入口 '+settingsTiles+' 项；核心导航 '+coreTabs+' 项');
       await kp.locator('#scanOwnReposBtn').click();
       await kp.waitForFunction(() => (document.querySelector('#githubAutoScanStatus')?.textContent || '').includes('扫描完成'), null, { timeout: 10000 });
       const scanCountAfter = await kp.locator('#projectCards .kp-resource-row').filter({ hasText: 'qa-auto-scan-app' }).count();
@@ -485,6 +489,7 @@ const mark = (status, name, detail = '') => {
       mark(radarFetchPassed ? 'PASS' : 'FAIL', 'KeyPocket Skill Radar 同源 JSON 加载', JSON.stringify({ response: kpRadarResponse, meta: radarMetaText, allTimeCards: radarCardCount }));
       if (!radarFetchPassed) throw new Error('Skill Radar same-origin API did not load: ' + JSON.stringify({ response: kpRadarResponse, meta: radarMetaText, allTimeCards: radarCardCount }));
       // GitHub App is intentionally unavailable until its OAuth Worker and secrets are configured.
+      await kp.locator('#settingsBtn').click();
       await kp.locator('[data-module="github"]').click();
       await kp.waitForSelector('#githubView:not(.hidden)', { timeout: 5000 });
       const githubStatus = await kp.locator('#githubAccountStatus').innerText();
@@ -728,6 +733,7 @@ const mark = (status, name, detail = '') => {
       kp.once('dialog', dialog => dialog.accept());
       await kp.locator('#modalRoot [data-action="delete"]').click();
       await kp.waitForFunction(() => document.querySelector('#totalCount')?.textContent === '1', null, { timeout: 5000 });
+      await kp.locator('#settingsBtn').click();
       await kp.locator('[data-module="recycle"]').click();
       await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
       await kp.waitForFunction(() => document.querySelectorAll('#recycleCards [data-trash-restore]').length >= 2, null, { timeout: 5000 });
@@ -752,6 +758,7 @@ const mark = (status, name, detail = '') => {
       mark(restoredKeyText.includes('QA Synthetic DeepSeek Key') && restoredKeyText.includes('QA Synthetic OpenAI Key') && restoredKeyText.includes('QA Synthetic Custom Key Edited') ? 'PASS' : 'FAIL', 'KeyPocket 回收站批量恢复', '恢复后保留三条合成 API Key');
 
       // Verify encrypted local snapshot creation and restoration through the real UI.
+      await kp.locator('#settingsBtn').click();
       await kp.locator('[data-module="backup"]').click();
       await kp.waitForSelector('#backupView:not(.hidden)', { timeout: 5000 });
       const backupPolicyText = await kp.locator('#backupView').innerText();
@@ -823,7 +830,8 @@ const mark = (status, name, detail = '') => {
           kp.once('dialog', dialog => dialog.accept());
           await importedProjectCard.locator('[data-project-action="delete"]').click();
           await kp.waitForFunction(name => !document.querySelector('#projectCards')?.innerText.includes(name), selectedRepoName, { timeout: 10000 });
-          await kp.locator('[data-module="recycle"]').click();
+          await kp.locator('#settingsBtn').click();
+      await kp.locator('[data-module="recycle"]').click();
           await kp.waitForSelector('#recycleView:not(.hidden)', { timeout: 5000 });
           await kp.waitForFunction(() => document.querySelectorAll('#recycleCards [data-kind="project"][data-trash-restore]').length === 1, null, { timeout: 5000 });
           const restoreProjectButton = kp.locator('#recycleCards [data-kind="project"][data-trash-restore]').first();
@@ -959,6 +967,7 @@ const mark = (status, name, detail = '') => {
         token_type: 'bearer',
         user: { id: userId, email: 'keypocket-qa@example.invalid' }
       })), qaUserId);
+      await kp.locator('#settingsBtn').click();
       await kp.locator('[data-module="sync"]').click();
       await kp.waitForSelector('#syncView:not(.hidden)', { timeout: 5000 });
       await kp.waitForSelector('#syncDeviceList [data-revoke-device]', { timeout: 8000 });
@@ -1016,6 +1025,7 @@ const mark = (status, name, detail = '') => {
         qaPasswordUpdate = { method: request.method(), authorization: request.headers().authorization, password: request.postDataJSON()?.password };
         await route.fulfill({ status: 200, headers: { ...qaAuthCors, 'content-type': 'application/json' }, body: JSON.stringify({ id: 'qa-recovery-user' }) });
       });
+      await kp.locator('#settingsBtn').click();
       await kp.locator('[data-module="sync"]').click();
       await kp.locator('#syncEmail').fill('keypocket-qa@example.invalid');
       await kp.locator('#syncForgotPasswordBtn').click();
