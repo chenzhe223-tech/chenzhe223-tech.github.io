@@ -48,3 +48,11 @@
 - 页面动效支持关闭、淡入、上浮、漂浮、光感、滑入，提供速度、幅度、方向调节并尊重 prefers-reduced-motion。
 - 布局支持 Editorial/Balanced/Vertical/Compact/Bento/Split、内容宽度、列数、间距与导航位置。
 - 外观偏好独立存储，不进入加密密钥库或云同步；支持实时预览、恢复默认与 JSON 导出。
+
+
+## 2026-11-04 — Skill Intelligence Library 首期
+- 新增九大能力领域、子分类与使用场景的规则归纳。
+- 新增 Skill 能力档案：一句话摘要、能力标签、适用场景、分类置信度、依据来源。
+- 新增领域统计浏览、场景快捷筛选；扩展搜索字段。
+- 项目加密记录新增可选 skillProfile，旧记录自动补齐；支持人工覆盖并优先保留人工结果。
+- 资源版本：kp-v2-skill-intelligence-20261104-02。
