@@ -253,3 +253,15 @@ P2：
 - Browser QA 关键断言：三大资源盒=3；横条资源记录可见；热门 Skill 9 个领域、每领域至少 5 条；GitHub 自动扫描去重；390px 页面无横向溢出/无 KeyPocket pageerror。Handoff QA 通过语法、源代码契约、线上 HTML/JS/Radar 资源校验及一键 Skill 收录 E2E。
 - 修复了能力档案默认摘要重复 Skill 名称的问题；E2E 改为定位横条资源行，避免摘要与名称重复时 Playwright strict locator 冲突。
 - 数据刷新语义：刷新读取最新已发布 Radar 静态数据；实际 GitHub 搜索与 SKILL.md 递归树校验由每日 Actions 采集，不会每次浏览器刷新都重新触发全量采集。
+
+
+## 2026-11-04 移动端主界面与统一设置中心重构
+- 用户根据 iPhone / 桌面截图反馈：手机端顶部、导航、多个操作按钮过度拥挤；要求将视觉与动效、导入/导出、自动备份、同步中心、GitHub 账户、回收站等管理入口集中到设置。
+- 已将核心导航收敛为「我的密钥 / 我的 Skills 与项目 / Skill Radar」三项；顶部只保留「设置」入口，锁定功能移动至设置中心。
+- 新增软件设置中心：外观与体验（视觉与动效）；数据与备份（导入备份、导出备份、自动备份、回收站）；账户与连接（同步中心、GitHub 账户）；安全（锁定 KeyPocket）。现有模块页面保留，子页面提供返回设置入口。
+- 项目页新增折叠式「导入与管理工具」区，保留 GitHub 导入、Skill 名称导入、AI 简报收录、收藏热度刷新和扫描仓库等既有按钮/ID；默认收起，只突出「收录项目」主操作。搜索栏与筛选器在手机端改为双列/整行组合。
+- 手机端重新排版品牌头部、三项等宽导航、项目标题/主 CTA、筛选区和资源横条；设置中心采用几何对称的分组卡片。桌面端仍使用两列设置卡片与三列项目工具布局。
+- 资源版本 `kp-v2-mobile-settings-20261104-02`；app.js commit `1b1547967fda7cd5d49c4cf807cdda576153af4b`；index.html commit `3424038af3a0e8304bfb7b78053dea08784075b9`；QA 脚本 commit `da51f222540988f1de37129dadcb3903820dc967`；E2E settings 导航调整 commit `551f4b9511add3e1beb68da7efdf77fbd676decc`。
+- 最终 Pages run `41812157275` SUCCESS；DAVYLAB Browser QA run `41812157552` SUCCESS；KeyPocket Skill Handoff QA run `41811558670` SUCCESS（线上资源版本与 Skill 收录 E2E）。
+- Browser QA 通过：统一设置中心 7 个入口、核心导航 3 项；390px 项目页三项导航/折叠工具区/双列筛选；390px 设置中心 7 个入口、无横向溢出；手机端新增密钥入口可见；无 KeyPocket pageerror。视觉与动效实时应用/恢复默认也通过。
+- 自动化测试环境为 390px Playwright Chromium，不等同真实 iPhone Safari / 微信内置浏览器实机测试；后续仍需实机验收。
