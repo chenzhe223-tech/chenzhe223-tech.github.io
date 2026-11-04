@@ -93,3 +93,4 @@
 4. 云端快照仍含 records、projects 与 deleted/tombstone；恢复前保护流程不提前删除原快照。
 5. 新 Browser QA 将连续两次本地备份更新后断言只有一张备份卡片且稳定 ID 不变，再执行恢复回归。
 6. 真实 Supabase 账号同步与云备份仍未进行；mock/代码测试不能标记为真实云端验收。
+undefined
