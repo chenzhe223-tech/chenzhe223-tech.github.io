@@ -462,6 +462,7 @@ const mark = (status, name, detail = '') => {
       const threeBoxes = await kp.locator('#projectCards .kp-resource-box').count();
       const resourceRows = await kp.locator('#projectCards .kp-resource-row').count();
       mark(threeBoxes >= 3 && resourceRows >= 2 ? 'PASS' : 'FAIL', 'KeyPocket 三大资源盒与横条列表布局', '资源盒数量 '+threeBoxes+'，横条记录 '+resourceRows);
+      await kp.waitForFunction(() => document.querySelectorAll('#hotSkillGroups .kp-hot-domain').length === 9 || (document.querySelector('#hotSkillStatus')?.textContent || '').includes('更新失败'), null, { timeout: 15000 });
       const hotRows = await kp.locator('#hotSkillGroups .kp-hot-domain').count();
       const hotMinimum = await kp.locator('#hotSkillGroups .kp-hot-domain').evaluateAll(nodes => nodes.every(n => n.querySelectorAll('.kp-hot-row').length >= 5));
       mark(hotRows === 9 && hotMinimum ? 'PASS' : 'FAIL', '热门 Skill 九大领域每类至少五项', '领域数 '+hotRows+'；每领域至少五项：'+hotMinimum);
