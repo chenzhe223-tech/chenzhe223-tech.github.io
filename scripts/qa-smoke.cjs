@@ -415,6 +415,7 @@ const mark = (status, name, detail = '') => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(repos) });
       });
       await kp.locator('[data-module="projects"]').click();
+      await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
       await kp.locator('#skillNameInput').fill('geo-sleuth');
@@ -459,6 +460,7 @@ const mark = (status, name, detail = '') => {
       const settingsTiles = await kp.locator('#settingsView .settings-tile').count();
       const coreTabs = await kp.locator('.module-tabs[aria-label="核心功能"] .module-tab').count();
       mark(settingsTiles >= 6 && coreTabs === 3 ? 'PASS' : 'FAIL', 'KeyPocket 统一设置中心与精简核心导航', '设置入口 '+settingsTiles+' 项；核心导航 '+coreTabs+' 项');
+      await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
       await kp.locator('#scanOwnReposBtn').click();
       await kp.waitForFunction(() => (document.querySelector('#githubAutoScanStatus')?.textContent || '').includes('扫描完成'), null, { timeout: 10000 });
       const scanCountAfter = await kp.locator('#projectCards .kp-resource-row').filter({ hasText: 'qa-auto-scan-app' }).count();
@@ -670,6 +672,7 @@ const mark = (status, name, detail = '') => {
       mark(cardsText.includes('QA Synthetic DeepSeek Key') && cardsText.includes('QA Synthetic OpenAI Key') && cardsText.includes('QA Synthetic Custom Key Edited') ? 'PASS' : 'FAIL', 'KeyPocket 单条编辑不影响其他记录', cardsText.slice(0, 450));
       // Export backup through the real UI and verify payload is encrypted; no plaintext keys in the file.
       const downloadPromise = kp.waitForEvent('download');
+      await kp.locator('#settingsBtn').click();
       await kp.locator('#exportBtn').click();
       await kp.waitForSelector('#exportForm', { timeout: 5000 });
       await kp.locator('#backupPassword').fill('QA-only-backup-password-2026');
@@ -691,6 +694,7 @@ const mark = (status, name, detail = '') => {
       await restoreKp.locator('#confirmPassword').fill('QA-only-restore-password-2026');
       await restoreKp.locator('#unlockBtn').click();
       await restoreKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+      await restoreKp.locator('#settingsBtn').click();
       await restoreKp.locator('#importBtn').click();
       await restoreKp.locator('#backupFile').setInputFiles(backupPath);
       await restoreKp.waitForSelector('#importForm', { timeout: 5000 });
@@ -789,7 +793,8 @@ const mark = (status, name, detail = '') => {
       await mobileKp.locator('#unlockBtn').click();
       await mobileKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
 
-      await mobileKp.locator('#visualSettingsBtn').click();
+      await mobileKp.locator('#settingsBtn').click();
+       await mobileKp.locator('#visualSettingsBtn').click();
       await mobileKp.waitForSelector('#kpVisualContent', { timeout: 5000 });
       const mobileVisual = await mobileKp.evaluate(() => ({
         width: innerWidth, documentWidth: document.documentElement.scrollWidth,
@@ -810,6 +815,7 @@ const mark = (status, name, detail = '') => {
       const importButton = await kp.locator('#importGithubBtn').count();
       mark(importButton === 1 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 导入入口', '按钮数量=' + importButton);
       if (importButton === 1) {
+        await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
         await kp.locator('#importGithubBtn').click();
         await kp.waitForSelector('#githubOwner', { timeout: 5000 });
         await kp.locator('#githubOwner').fill('octocat');
@@ -862,6 +868,7 @@ const mark = (status, name, detail = '') => {
         skillSearchRequests++;
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ total_count: 0, items: [] }) });
       });
+      await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
       await kp.locator('#skillNameInput').fill('https://github.com/Oldcircle/geo-sleuth');
@@ -878,6 +885,7 @@ const mark = (status, name, detail = '') => {
       await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal'), null, { timeout: 10000 });
       const savedSkillVisible = await kp.locator('#projectCards').innerText().then(t => t.includes('geo-sleuth'));
       mark(savedSkillVisible ? 'PASS' : 'FAIL', 'KeyPocket 手机端收录 Skill 并正常返回', '保存后弹窗关闭且项目卡片可见=' + savedSkillVisible);
+      await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
       await kp.locator('#modalRoot [data-action="close"]').last().click();
