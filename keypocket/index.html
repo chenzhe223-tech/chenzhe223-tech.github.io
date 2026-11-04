@@ -53,7 +53,7 @@ body.kp-modal-open{overflow:hidden}
 
 @media(max-width:700px){.module-tabs{width:100%;overflow-x:auto;justify-content:flex-start}.module-tab{white-space:nowrap;flex:0 0 auto}.radar-period-tabs{width:100%;overflow-x:auto}}\n
 /* Visual & Motion Studio — user-customizable presentation layer */
-:root{--kp-user-bg:#f6f7fb;--kp-user-paper:#fff;--kp-user-ink:#17233d;--kp-user-muted:#727e96;--kp-user-line:#e5e9f2;--kp-user-accent:#5b5ce2;--kp-user-radius:18px;--kp-user-card-pad:19px;--kp-user-gap:14px;--kp-user-font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--kp-user-motion-duration:420ms}
+:root{--kp-user-bg:#f6f7fb;--kp-user-paper:#fff;--kp-user-ink:#17233d;--kp-user-muted:#727e96;--kp-user-line:#e5e9f2;--kp-user-accent:#5b5ce2;--kp-user-radius:18px;--kp-user-card-pad:19px;--kp-user-gap:14px;--kp-user-font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--kp-user-motion-duration:420ms;--kp-user-motion-start:translateY(12px)}
 body.kp-customized{background:var(--kp-user-bg);color:var(--kp-user-ink);font-family:var(--kp-user-font)}
 body.kp-customized .shell{max-width:var(--kp-user-width,1180px)}
 body.kp-customized .card,body.kp-customized .stat,body.kp-customized .modal,body.kp-customized .lock-card{background:var(--kp-user-paper);border-color:var(--kp-user-line);border-radius:var(--kp-user-radius)}
@@ -67,7 +67,7 @@ body.kp-density-comfortable .card{padding:var(--kp-user-card-pad)}
 body.kp-density-loose .card{padding:25px}body.kp-density-loose .cards{gap:20px}
 body.kp-layout-wide .shell{max-width:1380px}body.kp-layout-standard .shell{max-width:1100px}body.kp-layout-full .shell{max-width:none}
 body.kp-layout-editorial .cards{grid-template-columns:repeat(var(--kp-user-columns,2),minmax(0,1fr))}
-body.kp-layout-vertical .cards{grid-template-columns:1fr}
+body.kp-layout-vertical .cards{grid-template-columns:1fr}body.kp-layout-compact .cards{grid-template-columns:repeat(3,minmax(0,1fr))}body.kp-layout-split .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
 body.kp-layout-bento .cards .card:nth-child(5n+1){grid-column:span 2}
 body.kp-nav-bottom .module-tabs{position:sticky;bottom:8px;z-index:12;margin-top:20px;box-shadow:0 8px 26px #17233d20;backdrop-filter:blur(14px)}
 body.kp-nav-floating .module-tabs{position:sticky;top:8px;z-index:12;width:max-content;max-width:100%;margin-inline:auto;box-shadow:0 8px 24px #17233d18}
@@ -121,4 +121,4 @@ body.kp-motion-slide .card{animation:kpSlide var(--kp-user-motion-duration) ease
 <div class="stats"><div class="stat"><b id="totalCount">0</b><span>已保存密钥</span></div><div class="stat"><b id="providerCount">0</b><span>服务商</span></div><div class="stat"><b id="favoriteCount">0</b><span>常用收藏</span></div></div>
 <div class="list-head"><h2>我的密钥</h2><div class="list-head-actions"><small id="listCount">0 条记录</small><button id="addKeyBtn" class="btn primary" type="button">＋ 新增 API Key</button></div></div><section id="cards" class="cards" aria-live="polite"></section>
 </section><footer class="footer"><span>KeyPocket V2.0 · 本地加密资产管理</span><span>本地自动保存与最新备份恢复 · 云端授权状态独立显示</span></footer></section></main><div id="modalRoot"></div><div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
-<script src="./app.js?v=kp-v2-single-latest-backup-20261104-01" defer></script></body></html>
+<script src="./app.js?v=kp-v2-visual-motion-studio-20261104-01" defer></script></body></html>
