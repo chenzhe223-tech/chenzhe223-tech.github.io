@@ -709,6 +709,9 @@ const mark = (status, name, detail = '') => {
       // Verify encrypted local snapshot creation and restoration through the real UI.
       await kp.locator('[data-module="backup"]').click();
       await kp.waitForSelector('#backupView:not(.hidden)', { timeout: 5000 });
+      const backupPolicyText = await kp.locator('#backupView').innerText();
+      mark(backupPolicyText.includes('覆盖上一份') && backupPolicyText.includes('只保留一份最新完整备份') ? 'PASS' : 'FAIL',
+        'KeyPocket 单份最新备份策略说明', '备份中心明确说明全量覆盖与单份保留');
       await kp.locator('#backupNowBtn').click();
       await kp.waitForFunction(() => document.querySelectorAll('#backupCards [data-snapshot-restore]').length > 0, null, { timeout: 10000 });
       const snapshotsBeforeRestore = await kp.locator('#backupCards [data-snapshot-restore]').count();
