@@ -270,7 +270,7 @@ if (!expectedBuild) throw new Error('KeyPocket build marker missing from source'
     await keyPocket.locator('#recycleCards [data-trash-restore]').first().click();
     await keyPocket.locator('[data-module="projects"]').click();
     await keyPocket.locator('#projectView').waitFor({ state: 'visible', timeout: 10000 });
-    await keyPocket.locator('#projectCards').getByText(skillName, { exact: false }).waitFor({ state: 'visible', timeout: 10000 });
+    await keyPocket.locator('#projectCards .kp-resource-row').filter({ hasText: skillName }).first().waitFor({ state: 'visible', timeout: 10000 });
     const restored = await keyPocket.evaluate(async () => {
       const db = await new Promise((resolve, reject) => {
         const request = indexedDB.open('keypocket-local-v1');
