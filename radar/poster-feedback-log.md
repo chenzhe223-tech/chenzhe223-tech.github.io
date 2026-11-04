@@ -135,3 +135,13 @@
 - P0 failure: final-poster verifier found one truncated Skill description paragraph at `x=82,y=1434,width=550`; the original 15px/3-line block clipped the final text. The final-image QR/deployment gate stopped the workflow. No candidate report, poster, or QR manifest was committed; the previous published version remains protected.
 - Repair: keep the same geometric-navy design and region order; render the full Skill description at 13px (the configured minimum body size) in a 565px-wide, four-line reserved area, leaving the existing topics row and QR panel in place. Added a regression test proving the four-line block fits before the topics row without truncation.
 - Retest status at this commit: code/test change committed; complete production, QR, desktop/mobile and deployment retest pending the next Actions run. No production success is claimed yet.
+
+
+## 2026-11-05 — Daily source review and production kickoff
+
+- Prepared the date-scoped editorial source file: `radar/data/manual-editorial/2026-11-05.json`.
+- Five reviewed items: Apple China developer beta (Apple newsroom, announcement dated 2026-10-31; beta began 2026-11-04); OCC bank-AI examiner guidance (Reuters, 2026-11-04; explicitly nonbinding); India's I4C warning on AI-agent-assisted financial cyberattacks (Reuters, 2026-11-04); Chinese financial-regulator remarks on AI-investment concentration (Reuters, 2026-11-03); and an arXiv preprint on Agent Skill evolution (2026-11-03; not peer reviewed).
+- Checked the accessible 2026-10-29 through 2026-11-04 archive reports; the five selected event/source records were not present in the prior seven-day news pools. Repeated Tencent Hy4 coverage from 2026-11-04 was deliberately not promoted again.
+- The source file records the exact source URLs, publication dates, Chinese/English summaries, limitations and DAVYLAB analysis. It does not override the automatic Skill Radar list.
+- Production state at kickoff: editorial source review complete; daily RSS collection, Skill selection, data quality gate, poster rendering, QR verification, deployment and live QA are pending. No production success is claimed by this record.
+- Website poster target remains 1200×1800 PNG only. ISO 2026-W45 must use the deterministic `poster_style_metadata` result; WeChat six-image and social ZIP outputs remain disabled.
