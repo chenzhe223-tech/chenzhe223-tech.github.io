@@ -249,7 +249,9 @@ function openProjectEditor(project=null){
   }catch(err){const n=$('#modalRoot .modal');if(n){const msg=document.createElement('div');msg.className='notice error';msg.textContent='保存失败：'+(err.message||'请重试');n.prepend(msg);}}
  });
 }
+let kpLastModule='keys';
 function setModule(name){
+ if(name!=='settings')kpLastModule=name;
  const views={keys:'#keysView',projects:'#projectView',radar:'#radarView',settings:'#settingsView',recycle:'#recycleView',backup:'#backupView',sync:'#syncView',github:'#githubView'};
  Object.entries(views).forEach(([key,selector])=>{const n=$(selector);if(n)n.classList.toggle('hidden',key!==name);});
  document.querySelectorAll('[data-module]').forEach(b=>b.classList.toggle('active',b.dataset.module===name));
@@ -262,6 +264,8 @@ function setModule(name){
 }
 document.querySelectorAll('[data-module]').forEach(b=>b.addEventListener('click',()=>setModule(b.dataset.module)));
 $('#settingsBtn')?.addEventListener('click',()=>setModule('settings'));
+$('#settingsReturnBtn')?.addEventListener('click',()=>setModule(kpLastModule));
+document.querySelectorAll('[data-settings-return]').forEach(b=>b.addEventListener('click',()=>setModule('settings')));
 function githubCategory(repo){const s=((repo.name||'')+' '+(repo.description||'')+' '+(repo.language||'')+' '+(repo.topics||[]).join(' ')).toLowerCase();if(/ai|llm|gpt|agent|model|prompt|deepseek/.test(s))return 'AI 工具';if(/portfolio|personal site|个人网站|homepage/.test(s))return '个人网站';if(/mini.?program|小程序|wechat/.test(s))return '小程序';if(/dashboard|看板|analytics|chart/.test(s))return 'Web 应用';return 'Web 应用';}
 const KP_GITHUB_OWNER='chenzhe223-tech',KP_REPO_SCAN_KEY='kp.repo-scan.last.v1';
 let kpRepoScanPromise=null;
