@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-visual-motion-studio-20261104-02';
+window.__kpBuildVersion='kp-v2-skill-intelligence-20261104-01';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -86,49 +86,86 @@ function isOwnGithubRepo(url){const path=githubRepoPath(url||'');return !!path&&
 function projectSource(p){if(isOwnGithubRepo(p.repoUrl))return 'mine';if(p.repoUrl)return 'external';return 'other';}
 function isExternalSkillProject(p){return projectSource(p)==='external'&&(/skill/i.test([p.name,p.category,p.tags].join(' '))||/skill/i.test(p.notes||'')||/AI 前沿简报|公开仓库/.test(p.notes||''));}
 function isOwnSkillProject(p){return projectSource(p)==='mine'&&(/skill/i.test([p.name,p.category,p.tags].join(' '))||/skill/i.test(p.notes||''));}
-function skillCategory(p){
- const s=[p.name,p.category,p.stack,p.tags,p.notes].join(' ').toLowerCase();
- if(/security|secure|privacy|安全|隐私|audit|漏洞/.test(s))return '安全与隐私';
- if(/agent|mcp|automation|workflow|tool.?use|智能体|自动化/.test(s))return 'Agent 与自动化';
- if(/frontend|backend|coding|code|programming|developer|开发|编程|github|api|cli|terminal/.test(s))return '编程与开发';
- if(/ui.?ux|design|figma|css|visual design|界面|设计系统|原型/.test(s))return 'UI/UX 设计';
- if(/data|analytics|sql|database|dashboard|chart|数据|看板|报表/.test(s))return '数据与看板';
- if(/writing|content|copywriting|blog|newsletter|公众号|写作|文案|内容创作/.test(s))return '写作与内容';
- if(/test|qa|playwright|browser|debug|testing|测试|质量保障/.test(s))return '测试与质量';
- if(/image|video|audio|music|photo|media|imagegen|图片|视频|音频|音乐|多媒体/.test(s))return '多媒体创作';
- if(/productivity|note|task|calendar|search|knowledge|效率|笔记|知识管理/.test(s))return '效率与知识管理';
- return '其他 Skill';
+const KP_SKILL_TAXONOMY={
+ 'AI Agent 与自动化':{subs:['Agent 框架与多智能体','MCP 与工具调用','工作流与自动化','提示词与上下文工程'],scenes:['构建 AI Agent','自动化重复工作','连接外部工具']},
+ '编程与软件工程':{subs:['前端与 Web 开发','后端与 API','代码理解与重构','调试与性能优化','测试与代码审查'],scenes:['开发 Web 应用','API 集成','代码质量提升']},
+ 'UI/UX 与视觉设计':{subs:['界面与交互设计','设计系统与组件','插画与视觉生成','动效与原型','地图与数据视觉'],scenes:['设计产品界面','制作视觉内容','构建动效原型']},
+ '数据分析与知识管理':{subs:['数据分析与 SQL','数据可视化与看板','知识库与检索','文档解析与信息提取'],scenes:['分析业务数据','搭建知识库','制作数据看板']},
+ '内容创作与办公':{subs:['写作与编辑','演示与文档','办公自动化','翻译与本地化'],scenes:['撰写内容','制作办公文档','跨语言沟通']},
+ '搜索与深度研究':{subs:['网页与资料搜索','研究分析与综述','事实核查与引用'],scenes:['开展专题研究','检索可信资料','信息核验']},
+ '多媒体与创意':{subs:['图像生成与编辑','视频与动画','音频与音乐','3D 与空间创作'],scenes:['生成图片','制作视频','音频创作']},
+ '业务与行业应用':{subs:['产品与项目管理','商业分析与运营','采购与合同','行业专业工具'],scenes:['管理项目','业务流程优化','专业行业工作']},
+ '安全与系统运维':{subs:['应用安全与隐私','云与基础设施','DevOps 与部署','监控与故障排查'],scenes:['保障应用安全','部署与运维','排查系统故障']}
+};
+function inferSkillProfile(p){
+ const text=[p.name,p.category,p.stack,p.tags,p.notes,p.repoUrl].join(' ').toLowerCase();
+ const rules=[
+  ['安全与系统运维','应用安全与隐私',/security|secure|privacy|安全|隐私|漏洞|audit/],
+  ['AI Agent 与自动化','MCP 与工具调用',/\bmcp\b|tool.?use|工具调用/],
+  ['AI Agent 与自动化','Agent 框架与多智能体',/agent|智能体|multi.?agent/],
+  ['AI Agent 与自动化','工作流与自动化',/automation|workflow|自动化|工作流/],
+  ['编程与软件工程','前端与 Web 开发',/frontend|front-end|react|vue|next\.js|css|html|前端|web/],
+  ['编程与软件工程','后端与 API',/backend|api|server|后端|接口/],
+  ['编程与软件工程','测试与代码审查',/test|qa|playwright|testing|测试|代码审查/],
+  ['UI/UX 与视觉设计','界面与交互设计',/ui.?ux|figma|design|interface|界面|交互|设计/],
+  ['UI/UX 与视觉设计','插画与视觉生成',/image|illustration|draw|hand.?draw|插画|图像|图片/],
+  ['UI/UX 与视觉设计','动效与原型',/motion|animation|prototype|动效|动画|原型/],
+  ['数据分析与知识管理','数据可视化与看板',/dashboard|chart|visualization|看板|图表|可视化/],
+  ['数据分析与知识管理','数据分析与 SQL',/data|analytics|sql|database|数据|分析/],
+  ['搜索与深度研究','网页与资料搜索',/search|browser|crawl|scrape|搜索|爬取/],
+  ['内容创作与办公','写作与编辑',/writing|content|copywriting|blog|文案|写作|内容/],
+  ['多媒体与创意','视频与动画',/video|film|视频/],
+  ['多媒体与创意','音频与音乐',/audio|music|音频|音乐/],
+  ['业务与行业应用','产品与项目管理',/project management|product management|项目管理|产品管理/],
+  ['安全与系统运维','DevOps 与部署',/devops|deploy|cloud|docker|kubernetes|部署|运维/]
+ ];
+ let selected=rules.find(r=>r[2].test(text));
+ const domain=selected?.[0]||'业务与行业应用',subcategory=selected?.[1]||'专业工具与流程';
+ const evidence=[p.name?'仓库/Skill 名称':'',p.category?'原始分类':'',p.stack?'技术栈':'',p.tags?'标签':'',p.notes?'备注描述':'',p.repoUrl?'GitHub 仓库地址':''].filter(Boolean);
+ const purpose=(String(p.notes||'').split('\n').find(x=>/^(主要作用|应用建议|建议方向)：/.test(x))||'').replace(/^(主要作用|应用建议|建议方向)：/,'').trim();
+ const summary=purpose||((p.name||'该 Skill')+'：根据名称、标签与仓库元数据归纳的能力工具；建议打开原始仓库核实详细用法。');
+ const confidence=evidence.length>=4?'较高':evidence.length>=2?'中等':'较低';
+ return {version:1,domain,subcategory,scenes:KP_SKILL_TAXONOMY[domain]?.scenes||[],summary,capabilities:[subcategory,...(p.stack?[p.stack]:[])].slice(0,4),confidence,evidence,source:p.repoUrl||'',generatedAt:Date.now(),method:'metadata-rules'};
 }
+function skillProfile(p){
+ const auto=inferSkillProfile(p),saved=p.skillProfile&&typeof p.skillProfile==='object'?p.skillProfile:{};
+ return {...auto,...saved,domain:saved.manualDomain||auto.domain,subcategory:saved.manualSubcategory||auto.subcategory,summary:saved.manualSummary||auto.summary,scenes:saved.manualScenes||auto.scenes,confidence:saved.manualDomain||saved.manualSummary?'人工确认':auto.confidence};
+}
+function skillCategory(p){return skillProfile(p).domain;}
 function skillMetaLines(p){
  const lines=String(p.notes||'').split('\n');
  return {rank:lines.find(x=>/^GitHub 排名：/.test(x)),heat:lines.find(x=>/^热度：/.test(x)),updated:lines.find(x=>/^热度采集时间：/.test(x)),stars:lines.find(x=>/^GitHub Stars：/.test(x)),purpose:lines.find(x=>/^主要作用：|^应用建议：|^建议方向：/.test(x))};
 }
 function renderProjects(){
- const q=($('#projectSearch')?.value||'').trim().toLowerCase(),sourceFilter=$('#projectSourceFilter')?.value||'all',categoryFilter=$('#projectCategoryFilter')?.value||'all';
+ const q=($('#projectSearch')?.value||'').trim().toLowerCase(),sourceFilter=$('#projectSourceFilter')?.value||'all',categoryFilter=$('#projectCategoryFilter')?.value||'all',sceneFilter=$('#projectSceneFilter')?.value||'all';
  const matches=projects.filter(p=>{
-  const src=projectSource(p),externalSkill=isExternalSkillProject(p),ownSkill=isOwnSkillProject(p),skillProject=externalSkill||ownSkill,cat=skillProject?skillCategory(p):'';
+  const src=projectSource(p),externalSkill=isExternalSkillProject(p),ownSkill=isOwnSkillProject(p),skillProject=externalSkill||ownSkill,profile=skillProject?skillProfile(p):null;
   if((sourceFilter==='mine'&&src!=='mine')||(sourceFilter==='external'&&src!=='external')||(sourceFilter==='skills'&&!skillProject)||(sourceFilter==='other'&&src!=='other'))return false;
-  if(categoryFilter!=='all'&&cat!==categoryFilter)return false;
-  return !q||[p.name,p.repoUrl,p.appUrl,p.category,p.stack,p.notes,p.tags,src==='mine'?'我的开发':src==='external'?'外部收录':'其他',cat].join(' ').toLowerCase().includes(q);
+  if(categoryFilter!=='all'&&profile?.domain!==categoryFilter)return false;
+  if(sceneFilter!=='all'&&!(profile?.scenes||[]).includes(sceneFilter))return false;
+  return !q||[p.name,p.repoUrl,p.appUrl,p.category,p.stack,p.notes,p.tags,profile?.domain,profile?.subcategory,profile?.summary,...(profile?.scenes||[])].join(' ').toLowerCase().includes(q);
  });
  const list=matches.sort((a,b)=>Number(b.favorite)-Number(a.favorite)||b.updatedAt-a.updatedAt),host=$('#projectCards');if(!host)return;
  $('#projectCount').textContent=list.length+' / '+projects.length+' 个项目';
  const groups=[{key:'mine',title:'我的开发',desc:'自己开发或维护的应用与仓库',items:list.filter(p=>projectSource(p)==='mine')},{key:'external',title:'外部收录',desc:'来自公开网络、Skill 搜索与 AI 简报的资源',items:list.filter(p=>projectSource(p)==='external')},{key:'other',title:'其他 / 待归类',desc:'暂时无法识别来源的项目',items:list.filter(p=>projectSource(p)==='other')}].filter(g=>g.items.length);
- const categoryOptions=['Agent 与自动化','编程与开发','UI/UX 设计','数据与看板','写作与内容','测试与质量','安全与隐私','多媒体创作','效率与知识管理','其他 Skill'];
  const cards=p=>{
-  const src=projectSource(p),externalSkill=isExternalSkillProject(p),ownSkill=isOwnSkillProject(p),skillProject=externalSkill||ownSkill,m=skillMetaLines(p),cat=skillProject?skillCategory(p):'';
+  const src=projectSource(p),externalSkill=isExternalSkillProject(p),ownSkill=isOwnSkillProject(p),skillProject=externalSkill||ownSkill,profile=skillProject?skillProfile(p):null,m=skillMetaLines(p);
   const sourceBadge=src==='mine'?'<span class="source-badge source-mine">我的开发</span>':src==='external'?'<span class="source-badge source-external">外部收录</span>':'<span class="source-badge">待归类</span>';
-  const catBadge=skillProject?'<span class="source-badge source-category">'+esc(cat)+'</span>':'';
+  const catBadge=profile?'<span class="source-badge source-category">'+esc(profile.domain)+' · '+esc(profile.subcategory)+'</span>':'';
+  const purpose=profile?'<div class="skill-profile"><p>'+esc(profile.summary)+'</p><small>场景：'+esc((profile.scenes||[]).slice(0,3).join(' · '))+'　·　归纳置信度：'+esc(profile.confidence)+'</small><small>依据：'+esc((profile.evidence||[]).join('、')||'仅名称')+'</small></div>':'';
   const heatPanel=externalSkill&&(m.heat||m.stars||m.rank)?'<div class="skill-insights"><strong>GitHub Skill 热度</strong>'+(m.rank?'<p>'+esc(m.rank)+'</p>':'')+(m.stars?'<p>'+esc(m.stars)+'</p>':'')+(m.heat?'<p>'+esc(m.heat)+'</p>':'')+(m.updated?'<p>'+esc(m.updated)+'</p>':'')+'</div>':'';
-  const purpose=externalSkill?'<p class="project-note skill-purpose">'+esc((p.notes||'').split('\n').filter(x=>/^主要作用：|^应用建议：|^建议方向：/.test(x)).join(' '))+'</p>':'';
   const note=p.notes&&!externalSkill?'<p class="project-note">'+esc(p.notes.length>260?p.notes.slice(0,260)+'…':p.notes)+'</p>':'';
-  return '<article class="card project-card" data-project-id="'+esc(p.id)+'"><div class="cardtop"><div class="provider-icon">'+(p.repoUrl?'GH':'APP')+'</div><div class="cardtitle"><h3>'+esc(p.name)+(p.favorite?' ★':'')+'</h3><p>'+esc(p.category||'其他')+(p.stack?' · '+esc(p.stack):'')+'</p><div class="source-badges">'+sourceBadge+catBadge+'</div></div><button class="dots" data-project-action="menu" aria-label="项目操作">⋯</button></div><div class="project-links">'+(p.repoUrl?'<a class="btn" href="'+esc(p.repoUrl)+'" target="_blank" rel="noopener noreferrer">↗ GitHub 仓库</a>':'')+(p.appUrl?'<a class="btn primary" href="'+esc(p.appUrl)+'" target="_blank" rel="noopener noreferrer">↗ 打开应用</a>':'')+'</div>'+note+heatPanel+purpose+(p.tags?'<div class="tags">'+p.tags.split(',').map(t=>t.trim()).filter(Boolean).slice(0,6).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>':'')+'<div class="cardactions"><button class="btn primary" data-project-action="edit">编辑项目</button><button class="btn" data-project-action="favorite">'+(p.favorite?'取消收藏':'收藏')+'</button><button class="btn danger" data-project-action="delete">删除</button></div></article>';
+  return '<article class="card project-card" data-project-id="'+esc(p.id)+'"><div class="cardtop"><div class="provider-icon">'+(p.repoUrl?'GH':'APP')+'</div><div class="cardtitle"><h3>'+esc(p.name)+(p.favorite?' ★':'')+'</h3><p>'+esc(p.category||'其他')+(p.stack?' · '+esc(p.stack):'')+'</p><div class="source-badges">'+sourceBadge+catBadge+'</div></div><button class="dots" data-project-action="menu" aria-label="项目操作">⋯</button></div><div class="project-links">'+(p.repoUrl?'<a class="btn" href="'+esc(p.repoUrl)+'" target="_blank" rel="noopener noreferrer">↗ GitHub 仓库</a>':'')+(p.appUrl?'<a class="btn primary" href="'+esc(p.appUrl)+'" target="_blank" rel="noopener noreferrer">↗ 打开应用</a>':'')+'</div>'+purpose+note+heatPanel+(p.tags?'<div class="tags">'+p.tags.split(',').map(t=>t.trim()).filter(Boolean).slice(0,6).map(t=>'<span class="tag">'+esc(t)+'</span>').join('')+'</div>':'')+'<div class="cardactions"><button class="btn primary" data-project-action="edit">编辑项目</button><button class="btn" data-project-action="favorite">'+(p.favorite?'取消收藏':'收藏')+'</button><button class="btn danger" data-project-action="delete">删除</button></div></article>';
  };
- host.innerHTML=groups.length?groups.map(g=>'<section class="project-group project-group-'+g.key+'"><div class="project-group-head"><div><h3>'+g.title+'</h3><p>'+g.desc+'</p></div><span>'+g.items.length+'</span></div><div class="cards">'+g.items.map(cards).join('')+'</div></section>').join(''):'<div class="empty"><div class="big">⌘</div><h3>'+(projects.length?'没有匹配的项目':'还没有收录项目')+'</h3><p>可尝试更换来源或分类筛选，也可以收录新的应用和 Skill。</p><button class="btn primary" data-project-action="add">＋ 收录项目</button></div>';
+ const skillItems=list.filter(p=>isExternalSkillProject(p)||isOwnSkillProject(p)),counts=Object.keys(KP_SKILL_TAXONOMY).map(k=>({name:k,count:skillItems.filter(p=>skillProfile(p).domain===k).length})).filter(x=>x.count);
+ const explorer='<section class="skill-explorer"><div class="skill-explorer-head"><div><h3>Skill 智能分类</h3><p>按能力领域与实际使用场景查阅；分类由仓库元数据规则归纳，可在编辑时人工校正。</p></div><span>'+skillItems.length+' 个 Skill</span></div><div class="skill-domain-grid">'+counts.map(x=>'<button class="skill-domain-chip '+(categoryFilter===x.name?'active':'')+'" data-skill-domain="'+esc(x.name)+'"><strong>'+esc(x.name)+'</strong><small>'+x.count+' 个</small></button>').join('')+'</div><div class="skill-scenes">'+['构建 AI Agent','自动化重复工作','开发 Web 应用','设计产品界面','制作视觉内容','分析业务数据','搭建知识库','开展专题研究','撰写内容','管理项目','部署与运维'].map(x=>'<button class="skill-scene-chip '+(sceneFilter===x?'active':'')+'" data-skill-scene="'+esc(x)+'">'+esc(x)+'</button>').join('')+'</div></section>';
+ host.innerHTML=(explorer)+(groups.length?groups.map(g=>'<section class="project-group project-group-'+g.key+'"><div class="project-group-head"><div><h3>'+g.title+'</h3><p>'+g.desc+'</p></div><span>'+g.items.length+'</span></div><div class="cards">'+g.items.map(cards).join('')+'</div></section>').join(''):'<div class="empty"><div class="big">⌘</div><h3>'+(projects.length?'没有匹配的项目':'还没有收录项目')+'</h3><p>可尝试更换来源或分类筛选，也可以收录新的应用和 Skill。</p><button class="btn primary" data-project-action="add">＋ 收录项目</button></div>');
 }
+
 window.renderProjects = renderProjects;
-window.__kpProjectRendererReady = true;
+window.__kpProjectRendererReady = true;window.__kpSkillIntelligenceVersion=1;
 $('#projectCards')?.addEventListener('click',async e=>{
+ const domain=e.target.closest('[data-skill-domain]');if(domain){$('#projectCategoryFilter').value=domain.dataset.skillDomain;$('#projectSceneFilter').value='all';window.renderProjects();return;}const scene=e.target.closest('[data-skill-scene]');if(scene){$('#projectSceneFilter').value=scene.dataset.skillScene;$('#projectCategoryFilter').value='all';window.renderProjects();return;}
  const b=e.target.closest('[data-project-action]');if(!b)return;
  const action=b.dataset.projectAction,card=b.closest('[data-project-id]'),id=card?.dataset.projectId;
  if(action==='add'){openProjectEditor();return;}
@@ -590,7 +627,7 @@ window.addEventListener('storage',event=>{
 updateRadarImportButton();
 $('#projectSearch')?.addEventListener('input',window.renderProjects);
 $('#projectSourceFilter')?.addEventListener('change',window.renderProjects);
-$('#projectCategoryFilter')?.addEventListener('change',window.renderProjects);
+$('#projectCategoryFilter')?.addEventListener('change',window.renderProjects);$('#projectSceneFilter')?.addEventListener('change',window.renderProjects);
 
 
 const KP_SUPABASE_URL='https://urzgghdwawpwqliafrzv.supabase.co';
