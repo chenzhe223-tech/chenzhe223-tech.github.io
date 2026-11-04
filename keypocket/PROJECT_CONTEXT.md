@@ -159,3 +159,16 @@ P2：
 - HTML/app.js 缓存版本更新为 kp-v2-project-cta-fix-20261104-01，避免浏览器继续使用旧脚本。
 - 新增 Browser QA 回归：解锁后直接点击顶部 CTA，断言 #projectEditForm 出现，再关闭弹窗并确认遮罩清除。
 - 本项状态：代码修复已提交后待 Actions 构建、线上浏览器 E2E 与生产页面核验；不得在这些验证完成前标记为功能验收通过。
+
+
+## 2026-11-04 GitHub 自有仓库自动发现与收录
+
+- 产品需求：扫描用户自己的 GitHub 仓库，自动发现新开发的 Skill 与应用，并收录到「我的 Skills / 项目」。
+- 实现方案：首次进入项目页自动扫描；成功后记录本地扫描时间，之后每 24 小时自动扫描一次；页面提供「扫描我的仓库」手动入口。
+- 数据源：GitHub 用户公开仓库 API，仅读取 `chenzhe223-tech` 名下非 fork、非 archived、未 disabled 的公开仓库元数据；按规范化 GitHub owner/repo URL 去重。
+- 分类：依据仓库名称、描述和 Topics 中的 Skill/Agent Skill 等明确关键词识别 Skill；其他自有仓库作为应用/开发项目；自有 Skill 在「仅看 Skill」筛选中可见。
+- 保存：新增项目继续走 KeyPocket 现有 AES-GCM 本地加密与 `persistProject()` 路径；不会覆盖已收录项目的个人备注、分类、收藏或标签；不会导入 API Key。
+- 私有仓库：当前 KeyPocket GitHub App/OAuth 尚未配置，不能扫描私有仓库；页面明确提示，待 GitHub App 最小权限授权后再扩展。不得通过前端硬编码 Token 绕过。
+- 自动扫描频率：每个浏览器本地记录 24 小时扫描时间；手动扫描可随时触发。首次扫描会补齐此前未录入的公开原创仓库。
+- 本轮新增 Browser QA：模拟自有应用、Skill 与 fork 仓库，验证自动发现、Skill 分类、重复扫描去重；测试仅使用合成仓库元数据。
+- 本项状态：代码提交后等待 Pages build/deploy、Browser QA 与线上运行验收；私有仓库能力仍待 GitHub App OAuth 完成。
