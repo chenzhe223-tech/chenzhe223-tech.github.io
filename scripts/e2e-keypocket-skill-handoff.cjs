@@ -265,6 +265,7 @@ if (!expectedBuild) throw new Error('KeyPocket build marker missing from source'
     // Confirm the project deletion and recovery path leaves the encrypted item intact.
     keyPocket.on('dialog', dialog => dialog.accept());
     await keyPocket.locator('#projectCards [data-project-action="delete"]').first().click();
+    await keyPocket.locator('#settingsBtn').click();
     await keyPocket.locator('[data-module="recycle"]').click();
     await keyPocket.locator('#recycleCards [data-trash-restore]').first().waitFor({ state: 'visible', timeout: 10000 });
     await keyPocket.locator('#recycleCards [data-trash-restore]').first().click();
@@ -287,6 +288,7 @@ if (!expectedBuild) throw new Error('KeyPocket build marker missing from source'
     });
     assert.ok(restored.some(item => item.iv && item.data), 'restored project must remain encrypted in IndexedDB');
 
+    await keyPocket.locator('#settingsBtn').click();
     await keyPocket.locator('[data-module="backup"]').click();
     await keyPocket.locator('#backupCards').waitFor({ state: 'visible', timeout: 10000 });
     assert.ok((await keyPocket.locator('#backupCards').innerText()).length > 0, 'local backup history should render after unlock');
