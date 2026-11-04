@@ -773,6 +773,18 @@ const mark = (status, name, detail = '') => {
       await mobileKp.locator('#confirmPassword').fill('QA-only-demo-password-2026');
       await mobileKp.locator('#unlockBtn').click();
       await mobileKp.waitForSelector('#mainView:not(.hidden)', { timeout: 10000 });
+
+      await mobileKp.locator('#visualSettingsBtn').click();
+      await mobileKp.waitForSelector('#kpVisualContent', { timeout: 5000 });
+      const mobileVisual = await mobileKp.evaluate(() => ({
+        width: innerWidth, documentWidth: document.documentElement.scrollWidth,
+        tabs: document.querySelectorAll('[data-vtab]').length,
+        menuVisible: !!document.querySelector('#modalRoot .kp-visual-panel')
+      }));
+      mark(mobileVisual.documentWidth <= mobileVisual.width && mobileVisual.tabs === 3 && mobileVisual.menuVisible
+        ? 'PASS' : 'FAIL', 'KeyPocket 390px 手机端视觉设置面板布局', JSON.stringify(mobileVisual));
+      await mobileKp.locator('#modalRoot [data-action="close"]').click();
+      await mobileKp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop'), null, { timeout: 5000 });
       const addOnMobile = await mobileKp.locator('#addKeyBtn').isVisible();
       const mobileBounds = await mobileKp.evaluate(() => ({viewport: innerWidth, doc: document.documentElement.scrollWidth, buttonRight: document.querySelector('#addKeyBtn').getBoundingClientRect().right}));
       mark(addOnMobile && mobileBounds.doc <= mobileBounds.viewport && mobileBounds.buttonRight <= mobileBounds.viewport ? 'PASS' : 'FAIL', 'KeyPocket 手机端新增按钮与布局', JSON.stringify(mobileBounds));
