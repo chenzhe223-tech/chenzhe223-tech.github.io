@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-mobile-settings-20261104-01';
+window.__kpBuildVersion='kp-v2-mobile-settings-20261104-02';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
