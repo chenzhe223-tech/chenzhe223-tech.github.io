@@ -208,3 +208,11 @@ P2：
 - 设置保存在独立 localStorage key `kp.visual.preferences.v1`，不进入 API Key 加密库、不参与云同步；支持实时预览、独立恢复默认和 JSON 导出。未改动密钥加密、备份、同步业务数据。
 - 资源版本：`kp-v2-visual-motion-studio-20261104-01`。应用代码已提交；新增 Skill Handoff source-contract QA，线上部署和浏览器 E2E 待最新 Actions 结果。
 - 验收边界：当前为桌面/移动响应式代码实现；尚不能标记真实 iPhone Safari/微信真机通过。后续需验证设置保存刷新、每个主题/布局/动效、390px 视口、减少动态效果、JSON 导出与恢复默认。
+
+
+
+### 视觉与动效自定义中心部署验收更新（2026-11-04）
+- 最终资源版本：`kp-v2-visual-motion-studio-20261104-02`（HTML 与 app.js 版本一致）。
+- 最新代码 SHA：`b7c2c613191ff04065f4e3ae6303c6f9fe87d451`；Pages run `41798223345` SUCCESS；KeyPocket Skill Handoff QA run `41798222925` SUCCESS，JS syntax、source contract、线上 HTML/JS 资源版本及一键 Skill 收录 E2E 均通过。
+- DAVYLAB Browser QA run `41798222827` 已通过 Pages 同 SHA 等待阶段，当前整站浏览器测试运行中；该脚本新增桌面视觉设置实时应用/持久化/恢复默认和 390px 手机面板无横向溢出检查。结果完成后需回填。
+- 曾发现 CDN 旧缓存仍提供 -01 的旧 JS bundle（语法错误），已将 HTML/app.js cache-bust 同步升级到 -02；最终 Pages 成功部署，Handoff 线上资源校验通过。不要复用 -01 缓存地址。
