@@ -55,7 +55,26 @@ assert.match(app, /id=neq\.'\+encodeURIComponent\(latest\.id\)/, 'cloud backup m
 assert.match(app, /&order=created_at\.desc&limit=1/, 'cloud backup center must display only the latest snapshot');
 assert.match(app, /上一份有效备份保持不变/, 'failed local backup must preserve the previous valid snapshot');
 
+assert.match(appHtml, /id="visualSettingsBtn"/, 'KeyPocket must expose the visual and motion settings menu');
+assert.match(app, /KP_VISUAL_PREF_KEY='kp\.visual\.preferences\.v1'/, 'visual preferences must use a dedicated local settings key');
+assert.match(app, /function kpApplyVisualPrefs/, 'visual preferences must apply to the UI');
+assert.match(app, /function kpOpenVisualStudio/, 'visual studio settings panel must be interactive');
+assert.match(app, /QORE 冰雾玻璃/, 'visual presets must include the QORE theme');
+assert.match(app, /Editorial 纸感/, 'visual presets must include the Editorial theme');
+assert.match(app, /Ocean Mist/, 'visual presets must include the Ocean Mist theme');
+assert.match(app, /阳光 Sunshine/, 'visual presets must include the Sunshine theme');
+assert.match(app, /薄荷 Mint/, 'visual presets must include the Mint theme');
+assert.match(app, /蜜桃 Peach/, 'visual presets must include the Peach theme');
+assert.match(app, /薰衣草 Lavender/, 'visual presets must include the Lavender theme');
+assert.match(app, /data-vtab="theme"/, 'visual studio must expose theme controls');
+assert.match(app, /data-vtab="motion"/, 'visual studio must expose motion controls');
+assert.match(app, /data-vtab="layout"/, 'visual studio must expose layout controls');
+assert.match(app, /kp-motion-fade.*kp-motion-rise.*kp-motion-float.*kp-motion-glow.*kp-motion-slide/s, 'motion effects must be selectable');
+assert.match(appHtml, /prefers-reduced-motion:reduce/, 'custom motion must respect reduced-motion preference');
+assert.match(app, /localStorage\.setItem\(KP_VISUAL_PREF_KEY/, 'visual preferences must persist locally');
+assert.match(app, /kpVisualReset/, 'visual settings must offer an independent reset action');
 
 console.log('PASS: Radar-to-KeyPocket Skill handoff source contract');
+console.log('PASS: KeyPocket visual and motion customization source contract');
 console.log('PASS: shared local queue key:', keyPocketQueueKey);
 console.log('PASS: GitHub URL validation, encrypted project save, duplicate check and queue UI are wired');
