@@ -112,3 +112,11 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 刷新仅重新请求最新发布的静态 JSON，不在客户端伪造即时 GitHub 采集；底层采集由每日 Actions 运行。
 - 版本 kp-v2-skill-boxes-20261104-01；app.js 5f7bb2f，index.html 26b5386；Browser QA 选择器更新 03fd9ef / 5b87a53。
 - 当前验收状态：等待最终 SHA 的 Pages、Browser QA、Skill Handoff QA；旧轮次失败原因是测试启动时 Pages 尚未部署该提交，并非应用测试断言失败。需核验最终 run。
+
+
+## 三盒式 Skill 资源库验收完成（2026-11-04）
+- 正式资源版本 kp-v2-skill-boxes-20261104-01。
+- Pages deploy `41808879806` SUCCESS；Browser QA `41808657331` SUCCESS；KeyPocket Skill Handoff QA `41808879505` SUCCESS。
+- 验证三大资源盒=3、横条资源记录可见、热门 Skill 九领域各至少 5 条、公开 GitHub 仓库扫描去重、390px 页面无横向溢出/无 KeyPocket pageerror；Handoff 验证 JS 语法、source contract、线上资产及一键收录 E2E。
+- 修复默认摘要重复 Skill 名称；E2E 使用横条资源行定位。
+- 当前状态：Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed（基于对应 Actions 证据）。真实 iPhone Safari 与微信内置浏览器实机测试仍未完成。
