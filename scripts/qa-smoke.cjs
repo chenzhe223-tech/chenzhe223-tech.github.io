@@ -806,6 +806,7 @@ const mark = (status, name, detail = '') => {
         ? 'PASS' : 'FAIL', 'KeyPocket 390px 手机端视觉设置面板布局', JSON.stringify(mobileVisual));
       await mobileKp.locator('#modalRoot [data-action="close"]').click();
       await mobileKp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop'), null, { timeout: 5000 });
+       await mobileKp.locator('[data-module="keys"]').click();
       const addOnMobile = await mobileKp.locator('#addKeyBtn').isVisible();
       const mobileBounds = await mobileKp.evaluate(() => ({viewport: innerWidth, doc: document.documentElement.scrollWidth, buttonRight: document.querySelector('#addKeyBtn').getBoundingClientRect().right}));
       mark(addOnMobile && mobileBounds.doc <= mobileBounds.viewport && mobileBounds.buttonRight <= mobileBounds.viewport ? 'PASS' : 'FAIL', 'KeyPocket 手机端新增按钮与布局', JSON.stringify(mobileBounds));
