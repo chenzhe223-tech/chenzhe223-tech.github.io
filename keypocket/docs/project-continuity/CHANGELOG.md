@@ -31,3 +31,11 @@
 - 删除 sync_items 旧 INSERT/UPDATE RLS policies，防止将来误授表写权限时打开旁路。
 - 为整站 QA 重载解锁失败增加 unlock 状态与 IndexedDB 快照诊断；具体根因待运行日志回传。
 - 同步文档与唯一项目状态，标记真实账号双设备与 iOS/微信尚未验收。
+
+
+## 2026-11-04 自动备份改为单份最新全量覆盖
+
+- 本地自动快照改为固定 IndexedDB key `kp.snapshot.latest`，每次完整加密后覆盖旧快照；成功写入后清理旧版本，失败保留上一份有效备份。
+- 备份中心仅显示最新一份；恢复流程先在内存读取并校验目标备份，再写入保护快照，避免固定 ID 覆盖导致恢复读错。
+- 云端 V2 备份改为账号级 `milestone/latest` 单行 upsert；成功写入后删除当前账号其他 daily/monthly/milestone 旧快照。密文仍包含密钥、项目及删除/tombstone 信息。
+- 新增 Browser QA：连续两次更新后本地备份仍只有一个稳定 ID，并继续验证最新备份恢复。
