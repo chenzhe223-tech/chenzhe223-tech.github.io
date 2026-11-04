@@ -23,3 +23,9 @@
 
 ## 验收状态
 代码已按单份最新备份策略更新；待 Pages、Browser QA 与云端备份 API 模拟验收。真实账号云端覆盖/跨设备恢复仍需真实双设备测试。
+
+## 2026-11-04 单份最新备份策略最终验收
+- 本地固定快照槽 `kp.snapshot.latest` 覆盖测试通过：两次连续更新后仅一份，ID 保持不变；最新备份恢复通过（3 条合成 API Key）。
+- 备份中心 UI 明确说明“全量覆盖上一份 / 只保留一份”。
+- 云端代码按账号级 `milestone/latest` upsert，再删除同账号其他备份；真实 Supabase 当前快照表为 0 行，未执行真实账号备份上传/删除验证。
+- Pages `41795909835` SUCCESS；Browser QA `41795909779` SUCCESS；Skill Handoff QA `41795832154` SUCCESS。生产资源版本 `kp-v2-single-latest-backup-20261104-01` 已部署。
