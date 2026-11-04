@@ -366,6 +366,16 @@ const mark = (status, name, detail = '') => {
         };
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ total_count: 1, incomplete_results: false, items: [repo] }) });
       });
+      let kpOwnRepoScanCalls = 0;
+      await kp.route('https://api.github.com/users/chenzhe223-tech/repos**', async route => {
+        kpOwnRepoScanCalls++;
+        const repos = [
+          { id: 990101, name: 'qa-auto-scan-app', full_name: 'chenzhe223-tech/qa-auto-scan-app', html_url: 'https://github.com/chenzhe223-tech/qa-auto-scan-app', description: 'QA fixture web application', owner: { login: 'chenzhe223-tech' }, private: false, fork: false, archived: false, disabled: false, language: 'JavaScript', homepage: 'https://example.test/qa-app', topics: ['web-app','qa-fixture'] },
+          { id: 990102, name: 'qa-auto-scan-skill', full_name: 'chenzhe223-tech/qa-auto-scan-skill', html_url: 'https://github.com/chenzhe223-tech/qa-auto-scan-skill', description: 'QA fixture Claude agent skill', owner: { login: 'chenzhe223-tech' }, private: false, fork: false, archived: false, disabled: false, language: 'Markdown', homepage: null, topics: ['agent-skills','qa-fixture'] },
+          { id: 990103, name: 'qa-fork-ignore', full_name: 'chenzhe223-tech/qa-fork-ignore', html_url: 'https://github.com/chenzhe223-tech/qa-fork-ignore', description: 'Must be ignored', owner: { login: 'chenzhe223-tech' }, private: false, fork: true, archived: false, disabled: false, language: 'JavaScript', topics: [] }
+        ];
+        await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(repos) });
+      });
       await kp.locator('[data-module="projects"]').click();
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
@@ -399,6 +409,20 @@ const mark = (status, name, detail = '') => {
         '点击主 CTA → 项目编辑表单可见；无需先在搜索框输入内容');
       await kp.locator('#modalRoot [data-action="close"]').first().click();
       await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop'), null, { timeout: 5000 });
+
+      await kp.waitForFunction(() => (document.querySelector('#githubAutoScanStatus')?.textContent || '').includes('扫描完成'), null, { timeout: 10000 });
+      const autoScanText = await kp.locator('#githubAutoScanStatus').innerText();
+      const autoScanApp = await kp.locator('#projectCards').innerText().then(t => t.includes('qa-auto-scan-app'));
+      const autoScanSkill = await kp.locator('#projectCards').innerText().then(t => t.includes('qa-auto-scan-skill · Skill'));
+      mark(autoScanApp && autoScanSkill ? 'PASS' : 'FAIL', 'KeyPocket 自动发现并加密收录自有 GitHub 应用与 Skill', autoScanText);
+      const autoScanSkillCategory = await kp.locator('#projectCards').innerText().then(t => t.includes('Agent 与自动化'));
+      mark(autoScanSkillCategory ? 'PASS' : 'FAIL', '自动扫描的自有 Skill 分类展示', 'Skill 标签与用途分类可见');
+      const scanCountBefore = await kp.locator('#projectCards .project-card').filter({ hasText: 'qa-auto-scan-app' }).count();
+      await kp.locator('#scanOwnReposBtn').click();
+      await kp.waitForFunction(() => (document.querySelector('#githubAutoScanStatus')?.textContent || '').includes('扫描完成'), null, { timeout: 10000 });
+      const scanCountAfter = await kp.locator('#projectCards .project-card').filter({ hasText: 'qa-auto-scan-app' }).count();
+      mark(scanCountBefore === 1 && scanCountAfter === 1 && kpOwnRepoScanCalls >= 2 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 自动扫描去重', '重复扫描前后应用卡片数量：'+scanCountBefore+' → '+scanCountAfter);
+
 
       // Skill Radar fetches a same-origin static JSON API. Its CSP must explicitly allow 'self'.
       await kp.locator('[data-module="radar"]').click();
