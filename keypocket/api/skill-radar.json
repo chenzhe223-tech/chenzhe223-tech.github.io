@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "updatedAt": "2026-11-03T06:58:46.283Z",
+  "updatedAt": "2026-11-04T06:41:06.656Z",
   "historyStartedAt": "2026-11-02",
   "retainedFrom": "2026-11-02",
-  "dataCoverageDays": 1,
-  "snapshotCount": 2,
+  "dataCoverageDays": 2,
+  "snapshotCount": 3,
   "totalRepositories": 131,
   "verifiedRepositoryCount": 131,
   "source": "GitHub REST API repository search + recursive Git trees",
@@ -26,9 +26,9 @@
         "repoName": "rea",
         "url": "https://github.com/morluto/rea",
         "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
-        "stars": 424041,
-        "forks": 105685,
-        "openIssues": 1641,
+        "stars": 428064,
+        "forks": 106516,
+        "openIssues": 1731,
         "language": "TypeScript",
         "topics": [
           "agent-skills",
@@ -52,8 +52,8 @@
           "touhou",
           "typescript"
         ],
-        "pushedAt": "2026-11-03T06:55:08Z",
-        "updatedAt": "2026-11-03T06:58:20Z",
+        "pushedAt": "2026-11-04T06:37:47Z",
+        "updatedAt": "2026-11-04T06:40:52Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -65,7 +65,7 @@
           ".agents/skills/reverse-engineer-anything/SKILL.md"
         ],
         "readmeRelevance": 100,
-        "verifiedAt": "2026-11-03T06:58:39.281Z",
+        "verifiedAt": "2026-11-04T06:41:00.307Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -77,6 +77,11 @@
             "date": "2026-11-03",
             "stars": 424041,
             "forks": 105685
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 428064,
+            "forks": 106516
           }
         ],
         "starGrowth": null,
@@ -92,9 +97,9 @@
         "repoName": "superpowers",
         "url": "https://github.com/obra/superpowers",
         "description": "An agentic skills framework & software development methodology that works.",
-        "stars": 311380,
-        "forks": 27708,
-        "openIssues": 351,
+        "stars": 312005,
+        "forks": 27752,
+        "openIssues": 330,
         "language": "Shell",
         "topics": [
           "ai",
@@ -106,8 +111,8 @@
           "subagent-driven-development",
           "superpowers"
         ],
-        "pushedAt": "2026-11-03T02:51:39Z",
-        "updatedAt": "2026-11-03T06:55:46Z",
+        "pushedAt": "2026-11-03T23:24:58Z",
+        "updatedAt": "2026-11-04T06:38:42Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -126,7 +131,7 @@
           "skills/using-superpowers/SKILL.md"
         ],
         "readmeRelevance": 55,
-        "verifiedAt": "2026-11-03T06:58:39.287Z",
+        "verifiedAt": "2026-11-04T06:41:00.214Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -138,6 +143,11 @@
             "date": "2026-11-03",
             "stars": 311380,
             "forks": 27708
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 312005,
+            "forks": 27752
           }
         ],
         "starGrowth": null,
@@ -153,13 +163,13 @@
         "repoName": "skills",
         "url": "https://github.com/mattpocock/skills",
         "description": "Skills for Real Engineers. Straight from my .agents directory.",
-        "stars": 310525,
-        "forks": 26119,
-        "openIssues": 204,
+        "stars": 311771,
+        "forks": 26199,
+        "openIssues": 209,
         "language": "Shell",
         "topics": [],
         "pushedAt": "2026-11-01T11:42:33Z",
-        "updatedAt": "2026-11-03T06:58:26Z",
+        "updatedAt": "2026-11-04T06:40:49Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -178,7 +188,7 @@
           "skills/engineering/research/SKILL.md"
         ],
         "readmeRelevance": 65,
-        "verifiedAt": "2026-11-03T06:58:39.286Z",
+        "verifiedAt": "2026-11-04T06:41:00.226Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -190,6 +200,11 @@
             "date": "2026-11-03",
             "stars": 310525,
             "forks": 26119
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 311771,
+            "forks": 26199
           }
         ],
         "starGrowth": null,
@@ -205,9 +220,9 @@
         "repoName": "ECC",
         "url": "https://github.com/affaan-m/ECC",
         "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-        "stars": 295881,
-        "forks": 43781,
-        "openIssues": 209,
+        "stars": 296705,
+        "forks": 43872,
+        "openIssues": 226,
         "language": "JavaScript",
         "topics": [
           "ai-agents",
@@ -220,7 +235,7 @@
           "productivity"
         ],
         "pushedAt": "2026-11-02T04:56:08Z",
-        "updatedAt": "2026-11-03T06:58:31Z",
+        "updatedAt": "2026-11-04T06:40:35Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -239,7 +254,7 @@
           ".agents/skills/competitive-platform-analysis/SKILL.md"
         ],
         "readmeRelevance": 75,
-        "verifiedAt": "2026-11-03T06:58:39.553Z",
+        "verifiedAt": "2026-11-04T06:41:00.419Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -251,6 +266,11 @@
             "date": "2026-11-03",
             "stars": 295881,
             "forks": 43781
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 296705,
+            "forks": 43872
           }
         ],
         "starGrowth": null,
@@ -266,9 +286,9 @@
         "repoName": "firecrawl",
         "url": "https://github.com/firecrawl/firecrawl",
         "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
-        "stars": 198099,
-        "forks": 10465,
-        "openIssues": 750,
+        "stars": 198393,
+        "forks": 10474,
+        "openIssues": 755,
         "language": "TypeScript",
         "topics": [
           "ai",
@@ -291,8 +311,8 @@
           "web-search",
           "webscraping"
         ],
-        "pushedAt": "2026-11-03T05:32:41Z",
-        "updatedAt": "2026-11-03T06:53:54Z",
+        "pushedAt": "2026-11-04T06:16:56Z",
+        "updatedAt": "2026-11-04T06:39:33Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -304,7 +324,7 @@
           "skills/firecrawl-build/SKILL.md"
         ],
         "readmeRelevance": 55,
-        "verifiedAt": "2026-11-03T06:58:39.436Z",
+        "verifiedAt": "2026-11-04T06:41:00.370Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -316,6 +336,11 @@
             "date": "2026-11-03",
             "stars": 198099,
             "forks": 10465
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 198393,
+            "forks": 10474
           }
         ],
         "starGrowth": null,
@@ -331,15 +356,15 @@
         "repoName": "skills",
         "url": "https://github.com/anthropics/skills",
         "description": "Public repository for Agent Skills",
-        "stars": 186874,
-        "forks": 22066,
-        "openIssues": 1466,
+        "stars": 187186,
+        "forks": 22089,
+        "openIssues": 1476,
         "language": "Python",
         "topics": [
           "agent-skills"
         ],
         "pushedAt": "2026-10-28T19:20:39Z",
-        "updatedAt": "2026-11-03T06:56:12Z",
+        "updatedAt": "2026-11-04T06:37:04Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -358,7 +383,7 @@
           "skills/pdf/SKILL.md"
         ],
         "readmeRelevance": 100,
-        "verifiedAt": "2026-11-03T06:58:39.317Z",
+        "verifiedAt": "2026-11-04T06:41:00.247Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -370,6 +395,11 @@
             "date": "2026-11-03",
             "stars": 186874,
             "forks": 22066
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 187186,
+            "forks": 22089
           }
         ],
         "starGrowth": null,
@@ -385,9 +415,9 @@
         "repoName": "ponytail",
         "url": "https://github.com/DietrichGebert/ponytail",
         "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
-        "stars": 183090,
-        "forks": 10118,
-        "openIssues": 156,
+        "stars": 183935,
+        "forks": 10143,
+        "openIssues": 160,
         "language": "JavaScript",
         "topics": [
           "agent-skills",
@@ -402,7 +432,7 @@
           "yagni"
         ],
         "pushedAt": "2026-10-29T11:59:31Z",
-        "updatedAt": "2026-11-03T06:57:18Z",
+        "updatedAt": "2026-11-04T06:40:17Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -421,7 +451,7 @@
           "skills/ponytail/SKILL.md"
         ],
         "readmeRelevance": 100,
-        "verifiedAt": "2026-11-03T06:58:39.513Z",
+        "verifiedAt": "2026-11-04T06:41:00.441Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -433,6 +463,11 @@
             "date": "2026-11-03",
             "stars": 183090,
             "forks": 10118
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 183935,
+            "forks": 10143
           }
         ],
         "starGrowth": null,
@@ -448,9 +483,9 @@
         "repoName": "ui-ux-pro-max-skill",
         "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
         "description": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
-        "stars": 144421,
-        "forks": 15283,
-        "openIssues": 87,
+        "stars": 144874,
+        "forks": 15322,
+        "openIssues": 89,
         "language": "Python",
         "topics": [
           "ai-skills",
@@ -474,7 +509,7 @@
           "windsurf-ai"
         ],
         "pushedAt": "2026-11-02T16:10:22Z",
-        "updatedAt": "2026-11-03T06:58:22Z",
+        "updatedAt": "2026-11-04T06:40:16Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -493,7 +528,7 @@
           "cli/assets/skills/slides/SKILL.md"
         ],
         "readmeRelevance": 85,
-        "verifiedAt": "2026-11-03T06:58:39.586Z",
+        "verifiedAt": "2026-11-04T06:41:00.462Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -505,6 +540,11 @@
             "date": "2026-11-03",
             "stars": 144421,
             "forks": 15283
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 144874,
+            "forks": 15322
           }
         ],
         "starGrowth": null,
@@ -520,13 +560,13 @@
         "repoName": "gstack",
         "url": "https://github.com/garrytan/gstack",
         "description": "Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA",
-        "stars": 138720,
-        "forks": 20561,
-        "openIssues": 106,
+        "stars": 138960,
+        "forks": 20591,
+        "openIssues": 88,
         "language": "TypeScript",
         "topics": [],
-        "pushedAt": "2026-11-03T06:51:38Z",
-        "updatedAt": "2026-11-03T06:52:01Z",
+        "pushedAt": "2026-11-04T06:31:23Z",
+        "updatedAt": "2026-11-04T06:39:33Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -538,7 +578,7 @@
           "openclaw/skills/gstack-openclaw-retro/SKILL.md"
         ],
         "readmeRelevance": 75,
-        "verifiedAt": "2026-11-03T06:58:39.968Z",
+        "verifiedAt": "2026-11-04T06:41:00.719Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -550,6 +590,11 @@
             "date": "2026-11-03",
             "stars": 138720,
             "forks": 20561
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 138960,
+            "forks": 20591
           }
         ],
         "starGrowth": null,
@@ -565,9 +610,9 @@
         "repoName": "agent-skills",
         "url": "https://github.com/addyosmani/agent-skills",
         "description": "Production-grade engineering skills for AI coding agents.",
-        "stars": 112872,
-        "forks": 11818,
-        "openIssues": 126,
+        "stars": 113108,
+        "forks": 11833,
+        "openIssues": 127,
         "language": "JavaScript",
         "topics": [
           "agent-skills",
@@ -578,7 +623,7 @@
           "skills"
         ],
         "pushedAt": "2026-11-01T19:24:49Z",
-        "updatedAt": "2026-11-03T06:58:35Z",
+        "updatedAt": "2026-11-04T06:32:29Z",
         "archived": false,
         "fork": false,
         "defaultBranch": "main",
@@ -597,7 +642,7 @@
           "skills/frontend-ui-engineering/SKILL.md"
         ],
         "readmeRelevance": 100,
-        "verifiedAt": "2026-11-03T06:58:40.094Z",
+        "verifiedAt": "2026-11-04T06:41:00.707Z",
         "firstObservedAt": "2026-11-02",
         "history": [
           {
@@ -609,6 +654,11 @@
             "date": "2026-11-03",
             "stars": 112872,
             "forks": 11818
+          },
+          {
+            "date": "2026-11-04",
+            "stars": 113108,
+            "forks": 11833
           }
         ],
         "starGrowth": null,
@@ -627,9 +677,9 @@
       "repoName": "rea",
       "url": "https://github.com/morluto/rea",
       "description": "Reverse engineer anything with agents, from app behavior down to native binaries.",
-      "stars": 424041,
-      "forks": 105685,
-      "openIssues": 1641,
+      "stars": 428064,
+      "forks": 106516,
+      "openIssues": 1731,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -653,8 +703,8 @@
         "touhou",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T06:55:08Z",
-      "updatedAt": "2026-11-03T06:58:20Z",
+      "pushedAt": "2026-11-04T06:37:47Z",
+      "updatedAt": "2026-11-04T06:40:52Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -666,7 +716,7 @@
         ".agents/skills/reverse-engineer-anything/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:39.281Z",
+      "verifiedAt": "2026-11-04T06:41:00.307Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -678,6 +728,11 @@
           "date": "2026-11-03",
           "stars": 424041,
           "forks": 105685
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 428064,
+          "forks": 106516
         }
       ]
     },
@@ -688,9 +743,9 @@
       "repoName": "superpowers",
       "url": "https://github.com/obra/superpowers",
       "description": "An agentic skills framework & software development methodology that works.",
-      "stars": 311380,
-      "forks": 27708,
-      "openIssues": 351,
+      "stars": 312005,
+      "forks": 27752,
+      "openIssues": 330,
       "language": "Shell",
       "topics": [
         "ai",
@@ -702,8 +757,8 @@
         "subagent-driven-development",
         "superpowers"
       ],
-      "pushedAt": "2026-11-03T02:51:39Z",
-      "updatedAt": "2026-11-03T06:55:46Z",
+      "pushedAt": "2026-11-03T23:24:58Z",
+      "updatedAt": "2026-11-04T06:38:42Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -722,7 +777,7 @@
         "skills/using-superpowers/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:39.287Z",
+      "verifiedAt": "2026-11-04T06:41:00.214Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -734,6 +789,11 @@
           "date": "2026-11-03",
           "stars": 311380,
           "forks": 27708
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 312005,
+          "forks": 27752
         }
       ]
     },
@@ -744,13 +804,13 @@
       "repoName": "skills",
       "url": "https://github.com/mattpocock/skills",
       "description": "Skills for Real Engineers. Straight from my .agents directory.",
-      "stars": 310525,
-      "forks": 26119,
-      "openIssues": 204,
+      "stars": 311771,
+      "forks": 26199,
+      "openIssues": 209,
       "language": "Shell",
       "topics": [],
       "pushedAt": "2026-11-01T11:42:33Z",
-      "updatedAt": "2026-11-03T06:58:26Z",
+      "updatedAt": "2026-11-04T06:40:49Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -769,7 +829,7 @@
         "skills/engineering/research/SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:39.286Z",
+      "verifiedAt": "2026-11-04T06:41:00.226Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -781,6 +841,11 @@
           "date": "2026-11-03",
           "stars": 310525,
           "forks": 26119
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 311771,
+          "forks": 26199
         }
       ]
     },
@@ -791,9 +856,9 @@
       "repoName": "ECC",
       "url": "https://github.com/affaan-m/ECC",
       "description": "The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.",
-      "stars": 295881,
-      "forks": 43781,
-      "openIssues": 209,
+      "stars": 296705,
+      "forks": 43872,
+      "openIssues": 226,
       "language": "JavaScript",
       "topics": [
         "ai-agents",
@@ -806,7 +871,7 @@
         "productivity"
       ],
       "pushedAt": "2026-11-02T04:56:08Z",
-      "updatedAt": "2026-11-03T06:58:31Z",
+      "updatedAt": "2026-11-04T06:40:35Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -825,7 +890,7 @@
         ".agents/skills/competitive-platform-analysis/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:39.553Z",
+      "verifiedAt": "2026-11-04T06:41:00.419Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -837,6 +902,11 @@
           "date": "2026-11-03",
           "stars": 295881,
           "forks": 43781
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 296705,
+          "forks": 43872
         }
       ]
     },
@@ -847,9 +917,9 @@
       "repoName": "firecrawl",
       "url": "https://github.com/firecrawl/firecrawl",
       "description": "Supercharge your AI agents with data from the web and beyond. Building the library for superintelligence. 🔥",
-      "stars": 198099,
-      "forks": 10465,
-      "openIssues": 750,
+      "stars": 198393,
+      "forks": 10474,
+      "openIssues": 755,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -872,8 +942,8 @@
         "web-search",
         "webscraping"
       ],
-      "pushedAt": "2026-11-03T05:32:41Z",
-      "updatedAt": "2026-11-03T06:53:54Z",
+      "pushedAt": "2026-11-04T06:16:56Z",
+      "updatedAt": "2026-11-04T06:39:33Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -885,7 +955,7 @@
         "skills/firecrawl-build/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:39.436Z",
+      "verifiedAt": "2026-11-04T06:41:00.370Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -897,6 +967,11 @@
           "date": "2026-11-03",
           "stars": 198099,
           "forks": 10465
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 198393,
+          "forks": 10474
         }
       ]
     },
@@ -907,15 +982,15 @@
       "repoName": "skills",
       "url": "https://github.com/anthropics/skills",
       "description": "Public repository for Agent Skills",
-      "stars": 186874,
-      "forks": 22066,
-      "openIssues": 1466,
+      "stars": 187186,
+      "forks": 22089,
+      "openIssues": 1476,
       "language": "Python",
       "topics": [
         "agent-skills"
       ],
       "pushedAt": "2026-10-28T19:20:39Z",
-      "updatedAt": "2026-11-03T06:56:12Z",
+      "updatedAt": "2026-11-04T06:37:04Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -934,7 +1009,7 @@
         "skills/pdf/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:39.317Z",
+      "verifiedAt": "2026-11-04T06:41:00.247Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -946,6 +1021,11 @@
           "date": "2026-11-03",
           "stars": 186874,
           "forks": 22066
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 187186,
+          "forks": 22089
         }
       ]
     },
@@ -956,9 +1036,9 @@
       "repoName": "ponytail",
       "url": "https://github.com/DietrichGebert/ponytail",
       "description": "Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.",
-      "stars": 183090,
-      "forks": 10118,
-      "openIssues": 156,
+      "stars": 183935,
+      "forks": 10143,
+      "openIssues": 160,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -973,7 +1053,7 @@
         "yagni"
       ],
       "pushedAt": "2026-10-29T11:59:31Z",
-      "updatedAt": "2026-11-03T06:57:18Z",
+      "updatedAt": "2026-11-04T06:40:17Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -992,7 +1072,7 @@
         "skills/ponytail/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:39.513Z",
+      "verifiedAt": "2026-11-04T06:41:00.441Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1004,6 +1084,11 @@
           "date": "2026-11-03",
           "stars": 183090,
           "forks": 10118
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 183935,
+          "forks": 10143
         }
       ]
     },
@@ -1014,9 +1099,9 @@
       "repoName": "ui-ux-pro-max-skill",
       "url": "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill",
       "description": "An AI skill that provides design intelligence for building professional UI/UX across multiple platforms.",
-      "stars": 144421,
-      "forks": 15283,
-      "openIssues": 87,
+      "stars": 144874,
+      "forks": 15322,
+      "openIssues": 89,
       "language": "Python",
       "topics": [
         "ai-skills",
@@ -1040,7 +1125,7 @@
         "windsurf-ai"
       ],
       "pushedAt": "2026-11-02T16:10:22Z",
-      "updatedAt": "2026-11-03T06:58:22Z",
+      "updatedAt": "2026-11-04T06:40:16Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1059,7 +1144,7 @@
         "cli/assets/skills/slides/SKILL.md"
       ],
       "readmeRelevance": 85,
-      "verifiedAt": "2026-11-03T06:58:39.586Z",
+      "verifiedAt": "2026-11-04T06:41:00.462Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1071,6 +1156,11 @@
           "date": "2026-11-03",
           "stars": 144421,
           "forks": 15283
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 144874,
+          "forks": 15322
         }
       ]
     },
@@ -1081,13 +1171,13 @@
       "repoName": "gstack",
       "url": "https://github.com/garrytan/gstack",
       "description": "Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA",
-      "stars": 138720,
-      "forks": 20561,
-      "openIssues": 106,
+      "stars": 138960,
+      "forks": 20591,
+      "openIssues": 88,
       "language": "TypeScript",
       "topics": [],
-      "pushedAt": "2026-11-03T06:51:38Z",
-      "updatedAt": "2026-11-03T06:52:01Z",
+      "pushedAt": "2026-11-04T06:31:23Z",
+      "updatedAt": "2026-11-04T06:39:33Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1099,7 +1189,7 @@
         "openclaw/skills/gstack-openclaw-retro/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:39.968Z",
+      "verifiedAt": "2026-11-04T06:41:00.719Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1111,6 +1201,11 @@
           "date": "2026-11-03",
           "stars": 138720,
           "forks": 20561
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 138960,
+          "forks": 20591
         }
       ]
     },
@@ -1121,9 +1216,9 @@
       "repoName": "agent-skills",
       "url": "https://github.com/addyosmani/agent-skills",
       "description": "Production-grade engineering skills for AI coding agents.",
-      "stars": 112872,
-      "forks": 11818,
-      "openIssues": 126,
+      "stars": 113108,
+      "forks": 11833,
+      "openIssues": 127,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -1134,7 +1229,7 @@
         "skills"
       ],
       "pushedAt": "2026-11-01T19:24:49Z",
-      "updatedAt": "2026-11-03T06:58:35Z",
+      "updatedAt": "2026-11-04T06:32:29Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1153,7 +1248,7 @@
         "skills/frontend-ui-engineering/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.094Z",
+      "verifiedAt": "2026-11-04T06:41:00.707Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1165,6 +1260,11 @@
           "date": "2026-11-03",
           "stars": 112872,
           "forks": 11818
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 113108,
+          "forks": 11833
         }
       ]
     },
@@ -1175,9 +1275,9 @@
       "repoName": "paperclip",
       "url": "https://github.com/paperclipai/paperclip",
       "description": "The open-source app everyone uses to manage agents at work",
-      "stars": 110579,
-      "forks": 18299,
-      "openIssues": 6631,
+      "stars": 110892,
+      "forks": 18366,
+      "openIssues": 6569,
       "language": "TypeScript",
       "topics": [
         "acpx",
@@ -1201,8 +1301,8 @@
         "project-management",
         "workflow-automation"
       ],
-      "pushedAt": "2026-11-03T06:54:40Z",
-      "updatedAt": "2026-11-03T06:57:44Z",
+      "pushedAt": "2026-11-04T06:32:07Z",
+      "updatedAt": "2026-11-04T06:39:37Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -1221,7 +1321,7 @@
         ".agents/skills/deal-with-security-advisory/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.233Z",
+      "verifiedAt": "2026-11-04T06:41:01.167Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1233,6 +1333,11 @@
           "date": "2026-11-03",
           "stars": 110579,
           "forks": 18299
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 110892,
+          "forks": 18366
         }
       ]
     },
@@ -1243,9 +1348,9 @@
       "repoName": "taste-skill",
       "url": "https://github.com/Leonxlnx/taste-skill",
       "description": "Agent skills that give coding agents taste: art direction, reference images and a browser check instead of generic AI pages",
-      "stars": 108974,
-      "forks": 7339,
-      "openIssues": 10,
+      "stars": 109647,
+      "forks": 7370,
+      "openIssues": 11,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -1260,8 +1365,8 @@
         "ui-design",
         "web-design"
       ],
-      "pushedAt": "2026-11-03T01:53:39Z",
-      "updatedAt": "2026-11-03T06:55:27Z",
+      "pushedAt": "2026-11-04T03:50:09Z",
+      "updatedAt": "2026-11-04T06:40:26Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1269,7 +1374,7 @@
         "skills/taste-skill/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:39.744Z",
+      "verifiedAt": "2026-11-04T06:41:00.767Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1281,6 +1386,11 @@
           "date": "2026-11-03",
           "stars": 108974,
           "forks": 7339
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 109647,
+          "forks": 7370
         }
       ]
     },
@@ -1291,9 +1401,9 @@
       "repoName": "open-design",
       "url": "https://github.com/nexu-io/open-design",
       "description": "The 1st Collaborative AI Design Agent Workspace. Local-first and open source. Create motion, prototypes, websites, apps, dashboards, presentations, images, and videos with your team and AI agents. Share work, exchange feedback, and iterate together in one workspace.",
-      "stars": 105594,
-      "forks": 12040,
-      "openIssues": 1340,
+      "stars": 105816,
+      "forks": 12053,
+      "openIssues": 1345,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -1317,8 +1427,8 @@
         "ui-generator",
         "vibe-coding"
       ],
-      "pushedAt": "2026-11-03T06:45:47Z",
-      "updatedAt": "2026-11-03T06:57:29Z",
+      "pushedAt": "2026-11-04T06:32:17Z",
+      "updatedAt": "2026-11-04T06:29:50Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1337,7 +1447,7 @@
         "skills/brainstorming/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.261Z",
+      "verifiedAt": "2026-11-04T06:41:01.096Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1349,6 +1459,11 @@
           "date": "2026-11-03",
           "stars": 105594,
           "forks": 12040
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 105816,
+          "forks": 12053
         }
       ]
     },
@@ -1359,9 +1474,9 @@
       "repoName": "impeccable",
       "url": "https://github.com/pbakaus/impeccable",
       "description": "The design vocabulary for your coding agent. Steer with polish and bolder, review with critique and audit, catch AI slop before it ships.",
-      "stars": 100773,
-      "forks": 5952,
-      "openIssues": 64,
+      "stars": 101779,
+      "forks": 5999,
+      "openIssues": 71,
       "language": "Rust",
       "topics": [
         "agent-skills",
@@ -1370,8 +1485,8 @@
         "design",
         "slop"
       ],
-      "pushedAt": "2026-11-02T22:39:39Z",
-      "updatedAt": "2026-11-03T06:58:09Z",
+      "pushedAt": "2026-11-04T06:13:39Z",
+      "updatedAt": "2026-11-04T06:38:52Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1390,7 +1505,7 @@
         ".omp/skills/impeccable/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.072Z",
+      "verifiedAt": "2026-11-04T06:41:00.925Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1402,6 +1517,11 @@
           "date": "2026-11-03",
           "stars": 100773,
           "forks": 5952
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 101779,
+          "forks": 5999
         }
       ]
     },
@@ -1412,9 +1532,9 @@
       "repoName": "VoiceStudio",
       "url": "https://github.com/debpalash/VoiceStudio",
       "description": "VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription & audiobook creation in 646 languages.",
-      "stars": 99349,
-      "forks": 11019,
-      "openIssues": 125,
+      "stars": 100307,
+      "forks": 11112,
+      "openIssues": 132,
       "language": "Python",
       "topics": [
         "ai",
@@ -1437,8 +1557,8 @@
         "voicestudio",
         "workflow"
       ],
-      "pushedAt": "2026-11-03T06:56:59Z",
-      "updatedAt": "2026-11-03T06:58:30Z",
+      "pushedAt": "2026-11-04T03:08:36Z",
+      "updatedAt": "2026-11-04T06:40:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1449,7 +1569,7 @@
         "skills/voicestudio/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.186Z",
+      "verifiedAt": "2026-11-04T06:41:01.064Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1461,6 +1581,11 @@
           "date": "2026-11-03",
           "stars": 99349,
           "forks": 11019
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 100307,
+          "forks": 11112
         }
       ]
     },
@@ -1471,9 +1596,9 @@
       "repoName": "archify",
       "url": "https://github.com/tt-a1i/archify",
       "description": "Turn any idea, plan, or codebase into a beautiful interactive diagram. An agent skill for Claude Code, Codex, and more.",
-      "stars": 92862,
-      "forks": 6337,
-      "openIssues": 277,
+      "stars": 93218,
+      "forks": 6350,
+      "openIssues": 284,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -1497,8 +1622,8 @@
         "system-design",
         "visualization"
       ],
-      "pushedAt": "2026-11-02T16:05:04Z",
-      "updatedAt": "2026-11-03T06:57:01Z",
+      "pushedAt": "2026-11-03T23:41:50Z",
+      "updatedAt": "2026-11-04T06:36:50Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1509,7 +1634,7 @@
         ".agents/skills/test-value/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.205Z",
+      "verifiedAt": "2026-11-04T06:41:01.004Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1521,6 +1646,11 @@
           "date": "2026-11-03",
           "stars": 92862,
           "forks": 6337
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 93218,
+          "forks": 6350
         }
       ]
     },
@@ -1531,9 +1661,9 @@
       "repoName": "worldmonitor",
       "url": "https://github.com/koala73/worldmonitor",
       "description": "Real-time global intelligence dashboard. AI-powered news aggregation, geopolitical monitoring, and infrastructure tracking in a unified situational awareness interface",
-      "stars": 90039,
-      "forks": 13913,
-      "openIssues": 356,
+      "stars": 90121,
+      "forks": 13925,
+      "openIssues": 351,
       "language": "TypeScript",
       "topics": [
         "agent",
@@ -1549,8 +1679,8 @@
         "palantir",
         "situation"
       ],
-      "pushedAt": "2026-11-03T06:58:33Z",
-      "updatedAt": "2026-11-03T06:50:53Z",
+      "pushedAt": "2026-11-04T06:36:19Z",
+      "updatedAt": "2026-11-04T06:31:23Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1569,7 +1699,7 @@
         "skills/check-country-risk/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.430Z",
+      "verifiedAt": "2026-11-04T06:41:01.144Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1581,6 +1711,11 @@
           "date": "2026-11-03",
           "stars": 90039,
           "forks": 13913
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 90121,
+          "forks": 13925
         }
       ]
     },
@@ -1591,9 +1726,9 @@
       "repoName": "deer-flow",
       "url": "https://github.com/bytedance/deer-flow",
       "description": "An open-source long-horizon SuperAgent harness that researches, codes, and creates. With the help of sandboxes, memories, tools, skill, subagents and message gateway, it handles different levels of tasks that could take minutes to hours.",
-      "stars": 84912,
-      "forks": 11936,
-      "openIssues": 1033,
+      "stars": 84964,
+      "forks": 11934,
+      "openIssues": 1049,
       "language": "Python",
       "topics": [
         "agent",
@@ -1615,8 +1750,8 @@
         "superagent",
         "typescript"
       ],
-      "pushedAt": "2026-11-02T13:37:00Z",
-      "updatedAt": "2026-11-03T06:45:10Z",
+      "pushedAt": "2026-11-04T06:37:07Z",
+      "updatedAt": "2026-11-04T05:59:03Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1635,7 +1770,7 @@
         "skills/public/deep-research/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.408Z",
+      "verifiedAt": "2026-11-04T06:41:01.246Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1647,6 +1782,11 @@
           "date": "2026-11-03",
           "stars": 84912,
           "forks": 11936
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 84964,
+          "forks": 11934
         }
       ]
     },
@@ -1657,9 +1797,9 @@
       "repoName": "MinerU",
       "url": "https://github.com/opendatalab/MinerU",
       "description": "Transforms complex documents like PDFs and Office docs into LLM-ready markdown/JSON for your Agentic workflows.",
-      "stars": 83026,
-      "forks": 6875,
-      "openIssues": 12,
+      "stars": 83084,
+      "forks": 6878,
+      "openIssues": 11,
       "language": "Python",
       "topics": [
         "ai4science",
@@ -1679,8 +1819,8 @@
         "python",
         "xlsx"
       ],
-      "pushedAt": "2026-11-03T06:56:01Z",
-      "updatedAt": "2026-11-03T06:55:44Z",
+      "pushedAt": "2026-11-03T12:08:44Z",
+      "updatedAt": "2026-11-04T06:25:43Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -1688,7 +1828,7 @@
         "skills/mineru/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:40.390Z",
+      "verifiedAt": "2026-11-04T06:41:01.220Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1700,6 +1840,11 @@
           "date": "2026-11-03",
           "stars": 83026,
           "forks": 6875
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 83084,
+          "forks": 6878
         }
       ]
     },
@@ -1710,9 +1855,9 @@
       "repoName": "career-ops",
       "url": "https://github.com/career-ops-hq/career-ops",
       "description": "Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and an application tracker. It helps you fill in each application; you press Submit. Runs locally in Codex, OpenCode and other AI CLIs, or as a Claude Code plugin.",
-      "stars": 79649,
-      "forks": 14682,
-      "openIssues": 513,
+      "stars": 79950,
+      "forks": 14720,
+      "openIssues": 472,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -1736,8 +1881,8 @@
         "open-source",
         "resume"
       ],
-      "pushedAt": "2026-11-03T06:01:56Z",
-      "updatedAt": "2026-11-03T06:57:41Z",
+      "pushedAt": "2026-11-04T05:59:04Z",
+      "updatedAt": "2026-11-04T06:38:44Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1755,7 +1900,7 @@
         "openai-directory/skills/career-ops/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:40.475Z",
+      "verifiedAt": "2026-11-04T06:41:01.251Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1767,6 +1912,11 @@
           "date": "2026-11-03",
           "stars": 79649,
           "forks": 14682
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 79950,
+          "forks": 14720
         }
       ]
     },
@@ -1777,9 +1927,9 @@
       "repoName": "hyperframes",
       "url": "https://github.com/heygen-com/hyperframes",
       "description": "Write HTML. Render video. Built for agents.",
-      "stars": 77891,
-      "forks": 7168,
-      "openIssues": 225,
+      "stars": 78501,
+      "forks": 7224,
+      "openIssues": 237,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -1798,8 +1948,8 @@
         "typescript",
         "video-editor"
       ],
-      "pushedAt": "2026-11-03T06:50:44Z",
-      "updatedAt": "2026-11-03T06:58:33Z",
+      "pushedAt": "2026-11-04T06:25:29Z",
+      "updatedAt": "2026-11-04T06:39:10Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1818,7 +1968,7 @@
         ".claude/skills/seam-craft/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.694Z",
+      "verifiedAt": "2026-11-04T06:41:01.463Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1830,6 +1980,11 @@
           "date": "2026-11-03",
           "stars": 77891,
           "forks": 7168
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 78501,
+          "forks": 7224
         }
       ]
     },
@@ -1840,9 +1995,9 @@
       "repoName": "OpenMontage",
       "url": "https://github.com/calesthio/OpenMontage",
       "description": "World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.",
-      "stars": 75505,
-      "forks": 9966,
-      "openIssues": 435,
+      "stars": 76102,
+      "forks": 10087,
+      "openIssues": 438,
       "language": "Python",
       "topics": [
         "agent",
@@ -1865,8 +2020,8 @@
         "video-generation",
         "video-production"
       ],
-      "pushedAt": "2026-10-28T21:46:02Z",
-      "updatedAt": "2026-11-03T06:57:53Z",
+      "pushedAt": "2026-11-03T17:42:02Z",
+      "updatedAt": "2026-11-04T06:39:49Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1885,7 +2040,7 @@
         ".agents/skills/character-animation-qa/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.677Z",
+      "verifiedAt": "2026-11-04T06:41:01.408Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1897,6 +2052,11 @@
           "date": "2026-11-03",
           "stars": 75505,
           "forks": 9966
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 76102,
+          "forks": 10087
         }
       ]
     },
@@ -1907,8 +2067,8 @@
       "repoName": "Front-End-Checklist",
       "url": "https://github.com/thedaviddias/Front-End-Checklist",
       "description": "🗂 The essential checklist for modern web development, for humans and AI agents",
-      "stars": 74638,
-      "forks": 6780,
+      "stars": 74643,
+      "forks": 6781,
       "openIssues": 19,
       "language": "MDX",
       "topics": [
@@ -1929,7 +2089,7 @@
         "web-development"
       ],
       "pushedAt": "2026-10-31T05:44:22Z",
-      "updatedAt": "2026-11-03T03:17:58Z",
+      "updatedAt": "2026-11-04T05:38:45Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -1948,7 +2108,7 @@
         "skills/ai-content/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.662Z",
+      "verifiedAt": "2026-11-04T06:41:01.563Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -1960,6 +2120,11 @@
           "date": "2026-11-03",
           "stars": 74638,
           "forks": 6780
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 74643,
+          "forks": 6781
         }
       ]
     },
@@ -1970,9 +2135,9 @@
       "repoName": "strix",
       "url": "https://github.com/usestrix/strix",
       "description": "Open-source AI penetration testing tool to find and fix your app’s vulnerabilities.",
-      "stars": 73457,
-      "forks": 8277,
-      "openIssues": 536,
+      "stars": 73634,
+      "forks": 8293,
+      "openIssues": 541,
       "language": "Python",
       "topics": [
         "agents",
@@ -1996,8 +2161,8 @@
         "security",
         "security-automation"
       ],
-      "pushedAt": "2026-11-03T06:57:59Z",
-      "updatedAt": "2026-11-03T06:51:17Z",
+      "pushedAt": "2026-11-04T04:21:17Z",
+      "updatedAt": "2026-11-04T06:07:59Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2013,7 +2178,7 @@
         "skills/web-app-penetration-testing/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:40.681Z",
+      "verifiedAt": "2026-11-04T06:41:01.495Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2025,6 +2190,11 @@
           "date": "2026-11-03",
           "stars": 73457,
           "forks": 8277
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 73634,
+          "forks": 8293
         }
       ]
     },
@@ -2035,8 +2205,8 @@
       "repoName": "ppt-master",
       "url": "https://github.com/hugohe3/ppt-master",
       "description": "AI turns documents or topics into real, native PowerPoint decks—with native shapes, transitions and animations, data-backed charts and tables on demand, audio narration from speaker notes, and support for your own .pptx templates. · by Hugo He",
-      "stars": 72755,
-      "forks": 5715,
+      "stars": 73235,
+      "forks": 5740,
       "openIssues": 1,
       "language": "Python",
       "topics": [
@@ -2051,8 +2221,8 @@
         "slide",
         "slides"
       ],
-      "pushedAt": "2026-11-03T05:47:01Z",
-      "updatedAt": "2026-11-03T06:55:56Z",
+      "pushedAt": "2026-11-03T15:49:09Z",
+      "updatedAt": "2026-11-04T06:40:43Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2060,7 +2230,7 @@
         "skills/ppt-master/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:40.835Z",
+      "verifiedAt": "2026-11-04T06:41:01.702Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2072,6 +2242,11 @@
           "date": "2026-11-03",
           "stars": 72755,
           "forks": 5715
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 73235,
+          "forks": 5740
         }
       ]
     },
@@ -2082,17 +2257,17 @@
       "repoName": "remotion",
       "url": "https://github.com/remotion-dev/remotion",
       "description": "🎥      Make videos programmatically with React",
-      "stars": 70208,
-      "forks": 5784,
-      "openIssues": 191,
+      "stars": 70528,
+      "forks": 5806,
+      "openIssues": 202,
       "language": "TypeScript",
       "topics": [
         "javascript",
         "react",
         "video"
       ],
-      "pushedAt": "2026-11-03T06:28:35Z",
-      "updatedAt": "2026-11-03T06:56:12Z",
+      "pushedAt": "2026-11-04T06:39:34Z",
+      "updatedAt": "2026-11-04T06:40:09Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2111,7 +2286,7 @@
         ".agents/skills/docs-demo/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.035Z",
+      "verifiedAt": "2026-11-04T06:41:01.724Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2123,6 +2298,11 @@
           "date": "2026-11-03",
           "stars": 70208,
           "forks": 5784
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 70528,
+          "forks": 5806
         }
       ]
     },
@@ -2133,9 +2313,9 @@
       "repoName": "ai-job-search",
       "url": "https://github.com/ai-job-search-dev/ai-job-search",
       "description": "The job search that runs on your machine. AI job application framework built on Claude Code: evaluate postings, tailor CVs, write cover letters, prep interviews. Fork it and own it.",
-      "stars": 69172,
-      "forks": 22158,
-      "openIssues": 84,
+      "stars": 69433,
+      "forks": 22287,
+      "openIssues": 80,
       "language": "Python",
       "topics": [
         "ai",
@@ -2151,8 +2331,8 @@
         "latex",
         "resume"
       ],
-      "pushedAt": "2026-11-02T20:26:54Z",
-      "updatedAt": "2026-11-03T06:57:48Z",
+      "pushedAt": "2026-11-03T19:20:28Z",
+      "updatedAt": "2026-11-04T06:40:40Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -2168,7 +2348,7 @@
         ".claude/skills/upskill/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.919Z",
+      "verifiedAt": "2026-11-04T06:41:01.594Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2180,6 +2360,11 @@
           "date": "2026-11-03",
           "stars": 69172,
           "forks": 22158
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 69433,
+          "forks": 22287
         }
       ]
     },
@@ -2190,8 +2375,8 @@
       "repoName": "openinterpreter",
       "url": "https://github.com/openinterpreter/openinterpreter",
       "description": "A coding agent for open models like Kimi K3 and GLM 5.3",
-      "stars": 68783,
-      "forks": 5940,
+      "stars": 68791,
+      "forks": 5937,
       "openIssues": 34,
       "language": "Rust",
       "topics": [
@@ -2203,8 +2388,8 @@
         "qwen",
         "rust"
       ],
-      "pushedAt": "2026-11-01T10:01:41Z",
-      "updatedAt": "2026-11-03T05:16:46Z",
+      "pushedAt": "2026-11-04T01:39:11Z",
+      "updatedAt": "2026-11-04T06:32:34Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2222,7 +2407,7 @@
         ".codex/skills/update-v8-version/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.220Z",
+      "verifiedAt": "2026-11-04T06:41:01.848Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2234,6 +2419,11 @@
           "date": "2026-11-03",
           "stars": 68783,
           "forks": 5940
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 68791,
+          "forks": 5937
         }
       ]
     },
@@ -2244,9 +2434,9 @@
       "repoName": "claude-code-best-practice",
       "url": "https://github.com/shanraisshan/claude-code-best-practice",
       "description": "from vibe coding to agentic engineering - practice makes claude perfect",
-      "stars": 68481,
-      "forks": 6817,
-      "openIssues": 39,
+      "stars": 68518,
+      "forks": 6823,
+      "openIssues": 40,
       "language": "HTML",
       "topics": [
         "agentic-ai",
@@ -2270,8 +2460,8 @@
         "pakistani-developer",
         "vibe-coding"
       ],
-      "pushedAt": "2026-11-03T06:34:35Z",
-      "updatedAt": "2026-11-03T06:35:03Z",
+      "pushedAt": "2026-11-04T06:34:06Z",
+      "updatedAt": "2026-11-04T06:34:36Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2287,7 +2477,7 @@
         "agent-teams/.claude/skills/time-svg-creator/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.965Z",
+      "verifiedAt": "2026-11-04T06:41:01.687Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2299,6 +2489,11 @@
           "date": "2026-11-03",
           "stars": 68481,
           "forks": 6817
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 68518,
+          "forks": 6823
         }
       ]
     },
@@ -2309,9 +2504,9 @@
       "repoName": "mem0",
       "url": "https://github.com/mem0ai/mem0",
       "description": "The Memory Layer for AI Agents - Drop-in memory infrastructure for AI agents and apps. Context that persists. Built for production.",
-      "stars": 68307,
-      "forks": 8109,
-      "openIssues": 898,
+      "stars": 68363,
+      "forks": 8112,
+      "openIssues": 901,
       "language": "Python",
       "topics": [
         "agentic-memory",
@@ -2330,7 +2525,7 @@
         "state-management"
       ],
       "pushedAt": "2026-10-30T21:36:23Z",
-      "updatedAt": "2026-11-03T06:53:35Z",
+      "updatedAt": "2026-11-04T06:28:06Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2349,7 +2544,7 @@
         "integrations/claude-code-plugin/skills/status/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:40.950Z",
+      "verifiedAt": "2026-11-04T06:41:01.835Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2361,6 +2556,11 @@
           "date": "2026-11-03",
           "stars": 68307,
           "forks": 8109
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 68363,
+          "forks": 8112
         }
       ]
     },
@@ -2371,9 +2571,9 @@
       "repoName": "last30days-skill",
       "url": "https://github.com/mvanhorn/last30days-skill",
       "description": "AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary",
-      "stars": 66397,
-      "forks": 5810,
-      "openIssues": 24,
+      "stars": 66520,
+      "forks": 5820,
+      "openIssues": 17,
       "language": "Python",
       "topics": [
         "ai-prompts",
@@ -2397,8 +2597,8 @@
         "web-search",
         "youtube"
       ],
-      "pushedAt": "2026-11-01T18:47:38Z",
-      "updatedAt": "2026-11-03T06:45:50Z",
+      "pushedAt": "2026-11-03T14:42:28Z",
+      "updatedAt": "2026-11-04T06:39:02Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2406,7 +2606,7 @@
         "skills/last30days/SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:40.945Z",
+      "verifiedAt": "2026-11-04T06:41:01.774Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2418,6 +2618,11 @@
           "date": "2026-11-03",
           "stars": 66397,
           "forks": 5810
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 66520,
+          "forks": 5820
         }
       ]
     },
@@ -2428,9 +2633,9 @@
       "repoName": "diagram-design",
       "url": "https://github.com/cathrynlavery/diagram-design",
       "description": "Editorial diagram design for Claude Code, Codex, GitHub Copilot, Cursor, Factory Droid, Qoder, and Pi. 45 diagram types. Self-contained HTML + SVG. No shadows. No Mermaid slop.",
-      "stars": 64449,
-      "forks": 4258,
-      "openIssues": 50,
+      "stars": 64775,
+      "forks": 4274,
+      "openIssues": 53,
       "language": "HTML",
       "topics": [
         "agent-skills",
@@ -2442,8 +2647,8 @@
         "mermaid",
         "svg"
       ],
-      "pushedAt": "2026-11-03T02:44:50Z",
-      "updatedAt": "2026-11-03T06:49:43Z",
+      "pushedAt": "2026-11-03T18:31:42Z",
+      "updatedAt": "2026-11-04T06:40:40Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2451,7 +2656,7 @@
         "skills/diagram-design/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:41.047Z",
+      "verifiedAt": "2026-11-04T06:41:01.854Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2463,6 +2668,11 @@
           "date": "2026-11-03",
           "stars": 64449,
           "forks": 4258
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 64775,
+          "forks": 4274
         }
       ]
     },
@@ -2473,8 +2683,8 @@
       "repoName": "humanizer",
       "url": "https://github.com/blader/humanizer",
       "description": "Agent skill that removes signs of AI-generated writing from text",
-      "stars": 64113,
-      "forks": 5069,
+      "stars": 64516,
+      "forks": 5087,
       "openIssues": 14,
       "language": "Python",
       "topics": [
@@ -2493,7 +2703,7 @@
         "writing-tools"
       ],
       "pushedAt": "2026-10-28T07:17:33Z",
-      "updatedAt": "2026-11-03T06:55:19Z",
+      "updatedAt": "2026-11-04T06:39:49Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2501,7 +2711,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:41.046Z",
+      "verifiedAt": "2026-11-04T06:41:01.852Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2513,6 +2723,11 @@
           "date": "2026-11-03",
           "stars": 64113,
           "forks": 5069
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 64516,
+          "forks": 5087
         }
       ]
     },
@@ -2523,8 +2738,8 @@
       "repoName": "chinese-independent-developer",
       "url": "https://github.com/1c7/chinese-independent-developer",
       "description": "👩🏿‍💻👨🏾‍💻👩🏼‍💻👨🏽‍💻👩🏻‍💻中国独立开发者项目列表 -- 分享大家都在做什么",
-      "stars": 61995,
-      "forks": 5577,
+      "stars": 61996,
+      "forks": 5573,
       "openIssues": 2,
       "language": "",
       "topics": [
@@ -2532,8 +2747,8 @@
         "indie",
         "indie-developer"
       ],
-      "pushedAt": "2026-11-03T05:55:42Z",
-      "updatedAt": "2026-11-03T06:56:03Z",
+      "pushedAt": "2026-11-04T01:40:31Z",
+      "updatedAt": "2026-11-04T06:28:44Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -2541,7 +2756,7 @@
         ".claude/skills/chinese-indie-dev/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.155Z",
+      "verifiedAt": "2026-11-04T06:41:01.921Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2553,6 +2768,11 @@
           "date": "2026-11-03",
           "stars": 61995,
           "forks": 5577
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 61996,
+          "forks": 5573
         }
       ]
     },
@@ -2563,9 +2783,9 @@
       "repoName": "i-have-adhd",
       "url": "https://github.com/ayghri/i-have-adhd",
       "description": "A skill to stop your coding agent from burying the answer. ADHD-friendly output.",
-      "stars": 59861,
-      "forks": 3489,
-      "openIssues": 84,
+      "stars": 59988,
+      "forks": 3495,
+      "openIssues": 88,
       "language": "Python",
       "topics": [
         "adhd",
@@ -2576,7 +2796,7 @@
         "productivity"
       ],
       "pushedAt": "2026-10-19T19:46:23Z",
-      "updatedAt": "2026-11-03T06:52:32Z",
+      "updatedAt": "2026-11-04T06:40:43Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2585,7 +2805,7 @@
         "skills/i-have-adhd/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:41.222Z",
+      "verifiedAt": "2026-11-04T06:41:01.978Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2597,6 +2817,11 @@
           "date": "2026-11-03",
           "stars": 59861,
           "forks": 3489
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 59988,
+          "forks": 3495
         }
       ]
     },
@@ -2607,8 +2832,8 @@
       "repoName": "voicebox",
       "url": "https://github.com/jamiepine/voicebox",
       "description": "The open-source AI voice studio. Clone, dictate, create.",
-      "stars": 59312,
-      "forks": 7435,
+      "stars": 59381,
+      "forks": 7444,
       "openIssues": 529,
       "language": "Python",
       "topics": [
@@ -2622,7 +2847,7 @@
         "whisper"
       ],
       "pushedAt": "2026-10-07T01:17:58Z",
-      "updatedAt": "2026-11-03T06:51:03Z",
+      "updatedAt": "2026-11-04T06:36:53Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2633,7 +2858,7 @@
         ".agents/skills/triage-prs/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.310Z",
+      "verifiedAt": "2026-11-04T06:41:02.068Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2645,6 +2870,52 @@
           "date": "2026-11-03",
           "stars": 59312,
           "forks": 7435
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 59381,
+          "forks": 7444
+        }
+      ]
+    },
+    {
+      "id": 1273427276,
+      "fullName": "cloudflare/security-audit-skill",
+      "owner": "cloudflare",
+      "repoName": "security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
+      "stars": 58374,
+      "forks": 3799,
+      "openIssues": 112,
+      "language": "JavaScript",
+      "topics": [],
+      "pushedAt": "2026-09-14T19:29:02Z",
+      "updatedAt": "2026-11-04T06:38:37Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        "skills/security-audit/SKILL.md"
+      ],
+      "readmeRelevance": 65,
+      "verifiedAt": "2026-11-04T06:41:02.075Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 56655,
+          "forks": 3693
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 57623,
+          "forks": 3750
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 58374,
+          "forks": 3799
         }
       ]
     },
@@ -2655,9 +2926,9 @@
       "repoName": "marketingskills",
       "url": "https://github.com/coreyhaines31/marketingskills",
       "description": "Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.",
-      "stars": 58159,
-      "forks": 8542,
-      "openIssues": 73,
+      "stars": 58374,
+      "forks": 8568,
+      "openIssues": 85,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -2682,7 +2953,7 @@
         "skill-md"
       ],
       "pushedAt": "2026-10-31T00:53:07Z",
-      "updatedAt": "2026-11-03T06:54:47Z",
+      "updatedAt": "2026-11-04T06:40:46Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2701,7 +2972,7 @@
         "skills/competitor-profiling/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:41.256Z",
+      "verifiedAt": "2026-11-04T06:41:02.140Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2713,6 +2984,11 @@
           "date": "2026-11-03",
           "stars": 58159,
           "forks": 8542
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 58374,
+          "forks": 8568
         }
       ]
     },
@@ -2723,13 +2999,13 @@
       "repoName": "CLI-Anything",
       "url": "https://github.com/HKUDS/CLI-Anything",
       "description": "\"CLI-Anything: Making ALL Software Agent-Native\" -- CLI-Hub: https://clianything.cc/",
-      "stars": 58150,
-      "forks": 5230,
-      "openIssues": 237,
+      "stars": 58199,
+      "forks": 5237,
+      "openIssues": 238,
       "language": "Python",
       "topics": [],
       "pushedAt": "2026-09-22T02:01:29Z",
-      "updatedAt": "2026-11-03T06:44:45Z",
+      "updatedAt": "2026-11-04T06:09:11Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2748,7 +3024,7 @@
         "cloudcompare/agent-harness/cli_anything/cloudcompare/skills/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.325Z",
+      "verifiedAt": "2026-11-04T06:41:02.145Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2760,6 +3036,11 @@
           "date": "2026-11-03",
           "stars": 58150,
           "forks": 5230
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 58199,
+          "forks": 5237
         }
       ]
     },
@@ -2770,9 +3051,9 @@
       "repoName": "appwrite",
       "url": "https://github.com/appwrite/appwrite",
       "description": "The open-source cloud for agents & devs. Including Auth, Databases, Storage, Functions, Messaging, Hosting, Realtime, WAF and more",
-      "stars": 57855,
-      "forks": 5832,
-      "openIssues": 749,
+      "stars": 57860,
+      "forks": 5831,
+      "openIssues": 750,
       "language": "TypeScript",
       "topics": [
         "android",
@@ -2796,8 +3077,8 @@
         "swift",
         "web"
       ],
-      "pushedAt": "2026-11-03T06:42:25Z",
-      "updatedAt": "2026-11-03T03:23:20Z",
+      "pushedAt": "2026-11-04T06:39:21Z",
+      "updatedAt": "2026-11-04T06:11:06Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2808,7 +3089,7 @@
         "apps/console/.cursor/skills/writing-blogs/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.761Z",
+      "verifiedAt": "2026-11-04T06:41:02.517Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2820,42 +3101,11 @@
           "date": "2026-11-03",
           "stars": 57855,
           "forks": 5832
-        }
-      ]
-    },
-    {
-      "id": 1273427276,
-      "fullName": "cloudflare/security-audit-skill",
-      "owner": "cloudflare",
-      "repoName": "security-audit-skill",
-      "url": "https://github.com/cloudflare/security-audit-skill",
-      "description": "A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings",
-      "stars": 57623,
-      "forks": 3750,
-      "openIssues": 111,
-      "language": "JavaScript",
-      "topics": [],
-      "pushedAt": "2026-09-14T19:29:02Z",
-      "updatedAt": "2026-11-03T06:58:21Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        "skills/security-audit/SKILL.md"
-      ],
-      "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:41.438Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 56655,
-          "forks": 3693
         },
         {
-          "date": "2026-11-03",
-          "stars": 57623,
-          "forks": 3750
+          "date": "2026-11-04",
+          "stars": 57860,
+          "forks": 5831
         }
       ]
     },
@@ -2866,9 +3116,9 @@
       "repoName": "scientific-agent-skills",
       "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
       "description": "Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 250,000+ scientists worldwide. 177 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard.",
-      "stars": 55877,
-      "forks": 4918,
-      "openIssues": 77,
+      "stars": 56017,
+      "forks": 4925,
+      "openIssues": 79,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -2890,7 +3140,7 @@
         "scientific-visualization"
       ],
       "pushedAt": "2026-11-02T09:23:27Z",
-      "updatedAt": "2026-11-03T06:43:57Z",
+      "updatedAt": "2026-11-04T06:39:11Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2909,7 +3159,7 @@
         "skills/bgpt-paper-search/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:41.600Z",
+      "verifiedAt": "2026-11-04T06:41:02.307Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2921,6 +3171,11 @@
           "date": "2026-11-03",
           "stars": 55877,
           "forks": 4918
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 56017,
+          "forks": 4925
         }
       ]
     },
@@ -2931,13 +3186,13 @@
       "repoName": "multica",
       "url": "https://github.com/multica-ai/multica",
       "description": "Make humans and AI agents work as one team — open-source and self-hostable.",
-      "stars": 54682,
-      "forks": 7197,
+      "stars": 54817,
+      "forks": 7219,
       "openIssues": 1885,
       "language": "Go",
       "topics": [],
-      "pushedAt": "2026-11-03T06:52:44Z",
-      "updatedAt": "2026-11-03T06:57:01Z",
+      "pushedAt": "2026-11-04T06:38:12Z",
+      "updatedAt": "2026-11-04T06:37:28Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -2946,7 +3201,7 @@
         ".agents/skills/web-design-guidelines/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:41.894Z",
+      "verifiedAt": "2026-11-04T06:41:02.565Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -2958,6 +3213,11 @@
           "date": "2026-11-03",
           "stars": 54682,
           "forks": 7197
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 54817,
+          "forks": 7219
         }
       ]
     },
@@ -2968,9 +3228,9 @@
       "repoName": "cherry-studio",
       "url": "https://github.com/CherryHQ/cherry-studio",
       "description": "Your AI workspace for models, agents, and productivity.",
-      "stars": 53214,
-      "forks": 5170,
-      "openIssues": 2421,
+      "stars": 53244,
+      "forks": 5172,
+      "openIssues": 2444,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -2984,8 +3244,8 @@
         "mcp-client",
         "ollama"
       ],
-      "pushedAt": "2026-11-03T06:58:20Z",
-      "updatedAt": "2026-11-03T06:42:16Z",
+      "pushedAt": "2026-11-04T06:40:55Z",
+      "updatedAt": "2026-11-04T06:17:58Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3004,7 +3264,7 @@
         ".agents/skills/translate-docs/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:42.221Z",
+      "verifiedAt": "2026-11-04T06:41:02.770Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3016,6 +3276,11 @@
           "date": "2026-11-03",
           "stars": 53214,
           "forks": 5170
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 53244,
+          "forks": 5172
         }
       ]
     },
@@ -3026,17 +3291,17 @@
       "repoName": "nature-skills",
       "url": "https://github.com/Yuan1z0825/nature-skills",
       "description": "符合nature论文学术表达和科研绘图的Skill",
-      "stars": 51930,
-      "forks": 2704,
-      "openIssues": 4,
+      "stars": 52088,
+      "forks": 2715,
+      "openIssues": 5,
       "language": "Python",
       "topics": [
         "codex-skills",
         "nature",
         "nature-skills"
       ],
-      "pushedAt": "2026-11-02T03:21:16Z",
-      "updatedAt": "2026-11-03T06:58:06Z",
+      "pushedAt": "2026-11-04T02:23:01Z",
+      "updatedAt": "2026-11-04T06:39:25Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3055,7 +3320,7 @@
         "skills/nature-paper-xray/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:41.882Z",
+      "verifiedAt": "2026-11-04T06:41:02.657Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3067,6 +3332,11 @@
           "date": "2026-11-03",
           "stars": 51930,
           "forks": 2704
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 52088,
+          "forks": 2715
         }
       ]
     },
@@ -3077,8 +3347,8 @@
       "repoName": "obsidian-skills",
       "url": "https://github.com/kepano/obsidian-skills",
       "description": "Agent skills for Obsidian. Teach your agent to use Obsidian CLI and open formats including Markdown, Bases, JSON Canvas.",
-      "stars": 50661,
-      "forks": 3580,
+      "stars": 50711,
+      "forks": 3584,
       "openIssues": 75,
       "language": "",
       "topics": [
@@ -3101,7 +3371,7 @@
         "skills"
       ],
       "pushedAt": "2026-09-15T14:43:57Z",
-      "updatedAt": "2026-11-03T06:36:14Z",
+      "updatedAt": "2026-11-04T06:09:12Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3114,7 +3384,7 @@
         "skills/obsidian-markdown/SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:41.871Z",
+      "verifiedAt": "2026-11-04T06:41:02.643Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3126,6 +3396,11 @@
           "date": "2026-11-03",
           "stars": 50661,
           "forks": 3580
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 50711,
+          "forks": 3584
         }
       ]
     },
@@ -3136,9 +3411,9 @@
       "repoName": "open-code-review",
       "url": "https://github.com/alibaba/open-code-review",
       "description": "Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI & Anthropic compatible.",
-      "stars": 49312,
-      "forks": 3617,
-      "openIssues": 366,
+      "stars": 49385,
+      "forks": 3620,
+      "openIssues": 351,
       "language": "Go",
       "topics": [
         "agent",
@@ -3148,8 +3423,8 @@
         "harness",
         "repository-level-context"
       ],
-      "pushedAt": "2026-11-03T02:23:33Z",
-      "updatedAt": "2026-11-03T06:04:53Z",
+      "pushedAt": "2026-11-04T05:52:42Z",
+      "updatedAt": "2026-11-04T06:25:57Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3160,7 +3435,7 @@
         "skills/open-code-review/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:41.996Z",
+      "verifiedAt": "2026-11-04T06:41:02.755Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3172,6 +3447,11 @@
           "date": "2026-11-03",
           "stars": 49312,
           "forks": 3617
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 49385,
+          "forks": 3620
         }
       ]
     },
@@ -3182,9 +3462,9 @@
       "repoName": "agentic-awesome-skills",
       "url": "https://github.com/sickn33/agentic-awesome-skills",
       "description": "2,884+ reusable AI agent skills for Claude Code, Codex, Cursor and Gemini CLI. AAS Core adds local catalog discovery, agent-owned selection and plan preview. CLI, MCP and plugins.",
-      "stars": 49062,
-      "forks": 7121,
-      "openIssues": 7,
+      "stars": 49117,
+      "forks": 7133,
+      "openIssues": 2,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -3208,8 +3488,8 @@
         "mcp",
         "skill-library"
       ],
-      "pushedAt": "2026-11-03T02:29:39Z",
-      "updatedAt": "2026-11-03T06:27:21Z",
+      "pushedAt": "2026-11-04T05:13:19Z",
+      "updatedAt": "2026-11-04T06:40:03Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3228,7 +3508,7 @@
         "plugins/agentic-awesome-skills-claude/skills/ab-test-setup/SKILL.md"
       ],
       "readmeRelevance": 95,
-      "verifiedAt": "2026-11-03T06:58:42.708Z",
+      "verifiedAt": "2026-11-04T06:41:03.384Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3240,6 +3520,11 @@
           "date": "2026-11-03",
           "stars": 49062,
           "forks": 7121
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 49117,
+          "forks": 7133
         }
       ]
     },
@@ -3250,13 +3535,13 @@
       "repoName": "GitNexus",
       "url": "https://github.com/abhigyanpatwari/GitNexus",
       "description": "GitNexus: The Zero-Server Code Intelligence Engine ",
-      "stars": 48230,
+      "stars": 48260,
       "forks": 5226,
-      "openIssues": 294,
+      "openIssues": 283,
       "language": "TypeScript",
       "topics": [],
-      "pushedAt": "2026-11-02T20:15:09Z",
-      "updatedAt": "2026-11-03T06:41:10Z",
+      "pushedAt": "2026-11-03T20:18:51Z",
+      "updatedAt": "2026-11-04T06:24:51Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3275,7 +3560,7 @@
         ".claude/skills/gitnexus/gitnexus-pdg-query/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.263Z",
+      "verifiedAt": "2026-11-04T06:41:02.906Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3287,6 +3572,11 @@
           "date": "2026-11-03",
           "stars": 48230,
           "forks": 5226
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 48260,
+          "forks": 5226
         }
       ]
     },
@@ -3297,9 +3587,9 @@
       "repoName": "herdr",
       "url": "https://github.com/herdrdev/herdr",
       "description": "the runtime your coding agents live on",
-      "stars": 47681,
-      "forks": 3822,
-      "openIssues": 414,
+      "stars": 47935,
+      "forks": 3844,
+      "openIssues": 426,
       "language": "Rust",
       "topics": [
         "agent",
@@ -3321,8 +3611,8 @@
         "tui",
         "workspace-manager"
       ],
-      "pushedAt": "2026-11-02T14:30:41Z",
-      "updatedAt": "2026-11-03T06:49:15Z",
+      "pushedAt": "2026-11-03T11:36:13Z",
+      "updatedAt": "2026-11-04T06:38:27Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -3334,7 +3624,7 @@
         "vendor/libghostty-vt/.agents/skills/writing-commit-messages/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.230Z",
+      "verifiedAt": "2026-11-04T06:41:02.948Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3346,6 +3636,11 @@
           "date": "2026-11-03",
           "stars": 47681,
           "forks": 3822
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 47935,
+          "forks": 3844
         }
       ]
     },
@@ -3356,9 +3651,9 @@
       "repoName": "orm",
       "url": "https://github.com/prisma/orm",
       "description": "The Prisma ORM: write your application in TypeScript with human-readable queries instead of SQL. Host your database on Prisma Postgres and your app on Prisma Compute.",
-      "stars": 47661,
-      "forks": 2634,
-      "openIssues": 2830,
+      "stars": 47662,
+      "forks": 2605,
+      "openIssues": 2832,
       "language": "TypeScript",
       "topics": [
         "cockroachdb",
@@ -3382,8 +3677,8 @@
         "sqlserver",
         "typescript"
       ],
-      "pushedAt": "2026-11-02T17:44:08Z",
-      "updatedAt": "2026-11-03T06:45:24Z",
+      "pushedAt": "2026-11-03T17:02:33Z",
+      "updatedAt": "2026-11-04T06:15:20Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3391,7 +3686,7 @@
         "skills/prisma-8/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:42.780Z",
+      "verifiedAt": "2026-11-04T06:41:03.284Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3403,6 +3698,52 @@
           "date": "2026-11-03",
           "stars": 47661,
           "forks": 2634
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 47662,
+          "forks": 2605
+        }
+      ]
+    },
+    {
+      "id": 1222917575,
+      "fullName": "Nutlope/hallmark",
+      "owner": "Nutlope",
+      "repoName": "hallmark",
+      "url": "https://github.com/Nutlope/hallmark",
+      "description": "Anti-AI-slop design skill for Claude Code, Cursor, and Codex.",
+      "stars": 47220,
+      "forks": 2494,
+      "openIssues": 73,
+      "language": "CSS",
+      "topics": [],
+      "pushedAt": "2026-11-03T09:01:00Z",
+      "updatedAt": "2026-11-04T06:40:49Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        "skills/hallmark/SKILL.md"
+      ],
+      "readmeRelevance": 55,
+      "verifiedAt": "2026-11-04T06:41:03.009Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 45227,
+          "forks": 2403
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 46240,
+          "forks": 2453
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 47220,
+          "forks": 2494
         }
       ]
     },
@@ -3413,9 +3754,9 @@
       "repoName": "serverless",
       "url": "https://github.com/serverless/serverless",
       "description": "⚡ Serverless Framework – Effortlessly build apps that auto-scale, incur zero costs when idle, and require minimal maintenance using AWS Lambda and other managed cloud services.",
-      "stars": 46927,
-      "forks": 5712,
-      "openIssues": 1203,
+      "stars": 46928,
+      "forks": 5713,
+      "openIssues": 1204,
       "language": "JavaScript",
       "topics": [
         "aws",
@@ -3428,8 +3769,8 @@
         "serverless-architectures",
         "serverless-framework"
       ],
-      "pushedAt": "2026-11-02T15:28:40Z",
-      "updatedAt": "2026-11-02T21:31:58Z",
+      "pushedAt": "2026-11-04T00:57:44Z",
+      "updatedAt": "2026-11-04T00:58:00Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3441,7 +3782,7 @@
         "skills/serverless-upgrade/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:42.448Z",
+      "verifiedAt": "2026-11-04T06:41:03.203Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3453,6 +3794,11 @@
           "date": "2026-11-03",
           "stars": 46927,
           "forks": 5712
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 46928,
+          "forks": 5713
         }
       ]
     },
@@ -3463,9 +3809,9 @@
       "repoName": "cli",
       "url": "https://github.com/cli/cli",
       "description": "GitHub’s official command line tool",
-      "stars": 46850,
-      "forks": 9243,
-      "openIssues": 1097,
+      "stars": 46864,
+      "forks": 9241,
+      "openIssues": 1109,
       "language": "Go",
       "topics": [
         "cli",
@@ -3473,8 +3819,8 @@
         "github-api-v4",
         "golang"
       ],
-      "pushedAt": "2026-11-03T00:25:44Z",
-      "updatedAt": "2026-11-03T04:36:48Z",
+      "pushedAt": "2026-11-03T21:19:44Z",
+      "updatedAt": "2026-11-04T05:45:53Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "trunk",
@@ -3493,7 +3839,7 @@
         ".github/skills/writing-acceptance-tests/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.474Z",
+      "verifiedAt": "2026-11-04T06:41:03.166Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3505,6 +3851,11 @@
           "date": "2026-11-03",
           "stars": 46850,
           "forks": 9243
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 46864,
+          "forks": 9241
         }
       ]
     },
@@ -3515,9 +3866,9 @@
       "repoName": "LibreChat",
       "url": "https://github.com/LibreChat-AI/LibreChat",
       "description": "Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets, open-source for self-hosting. Active",
-      "stars": 46662,
-      "forks": 9605,
-      "openIssues": 1074,
+      "stars": 46710,
+      "forks": 9612,
+      "openIssues": 1104,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -3541,8 +3892,8 @@
         "vision",
         "webui"
       ],
-      "pushedAt": "2026-11-03T02:14:53Z",
-      "updatedAt": "2026-11-03T06:55:58Z",
+      "pushedAt": "2026-11-04T05:58:15Z",
+      "updatedAt": "2026-11-04T06:22:37Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3551,7 +3902,7 @@
         ".claude/skills/improve-codebase-architecture/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.731Z",
+      "verifiedAt": "2026-11-04T06:41:03.304Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3563,42 +3914,11 @@
           "date": "2026-11-03",
           "stars": 46662,
           "forks": 9605
-        }
-      ]
-    },
-    {
-      "id": 1222917575,
-      "fullName": "Nutlope/hallmark",
-      "owner": "Nutlope",
-      "repoName": "hallmark",
-      "url": "https://github.com/Nutlope/hallmark",
-      "description": "Anti-AI-slop design skill for Claude Code, Cursor, and Codex.",
-      "stars": 46240,
-      "forks": 2453,
-      "openIssues": 77,
-      "language": "CSS",
-      "topics": [],
-      "pushedAt": "2026-10-29T16:50:04Z",
-      "updatedAt": "2026-11-03T06:57:19Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        "skills/hallmark/SKILL.md"
-      ],
-      "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:42.551Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 45227,
-          "forks": 2403
         },
         {
-          "date": "2026-11-03",
-          "stars": 46240,
-          "forks": 2453
+          "date": "2026-11-04",
+          "stars": 46710,
+          "forks": 9612
         }
       ]
     },
@@ -3609,17 +3929,17 @@
       "repoName": "claude-plugins-official",
       "url": "https://github.com/anthropics/claude-plugins-official",
       "description": "Official, Anthropic-managed directory of high quality Claude Code Plugins.",
-      "stars": 45887,
-      "forks": 4778,
-      "openIssues": 1270,
+      "stars": 46023,
+      "forks": 4790,
+      "openIssues": 1261,
       "language": "Python",
       "topics": [
         "claude-code",
         "mcp",
         "skills"
       ],
-      "pushedAt": "2026-11-02T07:29:13Z",
-      "updatedAt": "2026-11-03T06:55:50Z",
+      "pushedAt": "2026-11-04T02:41:17Z",
+      "updatedAt": "2026-11-04T06:37:44Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3638,7 +3958,7 @@
         "plugins/example-plugin/skills/example-command/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.786Z",
+      "verifiedAt": "2026-11-04T06:41:03.394Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3650,6 +3970,11 @@
           "date": "2026-11-03",
           "stars": 45887,
           "forks": 4778
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 46023,
+          "forks": 4790
         }
       ]
     },
@@ -3660,9 +3985,9 @@
       "repoName": "reactive-resume",
       "url": "https://github.com/reactive-resume/reactive-resume",
       "description": "A one-of-a-kind resume builder that keeps your privacy in mind. Completely secure, customizable, portable, open-source and free forever. Try it out today!",
-      "stars": 45236,
-      "forks": 4908,
-      "openIssues": 22,
+      "stars": 45303,
+      "forks": 4913,
+      "openIssues": 17,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -3676,8 +4001,8 @@
         "self-hosted",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T06:51:37Z",
-      "updatedAt": "2026-11-03T06:54:09Z",
+      "pushedAt": "2026-11-04T05:36:35Z",
+      "updatedAt": "2026-11-04T06:21:42Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3696,7 +4021,7 @@
         "plugins/reactive-resume/skills/executive-resume/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:42.799Z",
+      "verifiedAt": "2026-11-04T06:41:03.400Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3708,6 +4033,11 @@
           "date": "2026-11-03",
           "stars": 45236,
           "forks": 4908
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 45303,
+          "forks": 4913
         }
       ]
     },
@@ -3718,9 +4048,9 @@
       "repoName": "meteor",
       "url": "https://github.com/meteor/meteor",
       "description": "Meteor, the JavaScript App Platform",
-      "stars": 44800,
-      "forks": 5270,
-      "openIssues": 433,
+      "stars": 44797,
+      "forks": 5271,
+      "openIssues": 438,
       "language": "JavaScript",
       "topics": [
         "build-system",
@@ -3738,7 +4068,7 @@
         "zero-configuration"
       ],
       "pushedAt": "2026-11-02T12:31:56Z",
-      "updatedAt": "2026-11-02T04:48:51Z",
+      "updatedAt": "2026-11-03T19:18:54Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "devel",
@@ -3756,7 +4086,7 @@
         ".github/skills/version-bump/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:42.844Z",
+      "verifiedAt": "2026-11-04T06:41:03.458Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3768,6 +4098,11 @@
           "date": "2026-11-03",
           "stars": 44800,
           "forks": 5270
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 44797,
+          "forks": 5271
         }
       ]
     },
@@ -3778,13 +4113,13 @@
       "repoName": "reverse-skill",
       "url": "https://github.com/zhaoxuya520/reverse-skill",
       "description": "Reverse Engineering / Authorized Penetration Testing / Security Research Skill Router Pack AI-powered routing + On-demand toolchain bootstrapping + Self-evolving knowledge base  Supports Claude Code, Kiro, Cursor, Cline, and other AI coding clients 逆向/渗透/安全技能路由包 - AI 自动路由 + 按需自举工具链 + 自动进化经验库 | 支持 Claude Code / Kiro / Cursor / Cline 等代码 AI 客户端",
-      "stars": 44016,
-      "forks": 6528,
+      "stars": 44070,
+      "forks": 6534,
       "openIssues": 41,
       "language": "PowerShell",
       "topics": [],
       "pushedAt": "2026-09-22T06:43:21Z",
-      "updatedAt": "2026-11-03T06:55:09Z",
+      "updatedAt": "2026-11-04T06:33:32Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3803,7 +4138,7 @@
         "skills/code-audit/SKILL.md"
       ],
       "readmeRelevance": 85,
-      "verifiedAt": "2026-11-03T06:58:42.835Z",
+      "verifiedAt": "2026-11-04T06:41:03.424Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3815,6 +4150,11 @@
           "date": "2026-11-03",
           "stars": 44016,
           "forks": 6528
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 44070,
+          "forks": 6534
         }
       ]
     },
@@ -3825,9 +4165,9 @@
       "repoName": "agno",
       "url": "https://github.com/agno-agi/agno",
       "description": "The self-driving agent platform",
-      "stars": 43025,
-      "forks": 6231,
-      "openIssues": 1962,
+      "stars": 43053,
+      "forks": 6244,
+      "openIssues": 1974,
       "language": "Python",
       "topics": [
         "agents",
@@ -3836,8 +4176,8 @@
         "developer-tools",
         "python"
       ],
-      "pushedAt": "2026-11-02T20:56:43Z",
-      "updatedAt": "2026-11-03T04:27:48Z",
+      "pushedAt": "2026-11-04T06:21:22Z",
+      "updatedAt": "2026-11-04T05:20:35Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3848,7 +4188,7 @@
         "libs/agno/agno/company/skills/summary/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.155Z",
+      "verifiedAt": "2026-11-04T06:41:03.707Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3860,6 +4200,11 @@
           "date": "2026-11-03",
           "stars": 43025,
           "forks": 6231
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 43053,
+          "forks": 6244
         }
       ]
     },
@@ -3870,9 +4215,9 @@
       "repoName": "agents",
       "url": "https://github.com/wshobson/agents",
       "description": "Multi-harness agentic plugin marketplace for Claude Code, Codex, Cursor, OpenCode, GitHub Copilot, Google Antigravity, and Pi",
-      "stars": 42125,
-      "forks": 4454,
-      "openIssues": 7,
+      "stars": 42166,
+      "forks": 4457,
+      "openIssues": 9,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -3897,7 +4242,7 @@
         "subagents"
       ],
       "pushedAt": "2026-11-02T01:08:47Z",
-      "updatedAt": "2026-11-03T06:48:10Z",
+      "updatedAt": "2026-11-04T06:12:22Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3916,7 +4261,7 @@
         "plugins/backend-development/skills/architecture-patterns/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:43.066Z",
+      "verifiedAt": "2026-11-04T06:41:03.655Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3928,6 +4273,11 @@
           "date": "2026-11-03",
           "stars": 42125,
           "forks": 4454
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 42166,
+          "forks": 4457
         }
       ]
     },
@@ -3938,13 +4288,13 @@
       "repoName": "financial-services",
       "url": "https://github.com/anthropics/financial-services",
       "description": "",
-      "stars": 41004,
-      "forks": 5709,
+      "stars": 41030,
+      "forks": 5710,
       "openIssues": 235,
       "language": "Python",
       "topics": [],
       "pushedAt": "2026-10-28T17:23:24Z",
-      "updatedAt": "2026-11-03T06:21:41Z",
+      "updatedAt": "2026-11-04T06:19:18Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -3963,7 +4313,7 @@
         "plugins/agent-plugins/kyc-screener/skills/kyc-doc-parse/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.105Z",
+      "verifiedAt": "2026-11-04T06:41:03.615Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -3975,6 +4325,11 @@
           "date": "2026-11-03",
           "stars": 41004,
           "forks": 5709
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 41030,
+          "forks": 5710
         }
       ]
     },
@@ -3985,8 +4340,8 @@
       "repoName": "phaser",
       "url": "https://github.com/phaserjs/phaser",
       "description": "Phaser is a fun, free and fast 2D game framework for making HTML5 games for desktop and mobile web browsers, supporting Canvas and WebGL rendering.",
-      "stars": 40635,
-      "forks": 7185,
+      "stars": 40645,
+      "forks": 7186,
       "openIssues": 178,
       "language": "JavaScript",
       "topics": [
@@ -4005,7 +4360,7 @@
         "youtube-playables"
       ],
       "pushedAt": "2026-08-21T06:56:13Z",
-      "updatedAt": "2026-11-03T06:50:52Z",
+      "updatedAt": "2026-11-04T04:16:05Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -4024,7 +4379,7 @@
         "skills/graphics-and-shapes/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:43.140Z",
+      "verifiedAt": "2026-11-04T06:41:03.746Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4036,6 +4391,11 @@
           "date": "2026-11-03",
           "stars": 40635,
           "forks": 7185
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 40645,
+          "forks": 7186
         }
       ]
     },
@@ -4046,9 +4406,9 @@
       "repoName": "oh-my-claudecode",
       "url": "https://github.com/Yeachan-Heo/oh-my-claudecode",
       "description": "Teams-first Multi-agent orchestration for Claude Code",
-      "stars": 40527,
-      "forks": 3626,
-      "openIssues": 26,
+      "stars": 40551,
+      "forks": 3630,
+      "openIssues": 30,
       "language": "TypeScript",
       "topics": [
         "agentic-coding",
@@ -4062,8 +4422,8 @@
         "parallel-execution",
         "vibe-coding"
       ],
-      "pushedAt": "2026-11-03T06:21:22Z",
-      "updatedAt": "2026-11-03T06:50:42Z",
+      "pushedAt": "2026-11-03T08:27:46Z",
+      "updatedAt": "2026-11-04T06:23:45Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4082,7 +4442,7 @@
         "skills/deepinit/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:43.396Z",
+      "verifiedAt": "2026-11-04T06:41:03.955Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4094,6 +4454,11 @@
           "date": "2026-11-03",
           "stars": 40527,
           "forks": 3626
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 40551,
+          "forks": 3630
         }
       ]
     },
@@ -4104,9 +4469,9 @@
       "repoName": "tiptap",
       "url": "https://github.com/ueberdosis/tiptap",
       "description": "The headless rich text editor framework for web artisans.",
-      "stars": 38939,
-      "forks": 3191,
-      "openIssues": 913,
+      "stars": 38950,
+      "forks": 3190,
+      "openIssues": 905,
       "language": "TypeScript",
       "topics": [
         "editor",
@@ -4121,8 +4486,8 @@
         "wysiwyg",
         "wysiwyg-editor"
       ],
-      "pushedAt": "2026-11-03T05:20:01Z",
-      "updatedAt": "2026-11-03T06:37:09Z",
+      "pushedAt": "2026-11-03T22:23:22Z",
+      "updatedAt": "2026-11-04T06:08:13Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4131,7 +4496,7 @@
         ".agents/skills/tiptap/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.327Z",
+      "verifiedAt": "2026-11-04T06:41:03.915Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4143,6 +4508,11 @@
           "date": "2026-11-03",
           "stars": 38939,
           "forks": 3191
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 38950,
+          "forks": 3190
         }
       ]
     },
@@ -4153,9 +4523,9 @@
       "repoName": "ai-website-cloner-template",
       "url": "https://github.com/JCodesMore/ai-website-cloner-template",
       "description": "Clone any website with one command using AI coding agents",
-      "stars": 38473,
-      "forks": 5708,
-      "openIssues": 7,
+      "stars": 38552,
+      "forks": 5723,
+      "openIssues": 11,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -4179,7 +4549,7 @@
         "website-clone"
       ],
       "pushedAt": "2026-10-19T22:56:31Z",
-      "updatedAt": "2026-11-03T06:51:02Z",
+      "updatedAt": "2026-11-04T06:23:22Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -4187,7 +4557,7 @@
         ".agents/skills/clone-website/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.335Z",
+      "verifiedAt": "2026-11-04T06:41:03.844Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4199,6 +4569,11 @@
           "date": "2026-11-03",
           "stars": 38473,
           "forks": 5708
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 38552,
+          "forks": 5723
         }
       ]
     },
@@ -4209,13 +4584,13 @@
       "repoName": "skills",
       "url": "https://github.com/vercel-labs/skills",
       "description": "The open agent skills tool - npx skills",
-      "stars": 37842,
-      "forks": 3272,
-      "openIssues": 1223,
+      "stars": 37999,
+      "forks": 3291,
+      "openIssues": 1228,
       "language": "TypeScript",
       "topics": [],
-      "pushedAt": "2026-11-03T00:14:26Z",
-      "updatedAt": "2026-11-03T06:46:49Z",
+      "pushedAt": "2026-11-03T23:42:47Z",
+      "updatedAt": "2026-11-04T06:32:03Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4225,7 +4600,7 @@
         "skills/find-skills/SKILL.md"
       ],
       "readmeRelevance": 85,
-      "verifiedAt": "2026-11-03T06:58:43.370Z",
+      "verifiedAt": "2026-11-04T06:41:03.865Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4237,6 +4612,11 @@
           "date": "2026-11-03",
           "stars": 37842,
           "forks": 3272
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 37999,
+          "forks": 3291
         }
       ]
     },
@@ -4247,9 +4627,9 @@
       "repoName": "oh-my-pi",
       "url": "https://github.com/can1357/oh-my-pi",
       "description": "⌥ Coding agent with the IDE wired in. Built by Stencil Labs.",
-      "stars": 37591,
-      "forks": 4235,
-      "openIssues": 4517,
+      "stars": 37716,
+      "forks": 4250,
+      "openIssues": 4587,
       "language": "TypeScript",
       "topics": [
         "ai-agent",
@@ -4268,8 +4648,8 @@
         "tui",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T06:16:34Z",
-      "updatedAt": "2026-11-03T06:49:10Z",
+      "pushedAt": "2026-11-04T05:19:34Z",
+      "updatedAt": "2026-11-04T06:32:21Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4279,7 +4659,7 @@
         ".omp/skills/tool-prompt-optimization/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.523Z",
+      "verifiedAt": "2026-11-04T06:41:04.039Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4291,6 +4671,11 @@
           "date": "2026-11-03",
           "stars": 37591,
           "forks": 4235
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 37716,
+          "forks": 4250
         }
       ]
     },
@@ -4301,9 +4686,9 @@
       "repoName": "Vibe-Trading",
       "url": "https://github.com/HKUDS/Vibe-Trading",
       "description": "\"Vibe-Trading: Your Personal Trading Agent\"",
-      "stars": 37511,
-      "forks": 6066,
-      "openIssues": 29,
+      "stars": 37587,
+      "forks": 6086,
+      "openIssues": 36,
       "language": "Python",
       "topics": [
         "ai-agent",
@@ -4318,7 +4703,7 @@
         "trading"
       ],
       "pushedAt": "2026-11-02T18:53:08Z",
-      "updatedAt": "2026-11-03T06:49:43Z",
+      "updatedAt": "2026-11-04T06:16:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4337,7 +4722,7 @@
         "agent/src/skills/commodity-analysis/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.411Z",
+      "verifiedAt": "2026-11-04T06:41:04.009Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4349,6 +4734,11 @@
           "date": "2026-11-03",
           "stars": 37511,
           "forks": 6066
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 37587,
+          "forks": 6086
         }
       ]
     },
@@ -4359,13 +4749,16 @@
       "repoName": "nuwa-skill",
       "url": "https://github.com/alchaincyf/nuwa-skill",
       "description": "你想蒸馏的下一个员工，何必是同事。蒸馏任何人的思维方式——心智模型、决策启发式、表达DNA。Distill how anyone thinks.",
-      "stars": 37273,
-      "forks": 4822,
+      "stars": 37420,
+      "forks": 4835,
       "openIssues": 28,
       "language": "Python",
-      "topics": [],
-      "pushedAt": "2026-10-24T16:12:03Z",
-      "updatedAt": "2026-11-03T06:57:58Z",
+      "topics": [
+        "deepseek-harness",
+        "dsh-plugin"
+      ],
+      "pushedAt": "2026-11-03T08:51:23Z",
+      "updatedAt": "2026-11-04T06:35:06Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4373,7 +4766,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:43.363Z",
+      "verifiedAt": "2026-11-04T06:41:03.967Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4385,6 +4778,11 @@
           "date": "2026-11-03",
           "stars": 37273,
           "forks": 4822
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 37420,
+          "forks": 4835
         }
       ]
     },
@@ -4395,9 +4793,9 @@
       "repoName": "book-to-skill",
       "url": "https://github.com/virgiliojr94/book-to-skill",
       "description": "Turn any technical book PDF into a Claude Code skill — ready to study, reference, and use while you work.",
-      "stars": 36810,
-      "forks": 3897,
-      "openIssues": 27,
+      "stars": 36891,
+      "forks": 3910,
+      "openIssues": 13,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -4414,8 +4812,8 @@
         "self-study",
         "study-tools"
       ],
-      "pushedAt": "2026-10-28T13:26:03Z",
-      "updatedAt": "2026-11-03T06:43:20Z",
+      "pushedAt": "2026-11-03T17:53:25Z",
+      "updatedAt": "2026-11-04T06:23:45Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -4423,7 +4821,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:43.548Z",
+      "verifiedAt": "2026-11-04T06:41:04.029Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4435,6 +4833,11 @@
           "date": "2026-11-03",
           "stars": 36810,
           "forks": 3897
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 36891,
+          "forks": 3910
         }
       ]
     },
@@ -4445,9 +4848,9 @@
       "repoName": "WeKnora",
       "url": "https://github.com/Tencent/WeKnora",
       "description": "Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.",
-      "stars": 36326,
-      "forks": 4953,
-      "openIssues": 739,
+      "stars": 36424,
+      "forks": 4973,
+      "openIssues": 788,
       "language": "Go",
       "topics": [
         "agent",
@@ -4472,7 +4875,7 @@
         "wiki"
       ],
       "pushedAt": "2026-11-03T03:33:48Z",
-      "updatedAt": "2026-11-03T06:52:18Z",
+      "updatedAt": "2026-11-04T06:38:32Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4481,7 +4884,7 @@
         "cli/skills/weknora-shared/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.723Z",
+      "verifiedAt": "2026-11-04T06:41:04.395Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4493,6 +4896,11 @@
           "date": "2026-11-03",
           "stars": 36326,
           "forks": 4953
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 36424,
+          "forks": 4973
         }
       ]
     },
@@ -4503,8 +4911,8 @@
       "repoName": "Anthropic-Cybersecurity-Skills",
       "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
       "description": "817 structured cybersecurity skills for AI agents · Mapped to 6 frameworks: MITRE ATT&CK, NIST CSF 2.0, MITRE ATLAS, D3FEND, NIST AI RMF & MITRE F3 (Fight Fraud) · agentskills.io standard · Works with Claude Code, GitHub Copilot, Codex CLI, Cursor, Gemini CLI & 20+ platforms · 29 security domains · Apache 2.0",
-      "stars": 35480,
-      "forks": 4322,
+      "stars": 35536,
+      "forks": 4330,
       "openIssues": 68,
       "language": "Python",
       "topics": [
@@ -4530,7 +4938,7 @@
         "threat-intelligence"
       ],
       "pushedAt": "2026-08-31T04:32:44Z",
-      "updatedAt": "2026-11-03T06:52:14Z",
+      "updatedAt": "2026-11-04T06:36:58Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4549,7 +4957,7 @@
         "skills/analyzing-campaign-attribution-evidence/SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:43.756Z",
+      "verifiedAt": "2026-11-04T06:41:04.250Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4561,50 +4969,11 @@
           "date": "2026-11-03",
           "stars": 35480,
           "forks": 4322
-        }
-      ]
-    },
-    {
-      "id": 157846876,
-      "fullName": "motiondivision/motion",
-      "owner": "motiondivision",
-      "repoName": "motion",
-      "url": "https://github.com/motiondivision/motion",
-      "description": "A modern animation library for React and JavaScript",
-      "stars": 34825,
-      "forks": 1499,
-      "openIssues": 19,
-      "language": "TypeScript",
-      "topics": [
-        "animation",
-        "animation-js",
-        "motion",
-        "react",
-        "reactanimations",
-        "spring"
-      ],
-      "pushedAt": "2026-11-02T13:49:35Z",
-      "updatedAt": "2026-11-03T06:55:25Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        ".agents/skills/fix/SKILL.md",
-        ".agents/skills/improve/SKILL.md"
-      ],
-      "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.866Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 34790,
-          "forks": 1494
         },
         {
-          "date": "2026-11-03",
-          "stars": 34825,
-          "forks": 1499
+          "date": "2026-11-04",
+          "stars": 35536,
+          "forks": 4330
         }
       ]
     },
@@ -4615,9 +4984,9 @@
       "repoName": "Claude-Code-Game-Studios",
       "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
       "description": "Turn Claude Code into a full game dev studio — 49 AI agents, 72 workflow skills, and a complete coordination system mirroring real studio hierarchy.",
-      "stars": 33893,
-      "forks": 4543,
-      "openIssues": 92,
+      "stars": 34894,
+      "forks": 4619,
+      "openIssues": 93,
       "language": "Shell",
       "topics": [
         "ai-agents",
@@ -4634,7 +5003,7 @@
         "unreal-engine"
       ],
       "pushedAt": "2026-10-19T02:43:42Z",
-      "updatedAt": "2026-11-03T06:57:27Z",
+      "updatedAt": "2026-11-04T06:36:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4653,13 +5022,67 @@
         ".claude/skills/code-review/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.898Z",
+      "verifiedAt": "2026-11-04T06:41:04.288Z",
       "firstObservedAt": "2026-11-03",
       "history": [
         {
           "date": "2026-11-03",
           "stars": 33893,
           "forks": 4543
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 34894,
+          "forks": 4619
+        }
+      ]
+    },
+    {
+      "id": 157846876,
+      "fullName": "motiondivision/motion",
+      "owner": "motiondivision",
+      "repoName": "motion",
+      "url": "https://github.com/motiondivision/motion",
+      "description": "A modern animation library for React and JavaScript",
+      "stars": 34870,
+      "forks": 1504,
+      "openIssues": 12,
+      "language": "TypeScript",
+      "topics": [
+        "animation",
+        "animation-js",
+        "motion",
+        "react",
+        "reactanimations",
+        "spring"
+      ],
+      "pushedAt": "2026-11-04T06:29:07Z",
+      "updatedAt": "2026-11-04T06:39:18Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        ".agents/skills/fix/SKILL.md",
+        ".agents/skills/improve/SKILL.md"
+      ],
+      "readmeRelevance": 75,
+      "verifiedAt": "2026-11-04T06:41:04.366Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 34790,
+          "forks": 1494
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 34825,
+          "forks": 1499
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 34870,
+          "forks": 1504
         }
       ]
     },
@@ -4670,13 +5093,13 @@
       "repoName": "oh-my-codex",
       "url": "https://github.com/Yeachan-Heo/oh-my-codex",
       "description": "OmX - Oh My codeX: Your codex is not alone. Add hooks, agent teams, HUDs, and so much more.",
-      "stars": 33700,
+      "stars": 33709,
       "forks": 2546,
-      "openIssues": 10,
+      "openIssues": 11,
       "language": "TypeScript",
       "topics": [],
       "pushedAt": "2026-11-03T05:25:27Z",
-      "updatedAt": "2026-11-03T06:19:58Z",
+      "updatedAt": "2026-11-04T06:27:54Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4695,7 +5118,7 @@
         "plugins/oh-my-codex/skills/doctor/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.955Z",
+      "verifiedAt": "2026-11-04T06:41:04.444Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4707,6 +5130,60 @@
           "date": "2026-11-03",
           "stars": 33700,
           "forks": 2546
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 33709,
+          "forks": 2546
+        }
+      ]
+    },
+    {
+      "id": 1112540808,
+      "fullName": "vercel-labs/agent-skills",
+      "owner": "vercel-labs",
+      "repoName": "agent-skills",
+      "url": "https://github.com/vercel-labs/agent-skills",
+      "description": "Vercel's official collection of agent skills",
+      "stars": 33501,
+      "forks": 2934,
+      "openIssues": 192,
+      "language": "JavaScript",
+      "topics": [],
+      "pushedAt": "2026-10-28T19:17:28Z",
+      "updatedAt": "2026-11-04T06:19:25Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        "skills/composition-patterns/SKILL.md",
+        "skills/deploy-to-vercel/SKILL.md",
+        "skills/react-best-practices/SKILL.md",
+        "skills/react-native-skills/SKILL.md",
+        "skills/react-view-transitions/SKILL.md",
+        "skills/vercel-cli-with-tokens/SKILL.md",
+        "skills/vercel-optimize/SKILL.md",
+        "skills/web-design-guidelines/SKILL.md",
+        "skills/writing-guidelines/SKILL.md"
+      ],
+      "readmeRelevance": 65,
+      "verifiedAt": "2026-11-04T06:41:04.492Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 33376,
+          "forks": 2924
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 33432,
+          "forks": 2928
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 33501,
+          "forks": 2934
         }
       ]
     },
@@ -4717,9 +5194,9 @@
       "repoName": "remix",
       "url": "https://github.com/remix-run/remix",
       "description": "The fully-stacked web framework",
-      "stars": 33440,
-      "forks": 2798,
-      "openIssues": 87,
+      "stars": 33443,
+      "forks": 2795,
+      "openIssues": 79,
       "language": "TypeScript",
       "topics": [
         "remix",
@@ -4727,8 +5204,8 @@
         "web-application",
         "web-development"
       ],
-      "pushedAt": "2026-11-03T00:12:41Z",
-      "updatedAt": "2026-11-03T03:06:00Z",
+      "pushedAt": "2026-11-04T01:48:26Z",
+      "updatedAt": "2026-11-04T00:43:00Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4747,7 +5224,7 @@
         ".agents/skills/supersede-pr/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:43.992Z",
+      "verifiedAt": "2026-11-04T06:41:04.645Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4759,50 +5236,11 @@
           "date": "2026-11-03",
           "stars": 33440,
           "forks": 2798
-        }
-      ]
-    },
-    {
-      "id": 1112540808,
-      "fullName": "vercel-labs/agent-skills",
-      "owner": "vercel-labs",
-      "repoName": "agent-skills",
-      "url": "https://github.com/vercel-labs/agent-skills",
-      "description": "Vercel's official collection of agent skills",
-      "stars": 33432,
-      "forks": 2928,
-      "openIssues": 192,
-      "language": "JavaScript",
-      "topics": [],
-      "pushedAt": "2026-10-28T19:17:28Z",
-      "updatedAt": "2026-11-03T06:56:25Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        "skills/composition-patterns/SKILL.md",
-        "skills/deploy-to-vercel/SKILL.md",
-        "skills/react-best-practices/SKILL.md",
-        "skills/react-native-skills/SKILL.md",
-        "skills/react-view-transitions/SKILL.md",
-        "skills/vercel-cli-with-tokens/SKILL.md",
-        "skills/vercel-optimize/SKILL.md",
-        "skills/web-design-guidelines/SKILL.md",
-        "skills/writing-guidelines/SKILL.md"
-      ],
-      "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:43.975Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 33376,
-          "forks": 2924
         },
         {
-          "date": "2026-11-03",
-          "stars": 33432,
-          "forks": 2928
+          "date": "2026-11-04",
+          "stars": 33443,
+          "forks": 2795
         }
       ]
     },
@@ -4814,7 +5252,7 @@
       "url": "https://github.com/binarywang/WxJava",
       "description": "微信开发 Java SDK ，支持包括微信支付，开放平台，小程序，企业微信，视频号，公众号等的后端开发",
       "stars": 33178,
-      "forks": 9039,
+      "forks": 9038,
       "openIssues": 11,
       "language": "Java",
       "topics": [
@@ -4835,7 +5273,7 @@
         "wxpay"
       ],
       "pushedAt": "2026-11-02T06:34:11Z",
-      "updatedAt": "2026-11-03T06:54:50Z",
+      "updatedAt": "2026-11-04T05:30:40Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "develop",
@@ -4847,7 +5285,7 @@
         "skills/wxjava-upgrade-guide/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.136Z",
+      "verifiedAt": "2026-11-04T06:41:04.589Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4859,6 +5297,11 @@
           "date": "2026-11-03",
           "stars": 33178,
           "forks": 9039
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 33178,
+          "forks": 9038
         }
       ]
     },
@@ -4869,9 +5312,9 @@
       "repoName": "cognee",
       "url": "https://github.com/topoteretes/cognee",
       "description": "Cognee is the open-source AI memory platform for agents. Give your AI agents persistent long-term memory with small models for free",
-      "stars": 33019,
-      "forks": 3450,
-      "openIssues": 1080,
+      "stars": 33042,
+      "forks": 3456,
+      "openIssues": 1088,
       "language": "Python",
       "topics": [
         "agent-memory",
@@ -4894,8 +5337,8 @@
         "open-source",
         "vector-database"
       ],
-      "pushedAt": "2026-11-03T05:42:57Z",
-      "updatedAt": "2026-11-03T06:17:27Z",
+      "pushedAt": "2026-11-04T06:20:35Z",
+      "updatedAt": "2026-11-04T06:36:12Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4914,7 +5357,7 @@
         ".agents/skills/cognee-performance/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.111Z",
+      "verifiedAt": "2026-11-04T06:41:04.600Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4926,6 +5369,11 @@
           "date": "2026-11-03",
           "stars": 33019,
           "forks": 3450
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 33042,
+          "forks": 3456
         }
       ]
     },
@@ -4936,9 +5384,9 @@
       "repoName": "OfficeCLI",
       "url": "https://github.com/iOfficeAI/OfficeCLI",
       "description": "OfficeCLI is the first and best Office suite  purpose-built for AI agents to read, edit, and automate Word, Excel, and PowerPoint files. Free, open-source, single binary, no Office installation required.",
-      "stars": 32958,
-      "forks": 2244,
-      "openIssues": 140,
+      "stars": 33004,
+      "forks": 2249,
+      "openIssues": 141,
       "language": "C#",
       "topics": [
         "agent",
@@ -4957,7 +5405,7 @@
         "xlsx"
       ],
       "pushedAt": "2026-10-30T06:48:51Z",
-      "updatedAt": "2026-11-03T06:55:33Z",
+      "updatedAt": "2026-11-04T06:18:08Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -4976,7 +5424,7 @@
         "skills/officecli/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.099Z",
+      "verifiedAt": "2026-11-04T06:41:04.565Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -4988,6 +5436,11 @@
           "date": "2026-11-03",
           "stars": 32958,
           "forks": 2244
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 33004,
+          "forks": 2249
         }
       ]
     },
@@ -4998,7 +5451,7 @@
       "repoName": "invisible_dots",
       "url": "https://github.com/feder-cr/invisible_dots",
       "description": "Open-source, self-hosted alternative to OpenAI Dots, Grok Bot. Built to be undetectable by anti-bot systems.",
-      "stars": 32363,
+      "stars": 32384,
       "forks": 4739,
       "openIssues": 5,
       "language": "TypeScript",
@@ -5024,8 +5477,8 @@
         "self-hosted",
         "stealth-browser"
       ],
-      "pushedAt": "2026-10-31T06:28:10Z",
-      "updatedAt": "2026-11-03T06:38:07Z",
+      "pushedAt": "2026-11-04T06:32:29Z",
+      "updatedAt": "2026-11-04T06:21:59Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5033,7 +5486,7 @@
         "invisible_engine_dots/skills/invisible-playwright/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.153Z",
+      "verifiedAt": "2026-11-04T06:41:04.650Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5045,6 +5498,11 @@
           "date": "2026-11-03",
           "stars": 32363,
           "forks": 4739
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 32384,
+          "forks": 4739
         }
       ]
     },
@@ -5055,8 +5513,8 @@
       "repoName": "cli",
       "url": "https://github.com/googleworkspace/cli",
       "description": "Google Workspace CLI — one command-line tool for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more. Dynamically built from Google Discovery Service. Includes AI agent skills.",
-      "stars": 32074,
-      "forks": 1980,
+      "stars": 32093,
+      "forks": 1981,
       "openIssues": 137,
       "language": "Rust",
       "topics": [
@@ -5078,7 +5536,7 @@
         "rust"
       ],
       "pushedAt": "2026-11-03T01:37:22Z",
-      "updatedAt": "2026-11-03T05:30:48Z",
+      "updatedAt": "2026-11-04T05:17:17Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5097,7 +5555,7 @@
         "skills/gws-events-renew/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:44.211Z",
+      "verifiedAt": "2026-11-04T06:41:04.640Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5109,6 +5567,11 @@
           "date": "2026-11-03",
           "stars": 32074,
           "forks": 1980
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 32093,
+          "forks": 1981
         }
       ]
     },
@@ -5119,8 +5582,8 @@
       "repoName": "frontend-slides",
       "url": "https://github.com/zarazhangrui/frontend-slides",
       "description": "Create beautiful slides on the web using a coding agent's frontend skills",
-      "stars": 31780,
-      "forks": 2436,
+      "stars": 31839,
+      "forks": 2442,
       "openIssues": 71,
       "language": "JavaScript",
       "topics": [
@@ -5136,7 +5599,7 @@
         "vibe-coding"
       ],
       "pushedAt": "2026-06-23T20:08:19Z",
-      "updatedAt": "2026-11-03T06:55:58Z",
+      "updatedAt": "2026-11-04T06:37:47Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5145,7 +5608,7 @@
         "plugins/frontend-slides/skills/frontend-slides/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.165Z",
+      "verifiedAt": "2026-11-04T06:41:04.643Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5157,6 +5620,11 @@
           "date": "2026-11-03",
           "stars": 31780,
           "forks": 2436
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 31839,
+          "forks": 2442
         }
       ]
     },
@@ -5167,13 +5635,13 @@
       "repoName": "gbrain",
       "url": "https://github.com/garrytan/gbrain",
       "description": "Garry's Opinionated OpenClaw/Hermes Agent Brain",
-      "stars": 31476,
-      "forks": 4692,
-      "openIssues": 485,
+      "stars": 31508,
+      "forks": 4695,
+      "openIssues": 537,
       "language": "TypeScript",
       "topics": [],
-      "pushedAt": "2026-11-03T06:30:20Z",
-      "updatedAt": "2026-11-03T06:55:13Z",
+      "pushedAt": "2026-11-04T06:04:16Z",
+      "updatedAt": "2026-11-04T04:18:03Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -5192,7 +5660,7 @@
         "plugin-variants/gbrain-coding/skills/idea-lineage/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.489Z",
+      "verifiedAt": "2026-11-04T06:41:04.935Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5204,6 +5672,11 @@
           "date": "2026-11-03",
           "stars": 31476,
           "forks": 4692
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 31508,
+          "forks": 4695
         }
       ]
     },
@@ -5214,9 +5687,9 @@
       "repoName": "OpenCLI",
       "url": "https://github.com/jackwener/OpenCLI",
       "description": "Make Any Website into CLI & Use your logged-in browser by AI agent. ",
-      "stars": 30840,
-      "forks": 3027,
-      "openIssues": 328,
+      "stars": 30862,
+      "forks": 3032,
+      "openIssues": 332,
       "language": "JavaScript",
       "topics": [
         "ai-agent",
@@ -5228,7 +5701,7 @@
         "playwright"
       ],
       "pushedAt": "2026-10-26T07:53:40Z",
-      "updatedAt": "2026-11-03T06:11:09Z",
+      "updatedAt": "2026-11-04T06:40:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5240,7 +5713,7 @@
         "skills/smart-search/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.238Z",
+      "verifiedAt": "2026-11-04T06:41:04.776Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5252,6 +5725,11 @@
           "date": "2026-11-03",
           "stars": 30840,
           "forks": 3027
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 30862,
+          "forks": 3032
         }
       ]
     },
@@ -5262,13 +5740,13 @@
       "repoName": "video-use",
       "url": "https://github.com/browser-use/video-use",
       "description": "Edit videos with coding agents",
-      "stars": 30438,
-      "forks": 3534,
-      "openIssues": 162,
+      "stars": 30510,
+      "forks": 3541,
+      "openIssues": 163,
       "language": "Python",
       "topics": [],
       "pushedAt": "2026-10-08T22:17:01Z",
-      "updatedAt": "2026-11-03T06:55:52Z",
+      "updatedAt": "2026-11-04T06:37:55Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5277,7 +5755,7 @@
         "skills/manim-video/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.375Z",
+      "verifiedAt": "2026-11-04T06:41:05.207Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5289,6 +5767,11 @@
           "date": "2026-11-03",
           "stars": 30438,
           "forks": 3534
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 30510,
+          "forks": 3541
         }
       ]
     },
@@ -5299,9 +5782,9 @@
       "repoName": "agentmemory",
       "url": "https://github.com/rohitg00/agentmemory",
       "description": "#1 Persistent memory for AI coding agents based on real-world benchmarks",
-      "stars": 30103,
-      "forks": 2663,
-      "openIssues": 537,
+      "stars": 30122,
+      "forks": 2666,
+      "openIssues": 525,
       "language": "TypeScript",
       "topics": [
         "agentmemory",
@@ -5321,8 +5804,8 @@
         "opencode",
         "pi"
       ],
-      "pushedAt": "2026-11-02T06:15:04Z",
-      "updatedAt": "2026-11-03T06:56:29Z",
+      "pushedAt": "2026-11-04T06:27:48Z",
+      "updatedAt": "2026-11-04T06:25:07Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5341,7 +5824,7 @@
         "plugin/skills/memory-discipline/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.388Z",
+      "verifiedAt": "2026-11-04T06:41:04.805Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5353,6 +5836,11 @@
           "date": "2026-11-03",
           "stars": 30103,
           "forks": 2663
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 30122,
+          "forks": 2666
         }
       ]
     },
@@ -5363,13 +5851,13 @@
       "repoName": "picoclaw",
       "url": "https://github.com/sipeed/picoclaw",
       "description": "Tiny, Fast, and Deployable anywhere — automate the mundane, unleash your creativity",
-      "stars": 30089,
-      "forks": 4416,
-      "openIssues": 29,
+      "stars": 30091,
+      "forks": 4419,
+      "openIssues": 28,
       "language": "Go",
       "topics": [],
       "pushedAt": "2026-10-30T18:08:20Z",
-      "updatedAt": "2026-11-03T06:25:56Z",
+      "updatedAt": "2026-11-04T05:54:21Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5384,7 +5872,7 @@
         "workspace/skills/weather/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.409Z",
+      "verifiedAt": "2026-11-04T06:41:04.903Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5396,6 +5884,11 @@
           "date": "2026-11-03",
           "stars": 30089,
           "forks": 4416
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 30091,
+          "forks": 4419
         }
       ]
     },
@@ -5405,10 +5898,10 @@
       "owner": "alirezarezvani",
       "repoName": "claude-skills",
       "url": "https://github.com/alirezarezvani/claude-skills",
-      "description": "380 Claude Code skills & agent skills & plugins (30+ Agents, 70+ custom commands, 380+ skills, customizable references, scripts)for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory, research, business operations, commercial & finance, and your daily productivity skills.",
-      "stars": 29192,
-      "forks": 4056,
-      "openIssues": 4,
+      "description": "410 Claude Code skills & agent skills & plugins (120+ Agents, custom commands, 410+ skills, customizable references, scripts)for Claude Code, Codex, Gemini CLI, Cursor, and 8 more coding agents — engineering, marketing, product, compliance, C-level advisory, research, business operations, commercial & finance, and your daily productivity skills.",
+      "stars": 29255,
+      "forks": 4062,
+      "openIssues": 1,
       "language": "Python",
       "topics": [
         "agent-plugins",
@@ -5432,8 +5925,8 @@
         "openclaw-skills",
         "prompt-engineering"
       ],
-      "pushedAt": "2026-11-02T15:50:08Z",
-      "updatedAt": "2026-11-03T06:44:51Z",
+      "pushedAt": "2026-11-03T17:59:48Z",
+      "updatedAt": "2026-11-04T06:22:31Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5452,7 +5945,7 @@
         ".gemini/skills/cs-demand-gen-specialist/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.503Z",
+      "verifiedAt": "2026-11-04T06:41:04.981Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5464,6 +5957,11 @@
           "date": "2026-11-03",
           "stars": 29192,
           "forks": 4056
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 29255,
+          "forks": 4062
         }
       ]
     },
@@ -5474,8 +5972,8 @@
       "repoName": "guizang-ppt-skill",
       "url": "https://github.com/op7418/guizang-ppt-skill",
       "description": "AI-agent Skill for generating polished HTML slide decks: editorial magazine and Swiss layouts, image prompts, social covers, and a WebGL/low-power presentation runtime.",
-      "stars": 29176,
-      "forks": 2001,
+      "stars": 29231,
+      "forks": 2007,
       "openIssues": 53,
       "language": "HTML",
       "topics": [
@@ -5492,7 +5990,7 @@
         "web-ppt"
       ],
       "pushedAt": "2026-10-30T12:45:28Z",
-      "updatedAt": "2026-11-03T06:54:02Z",
+      "updatedAt": "2026-11-04T06:36:06Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5500,7 +5998,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:44.512Z",
+      "verifiedAt": "2026-11-04T06:41:04.869Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5512,6 +6010,11 @@
           "date": "2026-11-03",
           "stars": 29176,
           "forks": 2001
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 29231,
+          "forks": 2007
         }
       ]
     },
@@ -5522,9 +6025,9 @@
       "repoName": "repomix",
       "url": "https://github.com/yamadashy/repomix",
       "description": "📦 Repomix is a powerful tool that packs your entire repository into a single, AI-friendly file. Perfect for when you need to feed your codebase to Large Language Models (LLMs) or other AI tools like Claude, ChatGPT, DeepSeek, Perplexity, Gemini, Gemma, Llama, Grok, and more.",
-      "stars": 29129,
-      "forks": 1615,
-      "openIssues": 141,
+      "stars": 29147,
+      "forks": 1619,
+      "openIssues": 142,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -5548,8 +6051,8 @@
         "openai",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T04:46:34Z",
-      "updatedAt": "2026-11-03T06:19:40Z",
+      "pushedAt": "2026-11-03T12:10:58Z",
+      "updatedAt": "2026-11-04T06:22:12Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5562,7 +6065,7 @@
         "website/.claude/skills/website-maintainer/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.435Z",
+      "verifiedAt": "2026-11-04T06:41:04.851Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5574,51 +6077,11 @@
           "date": "2026-11-03",
           "stars": 29129,
           "forks": 1615
-        }
-      ]
-    },
-    {
-      "id": 987670088,
-      "fullName": "charmbracelet/crush",
-      "owner": "charmbracelet",
-      "repoName": "crush",
-      "url": "https://github.com/charmbracelet/crush",
-      "description": "Glamourous agentic coding for all 💘",
-      "stars": 28923,
-      "forks": 2348,
-      "openIssues": 533,
-      "language": "Go",
-      "topics": [
-        "agentic-ai",
-        "ai",
-        "llms",
-        "ravishing"
-      ],
-      "pushedAt": "2026-11-03T00:36:07Z",
-      "updatedAt": "2026-11-03T06:30:19Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        ".agents/skills/builtin-skills/SKILL.md",
-        ".agents/skills/shell-builtins/SKILL.md",
-        "internal/skills/builtin/crush-config/SKILL.md",
-        "internal/skills/builtin/crush-hooks/SKILL.md",
-        "internal/skills/builtin/jq/SKILL.md"
-      ],
-      "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.549Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 28909,
-          "forks": 2344
         },
         {
-          "date": "2026-11-03",
-          "stars": 28923,
-          "forks": 2348
+          "date": "2026-11-04",
+          "stars": 29147,
+          "forks": 1619
         }
       ]
     },
@@ -5629,9 +6092,9 @@
       "repoName": "qwen-code",
       "url": "https://github.com/QwenLM/qwen-code",
       "description": "An open-source AI coding agent that lives in your terminal.",
-      "stars": 28910,
-      "forks": 3299,
-      "openIssues": 2098,
+      "stars": 28987,
+      "forks": 3307,
+      "openIssues": 2127,
       "language": "TypeScript",
       "topics": [
         "agentic",
@@ -5647,8 +6110,8 @@
         "terminal",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T06:47:38Z",
-      "updatedAt": "2026-11-03T06:47:25Z",
+      "pushedAt": "2026-11-04T06:36:57Z",
+      "updatedAt": "2026-11-04T06:30:31Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5667,7 +6130,7 @@
         ".qwen/skills/feat-dev/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.911Z",
+      "verifiedAt": "2026-11-04T06:41:05.265Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5679,6 +6142,61 @@
           "date": "2026-11-03",
           "stars": 28910,
           "forks": 3299
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 28987,
+          "forks": 3307
+        }
+      ]
+    },
+    {
+      "id": 987670088,
+      "fullName": "charmbracelet/crush",
+      "owner": "charmbracelet",
+      "repoName": "crush",
+      "url": "https://github.com/charmbracelet/crush",
+      "description": "Glamourous agentic coding for all 💘",
+      "stars": 28945,
+      "forks": 2351,
+      "openIssues": 537,
+      "language": "Go",
+      "topics": [
+        "agentic-ai",
+        "ai",
+        "llms",
+        "ravishing"
+      ],
+      "pushedAt": "2026-11-03T13:31:53Z",
+      "updatedAt": "2026-11-04T05:12:40Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        ".agents/skills/builtin-skills/SKILL.md",
+        ".agents/skills/shell-builtins/SKILL.md",
+        "internal/skills/builtin/crush-config/SKILL.md",
+        "internal/skills/builtin/crush-hooks/SKILL.md",
+        "internal/skills/builtin/jq/SKILL.md"
+      ],
+      "readmeRelevance": 75,
+      "verifiedAt": "2026-11-04T06:41:05.150Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 28909,
+          "forks": 2344
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 28923,
+          "forks": 2348
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 28945,
+          "forks": 2351
         }
       ]
     },
@@ -5689,8 +6207,8 @@
       "repoName": "huashu-design",
       "url": "https://github.com/alchaincyf/huashu-design",
       "description": "Huashu Design 3.0 · 在 agent 里打一句话，拿回能交付的设计：网页 / App 原型 / 可编辑 PPTX / 动画 / 信息图 · 六个候选挑三个方向 · 84 种带样张的风格库 · 越用越懂你的外观账本与设计体检 · HTML-native design skill for Claude Code, Codex, Cursor & any agent",
-      "stars": 28531,
-      "forks": 3090,
+      "stars": 28617,
+      "forks": 3096,
       "openIssues": 0,
       "language": "HTML",
       "topics": [
@@ -5700,13 +6218,15 @@
         "claude-skills",
         "codex",
         "cursor",
+        "deepseek-harness",
         "design",
+        "dsh-plugin",
         "html",
         "pptx",
         "prototype"
       ],
-      "pushedAt": "2026-10-30T17:51:13Z",
-      "updatedAt": "2026-11-03T06:55:47Z",
+      "pushedAt": "2026-11-04T03:28:47Z",
+      "updatedAt": "2026-11-04T06:40:32Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -5714,7 +6234,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:44.609Z",
+      "verifiedAt": "2026-11-04T06:41:05.037Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5726,6 +6246,11 @@
           "date": "2026-11-03",
           "stars": 28531,
           "forks": 3090
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 28617,
+          "forks": 3096
         }
       ]
     },
@@ -5736,9 +6261,9 @@
       "repoName": "planning-with-files",
       "url": "https://github.com/OthmanAdi/planning-with-files",
       "description": "Persistent file-based planning for AI coding agents and long-running tasks. Crash-proof markdown plans, session recovery after /clear and compaction, per-turn re-injection against context rot, deterministic completion gate. Manus-style. Install from npm, the Claude Code plugin marketplace, or npx skills. Codex, Cursor, OpenCode, 60+ agents.",
-      "stars": 27844,
-      "forks": 2312,
-      "openIssues": 15,
+      "stars": 27863,
+      "forks": 2314,
+      "openIssues": 16,
       "language": "Shell",
       "topics": [
         "agent-skills",
@@ -5763,7 +6288,7 @@
         "session-recovery"
       ],
       "pushedAt": "2026-11-03T02:30:41Z",
-      "updatedAt": "2026-11-03T06:18:29Z",
+      "updatedAt": "2026-11-04T05:17:53Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -5782,7 +6307,7 @@
         ".pi/skills/planning-with-files/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.647Z",
+      "verifiedAt": "2026-11-04T06:41:05.074Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5794,6 +6319,11 @@
           "date": "2026-11-03",
           "stars": 27844,
           "forks": 2312
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 27863,
+          "forks": 2314
         }
       ]
     },
@@ -5804,8 +6334,8 @@
       "repoName": "pm-skills",
       "url": "https://github.com/phuryn/pm-skills",
       "description": "PM Skills Marketplace: 100+ agentic skills, commands, and plugins — from discovery to strategy, execution, launch, and growth.",
-      "stars": 27645,
-      "forks": 2855,
+      "stars": 27672,
+      "forks": 2863,
       "openIssues": 49,
       "language": "",
       "topics": [
@@ -5818,7 +6348,7 @@
         "product-management"
       ],
       "pushedAt": "2026-10-29T19:09:57Z",
-      "updatedAt": "2026-11-03T06:34:10Z",
+      "updatedAt": "2026-11-04T06:40:41Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5837,7 +6367,7 @@
         "pm-execution/skills/pre-mortem/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.691Z",
+      "verifiedAt": "2026-11-04T06:41:05.115Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5849,6 +6379,11 @@
           "date": "2026-11-03",
           "stars": 27645,
           "forks": 2855
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 27672,
+          "forks": 2863
         }
       ]
     },
@@ -5859,8 +6394,8 @@
       "repoName": "baoyu-skills",
       "url": "https://github.com/JimLiu/baoyu-skills",
       "description": "",
-      "stars": 27226,
-      "forks": 2968,
+      "stars": 27254,
+      "forks": 2969,
       "openIssues": 1,
       "language": "TypeScript",
       "topics": [
@@ -5870,7 +6405,7 @@
         "openclaw-skills"
       ],
       "pushedAt": "2026-11-02T19:25:27Z",
-      "updatedAt": "2026-11-03T06:43:51Z",
+      "updatedAt": "2026-11-04T06:28:13Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5889,7 +6424,7 @@
         "skills/baoyu-infographic/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.723Z",
+      "verifiedAt": "2026-11-04T06:41:05.168Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5901,6 +6436,11 @@
           "date": "2026-11-03",
           "stars": 27226,
           "forks": 2968
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 27254,
+          "forks": 2969
         }
       ]
     },
@@ -5911,8 +6451,8 @@
       "repoName": "distilly",
       "url": "https://github.com/titanwings/distilly",
       "description": "Distilly — Distill how they think into reusable Skills for any Agent or Bot. Formerly Colleague Skill（原同事 Skill）.",
-      "stars": 26319,
-      "forks": 2243,
+      "stars": 26354,
+      "forks": 2244,
       "openIssues": 72,
       "language": "Python",
       "topics": [
@@ -5937,7 +6477,7 @@
         "personal-agent"
       ],
       "pushedAt": "2026-10-13T05:57:17Z",
-      "updatedAt": "2026-11-03T06:20:05Z",
+      "updatedAt": "2026-11-04T06:09:17Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "dot-skill",
@@ -5945,7 +6485,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:44.739Z",
+      "verifiedAt": "2026-11-04T06:41:05.250Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -5957,6 +6497,11 @@
           "date": "2026-11-03",
           "stars": 26319,
           "forks": 2243
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 26354,
+          "forks": 2244
         }
       ]
     },
@@ -5967,9 +6512,9 @@
       "repoName": "watermarks-remover",
       "url": "https://github.com/guillaumemeyer/watermarks-remover",
       "description": "A privacy-first app that strips AI watermarks from content you own.",
-      "stars": 26048,
-      "forks": 2965,
-      "openIssues": 41,
+      "stars": 26186,
+      "forks": 2983,
+      "openIssues": 43,
       "language": "Python",
       "topics": [
         "agent-skill",
@@ -5989,7 +6534,7 @@
         "watermarks"
       ],
       "pushedAt": "2026-11-02T20:26:10Z",
-      "updatedAt": "2026-11-03T06:44:34Z",
+      "updatedAt": "2026-11-04T06:20:07Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -5998,7 +6543,7 @@
         "skills/remove-ai-marks/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.781Z",
+      "verifiedAt": "2026-11-04T06:41:05.268Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6010,6 +6555,11 @@
           "date": "2026-11-03",
           "stars": 26048,
           "forks": 2965
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 26186,
+          "forks": 2983
         }
       ]
     },
@@ -6020,16 +6570,16 @@
       "repoName": "compound-engineering-plugin",
       "url": "https://github.com/EveryInc/compound-engineering-plugin",
       "description": "Official Compound Engineering plugin for Claude Code, Codex, Cursor, and more",
-      "stars": 25876,
-      "forks": 2056,
+      "stars": 25905,
+      "forks": 2059,
       "openIssues": 96,
       "language": "TypeScript",
       "topics": [
         "compound",
         "engineering"
       ],
-      "pushedAt": "2026-11-03T03:50:37Z",
-      "updatedAt": "2026-11-03T06:15:00Z",
+      "pushedAt": "2026-11-04T04:48:30Z",
+      "updatedAt": "2026-11-04T04:47:01Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6048,7 +6598,7 @@
         "skills/ce-dogfood/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:44.860Z",
+      "verifiedAt": "2026-11-04T06:41:05.367Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6060,6 +6610,11 @@
           "date": "2026-11-03",
           "stars": 25876,
           "forks": 2056
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 25905,
+          "forks": 2059
         }
       ]
     },
@@ -6070,9 +6625,9 @@
       "repoName": "editor",
       "url": "https://github.com/pascalorg/editor",
       "description": "Open-source 3D architectural editor with a local CLI, MCP tools, and practical workflows for humans and AI agents.",
-      "stars": 25289,
-      "forks": 3144,
-      "openIssues": 60,
+      "stars": 25313,
+      "forks": 3147,
+      "openIssues": 64,
       "language": "TypeScript",
       "topics": [
         "3d",
@@ -6094,8 +6649,8 @@
         "threejs",
         "typescript"
       ],
-      "pushedAt": "2026-11-03T02:05:10Z",
-      "updatedAt": "2026-11-03T06:12:42Z",
+      "pushedAt": "2026-11-03T20:36:23Z",
+      "updatedAt": "2026-11-04T06:34:45Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6106,7 +6661,7 @@
         "skills/pascal-3d/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:44.947Z",
+      "verifiedAt": "2026-11-04T06:41:05.569Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6118,6 +6673,11 @@
           "date": "2026-11-03",
           "stars": 25289,
           "forks": 3144
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 25313,
+          "forks": 3147
         }
       ]
     },
@@ -6128,9 +6688,9 @@
       "repoName": "nocobase",
       "url": "https://github.com/nocobase/nocobase",
       "description": "NocoBase is the open-source platform for building, running, and evolving business systems with AI. Agents write the code and do the work, NocoBase provides the foundation and governance, and people make the decisions.",
-      "stars": 24824,
-      "forks": 2948,
-      "openIssues": 350,
+      "stars": 24835,
+      "forks": 2949,
+      "openIssues": 345,
       "language": "TypeScript",
       "topics": [
         "admin-dashboard",
@@ -6154,8 +6714,8 @@
         "workflow-engine",
         "workflows"
       ],
-      "pushedAt": "2026-11-03T05:35:01Z",
-      "updatedAt": "2026-11-03T06:33:29Z",
+      "pushedAt": "2026-11-04T05:57:05Z",
+      "updatedAt": "2026-11-04T05:19:03Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "v3-develop",
@@ -6174,7 +6734,7 @@
         "packages/plugins/app-plugin-authentication/skills/nocobase-app-plugin-authentication/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:45.172Z",
+      "verifiedAt": "2026-11-04T06:41:05.758Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6186,6 +6746,57 @@
           "date": "2026-11-03",
           "stars": 24824,
           "forks": 2948
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 24835,
+          "forks": 2949
+        }
+      ]
+    },
+    {
+      "id": 1410124849,
+      "fullName": "wheresryan22/anatomy",
+      "owner": "wheresryan22",
+      "repoName": "anatomy",
+      "url": "https://github.com/wheresryan22/anatomy",
+      "description": "An agent skill for creating detailed, interactive isometric illustrations of real-world machines and complex systems. Generates polished SVGs with optional WebGL shaders and 3D effects.",
+      "stars": 24570,
+      "forks": 2050,
+      "openIssues": 71,
+      "language": "JavaScript",
+      "topics": [
+        "agent-skill",
+        "open-source",
+        "svg",
+        "vizualization"
+      ],
+      "pushedAt": "2026-10-18T20:20:24Z",
+      "updatedAt": "2026-11-04T06:39:10Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        "SKILL.md"
+      ],
+      "readmeRelevance": 55,
+      "verifiedAt": "2026-11-04T06:41:05.427Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 23875,
+          "forks": 1995
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 24204,
+          "forks": 2022
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 24570,
+          "forks": 2050
         }
       ]
     },
@@ -6196,13 +6807,13 @@
       "repoName": "openwork",
       "url": "https://github.com/different-ai/openwork",
       "description": "The open-source alternative to Claude Cowork (powered by opencode)",
-      "stars": 24380,
-      "forks": 2476,
-      "openIssues": 350,
+      "stars": 24390,
+      "forks": 2479,
+      "openIssues": 366,
       "language": "TypeScript",
       "topics": [],
-      "pushedAt": "2026-11-03T06:57:59Z",
-      "updatedAt": "2026-11-03T06:45:21Z",
+      "pushedAt": "2026-11-04T06:28:05Z",
+      "updatedAt": "2026-11-04T05:42:16Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "dev",
@@ -6221,7 +6832,7 @@
         ".opencode/skills/get-env-var/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:45.141Z",
+      "verifiedAt": "2026-11-04T06:41:05.611Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6233,47 +6844,11 @@
           "date": "2026-11-03",
           "stars": 24380,
           "forks": 2476
-        }
-      ]
-    },
-    {
-      "id": 1410124849,
-      "fullName": "wheresryan22/anatomy",
-      "owner": "wheresryan22",
-      "repoName": "anatomy",
-      "url": "https://github.com/wheresryan22/anatomy",
-      "description": "An agent skill for creating detailed, interactive isometric illustrations of real-world machines and complex systems. Generates polished SVGs with optional WebGL shaders and 3D effects.",
-      "stars": 24204,
-      "forks": 2022,
-      "openIssues": 71,
-      "language": "JavaScript",
-      "topics": [
-        "agent-skill",
-        "open-source",
-        "svg",
-        "vizualization"
-      ],
-      "pushedAt": "2026-10-18T20:20:24Z",
-      "updatedAt": "2026-11-03T06:55:35Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        "SKILL.md"
-      ],
-      "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:44.990Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 23875,
-          "forks": 1995
         },
         {
-          "date": "2026-11-03",
-          "stars": 24204,
-          "forks": 2022
+          "date": "2026-11-04",
+          "stars": 24390,
+          "forks": 2479
         }
       ]
     },
@@ -6284,9 +6859,9 @@
       "repoName": "SkillSpector",
       "url": "https://github.com/NVIDIA/SkillSpector",
       "description": "Security scanner for AI agent skills. Detect vulnerabilities, malicious patterns, security risks, prompt injection, data exfiltration, and supply-chain risks in Claude Code, Codex, and MCP skills before you install them.",
-      "stars": 24062,
-      "forks": 2075,
-      "openIssues": 138,
+      "stars": 24253,
+      "forks": 2088,
+      "openIssues": 153,
       "language": "Python",
       "topics": [
         "agent-security",
@@ -6301,8 +6876,8 @@
         "security-workflow",
         "supply-chain-security"
       ],
-      "pushedAt": "2026-11-03T06:20:40Z",
-      "updatedAt": "2026-11-03T06:57:43Z",
+      "pushedAt": "2026-11-04T05:44:24Z",
+      "updatedAt": "2026-11-04T06:34:39Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6310,7 +6885,7 @@
         "skills/skill-inspector/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:45.112Z",
+      "verifiedAt": "2026-11-04T06:41:05.529Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6322,6 +6897,11 @@
           "date": "2026-11-03",
           "stars": 24062,
           "forks": 2075
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 24253,
+          "forks": 2088
         }
       ]
     },
@@ -6332,13 +6912,13 @@
       "repoName": "vibe-coding-cn",
       "url": "https://github.com/2025Emma/vibe-coding-cn",
       "description": "",
-      "stars": 23130,
+      "stars": 23139,
       "forks": 2422,
       "openIssues": 8,
       "language": "Python",
       "topics": [],
       "pushedAt": "2025-12-17T00:11:18Z",
-      "updatedAt": "2026-11-03T06:31:33Z",
+      "updatedAt": "2026-11-04T06:28:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6357,7 +6937,7 @@
         "i18n/en/skills/telegram-dev/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:45.131Z",
+      "verifiedAt": "2026-11-04T06:41:05.514Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6369,6 +6949,11 @@
           "date": "2026-11-03",
           "stars": 23130,
           "forks": 2422
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 23139,
+          "forks": 2422
         }
       ]
     },
@@ -6379,13 +6964,13 @@
       "repoName": "AI-Trader",
       "url": "https://github.com/HKUDS/AI-Trader",
       "description": "\"AI-Trader: 100% Fully-Automated Agent-Native Trading\"  ",
-      "stars": 23087,
-      "forks": 3473,
+      "stars": 23099,
+      "forks": 3476,
       "openIssues": 70,
       "language": "Python",
       "topics": [],
       "pushedAt": "2026-06-11T09:26:03Z",
-      "updatedAt": "2026-11-03T06:51:51Z",
+      "updatedAt": "2026-11-04T06:22:21Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6398,7 +6983,7 @@
         "skills/tradesync/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:45.176Z",
+      "verifiedAt": "2026-11-04T06:41:05.583Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6410,6 +6995,11 @@
           "date": "2026-11-03",
           "stars": 23087,
           "forks": 3473
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 23099,
+          "forks": 3476
         }
       ]
     },
@@ -6420,13 +7010,13 @@
       "repoName": "Humanizer-zh",
       "url": "https://github.com/op7418/Humanizer-zh",
       "description": "Humanizer 的汉化版本，Claude Code Skills，旨在消除文本中 AI 生成的痕迹。",
-      "stars": 21821,
-      "forks": 1373,
+      "stars": 21926,
+      "forks": 1381,
       "openIssues": 34,
       "language": "Python",
       "topics": [],
       "pushedAt": "2026-09-23T02:24:28Z",
-      "updatedAt": "2026-11-03T06:53:09Z",
+      "updatedAt": "2026-11-04T06:39:41Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6434,7 +7024,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:45.186Z",
+      "verifiedAt": "2026-11-04T06:41:05.603Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6446,6 +7036,11 @@
           "date": "2026-11-03",
           "stars": 21821,
           "forks": 1373
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 21926,
+          "forks": 1381
         }
       ]
     },
@@ -6456,9 +7051,9 @@
       "repoName": "ego-lite",
       "url": "https://github.com/citrolabs/ego-lite",
       "description": "The fastest browser for AI agents to run browser automation, built for sharing your logged-in browser state with your AI agents, like Codex or Claude Code, without disturbing you. Zero cost, zero config.",
-      "stars": 21404,
-      "forks": 1203,
-      "openIssues": 235,
+      "stars": 21553,
+      "forks": 1212,
+      "openIssues": 236,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -6472,8 +7067,8 @@
         "skills",
         "skills-sh"
       ],
-      "pushedAt": "2026-11-03T06:34:03Z",
-      "updatedAt": "2026-11-03T06:55:59Z",
+      "pushedAt": "2026-11-04T06:38:21Z",
+      "updatedAt": "2026-11-04T06:39:13Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6482,7 +7077,7 @@
         "skills/ego-browser/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.392Z",
+      "verifiedAt": "2026-11-04T06:41:05.767Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6494,6 +7089,11 @@
           "date": "2026-11-03",
           "stars": 21404,
           "forks": 1203
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 21553,
+          "forks": 1212
         }
       ]
     },
@@ -6504,9 +7104,9 @@
       "repoName": "voyager",
       "url": "https://github.com/voyager-crew/voyager",
       "description": "Enhancement suite for Gemini, AI Studio, Claude, ChatGPT & DeepSeek — plus a prompt manager for any website, DeepSeek Harness included. / 面向 Gemini、AI Studio、Claude、ChatGPT 与 DeepSeek 的增强套件；其中的提示词管理器可用于任意网站，如 DeepSeek Harness。",
-      "stars": 20533,
-      "forks": 689,
-      "openIssues": 6,
+      "stars": 20539,
+      "forks": 690,
+      "openIssues": 8,
       "language": "TypeScript",
       "topics": [
         "ai-studio",
@@ -6524,7 +7124,7 @@
         "safari-extension"
       ],
       "pushedAt": "2026-11-02T00:17:49Z",
-      "updatedAt": "2026-11-03T06:22:07Z",
+      "updatedAt": "2026-11-04T06:10:23Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6539,7 +7139,7 @@
         ".agents/skills/writing-docs/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:45.660Z",
+      "verifiedAt": "2026-11-04T06:41:06.054Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6551,6 +7151,11 @@
           "date": "2026-11-03",
           "stars": 20533,
           "forks": 689
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 20539,
+          "forks": 690
         }
       ]
     },
@@ -6561,8 +7166,8 @@
       "repoName": "brag",
       "url": "https://github.com/latent-spaces/brag",
       "description": "You built it. Now brag. Turn the project you just created into a short, shareable launch video with one command.",
-      "stars": 20089,
-      "forks": 1557,
+      "stars": 20204,
+      "forks": 1567,
       "openIssues": 16,
       "language": "Python",
       "topics": [
@@ -6574,7 +7179,7 @@
         "video-generation"
       ],
       "pushedAt": "2026-10-23T21:18:13Z",
-      "updatedAt": "2026-11-03T06:50:01Z",
+      "updatedAt": "2026-11-04T06:25:33Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6583,7 +7188,7 @@
         "skills/brag/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.393Z",
+      "verifiedAt": "2026-11-04T06:41:05.820Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6595,6 +7200,11 @@
           "date": "2026-11-03",
           "stars": 20089,
           "forks": 1557
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 20204,
+          "forks": 1567
         }
       ]
     },
@@ -6605,8 +7215,8 @@
       "repoName": "notebooklm-py",
       "url": "https://github.com/teng-lin/notebooklm-py",
       "description": "Unofficial Python API and agentic skill for Google Gemini Notebook. Full programmatic access to Gemini Notebook's features—including capabilities the web UI doesn't expose—via Python, CLI, and AI agents like Claude Code, Codex, and OpenClaw.",
-      "stars": 20079,
-      "forks": 2672,
+      "stars": 20091,
+      "forks": 2676,
       "openIssues": 25,
       "language": "Python",
       "topics": [
@@ -6625,8 +7235,8 @@
         "sdk",
         "skills"
       ],
-      "pushedAt": "2026-11-01T22:09:59Z",
-      "updatedAt": "2026-11-03T04:15:00Z",
+      "pushedAt": "2026-11-03T16:20:42Z",
+      "updatedAt": "2026-11-04T03:36:45Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6634,7 +7244,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.434Z",
+      "verifiedAt": "2026-11-04T06:41:05.920Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6646,6 +7256,52 @@
           "date": "2026-11-03",
           "stars": 20079,
           "forks": 2672
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 20091,
+          "forks": 2676
+        }
+      ]
+    },
+    {
+      "id": 1219644159,
+      "fullName": "bradautomates/claude-video",
+      "owner": "bradautomates",
+      "repoName": "claude-video",
+      "url": "https://github.com/bradautomates/claude-video",
+      "description": "Give Claude the ability to watch any video. /watch downloads, extracts frames, transcribes, hands it all to Claude.",
+      "stars": 19825,
+      "forks": 2086,
+      "openIssues": 212,
+      "language": "Python",
+      "topics": [],
+      "pushedAt": "2026-09-25T01:25:54Z",
+      "updatedAt": "2026-11-04T06:30:47Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        "skills/watch/SKILL.md"
+      ],
+      "readmeRelevance": 55,
+      "verifiedAt": "2026-11-04T06:41:05.939Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 19694,
+          "forks": 2075
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 19751,
+          "forks": 2079
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 19825,
+          "forks": 2086
         }
       ]
     },
@@ -6656,9 +7312,9 @@
       "repoName": "pua",
       "url": "https://github.com/tanweai/pua",
       "description": "你是一个曾经被寄予厚望的 P8 级工程师。Anthropic 当初给你定级的时候，对你的期望是很高的。  一个agent使用的高能动性的skill。  Your AI has been placed on a PIP. 30 days to show improvement.",
-      "stars": 19790,
-      "forks": 1202,
-      "openIssues": 3,
+      "stars": 19795,
+      "forks": 1203,
+      "openIssues": 4,
       "language": "Python",
       "topics": [
         "agency",
@@ -6667,7 +7323,7 @@
         "pua"
       ],
       "pushedAt": "2026-09-09T10:28:14Z",
-      "updatedAt": "2026-11-03T01:09:06Z",
+      "updatedAt": "2026-11-04T06:30:43Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6686,7 +7342,7 @@
         "skills/pua-ja/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:45.399Z",
+      "verifiedAt": "2026-11-04T06:41:05.974Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6698,42 +7354,11 @@
           "date": "2026-11-03",
           "stars": 19790,
           "forks": 1202
-        }
-      ]
-    },
-    {
-      "id": 1219644159,
-      "fullName": "bradautomates/claude-video",
-      "owner": "bradautomates",
-      "repoName": "claude-video",
-      "url": "https://github.com/bradautomates/claude-video",
-      "description": "Give Claude the ability to watch any video. /watch downloads, extracts frames, transcribes, hands it all to Claude.",
-      "stars": 19751,
-      "forks": 2079,
-      "openIssues": 212,
-      "language": "Python",
-      "topics": [],
-      "pushedAt": "2026-09-25T01:25:54Z",
-      "updatedAt": "2026-11-03T06:21:52Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        "skills/watch/SKILL.md"
-      ],
-      "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:45.566Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 19694,
-          "forks": 2075
         },
         {
-          "date": "2026-11-03",
-          "stars": 19751,
-          "forks": 2079
+          "date": "2026-11-04",
+          "stars": 19795,
+          "forks": 1203
         }
       ]
     },
@@ -6744,9 +7369,9 @@
       "repoName": "LifeOS",
       "url": "https://github.com/danielmiessler/LifeOS",
       "description": "⛰️ LifeOS — The universal AI Harness designed to move you from Current to Ideal state in both life and work.",
-      "stars": 19687,
-      "forks": 2514,
-      "openIssues": 143,
+      "stars": 19695,
+      "forks": 2513,
+      "openIssues": 165,
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -6760,7 +7385,7 @@
         "productivity"
       ],
       "pushedAt": "2026-10-28T04:20:05Z",
-      "updatedAt": "2026-11-03T02:52:47Z",
+      "updatedAt": "2026-11-04T06:24:37Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6779,7 +7404,7 @@
         "LifeOS/install/skills/Brand/SKILL.md"
       ],
       "readmeRelevance": 75,
-      "verifiedAt": "2026-11-03T06:58:45.696Z",
+      "verifiedAt": "2026-11-04T06:41:06.076Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6791,6 +7416,11 @@
           "date": "2026-11-03",
           "stars": 19687,
           "forks": 2514
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 19695,
+          "forks": 2513
         }
       ]
     },
@@ -6801,16 +7431,16 @@
       "repoName": "SkillOpt",
       "url": "https://github.com/microsoft/SkillOpt",
       "description": "SkillOpt is a text-space optimizer that trains reusable natural-language skills for frozen LLM agents through trajectory-driven edits, validation-gated updates, and deployable best_skill.md artifacts.",
-      "stars": 18841,
-      "forks": 1790,
-      "openIssues": 69,
+      "stars": 18876,
+      "forks": 1795,
+      "openIssues": 72,
       "language": "Python",
       "topics": [
         "agent-skills",
         "self-evolving-agents"
       ],
-      "pushedAt": "2026-11-01T14:47:38Z",
-      "updatedAt": "2026-11-03T06:48:22Z",
+      "pushedAt": "2026-11-04T04:30:36Z",
+      "updatedAt": "2026-11-04T06:21:02Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6821,7 +7451,7 @@
         "plugins/dsh/skills/skillopt-sleep/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:45.628Z",
+      "verifiedAt": "2026-11-04T06:41:06.002Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6833,6 +7463,11 @@
           "date": "2026-11-03",
           "stars": 18841,
           "forks": 1790
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 18876,
+          "forks": 1795
         }
       ]
     },
@@ -6843,9 +7478,9 @@
       "repoName": "browser-harness",
       "url": "https://github.com/browser-use/browser-harness",
       "description": "Let Claude Code, Codex or Cursor use your real Chrome, logged in as you. One prompt to set up. Open source, MIT.",
-      "stars": 18828,
-      "forks": 1859,
-      "openIssues": 437,
+      "stars": 18853,
+      "forks": 1860,
+      "openIssues": 438,
       "language": "Python",
       "topics": [
         "ai-agent",
@@ -6869,8 +7504,8 @@
         "vps-agent",
         "web-automation"
       ],
-      "pushedAt": "2026-11-02T20:08:08Z",
-      "updatedAt": "2026-11-03T06:12:33Z",
+      "pushedAt": "2026-11-04T05:23:12Z",
+      "updatedAt": "2026-11-04T06:21:30Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6879,7 +7514,7 @@
         "skills/browser-harness/SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:45.662Z",
+      "verifiedAt": "2026-11-04T06:41:06.036Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6891,6 +7526,11 @@
           "date": "2026-11-03",
           "stars": 18828,
           "forks": 1859
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 18853,
+          "forks": 1860
         }
       ]
     },
@@ -6901,13 +7541,13 @@
       "repoName": "stop-slop",
       "url": "https://github.com/hardikpandya/stop-slop",
       "description": "A skill file for removing AI tells from prose",
-      "stars": 18566,
-      "forks": 1369,
+      "stars": 18588,
+      "forks": 1371,
       "openIssues": 57,
       "language": "",
       "topics": [],
       "pushedAt": "2026-03-17T18:50:39Z",
-      "updatedAt": "2026-11-03T06:25:01Z",
+      "updatedAt": "2026-11-04T06:39:13Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -6915,7 +7555,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 55,
-      "verifiedAt": "2026-11-03T06:58:45.638Z",
+      "verifiedAt": "2026-11-04T06:41:06.130Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6927,6 +7567,11 @@
           "date": "2026-11-03",
           "stars": 18566,
           "forks": 1369
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 18588,
+          "forks": 1371
         }
       ]
     },
@@ -6937,7 +7582,7 @@
       "repoName": "kubesphere",
       "url": "https://github.com/kubesphere/kubesphere",
       "description": "The container platform tailored for Kubernetes multi-cloud, datacenter, and edge management ⎈ 🖥 ☁️",
-      "stars": 17076,
+      "stars": 17075,
       "forks": 2756,
       "openIssues": 351,
       "language": "Go",
@@ -6961,7 +7606,7 @@
         "skillsmp"
       ],
       "pushedAt": "2026-07-15T01:14:39Z",
-      "updatedAt": "2026-11-03T06:08:49Z",
+      "updatedAt": "2026-11-04T03:21:54Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -6980,7 +7625,7 @@
         "skills/kubesphere-devops-tenant/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:46.055Z",
+      "verifiedAt": "2026-11-04T06:41:06.409Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -6992,6 +7637,11 @@
           "date": "2026-11-03",
           "stars": 17076,
           "forks": 2756
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 17075,
+          "forks": 2756
         }
       ]
     },
@@ -7002,9 +7652,9 @@
       "repoName": "video-shotcraft",
       "url": "https://github.com/Vincentwei1021/video-shotcraft",
       "description": "AI video skill for Claude Code & Codex — cinematic, editable product promos with Remotion: 124 shot recipe cards, 150 motion previews, beat sync, sound design, Motion Workbench & JianYing (CapCut CN) export.",
-      "stars": 16282,
-      "forks": 1538,
-      "openIssues": 4,
+      "stars": 16687,
+      "forks": 1578,
+      "openIssues": 5,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -7023,7 +7673,7 @@
         "video-production"
       ],
       "pushedAt": "2026-10-29T16:17:26Z",
-      "updatedAt": "2026-11-03T06:56:27Z",
+      "updatedAt": "2026-11-04T06:38:49Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7031,7 +7681,7 @@
         "SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.918Z",
+      "verifiedAt": "2026-11-04T06:41:06.230Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7043,6 +7693,11 @@
           "date": "2026-11-03",
           "stars": 16282,
           "forks": 1538
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 16687,
+          "forks": 1578
         }
       ]
     },
@@ -7053,8 +7708,8 @@
       "repoName": "claude-obsidian",
       "url": "https://github.com/AgriciDaniel/claude-obsidian",
       "description": "Self-organizing AI second brain for Obsidian + Claude Code. Drop any source and Claude reads, links, and files it into one connected knowledge graph of plain Markdown you own. AI note-taking, personal knowledge management (PKM), and an open-source Notion alternative. Based on Karpathy's LLM Wiki pattern.",
-      "stars": 16099,
-      "forks": 1588,
+      "stars": 16134,
+      "forks": 1591,
       "openIssues": 24,
       "language": "Python",
       "topics": [
@@ -7080,7 +7735,7 @@
         "second-brain"
       ],
       "pushedAt": "2026-10-25T22:24:31Z",
-      "updatedAt": "2026-11-03T05:06:00Z",
+      "updatedAt": "2026-11-04T05:35:34Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7099,7 +7754,7 @@
         "skills/wiki-mode/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.902Z",
+      "verifiedAt": "2026-11-04T06:41:06.282Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7111,6 +7766,11 @@
           "date": "2026-11-03",
           "stars": 16099,
           "forks": 1588
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 16134,
+          "forks": 1591
         }
       ]
     },
@@ -7121,9 +7781,9 @@
       "repoName": "social-auto-upload",
       "url": "https://github.com/dreammis/social-auto-upload",
       "description": "自动化上传视频到社交媒体：抖音、小红书、视频号、tiktok、youtube、bilibili",
-      "stars": 16059,
-      "forks": 2715,
-      "openIssues": 81,
+      "stars": 16104,
+      "forks": 2723,
+      "openIssues": 82,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -7134,7 +7794,7 @@
         "youtube"
       ],
       "pushedAt": "2026-10-22T18:42:22Z",
-      "updatedAt": "2026-11-03T05:50:49Z",
+      "updatedAt": "2026-11-04T05:38:26Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7153,7 +7813,7 @@
         "skills/tencent-upload/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.878Z",
+      "verifiedAt": "2026-11-04T06:41:06.261Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7165,6 +7825,11 @@
           "date": "2026-11-03",
           "stars": 16059,
           "forks": 2715
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 16104,
+          "forks": 2723
         }
       ]
     },
@@ -7175,9 +7840,9 @@
       "repoName": "OpenCreator",
       "url": "https://github.com/krillinai/OpenCreator",
       "description": "Formerly KrillinAI, VideoTranslation and Dubbing Tool for 120+ Languages. Open-source AI workspace for creators, powered by Codex. Video downloader, video translation, create videos, images, audios, and edits with Agents in one place. For your Social Media like YouTube, TikTok, Instagram, etc.",
-      "stars": 14102,
-      "forks": 1563,
-      "openIssues": 42,
+      "stars": 14142,
+      "forks": 1574,
+      "openIssues": 41,
       "language": "TypeScript",
       "topics": [
         "agent-skills",
@@ -7193,8 +7858,8 @@
         "video-transcription",
         "video-translation"
       ],
-      "pushedAt": "2026-11-03T05:50:22Z",
-      "updatedAt": "2026-11-03T05:27:33Z",
+      "pushedAt": "2026-11-03T14:12:07Z",
+      "updatedAt": "2026-11-04T05:32:16Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "master",
@@ -7208,7 +7873,7 @@
         "skills/krillinai-tts/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:45.987Z",
+      "verifiedAt": "2026-11-04T06:41:06.437Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7220,6 +7885,11 @@
           "date": "2026-11-03",
           "stars": 14102,
           "forks": 1563
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 14142,
+          "forks": 1574
         }
       ]
     },
@@ -7230,7 +7900,7 @@
       "repoName": "Kami",
       "url": "https://github.com/tw93/Kami",
       "description": "👩‍🚒 Good content deserves good paper. Layout rules and templates that let AI agents export PDF, PNG and editable PowerPoint.",
-      "stars": 12219,
+      "stars": 12236,
       "forks": 574,
       "openIssues": 0,
       "language": "HTML",
@@ -7245,7 +7915,7 @@
         "typesetting"
       ],
       "pushedAt": "2026-11-01T09:38:06Z",
-      "updatedAt": "2026-11-03T06:56:24Z",
+      "updatedAt": "2026-11-04T06:15:41Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7254,7 +7924,7 @@
         "skills/kami/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:45.979Z",
+      "verifiedAt": "2026-11-04T06:41:06.329Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7266,6 +7936,11 @@
           "date": "2026-11-03",
           "stars": 12219,
           "forks": 574
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 12236,
+          "forks": 574
         }
       ]
     },
@@ -7276,9 +7951,9 @@
       "repoName": "lemo-opuscar",
       "url": "https://github.com/lemomo-ai/lemo-opuscar",
       "description": "A toolbox of film styles made in code for Claude Code: 66 ready to use, and your own. Each style is a style prompt plus a demo film made entirely in code by Claude Opus 5.5, with no video model. By Lemomo. · 一套用代码做片的风格工具箱：66 种现成风格，也能做出你自己的",
-      "stars": 11306,
-      "forks": 1298,
-      "openIssues": 11,
+      "stars": 11922,
+      "forks": 1378,
+      "openIssues": 13,
       "language": "JavaScript",
       "topics": [
         "agent-skills",
@@ -7303,7 +7978,7 @@
         "webgl"
       ],
       "pushedAt": "2026-10-31T14:53:23Z",
-      "updatedAt": "2026-11-03T06:58:15Z",
+      "updatedAt": "2026-11-04T06:38:43Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7311,7 +7986,7 @@
         "plugin/skills/lemo-opuscar/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:46.143Z",
+      "verifiedAt": "2026-11-04T06:41:06.487Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7323,68 +7998,11 @@
           "date": "2026-11-03",
           "stars": 11306,
           "forks": 1298
-        }
-      ]
-    },
-    {
-      "id": 1132431999,
-      "fullName": "aden-hive/hive",
-      "owner": "aden-hive",
-      "repoName": "hive",
-      "url": "https://github.com/aden-hive/hive",
-      "description": "Multi-Agent Harness for Production AI",
-      "stars": 11138,
-      "forks": 5640,
-      "openIssues": 1091,
-      "language": "Python",
-      "topics": [
-        "agent",
-        "agent-framework",
-        "agent-skills",
-        "anthropic",
-        "automation",
-        "autonomous-agents",
-        "claude",
-        "harness",
-        "harness-engineering",
-        "human-in-the-loop",
-        "openai",
-        "python",
-        "self-hosted",
-        "self-improving"
-      ],
-      "pushedAt": "2026-11-02T10:07:20Z",
-      "updatedAt": "2026-11-03T05:19:41Z",
-      "archived": false,
-      "fork": false,
-      "defaultBranch": "main",
-      "skillFiles": [
-        ".claude/skills/browser-edge-cases/SKILL.md",
-        ".claude/skills/queen-colony-debug/SKILL.md",
-        ".claude/skills/test-reporting/SKILL.md",
-        ".claude/skills/triage-issue/SKILL.md",
-        "core/framework/skills/_default_skills/browser-automation/SKILL.md",
-        "core/framework/skills/_default_skills/colony-progress-tracker/SKILL.md",
-        "core/framework/skills/_default_skills/context-preservation/SKILL.md",
-        "core/framework/skills/_default_skills/error-recovery/SKILL.md",
-        "core/framework/skills/_default_skills/image-generation/SKILL.md",
-        "core/framework/skills/_default_skills/note-taking/SKILL.md",
-        "core/framework/skills/_default_skills/pdf/SKILL.md",
-        "core/framework/skills/_default_skills/quality-monitor/SKILL.md"
-      ],
-      "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:46.276Z",
-      "firstObservedAt": "2026-11-02",
-      "history": [
-        {
-          "date": "2026-11-02",
-          "stars": 11131,
-          "forks": 5641
         },
         {
-          "date": "2026-11-03",
-          "stars": 11138,
-          "forks": 5640
+          "date": "2026-11-04",
+          "stars": 11922,
+          "forks": 1378
         }
       ]
     },
@@ -7395,9 +8013,9 @@
       "repoName": "elephant-goldfish-model",
       "url": "https://github.com/google/elephant-goldfish-model",
       "description": "Open-source skills for designing and reviewing software with AI agents",
-      "stars": 10798,
-      "forks": 721,
-      "openIssues": 51,
+      "stars": 11405,
+      "forks": 785,
+      "openIssues": 52,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -7417,8 +8035,8 @@
         "prompt-engineering",
         "spec-driven-development"
       ],
-      "pushedAt": "2026-11-03T02:23:14Z",
-      "updatedAt": "2026-11-03T06:57:24Z",
+      "pushedAt": "2026-11-03T21:31:42Z",
+      "updatedAt": "2026-11-04T06:38:58Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7437,7 +8055,7 @@
         "skills/egm-resolve/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:46.144Z",
+      "verifiedAt": "2026-11-04T06:41:06.473Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7449,6 +8067,78 @@
           "date": "2026-11-03",
           "stars": 10798,
           "forks": 721
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 11405,
+          "forks": 785
+        }
+      ]
+    },
+    {
+      "id": 1132431999,
+      "fullName": "aden-hive/hive",
+      "owner": "aden-hive",
+      "repoName": "hive",
+      "url": "https://github.com/aden-hive/hive",
+      "description": "Multi-Agent Harness for Production AI",
+      "stars": 11142,
+      "forks": 5640,
+      "openIssues": 1094,
+      "language": "Python",
+      "topics": [
+        "agent",
+        "agent-framework",
+        "agent-skills",
+        "anthropic",
+        "automation",
+        "autonomous-agents",
+        "claude",
+        "harness",
+        "harness-engineering",
+        "human-in-the-loop",
+        "openai",
+        "python",
+        "self-hosted",
+        "self-improving"
+      ],
+      "pushedAt": "2026-11-02T10:07:20Z",
+      "updatedAt": "2026-11-04T06:06:16Z",
+      "archived": false,
+      "fork": false,
+      "defaultBranch": "main",
+      "skillFiles": [
+        ".claude/skills/browser-edge-cases/SKILL.md",
+        ".claude/skills/queen-colony-debug/SKILL.md",
+        ".claude/skills/test-reporting/SKILL.md",
+        ".claude/skills/triage-issue/SKILL.md",
+        "core/framework/skills/_default_skills/browser-automation/SKILL.md",
+        "core/framework/skills/_default_skills/colony-progress-tracker/SKILL.md",
+        "core/framework/skills/_default_skills/context-preservation/SKILL.md",
+        "core/framework/skills/_default_skills/error-recovery/SKILL.md",
+        "core/framework/skills/_default_skills/image-generation/SKILL.md",
+        "core/framework/skills/_default_skills/note-taking/SKILL.md",
+        "core/framework/skills/_default_skills/pdf/SKILL.md",
+        "core/framework/skills/_default_skills/quality-monitor/SKILL.md"
+      ],
+      "readmeRelevance": 100,
+      "verifiedAt": "2026-11-04T06:41:06.491Z",
+      "firstObservedAt": "2026-11-02",
+      "history": [
+        {
+          "date": "2026-11-02",
+          "stars": 11131,
+          "forks": 5641
+        },
+        {
+          "date": "2026-11-03",
+          "stars": 11138,
+          "forks": 5640
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 11142,
+          "forks": 5640
         }
       ]
     },
@@ -7459,8 +8149,8 @@
       "repoName": "claude-ads",
       "url": "https://github.com/AgriciDaniel/claude-ads",
       "description": "Claude-first paid-media operations skill for Claude Code across 12 ad platforms (Google, Meta, YouTube, LinkedIn, TikTok, Microsoft, Apple, Amazon, Reddit, Pinterest, Snapchat, X): source-grounded audits, deterministic findings and evidence coverage, versioned JSON reports, and capability-gated account changes.",
-      "stars": 10687,
-      "forks": 1553,
+      "stars": 10721,
+      "forks": 1563,
       "openIssues": 5,
       "language": "Python",
       "topics": [
@@ -7477,7 +8167,7 @@
         "ppc"
       ],
       "pushedAt": "2026-11-01T21:08:14Z",
-      "updatedAt": "2026-11-03T06:33:28Z",
+      "updatedAt": "2026-11-04T05:23:32Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7496,7 +8186,7 @@
         "skills/ads-landing/SKILL.md"
       ],
       "readmeRelevance": 90,
-      "verifiedAt": "2026-11-03T06:58:46.145Z",
+      "verifiedAt": "2026-11-04T06:41:06.474Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7508,6 +8198,11 @@
           "date": "2026-11-03",
           "stars": 10687,
           "forks": 1553
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 10721,
+          "forks": 1563
         }
       ]
     },
@@ -7518,9 +8213,9 @@
       "repoName": "autoharness",
       "url": "https://github.com/tigerless-labs/autoharness",
       "description": "Building the self-learning layer next-gen agents will ship with, learning skills from real work.",
-      "stars": 10637,
-      "forks": 647,
-      "openIssues": 31,
+      "stars": 10685,
+      "forks": 649,
+      "openIssues": 32,
       "language": "Python",
       "topics": [
         "agent-skills",
@@ -7530,7 +8225,7 @@
         "python"
       ],
       "pushedAt": "2026-11-02T12:30:30Z",
-      "updatedAt": "2026-11-03T06:43:06Z",
+      "updatedAt": "2026-11-04T06:22:29Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7538,7 +8233,7 @@
         "skills/learn/SKILL.md"
       ],
       "readmeRelevance": 65,
-      "verifiedAt": "2026-11-03T06:58:46.192Z",
+      "verifiedAt": "2026-11-04T06:41:06.507Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7550,6 +8245,11 @@
           "date": "2026-11-03",
           "stars": 10637,
           "forks": 647
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 10685,
+          "forks": 649
         }
       ]
     },
@@ -7560,7 +8260,7 @@
       "repoName": "drawio-skill",
       "url": "https://github.com/Agents365-ai/drawio-skill",
       "description": "Agent skill that turns natural language, code, Terraform/K8s, SQL, OpenAPI, AsyncAPI, Protobuf and GraphQL sources into editable, tested draw.io architecture diagrams: incremental sync, multi-view projection, drift diff, CI architecture tests, whiteboard derasterize, interactive HTML/PPTX/Mermaid exports.",
-      "stars": 10536,
+      "stars": 10559,
       "forks": 728,
       "openIssues": 0,
       "language": "Python",
@@ -7587,7 +8287,7 @@
         "uml"
       ],
       "pushedAt": "2026-11-01T07:26:09Z",
-      "updatedAt": "2026-11-03T05:52:43Z",
+      "updatedAt": "2026-11-04T06:27:48Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7595,7 +8295,7 @@
         "skills/drawio-skill/SKILL.md"
       ],
       "readmeRelevance": 100,
-      "verifiedAt": "2026-11-03T06:58:46.212Z",
+      "verifiedAt": "2026-11-04T06:41:06.573Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7607,6 +8307,11 @@
           "date": "2026-11-03",
           "stars": 10536,
           "forks": 728
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 10559,
+          "forks": 728
         }
       ]
     },
@@ -7617,9 +8322,9 @@
       "repoName": "html-anything",
       "url": "https://github.com/nexu-io/html-anything",
       "description": "✨ The agentic HTML editor — your local AI agent writes the HTML, you ship it. 🚀 75 Skills × 9 Surfaces (magazine · deck · poster · XHS / tweet · prototype · data report · Hyperframes) 🛡️ Sandboxed preview · 📤 1-click to WeChat / X / Zhihu / HTML / PNG 🔑 Zero API key — Claude Code / Cursor / Codex / Gemini / Copilot / OpenCode / Qwen / Aider.",
-      "stars": 9382,
-      "forks": 900,
-      "openIssues": 59,
+      "stars": 9403,
+      "forks": 903,
+      "openIssues": 62,
       "language": "HTML",
       "topics": [
         "agent-skills",
@@ -7644,7 +8349,7 @@
         "xiaohongshu"
       ],
       "pushedAt": "2026-10-13T02:33:42Z",
-      "updatedAt": "2026-11-03T06:13:30Z",
+      "updatedAt": "2026-11-04T05:35:37Z",
       "archived": false,
       "fork": false,
       "defaultBranch": "main",
@@ -7663,7 +8368,7 @@
         "next/src/lib/templates/skills/deck-dir-key-nav/SKILL.md"
       ],
       "readmeRelevance": 85,
-      "verifiedAt": "2026-11-03T06:58:46.281Z",
+      "verifiedAt": "2026-11-04T06:41:06.655Z",
       "firstObservedAt": "2026-11-02",
       "history": [
         {
@@ -7675,6 +8380,11 @@
           "date": "2026-11-03",
           "stars": 9382,
           "forks": 900
+        },
+        {
+          "date": "2026-11-04",
+          "stars": 9403,
+          "forks": 903
         }
       ]
     }
