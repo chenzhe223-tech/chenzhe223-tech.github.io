@@ -92,7 +92,7 @@ class PosterGenerationTests(unittest.TestCase):
         draw = ImageDraw.Draw(image)
         previous = list(poster.TEXT_BOUNDS)
         try:
-            description = "面向数据分析、统计验证、图表生成与可打印报告的自动化工作流。" * 6
+            description = "面向数据分析、统计验证、图表生成与可打印报告的自动化工作流。" * 5
             bottom = poster.paragraph(
                 draw, description, (82, 1434), poster.font(13), "black", 565, 4, 2
             )
