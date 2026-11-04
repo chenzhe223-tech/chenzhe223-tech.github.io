@@ -1,6 +1,6 @@
 # KeyPocket｜项目唯一状态文件
 
-最后更新：2026-11-03（UTC+8）
+最后更新：2026-11-04（UTC+8）
 产品版本目标：V2.0
 正式应用：https://chenzhe223-tech.github.io/keypocket/
 代码仓库：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io（应用目录：`keypocket/`）
@@ -149,3 +149,13 @@ P2：
 - **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
 - 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
 
+
+
+## 2026-11-04 顶部「收录项目」按钮无响应修复
+
+- 用户反馈：网页版「我的 Skills / 项目」页面点击顶部「＋ 收录项目」无反应；在搜索框粘贴 GitHub URL 后才出现收录窗口。
+- 根因已从 main 分支代码确认：#addProjectBtn 在 keypocket/index.html 中存在，但 keypocket/app.js 没有为其注册 click handler；空列表中的 data-project-action=add 有事件委托处理，因此两种入口表现不一致。
+- 修复：为 #addProjectBtn 绑定 openProjectEditor()，直接打开空白项目表单；不依赖搜索框输入，不改变 Skill 搜索、加密保存或现有项目数据。
+- HTML/app.js 缓存版本更新为 kp-v2-project-cta-fix-20261104-01，避免浏览器继续使用旧脚本。
+- 新增 Browser QA 回归：解锁后直接点击顶部 CTA，断言 #projectEditForm 出现，再关闭弹窗并确认遮罩清除。
+- 本项状态：代码修复已提交后待 Actions 构建、线上浏览器 E2E 与生产页面核验；不得在这些验证完成前标记为功能验收通过。
