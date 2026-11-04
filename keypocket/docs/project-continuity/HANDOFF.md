@@ -103,3 +103,10 @@ undefined
 4. 偏好存储在 localStorage 的 `kp.visual.preferences.v1`，与 IndexedDB 加密密钥库隔离；不改变 API Key、项目、备份和同步业务数据。
 5. 资源版本 `kp-v2-visual-motion-studio-20261104-01`。新增 Skill Handoff QA source contract；等待本轮最新 Pages/Browser QA/Skill Handoff QA 同 SHA 结果。
 6. 后续必须确认线上菜单可打开、切换主题/布局/动效实时生效、刷新后保留、恢复默认生效、JSON 导出可用、390px 手机端无横向溢出；尊重系统减少动态效果。真机 Safari/微信仍需用户实测。
+
+
+
+### 视觉与动效中心最终资源与验收进度
+- 资源版本已从早期测试版更新为 `kp-v2-visual-motion-studio-20261104-02`，HTML 与 app.js 版本一致，避免旧 CDN bundle 缓存。
+- Pages run `41798223345` SUCCESS；KeyPocket Skill Handoff QA `41798222925` SUCCESS，线上资源核验及原有 Skill 一键收录 E2E 通过。
+- DAVYLAB Browser QA `41798222827` 已开始最终桌面/移动端交互检查，当前运行中；其中包含视觉设置持久化、实时样式应用、恢复默认及 390px 面板布局检查。
