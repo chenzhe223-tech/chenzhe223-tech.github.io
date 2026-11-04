@@ -392,6 +392,14 @@ const mark = (status, name, detail = '') => {
       mark(skillImportPassed ? 'PASS' : 'FAIL', 'KeyPocket GitHub Skill 搜索结果一键加密收录',
         'mock GitHub 搜索 → 收录按钮 → 项目卡片显示；不触碰真实用户数据');
 
+      // Main project CTA must open the project editor without requiring search input.
+      await kp.locator('#addProjectBtn').click();
+      const projectCtaPassed = await kp.locator('#projectEditForm').count().then(n => n === 1);
+      mark(projectCtaPassed ? 'PASS' : 'FAIL', 'KeyPocket 顶部「收录项目」按钮直接打开编辑窗口',
+        '点击主 CTA → 项目编辑表单可见；无需先在搜索框输入内容');
+      await kp.locator('#modalRoot [data-action="close"]').first().click();
+      await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop'), null, { timeout: 5000 });
+
       // Skill Radar fetches a same-origin static JSON API. Its CSP must explicitly allow 'self'.
       await kp.locator('[data-module="radar"]').click();
       await kp.waitForSelector('#radarView:not(.hidden)', { timeout: 5000 });
