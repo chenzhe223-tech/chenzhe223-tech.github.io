@@ -245,3 +245,11 @@ P2：
 - 刷新按钮使用同源 JSON 的 no-store 与时间戳重新读取最新采集数据；底层 GitHub 采集仍由现有每日 GitHub Actions 完成，前端刷新不会绕过授权直接触发 GitHub Actions，也不会在浏览器匿名调用大量 API。
 - 资源版本：kp-v2-skill-boxes-20261104-01。代码 app.js commit 5f7bb2f；HTML commit 26b5386；QA 脚本 commits 03fd9ef、5b87a53。
 - 前一轮 Skill Handoff QA 失败原因已查明：HTML 仍引用旧 -01 资源，而 JS build 标记为 -02，线上资产版本不匹配。当前 HTML 与 JS 已统一切换到新 -01 资源标记；需等待本轮同 SHA Pages/Handoff/Browser QA 最终结果。
+
+
+### 三盒式资源库最终验收（2026-11-04）
+- 最新资源版本：kp-v2-skill-boxes-20261104-01；app.js 最新修正 commit `3f546ecbfb3d715df4f7f59655f6df1b8dc73076`；index.html commit `26b53867aee96c5e963f759772fad8d66ee7daf9`。
+- Pages deploy run `41808879806` SUCCESS；Browser QA run `41808657331` SUCCESS；KeyPocket Skill Handoff QA run `41808879505` SUCCESS。
+- Browser QA 关键断言：三大资源盒=3；横条资源记录可见；热门 Skill 9 个领域、每领域至少 5 条；GitHub 自动扫描去重；390px 页面无横向溢出/无 KeyPocket pageerror。Handoff QA 通过语法、源代码契约、线上 HTML/JS/Radar 资源校验及一键 Skill 收录 E2E。
+- 修复了能力档案默认摘要重复 Skill 名称的问题；E2E 改为定位横条资源行，避免摘要与名称重复时 Playwright strict locator 冲突。
+- 数据刷新语义：刷新读取最新已发布 Radar 静态数据；实际 GitHub 搜索与 SKILL.md 递归树校验由每日 Actions 采集，不会每次浏览器刷新都重新触发全量采集。
