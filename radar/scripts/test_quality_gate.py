@@ -122,7 +122,7 @@ class QualityGateTests(unittest.TestCase):
                  "image_fallback_url":"https://images.example/b.jpg",
                  "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
         with patch("radar.scripts.quality_gate.download_fingerprints", side_effect=OSError("unavailable")):
-            error, record, repair = verify_and_repair_story_image(story, {}, [])
+            error, record, repair = verify_and_repair_story_image(story, {}, [], {})
         self.assertEqual(error["type"], "image_unverifiable")
         self.assertIsNone(record)
         self.assertIsNone(repair)

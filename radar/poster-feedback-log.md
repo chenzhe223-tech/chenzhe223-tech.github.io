@@ -162,3 +162,5 @@
 - Root cause: `_theme_backup_url` selected the first different topic image but did not consult the current-week `used` set. The primary fallback path already avoided weekly reuse; its backup path did not.
 - Repair: bump image cache version to 7; make backup selection exclude every image already used in the current ISO week; have the quality gate check the weekly URL index before accepting either primary or backup; add regression tests for weekly backup exclusion and fail-closed exhaustion.
 - No report/poster/QR bundle has been published yet. The previous valid production version remains protected until all gates pass.
+
+- Regression-test review: all calls to the new image-repair helper now pass an explicit empty/current-week index in unit tests; production continues to pass the archive-derived ISO-week index.
