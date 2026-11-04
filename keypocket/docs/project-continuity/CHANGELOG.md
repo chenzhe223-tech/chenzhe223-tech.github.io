@@ -39,3 +39,12 @@
 - 备份中心仅显示最新一份；恢复流程先在内存读取并校验目标备份，再写入保护快照，避免固定 ID 覆盖导致恢复读错。
 - 云端 V2 备份改为账号级 `milestone/latest` 单行 upsert；成功写入后删除当前账号其他 daily/monthly/milestone 旧快照。密文仍包含密钥、项目及删除/tombstone 信息。
 - 新增 Browser QA：连续两次更新后本地备份仍只有一个稳定 ID，并继续验证最新备份恢复。
+
+
+
+## 2026-11-04 — 视觉与动效自定义中心
+- 主界面新增「视觉与动效」设置入口，参照公众号选题平台的 Visual DNA，提供主题与字体、Motion Lab、页面布局三个标签。
+- 主题支持 QORE 冰雾玻璃、Editorial 纸感、Ocean Mist、阳光、薄荷、蜜桃、薰衣草及自定义色值；可调整字体、内容密度和圆角。
+- 页面动效支持关闭、淡入、上浮、漂浮、光感、滑入，提供速度、幅度、方向调节并尊重 prefers-reduced-motion。
+- 布局支持 Editorial/Balanced/Vertical/Compact/Bento/Split、内容宽度、列数、间距与导航位置。
+- 外观偏好独立存储，不进入加密密钥库或云同步；支持实时预览、恢复默认与 JSON 导出。
