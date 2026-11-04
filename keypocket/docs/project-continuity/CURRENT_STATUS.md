@@ -57,3 +57,10 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
 - 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
 
+
+
+## 2026-11-04 单份最新自动备份升级
+- 本地备份：固定 ID 覆盖式完整 AES-GCM 快照，成功后清理旧版本；失败保留上一份。
+- 云端备份：V2 同步成功后 upsert 账号级 `milestone/latest`，再清理该账号其他备份记录；云端完整快照包含密钥、项目和 tombstone 密文。
+- 备份中心只显示最新一份，不再显示每日/每月历史版本；独立手动导出文件不受影响。
+- 新增 Browser QA 检查连续两次备份仍只有一份、ID 不变及恢复流程；待最新 SHA 的 Pages 与 QA 运行结果。
