@@ -120,3 +120,12 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 验证三大资源盒=3、横条资源记录可见、热门 Skill 九领域各至少 5 条、公开 GitHub 仓库扫描去重、390px 页面无横向溢出/无 KeyPocket pageerror；Handoff 验证 JS 语法、source contract、线上资产及一键收录 E2E。
 - 修复默认摘要重复 Skill 名称；E2E 使用横条资源行定位。
 - 当前状态：Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed（基于对应 Actions 证据）。真实 iPhone Safari 与微信内置浏览器实机测试仍未完成。
+
+
+## 2026-11-04 移动端布局与设置中心升级（已部署并通过自动化验收）
+- 资源版本 `kp-v2-mobile-settings-20261104-02`。
+- 核心导航仅保留我的密钥、我的 Skills / 项目、Skill Radar；顶部只保留设置入口。视觉与动效、导入/导出、自动备份、回收站、同步中心、GitHub 账户和锁定统一进入设置中心。
+- 项目页导入/扫描/热度刷新工具折叠，收录项目为唯一主 CTA；搜索/来源/领域/场景筛选改为手机端双列布局。
+- Pages `41812157275` SUCCESS；Browser QA `41812157552` SUCCESS；KeyPocket Skill Handoff QA `41811558670` SUCCESS。
+- Browser QA PASS：设置入口 7 项、核心导航 3 项；390px 项目页布局/工具折叠/双列筛选；390px 设置中心 7 项；新增密钥按钮边界；无横向溢出、无 KeyPocket pageerror。视觉与动效测试仍通过。
+- 状态：Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed。真实 iPhone Safari / 微信浏览器实机测试仍待完成。
