@@ -47,6 +47,15 @@ assert.match(app, /window\.localStorage\.removeItem|writePendingRadarSkills|remo
 assert.match(appHtml, /id="importRadarSkillsBtn"/, 'KeyPocket must expose a manual pending-import entry point');
 assert.match(appHtml, /app\.js\?v=[^"]+/, 'KeyPocket must use a cache-busted app bundle');
 
+assert.match(app, /KP_SNAPSHOT_LATEST_ID='kp\.snapshot\.latest'/, 'local backups must use one stable latest-only slot');
+assert.match(app, /id:KP_SNAPSHOT_LATEST_ID,kind:'local-encrypted-snapshot'/, 'local backups must overwrite the latest encrypted snapshot');
+assert.doesNotMatch(app, /KP_SNAPSHOT_KEEP/, 'local backup history retention must be removed');
+assert.match(app, /snapshot_type:'milestone',period_key:'latest'/, 'cloud backup must use one account-wide latest snapshot slot');
+assert.match(app, /id=neq\.'\+encodeURIComponent\(latest\.id\)/, 'cloud backup must prune older account snapshots only after upsert');
+assert.match(app, /&order=created_at\.desc&limit=1/, 'cloud backup center must display only the latest snapshot');
+assert.match(app, /上一份有效备份保持不变/, 'failed local backup must preserve the previous valid snapshot');
+
+
 console.log('PASS: Radar-to-KeyPocket Skill handoff source contract');
 console.log('PASS: shared local queue key:', keyPocketQueueKey);
 console.log('PASS: GitHub URL validation, encrypted project save, duplicate check and queue UI are wired');
