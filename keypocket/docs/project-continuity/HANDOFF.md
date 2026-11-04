@@ -128,3 +128,13 @@ undefined
 5. skillProfile 可选字段通过原有加密项目记录保存；旧记录缺失时解锁后自动补齐；不改 schema/envelope。人工字段优先于自动字段。
 6. Actions：Pages 41802609405、Browser QA 41802610144、Skill Handoff QA 41802610170 对应最终 app SHA 49037b4，开始检查时仍在运行；接手者应查询最终状态并读失败日志。
 7. 下一步：完成同 SHA QA；若通过，更新状态为部署验收；补充测试覆盖旧记录升级、人工覆盖持久化、场景筛选与 390px 布局。随后进入 P4 Skill 关联推荐与组合工作流。
+
+
+## 2026-11-04 三盒式资源库升级交接
+1. 用户反馈智能分类后页面松散、收录 Skill 不完整，要求横条展示完整收录，并拆为我的开发/外部收录/热门 Skill 三个盒子。
+2. 已实现紧凑横条资源行，保留所有自有项目、外部 Skill；非 Skill 外部资源保留在辅助区，未删除数据。
+3. 热门 Skill 读取每日 Radar API 的完整 verified repositories（当前 API 有 131 条已验证仓库），按九领域分类，每类保证至少 5 条；不足时显示“综合热门补充”，Stars 排序；可刷新最新静态数据并一键加密收录。
+4. 前端刷新不触发 GitHub Action，只重新请求 api/skill-radar.json 加时间戳；GitHub 采集仍每日运行。不要宣称每次页面刷新都重新执行全量 GitHub 搜索。
+5. 资源版本 kp-v2-skill-boxes-20261104-01；app.js 5f7bb2f，index.html 26b5386，QA 脚本 5b87a53。
+6. 前一轮 Handoff run 41802796262 失败根因为 HTML 引用 skill-intelligence -01，JS 期望 -02，CDN 资产不一致。新 HTML 与 JS 统一为新 build 标记；等待最终 Actions 验收。
+7. 下一步：核验同 SHA Pages/Browser QA/Handoff QA；如失败读日志修复。重点确认热门分组 9 组各 >=5、移动端横条换行无溢出、点击收录进入外部盒、项目编辑/收藏/删除回归。
