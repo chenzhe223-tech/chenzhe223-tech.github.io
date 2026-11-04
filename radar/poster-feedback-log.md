@@ -122,7 +122,16 @@
 
 ## 2026-11-04 — Daily production brief and visual lock
 
-- 今日人工编辑基线已写入 `radar/data/manual-editorial/2026-11-04.json`（commit `9e7b8be45aa8890523ea01d0e850eae4dec099ce`）：五条新闻分别核对 IT之家、36氪、TechCrunch、Kimi 官方公告及 Anthropic SEC S-1/A；企业自报能力、实验状态与前瞻性风险均保留限定。
+- 今日人工编辑基线最终版本位于 `radar/data/manual-editorial/2026-11-04.json`：五条新闻核对 MIT CSAIL 研究者原始博客、Reuters、Anthropic 官方研究、Soniox 官方公告（并参考 MarkTechPost）及澎湃新闻；企业自报能力、早期研究和原型限制均保留限定。较早提交中记录的 IT之家、36氪、TechCrunch、Kimi 与 SEC 来源清单已被后续编辑稿替换，不作为本期最终来源。
 - 按 `poster_style.py::poster_style_metadata` 的 ISO 周轮换算法，2026-11-04 属于 ISO 2026-W45，风格为 `geometric-navy`；本周重试必须固定此风格。
 - 当前社交图片生产已停用：本日只允许生成网站正式主海报 `1200×1800 PNG`。历史记录中关于 900×1200 微信六图、专题配图和 ZIP 的条目仅保留为历史，不再属于当前生产输出或门禁。
 - 本记录提交用于启动本日正式生产工作流；记录时尚未取得本日生成、二维码、浏览器 QA 或线上部署证据。未通过 P0 前不得覆盖上一有效线上版本或宣称完成。
+
+
+### 2026-11-04 — Production repair round 1: geometric Skill description
+
+- Run: `41743270512` (commit `1027be353cbf9145f23c6232c9dec46972279b5d`).
+- Evidence before poster gate: Skill Radar selected 9 verified Skills from 214 candidates; seven-day history coverage was complete; image/claim quality gate PASS; all 13 current story images passed relevance and freshness checks; W45 ISO style resolved to `geometric-navy`; renderer created a 1200×1800 PNG.
+- P0 failure: final-poster verifier found one truncated Skill description paragraph at `x=82,y=1434,width=550`; the original 15px/3-line block clipped the final text. The final-image QR/deployment gate stopped the workflow. No candidate report, poster, or QR manifest was committed; the previous published version remains protected.
+- Repair: keep the same geometric-navy design and region order; render the full Skill description at 13px (the configured minimum body size) in a 565px-wide, four-line reserved area, leaving the existing topics row and QR panel in place. Added a regression test proving the four-line block fits before the topics row without truncation.
+- Retest status at this commit: code/test change committed; complete production, QR, desktop/mobile and deployment retest pending the next Actions run. No production success is claimed yet.

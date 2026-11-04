@@ -87,6 +87,21 @@ class PosterGenerationTests(unittest.TestCase):
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font), 110.5)
 
+    def test_geometric_skill_description_fits_reserved_four_line_area(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        previous = list(poster.TEXT_BOUNDS)
+        try:
+            description = "面向数据分析、统计验证、图表生成与可打印报告的自动化工作流。" * 6
+            bottom = poster.paragraph(
+                draw, description, (82, 1434), poster.font(13), "black", 565, 4, 2
+            )
+            self.assertLessEqual(bottom, 1500)
+            self.assertFalse(poster.TEXT_BOUNDS[-1]["truncated"])
+            self.assertEqual(poster.TEXT_BOUNDS[-1]["line_count"], 4)
+        finally:
+            poster.TEXT_BOUNDS[:] = previous
+
     def test_final_composite_qr_decodes_at_mobile_friendly_size(self):
         target = "https://chenzhe223-tech.github.io/radar/daily/"
         qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)

@@ -562,7 +562,10 @@ def main():
     skill_name = str(skill.get("name") or "Open-source AI Skill")
     paragraph(draw, skill_name, (82, 1380), font(24, True), ink, 550, 2, 3)
     desc = str(skill.get("poster_description_zh") or skill.get("description_zh") or skill.get("description") or "开源 AI 工作流与智能体工具。")
-    paragraph(draw, desc, (82, 1434), font(15), ink, 550, 3, 4)
+    # The featured Skill description may be longer than a single short blurb.
+    # Keep the full text, but use the approved minimum body size and four-line
+    # reserved area so it never silently clips or collides with the topics row.
+    paragraph(draw, desc, (82, 1434), font(13), ink, 565, 4, 2)
     topics = "适用方向： " + " · ".join((skill.get("topics") or [])[:4]) or (skill.get("language") or "AI 工作流")
     paragraph(draw, topics, (82, 1500), font(12, True), muted, 550, 2, 2)
     stars = skill.get("stars")
