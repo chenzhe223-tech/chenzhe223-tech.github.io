@@ -22,7 +22,7 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 3
-CACHE_VERSION = 6
+CACHE_VERSION = 7
 IMAGE_MATCH_BUDGET_SECONDS = 150
 STORY_IMAGE_BUDGET_SECONDS = 10
 QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
@@ -412,13 +412,15 @@ def story_fallback_topic(story: dict) -> str:
 def _theme_photo_url(photo_id: str) -> str:
     return f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&w=1000&q=82"
 
-def _theme_backup_url(story: dict, exclude_url: str = "") -> str:
+def _theme_backup_url(story: dict, exclude_url: str = "", used: set[str] | None = None) -> str:
+    """Return a topic-matched backup that is not the primary asset or any image used this ISO week."""
+    used = used or set()
     candidates = list(THEME_PHOTOS.get(story_fallback_topic(story), ())) + list(THEME_PHOTOS["general"])
     for photo_id in candidates:
         url = _theme_photo_url(photo_id)
-        if url != exclude_url:
+        if url != exclude_url and _image_identity(url) not in used:
             return url
-    return _theme_photo_url(THEME_PHOTOS["general"][0])
+    return ""
 
 def _thematic_fallback(story: dict, used: set[str]) -> dict:
     """Fast deterministic topic illustration fallback; no network calls."""
@@ -430,7 +432,7 @@ def _thematic_fallback(story: dict, used: set[str]) -> dict:
         return {"image_url":"","image_source":"No verified unique image available","image_page_url":"","image_credit":"","image_license":"","image_license_url":"","image_alt":"配图暂缺 · 未找到符合本周去重规则的唯一图片","image_match_status":"image_unavailable","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
     labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration","product":"AI product / software topic illustration","business":"AI business / industry topic illustration","creative":"AI creativity topic illustration","general":"AI technology topic illustration"}
     slugs = {"robot":"robotics","compute":"computer-technology","product":"technology","business":"business-technology","creative":"creative-technology","general":"artificial-intelligence"}
-    return {"image_url":url,"image_fallback_url":_theme_backup_url(story,url),"image_source":"Unsplash topic illustration","image_page_url":"https://unsplash.com/s/photos/"+slugs[topic],"image_credit":"Unsplash","image_license":"Unsplash License; review source terms before reuse","image_license_url":"https://unsplash.com/license","image_alt":"主题配图（非新闻现场）："+labels[topic]+": "+title,"image_match_status":"thematic_fallback","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
+    return {"image_url":url,"image_fallback_url":_theme_backup_url(story,url,used),"image_source":"Unsplash topic illustration","image_page_url":"https://unsplash.com/s/photos/"+slugs[topic],"image_credit":"Unsplash","image_license":"Unsplash License; review source terms before reuse","image_license_url":"https://unsplash.com/license","image_alt":"主题配图（非新闻现场）："+labels[topic]+": "+title,"image_match_status":"thematic_fallback","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
 
 def _openverse_candidates(query: str) -> list[dict]:
     url = "https://api.openverse.org/v1/images/?" + urllib.parse.urlencode({"q": query[:180], "page_size": 12, "mature": "false"})
@@ -500,7 +502,7 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
             continue
         license_name = " ".join(str(candidate.get("license") or "").split())
         version = str(candidate.get("license_version") or "").strip()
-        return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url),"image_source":"Openverse topic image","image_page_url":normalize_url(candidate.get("foreign_landing_url") or ""),"image_credit":str(candidate.get("creator") or "Openverse contributor"),"image_license":(license_name+" "+version).strip() or "License not listed","image_license_url":normalize_url(candidate.get("license_url") or ""),"image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic","image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
+        return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url,used),"image_source":"Openverse topic image","image_page_url":normalize_url(candidate.get("foreign_landing_url") or ""),"image_credit":str(candidate.get("creator") or "Openverse contributor"),"image_license":(license_name+" "+version).strip() or "License not listed","image_license_url":normalize_url(candidate.get("license_url") or ""),"image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic","image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
     return None
 
 def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
@@ -533,7 +535,7 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     except Exception as exc:
         print(f"[image-match] story fallback: {type(exc).__name__}",file=sys.stderr)
     if not result: result=_thematic_fallback(story,used)
-    if result.get("image_url"): result.setdefault("image_fallback_url",_theme_backup_url(story,result["image_url"]))
+    if result.get("image_url"): result.setdefault("image_fallback_url",_theme_backup_url(story,result["image_url"],used))
     result.setdefault("image_is_generated",False)
     result.setdefault("image_generation_prompt",build_illustration_prompt(story))
     result["image_match_duration_seconds"]=round(time.monotonic()-started,2)

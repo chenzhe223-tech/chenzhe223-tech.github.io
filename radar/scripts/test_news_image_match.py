@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from news_image_match import (
     _BingImageParser, candidate_relevance, derive_visual_search_queries,
     extract_image_candidates, is_generic_brand_asset, normalize_url, story_fallback_topic,
-    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity, MIN_IMAGE_RELEVANCE_SCORE, _thematic_fallback, IMAGE_MATCH_BUDGET_SECONDS, STORY_IMAGE_BUDGET_SECONDS,
+    build_illustration_prompt, firecrawl_enabled, THEME_PHOTOS, enforce_unique_story_images, _image_identity, MIN_IMAGE_RELEVANCE_SCORE, _thematic_fallback, _theme_backup_url, _theme_photo_url, IMAGE_MATCH_BUDGET_SECONDS, STORY_IMAGE_BUDGET_SECONDS,
 )
 
 
@@ -15,6 +15,24 @@ class NewsImageMatchTests(unittest.TestCase):
     def test_image_matching_budgets_are_bounded(self):
         self.assertLessEqual(IMAGE_MATCH_BUDGET_SECONDS, 150)
         self.assertLessEqual(STORY_IMAGE_BUDGET_SECONDS, 10)
+
+    def test_theme_backup_skips_images_already_used_this_week(self):
+        story = {"title_zh":"AI smartphone product launch"}
+        topic = story_fallback_topic(story)
+        candidates = list(THEME_PHOTOS.get(topic, ())) + list(THEME_PHOTOS["general"])
+        used = {_image_identity(_theme_photo_url(pid)) for pid in candidates[:4]}
+        primary = _theme_photo_url(candidates[0])
+        backup = _theme_backup_url(story, primary, used)
+        self.assertTrue(backup)
+        self.assertNotEqual(backup, primary)
+        self.assertNotIn(_image_identity(backup), used)
+
+    def test_theme_backup_fails_closed_when_all_weekly_assets_are_used(self):
+        story = {"title_zh":"AI smartphone product launch"}
+        topic = story_fallback_topic(story)
+        candidates = list(THEME_PHOTOS.get(topic, ())) + list(THEME_PHOTOS["general"])
+        used = {_image_identity(_theme_photo_url(pid)) for pid in candidates}
+        self.assertEqual(_theme_backup_url(story, "", used), "")
 
     def test_thematic_fallback_does_not_make_network_requests(self):
         with patch("news_image_match.valid_image_url", side_effect=AssertionError("fallback must not call network")):

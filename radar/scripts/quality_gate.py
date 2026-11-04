@@ -247,10 +247,13 @@ def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_
     blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors or claim_errors)
     return "FAIL" if blocking else "PASS"
 
-def _image_candidate_issue(url, title, image_seen, current_images):
+def _image_candidate_issue(url, title, image_seen, current_images, week_urls=None):
     canonical = norm_url(url)
+    week_urls = week_urls or {}
     if not canonical:
         return {"type":"invalid_image_url","title":title,"url":url}
+    if canonical in week_urls:
+        return {"type":"same_week_url_reuse","title":title,"url":url,"history":week_urls[canonical]}
     if canonical in image_seen:
         return {"type":"same_day_url_duplicate","title":title,"url":url,"other_title":image_seen[canonical]}
     try:
@@ -263,7 +266,7 @@ def _image_candidate_issue(url, title, image_seen, current_images):
     return None, {"title":title,"url":url,"canonical_url":canonical,"sha256":sha,"phash":ph}
 
 
-def verify_and_repair_story_image(story, image_seen, current_images):
+def verify_and_repair_story_image(story, image_seen, current_images, week_urls=None):
     """Use a declared fallback only after it independently passes the same image gates."""
     title = story_title(story)
     primary_url = image_url(story)
@@ -277,7 +280,7 @@ def verify_and_repair_story_image(story, image_seen, current_images):
         candidates.append(("fallback", fallback_url))
 
     for candidate_type, candidate_url in candidates:
-        result = _image_candidate_issue(candidate_url, title, image_seen, current_images)
+        result = _image_candidate_issue(candidate_url, title, image_seen, current_images, week_urls)
         if isinstance(result, tuple):
             issue, record = result
         else:
@@ -373,8 +376,18 @@ def main():
     for item in china:
         hit=compare_story(item,china_history,current_date=today)
         if hit: china_hits.append({"title":story_title(item),"match":hit})
+    # Build the current ISO-week URL index before choosing any backup image.
+    week_start=(dt.date.fromisoformat(today)-dt.timedelta(days=dt.date.fromisoformat(today).weekday())).isoformat()
+    week_urls={}
+    for day,doc in docs:
+        try:
+            if dt.date.fromisoformat(day).isoformat()<week_start: continue
+        except Exception: continue
+        for story in published_image_records(doc,day):
+            u=image_url(story)
+            if u: week_urls[norm_url(u)]={"date":day,"title":story_title(story),"url":u}
     # Current-day unique-image checks: verify primary assets, then try a declared
-    # topic-image backup if the primary is unavailable, irrelevant or duplicated.
+    # topic-image backup only if it is also unused in the current ISO week.
     image_errors=[]; current_images=[]; image_seen={}; image_fallback_repairs=[]
     image_stories=[]
     for key in ("top5","china_ai_news"):
@@ -385,23 +398,14 @@ def main():
     unique_story={}
     for s in image_stories: unique_story[story_id(s)]=s
     for s in unique_story.values():
-        error, image_record, repair = verify_and_repair_story_image(s, image_seen, current_images)
+        error, image_record, repair = verify_and_repair_story_image(s, image_seen, current_images, week_urls)
         if error:
             image_errors.append(error)
         else:
             current_images.append(image_record)
             if repair:
                 image_fallback_repairs.append(repair)
-    # Compare this week's current images to image URLs recorded in archives, excluding current date.
-    week_start=(dt.date.fromisoformat(today)-dt.timedelta(days=dt.date.fromisoformat(today).weekday())).isoformat()
-    week_urls={}
-    for day,doc in docs:
-        try:
-            if dt.date.fromisoformat(day).isoformat()<week_start: continue
-        except Exception: continue
-        for story in published_image_records(doc,day):
-            u=image_url(story)
-            if u: week_urls[norm_url(u)]={"date":day,"title":story_title(story),"url":u}
+    # Compare the verified current images to historical URL and content fingerprints.
     week_image_hits=[]
     historical_week_images=[]
     historical_image_failures=[]

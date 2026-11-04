@@ -154,3 +154,11 @@
 - Repair: keep the gate fail-closed, but permit a declared `image_fallback_url` only when it independently passes URL, download, SHA-256/perceptual duplicate and topic-label checks. If the fallback also fails, publication remains blocked. Add regression tests for unavailable, duplicate and low-relevance primary images.
 - Editorial repair: replace the OCC original-title wording with a neutral title; the underlying Reuters story remains attributed and the guidance's nonbinding status remains explicit.
 - Current status: repair code and regression tests are prepared for the next production attempt; no successful publication is claimed.
+
+
+## 2026-11-05 — ISO-week image fallback correction
+
+- Second production attempt passed same-day image URL/content checks and claim provenance, with zero news duplicates and zero Skill errors (10 recommendations; seven-day history complete), but the ISO-week image gate correctly blocked two fallback assets already used on 2026-11-02.
+- Root cause: `_theme_backup_url` selected the first different topic image but did not consult the current-week `used` set. The primary fallback path already avoided weekly reuse; its backup path did not.
+- Repair: bump image cache version to 7; make backup selection exclude every image already used in the current ISO week; have the quality gate check the weekly URL index before accepting either primary or backup; add regression tests for weekly backup exclusion and fail-closed exhaustion.
+- No report/poster/QR bundle has been published yet. The previous valid production version remains protected until all gates pass.

@@ -70,7 +70,7 @@ class QualityGateTests(unittest.TestCase):
                  "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
         with patch("radar.scripts.quality_gate.download_fingerprints",
                    side_effect=[OSError("unavailable"), ("fallback-sha", None)]):
-            error, record, repair = verify_and_repair_story_image(story, {}, [])
+            error, record, repair = verify_and_repair_story_image(story, {}, [], {})
         self.assertIsNone(error)
         self.assertEqual(record["url"], fallback)
         self.assertEqual(story["image_url"], fallback)
@@ -85,7 +85,7 @@ class QualityGateTests(unittest.TestCase):
         current = [{"title":"Earlier story","sha256":"duplicate-sha","phash":None}]
         with patch("radar.scripts.quality_gate.download_fingerprints",
                    side_effect=[("duplicate-sha", None), ("unique-sha", None)]):
-            error, record, repair = verify_and_repair_story_image(story, {}, current)
+            error, record, repair = verify_and_repair_story_image(story, {}, current, {})
         self.assertIsNone(error)
         self.assertEqual(record["sha256"], "unique-sha")
         self.assertEqual(story["image_url"], fallback)
@@ -97,12 +97,25 @@ class QualityGateTests(unittest.TestCase):
                  "image_fallback_url":fallback,"image_match_status":"web_search_topic",
                  "image_match_score":0.1,"image_alt":"unrelated image"}
         with patch("radar.scripts.quality_gate.download_fingerprints", return_value=("topic-sha", None)) as fetch:
-            error, record, repair = verify_and_repair_story_image(story, {}, [])
+            error, record, repair = verify_and_repair_story_image(story, {}, [], {})
         self.assertIsNone(error)
         fetch.assert_called_once_with(fallback)
         self.assertIsNone(image_relevance_error(story))
         self.assertEqual(story["image_url"], fallback)
         self.assertEqual(repair["reason"], "low_image_relevance")
+
+    def test_same_week_primary_uses_fresh_declared_fallback(self):
+        primary = "https://images.example/used-this-week.jpg"
+        fallback = "https://images.example/fresh-this-week.jpg"
+        story = {"title_zh":"Weekly image reuse","image_url":primary,"image_fallback_url":fallback,
+                 "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
+        week_urls = {norm_url(primary): {"date":"2026-11-02","title":"Earlier story","url":primary}}
+        with patch("radar.scripts.quality_gate.download_fingerprints", return_value=("fresh-sha", None)) as fetch:
+            error, record, repair = verify_and_repair_story_image(story, {}, [], week_urls)
+        self.assertIsNone(error)
+        fetch.assert_called_once_with(fallback)
+        self.assertEqual(record["url"], fallback)
+        self.assertEqual(repair["reason"], "same_week_url_reuse")
 
     def test_unverifiable_primary_and_fallback_still_block(self):
         story = {"title_zh":"Unavailable image","image_url":"https://images.example/a.jpg",
