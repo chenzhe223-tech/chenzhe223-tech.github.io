@@ -109,3 +109,10 @@
 - 关键输出：`[PASS] KeyPocket 视觉与动效设置实时应用及本地持久化`；`[PASS] KeyPocket 视觉设置独立恢复默认`；`[PASS] KeyPocket 390px 手机端视觉设置面板布局`。
 - 整站 Browser QA 最终结论为 FAILURE，但唯一失败项为外部产品入口 Worktoon 的 URL `https://worktoon.app.workbuddy.host/` 请求超时 25 秒，与 KeyPocket 无关。KeyPocket 子项包括原有备份覆盖/恢复、GitHub 收录、同步/密码找回 mock 等均 PASS。
 - 结论：KeyPocket 视觉与动效功能的 Browser Functional Test 通过；不把整站 QA 的外部 Worktoon 超时归因于 KeyPocket。
+
+
+## 2026-11-04 Skill Intelligence 首期测试范围
+- 待验证：app.js 语法与 source contract；线上 HTML/JS cache-bust 版本一致；旧项目记录解锁时自动生成并加密保存 skillProfile；人工 domain/subcategory/summary 覆盖刷新后保留；场景筛选、领域快捷筛选、自然语言关键词搜索；390px 手机端无横向溢出；无 pageerror。
+- 本轮未验证 GitHub README 正文抓取、Topics/目录深度分析、AI 语义归纳、Skill 之间的依赖/关联图谱。
+- 风险：规则匹配的置信度仅代表元数据覆盖程度，不代表语义正确性；建议人工复核低置信度记录。
+- Actions 41802609405 / 41802610144 / 41802610170 需在最终提交 SHA 上完成核验。
