@@ -122,3 +122,11 @@
 - 新增 Browser QA：三大资源盒存在；项目横条替代旧 .project-card；9 个热门领域均展示至少 5 个条目；热门数据异步加载后再断言；自有仓库扫描去重使用新横条选择器。
 - 待最终线上验证：最新 Pages HTML/JS 版本一致；热门数据真实请求、9 组各 >=5；刷新无缓存；一键收录加密保存并归入外部 Skill；390px 手机端横条动作按钮换行且无横向溢出；编辑/收藏/回收站操作正常。
 - 数据边界：每次刷新获取最新已发布静态 JSON；GitHub 全量搜索/递归树验证由每日 Actions 运行。每类不足 5 条精准分类时以真实已验证热门仓库补充并标注，不能宣称所有补充条目均精准属于该领域。
+
+
+### 三盒式资源库最终测试结果（2026-11-04）
+- Pages deploy run 41808879806 SUCCESS。
+- Browser QA run 41808657331 SUCCESS：`KeyPocket 三大资源盒与横条列表布局` PASS；`热门 Skill 九大领域每类至少五项` PASS（9 个领域，每类至少 5）；`KeyPocket 页面 JavaScript 异常` PASS；390px 手机端页面无横向溢出。
+- Skill Handoff QA run 41808879505 SUCCESS：JavaScript syntax、Radar source contract、published HTML/JS/Radar asset checks、一键收录 E2E PASS。
+- E2E 曾因摘要重复仓库名使 Playwright strict locator 匹配两处失败；已改为 `.kp-resource-row` 范围定位并修复摘要，修正后的 Handoff 通过。
+- 仍未完成：iPhone Safari 与微信内置浏览器实机专项测试。
