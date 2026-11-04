@@ -93,3 +93,11 @@
 - **验收边界**：390px Playwright/Chromium 触屏测试通过，不等同真实 iPhone Safari 或微信内置浏览器真机验收。白屏现象在自动化环境未复现，不能声称真机白屏已被完全证实根治。不得要求用户清除网站数据、IndexedDB 或 localStorage。
 - 正式入口：https://chenzhe223-tech.github.io/keypocket/ 。
 
+
+
+
+## 2026-11-04 — 视觉与动效自定义中心
+- 资源版本：`kp-v2-visual-motion-studio-20261104-02`；Pages run `41798223345` SUCCESS。
+- KeyPocket Skill Handoff QA run `41798222925` SUCCESS：app.js syntax、Radar/KeyPocket source contract、线上资源版本及一键 Skill 收录 E2E 通过。
+- DAVYLAB Browser QA run `41798222827` 正在运行；测试脚本新增桌面端主题/动效/布局操作、localStorage 持久化、恢复默认，以及 390px 手机端面板宽度检查。
+- 缓存问题：旧 -01 URL 曾继续返回语法错误 bundle；最终通过同步更新 HTML 引用与 JS build marker 至 -02 解决，Pages 与线上资源校验已通过。
