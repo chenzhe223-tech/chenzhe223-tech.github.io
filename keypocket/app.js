@@ -123,7 +123,7 @@ function inferSkillProfile(p){
  const domain=selected?.[0]||'业务与行业应用',subcategory=selected?.[1]||'专业工具与流程';
  const evidence=[p.name?'仓库/Skill 名称':'',p.category?'原始分类':'',p.stack?'技术栈':'',p.tags?'标签':'',p.notes?'备注描述':'',p.repoUrl?'GitHub 仓库地址':''].filter(Boolean);
  const purpose=(String(p.notes||'').split('\n').find(x=>/^(主要作用|应用建议|建议方向)：/.test(x))||'').replace(/^(主要作用|应用建议|建议方向)：/,'').trim();
- const summary=purpose||((p.name||'该 Skill')+'：根据名称、标签与仓库元数据归纳的能力工具；建议打开原始仓库核实详细用法。');
+ const summary=purpose||'根据仓库名称、标签与元数据归纳的能力工具；建议打开原始仓库核实详细用法。';
  const confidence=evidence.length>=4?'较高':evidence.length>=2?'中等':'较低';
  return {version:1,domain,subcategory,scenes:KP_SKILL_TAXONOMY[domain]?.scenes||[],summary,capabilities:[subcategory,...(p.stack?[p.stack]:[])].slice(0,4),confidence,evidence,source:p.repoUrl||'',generatedAt:Date.now(),method:'metadata-rules'};
 }
