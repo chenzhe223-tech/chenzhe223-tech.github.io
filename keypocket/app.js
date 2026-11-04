@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-skill-boxes-20261104-01';
+window.__kpBuildVersion='kp-v2-mobile-settings-20261104-01';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -250,7 +250,7 @@ function openProjectEditor(project=null){
  });
 }
 function setModule(name){
- const views={keys:'#keysView',projects:'#projectView',radar:'#radarView',recycle:'#recycleView',backup:'#backupView',sync:'#syncView',github:'#githubView'};
+ const views={keys:'#keysView',projects:'#projectView',radar:'#radarView',settings:'#settingsView',recycle:'#recycleView',backup:'#backupView',sync:'#syncView',github:'#githubView'};
  Object.entries(views).forEach(([key,selector])=>{const n=$(selector);if(n)n.classList.toggle('hidden',key!==name);});
  document.querySelectorAll('[data-module]').forEach(b=>b.classList.toggle('active',b.dataset.module===name));
  if(name==='projects'){window.renderProjects();scanOwnGithubRepos({automatic:true});}
@@ -261,6 +261,7 @@ function setModule(name){
  if(name==='github')renderGithubCenter();
 }
 document.querySelectorAll('[data-module]').forEach(b=>b.addEventListener('click',()=>setModule(b.dataset.module)));
+$('#settingsBtn')?.addEventListener('click',()=>setModule('settings'));
 function githubCategory(repo){const s=((repo.name||'')+' '+(repo.description||'')+' '+(repo.language||'')+' '+(repo.topics||[]).join(' ')).toLowerCase();if(/ai|llm|gpt|agent|model|prompt|deepseek/.test(s))return 'AI 工具';if(/portfolio|personal site|个人网站|homepage/.test(s))return '个人网站';if(/mini.?program|小程序|wechat/.test(s))return '小程序';if(/dashboard|看板|analytics|chart/.test(s))return 'Web 应用';return 'Web 应用';}
 const KP_GITHUB_OWNER='chenzhe223-tech',KP_REPO_SCAN_KEY='kp.repo-scan.last.v1';
 let kpRepoScanPromise=null;
