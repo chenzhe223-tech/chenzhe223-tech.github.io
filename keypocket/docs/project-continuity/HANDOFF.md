@@ -84,3 +84,12 @@
 1. 请用户在原 iPhone Safari 设备和原网址重新打开最新资源，测试 Skill URL `https://github.com/Oldcircle/geo-sleuth`、弹窗取消/再次打开、收录成功返回列表；不要清除网站数据。
 2. 若仍白屏，优先收集 Safari Web Inspector 的 `window.__kpInitDiagnostic`、`window.__kpBuildVersion` 与 Console 首条异常；不能要求用户重置 IndexedDB。
 3. 后续按 P0 完成真实 QQ 邮箱 SMTP 投递、双设备云同步及云备份恢复；这些不属于本轮 Skill UI 验收范围。
+
+
+## 2026-11-04 单份最新自动备份交接
+1. 用户明确要求：自动备份完成后全量覆盖上一版，不保留每一版历史。
+2. 本地采用固定 IndexedDB key `kp.snapshot.latest`；新密文 put 成功后才删除旧版快照；失败保留旧版。
+3. 云端采用现有约束允许的 `snapshot_type='milestone'` 与 `period_key='latest'`，无需改数据库 schema；upsert 成功后删除当前用户其他快照，确保账号级只保留一份。
+4. 云端快照仍含 records、projects 与 deleted/tombstone；恢复前保护流程不提前删除原快照。
+5. 新 Browser QA 将连续两次本地备份更新后断言只有一张备份卡片且稳定 ID 不变，再执行恢复回归。
+6. 真实 Supabase 账号同步与云备份仍未进行；mock/代码测试不能标记为真实云端验收。
