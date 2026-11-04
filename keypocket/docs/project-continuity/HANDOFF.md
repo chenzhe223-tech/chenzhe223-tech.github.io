@@ -118,3 +118,13 @@ undefined
 - 关键输出：`[PASS] KeyPocket 视觉与动效设置实时应用及本地持久化`；`[PASS] KeyPocket 视觉设置独立恢复默认`；`[PASS] KeyPocket 390px 手机端视觉设置面板布局`。
 - 整站 Browser QA 最终结论为 FAILURE，但唯一失败项为外部产品入口 Worktoon 的 URL `https://worktoon.app.workbuddy.host/` 请求超时 25 秒，与 KeyPocket 无关。KeyPocket 子项包括原有备份覆盖/恢复、GitHub 收录、同步/密码找回 mock 等均 PASS。
 - 结论：KeyPocket 视觉与动效功能的 Browser Functional Test 通过；不把整站 QA 的外部 Worktoon 超时归因于 KeyPocket。
+
+
+## 2026-11-04 Skill Intelligence 首期交接
+1. 用户批准启动智能分类、归纳与查阅体验升级，首期 P1–P3 已提交。
+2. 代码：app.js commit 49037b4；index.html commit 3e6c631；最终资源标记 kp-v2-skill-intelligence-20261104-02。
+3. 9 个领域 + 二级分类 + 使用场景；规则归纳生成摘要/能力标签/置信度/证据字段。当前基于已有本地元数据，不声称读取 README 正文或调用 AI 模型。
+4. Skill 浏览新增领域统计与场景筛选；搜索覆盖摘要、子类和场景。编辑窗口允许人工覆盖领域/子类/摘要。
+5. skillProfile 可选字段通过原有加密项目记录保存；旧记录缺失时解锁后自动补齐；不改 schema/envelope。人工字段优先于自动字段。
+6. Actions：Pages 41802609405、Browser QA 41802610144、Skill Handoff QA 41802610170 对应最终 app SHA 49037b4，开始检查时仍在运行；接手者应查询最终状态并读失败日志。
+7. 下一步：完成同 SHA QA；若通过，更新状态为部署验收；补充测试覆盖旧记录升级、人工覆盖持久化、场景筛选与 390px 布局。随后进入 P4 Skill 关联推荐与组合工作流。
