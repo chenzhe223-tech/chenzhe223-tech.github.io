@@ -101,3 +101,11 @@
 - KeyPocket Skill Handoff QA run `41798222925` SUCCESS：app.js syntax、Radar/KeyPocket source contract、线上资源版本及一键 Skill 收录 E2E 通过。
 - DAVYLAB Browser QA run `41798222827` 正在运行；测试脚本新增桌面端主题/动效/布局操作、localStorage 持久化、恢复默认，以及 390px 手机端面板宽度检查。
 - 缓存问题：旧 -01 URL 曾继续返回语法错误 bundle；最终通过同步更新 HTML 引用与 JS build marker 至 -02 解决，Pages 与线上资源校验已通过。
+
+
+
+### 视觉与动效中心 Browser QA 最终结果（2026-11-04）
+- DAVYLAB Browser QA run `41798222827` 的 KeyPocket 子项全部通过：桌面端主题切换、动效/速度/幅度/方向、布局与导航位置实时应用；localStorage 偏好持久化；恢复默认；390px 手机端面板三标签可见、documentWidth=390，无横向溢出；桌面与手机端均无 KeyPocket pageerror。
+- 关键输出：`[PASS] KeyPocket 视觉与动效设置实时应用及本地持久化`；`[PASS] KeyPocket 视觉设置独立恢复默认`；`[PASS] KeyPocket 390px 手机端视觉设置面板布局`。
+- 整站 Browser QA 最终结论为 FAILURE，但唯一失败项为外部产品入口 Worktoon 的 URL `https://worktoon.app.workbuddy.host/` 请求超时 25 秒，与 KeyPocket 无关。KeyPocket 子项包括原有备份覆盖/恢复、GitHub 收录、同步/密码找回 mock 等均 PASS。
+- 结论：KeyPocket 视觉与动效功能的 Browser Functional Test 通过；不把整站 QA 的外部 Worktoon 超时归因于 KeyPocket。
