@@ -265,3 +265,10 @@ P2：
 - 最终 Pages run `41812157275` SUCCESS；DAVYLAB Browser QA run `41812157552` SUCCESS；KeyPocket Skill Handoff QA run `41811558670` SUCCESS（线上资源版本与 Skill 收录 E2E）。
 - Browser QA 通过：统一设置中心 7 个入口、核心导航 3 项；390px 项目页三项导航/折叠工具区/双列筛选；390px 设置中心 7 个入口、无横向溢出；手机端新增密钥入口可见；无 KeyPocket pageerror。视觉与动效实时应用/恢复默认也通过。
 - 自动化测试环境为 390px Playwright Chromium，不等同真实 iPhone Safari / 微信内置浏览器实机测试；后续仍需实机验收。
+
+
+## 2026-11-04 阶段交接总索引（新对话优先阅读）
+- 本阶段完整成果、当前代码/部署基准、测试证据、已知限制、未完成优先级及新对话接手步骤，统一整理在 `keypocket/docs/project-continuity/SESSION_HANDOFF_2026-11-04.md`。
+- 本次交接文件创建 commit：`0cb10ea0dcc62abba5341754bf2c32d9e4b74e8e`。
+- 交接基准 SHA：`194a5fd2d571386654a064c42ae5a54299767061`；交接文件提交后仍需新对话重新核对 main 最新 SHA 和 Actions。
+- 最终验收：Pages `41812576668`、Browser QA `41812576957`、KeyPocket Skill Handoff QA `41812576892` 均 SUCCESS。
