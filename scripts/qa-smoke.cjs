@@ -808,6 +808,25 @@ const mark = (status, name, detail = '') => {
       const addOnMobile = await mobileKp.locator('#addKeyBtn').isVisible();
       const mobileBounds = await mobileKp.evaluate(() => ({viewport: innerWidth, doc: document.documentElement.scrollWidth, buttonRight: document.querySelector('#addKeyBtn').getBoundingClientRect().right}));
       mark(addOnMobile && mobileBounds.doc <= mobileBounds.viewport && mobileBounds.buttonRight <= mobileBounds.viewport ? 'PASS' : 'FAIL', 'KeyPocket 手机端新增按钮与布局', JSON.stringify(mobileBounds));
+       await mobileKp.locator('[data-module="projects"]').click();
+       await mobileKp.waitForSelector('#projectView:not(.hidden)', { timeout: 5000 });
+       const mobileProjectLayout = await mobileKp.evaluate(() => ({
+         viewport: innerWidth, document: document.documentElement.scrollWidth,
+         tabs: document.querySelectorAll('.module-tabs[aria-label="核心功能"] .module-tab').length,
+         toolsCollapsed: !document.querySelector('.project-tools-menu')?.open,
+         filterColumns: getComputedStyle(document.querySelector('.project-filters')).gridTemplateColumns
+       }));
+       mark(mobileProjectLayout.document <= mobileProjectLayout.viewport && mobileProjectLayout.tabs === 3 && mobileProjectLayout.toolsCollapsed
+         ? 'PASS' : 'FAIL', 'KeyPocket 手机端项目页层级与操作区布局', JSON.stringify(mobileProjectLayout));
+       await mobileKp.locator('#settingsBtn').click();
+       const mobileSettings = await mobileKp.evaluate(() => ({
+         visible: !document.querySelector('#settingsView')?.classList.contains('hidden'),
+         width: innerWidth, document: document.documentElement.scrollWidth,
+         tiles: document.querySelectorAll('#settingsView .settings-tile').length
+       }));
+       mark(mobileSettings.visible && mobileSettings.document <= mobileSettings.width && mobileSettings.tiles >= 6
+         ? 'PASS' : 'FAIL', 'KeyPocket 手机端统一设置中心布局', JSON.stringify(mobileSettings));
+
       mark(mobileErrors.length === 0 ? 'PASS' : 'FAIL', 'KeyPocket 手机端 JavaScript 异常', mobileErrors.length ? JSON.stringify(mobileErrors) : '未发现 pageerror');
       await mobileKp.close();
       await kp.locator('[data-module="projects"]').click();
