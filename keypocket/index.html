@@ -51,9 +51,48 @@ body.kp-modal-open{overflow:hidden}
  #modalRoot .modal-actions .btn{min-height:44px}
 }
 
-@media(max-width:700px){.module-tabs{width:100%;overflow-x:auto;justify-content:flex-start}.module-tab{white-space:nowrap;flex:0 0 auto}.radar-period-tabs{width:100%;overflow-x:auto}}\n</style></head>
+@media(max-width:700px){.module-tabs{width:100%;overflow-x:auto;justify-content:flex-start}.module-tab{white-space:nowrap;flex:0 0 auto}.radar-period-tabs{width:100%;overflow-x:auto}}\n
+/* Visual & Motion Studio — user-customizable presentation layer */
+:root{--kp-user-bg:#f6f7fb;--kp-user-paper:#fff;--kp-user-ink:#17233d;--kp-user-muted:#727e96;--kp-user-line:#e5e9f2;--kp-user-accent:#5b5ce2;--kp-user-radius:18px;--kp-user-card-pad:19px;--kp-user-gap:14px;--kp-user-font:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;--kp-user-motion-duration:420ms}
+body.kp-customized{background:var(--kp-user-bg);color:var(--kp-user-ink);font-family:var(--kp-user-font)}
+body.kp-customized .shell{max-width:var(--kp-user-width,1180px)}
+body.kp-customized .card,body.kp-customized .stat,body.kp-customized .modal,body.kp-customized .lock-card{background:var(--kp-user-paper);border-color:var(--kp-user-line);border-radius:var(--kp-user-radius)}
+body.kp-customized .card{padding:var(--kp-user-card-pad);gap:var(--kp-user-gap)}
+body.kp-customized .btn.primary,body.kp-customized .module-tab.active{background:var(--kp-user-accent);border-color:var(--kp-user-accent);color:#fff}
+body.kp-customized .module-tab{border-radius:calc(var(--kp-user-radius)*.55)}
+body.kp-customized .cards{gap:var(--kp-user-gap);grid-template-columns:repeat(var(--kp-user-columns,2),minmax(0,1fr))}
+body.kp-customized .brand h1,body.kp-customized .list-head h2,body.kp-customized .project-intro h2{font-family:var(--kp-user-font)}
+body.kp-density-compact .card{padding:12px}body.kp-density-compact .stats{gap:7px}body.kp-density-compact .cards{gap:8px}
+body.kp-density-comfortable .card{padding:var(--kp-user-card-pad)}
+body.kp-density-loose .card{padding:25px}body.kp-density-loose .cards{gap:20px}
+body.kp-layout-wide .shell{max-width:1380px}body.kp-layout-standard .shell{max-width:1100px}body.kp-layout-full .shell{max-width:none}
+body.kp-layout-editorial .cards{grid-template-columns:repeat(var(--kp-user-columns,2),minmax(0,1fr))}
+body.kp-layout-vertical .cards{grid-template-columns:1fr}
+body.kp-layout-bento .cards .card:nth-child(5n+1){grid-column:span 2}
+body.kp-nav-bottom .module-tabs{position:sticky;bottom:8px;z-index:12;margin-top:20px;box-shadow:0 8px 26px #17233d20;backdrop-filter:blur(14px)}
+body.kp-nav-floating .module-tabs{position:sticky;top:8px;z-index:12;width:max-content;max-width:100%;margin-inline:auto;box-shadow:0 8px 24px #17233d18}
+body.kp-nav-hidden .module-tabs{display:none}
+body.kp-nav-left #mainView,body.kp-nav-right #mainView{display:grid;grid-template-columns:190px minmax(0,1fr);column-gap:18px;align-items:start}
+body.kp-nav-left #mainView>.top,body.kp-nav-left #mainView>.banner,body.kp-nav-left #mainView>.footer,body.kp-nav-right #mainView>.top,body.kp-nav-right #mainView>.banner,body.kp-nav-right #mainView>.footer{grid-column:1/-1}
+body.kp-nav-left #mainView>.module-tabs{grid-column:1;grid-row:3;display:flex;flex-direction:column;width:100%;position:sticky;top:12px}
+body.kp-nav-right #mainView>.module-tabs{grid-column:2;grid-row:3;display:flex;flex-direction:column;width:100%;position:sticky;top:12px}
+body.kp-nav-left #mainView>section:not(.lock-wrap),body.kp-nav-right #mainView>section:not(.lock-wrap){grid-column:1/-1}
+body.kp-motion-fade .card{animation:kpFade var(--kp-user-motion-duration) ease both}
+body.kp-motion-rise .card{animation:kpRise var(--kp-user-motion-duration) cubic-bezier(.2,.7,.2,1) both}
+body.kp-motion-float .card{animation:kpFloat calc(var(--kp-user-motion-duration)*1.8) ease-in-out both}
+body.kp-motion-glow .card{animation:kpGlow var(--kp-user-motion-duration) ease both}
+body.kp-motion-slide .card{animation:kpSlide var(--kp-user-motion-duration) ease both}
+@keyframes kpFade{from{opacity:0}to{opacity:1}}
+@keyframes kpRise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes kpFloat{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes kpGlow{from{box-shadow:0 0 0 transparent}to{box-shadow:0 8px 28px color-mix(in srgb,var(--kp-user-accent) 14%,transparent)}}
+@keyframes kpSlide{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.kp-visual-panel{width:min(100%,760px)}.kp-visual-tabs{display:flex;gap:7px;overflow:auto;margin:0 0 16px;padding:4px;background:#f0f2f8;border-radius:13px}.kp-visual-tabs button{border:0;background:transparent;border-radius:9px;padding:10px 14px;white-space:nowrap;color:#69748a;font-weight:700;font-size:12px}.kp-visual-tabs button.active{background:#fff;color:var(--kp-user-accent);box-shadow:0 2px 8px #17233d12}.kp-visual-content{display:grid;gap:13px}.kp-setting-group{border:1px solid #e7eaf2;border-radius:14px;padding:14px}.kp-setting-group h3{margin:0 0 10px;font-size:13px}.kp-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.kp-choice{border:1px solid #e2e6ef;background:#fff;color:#536078;border-radius:11px;padding:10px 8px;text-align:left;font-size:11px;min-width:0}.kp-choice.active{border-color:var(--kp-user-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--kp-user-accent) 13%,transparent);color:var(--kp-user-accent)}.kp-swatch{display:flex;gap:5px;margin-bottom:7px}.kp-swatch i{width:17px;height:17px;border-radius:6px;border:1px solid #00000012}.kp-setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:10px 0;font-size:12px;color:#59657c}.kp-setting-row input[type=color]{width:42px;height:34px;padding:2px;border:1px solid #dfe3eb;border-radius:8px;background:white}.kp-setting-row select,.kp-setting-row input[type=range]{max-width:55%;accent-color:var(--kp-user-accent)}.kp-setting-row select{border:1px solid #dfe3eb;border-radius:9px;padding:8px;background:#fff;color:#39445b}.kp-visual-preview{border:1px dashed #d9deeb;border-radius:14px;padding:14px;background:color-mix(in srgb,var(--kp-user-paper) 78%,var(--kp-user-bg))}.kp-visual-preview .card{max-width:100%;margin-top:10px}.kp-visual-actions{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:16px}.kp-visual-actions .btn{min-height:40px}
+@media(max-width:700px){body.kp-nav-left #mainView,body.kp-nav-right #mainView{display:block}body.kp-nav-left #mainView>.module-tabs,body.kp-nav-right #mainView>.module-tabs{position:static;display:flex;flex-direction:row;width:100%;overflow-x:auto}.kp-choice-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.kp-setting-row{align-items:flex-start}.kp-setting-row select{max-width:60%}body.kp-layout-bento .cards .card:nth-child(5n+1){grid-column:auto}}
+@media(prefers-reduced-motion:reduce){body[class*="kp-motion-"] .card{animation:none!important}body.kp-customized *,body.kp-customized *:before,body.kp-customized *:after{scroll-behavior:auto!important}}
+</style></head>
 <body><main id="app" class="shell"><section id="lockView" class="lock-wrap"><div class="lock-card"><div class="logo">⌘</div><h2 id="lockTitle">你的密钥，只留在本地</h2><p id="lockDesc">KeyPocket 使用本地密码加密保存密钥。密码不会上传，也无法由我们找回。</p><form id="unlockForm"><div class="field"><label for="masterPassword">本地解锁密码</label><input id="masterPassword" type="password" autocomplete="current-password" minlength="10" required placeholder="至少 10 位，建议使用长密码"></div><div id="confirmWrap" class="field hidden"><label for="confirmPassword">再次输入密码</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="10" placeholder="确认密码"></div><div id="lockNotice" class="notice hidden"></div><button id="unlockBtn" class="btn primary" type="submit">设置本地密码</button></form><button id="resetLocalBtn" class="smalllink hidden" type="button">忘记密码？清空本地库并重新设置</button><div class="notice warn">重要：忘记本地密码且没有可用备份时，密钥无法恢复。请妥善保管密码与加密备份。</div></div></section>
-<section id="mainView" class="hidden"><header class="top"><div class="brand"><div class="logo">⌘</div><div><h1>KeyPocket</h1><p>把 API 密钥，放在随手可用的口袋里。</p></div></div><div class="top-actions"><button id="importBtn" class="btn">导入备份</button><button id="exportBtn" class="btn">导出备份</button><button id="lockBtn" class="btn ghost">锁定</button><input id="backupFile" class="fileinput" type="file" accept=".keypocket,application/json"></div></header>
+<section id="mainView" class="hidden"><header class="top"><div class="brand"><div class="logo">⌘</div><div><h1>KeyPocket</h1><p>把 API 密钥，放在随手可用的口袋里。</p></div></div><div class="top-actions"><button id="visualSettingsBtn" class="btn" type="button" aria-haspopup="dialog">✦ 视觉与动效</button><button id="importBtn" class="btn">导入备份</button><button id="exportBtn" class="btn">导出备份</button><button id="lockBtn" class="btn ghost">锁定</button><input id="backupFile" class="fileinput" type="file" accept=".keypocket,application/json"></div></header>
 <div class="banner"><span>◈</span><div><strong>本地优先 · 加密存储</strong>密钥在此浏览器内加密保存，不会发送到 KeyPocket 服务器。复制操作会把完整密钥放入系统剪贴板，请留意共享设备。</div></div>
 <section id="syncView" class="hidden"><div id="syncCenterStatus" class="notice info" role="status"></div><section id="cloudSyncPanel" class="notice info" style="margin:16px 0;padding:16px">
 <strong>跨设备同步（加密）</strong>
