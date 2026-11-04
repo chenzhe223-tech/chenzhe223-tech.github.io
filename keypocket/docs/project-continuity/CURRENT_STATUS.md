@@ -81,3 +81,10 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 六种布局预设、内容宽度、列数、卡片间距、六种导航位置；移动端侧栏自动回流。
 - 设置独立保存在 localStorage，不触碰密钥库、加密快照和云同步数据；支持实时预览、恢复默认、JSON 导出。
 - 资源版本：`kp-v2-visual-motion-studio-20261104-01`。QA source-contract 已扩展；待 Pages、Browser QA、Skill Handoff QA 同 SHA 成功后，才升级为部署/功能验收通过。
+
+
+
+## 2026-11-04 视觉与动效中心部署状态更新
+- 最终版本 `kp-v2-visual-motion-studio-20261104-02` 已部署。
+- Pages run `41798223345` SUCCESS；KeyPocket Skill Handoff QA run `41798222925` SUCCESS（语法、source contract、线上资源版本、一键收录 E2E 通过）。
+- DAVYLAB Browser QA run `41798222827` 正在执行桌面交互和 390px 手机端测试，完成后回填结果。
