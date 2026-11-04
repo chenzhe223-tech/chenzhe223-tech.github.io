@@ -64,3 +64,10 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 云端备份：V2 同步成功后 upsert 账号级 `milestone/latest`，再清理该账号其他备份记录；云端完整快照包含密钥、项目和 tombstone 密文。
 - 备份中心只显示最新一份，不再显示每日/每月历史版本；独立手动导出文件不受影响。
 - 新增 Browser QA 检查连续两次备份仍只有一份、ID 不变及恢复流程；待最新 SHA 的 Pages 与 QA 运行结果。
+
+
+## 2026-11-04 单份最新自动备份验收结果
+- 部署资源版本：`kp-v2-single-latest-backup-20261104-01`；Pages `41795909835` SUCCESS；DAVYLAB Browser QA `41795909779` SUCCESS；KeyPocket Skill Handoff QA `41795832154` SUCCESS。
+- Browser QA 通过：备份策略文案、重复更新仍只保留一份且固定 ID 不变、最新本地备份恢复成功（3 条合成记录）、无页面 JavaScript 异常。
+- 云端 `milestone/latest` 账号级覆盖实现已提交；真实用户账号上传、覆盖、删除旧行及跨设备恢复仍待验证。当前 Supabase 快照表为空。
+- 下次接手：真实账号双设备验证仍按 P0 执行；禁止将云端 source-contract/mock 结果描述为真实 E2E。
