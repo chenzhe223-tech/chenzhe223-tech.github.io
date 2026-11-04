@@ -1,5 +1,6 @@
 import unittest
-from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens
+from unittest.mock import patch
+from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens, verify_and_repair_story_image
 
 class QualityGateTests(unittest.TestCase):
     def test_one_verified_skill_is_enough_for_daily_featured_recommendation(self):
@@ -61,6 +62,57 @@ class QualityGateTests(unittest.TestCase):
             "image_match_status":"thematic_fallback",
             "image_alt":"AI compute topic illustration: AI inference",
         }))
+
+    def test_unverifiable_primary_image_uses_verified_fallback(self):
+        primary = "https://images.example/primary.jpg"
+        fallback = "https://images.example/fallback.jpg"
+        story = {"title_zh":"Kimi model","image_url":primary,"image_fallback_url":fallback,
+                 "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   side_effect=[OSError("unavailable"), ("fallback-sha", None)]):
+            error, record, repair = verify_and_repair_story_image(story, {}, [])
+        self.assertIsNone(error)
+        self.assertEqual(record["url"], fallback)
+        self.assertEqual(story["image_url"], fallback)
+        self.assertEqual(story["image_match_status"], "thematic_fallback")
+        self.assertEqual(repair["reason"], "image_unverifiable")
+
+    def test_duplicate_primary_image_uses_unique_fallback(self):
+        primary = "https://images.example/duplicate.jpg"
+        fallback = "https://images.example/unique.jpg"
+        story = {"title_zh":"Compute story","image_url":primary,"image_fallback_url":fallback,
+                 "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
+        current = [{"title":"Earlier story","sha256":"duplicate-sha","phash":None}]
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   side_effect=[("duplicate-sha", None), ("unique-sha", None)]):
+            error, record, repair = verify_and_repair_story_image(story, {}, current)
+        self.assertIsNone(error)
+        self.assertEqual(record["sha256"], "unique-sha")
+        self.assertEqual(story["image_url"], fallback)
+        self.assertEqual(repair["reason"], "same_day_content_duplicate")
+
+    def test_low_relevance_image_is_replaced_by_labelled_topic_fallback(self):
+        fallback = "https://images.example/topic.jpg"
+        story = {"title_zh":"Bank AI guidance","image_url":"https://images.example/unrelated.jpg",
+                 "image_fallback_url":fallback,"image_match_status":"web_search_topic",
+                 "image_match_score":0.1,"image_alt":"unrelated image"}
+        with patch("radar.scripts.quality_gate.download_fingerprints", return_value=("topic-sha", None)) as fetch:
+            error, record, repair = verify_and_repair_story_image(story, {}, [])
+        self.assertIsNone(error)
+        fetch.assert_called_once_with(fallback)
+        self.assertIsNone(image_relevance_error(story))
+        self.assertEqual(story["image_url"], fallback)
+        self.assertEqual(repair["reason"], "low_image_relevance")
+
+    def test_unverifiable_primary_and_fallback_still_block(self):
+        story = {"title_zh":"Unavailable image","image_url":"https://images.example/a.jpg",
+                 "image_fallback_url":"https://images.example/b.jpg",
+                 "image_match_status":"thematic_fallback","image_alt":"主题配图（非新闻现场）"}
+        with patch("radar.scripts.quality_gate.download_fingerprints", side_effect=OSError("unavailable")):
+            error, record, repair = verify_and_repair_story_image(story, {}, [])
+        self.assertEqual(error["type"], "image_unverifiable")
+        self.assertIsNone(record)
+        self.assertIsNone(repair)
 
     def test_superlative_requires_date_and_metric_scope(self):
         story = {

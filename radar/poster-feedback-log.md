@@ -145,3 +145,12 @@
 - The source file records the exact source URLs, publication dates, Chinese/English summaries, limitations and DAVYLAB analysis. It does not override the automatic Skill Radar list.
 - Production state at kickoff: editorial source review complete; daily RSS collection, Skill selection, data quality gate, poster rendering, QR verification, deployment and live QA are pending. No production success is claimed by this record.
 - Website poster target remains 1200×1800 PNG only. ISO 2026-W45 must use the deterministic `poster_style_metadata` result; WeChat six-image and social ZIP outputs remain disabled.
+
+
+## 2026-11-05 — P0 gate failure and verified-image fallback repair
+
+- First production attempt: run `41935297547` reached the historical news/image freshness gate but correctly blocked publication. No report, poster or QR bundle was deployed.
+- The gate found zero historical news duplicates, zero China-news duplicates, zero same-ISO-week image reuse and zero Skill errors (9 recommendations; seven-day history complete). It found two image issues: one unavailable Unsplash topic image and one same-day duplicate image fingerprint. It also flagged the OCC headline's inherited “first-ever” wording because the claim did not carry an explicit year/metric scope.
+- Repair: keep the gate fail-closed, but permit a declared `image_fallback_url` only when it independently passes URL, download, SHA-256/perceptual duplicate and topic-label checks. If the fallback also fails, publication remains blocked. Add regression tests for unavailable, duplicate and low-relevance primary images.
+- Editorial repair: replace the OCC original-title wording with a neutral title; the underlying Reuters story remains attributed and the guidance's nonbinding status remains explicit.
+- Current status: repair code and regression tests are prepared for the next production attempt; no successful publication is claimed.

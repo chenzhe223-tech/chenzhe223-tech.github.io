@@ -247,6 +247,71 @@ def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_
     blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors or claim_errors)
     return "FAIL" if blocking else "PASS"
 
+def _image_candidate_issue(url, title, image_seen, current_images):
+    canonical = norm_url(url)
+    if not canonical:
+        return {"type":"invalid_image_url","title":title,"url":url}
+    if canonical in image_seen:
+        return {"type":"same_day_url_duplicate","title":title,"url":url,"other_title":image_seen[canonical]}
+    try:
+        sha, ph = download_fingerprints(url)
+    except Exception as exc:
+        return {"type":"image_unverifiable","title":title,"url":url,"error":type(exc).__name__}
+    for old in current_images:
+        if sha == old["sha256"] or (ph and old.get("phash") and hamming(ph, old["phash"]) <= 4):
+            return {"type":"same_day_content_duplicate","title":title,"url":url,"other_title":old["title"],"sha256":sha}
+    return None, {"title":title,"url":url,"canonical_url":canonical,"sha256":sha,"phash":ph}
+
+
+def verify_and_repair_story_image(story, image_seen, current_images):
+    """Use a declared fallback only after it independently passes the same image gates."""
+    title = story_title(story)
+    primary_url = image_url(story)
+    fallback_url = str(story.get("image_fallback_url") or "").strip()
+    relevance_error = image_relevance_error(story)
+    issues = [relevance_error] if relevance_error else []
+    candidates = []
+    if not relevance_error and primary_url:
+        candidates.append(("primary", primary_url))
+    if fallback_url and norm_url(fallback_url) != norm_url(primary_url):
+        candidates.append(("fallback", fallback_url))
+
+    for candidate_type, candidate_url in candidates:
+        result = _image_candidate_issue(candidate_url, title, image_seen, current_images)
+        if isinstance(result, tuple):
+            issue, record = result
+        else:
+            issues.append(result)
+            continue
+
+        repair = None
+        if candidate_type == "fallback":
+            story["image_url"] = candidate_url
+            story["image_fallback_url"] = primary_url
+            story["image_source"] = "Unsplash topic illustration"
+            story["image_page_url"] = "https://unsplash.com/s/photos/artificial-intelligence"
+            story["image_credit"] = "Unsplash"
+            story["image_license"] = "Unsplash License; review source terms before reuse"
+            story["image_license_url"] = "https://unsplash.com/license"
+            story["image_alt"] = f"主题配图（非新闻现场）：AI technology topic illustration: {title}"
+            story["image_match_status"] = "thematic_fallback"
+            story.pop("image_match_score", None)
+            story["image_matched_at"] = dt.datetime.now(TZ).isoformat()
+            story["image_is_generated"] = False
+            repair = {
+                "title": title,
+                "from": primary_url,
+                "to": candidate_url,
+                "reason": issues[-1].get("type") if issues else "primary_relevance_gate",
+            }
+        image_seen[record["canonical_url"]] = title
+        return None, record, repair
+
+    if issues:
+        return issues[-1], None, None
+    return {"type":"image_missing","title":title,"url":primary_url}, None, None
+
+
 def main():
     OUT_DIR.mkdir(parents=True,exist_ok=True)
     if not REPORT.exists(): raise SystemExit("FAIL: latest.json missing; cannot run historical quality gate")
@@ -308,8 +373,9 @@ def main():
     for item in china:
         hit=compare_story(item,china_history,current_date=today)
         if hit: china_hits.append({"title":story_title(item),"match":hit})
-    # Current-day unique-image checks: URL canonicalization and content hashes.
-    image_errors=[]; current_images=[]; image_seen={}
+    # Current-day unique-image checks: verify primary assets, then try a declared
+    # topic-image backup if the primary is unavailable, irrelevant or duplicated.
+    image_errors=[]; current_images=[]; image_seen={}; image_fallback_repairs=[]
     image_stories=[]
     for key in ("top5","china_ai_news"):
         arr=report.get(key)
@@ -319,23 +385,13 @@ def main():
     unique_story={}
     for s in image_stories: unique_story[story_id(s)]=s
     for s in unique_story.values():
-        relevance_error = image_relevance_error(s)
-        if relevance_error:
-            image_errors.append(relevance_error)
-        url=image_url(s); canonical=norm_url(url)
-        if canonical in image_seen:
-            image_errors.append({"type":"same_day_url_duplicate","title":story_title(s),"url":url,"other_title":image_seen[canonical]})
-            continue
-        image_seen[canonical]=story_title(s)
-        try:
-            sha,ph=download_fingerprints(url)
-            for old in current_images:
-                if sha==old["sha256"] or (ph and old.get("phash") and hamming(ph,old["phash"])<=4):
-                    image_errors.append({"type":"same_day_content_duplicate","title":story_title(s),"url":url,"other_title":old["title"],"sha256":sha})
-                    break
-            current_images.append({"title":story_title(s),"url":url,"canonical_url":canonical,"sha256":sha,"phash":ph})
-        except Exception as exc:
-            image_errors.append({"type":"image_unverifiable","title":story_title(s),"url":url,"error":type(exc).__name__})
+        error, image_record, repair = verify_and_repair_story_image(s, image_seen, current_images)
+        if error:
+            image_errors.append(error)
+        else:
+            current_images.append(image_record)
+            if repair:
+                image_fallback_repairs.append(repair)
     # Compare this week's current images to image URLs recorded in archives, excluding current date.
     week_start=(dt.date.fromisoformat(today)-dt.timedelta(days=dt.date.fromisoformat(today).weekday())).isoformat()
     week_urls={}
@@ -443,7 +499,7 @@ def main():
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files",
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
-      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"fallback_repairs":image_fallback_repairs,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
       "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors,"policy_version":CLAIM_PROVENANCE_POLICY_VERSION,"editorial_source_basis_count":len(source_basis),"editorial_analysis_label":editorial.get("analysis_label_zh")},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
       "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
@@ -458,10 +514,10 @@ def main():
             "status": "PASS", "checked_at": result["generated_at"], "image_relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"], "claim_provenance_policy_version": CLAIM_PROVENANCE_POLICY_VERSION,
             "history_files": len(archive_files), "history_stories": len(history),
             "news_duplicate_hits": len(duplicate_hits), "china_duplicate_hits": len(china_hits),
-            "same_week_image_reuse": len(week_image_hits), "report_path": "test-results/radar/news-image-quality-gate.json"
+            "same_week_image_reuse": len(week_image_hits), "image_fallback_repairs": image_fallback_repairs, "report_path": "test-results/radar/news-image-quality-gate.json"
         }
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
-    print(json.dumps({"status":result["status"],"image_error_details":image_errors,"skill_errors":skill_errors,"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"claim_errors":claim_errors,"report":str(out)},ensure_ascii=False))
+    print(json.dumps({"status":result["status"],"image_error_details":image_errors,"skill_errors":skill_errors,"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"image_fallback_repairs":image_fallback_repairs,"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"claim_errors":claim_errors,"report":str(out)},ensure_ascii=False))
     if result["status"]!="PASS":
         raise SystemExit("FAIL: news/image freshness gate blocked publication; see test-results/radar/news-image-quality-gate.json")
     return 0
