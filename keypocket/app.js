@@ -187,7 +187,7 @@ function kpProjectRow(p,kind){
 }
 function renderProjects(){
  const q=($('#projectSearch')?.value||'').trim().toLowerCase(),sourceFilter=$('#projectSourceFilter')?.value||'all',categoryFilter=$('#projectCategoryFilter')?.value||'all',sceneFilter=$('#projectSceneFilter')?.value||'all';
- const allMine=projects.filter(p=>projectSource(p)==='mine'),allExternal=projects.filter(p=>projectSource(p)==='external'&&(isExternalSkillProject(p)||isExternalSkillProject(p)));
+ const allMine=projects.filter(p=>projectSource(p)==='mine');
  const matches=projects.filter(p=>{
   const src=projectSource(p),skill=isExternalSkillProject(p)||isOwnSkillProject(p),profile=skill?skillProfile(p):null;
   if((sourceFilter==='mine'&&src!=='mine')||(sourceFilter==='external'&&src!=='external')||(sourceFilter==='skills'&&!skill)||(sourceFilter==='other'&&src!=='other'))return false;
@@ -196,7 +196,7 @@ function renderProjects(){
   return !q||[p.name,p.repoUrl,p.appUrl,p.category,p.stack,p.notes,p.tags,profile?.domain,profile?.subcategory,profile?.summary,...(profile?.scenes||[])].join(' ').toLowerCase().includes(q);
  });
  const sort=(a,b)=>Number(b.favorite)-Number(a.favorite)||b.updatedAt-a.updatedAt;
- const mine=matches.filter(p=>projectSource(p)==='mine').sort(sort),external=matches.filter(p=>projectSource(p)==='external'&&(isExternalSkillProject(p)||isExternalSkillProject(p))).sort(sort);
+ const mine=matches.filter(p=>projectSource(p)==='mine').sort(sort),external=matches.filter(p=>projectSource(p)==='external'&&isExternalSkillProject(p)).sort(sort);
  const other=matches.filter(p=>projectSource(p)!=='mine'&&!(projectSource(p)==='external'&&isExternalSkillProject(p))).sort(sort);
  $('#projectCount').textContent=projects.length+' 项资源 · 我的开发 '+allMine.length+' · 外部 Skill '+projects.filter(p=>projectSource(p)==='external'&&isExternalSkillProject(p)).length;
  const row=(p,kind)=>kpProjectRow(p,kind);
