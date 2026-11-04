@@ -357,6 +357,7 @@ async function refreshSavedSkillHeat(){
 }
 $('#refreshSkillHeatBtn')?.addEventListener('click',refreshSavedSkillHeat);
 $('#importSkillBtn')?.addEventListener('click',skillImportModal);
+$('#addProjectBtn')?.addEventListener('click',()=>openProjectEditor());
 
 function canonicalSkillRepoUrl(value){
  try{
