@@ -236,3 +236,12 @@ P2：
 - 资源版本：kp-v2-skill-intelligence-20261104-02。代码提交：49037b4（app.js）及 3e6c631（index.html）。
 - Pages、Browser QA、Skill Handoff QA 对最终 SHA 49037b4 的结果仍需核对；在同 SHA 通过前不标记为验收完成。
 - 风险/边界：规则分类不是语义 AI；缺少 README/仓库正文解析，暂时主要依赖已收录名称、category、stack、tags、notes 和 repo URL。后续阶段可增加 GitHub README/Topics/目录结构分析、分类置信度校准、Skill 关联推荐与组合工作流。
+
+
+## 2026-11-04 我的应用与仓库三盒布局升级
+- 根据用户截图反馈，撤销此前卡片网格式 Skill 展示，重构为三个清晰资源盒：我的开发、外部收录、热门 Skill；项目/Skill 使用紧凑横条行展示，避免卡片高低错落与大面积空白。
+- 我的开发：列出所有符合自有 GitHub owner 的项目；外部收录：列出已收录外部 Skill；其他非 Skill 外部项目保留独立辅助区，不丢弃数据。支持现有编辑、收藏、删除/回收站、仓库与应用链接。
+- 热门 Skill：读取 KeyPocket 现有每日 GitHub Skill Radar JSON 的完整 repositories（已验证公开 Git Tree 含 SKILL.md、过滤 fork/archived），按九大能力领域归组。每个领域展示至少 5 条；分类不足时用综合热门 Skill 补足并明确标记，不伪称精准匹配。按真实 Stars 排序，展示仓库链接、描述、语言和 Stars，可一键加密收录到外部 Skill 盒子。
+- 刷新按钮使用同源 JSON 的 no-store 与时间戳重新读取最新采集数据；底层 GitHub 采集仍由现有每日 GitHub Actions 完成，前端刷新不会绕过授权直接触发 GitHub Actions，也不会在浏览器匿名调用大量 API。
+- 资源版本：kp-v2-skill-boxes-20261104-01。代码 app.js commit 5f7bb2f；HTML commit 26b5386；QA 脚本 commits 03fd9ef、5b87a53。
+- 前一轮 Skill Handoff QA 失败原因已查明：HTML 仍引用旧 -01 资源，而 JS build 标记为 -02，线上资产版本不匹配。当前 HTML 与 JS 已统一切换到新 -01 资源标记；需等待本轮同 SHA Pages/Handoff/Browser QA 最终结果。
