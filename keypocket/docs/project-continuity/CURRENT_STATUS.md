@@ -104,3 +104,11 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 加密项目记录支持可选 skillProfile；旧记录解锁后自动补齐，沿用 persistProject/AES-GCM。编辑窗口支持人工领域/子类/摘要覆盖。
 - 资源版本：kp-v2-skill-intelligence-20261104-02；app.js commit 49037b4，HTML commit 3e6c631。最新 Actions 41802610170（Skill Handoff）、41802610144（Browser QA）、41802609405（Pages）正在运行，需按最终 SHA 核验。
 - 当前等级：Code Completed（首期实现已提交）；Build/Runtime/Functional/Production 等待同 SHA Actions 结果。规则归纳并非 AI 深度理解，README 正文分析与 Skill 关联推荐属于后续阶段。
+
+
+## 2026-11-04 三盒式 Skill 资源库升级
+- 已将原先卡片网格重构为「我的开发 / 外部收录 / 热门 Skill」三大资源盒；自有项目与外部 Skill 全量以横条展示，保留编辑、收藏、删除、GitHub/应用跳转。
+- 热门 Skill 从 api/skill-radar.json 完整 repositories 读取真实验证数据（SKILL.md 路径验证、过滤 fork/archived），按九大能力领域分组，每组至少 5 项；不足部分以“综合热门补充”明确标记。支持刷新最新采集数据、一键加密收录。
+- 刷新仅重新请求最新发布的静态 JSON，不在客户端伪造即时 GitHub 采集；底层采集由每日 Actions 运行。
+- 版本 kp-v2-skill-boxes-20261104-01；app.js 5f7bb2f，index.html 26b5386；Browser QA 选择器更新 03fd9ef / 5b87a53。
+- 当前验收状态：等待最终 SHA 的 Pages、Browser QA、Skill Handoff QA；旧轮次失败原因是测试启动时 Pages 尚未部署该提交，并非应用测试断言失败。需核验最终 run。
