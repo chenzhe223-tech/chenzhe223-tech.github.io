@@ -171,4 +171,13 @@ P2：
 - 私有仓库：当前 KeyPocket GitHub App/OAuth 尚未配置，不能扫描私有仓库；页面明确提示，待 GitHub App 最小权限授权后再扩展。不得通过前端硬编码 Token 绕过。
 - 自动扫描频率：每个浏览器本地记录 24 小时扫描时间；手动扫描可随时触发。首次扫描会补齐此前未录入的公开原创仓库。
 - 本轮新增 Browser QA：模拟自有应用、Skill 与 fork 仓库，验证自动发现、Skill 分类、重复扫描去重；测试仅使用合成仓库元数据。
-- 本项状态：代码提交后等待 Pages build/deploy、Browser QA 与线上运行验收；私有仓库能力仍待 GitHub App OAuth 完成。
+- 验收结果：Pages build/deploy run `41794539121` SUCCESS；DAVYLAB Browser QA run `41794539177` SUCCESS；KeyPocket Skill Handoff QA run `41794539058` SUCCESS，三者均对应最终功能 SHA `4fe8ac7f45561ffd19ce637723c84aa3376e2875`。Browser QA 实测自动发现 2 个模拟自有仓库（1 个 Skill、1 个应用）、Skill 分类展示、重复扫描不重复收录均 PASS。
+
+
+### GitHub 自动发现功能验收记录（2026-11-04）
+
+- 最新功能代码：`fc48a6d023c30aabfb8977c1fda1d748789f17fa`；HTML：`940064f7131f6c710cb38308019dea581b7389c8`；Browser QA：`96c02ccde08bd4dae184e72dbb5907a63b8413b5`；项目状态文档：`0e7de5eb923aca5b8d783036d5364a7732265d7b`；README：`4fe8ac7f45561ffd19ce637723c84aa3376e2875`。
+- 五级交付：Code Completed；Build Passed（Pages run 41794539121）；Runtime Verified（Pages deployment 与线上资源检查通过）；Functional Tested（Browser QA run 41794539177）；Production Deployed（GitHub Pages deploy SUCCESS）。
+- Browser QA 关键结果：自动发现并加密收录自有 GitHub 应用与 Skill PASS；自有 Skill 分类展示 PASS；重复扫描去重 PASS；KeyPocket 页面无 JavaScript pageerror。
+- 自动扫描默认每 24 小时执行一次（用户进入「我的 Skills / 项目」模块时触发），并提供手动扫描按钮；首次扫描补齐未收录的公开原创仓库。现有记录不会被自动覆盖。
+- 当前仅公开仓库：GitHub App/OAuth 未配置，私有仓库不可扫描。不得将此能力描述为全量私有仓库同步。
