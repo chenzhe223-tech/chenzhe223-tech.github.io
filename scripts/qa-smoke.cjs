@@ -683,6 +683,7 @@ const mark = (status, name, detail = '') => {
       const backupRaw = JSON.parse(require('fs').readFileSync(backupPath, 'utf8'));
       const backupHasNoPlaintext = !JSON.stringify(backupRaw).includes('qa-synthetic-');
       mark(backupRaw.app === 'KeyPocket' && backupRaw.cipher?.name === 'AES-256-GCM' && backupHasNoPlaintext ? 'PASS' : 'FAIL', 'KeyPocket 多记录加密备份导出', '加密文件结构有效；未发现明文测试密钥');
+      await kp.locator('[data-module="keys"]').click();
       // Restore the encrypted backup into a fresh, isolated browser context to verify compatibility.
       const restoreKp = await browser.newPage({ viewport: { width: 1280, height: 900 } });
       const restoreErrors = [];
