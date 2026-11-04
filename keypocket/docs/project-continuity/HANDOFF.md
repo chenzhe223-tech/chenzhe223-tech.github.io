@@ -138,3 +138,11 @@ undefined
 5. 资源版本 kp-v2-skill-boxes-20261104-01；app.js 5f7bb2f，index.html 26b5386，QA 脚本 5b87a53。
 6. 前一轮 Handoff run 41802796262 失败根因为 HTML 引用 skill-intelligence -01，JS 期望 -02，CDN 资产不一致。新 HTML 与 JS 统一为新 build 标记；等待最终 Actions 验收。
 7. 下一步：核验同 SHA Pages/Browser QA/Handoff QA；如失败读日志修复。重点确认热门分组 9 组各 >=5、移动端横条换行无溢出、点击收录进入外部盒、项目编辑/收藏/删除回归。
+
+
+### 三盒式资源库最终交付结果（2026-11-04）
+- 资源版本 kp-v2-skill-boxes-20261104-01；app.js 最新修正 commit 3f546ec；HTML commit 26b5386。
+- Pages `41808879806` SUCCESS；Browser QA `41808657331` SUCCESS；Handoff `41808879505` SUCCESS。
+- 三盒、横条列表、九领域每类至少 5 个热门 Skill、390px 无横向溢出及页面无 JS error 均通过；一键收录 E2E 通过。
+- 最新修复：默认摘要不再重复仓库名称；E2E 定位 `.kp-resource-row`，修复严格定位冲突。
+- 仍待：真实 iPhone Safari/微信实机验证。刷新读取最新已发布静态 Radar 数据，底层每日 Actions 采集。
