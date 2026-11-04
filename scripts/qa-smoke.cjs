@@ -454,11 +454,18 @@ const mark = (status, name, detail = '') => {
       mark(autoScanApp && autoScanSkill ? 'PASS' : 'FAIL', 'KeyPocket 自动发现并加密收录自有 GitHub 应用与 Skill', autoScanText);
       const autoScanSkillCategory = await kp.locator('#projectCards').innerText().then(t => t.includes('Agent 与自动化'));
       mark(autoScanSkillCategory ? 'PASS' : 'FAIL', '自动扫描的自有 Skill 分类展示', 'Skill 标签与用途分类可见');
-      const scanCountBefore = await kp.locator('#projectCards .project-card').filter({ hasText: 'qa-auto-scan-app' }).count();
+      const scanCountBefore = await kp.locator('#projectCards .kp-resource-row').filter({ hasText: 'qa-auto-scan-app' }).count();
       await kp.locator('#scanOwnReposBtn').click();
       await kp.waitForFunction(() => (document.querySelector('#githubAutoScanStatus')?.textContent || '').includes('扫描完成'), null, { timeout: 10000 });
-      const scanCountAfter = await kp.locator('#projectCards .project-card').filter({ hasText: 'qa-auto-scan-app' }).count();
+      const scanCountAfter = await kp.locator('#projectCards .kp-resource-row').filter({ hasText: 'qa-auto-scan-app' }).count();
       mark(scanCountBefore === 1 && scanCountAfter === 1 && kpOwnRepoScanCalls >= 2 ? 'PASS' : 'FAIL', 'KeyPocket GitHub 自动扫描去重', '重复扫描前后应用卡片数量：'+scanCountBefore+' → '+scanCountAfter);
+      const threeBoxes = await kp.locator('#projectCards .kp-resource-box').count();
+      const resourceRows = await kp.locator('#projectCards .kp-resource-row').count();
+      mark(threeBoxes >= 3 && resourceRows >= 2 ? 'PASS' : 'FAIL', 'KeyPocket 三大资源盒与横条列表布局', '资源盒数量 '+threeBoxes+'，横条记录 '+resourceRows);
+      const hotRows = await kp.locator('#hotSkillGroups .kp-hot-domain').count();
+      const hotMinimum = await kp.locator('#hotSkillGroups .kp-hot-domain').evaluateAll(nodes => nodes.every(n => n.querySelectorAll('.kp-hot-row').length >= 5));
+      mark(hotRows === 9 && hotMinimum ? 'PASS' : 'FAIL', '热门 Skill 九大领域每类至少五项', '领域数 '+hotRows+'；每领域至少五项：'+hotMinimum);
+
 
 
       // Skill Radar fetches a same-origin static JSON API. Its CSP must explicitly allow 'self'.
