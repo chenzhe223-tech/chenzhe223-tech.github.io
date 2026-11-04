@@ -71,3 +71,13 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - Browser QA 通过：备份策略文案、重复更新仍只保留一份且固定 ID 不变、最新本地备份恢复成功（3 条合成记录）、无页面 JavaScript 异常。
 - 云端 `milestone/latest` 账号级覆盖实现已提交；真实用户账号上传、覆盖、删除旧行及跨设备恢复仍待验证。当前 Supabase 快照表为空。
 - 下次接手：真实账号双设备验证仍按 P0 执行；禁止将云端 source-contract/mock 结果描述为真实 E2E。
+
+
+
+## 2026-11-04 视觉与动效设置中心（代码已提交，待部署验收）
+- 主界面新增「视觉与动效」菜单，三标签：主题与字体、动效 Motion Lab、页面布局。
+- 七种主题预设 + 自定义颜色；四种字体；三档内容密度与圆角控制。
+- 六种页面动效，速度/幅度/方向可调；尊重系统减少动态效果设置。
+- 六种布局预设、内容宽度、列数、卡片间距、六种导航位置；移动端侧栏自动回流。
+- 设置独立保存在 localStorage，不触碰密钥库、加密快照和云同步数据；支持实时预览、恢复默认、JSON 导出。
+- 资源版本：`kp-v2-visual-motion-studio-20261104-01`。QA source-contract 已扩展；待 Pages、Browser QA、Skill Handoff QA 同 SHA 成功后，才升级为部署/功能验收通过。
