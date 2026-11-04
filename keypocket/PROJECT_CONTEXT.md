@@ -197,3 +197,14 @@ P2：
 - Browser QA 验证：备份中心策略说明 PASS；连续两次备份后卡片数量 `1→1` 且固定快照 ID 不变 PASS；最新本地备份恢复三条合成 API Key PASS；无 JavaScript pageerror。
 - 云端单份覆盖代码已提交并通过 source contract 检查；Supabase 当前 `keypocket_backup_snapshots` 表查询显示 0 行，因此没有旧云端快照可清理。真实账号云端 upsert/delete 及跨设备恢复仍待真实账号测试，不能宣称真实云端备份 E2E 已通过。
 - 不修改数据库 schema/RLS/grants。云端使用既有 `milestone` 类型与 `latest` period key，写入成功后按当前 user_id 清理其他旧快照。
+
+
+
+## 2026-11-04 视觉与动效自定义中心（开发中，待线上验收）
+- 参照公众号选题平台的 Visual DNA，将独立「视觉与动效」入口加入 KeyPocket 主界面；设置分为「主题与字体 / 动效 Motion Lab / 页面布局」三标签。
+- 主题：QORE 冰雾玻璃、Editorial 纸感、Ocean Mist、阳光 Sunshine、薄荷 Mint、蜜桃 Peach、薰衣草 Lavender、自定义颜色；支持强调色、背景色、卡片色、系统/圆润/衬线/等宽字体、紧凑/舒适/宽松密度、圆角。
+- 动效：关闭、柔和淡入、轻盈上浮、漂浮显现、光感聚焦、侧向滑入；速度、幅度和方向可调，系统 prefers-reduced-motion 时禁用动画。
+- 布局：Editorial、Balanced、Vertical、Compact、Bento、Split；内容宽度、卡片列数、间距、导航顶部/左侧/右侧/底部/悬浮/隐藏；手机端侧栏自动回流为横向导航。
+- 设置保存在独立 localStorage key `kp.visual.preferences.v1`，不进入 API Key 加密库、不参与云同步；支持实时预览、独立恢复默认和 JSON 导出。未改动密钥加密、备份、同步业务数据。
+- 资源版本：`kp-v2-visual-motion-studio-20261104-01`。应用代码已提交；新增 Skill Handoff source-contract QA，线上部署和浏览器 E2E 待最新 Actions 结果。
+- 验收边界：当前为桌面/移动响应式代码实现；尚不能标记真实 iPhone Safari/微信真机通过。后续需验证设置保存刷新、每个主题/布局/动效、390px 视口、减少动态效果、JSON 导出与恢复默认。
