@@ -156,3 +156,11 @@ undefined
 - Pages `41812157275` SUCCESS；Browser QA `41812157552` SUCCESS；Handoff QA `41811558670` SUCCESS。
 - Browser 重点结果：设置中心 7 项、主导航 3 项；390px 项目页与设置页布局通过；横向溢出为 0；手机端新增 Key 按钮可见；无页面异常。
 - 尚待真实 iPhone Safari / 微信内置浏览器实机测试；Chromium 390px 通过不能替代真机验收。
+
+
+## 2026-11-04 阶段完整交接
+- 已新增统一交接文档：`keypocket/docs/project-continuity/SESSION_HANDOFF_2026-11-04.md`。
+- 覆盖本阶段 API Key 本地加密/自动备份/回收站、同步账号与设备安全、Skill 搜索/收录/公开仓库扫描、Skill Intelligence、三盒式资源库、视觉与动效、手机端主界面和设置中心。
+- 明确列出真实双设备同步、真实邮件投递、iPhone Safari/微信实机、Skill Profile 专项回归、GitHub 私有仓库 OAuth 等未完成项。
+- 另记录用户已批准但尚未交付的 V2.1 Phase 1：应用-Key 绑定、DeepSeek 账单导入、应用/模型/日期统计、未分配账单、预算提醒、Excel/CSV 导出及账单本地加密原则。
+- 新对话请以 SESSION_HANDOFF 为接手清单，仍须重新查询 main 最新 SHA 和 Actions，不可直接相信历史 SHA。
