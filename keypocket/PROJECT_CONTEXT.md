@@ -224,3 +224,15 @@ P2：
 - 关键输出：`[PASS] KeyPocket 视觉与动效设置实时应用及本地持久化`；`[PASS] KeyPocket 视觉设置独立恢复默认`；`[PASS] KeyPocket 390px 手机端视觉设置面板布局`。
 - 整站 Browser QA 最终结论为 FAILURE，但唯一失败项为外部产品入口 Worktoon 的 URL `https://worktoon.app.workbuddy.host/` 请求超时 25 秒，与 KeyPocket 无关。KeyPocket 子项包括原有备份覆盖/恢复、GitHub 收录、同步/密码找回 mock 等均 PASS。
 - 结论：KeyPocket 视觉与动效功能的 Browser Functional Test 通过；不把整站 QA 的外部 Worktoon 超时归因于 KeyPocket。
+
+
+## 2026-11-04 Skill Intelligence Library（首期 P1–P3 开发）
+- 用户批准将 Skill 模块升级为智能分类与归纳知识库。
+- 已实现 9 个一级能力领域：AI Agent 与自动化、编程与软件工程、UI/UX 与视觉设计、数据分析与知识管理、内容创作与办公、搜索与深度研究、多媒体与创意、业务与行业应用、安全与系统运维。
+- 新增二级子分类、使用场景标签、自动能力摘要、核心能力标签、分类置信度与归纳依据。当前使用本地规则/元数据分析，不调用收费 AI API；摘要缺乏明确描述时会明确提示需回原仓库核实，不伪装成已验证事实。
+- Skill 浏览区新增领域统计入口、场景快捷筛选和能力档案卡片；自然语言搜索覆盖领域、子类、摘要和场景。
+- 项目加密记录新增可选 skillProfile 字段，旧记录缺失时在解锁后自动补齐并通过既有 persistProject/AES-GCM 流程保存；未修改 IndexedDB schema、加密 envelope 或 Supabase schema。
+- 编辑项目时可人工指定能力领域、子分类与摘要；人工字段优先于自动推断。重新自动归纳不应覆盖 manualDomain/manualSubcategory/manualSummary。
+- 资源版本：kp-v2-skill-intelligence-20261104-02。代码提交：49037b4（app.js）及 3e6c631（index.html）。
+- Pages、Browser QA、Skill Handoff QA 对最终 SHA 49037b4 的结果仍需核对；在同 SHA 通过前不标记为验收完成。
+- 风险/边界：规则分类不是语义 AI；缺少 README/仓库正文解析，暂时主要依赖已收录名称、category、stack、tags、notes 和 repo URL。后续阶段可增加 GitHub README/Topics/目录结构分析、分类置信度校准、Skill 关联推荐与组合工作流。
