@@ -1,0 +1,294 @@
+{
+  "report_date": "2026-11-04",
+  "poster": "radar/posters/2026-11-04.png",
+  "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "news_count": 5,
+  "news_urls": [
+    "https://rikiyat.github.io/blog/weight-space-programming/",
+    "https://www.reuters.com/technology/chinas-baidu-launches-ai-model-simulating-road-environment-robotaxis-2026-11-03/",
+    "https://www.anthropic.com/research/provable-inference",
+    "https://www.marktechpost.com/2026/11/03/soniox-stt-v6-agent-text-input-echo-cancellation/",
+    "https://www.thepaper.cn/newsDetail_forward_34398138"
+  ],
+  "news_titles": [
+    "MIT研究者展示模型权重直接编辑实验",
+    "百度Apollo World把自动驾驶测试搬进模拟世界",
+    "Anthropic推出FlashProve，尝试给模型回答加“来源证明”",
+    "Soniox STT v6让语音 Agent 听懂自己刚说过的话",
+    "乌镇对话聚焦中国大模型开源与安全治理"
+  ],
+  "news_image_evidence": [
+    {
+      "story_url": "https://rikiyat.github.io/blog/weight-space-programming/",
+      "image_source": "MIT CSAIL研究者原始博客",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.reuters.com/technology/chinas-baidu-launches-ai-model-simulating-road-environment-robotaxis-2026-11-03/",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://www.anthropic.com/research/provable-inference",
+      "image_source": "Anthropic官方研究博客",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/03/soniox-stt-v6-agent-text-input-echo-cancellation/",
+      "image_source": "MarkTechPost；Soniox官方公告",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.thepaper.cn/newsDetail_forward_34398138",
+      "image_source": "澎湃新闻",
+      "image_match_status": "article_image",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    }
+  ],
+  "skill": "NVIDIA/SkillSpector",
+  "design": "geometric-navy",
+  "format": "PNG",
+  "canvas": [
+    1200,
+    1800
+  ],
+  "layout_regions": {
+    "masthead": [
+      58,
+      42,
+      1152,
+      110
+    ],
+    "geometric-hero": [
+      0,
+      0,
+      1200,
+      425
+    ],
+    "editorial-observation": [
+      48,
+      450,
+      1152,
+      575
+    ],
+    "three-column-news-grid": [
+      50,
+      608,
+      1150,
+      1122
+    ],
+    "two-news-summary-row": [
+      50,
+      1136,
+      1150,
+      1280
+    ],
+    "skill-recommendation": [
+      48,
+      1324,
+      868,
+      1538
+    ],
+    "right-qr-panel": [
+      900,
+      1290,
+      1164,
+      1664
+    ],
+    "brand-footer": [
+      0,
+      1700,
+      1200,
+      1800
+    ]
+  },
+  "text_bounds": [
+    {
+      "block": "paragraph",
+      "x": 64,
+      "y": 329,
+      "width": 1070,
+      "height": 25,
+      "actual_width": 906.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 250,
+      "y": 469,
+      "width": 850,
+      "height": 84,
+      "actual_width": 844.1,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 309.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 881,
+      "width": 318,
+      "height": 21,
+      "actual_width": 276.8,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 311.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 881,
+      "width": 318,
+      "height": 21,
+      "actual_width": 257.6,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 300.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 881,
+      "width": 318,
+      "height": 21,
+      "actual_width": 288.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 195,
+      "y": 1176,
+      "width": 372,
+      "height": 42,
+      "actual_width": 364.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 195,
+      "y": 1222,
+      "width": 372,
+      "height": 17,
+      "actual_width": 190.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 758,
+      "y": 1176,
+      "width": 372,
+      "height": 21,
+      "actual_width": 324.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 758,
+      "y": 1201,
+      "width": 372,
+      "height": 17,
+      "actual_width": 266.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1380,
+      "width": 550,
+      "height": 27,
+      "actual_width": 212.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1434,
+      "width": 565,
+      "height": 45,
+      "actual_width": 560.6,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1500,
+      "width": 550,
+      "height": 14,
+      "actual_width": 335.5,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    }
+  ],
+  "design_variant": "geometric-navy",
+  "iso_year": 2026,
+  "iso_week": 45,
+  "iso_weekday": 3,
+  "style_cycle_index": 44,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.4.0",
+  "generated_at": "2026-11-04T08:17:59.104147+08:00"
+}
