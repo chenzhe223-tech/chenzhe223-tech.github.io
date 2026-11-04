@@ -71,3 +71,7 @@ Skill 区域支持九大能力领域、二级子分类、场景筛选与扩展�
 
 
 三盒式资源库已通过 Pages 部署、Browser QA 与 Skill Handoff QA；验证九大领域每类至少五条真实 GitHub Skill 候选、横条展示与 390px Chromium 响应式检查。iPhone Safari/微信实机验收仍待完成。
+
+
+### 移动端与统一设置中心
+主导航仅保留「我的密钥 / 我的 Skills 与项目 / Skill Radar」。视觉与动效、加密备份导入/导出、自动备份、同步中心、GitHub 账户、回收站及锁定入口统一集中到设置中心。项目导入与仓库扫描工具默认折叠，突出「收录项目」主操作。390px Playwright 手机视口布局与无横向溢出检查通过；真实 iPhone Safari / 微信实机仍待验收。
