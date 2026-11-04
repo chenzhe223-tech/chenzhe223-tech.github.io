@@ -130,3 +130,12 @@
 - Skill Handoff QA run 41808879505 SUCCESS：JavaScript syntax、Radar source contract、published HTML/JS/Radar asset checks、一键收录 E2E PASS。
 - E2E 曾因摘要重复仓库名使 Playwright strict locator 匹配两处失败；已改为 `.kp-resource-row` 范围定位并修复摘要，修正后的 Handoff 通过。
 - 仍未完成：iPhone Safari 与微信内置浏览器实机专项测试。
+
+
+## 2026-11-04 移动端布局与设置中心测试结果
+- Pages deploy run `41812157275` SUCCESS。
+- Browser QA run `41812157552` SUCCESS；KeyPocket Handoff QA run `41811558670` SUCCESS。
+- PASS：设置中心 7 项入口、主导航 3 项；390px 项目页三项导航、默认折叠导入工具、双列筛选；390px 设置中心 7 项入口且无横向溢出；手机端新增 API Key 按钮可见；视觉设置实时应用/恢复默认；无 KeyPocket pageerror。
+- 测试脚本适配新的导航路径：管理子页从设置中心进入；导入/扫描工具测试前展开 details；导入/导出测试结束后返回对应主模块。
+- 曾出现自动化测试上下文仍停留在设置页而误判密钥按钮不可见，已在测试中明确返回密钥主模块后重跑，最终 PASS；不是生产功能缺陷。
+- 实机边界：尚未在真实 iPhone Safari 和微信内置浏览器完成触屏、滚动、刘海安全区与动态视口专项验收。
