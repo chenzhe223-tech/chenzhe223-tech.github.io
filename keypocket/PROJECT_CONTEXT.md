@@ -189,3 +189,11 @@ P2：
 - 云端 V2 快照使用现有约束允许的 `milestone/latest` 单槽，账号级 upsert 成功后删除其他旧快照；不改动 Supabase schema、RLS 或 grants。
 - 本地与云端备份中心均只显示最新一份；独立加密导出文件仍由用户主动保存，不属于自动历史版本。
 - 当前代码状态：已实现并新增本地覆盖/恢复 Browser QA；待同 SHA 部署与验收。真实云端账号覆盖和跨设备恢复仍待真实双设备验证。
+
+
+### 自动备份单份覆盖验收结果（2026-11-04）
+- 正式资源版本：`kp-v2-single-latest-backup-20261104-01`；功能代码 commit：`b45ce409f0ddf39028025abd06fb6ad56cb3a16d`；HTML commit：`24ee73ade6555d50ad5ea7d71979354e947b1082`；最终部署/QA 触发 SHA：`17b9257e88e9002dd12ef035a10b354cad2d3f05`。
+- Pages build/deploy run `41795909835` SUCCESS；DAVYLAB Browser QA run `41795909779` SUCCESS；KeyPocket Skill Handoff QA run `41795832154` SUCCESS。
+- Browser QA 验证：备份中心策略说明 PASS；连续两次备份后卡片数量 `1→1` 且固定快照 ID 不变 PASS；最新本地备份恢复三条合成 API Key PASS；无 JavaScript pageerror。
+- 云端单份覆盖代码已提交并通过 source contract 检查；Supabase 当前 `keypocket_backup_snapshots` 表查询显示 0 行，因此没有旧云端快照可清理。真实账号云端 upsert/delete 及跨设备恢复仍待真实账号测试，不能宣称真实云端备份 E2E 已通过。
+- 不修改数据库 schema/RLS/grants。云端使用既有 `milestone` 类型与 `latest` period key，写入成功后按当前 user_id 清理其他旧快照。
