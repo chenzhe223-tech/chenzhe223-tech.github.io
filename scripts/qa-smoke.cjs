@@ -354,6 +354,43 @@ const mark = (status, name, detail = '') => {
         error: window.__kpUnlockError || null
       }));
       if (initialUnlockState.error) throw new Error('KeyPocket first-run setup did not complete: ' + JSON.stringify(initialUnlockState));
+
+      // Visual & Motion Studio: exercise real controls in an isolated synthetic vault.
+      await kp.locator('#visualSettingsBtn').click();
+      await kp.waitForSelector('#kpVisualContent', { timeout: 5000 });
+      const visualTabs = await kp.locator('[data-vtab]').count();
+      await kp.locator('[data-vgroup="theme"][data-vvalue="mint"]').click();
+      const mintAccent = await kp.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--kp-user-accent').trim());
+      await kp.locator('[data-vtab="motion"]').click();
+      await kp.locator('[data-vgroup="motion"][data-vvalue="glow"]').click();
+      await kp.locator('#kpSpeed').fill('650');
+      await kp.locator('#kpAmplitude').fill('18');
+      await kp.locator('#kpDirection').selectOption('right');
+      await kp.locator('[data-vtab="layout"]').click();
+      await kp.locator('[data-vgroup="layout"][data-vvalue="bento"]').click();
+      await kp.locator('#kpNav').count().then(() => {});
+      await kp.locator('[data-vgroup="nav"][data-vvalue="bottom"]').click();
+      const visualState = await kp.evaluate(() => ({
+        prefs: JSON.parse(localStorage.getItem('kp.visual.preferences.v1') || 'null'),
+        accent: getComputedStyle(document.documentElement).getPropertyValue('--kp-user-accent').trim(),
+        motion: document.body.classList.contains('kp-motion-glow'),
+        layout: document.body.classList.contains('kp-layout-bento'),
+        nav: document.body.classList.contains('kp-nav-bottom')
+      }));
+      const visualPassed = visualTabs === 3 && visualState.prefs?.theme === 'mint'
+        && visualState.prefs?.motion === 'glow' && visualState.prefs?.speed === 650
+        && visualState.prefs?.amplitude === 18 && visualState.prefs?.direction === 'right'
+        && visualState.prefs?.layout === 'bento' && visualState.prefs?.nav === 'bottom'
+        && visualState.motion && visualState.layout && visualState.nav && visualState.accent === mintAccent;
+      mark(visualPassed ? 'PASS' : 'FAIL', 'KeyPocket 视觉与动效设置实时应用及本地持久化', JSON.stringify(visualState));
+      await kp.locator('#kpVisualReset').click();
+      const visualReset = await kp.evaluate(() => {
+        const p = JSON.parse(localStorage.getItem('kp.visual.preferences.v1') || 'null');
+        return p?.theme === 'qore' && p?.motion === 'rise' && p?.layout === 'balanced' && p?.nav === 'top';
+      });
+      mark(visualReset ? 'PASS' : 'FAIL', 'KeyPocket 视觉设置独立恢复默认', '恢复 QORE / 上浮 / Balanced / 顶部导航');
+      await kp.locator('#modalRoot [data-action="close"]').click();
+      await kp.waitForFunction(() => !document.querySelector('#modalRoot .modal-backdrop'), null, { timeout: 5000 });
       // Skill import regression: mocked GitHub results exercise the real save UI and encrypted local persistence.
       await kp.route('https://api.github.com/search/repositories**', async route => {
         const repo = {
