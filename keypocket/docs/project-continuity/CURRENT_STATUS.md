@@ -96,3 +96,11 @@ Cloudflare 中的 `keypocket-vault-api` Worker 脚本目前未启用 workers.dev
 - 关键输出：`[PASS] KeyPocket 视觉与动效设置实时应用及本地持久化`；`[PASS] KeyPocket 视觉设置独立恢复默认`；`[PASS] KeyPocket 390px 手机端视觉设置面板布局`。
 - 整站 Browser QA 最终结论为 FAILURE，但唯一失败项为外部产品入口 Worktoon 的 URL `https://worktoon.app.workbuddy.host/` 请求超时 25 秒，与 KeyPocket 无关。KeyPocket 子项包括原有备份覆盖/恢复、GitHub 收录、同步/密码找回 mock 等均 PASS。
 - 结论：KeyPocket 视觉与动效功能的 Browser Functional Test 通过；不把整站 QA 的外部 Worktoon 超时归因于 KeyPocket。
+
+
+## 2026-11-04 Skill Intelligence Library 首期
+- 已提交 9 个能力领域、二级分类、场景标签、规则摘要、能力档案与依据/置信度提示。
+- Skill 浏览区新增能力领域统计、场景筛选；搜索覆盖自动摘要、子分类与场景。
+- 加密项目记录支持可选 skillProfile；旧记录解锁后自动补齐，沿用 persistProject/AES-GCM。编辑窗口支持人工领域/子类/摘要覆盖。
+- 资源版本：kp-v2-skill-intelligence-20261104-02；app.js commit 49037b4，HTML commit 3e6c631。最新 Actions 41802610170（Skill Handoff）、41802610144（Browser QA）、41802609405（Pages）正在运行，需按最终 SHA 核验。
+- 当前等级：Code Completed（首期实现已提交）；Build/Runtime/Functional/Production 等待同 SHA Actions 结果。规则归纳并非 AI 深度理解，README 正文分析与 Skill 关联推荐属于后续阶段。
