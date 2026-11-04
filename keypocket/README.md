@@ -43,3 +43,9 @@ KeyPocket 是本地优先的 AI 资产管理工具，管理 API Key、GitHub Ski
 ## 验收规则
 
 采用 Code Completed、Build Passed、Runtime Verified、Functional Tested、Production Deployed 五级交付；每一级必须有实际证据。代码提交或 Pages 部署成功不代表功能验收通过，合成 E2E 也不等于真实双设备已验收。
+
+
+### GitHub 仓库自动发现
+
+- 首次进入「我的 Skills / 项目」自动扫描 `chenzhe223-tech` 的公开原创仓库，之后每 24 小时自动扫描；也可手动点击「扫描我的仓库」。
+- 新发现的 Skill 与应用会去重后通过现有本地加密流程自动收录。当前只扫描公开仓库；私有仓库接入需先完成 KeyPocket GitHub App/OAuth 配置。
