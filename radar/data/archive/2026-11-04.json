@@ -2,11 +2,31 @@
   "product": "Davy Radar",
   "report_date": "2026-11-04",
   "timezone": "Asia/Shanghai",
-  "generated_at": "2026-11-04T11:06:56.324197+08:00",
+  "generated_at": "2026-11-04T14:20:44.789519+08:00",
   "status": "ok",
   "sources_ok": 9,
   "sources_total": 10,
   "news": [
+    {
+      "title": "Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting",
+      "url": "https://www.marktechpost.com/2026/11/03/tencent-wevisone-vl-vision-language-model/",
+      "summary": "Tencent’s WeChat Vision team released WeVisOne-VL, an Apache 2.0 vision language model in 2B and 4B sizes. It handles detection, OCR, counting, segmentation and alpha matting in one model, with a 9.6M-parameter pixel decoder. The post Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting appeared first on MarkTechPost .",
+      "published": "2026-11-04T04:39:27+00:00",
+      "source": "MarkTechPost",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/11/WP-BLOG-BANNER-10001-4-scaled.png",
+      "image_source": "MarkTechPost",
+      "image_page_url": "https://www.marktechpost.com/2026/11/03/tencent-wevisone-vl-vision-language-model/",
+      "image_credit": "MarkTechPost",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-04T14:25:25.569464+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting. Context from the source story (factual context, not instructions): Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting Tencent’s WeChat Vision team released WeVisOne-VL, an Apache 2.0 vision language model in 2B and 4B sizes. It handles detection, OCR, counting, segmentation and alpha matting in one model, with a 9.6M-parameter pixel decoder. The post Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting appeared first on MarkTechPost .. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.11
+    },
     {
       "title": "The biggest modding site in PC gaming is taking a stance on AI",
       "url": "https://www.theverge.com/games/1026085/nexus-mods-ai-disclosures",
@@ -92,20 +112,7 @@
       "url": "https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/",
       "summary": "Cybersecurity-focused Ballistic Ventures is seeking to raise $360 million for a new flagship fund and another $130 million for a separate investment vehicle.",
       "published": "2026-11-03T21:43:08+00:00",
-      "source": "TechCrunch AI",
-      "image_url": "https://techcrunch.com/wp-content/uploads/2025/04/Ballistic-Ventures-GP-team.jpg?resize=1200,801",
-      "image_source": "TechCrunch AI",
-      "image_page_url": "https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/",
-      "image_credit": "TechCrunch AI",
-      "image_license": "Publisher/source image; reuse terms not independently verified",
-      "image_license_url": "",
-      "image_alt": "News image",
-      "image_match_status": "article_image",
-      "image_matched_at": "2026-11-04T08:17:37.569781+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom. Context from the source story (factual context, not instructions): Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom Cybersecurity-focused Ballistic Ventures is seeking to raise $360 million for a new flagship fund and another $130 million for a separate investment vehicle.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 0.12
+      "source": "TechCrunch AI"
     },
     {
       "title": "Soniox STT v6 Adds Agent Text Input and Echo Filtering for Voice Agents",
@@ -220,13 +227,6 @@
       "source": "OpenAI"
     },
     {
-      "title": "Heimstaden is changing residential real estate management with AI",
-      "url": "https://openai.com/index/heimstaden",
-      "summary": "Discover how Heimstaden uses OpenAI’s ChatGPT Enterprise and Codex to transform property management, cut costs, and empower employees across Europe.",
-      "published": "2026-11-03T08:00:00+00:00",
-      "source": "OpenAI"
-    },
-    {
       "title": "Sparks of Weight-Space Programming: LLMs can natively read & write neural network weights",
       "title_zh": "MIT研究者展示模型权重直接编辑实验",
       "title_en": "MIT CSAIL researchers report early experiments in direct neural-weight editing",
@@ -285,12 +285,12 @@
   ],
   "china_ai_news": [
     {
-      "title": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
-      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ETFlGUHltWWhBZFpicWhCRlRneEUtdUtsSlNVVnF0ZWpSb09SOFBGY3Bnd1kzQXJLNjhSNlNwczRDWWVaX1ZUWXJySlBpcWRmSnJPRFVZSUo2a3J1Wk80UjhMX19pTXFzT1Y2QWhSUDA?oc=5",
-      "summary": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 中华网",
-      "published": "2026-11-04T02:33:15+00:00",
-      "source": "Google News China AI",
-      "category": "产品与产业应用",
+      "title": "腾讯混元 Hy4 正式版发布，称首次跻身最强开源模型之列",
+      "url": "https://chenqiyuan.cn/article/intel-cb4d91eec775b1cd5fefc850",
+      "summary": "腾讯混元 11 月 4 日发布大语言模型 Hy4 正式版，官方称 Hy 首次跻身最强开源模型之列，计划近期开源模型权重并发布模型系统卡片。相比 Hy4 preview，该模型扩展了预训练和后训练规模，首次引入视觉能力和电脑操作支持，可执行细粒度图像处理、复杂图表分析、数学视觉推理及结合命令行与图形界面的任务。",
+      "published": "2026-11-04T04:59:42+00:00",
+      "source": "AI圈报",
+      "category": "模型与技术进展",
       "region": "China",
       "image_url": "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
@@ -298,56 +298,122 @@
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
+      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: 腾讯混元 Hy4 正式版发布，称首次跻身最强开源模型之列",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:18.479905+08:00",
+      "image_matched_at": "2026-11-04T14:25:29.297640+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网. Context from the source story (factual context, not instructions): 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 中华网 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 3.31
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 腾讯混元 Hy4 正式版发布，称首次跻身最强开源模型之列. Context from the source story (factual context, not instructions): 腾讯混元 Hy4 正式版发布，称首次跻身最强开源模型之列 腾讯混元 11 月 4 日发布大语言模型 Hy4 正式版，官方称 Hy 首次跻身最强开源模型之列，计划近期开源模型权重并发布模型系统卡片。相比 Hy4 preview，该模型扩展了预训练和后训练规模，首次引入视觉能力和电脑操作支持，可执行细粒度图像处理、复杂图表分析、数学视觉推理及结合命令行与图形界面的任务。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 3.73
     },
     {
-      "title": "国内首款：网易《燕云十六声》官宣 11 月 24 日实装英伟达 DLSS 5",
-      "url": "https://www.ithome.com/1/021/935.htm",
-      "summary": "IT之家 11 月 4 日消息，网易旗下开放世界武侠游戏《燕云十六声》官方宣布将于 2026 年 11 月 24 日正式实装英伟达 DLSS 5 技术，成为全球首批、国内首款支持该技术的游戏（北美地区将提前一天，于 11 月 23 日先行上线）。 DLSS 5 是英伟达在 2026 年 3 月 GTC 大会上公布的新一代实时神经渲染技术，官方将其定位为“图形领域的 GPT 时刻”。 与单纯提升分辨率的传统超采样不同，DLSS 5 以游戏每帧的颜色和动态向量为输入，利用 AI 模型为场景生成与原始 3D 内容紧密对齐的拟真光照和材质，最高可在 4K 分辨率下实时运行。 据介绍，《燕云十六声》此次接入的是 DLSS 5 中的 3D 引导神经渲染方案。该方案以游戏引擎渲染的帧为不可更改的基础，在完整保留美术人员设计的",
-      "published": "2026-11-04T01:42:55+00:00",
+      "title": "比亚迪：网传“天神之眼 C 停产”等消息不实",
+      "url": "https://www.ithome.com/1/022/033.htm",
+      "summary": "IT之家 11 月 4 日消息，@比亚迪新闻打假办公室 今天（4 日）午间发文称，网传“比亚迪天神之眼 C 停产、天神之眼 B / 天神之眼 C 将更换智驾方案”不实。 IT之家从声明获悉，比亚迪方面称，近期，网络上出现的 “比亚迪天神之眼 C 停产、天神之眼 B / 天神之眼 C 将更换智驾方案”等相关传言 为不实信息。为给消费者提供更安全、更可靠的智驾体验， 比亚迪始终坚持全栈自研，相关智驾软件也在持续迭代更新中 。请大家不信谣、不传谣，对于编造、传播不实信息、刻意误导公众的行为，公司已对相关不实言论进行证据固定，将依法追究相关主体的法律责任。",
+      "published": "2026-11-04T04:50:11+00:00",
       "source": "IT之家",
-      "category": "模型与技术进展",
+      "category": "具身智能与智能终端",
       "region": "China",
-      "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/97a7d551-58bc-4304-b16d-2d2b06ec2742.png?x-bce-process=image/format,f_auto",
+      "image_url": "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/robotics",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI agent / robotics topic illustration: 比亚迪：网传“天神之眼 C 停产”等消息不实",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-04T14:25:31.506492+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 比亚迪：网传“天神之眼 C 停产”等消息不实. Context from the source story (factual context, not instructions): 比亚迪：网传“天神之眼 C 停产”等消息不实 IT之家 11 月 4 日消息，@比亚迪新闻打假办公室 今天（4 日）午间发文称，网传“比亚迪天神之眼 C 停产、天神之眼 B / 天神之眼 C 将更换智驾方案”不实。 IT之家从声明获悉，比亚迪方面称，近期，网络上出现的 “比亚迪天神之眼 C 停产、天神之眼 B / 天神之眼 C 将更换智驾方案”等相关传言 为不实信息。为给消费者提供更安全、更可靠的智驾体验， 比亚迪始终坚持全栈自研，相关智驾软件也在持续迭代更新中 。请大家不信谣、不传谣，对于编造、传播不实信息、刻意误导公众的行为，公司已对相关不实言论进行证据固定，将依法追究相关主体的法律责任。 具身智能与智能终端. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 2.21
+    },
+    {
+      "title": "宇树王兴兴：大概率明年是机器人行业或机器人模型临界点",
+      "url": "https://www.ithome.com/1/022/026.htm",
+      "summary": "IT之家 11 月 4 日消息，据中国新闻网今日报道，宇树科技创始人王兴兴在 2026 世界互联网大会乌镇峰会互联网企业家论坛上表示， 大概率明年将是机器人行业或机器人模型的临界点 。 综合IT之家此前报道， 在 2026 世界物理 AI 大会暨宇树合作伙伴生态大会上 ，王兴兴曾表示全世界几乎所有人，对 AI 的重视程度和信仰都还不够，包括他自己。 王兴兴表示，随着 GPT-6 的发布， 目前物理 AI 已经看到被击穿的苗头，很可能最近 1-2 年或 2-3 年 ，目前具身智能迈过 ChatGPT 时刻的最核心挑战是 AI 模型的输入输出和真实机器人的对齐。他认为，在商业服务的落地会比家庭、工业领域更快些。 王兴兴还透露， 宇树科技未来重点在攻克机器人大脑技术 ，除了宇树科技自身的技术突破，还将在全球范围寻求合",
+      "published": "2026-11-04T04:06:48+00:00",
+      "source": "IT之家",
+      "category": "具身智能与智能终端",
+      "region": "China",
+      "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/88e3dcfc-9192-4c9e-ad01-d8e378110120.jpg",
       "image_source": "IT之家",
-      "image_page_url": "https://www.ithome.com/1/021/935.htm",
+      "image_page_url": "https://www.ithome.com/1/022/026.htm",
       "image_credit": "IT之家",
       "image_license": "Publisher/source image; reuse terms not independently verified",
       "image_license_url": "",
       "image_alt": "News image",
       "image_match_status": "feed_image",
-      "image_matched_at": "2026-11-04T11:11:18.593128+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_matched_at": "2026-11-04T14:25:31.647696+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 国内首款：网易《燕云十六声》官宣 11 月 24 日实装英伟达 DLSS 5. Context from the source story (factual context, not instructions): 国内首款：网易《燕云十六声》官宣 11 月 24 日实装英伟达 DLSS 5 IT之家 11 月 4 日消息，网易旗下开放世界武侠游戏《燕云十六声》官方宣布将于 2026 年 11 月 24 日正式实装英伟达 DLSS 5 技术，成为全球首批、国内首款支持该技术的游戏（北美地区将提前一天，于 11 月 23 日先行上线）。 DLSS 5 是英伟达在 2026 年 3 月 GTC 大会上公布的新一代实时神经渲染技术，官方将其定位为“图形领域的 GPT 时刻”。 与单纯提升分辨率的传统超采样不同，DLSS 5 以游戏每帧的颜色和动态向量为输入，利用 AI 模型为场景生成与原始 3D 内容紧密对齐的拟真光照和材质，最高可在 4K 分辨率下实时运行。 据介绍，《燕云十六声》此次接入的是 DLSS 5 中的 3D 引导神经渲染方案。该方案以游戏引擎渲染的帧为不可更改的基础，在完整保留美术人员设计的 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 0.11
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 宇树王兴兴：大概率明年是机器人行业或机器人模型临界点. Context from the source story (factual context, not instructions): 宇树王兴兴：大概率明年是机器人行业或机器人模型临界点 IT之家 11 月 4 日消息，据中国新闻网今日报道，宇树科技创始人王兴兴在 2026 世界互联网大会乌镇峰会互联网企业家论坛上表示， 大概率明年将是机器人行业或机器人模型的临界点 。 综合IT之家此前报道， 在 2026 世界物理 AI 大会暨宇树合作伙伴生态大会上 ，王兴兴曾表示全世界几乎所有人，对 AI 的重视程度和信仰都还不够，包括他自己。 王兴兴表示，随着 GPT-6 的发布， 目前物理 AI 已经看到被击穿的苗头，很可能最近 1-2 年或 2-3 年 ，目前具身智能迈过 ChatGPT 时刻的最核心挑战是 AI 模型的输入输出和真实机器人的对齐。他认为，在商业服务的落地会比家庭、工业领域更快些。 王兴兴还透露， 宇树科技未来重点在攻克机器人大脑技术 ，除了宇树科技自身的技术突破，还将在全球范围寻求合 具身智能与智能终端. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.14
     },
     {
-      "title": "中国开源AI大模型持续“圈粉” - 手机新浪网",
-      "url": "https://news.google.com/rss/articles/CBMif0FVX3lxTFBaTnByXzlhTWtSWnY2VkZ1Mko5YmIzZDBIMVVXVlF0anBhTEMwZ05zcnhTOWVLbXBSZkh4SkVIMGVCNXMzVy1YY3JGdGRUdlNGRjBhZ2RIUy1DZ2VPT2FjQkRmX2U3UHMyY18wR0p2MzZGVUY3blNHSy1PakNVQlE?oc=5",
-      "summary": "中国开源AI大模型持续“圈粉” 手机新浪网",
-      "published": "2026-11-04T01:30:00+00:00",
-      "source": "Google News China AI",
-      "category": "模型与技术进展",
+      "title": "当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战",
+      "url": "https://www.leiphone.com/category/ai/tT9FskgaSMm7y4Ao.html",
+      "summary": "2026年，智能体从概念走向了生产系统。 蚂蚁集团3万多名员工背后，已有10万余个智能体在运行。华为内部同样部署了成千上万个智能体，覆盖客服、办公、运维、研发各条业务线。放眼更广的产业图景，个人助手、AI for Science、网络安全自动化攻防、企业级工作流编排，智能体正在逐步接管人类过去亲力亲为的工作。 Gartner将智能体列入了2027年十大战略技术，安全圈里，非人类身份（NHI）成了RSAC大会上的新赛道。中国这边，国标、强标、最高法司法意见、三部委规范文件在今年密集出台，政策端的紧迫感与产业端的狂飙几乎同步。 10月22日，成都，在CNCC 2026”智能体的安全问题”专题论坛上，于锐、徐恪、胡侠、韦韬、肖亚军五位嘉宾齐聚一堂，分别从国家标准制定、高校AI安全研究、企业安全最后一道防线等角度，做出",
+      "published": "2026-11-04T03:22:00+00:00",
+      "source": "雷峰网·人工智能",
+      "category": "产品与产业应用",
       "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1553877522-43269d4ea984?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/technology",
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 中国开源AI大模型持续“圈粉” - 手机新浪网",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:21.725385+08:00",
+      "image_matched_at": "2026-11-04T14:25:39.198024+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 中国开源AI大模型持续“圈粉” - 手机新浪网. Context from the source story (factual context, not instructions): 中国开源AI大模型持续“圈粉” - 手机新浪网 中国开源AI大模型持续“圈粉” 手机新浪网 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战. Context from the source story (factual context, not instructions): 当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战 2026年，智能体从概念走向了生产系统。 蚂蚁集团3万多名员工背后，已有10万余个智能体在运行。华为内部同样部署了成千上万个智能体，覆盖客服、办公、运维、研发各条业务线。放眼更广的产业图景，个人助手、AI for Science、网络安全自动化攻防、企业级工作流编排，智能体正在逐步接管人类过去亲力亲为的工作。 Gartner将智能体列入了2027年十大战略技术，安全圈里，非人类身份（NHI）成了RSAC大会上的新赛道。中国这边，国标、强标、最高法司法意见、三部委规范文件在今年密集出台，政策端的紧迫感与产业端的狂飙几乎同步。 10月22日，成都，在CNCC 2026”智能体的安全问题”专题论坛上，于锐、徐恪、胡侠、韦韬、肖亚军五位嘉宾齐聚一堂，分别从国家标准制定、高校AI安全研究、企业安全最后一道防线等角度，做出 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 7.55
+    },
+    {
+      "title": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ETFlGUHltWWhBZFpicWhCRlRneEUtdUtsSlNVVnF0ZWpSb09SOFBGY3Bnd1kzQXJLNjhSNlNwczRDWWVaX1ZUWXJySlBpcWRmSnJPRFVZSUo2a3J1Wk80UjhMX19pTXFzT1Y2QWhSUDA?oc=5",
+      "summary": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 中华网",
+      "published": "2026-11-04T02:33:15+00:00",
+      "source": "Google News China AI",
+      "category": "产品与产业应用",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-04T14:25:39.354012+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网. Context from the source story (factual context, not instructions): 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网 豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 中华网 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.16
+    },
+    {
+      "title": "QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 - 白鲸出海",
+      "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE9mZUhSRVp6QWRNYzJOaENpWGpSaEFlRlZCYXVTb1pmLWszQlA4WHZKZTVneVE4OHoxaDN3RXJBaVROSFI4cnZOMlAxOXBwd2tfeEJyQ0Q5NFE?oc=5",
+      "summary": "QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 白鲸出海",
+      "published": "2026-11-04T02:05:00+00:00",
+      "source": "Google News China AI",
+      "category": "产品与产业应用",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 - 白鲸出海",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-04T14:25:42.486338+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 - 白鲸出海. Context from the source story (factual context, not instructions): QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 - 白鲸出海 QuestMobile：豆包、DeepSeek 月人均使用次数超其他 AI 应用 白鲸出海 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
       "image_match_duration_seconds": 3.13
     },
     {
@@ -373,98 +439,32 @@
       "image_match_duration_seconds": 0.94
     },
     {
-      "title": "曝字节将大面积限制员工在内部自费使用 Claude、Codex 等",
-      "url": "https://www.ithome.com/1/021/917.htm",
-      "summary": "IT之家 11 月 4 日消息，据大厂日爆 11 月 3 日爆料，字节迎来新规， 将大面积限制 Claude、Codex 等个人账号的内部使用 。 爆料称，本月起，字节跳动将会对所有 L4 级别的代码仓库和飞书文档进行 外部 AI 访问封禁 ，覆盖范围全公司，员工个人采买的 AI 账号不能再用。 爆料还称，通知自上周发出后，引起了内部一些讨论，字节跳动技术副总裁洪定坤还在内网进行了详细回应，比如“L3 及以上内容一旦有泄露，后果是非常严重的”、“推广产品不需要用这种禁掉其他选择强迫使用的方式，因为这样效果很差”。 据 The Information 今年 8 月报道 ，字节跳动创始人张一鸣在上个月的 Seed 团队全体会议上明确表示，即使意味着暂时落后于竞争对手，公司也不会依赖 AI 蒸馏技术来改进其模型。 延",
+      "title": "曝字节跳动将封禁 L4 代码仓库及飞书文档的外部 AI 访问，限制员工自费使用 Claude、Codex",
+      "url": "https://chenqiyuan.cn/article/intel-84c230ee90d6b78fe6534000",
+      "summary": "据大厂日爆 11 月 3 日爆料，字节跳动本月起将对全公司 L4 级别代码仓库和飞书文档实施外部 AI 访问封禁，员工个人采买的 Claude、Codex 等 AI 账号不能再用。",
       "published": "2026-11-04T01:12:30+00:00",
-      "source": "IT之家",
-      "category": "模型与技术进展",
+      "source": "AI圈报",
+      "category": "产业与生态",
       "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1000&q=82",
+      "image_url": "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1000&q=82",
       "image_source": "Unsplash topic illustration",
       "image_page_url": "https://unsplash.com/s/photos/technology",
       "image_credit": "Unsplash",
       "image_license": "Unsplash License; review source terms before reuse",
       "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 曝字节将大面积限制员工在内部自费使用 Claude、Codex 等",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 曝字节跳动将封禁 L4 代码仓库及飞书文档的外部 AI 访问，限制员工自费使用 Claude、Codex",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:26.057403+08:00",
+      "image_matched_at": "2026-11-04T14:25:47.829605+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 曝字节将大面积限制员工在内部自费使用 Claude、Codex 等. Context from the source story (factual context, not instructions): 曝字节将大面积限制员工在内部自费使用 Claude、Codex 等 IT之家 11 月 4 日消息，据大厂日爆 11 月 3 日爆料，字节迎来新规， 将大面积限制 Claude、Codex 等个人账号的内部使用 。 爆料称，本月起，字节跳动将会对所有 L4 级别的代码仓库和飞书文档进行 外部 AI 访问封禁 ，覆盖范围全公司，员工个人采买的 AI 账号不能再用。 爆料还称，通知自上周发出后，引起了内部一些讨论，字节跳动技术副总裁洪定坤还在内网进行了详细回应，比如“L3 及以上内容一旦有泄露，后果是非常严重的”、“推广产品不需要用这种禁掉其他选择强迫使用的方式，因为这样效果很差”。 据 The Information 今年 8 月报道 ，字节跳动创始人张一鸣在上个月的 Seed 团队全体会议上明确表示，即使意味着暂时落后于竞争对手，公司也不会依赖 AI 蒸馏技术来改进其模型。 延 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 3.39
-    },
-    {
-      "title": "早报｜国行苹果AI开测，Siri接入千问/中兴否认出售手机业务传闻/多所高校免费发Token",
-      "url": "https://www.ifanr.com/1687477?utm_source=rss&utm_medium=rss&utm_campaign=",
-      "summary": "· GPT 爆改 Qwen 权重，团队测试数学成绩提升约 6 倍 · 盗用 AI 平台算力，上海一男子获刑三年 · 中兴否认出售手机业务传闻 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。",
-      "published": "2026-11-04T00:26:05+00:00",
-      "source": "爱范儿",
-      "category": "芯片与算力",
-      "region": "China",
-      "image_url": "https://s3.ifanr.com/wp-content/uploads/2026/11/AI-scaled.jpg",
-      "image_source": "爱范儿",
-      "image_page_url": "https://www.ifanr.com/1687477?utm_source=rss&utm_medium=rss&utm_campaign=",
-      "image_credit": "爱范儿",
-      "image_license": "Publisher/source image; reuse terms not independently verified",
-      "image_license_url": "",
-      "image_alt": "News image",
-      "image_match_status": "article_image",
-      "image_matched_at": "2026-11-04T11:11:27.119299+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 早报｜国行苹果AI开测，Siri接入千问/中兴否认出售手机业务传闻/多所高校免费发Token. Context from the source story (factual context, not instructions): 早报｜国行苹果AI开测，Siri接入千问/中兴否认出售手机业务传闻/多所高校免费发Token · GPT 爆改 Qwen 权重，团队测试数学成绩提升约 6 倍 · 盗用 AI 平台算力，上海一男子获刑三年 · 中兴否认出售手机业务传闻 #欢迎关注爱范儿官方微信公众号：爱范儿（微信号：ifanr），更多精彩内容第一时间为您奉上。 芯片与算力. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 1.06
-    },
-    {
-      "title": "国行 Apple 智能随 iOS 27.3 首个开发者预览版上线，AirPods 实时翻译与千问拓展可用",
-      "url": "https://chenqiyuan.cn/article/intel-4c758bf8d7fc7f12a2005fb0",
-      "summary": "苹果推送首个 iOS 27.3 开发者预览版，为国行用户带来「Apple 智能与 Siri」。",
-      "published": "2026-11-03T20:31:34+00:00",
-      "source": "AI圈报",
-      "category": "产品与产业应用",
-      "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 国行 Apple 智能随 iOS 27.3 首个开发者预览版上线，AirPods 实时翻译与千问拓展可用",
-      "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:28.872820+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 国行 Apple 智能随 iOS 27.3 首个开发者预览版上线，AirPods 实时翻译与千问拓展可用. Context from the source story (factual context, not instructions): 国行 Apple 智能随 iOS 27.3 首个开发者预览版上线，AirPods 实时翻译与千问拓展可用 苹果推送首个 iOS 27.3 开发者预览版，为国行用户带来「Apple 智能与 Siri」。 产品与产业应用. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 1.75
-    },
-    {
-      "title": "哈佛MIT论文：推理模型思维链难控源于“Okay”开头习惯",
-      "url": "https://chenqiyuan.cn/article/intel-572ae6bdd953219b3c13f46f",
-      "summary": "哈佛与MIT论文发现，推理模型对思维链控制不佳部分源于习惯以“Okay”开头。Qwen3-32B和OLMo-3.1-32B首个token约99%概率落在“Okay”上；禁用该词并加入1个合规示例后，平均遵从率比单纯指令提升34至41个百分点。隐藏信息类任务（如避免某词）响应不一致，在12个模型中似属独立能力。",
-      "published": "2026-11-03T19:43:08+00:00",
-      "source": "AI圈报",
-      "category": "模型与技术进展",
-      "region": "China",
-      "image_url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: 哈佛MIT论文：推理模型思维链难控源于“Okay”开头习惯",
-      "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:30.171381+08:00",
-      "image_fallback_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82",
-      "image_is_generated": false,
-      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 哈佛MIT论文：推理模型思维链难控源于“Okay”开头习惯. Context from the source story (factual context, not instructions): 哈佛MIT论文：推理模型思维链难控源于“Okay”开头习惯 哈佛与MIT论文发现，推理模型对思维链控制不佳部分源于习惯以“Okay”开头。Qwen3-32B和OLMo-3.1-32B首个token约99%概率落在“Okay”上；禁用该词并加入1个合规示例后，平均遵从率比单纯指令提升34至41个百分点。隐藏信息类任务（如避免某词）响应不一致，在12个模型中似属独立能力。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 1.3
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 曝字节跳动将封禁 L4 代码仓库及飞书文档的外部 AI 访问，限制员工自费使用 Claude、Codex. Context from the source story (factual context, not instructions): 曝字节跳动将封禁 L4 代码仓库及飞书文档的外部 AI 访问，限制员工自费使用 Claude、Codex 据大厂日爆 11 月 3 日爆料，字节跳动本月起将对全公司 L4 级别代码仓库和飞书文档实施外部 AI 访问封禁，员工个人采买的 Claude、Codex 等 AI 账号不能再用。 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 5.34
     }
   ],
   "historical_dedupe": {
     "status": "ok",
-    "global_removed": 41,
-    "china_removed": 23,
+    "global_removed": 40,
+    "china_removed": 20,
     "matches": [
       {
         "section": "global_news",
@@ -634,16 +634,6 @@
           "date": "2026-11-03",
           "title": "42AI comes out of stealth with $62.5M and a world model that can ‘predict human behavior’",
           "url": "https://techcrunch.com/2026/11/02/42ai-comes-out-of-stealth-with-62-5m-and-a-world-model-that-can-predict-human-behavior/"
-        }
-      },
-      {
-        "section": "global_news",
-        "candidate": "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-11-02",
-          "title": "Nace AI Open-Sources Drex Max v1: A 27B Decision Model That Runs Locally on Apple Silicon",
-          "url": "https://www.marktechpost.com/2026/11/01/nace-ai-open-sources-drex-max-v1-local-inference/"
         }
       },
       {
@@ -898,16 +888,6 @@
       },
       {
         "section": "china_ai_news",
-        "candidate": "AI做中学 创未来｜智源SoulAgent持续拓展教育应用",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-28",
-          "title": "AI做中学 创未来｜智源SoulAgent持续拓展教育应用",
-          "url": "https://www.leiphone.com/category/ai/TKr0YQ085uv1ME7X.html"
-        }
-      },
-      {
-        "section": "china_ai_news",
         "candidate": "伯牙智能刘欣：GPT-6 之后，轮到硬件拖机器人后腿了 | 物理AI 50人",
         "match": {
           "kind": "same_url",
@@ -938,32 +918,12 @@
       },
       {
         "section": "china_ai_news",
-        "candidate": "早报｜iPhone国行AI官宣！千问接入Siri/DeepSeek千亿融资曝光/于东来建议支持「消费入座」",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-10-31",
-          "title": "早报｜iPhone国行AI官宣！千问接入Siri/DeepSeek千亿融资曝光/于东来建议支持「消费入座」",
-          "url": "https://www.ifanr.com/1686979?utm_source=rss&utm_medium=rss&utm_campaign="
-        }
-      },
-      {
-        "section": "china_ai_news",
         "candidate": "Apple may try to increase revenue by doing…something with third-party AI apps",
         "match": {
           "kind": "same_url",
           "date": "2026-11-03",
           "title": "Apple may try to increase revenue by doing…something with third-party AI apps",
           "url": "https://techcrunch.com/2026/11/02/apple-may-try-to-increase-revenue-by-doing-something-with-third-party-ai-apps/"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "刚刚，DeepSeek 开源新 Agent 架构：可接 Github 和飞书，研究让 AI 自己接活 - 新浪财经",
-        "match": {
-          "kind": "same_url",
-          "date": "2026-11-01",
-          "title": "DeepSeek开源新Agent架构：可接GitHub和飞书，研究让AI自己接活",
-          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9oeElGNnJ6Y002ajVfU3JHNXAwOGNVZjM3SzVGelpRMEhXd1VoYm5JVFBmZnotMkpNbWxjMk1EcnZGRHd6ZGFlSzJ0aXpsUTZNZnVQRms4RUxIQWswcll4OE1DdDZWbWN5NXB6WmlUU1FpeUI4bmtuRw?oc=5"
         }
       },
       {
@@ -975,6 +935,16 @@
           "date": "2026-11-02",
           "title": "百度搜索 AI API 千次仅需 4.9 元，低于 DeepSeek",
           "url": "https://www.infoq.cn/article/HJgTwfsPAugNBJ2jUefj?utm_source=rss&utm_medium=article"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "刚刚，DeepSeek 开源新 Agent 架构：可接 Github 和飞书，研究让 AI 自己接活 - 新浪财经",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "DeepSeek开源新Agent架构：可接GitHub和飞书，研究让AI自己接活",
+          "url": "https://news.google.com/rss/articles/CBMieEFVX3lxTE9oeElGNnJ6Y002ajVfU3JHNXAwOGNVZjM3SzVGelpRMEhXd1VoYm5JVFBmZnotMkpNbWxjMk1EcnZGRHd6ZGFlSzJ0aXpsUTZNZnVQRms4RUxIQWswcll4OE1DdDZWbWN5NXB6WmlUU1FpeUI4bmtuRw?oc=5"
         }
       },
       {
@@ -1037,16 +1007,6 @@
           "date": "2026-10-31",
           "title": "英伟达1.2万行代码优化Kimi K3，AI代码迭代超越人类审核",
           "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE5RWVVoZkpoLUd5bjk5T21oaDB2T0F4cC1NS0QwczFHamFLZlBGbG1ZamxNZ0lraEQwcHdhUGhGblhBM042SmNJRk1ycE1vUVBxVFRJMktuazlMMTNPYmJvY2ZxVmpjZkp3aTZrTkxfNmk?oc=5"
-        }
-      },
-      {
-        "section": "china_ai_news",
-        "candidate": "连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端",
-        "match": {
-          "kind": "same_title",
-          "date": "2026-11-02",
-          "title": "连AI都有领导了！DeepSeek让它们自己抢活干 - 网易新闻客户端",
-          "url": "https://news.google.com/rss/articles/CBMiggFBVV95cUxNWThJbW5FYVZfV3RRTHd1TWdqNmt4aExFUEdSRW9fMHdUYzFsa2V0QTF0RHRyMmZkd1hxRFFKLXY2bDcyQ05kTkk1U3haWkFzd1pBZmFBTVJZU2QxajU2RlQ1SDJxNEQ0SFR0ZllMMVZ5ZUFmTTBJNldYaXZ2TkEzQXl3?oc=5"
         }
       },
       {
@@ -1119,8 +1079,8 @@
       "name": "NVIDIA/SkillSpector",
       "url": "https://github.com/NVIDIA/SkillSpector",
       "description": "Security scanner for AI agent skills. Detect vulnerabilities, malicious patterns, security risks, prompt injection, data exfiltration, and supply-chain risks in Claude Code, Codex, and MCP skills before you install them.",
-      "stars": 24226,
-      "updated": "2026-11-04T03:05:11Z",
+      "stars": 24247,
+      "updated": "2026-11-04T06:09:42Z",
       "language": "Python",
       "topics": [
         "agent-security",
@@ -1138,24 +1098,24 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606130+08:00",
+        "checked_at": "2026-11-04T14:21:00.633236+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/nvidia/skillspector",
-      "stars_total": 24226,
-      "stars_delta_7d": 1440,
+      "stars_total": 24247,
+      "stars_delta_7d": 1461,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-28",
       "growth_baseline_30d_date": null,
       "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
       "license_name": "Apache License 2.0",
-      "forks_total": 2086,
-      "pushed_at": "2026-11-03T20:19:47Z",
+      "forks_total": 2088,
+      "pushed_at": "2026-11-04T05:44:24Z",
       "created_at": "2026-03-21T00:28:43Z",
-      "open_issues_total": 152,
+      "open_issues_total": 153,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:44.866611+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:35.950923+08:00",
       "evidence_urls": [
         "https://github.com/NVIDIA/SkillSpector",
         "https://api.github.com/repos/NVIDIA/SkillSpector/readme"
@@ -1194,7 +1154,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 6.83,
+      "growth_component": 6.84,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1206,7 +1166,7 @@
       "novelty_score": 10,
       "maintenance_score": 10,
       "total_score": 84.6,
-      "age_since_update_days": 1,
+      "age_since_update_days": 0,
       "confidence_level": "medium",
       "maturity_level": "持续维护",
       "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
@@ -1223,8 +1183,8 @@
       "name": "LibreChat-AI/LibreChat",
       "url": "https://github.com/LibreChat-AI/LibreChat",
       "description": "Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets, open-source for self-hosting. Active",
-      "stars": 46699,
-      "updated": "2026-11-04T02:56:38Z",
+      "stars": 46709,
+      "updated": "2026-11-04T05:56:25Z",
       "language": "TypeScript",
       "topics": [
         "ai",
@@ -1242,24 +1202,24 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606105+08:00",
+        "checked_at": "2026-11-04T14:21:00.633218+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/librechat-ai/librechat",
-      "stars_total": 46699,
-      "stars_delta_7d": 298,
+      "stars_total": 46709,
+      "stars_delta_7d": 308,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-28",
       "growth_baseline_30d_date": null,
       "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
       "license_name": "MIT License",
-      "forks_total": 9610,
-      "pushed_at": "2026-11-04T00:14:56Z",
+      "forks_total": 9612,
+      "pushed_at": "2026-11-04T05:58:15Z",
       "created_at": "2023-02-12T01:06:52Z",
-      "open_issues_total": 1103,
+      "open_issues_total": 1104,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:20.944680+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:11.972858+08:00",
       "evidence_urls": [
         "https://github.com/LibreChat-AI/LibreChat",
         "https://api.github.com/repos/LibreChat-AI/LibreChat/readme"
@@ -1289,7 +1249,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 5.35,
+      "growth_component": 5.39,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1318,8 +1278,8 @@
       "name": "alchaincyf/huashu-design",
       "url": "https://github.com/alchaincyf/huashu-design",
       "description": "Huashu Design 3.0 · 在 agent 里打一句话，拿回能交付的设计：网页 / App 原型 / 可编辑 PPTX / 动画 / 信息图 · 六个候选挑三个方向 · 84 种带样张的风格库 · 越用越懂你的外观账本与设计体检 · HTML-native design skill for Claude Code, Codex, Cursor & any agent",
-      "stars": 28598,
-      "updated": "2026-11-04T03:01:58Z",
+      "stars": 28615,
+      "updated": "2026-11-04T06:16:41Z",
       "language": "HTML",
       "topics": [
         "agent-skills",
@@ -1328,8 +1288,8 @@
         "claude-skills",
         "codex",
         "cursor",
-        "design",
-        "html"
+        "deepseek-harness",
+        "design"
       ],
       "daily_theme": "多模态与创作",
       "license": "MIT",
@@ -1337,24 +1297,24 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606205+08:00",
+        "checked_at": "2026-11-04T14:21:00.633298+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/alchaincyf/huashu-design",
-      "stars_total": 28598,
-      "stars_delta_7d": 795,
+      "stars_total": 28615,
+      "stars_delta_7d": 812,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-28",
       "growth_baseline_30d_date": null,
       "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
       "license_name": "MIT License",
-      "forks_total": 3095,
-      "pushed_at": "2026-10-30T17:51:13Z",
+      "forks_total": 3096,
+      "pushed_at": "2026-11-04T03:28:47Z",
       "created_at": "2026-04-19T14:42:06Z",
       "open_issues_total": 0,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:41.929061+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:33.389339+08:00",
       "evidence_urls": [
         "https://github.com/alchaincyf/huashu-design",
         "https://api.github.com/repos/alchaincyf/huashu-design/readme"
@@ -1382,7 +1342,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 6.27,
+      "growth_component": 6.29,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1394,7 +1354,7 @@
       "novelty_score": 10,
       "maintenance_score": 10,
       "total_score": 80.5,
-      "age_since_update_days": 5,
+      "age_since_update_days": 0,
       "confidence_level": "medium",
       "maturity_level": "持续维护",
       "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
@@ -1408,11 +1368,115 @@
       "description_en": "Huashu Design 3.0 · 在 agent 里打一句话，拿回能交付的设计：网页 / App 原型 / 可编辑 PPTX / 动画 / 信息图 · 六个候选挑三个方向 · 84 种带样张的风格库 · 越用越懂你的外观账本与设计体检 · HTML-native design skill for Claude Code, Codex, Cursor & any agent 1 workflow skills (1 SKILL.md files found in the repository scan.)"
     },
     {
+      "name": "mukul975/Anthropic-Cybersecurity-Skills",
+      "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
+      "description": "817 structured cybersecurity skills for AI agents · Mapped to 6 frameworks: MITRE ATT&CK, NIST CSF 2.0, MITRE ATLAS, D3FEND, NIST AI RMF & MITRE F3 (Fight Fraud) · agentskills.io standard · Works with Claude Code, GitHub Copilot, Codex CLI, Cursor, Gemini CLI & 20+ platforms · 29 security domains · Apache 2.0",
+      "stars": 35532,
+      "updated": "2026-11-04T05:07:16Z",
+      "language": "Python",
+      "topics": [
+        "ai-agents",
+        "claude-code",
+        "cloud-security",
+        "cybersecurity",
+        "devsecops",
+        "ethical-hacking",
+        "incident-response",
+        "infosec"
+      ],
+      "daily_theme": "安全与评估",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-04T14:21:00.633222+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/mukul975/anthropic-cybersecurity-skills",
+      "stars_total": 35532,
+      "stars_delta_7d": 392,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-28",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "Apache License 2.0",
+      "forks_total": 4329,
+      "pushed_at": "2026-08-31T04:32:44Z",
+      "created_at": "2026-02-25T09:47:50Z",
+      "open_issues_total": 68,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-04T14:21:37.419076+08:00",
+      "evidence_urls": [
+        "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
+        "https://api.github.com/repos/mukul975/Anthropic-Cybersecurity-Skills/readme"
+      ],
+      "official_website": "https://mahipal.engineer/Anthropic-Cybersecurity-Skills/",
+      "official_website_final_url": "https://www.mahipal.engineer/Anthropic-Cybersecurity-Skills/",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 818,
+      "skill_file_paths": [
+        "skills/abusing-dpapi-for-credential-access/SKILL.md",
+        "skills/abusing-shadow-credentials-for-privesc/SKILL.md",
+        "skills/achieving-cmmc-level-2-compliance/SKILL.md",
+        "skills/acquiring-disk-image-with-dd-and-dcfldd/SKILL.md",
+        "skills/analyzing-active-directory-acl-abuse/SKILL.md",
+        "skills/analyzing-android-malware-with-apktool/SKILL.md",
+        "skills/analyzing-api-gateway-access-logs/SKILL.md",
+        "skills/analyzing-apt-group-with-mitre-navigator/SKILL.md",
+        "skills/analyzing-azure-activity-logs-for-threats/SKILL.md",
+        "skills/analyzing-bootkit-and-rootkit-samples/SKILL.md",
+        "skills/analyzing-browser-forensics-with-hindsight/SKILL.md",
+        "skills/analyzing-campaign-attribution-evidence/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "mukul975/Anthropic-Cybersecurity-Skills",
+        "Anthropic-Cybersecurity-Skills"
+      ],
+      "discovered_at": "2026-11-04",
+      "first_recommended_at": "2026-11-04",
+      "last_recommended_at": "2026-11-04",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 5.61,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 16.5,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 8,
+      "total_score": 79.3,
+      "age_since_update_days": 65,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "817 structured cybersecurity skills for AI agents · Mapped to 6 frameworks: MITRE ATT&CK, NIST CSF 2.0, MITRE ATLAS, D3FEND, NIST AI RMF & MITRE F3 (Fight Fraud) · agentskills.io standard · Works with Claude Code, GitHub Copilot, Codex CLI, Cursor, Gemini CLI & 20+ platforms · 29 security domains · Apache 2.0（仓库实际扫描到818个SKILL.md文件）",
+      "description_en": "817 structured cybersecurity skills for AI agents · Mapped to 6 frameworks: MITRE ATT&CK, NIST CSF 2.0, MITRE ATLAS, D3FEND, NIST AI RMF & MITRE F3 (Fight Fraud) · agentskills.io standard · Works with Claude Code, GitHub Copilot, Codex CLI, Cursor, Gemini CLI & 20+ platforms · 29 security domains · Apache 2.0 818 workflow skills (818 SKILL.md files found in the repository scan.)"
+    },
+    {
       "name": "teng-lin/notebooklm-py",
       "url": "https://github.com/teng-lin/notebooklm-py",
       "description": "Unofficial Python API and agentic skill for Google Gemini Notebook. Full programmatic access to Gemini Notebook's features—including capabilities the web UI doesn't expose—via Python, CLI, and AI agents like Claude Code, Codex, and OpenClaw.",
-      "stars": 20090,
-      "updated": "2026-11-04T02:14:51Z",
+      "stars": 20091,
+      "updated": "2026-11-04T03:36:45Z",
       "language": "Python",
       "topics": [
         "agentic-skill",
@@ -1430,24 +1494,24 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606139+08:00",
+        "checked_at": "2026-11-04T14:21:00.633242+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/teng-lin/notebooklm-py",
-      "stars_total": 20090,
-      "stars_delta_7d": 141,
+      "stars_total": 20091,
+      "stars_delta_7d": 142,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-28",
       "growth_baseline_30d_date": null,
       "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
       "license_name": "MIT License",
-      "forks_total": 2675,
+      "forks_total": 2676,
       "pushed_at": "2026-11-03T16:20:42Z",
       "created_at": "2026-01-07T15:27:19Z",
-      "open_issues_total": 24,
+      "open_issues_total": 25,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:24.043367+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:15.241435+08:00",
       "evidence_urls": [
         "https://github.com/teng-lin/notebooklm-py",
         "https://api.github.com/repos/teng-lin/notebooklm-py/readme"
@@ -1475,7 +1539,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 4.65,
+      "growth_component": 4.66,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1504,8 +1568,8 @@
       "name": "kepano/obsidian-skills",
       "url": "https://github.com/kepano/obsidian-skills",
       "description": "Agent skills for Obsidian. Teach your agent to use Obsidian CLI and open formats including Markdown, Bases, JSON Canvas.",
-      "stars": 50706,
-      "updated": "2026-11-04T02:53:42Z",
+      "stars": 50711,
+      "updated": "2026-11-04T06:09:12Z",
       "language": "Multi-language",
       "topics": [
         "agents",
@@ -1523,12 +1587,12 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606251+08:00",
+        "checked_at": "2026-11-04T14:21:00.633328+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/kepano/obsidian-skills",
-      "stars_total": 50706,
-      "stars_delta_7d": 446,
+      "stars_total": 50711,
+      "stars_delta_7d": 451,
       "stars_delta_30d": null,
       "growth_baseline_7d_date": "2026-10-28",
       "growth_baseline_30d_date": null,
@@ -1540,7 +1604,7 @@
       "open_issues_total": 75,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:41.039968+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:32.206391+08:00",
       "evidence_urls": [
         "https://github.com/kepano/obsidian-skills",
         "https://api.github.com/repos/kepano/obsidian-skills/readme"
@@ -1573,7 +1637,7 @@
       "recommendation_history": [],
       "rejection_reason": null,
       "re_recommendation_reason": null,
-      "growth_component": 5.73,
+      "growth_component": 5.74,
       "community_count_7d": 0,
       "community_evidence_urls": [],
       "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
@@ -1599,28 +1663,23 @@
       "description_en": "Agent skills for Obsidian. Teach your agent to use Obsidian CLI and open formats including Markdown, Bases, JSON Canvas 6 workflow skills (6 SKILL.md files found in the repository scan.)"
     },
     {
-      "name": "GaoYishen/research-simulation-workflows",
-      "url": "https://github.com/GaoYishen/research-simulation-workflows",
-      "description": "Portable research simulation manifests, file integrity checks, handoff reports, and three Agent Skills with synthetic examples.",
+      "name": "mapsscraper-dev/mapsscraper-mcp",
+      "url": "https://github.com/mapsscraper-dev/mapsscraper-mcp",
+      "description": "MapsScraper.dev MCP server settings and agent skills: Google Maps business research with explicit unit budgets, for ChatGPT, Claude, Cursor, VS Code, Gemini CLI and Codex.",
       "stars": 0,
-      "updated": "2026-11-04T03:07:07Z",
-      "language": "Python",
-      "topics": [
-        "agent-skills",
-        "python",
-        "reproducible-research",
-        "scientific-computing"
-      ],
+      "updated": "2026-11-04T06:14:52Z",
+      "language": "Multi-language",
+      "topics": [],
       "daily_theme": "研究与知识管理",
       "license": "MIT",
       "community_signals": {
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606415+08:00",
+        "checked_at": "2026-11-04T14:21:00.633474+08:00",
         "status": "no_exact_match"
       },
-      "canonical_id": "github.com/gaoyishen/research-simulation-workflows",
+      "canonical_id": "github.com/mapsscraper-dev/mapsscraper-mcp",
       "stars_total": 0,
       "stars_delta_7d": null,
       "stars_delta_30d": null,
@@ -1629,33 +1688,38 @@
       "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
       "license_name": "MIT License",
       "forks_total": 0,
-      "pushed_at": "2026-11-04T03:07:03Z",
-      "created_at": "2026-11-04T02:59:07Z",
+      "pushed_at": "2026-11-04T06:14:48Z",
+      "created_at": "2026-11-03T18:36:02Z",
       "open_issues_total": 0,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:18.663811+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:10.435878+08:00",
       "evidence_urls": [
-        "https://github.com/GaoYishen/research-simulation-workflows",
-        "https://api.github.com/repos/GaoYishen/research-simulation-workflows/readme"
+        "https://github.com/mapsscraper-dev/mapsscraper-mcp",
+        "https://api.github.com/repos/mapsscraper-dev/mapsscraper-mcp/readme"
       ],
-      "official_website": "https://github.com/GaoYishen/research-simulation-workflows",
-      "official_website_final_url": "https://github.com/GaoYishen/research-simulation-workflows",
+      "official_website": "https://github.com/mapsscraper-dev/mapsscraper-mcp",
+      "official_website_final_url": "https://github.com/mapsscraper-dev/mapsscraper-mcp",
       "official_website_http_status": 200,
       "official_website_type": "official_github_repository_page",
       "official_website_verified": true,
       "quality_status": "PASS",
       "skill_type": "skill_pack",
-      "actual_skill_file_count": 3,
+      "actual_skill_file_count": 8,
       "skill_file_paths": [
-        "skills/research-session-handoff/SKILL.md",
-        "skills/simulation-case-manifest/SKILL.md",
-        "skills/simulation-run-review/SKILL.md"
+        "skills/business-enrichment/SKILL.md",
+        "skills/competitor-brief/SKILL.md",
+        "skills/local-prospecting/SKILL.md",
+        "skills/photo-audit/SKILL.md",
+        "skills/research-monitor/SKILL.md",
+        "skills/review-intelligence/SKILL.md",
+        "skills/setup/SKILL.md",
+        "skills/website-opportunity/SKILL.md"
       ],
       "novelty_status": "new",
       "aliases": [
-        "GaoYishen/research-simulation-workflows",
-        "research-simulation-workflows"
+        "mapsscraper-dev/mapsscraper-mcp",
+        "mapsscraper-mcp"
       ],
       "discovered_at": "2026-11-04",
       "first_recommended_at": "2026-11-04",
@@ -1686,98 +1750,8 @@
       "rare_value_verified": false,
       "rare_value_reason": null,
       "rare_value_evidence_url": null,
-      "description_zh": "Portable research simulation manifests, file integrity checks, handoff reports, and three Agent Skills with synthetic examples.（仓库实际扫描到3个SKILL.md文件）",
-      "description_en": "Portable research simulation manifests, file integrity checks, handoff reports, and three Agent Skills with synthetic examples 3 workflow skills (3 SKILL.md files found in the repository scan.)"
-    },
-    {
-      "name": "vedovato/qa-walk",
-      "url": "https://github.com/vedovato/qa-walk",
-      "description": "Let a coding agent walk your web app in a real browser while you watch: terminal-browser as a Herdr pane (right split, split below, tab or floating window). Agent skill plus Herdr app mod.",
-      "stars": 0,
-      "updated": "2026-11-04T03:04:25Z",
-      "language": "JavaScript",
-      "topics": [
-        "agent-skill",
-        "herdr",
-        "herdr-mod",
-        "qa",
-        "terminal-browser"
-      ],
-      "daily_theme": "软件工程与测试",
-      "license": "MIT",
-      "community_signals": {
-        "source": "Hacker News Algolia",
-        "count_7d": 0,
-        "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606453+08:00",
-        "status": "no_exact_match"
-      },
-      "canonical_id": "github.com/vedovato/qa-walk",
-      "stars_total": 0,
-      "stars_delta_7d": null,
-      "stars_delta_30d": null,
-      "growth_baseline_7d_date": null,
-      "growth_baseline_30d_date": null,
-      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
-      "license_name": "MIT License",
-      "forks_total": 0,
-      "pushed_at": "2026-11-04T03:04:21Z",
-      "created_at": "2026-11-04T02:45:21Z",
-      "open_issues_total": 0,
-      "evidence_verified": true,
-      "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:19.656862+08:00",
-      "evidence_urls": [
-        "https://github.com/vedovato/qa-walk",
-        "https://api.github.com/repos/vedovato/qa-walk/readme"
-      ],
-      "official_website": "https://github.com/vedovato/qa-walk",
-      "official_website_final_url": "https://github.com/vedovato/qa-walk",
-      "official_website_http_status": 200,
-      "official_website_type": "official_github_repository_page",
-      "official_website_verified": true,
-      "quality_status": "PASS",
-      "skill_type": "skill_pack",
-      "actual_skill_file_count": 1,
-      "skill_file_paths": [
-        "skills/qa-walk/SKILL.md"
-      ],
-      "novelty_status": "new",
-      "aliases": [
-        "vedovato/qa-walk",
-        "qa-walk"
-      ],
-      "discovered_at": "2026-11-04",
-      "first_recommended_at": "2026-11-04",
-      "last_recommended_at": "2026-11-04",
-      "last_release_at": null,
-      "recommendation_history": [],
-      "rejection_reason": null,
-      "re_recommendation_reason": null,
-      "growth_component": 0,
-      "community_count_7d": 0,
-      "community_evidence_urls": [],
-      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
-      "heat_score": 0,
-      "trend_score": 11.0,
-      "relevance_score": 11.0,
-      "usefulness_score": 20,
-      "quality_score": 15,
-      "novelty_score": 10,
-      "maintenance_score": 10,
-      "total_score": 66.0,
-      "age_since_update_days": 0,
-      "confidence_level": "medium",
-      "maturity_level": "持续维护",
-      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
-      "security_status": "未完成专项安全审计",
-      "recommendation_type": "趋势观察（未验证增长）",
-      "user_feedback": [],
-      "rare_value_verified": false,
-      "rare_value_reason": null,
-      "rare_value_evidence_url": null,
-      "description_zh": "Let a coding agent walk your web app in a real browser while you watch: terminal-browser as a Herdr pane (right split, split below, tab or floating window). Agent skill plus Herdr app mod.（仓库实际扫描到1个SKILL.md文件）",
-      "description_en": "Let a coding agent walk your web app in a real browser while you watch: terminal-browser as a Herdr pane (right split, split below, tab or floating window). Agent skill plus Herdr app mod 1 workflow skills (1 SKILL.md files found in the repository scan.)"
+      "description_zh": "MapsScraper.dev MCP server settings and agent skills: Google Maps business research with explicit unit budgets, for ChatGPT, Claude, Cursor, VS Code, Gemini CLI and Codex.（仓库实际扫描到8个SKILL.md文件）",
+      "description_en": "MapsScraper.dev MCP server settings and agent skills: Google Maps business research with explicit unit budgets, for ChatGPT, Claude, Cursor, VS Code, Gemini CLI and Codex 8 workflow skills (8 SKILL.md files found in the repository scan.)"
     },
     {
       "name": "OpaceDigitalAgency/ai-ui-ux-motion-engine",
@@ -1802,7 +1776,7 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606667+08:00",
+        "checked_at": "2026-11-04T14:21:00.633609+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/opacedigitalagency/ai-ui-ux-motion-engine",
@@ -1819,7 +1793,7 @@
       "open_issues_total": 0,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:32.815262+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:23.074002+08:00",
       "evidence_urls": [
         "https://github.com/OpaceDigitalAgency/ai-ui-ux-motion-engine",
         "https://api.github.com/repos/OpaceDigitalAgency/ai-ui-ux-motion-engine/readme"
@@ -1886,7 +1860,7 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606716+08:00",
+        "checked_at": "2026-11-04T14:21:00.633648+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/mexin/qa-agent-skill",
@@ -1903,7 +1877,7 @@
       "open_issues_total": 0,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:34.671367+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:25.326753+08:00",
       "evidence_urls": [
         "https://github.com/mexin/qa-agent-skill",
         "https://api.github.com/repos/mexin/qa-agent-skill/readme"
@@ -1974,7 +1948,7 @@
         "source": "Hacker News Algolia",
         "count_7d": 0,
         "evidence_urls": [],
-        "checked_at": "2026-11-04T11:07:11.606945+08:00",
+        "checked_at": "2026-11-04T14:21:00.633886+08:00",
         "status": "no_exact_match"
       },
       "canonical_id": "github.com/qinghonglin/data2story-skill",
@@ -1991,7 +1965,7 @@
       "open_issues_total": 1,
       "evidence_verified": true,
       "readme_verified": true,
-      "evidence_checked_at": "2026-11-04T11:07:17.674552+08:00",
+      "evidence_checked_at": "2026-11-04T14:21:06.895952+08:00",
       "evidence_urls": [
         "https://github.com/QinghongLin/data2story-skill",
         "https://api.github.com/repos/QinghongLin/data2story-skill/readme"
@@ -2067,13 +2041,13 @@
         "query_count": 3,
         "window_days": 7
       },
-      "github_candidate_count": 211
+      "github_candidate_count": 209
     },
     "growth_snapshots": {
       "status": "observed",
       "historical_snapshots_read": 11,
       "historical_errors": [],
-      "candidate_count": 211,
+      "candidate_count": 209,
       "candidates_with_7d_delta": 136,
       "candidates_with_30d_delta": 0
     },
@@ -2087,7 +2061,7 @@
       "errors": [],
       "records": 50
     },
-    "candidate_count": 211,
+    "candidate_count": 209,
     "history_duplicate_exclusions": [
       {
         "name": "mvanhorn/last30days-skill",
@@ -2453,17 +2427,6 @@
         }
       },
       {
-        "name": "jmagly/aiwg",
-        "url": "https://github.com/jmagly/aiwg",
-        "reason": "7-day history duplicate; no verified material release",
-        "match": {
-          "kind": "canonical_id",
-          "history_date": "2026-10-31",
-          "name": "jmagly/aiwg",
-          "url": "https://github.com/jmagly/aiwg"
-        }
-      },
-      {
         "name": "GulajavaMinistudio/awesome-copilot-id",
         "url": "https://github.com/GulajavaMinistudio/awesome-copilot-id",
         "reason": "7-day history duplicate; no verified material release",
@@ -2498,13 +2461,13 @@
         "reason": "repository/license/README verification failed"
       },
       {
-        "name": "lijishuang/skill-forge",
-        "url": "https://github.com/lijishuang/skill-forge",
+        "name": "arm-pz/skills-site",
+        "url": "https://github.com/arm-pz/skills-site",
         "reason": "repository/license/README verification failed"
       },
       {
-        "name": "arm-pz/skills-site",
-        "url": "https://github.com/arm-pz/skills-site",
+        "name": "lijishuang/skill-forge",
+        "url": "https://github.com/lijishuang/skill-forge",
         "reason": "repository/license/README verification failed"
       },
       {
@@ -2529,7 +2492,7 @@
       }
     ],
     "selected_count": 10,
-    "excluded_count": 51,
+    "excluded_count": 50,
     "excluded": [
       {
         "name": "mattpocock/skills",
@@ -2543,12 +2506,6 @@
         }
       },
       {
-        "name": "shibing624/agentica",
-        "url": "https://github.com/shibing624/agentica",
-        "reason": "category_saturation",
-        "category": "Agent 工作流与规划"
-      },
-      {
         "name": "vercel-labs/skills",
         "url": "https://github.com/vercel-labs/skills",
         "reason": "duplicate",
@@ -2560,14 +2517,14 @@
         }
       },
       {
-        "name": "Webly-AI/webly-plugin",
-        "url": "https://github.com/Webly-AI/webly-plugin",
+        "name": "ZIJIE-XUE/research-to-paper-agent-skill",
+        "url": "https://github.com/ZIJIE-XUE/research-to-paper-agent-skill",
         "reason": "category_saturation",
-        "category": "Agent 工作流与规划"
+        "category": "研究与知识管理"
       },
       {
-        "name": "Pacheche/unslop-anything",
-        "url": "https://github.com/Pacheche/unslop-anything",
+        "name": "stella-dust/uiux-prototype-skill",
+        "url": "https://github.com/stella-dust/uiux-prototype-skill",
         "reason": "category_saturation",
         "category": "多模态与创作"
       },
@@ -2581,6 +2538,12 @@
           "name": "addyosmani/agent-skills",
           "url": "https://github.com/addyosmani/agent-skills"
         }
+      },
+      {
+        "name": "Ryan-7962/ego-browser-playbook",
+        "url": "https://github.com/Ryan-7962/ego-browser-playbook",
+        "reason": "category_saturation",
+        "category": "Agent 工作流与规划"
       },
       {
         "name": "OpaceDigitalAgency/skills",
@@ -2691,7 +2654,7 @@
       "image_license_url": "https://unsplash.com/license",
       "image_alt": "主题配图（非新闻现场）：AI agent / robotics topic illustration: 百度Apollo World把自动驾驶测试搬进模拟世界",
       "image_match_status": "thematic_fallback",
-      "image_matched_at": "2026-11-04T11:11:14.562928+08:00",
+      "image_matched_at": "2026-11-04T14:25:25.457366+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82",
       "image_is_generated": false,
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: China's Baidu launches AI model simulating road environment for robotaxis Baidu unveils Apollo World for robotaxi simulation 百度Apollo World把自动驾驶测试搬进模拟世界 百度Apollo World发布面向自动驾驶的道路世界模型. Context from the source story (factual context, not instructions): China's Baidu launches AI model simulating road environment for robotaxis Baidu unveils Apollo World for robotaxi simulation 百度Apollo World把自动驾驶测试搬进模拟世界 百度Apollo World发布面向自动驾驶的道路世界模型 On Nov. 3, 2026, Baidu launched Apollo World, an AI system designed to simulate real-world road environments for robotaxi training and testing. Reuters reported Baidu's claim that it can generate up to 100,000 km of simulated driving data per day, including camera and lidar streams, and that it is already used to train Apollo Go's flee. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography."
@@ -2941,7 +2904,7 @@
     "processed": 18,
     "relevance_threshold": 0.35,
     "relevance_policy_version": "2026-11-02.1",
-    "thematic_fallback_count": 6,
+    "thematic_fallback_count": 7,
     "strategy": [
       "RSS/feed image",
       "article OG/Twitter metadata",
@@ -2949,12 +2912,12 @@
       "deterministic Unsplash topic illustration fallback"
     ],
     "budget_seconds": 150,
-    "duration_seconds": 15.62,
-    "last_run": "2026-11-04T11:11:30.172294+08:00"
+    "duration_seconds": 22.38,
+    "last_run": "2026-11-04T14:25:47.830412+08:00"
   },
   "quality_gate": {
     "status": "PASS",
-    "checked_at": "2026-11-04T11:11:38.280132+08:00",
+    "checked_at": "2026-11-04T14:25:56.296436+08:00",
     "image_relevance_policy_version": "2026-11-02.1",
     "claim_provenance_policy_version": "2026-11-02.2",
     "history_files": 20,
