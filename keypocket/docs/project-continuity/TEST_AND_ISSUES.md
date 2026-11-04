@@ -139,3 +139,11 @@
 - 测试脚本适配新的导航路径：管理子页从设置中心进入；导入/扫描工具测试前展开 details；导入/导出测试结束后返回对应主模块。
 - 曾出现自动化测试上下文仍停留在设置页而误判密钥按钮不可见，已在测试中明确返回密钥主模块后重跑，最终 PASS；不是生产功能缺陷。
 - 实机边界：尚未在真实 iPhone Safari 和微信内置浏览器完成触屏、滚动、刘海安全区与动态视口专项验收。
+
+
+## 2026-11-04 阶段交接时测试边界汇总
+- 最终同 SHA `194a5fd2d571386654a064c42ae5a54299767061`：Pages `41812576668` SUCCESS；Browser QA `41812576957` SUCCESS；KeyPocket Skill Handoff QA `41812576892` SUCCESS。
+- 已通过：390px Chromium 手机布局、三项主导航、7 项设置入口、项目工具折叠、双列筛选、无横向溢出、无 KeyPocket pageerror；视觉偏好、Key CRUD、加密备份/恢复、回收站、本地快照、Skill 收录、公开仓库扫描、Radar JSON 等自动化回归。
+- 尚未通过真实环境证明：iPhone Safari/微信实机、真实邮箱 SMTP 投递、真实双设备同步与云备份跨设备恢复、真实 GitHub App/OAuth 私有仓库连接。
+- Skill Intelligence 的 README/Topics/目录深度分析及人工覆盖/旧记录升级专项测试仍需补足，规则置信度不可等同语义正确性。
+- 详细下一步与 V2.1 Phase 1 范围见 `SESSION_HANDOFF_2026-11-04.md`。
