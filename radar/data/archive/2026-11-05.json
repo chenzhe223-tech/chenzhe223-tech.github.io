@@ -1,0 +1,3093 @@
+{
+  "product": "Davy Radar",
+  "report_date": "2026-11-05",
+  "timezone": "Asia/Shanghai",
+  "generated_at": "2026-11-05T08:10:13.911102+08:00",
+  "status": "ok",
+  "sources_ok": 9,
+  "sources_total": 10,
+  "news": [
+    {
+      "title": "AI PACs spent millions trying to shape Congress — here’s how they fared",
+      "url": "https://techcrunch.com/2026/11/04/ai-pacs-spent-millions-trying-to-shape-congress-heres-how-they-fared/",
+      "summary": "AI industry PACs spent millions influencing the 2026 midterms, with mixed results. Political groups are already looking toward the next election cycle.",
+      "published": "2026-11-04T22:45:09+00:00",
+      "source": "TechCrunch AI",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/11/GettyImages-2264644532.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/11/04/ai-pacs-spent-millions-trying-to-shape-congress-heres-how-they-fared/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:28.891280+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: AI PACs spent millions trying to shape Congress — here’s how they fared. Context from the source story (factual context, not instructions): AI PACs spent millions trying to shape Congress — here’s how they fared AI industry PACs spent millions influencing the 2026 midterms, with mixed results. Political groups are already looking toward the next election cycle.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.12
+    },
+    {
+      "title": "webAI Releases TwIL-8B, an 8.8B Reasoning Model Scoring 98.2 on MATH-500",
+      "url": "https://www.marktechpost.com/2026/11/04/webai-twil-8b-reasoning-model/",
+      "summary": "webAI released TwIL-8B, an 8.8B reasoning model post-trained from IBM Granite 4.2 8B. It posts 98.2 on MATH-500 and 81.6 on LiveCodeBench, but trails similar-size models on knowledge benchmarks. The post webAI Releases TwIL-8B, an 8.8B Reasoning Model Scoring 98.2 on MATH-500 appeared first on MarkTechPost .",
+      "published": "2026-11-04T22:25:05+00:00",
+      "source": "MarkTechPost",
+      "image_url": "https://www.marktechpost.com/wp-content/uploads/2026/11/WP-BLOG-BANNER-10001-6-scaled.png",
+      "image_source": "MarkTechPost",
+      "image_page_url": "https://www.marktechpost.com/2026/11/04/webai-twil-8b-reasoning-model/",
+      "image_credit": "MarkTechPost",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:29.128480+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: webAI Releases TwIL-8B, an 8.8B Reasoning Model Scoring 98.2 on MATH-500. Context from the source story (factual context, not instructions): webAI Releases TwIL-8B, an 8.8B Reasoning Model Scoring 98.2 on MATH-500 webAI released TwIL-8B, an 8.8B reasoning model post-trained from IBM Granite 4.2 8B. It posts 98.2 on MATH-500 and 81.6 on LiveCodeBench, but trails similar-size models on knowledge benchmarks. The post webAI Releases TwIL-8B, an 8.8B Reasoning Model Scoring 98.2 on MATH-500 appeared first on MarkTechPost .. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.24
+    },
+    {
+      "title": "Nothing CEO says company’s mysterious AI-first device is dropping next month",
+      "url": "https://techcrunch.com/2026/11/04/nothing-ceo-says-companys-mysterious-ai-first-device-is-dropping-next-month/",
+      "summary": "While it's not yet clear what kind of product the smartphone startup is cooking up, Nothing's CEO said the product is designed to leverage AI for productivity gains.",
+      "published": "2026-11-04T22:13:16+00:00",
+      "source": "TechCrunch AI",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2024/02/2560x2040_5fe778b6-8919-4143-bf11-8d86af754f52_2192x.webp?resize=1200,956",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/11/04/nothing-ceo-says-companys-mysterious-ai-first-device-is-dropping-next-month/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:29.250760+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Nothing CEO says company’s mysterious AI-first device is dropping next month. Context from the source story (factual context, not instructions): Nothing CEO says company’s mysterious AI-first device is dropping next month While it's not yet clear what kind of product the smartphone startup is cooking up, Nothing's CEO said the product is designed to leverage AI for productivity gains.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.12
+    },
+    {
+      "title": "Almost no one uses AI agents to book their Uber, company says",
+      "url": "https://techcrunch.com/2026/11/04/almost-no-one-uses-ai-agents-to-book-their-uber-company-says/",
+      "summary": "During its busiest week last quarter, Uber said only four people booked a ride using an AI agent.",
+      "published": "2026-11-04T21:56:01+00:00",
+      "source": "TechCrunch AI",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/07/uber-getty.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/11/04/almost-no-one-uses-ai-agents-to-book-their-uber-company-says/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:29.366749+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Almost no one uses AI agents to book their Uber, company says. Context from the source story (factual context, not instructions): Almost no one uses AI agents to book their Uber, company says During its busiest week last quarter, Uber said only four people booked a ride using an AI agent.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.12
+    },
+    {
+      "title": "OpenAI is already trying to shape the 2028 election",
+      "url": "https://techcrunch.com/2026/11/04/openai-is-already-trying-to-shape-the-2028-election/",
+      "summary": "OpenAI’s Chris Lehane wants AI to define the 2028 election, proposing a new social contract that could benefit Americans while also advancing the AI giant’s own business interests.",
+      "published": "2026-11-04T21:25:44+00:00",
+      "source": "TechCrunch AI",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/08/GettyImages-2263890424.jpg?w=1024",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/2026/11/04/openai-is-already-trying-to-shape-the-2028-election/",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:29.480446+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: OpenAI is already trying to shape the 2028 election. Context from the source story (factual context, not instructions): OpenAI is already trying to shape the 2028 election OpenAI’s Chris Lehane wants AI to define the 2028 election, proposing a new social contract that could benefit Americans while also advancing the AI giant’s own business interests.. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.11
+    },
+    {
+      "title": "Meta acquires AI coding startup Conductor",
+      "url": "https://techcrunch.com/2026/11/04/meta-acquires-ai-coding-startup-conductor/",
+      "summary": "The startup allows software engineers to deploy teams of agents to work on various aspects of a project simultaneously.",
+      "published": "2026-11-04T21:10:56+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Ricursive AI Releases Ripple-65B Preview: A 65B Dense Open-Weight Model Scoring 80.5 on Terminal-Bench 2.1",
+      "url": "https://www.marktechpost.com/2026/11/04/ricursive-ripple-65b-preview-open-weight-model/",
+      "summary": "Ricursive Intelligence released Ripple-65B Preview, a 65B dense open-weight LLM under Apache 2.0. It scores 80.5 on Terminal-Bench 2.1, ahead of US open models up to 15x its size. The post Ricursive AI Releases Ripple-65B Preview: A 65B Dense Open-Weight Model Scoring 80.5 on Terminal-Bench 2.1 appeared first on MarkTechPost .",
+      "published": "2026-11-04T21:01:06+00:00",
+      "source": "MarkTechPost"
+    },
+    {
+      "title": "Gemini for Home now plugs into AT&T’s smart security system",
+      "url": "https://www.theverge.com/tech/1026787/att-gemini-for-home-connected-life-security-system",
+      "summary": "AT&T's smart home security system now integrates with Gemini for Home. The company says its Connected Life system is the \"first\" home security product to integrate with Google Home Premium, enabling a bunch of Gemini-powered features that can summarize home events, search your video history, and more. With the update, Gemini for Home can provide […]",
+      "published": "2026-11-04T20:23:24+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "Open source AI is booming. Hugging Face explains who profits.",
+      "url": "https://techcrunch.com/video/open-source-ai-is-booming-hugging-face-explains-who-profits/",
+      "summary": "Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of […",
+      "published": "2026-11-04T19:30:04+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "DuckDuckGo pitches itself to schools amid backlash over Google’s AI policy",
+      "url": "https://techcrunch.com/2026/11/04/duckduckgo-pitches-itself-to-schools-amid-backlash-over-googles-ai-policy/",
+      "summary": "DuckDuckGo is courting schools frustrated by Google's AI restrictions, pointing educators to its search engine and options to disable AI features.",
+      "published": "2026-11-04T19:29:52+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Texas was the new epicenter of the AI data center buildout. That might be kaput.",
+      "url": "https://www.technologyreview.com/2026/11/04/1148043/texas-was-the-new-epicenter-of-the-ai-data-center-buildout-that-might-be-kaput/",
+      "summary": "Texas is the fastest-growing data center market in the US and ground zero for Big Tech’s largest AI buildouts. But the blue wave that swept the Lone Star State may jeopardize that position. Democrat James Talarico won the US Senate seat against Ken Paxton. Gina Hinojosa won the race for governor against the Republican incumbent,…",
+      "published": "2026-11-04T18:50:55+00:00",
+      "source": "MIT Technology Review AI"
+    },
+    {
+      "title": "Building on open source AI? Hugging Face’s policy chief on the costs, risks, and trade-offs",
+      "url": "https://techcrunch.com/podcast/building-on-open-source-ai-hugging-faces-policy-chief-on-the-costs-risks-and-trade-offs/",
+      "summary": "Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of […",
+      "published": "2026-11-04T18:44:57+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Nothing teases a screen-free AI device ahead of launch next month",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1026586/nothing-screen-free-ai-device-carl-pei",
+      "summary": "Nothing CEO Carl Pei said in a post on X that the company's launching its first AI device in December. That's just a little over a year after Pei announced plans for \"AI-native\" devices and an AI operating system. He didn't give away much about what exactly the new device is, only that one feature […]",
+      "published": "2026-11-04T18:26:07+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "ChatGPT will now make you animated GIFs",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1026474/openai-chatgpt-animated-gifs-images-2-6",
+      "summary": "ChatGPT can now create GIFs using a prompt or a photo uploaded to the AI chatbot. The update, which is rolling out alongside OpenAI's new Images 2.6 model, allows you to adjust the GIF's animation speed, edit individual frames, and share it with others. Before this change, ChatGPT couldn't natively generate GIFs in a single […]",
+      "published": "2026-11-04T18:00:00+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "I tried Apple’s Siri Recaps. They’re surprisingly useful — and a little unsettling",
+      "url": "https://techcrunch.com/2026/11/04/i-tried-apples-siri-recaps-theyre-surprisingly-useful-and-a-little-unsettling/",
+      "summary": "Apple's AI-powered Siri Recaps won me over in just one day, despite my privacy reservations. But there's still room for improvement.",
+      "published": "2026-11-04T16:51:35+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Google faces backlash for plan that would turn off Search for schools that restrict AI",
+      "url": "https://techcrunch.com/2026/11/04/google-faces-backlash-for-plan-that-would-turn-off-search-for-schools-that-restrict-ai/",
+      "summary": "Politicians on the left, like NYC mayor Zohran Mamdani and former FTC chair Lina Khan, accused Google of acting as an unregulated monopoly.",
+      "published": "2026-11-04T16:17:22+00:00",
+      "source": "TechCrunch AI"
+    },
+    {
+      "title": "Data centers lost the midterms",
+      "url": "https://www.theverge.com/policy/1026365/data-centers-midterms-results",
+      "summary": "Data center developers are poised to face a more restrictive building environment after voters across the country voted in candidates who favor moratoriums and ballot measures that put more obstacles on their expansion, delivering a stinging blow to a central pillar of the AI industry. Of voters polled by NBC News on Election Day, 76 […]",
+      "published": "2026-11-04T16:05:39+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "Uber only fulfilled 4 rides from AI agents last quarter",
+      "url": "https://www.theverge.com/transportation/1026306/uber-ai-agents-q3-earnings-disintermediation",
+      "summary": "AI agents won't be stealing Uber's lunch any time soon. Only four rides were arranged by third-party AI agents during the third quarter of 2026, Uber executives disclosed during an earnings call this morning. The volume of Uber Eats orders fulfilled by AI agents was a little higher, with the company recording \"around 500\" during […]",
+      "published": "2026-11-04T15:58:45+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "datasette-llm 0.1a10",
+      "url": "https://simonwillison.net/2026/Nov/4/datasette-llm/",
+      "summary": "Release: datasette-llm 0.1a10 Fixes a bug that affected my agent.datasette.io demo site, where the set of available LLM models was not correctly restricted to just those in the configuration. Tags: datasette , llm",
+      "published": "2026-11-04T15:26:02+00:00",
+      "source": "Simon Willison"
+    },
+    {
+      "title": "Sam Altman addresses RAM comments: People should ‘put as much as they want in their computers’",
+      "url": "https://www.theverge.com/ai-artificial-intelligence/1026292/sam-altman-ram-shortage-pcs-comments",
+      "summary": "OpenAI CEO Sam Altman spent election night defending his position on PC RAM purchases. He changed his name on X to \"Ram Altman\" in response to another user's comment, saying, \"i actually do want the world to have tons of memory and people to put as much as they want in their computers, and it […]",
+      "published": "2026-11-04T14:46:01+00:00",
+      "source": "The Verge AI"
+    },
+    {
+      "title": "US bank regulator issues AI guidance for examiners",
+      "title_zh": "美国 OCC 发布银行 AI 使用审查指引",
+      "title_en": "US OCC issues guidance for examiners assessing banks' AI use",
+      "summary": "Reuters 于 11 月 4 日报道，美国货币监理署（OCC）发布面向银行检查人员的 AI 使用审查指引。文件不是具有法律约束力的新规，重点是按 AI 的具体用途、机构规模和复杂程度评估风险；例如，获准发起交易的简单 Agent，可能比仅用于内部工作的高级模型风险更高。",
+      "summary_zh": "Reuters 于 11 月 4 日报道，美国货币监理署（OCC）发布面向银行检查人员的 AI 使用审查指引。文件不是具有法律约束力的新规，重点是按 AI 的具体用途、机构规模和复杂程度评估风险；例如，获准发起交易的简单 Agent，可能比仅用于内部工作的高级模型风险更高。",
+      "summary_en": "Reuters reported on Nov. 4 that the US Office of the Comptroller of the Currency issued guidance for examiners reviewing banks' use of AI. The document is nonbinding, and asks examiners to assess the use case, the institution's size and complexity. A simple agent authorized to initiate transactions may pose more risk than an advanced model used only for internal work.",
+      "source": "Reuters",
+      "url": "https://www.reuters.com/business/finance/us-bank-regulator-issues-first-ever-ai-guidance-for-examiners-2026-11-04/",
+      "published": "2026-11-04",
+      "manual_editorial_source": true,
+      "additional_sources": [],
+      "image_url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 美国 OCC 发布银行 AI 使用审查指引",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.078123+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: US bank regulator issues AI guidance for examiners US OCC issues guidance for examiners assessing banks' AI use 美国 OCC 发布银行 AI 使用审查指引 美国 OCC 发布银行 AI 使用审查指引. Context from the source story (factual context, not instructions): US bank regulator issues AI guidance for examiners US OCC issues guidance for examiners assessing banks' AI use 美国 OCC 发布银行 AI 使用审查指引 美国 OCC 发布银行 AI 使用审查指引 Reuters reported on Nov. 4 that the US Office of the Comptroller of the Currency issued guidance for examiners reviewing banks' use of AI. The document is nonbinding, and asks examiners to assess the use case, the institution's size and complexity. A simple agent authorized to initiate transactions may pose more risk than an advanced model used only for internal. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 3.27
+    },
+    {
+      "title": "India cybercrime agency warns financial firms of AI-driven cyberattacks",
+      "title_zh": "印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+      "title_en": "India's cybercrime agency warns financial firms about AI-assisted attacks",
+      "summary": "Reuters 于 11 月 4 日报道，印度网络犯罪协调中心（I4C）向银行、非银行贷款机构和金融科技企业发出警示，称攻击者正借助 AI Agent 加快攻击流程。公告提到的路径包括利用未修补软件或错误配置进入系统，再攻击自动放款系统及支付、转账 API；I4C 建议设置每日和单笔交易限额、核验收款人姓名并监测异常交易速度。",
+      "summary_zh": "Reuters 于 11 月 4 日报道，印度网络犯罪协调中心（I4C）向银行、非银行贷款机构和金融科技企业发出警示，称攻击者正借助 AI Agent 加快攻击流程。公告提到的路径包括利用未修补软件或错误配置进入系统，再攻击自动放款系统及支付、转账 API；I4C 建议设置每日和单笔交易限额、核验收款人姓名并监测异常交易速度。",
+      "summary_en": "Reuters reported on Nov. 4 that India's Indian Cybercrime Coordination Centre warned banks, non-bank lenders and fintech firms about attacks accelerated with AI agents. The advisory describes attackers exploiting unpatched software or misconfigured systems before targeting automated disbursement systems and payment or transfer APIs. It recommends daily and per-transaction limits, beneficiary-name checks and monitoring unusual transaction speeds.",
+      "source": "Reuters",
+      "url": "https://www.reuters.com/legal/government/india-cybercrime-agency-warns-financial-firms-ai-attacks-2026-11-04/",
+      "published": "2026-11-04",
+      "manual_editorial_source": true,
+      "additional_sources": [],
+      "image_url": "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.250546+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: India cybercrime agency warns financial firms of AI-driven cyberattacks India's cybercrime agency warns financial firms about AI-assisted attacks 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 印度网络犯罪机构警示 AI Agent 加速金融网络攻击. Context from the source story (factual context, not instructions): India cybercrime agency warns financial firms of AI-driven cyberattacks India's cybercrime agency warns financial firms about AI-assisted attacks 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 Reuters reported on Nov. 4 that India's Indian Cybercrime Coordination Centre warned banks, non-bank lenders and fintech firms about attacks accelerated with AI agents. The advisory describes attackers exploiting unpatched software or misconfigured systems before targeting automated disbursement systems and payment. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.17
+    },
+    {
+      "title": "How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub",
+      "title_zh": "研究团队分析 8.42 万个 Agent Skill 的演进模式",
+      "title_en": "Researchers study how 84,200 Agent Skills evolve on GitHub",
+      "summary": "一篇 11 月 3 日提交到 arXiv 的预印本，分析了作者收集的 84,200 个 GitHub Agent Skill 和 750,898 次提交。研究指出，Skill 的可靠性设计受到的关注相对不足，修改多为渐进式补充；以安全为目的的改动也未必能充分降低风险。该研究尚未经过同行评审，样本和结论应按论文作者的方法与口径理解。",
+      "summary_zh": "一篇 11 月 3 日提交到 arXiv 的预印本，分析了作者收集的 84,200 个 GitHub Agent Skill 和 750,898 次提交。研究指出，Skill 的可靠性设计受到的关注相对不足，修改多为渐进式补充；以安全为目的的改动也未必能充分降低风险。该研究尚未经过同行评审，样本和结论应按论文作者的方法与口径理解。",
+      "summary_en": "An arXiv preprint submitted on Nov. 3 analyzes a dataset assembled by its authors containing 84,200 GitHub Agent Skills and 750,898 commits. The authors report that reliability receives comparatively little attention, changes are often incremental, and security-motivated edits do not necessarily reduce risk enough. The work has not been peer reviewed, and its findings should be read within the authors' sampling and methodology.",
+      "source": "arXiv 预印本",
+      "url": "https://arxiv.org/abs/2611.04456",
+      "published": "2026-11-03",
+      "manual_editorial_source": true,
+      "additional_sources": [],
+      "image_url": "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 研究团队分析 8.42 万个 Agent Skill 的演进模式",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.775882+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub Researchers study how 84,200 Agent Skills evolve on GitHub 研究团队分析 8.42 万个 Agent Skill 的演进模式 研究团队分析 8.42 万个 Agent Skill 的演进模式. Context from the source story (factual context, not instructions): How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub Researchers study how 84,200 Agent Skills evolve on GitHub 研究团队分析 8.42 万个 Agent Skill 的演进模式 研究团队分析 8.42 万个 Agent Skill 的演进模式 An arXiv preprint submitted on Nov. 3 analyzes a dataset assembled by its authors containing 84,200 GitHub Agent Skills and 750,898 commits. The authors report that reliability receives comparatively little attention, changes are often incremental, and security-motivated edits do not necessarily reduce risk enough. The. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.39
+    }
+  ],
+  "china_ai_news": [
+    {
+      "title": "月之暗面 2.8 万亿参数 Kimi K3.1 Pro 开放权重，登顶 Agent Arena 开源模型榜",
+      "url": "https://www.ithome.com/1/022/490.htm",
+      "summary": "IT之家 11 月 5 日消息，按照 10 月 24 日发布时给出的承诺，月之暗面（Moonshot AI）今日在 Hugging Face 平台开放了 Kimi K3.1 Pro 的模型权重。 在 Arena 运营的 Agent Arena 智能体排行榜中，Kimi K3.1 Pro（Max）位列开放权重模型第一、全部参评模型第 13 位，并在工作、编程与聊天三个类别中均居开放模型首位。 Agent Arena 的评测方式与传统的成对盲测不同。它不要求用户对两个回答投票，而是从真实用户的智能体会话中提取信号，包括用户对任务的明确确认、表扬与投诉、纠正指令以及 Shell 命令执行错误等，再通过 Arena 称为“因果追踪”的随机化推断方法估算各模型相对于平均水平的净改进率。 Kimi K3.1 Pro 此次排",
+      "published": "2026-11-05T00:00:15+00:00",
+      "source": "IT之家",
+      "category": "模型与技术进展",
+      "region": "China",
+      "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/043edf7b-dba9-4e4c-8358-88dc21ca1983.png",
+      "image_source": "IT之家",
+      "image_page_url": "https://www.ithome.com/1/022/490.htm",
+      "image_credit": "IT之家",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "feed_image",
+      "image_matched_at": "2026-11-05T08:14:30.427875+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 月之暗面 2.8 万亿参数 Kimi K3.1 Pro 开放权重，登顶 Agent Arena 开源模型榜. Context from the source story (factual context, not instructions): 月之暗面 2.8 万亿参数 Kimi K3.1 Pro 开放权重，登顶 Agent Arena 开源模型榜 IT之家 11 月 5 日消息，按照 10 月 24 日发布时给出的承诺，月之暗面（Moonshot AI）今日在 Hugging Face 平台开放了 Kimi K3.1 Pro 的模型权重。 在 Arena 运营的 Agent Arena 智能体排行榜中，Kimi K3.1 Pro（Max）位列开放权重模型第一、全部参评模型第 13 位，并在工作、编程与聊天三个类别中均居开放模型首位。 Agent Arena 的评测方式与传统的成对盲测不同。它不要求用户对两个回答投票，而是从真实用户的智能体会话中提取信号，包括用户对任务的明确确认、表扬与投诉、纠正指令以及 Shell 命令执行错误等，再通过 Arena 称为“因果追踪”的随机化推断方法估算各模型相对于平均水平的净改进率。 Kimi K3.1 Pro 此次排 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.95
+    },
+    {
+      "title": "月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 - 凤凰网",
+      "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE54WXd2TGtzNEs3cF9XVU04QmFKSTl2YU0td0REbUk4bUU5SmVyMXRBVU5zOTlROXVSbDRJdS1femZHd3FpVmd3M01peXhDT2hYZVE?oc=5",
+      "summary": "月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 凤凰网",
+      "published": "2026-11-04T23:34:37+00:00",
+      "source": "Google News China AI",
+      "category": "模型与技术进展",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI technology topic illustration: 月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 - 凤凰网",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:39.962323+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 - 凤凰网. Context from the source story (factual context, not instructions): 月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 - 凤凰网 月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 凤凰网 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 3.39
+    },
+    {
+      "title": "小鹏 MONA L05 开启首批车主交付，何小鹏现场交车",
+      "url": "https://www.ithome.com/1/022/481.htm",
+      "summary": "IT之家 11 月 5 日消息，11 月 4 日，小鹏汽车举办 MONA L05 首批车主交付仪式，小鹏集团董事长何小鹏亲临现场，为车主完成新车交付。小鹏 MONA L05 共推出 6 款车型，售价区间 14.48-17.68 万元，限时权益价区间 13.98-17.18 万元。 小鹏 MONA L05 于 10 月 29 日正式发布上市， 是 MONA 系列第三款车型 ，也是该系列首款大五座 SUV。车身长宽高为 4870/1930/1636mm，轴距 2940mm，轴长比 60.4%。座舱方面，MONA L05 以 26.8 英寸 W-HUD 抬头显示替代，配备 17.3 英寸悬浮中控屏，后排另有一块 17.3 英寸车顶娱乐屏。 新车采用纯视觉智驾方案 ，Max 版搭载 1 颗图灵 AI 芯片，有效算力 7",
+      "published": "2026-11-04T23:20:10+00:00",
+      "source": "IT之家",
+      "category": "芯片与算力",
+      "region": "China",
+      "image_url": "https://img.ithome.com/newsuploadfiles/2026/11/dd9c8749-dd42-4e01-be3c-f49c4fb9a846.png",
+      "image_source": "IT之家",
+      "image_page_url": "https://www.ithome.com/1/022/481.htm",
+      "image_credit": "IT之家",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "feed_image",
+      "image_matched_at": "2026-11-05T08:14:35.192123+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: 小鹏 MONA L05 开启首批车主交付，何小鹏现场交车. Context from the source story (factual context, not instructions): 小鹏 MONA L05 开启首批车主交付，何小鹏现场交车 IT之家 11 月 5 日消息，11 月 4 日，小鹏汽车举办 MONA L05 首批车主交付仪式，小鹏集团董事长何小鹏亲临现场，为车主完成新车交付。小鹏 MONA L05 共推出 6 款车型，售价区间 14.48-17.68 万元，限时权益价区间 13.98-17.18 万元。 小鹏 MONA L05 于 10 月 29 日正式发布上市， 是 MONA 系列第三款车型 ，也是该系列首款大五座 SUV。车身长宽高为 4870/1930/1636mm，轴距 2940mm，轴长比 60.4%。座舱方面，MONA L05 以 26.8 英寸 W-HUD 抬头显示替代，配备 17.3 英寸悬浮中控屏，后排另有一块 17.3 英寸车顶娱乐屏。 新车采用纯视觉智驾方案 ，Max 版搭载 1 颗图灵 AI 芯片，有效算力 7 芯片与算力. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 1.37
+    },
+    {
+      "title": "GPT-6.1 Sol vs Kimi K4：从未存在过的模型 - OrcaRouter",
+      "url": "https://news.google.com/rss/articles/CBMia0FVX3lxTFB1MHB3OGNNMGpwQnM1ak5DU1RKWHZlX3NsRVhrLTRuM055c3EzOHdabS1WN252X0dQeU1RTEdueHBxdFdtcm43THlmNW5uME1PTC13NnhWZGpOckJEaGM4VndmSC1tSHRtcy1n?oc=5",
+      "summary": "GPT-6.1 Sol vs Kimi K4：从未存在过的模型 OrcaRouter",
+      "published": "2026-11-04T22:38:42+00:00",
+      "source": "Google News China AI",
+      "category": "模型与技术进展",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI technology topic illustration: GPT-6.1 Sol vs Kimi K4：从未存在过的模型 - OrcaRouter",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:40.157645+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: GPT-6.1 Sol vs Kimi K4：从未存在过的模型 - OrcaRouter. Context from the source story (factual context, not instructions): GPT-6.1 Sol vs Kimi K4：从未存在过的模型 - OrcaRouter GPT-6.1 Sol vs Kimi K4：从未存在过的模型 OrcaRouter 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.39
+    },
+    {
+      "title": "Artificial Analysis 测算 $100 预算在各模型上的 Intelligence Index 任务量对比",
+      "url": "https://chenqiyuan.cn/article/intel-0bd141162d24638c087fca7e",
+      "summary": "Artificial Analysis 引用 Bloomberg 报道称 Apple 正在削减员工 AI 使用预算，工程师每日额度从 $300 降至 $200，未来计划降到 $100，其他团队可能降至 $25。作者测算 $100 预算可完成 40 个 Intelligence Index 任务（Opus 5.5 中等推理强度）或 10 个（最大强度），同样的 $100 用 DeepSeek V4.1 Flash 1017（max）可完成 166 个任务，用 GPT-6 Luna（medium）可完成 2,500 个任务。",
+      "published": "2026-11-04T22:02:34+00:00",
+      "source": "AI圈报",
+      "category": "模型与技术进展",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI technology topic illustration: Artificial Analysis 测算 $100 预算在各模型上的 Intelligence Index 任务量对比",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:40.330993+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Artificial Analysis 测算 $100 预算在各模型上的 Intelligence Index 任务量对比. Context from the source story (factual context, not instructions): Artificial Analysis 测算 $100 预算在各模型上的 Intelligence Index 任务量对比 Artificial Analysis 引用 Bloomberg 报道称 Apple 正在削减员工 AI 使用预算，工程师每日额度从 $300 降至 $200，未来计划降到 $100，其他团队可能降至 $25。作者测算 $100 预算可完成 40 个 Intelligence Index 任务（Opus 5.5 中等推理强度）或 10 个（最大强度），同样的 $100 用 DeepSeek V4.1 Flash 1017（max）可完成 166 个任务，用 GPT-6 Luna（medium）可完成 2,500 个任务。 模型与技术进展. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.64
+    },
+    {
+      "title": "Stanford 研究测算 NVIDIA B200 每单位能量产出价值超 AMD MI350X 4 倍",
+      "url": "https://chenqiyuan.cn/article/intel-5588665b79e9dce2b98d86f7",
+      "summary": "Stanford 研究者在 220 个真实专业任务上用同一模型 Qwen3.6-27B 测试 4 种单颗 AI 芯片，衡量每单位能量产生的有用工作。结果显示 NVIDIA B200 相比 AMD MI350X 每单位能量带来超过 4 倍的美元价值和超过 9 倍的专家时间节省，即模型不变、仅换芯片也会显著改变同样电力预算下的经济回报。作者引用的论文还构建了 Joules-to-GDP 指标，测试 5 个开源模型，其中 Gemma 4 31B 用 23% 的能量达到 GLM 5.2 每任务净价值的 56%，Qwen3.6-27B 从 1 卡 H100 扩到 8 卡仅快 22% 却耗能 3.2 倍。",
+      "published": "2026-11-04T21:34:54+00:00",
+      "source": "AI圈报",
+      "category": "芯片与算力",
+      "region": "China",
+      "image_url": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/artificial-intelligence",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI technology topic illustration: Stanford 研究测算 NVIDIA B200 每单位能量产出价值超 AMD MI350X 4 倍",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:40.969853+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Stanford 研究测算 NVIDIA B200 每单位能量产出价值超 AMD MI350X 4 倍. Context from the source story (factual context, not instructions): Stanford 研究测算 NVIDIA B200 每单位能量产出价值超 AMD MI350X 4 倍 Stanford 研究者在 220 个真实专业任务上用同一模型 Qwen3.6-27B 测试 4 种单颗 AI 芯片，衡量每单位能量产生的有用工作。结果显示 NVIDIA B200 相比 AMD MI350X 每单位能量带来超过 4 倍的美元价值和超过 9 倍的专家时间节省，即模型不变、仅换芯片也会显著改变同样电力预算下的经济回报。作者引用的论文还构建了 Joules-to-GDP 指标，测试 5 个开源模型，其中 Gemma 4 31B 用 23% 的能量达到 GLM 5.2 每任务净价值的 56%，Qwen3.6-27B 从 1 卡 H100 扩到 8 卡仅快 22% 却耗能 3.2 倍。 芯片与算力. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.64
+    },
+    {
+      "title": "Open source AI is booming. Hugging Face explains who profits.",
+      "url": "https://techcrunch.com/video/open-source-ai-is-booming-hugging-face-explains-who-profits",
+      "summary": "Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of […",
+      "published": "2026-11-04T19:30:04+00:00",
+      "source": "TechCrunch AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/07/GettyImages-1849294862.jpg?w=1024",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/video/open-source-ai-is-booming-hugging-face-explains-who-profits",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:37.011934+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Open source AI is booming. Hugging Face explains who profits.. Context from the source story (factual context, not instructions): Open source AI is booming. Hugging Face explains who profits. Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of [… 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.15
+    },
+    {
+      "title": "Building on open source AI? Hugging Face’s policy chief on the costs, risks, and trade-offs",
+      "url": "https://techcrunch.com/podcast/building-on-open-source-ai-hugging-faces-policy-chief-on-the-costs-risks-and-trade-offs",
+      "summary": "Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of […",
+      "published": "2026-11-04T18:44:57+00:00",
+      "source": "TechCrunch AI",
+      "category": "产业与生态",
+      "region": "China",
+      "image_url": "https://techcrunch.com/wp-content/uploads/2026/11/55593309776_55e4a08b03_o.jpg?resize=1200,800",
+      "image_source": "TechCrunch AI",
+      "image_page_url": "https://techcrunch.com/podcast/building-on-open-source-ai-hugging-faces-policy-chief-on-the-costs-risks-and-trade-offs",
+      "image_credit": "TechCrunch AI",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "News image",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:37.162267+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Building on open source AI? Hugging Face’s policy chief on the costs, risks, and trade-offs. Context from the source story (factual context, not instructions): Building on open source AI? Hugging Face’s policy chief on the costs, risks, and trade-offs Open source models are becoming more mainstream as enterprises, governments and startups alike rely on the promise of lower costs, more control, and more flexibility. But as increasingly capable models become more freely available, how do companies capture value? And with Chinese open models gaining ground, can American players keep up? On this episode of [… 产业与生态. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.15
+    }
+  ],
+  "historical_dedupe": {
+    "status": "ok",
+    "global_removed": 38,
+    "china_removed": 15,
+    "matches": [
+      {
+        "section": "global_news",
+        "candidate": "Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Tencent WeVisOne-VL Unifies Detection, OCR, Segmentation and Matting",
+          "url": "https://www.marktechpost.com/2026/11/03/tencent-wevisone-vl-vision-language-model/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "The biggest modding site in PC gaming is taking a stance on AI",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "The biggest modding site in PC gaming is taking a stance on AI",
+          "url": "https://www.theverge.com/games/1026085/nexus-mods-ai-disclosures"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Anthropic is working on a system to prove AI models’ identity",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Anthropic is working on a system to prove AI models’ identity",
+          "url": "https://techcrunch.com/2026/11/03/anthropic-is-working-on-a-system-to-prove-ai-models-identity/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Anthropic Releases FlashProve: Cryptographic Proofs That a Reply Came From Committed Weights",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Anthropic Releases FlashProve: Cryptographic Proofs That a Reply Came From Committed Weights",
+          "url": "https://www.marktechpost.com/2026/11/03/anthropic-flashprove-provable-inference-zksnark/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Ted Schlein’s Ballistic Ventures seeks $490M for new funds amid AI-driven cybersecurity boom",
+          "url": "https://techcrunch.com/2026/11/03/ted-schleins-ballistic-ventures-seeks-490m-for-new-funds-amid-ai-driven-cybersecurity-boom/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "llm 0.37.1",
+        "match": {
+          "kind": "near_title_or_event",
+          "score": 1.0,
+          "date": "2026-11-03",
+          "title": "llm 0.37",
+          "url": "https://simonwillison.net/2026/Nov/2/llm/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Soniox STT v6 Adds Agent Text Input and Echo Filtering for Voice Agents",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Soniox STT v6 Adds Agent Text Input and Echo Filtering for Voice Agents",
+          "url": "https://www.marktechpost.com/2026/11/03/soniox-stt-v6-agent-text-input-echo-cancellation/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "AI inference startup Fal doubles its valuation to $16B as demand surges",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "AI inference startup Fal doubles its valuation to $16B as demand surges",
+          "url": "https://techcrunch.com/2026/11/03/ai-inference-startup-fal-doubles-its-valuation-to-16b-as-demand-surges/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Netflix’s new AI Discover tab helps you find something to watch based on your mood",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Netflix’s new AI Discover tab helps you find something to watch based on your mood",
+          "url": "https://techcrunch.com/2026/11/03/netflixs-new-ai-discover-tab-helps-you-find-something-to-watch-based-on-your-mood/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Anthropic is still grappling with the economics of compute",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Anthropic is still grappling with the economics of compute",
+          "url": "https://techcrunch.com/2026/11/03/anthropic-is-still-grappling-with-the-economics-of-compute/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Palette: teaching a small model to build decks in your design language",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Palette: teaching a small model to build decks in your design language",
+          "url": "https://huggingface.co/blog/ibm-research/palette-deck-building"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Google will let schools disable its AI tools, but not without sacrificing Search",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Google will let schools disable its AI tools, but not without sacrificing Search",
+          "url": "https://techcrunch.com/2026/11/03/google-will-let-schools-disable-its-ai-tools-but-not-without-sacrificing-search/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Qwen 3.8 27B on my laptop can interpret model weights, too",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Qwen 3.8 27B on my laptop can interpret model weights, too",
+          "url": "https://simonwillison.net/2026/Nov/3/qwen-can-interpret-model-weights/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Apple restricts dating apps and AI companions to users 18 and up",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "Apple restricts dating apps and AI companions to users 18 and up",
+          "url": "https://techcrunch.com/2026/11/03/apple-restricts-dating-apps-and-ai-companions-to-users-18-and-up/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "How “reverse game theory” could keep AI agents in check",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "How “reverse game theory” could keep AI agents in check",
+          "url": "https://www.technologyreview.com/2026/11/03/1147934/reverse-game-theory-mechanism-design-ai-alignment/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "How Cisco defends at machine speed with OpenAI",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "How Cisco defends at machine speed with OpenAI",
+          "url": "https://openai.com/index/cisco-cyber"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "October sponsors-only newsletter",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "October sponsors-only newsletter",
+          "url": "https://simonwillison.net/2026/Nov/3/october-newsletter/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Here’s who is falling in line for Trump’s “Super Intelligence” loyalty test",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Here’s who is falling in line for Trump’s “Super Intelligence” loyalty test",
+          "url": "https://www.technologyreview.com/2026/11/02/1147932/heres-who-is-falling-in-line-for-trumps-super-intelligence-loyalty-test/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Zyphra AI Introduces Zyphra Hierarchical Attention (ZHA): A Path to True Subquadratic Attention",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Zyphra AI Introduces Zyphra Hierarchical Attention (ZHA): A Path to True Subquadratic Attention",
+          "url": "https://www.marktechpost.com/2026/11/02/zyphra-hierarchical-attention-zha-sparse-attention/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "The Letter Company Releases Letterpress-1: A Coding Agent Built for Growth Engineering",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "The Letter Company Releases Letterpress-1: A Coding Agent Built for Growth Engineering",
+          "url": "https://www.marktechpost.com/2026/11/02/letter-letterpress-1-growth-engineering-coding-agent/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "llm 0.37",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "llm 0.37",
+          "url": "https://simonwillison.net/2026/Nov/2/llm/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Deep Principle Releases Hydrogen-1.0: A 753B Open-Weight Model for Scientific Discovery",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Deep Principle Releases Hydrogen-1.0: A 753B Open-Weight Model for Scientific Discovery",
+          "url": "https://www.marktechpost.com/2026/11/02/deep-principle-hydrogen-1-0-open-weight-scientific-model/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Preparing our next security sprint to harden OpenAI",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Preparing our next security sprint to harden OpenAI",
+          "url": "https://openai.com/index/preparing-our-next-security-sprint-to-harden-openai"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Rewarding defenders with bigger bug bounties",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Rewarding defenders with bigger bug bounties",
+          "url": "https://openai.com/index/rewarding-defenders-with-bigger-bug-bounties"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "The latest AI news we announced in October 2026",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "The latest AI news we announced in October 2026",
+          "url": "https://blog.google/innovation-and-ai/technology/ai/google-ai-updates-october-2026/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Raising the quality of insights in agentic analytics",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "Raising the quality of insights in agentic analytics",
+          "url": "https://www.technologyreview.com/2026/11/02/1147660/raising-the-quality-of-insights-in-agentic-analytics/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "How We Took Over ChatGPT Accounts",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "我们如何接管ChatGPT账户",
+          "url": "https://simonwillison.net/2026/Oct/31/how-we-took-over-chatgpt-accounts/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "datasette-llm 0.1a9",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-02",
+          "title": "datasette-llm 0.1a9",
+          "url": "https://simonwillison.net/2026/Oct/31/datasette-llm/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Making it easier for websites to express AI training preferences",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "让网站更便捷地表达AI训练偏好",
+          "url": "https://openai.com/index/helping-websites-express-ai-training-preferences"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Community safety report and new protections for teens",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "社区安全报告及面向青少年的新保护措施",
+          "url": "https://openai.com/index/community-safety-report-and-new-protections-for-teens"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Fair use benefits everyone",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "合理使用惠及所有人",
+          "url": "https://openai.com/index/fair-use-benefits-everyone"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "API credits benefit for eligible ChatGPT subscriptions",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-30",
+          "title": "符合条件的ChatGPT订阅可获API额度福利",
+          "url": "https://simonwillison.net/2026/Oct/29/api-credits/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Building a multiplayer game world with autonomous Fable-class models",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-30",
+          "title": "Building a multiplayer game world with autonomous Fable-class models",
+          "url": "https://simonwillison.net/2026/Oct/29/how-i-built-the-most-ai-pilled-company-in-the-world/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "An updated Model Spec for more capable and beneficial AI",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-30",
+          "title": "An updated Model Spec for more capable and beneficial AI",
+          "url": "https://openai.com/index/updated-model-spec"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "Quoting Ben Hylak",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "引用Ben Hylak",
+          "url": "https://simonwillison.net/2026/Oct/29/ben-hylak/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "We urgently need to monitor AI agents’ actions in real time",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "We urgently need to monitor AI agents’ actions in real time",
+          "url": "https://www.technologyreview.com/2026/10/29/1147824/monitor-ai-agents-actions-real-time/"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "How we detect frontier model misalignment",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "How we detect frontier model misalignment",
+          "url": "https://openai.com/index/how-we-detect-frontier-model-misalignment"
+        }
+      },
+      {
+        "section": "global_news",
+        "candidate": "How Ropes & Gray is developing AI for transactional diligence",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "How Ropes & Gray is developing AI for transactional diligence",
+          "url": "https://openai.com/index/ropes-gray-ai-diligence"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "当10万个智能体已在运行，安全防线到底在哪？｜CNCC 2026专家激辩智能体安全挑战",
+          "url": "https://www.leiphone.com/category/ai/tT9FskgaSMm7y4Ao.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek 又一开源重器！深挖 DeepInfer 究竟藏着多少技术狠活？",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-30",
+          "title": "DeepSeek开源推理引擎DeepInfer",
+          "url": "https://www.leiphone.com/category/ai/HecXToP0EHbPjPd0.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "伯牙智能刘欣：GPT-6 之后，轮到硬件拖机器人后腿了 | 物理AI 50人",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "伯牙智能刘欣：GPT-6之后，轮到硬件拖机器人后腿了",
+          "url": "https://www.leiphone.com/category/robot/EnKFLg1RRmN9SaHJ.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "宇树最新财报：重金投入研发，上市后的考题变了",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "宇树最新财报：重金投入研发，上市后的考题变了",
+          "url": "https://www.leiphone.com/category/robot/9NTmjVmWkIyllzaj.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "天数智芯天垓300实测对标H200，国产GPU接下来拼什么？",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-10-31",
+          "title": "天数智芯天垓300实测对标H200，国产GPU接下来拼什么？",
+          "url": "https://www.leiphone.com/category/chips/748GRHfg9VPRbp7x.html"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "15.98 万元起，东风奕派 M8 天元激光版上市，用自研智驾替换华为乾崑",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "15.98 万元起，东风奕派 M8 天元激光版上市，用自研智驾替换华为乾崑",
+          "url": "https://www.ifanr.com/1687538?utm_source=rss&utm_medium=rss&utm_campaign="
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-02",
+          "title": "环比大增690％，MiniMax模型冲进全球AI大模型周Token调用榜第八！小米MiMo-V2.6-Flash跌出榜单 - 每日经济新闻",
+          "url": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE5hVTZzTUFsWVItU2JvOG1LYWdvUURDdW1lMXI4QkpISmVqWWRRbFdZMGQxWE43ZWp2WFhkSTNRWlFaaWJ6ckROc1lJcm01RElsNk9ITFpRRDQ1WFFfRHhUOGdlalI5Zw?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "卓特视觉 × MiniMax × 野菩萨丨北京AI产品分享会落幕，共拓 AIGC 商用生产力新边界 - 人工智能",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "卓特视觉 × MiniMax × 野菩萨丨北京AI产品分享会落幕，共拓 AIGC 商用生产力新边界 - www.icloudnews.net",
+          "url": "https://news.google.com/rss/articles/CBMiUkFVX3lxTFAzZlJ1bFV6MmdhTE82N1VWT2ppWXhyZExsUU5UdmR1UW9FTkxFbk1pSWRvS1BUdWhfenhyR2VLNzRSX0pfTDZ5LUxyUWQzY1Ewb2c?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "月之暗面 Kimi 发布游戏开发与创意工作解决方案：AI 可直接操作 Unity、虚幻引擎等 - 17173",
+        "match": {
+          "kind": "near_title_or_event",
+          "score": 1.0,
+          "date": "2026-11-03",
+          "title": "月之暗面 Kimi 发布游戏开发与创意工作解决方案：AI 可直接操作 Unity、虚幻引擎等",
+          "url": "https://www.ithome.com/1/021/539.htm"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-04",
+          "title": "豆包DeepSeek使用数甩开其他AI应用 高频交互赢得用户 - 中华网",
+          "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE9ETFlGUHltWWhBZFpicWhCRlRneEUtdUtsSlNVVnF0ZWpSb09SOFBGY3Bnd1kzQXJLNjhSNlNwczRDWWVaX1ZUWXJySlBpcWRmSnJPRFVZSUo2a3J1Wk80UjhMX19pTXFzT1Y2QWhSUDA?oc=5"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "GFlow v1.4.1 发布：审批流转全程留痕、审批消息直达 IM、开放外部系统集成",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-03",
+          "title": "GFlow v1.4.1 发布：审批流转全程留痕、审批消息直达 IM、开放外部系统集成",
+          "url": "https://www.oschina.net/news/503364"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": ":fire::fire: ApiGo 开源接口平台 Go 版本发布",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-02",
+          "title": ":fire::fire: ApiGo 开源接口平台 Go 版本发布",
+          "url": "https://www.oschina.net/news/503339"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-02",
+          "title": "DeepSeek 团队把 Agent 设计成“操作系统”：多任务的上限不该是人的注意力",
+          "url": "https://www.oschina.net/news/503338/deepseek-harness-super-agent"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "聚力开源向实 赋能产业创新——2026 上海开源软件应用创新大赛总决赛暨创新增长大会圆满落幕",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "2026上海开源软件应用创新大赛总决赛暨创新增长大会落幕",
+          "url": "https://www.oschina.net/news/503320"
+        }
+      },
+      {
+        "section": "china_ai_news",
+        "candidate": "DeepSeek 千亿融资名单曝光，国资占比从 2% 跳到 27%",
+        "match": {
+          "kind": "same_url",
+          "date": "2026-11-01",
+          "title": "DeepSeek千亿融资名单曝光，国资占比从2%跳到27%",
+          "url": "https://www.oschina.net/news/503318"
+        }
+      }
+    ],
+    "history_archive_files": 20
+  },
+  "china_sources_ok": 12,
+  "china_sources_total": 15,
+  "skills": [
+    {
+      "name": "Graphify-Labs/graphify",
+      "url": "https://github.com/Graphify-Labs/graphify",
+      "description": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.",
+      "stars": 142434,
+      "updated": "2026-11-05T00:10:18Z",
+      "language": "Python",
+      "topics": [
+        "ai-agents",
+        "antigravity",
+        "ast",
+        "claude-code",
+        "code-analysis",
+        "code-search",
+        "codex",
+        "cursor"
+      ],
+      "daily_theme": "内容与表达",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271184+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/graphify-labs/graphify",
+      "stars_total": 142434,
+      "stars_delta_7d": 4408,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "Apache License 2.0",
+      "forks_total": 13620,
+      "pushed_at": "2026-11-03T22:46:46Z",
+      "created_at": "2026-04-03T15:49:07Z",
+      "open_issues_total": 1629,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:36.631199+08:00",
+      "evidence_urls": [
+        "https://github.com/Graphify-Labs/graphify",
+        "https://api.github.com/repos/Graphify-Labs/graphify/readme"
+      ],
+      "official_website": "https://www.graphify.com",
+      "official_website_final_url": "https://graphify.com/",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "agent_skill_or_pack",
+      "actual_skill_file_count": 1,
+      "skill_file_paths": [
+        "graphify/skill.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "Graphify-Labs/graphify",
+        "graphify"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 7.88,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 20.3,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 83.8,
+      "age_since_update_days": 2,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.（仓库实际扫描到1个SKILL.md文件）",
+      "description_en": "Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store 1 workflow skills (1 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "description": "An agentic skills framework & software development methodology that works.",
+      "stars": 312433,
+      "updated": "2026-11-05T00:07:01Z",
+      "language": "Shell",
+      "topics": [
+        "ai",
+        "brainstorming",
+        "coding",
+        "obra",
+        "sdlc",
+        "skills",
+        "subagent-driven-development",
+        "superpowers"
+      ],
+      "daily_theme": "软件工程与测试",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271211+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/obra/superpowers",
+      "stars_total": 312433,
+      "stars_delta_7d": 4797,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "MIT License",
+      "forks_total": 27791,
+      "pushed_at": "2026-11-03T23:24:58Z",
+      "created_at": "2025-10-09T19:45:18Z",
+      "open_issues_total": 328,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:39.360752+08:00",
+      "evidence_urls": [
+        "https://github.com/obra/superpowers",
+        "https://api.github.com/repos/obra/superpowers/readme"
+      ],
+      "official_website": "https://github.com/obra/superpowers",
+      "official_website_final_url": "https://github.com/obra/superpowers",
+      "official_website_http_status": 200,
+      "official_website_type": "official_github_repository_page",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 15,
+      "skill_file_paths": [
+        "skills/brainstorming/SKILL.md",
+        "skills/diagnosing-superpowers/SKILL.md",
+        "skills/dispatching-parallel-agents/SKILL.md",
+        "skills/executing-plans/SKILL.md",
+        "skills/finishing-a-development-branch/SKILL.md",
+        "skills/receiving-code-review/SKILL.md",
+        "skills/requesting-code-review/SKILL.md",
+        "skills/subagent-driven-development/SKILL.md",
+        "skills/systematic-debugging/SKILL.md",
+        "skills/test-driven-development/SKILL.md",
+        "skills/using-git-worktrees/SKILL.md",
+        "skills/using-superpowers/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "obra/superpowers",
+        "superpowers"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 7.96,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 21.1,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 16,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 81.9,
+      "age_since_update_days": 2,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "An agentic skills framework & software development methodology that works.（仓库实际扫描到15个SKILL.md文件）",
+      "description_en": "An agentic skills framework & software development methodology that works 15 workflow skills (15 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "googleworkspace/cli",
+      "url": "https://github.com/googleworkspace/cli",
+      "description": "Google Workspace CLI — one command-line tool for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more. Dynamically built from Google Discovery Service. Includes AI agent skills.",
+      "stars": 32116,
+      "updated": "2026-11-04T21:47:52Z",
+      "language": "Rust",
+      "topics": [
+        "agent-skills",
+        "ai-agent",
+        "automation",
+        "cli",
+        "discovery-api",
+        "gemini-cli-extension",
+        "google-admin",
+        "google-api"
+      ],
+      "daily_theme": "办公与业务自动化",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271157+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/googleworkspace/cli",
+      "stars_total": 32116,
+      "stars_delta_7d": 142,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "Apache License 2.0",
+      "forks_total": 1986,
+      "pushed_at": "2026-11-03T01:37:22Z",
+      "created_at": "2026-03-02T19:46:06Z",
+      "open_issues_total": 140,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:11:01.194043+08:00",
+      "evidence_urls": [
+        "https://github.com/googleworkspace/cli",
+        "https://api.github.com/repos/googleworkspace/cli/readme"
+      ],
+      "official_website": "https://developers.google.com/workspace",
+      "official_website_final_url": "https://developers.google.com/workspace",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 95,
+      "skill_file_paths": [
+        "skills/gws-admin-reports/SKILL.md",
+        "skills/gws-calendar-agenda/SKILL.md",
+        "skills/gws-calendar-insert/SKILL.md",
+        "skills/gws-calendar/SKILL.md",
+        "skills/gws-chat-send/SKILL.md",
+        "skills/gws-chat/SKILL.md",
+        "skills/gws-classroom/SKILL.md",
+        "skills/gws-docs-write/SKILL.md",
+        "skills/gws-docs/SKILL.md",
+        "skills/gws-drive-upload/SKILL.md",
+        "skills/gws-drive/SKILL.md",
+        "skills/gws-events-renew/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "googleworkspace/cli",
+        "cli"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 4.66,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 15.5,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 80.2,
+      "age_since_update_days": 2,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "Google Workspace CLI — one command-line tool for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more. Dynamically built from Google Discovery Service. Includes AI agent skills.（仓库实际扫描到95个SKILL.md文件）",
+      "description_en": "Google Workspace CLI — one command-line tool for Drive, Gmail, Calendar, Sheets, Docs, Chat, Admin, and more. Dynamically built from Google Discovery Service. Includes AI agent skills 95 workflow skills (95 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "genspark-ai/genoffice",
+      "url": "https://github.com/genspark-ai/genoffice",
+      "description": "Free, open-source AI Office suite: Docs, Sheets, Slides, PDF, Markdown and HTML editors with a built-in AI agent, plus a `genoffice` CLI and agent skill so Claude Code, Codex and Cursor can create and edit real .docx/.xlsx/.pptx files locally. Bring your own key. macOS, Windows & Linux.",
+      "stars": 11734,
+      "updated": "2026-11-05T00:06:49Z",
+      "language": "TypeScript",
+      "topics": [
+        "ai",
+        "ai-agent",
+        "claude-code",
+        "cli",
+        "codex",
+        "cursor",
+        "docx",
+        "excel"
+      ],
+      "daily_theme": "多模态与创作",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271180+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/genspark-ai/genoffice",
+      "stars_total": 11734,
+      "stars_delta_7d": 495,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "Apache License 2.0",
+      "forks_total": 1617,
+      "pushed_at": "2026-11-04T15:37:54Z",
+      "created_at": "2026-07-31T09:40:58Z",
+      "open_issues_total": 74,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:56.389289+08:00",
+      "evidence_urls": [
+        "https://github.com/genspark-ai/genoffice",
+        "https://api.github.com/repos/genspark-ai/genoffice/readme"
+      ],
+      "official_website": "https://genoffice.ai/",
+      "official_website_final_url": "https://genoffice.ai/",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 43,
+      "skill_file_paths": [
+        "skills/genoffice/SKILL.md",
+        "skills/recommended/brand-copy/SKILL.md",
+        "skills/recommended/budget-planner/SKILL.md",
+        "skills/recommended/business-plan/SKILL.md",
+        "skills/recommended/business-report/SKILL.md",
+        "skills/recommended/campaign-planner/SKILL.md",
+        "skills/recommended/contract-drafter/SKILL.md",
+        "skills/recommended/course-slides/SKILL.md",
+        "skills/recommended/data-analyst/SKILL.md",
+        "skills/recommended/data-cleaning/SKILL.md",
+        "skills/recommended/deep-research/SKILL.md",
+        "skills/recommended/email-drafter/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "genspark-ai/genoffice",
+        "genoffice"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 5.83,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 15.6,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 79.1,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "Free, open-source AI Office suite: Docs, Sheets, Slides, PDF, Markdown and HTML editors with a built-in AI agent, plus a `genoffice` CLI and agent skill so Claude Code, Codex and Cursor can create and edit real .docx/.xlsx/.pptx files locally. Bring your own key. macOS, Windows & Linux.（仓库实际扫描到43个SKILL.md文件）",
+      "description_en": "Free, open-source AI Office suite: Docs, Sheets, Slides, PDF, Markdown and HTML editors with a built-in AI agent, plus a `genoffice` CLI and agent skill so Claude Code, Codex and Cursor can create and edit real .docx/.xlsx/.pptx files locally. Bring your own key. macOS, Windows & Linux 43 workflow skills (43 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "KKKKhazix/khazix-skills",
+      "url": "https://github.com/KKKKhazix/khazix-skills",
+      "description": "数字生命卡兹克开源的 AI Skills 合集 | Agent Skills: leader（帮你定义目标）, neat-freak 洁癖, hv-analysis, khazix-writer & more — Claude Code, Codex & 40+ agents",
+      "stars": 21956,
+      "updated": "2026-11-04T20:25:03Z",
+      "language": "Python",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "claude",
+        "claude-code",
+        "codex",
+        "developer-tools",
+        "llm",
+        "skills"
+      ],
+      "daily_theme": "软件工程与测试",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271164+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/kkkkhazix/khazix-skills",
+      "stars_total": 21956,
+      "stars_delta_7d": 231,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "MIT License",
+      "forks_total": 2310,
+      "pushed_at": "2026-11-03T21:50:31Z",
+      "created_at": "2026-04-06T07:37:02Z",
+      "open_issues_total": 2,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:59.847851+08:00",
+      "evidence_urls": [
+        "https://github.com/KKKKhazix/khazix-skills",
+        "https://api.github.com/repos/KKKKhazix/khazix-skills/readme"
+      ],
+      "official_website": "https://github.com/KKKKhazix/khazix-skills",
+      "official_website_final_url": "https://github.com/KKKKhazix/khazix-skills",
+      "official_website_http_status": 200,
+      "official_website_type": "official_github_repository_page",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 6,
+      "skill_file_paths": [
+        "aihot/SKILL.md",
+        "hv-analysis/SKILL.md",
+        "khazix-writer/SKILL.md",
+        "leader/SKILL.md",
+        "neat-freak/SKILL.md",
+        "storage-analyzer/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "KKKKhazix/khazix-skills",
+        "khazix-skills"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 5.12,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 15.5,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 79.0,
+      "age_since_update_days": 2,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "数字生命卡兹克开源的 AI Skills 合集 | Agent Skills: leader（帮你定义目标）, neat-freak 洁癖, hv-analysis, khazix-writer & more — Claude Code, Codex & 40+ agents（仓库实际扫描到6个SKILL.md文件）",
+      "description_en": "数字生命卡兹克开源的 AI Skills 合集 | Agent Skills: leader（帮你定义目标）, neat-freak 洁癖, hv-analysis, khazix-writer & more — Claude Code, Codex & 40+ agents 6 workflow skills (6 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "Vincentwei1021/video-shotcraft",
+      "url": "https://github.com/Vincentwei1021/video-shotcraft",
+      "description": "AI video skill for Claude Code & Codex — cinematic, editable product promos with Remotion: 124 shot recipe cards, 150 motion previews, beat sync, sound design, Motion Workbench & JianYing (CapCut CN) export.",
+      "stars": 16987,
+      "updated": "2026-11-05T00:07:59Z",
+      "language": "TypeScript",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "ai-video",
+        "claude-code",
+        "claude-code-skills",
+        "claude-skills",
+        "codex",
+        "motion-design"
+      ],
+      "daily_theme": "多模态与创作",
+      "license": "Apache-2.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271205+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/vincentwei1021/video-shotcraft",
+      "stars_total": 16987,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "Apache License 2.0",
+      "forks_total": 1600,
+      "pushed_at": "2026-10-29T16:17:26Z",
+      "created_at": "2026-07-19T11:44:41Z",
+      "open_issues_total": 7,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:11:09.020406+08:00",
+      "evidence_urls": [
+        "https://github.com/Vincentwei1021/video-shotcraft",
+        "https://api.github.com/repos/Vincentwei1021/video-shotcraft/readme"
+      ],
+      "official_website": "https://vincentwei1021.github.io/video-shotcraft/",
+      "official_website_final_url": "https://vincentwei1021.github.io/video-shotcraft/",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "agent_skill_or_pack",
+      "actual_skill_file_count": 1,
+      "skill_file_paths": [
+        "SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "Vincentwei1021/video-shotcraft",
+        "video-shotcraft"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 10.2,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 73.7,
+      "age_since_update_days": 7,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "AI video skill for Claude Code & Codex — cinematic, editable product promos with Remotion: 124 shot recipe cards, 150 motion previews, beat sync, sound design, Motion Workbench & JianYing (CapCut CN) export.（仓库实际扫描到1个SKILL.md文件）",
+      "description_en": "AI video skill for Claude Code & Codex — cinematic, editable product promos with Remotion: 124 shot recipe cards, 150 motion previews, beat sync, sound design, Motion Workbench & JianYing (CapCut CN) export 1 workflow skills (1 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "description": "Skills for Real Engineers. Straight from my .agents directory.",
+      "stars": 313287,
+      "updated": "2026-11-05T00:10:12Z",
+      "language": "Shell",
+      "topics": [],
+      "daily_theme": "Agent 工作流与规划",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271210+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/mattpocock/skills",
+      "stars_total": 313287,
+      "stars_delta_7d": 7368,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "MIT License",
+      "forks_total": 26280,
+      "pushed_at": "2026-11-04T11:45:30Z",
+      "created_at": "2026-02-03T11:15:53Z",
+      "open_issues_total": 210,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:37.958154+08:00",
+      "evidence_urls": [
+        "https://github.com/mattpocock/skills",
+        "https://api.github.com/repos/mattpocock/skills/readme"
+      ],
+      "official_website": "https://aihero.dev/skills",
+      "official_website_final_url": "https://www.aihero.dev/skills",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 39,
+      "skill_file_paths": [
+        "skills/engineering/ask-matt/SKILL.md",
+        "skills/engineering/code-review/SKILL.md",
+        "skills/engineering/codebase-design/SKILL.md",
+        "skills/engineering/diagnosing-bugs/SKILL.md",
+        "skills/engineering/domain-modeling/SKILL.md",
+        "skills/engineering/grill-with-docs/SKILL.md",
+        "skills/engineering/implement-spec/SKILL.md",
+        "skills/engineering/implement/SKILL.md",
+        "skills/engineering/improve-codebase-architecture/SKILL.md",
+        "skills/engineering/pr/SKILL.md",
+        "skills/engineering/prototype/SKILL.md",
+        "skills/engineering/research/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "mattpocock/skills",
+        "skills"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 8.36,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 21.6,
+      "trend_score": 8.5,
+      "relevance_score": 8.5,
+      "usefulness_score": 8,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 73.1,
+      "age_since_update_days": 1,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "成熟实用",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "Skills for Real Engineers. Straight from my .agents directory.（仓库实际扫描到39个SKILL.md文件）",
+      "description_en": "Skills for Real Engineers. Straight from my .agents directory 39 workflow skills (39 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "Code-and-Sorts/awesome-copilot-agents",
+      "url": "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+      "description": "✨ A curated list of awesome GitHub instructions, prompt, skills, MCPs and agent markdown files for enhancing your GitHub Copilot AI experience.",
+      "stars": 591,
+      "updated": "2026-11-02T10:05:28Z",
+      "language": "TypeScript",
+      "topics": [
+        "agent-skills",
+        "ai-agents",
+        "awesome",
+        "awesome-list",
+        "copilot-instructions",
+        "copilot-prompting",
+        "custom-agents",
+        "github-copilot"
+      ],
+      "daily_theme": "Agent 工作流与规划",
+      "license": "CC0-1.0",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271225+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/code-and-sorts/awesome-copilot-agents",
+      "stars_total": 591,
+      "stars_delta_7d": 3,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": "2026-10-29",
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "directly observed daily GitHub Stars snapshots; baseline dates recorded",
+      "license_name": "Creative Commons Zero v1.0 Universal",
+      "forks_total": 97,
+      "pushed_at": "2026-04-29T06:42:59Z",
+      "created_at": "2025-04-19T17:37:01Z",
+      "open_issues_total": 34,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:11:17.057815+08:00",
+      "evidence_urls": [
+        "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+        "https://api.github.com/repos/Code-and-Sorts/awesome-copilot-agents/readme"
+      ],
+      "official_website": "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+      "official_website_final_url": "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+      "official_website_http_status": 200,
+      "official_website_type": "official_github_repository_page",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 4,
+      "skill_file_paths": [
+        "skills/calculator/SKILL.md",
+        "skills/cloud/az-cli/SKILL.md",
+        "skills/cloud/azure-prices/SKILL.md",
+        "skills/jira-cli/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "Code-and-Sorts/awesome-copilot-agents",
+        "awesome-copilot-agents"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 1.3,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 8.0,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 5,
+      "total_score": 67.7,
+      "age_since_update_days": 190,
+      "confidence_level": "medium",
+      "maturity_level": "维护状态待确认",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "维护状态观察",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "✨ A curated list of awesome GitHub instructions, prompt, skills, MCPs and agent markdown files for enhancing your GitHub Copilot AI experience.（仓库实际扫描到4个SKILL.md文件）",
+      "description_en": "✨ A curated list of awesome GitHub instructions, prompt, skills, MCPs and agent markdown files for enhancing your GitHub Copilot AI experience 4 workflow skills (4 SKILL.md files found in the repository scan.)"
+    },
+    {
+      "name": "AI-Marketing-OS-LTD/cmo-so-skills",
+      "url": "https://github.com/AI-Marketing-OS-LTD/cmo-so-skills",
+      "description": "Skills for running your marketing with CMO.so and Maggie from Claude Code and other agents, built on the CMO.so MCP server.",
+      "stars": 3,
+      "updated": "2026-11-05T00:06:09Z",
+      "language": "JavaScript",
+      "topics": [
+        "claude-code",
+        "claude-skills",
+        "linkedin",
+        "marketing",
+        "mcp",
+        "seo"
+      ],
+      "daily_theme": "办公与业务自动化",
+      "license": "MIT",
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-05T08:10:30.271283+08:00",
+        "status": "no_exact_match"
+      },
+      "canonical_id": "github.com/ai-marketing-os-ltd/cmo-so-skills",
+      "stars_total": 3,
+      "stars_delta_7d": null,
+      "stars_delta_30d": null,
+      "growth_baseline_7d_date": null,
+      "growth_baseline_30d_date": null,
+      "growth_data_status": "no historical candidate snapshot in 7-day/30-day comparison windows",
+      "license_name": "MIT License",
+      "forks_total": 0,
+      "pushed_at": "2026-11-05T00:06:04Z",
+      "created_at": "2026-10-11T12:00:54Z",
+      "open_issues_total": 0,
+      "evidence_verified": true,
+      "readme_verified": true,
+      "evidence_checked_at": "2026-11-05T08:10:44.072616+08:00",
+      "evidence_urls": [
+        "https://github.com/AI-Marketing-OS-LTD/cmo-so-skills",
+        "https://api.github.com/repos/AI-Marketing-OS-LTD/cmo-so-skills/readme"
+      ],
+      "official_website": "https://ai.cmo.so/hot/mcp",
+      "official_website_final_url": "https://ai.cmo.so/hot/mcp",
+      "official_website_http_status": 200,
+      "official_website_type": "declared_project_homepage",
+      "official_website_verified": true,
+      "quality_status": "PASS",
+      "skill_type": "skill_pack",
+      "actual_skill_file_count": 154,
+      "skill_file_paths": [
+        "plugins/cmo-so-ai-search/skills/cmo-aeo-content/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-agent-readiness/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-ai-brand-monitoring/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-ai-citation-gaps/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-ai-prompt-research/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-ai-visibility-audit/SKILL.md",
+        "plugins/cmo-so-ai-search/skills/cmo-entity-audit/SKILL.md",
+        "plugins/cmo-so-analytics/skills/cmo-attribution/SKILL.md",
+        "plugins/cmo-so-analytics/skills/cmo-campaign-analytics/SKILL.md",
+        "plugins/cmo-so-analytics/skills/cmo-client-report/SKILL.md",
+        "plugins/cmo-so-analytics/skills/cmo-closed-loop-measurement/SKILL.md",
+        "plugins/cmo-so-analytics/skills/cmo-tracking-setup/SKILL.md"
+      ],
+      "novelty_status": "new",
+      "aliases": [
+        "AI-Marketing-OS-LTD/cmo-so-skills",
+        "cmo-so-skills"
+      ],
+      "discovered_at": "2026-11-05",
+      "first_recommended_at": "2026-11-05",
+      "last_recommended_at": "2026-11-05",
+      "last_release_at": null,
+      "recommendation_history": [],
+      "rejection_reason": null,
+      "re_recommendation_reason": null,
+      "growth_component": 0,
+      "community_count_7d": 0,
+      "community_evidence_urls": [],
+      "heat_data_status": "GitHub cumulative Stars plus exact-match Hacker News discussions; Stars growth not available",
+      "heat_score": 1.4,
+      "trend_score": 9.8,
+      "relevance_score": 9.8,
+      "usefulness_score": 20,
+      "quality_score": 15,
+      "novelty_score": 10,
+      "maintenance_score": 10,
+      "total_score": 66.2,
+      "age_since_update_days": 0,
+      "confidence_level": "medium",
+      "maturity_level": "持续维护",
+      "compatibility_status": "文档及仓库元数据已核验；未执行安装测试",
+      "security_status": "未完成专项安全审计",
+      "recommendation_type": "趋势观察（未验证增长）",
+      "user_feedback": [],
+      "rare_value_verified": false,
+      "rare_value_reason": null,
+      "rare_value_evidence_url": null,
+      "description_zh": "Skills for running your marketing with CMO.so and Maggie from Claude Code and other agents, built on the CMO.so MCP server.（仓库实际扫描到154个SKILL.md文件）",
+      "description_en": "Skills for running your marketing with CMO.so and Maggie from Claude Code and other agents, built on the CMO.so MCP server 154 workflow skills (154 SKILL.md files found in the repository scan.)"
+    }
+  ],
+  "skill_radar": {
+    "status": "PASS",
+    "engine_version": "2026.11.02.1",
+    "discovery_sources": {
+      "github_repository_search": "available",
+      "hacker_news": {
+        "status": "ok",
+        "queries_succeeded": 3,
+        "query_count": 3,
+        "window_days": 7
+      },
+      "github_candidate_count": 218
+    },
+    "growth_snapshots": {
+      "status": "observed",
+      "historical_snapshots_read": 12,
+      "historical_errors": [],
+      "candidate_count": 218,
+      "candidates_with_7d_delta": 132,
+      "candidates_with_30d_delta": 0
+    },
+    "history": {
+      "status": "complete",
+      "files_read": 7,
+      "coverage_days": 7,
+      "window_days": 7,
+      "window_start": "2026-10-29",
+      "window_end": "2026-11-04",
+      "errors": [],
+      "records": 51
+    },
+    "candidate_count": 218,
+    "history_duplicate_exclusions": [
+      {
+        "name": "coreyhaines31/marketingskills",
+        "url": "https://github.com/coreyhaines31/marketingskills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-30",
+          "name": "coreyhaines31/marketingskills",
+          "url": "https://github.com/coreyhaines31/marketingskills"
+        }
+      },
+      {
+        "name": "blader/humanizer",
+        "url": "https://github.com/blader/humanizer",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-30",
+          "name": "blader/humanizer",
+          "url": "https://github.com/blader/humanizer"
+        }
+      },
+      {
+        "name": "op7418/guizang-ppt-skill",
+        "url": "https://github.com/op7418/guizang-ppt-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-30",
+          "name": "op7418/guizang-ppt-skill",
+          "url": "https://github.com/op7418/guizang-ppt-skill"
+        }
+      },
+      {
+        "name": "zarazhangrui/frontend-slides",
+        "url": "https://github.com/zarazhangrui/frontend-slides",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-31",
+          "name": "zarazhangrui/frontend-slides",
+          "url": "https://github.com/zarazhangrui/frontend-slides"
+        }
+      },
+      {
+        "name": "alirezarezvani/claude-skills",
+        "url": "https://github.com/alirezarezvani/claude-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-30",
+          "name": "alirezarezvani/claude-skills",
+          "url": "https://github.com/alirezarezvani/claude-skills"
+        }
+      },
+      {
+        "name": "affaan-m/ECC",
+        "url": "https://github.com/affaan-m/ECC",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "affaan-m/ECC",
+          "url": "https://github.com/affaan-m/ECC"
+        }
+      },
+      {
+        "name": "Leonxlnx/taste-skill",
+        "url": "https://github.com/Leonxlnx/taste-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-31",
+          "name": "Leonxlnx/taste-skill",
+          "url": "https://github.com/Leonxlnx/taste-skill"
+        }
+      },
+      {
+        "name": "addyosmani/agent-skills",
+        "url": "https://github.com/addyosmani/agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "addyosmani/agent-skills",
+          "url": "https://github.com/addyosmani/agent-skills"
+        }
+      },
+      {
+        "name": "tt-a1i/archify",
+        "url": "https://github.com/tt-a1i/archify",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-01",
+          "name": "tt-a1i/archify",
+          "url": "https://github.com/tt-a1i/archify"
+        }
+      },
+      {
+        "name": "Shubhamsaboo/awesome-llm-apps",
+        "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "Shubhamsaboo/awesome-llm-apps",
+          "url": "https://github.com/Shubhamsaboo/awesome-llm-apps"
+        }
+      },
+      {
+        "name": "calesthio/OpenMontage",
+        "url": "https://github.com/calesthio/OpenMontage",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-01",
+          "name": "calesthio/OpenMontage",
+          "url": "https://github.com/calesthio/OpenMontage"
+        }
+      },
+      {
+        "name": "mvanhorn/last30days-skill",
+        "url": "https://github.com/mvanhorn/last30days-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "mvanhorn/last30days-skill",
+          "url": "https://github.com/mvanhorn/last30days-skill"
+        }
+      },
+      {
+        "name": "ayghri/i-have-adhd",
+        "url": "https://github.com/ayghri/i-have-adhd",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "ayghri/i-have-adhd",
+          "url": "https://github.com/ayghri/i-have-adhd"
+        }
+      },
+      {
+        "name": "cloudflare/security-audit-skill",
+        "url": "https://github.com/cloudflare/security-audit-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-02",
+          "name": "Cloudflare Security Audit Skill",
+          "url": "https://github.com/cloudflare/security-audit-skill"
+        }
+      },
+      {
+        "name": "K-Dense-AI/scientific-agent-skills",
+        "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "K-Dense-AI/scientific-agent-skills",
+          "url": "https://github.com/K-Dense-AI/scientific-agent-skills"
+        }
+      },
+      {
+        "name": "Nutlope/hallmark",
+        "url": "https://github.com/Nutlope/hallmark",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-01",
+          "name": "Nutlope/hallmark",
+          "url": "https://github.com/Nutlope/hallmark"
+        }
+      },
+      {
+        "name": "ca-who-codes/ultimate.UIUX.design.skills",
+        "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "ca-who-codes/ultimate.UIUX.design.skills",
+          "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills"
+        }
+      },
+      {
+        "name": "Donchitos/Claude-Code-Game-Studios",
+        "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "Donchitos/Claude-Code-Game-Studios",
+          "url": "https://github.com/Donchitos/Claude-Code-Game-Studios"
+        }
+      },
+      {
+        "name": "sickn33/agentic-awesome-skills",
+        "url": "https://github.com/sickn33/agentic-awesome-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-31",
+          "name": "sickn33/agentic-awesome-skills",
+          "url": "https://github.com/sickn33/agentic-awesome-skills"
+        }
+      },
+      {
+        "name": "alchaincyf/huashu-design",
+        "url": "https://github.com/alchaincyf/huashu-design",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "alchaincyf/huashu-design",
+          "url": "https://github.com/alchaincyf/huashu-design"
+        }
+      },
+      {
+        "name": "virgiliojr94/book-to-skill",
+        "url": "https://github.com/virgiliojr94/book-to-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "virgiliojr94/book-to-skill",
+          "url": "https://github.com/virgiliojr94/book-to-skill"
+        }
+      },
+      {
+        "name": "kepano/obsidian-skills",
+        "url": "https://github.com/kepano/obsidian-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "kepano/obsidian-skills",
+          "url": "https://github.com/kepano/obsidian-skills"
+        }
+      },
+      {
+        "name": "NVIDIA/SkillSpector",
+        "url": "https://github.com/NVIDIA/SkillSpector",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "NVIDIA/SkillSpector",
+          "url": "https://github.com/NVIDIA/SkillSpector"
+        }
+      },
+      {
+        "name": "op7418/Humanizer-zh",
+        "url": "https://github.com/op7418/Humanizer-zh",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-31",
+          "name": "op7418/Humanizer-zh",
+          "url": "https://github.com/op7418/Humanizer-zh"
+        }
+      },
+      {
+        "name": "zhaoxuya520/reverse-skill",
+        "url": "https://github.com/zhaoxuya520/reverse-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "zhaoxuya520/reverse-skill",
+          "url": "https://github.com/zhaoxuya520/reverse-skill"
+        }
+      },
+      {
+        "name": "LibreChat-AI/LibreChat",
+        "url": "https://github.com/LibreChat-AI/LibreChat",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "LibreChat-AI/LibreChat",
+          "url": "https://github.com/LibreChat-AI/LibreChat"
+        }
+      },
+      {
+        "name": "mukul975/Anthropic-Cybersecurity-Skills",
+        "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "mukul975/Anthropic-Cybersecurity-Skills",
+          "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills"
+        }
+      },
+      {
+        "name": "greensock/gsap-skills",
+        "url": "https://github.com/greensock/gsap-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "greensock/gsap-skills",
+          "url": "https://github.com/greensock/gsap-skills"
+        }
+      },
+      {
+        "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+        "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-29",
+          "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+          "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep"
+        }
+      },
+      {
+        "name": "nidhinjs/prompt-master",
+        "url": "https://github.com/nidhinjs/prompt-master",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "nidhinjs/prompt-master",
+          "url": "https://github.com/nidhinjs/prompt-master"
+        }
+      },
+      {
+        "name": "OthmanAdi/planning-with-files",
+        "url": "https://github.com/OthmanAdi/planning-with-files",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-01",
+          "name": "OthmanAdi/planning-with-files",
+          "url": "https://github.com/OthmanAdi/planning-with-files"
+        }
+      },
+      {
+        "name": "Orchestra-Research/AI-Research-SKILLs",
+        "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-30",
+          "name": "Orchestra-Research/AI-Research-SKILLs",
+          "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs"
+        }
+      },
+      {
+        "name": "teng-lin/notebooklm-py",
+        "url": "https://github.com/teng-lin/notebooklm-py",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "teng-lin/notebooklm-py",
+          "url": "https://github.com/teng-lin/notebooklm-py"
+        }
+      },
+      {
+        "name": "kesslernity/awesome-copilot-agent-skills",
+        "url": "https://github.com/kesslernity/awesome-copilot-agent-skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-10-31",
+          "name": "kesslernity/awesome-copilot-agent-skills",
+          "url": "https://github.com/kesslernity/awesome-copilot-agent-skills"
+        }
+      },
+      {
+        "name": "OpaceDigitalAgency/skills",
+        "url": "https://github.com/OpaceDigitalAgency/skills",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "functional_similarity",
+          "score": 0.727,
+          "history_date": "2026-11-04",
+          "name": "OpaceDigitalAgency/ai-ui-ux-motion-engine",
+          "url": "https://github.com/OpaceDigitalAgency/ai-ui-ux-motion-engine"
+        }
+      },
+      {
+        "name": "OpaceDigitalAgency/ai-ui-ux-motion-engine",
+        "url": "https://github.com/OpaceDigitalAgency/ai-ui-ux-motion-engine",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "OpaceDigitalAgency/ai-ui-ux-motion-engine",
+          "url": "https://github.com/OpaceDigitalAgency/ai-ui-ux-motion-engine"
+        }
+      },
+      {
+        "name": "pablodiegoo/Data-Pro-Skill",
+        "url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-03",
+          "name": "pablodiegoo/Data-Pro-Skill",
+          "url": "https://github.com/pablodiegoo/Data-Pro-Skill"
+        }
+      },
+      {
+        "name": "mexin/qa-agent-skill",
+        "url": "https://github.com/mexin/qa-agent-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "mexin/qa-agent-skill",
+          "url": "https://github.com/mexin/qa-agent-skill"
+        }
+      },
+      {
+        "name": "QinghongLin/data2story-skill",
+        "url": "https://github.com/QinghongLin/data2story-skill",
+        "reason": "7-day history duplicate; no verified material release",
+        "match": {
+          "kind": "canonical_id",
+          "history_date": "2026-11-04",
+          "name": "QinghongLin/data2story-skill",
+          "url": "https://github.com/QinghongLin/data2story-skill"
+        }
+      }
+    ],
+    "verification_failures": [
+      {
+        "name": "AgriciDaniel/claude-seo",
+        "url": "https://github.com/AgriciDaniel/claude-seo",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "JuliusBrussee/caveman",
+        "url": "https://github.com/JuliusBrussee/caveman",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-copilot-chat-agents",
+        "url": "https://github.com/kesslernity/awesome-copilot-chat-agents",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "volcengine/OpenViking",
+        "url": "https://github.com/volcengine/OpenViking",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "VoltAgent/awesome-agent-skills",
+        "url": "https://github.com/VoltAgent/awesome-agent-skills",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "github/awesome-copilot",
+        "url": "https://github.com/github/awesome-copilot",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "zhayujie/CowAgent",
+        "url": "https://github.com/zhayujie/CowAgent",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "wasp-lang/open-saas",
+        "url": "https://github.com/wasp-lang/open-saas",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "MemTensor/MemOS",
+        "url": "https://github.com/MemTensor/MemOS",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-microsoft-copilot-prompts",
+        "url": "https://github.com/kesslernity/awesome-microsoft-copilot-prompts",
+        "reason": "repository/license/README verification failed"
+      },
+      {
+        "name": "kesslernity/awesome-copilot-studio-agents",
+        "url": "https://github.com/kesslernity/awesome-copilot-studio-agents",
+        "reason": "repository/license/README verification failed"
+      }
+    ],
+    "selected_count": 9,
+    "excluded_count": 61,
+    "excluded": [
+      {
+        "name": "larksuite/cli",
+        "url": "https://github.com/larksuite/cli",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": null,
+          "name": "googleworkspace/cli",
+          "url": "https://github.com/googleworkspace/cli"
+        }
+      },
+      {
+        "name": "first-fluke/oh-my-agent",
+        "url": "https://github.com/first-fluke/oh-my-agent",
+        "reason": "category_saturation",
+        "category": "软件工程与测试"
+      },
+      {
+        "name": "google/elephant-goldfish-model",
+        "url": "https://github.com/google/elephant-goldfish-model",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "upex-galaxy/agentic-qa-boilerplate",
+        "url": "https://github.com/upex-galaxy/agentic-qa-boilerplate",
+        "reason": "category_saturation",
+        "category": "软件工程与测试"
+      },
+      {
+        "name": "vercel-labs/skills",
+        "url": "https://github.com/vercel-labs/skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": null,
+          "name": "mattpocock/skills",
+          "url": "https://github.com/mattpocock/skills"
+        }
+      },
+      {
+        "name": "arvindand/agent-skills",
+        "url": "https://github.com/arvindand/agent-skills",
+        "reason": "duplicate",
+        "match": {
+          "kind": "name_or_alias",
+          "history_date": "2026-11-03",
+          "name": "addyosmani/agent-skills",
+          "url": "https://github.com/addyosmani/agent-skills"
+        }
+      },
+      {
+        "name": "touchine-ojo/OJO-Design-Skills",
+        "url": "https://github.com/touchine-ojo/OJO-Design-Skills",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "Ludi-Herry/b-end-design-system-skill",
+        "url": "https://github.com/Ludi-Herry/b-end-design-system-skill",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "kesslernity/awesome-copilot-office-skills",
+        "url": "https://github.com/kesslernity/awesome-copilot-office-skills",
+        "reason": "category_saturation",
+        "category": "办公与业务自动化"
+      },
+      {
+        "name": "SamJU25/software-craftsmanship",
+        "url": "https://github.com/SamJU25/software-craftsmanship",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      },
+      {
+        "name": "Pacheche/unslop-anything",
+        "url": "https://github.com/Pacheche/unslop-anything",
+        "reason": "category_saturation",
+        "category": "多模态与创作"
+      }
+    ],
+    "scoring_model": {
+      "weights": {
+        "recent_heat_and_growth": 25,
+        "ai_trend_relevance": 20,
+        "practical_usefulness": 20,
+        "technical_quality": 15,
+        "novelty": 10,
+        "maintenance": 10
+      },
+      "growth_data_policy": "7-day and 30-day Stars deltas are populated only when a dated snapshot of the same canonical repository exists in the permitted comparison window; otherwise null. Current run records a daily candidate snapshot."
+    },
+    "limitations": [
+      "Only accessible archived recommendation days in the seven-day window can be checked; coverage is explicitly reported.",
+      "Repository metadata and README were checked; installation and dedicated security audits were not performed."
+    ]
+  },
+  "method": {
+    "news_sources": "public RSS feeds; links and published timestamps preserved",
+    "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI, Google News China-AI, IT Home, InfoQ China and OSChina RSS; filtered for China-related AI entities and timestamps within seven days",
+    "china_ai_news_minimum": 6,
+    "china_ai_news_target": 8,
+    "china_ai_news_window_days": 7,
+    "skill_ranking": "evidence-verified GitHub repositories ranked by weighted heat, trend relevance, practical usefulness, technical quality, novelty and maintenance; current cumulative Stars are not treated as historical growth"
+  },
+  "ai_analysis": {
+    "status": "unavailable",
+    "message": "Horizon enrichment did not complete; the source-backed news baseline is retained."
+  },
+  "top5": [
+    {
+      "id": "apple-intelligence-china-developer-beta-20261104",
+      "title": "Apple 智能在中国开放首轮开发者测试",
+      "title_zh": "Apple 智能在中国开放首轮开发者测试",
+      "title_en": "Apple Intelligence begins its first developer beta rollout in China",
+      "original_title": "Apple Intelligence features are coming to users in China",
+      "source": "Apple 中国大陆官方新闻稿",
+      "source_url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/",
+      "additional_sources": [],
+      "published": "2026-10-31",
+      "source_section": "china_ai_news",
+      "category": "中国 AI / 终端生态与应用",
+      "confidence": "high",
+      "what_zh": "Apple 于 10 月 31 日宣布，面向中国用户的首批 Apple 智能功能从 11 月 4 日起随 iOS 开发者 Beta 版开放测试，计划在 12 月 iOS 27.3 正式版推出。首批功能包括实时翻译、写作工具、视觉智能和照片消除等；Apple 还宣布与阿里巴巴合作，在部分体验中接入千问。开发者测试不等于所有用户已经全面可用。",
+      "why_zh": "这标志着国际终端厂商开始把本地模型合作、产品功能和区域合规放在同一条交付链上。实际体验仍取决于设备支持、系统版本和后续正式发布。",
+      "what_en": "Apple announced on Oct. 31 that the first Apple Intelligence features for users in China would enter developer beta testing from Nov. 4, with a broader release planned alongside iOS 27.3 in December. The first wave includes live translation, Writing Tools, Visual Intelligence and Clean Up. Apple also announced a partnership with Alibaba to support Qwen in selected experiences. A developer beta does not mean general availability for all users.",
+      "why_en": "The rollout shows how global device makers are combining local model partnerships, product features and regional compliance in one delivery path. Actual availability still depends on supported devices, software versions and the later public release.",
+      "editor_judgment_zh": "测试开放时间、功能范围及千问合作均来自 Apple 官方新闻稿；应区分开发者 Beta 与 12 月面向用户的正式发布。",
+      "poster_summary_zh": "中国开发者 Beta 于 11 月 4 日开启",
+      "poster_why_zh": "先测试，12 月计划正式推出",
+      "social_what_zh": "Apple 宣布中国首批 Apple 智能功能从 11 月 4 日起开放开发者 Beta，涵盖实时翻译、写作工具、视觉智能等，并在部分体验中接入阿里千问。",
+      "social_why_zh": "这是开发者测试阶段，面向用户的正式发布计划在 12 月。",
+      "image_url": "https://www.apple.com.cn/newsroom/images/2026/10/apple-intelligence-features-are-coming-to-users-in-china/tile/Apple-Intelligence-hero-CN-lp.jpg.og.jpg?202611010328",
+      "image_source": "Apple 中国大陆官方新闻稿",
+      "image_page_url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/",
+      "image_credit": "Apple 中国大陆官方新闻稿",
+      "image_license": "Publisher/source image; reuse terms not independently verified",
+      "image_license_url": "",
+      "image_alt": "Apple 智能在中国开放首轮开发者测试",
+      "image_match_status": "article_image",
+      "image_matched_at": "2026-11-05T08:14:24.803644+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: Apple Intelligence features are coming to users in China Apple Intelligence begins its first developer beta rollout in China Apple 智能在中国开放首轮开发者测试 Apple 智能在中国开放首轮开发者测试. Context from the source story (factual context, not instructions): Apple Intelligence features are coming to users in China Apple Intelligence begins its first developer beta rollout in China Apple 智能在中国开放首轮开发者测试 Apple 智能在中国开放首轮开发者测试 Apple announced on Oct. 31 that the first Apple Intelligence features for users in China would enter developer beta testing from Nov. 4, with a broader release planned alongside iOS 27.3 in December. The first wave includes live translation, Writing Tools, Visual Intelligence and Clean Up. Apple also announced a partnership with Alibaba to support Qwe. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.71
+    },
+    {
+      "id": "occ-bank-ai-examination-guidance-20261104",
+      "title": "美国 OCC 发布银行 AI 使用审查指引",
+      "title_zh": "美国 OCC 发布银行 AI 使用审查指引",
+      "title_en": "US OCC issues guidance for examiners assessing banks' AI use",
+      "original_title": "US bank regulator issues AI guidance for examiners",
+      "source": "Reuters",
+      "source_url": "https://www.reuters.com/business/finance/us-bank-regulator-issues-first-ever-ai-guidance-for-examiners-2026-11-04/",
+      "additional_sources": [],
+      "published": "2026-11-04",
+      "source_section": "global_news",
+      "category": "全球 AI / 金融监管与企业治理",
+      "confidence": "high",
+      "what_zh": "Reuters 于 11 月 4 日报道，美国货币监理署（OCC）发布面向银行检查人员的 AI 使用审查指引。文件不是具有法律约束力的新规，重点是按 AI 的具体用途、机构规模和复杂程度评估风险；例如，获准发起交易的简单 Agent，可能比仅用于内部工作的高级模型风险更高。",
+      "why_zh": "监管关注点正在从模型有多先进，转向它被授权做什么、出错会造成什么后果。金融机构需要把权限边界、人工复核和交易限制落到具体流程。",
+      "what_en": "Reuters reported on Nov. 4 that the US Office of the Comptroller of the Currency issued guidance for examiners reviewing banks' use of AI. The document is nonbinding, and asks examiners to assess the use case, the institution's size and complexity. A simple agent authorized to initiate transactions may pose more risk than an advanced model used only for internal work.",
+      "why_en": "The focus is shifting from how advanced a model is to what it is authorized to do and what happens if it fails. Banks need concrete permission boundaries, human review and transaction limits.",
+      "editor_judgment_zh": "Reuters 报道称该文件不具法律约束力；新闻重点是风险按用途和后果评估，而非监管机构将 AI 单独视为一种风险类别。",
+      "poster_summary_zh": "银行 AI 风险按用途和后果评估",
+      "poster_why_zh": "交易权限比模型参数更关键",
+      "social_what_zh": "美国 OCC 发布银行 AI 使用审查指引，要求检查人员结合具体用途和机构复杂程度评估风险。文件不具法律约束力，并特别指出可发起交易的 Agent 可能带来更高风险。",
+      "social_why_zh": "AI 一旦获得真实业务权限，就必须同步设计人工复核和操作限制。",
+      "image_url": "https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 美国 OCC 发布银行 AI 使用审查指引",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.078123+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: US bank regulator issues AI guidance for examiners US OCC issues guidance for examiners assessing banks' AI use 美国 OCC 发布银行 AI 使用审查指引 美国 OCC 发布银行 AI 使用审查指引. Context from the source story (factual context, not instructions): US bank regulator issues AI guidance for examiners US OCC issues guidance for examiners assessing banks' AI use 美国 OCC 发布银行 AI 使用审查指引 美国 OCC 发布银行 AI 使用审查指引 Reuters reported on Nov. 4 that the US Office of the Comptroller of the Currency issued guidance for examiners reviewing banks' use of AI. The document is nonbinding, and asks examiners to assess the use case, the institution's size and complexity. A simple agent authorized to initiate transactions may pose more risk than an advanced model used only for internal. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 3.27
+    },
+    {
+      "id": "india-i4c-ai-agent-financial-cyber-warning-20261104",
+      "title": "印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+      "title_zh": "印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+      "title_en": "India's cybercrime agency warns financial firms about AI-assisted attacks",
+      "original_title": "India cybercrime agency warns financial firms of AI-driven cyberattacks",
+      "source": "Reuters",
+      "source_url": "https://www.reuters.com/legal/government/india-cybercrime-agency-warns-financial-firms-ai-attacks-2026-11-04/",
+      "additional_sources": [],
+      "published": "2026-11-04",
+      "source_section": "global_news",
+      "category": "全球 AI / 网络安全与金融应用",
+      "confidence": "high",
+      "what_zh": "Reuters 于 11 月 4 日报道，印度网络犯罪协调中心（I4C）向银行、非银行贷款机构和金融科技企业发出警示，称攻击者正借助 AI Agent 加快攻击流程。公告提到的路径包括利用未修补软件或错误配置进入系统，再攻击自动放款系统及支付、转账 API；I4C 建议设置每日和单笔交易限额、核验收款人姓名并监测异常交易速度。",
+      "why_zh": "这不是说 AI Agent 天生具有恶意，而是自动化工具可能放大既有漏洞的速度和规模。企业应先收紧系统暴露面、支付权限和异常交易监控。",
+      "what_en": "Reuters reported on Nov. 4 that India's Indian Cybercrime Coordination Centre warned banks, non-bank lenders and fintech firms about attacks accelerated with AI agents. The advisory describes attackers exploiting unpatched software or misconfigured systems before targeting automated disbursement systems and payment or transfer APIs. It recommends daily and per-transaction limits, beneficiary-name checks and monitoring unusual transaction speeds.",
+      "why_en": "The warning does not mean AI agents are inherently malicious; automation can amplify existing vulnerabilities at greater speed and scale. Organizations should tighten exposed systems, payment permissions and anomaly monitoring.",
+      "editor_judgment_zh": "这是印度 I4C 的公开安全警示，经 Reuters 报道；应将风险限定在攻击者借助 Agent 自动化攻击的场景，不泛化为所有 Agent 的行为。",
+      "poster_summary_zh": "攻击者借 Agent 自动化攻击金融系统",
+      "poster_why_zh": "支付 API 与交易限额需重点防护",
+      "social_what_zh": "印度 I4C 警示金融机构，攻击者可能借 AI Agent 加速利用系统漏洞并攻击支付 API。建议设置单笔限额、核验收款人并监测异常交易速度。",
+      "social_why_zh": "自动化让既有漏洞更快转化为业务风险。",
+      "image_url": "https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.250546+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: India cybercrime agency warns financial firms of AI-driven cyberattacks India's cybercrime agency warns financial firms about AI-assisted attacks 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 印度网络犯罪机构警示 AI Agent 加速金融网络攻击. Context from the source story (factual context, not instructions): India cybercrime agency warns financial firms of AI-driven cyberattacks India's cybercrime agency warns financial firms about AI-assisted attacks 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 印度网络犯罪机构警示 AI Agent 加速金融网络攻击 Reuters reported on Nov. 4 that India's Indian Cybercrime Coordination Centre warned banks, non-bank lenders and fintech firms about attacks accelerated with AI agents. The advisory describes attackers exploiting unpatched software or misconfigured systems before targeting automated disbursement systems and payment. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.17
+    },
+    {
+      "id": "china-ai-investment-concentration-warning-20261103",
+      "title": "中国金融监管官员警示 AI 投资过度集中",
+      "title_zh": "中国金融监管官员警示 AI 投资过度集中",
+      "title_en": "Chinese financial regulator warns that AI investment is becoming too concentrated",
+      "original_title": "AI investment is becoming overly concentrated, Chinese official says",
+      "source": "Reuters",
+      "source_url": "https://www.reuters.com/business/finance/ai-investment-is-becoming-overly-concentrated-chinese-official-says-2026-11-03/",
+      "additional_sources": [],
+      "published": "2026-11-03",
+      "source_section": "china_ai_news",
+      "category": "中国 AI / 产业资本与宏观风险",
+      "confidence": "high",
+      "what_zh": "Reuters 于 11 月 3 日报道，中国国家金融监督管理总局副局长肖远企在香港全球金融领袖投资峰会上表示，全球 AI 投资过度集中于科技领域和头部企业，可能推高杠杆和借贷成本，并挤压传统行业再投资空间。他呼吁制定适应 AI 转型的宏观管理和金融风险政策。这是监管官员的风险判断，不是对所有 AI 投资项目的审计结论。",
+      "why_zh": "AI 基础设施和头部企业吸引大量资金的同时，资本配置、融资成本和传统行业投资也需要被纳入评估。产业发展不能只看算力和融资规模，还要看资金是否转化为可持续生产力。",
+      "what_en": "Reuters reported on Nov. 3 that Xiao Yuanqi, deputy head of China's National Financial Regulatory Administration, said at the Global Financial Leaders' Investment Summit in Hong Kong that global AI investment was overly concentrated in technology firms and leading companies. He warned this could raise leverage and borrowing costs and crowd out reinvestment by traditional industries. This is a regulator's risk assessment, not an audit of every AI investment.",
+      "why_en": "Heavy capital flows into AI infrastructure and leading firms also raise questions about capital allocation, financing costs and investment in traditional industries. Development should be judged not only by compute and funding scale, but by sustainable productivity.",
+      "editor_judgment_zh": "“过度集中”是监管官员在峰会上的判断，Reuters 记录了其发言；文案明确保留观点归属，不将其写成已量化的行业结论。",
+      "poster_summary_zh": "监管官员提醒 AI 资本配置风险",
+      "poster_why_zh": "融资规模不等于生产力回报",
+      "social_what_zh": "中国金融监管官员在香港峰会上表示，全球 AI 投资过度集中可能推高杠杆和借贷成本，并挤压传统行业融资空间。",
+      "social_why_zh": "AI 投资还要看资本配置与实体产业的长期回报。",
+      "image_url": "https://images.unsplash.com/photo-1556761175-129418cb2dfe?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: 中国金融监管官员警示 AI 投资过度集中",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.387917+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: AI investment is becoming overly concentrated, Chinese official says Chinese financial regulator warns that AI investment is becoming too concentrated 中国金融监管官员警示 AI 投资过度集中 中国金融监管官员警示 AI 投资过度集中. Context from the source story (factual context, not instructions): AI investment is becoming overly concentrated, Chinese official says Chinese financial regulator warns that AI investment is becoming too concentrated 中国金融监管官员警示 AI 投资过度集中 中国金融监管官员警示 AI 投资过度集中 Reuters reported on Nov. 3 that Xiao Yuanqi, deputy head of China's National Financial Regulatory Administration, said at the Global Financial Leaders' Investment Summit in Hong Kong that global AI investment was overly concentrated in technology firms and leading companies. He warned this could raise leverage and borrowing c. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.14
+    },
+    {
+      "id": "agent-skills-evolution-empirical-study-20261103",
+      "title": "研究团队分析 8.42 万个 Agent Skill 的演进模式",
+      "title_zh": "研究团队分析 8.42 万个 Agent Skill 的演进模式",
+      "title_en": "Researchers study how 84,200 Agent Skills evolve on GitHub",
+      "original_title": "How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub",
+      "source": "arXiv 预印本",
+      "source_url": "https://arxiv.org/abs/2611.04456",
+      "additional_sources": [],
+      "published": "2026-11-03",
+      "source_section": "global_news",
+      "category": "全球 AI / Agent Skill 研究与可靠性",
+      "confidence": "medium",
+      "what_zh": "一篇 11 月 3 日提交到 arXiv 的预印本，分析了作者收集的 84,200 个 GitHub Agent Skill 和 750,898 次提交。研究指出，Skill 的可靠性设计受到的关注相对不足，修改多为渐进式补充；以安全为目的的改动也未必能充分降低风险。该研究尚未经过同行评审，样本和结论应按论文作者的方法与口径理解。",
+      "why_zh": "Skill 不只是提示词文件，它会随着项目和工具变化持续演进。真正可用的 Skill 应明确输入、执行步骤、验证条件、失败恢复和安全边界，而不只是写得详细。",
+      "what_en": "An arXiv preprint submitted on Nov. 3 analyzes a dataset assembled by its authors containing 84,200 GitHub Agent Skills and 750,898 commits. The authors report that reliability receives comparatively little attention, changes are often incremental, and security-motivated edits do not necessarily reduce risk enough. The work has not been peer reviewed, and its findings should be read within the authors' sampling and methodology.",
+      "why_en": "A Skill is more than a prompt file; it evolves as projects and tools change. A useful Skill should define inputs, execution steps, verification criteria, recovery paths and security boundaries—not merely provide detailed prose.",
+      "editor_judgment_zh": "样本规模与研究结论来自论文作者的 arXiv 预印本；未同行评审，不将其表述为已确立的行业共识。",
+      "poster_summary_zh": "8.42 万个 Skill 的演进研究",
+      "poster_why_zh": "可靠性与回归验证仍需加强",
+      "social_what_zh": "一篇 arXiv 预印本分析了 8.42 万个 GitHub Agent Skill 和 75 万余次提交，指出可靠性设计与安全回归仍有改进空间。",
+      "social_why_zh": "Skill 应有明确验证、恢复和安全边界，而不只是写得详细。",
+      "image_url": "https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&w=1000&q=82",
+      "image_source": "Unsplash topic illustration",
+      "image_page_url": "https://unsplash.com/s/photos/technology",
+      "image_credit": "Unsplash",
+      "image_license": "Unsplash License; review source terms before reuse",
+      "image_license_url": "https://unsplash.com/license",
+      "image_alt": "主题配图（非新闻现场）：AI product / software topic illustration: 研究团队分析 8.42 万个 Agent Skill 的演进模式",
+      "image_match_status": "thematic_fallback",
+      "image_matched_at": "2026-11-05T08:14:28.775882+08:00",
+      "image_fallback_url": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+      "image_fallback_candidates": [
+        "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1485470733090-0aae1788d5af?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1000&q=82"
+      ],
+      "image_is_generated": false,
+      "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub Researchers study how 84,200 Agent Skills evolve on GitHub 研究团队分析 8.42 万个 Agent Skill 的演进模式 研究团队分析 8.42 万个 Agent Skill 的演进模式. Context from the source story (factual context, not instructions): How Agent Skills Evolve: A Large-Scale Empirical Study of Skills on GitHub Researchers study how 84,200 Agent Skills evolve on GitHub 研究团队分析 8.42 万个 Agent Skill 的演进模式 研究团队分析 8.42 万个 Agent Skill 的演进模式 An arXiv preprint submitted on Nov. 3 analyzes a dataset assembled by its authors containing 84,200 GitHub Agent Skills and 750,898 commits. The authors report that reliability receives comparatively little attention, changes are often incremental, and security-motivated edits do not necessarily reduce risk enough. The. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
+      "image_match_duration_seconds": 0.39
+    }
+  ],
+  "top5_status": "editorial_curated",
+  "localization": {
+    "status": "manual_editorial_verified",
+    "provider": "DAVYLAB editorial review",
+    "method": "Five-story review against Apple's China newsroom announcement, Reuters reports on US bank supervision and India's I4C cyber advisory, Reuters coverage of China's financial-regulator remarks, and the original arXiv preprint on Agent Skill evolution.",
+    "reviewed_at": "2026-11-05T07:35:00+08:00",
+    "sources_checked": 5,
+    "note": "五条重点内容已核对原始公告、监管部门公开指引/发言或研究论文页面，并与近七日归档去重。Apple 中国首轮开发者测试时间与正式面向用户时间分开表述；OCC 指引注明不具法律约束力；印度 I4C 内容是监管警示而非对所有 AI Agent 的概括；中国金融监管官员的观点明确归因；Agent Skill 研究注明为 arXiv 预印本，未同行评审。 首次性措辞仅在原始报道中作为媒体标题出现，本期采用中性标题，不把它作为未经限定的事实主张。"
+  },
+  "editorial": {
+    "headline_zh": "AI 正在进入真实流程，权限和责任也得跟上",
+    "headline_en": "AI is entering real workflows—and permissions and accountability must follow",
+    "trend_zh": "从手机端功能开放、银行 AI 使用审查，到 Agent 驱动的网络攻击警示，本期动态显示 AI 正从单点问答走向真实终端和业务流程。模型越能采取行动，权限、审计、人工接管和安全回归就越不能缺席。",
+    "core_zh": "今天的变化不只是多了几个模型或功能，而是 AI 正在进入手机、金融系统和可复用的 Agent 工作流。对企业来说，真正的落地指标不仅是效率，还包括权限控制、错误后果、人工接管、成本和持续验证。",
+    "trend_en": "From consumer-device features to bank supervision and warnings about AI-assisted cyberattacks, this issue shows AI moving from standalone answers into real devices and business workflows. As models gain the ability to act, permissions, auditability, human handoff and security regression become essential.",
+    "core_en": "The shift is not simply another model or feature release: AI is entering phones, financial systems and reusable agent workflows. For organizations, deployment must be measured not only by efficiency but also by permissions, failure consequences, human handoff, cost and continuous verification.",
+    "analysis_label_zh": "DAVYLAB 分析",
+    "analysis_label_en": "DAVYLAB analysis",
+    "analysis_scope_zh": "以下为 DAVYLAB 基于本期已核验公开来源的综合判断，不代表任何单一机构或企业的结论。",
+    "analysis_scope_en": "This is DAVYLAB's synthesis of the verified public sources in this issue, not a statement by any single organization or company.",
+    "poster_trend_zh": "AI 正进入手机与业务流程；权限、审计、人工接管和安全验证必须同步跟上。",
+    "opening_zh": "AI 不只是多了几个新功能。它正在进入手机、银行和自动化工具，真正的问题变成：谁授权它行动，出了错怎么追责？",
+    "question_zh": "你最关心 AI 进入真实流程后的哪件事？",
+    "options_zh": "A. 工作效率  B. 数据隐私  C. 自动操作风险  D. 成本与回报",
+    "next_question_zh": "AI 进流程，最先要明确的是权限、审计和人工接管边界。",
+    "interaction_invitation_zh": "欢迎在评论区分享你真正想交给 AI、但仍担心风险的工作场景。",
+    "poster_copy_zh": "AI 正走进手机与业务流程，权限、审计和人工接管也必须同步升级。",
+    "moments_copy_zh": "AI 正在从回答问题走向参与真实流程：手机功能开始本地化开放，银行监管关注 Agent 的交易权限，安全机构警示自动化攻击风险。能力越接近真实业务，越要把权限、审计和人工接管提前设计好。",
+    "source_basis": [
+      {
+        "title_zh": "Apple 智能在中国开放首轮开发者测试",
+        "title_en": "Apple Intelligence begins its first developer beta rollout in China",
+        "source": "Apple 中国大陆官方新闻稿",
+        "url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/"
+      },
+      {
+        "title_zh": "美国 OCC 发布银行 AI 使用审查指引",
+        "title_en": "US OCC issues guidance for examiners assessing banks' AI use",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/business/finance/us-bank-regulator-issues-first-ever-ai-guidance-for-examiners-2026-11-04/"
+      },
+      {
+        "title_zh": "印度网络犯罪机构警示 AI Agent 加速金融网络攻击",
+        "title_en": "India's cybercrime agency warns financial firms about AI-assisted attacks",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/legal/government/india-cybercrime-agency-warns-financial-firms-ai-attacks-2026-11-04/"
+      },
+      {
+        "title_zh": "中国金融监管官员警示 AI 投资过度集中",
+        "title_en": "Chinese financial regulator warns that AI investment is becoming too concentrated",
+        "source": "Reuters",
+        "url": "https://www.reuters.com/business/finance/ai-investment-is-becoming-overly-concentrated-chinese-official-says-2026-11-03/"
+      },
+      {
+        "title_zh": "研究团队分析 8.42 万个 Agent Skill 的演进模式",
+        "title_en": "Researchers study how 84,200 Agent Skills evolve on GitHub",
+        "source": "arXiv 预印本",
+        "url": "https://arxiv.org/abs/2611.04456"
+      }
+    ]
+  },
+  "manual_editorial_override": {
+    "applied": true,
+    "source_file": "radar/data/manual-editorial/2026-11-05.json",
+    "method": "manual source verification and Chinese editorial review"
+  },
+  "cross_section_dedupe": {
+    "status": "ok",
+    "removed_from_china_ai_news": 2,
+    "remaining_china_ai_news": 8,
+    "removed": [
+      {
+        "title": "Apple 智能在中国开放首轮开发者测试",
+        "url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/",
+        "matched_title": "Apple 智能在中国开放首轮开发者测试",
+        "matched_url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/",
+        "kind": "same_url"
+      },
+      {
+        "title": "中国金融监管官员警示 AI 投资过度集中",
+        "url": "https://www.reuters.com/business/finance/ai-investment-is-becoming-overly-concentrated-chinese-official-says-2026-11-03/",
+        "matched_title": "中国金融监管官员警示 AI 投资过度集中",
+        "matched_url": "https://www.reuters.com/business/finance/ai-investment-is-becoming-overly-concentrated-chinese-official-says-2026-11-03/",
+        "kind": "same_url"
+      }
+    ],
+    "top5_source_references": [
+      {
+        "title_zh": "Apple 智能在中国开放首轮开发者测试",
+        "title_en": "Apple Intelligence begins its first developer beta rollout in China",
+        "url": "https://www.apple.com.cn/newsroom/2026/10/apple-intelligence-features-are-coming-to-users-in-china/",
+        "source": "Apple 中国大陆官方新闻稿",
+        "published": "2026-10-31",
+        "source_section": "china_ai_news",
+        "additional_sources": []
+      },
+      {
+        "title_zh": "中国金融监管官员警示 AI 投资过度集中",
+        "title_en": "Chinese financial regulator warns that AI investment is becoming too concentrated",
+        "url": "https://www.reuters.com/business/finance/ai-investment-is-becoming-overly-concentrated-chinese-official-says-2026-11-03/",
+        "source": "Reuters",
+        "published": "2026-11-03",
+        "source_section": "china_ai_news",
+        "additional_sources": []
+      }
+    ]
+  },
+  "editorial_policy_version": "2026-11-02.2",
+  "image_matching": {
+    "status": "ok",
+    "matched": 18,
+    "processed": 18,
+    "relevance_threshold": 0.35,
+    "relevance_policy_version": "2026-11-02.1",
+    "thematic_fallback_count": 8,
+    "strategy": [
+      "RSS/feed image",
+      "article OG/Twitter metadata",
+      "single bounded Openverse lookup",
+      "deterministic Unsplash topic illustration fallback"
+    ],
+    "budget_seconds": 150,
+    "duration_seconds": 13.07,
+    "last_run": "2026-11-05T08:14:37.163282+08:00"
+  },
+  "quality_gate": {
+    "status": "PASS",
+    "checked_at": "2026-11-05T08:14:55.191567+08:00",
+    "image_relevance_policy_version": "2026-11-02.1",
+    "claim_provenance_policy_version": "2026-11-02.2",
+    "history_files": 21,
+    "history_stories": 594,
+    "news_duplicate_hits": 0,
+    "china_duplicate_hits": 0,
+    "same_week_image_reuse": 0,
+    "image_fallback_repairs": [
+      {
+        "title": "月之暗面开源Kimi K3.1 Pro，登顶Agent Arena开放权重模型榜 - 凤凰网",
+        "from": "https://images.unsplash.com/photo-1556761175-136f8a6b7a44?auto=format&fit=crop&w=1000&q=82",
+        "to": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "reason": "image_unverifiable",
+        "fallback_candidates_checked": 7
+      },
+      {
+        "title": "GPT-6.1 Sol vs Kimi K4：从未存在过的模型 - OrcaRouter",
+        "from": "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1000&q=82",
+        "to": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "reason": "same_day_url_duplicate",
+        "fallback_candidates_checked": 6
+      },
+      {
+        "title": "Artificial Analysis 测算 $100 预算在各模型上的 Intelligence Index 任务量对比",
+        "from": "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=1000&q=82",
+        "to": "https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1000&q=82",
+        "reason": "same_day_content_duplicate",
+        "fallback_candidates_checked": 5
+      },
+      {
+        "title": "Stanford 研究测算 NVIDIA B200 每单位能量产出价值超 AMD MI350X 4 倍",
+        "from": "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1000&q=82",
+        "to": "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=82",
+        "reason": "same_day_content_duplicate",
+        "fallback_candidates_checked": 4
+      }
+    ],
+    "report_path": "test-results/radar/news-image-quality-gate.json"
+  }
+}
