@@ -20,6 +20,11 @@ async function main() {
   assert.ok(html.includes('id="importNianbox"'), "NianBox import entry exists");
   assert.ok(html.includes("NIANBOX_TOKEN_KEY"), "NianBox session token is session-scoped");
   assert.ok(html.includes('id="section-growth"'), "audience Growth Lab section exists");
+  assert.ok(html.includes('id="section-research"'), "niche research section exists");
+  assert.ok(html.includes('id="researchGenerate"'), "niche research prompt generator exists");
+  assert.ok(html.includes('id="benchmarkForm"'), "benchmark account form exists");
+  assert.ok(html.includes('id="seriesParse"'), "series topic parser exists");
+
   assert.ok(html.includes('id="viralExperimentForm"'), "viral experiment form exists");
   assert.ok(html.includes('id="posterTaskForm"'), "daily poster task form exists");
   assert.ok(html.includes('id="growthMetricForm"'), "growth metric form exists");
@@ -54,6 +59,39 @@ async function main() {
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
     assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
+
+
+    // Editorial research: prompt generation, benchmark local persistence, series parsing and topic-pool integration.
+    await page.locator('[data-section="research"]').click();
+    await page.locator("#researchNiche").fill("普通人用 AI 做产品");
+    await page.locator("#researchAudience").fill("不会编程的普通人");
+    await page.locator("#researchGenerate").click();
+    assert.ok((await page.locator("#researchPrompt").inputValue()).includes("普通人用 AI 做产品"), "research prompt includes the requested niche");
+    await page.locator("#benchmarkName").fill("测试对标账号");
+    await page.locator("#benchmarkUrl").fill("https://example.com");
+    await page.locator("#benchmarkNiche").fill("AI 实用教程");
+    await page.locator("#benchmarkPattern").fill("步骤图解");
+    await page.locator("#benchmarkForm button[type=submit]").click();
+    assert.equal(await page.locator("#benchmarkList .growth-item").count(), 1, "benchmark account is saved and rendered");
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-research-v1")||"[]").length), 1, "benchmark record persists locally");
+    await page.locator("#seriesTheme").fill("每天一个 AI 实用技巧");
+    await page.locator("#seriesGenerate").click();
+    assert.ok((await page.locator("#seriesPrompt").inputValue()).includes("每天一个 AI 实用技巧"), "series prompt includes the topic theme");
+    await page.locator("#seriesPaste").fill("01｜AI 如何整理会议记录｜自动提取行动项\n02｜AI 如何把灵感变成任务｜建立简单工作流");
+    await page.locator("#seriesParse").click();
+    assert.equal(await page.locator("#seriesPreview .growth-item").count(), 2, "series parser previews two distinct ideas");
+    await page.locator("#seriesBatchAdd").click();
+    await page.locator('[data-section="library"]').click();
+    assert.equal(await page.locator("#topicList .topiccard").count(), 2, "series ideas are integrated into the existing topic pool");
+    assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]").length), 2, "series ideas persist in the existing topic store");
+    await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-desktop.png"), fullPage: true });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator('[data-section="research"]').click();
+    const mobileOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+    assert.equal(mobileOverflow, false, "research page has no horizontal overflow on mobile");
+    await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-mobile.png"), fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.locator('[data-section="discover"]').click();
 
     // Visual DNA: theme customization, responsive navigation, motion preview/export and persistence.
     await page.locator("#openVisualSettings").click();
