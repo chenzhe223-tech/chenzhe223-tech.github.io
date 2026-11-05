@@ -410,7 +410,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
-  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button>
+  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button>
  </div></div>
  <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
@@ -428,25 +428,55 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="stat"><div class="statlabel">我的选题</div><div class="statnum" id="statTopics">0</div><div class="statfoot">已保存在当前浏览器</div></div>
  <div class="stat"><div class="statlabel">待继续推进</div><div class="statnum" id="statActive">0</div><div class="statfoot">灵感、候选或正在创作</div></div>
 </div>
-<section class="section active" id="section-discover"><div class="ai-studio" aria-labelledby="aiStudioTitle"><div class="ai-studio-head"><div><div class="ai-kicker">DAVYLAB · IDEA TO EDITORIAL</div><h2 id="aiStudioTitle">先说一个念头，找到值得写的角度。</h2><p>一句话开始。先确定方向，再生成完整创作指令；不会未经确认替你定题。</p></div><span class="tag blue">AI 选题工作台 · V2.0</span></div><div class="ai-inputrow"><textarea id="ideaInput" maxlength="5000" placeholder="例如：我发现越来越多不会写代码的人也开始用 AI 做产品，我想聊聊普通人能抓住哪些机会……"></textarea><div class="ai-controls"><button class="btn primary" id="analyzeIdeas">✦ 分析并生成方向</button><button class="btn" id="importNianbox">↗ 从念头盒导入</button></div></div><div class="ai-subrow"><span class="import-hint">支持灵感、长背景和从念头盒导出的 JSON / TXT / Markdown 文件。</span><button class="btn small" id="pasteNianbox">粘贴念头内容</button></div><div id="aiState" class="ai-state" role="status">输入一句话即可开始。先连接念头盒账号，系统通过已配置的服务端 AI 接口分析；账号令牌仅保存在当前标签页会话中。</div><div id="directionResults" class="ai-result" aria-live="polite"></div><div id="directionFollowup" class="ai-convo" hidden><input id="directionAdjustment" placeholder="继续调整：更适合公众号 / 更有观点 / 普通人能看懂"><button class="btn" id="applyAdjustment">调整方向</button></div><div id="directionNext" class="ai-subrow" hidden><span class="import-hint">选定方向后，再生成创作指令或保存到选题池。</span><div class="paneltools"><button class="btn" id="regenDirections">换一批方向</button><button class="btn primary" id="makeCreationPrompt">生成创作指令</button></div></div></div><div class="discovery">
- <div class="panel"><div class="panelhead"><div><h2>今天有什么值得写？</h2><p>从已收录的 AI 新闻和开源 Skill 里找切口。每条素材保留原始来源，避免只看摘要下结论。</p></div><div class="loadstatus" id="sourceStatus"><i class="dot"></i><span>等待数据</span></div></div>
-  <div class="filters" id="feedFilters"><button class="chip active" data-feed="all">全部素材</button><button class="chip" data-feed="news">AI 新闻</button><button class="chip" data-feed="china">中国 AI 动态</button><button class="chip" data-feed="skills">GitHub Skill</button></div>
-  <div class="radar-toolbar">
-   <div class="field radar-search"><label for="radarSearch">全球 AI 信息雷达 · 搜索素材</label><input id="radarSearch" type="search" placeholder="搜索公司、模型、工具、研究、来源…"></div>
-   <div class="field radar-sort"><label for="radarSort">排序方式</label><select id="radarSort"><option value="fresh">最新发布</option><option value="topic">先看新闻，再看工具</option><option value="source">按来源名称</option></select></div>
-   <div class="field"><label for="radarTheme">主题聚类</label><select id="radarTheme"><option value="all">全部主题</option><option value="agents">智能体与自动化</option><option value="models">模型与算力</option><option value="products">产品与应用</option><option value="business">商业与市场</option><option value="safety">安全与治理</option><option value="creative">内容与创作</option><option value="other">其他</option></select></div>
-   <div class="radar-count" id="radarResultCount" aria-live="polite">等待素材</div>
-  </div>
-  <div class="notice">ℹ　这些是<strong>选题素材</strong>，不是已经验证过的公众号选题。请先看原文，再确定适合 DAVYLAB 读者的角度。更新时间以 Davy Radar 当日报告为准。</div>
-   <div class="growth-item radar-quality" id="radarQuality" aria-live="polite"><strong>信息源与素材质量检查</strong><div class="growth-review-metrics" id="radarQualityMetrics"><span class="growth-badge">等待素材分析</span></div><div class="growth-footnote" id="radarQualityNote">这里只检查当前已载入素材的可见字段，不代表对新闻真实性或全球覆盖率的独立审计。</div></div>
-  <div class="feedlist" id="feedList"><div class="empty">正在连接 Davy Radar 数据……</div></div><div class="sourcefooter" id="sourceFoot">数据源：Davy Radar daily JSON。</div>
+
+<section class="section" id="section-research">
+ <div class="hero">
+  <div><div class="eyebrow">DAVYLAB · NICHE & EDITORIAL RESEARCH</div><h1>找到一个值得长期写的方向。</h1><p>把赛道研究、对标账号和系列选题放在一起。可直接把选题送入现有选题池，评分、排期和创作流程继续沿用原有能力。</p></div>
+  <div class="heroactions"><button class="btn" id="researchClear">清空表单</button><button class="btn primary" id="researchAddAll">将选题加入选题池</button></div>
  </div>
- <div><div class="panel"><div class="panelhead"><div><h2>把素材变成选题</h2><p>三个问题，帮你找到自己的表达角度。</p></div></div>
-  <div class="method onecol"><div class="num">01 / WHO</div><h3>写给谁看？</h3><p>普通 AI 用户、独立开发者，还是正在用 AI 改进工作的人？</p></div>
-  <div class="method onecol"><div class="num">02 / WHY</div><h3>为什么现在值得写？</h3><p>有新变化、有真实问题，或者能帮读者少走一步弯路。</p></div>
-  <div class="method"><div class="num">03 / HOW</div><h3>你能补充什么？</h3><p>亲身实践、清楚的解释、可复用的方法，而不只是复述新闻。</p></div></div>
- <div class="panel"><div class="panelhead"><div><h2>DAVYLAB 的内容方向</h2><p>让每篇内容慢慢积累成品牌辨识度。</p></div></div><div class="tags"><span class="tag blue">从念头到产品</span><span class="tag blue">AI 实战手记</span><span class="tag blue">AI 创造机会雷达</span><span class="tag blue">普通人的 AI 创造力</span><span class="tag blue">产品复盘与实验室</span></div><p style="font-size:12px;color:var(--muted);margin:10px 0 0">常规目标为隔日一篇；每月设置至少 3 个爆款实验候选，不必追着每条热点跑。</p></div>
- </div></div></section>
+ <div class="panel">
+  <div class="panelhead"><div><h2>01 / 赛道研究</h2><p>输入领域或目标读者，形成清晰的细分方向。AI 结果由你审核，不将推测包装成市场事实。</p></div><span class="tag blue">研究工作区</span></div>
+  <div class="formgrid">
+   <div class="field"><label for="researchNiche">想研究的领域 *</label><input id="researchNiche" maxlength="120" placeholder="例如：普通人用 AI 做产品 / 生僻字知识"></div>
+   <div class="field"><label for="researchAudience">目标读者</label><input id="researchAudience" maxlength="120" placeholder="例如：对 AI 感兴趣但不会编程的普通人"></div>
+   <div class="field"><label for="researchGoal">内容目标</label><select id="researchGoal"><option>建立长期垂直栏目</option><option>测试新赛道起号</option><option>提高收藏与转发</option><option>服务 DAVYLAB 产品生态</option></select></div>
+   <div class="field"><label for="researchFrequency">更新节奏</label><select id="researchFrequency"><option>隔日更新</option><option>每日更新</option><option>每周 2–3 篇</option><option>每周 1 篇深度内容</option></select></div>
+   <div class="field full"><label for="researchContext">补充背景（可选）</label><textarea id="researchContext" placeholder="你的经验、现有产品、想避开的方向或差异化优势…"></textarea></div>
+  </div>
+  <div class="promptactions"><button class="btn primary" id="researchGenerate">生成赛道研究指令</button><button class="btn" id="researchCopy">复制指令</button></div>
+  <div class="quickprompt"><textarea id="researchPrompt" readonly placeholder="填写领域后，点击生成研究指令。复制到 ChatGPT 即可开始研究。"></textarea></div>
+ </div>
+ <div class="panel">
+  <div class="panelhead"><div><h2>02 / 对标账号与内容观察</h2><p>手动记录可核实的账号主页和代表文章，方便持续拆解标题、选题与内容结构。</p></div><span class="tag">本机保存</span></div>
+  <form id="benchmarkForm" class="formgrid">
+   <div class="field"><label for="benchmarkName">账号名称 *</label><input id="benchmarkName" required maxlength="100" placeholder="账号或作者名称"></div>
+   <div class="field"><label for="benchmarkUrl">主页 / 文章链接</label><input id="benchmarkUrl" type="url" placeholder="https://..."></div>
+   <div class="field"><label for="benchmarkNiche">所属方向</label><input id="benchmarkNiche" maxlength="100" placeholder="例如：AI 实用教程"></div>
+   <div class="field"><label for="benchmarkPattern">观察到的内容特点</label><input id="benchmarkPattern" maxlength="180" placeholder="例如：问题式标题、步骤图解、系列更新"></div>
+   <div class="field full"><button class="btn primary" type="submit">＋ 保存对标记录</button></div>
+  </form>
+  <div id="benchmarkList" class="growth-list"><div class="growth-empty">还没有对标记录。仅记录你实际查看过的账号和文章。</div></div>
+ </div>
+ <div class="panel">
+  <div class="panelhead"><div><h2>03 / 系列选题生成</h2><p>围绕一个垂直方向组织连续内容。生成后先审核，再批量加入现有选题池。</p></div><span class="tag blue">可进入选题池</span></div>
+  <div class="formrow" style="margin-bottom:10px"><div class="field" style="flex:1;min-width:200px"><label for="seriesTheme">系列主题</label><input id="seriesTheme" placeholder="例如：每天认识一个容易读错的汉字"></div><div class="field" style="width:170px"><label for="seriesCount">选题数量</label><select id="seriesCount"><option>5</option><option selected>10</option><option>15</option><option>20</option></select></div></div>
+  <div class="formrow" style="margin-bottom:10px"><div class="field" style="flex:1;min-width:200px"><label for="seriesType">系列结构</label><select id="seriesType"><option>由浅入深的入门系列</option><option>问题与解决方案系列</option><option>每日一个知识点</option><option>案例拆解系列</option><option>误区纠正系列</option><option>实操步骤系列</option></select></div><button class="btn primary" id="seriesGenerate" type="button">生成系列选题指令</button></div>
+  <div class="quickprompt"><textarea id="seriesPrompt" readonly placeholder="输入系列主题后生成提示词。"></textarea><div class="promptactions"><button class="btn" id="seriesCopy" type="button">复制指令</button><button class="btn" id="seriesBatchAdd" type="button">将选题加入选题池</button></div></div>
+  <div class="field full" style="margin-top:12px"><label for="seriesPaste">粘贴 AI 生成的选题清单（每行一个标题；也支持“标题｜角度”）</label><textarea id="seriesPaste" rows="7" placeholder="01｜标题｜核心角度&#10;02｜标题｜核心角度"></textarea></div>
+  <div class="promptactions"><button class="btn primary" id="seriesParse" type="button">解析为选题预览</button></div>
+  <div id="seriesPreview" class="growth-list"><div class="growth-empty">解析后的选题将在这里预览，确认后再入池。</div></div>
+ </div>
+ <div class="panel">
+  <div class="panelhead"><div><h2>04 / 内容模板库</h2><p>把 X 文章中的可复用方法整理为写作结构，不直接复制原文。</p></div></div>
+  <div class="methodgrid" id="researchTemplates">
+   <div class="method"><div class="num">01 / 字词知识</div><h3>生僻字 / 易错字</h3><p>认知反差 → 正确读音 → 权威出处 → 字形字义 → 古今例句 → 记忆方法 → 互动结尾。</p><button class="btn small research-template" data-template="字词知识">生成模板指令</button></div>
+   <div class="method"><div class="num">02 / 文化典故</div><h3>成语 / 历史典故</h3><p>生活化场景 → 典故出处 → 历史背景 → 原义变化 → 现代用法 → 常见误用。</p><button class="btn small research-template" data-template="文化典故">生成模板指令</button></div>
+   <div class="method"><div class="num">03 / AI 实操</div><h3>工具 / 方法教程</h3><p>真实痛点 → 工具与前置条件 → 步骤演示 → 常见失败 → 结果核验 → 可复用清单。</p><button class="btn small research-template" data-template="AI 实操">生成模板指令</button></div>
+  </div>
+  <div class="quickprompt"><textarea id="templatePrompt" readonly placeholder="选择一个模板，生成可复制的创作指令。"></textarea><div class="promptactions"><button class="btn" id="templateCopy" type="button">复制模板指令</button><button class="btn primary" id="templateUse" type="button">按此模板生成系列选题</button></div></div>
+ </div>
+ <div class="notice">数据说明：对标账号记录和研究结果当前保存在本浏览器 localStorage；不会自动抓取公众号后台数据，也不会自动发布。生成内容应核对原始来源、版权与事实。</div>
+</section>
 <section class="section" id="section-library"><div class="panel">
  <div class="panelhead"><div><h2>我的选题池</h2><p>收集、筛选、评分和推进公众号内容。变更自动保存在当前浏览器。</p></div><div class="paneltools"><button class="btn small" id="importBtn">导入 JSON</button><button class="btn small" id="exportBtn">导出 JSON</button><button class="btn primary small" id="newLibrary">＋ 新建选题</button><input type="file" id="importFile" accept=".json,application/json" hidden></div></div>
  <div class="filters" id="libraryFilters"><button class="chip active" data-status="all">全部</button><button class="chip" data-status="inbox">灵感收集</button><button class="chip" data-status="shortlist">值得写</button><button class="chip" data-status="writing">正在创作</button><button class="chip" data-status="ready">待交稿</button><button class="chip" data-status="published">已发布</button></div>
@@ -714,8 +744,54 @@ function safe(v=""){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<"
 function safeUrl(v=""){try{const u=new URL(String(v),location.href);return ["http:","https:"].includes(u.protocol)?u.href:"#"}catch{return"#"}}
 function toast(s){const e=$("toast");e.textContent=s;e.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove("show"),2200)}
 function saveTopics(){localStorage.setItem(STORE_KEY,JSON.stringify(topics));renderStats();renderTopics();renderCalendar()}
-function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池",calendar:"内容排期",published:"公众号内容库",workflow:"创作流程",growth:"增长实验室"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();if(n==="published")renderPublishedArticles();window.scrollTo({top:0,behavior:"smooth"})}
+function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池",calendar:"内容排期",published:"公众号内容库",workflow:"创作流程",growth:"增长实验室",research:"赛道研究"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();if(n==="published")renderPublishedArticles();if(n==="research")renderBenchmarks();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll(".nav[data-section]").forEach(e=>e.addEventListener("click",()=>changeSection(e.dataset.section)));
+
+const RESEARCH_KEY="davylab-topic-research-v1";
+let benchmarks=loadBenchmarks(),seriesCandidates=[];
+function loadBenchmarks(){try{const x=JSON.parse(localStorage.getItem(RESEARCH_KEY)||"[]");return Array.isArray(x)?x:[]}catch{return[]}}
+function saveBenchmarks(){localStorage.setItem(RESEARCH_KEY,JSON.stringify(benchmarks));renderBenchmarks()}
+function renderBenchmarks(){const el=$("benchmarkList");if(!el)return;if(!benchmarks.length){el.innerHTML='<div class="growth-empty">还没有对标记录。仅记录你实际查看过的账号和文章。</div>';return}el.innerHTML=benchmarks.map((x,i)=>'<div class="growth-item"><div class="growth-item-head"><div><h3>'+safe(x.name)+'</h3><p>'+safe(x.niche||"未分类")+' · '+safe(x.pattern||"尚未补充观察")+'</p>'+(x.url?'<p><a href="'+safeUrl(x.url)+'" target="_blank" rel="noopener">打开来源 ↗</a></p>':"")+'</div><button class="btn small" data-benchmark-delete="'+i+'">删除</button></div></div>').join("");el.querySelectorAll("[data-benchmark-delete]").forEach(b=>b.addEventListener("click",()=>{benchmarks.splice(+b.dataset.benchmarkDelete,1);saveBenchmarks()}))}
+$("benchmarkForm")?.addEventListener("submit",e=>{e.preventDefault();const name=$("benchmarkName").value.trim();if(!name)return;benchmarks.unshift({name,url:$("benchmarkUrl").value.trim(),niche:$("benchmarkNiche").value.trim(),pattern:$("benchmarkPattern").value.trim(),createdAt:new Date().toISOString()});saveBenchmarks();e.target.reset();toast("对标记录已保存到本机")});
+function buildResearchPrompt(){const niche=$("researchNiche").value.trim();if(!niche){toast("先填写想研究的领域");return""}return [
+"你是 DAVYLAB 公众号内容策略研究员。请围绕指定领域做一份可执行、证据透明的赛道研究。",
+"【研究领域】"+niche,"【目标读者】"+($("researchAudience").value.trim()||"普通读者，按领域再细分"),
+"【目标】"+$("researchGoal").value,"【更新节奏】"+$("researchFrequency").value,
+"【补充背景】"+$("researchContext").value.trim(),
+"请按以下结构输出：",
+"1. 领域边界与读者真实需求；区分已验证证据和推测。",
+"2. 5—8 个细分内容方向，分别说明读者价值、可持续性、差异化和事实/版权风险。",
+"3. 适合起步的首选方向及理由；不承诺流量或涨粉。",
+"4. 目标读者画像、常见问题、搜索表达和内容场景。",
+"5. 对标账号研究方法：建议检索关键词、需观察的公开字段、近期代表内容；没有核实的账号和数据不得编造。",
+"6. 前 10 篇连续选题，按由浅入深排序，给出标题、核心角度、读者收获和核查来源方向。",
+"7. 文章模板、配图形式、更新节奏和 30 天复盘指标。",
+"要求：使用最新可靠来源并附链接与日期；无法访问或无法核实的内容明确标记待核实；不要编造粉丝数、阅读量、变现数据或平台算法规则。",
+"输出应简洁、能直接用于 DAVYLAB 公众号选题工作台。"
+].join("\n")}
+$("researchGenerate")?.addEventListener("click",()=>{$("researchPrompt").value=buildResearchPrompt();if($("researchPrompt").value)toast("研究指令已生成")});
+$("researchCopy")?.addEventListener("click",()=>copyText($("researchPrompt").value));
+$("researchClear")?.addEventListener("click",()=>{["researchNiche","researchAudience","researchContext","researchPrompt","benchmarkName","benchmarkUrl","benchmarkNiche","benchmarkPattern","seriesTheme","seriesPrompt","seriesPaste","seriesPreview","templatePrompt"].forEach(id=>{const e=$(id);if(e)e.value??(e.textContent="")});seriesCandidates=[];toast("当前表单已清空；已保存的对标记录未删除")});
+function buildSeriesPrompt(){const theme=$("seriesTheme").value.trim();if(!theme){toast("先填写系列主题");return""}return ["你是 DAVYLAB 公众号主编。请为以下主题设计一个可连续更新的系列选题。","主题："+theme,"目标读者："+($("researchAudience").value.trim()||"该主题的普通读者"),"数量："+$("seriesCount").value+" 条","结构："+$("seriesType").value,"每条严格输出一行：编号｜文章标题｜核心角度｜读者收获｜需要核实的资料。","选题要有递进关系、避免重复，每篇都具备独立价值；兼顾收藏、转发与长期内容资产，但不承诺流量。","事实性内容标注需要查证的来源方向，不要虚构数据或对标案例。"].join("\n")}
+$("seriesGenerate")?.addEventListener("click",()=>{$("seriesPrompt").value=buildSeriesPrompt();if($("seriesPrompt").value)toast("系列选题指令已生成")});
+$("seriesCopy")?.addEventListener("click",()=>copyText($("seriesPrompt").value));
+function parseSeries(){const raw=$("seriesPaste").value.trim();if(!raw){toast("先粘贴 AI 生成的选题清单");return}seriesCandidates=raw.split(/\n+/).map((line,i)=>{const p=line.split(/[｜|]/).map(x=>x.trim()).filter(Boolean);if(!p.length)return null;const title=p.length>=3?p[1]:p[0].replace(/^\d+[.、)）\s]*/,"");const angle=p.length>=3?p.slice(2).join("；"):"系列主题："+$("seriesTheme").value.trim();return title?{title,angle}:null}).filter(Boolean);renderSeriesPreview()}
+function renderSeriesPreview(){const el=$("seriesPreview");if(!seriesCandidates.length){el.innerHTML='<div class="growth-empty">未解析到有效标题。</div>';return}el.innerHTML=seriesCandidates.map((x,i)=>'<div class="growth-item"><div class="growth-item-head"><div><span class="growth-badge">'+String(i+1).padStart(2,"0")+'</span><h3>'+safe(x.title)+'</h3><p>'+safe(x.angle)+'</p></div></div></div>').join("")}
+$("seriesParse")?.addEventListener("click",parseSeries);
+function addCandidatesToTopics(){if(!seriesCandidates.length){parseSeries();if(!seriesCandidates.length)return}let added=0;seriesCandidates.forEach(x=>{if(topics.some(t=>t.title.trim()===x.title.trim()))return;topics.unshift({id:uid(),title:x.title,angle:x.angle,summary:"来自 DAVYLAB 系列选题研究；加入后请补充来源和事实核查。",column:$("researchNiche").value.trim()||$("seriesTheme").value.trim()||"系列内容",format:"文章",status:"inbox",plannedDate:"",scores:{reader:3,timely:3,practical:3,distinct:3,brand:4},createdAt:new Date().toISOString(),origin:"topic-research"}) ;added++});if(added)saveTopics();toast("已加入 "+added+" 条选题；重复标题已跳过");changeSection("library")}
+$("seriesBatchAdd")?.addEventListener("click",addCandidatesToTopics);
+$("researchAddAll")?.addEventListener("click",addCandidatesToTopics);
+const TEMPLATE_TEXT={
+ "字词知识":"围绕一个生僻字或易错字创作：生活场景引入 → 常见误读/误写 → 权威词典读音 → 字形与字义 → 可核验出处 → 古今例句 → 记忆方法 → 互动结尾。必须使用权威词典、古籍或可靠语言资料核实，区分异读与误读，不编造字源。",
+ "文化典故":"围绕一个成语或典故创作：现代场景 → 准确释义 → 原始出处 → 历史背景 → 原义与现代用法变化 → 真实例句 → 常见误用。出处、人物、年代和引文必须逐项核验。",
+ "AI 实操":"围绕一个 AI 工具或方法创作：真实痛点 → 工具定位与使用条件 → 可复现步骤 → 实际案例与结果证据 → 常见失败及解决 → 适用边界 → 可复制清单。所有产品能力、版本、价格与截图必须有来源，不得伪造实测。"
+};
+document.querySelectorAll(".research-template").forEach(b=>b.addEventListener("click",()=>{$("templatePrompt").value="你是 DAVYLAB 微信公众号编辑。请按以下模板研究并创作，先核查资料，再输出提纲与素材清单。\n\n"+TEMPLATE_TEXT[b.dataset.template]+"\n\n请先提出 5 个不同选题，不要直接编造未经核实的事实。";toast("模板指令已准备")}));
+$("templateCopy")?.addEventListener("click",()=>copyText($("templatePrompt").value));
+$("templateUse")?.addEventListener("click",()=>{const t=$("templatePrompt").value;if(!t){toast("先选择一个模板");return}$("seriesPrompt").value=t; $("seriesTheme").value=$("researchNiche").value||"围绕所选模板设计系列选题";$("seriesPrompt").scrollIntoView({behavior:"smooth",block:"center"});toast("模板已放入系列选题工作区")});
+function copyText(value){if(!value){toast("没有可复制的内容");return}if(navigator.clipboard?.writeText){navigator.clipboard.writeText(value).then(()=>toast("已复制")).catch(()=>fallbackCopy(value))}else fallbackCopy(value)}
+function fallbackCopy(value){const t=document.createElement("textarea");t.value=value;document.body.appendChild(t);t.select();try{document.execCommand("copy");toast("已复制")}catch{toast("复制失败，请手动选择文本")}t.remove()}
+
 function fmtDate(s){try{return new Intl.DateTimeFormat("zh-CN",{month:"2-digit",day:"2-digit"}).format(new Date(s+"T00:00:00"))}catch{return s}}
 function ago(s){if(!s)return"时间未知";const d=new Date(s);if(Number.isNaN(d.getTime()))return"时间未知";const h=Math.round((Date.now()-d.getTime())/3600000);return h<0?"刚刚":h<24?h+" 小时前":Math.floor(h/24)+" 天前"}
 function radarTheme(x){const s=[x.title,x.summary,x.why,x.source].join(" ").toLowerCase();if(/agent|智能体|自动化|workflow|robot|机器人|代理/.test(s))return"agents";if(/model|模型|llm|gpt|deepseek|算力|chip|芯片|gpu|推理/.test(s))return"models";if(/融资|投资|市场|商业|revenue|business|估值|公司|enterprise|企业|用户增长/.test(s))return"business";if(/安全|隐私|治理|监管|policy|safety|security|copyright|版权/.test(s))return"safety";if(/图像|视频|设计|创作|image|video|creative|content|内容生成|音乐/.test(s))return"creative";if(/app|应用|产品|product|平台|software|开源|skill|developer|编程|代码|coding/.test(s))return"products";return"other"}
