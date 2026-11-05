@@ -91,6 +91,47 @@ class QualityGateTests(unittest.TestCase):
         self.assertEqual(story["image_url"], fallback)
         self.assertEqual(repair["reason"], "same_day_content_duplicate")
 
+    def test_duplicate_primary_skips_duplicate_fallback_and_uses_next_candidate(self):
+        primary = "https://images.example/duplicate-primary.jpg"
+        duplicate_fallback = "https://images.example/duplicate-fallback.jpg"
+        unique_fallback = "https://images.example/unique-fallback.jpg"
+        story = {
+            "title_zh":"Compute story",
+            "image_url":primary,
+            "image_fallback_url":duplicate_fallback,
+            "image_fallback_candidates":[duplicate_fallback, unique_fallback],
+            "image_match_status":"thematic_fallback",
+            "image_alt":"主题配图（非新闻现场）",
+        }
+        current = [{"title":"Earlier story","sha256":"duplicate-sha","phash":None}]
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   side_effect=[("duplicate-sha", None), ("duplicate-sha", None), ("unique-sha", None)]):
+            error, record, repair = verify_and_repair_story_image(story, {}, current, {})
+        self.assertIsNone(error)
+        self.assertEqual(record["url"], unique_fallback)
+        self.assertEqual(story["image_url"], unique_fallback)
+        self.assertEqual(repair["fallback_candidates_checked"], 2)
+
+    def test_duplicate_primary_blocks_only_after_all_fallback_candidates_fail(self):
+        primary = "https://images.example/duplicate-primary.jpg"
+        fallback_one = "https://images.example/duplicate-fallback-one.jpg"
+        fallback_two = "https://images.example/duplicate-fallback-two.jpg"
+        story = {
+            "title_zh":"Compute story",
+            "image_url":primary,
+            "image_fallback_url":fallback_one,
+            "image_fallback_candidates":[fallback_one, fallback_two],
+            "image_match_status":"thematic_fallback",
+            "image_alt":"主题配图（非新闻现场）",
+        }
+        current = [{"title":"Earlier story","sha256":"duplicate-sha","phash":None}]
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   side_effect=[("duplicate-sha", None), ("duplicate-sha", None), ("duplicate-sha", None)]):
+            error, record, repair = verify_and_repair_story_image(story, {}, current, {})
+        self.assertEqual(error["type"], "same_day_content_duplicate")
+        self.assertIsNone(record)
+        self.assertIsNone(repair)
+
     def test_low_relevance_image_is_replaced_by_labelled_topic_fallback(self):
         fallback = "https://images.example/topic.jpg"
         story = {"title_zh":"Bank AI guidance","image_url":"https://images.example/unrelated.jpg",
