@@ -16,6 +16,13 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertLessEqual(IMAGE_MATCH_BUDGET_SECONDS, 150)
         self.assertLessEqual(STORY_IMAGE_BUDGET_SECONDS, 10)
 
+    def test_compute_fallback_pool_has_extra_server_rack_assets_for_chip_supply_stories(self):
+        story = {"title_zh":"H200 芯片库存等待进口审批"}
+        self.assertEqual(story_fallback_topic(story), "compute")
+        self.assertIn("photo-1506399558188-acca6f8cbf41", THEME_PHOTOS["compute"])
+        self.assertIn("photo-1698668975271-2ba9a323be6b", THEME_PHOTOS["compute"])
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["compute"])), 8)
+
     def test_theme_backup_skips_images_already_used_this_week(self):
         story = {"title_zh":"AI smartphone product launch"}
         topic = story_fallback_topic(story)

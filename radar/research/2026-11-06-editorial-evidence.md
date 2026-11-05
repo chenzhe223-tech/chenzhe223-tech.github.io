@@ -40,3 +40,9 @@
 - 2026-11-06 is ISO 2026-W45. Shared `poster_style_metadata` algorithm selects `geometric-navy`, cycle index 44, template 2.4.0. Retry must preserve this style.
 - QR target is exactly `https://chenzhe223-tech.github.io/radar/daily/`.
 - A final claim of delivery requires workflow evidence, final PNG decode, HTTP/redirect check and post-deployment live asset revalidation. Phone-camera scan remains manual unless actually performed.
+
+## First production attempt and repair
+- Run: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/42130454464
+- The initial news/image freshness gate blocked publication. It found one same-day image URL collision: the H200 story's final compute fallback duplicated the image already used by a DeepSeek outage story. It also flagged the Hy4 headline's "首次" wording as a superlative without a machine-recognized date.
+- Repair: remove "首次" from the Hy4 editorial wording and add the explicit date 2026-11-04; add two Unsplash server-rack topic assets to the compute fallback pool and a regression test for H200/compute routing. These are labelled topic illustrations, not news photography.
+- The failed candidate was not published. A fresh workflow run must pass all gates before any production update.

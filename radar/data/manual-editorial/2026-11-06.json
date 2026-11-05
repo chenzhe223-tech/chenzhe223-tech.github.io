@@ -61,8 +61,8 @@
     },
     {
       "id": "tencent-hy4-release-20261104",
-      "title": "腾讯混元发布 Hy4：首次加入视觉理解与电脑操作",
-      "title_zh": "腾讯混元发布 Hy4：首次加入视觉理解与电脑操作",
+      "title": "腾讯混元发布 Hy4：加入视觉理解与电脑操作",
+      "title_zh": "腾讯混元发布 Hy4：加入视觉理解与电脑操作",
       "title_en": "Tencent launches Hy4 with visual understanding and computer-use capabilities",
       "original_title": "Tencent Launches Hy4: Joining the Ranks of the World's Leading Open-Source AI Models",
       "source": "腾讯官方发布；腾讯云 ADP",
@@ -75,14 +75,14 @@
       "source_section": "china_ai_news",
       "category": "中国 AI / 开源模型与企业 Agent",
       "confidence": "high",
-      "what_zh": "腾讯混元于 11 月 4 日发布 Hy4，首次加入视觉理解和电脑操作能力，并强化长文本、长程 Agent 与工具调用。腾讯云 ADP 已接入，官方称服务支持约 105 万 Token 上下文、单次最多输出 65,536 Token；性能与任务集评测属于腾讯公布的数据。Reuters 另报道称，腾讯将其网络安全训练限制在漏洞识别和修复等防御用途，并计划公布模型权重与安全测试报告。",
+      "what_zh": "2026年11月4日，腾讯混元发布 Hy4，加入视觉理解和电脑操作能力，并强化长文本、长程 Agent 与工具调用。腾讯云 ADP 已接入，官方称服务支持约 105 万 Token 上下文、单次最多输出 65,536 Token；性能与任务集评测属于腾讯公布的数据。Reuters 另报道称，腾讯将其网络安全训练限制在漏洞识别和修复等防御用途，并计划公布模型权重与安全测试报告。",
       "why_zh": "中国模型竞争正从文本问答延伸到看图、操作软件和持续执行任务。对企业而言，真正需要验证的是跨应用任务成功率、权限控制、成本和运行记录，而不只是上下文长度。",
-      "what_en": "Tencent launched Hy4 on Nov. 4, adding visual understanding and computer use while strengthening long-context, long-horizon agent and tool-calling capabilities. Tencent Cloud ADP has integrated it; Tencent says its service supports about 1.05 million tokens of context and up to 65,536 output tokens. Performance figures are company-reported. Reuters separately reported that Tencent restricted cybersecurity training to defensive uses and plans to publish model weights and a safety-testing report.",
+      "what_en": "Tencent launched Hy4 on Nov. 4, 2026, with visual understanding and computer-use capabilities while strengthening long-context, long-horizon agent and tool-calling capabilities. Tencent Cloud ADP has integrated it; Tencent says its service supports about 1.05 million tokens of context and up to 65,536 output tokens. Performance figures are company-reported. Reuters separately reported that Tencent restricted cybersecurity training to defensive uses and plans to publish model weights and a safety-testing report.",
       "why_en": "Chinese models are moving beyond text chat toward visual input, software operation and longer-running tasks. Enterprises should test end-to-end task success, permissions, cost and observability—not context length alone.",
       "editor_judgment_zh": "发布日期、功能与服务参数来自腾讯官方发布和腾讯云 ADP；评测数字属于企业口径。网络安全训练限制由 Reuters 报道，不能等同于独立安全审计。",
       "poster_summary_zh": "Hy4 加入视觉理解与电脑操作",
       "poster_why_zh": "长程 Agent 走向企业工作台",
-      "social_what_zh": "腾讯混元发布 Hy4，首次加入视觉理解和电脑操作，并接入腾讯云 ADP。腾讯称其支持约 105 万 Token 上下文，性能数据来自企业评测。",
+      "social_what_zh": "腾讯混元于 2026 年 11 月 4 日发布 Hy4，加入视觉理解和电脑操作，并接入腾讯云 ADP。腾讯称其支持约 105 万 Token 上下文，性能数据来自企业评测。",
       "social_why_zh": "企业落地要继续验证跨软件任务、权限和运行稳定性。"
     },
     {
