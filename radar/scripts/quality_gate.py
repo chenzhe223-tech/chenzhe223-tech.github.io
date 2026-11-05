@@ -271,13 +271,23 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
     title = story_title(story)
     primary_url = image_url(story)
     fallback_url = str(story.get("image_fallback_url") or "").strip()
+    raw_fallbacks = story.get("image_fallback_candidates")
+    fallback_candidates = list(raw_fallbacks) if isinstance(raw_fallbacks, list) else []
+    if fallback_url:
+        fallback_candidates.insert(0, fallback_url)
     relevance_error = image_relevance_error(story)
     issues = [relevance_error] if relevance_error else []
     candidates = []
+    seen_candidate_urls = set()
     if not relevance_error and primary_url:
         candidates.append(("primary", primary_url))
-    if fallback_url and norm_url(fallback_url) != norm_url(primary_url):
-        candidates.append(("fallback", fallback_url))
+        seen_candidate_urls.add(norm_url(primary_url))
+    for candidate_url in fallback_candidates:
+        candidate_url = str(candidate_url or "").strip()
+        canonical_candidate = norm_url(candidate_url)
+        if canonical_candidate and canonical_candidate not in seen_candidate_urls:
+            candidates.append(("fallback", candidate_url))
+            seen_candidate_urls.add(canonical_candidate)
 
     for candidate_type, candidate_url in candidates:
         result = _image_candidate_issue(candidate_url, title, image_seen, current_images, week_urls)
@@ -290,7 +300,12 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
         repair = None
         if candidate_type == "fallback":
             story["image_url"] = candidate_url
-            story["image_fallback_url"] = primary_url
+            remaining_fallbacks = [
+                str(value) for value in fallback_candidates
+                if norm_url(str(value or "")) not in {norm_url(candidate_url), norm_url(primary_url)}
+            ]
+            story["image_fallback_candidates"] = remaining_fallbacks
+            story["image_fallback_url"] = remaining_fallbacks[0] if remaining_fallbacks else ""
             story["image_source"] = "Unsplash topic illustration"
             story["image_page_url"] = "https://unsplash.com/s/photos/artificial-intelligence"
             story["image_credit"] = "Unsplash"
@@ -306,6 +321,7 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
                 "from": primary_url,
                 "to": candidate_url,
                 "reason": issues[-1].get("type") if issues else "primary_relevance_gate",
+                "fallback_candidates_checked": len(candidates) - 1,
             }
         image_seen[record["canonical_url"]] = title
         return None, record, repair
