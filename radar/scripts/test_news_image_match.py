@@ -21,7 +21,15 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertEqual(story_fallback_topic(story), "compute")
         self.assertIn("photo-1506399558188-acca6f8cbf41", THEME_PHOTOS["compute"])
         self.assertIn("photo-1698668975271-2ba9a323be6b", THEME_PHOTOS["compute"])
-        self.assertGreaterEqual(len(set(THEME_PHOTOS["compute"])), 8)
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["compute"])), 12)
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["robot"])), 7)
+
+    def test_robot_fallback_uses_robot_specific_assets_before_general_pool(self):
+        story = {"title_zh":"ABB 工业机器人业务收购"}
+        result = _thematic_fallback(story, set())
+        robot_assets = {_theme_photo_url(pid) for pid in THEME_PHOTOS["robot"]}
+        self.assertEqual(story_fallback_topic(story), "robot")
+        self.assertIn(result["image_url"], robot_assets)
 
     def test_theme_backup_skips_images_already_used_this_week(self):
         story = {"title_zh":"AI smartphone product launch"}

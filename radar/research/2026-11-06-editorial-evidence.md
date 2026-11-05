@@ -46,3 +46,9 @@
 - The initial news/image freshness gate blocked publication. It found one same-day image URL collision: the H200 story's final compute fallback duplicated the image already used by a DeepSeek outage story. It also flagged the Hy4 headline's "首次" wording as a superlative without a machine-recognized date.
 - Repair: remove "首次" from the Hy4 editorial wording and add the explicit date 2026-11-04; add two Unsplash server-rack topic assets to the compute fallback pool and a regression test for H200/compute routing. These are labelled topic illustrations, not news photography.
 - The failed candidate was not published. A fresh workflow run must pass all gates before any production update.
+
+## Second production attempt and repair
+- Run: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/42131421651
+- The second attempt cleared the Hy4 claim wording issue and the H200 image collision. The gate then found a different same-day duplicate in a compute-category news card: its final fallback reused an image already assigned to the VINCO story.
+- Repair round 2: expand the compute illustration pool with four verified Unsplash motherboard/server-rack photos, expand the robotics pool with two verified industrial-robot photos, and add regression tests for compute-pool capacity and robot-specific fallback selection.
+- This second candidate was also blocked before poster generation or production deployment. A third workflow run must pass the complete gate.
