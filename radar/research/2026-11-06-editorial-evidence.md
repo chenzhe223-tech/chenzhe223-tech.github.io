@@ -52,3 +52,9 @@
 - The second attempt cleared the Hy4 claim wording issue and the H200 image collision. The gate then found a different same-day duplicate in a compute-category news card: its final fallback reused an image already assigned to the VINCO story.
 - Repair round 2: expand the compute illustration pool with four verified Unsplash motherboard/server-rack photos, expand the robotics pool with two verified industrial-robot photos, and add regression tests for compute-pool capacity and robot-specific fallback selection.
 - This second candidate was also blocked before poster generation or production deployment. A third workflow run must pass the complete gate.
+
+## Third production attempt and repair
+- Run: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/42132223866
+- The third attempt cleared same-day URL/content collisions and claim-provenance checks, but failed the ISO-week image-reuse gate. The final fallback photos for GPT-6 Cyber and Tencent Hy4 were perceptually similar to a photo already used on 2026-11-05 for the Kimi Hosted Agents story.
+- Repair round 3: add a dedicated cybersecurity illustration theme, prioritize cybersecurity and compute classification before the generic "agent" keyword, and add regression tests proving GPT-6 Cyber routes to security, Hy4 routes to compute, and browser agents remain product imagery.
+- This is the third and final automatic repair round. A fresh run must pass all gates; if it does not, the prior valid production version remains untouched and the 2026-11-06 report will be marked blocked.

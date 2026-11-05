@@ -350,6 +350,7 @@ THEME_PHOTOS = {
     "product": ("photo-1512941937669-90a1b58e7e9c", "photo-1498050108023-c5249f4df085", "photo-1526498460520-4c246339dccb", "photo-1516321318423-f06f85e504b3", "photo-1523726491678-bf852e717f6a"),
     "business": ("photo-1519389950473-47ba0277781c", "photo-1551288049-bebda4e38f71", "photo-1504384308090-c894fdcc538d", "photo-1521737711867-e3b97375f902", "photo-1460925895917-afdab827c52f"),
     "creative": ("photo-1470252649378-9c29740c9fa8", "photo-1523726491678-bf852e717f6a", "photo-1526374965328-7f61d4dc18c5", "photo-1550745165-9bc0b252726f", "photo-1512941937669-90a1b58e7e9c"),
+    "security": ("photo-1768839722988-91767bb82b10", "photo-1774898989484-0b9becf69efb", "photo-1614064548237-096f735f344f", "photo-1614064642578-7faacdc6336e", "photo-1526374965328-7f61d4dc18c5", "photo-1518770660439-4636190af475"),
     "general": ("photo-1531297484001-80022131f5a1", "photo-1498050108023-c5249f4df085", "photo-1519389950473-47ba0277781c", "photo-1526374965328-7f61d4dc18c5", "photo-1516321318423-f06f85e504b3", "photo-1550745165-9bc0b252726f", "photo-1526498460520-4c246339dccb", "photo-1504384308090-c894fdcc538d", "photo-1460925895917-afdab827c52f", "photo-1521737711867-e3b97375f902", "photo-1497366754035-f200968a6e72", "photo-1556761175-b413da4baf72", "photo-1522071820081-009f0129c71c", "photo-1524758631624-e2822e304c36", "photo-1522542550221-31fd19575a2d", "photo-1553877522-43269d4ea984", "photo-1517245386807-bb43f82c33c4", "photo-1552664730-d307ca884978", "photo-1522202176988-66273c2fd55f", "photo-1497366216548-37526070297c", "photo-1497366811353-6870744d04b2", "photo-1497366858526-0766cadbe8fa", "photo-1556761175-129418cb2dfe", "photo-1556761175-4b46a572b786", "photo-1556761175-136f8a6b7a44", "photo-1500530855697-b586d89ba3ee", "photo-1500534623283-312aade485b7", "photo-1500534314209-a25ddb2bd429", "photo-1470770841072-f978cf4d019e", "photo-1485470733090-0aae1788d5af", "photo-1464822759023-fed622ff2c3b", "photo-1501785888041-af3ef285b470"),
 }
 
@@ -390,6 +391,9 @@ def derive_visual_search_queries(story: dict) -> list[str]:
 
 def story_fallback_topic(story: dict) -> str:
     value = (story_context(story) + " " + str(story.get("original_title") or "")).lower()
+    # Match high-signal physical/security/compute topics before generic "agent" wording.
+    if re.search(r"(cybersecurity|cyber security|security research|vulnerability|exploit|漏洞|网络安全|安全研究|漏洞利用|攻防)", value):
+        return "security"
     # Physical robotics only; software agents and coding agents are not robot photography.
     if re.search(r"(robot|robotics|机器人|具身智能|人形机器人|机器狗|自动驾驶)", value):
         return "robot"
@@ -397,10 +401,12 @@ def story_fallback_topic(story: dict) -> str:
         return "product"
     if re.search(r"(servicenow|enterprise workflow|business workflow|企业工作流|企业软件|工单|it service management|业务流程)", value):
         return "business"
-    if re.search(r"(coding agent|software agent|code agent|developer tool|github|飞书|代码智能体|编码智能体|工作器|路由|开发者工具|智能体|agent)", value):
+    if re.search(r"(coding agent|software agent|code agent|developer tool|github|飞书|代码智能体|编码智能体|工作器|路由|开发者工具)", value):
         return "product"
     if re.search(r"(chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|大模型|模型|推理)", value):
         return "compute"
+    if re.search(r"(智能体|agent)", value):
+        return "product"
     if re.search(r"(image|video|design|creative|visual|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频)", value):
         return "creative"
     if re.search(r"(phone|mobile|app|software|product|platform|应用|手机|软件|产品|开源)", value):
@@ -443,8 +449,8 @@ def _thematic_fallback(story: dict, used: set[str]) -> dict:
     title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI news")
     if not url:
         return {"image_url":"","image_source":"No verified unique image available","image_page_url":"","image_credit":"","image_license":"","image_license_url":"","image_alt":"配图暂缺 · 未找到符合本周去重规则的唯一图片","image_match_status":"image_unavailable","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
-    labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration","product":"AI product / software topic illustration","business":"AI business / industry topic illustration","creative":"AI creativity topic illustration","general":"AI technology topic illustration"}
-    slugs = {"robot":"robotics","compute":"computer-technology","product":"technology","business":"business-technology","creative":"creative-technology","general":"artificial-intelligence"}
+    labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration","product":"AI product / software topic illustration","business":"AI business / industry topic illustration","creative":"AI creativity topic illustration","security":"cybersecurity / digital protection topic illustration","general":"AI technology topic illustration"}
+    slugs = {"robot":"robotics","compute":"computer-technology","product":"technology","business":"business-technology","creative":"creative-technology","security":"cybersecurity","general":"artificial-intelligence"}
     backup_candidates = _theme_backup_candidates(story,url,used,limit=12)
     return {"image_url":url,"image_fallback_url":backup_candidates[0] if backup_candidates else "","image_fallback_candidates":backup_candidates,"image_source":"Unsplash topic illustration","image_page_url":"https://unsplash.com/s/photos/"+slugs[topic],"image_credit":"Unsplash","image_license":"Unsplash License; review source terms before reuse","image_license_url":"https://unsplash.com/license","image_alt":"主题配图（非新闻现场）："+labels[topic]+": "+title,"image_match_status":"thematic_fallback","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
 

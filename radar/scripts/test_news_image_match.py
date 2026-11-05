@@ -23,6 +23,28 @@ class NewsImageMatchTests(unittest.TestCase):
         self.assertIn("photo-1698668975271-2ba9a323be6b", THEME_PHOTOS["compute"])
         self.assertGreaterEqual(len(set(THEME_PHOTOS["compute"])), 12)
         self.assertGreaterEqual(len(set(THEME_PHOTOS["robot"])), 7)
+        self.assertGreaterEqual(len(set(THEME_PHOTOS["security"])), 6)
+
+    def test_security_and_compute_topics_precede_generic_agent_keyword(self):
+        self.assertEqual(
+            story_fallback_topic({"title_zh":"GPT-6 Cyber 网络安全研究 Agent"}),
+            "security",
+        )
+        self.assertEqual(
+            story_fallback_topic({"title_zh":"Tencent Hy4 long-horizon agent model"}),
+            "compute",
+        )
+        self.assertEqual(
+            story_fallback_topic({"title_zh":"AI agent for browser automation"}),
+            "product",
+        )
+
+    def test_security_fallback_uses_security_specific_assets(self):
+        story = {"title_zh":"GPT-6 Cyber 网络安全研究"}
+        result = _thematic_fallback(story, set())
+        security_assets = {_theme_photo_url(pid) for pid in THEME_PHOTOS["security"]}
+        self.assertEqual(story_fallback_topic(story), "security")
+        self.assertIn(result["image_url"], security_assets)
 
     def test_robot_fallback_uses_robot_specific_assets_before_general_pool(self):
         story = {"title_zh":"ABB 工业机器人业务收购"}
@@ -158,7 +180,7 @@ class NewsImageMatchTests(unittest.TestCase):
 
     def test_thematic_fallback_pool_supports_weekly_unique_images(self):
         self.assertGreaterEqual(len(set(THEME_PHOTOS["general"])), 25, "General fallback pool must support a full weekly run without exhausting unique images")
-        for topic in ("robot", "compute", "product", "business", "creative"):
+        for topic in ("robot", "compute", "product", "business", "creative", "security"):
             self.assertGreaterEqual(len(set(THEME_PHOTOS[topic])), 5)
         self.assertTrue(all(photo_id.startswith("photo-") for values in THEME_PHOTOS.values() for photo_id in values))
 
