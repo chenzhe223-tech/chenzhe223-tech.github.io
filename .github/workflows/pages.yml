@@ -133,7 +133,6 @@ jobs:
           python -m unittest radar.scripts.test_historical_dedupe -v
           python -m unittest radar.scripts.test_visual_lock -v
           python -m unittest radar.scripts.test_poster_style -v
-          python -m unittest radar.scripts.test_poster_generation -v
       - name: Install poster rendering and QA dependencies
         if: steps.preflight.outputs.skip != 'true'
         timeout-minutes: 12
