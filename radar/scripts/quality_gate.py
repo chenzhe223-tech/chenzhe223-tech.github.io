@@ -247,7 +247,7 @@ def evaluate_quality_gate(news_duplicates, china_duplicates, image_errors, week_
     blocking = bool(news_duplicates or china_duplicates or image_errors or week_image_hits or unreadable_history or skill_errors or claim_errors)
     return "FAIL" if blocking else "PASS"
 
-def _image_candidate_issue(url, title, image_seen, current_images, week_urls=None):
+def _image_candidate_issue(url, title, image_seen, current_images, week_urls=None, historical_week_images=None):
     canonical = norm_url(url)
     week_urls = week_urls or {}
     if not canonical:
@@ -263,10 +263,16 @@ def _image_candidate_issue(url, title, image_seen, current_images, week_urls=Non
     for old in current_images:
         if sha == old["sha256"] or (ph and old.get("phash") and hamming(ph, old["phash"]) <= 4):
             return {"type":"same_day_content_duplicate","title":title,"url":url,"other_title":old["title"],"sha256":sha}
+    # IMPORTANT: Check historical image CONTENT before accepting the candidate.
+    # Previously this comparison happened after selecting a fallback, when there
+    # was no opportunity to try the next candidate. Never bypass the P0 gate.
+    for old in historical_week_images or []:
+        if sha == old["sha256"] or (ph and old.get("phash") and hamming(ph, old["phash"]) <= 4):
+            return {"type":"same_week_content_reuse","title":title,"url":url,"history":old}
     return None, {"title":title,"url":url,"canonical_url":canonical,"sha256":sha,"phash":ph}
 
 
-def verify_and_repair_story_image(story, image_seen, current_images, week_urls=None):
+def verify_and_repair_story_image(story, image_seen, current_images, week_urls=None, historical_week_images=None):
     """Use a declared fallback only after it independently passes the same image gates."""
     title = story_title(story)
     primary_url = image_url(story)
@@ -290,7 +296,7 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
             seen_candidate_urls.add(canonical_candidate)
 
     for candidate_type, candidate_url in candidates:
-        result = _image_candidate_issue(candidate_url, title, image_seen, current_images, week_urls)
+        result = _image_candidate_issue(candidate_url, title, image_seen, current_images, week_urls, historical_week_images)
         if isinstance(result, tuple):
             issue, record = result
         else:
@@ -402,27 +408,8 @@ def main():
         for story in published_image_records(doc,day):
             u=image_url(story)
             if u: week_urls[norm_url(u)]={"date":day,"title":story_title(story),"url":u}
-    # Current-day unique-image checks: verify primary assets, then try a declared
-    # topic-image backup only if it is also unused in the current ISO week.
-    image_errors=[]; current_images=[]; image_seen={}; image_fallback_repairs=[]
-    image_stories=[]
-    for key in ("top5","china_ai_news"):
-        arr=report.get(key)
-        if isinstance(arr,list):
-            image_stories.extend(x for x in arr if isinstance(x,dict) and image_url(x))
-    # avoid repeated entries from the same object across report sections
-    unique_story={}
-    for s in image_stories: unique_story[story_id(s)]=s
-    for s in unique_story.values():
-        error, image_record, repair = verify_and_repair_story_image(s, image_seen, current_images, week_urls)
-        if error:
-            image_errors.append(error)
-        else:
-            current_images.append(image_record)
-            if repair:
-                image_fallback_repairs.append(repair)
-    # Compare the verified current images to historical URL and content fingerprints.
-    week_image_hits=[]
+    # Preload the published image history before candidate selection so every
+    # fallback can be checked against both historical URLs and image CONTENT.
     historical_week_images=[]
     historical_image_failures=[]
     verified_historical_urls=set()
@@ -447,6 +434,27 @@ def main():
                 historical_week_images.append({"date":day,"title":story_title(story),"url":u,"canonical_url":canonical,"sha256":sha,"phash":ph})
             except Exception as exc:
                 historical_image_failures.append({"date":day,"title":story_title(story),"url":u,"error":type(exc).__name__})
+    # Current-day unique-image checks: verify primary assets, then try a declared
+    # topic-image backup only if it is also unused in the current ISO week.
+    image_errors=[]; current_images=[]; image_seen={}; image_fallback_repairs=[]
+    image_stories=[]
+    for key in ("top5","china_ai_news"):
+        arr=report.get(key)
+        if isinstance(arr,list):
+            image_stories.extend(x for x in arr if isinstance(x,dict) and image_url(x))
+    # avoid repeated entries from the same object across report sections
+    unique_story={}
+    for s in image_stories: unique_story[story_id(s)]=s
+    for s in unique_story.values():
+        error, image_record, repair = verify_and_repair_story_image(s, image_seen, current_images, week_urls, historical_week_images)
+        if error:
+            image_errors.append(error)
+        else:
+            current_images.append(image_record)
+            if repair:
+                image_fallback_repairs.append(repair)
+    # Verify no historical match escaped candidate-selection safeguards.
+    week_image_hits=[]
     for img in current_images:
         old=week_urls.get(img["canonical_url"])
         if old:
