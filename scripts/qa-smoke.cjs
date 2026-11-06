@@ -405,17 +405,21 @@ const mark = (status, name, detail = '') => {
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ total_count: 1, incomplete_results: false, items: [repo] }) });
       });
       let kpOwnRepoScanCalls = 0;
-      await kp.route('https://api.github.com/users/chenzhe223-tech/repos**', async route => {
+      await kp.route('https://api.github.com/users/keypocket-fixture/repos**', async route => {
         kpOwnRepoScanCalls++;
         const repos = [
-          { id: 990101, name: 'qa-auto-scan-app', full_name: 'chenzhe223-tech/qa-auto-scan-app', html_url: 'https://github.com/chenzhe223-tech/qa-auto-scan-app', description: 'QA fixture web application', owner: { login: 'chenzhe223-tech' }, private: false, fork: false, archived: false, disabled: false, language: 'JavaScript', homepage: 'https://example.test/qa-app', topics: ['web-app','qa-fixture'] },
-          { id: 990102, name: 'qa-auto-scan-skill', full_name: 'chenzhe223-tech/qa-auto-scan-skill', html_url: 'https://github.com/chenzhe223-tech/qa-auto-scan-skill', description: 'QA fixture Claude agent skill', owner: { login: 'chenzhe223-tech' }, private: false, fork: false, archived: false, disabled: false, language: 'Markdown', homepage: null, topics: ['agent-skills','qa-fixture'] },
-          { id: 990103, name: 'qa-fork-ignore', full_name: 'chenzhe223-tech/qa-fork-ignore', html_url: 'https://github.com/chenzhe223-tech/qa-fork-ignore', description: 'Must be ignored', owner: { login: 'chenzhe223-tech' }, private: false, fork: true, archived: false, disabled: false, language: 'JavaScript', topics: [] }
+          { id: 990101, name: 'qa-auto-scan-app', full_name: 'keypocket-fixture/qa-auto-scan-app', html_url: 'https://github.com/keypocket-fixture/qa-auto-scan-app', description: 'QA fixture web application', owner: { login: 'keypocket-fixture' }, private: false, fork: false, archived: false, disabled: false, language: 'JavaScript', homepage: 'https://example.test/qa-app', topics: ['web-app','qa-fixture'] },
+          { id: 990102, name: 'qa-auto-scan-skill', full_name: 'keypocket-fixture/qa-auto-scan-skill', html_url: 'https://github.com/keypocket-fixture/qa-auto-scan-skill', description: 'QA fixture Claude agent skill', owner: { login: 'keypocket-fixture' }, private: false, fork: false, archived: false, disabled: false, language: 'Markdown', homepage: null, topics: ['agent-skills','qa-fixture'] },
+          { id: 990103, name: 'qa-fork-ignore', full_name: 'keypocket-fixture/qa-fork-ignore', html_url: 'https://github.com/keypocket-fixture/qa-fork-ignore', description: 'Must be ignored', owner: { login: 'keypocket-fixture' }, private: false, fork: true, archived: false, disabled: false, language: 'JavaScript', topics: [] }
         ];
         await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(repos) });
       });
       await kp.locator('[data-module="projects"]').click();
       await kp.locator('.project-tools-menu').evaluate(el => { el.open = true; });
+      mark(kpOwnRepoScanCalls===0 && (await kp.locator('#githubAutoScanStatus').innerText()).includes('选择')?'PASS':'FAIL','新用户须先选择仓库账号');
+      await kp.locator('#editPublicOwner').click();
+      await kp.locator('#publicOwner').fill('KeyPocket-Fixture');
+      await kp.locator('#publicOwnerForm button[type=submit]').click();
       await kp.locator('#importSkillBtn').click();
       await kp.waitForSelector('#skillSearchForm', { timeout: 5000 });
       await kp.locator('#skillNameInput').fill('geo-sleuth');

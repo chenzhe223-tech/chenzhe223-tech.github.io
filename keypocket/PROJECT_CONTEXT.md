@@ -1,6 +1,6 @@
 # KeyPocket｜项目唯一状态文件
 
-最后更新：2026-11-04（UTC+8）
+最后更新：2026-11-06（UTC+8）
 产品版本目标：V2.0
 正式应用：https://chenzhe223-tech.github.io/keypocket/
 代码仓库：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io（应用目录：`keypocket/`）
@@ -272,3 +272,11 @@ P2：
 - 本次交接文件创建 commit：`0cb10ea0dcc62abba5341754bf2c32d9e4b74e8e`。
 - 交接基准 SHA：`194a5fd2d571386654a064c42ae5a54299767061`；交接文件提交后仍需新对话重新核对 main 最新 SHA 和 Actions。
 - 最终验收：Pages `41812576668`、Browser QA `41812576957`、KeyPocket Skill Handoff QA `41812576892` 均 SUCCESS。
+
+## 2026-11-06 · App Store 准备 P0 第一批
+- 本轮以 main 55f4369 为起点，资源标记 kp-v2-recovery-20261106-01。修改 app.js、index.html、qa-smoke.cjs，新增 privacy.html 和 scripts/e2e-keypocket-recovery.cjs。
+- 首次使用不扫描固定作者。通过项目页「导入与管理工具 → 选择仓库账号」指定公开 owner；可清空停止。选择原账号即可恢复原有归类，原加密记录保留。手动公开仓库导入仍可预览选择。此偏好属于本机浏览器，不代表 OAuth 授权。
+- 允许登录后先读取恢复点；恢复时单独验证原跨设备口令，新设备无需先同步。恢复将活动记录与回收站标记一次写入同一本机事务，用户核对后手动恢复同步。云快照清理仅处理严格早于本次快照的其他行，避免并发设备互删最新备份；相同时间的候选可能短暂并存。失败的本机备份显示错误及上次成功时间。
+- Web 设置新增隐私说明；已确认生产数据库同时包含 Dashboard 与 KeyPocket 对象。账号注销仍待产品隔离与真实测试，勿直接删除可能共享的认证主体。
+- 验收：Node 语法、Handoff source contract、Radar collector 自测及 390px Chromium 合成端到端回归通过。真实 Web Crypto 和 IndexedDB；云 API 使用模拟响应；新设备恢复 2 条活动 Key、2 个 Skill、1 条已删除 Key；错误口令保留原记录，全流程无云写入。运行：先启动仓库根目录静态服务，再以 KP_TEST_URL 指向本机页面执行 node scripts/e2e-keypocket-recovery.cjs（需要 Playwright Chromium）。
+- 交接：按本次提交核对 Pages 和 Browser QA。下一项是独立真实账号 A/B 权限隔离、真实双设备写入与撤销、邮箱交付、iPhone Safari/微信；此后再做 iOS/TestFlight。无真机或真实邮件结果，不标记 App Store 可提交。

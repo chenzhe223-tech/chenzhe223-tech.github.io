@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-mobile-settings-20261104-02';
+window.__kpBuildVersion='kp-v2-recovery-20261106-01';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -82,7 +82,7 @@ $('#importBtn').addEventListener('click',()=>$('#backupFile').click());$('#backu
 window.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'&&!$('#mainView').classList.contains('hidden')){e.preventDefault();$('#searchInput').focus();}});
 
 // Project pocket: metadata is encrypted before entering IndexedDB; GitHub URLs are saved locally without OAuth tokens.
-function isOwnGithubRepo(url){const path=githubRepoPath(url||'');return !!path&&path.owner.toLowerCase()==='chenzhe223-tech';}
+function isOwnGithubRepo(url){const path=githubRepoPath(url||'');return !!path&&path.owner.toLowerCase()===kpGithubOwner();}
 function projectSource(p){if(isOwnGithubRepo(p.repoUrl))return 'mine';if(p.repoUrl)return 'external';return 'other';}
 function isExternalSkillProject(p){return projectSource(p)==='external'&&(/skill/i.test([p.name,p.category,p.tags].join(' '))||/skill/i.test(p.notes||'')||/AI 前沿简报|公开仓库/.test(p.notes||''));}
 function isOwnSkillProject(p){return projectSource(p)==='mine'&&(/skill/i.test([p.name,p.category,p.tags].join(' '))||/skill/i.test(p.notes||''));}
@@ -267,7 +267,21 @@ $('#settingsBtn')?.addEventListener('click',()=>setModule('settings'));
 $('#settingsReturnBtn')?.addEventListener('click',()=>setModule(kpLastModule));
 document.querySelectorAll('[data-settings-return]').forEach(b=>b.addEventListener('click',()=>setModule('settings')));
 function githubCategory(repo){const s=((repo.name||'')+' '+(repo.description||'')+' '+(repo.language||'')+' '+(repo.topics||[]).join(' ')).toLowerCase();if(/ai|llm|gpt|agent|model|prompt|deepseek/.test(s))return 'AI 工具';if(/portfolio|personal site|个人网站|homepage/.test(s))return '个人网站';if(/mini.?program|小程序|wechat/.test(s))return '小程序';if(/dashboard|看板|analytics|chart/.test(s))return 'Web 应用';return 'Web 应用';}
-const KP_GITHUB_OWNER='chenzhe223-tech',KP_REPO_SCAN_KEY='kp.repo-scan.last.v1';
+const KP_OWNER_PREF='kp.github.public-owner.v1';
+function kpGithubOwner(){return (localStorage.getItem(KP_OWNER_PREF)||'').toLowerCase();}
+function editPublicOwner(){
+ if(kpRepoScanPromise){showToast('请等待当前扫描完成。');return;}
+ openModal('<h2>选择我的公开仓库</h2><form id="publicOwnerForm"><div class="field"><label for="publicOwner">GitHub 用户名或组织名</label><input id="publicOwner" maxlength="39" autocapitalize="none" spellcheck="false"></div><p class="sub">保存后会扫描此账号的公开原创仓库并自动收录，以后每 24 小时进入项目页时更新。清空并保存可停止扫描，保留已收录项目。</p><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button class="btn primary" type="submit">保存设置</button></div></form>');
+ const input=$('#publicOwner');input.value=kpGithubOwner();
+ $('#publicOwnerForm').addEventListener('submit',e=>{
+  e.preventDefault();const owner=input.value.trim().toLowerCase();
+  if(owner&&!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(owner)){input.setCustomValidity('请填写有效的 GitHub 用户名。');input.reportValidity();return;}
+  if(owner)localStorage.setItem(KP_OWNER_PREF,owner);else localStorage.removeItem(KP_OWNER_PREF);
+  closeModal();window.renderProjects();scanOwnGithubRepos({automatic:true});
+ });
+ input.addEventListener('input',()=>input.setCustomValidity(''));
+}
+$('#editPublicOwner')?.addEventListener('click',editPublicOwner);
 let kpRepoScanPromise=null;
 function kpRepoScanStatus(message,type='info'){
  const el=$('#githubAutoScanStatus');if(!el)return;
@@ -280,8 +294,11 @@ function kpIsSkillRepo(repo){
 async function scanOwnGithubRepos(options={}){
  const automatic=options.automatic===true;
  if(!cryptoKey){kpRepoScanStatus('请先解锁 KeyPocket，再扫描 GitHub 仓库。','error');return;}
+ const owner=kpGithubOwner();
+ if(!owner){kpRepoScanStatus('选择 GitHub 用户名后可启用公开仓库扫描。');if(!automatic)editPublicOwner();return;}
+ const scanKey='kp.repo-scan.last.v2.'+owner;
  if(automatic){
-  const last=Number(localStorage.getItem(KP_REPO_SCAN_KEY))||0;
+  const last=Number(localStorage.getItem(scanKey))||0;
   if(last&&Date.now()-last<24*60*60*1000){
    kpRepoScanStatus('上次自动扫描：'+new Date(last).toLocaleString()+'。每 24 小时自动扫描一次；也可点击「扫描我的仓库」立即刷新。','info');
    return;
@@ -290,14 +307,14 @@ async function scanOwnGithubRepos(options={}){
  if(kpRepoScanPromise)return kpRepoScanPromise;
  kpRepoScanPromise=(async()=>{
   const button=$('#scanOwnReposBtn');if(button){button.disabled=true;button.textContent='扫描中…';}
-  kpRepoScanStatus('正在扫描 '+KP_GITHUB_OWNER+' 的公开仓库…','info');
+  kpRepoScanStatus('正在扫描 '+owner+' 的公开仓库…','info');
   try{
    const repos=[];let truncated=false;
    for(let page=1;page<=10;page++){
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
     let response;
     try{
-     response=await fetch('https://api.github.com/users/'+encodeURIComponent(KP_GITHUB_OWNER)+'/repos?type=owner&sort=created&direction=desc&per_page=100&page='+page,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},signal:controller.signal});
+     response=await fetch('https://api.github.com/users/'+encodeURIComponent(owner)+'/repos?type=owner&sort=created&direction=desc&per_page=100&page='+page,{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'},signal:controller.signal});
     }catch(error){if(error.name==='AbortError')throw Error('GitHub 仓库扫描超时，请稍后重试。');throw error;}
     finally{clearTimeout(timer);}
     if(!response.ok){
@@ -309,10 +326,11 @@ async function scanOwnGithubRepos(options={}){
     if(batch.length<100)break;
     if(page===10)truncated=true;
    }
-   const owned=repos.filter(r=>r&&r.owner?.login?.toLowerCase()===KP_GITHUB_OWNER&&!r.private&&!r.fork&&!r.archived&&!r.disabled&&r.html_url);
+   const owned=repos.filter(r=>r&&r.owner?.login?.toLowerCase()===owner&&!r.private&&!r.fork&&!r.archived&&!r.disabled&&r.html_url);
    const known=new Set(projects.map(p=>canonicalSkillRepoUrl(p.repoUrl)).filter(Boolean).map(x=>x.toLowerCase()));
    let added=0,skills=0,apps=0,skipped=0;
    for(const r of owned){
+    if(!cryptoKey||kpGithubOwner()!==owner)throw Error('仓库身份或解锁状态已改变，请重新扫描。');
     const repoUrl=canonicalSkillRepoUrl(r.html_url);if(!repoUrl)continue;
     const canonical=repoUrl.toLowerCase();if(known.has(canonical)){skipped++;continue;}
     const isSkill=kpIsSkillRepo(r),now=Date.now(),topics=Array.isArray(r.topics)?r.topics:[];
@@ -327,7 +345,7 @@ async function scanOwnGithubRepos(options={}){
     });
     await persistProject(item);projects.push(item);known.add(canonical);added++;if(isSkill)skills++;else apps++;
    }
-   localStorage.setItem(KP_REPO_SCAN_KEY,String(Date.now()));
+   localStorage.setItem(scanKey,String(Date.now()));
    window.renderProjects();
    const suffix=truncated?'；仓库数量超过本次扫描上限，后续可再次扫描':''; 
    kpRepoScanStatus('扫描完成：检查 '+owned.length+' 个公开原创仓库，新增 '+added+' 个（Skill '+skills+' 个、应用/项目 '+apps+' 个），已收录 '+skipped+' 个未重复导入。'+suffix+' 私有仓库需待 GitHub App 授权后接入。','ok');
@@ -343,7 +361,7 @@ async function scanOwnGithubRepos(options={}){
 }
 $('#scanOwnReposBtn')?.addEventListener('click',()=>scanOwnGithubRepos({automatic:false}));
 
-function githubImportModal(){openModal('<h2>从 GitHub 导入公开仓库</h2><p class="sub">无需 Token。KeyPocket 只读取公开仓库元数据，不读取仓库代码或私有文件。</p><div class="field"><label for="githubOwner">GitHub 用户名或组织</label><input id="githubOwner" maxlength="100" value="chenzhe223-tech" placeholder="GitHub 用户名"></div><div class="field"><label for="githubRepoSearch">筛选仓库</label><input id="githubRepoSearch" maxlength="100" placeholder="搜索仓库名称、描述或语言…"></div><div id="githubImportStatus" class="notice info">点击加载公开仓库。</div><div id="githubRepoList" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button id="githubLoadBtn" type="button" class="btn">加载仓库</button><button id="githubImportSelectedBtn" type="button" class="btn primary" disabled>导入所选（0）</button></div>');
+function githubImportModal(){openModal('<h2>从 GitHub 导入公开仓库</h2><p class="sub">无需 Token。KeyPocket 只读取公开仓库元数据，不读取仓库代码或私有文件。</p><div class="field"><label for="githubOwner">GitHub 用户名或组织</label><input id="githubOwner" maxlength="100" value="'+esc(kpGithubOwner())+'" placeholder="GitHub 用户名"></div><div class="field"><label for="githubRepoSearch">筛选仓库</label><input id="githubRepoSearch" maxlength="100" placeholder="搜索仓库名称、描述或语言…"></div><div id="githubImportStatus" class="notice info">点击加载公开仓库。</div><div id="githubRepoList" class="github-repo-list"></div><div class="modal-actions"><button type="button" class="btn" data-action="close">取消</button><button id="githubLoadBtn" type="button" class="btn">加载仓库</button><button id="githubImportSelectedBtn" type="button" class="btn primary" disabled>导入所选（0）</button></div>');
 const status=$('#githubImportStatus'),list=$('#githubRepoList'),load=$('#githubLoadBtn'),submit=$('#githubImportSelectedBtn');let loaded=[];
 function paint(){const q=$('#githubRepoSearch').value.trim().toLowerCase(),visible=loaded.filter(r=>(r.name+' '+(r.description||'')+' '+(r.language||'')).toLowerCase().includes(q));list.innerHTML=visible.length?visible.map(r=>'<label class="github-repo-row"><input type="checkbox" data-github-repo="'+esc(r.full_name)+'"><span class="github-repo-meta"><strong>'+esc(r.name)+'</strong><small>'+esc(r.description||'暂无描述')+'</small><small>'+esc(r.language||'未标注语言')+' · '+esc(r.updated_at?.slice(0,10)||'')+'</small></span><a href="'+esc(r.html_url)+'" target="_blank" rel="noopener noreferrer">查看 ↗</a></label>').join(''):'<div class="notice">没有匹配的公开仓库。</div>';function update(){const n=list.querySelectorAll('input[type=checkbox]:checked').length;submit.textContent='导入所选（'+n+'）';submit.disabled=n===0;}list.querySelectorAll('input[type=checkbox]').forEach(c=>c.addEventListener('change',update));update();}
 load.addEventListener('click',async()=>{const owner=$('#githubOwner').value.trim();if(!/^[a-zA-Z0-9-]{1,100}$/.test(owner)){status.textContent='请输入有效的 GitHub 用户名或组织名。';status.className='notice error';return;}load.disabled=true;status.textContent='正在加载公开仓库…';status.className='notice info';try{const response=await fetch('https://api.github.com/users/'+encodeURIComponent(owner)+'/repos?per_page=100&sort=updated&type=owner',{headers:{Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});if(!response.ok)throw Error(response.status===404?'未找到该用户或组织。':'GitHub API 请求失败（HTTP '+response.status+'）。');const data=await response.json();loaded=data.filter(r=>!r.private&&r.html_url&&r.full_name);status.textContent='找到 '+loaded.length+' 个公开仓库。选择要导入的项目。';status.className='notice ok';paint();}catch(e){status.textContent=e.message||'加载失败，请稍后重试。';status.className='notice error';}finally{load.disabled=false;}});
@@ -1049,8 +1067,8 @@ async function kpV2SaveCloudBackups(key,salt,deviceId){
   payload,created_at:now
  },'resolution=merge-duplicates,return=representation');
  const latest=Array.isArray(saved)?saved[0]:null;
- if(!latest?.id)throw Error('云端最新备份已提交，但未返回备份 ID，未清理旧备份。');
- await kpV2Api('keypocket_backup_snapshots?user_id=eq.'+encodeURIComponent(session.user.id)+'&id=neq.'+encodeURIComponent(latest.id),'DELETE');
+ if(!latest?.id||!Number.isFinite(Date.parse(latest.created_at)))throw Error('云端最新备份已提交，但未返回备份 ID，未清理旧备份。');
+ await kpV2Api('keypocket_backup_snapshots?user_id=eq.'+encodeURIComponent(session.user.id)+'&id=neq.'+encodeURIComponent(latest.id)+'&created_at=lt.'+encodeURIComponent(latest.created_at),'DELETE');
 }
 async function kpV2SyncNow(options={}){
  if(kpV2SyncBusy)return false;
@@ -1240,7 +1258,7 @@ $('#restoreAllBtn')?.addEventListener('click',async()=>{const xs=await kpReadTra
 $('#emptyRecycleBtn')?.addEventListener('click',async()=>{const xs=await kpReadTrash();if(!xs.length||!confirm('永久删除 '+xs.length+' 条记录？'))return;for(const x of xs)await kpPurgeTrash(x.id,x.kind);await renderRecycleBin();showToast('回收站已清空');});
 async function renderBackupCenter(){
  const xs=(await allItems()).filter(x=>x.id.startsWith(KP_SNAPSHOT_PREFIX)).sort((a,b)=>b.createdAt-a.createdAt),meta=await getItem(KP_META_PREFIX+'backup-state');
- const n=$('#backupStatus');if(n)n.textContent=meta?.lastSnapshotAt?'最新本地完整备份：'+new Date(meta.lastSnapshotAt).toLocaleString()+' · '+(meta.lastError?'最近备份失败：'+meta.lastError:'自动覆盖已启用，仅保留一份'):'尚未生成本地备份。数据变化后自动创建并覆盖上一份。';
+ const n=$('#backupStatus');if(n)n.textContent=meta?.lastError?'最近一次本机备份失败。'+(xs.length?'上次成功：'+new Date(xs[0].createdAt).toLocaleString():'暂无本机恢复点。'):meta?.lastSnapshotAt?'最新本地完整备份：'+new Date(meta.lastSnapshotAt).toLocaleString()+' · '+'自动覆盖已启用，仅保留一份':'尚未生成本地备份。数据变化后自动创建并覆盖上一份。';
  const latest=xs[0];
  $('#backupCards').innerHTML=latest?'<article class="card"><div class="cardtop"><div class="provider-icon">BK</div><div class="cardtitle"><h3>最新完整备份</h3><p>'+new Date(latest.createdAt).toLocaleString()+' · '+latest.recordCount+' 条密钥 · '+latest.projectCount+' 个项目</p></div></div><div class="cardactions"><button class="btn primary" data-snapshot-restore="'+esc(latest.id)+'">恢复最新备份</button></div></article>':'<div class="empty"><h3>暂无本地备份</h3><p>数据变更后自动创建；每次完成后覆盖上一份。</p></div>';
  await renderCloudBackupCenter();
@@ -1248,44 +1266,63 @@ async function renderBackupCenter(){
 async function renderCloudBackupCenter(){
  const host=$('#cloudBackupCards'),status=$('#cloudBackupStatus');if(!host||!status)return;
  if(!kpSession()?.access_token){status.textContent='登录同步账号并完成一次 V2 同步后，这里将显示云端加密快照。';host.innerHTML='';return;}
- if(!window.kpV2Passphrase||!kpV2SyncKey){status.textContent='请先在“同步中心”完成一次 V2 同步，解锁本会话云备份口令。';host.innerHTML='';return;}
+ status.textContent='正在查询当前账号的云端恢复点…';host.innerHTML='';
  try{
   const rows=await kpV2Api('keypocket_backup_snapshots?select=id,device_id,snapshot_type,period_key,record_count,created_at&order=created_at.desc&limit=1');
-  status.textContent='账号级最新完整云端备份：每次成功同步后覆盖上一份，云端仅保留一份 AES-GCM 加密密文，可在其他设备恢复。';
+  status.textContent=rows?.length?'云端最近成功备份：'+new Date(rows[0].created_at).toLocaleString()+'。换机恢复需要原跨设备加密口令。':'当前账号暂无云端恢复点。';
   host.innerHTML=(rows||[]).map(x=>'<article class="card"><div class="cardtop"><div class="provider-icon">☁</div><div class="cardtitle"><h3>最新完整备份</h3><p>'+new Date(x.created_at).toLocaleString()+' · '+Number(x.record_count||0)+' 条密钥</p></div></div><div class="cardactions"><button class="btn primary" data-cloud-restore="'+esc(x.id)+'">恢复最新云备份</button></div></article>').join('')||'<div class="empty"><h3>暂无云端备份</h3><p>完成 V2 同步后自动生成一份最新完整备份。</p></div>';
  }catch(error){status.textContent='读取云端快照失败：'+error.message;host.innerHTML='';}
 }
-async function kpV2RestoreCloudBackup(snapshotId){
- if(!kpV2SyncKey||!window.kpV2Passphrase)throw Error('请先在同步中心解锁云端加密口令。');
+async function kpV2RestoreCloudBackup(snapshotId,passphrase,form){
+ if(kpV2SyncBusy)throw Error('同步进行中，请稍后恢复。');
+ const sessionId=kpSession()?.user?.id,localKey=cryptoKey;
+ if(!sessionId||!localKey)throw Error('请先登录并解锁本地密钥库。');
  const rows=await kpV2Api('keypocket_backup_snapshots?select=id,payload,schema_version,record_count,device_id&id=eq.'+encodeURIComponent(snapshotId)+'&limit=1');
- const row=Array.isArray(rows)?rows[0]:null;if(!row)throw Error('云端快照不存在或不属于当前设备。');
+ const row=Array.isArray(rows)?rows[0]:null;if(!row)throw Error('当前账号下找不到该恢复点。');
  if(Number(row.schema_version)!==KP_V2_SYNC_SCHEMA)throw Error('云端快照版本不兼容，未修改本地数据。');
- if(row.payload?.salt!==kpV2SyncSalt)throw Error('云端快照加密 Salt 与当前口令不一致。');
- const snapshot=await decryptJson({iv:row.payload.iv,data:row.payload.data},kpV2SyncKey);
+ const metadata=await kpV2Api('keypocket_sync_meta?select=key_salt,iterations&limit=1');
+ const meta=metadata?.[0],iterations=Number(meta?.iterations);
+ if(!meta||meta.key_salt!==row.payload?.salt||!Number.isInteger(iterations)||iterations<100000||iterations>1000000)throw Error('云端加密参数异常。');
+ const key=await deriveKey(passphrase,fromB64(meta.key_salt),iterations);
+ let snapshot;
+ try{snapshot=await decryptJson(row.payload,key);}catch{throw Error('口令不匹配或云备份损坏，本机数据未修改。');}
+ if(!form.isConnected||kpSession()?.user?.id!==sessionId||cryptoKey!==localKey||kpV2SyncBusy)throw Error('会话已变化，请重新恢复。');
  if(!snapshot||snapshot.schemaVersion!==KP_V2_SYNC_SCHEMA||!Array.isArray(snapshot.records)||!Array.isArray(snapshot.projects)||!Array.isArray(snapshot.deleted))throw Error('云端快照结构验证失败。');
  const restoredRecords=normalizeBackupRecords(snapshot.records),restoredProjects=snapshot.projects.map(normalizeProject);
- const protection=await kpWriteEncryptedSnapshot('before-cloud-restore');if(!protection)throw Error('恢复前本地保护快照创建失败，已停止恢复。');
- const all=await allItems(),retained=all.filter(x=>x.id==='vault-meta'||x.id.startsWith(KP_SNAPSHOT_PREFIX)||x.id.startsWith(KP_META_PREFIX));
  const sealed=[];for(const item of restoredRecords){item.syncVersion=Math.max(kpV2Version(item),kpNow())+1;sealed.push(await sealRecord(item));}
  for(const item of restoredProjects){item.syncVersion=Math.max(kpV2Version(item),kpNow())+1;sealed.push(await sealProject(item));}
- const deleted=[];
  for(const entry of snapshot.deleted){
-  if(!entry||!['key','project'].includes(entry.kind)||!entry.id||!entry.plain||!entry.plain.deletedAt)continue;
-  const plain=entry.plain;plain.syncVersion=Math.max(Number(plain.syncVersion)||0,kpNow())+1;
-  const wrapped=entry.kind==='key'?await sealRecord(plain):await sealProject(plain);sealed.push(wrapped);
-  deleted.push({kind:entry.kind==='key'?'record':'project',id:String(entry.id),deletedAt:Number(plain.deletedAt),plain,permanent:entry.permanent===true});
+  if(!entry||!['key','project'].includes(entry.kind)||!entry.plain?.deletedAt||entry.id!==entry.plain.id)throw Error('回收站记录无效。');
+  const plain=entry.plain,kind=entry.kind==='key'?'record':'project',deletedAt=Number(plain.deletedAt);
+  plain.syncVersion=Math.max(Number(plain.syncVersion)||0,kpNow())+1;
+  sealed.push(entry.kind==='key'?await sealRecord(plain):await sealProject(plain));
+  const payload=await encryptJson({id:entry.id,kind,deletedAt,expiresAt:deletedAt+KP_TRASH_DAYS*86400000,version:plain.syncVersion,deletedItem:plain,permanent:entry.permanent===true});
+  sealed.push({id:KP_TOMBSTONE_PREFIX+kind+':'+entry.id,...payload,updatedAt:deletedAt});
  }
+ if(!form.isConnected||kpSession()?.user?.id!==sessionId||cryptoKey!==localKey||kpV2SyncBusy)throw Error('会话已变化，请重新恢复。');
+ const ids=new Set();
+ for(const item of sealed){
+  if(item.id==='vault-meta'||item.id.startsWith(KP_META_PREFIX)||item.id.startsWith(KP_SNAPSHOT_PREFIX)||ids.has(item.id))throw Error('备份包含重复或保留的记录编号。');
+  ids.add(item.id);
+ }
+ const protection=await kpWriteEncryptedSnapshot('before-cloud-restore');if(!protection)throw Error('恢复前本地保护快照创建失败，请重试。');
+ const retained=(await allItems()).filter(x=>x.id==='vault-meta'||x.id.startsWith(KP_SNAPSHOT_PREFIX)||x.id.startsWith(KP_META_PREFIX));
+ if(!form.isConnected||kpSession()?.user?.id!==sessionId||cryptoKey!==localKey||kpV2SyncBusy)throw Error('会话已变化，请重新恢复。');
+ clearTimeout(kpV2SyncTimer);window.kpV2Passphrase=null;
  await writeItems([...retained,...sealed],true);
- records=restoredRecords;projects=restoredProjects;
- for(const item of deleted)await kpSaveTombstone(item.kind,item.id,item.deletedAt,item.plain,{permanent:item.permanent,version:item.plain.syncVersion});
- render();window.renderProjects();
- await kpV2SyncNow({silent:true});
- showToast('已恢复云端加密快照，并将恢复结果同步到其他设备。');
+ records=restoredRecords;projects=restoredProjects;render();window.renderProjects();
+ showToast('本机已恢复。核对记录后可在同步中心重新启用同步。');
 }
-$('#cloudBackupCards')?.addEventListener('click',async e=>{
+$('#cloudBackupCards')?.addEventListener('click',e=>{
  const b=e.target.closest('[data-cloud-restore]');if(!b)return;
- if(!confirm('恢复云备份将替换本机当前记录。系统会先生成保护快照，确认继续？'))return;
- try{b.disabled=true;await kpV2RestoreCloudBackup(b.dataset.cloudRestore);}catch(error){showToast('云备份恢复失败：'+error.message);}finally{b.disabled=false;await renderBackupCenter();}
+ openModal('<h2>恢复到这台设备</h2><form id="cloudRestoreForm"><p>输入原跨设备加密口令。恢复会替换本机内容，云端备份保留。</p><div class="field"><label for="restorePass">跨设备加密口令</label><input id="restorePass" type="password" required minlength="10" autocomplete="off"></div><div id="restoreError" role="alert"></div><div class="modal-actions"><button type="button" data-action="close" class="btn">取消</button><button type="submit" class="btn primary">确认恢复</button></div></form>');
+ const form=$('#cloudRestoreForm');
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();const button=form.querySelector('[type=submit]');if(button.disabled)return;button.disabled=true;
+  try{await kpV2RestoreCloudBackup(b.dataset.cloudRestore,form.querySelector('input').value,form);if(form.isConnected)closeModal();await renderBackupCenter();}
+  catch(error){form.querySelector('[role=alert]').textContent=error.message;}
+  finally{button.disabled=false;}
+ });
 });
 $('#backupNowBtn')?.addEventListener('click',async()=>{const ok=await kpWriteEncryptedSnapshot('manual');showToast(ok?'加密快照已生成':'快照失败');await renderBackupCenter();});
 $('#backupCards')?.addEventListener('click',async e=>{
