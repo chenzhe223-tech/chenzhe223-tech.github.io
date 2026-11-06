@@ -280,3 +280,7 @@ P2：
 - Web 设置新增隐私说明；已确认生产数据库同时包含 Dashboard 与 KeyPocket 对象。账号注销仍待产品隔离与真实测试，勿直接删除可能共享的认证主体。
 - 验收：Node 语法、Handoff source contract、Radar collector 自测及 390px Chromium 合成端到端回归通过。真实 Web Crypto 和 IndexedDB；云 API 使用模拟响应；新设备恢复 2 条活动 Key、2 个 Skill、1 条已删除 Key；错误口令保留原记录，全流程无云写入。运行：先启动仓库根目录静态服务，再以 KP_TEST_URL 指向本机页面执行 node scripts/e2e-keypocket-recovery.cjs（需要 Playwright Chromium）。
 - 交接：按本次提交核对 Pages 和 Browser QA。下一项是独立真实账号 A/B 权限隔离、真实双设备写入与撤销、邮箱交付、iPhone Safari/微信；此后再做 iOS/TestFlight。无真机或真实邮件结果，不标记 App Store 可提交。
+
+### 本轮最终发布证据
+- 功能提交 c0ea3c8a5d6a81de4465cf213a7d31004f198c82。Pages run 42225658297 完成构建和部署；KeyPocket Handoff QA 42225659078 SUCCESS。正式首页、app.js 与隐私页重新下载后均与本次提交逐字节一致；用下载的发布资源再跑换机模拟回归 PASS。
+- 整站 Browser QA 42225658964 唯一 FAIL 是其他产品「公众号选题工作台」超时。KeyPocket 新用户扫描授权、旧功能回归及手机端无 pageerror 均 PASS。五级状态：本批网页代码、构建、运行、模拟功能测试、正式网页部署均有证据。真实账号/真机与 App Store 验收保持待办。
