@@ -158,6 +158,35 @@ class QualityGateTests(unittest.TestCase):
         self.assertEqual(record["url"], fallback)
         self.assertEqual(repair["reason"], "same_week_url_reuse")
 
+    def test_historical_content_reuse_uses_next_verified_fallback(self):
+        primary = "https://images.example/same-picture-different-url.jpg"
+        fallback = "https://images.example/new-topic.jpg"
+        story = {"title_zh":"Security research", "image_url":primary,
+                 "image_fallback_url":fallback, "image_match_status":"article_image",
+                 "image_alt":"Security announcement"}
+        prior = [{"date":"2026-11-03", "title":"Old image", "url":"https://other.example/old.jpg",
+                  "sha256":"old-sha", "phash":None}]
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   side_effect=[("old-sha", None), ("fresh-sha", None)]):
+            error, record, repair = verify_and_repair_story_image(story, {}, [], {}, prior)
+        self.assertIsNone(error)
+        self.assertEqual(record["sha256"], "fresh-sha")
+        self.assertEqual(story["image_url"], fallback)
+        self.assertEqual(story["image_match_status"], "thematic_fallback")
+        self.assertEqual(repair["reason"], "same_week_content_reuse")
+
+    def test_historical_perceptual_reuse_blocks_when_no_unique_candidate(self):
+        story = {"title_zh":"Computer use", "image_url":"https://images.example/visual.jpg",
+                 "image_match_status":"article_image", "image_alt":"Computer use feature"}
+        prior = [{"date":"2026-11-05", "title":"Old image", "url":"https://example.com/old.jpg",
+                  "sha256":"other-sha", "phash":"1111000011110000111100001111000011110000111100001111000011110000"}]
+        with patch("radar.scripts.quality_gate.download_fingerprints",
+                   return_value=("new-sha", prior[0]["phash"])):
+            error, record, repair = verify_and_repair_story_image(story, {}, [], {}, prior)
+        self.assertEqual(error["type"], "same_week_content_reuse")
+        self.assertIsNone(record)
+        self.assertIsNone(repair)
+
     def test_unverifiable_primary_and_fallback_still_block(self):
         story = {"title_zh":"Unavailable image","image_url":"https://images.example/a.jpg",
                  "image_fallback_url":"https://images.example/b.jpg",
