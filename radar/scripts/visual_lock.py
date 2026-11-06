@@ -80,9 +80,8 @@ def validate_visual_lock(report_date: str) -> dict:
             raise RuntimeError("P0: geometric-navy must retain three primary and two secondary news cards")
     else:
         raise RuntimeError(f"P0: unsupported ISO-selected poster style: {meta['design_variant']}")
-    social = layout.get("wechat_social_pack", {})
-    if [social.get("width"), social.get("height"), social.get("count")] != [900, 1200, 6]:
-        raise RuntimeError("P0: WeChat six-image output contract changed")
+    # The six-image WeChat pack was retired on 2026-11-03. Its legacy
+    # layout metadata must never become a website-poster production gate.
     if not typography.get("cjk_candidates") or not typography.get("cjk_bold_candidates"):
         raise RuntimeError("P0: no approved CJK font candidates configured")
     if any("DejaVuSans" in str(p) for p in typography.get("cjk_candidates", []) + typography.get("cjk_bold_candidates", [])):
