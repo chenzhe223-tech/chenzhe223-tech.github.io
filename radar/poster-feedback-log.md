@@ -164,3 +164,13 @@
 - No report/poster/QR bundle has been published yet. The previous valid production version remains protected until all gates pass.
 
 - Regression-test review: all calls to the new image-repair helper now pass an explicit empty/current-week index in unit tests; production continues to pass the archive-derived ISO-week index.
+
+
+## 2026-11-06 — Daily source review and production kickoff
+
+- Prepared and source-checked the date-scoped editorial file `radar/data/manual-editorial/2026-11-06.json` for today's report.
+- Five items reviewed against primary or named reporting sources: OpenAI GPT-6 Cyber (OpenAI release and Reuters, 2026-11-05); METR's Anthropic AI R&D assessment (METR, 2026-11-05; includes a 1.9x AECI estimate with 95% CI 1.5–2.8x and explicit redaction/uncertainty disclosures); Tencent Hunyuan Hy4 (Tencent Cloud ADP, 2026-11-04; company-reported capability and benchmark figures); China's prohibition of SoftBank's acquisition of ABB Robotics in China (ABB statement and Reuters, 2026-11-05; do not describe the global transaction as terminated); and Reuters' report of approximately 600,000 H200 chips in Hong Kong (2026-11-05; attributed to two unnamed sources, not officially confirmed).
+- Checked accessible 2026-11-01 through 2026-11-05 archives; the five editorial story records are not repeated from those daily Top-5 selections. The source file records dates, source URLs, caveats and DAVYLAB analysis.
+- Featured Skill remains automatic and must come from today's evidence-verified Skill Radar result; the manual editorial file does not override or shrink the automatic list.
+- ISO 2026-W45 style is determined by `poster_style_metadata` as `geometric-navy` (cycle index 44). The approved 2026-10-31 visual baseline and website-only 1200×1800 PNG contract remain unchanged. WeChat six-image assets remain disabled.
+- Production state at kickoff: source review complete; today's fresh RSS/GitHub collection, Skill Radar, quality gates, image matching, poster rendering, final-PNG QR validation, desktop/mobile QA, deployment and post-deployment asset checks remain pending. No production success is claimed by this record.
