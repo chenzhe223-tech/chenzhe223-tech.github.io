@@ -26,6 +26,19 @@ class VisualLockTests(unittest.TestCase):
         self.assertEqual(mountain["design_variant"], "mountain-editorial")
         self.assertEqual(geometric["design_variant"], "geometric-navy")
 
+    def test_retired_social_pack_is_not_a_p0_requirement(self):
+        original = visual_lock.load_json
+        def without_retired_pack(name):
+            data = original(name)
+            if name == "layout-spec.json":
+                data = dict(data)
+                data.pop("wechat_social_pack", None)
+            return data
+        with patch("radar.scripts.visual_lock.load_json", side_effect=without_retired_pack):
+            result = visual_lock.validate_visual_lock("2026-11-06")
+        self.assertEqual(result["canvas"], [1200, 1800])
+        self.assertEqual(result["design_variant"], "geometric-navy")
+
     def test_missing_image_relevance_policy_fails_closed(self):
         original = visual_lock.load_json
         def without_image_policy(name):
