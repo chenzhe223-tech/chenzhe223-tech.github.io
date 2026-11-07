@@ -211,6 +211,11 @@ def image_relevance_error(story):
     status = str(story.get("image_match_status") or "")
     alt = str(story.get("image_alt") or "")
     label_ok = bool(re.search(r"(主题配图|主题插画|搜索配图|topic image|topic illustration|非新闻现场|not news footage)", alt, re.I))
+    if status == "searched_image":
+        if not (str(story.get("image_page_url") or "").startswith("https://")
+                and str(story.get("image_license_url") or "").startswith("https://")
+                and str(story.get("image_credit") or "").strip()):
+            return {"type": "searched_image_missing_provenance", "title": story_title(story)}
     if status in TOPIC_IMAGE_STATUSES:
         try:
             score = float(story.get("image_match_score"))
