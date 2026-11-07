@@ -175,8 +175,20 @@ def verify_news_evidence(manifest: dict, report: dict) -> dict:
         fail("Poster must record image relevance evidence for all five stories")
     for item, story in zip(evidence, top[:5]):
         expected_digest = str(story.get("image_sha256") or "")
-        if len(expected_digest) != 64 or item.get("image_sha256") != expected_digest or item.get("rendered_image_sha256") != expected_digest:
-            fail("Rendered story image does not match its P0-verified digest")
+        visual_type = item.get("rendered_visual_type", "verified_photo")
+        rendered_digest = str(item.get("rendered_image_sha256") or "")
+        if len(expected_digest) != 64 or item.get("image_sha256") != expected_digest:
+            fail("Poster image source does not match the P0-verified digest")
+        if visual_type == "info_card":
+            # A generated brand card is NOT the original source photograph; do
+            # not falsely claim its pixel digest matches the external image.
+            if not re.fullmatch(r"[0-9a-f]{64}", rendered_digest) or not item.get("label_applied"):
+                fail("Source-backed information card digest/notice is missing")
+        elif visual_type == "verified_photo":
+            if rendered_digest != expected_digest:
+                fail("Rendered story photo does not match its P0-verified digest")
+        else:
+            fail(f"Unrecognized poster image rendering type: {visual_type}")
         if item.get("label_required") and not item.get("label_applied"):
             fail(f"Thematic image is missing its disclosure label: {item}")
     return {"news_count": 5, "image_evidence_count": len(evidence), "status": "PASS"}
