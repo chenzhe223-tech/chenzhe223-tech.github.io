@@ -704,3 +704,25 @@ jobs:
           else
             gh issue create --title "$title" --body "$body"
           fi
+
+  resolve-alert:
+    name: Resolve verified production recovery
+    if: always() && needs.verify-live.result == 'success'
+    needs: [qa, verify-live]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close today's failure issue after live acceptance
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="Radar production failure $(TZ=Asia/Shanghai date +%F)"
+          issue=$(gh issue list --state open --search "$title in:title" --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -1)
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body "Recovered only after required production gates and live report/PNG/QR verification succeeded: $RUN_URL. Earlier failed runs remain in Actions history."
+            gh issue close "$issue"
+          fi
+          echo "Verified production and live acceptance: $RUN_URL" >> "$GITHUB_STEP_SUMMARY"
