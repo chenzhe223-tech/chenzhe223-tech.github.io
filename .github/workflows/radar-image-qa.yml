@@ -11,6 +11,9 @@ on:
       - "scripts/qa-radar.cjs"
       - ".github/workflows/radar-image-qa.yml"
   workflow_dispatch:
+  workflow_run:
+    workflows: ["pages build and deployment"]
+    types: [completed]
 
 permissions:
   contents: read
@@ -21,6 +24,7 @@ concurrency:
 
 jobs:
   image-browser-qa:
+    if: github.event_name != 'workflow_run'
     name: Verify image cards and photo crop on desktop and mobile
     runs-on: ubuntu-latest
     timeout-minutes: 12
@@ -52,3 +56,44 @@ jobs:
           name: radar-image-browser-qa
           path: test-results/radar/
           retention-days: 14
+
+  live-image-smoke:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    name: Confirm deployed website uses the approved full-bleed image engine
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+    steps:
+      - name: Fetch actual deployed page, retry CDN propagation
+        env:
+          RUN_NUMBER: ${{ github.run_id }}
+        run: |
+          python - <<'PY'
+          import os, time, urllib.request
+          url='https://chenzhe223-tech.github.io/radar/daily/?image-qa='+os.environ['RUN_NUMBER']
+          required=(
+              'function radarImageLoaded(img)',
+              'story-image--protect::before',
+              'story-image--verified.story-image--protect img',
+              '--radar-image-bleed',
+              'object-fit:cover!important',
+          )
+          last='not fetched'
+          for attempt in range(1, 8):
+              try:
+                  req=urllib.request.Request(url,headers={'User-Agent':'DAVYLAB-Live-Image-QA/2','Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(req,timeout=12) as response:
+                      status=response.status
+                      final_url=response.geturl()
+                      html=response.read(200000).decode('utf-8','replace')
+                  missing=[token for token in required if token not in html]
+                  if status == 200 and not missing:
+                      print(f'PASS deployed_full_bleed_visual_v2: HTTP {status} URL={final_url}; all {len(required)} source checks present')
+                      break
+                  last=f'HTTP {status}, missing={missing}'
+              except Exception as exc:
+                  last=f'{type(exc).__name__}: {exc}'
+              if attempt < 7:
+                  time.sleep(7)
+          else:
+              raise SystemExit('FAIL live full-bleed visual deployment: '+last)
+          PY
