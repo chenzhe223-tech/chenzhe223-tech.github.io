@@ -114,6 +114,34 @@ class PosterGenerationTests(unittest.TestCase):
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font), 110.5)
 
+    def test_geometric_primary_card_auto_fits_six_line_summary(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        story = {"poster_summary_zh": "智能体项目部署进入真实业务，需要考虑数据授权、稳定性和人工监督。" * 3}
+        # After a two-line title the normal primary-card summary begins at y=906.
+        summary_y = 906
+        summary, fnt, line_limit = poster.choose_primary_card_summary(
+            draw, story, 318, 672 + 450 - 61 - summary_y
+        )
+        self.assertEqual(summary, story["poster_summary_zh"])
+        self.assertLessEqual(len(poster.wrap(draw, summary, fnt, 318)), line_limit)
+        old = list(poster.TEXT_BOUNDS)
+        try:
+            poster.paragraph(draw, summary, (816, summary_y), fnt, "black", 318, line_limit, 5)
+            self.assertFalse(poster.TEXT_BOUNDS[-1]["truncated"])
+            self.assertLessEqual(summary_y + poster.TEXT_BOUNDS[-1]["height"], 1061)
+        finally:
+            poster.TEXT_BOUNDS[:] = old
+
+    def test_geometric_primary_card_overlong_copy_uses_complete_alternate(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        story = {"poster_summary_zh": "能力发展需要真实评估。" * 80,
+                 "poster_why_zh": "只有得到授权才能执行真实任务。"}
+        summary, fnt, limit = poster.choose_primary_card_summary(draw, story, 318, 145)
+        self.assertEqual(summary, story["poster_why_zh"])
+        self.assertLessEqual(len(poster.wrap(draw, summary, fnt, 318)), limit)
+
     def test_geometric_secondary_cards_use_complete_fitting_summary(self):
         image = Image.new("RGB", (poster.W, poster.H), "white")
         draw = ImageDraw.Draw(image)
