@@ -41,7 +41,7 @@ def load_image_relevance_policy():
 
 IMAGE_RELEVANCE_POLICY = load_image_relevance_policy()
 MIN_IMAGE_RELEVANCE_SCORE = float(IMAGE_RELEVANCE_POLICY["minimum_score"])
-TOPIC_IMAGE_STATUSES = {"openverse_topic", "wikimedia_topic", "web_search_topic"}
+TOPIC_IMAGE_STATUSES = {"openverse_topic", "wikimedia_topic", "web_search_topic", "searched_image"}
 def load_claim_provenance_policy():
     if not QA_RULES_PATH.is_file():
         raise RuntimeError(f"P0 editorial claim policy missing: {QA_RULES_PATH}")
@@ -210,7 +210,7 @@ def validate_skill_count(skills):
 def image_relevance_error(story):
     status = str(story.get("image_match_status") or "")
     alt = str(story.get("image_alt") or "")
-    label_ok = bool(re.search(r"(主题配图|主题插画|topic image|topic illustration|非新闻现场|not news footage)", alt, re.I))
+    label_ok = bool(re.search(r"(主题配图|主题插画|搜索配图|topic image|topic illustration|非新闻现场|not news footage)", alt, re.I))
     if status in TOPIC_IMAGE_STATUSES:
         try:
             score = float(story.get("image_match_score"))
