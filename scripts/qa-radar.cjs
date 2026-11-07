@@ -35,9 +35,9 @@ function check(ok, name, detail = '') {
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
-        check(await page.locator('#chinaAINewsList .story-image').count() === chinaCount, viewport.name + ': every China AI story has a relevant photo or topic-specific illustration');
+        check(await page.locator('#chinaAINewsList .story-image').count() <= chinaCount, viewport.name + ': no fabricated image when a China AI source has no verified photograph');
         check(await page.locator('#chinaAINewsList .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': used photographs have HTTPS sources');
-        check(await page.locator('#chinaAINewsList .story-image.story-topic-illustration').count() + await page.locator('#chinaAINewsList .story-image.story-image--verified').count() === chinaCount, viewport.name + ': no unlabeled stock-image fallback');
+        check(await page.locator('#chinaAINewsList .story-topic-illustration, #chinaAINewsList .story-info-card').count() === 0, viewport.name + ': no repeated synthetic illustration templates in China news');
         check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
         check(await page.locator('#chinaAINewsList .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays China AI thumbnails');
         if (chinaCount > 0) {
@@ -56,9 +56,9 @@ function check(ok, name, detail = '') {
       const cards = page.locator('#top5List .top5-card');
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
-      check(await page.locator('#top5List .story-image').count() === 5, viewport.name + ': all five stories have a verified photo or topical illustration');
+      check(await page.locator('#top5List .story-image').count() <= 5, viewport.name + ': news without verified photographs stays text-first');
       check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
-      check(await page.locator('#top5List .story-topic-illustration').count() + await page.locator('#top5List .story-image--verified').count() === 5, viewport.name + ': no irrelevant stock-image fallback');
+      check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
       const visualPolicy = await page.evaluate(async () => {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
@@ -94,7 +94,7 @@ function check(ok, name, detail = '') {
         const portraitFit=getComputedStyle(portrait).objectFit;
         mock.remove();
         return {coverFit,subjectMode,portraitFit,backdrop,
-                stockSuppressed:Boolean(element.querySelector('.story-topic-illustration svg')),
+                stockSuppressed:!element.innerHTML.trim(),
                 h200Graphic:Boolean(h200.querySelector('.story-topic-illustration svg')),
                 h200RelevantLabel:h200.textContent.includes('H200 / GPU'),
                 h200NotNews:h200.textContent.includes('非新闻现场'),
@@ -105,9 +105,9 @@ function check(ok, name, detail = '') {
       });
       check(visualPolicy.coverFit === null || ['cover','contain'].includes(visualPolicy.coverFit), viewport.name + ': verified news photo uses adaptive cover or protected contain');
       check(visualPolicy.subjectMode && visualPolicy.portraitFit === 'contain' && visualPolicy.backdrop.startsWith('url('), viewport.name + ': portrait subjects remain whole with a full-bleed same-photo backdrop');
-      check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration becomes a source-labeled full-bleed topic visual');
-      check(visualPolicy.h200Graphic && visualPolicy.h200RelevantLabel && visualPolicy.h200NotNews,
-        viewport.name + ': Nvidia H200 story receives a relevant full-bleed GPU illustration instead of a blank blue card');
+      check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration suppressed without generating template art');
+      check(!visualPolicy.h200Graphic && !visualPolicy.h200RelevantLabel && !visualPolicy.h200NotNews,
+        viewport.name + ': H200 story never renders a repeating synthetic GPU icon template');
       check(visualPolicy.matchedSearchPicture && /非新闻现场|Not event footage/.test(visualPolicy.searchedImageDisclaimer)
         && visualPolicy.searchedImageSource.startsWith('https://'),
         viewport.name + ': licensed searched photos are displayed with a traceable non-event label');
