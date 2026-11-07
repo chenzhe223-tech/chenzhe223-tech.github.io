@@ -35,9 +35,9 @@ function check(ok, name, detail = '') {
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
-        check(await page.locator('#chinaAINewsList .story-image img').count() === chinaCount, viewport.name + ': every China AI card shows a picture');
-        check(await page.locator('#chinaAINewsList .story-image img[src^="https://"]').count() === chinaCount, viewport.name + ': every China AI picture uses an HTTPS image source');
-        check(await page.locator('#chinaAINewsList .image-placeholder').count() === 0, viewport.name + ': no China AI card displays a no-image placeholder');
+        check(await page.locator('#chinaAINewsList .story-image').count() === chinaCount, viewport.name + ': every China AI story has a complete visual or source-backed information card');
+        check(await page.locator('#chinaAINewsList .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': used photographs have HTTPS sources');
+        check(await page.locator('#chinaAINewsList .story-image.story-info-card').count() + await page.locator('#chinaAINewsList .story-image.story-image--verified').count() === chinaCount, viewport.name + ': no unlabeled stock-image fallback');
         check(await page.locator('#chinaAINewsList .china-story-source').count() === chinaCount, viewport.name + ': each China AI card shows source and publication metadata');
         check(await page.locator('#chinaAINewsList .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays China AI thumbnails');
         if (chinaCount > 0) {
@@ -56,9 +56,17 @@ function check(ok, name, detail = '') {
       const cards = page.locator('#top5List .top5-card');
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
-      check(await page.locator('#top5List .story-image img').count() === 5, viewport.name + ': all five stories show a picture');
-      check(await page.locator('#top5List .story-image img[src^="https://"]').count() === 5, viewport.name + ': every story picture uses an HTTPS image source');
-      check(await page.locator('#top5List .image-placeholder').count() === 0, viewport.name + ': no top story displays a no-image placeholder');
+      check(await page.locator('#top5List .story-image').count() === 5, viewport.name + ': all five stories have a source-backed image or information card');
+      check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
+      check(await page.locator('#top5List .story-info-card').count() + await page.locator('#top5List .story-image--verified').count() === 5, viewport.name + ': no irrelevant stock-image fallback');
+      const visualPolicy = await page.evaluate(() => {
+        const image = document.querySelector('#top5List .story-image--verified img');
+        const element = document.createElement('div');
+        element.innerHTML = storyImageMarkup({title_zh:'MaaS 模型推理优化',image_match_status:'thematic_fallback',image_source:'Unsplash topic illustration',image_url:'https://images.unsplash.com/photo-123'});
+        return {fit:image?getComputedStyle(image).objectFit:null,stockSuppressed:Boolean(element.querySelector('.story-info-card')),stockImage:Boolean(element.querySelector('img'))};
+      });
+      check(visualPolicy.fit === null || visualPolicy.fit === 'contain', viewport.name + ': verified news images preserve the full subject');
+      check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration becomes an information card');
       check(await page.locator('#top5List .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays top-story thumbnails');
       if (count > 0) {
         const topStoryCard = cards.first();
