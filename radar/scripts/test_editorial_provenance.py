@@ -19,6 +19,23 @@ class EditorialProvenanceTests(unittest.TestCase):
         self.assertIsNone(claim_provenance_error(story))
         self.assertEqual(story["title_zh"], "Zyphra ZYFA 最高提速 1.76 倍")
 
+    def test_unsupported_ai_summary_superlative_is_normalized_not_invented(self):
+        from radar.scripts.quality_gate import claim_provenance_error
+        story = {
+            "title_zh": "Axiom Math 对 Stacks Project 进行形式化验证",
+            "original_title": "AI agent checks mathematical proofs in Stacks Project",
+            "what_zh": "这被称为全球最大的数学证明核验工程。",
+            "what_en": "This is described as the largest mathematical proof verification effort.",
+            "source": "Research project",
+            "published": "2026-11-07",
+        }
+        apply_claim_provenance({"top5": [story]})
+        self.assertTrue(story.get("unsupported_editorial_superlative_normalized"))
+        self.assertNotIn("最大", story["what_zh"])
+        self.assertNotIn("largest", story["what_en"].lower())
+        self.assertIsNone(claim_provenance_error(story))
+        self.assertEqual(story["original_title"], "AI agent checks mathematical proofs in Stacks Project")
+
     def test_dated_superlative_without_concrete_metric_still_fails(self):
         from radar.scripts.quality_gate import claim_provenance_error
         story = {"title_zh": "最高性能", "what_zh": "项目方称性能更好。", "source": "Example", "published": "2026-11-06"}
