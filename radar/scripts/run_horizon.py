@@ -554,6 +554,37 @@ def apply_claim_provenance(report):
         what_zh = str(story.get("what_zh") or story.get("summary_zh") or "")
         summary_zh = str(story.get("summary_zh") or "")
         what_en = str(story.get("what_en") or "")
+        # An AI-written summary can introduce a superlative that the
+        # original headline never asserted. Without a concrete metric scope,
+        # remove that unsupported flourish rather than invent a benchmark.
+        # Source titles and measured comparisons remain untouched, so P0
+        # continues to block unsupported claims made by the source itself.
+        source_title = " ".join(str(story.get(k) or "") for k in ("title_zh", "title_en", "original_title"))
+        unsupported_superlative = r"(首次|首个|第一|最高|最大|纪录|首超|first-ever|first to|record|highest|largest)"
+        numeric_metric = r"(日均|词元|token|调用量|份额|市场|收入|用户|模型|benchmark|评分|latency|p95|volume|revenue|data)"
+        if (not re.search(unsupported_superlative, source_title, re.I)
+                and re.search(unsupported_superlative, what_zh + " " + what_en, re.I)
+                and not re.search(numeric_metric, what_zh + " " + what_en, re.I)):
+            for misleading, neutral in (
+                (r"全球最大|世界最大|中国最大|史上最大", "规模较大"),
+                (r"首次", "此次"),
+                (r"首个", "一个"),
+                (r"最高", "较高"),
+                (r"最大", "较大"),
+                (r"第一", "较前"),
+                (r"纪录", "阶段性进展"),
+                (r"首超", "超过"),
+            ):
+                what_zh = re.sub(misleading, neutral, what_zh)
+            for misleading, neutral in (
+                (r"first-ever", "recent"), (r"first to", "to"),
+                (r"highest", "high"), (r"largest", "large"),
+                (r"record", "reported"),
+            ):
+                what_en = re.sub(misleading, neutral, what_en, flags=re.I)
+            story["what_zh"] = what_zh
+            story["what_en"] = what_en
+            story["unsupported_editorial_superlative_normalized"] = True
         claim_text = " ".join(str(story.get(key) or "") for key in ("title_zh", "title_en", "original_title", "what_zh", "what_en"))
         benchmark_pattern = r"(benchmark|评分|分数|p95|latency|score|performance|性能|增长\d|提升\d|\d+多倍)"
         attribution_pattern = r"(自测|其自身|项目方|媒体披露|来源披露|公司称|官方称|报告称|据.{0,30}报道|称|披露|announced|official announcement|company states|company said|reported|according to|in its own|self[- ]reported|company says|project says|measured by)"
