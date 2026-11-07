@@ -114,6 +114,37 @@ class PosterGenerationTests(unittest.TestCase):
         for line in lines:
             self.assertLessEqual(draw.textlength(line, font=font), 110.5)
 
+    def test_geometric_secondary_cards_use_complete_fitting_summary(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        story = {
+            "title_zh": "智能体在企业采购与研发流程的应用",
+            "poster_summary_zh": "这是一条过长的新闻摘要，需要在海报窄卡片上完整表达而不能被悄悄截断。" * 9,
+            "poster_why_zh": "企业需要复核权限与结果。",
+        }
+        summary, fnt = poster.choose_mini_card_summary(draw, story, 372)
+        self.assertEqual(summary, story["poster_why_zh"])
+        self.assertLessEqual(len(poster.wrap(draw, summary, fnt, 372)), 3)
+        old = list(poster.TEXT_BOUNDS)
+        try:
+            poster.paragraph(draw, summary, (195, 1222), fnt, "black", 372, 3, 3)
+            self.assertFalse(poster.TEXT_BOUNDS[-1]["truncated"])
+            self.assertLessEqual(1222 + poster.TEXT_BOUNDS[-1]["height"], 1280)
+        finally:
+            poster.TEXT_BOUNDS[:] = old
+
+    def test_geometric_secondary_cards_never_silently_clip_unbounded_copy(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        story = {
+            "poster_summary_zh": "生成式技术帮助各行业完成任务。" * 60,
+            "poster_why_zh": "业务必须保持可靠性与可追溯性。" * 60,
+            "what_zh": "该项目仍处于研究原型阶段。" * 60,
+        }
+        summary, fnt = poster.choose_mini_card_summary(draw, story, 372)
+        self.assertLessEqual(len(poster.wrap(draw, summary, fnt, 372)), 3)
+        self.assertTrue(summary)
+
     def test_geometric_skill_description_fits_reserved_four_line_area(self):
         image = Image.new("RGB", (poster.W, poster.H), "white")
         draw = ImageDraw.Draw(image)
