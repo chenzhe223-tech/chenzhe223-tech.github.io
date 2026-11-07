@@ -103,11 +103,16 @@ def choose_mini_card_summary(draw, story: dict, width: int):
         str(story.get("what_zh") or "").strip(),
     ]
     seen = set()
-    for value in candidates:
-        if not value:
-            continue
-        first_sentence = re.split(r"[。！？；;\\n]", value, maxsplit=1)[0].strip()
-        for candidate in (value, first_sentence):
+    # Preserve the most useful complete editorial wording first. Only if no
+    # complete summary fits should a full first sentence be considered.
+    for sentence_only in (False, True):
+        for value in candidates:
+            if not value:
+                continue
+            candidate = (
+                re.split(r"[。！？；;\\n]", value, maxsplit=1)[0].strip()
+                if sentence_only else value
+            )
             if not candidate or candidate in seen:
                 continue
             seen.add(candidate)
