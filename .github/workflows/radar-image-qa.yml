@@ -58,10 +58,11 @@ jobs:
           retention-days: 14
 
   live-image-smoke:
-    if: github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    needs: [image-browser-qa]
+    if: always() && (github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'))
     name: Confirm deployed website uses the approved full-bleed image engine
     runs-on: ubuntu-latest
-    timeout-minutes: 4
+    timeout-minutes: 8
     steps:
       - name: Fetch actual deployed page, retry CDN propagation
         env:
@@ -81,7 +82,7 @@ jobs:
               'story-topic-illustration',
           )
           last='not fetched'
-          for attempt in range(1, 8):
+          for attempt in range(1, 31):
               try:
                   req=urllib.request.Request(url,headers={'User-Agent':'DAVYLAB-Live-Image-QA/2','Cache-Control':'no-cache'})
                   with urllib.request.urlopen(req,timeout=12) as response:
@@ -95,8 +96,8 @@ jobs:
                   last=f'HTTP {status}, missing={missing}'
               except Exception as exc:
                   last=f'{type(exc).__name__}: {exc}'
-              if attempt < 7:
-                  time.sleep(7)
+              if attempt < 30:
+                  time.sleep(10)
           else:
               raise SystemExit('FAIL live full-bleed visual deployment: '+last)
           PY
