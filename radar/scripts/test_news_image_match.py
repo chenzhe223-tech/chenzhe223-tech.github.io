@@ -12,6 +12,19 @@ from news_image_match import (
 
 
 class NewsImageMatchTests(unittest.TestCase):
+    def test_headline_product_query_prioritizes_nvidia_h200(self):
+        from news_image_match import focused_visual_queries, headline_image_relevance
+        story={"title_zh":"纽约时报调查称美国批准 Nvidia H200 销售给空壳中国公司",
+               "title_en":"New York Times reports on Nvidia H200 export licenses"}
+        queries=focused_visual_queries(story)
+        self.assertEqual(queries[0],"NVIDIA H200 GPU")
+        accepted,score=headline_image_relevance(
+            story["title_zh"]+" "+story["title_en"],"NVIDIA H200 GPU product photo")
+        self.assertTrue(accepted)
+        self.assertGreaterEqual(score,.8)
+        rejected,_=headline_image_relevance(story["title_zh"],"autumn leaves and flowers")
+        self.assertFalse(rejected)
+
     def test_publisher_image_has_priority_over_search(self):
         from news_image_match import resolve_story_image
         story={"title_en":"OpenAI launches assistant dashboard",
