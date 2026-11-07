@@ -579,7 +579,7 @@ def main():
             "status": "PASS", "checked_at": result["generated_at"], "image_relevance_policy_version": IMAGE_RELEVANCE_POLICY["policy_version"], "claim_provenance_policy_version": CLAIM_PROVENANCE_POLICY_VERSION,
             "history_files": len(archive_files), "history_stories": len(history),
             "news_duplicate_hits": len(duplicate_hits), "china_duplicate_hits": len(china_hits),
-            "same_week_image_reuse": len(week_image_hits), "image_fallback_repairs": image_fallback_repairs, "report_path": "test-results/radar/news-image-quality-gate.json"
+            "same_week_image_reuse": len(week_image_hits), "image_fallback_repairs": image_fallback_repairs, "visual_policy_version": IMAGE_VISUAL_POLICY_VERSION, "report_path": "test-results/radar/news-image-quality-gate.json"
         }
         REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     print(json.dumps({"status":result["status"],"image_error_details":image_errors,"skill_errors":skill_errors,"history_files":len(archive_files),"history_stories":len(history),"news_duplicate_hits":len(duplicate_hits),"china_duplicate_hits":len(china_hits),"image_errors":len(image_errors),"image_fallback_repairs":image_fallback_repairs,"same_week_image_reuse":len(week_image_hits),"historical_image_verification_failures":len(historical_image_failures),"claim_errors":claim_errors,"report":str(out)},ensure_ascii=False))
