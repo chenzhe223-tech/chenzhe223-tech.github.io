@@ -10,7 +10,7 @@ import io
 from pathlib import Path
 
 THEMATIC_STATUSES = {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
-POLICY_VERSION = "2026-11-08.1"
+POLICY_VERSION = "2026-11-08.2"
 
 
 # Subject-sensitive news layouts are protected by a full-frame foreground over
@@ -46,6 +46,25 @@ def assess_bytes(raw: bytes, story: dict) -> dict:
         thumb = image.convert("L")
         thumb.thumbnail((180, 180))
         contrast = round(float(ImageStat.Stat(thumb).stddev[0]), 2)
+    # Detect visible faces when OpenCV is available. This is a protection
+    # signal, not an identity classifier or a guarantee of face detection.
+    faces_detected = 0
+    face_detection_available = False
+    try:
+        import cv2
+        import numpy as np
+        with Image.open(io.BytesIO(raw)) as image:
+            reduced = image.convert("RGB")
+            reduced.thumbnail((640, 640))
+            gray = cv2.cvtColor(np.asarray(reduced), cv2.COLOR_RGB2GRAY)
+        detector_path = cv2.data.haarcascades + "haarcascade_frontalface_default.xml"
+        detector = cv2.CascadeClassifier(detector_path)
+        if not detector.empty():
+            face_detection_available = True
+            faces_detected = len(detector.detectMultiScale(gray, scaleFactor=1.13,
+                                                            minNeighbors=5, minSize=(25, 25)))
+    except (ImportError, OSError, ValueError, RuntimeError):
+        pass
     ratio = round(width / height, 3)
     status = str(story.get("image_match_status") or "")
     url = str(story.get("image_url") or "")
@@ -62,7 +81,7 @@ def assess_bytes(raw: bytes, story: dict) -> dict:
     # Portraits and diagrams must NOT be replaced merely for being narrow.
     # The renderer fills the entire card using a blurred copy as the background
     # while keeping the original subject entirely visible on the foreground.
-    protected = needs_subject_protection(story, ratio)
+    protected = bool(faces_detected) or needs_subject_protection(story, ratio)
     return {
         "policy_version": POLICY_VERSION,
         "display_mode": "info_card" if reasons else "verified_photo",
@@ -74,6 +93,8 @@ def assess_bytes(raw: bytes, story: dict) -> dict:
         "aspect_ratio": ratio,
         "luminance_stddev": contrast,
         "content_digest_sha256": hashlib.sha256(raw).hexdigest(),
+        "faces_detected": faces_detected,
+        "face_detection_available": face_detection_available,
         "semantic_match_model_verified": False,
     }
 
