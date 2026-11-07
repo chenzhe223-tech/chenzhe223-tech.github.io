@@ -925,30 +925,9 @@ function renderEditorial(data){
  root.hidden=false;
  root.innerHTML='<strong>'+esc(currentLang==="en"?"DAVYLAB ANALYSIS · EDITORIAL TAKE":"DAVYLAB 分析｜今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(scope?'<small class="editorial-scope">'+esc(scope)+'</small>':'')+(basisMarkup)+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
-function illustrationTheme(x){
- const t=[x.title_zh,x.title_en,x.original_title,x.title,x.category_zh].filter(Boolean).join(" ").toLowerCase();
- if(/nvidia|h200|gpu|芯片|英伟达|算力|半导体|数据中心/.test(t))return {kind:"chip",label:/h200/i.test(t)?"H200 / GPU":"AI COMPUTE",sub:"芯片与算力"};
- if(/实验|科研|湿实验|lab|science|bio|生物/.test(t))return {kind:"science",label:"AI × SCIENCE",sub:"科研与实验"};
- if(/电影|视频|导演|短视频|cinema|film|movie/.test(t))return {kind:"media",label:"AI × MEDIA",sub:"影像与创作"};
- if(/robot|机器人|具身|humanoid/.test(t))return {kind:"robot",label:"EMBODIED AI",sub:"机器人技术"};
- if(/model|模型|推理|agent|智能体|deepseek|minimax/.test(t))return {kind:"model",label:"AI MODEL",sub:"模型与应用"};
- return {kind:"product",label:"AI TECHNOLOGY",sub:"产业与产品"};
-}
-function topicIllustrationMarkup(x, reason){
- // A real visual illustration is preferable to an empty slate; it never
- // impersonates a news photograph. Remote image search has already run.
- const theme=illustrationTheme(x);
- const grid='<path d="M0 84H1200M0 160H1200M0 236H1200M0 312H1200M105 0V460M265 0V460M425 0V460M585 0V460M745 0V460M905 0V460M1065 0V460" stroke="#a8c9ff" stroke-width="1" opacity=".09"/>';
- const chip='<g transform="translate(755 208) rotate(-12)"><rect x="-142" y="-111" width="284" height="222" rx="30" fill="#102644" stroke="#95d4ff" stroke-width="3"/><rect x="-113" y="-84" width="226" height="168" rx="17" fill="#234b7c" stroke="#6dcdf8" stroke-width="3"/><rect x="-87" y="-60" width="174" height="120" rx="12" fill="#0d1a30" stroke="#a0ddff" stroke-width="2"/><path d="M-50 -8H50M0 -45V45" stroke="#78d4ff" stroke-width="7" stroke-linecap="round"/><g stroke="#68caff" stroke-width="8" stroke-linecap="round"><path d="M-126 -95v-27m47 27v-27m47 27v-27m47 27v-27m47 27v-27M-126 95v27m47-27v27m47-27v27m47-27v27m47-27v27"/></g></g>';
- const science='<g transform="translate(755 220)"><path d="M-72 -108v105m-40 0h80l-17-105h-46m-31 2h74m-70 103-56 104h177L-54 -3" fill="none" stroke="#8fe4fa" stroke-width="18" stroke-linejoin="round" stroke-linecap="round"/><circle cx="35" cy="-82" r="32" fill="#44b9e0" opacity=".6"/><circle cx="82" cy="-133" r="17" fill="#fbab69"/><circle cx="100" cy="-36" r="22" fill="#8ce3c8"/><path d="M-110 70q100-77 200 0" fill="none" stroke="#faad78" stroke-width="9"/></g>';
- const media='<g transform="translate(745 220) rotate(-8)"><rect x="-155" y="-100" width="310" height="210" rx="26" fill="#214b7c" stroke="#96d7ff" stroke-width="6"/><path d="M-150 -45H150M-95 -100l-50 55M0 -100l-50 55M90 -100L40 -45M155 -88L114 -45" stroke="#9ed8ff" stroke-width="12"/><path d="M-38 -15v83L49 27z" fill="#ffac75"/></g>';
- const robot='<g transform="translate(780 205)"><rect x="-90" y="-150" width="180" height="130" rx="52" fill="#204f82" stroke="#9edcff" stroke-width="5"/><rect x="-59" y="-100" width="118" height="40" rx="20" fill="#081e39"/><circle cx="-28" cy="-80" r="9" fill="#90e0ff"/><circle cx="28" cy="-80" r="9" fill="#90e0ff"/><path d="M-75 -10l-32 128h213L76 -10z" fill="#18365e" stroke="#88d9ff" stroke-width="6"/><path d="M-124 7l-58 122m306-122 58 122" stroke="#8bd7f4" stroke-width="19" stroke-linecap="round"/></g>';
- const model='<g transform="translate(755 210)" stroke="#99dafe" stroke-width="8"><circle cx="0" cy="0" r="85" fill="#163e6b"/><circle cx="-152" cy="-92" r="27" fill="#64bad9"/><circle cx="151" cy="-90" r="30" fill="#f8ab72"/><circle cx="-141" cy="101" r="24" fill="#72d6c8"/><circle cx="156" cy="100" r="29" fill="#5689ec"/><path d="M-128 -75 -70 -40M126 -72 70 -40M-122 83 -65 39M128 78 68 42" fill="none"/><path d="M-34 -24l66 24-66 24z" fill="#8ae0f7"/></g>';
- const art={chip,science,media,robot,model,product:chip}[theme.kind];
- const svg='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 460" preserveAspectRatio="xMidYMid slice" role="img" aria-label="'+esc(theme.sub)+'原创主题示意图"><defs><linearGradient id="g" x2="1" y2="1"><stop stop-color="#091b35"/><stop offset=".52" stop-color="#153b65"/><stop offset="1" stop-color="#246182"/></linearGradient><radialGradient id="r"><stop stop-color="#53bcf2" stop-opacity=".3"/><stop offset="1" stop-color="#53bcf2" stop-opacity="0"/></radialGradient></defs><rect width="1200" height="460" fill="url(#g)"/><rect width="1200" height="460" fill="url(#r)"/>'+grid+'<circle cx="775" cy="235" r="202" fill="none" stroke="#93c7fc" opacity=".16" stroke-width="2"/>'+art+'<text x="74" y="88" font-family="Arial,sans-serif" font-size="18" letter-spacing="4" font-weight="bold" fill="#92ccec">DAVYLAB / AI FRONTIER</text><path d="M74 110h380" stroke="#80c9eb" opacity=".45"/><text x="74" y="217" font-family="Arial,sans-serif" font-size="49" font-weight="bold" fill="#fff7ed">'+esc(theme.label)+'</text><text x="76" y="263" font-family="Arial,sans-serif" font-size="25" fill="#bfdcf0">'+esc(theme.sub)+'</text><text x="76" y="393" font-family="Arial,sans-serif" font-size="16" fill="#fae4cb">原创主题示意图 · 非新闻现场</text></svg>';
- return '<div class="story-image story-topic-illustration" data-image-reason="'+esc(reason||"no_licensed_source_image")+'">'+svg+'</div>';
-}
-function infoCardMarkup(x, reason){return topicIllustrationMarkup(x,reason);}
+/* When no lawful topic-relevant photo was found, the news card is text-first.
+   Do NOT generate or reuse synthetic blue icon/illustration placeholders. */
+function infoCardMarkup(_story, _reason){return "";}
 function themeStatusReason(x, thematic, supplied){
  if(!supplied)return "missing_image";
  if(thematic)return "thematic_image_suppressed";
@@ -977,14 +956,14 @@ function storyImageMarkup(x){
  const source=String(x.image_source||"").toLowerCase();
  const thematic=["thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"].includes(status)
      ||source.includes("topic image")||source.includes("topic illustration")||/images\\.unsplash\\.com/i.test(supplied);
- // Stock imagery and unknown images must not impersonate an actual news photo.
+ // No verified publisher/authorized search photo = text-first editorial card, never fake stock/illustration.
  if(!supplied||thematic||status==="image_unavailable"||x.image_display_mode==="info_card")return infoCardMarkup(x,themeStatusReason(x,thematic,supplied));
  const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
  const alt=x.image_alt||title||"News illustration";
  const subjectText=[title,alt,x.category_zh,x.category_en].filter(Boolean).join(" ").toLowerCase();
  const hasSubject=/(人形机器人|机器人|人像|肖像|全身|人物|合影|humanoid|robot|portrait|full.body|diagram|infographic|benchmark|dashboard|screenshot|compiler|产品界面|界面|流程图|图表|截图|屏幕|架构图|编译器|编译优化)/i.test(subjectText);
  const cropMode=String(x.image_visual_quality?.crop_mode||"");
- const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.outerHTML=topicIllustrationMarkup({title_zh:this.alt},\x27image_load_failed\x27)">';
+ const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.remove()">';
  const searched=status==="searched_image";
  const imagePage=String(x.image_page_url||"");
  const link=/^https:\/\//.test(imagePage)?imagePage:(x.source_url||"#");
