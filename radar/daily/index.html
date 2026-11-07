@@ -907,6 +907,11 @@ function infoCardMarkup(x, reason){
  const detail=currentLang==="en"?"Source-backed story · no unrelated stock image":"原文信息摘要 · 不使用无关图库照片";
  return '<div class="story-image story-info-card" data-image-reason="'+esc(reason||"no_verified_photo")+'"><span class="info-card-kicker">'+esc(label)+'</span><strong class="info-card-title">'+esc(title||"AI NEWS")+'</strong><span class="info-card-source">'+esc(source)+'</span><span class="info-card-detail">'+esc(detail)+'</span></div>';
 }
+function themeStatusReason(x, thematic, supplied){
+ if(!supplied)return "missing_image";
+ if(thematic)return "thematic_image_suppressed";
+ return (x.image_visual_quality&&x.image_visual_quality.reasons||[]).join(",")||"visual_quality_fallback";
+}
 function storyImageMarkup(x){
  const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:"";
  const status=String(x.image_match_status||"");
@@ -914,7 +919,7 @@ function storyImageMarkup(x){
  const thematic=["thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"].includes(status)
      ||source.includes("topic image")||source.includes("topic illustration")||/images\\.unsplash\\.com/i.test(supplied);
  // Stock imagery and unknown images must not impersonate an actual news photo.
- if(!supplied||thematic||status==="image_unavailable")return infoCardMarkup(x,thematic?"thematic_image_suppressed":"missing_image");
+ if(!supplied||thematic||status==="image_unavailable"||x.image_display_mode==="info_card")return infoCardMarkup(x,themeStatusReason(x,thematic,supplied));
  const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
  const alt=x.image_alt||title||"News illustration";
  const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
