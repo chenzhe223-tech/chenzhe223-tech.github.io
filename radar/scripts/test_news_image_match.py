@@ -12,6 +12,53 @@ from news_image_match import (
 
 
 class NewsImageMatchTests(unittest.TestCase):
+    def test_publisher_image_has_priority_over_search(self):
+        from news_image_match import resolve_story_image
+        story={"title_en":"OpenAI launches assistant dashboard",
+               "source_url":"https://publisher.example.com/openai/dashboard",
+               "image_url":"https://publisher.example.com/images/dashboard.png"}
+        with patch("news_image_match.valid_image_url",return_value=True), patch(
+            "news_image_match._free_image_search",side_effect=AssertionError("source image takes priority")
+        ):
+            chosen=resolve_story_image(story,{},set())
+        self.assertEqual(chosen["image_match_status"],"feed_image")
+        self.assertEqual(chosen["image_url"],story["image_url"])
+
+    def test_no_source_photo_searches_and_labels_reusable_title_match(self):
+        from news_image_match import _free_image_search
+        story={"title_en":"OpenAI Assistant dashboard product launch",
+               "title_zh":"OpenAI 助手仪表板产品发布"}
+        result={
+            "title":"OpenAI Assistant dashboard product launch official interface",
+            "url":"https://commons.wikimedia.org/images/openai-assistant-dashboard.jpg",
+            "foreign_landing_url":"https://commons.wikimedia.org/wiki/File:OpenAI_dashboard",
+            "license":"by","license_url":"https://creativecommons.org/licenses/by/4.0/",
+            "creator":"Photo contributor",
+        }
+        with patch("news_image_match._openverse_candidates",return_value=[result]), patch(
+            "news_image_match.valid_image_url",return_value=True
+        ):
+            chosen=_free_image_search(story,set())
+        self.assertIsNotNone(chosen)
+        self.assertEqual(chosen["image_match_status"],"searched_image")
+        self.assertIn("非新闻现场",chosen["image_alt"])
+        self.assertEqual(chosen["image_license_url"],result["license_url"])
+        self.assertGreaterEqual(chosen["image_match_score"],.55)
+
+    def test_image_search_rejects_unrelated_or_unlicensed_visuals(self):
+        from news_image_match import _free_image_search
+        story={"title_en":"OpenAI Assistant dashboard product launch"}
+        unrelated={"title":"Beautiful leaves and landscape","url":"https://images.example.com/forest.jpg",
+                    "foreign_landing_url":"https://example.com/forest","license":"cc0",
+                    "license_url":"https://creativecommons.org/publicdomain/zero/1.0/"}
+        forbidden={"title":"OpenAI Assistant dashboard product launch","url":"https://images.example.com/launch.jpg",
+                    "foreign_landing_url":"https://example.com/launch","license":"by-nc",
+                    "license_url":"https://creativecommons.org/licenses/by-nc/4.0/"}
+        with patch("news_image_match._openverse_candidates",return_value=[unrelated,forbidden]), patch(
+            "news_image_match.valid_image_url",return_value=True
+        ):
+            self.assertIsNone(_free_image_search(story,set()))
+
     def test_friday_inventory_exhaustion_has_unused_technology_assets(self):
         import json
         root = Path(__file__).resolve().parents[2]
