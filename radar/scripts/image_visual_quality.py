@@ -8,7 +8,6 @@ from __future__ import annotations
 import hashlib
 import io
 from pathlib import Path
-from PIL import Image, ImageStat
 
 THEMATIC_STATUSES = {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
 POLICY_VERSION = "2026-11-07.1"
@@ -16,6 +15,7 @@ POLICY_VERSION = "2026-11-07.1"
 
 def assess_bytes(raw: bytes, story: dict) -> dict:
     """Return an auditable presentation decision for the already verified bytes."""
+    from PIL import Image, ImageStat
     if not raw or len(raw) > 8 * 1024 * 1024:
         raise ValueError("unusable_image_bytes")
     with Image.open(io.BytesIO(raw)) as image:
