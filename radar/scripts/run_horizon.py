@@ -682,7 +682,7 @@ def main():
         try:
             DATA_DIR.mkdir(parents=True,exist_ok=True)
             cmd=[sys.executable,'-m','src.main','--config',str(CONFIG),'--data-dir',str(DATA_DIR),'--hours','24','--log-level','WARNING']
-            result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=180,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
+            result=subprocess.run(cmd,cwd=HORIZON_DIR,check=False,timeout=90,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,text=True)
             if result.returncode!=0:
                 tail='\n'.join((result.stdout or '').splitlines()[-35:])
                 tail=re.sub(r'''(?i)Bearer\s+[^\s"']+''', 'Bearer [REDACTED]', tail)
@@ -699,6 +699,9 @@ def main():
                 report['ai_analysis']={'status':'ok','provider':'DeepSeek via Horizon','generated_at':dt.datetime.now(TZ).isoformat(),'summary_markdown':summary[:30000],'summary_markdown_en':summary_en_path.read_text(encoding='utf-8').strip()[:30000] if summary_en_path.exists() else '','summary_source':'Horizon daily digest; source URLs are included where available.'}
         except subprocess.TimeoutExpired: report['ai_analysis']={'status':'unavailable','message':'AI 分析运行超时，基础新闻与 Skill 榜单已保留。'}
         except Exception as exc: report['ai_analysis']={'status':'unavailable','message':'AI 分析暂时不可用，基础新闻与 Skill 榜单已保留。'}; print(f'[horizon-warning] {type(exc).__name__}')
+    if '--horizon-only' in sys.argv:
+        REPORT.write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+        return 0
     localize(report)
     manual_applied = apply_manual_editorial_override(report)
     if not manual_applied:

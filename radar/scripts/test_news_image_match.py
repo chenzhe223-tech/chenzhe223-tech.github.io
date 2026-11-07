@@ -12,6 +12,20 @@ from news_image_match import (
 
 
 class NewsImageMatchTests(unittest.TestCase):
+    def test_friday_inventory_exhaustion_has_unused_technology_assets(self):
+        import json
+        root = Path(__file__).resolve().parents[2]
+        used = set()
+        for day in range(2, 7):
+            doc = json.loads((root / f"radar/data/archive/2026-11-{day:02d}.json").read_text())
+            for section in ("top5", "china_ai_news"):
+                used.update(_image_identity(str(x.get("image_url") or "")) for x in doc.get(section, []))
+        # A Saturday edition must have room for all 13 published cards, with no reuse.
+        for index in range(13):
+            result = _thematic_fallback({"title": "AI technology industry news"}, used)
+            self.assertTrue(result["image_url"], f"inventory exhausted at card {index}")
+            used.add(_image_identity(result["image_url"]))
+
     def test_image_matching_budgets_are_bounded(self):
         self.assertLessEqual(IMAGE_MATCH_BUDGET_SECONDS, 150)
         self.assertLessEqual(STORY_IMAGE_BUDGET_SECONDS, 10)

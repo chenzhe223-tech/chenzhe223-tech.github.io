@@ -3,6 +3,13 @@ from unittest.mock import patch
 from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens, verify_and_repair_story_image
 
 class QualityGateTests(unittest.TestCase):
+    def test_current_cards_without_images_are_still_checked(self):
+        from radar.scripts.quality_gate import current_image_stories
+        cards = current_image_stories({"top5": [{"title": "missing image", "url": "https://example.com/1"}], "china_ai_news": [{"title": "also missing", "url": "https://example.com/2"}]})
+        self.assertEqual(len(cards), 2)
+        error, _, _ = verify_and_repair_story_image(cards[0], {}, [], {}, [])
+        self.assertEqual(error["type"], "image_missing")
+
     def test_one_verified_skill_is_enough_for_daily_featured_recommendation(self):
         self.assertEqual(MIN_QUALIFIED_SKILLS, 1)
         self.assertEqual(validate_skill_count([{"name": "demo/skill"}]), [])

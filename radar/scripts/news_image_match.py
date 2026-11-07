@@ -22,7 +22,7 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 3
-CACHE_VERSION = 8
+CACHE_VERSION = 9
 IMAGE_MATCH_BUDGET_SECONDS = 150
 STORY_IMAGE_BUDGET_SECONDS = 10
 QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
@@ -354,6 +354,31 @@ THEME_PHOTOS = {
     "general": ("photo-1531297484001-80022131f5a1", "photo-1498050108023-c5249f4df085", "photo-1519389950473-47ba0277781c", "photo-1526374965328-7f61d4dc18c5", "photo-1516321318423-f06f85e504b3", "photo-1550745165-9bc0b252726f", "photo-1526498460520-4c246339dccb", "photo-1504384308090-c894fdcc538d", "photo-1460925895917-afdab827c52f", "photo-1521737711867-e3b97375f902", "photo-1497366754035-f200968a6e72", "photo-1556761175-b413da4baf72", "photo-1522071820081-009f0129c71c", "photo-1524758631624-e2822e304c36", "photo-1522542550221-31fd19575a2d", "photo-1553877522-43269d4ea984", "photo-1517245386807-bb43f82c33c4", "photo-1552664730-d307ca884978", "photo-1522202176988-66273c2fd55f", "photo-1497366216548-37526070297c", "photo-1497366811353-6870744d04b2", "photo-1497366858526-0766cadbe8fa", "photo-1556761175-129418cb2dfe", "photo-1556761175-4b46a572b786", "photo-1556761175-136f8a6b7a44", "photo-1500530855697-b586d89ba3ee", "photo-1500534623283-312aade485b7", "photo-1500534314209-a25ddb2bd429", "photo-1470770841072-f978cf4d019e", "photo-1485470733090-0aae1788d5af", "photo-1464822759023-fed622ff2c3b", "photo-1501785888041-af3ef285b470"),
 }
 
+
+# Additional technology/workplace illustrations. Every selected asset still has
+# to pass download, SHA256, perceptual and current-week history gates at runtime.
+# Do not use landscape photos merely to fill an exhausted technology inventory.
+TECHNOLOGY_RESERVE = (
+    "photo-1517433456452-f9633a875f6f", "photo-1517077304055-6e89abbf09b0",
+    "photo-1515879218367-8466d910aaa4", "photo-1461749280684-dccba630e2f6",
+    "photo-1555066931-4365d14bab8c", "photo-1542831371-29b0f74f9713",
+    "photo-1484417894907-623942c8ee29", "photo-1517694712202-14dd9538aa97",
+    "photo-1547658719-da2b51169166", "photo-1555949963-ff9fe0c870eb",
+    "photo-1558494949-ef010cbdcc31", "photo-1451187580459-43490279c0fa",
+    "photo-1488590528505-98d2b5aba04b", "photo-1531482615713-2afd69097998",
+    "photo-1517248135467-4c7edcad34c4", "photo-1551434678-e076c223a692",
+    "photo-1524178232363-1fb2b075b655", "photo-1531973576160-7125cd663d86",
+    "photo-1515378791036-0648a3ef77b2", "photo-1499951360447-b19be8fe80f5",
+    "photo-1496181133206-80ce9b88a853", "photo-1486312338219-ce68d2c6f44d",
+    "photo-1581091226825-a6a2a5aee158", "photo-1581092921461-eab62e97a780",
+)
+THEME_PHOTOS["general"] = tuple(pid for pid in THEME_PHOTOS["general"] if pid not in {
+    "photo-1500530855697-b586d89ba3ee", "photo-1500534623283-312aade485b7",
+    "photo-1500534314209-a25ddb2bd429", "photo-1470770841072-f978cf4d019e",
+    "photo-1485470733090-0aae1788d5af", "photo-1464822759023-fed622ff2c3b",
+    "photo-1501785888041-af3ef285b470",
+}) + TECHNOLOGY_RESERVE
+
 def story_context(story: dict) -> str:
     """Reuse Horizon's What/Why/Action and translated summaries as semantic query context."""
     fields = ("original_title", "title_en", "title_zh", "title", "what_en", "what_zh",
@@ -418,7 +443,7 @@ def story_fallback_topic(story: dict) -> str:
 def _theme_photo_url(photo_id: str) -> str:
     return f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&w=1000&q=82"
 
-def _theme_backup_candidates(story: dict, exclude_url: str = "", used: set[str] | None = None, limit: int = 12) -> list[str]:
+def _theme_backup_candidates(story: dict, exclude_url: str = "", used: set[str] | None = None, limit: int = 36) -> list[str]:
     """Return several topic-matched backup assets, excluding the primary and all known weekly reuse."""
     used = used or set()
     candidates = list(THEME_PHOTOS.get(story_fallback_topic(story), ())) + list(THEME_PHOTOS["general"])
@@ -451,7 +476,7 @@ def _thematic_fallback(story: dict, used: set[str]) -> dict:
         return {"image_url":"","image_source":"No verified unique image available","image_page_url":"","image_credit":"","image_license":"","image_license_url":"","image_alt":"配图暂缺 · 未找到符合本周去重规则的唯一图片","image_match_status":"image_unavailable","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
     labels = {"robot":"AI agent / robotics topic illustration","compute":"AI model / compute topic illustration","product":"AI product / software topic illustration","business":"AI business / industry topic illustration","creative":"AI creativity topic illustration","security":"cybersecurity / digital protection topic illustration","general":"AI technology topic illustration"}
     slugs = {"robot":"robotics","compute":"computer-technology","product":"technology","business":"business-technology","creative":"creative-technology","security":"cybersecurity","general":"artificial-intelligence"}
-    backup_candidates = _theme_backup_candidates(story,url,used,limit=12)
+    backup_candidates = _theme_backup_candidates(story,url,used,limit=36)
     return {"image_url":url,"image_fallback_url":backup_candidates[0] if backup_candidates else "","image_fallback_candidates":backup_candidates,"image_source":"Unsplash topic illustration","image_page_url":"https://unsplash.com/s/photos/"+slugs[topic],"image_credit":"Unsplash","image_license":"Unsplash License; review source terms before reuse","image_license_url":"https://unsplash.com/license","image_alt":"主题配图（非新闻现场）："+labels[topic]+": "+title,"image_match_status":"thematic_fallback","image_matched_at":dt.datetime.now(TZ).isoformat(),"image_is_generated":False,"image_generation_prompt":build_illustration_prompt(story)}
 
 def _openverse_candidates(query: str) -> list[dict]:
@@ -562,7 +587,7 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
         first_fallback = str(result.get("image_fallback_url") or "").strip()
         if first_fallback:
             candidates.insert(0, first_fallback)
-        candidates.extend(_theme_backup_candidates(story,str(result.get("image_url") or ""),used,limit=12))
+        candidates.extend(_theme_backup_candidates(story,str(result.get("image_url") or ""),used,limit=36))
         unique_candidates = []
         seen_candidates = set()
         for candidate in candidates:
@@ -572,7 +597,7 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
                 continue
             unique_candidates.append(candidate)
             seen_candidates.add(identity)
-            if len(unique_candidates) >= 12:
+            if len(unique_candidates) >= 36:
                 break
         result["image_fallback_candidates"] = unique_candidates
         result["image_fallback_url"] = unique_candidates[0] if unique_candidates else ""

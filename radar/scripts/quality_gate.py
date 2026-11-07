@@ -337,6 +337,12 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
     return {"type":"image_missing","title":title,"url":primary_url}, None, None
 
 
+def current_image_stories(report):
+    # Missing images must fail the same P0 gate as invalid/reused images.
+    return [story for section in ("top5", "china_ai_news")
+            for story in (report.get(section) or []) if isinstance(story, dict)]
+
+
 def main():
     OUT_DIR.mkdir(parents=True,exist_ok=True)
     if not REPORT.exists(): raise SystemExit("FAIL: latest.json missing; cannot run historical quality gate")
@@ -437,11 +443,7 @@ def main():
     # Current-day unique-image checks: verify primary assets, then try a declared
     # topic-image backup only if it is also unused in the current ISO week.
     image_errors=[]; current_images=[]; image_seen={}; image_fallback_repairs=[]
-    image_stories=[]
-    for key in ("top5","china_ai_news"):
-        arr=report.get(key)
-        if isinstance(arr,list):
-            image_stories.extend(x for x in arr if isinstance(x,dict) and image_url(x))
+    image_stories=current_image_stories(report)
     # avoid repeated entries from the same object across report sections
     unique_story={}
     for s in image_stories: unique_story[story_id(s)]=s

@@ -1,76 +1,13 @@
 name: Build Davy Radar Daily
-# Runs a private-key-safe Horizon + DeepSeek analysis before publishing the public daily JSON.
-
+# Emergency refresh uses exactly the same fail-closed pipeline as scheduled production.
 on:
-  # Manual emergency refresh only. The Pages workflow is the single scheduled production pipeline.
   workflow_dispatch:
-
 permissions:
   contents: write
-
-concurrency:
-  group: davy-radar-daily
-  cancel-in-progress: false
-
+  pages: write
+  id-token: write
+  issues: write
 jobs:
-  build-daily:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - name: Checkout DAVYLAB
-        uses: actions/checkout@v4
-        with:
-          ref: main
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
-      - name: Test news image matching rules
-        run: python -m unittest radar/scripts/test_news_image_match.py -v
-
-      - name: Collect public AI news and rank Skills
-        run: python radar/scripts/build_daily.py
-
-      - name: Checkout Horizon (MIT)
-        uses: actions/checkout@v4
-        with:
-          repository: Thysrael/Horizon
-          ref: main
-          path: horizon-src
-
-      - name: Install Horizon dependencies
-        working-directory: horizon-src
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install .
-
-      - name: Run Horizon AI analysis (no notifications)
-        env:
-          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
-          HORIZON_DIR: ${{ github.workspace }}/horizon-src
-        run: python radar/scripts/run_horizon.py
-
-      - name: Match story-specific images (free sources first; optional Firecrawl fallback)
-        env:
-          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
-          RADAR_USE_FIRECRAWL: ${{ vars.RADAR_USE_FIRECRAWL }}
-        run: python radar/scripts/news_image_match.py
-
-      - name: Enforce China AI minimum and data contract
-        run: |
-          python -m py_compile radar/scripts/build_daily.py
-          python -m unittest radar.scripts.test_daily_brief
-
-      - name: Commit daily data
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add radar/data/latest.json radar/data/history.json radar/data/archive/ radar/data/image-cache.json
-          if git diff --cached --quiet; then
-            echo "No daily data changes to commit."
-          else
-            git commit -m "Update Davy Radar daily intelligence"
-            git push origin HEAD:main
-          fi
+  production:
+    uses: ./.github/workflows/pages.yml
+    secrets: inherit

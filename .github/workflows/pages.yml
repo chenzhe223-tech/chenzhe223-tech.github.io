@@ -19,12 +19,16 @@ on:
     - cron: "15 0 * * *"
     - cron: "0 1 * * *"
     - cron: "45 1 * * *"
+    # Watchdog recovery: retry through the China-time day, never overwrite on failure.
+    - cron: "17 2-14 * * *"
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   # Protect the active production run; recovery crons must not cancel it.
@@ -35,7 +39,7 @@ jobs:
   qa:
     name: Test AI daily brief before publishing
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
       - name: Sync latest main before deciding whether recovery is needed
@@ -77,11 +81,9 @@ jobs:
               if generated_at.tzinfo is None:
                   generated_at = generated_at.replace(tzinfo=dt.timezone.utc)
               report_age_minutes = (now_local - generated_at.astimezone(timezone)).total_seconds() / 60
-              report_fresh_enough = 0 <= report_age_minutes <= 120
               complete = (
-                  report_fresh_enough
-                  and report.get('report_date') == today
-                  and report.get('generated_at', '').startswith(today)
+                  report.get('report_date') == today
+                  and 0 <= report_age_minutes
                   and (
                       (report.get('top5_status') == 'ai_curated' and (report.get('localization') or {}).get('status') == 'ok')
                       or (report.get('top5_status') == 'editorial_curated' and (report.get('localization') or {}).get('status') == 'manual_editorial_verified' and (report.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (report.get('localization') or {}).get('sources_checked') == 5)
@@ -122,7 +124,7 @@ jobs:
               complete = False
           with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as output:
               output.write('skip=' + ('true' if complete else 'false') + '\n')
-          print(f"Today's complete AI-curated report already published, fresh and with a license-verified featured Skill (age <= 120 min): {complete}; age_minutes={report_age_minutes}")
+          print(f"Today's complete AI-curated report already published, fresh and with a license-verified featured Skill (valid for this China-time day): {complete}; age_minutes={report_age_minutes}")
           PY
       - name: Run Skill Radar, visual-lock and poster regression tests before network-heavy setup
         run: |
@@ -160,7 +162,7 @@ jobs:
         if: steps.preflight.outputs.skip != 'true'
       - name: Run Horizon and DeepSeek enrichment with bounded retries
         continue-on-error: true
-        timeout-minutes: 5
+        timeout-minutes: 8
         env:
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
         shell: bash
@@ -191,15 +193,19 @@ jobs:
             python -m pip install "python-dotenv>=1.0.0"
           fi
           for attempt in 1; do
-            if timeout --kill-after=10s 120s python radar/scripts/run_horizon.py; then
+            if timeout --kill-after=10s 210s python -u radar/scripts/run_horizon.py --horizon-only; then
               break
             fi
             echo "::warning::Horizon/AI enrichment attempt $attempt failed."
             if [ "$attempt" = "1" ]; then sleep 8; fi
           done
         if: steps.preflight.outputs.skip != 'true'
-      - name: Apply deterministic claim provenance and source basis
-        run: timeout --kill-after=10s 420s python radar/scripts/run_horizon.py --provenance-only
+      - name: Apply required bilingual selection and claim provenance independently of Horizon
+        timeout-minutes: 16
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: timeout --kill-after=10s 900s python -u radar/scripts/run_horizon.py --provenance-only
+        if: steps.preflight.outputs.skip != 'true'
 
       - name: Record AI selection health for recovery scheduling
         if: steps.preflight.outputs.skip != 'true'
@@ -674,3 +680,27 @@ jobs:
           else:
               raise SystemExit('Post-deploy verification failed: ' + last_error)
           PY
+
+  alert:
+    name: Record production failure
+    if: always() && (needs.qa.result == 'failure' || needs.verify-live.result == 'failure')
+    needs: [qa, verify-live]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or update daily failure issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          title="Radar production failure $(TZ=Asia/Shanghai date +%F)"
+          body="Production gates failed. Previous valid files were retained unless all pre-publication gates passed. Inspect run: $RUN_URL. Live verification failure requires immediate investigation. Scheduled watchdog will retry; do not bypass P0."
+          echo "$body" >> "$GITHUB_STEP_SUMMARY"
+          issue=$(gh issue list --state open --search "$title in:title" --json number,title --jq ".[] | select(.title == \"$title\") | .number" | head -1)
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body "$body"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi

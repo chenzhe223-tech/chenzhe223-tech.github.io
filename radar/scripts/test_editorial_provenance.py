@@ -9,6 +9,14 @@ from radar.scripts.run_horizon import apply_claim_provenance, apply_verified_ski
 
 
 class EditorialProvenanceTests(unittest.TestCase):
+    def test_horizon_only_never_runs_required_localization(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            report_path = Path(tmp) / "latest.json"
+            report_path.write_text(json.dumps({"report_date": "2026-11-07"}))
+            with patch.object(run_horizon, "REPORT", report_path), patch.object(run_horizon, "HORIZON_DIR", Path(tmp) / "absent"), patch.dict("os.environ", {"DEEPSEEK_API_KEY": "test"}), patch.object(run_horizon.sys, "argv", ["run_horizon.py", "--horizon-only"]), patch.object(run_horizon, "localize", side_effect=AssertionError("optional Horizon must not run localization")):
+                self.assertEqual(run_horizon.main(), 0)
+            self.assertEqual(json.loads(report_path.read_text())["report_date"], "2026-11-07")
+
     def test_skill_count_and_host_compatibility_are_explicit(self):
         skills = [{
             "name": "Donchitos/Claude-Code-Game-Studios",
