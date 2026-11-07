@@ -587,16 +587,16 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     existing=normalize_url(story.get("image_url") or "")
     result={}
     try:
-        if existing and _image_identity(existing) not in used and not is_generic_brand_asset(existing) and valid_image_url(existing):
+        if existing and _image_identity(existing) not in used and not is_generic_brand_asset(existing) and "images.unsplash.com/" not in existing and valid_image_url(existing):
             result=_metadata_result(existing,story); result["image_match_status"]="feed_image"
         elif article_url and time.monotonic()-started<STORY_IMAGE_BUDGET_SECONDS:
             document=fetch_article_html(article_url)
-            for candidate_url in extract_image_candidates(document,article_url)[:1]:
+            for candidate_url in extract_image_candidates(document,article_url)[:3]:
                 if _image_identity(candidate_url) not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
                     result=_metadata_result(candidate_url,story); break
             if not result and firecrawl_enabled() and time.monotonic()-started<6:
                 firecrawl_document=fetch_article_html_firecrawl(article_url)
-                for candidate_url in extract_image_candidates(firecrawl_document,article_url)[:1]:
+                for candidate_url in extract_image_candidates(firecrawl_document,article_url)[:3]:
                     if candidate_url not in used and not is_generic_brand_asset(candidate_url) and valid_image_url(candidate_url):
                         result=_metadata_result(candidate_url,story); break
         if not result and time.monotonic()-started<STORY_IMAGE_BUDGET_SECONDS:
@@ -713,7 +713,7 @@ def enrich_report(report: dict, cache: dict) -> tuple[int,int]:
     enforce_unique_story_images(report,used)
     stories=list(top5)+[x for x in news[:5] if x.get("url") not in top_urls]+list(china)
     total=len(stories); matched=sum(bool(normalize_url(str(x.get("image_url") or ""))) for x in stories if isinstance(x,dict))
-    report["image_matching"]={"status":"ok" if matched==total else "partial","matched":matched,"processed":total,"relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"thematic_fallback_count":sum(1 for x in stories if isinstance(x,dict) and str(x.get("image_match_status","")).startswith("thematic_fallback")),"strategy":["RSS/feed image","article OG/Twitter metadata","single bounded Openverse lookup","deterministic Unsplash topic illustration fallback"],"budget_seconds":IMAGE_MATCH_BUDGET_SECONDS,"duration_seconds":round(time.monotonic()-started,2),"last_run":dt.datetime.now(TZ).isoformat()}
+    report["image_matching"]={"status":"ok" if matched==total else "partial","matched":matched,"processed":total,"relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"thematic_fallback_count":sum(1 for x in stories if isinstance(x,dict) and str(x.get("image_match_status","")).startswith("thematic_fallback")),"strategy":["Publisher feed image","Publisher article OG/Twitter image","Two bounded title-matched licensed image searches","Clearly labeled info card when no approved image exists"],"budget_seconds":IMAGE_MATCH_BUDGET_SECONDS,"duration_seconds":round(time.monotonic()-started,2),"last_run":dt.datetime.now(TZ).isoformat()}
     print(f"[image-match] finished in {report['image_matching']['duration_seconds']}s: {matched}/{total} images")
     return matched,total
 
