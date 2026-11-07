@@ -22,7 +22,7 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 3
-CACHE_VERSION = 9
+CACHE_VERSION = 10
 IMAGE_MATCH_BUDGET_SECONDS = 150
 STORY_IMAGE_BUDGET_SECONDS = 10
 QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
@@ -45,7 +45,7 @@ IMAGE_FIELDS = (
     "image_url", "image_source", "image_page_url", "image_credit",
     "image_license", "image_license_url", "image_alt", "image_match_status",
     "image_match_score", "image_matched_at", "image_fallback_url", "image_fallback_candidates",
-    "image_is_generated", "image_generation_prompt", "image_match_duration_seconds",
+    "image_is_generated", "image_generation_prompt", "image_match_duration_seconds", "image_search_query",
 )
 
 def _image_identity(value: str) -> str:
@@ -534,21 +534,45 @@ def _bing_candidates(query: str) -> list[dict]:
         return []
 
 def _free_image_search(story: dict, used: set[str]) -> dict | None:
-    """One bounded Openverse lookup; no multi-provider serial fan-out."""
+    """After publisher photos, search title-matched images with reusable licenses.
+
+    Only search results with a traceable source, strong headline match and
+    reusable license are eligible. Search photos are never claimed as images
+    of the actual news event.
+    """
     queries = derive_visual_search_queries(story)
-    if not queries:
-        return None
-    query = queries[0]
-    context = story_context(story) + " " + query
-    for candidate in _openverse_candidates(query)[:2]:
-        relevance, score = candidate_relevance(context, " ".join(str(candidate.get(k) or "") for k in ("title","creator","foreign_landing_url")))
-        image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
-        if not relevance or not image_url or _image_identity(image_url) in used or not valid_image_url(image_url):
-            continue
-        license_name = " ".join(str(candidate.get("license") or "").split())
-        version = str(candidate.get("license_version") or "").strip()
-        return {"image_url":image_url,"image_fallback_url":_theme_backup_url(story,image_url,used),"image_source":"Openverse topic image","image_page_url":normalize_url(candidate.get("foreign_landing_url") or ""),"image_credit":str(candidate.get("creator") or "Openverse contributor"),"image_license":(license_name+" "+version).strip() or "License not listed","image_license_url":normalize_url(candidate.get("license_url") or ""),"image_alt":f"主题配图（非新闻现场）：{str(candidate.get('title') or query)}","image_match_status":"openverse_topic","image_match_score":score,"image_matched_at":dt.datetime.now(TZ).isoformat()}
+    title = _story_title(story)
+    for query in queries[:2]:
+        for candidate in _openverse_candidates(query)[:8]:
+            caption = " ".join(str(candidate.get(k) or "") for k in ("title", "description"))
+            relevant, score = candidate_relevance(title, caption)
+            image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
+            landing = normalize_url(candidate.get("foreign_landing_url") or "")
+            license_name = str(candidate.get("license") or "").lower().strip()
+            license_url = normalize_url(candidate.get("license_url") or "")
+            licensed = license_name in {"cc0", "by", "by-sa", "pdm"}
+            if not (relevant and score >= max(.55, MIN_IMAGE_RELEVANCE_SCORE)
+                    and image_url and landing and license_url and licensed):
+                continue
+            if _image_identity(image_url) in used or is_generic_brand_asset(image_url):
+                continue
+            if not valid_image_url(image_url):
+                continue
+            return {
+                "image_url": image_url,
+                "image_source": "Openverse title-matched image search",
+                "image_page_url": landing,
+                "image_credit": str(candidate.get("creator") or "Openverse contributor"),
+                "image_license": (license_name.upper() + " " + str(candidate.get("license_version") or "")).strip(),
+                "image_license_url": license_url,
+                "image_alt": f"搜索配图 · 非新闻现场：{candidate.get('title') or query}",
+                "image_match_status": "searched_image",
+                "image_match_score": score,
+                "image_search_query": query,
+                "image_matched_at": dt.datetime.now(TZ).isoformat(),
+            }
     return None
+
 
 def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     started=time.monotonic()
