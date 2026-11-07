@@ -91,7 +91,7 @@ jobs:
                   and report.get('quality_gate', {}).get('status') == 'PASS'
                   and report.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
                   and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
-                  and report.get('quality_gate', {}).get('visual_policy_version') == '2026-11-07.1'
+                  and report.get('quality_gate', {}).get('visual_policy_version') == '2026-11-08.1'
                   and report.get('editorial_policy_version') == '2026-11-02.2'
                   and report.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
                   and report.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
