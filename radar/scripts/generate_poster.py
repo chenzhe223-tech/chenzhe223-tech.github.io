@@ -190,7 +190,7 @@ def news_image_evidence(stories):
         status = str(story.get("image_match_status") or "")
         label_required = (
             story.get("poster_image_material_type") == "thematic_fallback"
-            or status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
+            or status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic", "searched_image"}
             or "topic image" in source.lower()
             or "topic illustration" in source.lower()
         )
@@ -212,7 +212,7 @@ def mark_topic_illustration(image, story):
     """Label generic thematic fallback images so they cannot be mistaken for event photography."""
     image_source = str(story.get("image_source") or "")
     status = str(story.get("image_match_status") or "")
-    if status not in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} and "topic image" not in image_source.lower() and "topic illustration" not in image_source.lower():
+    if status not in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic", "searched_image"} and "topic image" not in image_source.lower() and "topic illustration" not in image_source.lower():
         return image
     canvas = image.convert("RGBA")
     small = canvas.width < 220
@@ -324,6 +324,8 @@ def story_photo(story, idx, size):
     src = str(story.get("image_source") or "").lower()
     url = str(story.get("image_url") or "")
     thematic = status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} or "topic illustration" in src or "topic image" in src or "images.unsplash.com/" in url
+    # Relevant, licensed searched photos are shown with an explicit
+    # "not news footage" notice, not discarded as generic stock art.
     thematic = thematic or story.get("image_display_mode") == "info_card"
     if thematic:
         rendered = branded_information_card(story, size)
