@@ -553,6 +553,22 @@ def focused_visual_queries(story: dict) -> list[str]:
     return result[:3]
 
 
+def headline_image_relevance(story_title: str, image_title: str) -> tuple[bool, float]:
+    """Compare long headlines by their *product/entity*, not incidental words."""
+    accepted, score = candidate_relevance(story_title, image_title)
+    headline, candidate = story_title.casefold(), image_title.casefold()
+    for entity, model in (("nvidia", "h200"), ("openai", "biobasicsbench"),
+                          ("together", "compiler"), ("deepseek", None),
+                          ("minimax", None)):
+        brand = entity in headline or (entity == "nvidia" and "英伟达" in headline)
+        if brand and entity in candidate:
+            if model and model in headline and model in candidate:
+                return True, max(score, .85)
+            if model is None:
+                return True, max(score, .72)
+    return accepted, score
+
+
 def _free_image_search(story: dict, used: set[str]) -> dict | None:
     """After publisher photos, search title-matched images with reusable licenses.
 
@@ -565,7 +581,7 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
     for query in queries[:2]:
         for candidate in _openverse_candidates(query)[:8]:
             caption = " ".join(str(candidate.get(k) or "") for k in ("title", "description"))
-            relevant, score = candidate_relevance(title, caption)
+            relevant, score = headline_image_relevance(title, caption)
             image_url = normalize_url(candidate.get("url") or candidate.get("thumbnail") or "")
             landing = normalize_url(candidate.get("foreign_landing_url") or "")
             license_name = str(candidate.get("license") or "").lower().strip()
@@ -596,7 +612,7 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
     for query in queries[:2]:
         for page in _wikimedia_candidates(query)[:6]:
             title_text = str(page.get("title") or "").replace("File:", "")
-            matched, score = candidate_relevance(title, title_text)
+            matched, score = headline_image_relevance(title, title_text)
             if not matched or score < max(.48, MIN_IMAGE_RELEVANCE_SCORE):
                 continue
             infos = page.get("imageinfo") or []
