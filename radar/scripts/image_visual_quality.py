@@ -63,7 +63,7 @@ def assess_bytes(raw: bytes, story: dict) -> dict:
             face_detection_available = True
             faces_detected = len(detector.detectMultiScale(gray, scaleFactor=1.13,
                                                             minNeighbors=5, minSize=(25, 25)))
-    except (ImportError, OSError, ValueError, RuntimeError):
+    except (ImportError, AttributeError, OSError, ValueError, RuntimeError):
         pass
     ratio = round(width / height, 3)
     status = str(story.get("image_match_status") or "")
