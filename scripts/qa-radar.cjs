@@ -59,7 +59,7 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .story-image').count() === 5, viewport.name + ': all five stories have a source-backed image or information card');
       check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
       check(await page.locator('#top5List .story-info-card').count() + await page.locator('#top5List .story-image--verified').count() === 5, viewport.name + ': no irrelevant stock-image fallback');
-      const visualPolicy = await page.evaluate(() => {
+      const visualPolicy = await page.evaluate(async () => {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
         element.innerHTML = storyImageMarkup({title_zh:'MaaS 模型推理优化',image_match_status:'thematic_fallback',image_source:'Unsplash topic illustration',image_url:'https://images.unsplash.com/photo-123'});
@@ -70,6 +70,7 @@ function check(ok, name, detail = '') {
         portrait.dataset.subject='1';portrait.dataset.cropMode='protected_full_bleed';
         portrait.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="900"><rect width="300" height="900" fill="blue"/></svg>');
         mock.appendChild(portrait);document.body.appendChild(mock);
+        await new Promise(resolve => {if(portrait.complete && portrait.naturalWidth)resolve();else portrait.addEventListener('load',resolve,{once:true});});
         radarImageLoaded(portrait);
         const subjectMode=mock.classList.contains('story-image--protect');
         const backdrop=mock.style.getPropertyValue('--radar-image-bleed');
