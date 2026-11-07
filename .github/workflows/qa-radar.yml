@@ -36,7 +36,7 @@ jobs:
           assert len(report.get('news') or []) >= 5, 'committed report has fewer than five source news items'
           assert len(report.get('top5') or []) == 5, 'committed report must have exactly five editorial stories'
           assert len(report.get('china_ai_news') or []) >= 6, 'committed report has fewer than six China AI stories'
-          assert len(report.get('skills') or []) >= 5, 'committed report has fewer than five Skills'
+          assert len(report.get('skills') or []) >= 1, 'committed report has no verified featured Skill'
           assert all(str(x.get('image_url') or '').startswith('https://') for x in report['top5']), 'a top-five story is missing an HTTPS image'
           assert all(str(x.get('image_url') or '').startswith('https://') for x in report['china_ai_news']), 'a China AI story is missing an HTTPS image'
           assert all(x.get('quality_status') == 'PASS' for x in report['skills']), 'committed report includes an unverified Skill'

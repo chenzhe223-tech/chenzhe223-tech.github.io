@@ -9,6 +9,22 @@ from radar.scripts.run_horizon import apply_claim_provenance, apply_verified_ski
 
 
 class EditorialProvenanceTests(unittest.TestCase):
+    def test_superlative_keeps_source_publication_date_and_comparison_scope(self):
+        from radar.scripts.quality_gate import claim_provenance_error
+        story = {"title_zh": "Zyphra ZYFA 最高提速 1.76 倍", "what_zh": "项目方称 FP8 FlashAttention 性能提升。", "what_en": "The project reports up to 1.76x performance.", "source": "Zyphra", "published": "2026-11-06T10:00:00Z", "source_url": "https://example.com/zyfa"}
+        apply_claim_provenance({"top5": [story]})
+        self.assertIn("2026-11-06", story["what_zh"])
+        self.assertIn("来源披露的比较范围", story["what_zh"])
+        self.assertIn("尚未独立验证", story["what_zh"])
+        self.assertIsNone(claim_provenance_error(story))
+        self.assertEqual(story["title_zh"], "Zyphra ZYFA 最高提速 1.76 倍")
+
+    def test_superlative_without_source_date_still_fails(self):
+        from radar.scripts.quality_gate import claim_provenance_error
+        story = {"title_zh": "最高性能模型", "what_zh": "项目方称性能更好。", "source": "Example"}
+        apply_claim_provenance({"report_date": "2026-11-07", "top5": [story]})
+        self.assertEqual(claim_provenance_error(story)["type"], "superlative_missing_date_or_metric_scope")
+
     def test_horizon_only_never_runs_required_localization(self):
         with tempfile.TemporaryDirectory() as tmp:
             report_path = Path(tmp) / "latest.json"

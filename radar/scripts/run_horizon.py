@@ -572,6 +572,23 @@ def apply_claim_provenance(report):
             if what_en and not re.search(attribution_pattern, what_en, re.I):
                 story["what_en"] = what_en.rstrip(". ") + " (reported by the project or media; not independently evaluated.)"
 
+        # Attach source publication context, never today's report date or an
+        # invented evaluation date. The comparison remains a source claim.
+        if re.search(r"(首次|首个|第一|最高|最大|纪录|首超|first-ever|first to|record|highest|largest)", claim_text, re.I):
+            try:
+                source_date = dt.datetime.fromisoformat(str(story.get("published") or "").replace("Z", "+00:00")).date().isoformat()
+            except (ValueError, TypeError):
+                source_date = ""
+            if source_date and "来源披露的比较范围" not in what_zh:
+                what_zh = f"据{source}于{source_date}发布的材料，{what_zh.rstrip('。； ')}；上述比较仅限该来源披露的比较范围，尚未独立验证。"
+                story["what_zh"] = what_zh
+                if summary_zh:
+                    summary_zh = what_zh
+                    story["summary_zh"] = summary_zh
+                what_en = str(story.get("what_en") or what_en)
+                story["what_en"] = f"According to {source}'s publication dated {source_date}, {what_en.rstrip('. ')} (limited to the source-reported comparison scope; not independently verified)."
+                story["claim_source_publication_date"] = source_date
+
         confidence = str(story.get("confidence") or "").lower()
         if confidence == "low":
             if has_benchmark or re.search(r"(评分|benchmark|score)", what_zh, re.I):
