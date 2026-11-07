@@ -984,7 +984,7 @@ function storyImageMarkup(x){
  const subjectText=[title,alt,x.category_zh,x.category_en].filter(Boolean).join(" ").toLowerCase();
  const hasSubject=/(人形机器人|机器人|人像|肖像|全身|人物|合影|humanoid|robot|portrait|full.body|diagram|infographic|benchmark|dashboard|screenshot|compiler|产品界面|界面|流程图|图表|截图|屏幕|架构图|编译器|编译优化)/i.test(subjectText);
  const cropMode=String(x.image_visual_quality?.crop_mode||"");
- const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
+ const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.outerHTML=topicIllustrationMarkup({title_zh:this.alt},\x27image_load_failed\x27)">';
  const searched=status==="searched_image";
  const imagePage=String(x.image_page_url||"");
  const link=/^https:\/\//.test(imagePage)?imagePage:(x.source_url||"#");
