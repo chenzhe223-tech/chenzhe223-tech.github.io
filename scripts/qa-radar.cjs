@@ -63,9 +63,25 @@ function check(ok, name, detail = '') {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
         element.innerHTML = storyImageMarkup({title_zh:'MaaS 模型推理优化',image_match_status:'thematic_fallback',image_source:'Unsplash topic illustration',image_url:'https://images.unsplash.com/photo-123'});
-        return {fit:image?getComputedStyle(image).objectFit:null,stockSuppressed:Boolean(element.querySelector('.story-info-card')),stockImage:Boolean(element.querySelector('img'))};
+        const mock = document.createElement('div');
+        mock.className='story-image story-image--verified';
+        mock.style.width='348px';mock.style.height='160px';
+        const portrait=document.createElement('img');
+        portrait.dataset.subject='1';portrait.dataset.cropMode='protected_full_bleed';
+        portrait.src='data:image/svg+xml,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="300" height="900"><rect width="300" height="900" fill="blue"/></svg>');
+        mock.appendChild(portrait);document.body.appendChild(mock);
+        radarImageLoaded(portrait);
+        const subjectMode=mock.classList.contains('story-image--protect');
+        const backdrop=mock.style.getPropertyValue('--radar-image-bleed');
+        const coverFit=image?getComputedStyle(image).objectFit:null;
+        const portraitFit=getComputedStyle(portrait).objectFit;
+        mock.remove();
+        return {coverFit,subjectMode,portraitFit,backdrop,
+                stockSuppressed:Boolean(element.querySelector('.story-info-card')),
+                stockImage:Boolean(element.querySelector('img'))};
       });
-      check(visualPolicy.fit === null || visualPolicy.fit === 'contain', viewport.name + ': verified news images preserve the full subject');
+      check(visualPolicy.coverFit === null || ['cover','contain'].includes(visualPolicy.coverFit), viewport.name + ': verified news photo uses adaptive cover or protected contain');
+      check(visualPolicy.subjectMode && visualPolicy.portraitFit === 'contain' && visualPolicy.backdrop.startsWith('url('), viewport.name + ': portrait subjects remain whole with a full-bleed same-photo backdrop');
       check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration becomes an information card');
       check(await page.locator('#top5List .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays top-story thumbnails');
       if (count > 0) {
