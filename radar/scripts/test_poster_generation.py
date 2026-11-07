@@ -199,6 +199,30 @@ class PosterGenerationTests(unittest.TestCase):
         self.assertIn((225, 40, 40), list(rendered.getdata()))
         self.assertIn((20, 40, 225), list(rendered.getdata()))
 
+    def test_default_landscape_image_covers_entire_poster_card(self):
+        original = Image.new("RGB", (500, 350), (90, 120, 150))
+        original.putpixel((250, 175), (240, 12, 18))
+        story = {"title_zh": "Dropbox 企业技术动态"}
+        fitted = poster.adaptive_verified_image(original, (348, 132), story)
+        self.assertEqual(fitted.size, (348, 132))
+        self.assertEqual(story["poster_crop_mode"], "cover")
+        # No empty color bars: the full frame is filled by source pixels.
+        self.assertEqual(fitted.getpixel((1, 1)), (90, 120, 150))
+        self.assertEqual(fitted.getpixel((347, 130)), (90, 120, 150))
+
+    def test_humanoid_poster_keeps_head_and_feet_with_full_bleed_backdrop(self):
+        original = Image.new("RGB", (120, 360), "white")
+        draw = ImageDraw.Draw(original)
+        draw.rectangle((10, 10, 110, 70), fill=(225, 40, 40))
+        draw.rectangle((10, 300, 110, 350), fill=(20, 40, 225))
+        story = {"title_zh": "人形机器人完整系统展示"}
+        rendered = poster.adaptive_verified_image(original, (348, 132), story)
+        self.assertEqual(story["poster_crop_mode"], "protected_full_bleed")
+        self.assertIn((225, 40, 40), list(rendered.getdata()))
+        self.assertIn((20, 40, 225), list(rendered.getdata()))
+        # Side gutters use the same image as a blurred backdrop, not empty grey.
+        self.assertNotEqual(rendered.getpixel((2, 2)), (225, 232, 237))
+
     def test_topic_fallback_becomes_branded_card_not_stock_photo(self):
         story = {
             "title_zh": "从推理优化到 AI 技术部署",
