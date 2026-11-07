@@ -290,6 +290,19 @@ section{margin-bottom:40px}
 .story-image .image-credit{position:absolute;left:7px;bottom:7px;max-width:calc(100% - 14px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 6px;background:rgba(15,30,49,.72);border-radius:2px;color:#fff;font-size:9px;text-decoration:none}
 
 .story-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+/* Image QA v1: preserve full article imagery; never crop people or product UI.
+   Topic/stock/failure assets are rendered as trustworthy branded information cards. */
+.story-image.story-image--verified{background:#e8edf2;display:flex;align-items:center;justify-content:center}
+.story-image.story-image--verified img,
+.top5-card .story-image.story-image--verified img,
+.china-news-grid .story-image.story-image--verified img{object-fit:contain!important;object-position:center!important}
+.story-image.story-info-card{height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;padding:16px 20px;overflow:hidden;background:linear-gradient(135deg,#10233d 0%,#1c3a52 72%,#2b5b7e 100%)!important;color:#faf7ef!important;border-left:5px solid #e8915d}
+.story-info-card .info-card-kicker{font-size:10px;letter-spacing:.13em;color:#e9b38d}
+.story-info-card .info-card-title{font-size:clamp(14px,1.5vw,19px);line-height:1.35;font-weight:700;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:100%}
+.story-info-card .info-card-source{font-size:11px;color:#c4d2df;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.story-info-card .info-card-detail{font-size:10px;color:#e9b38d}
+@media(max-width:760px){.story-image.story-info-card{min-height:145px;height:auto;padding:12px 14px}.story-info-card .info-card-title{font-size:14px}}
+
 .top5-card:hover .story-image img{transform:scale(1.035)}
 .top5-content{padding:15px 17px 18px;min-width:0}
 .top5-rank{position:absolute;z-index:1;margin:12px;background:#14253cdb;color:#fff!important;border-radius:2px}
@@ -887,31 +900,25 @@ function renderEditorial(data){
  root.hidden=false;
  root.innerHTML='<strong>'+esc(currentLang==="en"?"DAVYLAB ANALYSIS · EDITORIAL TAKE":"DAVYLAB 分析｜今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(scope?'<small class="editorial-scope">'+esc(scope)+'</small>':'')+(basisMarkup)+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
 }
-function themeFallbackUrl(x){
- const title=[x?.title_zh,x?.title_en,x?.original_title,x?.title,x?.what_zh,x?.what_en,x?.summary].filter(Boolean).join(" ").toLowerCase();
- const rules=[
-  {terms:/robot|agent|智能体|机器人|具身智能|automation|自动驾驶/,url:"https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=1000&q=82"},
-  {terms:/chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|大模型|模型|推理/,url:"https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=82"},
-  {terms:/phone|mobile|app|software|product|platform|应用|手机|软件|产品|开源/,url:"https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=1000&q=82"},
-  {terms:/image|video|design|creative|visual|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频/,url:"https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=82"},
-  {terms:/bank|business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司/,url:"https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=1000&q=82"}
- ];
- return (rules.find(v=>v.terms.test(title))||{url:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82"}).url;
+function infoCardMarkup(x, reason){
+ const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
+ const source=String(x.source||"DAVYLAB").split("；")[0].slice(0,54);
+ const label=currentLang==="en"?"EDITORIAL INFORMATION CARD":"DAVYLAB · 新闻信息卡";
+ const detail=currentLang==="en"?"Source-backed story · no unrelated stock image":"原文信息摘要 · 不使用无关图库照片";
+ return '<div class="story-image story-info-card" data-image-reason="'+esc(reason||"no_verified_photo")+'"><span class="info-card-kicker">'+esc(label)+'</span><strong class="info-card-title">'+esc(title||"AI NEWS")+'</strong><span class="info-card-source">'+esc(source)+'</span><span class="info-card-detail">'+esc(detail)+'</span></div>';
 }
 function storyImageMarkup(x){
+ const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:"";
+ const status=String(x.image_match_status||"");
+ const source=String(x.image_source||"").toLowerCase();
+ const thematic=["thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"].includes(status)
+     ||source.includes("topic image")||source.includes("topic illustration")||/images\\.unsplash\\.com/i.test(supplied);
+ // Stock imagery and unknown images must not impersonate an actual news photo.
+ if(!supplied||thematic||status==="image_unavailable")return infoCardMarkup(x,thematic?"thematic_image_suppressed":"missing_image");
  const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
- const themeFallback=themeFallbackUrl(x);
- const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:themeFallback;
- const storedFallback=typeof x.image_fallback_url==="string"&&x.image_fallback_url.startsWith("https://")?x.image_fallback_url:"";
- const fallback=storedFallback&&storedFallback!==supplied?storedFallback:(themeFallback!==supplied?themeFallback:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1000&q=82");
- const topicStatuses=["thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"];
- const isIllustration=!x.image_url||topicStatuses.includes(String(x.image_match_status||""))||String(x.image_source||"").toLowerCase().includes("topic image")||String(x.image_source||"").toLowerCase().includes("topic illustration");
- const alt=x.image_alt||(isIllustration?(currentLang==="en"?"Topic illustration: ":"主题示意图：")+(title||"AI news"):(title|| (currentLang==="en"?"News image":"新闻配图")));
- const page=(typeof x.image_page_url==="string"&&x.image_page_url.startsWith("https://"))?x.image_page_url:"https://unsplash.com/s/photos/artificial-intelligence";
-  // Image credits are displayed in story metadata, never overlaid on thumbnails.
-
- const badge=isIllustration?'<span class="story-image-badge">'+(currentLang==="en"?"TOPIC IMAGE · NOT EVENT PHOTO":"主题配图 · 非新闻现场")+'</span>':"";
- return '<div class="story-image">'+badge+'<img src="'+esc(supplied)+'" data-fallback="'+esc(fallback)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="if(this.dataset.fallback&&this.src!==this.dataset.fallback){this.src=this.dataset.fallback;this.dataset.fallback=&quot;&quot;;this.classList.add(&quot;image-theme-fallback&quot;)}else{this.onerror=null;this.src=&quot;https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&amp;fit=crop&amp;w=1000&amp;q=82&quot;}"></div>';
+ const alt=x.image_alt||title||"News illustration";
+ const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
+ return '<div class="story-image story-image--verified">'+img+'</div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
