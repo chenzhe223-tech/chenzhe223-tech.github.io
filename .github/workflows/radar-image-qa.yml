@@ -58,7 +58,7 @@ jobs:
           retention-days: 14
 
   live-image-smoke:
-    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'push' || (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
     name: Confirm deployed website uses the approved full-bleed image engine
     runs-on: ubuntu-latest
     timeout-minutes: 4
