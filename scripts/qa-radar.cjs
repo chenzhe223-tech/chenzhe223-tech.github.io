@@ -63,6 +63,15 @@ function check(ok, name, detail = '') {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
         element.innerHTML = storyImageMarkup({title_zh:'MaaS 模型推理优化',image_match_status:'thematic_fallback',image_source:'Unsplash topic illustration',image_url:'https://images.unsplash.com/photo-123'});
+        const matched=document.createElement('div');
+        matched.innerHTML=storyImageMarkup({
+          title_zh:'OpenAI Assistant dashboard product launch',
+          image_match_status:'searched_image',
+          image_url:'https://images.example.com/assistant-dashboard.jpg',
+          image_page_url:'https://commons.wikimedia.org/wiki/File:OpenAI_dashboard',
+          image_credit:'Example contributor',
+          image_license:'CC BY 4.0'
+        });
         const mock = document.createElement('div');
         mock.className='story-image story-image--verified';
         mock.style.width='348px';mock.style.height='160px';
@@ -79,11 +88,17 @@ function check(ok, name, detail = '') {
         mock.remove();
         return {coverFit,subjectMode,portraitFit,backdrop,
                 stockSuppressed:Boolean(element.querySelector('.story-info-card')),
-                stockImage:Boolean(element.querySelector('img'))};
+                stockImage:Boolean(element.querySelector('img')),
+                matchedSearchPicture:Boolean(matched.querySelector('.story-image--verified img')),
+                searchedImageDisclaimer:matched.querySelector('.story-search-attribution')?.textContent||'',
+                searchedImageSource:matched.querySelector('.story-search-attribution')?.getAttribute('href')||''};
       });
       check(visualPolicy.coverFit === null || ['cover','contain'].includes(visualPolicy.coverFit), viewport.name + ': verified news photo uses adaptive cover or protected contain');
       check(visualPolicy.subjectMode && visualPolicy.portraitFit === 'contain' && visualPolicy.backdrop.startsWith('url('), viewport.name + ': portrait subjects remain whole with a full-bleed same-photo backdrop');
       check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration becomes an information card');
+      check(visualPolicy.matchedSearchPicture && /非新闻现场|Not event footage/.test(visualPolicy.searchedImageDisclaimer)
+        && visualPolicy.searchedImageSource.startsWith('https://'),
+        viewport.name + ': licensed searched photos are displayed with a traceable non-event label');
       check(await page.locator('#top5List .story-image .image-credit').count() === 0, viewport.name + ': no source badge overlays top-story thumbnails');
       if (count > 0) {
         const topStoryCard = cards.first();
