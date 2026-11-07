@@ -59,6 +59,22 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .story-image').count() <= 5, viewport.name + ': news without verified photographs stays text-first');
       check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
       check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
+      const imageDuplicates = await page.evaluate(() => {
+        const seen=new Map(),duplicates=[];
+        const stories=[...(reportData?.top5||[]),...(reportData?.china_ai_news||[])];
+        for(const item of stories){
+          if(!item?.image_url || ['thematic_fallback','image_unavailable','thematic_fallback_budget_exhausted'].includes(item.image_match_status))continue;
+          if(item.image_display_mode==='info_card')continue;
+          let identity;
+          try{const u=new URL(item.image_url);identity=u.hostname.replace(/^www\./,'')+u.pathname.replace(/-\d{2,5}x\d{2,5}(?=\.[a-z0-9]+$)/i,'');}
+          catch{continue;}
+          const story=item.source_url||item.url||item.title_zh||'';
+          if(seen.has(identity) && seen.get(identity)!==story)duplicates.push(identity);
+          else seen.set(identity,story);
+        }
+        return duplicates;
+      });
+      check(imageDuplicates.length===0,viewport.name+': no duplicate verified thumbnails across different news stories',JSON.stringify(imageDuplicates));
       const visualPolicy = await page.evaluate(async () => {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
