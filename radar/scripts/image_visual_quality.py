@@ -10,7 +10,26 @@ import io
 from pathlib import Path
 
 THEMATIC_STATUSES = {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
-POLICY_VERSION = "2026-11-07.1"
+POLICY_VERSION = "2026-11-08.1"
+
+
+# Subject-sensitive news layouts are protected by a full-frame foreground over
+# a blurred full-bleed copy. Ordinary images are cover-cropped edge-to-edge.
+SUBJECT_TERMS = (
+    "人形机器人", "机器人", "人像", "肖像", "全身", "人物", "合影",
+    "humanoid", "robot", "portrait", "full body", "full-body",
+    "diagram", "infographic", "benchmark", "dashboard", "screenshot",
+    "compiler", "产品界面", "界面", "流程图", "图表", "截图", "屏幕",
+    "架构图", "编译器", "编译优化",
+)
+
+
+def needs_subject_protection(story: dict, ratio: float) -> bool:
+    """Conservative geometry/keyword heuristic; not AI face detection."""
+    text = " ".join(str(story.get(k) or "") for k in
+                    ("title_zh", "title_en", "original_title", "title",
+                     "image_alt", "category_zh")).lower()
+    return ratio < 1.15 or (ratio < 2.2 and any(term in text for term in SUBJECT_TERMS))
 
 
 def assess_bytes(raw: bytes, story: dict) -> dict:
@@ -36,17 +55,19 @@ def assess_bytes(raw: bytes, story: dict) -> dict:
         reasons.append("unverified_generic_topic_art")
     if min(width, height) < 230 or width * height < 100_000:
         reasons.append("thumbnail_too_small")
-    if ratio > 3.3 or ratio < 0.55:
+    if ratio > 4.5 or ratio < 0.23:
         reasons.append("unsafe_extreme_aspect_ratio")
     if contrast < 8:
         reasons.append("low_visual_contrast")
-    # A portrait can be legitimate article photography, but is unsuitable for
-    # a 3:1 horizontal news thumbnail without either huge bars or face cropping.
-    if ratio < 0.78:
-        reasons.append("portrait_in_landscape_card")
+    # Portraits and diagrams must NOT be replaced merely for being narrow.
+    # The renderer fills the entire card using a blurred copy as the background
+    # while keeping the original subject entirely visible on the foreground.
+    protected = needs_subject_protection(story, ratio)
     return {
         "policy_version": POLICY_VERSION,
         "display_mode": "info_card" if reasons else "verified_photo",
+        "crop_mode": "protected_full_bleed" if protected else "cover",
+        "crop_policy": "blurred_image_background_with_complete_foreground" if protected else "full_bleed_cover",
         "reasons": reasons or ["source_image_passes_basic_pixel_layout_checks"],
         "width": width,
         "height": height,
