@@ -3,6 +3,16 @@ from unittest.mock import patch
 from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens, verify_and_repair_story_image
 
 class QualityGateTests(unittest.TestCase):
+    def setUp(self):
+        # The fingerprint tests deliberately mock remote content hashes. A
+        # separate visual-quality suite tests real Pillow inspection of bytes.
+        visual = patch("radar.scripts.quality_gate.assess_cached_image",
+                       return_value={"display_mode": "verified_photo",
+                                     "reasons": ["unit_test_image"],
+                                     "width": 1200, "height": 800})
+        visual.start()
+        self.addCleanup(visual.stop)
+
     def test_accepted_story_records_exact_verified_image_digest(self):
         story = {"title": "Source story", "image_url": "https://example.com/a.png", "image_match_status": "article_image"}
         with patch("radar.scripts.quality_gate.download_fingerprints", return_value=("a" * 64, None)):
