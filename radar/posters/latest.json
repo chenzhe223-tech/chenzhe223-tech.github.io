@@ -1,75 +1,80 @@
 {
-  "report_date": "2026-11-07",
-  "poster": "radar/posters/2026-11-07.png",
+  "report_date": "2026-11-08",
+  "poster": "radar/posters/2026-11-08.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.theverge.com/ai-artificial-intelligence/1029126/anthropic-metr-report-accelerating-ai-development",
-    "https://www.theverge.com/ai-artificial-intelligence/1029380/openai-1-25-trillion-investment-valuation",
-    "https://techcrunch.com/2026/11/06/crusoe-sells-troubled-wyoming-data-center-project-to-google/",
-    "https://www.marktechpost.com/2026/11/06/zyphra-zyfa-fp8-flashattention-amd-mi355x/",
-    "https://www.theverge.com/tech/1028871/meta-muse-ai-spaces"
+    "https://www.ithome.com/1/023/767.htm",
+    "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
+    "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
+    "https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/",
+    "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review"
   ],
   "news_titles": [
-    "METR 报告：Anthropic 用 AI 自动化 AI 研发，模型改进速度约为一年前两倍",
-    "彭博社：OpenAI 新一轮融资再募 110 亿美元，估值达 1.25 万亿美元",
-    "Crusoe 将陷入困境的怀俄明州数据中心项目出售给谷歌",
-    "Zyphra 发布开源 ZYFA：面向 AMD MI355X 的 FP8 FlashAttention，最高提速 1.76 倍",
-    "Meta 的 Muse AI 可创建定制“空间”，按需生成应用式体验"
+    "苹果披露人形机器人HALO系统：调用千问模型在宇树G1上验证，单项任务平均成功率91%",
+    "OpenAI推出BioBasicsBench：衡量AI智能体如何处理日常湿实验室科研",
+    "Together AI发布Together Compiler：智能体使推理最高提速2.6倍",
+    "Dropbox以3.5亿美元收购Tigris Data以强化AI基础设施",
+    "纽约时报烹饪AI助手救了我的工作日晚餐，却差点毁了我的蛋糕"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029126/anthropic-metr-report-accelerating-ai-development",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "62ab760b83325b8d8852f2048dbd32e53c4ebb038c9875e9af9ee30428ac9d9e",
-      "rendered_image_sha256": "62ab760b83325b8d8852f2048dbd32e53c4ebb038c9875e9af9ee30428ac9d9e",
+      "story_url": "https://www.ithome.com/1/023/767.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "00ff0915d044d0d651026b59244e37e6f746be4ebc7982f7e0997da3833b20ce",
+      "rendered_image_sha256": "00ff0915d044d0d651026b59244e37e6f746be4ebc7982f7e0997da3833b20ce",
+      "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029380/openai-1-25-trillion-investment-valuation",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "bf6fae52cac2ba816f14b7ebc446b2f79ef86169b2179a596d7d9df6bf387733",
-      "rendered_image_sha256": "bf6fae52cac2ba816f14b7ebc446b2f79ef86169b2179a596d7d9df6bf387733",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
+      "story_url": "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "fb9d3e8fb8fc8b5bb0b1bdbe901931468b97260d2331c2892e8da6568b228b27",
+      "rendered_image_sha256": "ce1b4eac1c5ca092960e63fc6ec86a94618896aa67e69b1b3ff24d16edb6e1fb",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
     },
     {
-      "story_url": "https://techcrunch.com/2026/11/06/crusoe-sells-troubled-wyoming-data-center-project-to-google/",
-      "image_source": "TechCrunch AI",
-      "image_match_status": "article_image",
-      "image_sha256": "84a89af274c9dc0afbb27dfba0e90a200f6035bc664ffe758c6b701b6e31db97",
-      "rendered_image_sha256": "84a89af274c9dc0afbb27dfba0e90a200f6035bc664ffe758c6b701b6e31db97",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.marktechpost.com/2026/11/06/zyphra-zyfa-fp8-flashattention-amd-mi355x/",
+      "story_url": "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
       "image_source": "MarkTechPost",
       "image_match_status": "article_image",
-      "image_sha256": "3f06c5cb208bad99c9700661b3fae2b24daf1d9459384cd9a1c5213d23128a2a",
-      "rendered_image_sha256": "3f06c5cb208bad99c9700661b3fae2b24daf1d9459384cd9a1c5213d23128a2a",
+      "image_sha256": "c7246d7a59645fea99c1d35937fd48bb7b5440051a885f08727f13a994ce02bf",
+      "rendered_image_sha256": "c7246d7a59645fea99c1d35937fd48bb7b5440051a885f08727f13a994ce02bf",
+      "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://www.theverge.com/tech/1028871/meta-muse-ai-spaces",
+      "story_url": "https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "4f1a0dd0647ffe0ee1f127cff7f11585a02dcef93d5d6b9fc4af97941e0b5480",
+      "rendered_image_sha256": "4f1a0dd0647ffe0ee1f127cff7f11585a02dcef93d5d6b9fc4af97941e0b5480",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review",
       "image_source": "The Verge AI",
       "image_match_status": "article_image",
-      "image_sha256": "6611f7a537006ebacc03949c8d3cbfa68a0e2d9486cbe095ecdce0ee286258ba",
-      "rendered_image_sha256": "6611f7a537006ebacc03949c8d3cbfa68a0e2d9486cbe095ecdce0ee286258ba",
+      "image_sha256": "59a1b6c6fa84b807373cdf7e3078c9aea808f469c8e40a6e79a72012406b7864",
+      "rendered_image_sha256": "59a1b6c6fa84b807373cdf7e3078c9aea808f469c8e40a6e79a72012406b7864",
+      "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "op7418/guizang-ppt-skill",
+  "skill": "Leonxlnx/taste-skill",
   "design": "geometric-navy",
   "format": "PNG",
   "canvas": [
@@ -132,9 +137,9 @@
       "x": 64,
       "y": 329,
       "width": 1070,
-      "height": 50,
-      "actual_width": 1049.0,
-      "line_count": 2,
+      "height": 25,
+      "actual_width": 924.0,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -143,9 +148,9 @@
       "x": 250,
       "y": 469,
       "width": 850,
-      "height": 84,
-      "actual_width": 845.9,
-      "line_count": 3,
+      "height": 56,
+      "actual_width": 838.7,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -155,7 +160,7 @@
       "y": 823,
       "width": 318,
       "height": 75,
-      "actual_width": 312.7,
+      "actual_width": 305.4,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -165,9 +170,9 @@
       "x": 66,
       "y": 906,
       "width": 318,
-      "height": 84,
-      "actual_width": 312.8,
-      "line_count": 4,
+      "height": 152,
+      "actual_width": 317.9,
+      "line_count": 8,
       "truncated": false,
       "overflow": false
     },
@@ -177,7 +182,7 @@
       "y": 823,
       "width": 318,
       "height": 75,
-      "actual_width": 313.1,
+      "actual_width": 313.7,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -187,9 +192,9 @@
       "x": 441,
       "y": 906,
       "width": 318,
-      "height": 84,
-      "actual_width": 310.9,
-      "line_count": 4,
+      "height": 105,
+      "actual_width": 310.0,
+      "line_count": 5,
       "truncated": false,
       "overflow": false
     },
@@ -199,7 +204,7 @@
       "y": 823,
       "width": 318,
       "height": 50,
-      "actual_width": 302.7,
+      "actual_width": 317.3,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -209,9 +214,9 @@
       "x": 816,
       "y": 881,
       "width": 318,
-      "height": 63,
-      "actual_width": 307.4,
-      "line_count": 3,
+      "height": 147,
+      "actual_width": 313.1,
+      "line_count": 7,
       "truncated": false,
       "overflow": false
     },
@@ -221,7 +226,7 @@
       "y": 1176,
       "width": 372,
       "height": 42,
-      "actual_width": 368.0,
+      "actual_width": 358.3,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -232,7 +237,7 @@
       "y": 1222,
       "width": 372,
       "height": 51,
-      "actual_width": 371.7,
+      "actual_width": 371.1,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -243,7 +248,7 @@
       "y": 1176,
       "width": 372,
       "height": 42,
-      "actual_width": 354.5,
+      "actual_width": 358.9,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -253,9 +258,9 @@
       "x": 758,
       "y": 1222,
       "width": 372,
-      "height": 51,
-      "actual_width": 370.3,
-      "line_count": 3,
+      "height": 34,
+      "actual_width": 369.1,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -265,7 +270,7 @@
       "y": 1380,
       "width": 550,
       "height": 27,
-      "actual_width": 265.5,
+      "actual_width": 207.8,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -276,7 +281,7 @@
       "y": 1434,
       "width": 565,
       "height": 30,
-      "actual_width": 553.2,
+      "actual_width": 558.2,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -287,7 +292,7 @@
       "y": 1500,
       "width": 550,
       "height": 14,
-      "actual_width": 286.1,
+      "actual_width": 312.9,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -296,9 +301,9 @@
   "design_variant": "geometric-navy",
   "iso_year": 2026,
   "iso_week": 45,
-  "iso_weekday": 6,
+  "iso_weekday": 7,
   "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-07T23:43:28.044495+08:00"
+  "generated_at": "2026-11-08T00:16:33.133772+08:00"
 }
