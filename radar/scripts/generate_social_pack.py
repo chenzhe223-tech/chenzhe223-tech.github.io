@@ -463,7 +463,7 @@ def make_copy(report: dict, top: list[dict], skill: dict, report_date: str) -> t
     china_count = sum(1 for story in top if str(story.get("source_section") or "") == "china_ai_news")
     global_count = sum(1 for story in top if str(story.get("source_section") or "") == "global_news")
     if china_count and global_count:
-        intro = f"{date_label} 这期简报，挑出五条值得关注的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
+        intro = f"{date_label} 这期简报，挑出五条经过来源核验的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
     elif china_count:
         intro = f"{date_label} 这期简报，聚焦五条经过来源核验的全球与中国 AI 动态，看看 AI 正怎样走进真实场景 👇"
     else:

@@ -160,7 +160,7 @@ jobs:
           print('Configured DeepSeek model:', cfg.get('ai', {}).get('model', '(missing)'))
           PY
         if: steps.preflight.outputs.skip != 'true'
-      - name: Run Horizon and DeepSeek enrichment with bounded retries
+      - name: Run optional Horizon digest with bounded timeout
         continue-on-error: true
         timeout-minutes: 8
         env:
@@ -171,21 +171,21 @@ jobs:
             echo "::notice::DEEPSEEK_API_KEY is not configured; skipping optional Horizon enrichment."
             exit 0
           fi
-          # Horizon enriches the report, but must never block the validated RSS/GitHub baseline.
+          # Optional Horizon digest is isolated; required bilingual selection runs in its own step.
           if [ ! -f /tmp/Horizon/src/main.py ]; then
             if ! timeout --kill-after=10s 60s git clone --depth 1 https://github.com/Thysrael/Horizon.git /tmp/Horizon; then
-              echo "::warning::Horizon clone unavailable or timed out; publishing will continue with source-backed baseline data."
+              echo "::warning::Horizon clone unavailable or timed out; required bilingual selection and all P0 gates must still pass."
               exit 0
             fi
           fi
           if [ -f /tmp/Horizon/requirements.txt ]; then
             if ! timeout --kill-after=10s 90s python -m pip install -r /tmp/Horizon/requirements.txt; then
-              echo "::warning::Horizon requirements installation failed or timed out; publishing will continue with source-backed baseline data."
+              echo "::warning::Horizon requirements installation failed or timed out; required bilingual selection and all P0 gates must still pass."
               exit 0
             fi
           elif [ -f /tmp/Horizon/pyproject.toml ]; then
             if ! timeout --kill-after=10s 90s python -m pip install -e /tmp/Horizon; then
-              echo "::warning::Horizon editable install failed or timed out; publishing will continue with source-backed baseline data."
+              echo "::warning::Horizon editable install failed or timed out; required bilingual selection and all P0 gates must still pass."
               exit 0
             fi
           else
