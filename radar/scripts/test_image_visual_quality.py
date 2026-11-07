@@ -28,10 +28,24 @@ class NewsVisualQualityTests(unittest.TestCase):
         self.assertEqual(result["policy_version"], POLICY_VERSION)
         self.assertFalse(result["semantic_match_model_verified"])
 
-    def test_portrait_full_face_cannot_be_force_cropped_to_wide_card(self):
+    def test_portrait_full_face_is_protected_without_info_card(self):
         result = assess_bytes(sample_image(500, 900), {"image_match_status": "article_image"})
-        self.assertEqual(result["display_mode"], "info_card")
-        self.assertIn("portrait_in_landscape_card", result["reasons"])
+        self.assertEqual(result["display_mode"], "verified_photo")
+        self.assertEqual(result["crop_mode"], "protected_full_bleed")
+        self.assertEqual(result["crop_policy"], "blurred_image_background_with_complete_foreground")
+
+    def test_normal_landscape_photograph_remains_full_bleed(self):
+        result = assess_bytes(sample_image(960, 640), {"image_match_status": "article_image",
+                                                        "title_zh": "Dropbox 数据中心项目"})
+        self.assertEqual(result["crop_mode"], "cover")
+
+    def test_robot_and_diagram_images_are_subject_protected(self):
+        result = assess_bytes(sample_image(1000, 650), {"image_match_status": "article_image",
+                                                        "title_zh": "人形机器人系统展示"})
+        self.assertEqual(result["crop_mode"], "protected_full_bleed")
+        other = assess_bytes(sample_image(1000, 650), {"image_match_status": "article_image",
+                                                       "title_en": "Together Compiler benchmark diagram"})
+        self.assertEqual(other["crop_mode"], "protected_full_bleed")
 
     def test_low_resolution_image_is_replaced_by_information_card(self):
         result = assess_bytes(sample_image(150, 100), {"image_match_status": "article_image"})
