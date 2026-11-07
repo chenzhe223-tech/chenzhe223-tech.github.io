@@ -234,6 +234,7 @@ jobs:
         run: timeout --kill-after=5s 180s python radar/scripts/news_image_match.py
         if: steps.preflight.outputs.skip != 'true'
       - name: Enforce historical news and image freshness gate
+        if: steps.preflight.outputs.skip != 'true'
         run: |
           python -m py_compile radar/scripts/quality_gate.py radar/scripts/test_quality_gate.py
           python -m unittest radar.scripts.test_quality_gate -v
