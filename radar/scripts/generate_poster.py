@@ -305,6 +305,7 @@ def story_photo(story, idx, size):
     src = str(story.get("image_source") or "").lower()
     url = str(story.get("image_url") or "")
     thematic = status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} or "topic illustration" in src or "topic image" in src or "images.unsplash.com/" in url
+    thematic = thematic or story.get("image_display_mode") == "info_card"
     if thematic:
         rendered = branded_information_card(story, size)
         story["poster_visual_type"] = "info_card"
