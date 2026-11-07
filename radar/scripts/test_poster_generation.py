@@ -188,6 +188,52 @@ class PosterGenerationTests(unittest.TestCase):
         finally:
             poster.TEXT_BOUNDS[:] = previous
 
+    def test_news_photo_is_letterboxed_not_center_cropped(self):
+        image = Image.new("RGB", (120, 360), "white")
+        draw = ImageDraw.Draw(image)
+        draw.rectangle((10, 10, 110, 70), fill=(225, 40, 40))
+        draw.rectangle((10, 300, 110, 350), fill=(20, 40, 225))
+        rendered = poster.verified_image_contain(image, (348, 132))
+        self.assertEqual(rendered.size, (348, 132))
+        # Both top and bottom details of a portrait must remain in frame.
+        self.assertIn((225, 40, 40), list(rendered.getdata()))
+        self.assertIn((20, 40, 225), list(rendered.getdata()))
+
+    def test_topic_fallback_becomes_branded_card_not_stock_photo(self):
+        story = {
+            "title_zh": "从推理优化到 AI 技术部署",
+            "image_match_status": "thematic_fallback",
+            "image_source": "Unsplash topic illustration",
+            "image_url": "https://images.unsplash.com/photo-999",
+            "image_sha256": "b" * 64,
+        }
+        with patch.object(poster, "image_for_story", side_effect=AssertionError("must not draw stock photo")):
+            rendered = poster.story_photo(story, 1, (348, 132))
+        self.assertEqual(rendered.size, (348, 132))
+        self.assertTrue(story.get("poster_image_label_applied"))
+        self.assertEqual(story.get("poster_visual_type"), "info_card")
+        self.assertRegex(story.get("poster_image_sha256", ""), r"^[a-f0-9]{64}$")
+        evidence = poster.news_image_evidence([story])[0]
+        self.assertEqual(evidence["rendered_visual_type"], "info_card")
+        self.assertNotEqual(evidence["image_sha256"], evidence["rendered_image_sha256"])
+
+    def test_information_card_evidence_stays_distinct_from_original_image(self):
+        top = [{"title_zh": f"测试新闻{i}", "source_url": f"https://source.example/{i}", "image_sha256": "c" * 64} for i in range(5)]
+        top[0].update(image_match_status="thematic_fallback", poster_image_label_applied=True,
+                      poster_visual_type="info_card", poster_image_sha256="d" * 64)
+        for story in top[1:]:
+            story["poster_image_sha256"] = story["image_sha256"]
+        manifest = {
+            "news_urls": [x["source_url"] for x in top],
+            "news_titles": [x["title_zh"] for x in top],
+            "news_image_evidence": poster.news_image_evidence(top),
+        }
+        result = verify_poster.verify_news_evidence(manifest, {"top5": top})
+        self.assertEqual(result["status"], "PASS")
+        manifest["news_image_evidence"][0]["label_applied"] = False
+        with self.assertRaises(Exception):
+            verify_poster.verify_news_evidence(manifest, {"top5": top})
+
     def test_final_composite_qr_decodes_at_mobile_friendly_size(self):
         target = "https://chenzhe223-tech.github.io/radar/daily/"
         qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_M, box_size=10, border=4)
