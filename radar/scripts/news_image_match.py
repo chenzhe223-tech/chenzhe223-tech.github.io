@@ -649,9 +649,11 @@ def resolve_story_image(story: dict, cache: dict, used: set[str]) -> dict:
     cached=cache.get(key) if key else None
     if isinstance(cached,dict) and cached.get("cache_version")==CACHE_VERSION and _fresh(cached,72):
         if cached.get("image_url") and _image_identity(cached.get("image_url","")) not in used and not is_generic_brand_asset(cached.get("image_url","")):
-            if cached.get("image_match_status")=="thematic_fallback":
-                return _thematic_fallback(story,used)
-            return {k:v for k,v in cached.items() if k not in {"checked_at","cache_version"}}
+            # An unrelated theme placeholder is NOT a completed image match.
+            # Re-attempt the publisher/title search instead of preserving a
+            # stock-photo failure in the cache for the next 72 hours.
+            if cached.get("image_match_status") not in {"thematic_fallback", "thematic_fallback_budget_exhausted", "image_unavailable"}:
+                return {k:v for k,v in cached.items() if k not in {"checked_at","cache_version"}}
     article_url=normalize_url(key)
     existing=normalize_url(story.get("image_url") or "")
     result={}
