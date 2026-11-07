@@ -22,7 +22,7 @@ CACHE_PATH = ROOT / "radar" / "data" / "image-cache.json"
 TZ = ZoneInfo("Asia/Shanghai")
 UA = "DAVYLAB-NewsImageMatch/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"
 TIMEOUT = 3
-CACHE_VERSION = 10
+CACHE_VERSION = 11
 IMAGE_MATCH_BUDGET_SECONDS = 150
 STORY_IMAGE_BUDGET_SECONDS = 10
 QA_RULES_PATH = ROOT / "radar" / "config" / "qa-rules.json"
@@ -533,6 +533,26 @@ def _bing_candidates(query: str) -> list[dict]:
         print(f"[image-match] web image search unavailable: {type(exc).__name__}", file=sys.stderr)
         return []
 
+def focused_visual_queries(story: dict) -> list[str]:
+    """Prefer the named product/entity before a long translated news headline."""
+    title = _story_title(story)
+    known = (
+        (r"(?i)nvidia|英伟达", r"(?i)h200", "NVIDIA H200 GPU"),
+        (r"(?i)openai", r"(?i)biobasicsbench", "OpenAI BioBasicsBench lab science"),
+        (r"(?i)minimax|稀宇", None, "MiniMax AI"),
+        (r"(?i)deepseek|深度求索", None, "DeepSeek AI"),
+    )
+    result = []
+    for brand, product, query in known:
+        if re.search(brand, title) and (product is None or re.search(product, title)):
+            result.append(query)
+            break
+    for candidate in derive_visual_search_queries(story):
+        if candidate.casefold() not in {x.casefold() for x in result}:
+            result.append(candidate)
+    return result[:3]
+
+
 def _free_image_search(story: dict, used: set[str]) -> dict | None:
     """After publisher photos, search title-matched images with reusable licenses.
 
@@ -540,7 +560,7 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
     reusable license are eligible. Search photos are never claimed as images
     of the actual news event.
     """
-    queries = derive_visual_search_queries(story)
+    queries = focused_visual_queries(story)
     title = _story_title(story)
     for query in queries[:2]:
         for candidate in _openverse_candidates(query)[:8]:
@@ -566,6 +586,39 @@ def _free_image_search(story: dict, used: set[str]) -> dict | None:
                 "image_license": (license_name.upper() + " " + str(candidate.get("license_version") or "")).strip(),
                 "image_license_url": license_url,
                 "image_alt": f"搜索配图 · 非新闻现场：{candidate.get('title') or query}",
+                "image_match_status": "searched_image",
+                "image_match_score": score,
+                "image_search_query": query,
+                "image_matched_at": dt.datetime.now(TZ).isoformat(),
+            }
+    # Wikimedia Commons provides traceable file pages and machine-readable
+    # license metadata. Keep candidate count bounded for a daily cron job.
+    for query in queries[:2]:
+        for page in _wikimedia_candidates(query)[:6]:
+            title_text = str(page.get("title") or "").replace("File:", "")
+            matched, score = candidate_relevance(title, title_text)
+            if not matched or score < max(.48, MIN_IMAGE_RELEVANCE_SCORE):
+                continue
+            infos = page.get("imageinfo") or []
+            info = infos[0] if infos else {}
+            ext = info.get("extmetadata") or {}
+            license_name = re.sub(r"<[^>]+>", "", str((ext.get("LicenseShortName") or {}).get("value") or "")).strip()
+            license_lower = license_name.lower()
+            if not (license_lower.startswith("cc by") or license_lower == "cc0" or "public domain" in license_lower):
+                continue
+            url = normalize_url(info.get("thumburl") or info.get("url") or "")
+            landing = normalize_url(info.get("descriptionurl") or "")
+            if not url or not landing or _image_identity(url) in used or not valid_image_url(url):
+                continue
+            license_url = normalize_url((ext.get("LicenseUrl") or {}).get("value") or "") or "https://commons.wikimedia.org/wiki/Commons:Licensing"
+            return {
+                "image_url": url,
+                "image_source": "Wikimedia Commons headline-matched image",
+                "image_page_url": landing,
+                "image_credit": re.sub(r"<[^>]+>", "", str((ext.get("Artist") or {}).get("value") or "Wikimedia Commons contributor"))[:160],
+                "image_license": license_name,
+                "image_license_url": license_url,
+                "image_alt": f"搜索配图 · 非新闻现场：{title_text}",
                 "image_match_status": "searched_image",
                 "image_match_score": score,
                 "image_search_query": query,
