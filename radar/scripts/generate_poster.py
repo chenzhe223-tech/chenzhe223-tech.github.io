@@ -295,23 +295,80 @@ def adaptive_verified_image(image: Image.Image, size: tuple[int, int], story: di
 
 
 def branded_information_card(story: dict, size: tuple[int, int]) -> Image.Image:
-    """Create a deterministic source-backed information card, not fabricated photography."""
+    """Render substantive story-specific technical artwork, never a blank slate.
+
+    When no licensing-safe match exists, show original illustrative artwork.
+    The card is explicitly labeled, with no assertion of documentary capture.
+    """
     w, h = size
-    canvas = Image.new("RGB", size, (16, 35, 61))
+    title = str(story.get("title_zh") or story.get("title_en") or
+                story.get("original_title") or story.get("title") or "AI")
+    lower = title.lower()
+    if any(k in lower for k in ("nvidia", "h200", "英伟达", "芯片", "gpu", "算力")):
+        topic, caption = "chip", "GPU / H200" if "h200" in lower else "AI COMPUTE"
+    elif any(k in lower for k in ("实验", "科研", "生物", "lab", "science", "bio")):
+        topic, caption = "lab", "AI SCIENCE"
+    elif any(k in lower for k in ("电影", "视频", "短视频", "film", "media")):
+        topic, caption = "media", "AI MEDIA"
+    elif any(k in lower for k in ("机器人", "robot", "具身")):
+        topic, caption = "robot", "EMBODIED AI"
+    else:
+        topic, caption = "model", "AI TECHNOLOGY"
+    canvas = Image.new("RGB", size, (12, 30, 56))
     d = ImageDraw.Draw(canvas)
-    d.rectangle((0, 0, 5 if w >= 220 else 3, h), fill=(232, 145, 93))
-    small = w < 220
-    left = 10 if small else 16
-    d.text((left, 8 if small else 12), "DAVYLAB / AI", font=font(10 if small else 13, True), fill=(232, 180, 137))
-    title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI NEWS")
-    size_px = 11 if small else 15
-    width = max(10, w - left - 12)
-    available = max(1, h - (48 if small else 61))
-    maxlines = max(1, available // (size_px + 4))
-    lines = wrap(d, title, font(size_px, True), width)
-    for n, line in enumerate(lines[:maxlines]):
-        d.text((left, (25 if small else 34) + n * (size_px + 4)), line, font=font(size_px, True), fill=(250, 247, 239))
-    d.text((left, h - 17), "主题信息卡 · 非新闻现场" if not small else "非新闻现场", font=font(9), fill=(232, 180, 137))
+    # Full-bleed technical texture, not a text-only navy rectangle.
+    for y in range(h):
+        t = y / max(1, h-1)
+        d.line((0, y, w, y), fill=(int(12+19*t), int(30+36*t), int(56+51*t)))
+    step = max(16, min(w, h)//5)
+    for x in range(step, w, step):
+        d.line((x, 0, x, h), fill=(40, 76, 109), width=1)
+    for y in range(step, h, step):
+        d.line((0, y, w, y), fill=(40, 76, 109), width=1)
+    # Generous side area for the illustration with visible engineering motifs.
+    cx = int(w*.67)
+    cy = int(h*.49)
+    radius = max(16, min(h//3, w//5))
+    d.ellipse((cx-radius*1.5, cy-radius*1.5, cx+radius*1.5, cy+radius*1.5),
+              outline=(61, 114, 168), width=2)
+    if topic == "chip":
+        d.rounded_rectangle((cx-radius,cy-radius*.7,cx+radius,cy+radius*.7),
+                            radius=max(3,radius//5), fill=(28,79,130),
+                            outline=(130,215,247),width=3)
+        d.rectangle((cx-radius*.57,cy-radius*.42,cx+radius*.57,cy+radius*.42),
+                    fill=(9,33,64),outline=(148,220,249),width=2)
+        for i in range(-2,3):
+            x=cx+i*radius//3
+            d.line((x,cy-radius*.95,x,cy-radius*.7),fill=(121,210,245),width=3)
+            d.line((x,cy+radius*.7,x,cy+radius*.95),fill=(121,210,245),width=3)
+    elif topic == "lab":
+        d.line((cx-radius*.22,cy-radius,cx-radius*.22,cy),fill=(143,227,244),width=8)
+        d.polygon([(cx-radius*.22,cy),(cx-radius,cy+radius),(cx+radius,cy+radius),(cx+radius*.35,cy)],
+                  fill=(29,118,165),outline=(156,232,240))
+        for dx,dy,rr in ((.55,-.65,.25),(-.6,-.75,.2),(.4,.45,.12)):
+            d.ellipse((cx+radius*dx-radius*rr,cy+radius*dy-radius*rr,
+                       cx+radius*dx+radius*rr,cy+radius*dy+radius*rr),fill=(245,169,116))
+    elif topic == "media":
+        d.rounded_rectangle((cx-radius,cy-radius*.65,cx+radius,cy+radius*.8),
+                            radius=7,fill=(26,84,139),outline=(142,216,245),width=3)
+        d.polygon([(cx-radius*.22,cy-radius*.35),(cx+radius*.48,cy+radius*.1),
+                   (cx-radius*.22,cy+radius*.55)],fill=(255,183,128))
+    else:
+        d.ellipse((cx-radius*.45,cy-radius*.45,cx+radius*.45,cy+radius*.45),
+                  fill=(30,104,149),outline=(145,221,247),width=3)
+        for dx,dy in ((-.95,-.65),(.85,-.7),(-.75,.85),(.95,.65)):
+            px=cx+radius*dx
+            py=cy+radius*dy
+            d.line((cx,cy,px,py),fill=(112,205,240),width=3)
+            d.ellipse((px-5,py-5,px+5,py+5),fill=(244,166,113))
+    small=w<220
+    d.text((9 if small else 14, 7 if small else 11), "DAVYLAB / AI",
+           font=font(9 if small else 12,True),fill=(191,227,247))
+    d.text((9 if small else 14, max(26,h//2-8)),caption,
+           font=font(10 if small else 16,True),fill=(255,246,236))
+    d.rectangle((0,h-(22 if small else 25),w,h),fill=(9,27,49))
+    d.text((8,h-(18 if small else 19)), "主题示意 · 非新闻现场",
+           font=font(8 if small else 10),fill=(255,211,173))
     return canvas
 
 
