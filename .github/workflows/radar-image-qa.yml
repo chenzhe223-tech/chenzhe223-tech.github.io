@@ -1,0 +1,54 @@
+name: DAVYLAB Radar News Image Browser QA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "radar/daily/index.html"
+      - "radar/scripts/image_visual_quality.py"
+      - "radar/scripts/generate_poster.py"
+      - "radar/scripts/verify_poster.py"
+      - "scripts/qa-radar.cjs"
+      - ".github/workflows/radar-image-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: radar-image-browser-qa
+  cancel-in-progress: true
+
+jobs:
+  image-browser-qa:
+    name: Verify image cards and photo crop on desktop and mobile
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Chromium for source-backed UI QA
+        run: |
+          npm init -y
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Start test website
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/radar-image-http.log 2>&1 &
+          for n in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/radar/daily/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/radar-image-http.log
+          exit 1
+      - name: Run independent desktop and mobile image QA
+        run: node scripts/qa-radar.cjs
+      - name: Upload evidence (no social image generation)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: radar-image-browser-qa
+          path: test-results/radar/
+          retention-days: 14
