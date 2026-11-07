@@ -63,6 +63,13 @@ function check(ok, name, detail = '') {
         const image = document.querySelector('#top5List .story-image--verified img');
         const element = document.createElement('div');
         element.innerHTML = storyImageMarkup({title_zh:'MaaS 模型推理优化',image_match_status:'thematic_fallback',image_source:'Unsplash topic illustration',image_url:'https://images.unsplash.com/photo-123'});
+        const h200=document.createElement('div');
+        h200.innerHTML=storyImageMarkup({
+          title_zh:'纽约时报调查称美国批准 Nvidia H200 销售给空壳中国公司',
+          image_match_status:'thematic_fallback',
+          image_source:'Unsplash topic illustration',
+          image_url:'https://images.unsplash.com/photo-any'
+        });
         const matched=document.createElement('div');
         matched.innerHTML=storyImageMarkup({
           title_zh:'OpenAI Assistant dashboard product launch',
@@ -88,6 +95,9 @@ function check(ok, name, detail = '') {
         mock.remove();
         return {coverFit,subjectMode,portraitFit,backdrop,
                 stockSuppressed:Boolean(element.querySelector('.story-topic-illustration svg')),
+                h200Graphic:Boolean(h200.querySelector('.story-topic-illustration svg')),
+                h200RelevantLabel:h200.textContent.includes('H200 / GPU'),
+                h200NotNews:h200.textContent.includes('非新闻现场'),
                 stockImage:Boolean(element.querySelector('img')),
                 matchedSearchPicture:Boolean(matched.querySelector('.story-image--verified img')),
                 searchedImageDisclaimer:matched.querySelector('.story-search-attribution')?.textContent||'',
@@ -96,6 +106,8 @@ function check(ok, name, detail = '') {
       check(visualPolicy.coverFit === null || ['cover','contain'].includes(visualPolicy.coverFit), viewport.name + ': verified news photo uses adaptive cover or protected contain');
       check(visualPolicy.subjectMode && visualPolicy.portraitFit === 'contain' && visualPolicy.backdrop.startsWith('url('), viewport.name + ': portrait subjects remain whole with a full-bleed same-photo backdrop');
       check(visualPolicy.stockSuppressed && !visualPolicy.stockImage, viewport.name + ': unrelated stock illustration becomes a source-labeled full-bleed topic visual');
+      check(visualPolicy.h200Graphic && visualPolicy.h200RelevantLabel && visualPolicy.h200NotNews,
+        viewport.name + ': Nvidia H200 story receives a relevant full-bleed GPU illustration instead of a blank blue card');
       check(visualPolicy.matchedSearchPicture && /非新闻现场|Not event footage/.test(visualPolicy.searchedImageDisclaimer)
         && visualPolicy.searchedImageSource.startsWith('https://'),
         viewport.name + ': licensed searched photos are displayed with a traceable non-event label');
