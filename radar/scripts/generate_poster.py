@@ -20,8 +20,9 @@ try:
     from radar.scripts.visual_lock import validate_visual_lock
 except ModuleNotFoundError:
     from visual_lock import validate_visual_lock
-from PIL import Image, ImageDraw, ImageFont, ImageOps
+from PIL import Image, ImageDraw, ImageFont, ImageOps, ImageFilter
 import qrcode
+from radar.scripts.image_visual_quality import needs_subject_protection
 
 ROOT = Path.cwd().resolve() if (Path.cwd() / "radar" / "data" / "latest.json").exists() else Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -264,15 +265,33 @@ def image_for_story(story, idx):
 
 
 def verified_image_contain(image: Image.Image, size: tuple[int, int]) -> Image.Image:
-    """Preserve full faces, products, dashboards and text instead of center cropping."""
+    """Keep a full portrait/UI visible over a full-bleed blurred image backdrop.
+
+    The same authenticated source is used twice; never fill gaps with unrelated
+    stock photography or flat empty bars.
+    """
     w, h = size
     if w <= 0 or h <= 0:
         raise ValueError("Invalid news image dimensions")
     original = image.convert("RGB")
+    background = ImageOps.fit(original, size, method=Image.Resampling.LANCZOS)
+    background = background.filter(ImageFilter.GaussianBlur(max(5, round(min(size) * .045))))
+    background = Image.blend(background, Image.new("RGB", size, (10, 28, 46)), .24)
     fitted = ImageOps.contain(original, size, method=Image.Resampling.LANCZOS)
-    background = Image.new("RGB", size, (225, 232, 237))
     background.paste(fitted, ((w - fitted.width) // 2, (h - fitted.height) // 2))
     return background
+
+
+def adaptive_verified_image(image: Image.Image, size: tuple[int, int], story: dict) -> Image.Image:
+    """Ordinary photos cover the full card; portraits and diagrams stay whole."""
+    ratio = image.width / max(1, image.height)
+    qa = story.get("image_visual_quality") or {}
+    protected = qa.get("crop_mode") == "protected_full_bleed" or needs_subject_protection(story, ratio)
+    story["poster_crop_mode"] = "protected_full_bleed" if protected else "cover"
+    if protected:
+        return verified_image_contain(image, size)
+    return ImageOps.fit(image.convert("RGB"), size,
+                        method=Image.Resampling.LANCZOS, centering=(.5, .43))
 
 
 def branded_information_card(story: dict, size: tuple[int, int]) -> Image.Image:
@@ -313,7 +332,7 @@ def story_photo(story, idx, size):
         story["poster_image_label_applied"] = True
         return rendered
     story["poster_visual_type"] = "verified_photo"
-    return mark_topic_illustration(verified_image_contain(image_for_story(story, idx), size), story)
+    return mark_topic_illustration(adaptive_verified_image(image_for_story(story, idx), size, story), story)
 
 
 def crop_cover(img, size):
