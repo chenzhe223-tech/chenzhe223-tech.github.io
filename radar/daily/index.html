@@ -320,6 +320,8 @@ section{margin-bottom:40px}
 .story-info-card .info-card-title{font-size:clamp(14px,1.5vw,19px);line-height:1.35;font-weight:700;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:100%}
 .story-info-card .info-card-source{font-size:11px;color:#c4d2df;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .story-info-card .info-card-detail{font-size:10px;color:#fff0dd}
+.story-image .story-search-attribution{position:absolute;z-index:3;bottom:9px;left:9px;max-width:calc(100% - 18px);padding:5px 8px;border-radius:4px;background:rgba(8,25,48,.92);color:#fff!important;font-size:10px;line-height:1.35;text-decoration:none}
+.story-image .story-search-attribution:hover{text-decoration:underline;color:#fff!important}
 @media(max-width:760px){.story-image.story-info-card{min-height:145px;height:auto;padding:12px 14px}.story-info-card .info-card-title{font-size:14px}}
 
 .top5-card:hover .story-image img{transform:scale(1.035)}
@@ -963,7 +965,12 @@ function storyImageMarkup(x){
  const hasSubject=/(人形机器人|机器人|人像|肖像|全身|人物|合影|humanoid|robot|portrait|full.body|diagram|infographic|benchmark|dashboard|screenshot|compiler|产品界面|界面|流程图|图表|截图|屏幕|架构图|编译器|编译优化)/i.test(subjectText);
  const cropMode=String(x.image_visual_quality?.crop_mode||"");
  const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
- return '<div class="story-image story-image--verified">'+img+'</div>';
+ const searched=status==="searched_image";
+ const imagePage=String(x.image_page_url||"");
+ const link=/^https:\/\//.test(imagePage)?imagePage:(x.source_url||"#");
+ const attribution=searched?
+   '<a class="story-search-attribution" href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Searched illustration · Not event footage":"搜索配图 · 非新闻现场")+'</a>':"";
+ return '<div class="story-image story-image--verified">'+img+attribution+'</div>';
 }
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
