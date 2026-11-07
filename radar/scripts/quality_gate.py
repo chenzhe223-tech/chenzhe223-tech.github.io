@@ -14,6 +14,8 @@ import urllib.request
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from radar.scripts.image_visual_quality import assess_cached_image, POLICY_VERSION as IMAGE_VISUAL_POLICY_VERSION
+
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
 ARCHIVE = DATA / "archive"
@@ -309,6 +311,23 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
             issues.append(result)
             continue
 
+        # Inspect the exact already-verified bytes. Source relevance and
+        # presentation safety are separate: unsafe photos become honest info
+        # cards; corrupt images cannot pass and are retried via next candidate.
+        candidate_story = dict(story)
+        candidate_story["image_url"] = candidate_url
+        if candidate_type == "fallback":
+            candidate_story["image_match_status"] = "thematic_fallback"
+            candidate_story["image_source"] = "Unsplash topic illustration"
+        try:
+            visual_qa = assess_cached_image(
+                record["sha256"], candidate_story,
+                Path(tempfile.gettempdir()) / "davylab-verified-images"
+            )
+        except Exception as exc:
+            issues.append({"type": "image_visual_quality_unverifiable",
+                           "title": title, "url": candidate_url, "error": type(exc).__name__})
+            continue
         repair = None
         if candidate_type == "fallback":
             story["image_url"] = candidate_url
@@ -336,6 +355,8 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
                 "fallback_candidates_checked": len(candidates) - 1,
             }
         story["image_sha256"] = record["sha256"]
+        story["image_visual_quality"] = visual_qa
+        story["image_display_mode"] = visual_qa["display_mode"]
         image_seen[record["canonical_url"]] = title
         return None, record, repair
 
@@ -462,6 +483,13 @@ def main():
             current_images.append(image_record)
             if repair:
                 image_fallback_repairs.append(repair)
+    visual_decisions = [
+        {"title": story_title(x), "mode": x.get("image_display_mode"),
+         "reason": (x.get("image_visual_quality") or {}).get("reasons"),
+         "dimensions": [(x.get("image_visual_quality") or {}).get("width"),
+                        (x.get("image_visual_quality") or {}).get("height")]}
+        for x in unique_story.values()
+    ]
     # Verify no historical match escaped candidate-selection safeguards.
     week_image_hits=[]
     for img in current_images:
@@ -536,7 +564,7 @@ def main():
       "history":{"archive_files_read":len(archive_files),"documents_loaded":len(docs),"stories_indexed":len(history),"unreadable_files":unreadable,"coverage":"partial" if unreadable else "all_available_archive_files",
       "image_fingerprint_coverage":"partial" if historical_image_failures else "all_published_historical_images_verified"},
       "news":{"current_story_records_checked":len(current),"historical_duplicate_hits":duplicate_hits,"china_history_duplicate_hits":china_hits,"internal_duplicate_count":sum(1 for x in duplicate_hits if x["scope"]=="current_report")},
-      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"fallback_repairs":image_fallback_repairs,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True},
+      "images":{"unique_current_story_images_checked":len(current_images),"image_errors":image_errors,"fallback_repairs":image_fallback_repairs,"image_relevance_threshold":MIN_IMAGE_RELEVANCE_SCORE,"image_relevance_policy_version":IMAGE_RELEVANCE_POLICY["policy_version"],"same_iso_week_reuse":week_image_hits,"historical_image_verification_failures":historical_image_failures,"sha256_and_phash_checked":True,"visual_policy_version":IMAGE_VISUAL_POLICY_VERSION,"visual_decisions":visual_decisions},
       "claims":{"status":"FAIL" if claim_errors else "PASS","errors":claim_errors,"policy_version":CLAIM_PROVENANCE_POLICY_VERSION,"editorial_source_basis_count":len(source_basis),"editorial_analysis_label":editorial.get("analysis_label_zh")},
       "skills":{"status":"FAIL" if skill_errors else "PASS","selected_count":len(skills),"history_status":skill_radar.get("history",{}).get("status"),"history_coverage_days":skill_radar.get("history",{}).get("coverage_days"),"errors":skill_errors},
       "status":evaluate_quality_gate(duplicate_hits,china_hits,image_errors,week_image_hits,unreadable,historical_image_failures,skill_errors,claim_errors),
