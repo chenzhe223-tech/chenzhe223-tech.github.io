@@ -90,6 +90,35 @@ def paragraph(draw, text, xy, fnt, fill, width, max_lines=3, line_gap=5):
     return y
 
 
+def choose_mini_card_summary(draw, story: dict, width: int):
+    """Select a complete, source-derived mini-card line without hidden clipping.
+
+    The last two news cards have room for three small text lines. Prefer the
+    editorial poster summary; when it exceeds that space, use a complete
+    alternate or a complete first sentence, never a truncated display.
+    """
+    candidates = [
+        str(story.get("poster_summary_zh") or "").strip(),
+        str(story.get("poster_why_zh") or "").strip(),
+        str(story.get("what_zh") or "").strip(),
+    ]
+    seen = set()
+    for value in candidates:
+        if not value:
+            continue
+        first_sentence = re.split(r"[。！？；;\\n]", value, maxsplit=1)[0].strip()
+        for candidate in (value, first_sentence):
+            if not candidate or candidate in seen:
+                continue
+            seen.add(candidate)
+            for text_size in (14, 13):
+                fnt = font(text_size)
+                if len(wrap(draw, candidate, fnt, width)) <= 3:
+                    return candidate, fnt
+    # The complete headline remains on the card and the full story is online.
+    return "完整信息与来源详见正式简报", font(14)
+
+
 def layout_regions_for(style):
     if style == "geometric-navy":
         return {
@@ -539,8 +568,9 @@ def main():
         draw.text((x + 145, mini_y + 14), f"{index+1:02d}  /  {str(story.get('source') or '公开来源')[:22]}", font=font(13, True), fill=blue)
         title = story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻"
         yy = paragraph(draw, title, (x + 145, mini_y + 40), font(18, True), ink, mini_w - 165, 2, 3)
-        summary = story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
-        paragraph(draw, summary, (x + 145, yy + 4), font(14), muted, mini_w - 165, 2, 3)
+        summary, summary_font = choose_mini_card_summary(draw, story, mini_w - 165)
+        # Three lines fit this fixed 144px card even when the headline uses two.
+        paragraph(draw, summary, (x + 145, yy + 4), summary_font, muted, mini_w - 165, 3, 3)
 
     # Compact open-source recommendation panel with a reserved right-side QR column.
     draw.rounded_rectangle((48, 1324, 868, 1538), radius=18, fill=(245, 235, 215), outline=(232, 218, 191), width=2)
