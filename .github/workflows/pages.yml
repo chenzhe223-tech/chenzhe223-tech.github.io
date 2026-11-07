@@ -91,6 +91,7 @@ jobs:
                   and report.get('quality_gate', {}).get('status') == 'PASS'
                   and report.get('image_matching', {}).get('relevance_policy_version') == '2026-11-02.1'
                   and report.get('quality_gate', {}).get('image_relevance_policy_version') == '2026-11-02.1'
+                  and report.get('quality_gate', {}).get('visual_policy_version') == '2026-11-07.1'
                   and report.get('editorial_policy_version') == '2026-11-02.2'
                   and report.get('quality_gate', {}).get('claim_provenance_policy_version') == '2026-11-02.2'
                   and report.get('editorial', {}).get('analysis_label_zh') == 'DAVYLAB 分析'
@@ -128,7 +129,7 @@ jobs:
           PY
       - name: Run Skill Radar, visual-lock and poster regression tests before network-heavy setup
         run: |
-          python -m py_compile radar/scripts/skill_radar.py radar/scripts/build_daily.py radar/scripts/test_skill_homepage.py radar/scripts/quality_gate.py radar/scripts/visual_lock.py radar/scripts/generate_poster.py
+          python -m py_compile radar/scripts/skill_radar.py radar/scripts/build_daily.py radar/scripts/test_skill_homepage.py radar/scripts/quality_gate.py radar/scripts/visual_lock.py radar/scripts/generate_poster.py radar/scripts/image_visual_quality.py radar/scripts/test_image_visual_quality.py
           python -m unittest radar.scripts.test_skill_radar -v
           python -m unittest radar.scripts.test_skill_homepage -v
           python -m unittest radar.scripts.test_quality_gate -v
@@ -236,6 +237,7 @@ jobs:
         run: |
           python -m py_compile radar/scripts/quality_gate.py radar/scripts/test_quality_gate.py
           python -m unittest radar.scripts.test_quality_gate -v
+          python -m unittest radar.scripts.test_image_visual_quality -v
           python -m radar.scripts.quality_gate
       - name: Validate today's date, fresh news and data contract
         run: |
@@ -245,6 +247,7 @@ jobs:
           python -m unittest radar.scripts.test_skill_radar -v
           python -m unittest radar.scripts.test_poster_style -v
           python -m unittest radar.scripts.test_poster_generation -v
+          python -m unittest radar.scripts.test_image_visual_quality -v
           python -m py_compile radar/scripts/visual_lock.py radar/scripts/test_visual_lock.py
           python -m unittest radar.scripts.test_visual_lock -v
           python -m unittest radar.scripts.test_news_image_match -v
