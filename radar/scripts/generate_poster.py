@@ -200,6 +200,7 @@ def news_image_evidence(stories):
             "image_match_status": status,
             "image_sha256": story.get("image_sha256"),
             "rendered_image_sha256": story.get("poster_image_sha256"),
+            "rendered_visual_type": story.get("poster_visual_type", "verified_photo"),
             "label_required": label_required,
             "label_applied": label_applied,
             "label": "主题配图 · 非新闻现场" if label_required else None,
@@ -262,11 +263,56 @@ def image_for_story(story, idx):
     raise RuntimeError(f"Cannot load verified story image {url}; refusing unverified substitution") from last_error
 
 
+def verified_image_contain(image: Image.Image, size: tuple[int, int]) -> Image.Image:
+    """Preserve full faces, products, dashboards and text instead of center cropping."""
+    w, h = size
+    if w <= 0 or h <= 0:
+        raise ValueError("Invalid news image dimensions")
+    original = image.convert("RGB")
+    fitted = ImageOps.contain(original, size, method=Image.Resampling.LANCZOS)
+    background = Image.new("RGB", size, (225, 232, 237))
+    background.paste(fitted, ((w - fitted.width) // 2, (h - fitted.height) // 2))
+    return background
+
+
+def branded_information_card(story: dict, size: tuple[int, int]) -> Image.Image:
+    """Create a deterministic source-backed information card, not fabricated photography."""
+    w, h = size
+    canvas = Image.new("RGB", size, (16, 35, 61))
+    d = ImageDraw.Draw(canvas)
+    d.rectangle((0, 0, 5 if w >= 220 else 3, h), fill=(232, 145, 93))
+    small = w < 220
+    left = 10 if small else 16
+    d.text((left, 8 if small else 12), "DAVYLAB / AI", font=font(10 if small else 13, True), fill=(232, 180, 137))
+    title = str(story.get("title_zh") or story.get("title_en") or story.get("original_title") or story.get("title") or "AI NEWS")
+    size_px = 11 if small else 15
+    width = max(10, w - left - 12)
+    available = max(1, h - (48 if small else 61))
+    maxlines = max(1, available // (size_px + 4))
+    lines = wrap(d, title, font(size_px, True), width)
+    for n, line in enumerate(lines[:maxlines]):
+        d.text((left, (25 if small else 34) + n * (size_px + 4)), line, font=font(size_px, True), fill=(250, 247, 239))
+    d.text((left, h - 17), "主题信息卡 · 非新闻现场" if not small else "非新闻现场", font=font(9), fill=(232, 180, 137))
+    return canvas
+
+
 def story_photo(story, idx, size):
-    # Disclosure must be painted on the final crop, never on pixels that a later
-    # cover-crop may discard. Evidence is set only by the drawing operation.
+    # Never show a generic stock photograph as a specific event. The photo
+    # remains vetted upstream, but the website/poster can use a fully labelled
+    # source-backed visual rather than a misleading image.
     story.pop("poster_image_label_applied", None)
-    return mark_topic_illustration(crop_cover(image_for_story(story, idx), size), story)
+    status = str(story.get("image_match_status") or "")
+    src = str(story.get("image_source") or "").lower()
+    url = str(story.get("image_url") or "")
+    thematic = status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} or "topic illustration" in src or "topic image" in src or "images.unsplash.com/" in url
+    if thematic:
+        rendered = branded_information_card(story, size)
+        story["poster_visual_type"] = "info_card"
+        story["poster_image_sha256"] = hashlib.sha256(rendered.tobytes()).hexdigest()
+        story["poster_image_label_applied"] = True
+        return rendered
+    story["poster_visual_type"] = "verified_photo"
+    return mark_topic_illustration(verified_image_contain(image_for_story(story, idx), size), story)
 
 
 def crop_cover(img, size):
