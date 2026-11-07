@@ -290,12 +290,31 @@ section{margin-bottom:40px}
 .story-image .image-credit{position:absolute;left:7px;bottom:7px;max-width:calc(100% - 14px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:3px 6px;background:rgba(15,30,49,.72);border-radius:2px;color:#fff;font-size:9px;text-decoration:none}
 
 .story-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
-/* Image QA v1: preserve full article imagery; never crop people or product UI.
-   Topic/stock/failure assets are rendered as trustworthy branded information cards. */
-.story-image.story-image--verified{background:#e8edf2;display:flex;align-items:center;justify-content:center}
+/* Image QA v2: fill every visual frame, protect portrait/robot/UI subjects.
+   The only foreground letterbox is backed by a blurred, full-bleed copy of
+   that exact source image — no empty grey gutters or random stock images. */
+.story-image.story-image--verified{background:#10233d;position:relative;isolation:isolate;display:block}
 .story-image.story-image--verified img,
 .top5-card .story-image.story-image--verified img,
-.china-news-grid .story-image.story-image--verified img{object-fit:contain!important;object-position:center!important}
+.china-news-grid .story-image.story-image--verified img{
+    width:100%;height:100%;display:block;object-fit:cover!important;
+    object-position:center 43%!important;position:relative;z-index:1
+}
+.story-image.story-image--verified.story-image--protect::before{
+    content:"";position:absolute;inset:-12px;z-index:0;
+    background-image:var(--radar-image-bleed);background-position:center;
+    background-size:cover;filter:blur(14px) saturate(.88) brightness(.79);
+}
+.story-image.story-image--verified.story-image--protect img,
+.top5-card .story-image.story-image--verified.story-image--protect img,
+.china-news-grid .story-image.story-image--verified.story-image--protect img{
+    object-fit:contain!important;object-position:center!important
+}
+.story-image.story-image--verified.story-image--protect{overflow:hidden}
+.story-image.story-image--verified.story-image--protect::after{
+    content:"";position:absolute;inset:0;z-index:0;
+    background:linear-gradient(90deg,#071a3116,transparent 35%,transparent 65%,#071a3116)
+}
 .story-image.story-info-card{height:160px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:7px;padding:16px 20px;overflow:hidden;background:linear-gradient(135deg,#10233d 0%,#1c3a52 72%,#2b5b7e 100%)!important;color:#faf7ef!important;border-left:5px solid #e8915d}
 .story-info-card .info-card-kicker{font-size:10px;letter-spacing:.13em;color:#fff0dd}
 .story-info-card .info-card-title{font-size:clamp(14px,1.5vw,19px);line-height:1.35;font-weight:700;color:#fff;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:100%}
@@ -912,6 +931,23 @@ function themeStatusReason(x, thematic, supplied){
  if(thematic)return "thematic_image_suppressed";
  return (x.image_visual_quality&&x.image_visual_quality.reasons||[]).join(",")||"visual_quality_fallback";
 }
+function radarImageLoaded(img){
+ const container=img.parentElement;
+ if(!container||!container.classList.contains("story-image--verified"))return;
+ if(!img.naturalWidth||!img.naturalHeight)return;
+ const ratio=img.naturalWidth/img.naturalHeight;
+ const subject=img.dataset.subject==="1";
+ const protectedMode=img.dataset.cropMode==="protected_full_bleed"
+   ||ratio<1.15||(subject&&ratio<2.2);
+ container.classList.toggle("story-image--protect",protectedMode);
+ if(protectedMode){
+   // The URL is browser-resolved and escaped as a CSS string: no second
+   // arbitrary image or UI-invented fallback will be introduced.
+   container.style.setProperty("--radar-image-bleed","url("+JSON.stringify(img.currentSrc||img.src)+")");
+ }else{
+   container.style.removeProperty("--radar-image-bleed");
+ }
+}
 function storyImageMarkup(x){
  const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:"";
  const status=String(x.image_match_status||"");
@@ -922,7 +958,10 @@ function storyImageMarkup(x){
  if(!supplied||thematic||status==="image_unavailable"||x.image_display_mode==="info_card")return infoCardMarkup(x,themeStatusReason(x,thematic,supplied));
  const title=currentLang==="en"?(x.title_en||x.original_title||x.title_zh||x.title):(x.title_zh||x.original_title||x.title_en||x.title);
  const alt=x.image_alt||title||"News illustration";
- const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
+ const subjectText=[title,alt,x.category_zh,x.category_en].filter(Boolean).join(" ").toLowerCase();
+ const hasSubject=/(人形机器人|机器人|人像|肖像|全身|人物|合影|humanoid|robot|portrait|full.body|diagram|infographic|benchmark|dashboard|screenshot|compiler|产品界面|界面|流程图|图表|截图|屏幕|架构图|编译器|编译优化)/i.test(subjectText);
+ const cropMode=String(x.image_visual_quality?.crop_mode||"");
+ const img='<img src="'+esc(supplied)+'" alt="'+esc(alt)+'" loading="lazy" referrerpolicy="no-referrer" data-subject="'+(hasSubject?'1':'0')+'" data-crop-mode="'+esc(cropMode)+'" onload="radarImageLoaded(this)" onerror="this.onerror=null;this.parentElement.replaceWith((()=>{const d=document.createElement(&quot;div&quot;);d.className=&quot;story-image story-info-card&quot;;const t=document.createElement(&quot;strong&quot;);t.className=&quot;info-card-title&quot;;t.textContent=this.alt;d.appendChild(t);const k=document.createElement(&quot;span&quot;);k.className=&quot;info-card-detail&quot;;k.textContent=&quot;图片加载失败 · 已保留新闻来源&quot;;d.appendChild(k);return d})())">';
  return '<div class="story-image story-image--verified">'+img+'</div>';
 }
 function renderTop5(items){
