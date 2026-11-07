@@ -11,8 +11,8 @@
     "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review"
   ],
   "news_titles": [
-    "苹果披露人形机器人HALO系统：调用千问模型在宇树G1上验证，单项任务平均成功率91%",
-    "OpenAI推出BioBasicsBench：衡量AI智能体如何处理日常湿实验室科研",
+    "苹果披露人形机器人HALO系统：在宇树G1上验证，单项任务平均成功率91%",
+    "OpenAI推出BioBasicsBench：衡量AI智能体处理日常湿实验室科研的能力",
     "Together AI发布Together Compiler：智能体使推理最高提速2.6倍",
     "Dropbox以3.5亿美元收购Tigris Data以强化AI基础设施",
     "纽约时报烹饪AI助手救了我的工作日晚餐，却差点毁了我的蛋糕"
@@ -34,7 +34,7 @@
       "image_source": "Unsplash topic illustration",
       "image_match_status": "thematic_fallback",
       "image_sha256": "fb9d3e8fb8fc8b5bb0b1bdbe901931468b97260d2331c2892e8da6568b228b27",
-      "rendered_image_sha256": "ce1b4eac1c5ca092960e63fc6ec86a94618896aa67e69b1b3ff24d16edb6e1fb",
+      "rendered_image_sha256": "fff7e6f38450367dea535dedca21d4ab6278945730a8e9872db96ed06d2607c5",
       "rendered_visual_type": "info_card",
       "label_required": true,
       "label_applied": true,
@@ -138,7 +138,7 @@
       "y": 329,
       "width": 1070,
       "height": 25,
-      "actual_width": 924.0,
+      "actual_width": 682.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -171,7 +171,7 @@
       "y": 906,
       "width": 318,
       "height": 152,
-      "actual_width": 317.9,
+      "actual_width": 317.8,
       "line_count": 8,
       "truncated": false,
       "overflow": false
@@ -281,7 +281,7 @@
       "y": 1434,
       "width": 565,
       "height": 30,
-      "actual_width": 558.2,
+      "actual_width": 559.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -305,5 +305,5 @@
   "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-08T00:16:33.133772+08:00"
+  "generated_at": "2026-11-08T00:29:50.366355+08:00"
 }
