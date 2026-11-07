@@ -1,5 +1,6 @@
 """Regression tests for final-poster image fetches, overlays, text wrapping and QR encoding."""
 import io
+import hashlib
 import unittest
 from unittest.mock import patch
 
@@ -33,20 +34,46 @@ class PosterGenerationTests(unittest.TestCase):
         payload = png_bytes()
         story = {"title_zh": "测试新闻", "image_url": "https://images.example.test/news.png",
                  "image_fallback_url": "https://images.example.test/fallback.png",
-                 "image_source": "Publisher", "image_match_status": "article_image"}
+                 "image_source": "Publisher", "image_match_status": "article_image", "image_sha256": hashlib.sha256(payload).hexdigest()}
         with patch.object(poster.urllib.request, "urlopen", return_value=FakeResponse(payload)) as mocked:
             result = poster.image_for_story(story, 0)
         self.assertEqual(result.size, (120, 80))
         self.assertEqual(mocked.call_count, 1)
 
-    def test_failed_remote_images_fall_back_after_three_candidates(self):
+    def test_failed_verified_image_cannot_switch_to_ungated_backup(self):
         story = {"title_zh": "AI 智能体企业软件", "image_url": "https://source.example.test/news",
-                 "image_fallback_url": "https://source.example.test/fallback"}
-        with patch.object(poster.urllib.request, "urlopen", side_effect=OSError("offline")) as mocked:
-            result = poster.image_for_story(story, 0)
-        self.assertEqual(result.size, (700, 380))
-        self.assertLessEqual(mocked.call_count, 3)
-        self.assertGreater(mocked.call_count, 0)
+                 "image_fallback_url": "https://source.example.test/fallback", "image_sha256": "a" * 64}
+        with patch.object(poster.urllib.request, "urlopen", side_effect=OSError("offline")):
+            with self.assertRaisesRegex(RuntimeError, "verified story image"):
+                poster.image_for_story(story, 0)
+
+    def test_image_bytes_cannot_change_after_quality_gate(self):
+        story = {"image_url": "https://example.com/topic", "image_sha256": "a" * 64}
+        with patch.object(poster.urllib.request, "urlopen", return_value=FakeResponse(png_bytes())):
+            with self.assertRaisesRegex(RuntimeError, "verified story image"):
+                poster.image_for_story(story, 0)
+
+    def test_disclosure_is_drawn_after_final_wide_crop(self):
+        story = {"image_url": "https://example.com/topic", "image_match_status": "thematic_fallback"}
+        raw = Image.new("RGB", (700, 700), "white")
+        with patch.object(poster, "image_for_story", return_value=raw):
+            photo = poster.story_photo(story, 0, (348, 132))
+        self.assertEqual(photo.size, (348, 132))
+        self.assertNotEqual(photo.getpixel((0, 131)), (255, 255, 255))
+        self.assertTrue(story["poster_image_label_applied"])
+
+    def test_poster_evidence_rejects_image_substitution(self):
+        top = [{"title_zh": str(i), "source_url": f"https://example.com/{i}", "image_sha256": "a" * 64} for i in range(5)]
+        manifest = {"news_urls": [x["source_url"] for x in top], "news_titles": [x["title_zh"] for x in top], "news_image_evidence": [{"image_sha256": "a" * 64, "rendered_image_sha256": "a" * 64} for _ in top]}
+        self.assertEqual(verify_poster.verify_news_evidence(manifest, {"top5": top})["status"], "PASS")
+        manifest["news_image_evidence"][0]["rendered_image_sha256"] = "b" * 64
+        with self.assertRaisesRegex(RuntimeError, "P0-verified digest"):
+            verify_poster.verify_news_evidence(manifest, {"top5": top})
+
+    def test_topic_metadata_alone_is_not_proof_of_visible_disclosure(self):
+        evidence = poster.news_image_evidence([{"image_match_status": "thematic_fallback"}])[0]
+        self.assertTrue(evidence["label_required"])
+        self.assertFalse(evidence["label_applied"])
 
     def test_alpha_composite_checks_dimensions_and_preserves_canvas_size(self):
         background = Image.new("RGB", (32, 24), (0, 0, 0))

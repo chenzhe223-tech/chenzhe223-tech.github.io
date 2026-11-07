@@ -3,6 +3,13 @@ from unittest.mock import patch
 from radar.scripts.quality_gate import MIN_QUALIFIED_SKILLS, MIN_IMAGE_RELEVANCE_SCORE, image_relevance_error, claim_provenance_error, validate_skill_count, compare_story, evaluate_quality_gate, norm_url, published_image_records, similarity, tokens, verify_and_repair_story_image
 
 class QualityGateTests(unittest.TestCase):
+    def test_accepted_story_records_exact_verified_image_digest(self):
+        story = {"title": "Source story", "image_url": "https://example.com/a.png", "image_match_status": "article_image"}
+        with patch("radar.scripts.quality_gate.download_fingerprints", return_value=("a" * 64, None)):
+            error, record, _ = verify_and_repair_story_image(story, {}, [], {}, [])
+        self.assertIsNone(error)
+        self.assertEqual(story.get("image_sha256"), record["sha256"])
+
     def test_current_cards_without_images_are_still_checked(self):
         from radar.scripts.quality_gate import current_image_stories
         cards = current_image_stories({"top5": [{"title": "missing image", "url": "https://example.com/1"}], "china_ai_news": [{"title": "also missing", "url": "https://example.com/2"}]})

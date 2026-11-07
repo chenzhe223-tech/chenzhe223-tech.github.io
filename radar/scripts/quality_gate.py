@@ -8,6 +8,7 @@ import json
 import os
 import re
 import sys
+import tempfile
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -178,6 +179,11 @@ def download_fingerprints(url):
         if not r.headers.get("Content-Type","").lower().startswith("image/"):
             raise ValueError("response is not image content")
     sha=hashlib.sha256(data).hexdigest()
+    # Preserve precisely the validated bytes for this run's renderer. The cache
+    # is content-addressed and is never published as a separate social asset.
+    cache = Path(tempfile.gettempdir()) / "davylab-verified-images"
+    cache.mkdir(parents=True, exist_ok=True)
+    (cache / sha).write_bytes(data)
     # Optional perceptual hash; exact SHA/URL checks still work without Pillow.
     phash=None
     try:
@@ -329,6 +335,7 @@ def verify_and_repair_story_image(story, image_seen, current_images, week_urls=N
                 "reason": issues[-1].get("type") if issues else "primary_relevance_gate",
                 "fallback_candidates_checked": len(candidates) - 1,
             }
+        story["image_sha256"] = record["sha256"]
         image_seen[record["canonical_url"]] = title
         return None, record, repair
 

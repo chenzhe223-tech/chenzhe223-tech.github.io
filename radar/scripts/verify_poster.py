@@ -173,7 +173,10 @@ def verify_news_evidence(manifest: dict, report: dict) -> dict:
     evidence = manifest.get("news_image_evidence") or []
     if len(evidence) != 5:
         fail("Poster must record image relevance evidence for all five stories")
-    for item in evidence:
+    for item, story in zip(evidence, top[:5]):
+        expected_digest = str(story.get("image_sha256") or "")
+        if len(expected_digest) != 64 or item.get("image_sha256") != expected_digest or item.get("rendered_image_sha256") != expected_digest:
+            fail("Rendered story image does not match its P0-verified digest")
         if item.get("label_required") and not item.get("label_applied"):
             fail(f"Thematic image is missing its disclosure label: {item}")
     return {"news_count": 5, "image_evidence_count": len(evidence), "status": "PASS"}

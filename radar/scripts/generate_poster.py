@@ -3,6 +3,8 @@
 from __future__ import annotations
 import datetime as dt
 import json
+import hashlib
+import tempfile
 import os
 import re
 import urllib.request
@@ -124,15 +126,13 @@ def news_image_evidence(stories):
             or "topic image" in source.lower()
             or "topic illustration" in source.lower()
         )
-        label_applied = bool(story.get("poster_image_label_applied")) or (
-            status in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"}
-            or "topic image" in source.lower()
-            or "topic illustration" in source.lower()
-        )
+        label_applied = bool(story.get("poster_image_label_applied"))
         evidence.append({
             "story_url": str(story.get("source_url") or story.get("url") or ""),
             "image_source": source,
             "image_match_status": status,
+            "image_sha256": story.get("image_sha256"),
+            "rendered_image_sha256": story.get("poster_image_sha256"),
             "label_required": label_required,
             "label_applied": label_applied,
             "label": "主题配图 · 非新闻现场" if label_required else None,
@@ -146,11 +146,16 @@ def mark_topic_illustration(image, story):
     if status not in {"thematic_fallback", "openverse_topic", "wikimedia_topic", "web_search_topic"} and "topic image" not in image_source.lower() and "topic illustration" not in image_source.lower():
         return image
     canvas = image.convert("RGBA")
-    band_h = min(38, canvas.height)
-    band = Image.new("RGBA", (canvas.width, band_h), (8, 25, 48, 220))
+    small = canvas.width < 220
+    lines = ["主题配图", "非新闻现场"] if small else ["主题配图 · 非新闻现场"]
+    size = 11 if small else 15
+    band_h = min(36 if small else 30, canvas.height)
+    band = Image.new("RGBA", (canvas.width, band_h), (8, 25, 48, 235))
     canvas.alpha_composite(band, (0, canvas.height - band_h))
     overlay_draw = ImageDraw.Draw(canvas)
-    overlay_draw.text((14, canvas.height - band_h + 7), "主题配图 · 非新闻现场", font=font(15, True), fill=WHITE)
+    for index, line in enumerate(lines):
+        overlay_draw.text((4 if small else 10, canvas.height - band_h + 3 + index * 14), line, font=font(size, True), fill=WHITE)
+    story["poster_image_label_applied"] = True
     return canvas.convert("RGB")
 
 def composite_same_size(background: Image.Image, overlay: Image.Image) -> Image.Image:
@@ -164,56 +169,38 @@ def composite_same_size(background: Image.Image, overlay: Image.Image) -> Image.
     return Image.alpha_composite(base, top).convert("RGB")
 
 def image_for_story(story, idx):
-    """Try matched image, saved backup, then story-category web illustration."""
-    candidates = [str(story.get("image_url") or "").strip(), str(story.get("image_fallback_url") or "").strip()]
-    title = " ".join(str(story.get(k) or "") for k in ("title_zh", "title_en", "original_title", "title")).lower()
-    photo_ids = []
-    patterns = [
-        (r"robot|robotics|机器人|具身智能|人形机器人|机器狗|自动驾驶", "photo-1485827404703-89b55fcc595e"),
-        (r"apple intelligence|iphone|siri|smartphone|mobile|手机|写作工具|视觉智能", "photo-1512941937669-90a1b58e7e9c"),
-        (r"servicenow|enterprise workflow|business workflow|企业工作流|企业软件|工单|业务流程|business|company|customer|market|fund|investment|银行|企业|客户|商业|融资|股份|公司", "photo-1519389950473-47ba0277781c"),
-        (r"coding agent|software agent|code agent|github|飞书|代码智能体|编码智能体|工作器|路由|开发者工具|智能体|agent|phone|mobile|app|software|product|platform|应用|手机|软件|产品", "photo-1512941937669-90a1b58e7e9c"),
-        (r"chip|compute|semiconductor|gpu|model|llm|gpt|deepseek|算力|芯片|模型|推理", "photo-1518770660439-4636190af475"),
-        (r"image|video|design|creative|图像|视频|设计|创作|图像生成|图片生成|视频生成|内容生成|生成图片|生成视频", "photo-1470252649378-9c29740c9fa8"),
-    ]
-    for pattern, photo_id in patterns:
-        if re.search(pattern, title):
-            photo_ids.append(photo_id)
-    photo_ids.extend(["photo-1531297484001-80022131f5a1", "photo-1498050108023-c5249f4df085"])
-    candidates.extend(f"https://images.unsplash.com/{photo_id}?auto=format&fit=crop&w=700&q=82" for photo_id in photo_ids)
-    seen = set()
-    for url in candidates[:3]:  # Cap network attempts to prevent one poster run stalling on remote images.
-        if not url.startswith("https://") or url in seen:
-            continue
-        seen.add(url)
+    """Load only the image already accepted by the news/image quality gate."""
+    url = str(story.get("image_url") or "").strip()
+    if not url.startswith("https://"):
+        raise RuntimeError("Missing verified story image; rerun image matching and P0 gates")
+    expected = str(story.get("image_sha256") or "")
+    if not re.fullmatch(r"[0-9a-f]{64}", expected):
+        raise RuntimeError("Missing verified story image digest; rerun P0 quality gate")
+    cache = Path(tempfile.gettempdir()) / "davylab-verified-images" / expected
+    last_error = None
+    for _ in range(2):
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
-            with urllib.request.urlopen(req, timeout=5) as r:
-                raw = r.read(8 * 1024 * 1024)
-            image = Image.open(BytesIO(raw)).convert("RGB")
-            primary = str(story.get("image_url") or "").strip()
-            if url != primary and ("unsplash.com" in url or url == str(story.get("image_fallback_url") or "").strip()):
-                fallback_story = {**story, "image_match_status": "thematic_fallback", "image_source": "Unsplash topic illustration"}
-                story["poster_image_material_type"] = "thematic_fallback"
-                story["poster_image_label_applied"] = True
-                return mark_topic_illustration(image, fallback_story)
-            return mark_topic_illustration(image, story)
-        except Exception:
-            continue
-    # Keep a polished editorial composition when network images are unavailable.
-    story["poster_image_material_type"] = "thematic_fallback"
-    story["poster_image_label_applied"] = True
-    img = Image.new("RGB", (700, 380), (232, 237, 239))
-    d = ImageDraw.Draw(img)
-    d.rounded_rectangle((20, 20, 680, 360), radius=22, outline=(194, 205, 213), width=3)
-    d.text((42, 48), "DAVYLAB  /  AI TOPIC VISUAL", font=font(25, True), fill=(58, 79, 99))
-    title_text = str(story.get("title_zh") or story.get("original_title") or story.get("title_en") or "AI topic illustration")
-    title_font = font(24, True)
-    fallback_lines = wrap(d, title_text, title_font, 600)[:4]
-    for line_index, line_text in enumerate(fallback_lines):
-        d.text((42, 112 + line_index * 32), line_text, font=title_font, fill=(36, 55, 73))
-    d.text((42, 310), "主题插画 · 非新闻现场", font=font(18, True), fill=(99, 117, 131))
-    return img
+            if cache.is_file():
+                raw = cache.read_bytes()
+            else:
+                req = urllib.request.Request(url, headers={"User-Agent": "DAVYLAB-Radar-Poster/1.0"})
+                with urllib.request.urlopen(req, timeout=5) as response:
+                    raw = response.read(8 * 1024 * 1024)
+            if hashlib.sha256(raw).hexdigest() != expected:
+                raise RuntimeError("Image bytes changed after the P0 quality gate")
+            story["poster_image_sha256"] = expected
+            return Image.open(BytesIO(raw)).convert("RGB")
+        except Exception as exc:
+            last_error = exc
+    raise RuntimeError(f"Cannot load verified story image {url}; refusing unverified substitution") from last_error
+
+
+def story_photo(story, idx, size):
+    # Disclosure must be painted on the final crop, never on pixels that a later
+    # cover-crop may discard. Evidence is set only by the drawing operation.
+    story.pop("poster_image_label_applied", None)
+    return mark_topic_illustration(crop_cover(image_for_story(story, idx), size), story)
+
 
 def crop_cover(img, size):
     return ImageOps.fit(img, size, method=Image.Resampling.LANCZOS, centering=(0.5, 0.5))
@@ -336,7 +323,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
             draw.text((x, wy), line_text, font=why_font, fill=(52, 71, 96))
             wy += 17
         image_y, image_h = 1034, 154
-        photo = crop_cover(image_for_story(story, idx), (col_w, image_h))
+        photo = story_photo(story, idx, (col_w, image_h))
         canvas.paste(photo, (x, image_y))
         draw.text((x, 1200), str(story.get("published") or "")[:10], font=font(11), fill=muted)
         draw.text((x, 1220), "阅读原文 ↗", font=font(12, True), fill=blue)
@@ -526,7 +513,7 @@ def main():
     for i, story in enumerate(top[:3]):
         x = xs[i]
         draw.rounded_rectangle((x, card_y, x + card_w, card_y + card_h), radius=16, fill=(255, 254, 250), outline=light_line, width=2)
-        photo = crop_cover(image_for_story(story, i), (card_w - 2, 132))
+        photo = story_photo(story, i, (card_w - 2, 132))
         canvas.paste(photo, (x + 1, card_y + 1))
         draw.rounded_rectangle((x + 13, card_y + 12, x + 54, card_y + 51), radius=8, fill=orange)
         draw.text((x + 25, card_y + 16), f"{i+1:02d}", font=font(21, True), fill=dark)
@@ -547,7 +534,7 @@ def main():
     for index, story in enumerate(top[3:5], start=3):
         x = 50 + (index - 3) * (mini_w + 26)
         draw.rounded_rectangle((x, mini_y, x + mini_w, mini_y + mini_h), radius=14, fill=(255, 254, 250), outline=light_line, width=2)
-        thumb = crop_cover(image_for_story(story, index), (115, 118))
+        thumb = story_photo(story, index, (115, 118))
         canvas.paste(thumb, (x + 12, mini_y + 18))
         draw.text((x + 145, mini_y + 14), f"{index+1:02d}  /  {str(story.get('source') or '公开来源')[:22]}", font=font(13, True), fill=blue)
         title = story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻"
