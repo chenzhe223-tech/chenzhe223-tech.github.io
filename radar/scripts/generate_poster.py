@@ -90,6 +90,39 @@ def paragraph(draw, text, xy, fnt, fill, width, max_lines=3, line_gap=5):
     return y
 
 
+def choose_primary_card_summary(draw, story: dict, width: int, available_height: int):
+    """Fit the complete editorial summary into the primary card's real space.
+
+    Do not clip an arbitrary fourth line: use the space remaining above the
+    source footer, and select complete alternate wording only when necessary.
+    """
+    values = [
+        str(story.get("poster_summary_zh") or "").strip(),
+        str(story.get("poster_why_zh") or "").strip(),
+        str(story.get("what_zh") or "").strip(),
+    ]
+    for sentence_only in (False, True):
+        for value in values:
+            if not value:
+                continue
+            candidate = (re.split(r"[。！？；;\\n]", value, maxsplit=1)[0].strip()
+                         if sentence_only else value)
+            if not candidate:
+                continue
+            for size in (16, 15, 14, 13):
+                fnt = font(size)
+                line_count = len(wrap(draw, candidate, fnt, width))
+                permitted = min(8, max(0, available_height // (size + 5)))
+                if 1 <= line_count <= permitted:
+                    return candidate, fnt, permitted
+    fallback = "详情、来源及完整数据见正式简报"
+    fnt = font(13)
+    permitted = min(8, max(0, available_height // (fnt.size + 5)))
+    if len(wrap(draw, fallback, fnt, width)) > permitted:
+        raise RuntimeError("P0: primary news card has no room for any legible summary")
+    return fallback, fnt, permitted
+
+
 def choose_mini_card_summary(draw, story: dict, width: int):
     """Select a complete, source-derived mini-card line without hidden clipping.
 
@@ -553,8 +586,12 @@ def main():
         draw.text((x + 25, card_y + 16), f"{i+1:02d}", font=font(21, True), fill=dark)
         title = story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻"
         yy = paragraph(draw, title, (x + 16, card_y + 151), font(21, True), ink, card_w - 32, 4, 4)
-        summary = story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or ""
-        yy = paragraph(draw, summary, (x + 16, yy + 8), font(16), muted, card_w - 32, 4, 5)
+        summary_y = yy + 8
+        # Reserve the source footer and use as many complete lines as fit.
+        summary, summary_font, summary_lines = choose_primary_card_summary(
+            draw, story, card_w - 32, card_y + card_h - 61 - summary_y
+        )
+        yy = paragraph(draw, summary, (x + 16, summary_y), summary_font, muted, card_w - 32, summary_lines, 5)
         source = str(story.get("source") or "公开来源")
         if str(story.get("confidence") or "").lower() == "low":
             source += " · 低置信度"
