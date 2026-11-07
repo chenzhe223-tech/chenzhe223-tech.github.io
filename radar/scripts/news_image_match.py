@@ -702,7 +702,9 @@ def main() -> int:
     matched, total = enrich_report(report, cache)
     REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     _image_cache_save(cache)
-    print(f"News image match: {matched}/{total} stories matched; no generic-image fallback is used.")
+    selections=[x for sec in ("top5","china_ai_news") for x in (report.get(sec) or []) if isinstance(x,dict)]
+    thematic=sum(1 for x in selections if x.get("image_match_status") in {"thematic_fallback","openverse_topic","wikimedia_topic","web_search_topic"})
+    print(f"News image matching resolved {matched}/{total} source assets; thematic/stock candidates in selected sections={thematic}. Final UI will show source-backed info cards rather than misrepresent these as event photos.")
     return 0
 
 if __name__ == "__main__":
