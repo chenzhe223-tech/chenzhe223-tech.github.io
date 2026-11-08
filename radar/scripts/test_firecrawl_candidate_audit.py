@@ -16,7 +16,7 @@ class FirecrawlCandidateAuditTests(unittest.TestCase):
     def test_cross_publisher_near_duplicate_requires_review(self):
         old = [{"title":"Google launches Gemini Carbon model for coding and cybersecurity",
                 "url":"https://publisher-a.example/carbon"}]
-        new = [{"title":"Google launches Gemini Carbon model for coding and cyber security",
+        new = [{"title":"Google unveils Gemini Carbon model for coding and cybersecurity",
                 "url":"https://publisher-b.example/carbon", "published":"2026-11-07"}]
         result = audit(new, "2026-11-08", old)
         self.assertEqual(result["results"][0]["status"], "REVIEW_DUPLICATE")
