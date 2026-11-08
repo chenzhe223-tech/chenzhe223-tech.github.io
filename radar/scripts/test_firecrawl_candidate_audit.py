@@ -13,6 +13,26 @@ class FirecrawlCandidateAuditTests(unittest.TestCase):
         result = audit(rows, "2026-11-08", old)
         self.assertEqual([r["status"] for r in result["results"]], ["DUPLICATE", "CANDIDATE"])
         self.assertFalse(result["publish_allowed"])
+    def test_cross_publisher_near_duplicate_requires_review(self):
+        old = [{"title":"Google launches Gemini Carbon model for coding and cybersecurity",
+                "url":"https://publisher-a.example/carbon"}]
+        new = [{"title":"Google launches Gemini Carbon model for coding and cyber security",
+                "url":"https://publisher-b.example/carbon", "published":"2026-11-07"}]
+        result = audit(new, "2026-11-08", old)
+        self.assertEqual(result["results"][0]["status"], "REVIEW_DUPLICATE")
+    def test_different_events_same_company_are_not_duplicates(self):
+        old = [{"title":"Google launches a new enterprise coding agent",
+                "url":"https://publisher-a.example/coding"}]
+        new = [{"title":"Google releases a new voice model for mobile devices",
+                "url":"https://publisher-b.example/voice", "published":"2026-11-07"}]
+        result = audit(new, "2026-11-08", old)
+        self.assertEqual(result["results"][0]["status"], "CANDIDATE")
+    def test_english_title_in_bilingual_archive(self):
+        old = [{"title_zh":"谷歌发布全新AI模型", "title":"Google launches Gemini Carbon model for coding",
+                "url":"https://publisher-a.example/carbon"}]
+        new = [{"title":"Google launches Gemini Carbon model for coding",
+                "url":"https://publisher-b.example/carbon", "published":"2026-11-07"}]
+        self.assertEqual(audit(new, "2026-11-08", old)["results"][0]["status"], "DUPLICATE")
     def test_missing_history_fails_closed(self):
         result = audit([{"title":"News", "url":"https://example.com/a", "published":"2026-11-07"}],
                        "2026-11-08", None, "archive missing")
