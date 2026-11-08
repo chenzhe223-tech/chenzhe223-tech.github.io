@@ -4,41 +4,30 @@
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.ithome.com/1/023/767.htm",
-    "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
+    "https://www.marktechpost.com/2026/11/04/openai-gpt-image-2-6-flare-sunburst/",
     "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
-    "https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/",
-    "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review"
+    "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
+    "https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/",
+    "https://www.ithome.com/1/023/849.htm"
   ],
   "news_titles": [
-    "苹果披露人形机器人HALO系统：在宇树G1上验证，单项任务平均成功率91%",
-    "OpenAI推出BioBasicsBench：衡量AI智能体处理日常湿实验室科研的能力",
-    "Together AI发布Together Compiler：智能体使推理最高提速2.6倍",
-    "Dropbox以3.5亿美元收购Tigris Data以强化AI基础设施",
-    "纽约时报烹饪AI助手救了我的工作日晚餐，却差点毁了我的蛋糕"
+    "OpenAI 推出 GPT-Image-2.6 Flare 与 Sunburst：新增 GIF、SVG 导出和 6 秒 API 生成",
+    "Together AI 发布 Together Compiler：智能体让推理最高提速 2.6 倍",
+    "衡量 AI 智能体如何处理日常湿实验室科研",
+    "Axiom Math 想把 AI 垃圾挡在数学之外",
+    "索尼全球首发“基于视觉语言模型的驾驶接管危险预警”，为驾驶员提供分级提示"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.ithome.com/1/023/767.htm",
-      "image_source": "IT之家",
+      "story_url": "https://www.marktechpost.com/2026/11/04/openai-gpt-image-2-6-flare-sunburst/",
+      "image_source": "MarkTechPost",
       "image_match_status": "feed_image",
-      "image_sha256": "00ff0915d044d0d651026b59244e37e6f746be4ebc7982f7e0997da3833b20ce",
-      "rendered_image_sha256": "00ff0915d044d0d651026b59244e37e6f746be4ebc7982f7e0997da3833b20ce",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "fb9d3e8fb8fc8b5bb0b1bdbe901931468b97260d2331c2892e8da6568b228b27",
-      "rendered_image_sha256": "fff7e6f38450367dea535dedca21d4ab6278945730a8e9872db96ed06d2607c5",
+      "image_sha256": "5007ecf7f05597cb5400ccbbed67ec0395d390f798c0e5fc9ed9d04f0a08c058",
+      "rendered_image_sha256": "bee6e5f4a7c956beba95bd30ef26b3ef6be7e799cff8753ea34d0821de3ae921",
       "rendered_visual_type": "info_card",
-      "label_required": true,
+      "label_required": false,
       "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
+      "label": null
     },
     {
       "story_url": "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
@@ -52,22 +41,33 @@
       "label": null
     },
     {
-      "story_url": "https://techcrunch.com/2026/11/05/dropbox-acquires-tigris-data-for-350m-to-bolster-its-ai-iinfrastructure/",
+      "story_url": "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "fb9d3e8fb8fc8b5bb0b1bdbe901931468b97260d2331c2892e8da6568b228b27",
+      "rendered_image_sha256": "e27be025688ac3eb32be21dd0b33eec7beb22cf2e4a42c1d9951ea3d94f0f5ad",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/",
       "image_source": "TechCrunch AI",
       "image_match_status": "article_image",
-      "image_sha256": "4f1a0dd0647ffe0ee1f127cff7f11585a02dcef93d5d6b9fc4af97941e0b5480",
-      "rendered_image_sha256": "4f1a0dd0647ffe0ee1f127cff7f11585a02dcef93d5d6b9fc4af97941e0b5480",
+      "image_sha256": "6ef2f7912e193153103d641cbf9f26fe20bfb2ed51be28f80612d07ebf292186",
+      "rendered_image_sha256": "6ef2f7912e193153103d641cbf9f26fe20bfb2ed51be28f80612d07ebf292186",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://www.theverge.com/tech/1029489/nyt-cooking-ai-assistant-review",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "59a1b6c6fa84b807373cdf7e3078c9aea808f469c8e40a6e79a72012406b7864",
-      "rendered_image_sha256": "59a1b6c6fa84b807373cdf7e3078c9aea808f469c8e40a6e79a72012406b7864",
+      "story_url": "https://www.ithome.com/1/023/849.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "9e51c11f9eab9ffaeb36ec2d0301c5cb45cb97b34db73f92587314636a47c675",
+      "rendered_image_sha256": "9e51c11f9eab9ffaeb36ec2d0301c5cb45cb97b34db73f92587314636a47c675",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
@@ -138,7 +138,7 @@
       "y": 329,
       "width": 1070,
       "height": 25,
-      "actual_width": 682.0,
+      "actual_width": 836.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -148,53 +148,53 @@
       "x": 250,
       "y": 469,
       "width": 850,
-      "height": 56,
-      "actual_width": 838.7,
+      "height": 84,
+      "actual_width": 849.6,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 823,
+      "width": 318,
+      "height": 75,
+      "actual_width": 314.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 906,
+      "width": 318,
+      "height": 105,
+      "actual_width": 317.1,
+      "line_count": 5,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 317.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
-      "x": 66,
-      "y": 823,
-      "width": 318,
-      "height": 75,
-      "actual_width": 305.4,
-      "line_count": 3,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 66,
-      "y": 906,
-      "width": 318,
-      "height": 152,
-      "actual_width": 317.8,
-      "line_count": 8,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
       "x": 441,
-      "y": 823,
+      "y": 881,
       "width": 318,
-      "height": 75,
-      "actual_width": 313.7,
-      "line_count": 3,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 906,
-      "width": 318,
-      "height": 105,
-      "actual_width": 310.0,
-      "line_count": 5,
+      "height": 147,
+      "actual_width": 315.9,
+      "line_count": 7,
       "truncated": false,
       "overflow": false
     },
@@ -204,7 +204,7 @@
       "y": 823,
       "width": 318,
       "height": 50,
-      "actual_width": 317.3,
+      "actual_width": 303.6,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -214,9 +214,9 @@
       "x": 816,
       "y": 881,
       "width": 318,
-      "height": 147,
-      "actual_width": 313.1,
-      "line_count": 7,
+      "height": 105,
+      "actual_width": 314.1,
+      "line_count": 5,
       "truncated": false,
       "overflow": false
     },
@@ -225,20 +225,20 @@
       "x": 195,
       "y": 1176,
       "width": 372,
-      "height": 42,
-      "actual_width": 358.3,
-      "line_count": 2,
+      "height": 21,
+      "actual_width": 308.5,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
       "x": 195,
-      "y": 1222,
+      "y": 1201,
       "width": 372,
-      "height": 51,
-      "actual_width": 371.1,
-      "line_count": 3,
+      "height": 17,
+      "actual_width": 68.6,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -248,7 +248,7 @@
       "y": 1176,
       "width": 372,
       "height": 42,
-      "actual_width": 358.9,
+      "actual_width": 360.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -258,9 +258,9 @@
       "x": 758,
       "y": 1222,
       "width": 372,
-      "height": 34,
-      "actual_width": 369.1,
-      "line_count": 2,
+      "height": 17,
+      "actual_width": 182.0,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -281,7 +281,7 @@
       "y": 1434,
       "width": 565,
       "height": 30,
-      "actual_width": 559.0,
+      "actual_width": 562.4,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -305,5 +305,5 @@
   "style_cycle_index": 44,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-08T00:29:50.366355+08:00"
+  "generated_at": "2026-11-08T10:08:41.121452+08:00"
 }
