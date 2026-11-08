@@ -453,8 +453,56 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 }
 
 @media(max-width:760px){#appNavigation .navwrap .mobile-more{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:100%;border:0;background:transparent;color:#66758a;font-size:10px;border-radius:9px}#appNavigation .navwrap .mobile-more .ico{font-size:18px}#appNavigation .navwrap.mobile-more-open .nav[data-section="workflow"],#appNavigation .navwrap.mobile-more-open .nav[data-section="research"]{display:flex;position:fixed;right:9px;bottom:calc(122px + env(safe-area-inset-bottom));width:150px;height:48px;flex-direction:row;justify-content:flex-start;padding:8px 15px;background:#fff;border:1px solid #e0e7f0;box-shadow:0 4px 15px #182a411f;font-size:13px;z-index:90}#appNavigation .navwrap.mobile-more-open .nav[data-section="research"]{bottom:calc(72px + env(safe-area-inset-bottom))}#appNavigation .navwrap.mobile-more-open .mobile-more{background:#edf3ff;color:#2464cb}}
+
+/* DAVYLAB Mobile UX v2: compact, readable, task-first */
+@media(max-width:760px){
+ body{background:#f5f7fa!important}
+ #appNavigation{display:none!important}
+ .topbar{position:sticky;top:0;z-index:60;height:54px;background:#fff!important;border-bottom:1px solid #e9edf2}
+ .topbar .crumb{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .topbar .actions #newTop{min-height:38px}
+ .content{padding:12px 12px calc(90px + env(safe-area-inset-bottom));overflow-x:clip}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px}
+ .stats .stat{min-width:0;border-radius:12px!important;box-shadow:none!important}
+ .statfoot{font-size:10px;line-height:1.5}
+ .panel,.method{box-shadow:none!important;background:#fff!important;border-radius:14px!important}
+ .panelhead{align-items:flex-start}
+ .panelhead p{font-size:12px;line-height:1.55;margin:4px 0 0}
+ .paneltools{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;width:100%}
+ .paneltools>.btn{width:100%;min-height:40px;white-space:normal;line-height:1.3;padding:8px 5px;justify-content:center}
+ #section-library .panelhead,#section-published .panelhead{display:flex;flex-direction:column;align-items:stretch}
+ #section-library .panelhead>.paneltools,#section-published .panelhead>.paneltools{margin-top:10px}
+ #libraryFilters{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ #libraryFilters .chip{width:100%;min-width:0;padding:9px 3px;text-align:center;justify-content:center;font-size:12px;white-space:nowrap}
+ #section-library .formrow{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px}
+ #section-library .formrow>.field{width:auto!important;min-width:0!important}
+ #section-library input,#section-library select{min-width:0;width:100%;font-size:14px}
+ #section-published .notice,#section-published .sourcefooter,#section-published .methodgrid,#section-published .panel:has(.methodgrid){display:none!important}
+ #section-published .panelhead .eyebrow{display:none}
+ #section-published .panelhead p{max-width:38ch}
+ #section-published .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+ #section-published .stats .stat{padding:10px 8px}
+ #section-published .statnum{font-size:20px}
+ #section-published .published-card{grid-template-columns:76px minmax(0,1fr);gap:9px;padding:10px}
+ #section-published .published-cover{width:76px;height:64px}
+ #section-published .published-actions{grid-column:1/-1}
+ .methodgrid{grid-template-columns:1fr!important}
+ .method{padding:12px!important}
+ .mobile-bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:90;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(62px + env(safe-area-inset-bottom));padding:4px 4px calc(4px + env(safe-area-inset-bottom));background:#fff;border-top:1px solid #e5eaf1;box-shadow:0 -4px 20px #162c4210}
+ .mobile-bottom-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:0;border-radius:9px;color:#69798b;font-size:10px;min-width:0}
+ .mobile-bottom-nav button span{font-size:18px;line-height:1.2}
+ .mobile-bottom-nav button.active{background:#eef5ff;color:#1474d4;font-weight:750}
+ .mobile-bottom-nav .more-panel{position:absolute;right:8px;bottom:calc(65px + env(safe-area-inset-bottom));width:170px;background:#fff;border:1px solid #dbe3ee;border-radius:13px;padding:7px;box-shadow:0 12px 36px #1d34532b;display:none}
+ .mobile-bottom-nav .more-panel.open{display:grid}
+ .mobile-bottom-nav .more-panel button{min-height:44px;display:flex;flex-direction:row;justify-content:flex-start;padding:8px 12px;font-size:13px}
+ .mobile-bottom-nav .more-panel button span{font-size:16px}
+ .mobile-app-cover{display:none}
+ .section.active .panel{max-width:100%}
+ .content>.hero+ a{display:none!important}
+}
+@media(min-width:761px){.mobile-bottom-nav,.mobile-app-cover{display:none!important}}
 </style></head>
-<body><div class="app">
+<body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
@@ -1223,4 +1271,13 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  apply();setTab("theme");window.setTimeout(animateElements,120);
 })();
 
-</script><script>(function(){const nav=document.querySelector('#appNavigation .navwrap');const more=nav&&nav.querySelector('.mobile-more');if(!more)return;more.addEventListener('click',()=>{const open=nav.classList.toggle('mobile-more-open');more.setAttribute('aria-expanded',String(open))});nav.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{nav.classList.remove('mobile-more-open');more.setAttribute('aria-expanded','false')}));})();</script></body></html>
+</script><script>(function(){const nav=document.querySelector('#appNavigation .navwrap');const more=nav&&nav.querySelector('.mobile-more');if(!more)return;more.addEventListener('click',()=>{const open=nav.classList.toggle('mobile-more-open');more.setAttribute('aria-expanded',String(open))});nav.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{nav.classList.remove('mobile-more-open');more.setAttribute('aria-expanded','false')}));})();</script><script>(function(){
+const root=document.getElementById('mobileBottomNav'),panel=document.getElementById('mobileMorePanel'),toggle=document.getElementById('mobileMoreToggle');
+if(!root)return;
+const close=()=>{panel.classList.remove('open');toggle.setAttribute('aria-expanded','false')};
+toggle.addEventListener('click',()=>{const next=!panel.classList.contains('open');panel.classList.toggle('open',next);toggle.setAttribute('aria-expanded',String(next))});
+root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=>{const section=btn.dataset.go;const original=document.querySelector('#appNavigation .nav[data-section="'+section+'"]');if(original)original.click();root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x===btn));close()}));
+document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
+document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
+const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
+})();</script></body></html>
