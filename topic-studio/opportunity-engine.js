@@ -54,6 +54,24 @@ list.push(x);
 return list.sort((a,b)=>rank(b)-rank(a)||String(b.published||"").localeCompare(String(a.published||"")));
 }
 
+
+function renderTracks(){
+const el=$op("opportunityTrackSummary");if(!el)return;
+const keys=["agents","products","models","business","creative","safety"];
+const rows=keys.map(key=>{
+ const members=items().filter(x=>theme(x)===key&&url(x.url)!=="#");
+ return {key,total:members.length,recent:members.filter(x=>days(x)<=7).length};
+}).filter(x=>x.total).sort((a,b)=>b.recent-a.recent||b.total-a.total);
+if(!rows.length){el.innerHTML='<span class="op-track-loading">暂未收到可分类的真实新闻素材。</span>';return;}
+el.innerHTML=rows.slice(0,3).map(x=>
+ '<button type="button" class="op-track-card" data-op-track="'+x.key+'"><strong>'+esc(lensNames[x.key])+'</strong><span class="op-track-num">'+x.total+' 条</span><span class="op-track-sub">近 7 天 '+x.recent+' 条 · 点选查看</span></button>'
+).join("");
+el.querySelectorAll("[data-op-track]").forEach(btn=>btn.addEventListener("click",()=>{
+state.lens=btn.dataset.opTrack;state.q="";state.limit=6;
+const input=$op("opportunitySearch");if(input)input.value="";
+note();draw();$op("opportunityLens")?.scrollIntoView({behavior:"smooth",block:"nearest"});
+}));
+}
 function renderWeekPlan(){
  const el=$op("opportunityWeekPlan");if(!el)return;
  const all=readData(),used=new Set();
@@ -74,16 +92,16 @@ function draw(){
 const all=items(),filtered=readData(),count=$op("opportunityCount"),stamp=$op("opportunityUpdated");
 const report=typeof radarData!=="undefined" && radarData ? String(radarData.report_date||"") : "";
 if(count)count.textContent=filtered.length+" 条可选";
+renderTracks();renderWeekPlan();
 if(stamp)stamp.textContent=report ? "来源：DAVYLAB AI Radar · 数据日期 "+report+"（非全网热搜排名）" : "等待 AI Radar 数据；建议排序不代表真实阅读量";
 $op("opportunityLens")?.querySelectorAll("[data-lens]").forEach(b=>{const active=b.dataset.lens===state.lens;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));});
-if(!all.length){root.innerHTML='<div class="op-empty"><strong>正在准备选题素材</strong><p>若长时间没有内容，请点击「重新获取」。不会用假新闻占位。</p><button type="button" class="btn" id="opRetry">重新获取</button></div>';$op("opRetry")?.addEventListener("click",()=>{if(typeof loadRadar==="function")loadRadar()});return;}
-if(!filtered.length){root.innerHTML='<div class="op-empty"><strong>当前方向没有匹配的素材</strong><p>切换赛道或清空搜索，可以继续查找。</p></div>';return;}
+if(!all.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>正在准备选题素材</strong><p>若长时间没有内容，请点击「重新获取」。不会用假新闻占位。</p><button type="button" class="btn" id="opRetry">重新获取</button></div>';$op("opRetry")?.addEventListener("click",()=>{if(typeof loadRadar==="function")loadRadar()});return;}
+if(!filtered.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>当前方向没有匹配的素材</strong><p>切换赛道或清空搜索，可以继续查找。</p></div>';return;}
 root.innerHTML=filtered.slice(0,state.limit).map((x,j)=>{
 const index=all.indexOf(x),d=days(x),already=typeof topics!=="undefined"&&topics.some(t=>t.sourceUrl===x.url);
 const cite=(x.published?String(x.published).slice(0,10):"日期待核实");
 return '<article class="opportunity-card"><div class="op-card-top"><span class="op-type">'+esc(lensNames[theme(x)]||"AI 新闻")+'</span><span class="op-fresh '+(d>7?"old":"")+'">'+tag(x)+'</span></div><h3>'+esc(sampleTitle(x))+'</h3><p class="op-angle">编辑切入：'+esc(x.angle||"先读原文，再判断对普通人有什么价值")+'</p><div class="op-micro"><span>适合：'+esc(audience(x))+'</span><span>'+esc(x.source||"来源待核实")+' · '+esc(cite)+'</span></div><div class="op-card-bottom"><span class="op-rank" title="根据时效、内容匹配、来源完整性计算；非真实热度或涨粉预测">编辑优先级 '+rank(x)+'/100</span><div class="op-actions"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">读原文</a><button type="button" data-op-prompt="'+index+'">创作指令</button><button type="button" class="op-add" data-op-add="'+index+'" '+(already?"disabled":"")+'>'+(already?"已收藏":"收进选题池")+'</button></div></div></article>';
 }).join("");
-renderWeekPlan();
 root.querySelectorAll("[data-op-add]").forEach(btn=>btn.addEventListener("click",()=>{
 const x=items()[Number(btn.dataset.opAdd)];if(!x||typeof addFeed!=="function")return;addFeed(x);draw();
 }));
