@@ -615,6 +615,18 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 .op-external-sources a strong{color:#244c69;font-size:13px}
 .op-external-sources a span{color:#75879a;font-size:11px}
 @media(max-width:760px){.op-track-heading{display:block}.op-track-heading span{display:block;margin-top:2px}.op-track-grid{gap:5px}.op-track-card{padding:9px 7px;min-height:81px}.op-track-card strong{font-size:11px}.op-track-card .op-track-num{font-size:17px}.op-track-card .op-track-sub{font-size:9px}.op-external-sources{grid-template-columns:1fr 1fr}}
+
+.research-sourcepanel{background:#fff;border:1px solid #e0e7eb;border-radius:14px;padding:17px;margin:0 0 14px}
+.research-sourcehead{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.research-sourcehead strong{font-size:17px;color:#16344a}
+.research-sourcehead p{font-size:12px;color:#7a8999;margin:4px 0 13px}
+.research-sourcegrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.research-sourcegrid a{display:flex;flex-direction:column;gap:5px;padding:11px;border-radius:9px;background:#f6f8f9;border:1px solid #e5ebef;text-decoration:none;color:#1e4059}
+.research-sourcegrid strong{font-size:13px}
+.research-sourcegrid span{font-size:11px;color:#82909c;line-height:1.45}
+.research-picklane{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;color:#6a7f8d;font-size:11px}
+.research-picklane button{padding:7px 11px;border:1px solid #d4e1e6;border-radius:7px;background:#fff;color:#285b75;cursor:pointer;font-size:11px}
+@media(max-width:760px){.research-sourcegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.research-sourcepanel{padding:12px}.research-sourcehead strong{font-size:15px}}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -716,6 +728,16 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   <div><div class="eyebrow">DAVYLAB · NICHE & EDITORIAL RESEARCH</div><h1>找到一个值得长期写的方向。</h1><p>把赛道研究、对标账号和系列选题放在一起。可直接把选题送入现有选题池，评分、排期和创作流程继续沿用原有能力。</p></div>
   <div class="heroactions"><button class="btn" id="researchJumpDiscover" type="button">← 返回发现</button><button class="btn" id="researchClear">清空表单</button><button class="btn primary" id="researchAddAll">将选题加入选题池</button></div>
  </div>
+ <section class="research-sourcepanel" aria-label="赛道资源库">
+  <div class="research-sourcehead"><div><strong>从真实来源开始</strong><p>先看经过采集的新闻，再去公开平台找论文、项目和讨论，不凭空编造热度。</p></div><button class="btn small" type="button" id="researchJumpDiscover" style="display:none">返回发现</button></div>
+  <div class="research-sourcegrid">
+   <a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><strong>AI Radar</strong><span>每日经过整理的 AI 新闻</span></a>
+   <a href="https://github.com/trending" target="_blank" rel="noopener"><strong>GitHub Trending</strong><span>近期受关注的开源项目</span></a>
+   <a href="https://huggingface.co/papers" target="_blank" rel="noopener"><strong>Hugging Face Papers</strong><span>社区论文讨论与收藏</span></a>
+   <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" rel="noopener"><strong>arXiv · cs.AI</strong><span>研究论文原始入口</span></a>
+  </div>
+  <div class="research-picklane"><span>快捷方向：</span><button type="button" data-jump-lens="agents">智能体</button><button type="button" data-jump-lens="products">AI 实操</button><button type="button" data-jump-lens="models">前沿研究</button><button type="button" data-jump-lens="business">行业机会</button></div>
+ </section>
  <div class="panel">
   <div class="panelhead"><div><h2>01 / 赛道研究</h2><p>输入领域或目标读者，形成清晰的细分方向。AI 结果由你审核，不将推测包装成市场事实。</p></div><span class="tag blue">研究工作区</span></div>
   <div class="formgrid">
