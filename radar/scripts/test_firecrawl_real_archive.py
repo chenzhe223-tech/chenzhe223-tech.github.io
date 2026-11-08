@@ -17,7 +17,7 @@ class RealArchiveAuditTests(unittest.TestCase):
         candidate = [{
             "title": "谷歌发布 Gemini 4 Carbon，主打编程、智能体与网络安全",
             "url": "https://new-publisher.example/another-carbon-report",
-            "published": "2026-11-07T09:00:00+08:00",
+            "published": "2026-11-07T09:00:00+08:00", "published_origin": "article_meta",
             "source": "integration-fixture",
         }]
         result = audit(candidate, "2026-11-08", records)
@@ -30,7 +30,7 @@ class RealArchiveAuditTests(unittest.TestCase):
         candidate = [{
             "title": "Gemini Omni 1.2 Flash: Fast and cost-effective with longer clips",
             "url": "https://another-publisher.example/omni-clip",
-            "published": "2026-11-07",
+            "published": "2026-11-07", "published_origin": "article_meta",
         }]
         result = audit(candidate, "2026-11-08", records)
         self.assertIn(result["results"][0]["status"], ("DUPLICATE", "REVIEW_DUPLICATE"))
