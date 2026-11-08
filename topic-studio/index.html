@@ -587,6 +587,17 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  .mobile-cover-bottom{font-size:8px}
  .hero{display:none!important}
 }
+
+.op-plan{border:1px solid #e3e9ec;border-radius:11px;background:#f7faf9;margin-top:13px;padding:11px}
+.op-plan>summary{font-size:13px;font-weight:800;color:#21445a;cursor:pointer}
+.op-week-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:9px;padding:10px;background:#fff;border:1px solid #ebeff1;border-radius:9px}
+.op-week-row strong{display:block;font-size:12px;color:#18384f}
+.op-week-row span{display:block;font-size:11px;color:#567487;margin-top:3px}
+.op-week-row p{font-size:12px;font-weight:650;margin:6px 0;color:#203c52}
+.op-week-row small{color:#8794a0;font-size:10px}
+.op-week-row button{border:1px solid #cddfe7;background:#eaf2f4;color:#245168;font-size:12px;border-radius:7px;padding:8px 12px;cursor:pointer}
+.op-plan-note{font-size:11px;color:#82909d;margin:10px 0;line-height:1.5}
+#opGrowthJump{margin-top:10px}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -636,6 +647,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
    <button type="button" id="opportunityResearch">深入研究赛道 →</button>
   </div>
   <div id="opportunityList" class="opportunity-grid" aria-live="polite"><div class="op-empty">连接真实新闻素材中…</div></div>
+  <details class="op-plan"><summary>7 天 3 篇：尝试吸引、留住新读者</summary><div id="opportunityWeekPlan">正在准备来源明确的内容组合…</div><p class="op-plan-note">这是一组编辑实验建议，不是流量预测；只有手动加入选题池后才保存，发布仍需作者批准。</p></details>
   <div class="opportunity-footer"><span id="opportunityUpdated">数据以 Davy Radar 为准；优先级不是阅读量或粉丝增长预测。</span><button class="btn small" type="button" id="opportunityShowMore" hidden>查看更多</button></div>
  </section>
  <details class="discover-detail">
