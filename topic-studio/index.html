@@ -639,6 +639,37 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  #section-research>.hero .heroactions,#section-growth>.hero .heroactions{display:flex!important;gap:6px;margin:0;flex-wrap:wrap}
  #section-research>.hero .heroactions>.btn,#section-growth>.hero .heroactions>.btn{font-size:12px;padding:8px}
 }
+
+/* DAVYLAB editorial planner: compact mobile-first calendar. */
+#section-calendar .smart-schedule-panel{padding:clamp(15px,1.8vw,23px)}
+.smart-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:15px 0}
+.smart-controls label{min-width:0;display:flex;flex-direction:column;gap:6px;font-size:11px;font-weight:700;color:var(--muted)}
+.smart-controls input[type=date],.smart-controls select{width:100%;min-height:38px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);padding:8px;font-size:13px}
+.smart-controls .smart-autotoggle{flex-direction:row;align-items:center;gap:9px;color:var(--ink);font-size:12px;padding:0 9px;border:1px solid var(--line);background:var(--blue-soft);border-radius:10px;min-height:38px}
+.smart-controls .smart-autotoggle input{width:17px;height:17px;accent-color:var(--blue);flex-shrink:0}
+.smart-schedule-stats{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 17px}
+.smart-schedule-stats span{padding:9px 12px;background:var(--blue-soft);border:1px solid var(--line);border-radius:10px;font-size:11px;color:var(--muted);line-height:1.5}
+.smart-schedule-stats strong{font-size:13px;color:var(--ink)}
+.smart-schedule-list{display:grid;gap:8px}
+.smart-day{display:grid;grid-template-columns:76px minmax(0,1fr);border:1px solid var(--line);border-radius:13px;overflow:hidden;background:#fff;min-width:0}
+.smart-day-label{display:flex;flex-direction:column;gap:4px;padding:13px 10px;background:#f4f7fc;border-right:1px solid var(--line);color:var(--ink)}
+.smart-day-label strong{font-size:15px;white-space:nowrap;letter-spacing:-.5px}.smart-day-label span{font-size:11px;color:var(--muted)}
+.smart-day-slots{display:grid;gap:0;min-width:0}
+.smart-slot{display:grid;grid-template-columns:40px minmax(0,1fr) 52px;align-items:center;gap:10px;padding:10px 12px;min-width:0}
+.smart-slot+.smart-slot{border-top:1px solid var(--line)}
+.smart-type{font-size:11px;font-weight:750;text-align:center;padding:5px 2px;background:var(--blue-soft);color:var(--blue);border-radius:7px;white-space:nowrap}
+.smart-slot.poster .smart-type{background:#fff1e6;color:#bf6c1b}
+.smart-slot-main{display:flex;flex-direction:column;gap:4px;min-width:0}
+.smart-slot-main strong{font-size:13px;line-height:1.5;overflow-wrap:anywhere;color:var(--ink);font-weight:650}
+.smart-slot-main small{font-size:10px;line-height:1.45;color:var(--muted)}
+.smart-slot.missing{background:#fafbfd}
+.smart-slot.missing .smart-slot-main strong{font-weight:540}
+.smart-slot .btn{font-size:11px!important;padding:7px 8px!important;min-width:0;white-space:nowrap}
+.smart-schedule-note{margin:14px 2px 0;font-size:11px;line-height:1.75;color:var(--muted)}
+.smart-note-help{border:0;padding:2px;background:transparent;color:var(--blue);font-size:inherit;text-decoration:underline;cursor:pointer}
+@media(max-width:800px){.smart-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.smart-day{grid-template-columns:60px minmax(0,1fr)}.smart-day-label{padding:12px 8px}.smart-day-label strong{font-size:13px}.smart-slot{grid-template-columns:35px minmax(0,1fr) 48px;gap:6px;padding:10px 7px}.smart-slot-main strong{font-size:12px}.smart-schedule-stats span{flex:1 1 100px}}
+@media(max-width:380px){.smart-controls{gap:7px}.smart-slot{grid-template-columns:32px minmax(0,1fr) 44px;gap:5px}.smart-slot .btn{padding:6px 5px!important}.smart-slot-main strong{font-size:11px}}
+
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -800,7 +831,20 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="topiclist" id="topicList"><div class="empty"><strong>选题池还空着</strong>从“选题发现”收下一条素材，或直接新建灵感。</div></div>
  </div><div class="panel"><div class="panelhead"><div><h2>可复制的 AI 选题指令</h2><p>选择一个选题后，复制编辑指令到 ChatGPT 继续创作。</p></div></div><textarea id="promptBox" style="width:100%;min-height:145px;border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--ink);background:#fbfcfd" placeholder="从选题卡片点击“AI 指令”，这里会出现提示词。"></textarea><div class="actions" style="justify-content:flex-start;margin-top:9px"><button class="btn primary" id="copyPrompt">复制选题指令</button><button class="btn" id="openChatGPT">打开 ChatGPT ↗</button><button class="btn" id="clearPrompt">清空</button></div></div>
 </section>
-<section class="section" id="section-calendar"><div class="panel"><div class="panelhead"><div><h2>内容排期</h2><p>把选题安排到合适的日子。当前排期保存在本地，不会自动发送提醒。</p></div><button class="btn primary small" id="newCalendar">＋ 添加排期</button></div><div class="filters"><span class="tag">常规节奏：隔日一篇</span><span class="tag">先安排选题，再确定形式</span></div><div id="calendarList" class="calendarlist"><div class="empty"><strong>还没有排期</strong>编辑选题并设置计划日期后，这里会按时间显示。</div></div></div></section>
+<section class="section" id="section-calendar">
+ <div class="panel smart-schedule-panel">
+  <div class="panelhead"><div><div class="eyebrow">DAVYLAB · EDITORIAL PLANNER</div><h2>智能内容排期</h2><p>文章隔天一篇，贴图每周一、三、五、日。新选题随机分配专题；没有选题的日期给出可采纳的创作建议。</p></div><div class="paneltools"><button class="btn small" id="newCalendar" type="button">＋ 新选题</button><button class="btn primary small" id="smartPlanNow" type="button">智能填充空档</button></div></div>
+  <div class="smart-controls">
+   <label>文章起排日期<input id="smartStartDate" type="date"></label>
+   <label>查看未来<select id="smartScheduleWindow"><option value="14">14 天</option><option value="28" selected>28 天</option><option value="56">56 天</option></select></label>
+   <label>筛选<select id="smartScheduleFilter"><option value="all">全部排期</option><option value="missing">仅看空档</option></select></label>
+   <label class="smart-autotoggle"><input id="smartAutoAssign" type="checkbox" checked> 新建选题自动排期</label>
+  </div>
+  <div class="smart-schedule-stats" id="smartScheduleStats" aria-live="polite"></div>
+  <div id="calendarList" class="smart-schedule-list" aria-live="polite"><div class="empty">正在整理排期…</div></div>
+  <p class="smart-schedule-note">智能排期只调整计划日期，不会生成文章、直接发表或更改审核状态。现有手动日期保持不动；来源于 AI Radar 的热点建议需要核对原文。数据仅保存在当前浏览器。<button id="smartScheduleResetHint" class="smart-note-help" type="button">排期说明</button></p>
+ </div>
+</section>
 <section class="section" id="section-published">
  <div class="panel">
   <div class="panelhead">
@@ -1034,7 +1078,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 </dialog>
 <dialog id="importDialog"><div class="modalhead"><h2>从念头盒导入灵感</h2><button class="close" type="button" id="closeImportDialog">×</button></div><div class="modalbody"><p style="margin-top:0;color:var(--muted);font-size:12px">可连接念头盒账号，浏览本人云端灵感；也可导入 JSON、TXT、Markdown 或粘贴内容。账号令牌仅保存在当前标签页会话中，关闭标签页后自动清除。导入只复制到当前选题池，不会修改念头盒原始记录。</p><div class="formgrid"><div class="field"><label for="nianboxEmail">念头盒账号邮箱</label><input id="nianboxEmail" type="email" autocomplete="username" placeholder="登录念头盒使用的邮箱"></div><div class="field"><label for="nianboxPassword">念头盒密码</label><input id="nianboxPassword" type="password" autocomplete="current-password" placeholder="密码只发送至念头盒云端服务"></div></div><div class="formrow" style="margin:10px 0"><button class="btn primary" type="button" id="connectNianbox">连接念头盒</button><button class="btn" type="button" id="loadNianboxIdeas" disabled>读取我的念头</button><button class="btn" type="button" id="disconnectNianbox" hidden>断开连接</button><span id="nianboxConnectionStatus" class="import-hint">尚未连接</span></div><div id="nianboxCloudList" class="topiclist" style="margin-bottom:12px"></div><div class="field"><label for="nianboxFile">或选择念头盒导出文件</label><input id="nianboxFile" type="file" accept=".json,.txt,.md,.markdown,application/json,text/plain,text/markdown"></div><div class="field" style="margin-top:12px"><label for="nianboxPaste">或粘贴念头内容</label><textarea id="nianboxPaste" style="min-height:110px" placeholder="可粘贴一条或多条念头；每段内容会被当作独立灵感候选。"></textarea></div><div id="nianboxPreview" class="topiclist" style="margin-top:12px"></div></div><div class="modalfoot"><button class="btn" type="button" id="cancelImport">取消</button><button class="btn primary" type="button" id="confirmNianboxImport">导入选中灵感</button></div></dialog><dialog id="topicDialog"><form id="topicForm"><div class="modalhead"><h2 id="dialogTitle">新建选题</h2><button class="close" type="button" id="closeDialog">×</button></div><div class="modalbody"><input type="hidden" id="topicId"><div class="formgrid">
  <div class="field full"><label for="topicTitle">选题标题 *</label><input id="topicTitle" required maxlength="120" placeholder="例如：我如何把 AI 生成的页面，变成真正能用的产品"></div>
- <div class="field"><label for="topicColumn">内容栏目</label><select id="topicColumn"><option>从念头到产品</option><option>AI 实战手记</option><option>AI 创造机会雷达</option><option>普通人的 AI 创造力</option><option>产品复盘与实验室</option></select></div>
+ <div class="field"><label for="topicColumn">内容栏目（新选题随机推荐，可手动改）</label><select id="topicColumn"><option>从念头到产品</option><option>AI 实战手记</option><option>AI 创造机会雷达</option><option>普通人的 AI 创造力</option><option>产品复盘与实验室</option></select></div>
  <div class="field"><label for="topicFormat">内容形式</label><select id="topicFormat"><option>文章</option><option>贴图</option><option>视频</option><option>播客</option></select></div>
  <div class="field"><label for="topicStatus">当前状态</label><select id="topicStatus"><option value="inbox">灵感收集</option><option value="shortlist">值得写</option><option value="writing">正在创作</option><option value="ready">待交稿</option><option value="published">已发布</option></select></div>
  <div class="field"><label for="topicDate">计划日期</label><input type="date" id="topicDate"></div>
@@ -1516,4 +1560,4 @@ root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=
 document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
 document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
 const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
-})();</script><script src="./opportunity-engine.js"></script></body></html>
+})();</script><script src="./opportunity-engine.js"></script><script src="./smart-schedule.js"></script></body></html>
