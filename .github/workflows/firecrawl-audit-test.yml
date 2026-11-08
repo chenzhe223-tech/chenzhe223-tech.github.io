@@ -5,6 +5,8 @@ on:
       - 'radar/scripts/firecrawl_candidate_audit.py'
       - 'radar/scripts/test_firecrawl_candidate_audit.py'
       - 'radar/scripts/test_firecrawl_real_archive.py'
+      - 'radar/scripts/firecrawl_pipeline_audit.py'
+      - '.github/workflows/pages.yml'
       - '.github/workflows/firecrawl-audit-test.yml'
   workflow_dispatch:
 permissions:
@@ -21,4 +23,4 @@ jobs:
       - name: Unit tests
         run: python -m unittest radar.scripts.test_firecrawl_candidate_audit radar.scripts.test_firecrawl_real_archive -v
       - name: Syntax check
-        run: python -m py_compile radar/scripts/firecrawl_candidate_audit.py
+        run: python -m py_compile radar/scripts/firecrawl_candidate_audit.py radar/scripts/firecrawl_pipeline_audit.py
