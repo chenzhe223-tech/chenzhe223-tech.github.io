@@ -529,6 +529,64 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  #section-published .stats .statfoot{font-size:10px}
  .mobile-bottom-nav button:focus-visible{outline:2px solid #1474d4;outline-offset:-3px}
 }
+
+/* DISCOVER: 2026-11 editorial source discovery and track research */
+.opportunity-hub{margin:0 0 14px;padding:22px;background:#fcfcfa;border:1px solid #e2e7ea;border-radius:18px;box-shadow:0 10px 38px #17293a08}
+.opportunity-heading{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}
+.opportunity-heading h2{font-size:23px;letter-spacing:-.5px;color:#162b40;margin:5px 0 3px;line-height:1.3}
+.opportunity-heading p{font-size:13px;color:#738294;margin:0}
+.op-kicker{font-size:10px;letter-spacing:1.4px;color:#386f8b;font-weight:800}
+.opportunity-dashboard-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;border-bottom:1px solid #e5ebef;padding:11px 0;color:#6c7b8c;font-size:12px}
+.opportunity-dashboard-meta #opportunityCount{font-weight:700;color:#1d5f7c;white-space:nowrap}
+.opportunity-lens{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0}
+.opportunity-lens button{border:1px solid #dce4e9;background:#fff;color:#61758a;border-radius:8px;font-size:12px;padding:8px 12px;cursor:pointer}
+.opportunity-lens button.active{background:#18374b;color:#fff;border-color:#18374b;font-weight:700}
+.opportunity-controls{display:flex;gap:8px;margin-bottom:14px}
+.opportunity-controls input{border:1px solid #dbe4e9;border-radius:10px;background:#fff;padding:10px 12px;min-width:0;flex:1;font-size:13px}
+.opportunity-controls button{border:1px solid #cbdfe7;background:#eaf4f5;color:#194a60;border-radius:10px;padding:9px 13px;font-weight:750;cursor:pointer}
+.opportunity-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.opportunity-card{padding:15px 15px 12px;border:1px solid #e1e7ec;border-radius:13px;background:#fff;display:flex;flex-direction:column;min-width:0;gap:8px}
+.op-card-top{display:flex;gap:8px;justify-content:space-between;align-items:center;font-size:10px}
+.op-type{color:#28617b;font-weight:800}
+.op-fresh{font-weight:700;background:#eef6f0;color:#286442;padding:3px 6px;border-radius:5px}
+.op-fresh.old{background:#f2f2f2;color:#77818a}
+.opportunity-card h3{margin:0;color:#16293b;font-size:16px;line-height:1.42;overflow-wrap:anywhere;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden}
+.op-angle{font-size:12px;line-height:1.6;color:#53677b;margin:0;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.op-micro{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11px;color:#8291a0;line-height:1.5}
+.op-card-bottom{display:flex;justify-content:space-between;gap:8px;align-items:center;flex-wrap:wrap;margin-top:auto;padding-top:10px;border-top:1px solid #edf1f2}
+.op-rank{font-size:10px;font-weight:700;color:#6c7d8c}
+.op-actions{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.op-actions a,.op-actions button{border:1px solid #dfe7ed;background:#fff;color:#385975;border-radius:7px;padding:7px 9px;text-decoration:none;cursor:pointer;font-size:11px;line-height:1.2}
+.op-actions button.op-add{background:#1d4962;color:#fff;border-color:#1d4962;font-weight:700}
+.op-actions button:disabled{background:#f0f4f7;color:#84909e;border-color:#e1e7ed;cursor:default}
+.opportunity-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#85929f;font-size:11px;margin-top:12px;line-height:1.6}
+.op-empty{grid-column:1/-1;text-align:center;padding:28px 14px;color:#8190a1;border:1px dashed #d4e0e8;border-radius:12px}
+.op-empty strong{display:block;color:#233c50}
+.discover-detail{margin:10px 0;background:#fff;border:1px solid #e1e8ed;border-radius:12px;padding:13px 15px}
+.discover-detail>summary{cursor:pointer;color:#26485f;font-weight:750;font-size:13px}
+.discover-detail>summary span{font-size:11px;font-weight:400;color:#8794a2;margin-left:8px}
+.discover-detail .ai-studio{margin:14px 0 0}
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important}
+@media(max-width:850px){.opportunity-grid{grid-template-columns:1fr}}
+@media(max-width:760px){
+ .opportunity-hub{padding:14px 12px;margin:0 0 11px;border-radius:13px}
+ .opportunity-heading h2{font-size:19px}
+ .opportunity-heading p{font-size:12px}
+ .opportunity-heading .op-refesh{font-size:11px;padding:8px;white-space:nowrap}
+ .opportunity-lens{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+ .opportunity-lens button{padding:8px 3px;font-size:11px;min-width:0;text-align:center}
+ .opportunity-controls{display:grid;grid-template-columns:minmax(0,1fr) auto}
+ .opportunity-controls button{font-size:11px;padding:8px}
+ .opportunity-card{padding:13px}
+ .opportunity-card h3{font-size:15px}
+ .op-card-bottom{align-items:flex-start}
+ .opportunity-footer{align-items:flex-start}
+ .discover-detail>summary span{display:block;margin:3px 0 0}
+ .mobile-app-cover{min-height:110px;padding:13px 15px}
+ .mobile-cover-title{font-size:23px;margin:8px 0}
+ .mobile-cover-bottom{font-size:8px}
+ .hero{display:none!important}
+}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -555,10 +613,66 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="stat"><div class="statlabel">待继续推进</div><div class="statnum" id="statActive">0</div><div class="statfoot">灵感、候选或正在创作</div></div>
 </div>
 
+
+<section class="section active" id="section-discover">
+ <section class="opportunity-hub" aria-labelledby="opportunityTitle">
+  <div class="opportunity-heading">
+   <div><div class="op-kicker">DISCOVER / EDITORIAL SIGNALS</div><h2 id="opportunityTitle">今天，哪些 AI 话题值得写？</h2><p>从真实新闻里找线索，再判断是否能帮读者解决问题。</p></div>
+   <button class="btn op-refesh" id="opportunityRefresh" type="button">更新素材</button>
+  </div>
+  <div class="opportunity-dashboard-meta"><span id="sourceStatus" role="status">正在连接 AI Radar…</span><span id="opportunityCount">— 条可选</span></div>
+  <div class="opportunity-lens" id="opportunityLens" aria-label="选择赛道">
+   <button type="button" class="active" data-lens="all" aria-pressed="true">全部</button>
+   <button type="button" data-lens="agents">Agent / 自动化</button>
+   <button type="button" data-lens="products">工具实战</button>
+   <button type="button" data-lens="models">模型研究</button>
+   <button type="button" data-lens="business">商业与行业</button>
+   <button type="button" data-lens="creative">创作与设计</button>
+   <button type="button" data-lens="safety">隐私安全</button>
+  </div>
+  <div class="opportunity-controls">
+   <label for="opportunitySearch" class="visually-hidden">搜索候选选题</label>
+   <input id="opportunitySearch" type="search" placeholder="搜索技术、公司、问题、方法…" autocomplete="off">
+   <button type="button" id="opportunityResearch">深入研究赛道 →</button>
+  </div>
+  <div id="opportunityList" class="opportunity-grid" aria-live="polite"><div class="op-empty">连接真实新闻素材中…</div></div>
+  <div class="opportunity-footer"><span id="opportunityUpdated">数据以 Davy Radar 为准；优先级不是阅读量或粉丝增长预测。</span><button class="btn small" type="button" id="opportunityShowMore" hidden>查看更多</button></div>
+ </section>
+ <details class="discover-detail">
+  <summary>全部新闻素材与高级筛选 <span>按来源、方向和日期检索</span></summary>
+  <div class="panel" style="box-shadow:none;margin:12px 0 0">
+   <div class="filters" role="group" aria-label="素材类别">
+    <button type="button" class="chip active" data-feed="all">全部素材</button>
+    <button type="button" class="chip" data-feed="news">全球 AI</button>
+    <button type="button" class="chip" data-feed="china">中国 AI</button>
+    <button type="button" class="chip" data-feed="skills">开源项目</button>
+   </div>
+   <div class="radar-toolbar">
+    <div class="field radar-search"><label for="radarSearch">搜索素材</label><input id="radarSearch" placeholder="模型、新闻、工具或公司"></div>
+    <div class="field radar-sort"><label for="radarSort">排序</label><select id="radarSort"><option value="fresh">最新优先</option><option value="topic">按类型</option><option value="source">按来源</option></select></div>
+    <div class="field"><label for="radarTheme">方向</label><select id="radarTheme"><option value="all">全部方向</option><option value="agents">智能体</option><option value="models">模型研究</option><option value="products">AI 产品</option><option value="business">产业商业</option><option value="creative">内容创作</option><option value="safety">安全治理</option><option value="other">其他</option></select></div>
+    <span class="radar-count" id="radarResultCount">等待数据</span>
+   </div>
+   <div id="feedList" class="feedlist"><div class="empty">正在获取新闻素材…</div></div>
+   <details class="op-quality"><summary>数据完整性说明</summary><div id="radarQualityMetrics"></div><p id="radarQualityNote"></p><p id="sourceFoot"></p></details>
+  </div>
+ </details>
+ <details class="discover-detail">
+  <summary>把自己的经历变成原创选题 <span>可连接念头盒进行 AI 分析</span></summary>
+  <div class="ai-studio">
+   <div class="ai-studio-head"><div><h2>原创灵感工作台</h2><p>优先写自己的真实项目和学习经历；AI 分析需要先连接念头盒。</p></div></div>
+   <div class="ai-inputrow"><textarea id="ideaInput" placeholder="记录今天遇到的问题、产品开发中的经验或想写的故事…"></textarea><div class="ai-controls"><button class="btn primary" id="analyzeIdeas" type="button">分析选题方向</button><button class="btn" id="importNianbox" type="button">从念头盒导入</button><button class="btn" id="pasteNianbox" type="button">粘贴灵感</button></div></div>
+   <div class="ai-state" id="aiState">AI 分析需要连接念头盒账号；手动新建选题无需登录。</div>
+   <div id="directionResults" class="direction-grid"></div>
+   <div id="directionFollowup" hidden><button class="btn" id="regenDirections">换一批角度</button><textarea id="directionAdjustment" placeholder="希望强调什么、回避什么…"></textarea><button class="btn" id="applyAdjustment">按建议调整</button></div>
+   <div id="directionNext" hidden><button class="btn primary" id="makeCreationPrompt">生成创作指令</button></div>
+  </div>
+ </details>
+</section>
 <section class="section" id="section-research">
  <div class="hero">
   <div><div class="eyebrow">DAVYLAB · NICHE & EDITORIAL RESEARCH</div><h1>找到一个值得长期写的方向。</h1><p>把赛道研究、对标账号和系列选题放在一起。可直接把选题送入现有选题池，评分、排期和创作流程继续沿用原有能力。</p></div>
-  <div class="heroactions"><button class="btn" id="researchClear">清空表单</button><button class="btn primary" id="researchAddAll">将选题加入选题池</button></div>
+  <div class="heroactions"><button class="btn" id="researchJumpDiscover" type="button">← 返回发现</button><button class="btn" id="researchClear">清空表单</button><button class="btn primary" id="researchAddAll">将选题加入选题池</button></div>
  </div>
  <div class="panel">
   <div class="panelhead"><div><h2>01 / 赛道研究</h2><p>输入领域或目标读者，形成清晰的细分方向。AI 结果由你审核，不将推测包装成市场事实。</p></div><span class="tag blue">研究工作区</span></div>
@@ -938,11 +1052,11 @@ $("statNews").textContent=(d.news||[]).length+(d.china_ai_news||[]).length;
 $("statNewsFoot").textContent="报告 "+(d.report_date||"未知");
 $("statSkills").textContent=(d.skills||[]).length;
 $("sourceFoot").textContent="数据日期 "+(d.report_date||"未知")+" · 重要事实请核对原文。";
-renderFeed();return}
+renderFeed();window.renderOpportunityRadar?.();return}
 st.innerHTML='<i class="dot bad"></i><span>素材连接失败 · 可重试</span>';
 $("statNews").textContent="—";$("statNewsFoot").textContent="点击刷新今日素材";$("statSkills").textContent="—";
 $("sourceFoot").textContent="网络读取失败，未使用虚构数据。";
-$("feedList").innerHTML='<div class="empty"><strong>暂时无法连接新闻源</strong><p>请点击刷新重试，或访问 AI 新闻雷达。</p><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener">打开新闻雷达 ↗</a></div>';
+window.renderOpportunityRadar?.();$("feedList").innerHTML='<div class="empty"><strong>暂时无法连接新闻源</strong><p>请点击刷新重试，或访问 AI 新闻雷达。</p><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener">打开新闻雷达 ↗</a></div>';
 }
 function renderStats(){$("statTopics").textContent=topics.length;$("statActive").textContent=topics.filter(t=>["inbox","shortlist","writing","ready"].includes(t.status)).length}
 function renderRadarQuality(){const box=$("radarQualityMetrics"),note=$("radarQualityNote");if(!box||!note)return;const items=feedCache||[],sources=new Set(items.map(x=>String(x.source||"").trim()).filter(Boolean)),missing=items.filter(x=>!x.published||!Number.isFinite(Date.parse(x.published))).length,now=Date.now(),stale=items.filter(x=>x.published&&Number.isFinite(Date.parse(x.published))&&now-Date.parse(x.published)>7*86400000).length;const norm=s=>String(s||"").toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/gi,"");const groups=new Map();for(const x of items){const k=norm(x.title);if(k){if(!groups.has(k))groups.set(k,[]);groups.get(k).push(x)}}const duplicateGroups=[...groups.values()].filter(g=>g.length>1);const sourceStats=radarData&&radarData.sources_ok!==undefined&&radarData.sources_total!==undefined?String(radarData.sources_ok)+"/"+String(radarData.sources_total):"上游未提供";box.innerHTML='<span class="growth-badge">素材 '+items.length+' 条</span><span class="growth-badge">来源 '+sources.size+' 个</span><span class="growth-badge">'+sourceStats+' 个来源状态（上游）</span><span class="growth-badge '+(missing?"warn":"good")+'">缺发布时间 '+missing+' 条</span><span class="growth-badge '+(stale?"warn":"good")+'">超过 7 天 '+stale+' 条</span><span class="growth-badge '+(duplicateGroups.length?"warn":"good")+'">疑似同标题 '+duplicateGroups.length+' 组</span>';note.textContent=duplicateGroups.length?"疑似重复仅按标题文本匹配，可能是同题不同报道；不会自动删除。建议打开原文逐条判断。":"统计只反映当前上游已返回的数据；发布时间缺失和超过 7 天的素材应先核对时效，再决定是否选题。"}
@@ -1326,4 +1440,4 @@ root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=
 document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
 document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
 const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
-})();</script></body></html>
+})();</script><script src="./opportunity-engine.js"></script></body></html>
