@@ -15,6 +15,7 @@ function typeOf(t){const f=String(t.format||"文章");if(/贴图|海报|图文�
 function readConfig(){try{const v=JSON.parse(localStorage.getItem(CONFIG_KEY)||"{}");return{anchor:Number.isFinite(dayNumber(v.anchor))?v.anchor:today(),horizon:[14,28,56].includes(v.horizon)?v.horizon:28,autoAssign:v.autoAssign!==false,onlyMissing:v.onlyMissing===true}}catch{return{anchor:today(),horizon:28,autoAssign:true,onlyMissing:false}}}
 let config=readConfig();
 function persistConfig(){localStorage.setItem(CONFIG_KEY,JSON.stringify(config))}
+persistConfig(); // freeze the initial alternating-day anchor across page reloads
 function eligible(date,type){const delta=dayNumber(date)-dayNumber(config.anchor);return type==="article"?Number.isFinite(delta)&&delta>=0&&delta%2===0:POSTER_DAYS.has(weekday(date))}
 function generateSlots(horizon=config.horizon){const start=dayNumber(today()),slots=[];for(let k=0;k<horizon;k++){const d=dayString(start+k);if(eligible(d,"article"))slots.push({date:d,type:"article"});if(eligible(d,"poster"))slots.push({date:d,type:"poster"})}return slots}
 function occupied(date,type,exceptId){return topics.some(t=>t.id!==exceptId && t.plannedDate===date && typeOf(t)===type)}
