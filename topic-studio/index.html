@@ -598,6 +598,23 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 .op-week-row button{border:1px solid #cddfe7;background:#eaf2f4;color:#245168;font-size:12px;border-radius:7px;padding:8px 12px;cursor:pointer}
 .op-plan-note{font-size:11px;color:#82909d;margin:10px 0;line-height:1.5}
 #opGrowthJump{margin-top:10px}
+
+.op-track-panel{padding:12px 0 2px}
+.op-track-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:9px;align-items:baseline}
+.op-track-heading strong{font-size:14px;color:#20384d}
+.op-track-heading span{font-size:10px;color:#8493a0}
+.op-track-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.op-track-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:#f6f9fa;border:1px solid #e4ebed;border-radius:10px;padding:11px 12px;min-height:84px;cursor:pointer}
+.op-track-card strong{font-size:13px;color:#1b3b50;margin-bottom:4px}
+.op-track-card .op-track-num{font-size:19px;font-weight:800;color:#245d75;line-height:1.1}
+.op-track-card .op-track-sub{font-size:10px;color:#718495;margin-top:5px}
+.op-track-card:hover,.op-track-card:focus-visible{background:#eaf4f6;border-color:#9ec6d8}
+.op-track-loading{font-size:12px;color:#8595a3;padding:10px}
+.op-external-sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.op-external-sources a{display:flex;flex-direction:column;gap:3px;border:1px solid #e3e9ef;background:#f8fafb;padding:12px;border-radius:10px;text-decoration:none}
+.op-external-sources a strong{color:#244c69;font-size:13px}
+.op-external-sources a span{color:#75879a;font-size:11px}
+@media(max-width:760px){.op-track-heading{display:block}.op-track-heading span{display:block;margin-top:2px}.op-track-grid{gap:5px}.op-track-card{padding:9px 7px;min-height:81px}.op-track-card strong{font-size:11px}.op-track-card .op-track-num{font-size:17px}.op-track-card .op-track-sub{font-size:9px}.op-external-sources{grid-template-columns:1fr 1fr}}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -628,10 +645,14 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 <section class="section active" id="section-discover">
  <section class="opportunity-hub" aria-labelledby="opportunityTitle">
   <div class="opportunity-heading">
-   <div><div class="op-kicker">DISCOVER / EDITORIAL SIGNALS</div><h2 id="opportunityTitle">今天，哪些 AI 话题值得写？</h2><p>从真实新闻里找线索，再判断是否能帮读者解决问题。</p></div>
+   <div><div class="op-kicker">DISCOVER / EDITORIAL SIGNALS</div><h2 id="opportunityTitle">从最新 AI 动态里，发现值得写的题目</h2><p>从真实新闻里找线索，再判断是否能帮读者解决问题。</p></div>
    <button class="btn op-refesh" id="opportunityRefresh" type="button">更新素材</button>
   </div>
   <div class="opportunity-dashboard-meta"><span id="sourceStatus" role="status">正在连接 AI Radar…</span><span id="opportunityCount">— 条可选</span></div>
+  <div class="op-track-panel">
+   <div class="op-track-heading"><strong>赛道机会观察</strong><span>当前新闻源覆盖情况 · 非全网热度榜</span></div>
+   <div class="op-track-grid" id="opportunityTrackSummary" aria-live="polite"><span class="op-track-loading">正在汇总赛道线索…</span></div>
+  </div>
   <div class="opportunity-lens" id="opportunityLens" aria-label="选择赛道">
    <button type="button" class="active" data-lens="all" aria-pressed="true">全部</button>
    <button type="button" data-lens="agents">Agent / 自动化</button>
@@ -651,6 +672,15 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   <div class="opportunity-footer"><span id="opportunityUpdated">数据以 Davy Radar 为准；优先级不是阅读量或粉丝增长预测。</span><button class="btn small" type="button" id="opportunityShowMore" hidden>查看更多</button></div>
  </section>
  <details class="discover-detail">
+  <summary>发现更多选题来源 <span>从公开平台核查热点与研究</span></summary>
+  <div class="op-external-sources" aria-label="独立研究来源">
+   <a href="https://github.com/trending" target="_blank" rel="noopener noreferrer"><strong>GitHub Trending</strong><span>找开源项目与技术动向</span></a>
+   <a href="https://huggingface.co/papers" target="_blank" rel="noopener noreferrer"><strong>Hugging Face Papers</strong><span>查论文、模型和原始研究</span></a>
+   <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" rel="noopener noreferrer"><strong>arXiv AI</strong><span>阅读 AI 研究预印本</span></a>
+   <a href="https://trends.google.com/trends/" target="_blank" rel="noopener noreferrer"><strong>Google Trends</strong><span>交叉判断搜索兴趣，不等于公众号热度</span></a>
+  </div>
+ </details>
+<details class="discover-detail">
   <summary>全部新闻素材与高级筛选 <span>按来源、方向和日期检索</span></summary>
   <div class="panel" style="box-shadow:none;margin:12px 0 0">
    <div class="filters" role="group" aria-label="素材类别">
