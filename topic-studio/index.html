@@ -404,6 +404,53 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 }
 
 .visual-layout-choice{min-height:126px}.layout-mini{display:grid;width:100%;height:43px;gap:3px;padding:3px;border:1px solid #dce5f1;border-radius:7px;background:#f8faff}.layout-mini i{display:block;min-width:0;min-height:0;border:1px solid #d8e2f0;border-radius:3px;background:#e7eef9}.layout-mini i:first-child{background:#d6e5fb;border-color:#c5d8f4}.layout-mini--editorial{grid-template-columns:1.5fr .7fr;grid-template-rows:7px 1fr}.layout-mini--editorial i:first-child{grid-column:1/-1}.layout-mini--balanced{grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(2,1fr)}.layout-mini--vertical{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr)}.layout-mini--compact{grid-template-columns:repeat(3,1fr);grid-template-rows:1fr}.layout-mini--bento{grid-template-columns:1.2fr .8fr .8fr;grid-template-rows:repeat(2,1fr)}.layout-mini--bento i:first-child{grid-row:1/-1}.layout-mini--split{grid-template-columns:1.3fr .7fr;grid-template-rows:repeat(2,1fr)}.layout-mini--split i:first-child{grid-row:1/-1}.visual-layout-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.visual-layout-choice{display:flex;flex-direction:column;align-items:flex-start;gap:5px;text-align:left;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);min-height:82px}.visual-layout-choice strong{font-size:12px}.visual-layout-choice small{font-size:10px;color:var(--muted);line-height:1.45}.visual-layout-choice.active{border-color:var(--blue);background:var(--blue-soft);box-shadow:0 0 0 2px color-mix(in srgb,var(--blue) 12%,transparent)}@media(max-width:560px){.visual-layout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* DAVYLAB mobile-first compact navigation, 2026-11 */
+@media(max-width:760px){
+ html{scroll-padding-top:65px}
+ body{font-size:14px}
+ .app{display:block;min-width:0}
+ #appNavigation{position:relative;z-index:20;padding:9px 14px 0;min-height:0;gap:0;background:#f7f9fd;color:#17283e;border-bottom:1px solid #e5eaf1}
+ #appNavigation .brand{height:43px;padding:0;gap:9px}
+ #appNavigation .mark{width:31px;height:31px;border-radius:9px;font-size:18px}
+ #appNavigation .brand b{font-size:16px}
+ #appNavigation .brand small{display:none}
+ #appNavigation .sideintro,#appNavigation .sidefoot,#appNavigation .navlabel,#appNavigation .source-nav{display:none!important}
+ #appNavigation .navwrap{position:fixed;bottom:0;left:0;right:0;z-index:80;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));height:calc(62px + env(safe-area-inset-bottom));padding:5px 5px calc(5px + env(safe-area-inset-bottom));gap:2px;overflow:visible;background:#fff;border-top:1px solid #dce4ef;box-shadow:0 -4px 18px #14294312}
+ #appNavigation .navwrap .nav{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;width:100%;min-width:0;height:50px;padding:3px 0;border-radius:9px;color:#66758a;font-size:10px;line-height:1.2;white-space:nowrap}
+ #appNavigation .navwrap .nav .ico{font-size:18px;line-height:1.4}
+ #appNavigation .navwrap .nav.active{background:#edf3ff;color:#2464cb;font-weight:700}
+ #appNavigation .navwrap .nav[data-section="workflow"],#appNavigation .navwrap .nav[data-section="research"]{display:none}
+ .topbar{height:46px;padding:0 14px;background:#fff}
+ .topbar .actions{gap:5px}
+ .topbar #openVisualSettings,.topbar #exportTop,.topbar .local{display:none!important}
+ .topbar #newTop{font-size:12px;padding:7px 11px}
+ .content{padding:12px 12px calc(88px + env(safe-area-inset-bottom));max-width:100%;overflow-x:clip}
+ .hero{margin:0 0 13px;display:flex;align-items:center;gap:8px}
+ .hero .eyebrow,.hero p{display:none}
+ .hero h1{font-size:19px;line-height:1.35;letter-spacing:0;margin:0;font-weight:800}
+ .hero h1 br{display:none}
+ .hero h1{font-size:0}
+ .hero h1:after{content:"发现值得写的选题";font-size:19px}
+ .heroactions{margin:0 0 0 auto;display:flex;gap:6px}
+ .heroactions #newHero{display:none}
+ .heroactions #refreshRadar{font-size:11px;padding:7px 9px}
+ .content>.hero+ a{display:none!important}
+ .stats{gap:7px;margin-bottom:12px}
+ .stat{padding:10px 12px}
+ .statnum{font-size:21px}
+ .panel{padding:13px;margin-bottom:12px;border-radius:13px}
+ .panelhead{gap:8px}
+ .panelhead h2{font-size:16px}
+ .btn{max-width:100%}
+ .discovery,.methodgrid,.ai-result{grid-template-columns:minmax(0,1fr)}
+ body:has(#appNavigation .nav[data-section="library"].active) .hero,
+ body:has(#appNavigation .nav[data-section="calendar"].active) .hero,
+ body:has(#appNavigation .nav[data-section="published"].active) .hero,
+ body:has(#appNavigation .nav[data-section="workflow"].active) .hero,
+ body:has(#appNavigation .nav[data-section="growth"].active) .hero,
+ body:has(#appNavigation .nav[data-section="research"].active) .hero{display:none!important}
+}
 </style></head>
 <body><div class="app">
 <aside id="appNavigation">
