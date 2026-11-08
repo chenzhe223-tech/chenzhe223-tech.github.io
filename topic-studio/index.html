@@ -627,6 +627,18 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 .research-picklane{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-top:12px;color:#6a7f8d;font-size:11px}
 .research-picklane button{padding:7px 11px;border:1px solid #d4e1e6;border-radius:7px;background:#fff;color:#285b75;cursor:pointer;font-size:11px}
 @media(max-width:760px){.research-sourcegrid{grid-template-columns:repeat(2,minmax(0,1fr))}.research-sourcepanel{padding:12px}.research-sourcehead strong{font-size:15px}}
+
+/* Keep contextual research and growth actions visible on mobile; hide only the generic landing hero. */
+@media(max-width:760px){
+ .content>.hero{display:none!important}
+ #section-research>.hero,#section-growth>.hero{display:flex!important;flex-direction:column;align-items:stretch;gap:8px;margin:0 0 13px}
+ #section-research>.hero .eyebrow,#section-growth>.hero .eyebrow{display:none}
+ #section-research>.hero h1,#section-growth>.hero h1{font-size:19px;line-height:1.35;letter-spacing:0;margin:0}
+ #section-research>.hero h1 br,#section-growth>.hero h1 br{display:none}
+ #section-research>.hero p,#section-growth>.hero p{display:none}
+ #section-research>.hero .heroactions,#section-growth>.hero .heroactions{display:flex!important;gap:6px;margin:0;flex-wrap:wrap}
+ #section-research>.hero .heroactions>.btn,#section-growth>.hero .heroactions>.btn{font-size:12px;padding:8px}
+}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
