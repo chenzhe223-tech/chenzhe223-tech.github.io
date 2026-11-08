@@ -513,6 +513,22 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  body:has(.nav[data-section="library"].active) .mobile-app-cover,body:has(.nav[data-section="calendar"].active) .mobile-app-cover,body:has(.nav[data-section="published"].active) .mobile-app-cover,body:has(.nav[data-section="growth"].active) .mobile-app-cover,body:has(.nav[data-section="workflow"].active) .mobile-app-cover,body:has(.nav[data-section="research"].active) .mobile-app-cover{display:none!important}
  #section-published .panel:has(.methodgrid){display:none!important}
 }
+
+@media(max-width:760px){
+ body:has(.nav[data-section="library"].active) .content>.stats,body:has(.nav[data-section="calendar"].active) .content>.stats,body:has(.nav[data-section="published"].active) .content>.stats,body:has(.nav[data-section="workflow"].active) .content>.stats,body:has(.nav[data-section="growth"].active) .content>.stats,body:has(.nav[data-section="research"].active) .content>.stats{display:none!important}
+ #section-library .panelhead .paneltools #newLibrary{display:none}
+ #section-published .panelhead .paneltools #addPublished{display:none}
+ #section-library .panelhead p,#section-published .panelhead p{display:none}
+ #section-library .panelhead h2,#section-published .panelhead h2{font-size:18px;margin:0}
+ #section-library .panelhead,#section-published .panelhead{gap:7px}
+ #section-published .panelhead .paneltools{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #section-published .panelhead .paneltools .btn{font-size:11px}
+ #section-library .panelhead .paneltools{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #section-library .panelhead .paneltools .btn{font-size:12px}
+ #section-published .notice,#section-published .sourcefooter{display:none!important}
+ #section-published .stats .statfoot{font-size:10px}
+ .mobile-bottom-nav button:focus-visible{outline:2px solid #1474d4;outline-offset:-3px}
+}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
