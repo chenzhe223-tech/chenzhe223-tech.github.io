@@ -20,14 +20,22 @@ let v=0;if(/普通人|初学|入门|小白|beginner|guide|tutorial|实践|实战
 if(/agent|智能体|自动化|skill|workflow|coding|工具|应用|部署|app|open source|开源/.test(s))v+=10;
 if(/免费|效率|工作|案例|方法|生产力|企业|行业|实践|实用|workflow|效率/.test(s))v+=8;
 return Math.min(25,v);}
+function readerFit(x){
+const s=[x.title,x.summary,x.why,x.angle].join(" ").toLowerCase();
+let v=0;
+if(/普通人|非程序员|生活|工作日|厨房|烘焙|鸡肉|蛋糕|食谱|家庭|学习|写作|办公|采购|设计|视频|图片|动图|gif|效率|上手|入门|小白/.test(s))v+=13;
+if(/如何|怎样|怎么|教程|指南|案例|操作|方法|新功能|实用|复现|分享|收藏|生产力/.test(s))v+=5;
+if(/湿实验室|vllm|sglang|gpu|jdk|llama\.cpp|推理框架|算力基础设施|内核|compiler|编译器/.test(s))v-=12;
+return v;
+}
 function rank(x){
 const d=days(x);
 const fresh=d<=1?25:d<=3?20:d<=7?12:d<=14?5:0;
 const useful=relevance(x);
 const evidence=(url(x.url)!=="#"?10:0)+(x.published?5:0)+(x.source?5:0);
 const focus=theme(x)===state.lens?12:state.lens==="all"?8:0;
-const originality=x.type==="skills"?-7:10;
-return Math.min(95,fresh+useful+evidence+focus+originality);
+const originality=x.type==="skills"?-10:10;
+return Math.max(0,Math.min(95,fresh+useful+evidence+focus+originality+readerFit(x)));
 }
 function audience(x){const t=theme(x);return({agents:"想提升工作效率的普通人",products:"想用 AI 做工具的初学者",models:"想读懂前沿 AI 的学习者",business:"关注 AI 时代职业机会的人",creative:"做内容与设计的创作者",safety:"担心隐私和风险的 AI 用户"})[t]||"关注 AI 的普通读者";}
 function tag(x){const d=days(x);return d<=3?"近期素材":d<=7?"本周素材":"历史参考";}
