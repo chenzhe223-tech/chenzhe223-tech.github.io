@@ -6,8 +6,7 @@ const CONFIG_KEY="davylab-smart-editorial-schedule-v1";
 const COLUMNS=["从念头到产品","AI 实战手记","AI 创造机会雷达","普通人的 AI 创造力","产品复盘与实验室"];
 const WEEK=["日","一","二","三","四","五","六"];
 const POSTER_DAYS=new Set([0,1,3,5]);
-const formatDate=d=>[d.getFullYear(),String(d.getMonth()+1).padStart(2,"0"),String(d.getDate()).padStart(2,"0")].join("-");
-const today=()=>formatDate(new Date());
+const today=()=>{const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const map=Object.fromEntries(parts.map(p=>[p.type,p.value]));return map.year+"-"+map.month+"-"+map.day}; // editorial timezone: UTC+8
 function dayNumber(s){const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(s||""));if(!m)return NaN;const n=Date.UTC(+m[1],+m[2]-1,+m[3])/86400000;return new Date(n*86400000).toISOString().slice(0,10)===s?n:NaN}
 function dayString(n){return new Date(n*86400000).toISOString().slice(0,10)}
 function weekday(s){return new Date(dayNumber(s)*86400000).getUTCDay()}
