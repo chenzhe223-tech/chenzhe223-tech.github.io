@@ -1,0 +1,26 @@
+name: Firecrawl candidate audit (isolated)
+on:
+  pull_request:
+    paths:
+      - 'radar/scripts/firecrawl_candidate_audit.py'
+      - 'radar/scripts/test_firecrawl_candidate_audit.py'
+      - 'radar/scripts/test_firecrawl_real_archive.py'
+      - 'radar/scripts/firecrawl_pipeline_audit.py'
+      - '.github/workflows/pages.yml'
+      - '.github/workflows/firecrawl-audit-test.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Unit tests
+        run: python -m unittest radar.scripts.test_firecrawl_candidate_audit radar.scripts.test_firecrawl_real_archive -v
+      - name: Syntax check
+        run: python -m py_compile radar/scripts/firecrawl_candidate_audit.py radar/scripts/firecrawl_pipeline_audit.py
