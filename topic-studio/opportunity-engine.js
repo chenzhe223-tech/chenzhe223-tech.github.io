@@ -97,8 +97,18 @@ $op("opportunityLens")?.addEventListener("click",e=>{const b=e.target.closest("[
 $op("opportunitySearch")?.addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase();state.limit=6;draw();});
 $op("opportunityShowMore")?.addEventListener("click",()=>{state.limit+=6;draw();});
 $op("opportunityRefresh")?.addEventListener("click",()=>{if(typeof loadRadar==="function")loadRadar();});
-$op("opportunityResearch")?.addEventListener("click",()=>{if(typeof changeSection==="function"){changeSection("research");$op("researchNiche")?.focus({preventScroll:true});}});
+$op("opportunityResearch")?.addEventListener("click",()=>{
+ const niche=state.lens==="all"?"普通人如何用好 AI":lensNames[state.lens];
+ const field=$op("researchNiche");if(field&&!field.value.trim())field.value=niche;
+ const audience=$op("researchAudience");if(audience&&!audience.value.trim())audience.value="对 AI 感兴趣、没有编程背景的普通读者";
+ const context=$op("researchContext");
+ const sources=readData().slice(0,3).map(x=>String(x.title||"")+" · "+String(x.url||""));
+ if(context&&!context.value.trim()&&sources.length)context.value="本周已读取的来源线索（请逐项核查）：\n"+sources.join("\n");
+ if(typeof changeSection==="function"){changeSection("research");field?.focus({preventScroll:true});}
+});
 $op("researchJumpDiscover")?.addEventListener("click",()=>{if(typeof changeSection==="function")changeSection("discover");$op("opportunityLens")?.scrollIntoView({behavior:"smooth",block:"start"});});
+window.selectOpportunityLens=function(lens){state.lens=lensNames[lens]?lens:"all";state.limit=6;state.q="";const input=$op("opportunitySearch");if(input)input.value="";note();draw();if(typeof changeSection==="function")changeSection("discover");};
+document.querySelectorAll("[data-jump-lens]").forEach(b=>b.addEventListener("click",()=>window.selectOpportunityLens(b.dataset.jumpLens)));
 window.renderOpportunityRadar=draw;
 draw();
 })();
