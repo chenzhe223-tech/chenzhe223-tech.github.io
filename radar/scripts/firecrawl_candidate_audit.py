@@ -9,6 +9,7 @@ import argparse
 import datetime as dt
 import json
 import re
+import difflib
 import urllib.parse
 from pathlib import Path
 
@@ -26,6 +27,21 @@ def url_key(url):
 
 def title_key(title):
     return re.sub(r"[^a-z0-9\u4e00-\u9fff]+", "", str(title or "").casefold())
+
+def title_variants(item):
+    return [title_key(item.get(k)) for k in ("title", "title_zh", "title_en", "original_title")
+            if item.get(k)]
+
+def near_event(a, b):
+    """Conservative same-language event match, never a shared-brand-only match."""
+    for x in title_variants(a):
+        for y in title_variants(b):
+            if not x or not y or min(len(x), len(y)) < 18:
+                continue
+            ratio = difflib.SequenceMatcher(None, x, y).ratio()
+            if ratio >= 0.86:
+                return True
+    return False
 
 def published_date(value):
     try:
@@ -50,9 +66,7 @@ def history(today, days=90):
             for section in SECTIONS:
                 for item in document.get(section, []):
                     if isinstance(item, dict):
-                        records.append({"title": item.get("title_zh") or item.get("title") or item.get("title_en"),
-                                        "url": item.get("source_url") or item.get("url"),
-                                        "archive_date": file.stem})
+                        records.append({**item, "url": item.get("source_url") or item.get("url"), "archive_date": file.stem})
         except (ValueError, OSError, TypeError) as exc:
             return None, f"unreadable history file {file.name}: {type(exc).__name__}"
     if not records:
@@ -62,28 +76,33 @@ def history(today, days=90):
 def audit(candidates, today, records, history_error=None):
     seen_urls, seen_titles = set(), set()
     history_urls = {url_key(x.get("url")) for x in records or []}
-    history_titles = {title_key(x.get("title")) for x in records or []}
+    history_titles = {t for x in records or [] for t in title_variants(x)}
+    seen_items = []
     output = []
     for item in candidates:
         u, t = url_key(item.get("url")), title_key(item.get("title"))
+        variants = title_variants(item)
         date = published_date(item.get("published"))
         if not u or not t or not date:
             status, reason = "HOLD", "missing verified URL/title/ISO publication date"
         elif date > today:
             status, reason = "HOLD", "future publication date"
-        elif u in seen_urls or t in seen_titles:
+        elif u in seen_urls or t in seen_titles or any(near_event(item, prior) for prior in seen_items):
             status, reason = "DUPLICATE", "duplicate within candidate batch"
         elif history_error:
             status, reason = "HOLD", "historical comparison unavailable"
-        elif u in history_urls or t in history_titles:
+        elif u in history_urls or any(v in history_titles for v in variants):
             status, reason = "DUPLICATE", "matches 90-day historical URL or normalized title"
+        elif any(near_event(item, old) for old in records or []):
+            status, reason = "REVIEW_DUPLICATE", "possible same event across publishers; manual verification required"
         else:
-            status, reason = "CANDIDATE", "no exact URL/title match; semantic review still required"
+            status, reason = "CANDIDATE", "no exact or high-similarity title match; semantic review still required"
         output.append({"title": item.get("title"), "url": item.get("url"),
                        "published": date, "source": item.get("source"),
                        "status": status, "reason": reason})
         if u: seen_urls.add(u)
         if t: seen_titles.add(t)
+        seen_items.append(item)
     return {"audit_date": today, "mode": "read_only", "history_records": len(records or []),
             "history_error": history_error, "results": output,
             "publish_allowed": False}
