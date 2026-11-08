@@ -3,7 +3,7 @@
 
 Usage:
   python radar/scripts/firecrawl_candidate_audit.py --input candidates.json --date 2026-11-08
-Input: JSON array of {title,url,published,source} objects.
+Input: JSON array of {title,url,published,published_origin,source} objects.\n  published_origin must be article_meta, json_ld, or publisher_page.
 """
 import argparse
 import datetime as dt
@@ -42,6 +42,14 @@ def near_event(a, b):
             if ratio >= 0.86:
                 return True
     return False
+
+def verified_publication(item):
+    """Require provenance for a publication date; scrape timestamps are not publication dates."""
+    value = item.get("published")
+    origin = item.get("published_origin")
+    if origin not in ("article_meta", "json_ld", "publisher_page"):
+        return None
+    return published_date(value)
 
 def published_date(value):
     try:
@@ -82,9 +90,9 @@ def audit(candidates, today, records, history_error=None):
     for item in candidates:
         u, t = url_key(item.get("url")), title_key(item.get("title"))
         variants = title_variants(item)
-        date = published_date(item.get("published"))
+        date = verified_publication(item)
         if not u or not t or not date:
-            status, reason = "HOLD", "missing verified URL/title/ISO publication date"
+            status, reason = "HOLD", "missing verified URL/title/publication date provenance"
         elif date > today:
             status, reason = "HOLD", "future publication date"
         elif u in seen_urls or t in seen_titles or any(near_event(item, prior) for prior in seen_items):
@@ -98,7 +106,7 @@ def audit(candidates, today, records, history_error=None):
         else:
             status, reason = "CANDIDATE", "no exact or high-similarity title match; semantic review still required"
         output.append({"title": item.get("title"), "url": item.get("url"),
-                       "published": date, "source": item.get("source"),
+                       "published": date, "published_origin": item.get("published_origin"), "source": item.get("source"),
                        "status": status, "reason": reason})
         if u: seen_urls.add(u)
         if t: seen_titles.add(t)
