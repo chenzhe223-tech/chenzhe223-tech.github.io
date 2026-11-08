@@ -968,7 +968,7 @@ function storyImageMarkup(x){
  const imagePage=String(x.image_page_url||"");
  const link=/^https:\/\//.test(imagePage)?imagePage:(x.source_url||"#");
  const attribution=searched?
-   '<a class="story-search-attribution" href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Searched illustration · Not event footage":"搜索配图 · 非新闻现场")+'</a>':"";
+   '<a class="story-search-attribution" style="color:#fff!important;-webkit-text-fill-color:#fff!important;background-color:#081930!important" href="'+esc(link)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Searched illustration · Not event footage":"搜索配图 · 非新闻现场")+'</a>':"";
  return '<div class="story-image story-image--verified">'+img+attribution+'</div>';
 }
 function renderTop5(items){
