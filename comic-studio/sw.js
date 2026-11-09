@@ -1,1 +1,40 @@
-const CACHE='davylab-comic-press-v2.3-personal-studio';const CORE=['./','./index.html','./app.js','./styles.css','./extension.js','./briefing.js','./personalize.js','./personalize.css','./favicon.svg','./manifest.webmanifest'];self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(CORE)));self.skipWaiting()});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});self.addEventListener('fetch',e=>{if(e.request.method!=='GET'||new URL(e.request.url).origin!==self.location.origin)return;const url=new URL(e.request.url);const code=/\.(html|js|css)$/.test(url.pathname)||url.pathname.endsWith('/');e.respondWith(code?fetch(e.request).then(r=>{if(r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cp))}return r}).catch(()=>caches.match(e.request)):caches.match(e.request).then(c=>c||fetch(e.request).then(r=>{if(r.ok){const cp=r.clone();caches.open(CACHE).then(c=>c.put(e.request,cp))}return r})))})
+/* WORLD/TOON offline shell v2.7.1. Authenticated APIs must NEVER be cached. */
+'use strict';
+const CACHE='davylab-comic-press-v2.7.1-api-safe';
+const CORE=['./','./index.html','./app.js','./archive.js','./styles.css','./extension.js','./briefing.js','./personalize.js','./personalize.css','./favicon.svg','./manifest.webmanifest'];
+self.addEventListener('install',event=>{
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));
+  self.skipWaiting();
+});
+self.addEventListener('activate',event=>{
+  event.waitUntil((async()=>{
+    const keys=await caches.keys();
+    await Promise.all(keys.filter(key=>key.startsWith('davylab-comic-press-')&&key!==CACHE).map(key=>caches.delete(key)));
+    // Defensive cleanup if an older worker stored private API data in this cache.
+    const cache=await caches.open(CACHE);
+    await Promise.all((await cache.keys()).filter(req=>{
+      const path=new URL(req.url).pathname;
+      return path.startsWith('/api/')||path==='/health';
+    }).map(req=>cache.delete(req)));
+    await self.clients.claim();
+  })());
+});
+self.addEventListener('fetch',event=>{
+  const req=event.request,url=new URL(req.url);
+  if(req.method!=='GET'||url.origin!==self.location.origin)return;
+  // Strict network-only: status, session, private GitHub indexes, quota, and all API calls.
+  // Never return a cached public-only snapshot to a newly authenticated user.
+  if(url.pathname.startsWith('/api/')||url.pathname==='/health')return;
+  const code=/\.(?:html|js|css)$/.test(url.pathname)||url.pathname.endsWith('/');
+  if(code){
+    event.respondWith(fetch(req).then(response=>{
+      if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(req,copy)).catch(()=>{});}
+      return response;
+    }).catch(()=>caches.match(req)));
+  }else{
+    event.respondWith(caches.match(req).then(cached=>cached||fetch(req).then(response=>{
+      if(response.ok){const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(req,copy)).catch(()=>{});}
+      return response;
+    })));
+  }
+});
