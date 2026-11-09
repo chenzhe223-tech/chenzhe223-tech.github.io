@@ -24,6 +24,7 @@ jobs:
           node-version: '22'
       - name: Check editorial scoring module syntax
         run: node --check comic-studio/ranking.js
+          node --check comic-studio/comic-engine.js
       - name: Check browser scripts
         run: |
           node --check comic-studio/app.js
@@ -31,6 +32,8 @@ jobs:
           node --check comic-studio/extension.js
           node --check comic-studio/briefing.js
           node --check comic-studio/personalize.js
+      - name: Verify four-Skill live integration
+        run: node comic-studio/tests/comic-engine.cjs
       - name: Exercise one-click research-first task generation
         run: node comic-studio/tests/task-flow.cjs
       - name: Test six-dimension editorial scoring and filtering

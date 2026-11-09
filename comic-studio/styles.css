@@ -280,3 +280,33 @@
  .wt-shared-desk-body li{align-items:flex-start;flex-direction:column;gap:2px}
  .wt-shared-manual .wf-form>.field,.wt-shared-manual .wf-form button{width:100%;flex-basis:100%}
 }
+
+
+/* WorldToon Discovery & Comic Engine — compact, mobile-first controls */
+.wt-source-panel{padding:15px 18px;margin:12px 0 14px;border:1px solid #ddd8cd;border-radius:14px;background:#f8f6f0}
+.wt-source-panel>.kicker{margin-bottom:9px}
+.wt-source-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+.wt-source-tabs button{min-width:0;min-height:40px;border:1px solid #d4cec0;border-radius:9px;background:#fffdfa;color:#4e534c;font-weight:650;padding:7px 5px;font-size:12px}
+.wt-source-tabs button.active{color:#f5f1e8;background:#27372d;border-color:#27372d}
+.wt-source-panel p.minor{margin:8px 0 0;font-size:11px;word-break:break-word;line-height:1.5}
+.comic-engine{margin-top:18px;margin-bottom:22px;border:1px solid #d9d3c7}
+.comic-engine-head{display:flex;align-items:start;justify-content:space-between;gap:12px}
+.comic-engine-head h2{font-size:25px;margin-bottom:7px}
+.comic-engine-head p{max-width:650px;line-height:1.7}
+.comic-engine-head .wt-chip{white-space:nowrap}
+.comic-skill-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:13px 0}
+.comic-skill-step{min-width:0;display:flex;align-items:start;gap:11px;padding:13px;border:1px solid #ded8ca;border-radius:10px;background:#faf9f5}
+.comic-skill-num{flex:none;width:29px;height:29px;border-radius:8px;background:#e9ebe1;display:grid;place-items:center;color:#3a5545;font:700 13px Georgia,serif}
+.comic-skill-step>div{display:grid;gap:3px;min-width:0}
+.comic-skill-step strong{font-size:13px;overflow-wrap:anywhere}
+.comic-skill-step small{font-size:12px;color:#5b655c;line-height:1.4}
+.comic-skill-step span:last-child{font-size:10px;color:#887a67}
+.comic-engine .buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.comic-engine button[disabled]{opacity:.5;cursor:not-allowed}
+@media(max-width:720px){
+ .wt-source-panel{padding:12px}
+ .wt-source-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .comic-engine-head{flex-wrap:wrap}
+ .comic-skill-grid{grid-template-columns:1fr}
+ .comic-engine .buttons>.button{width:100%;text-align:center;justify-content:center}
+}
