@@ -1,80 +1,80 @@
 {
-  "report_date": "2026-11-09",
-  "poster": "radar/posters/2026-11-09.png",
+  "report_date": "2026-11-10",
+  "poster": "radar/posters/2026-11-10.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.leiphone.com/category/ai/0F072La1etrUN0Tr.html",
-    "https://www.marktechpost.com/2026/11/08/google-elephant-goldfish-model-plugin-spec-review-coding-agents/",
-    "https://www.theverge.com/ai-artificial-intelligence/1029552/apple-siri-ai-agentic",
-    "https://www.theverge.com/ai-artificial-intelligence/1029533/elvis-eminem-suno-ai-music-clone-lawsuit",
-    "https://www.ithome.com/1/024/241.htm"
+    "https://www.ithome.com/1/024/556.htm",
+    "https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
+    "https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/",
+    "https://www.marktechpost.com/2026/11/09/google-tpu-8i-max-tpu-8tx/",
+    "https://techcrunch.com/2026/11/09/anthropic-joins-ais-natural-gas-frenzy-buys-3-4b-worth-of-turbines/"
   ],
   "news_titles": [
-    "MIT CSAIL 用 Astra 直接改写 Qwen 权重，0.016% 改动提升 MATH-500 成绩",
-    "谷歌发布 Elephant-Goldfish 模型插件，编码前先做规范与五轮零上下文审查",
-    "彭博社：苹果加紧让 Siri 更具智能体能力",
-    "猫王与埃米纳姆版权方起诉 Suno",
-    "曹操出行联合蚂蚁集团在杭州、厦门、重庆落地司机之家 AI 健康驿站"
+    "美团龙猫开源LongCat-2.5：1.6万亿参数、百万上下文",
+    "Anthropic发布Claude Fable 5.2与Mythos 5.2",
+    "Meta发布轻量模型Muse Ember，面向智能体执行",
+    "谷歌发布TPU 8i Max与TPU 8tx：双芯片与机密推理",
+    "Anthropic购入34亿美元天然气涡轮机"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.leiphone.com/category/ai/0F072La1etrUN0Tr.html",
-      "image_source": "雷峰网·人工智能",
-      "image_match_status": "feed_image",
-      "image_sha256": "b7123032a1e3c2ac41f99b73e801ec128460ee5a1d7023ae53a29cc2ec2f9657",
-      "rendered_image_sha256": "b7123032a1e3c2ac41f99b73e801ec128460ee5a1d7023ae53a29cc2ec2f9657",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.marktechpost.com/2026/11/08/google-elephant-goldfish-model-plugin-spec-review-coding-agents/",
-      "image_source": "MarkTechPost",
-      "image_match_status": "article_image",
-      "image_sha256": "e35380c1eec59e1c3a3e426bcbd290ea6e8b47aba968e856bed7a41036cf844e",
-      "rendered_image_sha256": "e35380c1eec59e1c3a3e426bcbd290ea6e8b47aba968e856bed7a41036cf844e",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029552/apple-siri-ai-agentic",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "8c8b8521d85fa5f297e5e04e981d88abf24637d1f43ca94ee2aee6238afafc4d",
-      "rendered_image_sha256": "8c8b8521d85fa5f297e5e04e981d88abf24637d1f43ca94ee2aee6238afafc4d",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029533/elvis-eminem-suno-ai-music-clone-lawsuit",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "744e0c3e573e5f3d5487daf14da577e8079db3a247bde0e54fb53cc7281df65b",
-      "rendered_image_sha256": "744e0c3e573e5f3d5487daf14da577e8079db3a247bde0e54fb53cc7281df65b",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.ithome.com/1/024/241.htm",
+      "story_url": "https://www.ithome.com/1/024/556.htm",
       "image_source": "IT之家",
       "image_match_status": "feed_image",
-      "image_sha256": "7b220dca9a432fd243c3f6057ed17c564502bf2b1c14012a5bfb2022c5abfb31",
-      "rendered_image_sha256": "7b220dca9a432fd243c3f6057ed17c564502bf2b1c14012a5bfb2022c5abfb31",
+      "image_sha256": "f52cf698570f7894bad1de13fc3f6a12da03ffb68d152d09b5dae04ed7d2539d",
+      "rendered_image_sha256": "f52cf698570f7894bad1de13fc3f6a12da03ffb68d152d09b5dae04ed7d2539d",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "488be9a4a7a1a93bf27d3ba798917b407bdf6bfce4f75db7eae998ffd09a359f",
+      "rendered_image_sha256": "488be9a4a7a1a93bf27d3ba798917b407bdf6bfce4f75db7eae998ffd09a359f",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "912e4fb6c10ff273f89f9f55692c93b90f5417af416328c9147272cf74545d7c",
+      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
+      "rendered_visual_type": "info_card",
+      "label_required": false,
+      "label_applied": true,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/09/google-tpu-8i-max-tpu-8tx/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "d405298ffa484c0f6377706708e869acba8a7f25cbb07857a834ac4d88534d1f",
+      "rendered_image_sha256": "d405298ffa484c0f6377706708e869acba8a7f25cbb07857a834ac4d88534d1f",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/09/anthropic-joins-ais-natural-gas-frenzy-buys-3-4b-worth-of-turbines/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "abb572e8be02fdba2a25a192537a8fed8b885c954156558081aa18e59665791b",
+      "rendered_image_sha256": "abb572e8be02fdba2a25a192537a8fed8b885c954156558081aa18e59665791b",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "tt-a1i/archify",
+  "skill": "cloudflare/security-audit-skill",
   "design": "mountain-editorial",
   "format": "PNG",
   "canvas": [
@@ -132,7 +132,7 @@
       "y": 557,
       "width": 1100,
       "height": 92,
-      "actual_width": 1077.9,
+      "actual_width": 1064.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -143,7 +143,7 @@
       "y": 651,
       "width": 1090,
       "height": 22,
-      "actual_width": 831.5,
+      "actual_width": 792.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -154,7 +154,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 203.0,
+      "actual_width": 204.7,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -164,9 +164,9 @@
       "x": 48,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 200.3,
-      "line_count": 2,
+      "height": 18,
+      "actual_width": 71.0,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -175,9 +175,9 @@
       "x": 48,
       "y": 968,
       "width": 206,
-      "height": 17,
-      "actual_width": 117.0,
-      "line_count": 1,
+      "height": 51,
+      "actual_width": 204.0,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -186,9 +186,9 @@
       "x": 271,
       "y": 817,
       "width": 206,
-      "height": 66,
-      "actual_width": 203.4,
-      "line_count": 3,
+      "height": 44,
+      "actual_width": 204.8,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -198,7 +198,7 @@
       "y": 889,
       "width": 206,
       "height": 72,
-      "actual_width": 200.0,
+      "actual_width": 204.0,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -209,7 +209,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 200.9,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -220,7 +220,7 @@
       "y": 817,
       "width": 206,
       "height": 44,
-      "actual_width": 197.0,
+      "actual_width": 197.6,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -231,7 +231,7 @@
       "y": 889,
       "width": 206,
       "height": 72,
-      "actual_width": 205.0,
+      "actual_width": 205.1,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -242,7 +242,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 202.8,
+      "actual_width": 202.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -253,7 +253,7 @@
       "y": 817,
       "width": 206,
       "height": 44,
-      "actual_width": 198.0,
+      "actual_width": 204.2,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -263,9 +263,9 @@
       "x": 717,
       "y": 889,
       "width": 206,
-      "height": 72,
-      "actual_width": 199.8,
-      "line_count": 4,
+      "height": 36,
+      "actual_width": 204.2,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -275,7 +275,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 200.9,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -285,9 +285,9 @@
       "x": 940,
       "y": 817,
       "width": 206,
-      "height": 66,
-      "actual_width": 198.0,
-      "line_count": 3,
+      "height": 44,
+      "actual_width": 189.2,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -296,9 +296,9 @@
       "x": 940,
       "y": 889,
       "width": 206,
-      "height": 72,
-      "actual_width": 202.4,
-      "line_count": 4,
+      "height": 18,
+      "actual_width": 64.9,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -308,7 +308,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 204.0,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -319,7 +319,7 @@
       "y": 1305,
       "width": 650,
       "height": 46,
-      "actual_width": 649.7,
+      "actual_width": 646.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -330,7 +330,7 @@
       "y": 1362,
       "width": 780,
       "height": 17,
-      "actual_width": 607.5,
+      "actual_width": 602.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -341,7 +341,7 @@
       "y": 1490,
       "width": 555,
       "height": 30,
-      "actual_width": 144.3,
+      "actual_width": 327.1,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -352,7 +352,7 @@
       "y": 1554,
       "width": 565,
       "height": 38,
-      "actual_width": 554.8,
+      "actual_width": 555.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -363,7 +363,7 @@
       "y": 1628,
       "width": 565,
       "height": 14,
-      "actual_width": 376.5,
+      "actual_width": 60.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -372,9 +372,9 @@
   "design_variant": "mountain-editorial",
   "iso_year": 2026,
   "iso_week": 46,
-  "iso_weekday": 1,
+  "iso_weekday": 2,
   "style_cycle_index": 45,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-09T14:33:28.993874+08:00"
+  "generated_at": "2026-11-10T06:35:08.006801+08:00"
 }
