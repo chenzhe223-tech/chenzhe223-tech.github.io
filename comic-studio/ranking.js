@@ -35,7 +35,7 @@
  };
  const categoryBoost={
   '国际政治':{heat:2,impact:11,drawability:5},'AI 科技':{heat:3,impact:11,drawability:6},
-  '机器人':{heat:3,impact:8,drawability:12},'商业财经':{heat:2,impact:9,drawability:6},
+  '科技社区':{heat:2,impact:6,drawability:6},'机器人':{heat:3,impact:8,drawability:12},'商业财经':{heat:2,impact:9,drawability:6},
   '科学':{heat:1,impact:10,drawability:7},'航空航天':{heat:3,impact:9,drawability:12},
   '文化':{heat:3,impact:5,drawability:8},'娱乐':{heat:5,impact:4,drawability:11},
   '体育':{heat:5,impact:5,drawability:12},'人物':{heat:3,impact:5,drawability:11},

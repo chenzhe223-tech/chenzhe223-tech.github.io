@@ -33,3 +33,11 @@ By DAVYLAB · 把想法，做成能用的工具。
 - 双轨中心显示 WorkBuddy 已接单、草稿已核验、正式发表等细分状态；后台凭证缺失时明确显示需要配置，不错误推断仓库为 Public。
 - Worker 静态源使用本站 `main/comic-studio/`，便于前端修改随提交更新；缓存到期后生效，保留 Git 提交用于回滚。
 - 仅配置 Cloudflare Worker 服务端的 GitHub 受限令牌和 Supabase 管理员 UID 才能正式派单；此处不保存密钥。
+
+## Comic Engine · 2026-11-10
+
+- **素材发现**：生产 Worker `GET /api/comic/discover` 聚合全球新闻（原有 Google News/RSS/GDELT）、Hacker News、arXiv AI 论文。独立来源失败不伪造素材；输出来源标识、待核验状态和版权边界。前端六维规则评分，<60 隐藏，并可一键生成作品草稿。
+- **四 Skill 编辑工作台**：`comic-engine.js` 将 baoyu-comic、scenario-storyboards、agent-comic-kit、TT_AutoManga 的开放创作方法适配为可执行的九格分镜、角色圣经、逐格绘图提示词和浏览器 PNG 排版。直接打开漫画创作台即可操作；仅已有真实图片才能合成九张 PNG。
+- **真实接口/组件边界**：外部 Python/MCP 原版引擎目前**没有**作为 Worker 服务安装；平台未自动生成 AI 图片。之后若需一键完整出图，必须明确配置可用的图片模型或实际运行的 Python 后端，并核验费用和权限。
+- **验收**：PR 主分支 GitHub Actions 静态和单元测试通过；线上 GitHub Actions `worldtoon-live-comic.yml` 实际核验 Worker 健康、模块可访问、Hacker News 非空采集及非法来源 400。AI_ENABLED 保持 false；Cloudflare Secret、D1 绑定保留。
+- **版权**：开源采集和创作代码不意味着第三方新闻原文、图片、人物肖像已获得转载许可。未核验新闻与剧本草稿不可直接发表。

@@ -355,7 +355,7 @@ async function comicDiscover(url){
   return ((await r.json()).hits||[]).slice(0,40).map(x=>({title:x.title||x.story_title,
    url:x.url||'https://news.ycombinator.com/item?id='+encodeURIComponent(x.objectID),
    published:x.created_at,summary:'HN points '+Number(x.points||0)+' · comments '+Number(x.num_comments||0),
-   category:'AI 科技',source:'Hacker News'}));
+   category:'科技社区',source:'Hacker News'}));
  }});
  if(source==='all'||source==='arxiv')tasks.push({id:'arxiv',run:async()=>{
   const r=await fetch('https://rss.arxiv.org/rss/cs.AI',{signal:AbortSignal.timeout(9500)});
