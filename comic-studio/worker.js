@@ -150,7 +150,7 @@ try{
 }catch(err){return failure('生成服务暂不可用：'+aiError(err),503)}
 }
 // WORLD/TOON ARCHIVE / V2.5 — server-side private GitHub handoff (disabled unless secrets configured)
-const WT_REPO='chenzhe223-tech/davylab-worldtoon-comics';
+const WT_REPO='chenzhe223-tech/worldtoon';
 const WT_API='https://api.github.com/repos/'+WT_REPO;
 const WT_TASK_SCHEMA='davylab.worldtoon.task.v2';
 function wtJson(value,status=200){return Response.json(value,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
