@@ -41,3 +41,11 @@ By DAVYLAB · 把想法，做成能用的工具。
 - **真实接口/组件边界**：外部 Python/MCP 原版引擎目前**没有**作为 Worker 服务安装；平台未自动生成 AI 图片。之后若需一键完整出图，必须明确配置可用的图片模型或实际运行的 Python 后端，并核验费用和权限。
 - **验收**：PR 主分支 GitHub Actions 静态和单元测试通过；线上 GitHub Actions `worldtoon-live-comic.yml` 实际核验 Worker 健康、模块可访问、Hacker News 非空采集及非法来源 400。AI_ENABLED 保持 false；Cloudflare Secret、D1 绑定保留。
 - **版权**：开源采集和创作代码不意味着第三方新闻原文、图片、人物肖像已获得转载许可。未核验新闻与剧本草稿不可直接发表。
+
+## 2026-11-10 经典与历史资料 · P0–P3 增量
+
+- P0：新接入 Gutendex/Project Gutenberg 经典书目与 Wikidata 历史实体，正式线上测试分别确认 32 条、60 条候选。所有故事和历史实体都是待研究线索，未经过事实审核或原著/译本版权清理。
+- P1：开放视觉素材接口最初选用 Met v1 Search、Art Institute of Chicago，运行时分别返回 HTTP 410（旧 Met 搜索已于 2026-10-01 下线）和 HTTP 403。现改为 Met v1.1 Search + Cleveland Museum of Art API，均要求馆藏明确标注 CC0。新版本须通过线上冒烟测试，不可仅凭本地单元测试称为运行通过。
+- P2：创作台可搜索 CC0 视觉参考并保存至作品；制作包含 `production/visual-references.json`，九格提示词包含引用对象的源链接、作者、许可。参考图不是史实证据，也不自动复制到漫画成品。
+- P3：增加缺格断点续做（受 `AI_ENABLED` 和用户权限、每日配额保护）及九格 PNG 技术 QA 报告；`AI_ENABLED=false` 时不产生付费 AI 图片。真实九张独立 AI 生成、角色一致性人工审校和公众号发表仍属未验收项，不能宣布完整自动生成已交付。
+- 源码与线上资源遵循 GitHub + Cloudflare 部署；保留已有 Private GitHub 派单/档案、Supabase RLS、D1 和人工审核，不自动发表。

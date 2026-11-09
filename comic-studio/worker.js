@@ -443,6 +443,14 @@ async function heritageDiscover(source,query,limit){
   collectedAt:new Date().toISOString()},{headers:{'cache-control':'public,max-age=1800','x-content-type-options':'nosniff'}});
 }
 function heritageArt(x,id){
+ if(id==='cma'){
+  if(String(x?.share_license_status||'').toUpperCase()!=='CC0'||!x?.images?.web?.url||!x?.url)return null;
+  return {id:'cma-'+x.id,title:String(x.title||'无题').slice(0,200),
+   artist:String((x.creators||[]).map(c=>c.description||c.name).filter(Boolean).join(' · ')||'未标注').slice(0,120),
+   date:String(x.creation_date||'').slice(0,90),
+   image:x.images.web.url,source_url:x.url,source:'Cleveland Museum of Art',
+   license:'CC0',rights_verified:true,role:'visual_reference_only'};
+ }
  if(id==='met'){
   if(x?.isPublicDomain!==true||!x.primaryImageSmall||!x.objectURL)return null;
   return {id:'met-'+x.objectID,title:String(x.title||'无题').slice(0,200),
@@ -462,12 +470,12 @@ async function heritageVisuals(url){
  if(query.length<2)return failure('请输入至少 2 个字的素材搜索词，建议英文主题',400);
  const results=await Promise.allSettled([
   (async()=>{
-   const r=await heritageGetJSON('https://api.artic.edu/api/v1/artworks/search?q='+encodeURIComponent(query)+
-     '&limit=18&fields=id,title,image_id,is_public_domain,artist_display,date_display',9000);
-   return (r.data||[]).map(x=>heritageArt(x,'aic')).filter(Boolean).slice(0,10)
+   const r=await heritageGetJSON('https://openaccess-api.clevelandart.org/api/artworks/?q='+encodeURIComponent(query)+
+     '&cc0&has_image=1&limit=18&fields=id,title,share_license_status,images,creators,creation_date,url',11000);
+   return (r.data||[]).map(x=>heritageArt(x,'cma')).filter(Boolean).slice(0,12)
   })(),
   (async()=>{
-   const r=await heritageGetJSON('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q='+encodeURIComponent(query),9000);
+   const r=await heritageGetJSON('https://collectionapi.metmuseum.org/public/collection/v1.1/search?hasImages=true&limit=12&q='+encodeURIComponent(query),9000);
    const ids=(r.objectIDs||[]).slice(0,12);
    const objects=await Promise.allSettled(ids.map(id=>heritageGetJSON('https://collectionapi.metmuseum.org/public/collection/v1/objects/'+id,6500)));
    return objects.filter(x=>x.status==='fulfilled').map(x=>heritageArt(x.value,'met')).filter(Boolean).slice(0,8)
@@ -475,7 +483,7 @@ async function heritageVisuals(url){
  ]);
  const images=[],warnings=[],counts=[];
  for(let i=0;i<results.length;i++){
-  const key=i===0?'aic':'met',r=results[i];
+  const key=i===0?'cma':'met',r=results[i];
   if(r.status==='fulfilled'){images.push(...r.value);counts.push({id:key,count:r.value.length,ok:true})}
   else{warnings.push(key+': '+String(r.reason?.message||r.reason).slice(0,140));counts.push({id:key,count:0,ok:false})}
  }
