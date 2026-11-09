@@ -1,0 +1,20 @@
+name: WorldToon mobile layout contract
+on:
+  pull_request:
+    paths: ['comic-studio/index.html','comic-studio/mobile-refine.css','comic-studio/tests/mobile-layout.cjs']
+  push:
+    branches: [main]
+    paths: ['comic-studio/index.html','comic-studio/mobile-refine.css','comic-studio/tests/mobile-layout.cjs']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  mobile-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node comic-studio/tests/mobile-layout.cjs
