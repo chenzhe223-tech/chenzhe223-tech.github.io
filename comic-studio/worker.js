@@ -230,8 +230,8 @@ async function wtSharedPublications(){
   for(const a of data.articles){
    const url=String(a?.url||'').trim();let u;
    try{u=new URL(url)}catch{continue}
-   if(u.protocol!=='https:'||u.hostname!=='mp.weixin.qq.com'||!/^\\/s\\//.test(u.pathname))continue;
-   const id=String(a?.id||'').slice(0,100),key=u.pathname.replace(/\\/$/,'');
+   if(u.protocol!=='https:'||u.hostname!=='mp.weixin.qq.com'||!/^\/s\//.test(u.pathname))continue;
+   const id=String(a?.id||'').slice(0,100),key=u.pathname.replace(/\/$/,'');
    if(seen.has(key))continue;seen.add(key);
    const taskId=String(a.worldtoon_task_id||a.worldtoonTaskId||a.task_id||'').slice(0,80);
    articles.push({id,title:String(a.title||'').slice(0,230),url:u.href,
