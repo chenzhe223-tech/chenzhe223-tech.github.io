@@ -122,17 +122,17 @@ function renderSmartSchedule(){
   if(!groups.has(slot.date))groups.set(slot.date,[]);groups.get(slot.date).push(entry);
  }
  const gap=totals.article+totals.poster-filled.article-filled.poster;
- if(stats)stats.innerHTML='<span><strong>文章 '+filled.article+'/'+totals.article+'</strong> 隔天一篇</span><span><strong>贴图 '+filled.poster+'/'+totals.poster+'</strong> 周一三五日</span><span><strong>待补 '+gap+'</strong> 个排期位</span>';
+ if(stats)stats.innerHTML='<span><strong>文章 '+filled.article+'/'+totals.article+'</strong><small>隔天一篇</small></span><span><strong>贴图 '+filled.poster+'/'+totals.poster+'</strong><small>一三五日</small></span><span><strong>待补 '+gap+'</strong><small>个排期位</small></span>';
  const visible=[...groups].filter(([,entries])=>!config.onlyMissing||entries.some(e=>!e.matches.length));
  if(!visible.length){el.innerHTML='<div class="empty"><strong>排期已覆盖</strong>当前周期没有待补空档。</div>';return}
  const suggestionByKey=new Map();
  el.innerHTML=visible.map(([date,entries])=>{
-  const day=dayNumber(date),week=WEEK[weekday(date)],head='<div class="smart-day-label"><strong>'+safe(date.slice(5).replace("-"," / "))+'</strong><span>周'+week+'</span></div>';
+  const day=dayNumber(date),week=WEEK[weekday(date)],head='<div class="smart-day-label"><strong>'+safe(date.slice(5).replace("-","/"))+'</strong><span>周'+week+'</span></div>';
   const slotsHTML=entries.map(e=>{
    const label=e.type==="article"?"文章":"贴图",cls=e.type==="article"?"article":"poster",key=date+"|"+e.type;
    if(e.matches.length)return'<div class="smart-slot '+cls+'"><span class="smart-type">'+label+'</span><div class="smart-slot-main">'+e.matches.map(t=>'<strong>'+safe(t.title)+'</strong><small>'+safe(t.column||"未分类")+' · '+safe(STATUS[t.status]||"待编辑")+(t.scheduleSource?" · 智能排期":"")+'</small>').join("")+'</div><button class="btn small" data-smart-edit="'+safe(e.matches[0].id)+'">编辑</button></div>';
    suggestionByKey.set(key,e.idea);
-   return'<div class="smart-slot missing '+cls+'"><span class="smart-type">'+label+'</span><div class="smart-slot-main"><small>空档建议 · '+safe(e.idea.from)+'</small><strong>'+safe(e.idea.title)+'</strong></div><button class="btn small primary" data-smart-accept="'+safe(key)+'">采用</button></div>';
+   return'<div class="smart-slot missing '+cls+'"><span class="smart-type">'+label+'</span><div class="smart-slot-main"><small>建议 · '+safe(e.idea.from)+'</small><strong>'+safe(e.idea.title)+'</strong></div><button class="btn small primary" data-smart-accept="'+safe(key)+'">采用</button></div>';
   }).join("");
   return'<div class="smart-day">'+head+'<div class="smart-day-slots">'+slotsHTML+'</div></div>'
  }).join("");
