@@ -1,41 +1,43 @@
 import {createClient} from "npm:@supabase/supabase-js@2.57.0";
-const origin="https://chenzhe223-tech.github.io";
-const headers={"Access-Control-Allow-Origin":origin,"Access-Control-Allow-Headers":"authorization,apikey,content-type","Access-Control-Allow-Methods":"POST,OPTIONS","Content-Type":"application/json","Cache-Control":"no-store"};
-const respond=(v,s=200)=>new Response(JSON.stringify(v),{status:s,headers});
-const shift=(str,n)=>{const d=new Date(str+"T12:00:00Z");d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
-function week(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Singapore",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),t={};p.forEach(x=>t[x.type]=x.value);const today=t.year+"-"+t.month+"-"+t.day,wd=new Date(today+"T12:00:00Z").getUTCDay()||7,start=shift(today,1-wd-7),end=shift(start,6),th=new Date(shift(start,3)+"T12:00:00Z"),y=th.getUTCFullYear(),j=new Date(Date.UTC(y,0,4,12)),wd4=j.getUTCDay()||7,first=shift(j.toISOString().slice(0,10),1-wd4),n=1+Math.round((new Date(start+"T12:00:00Z")-new Date(first+"T12:00:00Z"))/604800000);return{start,end,issue:y+"-W"+String(n).padStart(2,"0"),days:Array.from({length:7},(_,i)=>shift(start,i))}}
-function canon(u){try{const a=new URL(u);return ["https:","http:"].includes(a.protocol)?a.hostname.replace(/^www\./,"").toLowerCase()+a.pathname.replace(/\/+$/,"").toLowerCase():""}catch{return""}}
-function date(s){if(!s||!Number.isFinite(Date.parse(s)))return"";const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Singapore",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date(s)),o={};p.forEach(x=>o[x.type]=x.value);return o.year+"-"+o.month+"-"+o.day}
-function collect(reports,w,priorN,priorS){const n=new Map(),t=new Map(),s=new Map();
-for(const r of reports){for(const section of ["top5","news","china_ai_news"])for(const v of Array.isArray(r[section])?r[section]:[]){const u=v.source_url||v.url,k=canon(u),d=date(v.published);if(!k||!d||d<w.start||d>w.end)continue;const title=String(v.title_en||v.title||"").toLowerCase().replace(/[\s\p{P}\p{S}]+/gu,"").slice(0,90);let x=n.get(k)||t.get(title);if(x){x.repeat++;x.sections.add(section);x.refs.add(v.url||u);continue}x={key:k,url:u,title:v.title_zh||v.title,summary:v.what_zh||v.summary_zh||v.summary||"",importance:v.why_zh||v.why_it_matters_zh||"",source:v.source||"",published:d,score:Number(v.total_score)||0,repeat:1,sections:new Set([section]),refs:new Set([v.url||u])};n.set(k,x);t.set(title,x)}
-for(const v of Array.isArray(r.skills)?r.skills:[]){const k=v.canonical_id||canon(v.url);if(!k)continue;const x=s.get(k);if(x){x.repeat++;continue}s.set(k,{key:k,url:v.url,title:v.name,summary:v.description_zh||v.description||"",license:v.license_name||v.license||"",verified:!!v.evidence_verified,score:Number(v.total_score)||0,repeat:1})}}
-return{news:[...new Set(n.values())].filter(x=>!priorN.has(x.key)).map(x=>({...x,sections:[...x.sections],refs:[...x.refs],rank:x.score+x.repeat*4+(x.sections.has("top5")?25:0)})).sort((a,b)=>b.rank-a.rank).slice(0,7),skills:[...s.values()].filter(x=>!priorS.has(x.key)).map(x=>({...x,rank:x.score+x.repeat*2+(x.verified?8:0)})).sort((a,b)=>b.rank-a.rank).slice(0,5),countNews:n.size,countSkills:s.size}}
-Deno.serve(async req=>{if(req.method==="OPTIONS")return new Response(null,{headers,status:204});if(req.method!=="POST")return respond({error:"Method not allowed"},405);const orig=req.headers.get("origin");if(orig&&orig!==origin)return respond({error:"Invalid origin"},403);
-const token=(req.headers.get("authorization")||"").replace(/^Bearer\s+/i,"");if(!token)return respond({error:"Authentication required"},401);
-const url=Deno.env.get("SUPABASE_URL"),anon=Deno.env.get("SUPABASE_ANON_KEY"),secret=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-if(!url||!anon||!secret)return respond({error:"Server secret missing"},503);
-const client=createClient(url,anon,{auth:{persistSession:false}}),checked=await client.auth.getUser(token),user=checked.data.user;if(checked.error||!user)return respond({error:"Invalid session"},401);
-const db=createClient(url,secret,{auth:{persistSession:false}});let body={};try{body=await req.json()}catch{return respond({error:"Invalid JSON"},400)}
-if(body.action==="list"){const r=await db.from("explorations_runs").select("id,issue,week_start,week_end,state,stage,progress,created_at,error_message,manifest,source_report").eq("user_id",user.id).order("created_at",{ascending:false}).limit(30);return r.error?respond({error:r.error.message},500):respond({runs:r.data})}
-if(body.action==="detail"){if(!/^[0-9a-f-]{36}$/i.test(body.run_id||""))return respond({error:"Invalid run id"},400);const [r,a]=await Promise.all([db.from("explorations_runs").select("*").eq("id",body.run_id).eq("user_id",user.id).maybeSingle(),db.from("explorations_assets").select("*").eq("run_id",body.run_id).eq("user_id",user.id).order("slot")]);if(r.error||a.error)return respond({error:r.error?.message||a.error?.message},500);return r.data?respond({run:r.data,assets:a.data||[]}):respond({error:"Not found"},404)}
-if(body.action!=="start")return respond({error:"Unknown action"},400);
-const w=week(),old=await db.from("explorations_runs").select("id,issue,state").eq("user_id",user.id).eq("issue",w.issue).maybeSingle();if(old.error)return respond({error:old.error.message},500);if(old.data)return respond({already_exists:true,run:old.data});
-const put=await db.from("explorations_runs").insert({user_id:user.id,issue:w.issue,week_start:w.start,week_end:w.end,state:"ingesting",stage:"reading_daily_archives",progress:7}).select("id").single();if(put.error)return respond({error:put.error.message},500);
-const id=put.data.id;const update=p=>db.from("explorations_runs").update({...p,updated_at:new Date().toISOString()}).eq("id",id).eq("user_id",user.id);
-try{const base="https://chenzhe223-tech.github.io/radar/data/";const get=async path=>{const response=await fetch(base+path,{headers:{accept:"application/json"},signal:AbortSignal.timeout(12000)});if(!response.ok)throw Error("Radar fetch "+path+" "+response.status);return response.json()};
-const hist=await get("history.json"),days=(hist.days||[]).map(x=>String(x).replace(/\.json$/,"")),missing=w.days.filter(x=>!days.includes(x));if(missing.length){await update({state:"blocked",stage:"missing_daily_archives",progress:10,error_message:"缺失日报："+missing.join("、"),source_report:{missing}});return respond({run_id:id,state:"blocked",missing})}
-const all=await Promise.allSettled(w.days.map(d=>get("archive/"+d+".json"))),reports=[],invalid=[];all.forEach((r,i)=>{if(r.status==="fulfilled"&&r.value.report_date===w.days[i]&&Array.isArray(r.value.news))reports.push(r.value);else invalid.push(w.days[i])});if(invalid.length){await update({state:"blocked",stage:"unreadable_daily_archive",progress:12,error_message:"无法读取："+invalid.join("、")});return respond({run_id:id,state:"blocked",missing:invalid})}
-await update({state:"selecting",stage:"deduplicating_candidates",progress:40});const since=new Date(Date.now()-90*86400000).toISOString(),prior=await db.from("explorations_runs").select("selections").eq("user_id",user.id).gte("created_at",since);if(prior.error)throw Error(prior.error.message);
-const pn=new Set(),ps=new Set();for(const p of prior.data||[]){for(const a of p.selections?.news||[])pn.add(a.key);for(const a of p.selections?.skills||[])ps.add(a.key)}
-const selected=collect(reports,w,pn,ps),news=selected.news,skills=selected.skills,source_report={days:w.days,candidate_news:selected.countNews,candidate_skills:selected.countSkills,excluded_previously_selected_news:pn.size,excluded_previously_selected_skills:ps.size,method:"Radar top5 relevance + URL/title dedupe. Social heat and cross-URL semantic duplicates require separate verification.",final_fact_check_required:true};
-if(news.length!==7||skills.length!==5){await update({state:"blocked",stage:"insufficient_candidates",progress:45,source_report,error_message:"候选不足："+news.length+"新闻，"+skills.length+" Skill"});return respond({run_id:id,state:"blocked",selected:{news:news.length,skills:skills.length}})}
-const selection={news,skills};await update({state:"selecting",stage:"preparing_editorial_drafts",progress:60,source_report,selections:selection});
-const direction="Premium magazine editorial, natural still-life photography, warm paper, charcoal and terracotta, conceptual storytelling, DAVY'S NOTE. No generic robots/neon/glass cards, no fake screenshots. Typeset text separately.";
-const rows=news.map((x,i)=>({run_id:id,user_id:user.id,slot:i+1,kind:"news",title:x.title,source_urls:x.refs,content:{source:x.source,published:x.published,summary:x.summary,importance:x.importance,editorial_note:"待编辑核验",visual_direction:direction},image_status:"not_generated",qc_status:"pending"}));
-for(let i=0;i<2;i++){const group=skills.slice(i*3,i*3+3);rows.push({run_id:id,user_id:user.id,slot:8+i,kind:"skill",title:i===0?"本周 Skill 精选 01—03":"本周 Skill 精选 04—05",source_urls:group.map(x=>x.url),content:{skills:group,visual_direction:direction},image_status:"not_generated",qc_status:"pending"})}
-const inserted=await db.from("explorations_assets").insert(rows);if(inserted.error)throw Error(inserted.error.message);
-const manifest={required_images:9,generated_images:0,visual_engine:"unconfigured",workbuddy:"not_handed_off",wechat:"not_published",deliverable:"editorial_drafts_only"};
-await update({state:"blocked",stage:"image_engine_unconfigured",progress:72,selections:selection,source_report,manifest,error_message:"真实生图执行服务未配置。已生成 9 条编辑草稿，不是 9 张 PNG；不能标记完成。"});
-return respond({run_id:id,issue:w.issue,state:"blocked",stage:"image_engine_unconfigured",drafts_created:9,selected:{news:7,skills:5},message:"已自动筛选并准备草稿，等待真实生图引擎配置。"})
-}catch(e){await update({state:"failed",stage:"exception",error_message:String(e).slice(0,1200)});return respond({run_id:id,state:"failed",error:String(e)},500)}
+const DOMAIN="https://chenzhe223-tech.github.io";
+const H={"Content-Type":"application/json","Access-Control-Allow-Origin":DOMAIN,"Access-Control-Allow-Methods":"POST, OPTIONS","Access-Control-Allow-Headers":"content-type,authorization,apikey","Cache-Control":"no-store"};
+const res=(body,code=200)=>new Response(JSON.stringify(body),{status:code,headers:H});
+const shift=(s,n)=>{const d=new Date(s+"T12:00:00Z");d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)};
+function pastWeek(){const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Singapore",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date()),v={};parts.forEach(p=>v[p.type]=p.value);
+const d=v.year+"-"+v.month+"-"+v.day,wd=new Date(d+"T12:00:00Z").getUTCDay()||7,start=shift(d,1-wd-7),end=shift(start,6);
+const th=new Date(shift(start,3)+"T12:00:00Z"),yr=th.getUTCFullYear(),jan4=new Date(Date.UTC(yr,0,4,12)),weekStart=shift(jan4.toISOString().slice(0,10),1-(jan4.getUTCDay()||7)),no=1+Math.round((new Date(start+"T12:00:00Z")-new Date(weekStart+"T12:00:00Z"))/604800000);
+return {start,end,issue:yr+"-W"+String(no).padStart(2,"0"),days:Array.from({length:7},(_,i)=>shift(start,i))};}
+function order(run,source){return {
+id:run.id,issue:run.issue,week:{start:run.week_start,end:run.week_end,timezone:"Asia/Shanghai"},
+sender:"Explorations Studio",assignee:"ChatGPT",downstream:"WorkBuddy",mode:"creative-production",
+sources:{daily_home:"https://chenzhe223-tech.github.io/radar/daily/",history:"https://chenzhe223-tech.github.io/radar/data/history.json",archive_pattern:"https://chenzhe223-tech.github.io/radar/data/archive/YYYY-MM-DD.json",days:source.days},
+requirements:{news:7,skills:5,posters_news:7,posters_skills:2,png_total:9,resolution:"1080x1440 minimum",historical_dedupe_days:90,art_direction:"AI Explorations · By DAVYLAB | refined international editorial magazine; natural photography, still life, warm paper, sophisticated typography, unique editorial metaphor, DAVY'S NOTE; never neon robots, glassmorphism, generic AI images"},
+deliverables:["nine original PNG posters","copy-ready WeChat editorial caption","verified source URLs and dedupe log","QC checklist and source design","ZIP package and accessible asset locations","WorkBuddy publication handoff manifest"],
+handoff_rule:"ONLY after all 9 real PNG files and quality checks have been verified, hand completed material to WorkBuddy for WeChat Official Account 贴图 module publishing. Record draft and public publication acknowledgements separately.",
+policy:"Never fabricate editorial completion, images, ChatGPT reception, WorkBuddy handoff, or WeChat publication. Never execute public WeChat publication without appropriate publishing permission."};}
+Deno.serve(async req=>{
+if(req.method==="OPTIONS")return new Response(null,{status:204,headers:H});
+if(req.method!=="POST")return res({error:"Method not allowed"},405);
+const origin=req.headers.get("origin");if(origin&&origin!==DOMAIN)return res({error:"Origin denied"},403);
+const jwt=(req.headers.get("authorization")||"").replace(/^Bearer\s+/i,"");
+if(!jwt)return res({error:"Login required"},401);
+const supa=Deno.env.get("SUPABASE_URL"),anon=Deno.env.get("SUPABASE_ANON_KEY"),secret=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");if(!supa||!anon||!secret)return res({error:"Supabase configuration missing"},503);
+const auth=createClient(supa,anon,{auth:{persistSession:false}}),verified=await auth.auth.getUser(jwt);
+const user=verified.data?.user;if(verified.error||!user)return res({error:"Invalid session"},401);
+const db=createClient(supa,secret,{auth:{persistSession:false}});
+let input={};try{input=await req.json()}catch{return res({error:"Invalid payload"},400)}
+if(input.action==="list"){const r=await db.from("explorations_runs").select("id,issue,week_start,week_end,state,stage,progress,created_at,error_message,manifest,source_report").eq("user_id",user.id).order("created_at",{ascending:false}).limit(30);return r.error?res({error:r.error.message},500):res({runs:r.data||[]})}
+if(input.action==="detail"||input.action==="work_order"){const id=input.run_id;if(!/^[0-9a-f-]{36}$/i.test(id||""))return res({error:"Invalid run ID"},400);
+const r=await db.from("explorations_runs").select("*").eq("user_id",user.id).eq("id",id).maybeSingle();if(r.error)return res({error:r.error.message},500);if(!r.data)return res({error:"Run not found"},404);
+if(input.action==="work_order")return res({run:r.data,work_order:order(r.data,r.data.source_report||{})});
+const assets=await db.from("explorations_assets").select("*").eq("user_id",user.id).eq("run_id",id).order("slot");return assets.error?res({error:assets.error.message},500):res({run:r.data,assets:assets.data||[]})}
+if(input.action!=="start")return res({error:"Unknown action"},400);
+const w=pastWeek();const existing=await db.from("explorations_runs").select("id,issue,week_start,week_end,state,stage,progress,source_report").eq("user_id",user.id).eq("issue",w.issue).maybeSingle();
+if(existing.error)return res({error:existing.error.message},500);
+if(existing.data)return res({already_exists:true,run:existing.data,work_order:order(existing.data,existing.data.source_report||{})});
+const source_report={days:w.days,history_url:"https://chenzhe223-tech.github.io/radar/data/history.json",integrity:"pending ChatGPT verification"};
+const manifest={contract_version:"v3",dispatcher:"Explorations Studio",producer:"ChatGPT",publisher:"WorkBuddy",required_news:7,required_skills:5,required_images:9,generated_images:0,deliverable_status:"request_only",chatgpt_status:"not_claimed",workbuddy_status:"not_started",wechat_status:"not_published"};
+const created=await db.from("explorations_runs").insert({user_id:user.id,issue:w.issue,week_start:w.start,week_end:w.end,state:"queued",stage:"awaiting_chatgpt",progress:3,source_report,manifest}).select("*").single();
+if(created.error){if(created.error.code==="23505"){const latest=await db.from("explorations_runs").select("*").eq("user_id",user.id).eq("issue",w.issue).single();return latest.error?res({error:latest.error.message},500):res({already_exists:true,run:latest.data,work_order:order(latest.data,latest.data.source_report||{})})}return res({error:created.error.message},500)}
+return res({run_id:created.data.id,issue:w.issue,state:"queued",stage:"awaiting_chatgpt",chatgpt_status:"not_claimed",message:"生产任务已登记，等待 ChatGPT 自动化领取；没有生成选题草稿或 PNG。",work_order:order(created.data,source_report)});
 });
