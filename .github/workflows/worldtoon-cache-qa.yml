@@ -11,6 +11,7 @@ on:
       - 'comic-studio/app.js'
       - 'comic-studio/tests/production-desk.cjs'
       - 'comic-studio/tests/character-deepseek.cjs'
+      - 'comic-studio/tests/shared-publications.cjs'
       - 'comic-studio/worker.js'
       - 'comic-studio/personalize.js'
       - 'comic-studio/tests/service-worker-cache.cjs'
@@ -42,3 +43,5 @@ jobs:
         run: node comic-studio/tests/production-desk.cjs
       - name: Verify DeepSeek free character AI and deprecation safety
         run: node comic-studio/tests/character-deepseek.cjs
+      - name: Verify shared WeChat publication matching and safety
+        run: node comic-studio/tests/shared-publications.cjs
