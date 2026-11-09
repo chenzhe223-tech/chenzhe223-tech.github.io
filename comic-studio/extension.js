@@ -6,11 +6,11 @@ let wtSource='all',wtSourceCounts=[],wtCategory='全部',wtQuery='',wtNews=[],wt
 let wtRankSort='overall',wtRankFocus='all',wtRankMin=60;
 let wtConfig=null,wtSession=null,wtSyncTimer=null,wtCloudBusy=false,wtSyncedAt='',wtCloudError='',wtStatus='未登录';
 let wtSelectedCharacter='',wtPreviewImage='',wtRemoteRev=null;
-const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','科技社区','机器人','商业财经','科学','环境','健康','航空航天'];
+const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','经典故事','历史脑洞','科技社区','机器人','商业财经','科学','环境','健康','航空航天'];
 const wtJson=async(res)=>{const body=await res.json().catch(()=>({error:'服务器响应无法解析'}));if(!res.ok)throw Error(body.error||body.message||`请求失败 ${res.status}`);return body;};
 const wtTime=v=>{try{return new Date(v).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}catch{return '—'}};
 
-const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','科技社区':'DEV','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
+const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','经典故事':'BOOK','历史脑洞':'HISTORY','科技社区':'DEV','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
 function wtNewsPicture(n,i){
  const image=safeURL(n.image||''),kind=wtNewsSymbols[n.category]||'WORLD';
  return '<div class="wt-news-media '+(image?'has-photo':'is-fallback')+'">'+
@@ -41,7 +41,7 @@ function wtLive(){
  const judged=wtEditorialRank.decorate(all);
  const result=wtEditorialRank.select(judged,{sort:wtRankSort,focus:wtRankFocus,minimum:wtRankMin,query:wtQuery});
  const items=result.items;
- const sourceTabs=[['all','综合发现'],['news','全球新闻'],['hackernews','开发者热点'],['arxiv','AI 前沿论文']].map(([id,label])=>'<button class="'+(wtSource===id?'active':'')+'" data-wt="source" data-value="'+id+'">'+label+'</button>').join('');
+ const sourceTabs=[['all','综合发现'],['news','全球新闻'],['hackernews','开发者热点'],['arxiv','AI 前沿论文'],['classics','经典故事'],['history','历史题材']].map(([id,label])=>'<button class="'+(wtSource===id?'active':'')+'" data-wt="source" data-value="'+id+'">'+label+'</button>').join('');
  const filters=wtCategories.map(c=>'<button class="'+(c===wtCategory?'active':'')+'" data-wt="category" data-value="'+e(c)+'">'+e(c)+'</button>').join('');
  const cards=items.map((n,i)=>'<article class="wt-news-card">'+wtNewsPicture(n,i)+
  '<div class="wt-news-card-body">'+wtRankBadge(n)+'<div class="wt-status"><span class="wt-chip">'+e(n.category)+'</span><span class="wt-chip wt-unverified">待核验</span><span class="wt-chip">'+e(wtTime(n.published))+'</span></div><h3>'+e(n.title)+'</h3>'+
@@ -49,10 +49,10 @@ function wtLive(){
  '<p class="minor wt-news-source">'+e(n.source||'来源未标注')+' · '+e(n.language||'全球')+'</p>'+
  '<p class="wt-rank-reason">'+e(n._rating.rationale)+'</p>'+
  '<div class="buttons"><a href="'+e(safeURL(n.url))+'" target="_blank" rel="noopener noreferrer" class="button">阅读原文 ↗</a><button class="button dark" data-wt="save-news" data-index="'+n._sourceIndex+'">加入选题池</button><button class="button" data-wt="create-news" data-index="'+n._sourceIndex+'">创作这条漫画</button></div></div></article>').join('');
- return heroHeader('02 / LIVE NEWSWIRE','漫画素材发现','实时新闻线索 · 六维规则预评估 · 选题优先级排序。评分用于筛选创作题材，不代表社交平台真实热度或事实已核验。','<button class="button dark" data-wt="news-refresh">⟳ 刷新实时新闻</button>')+
- '<div class="wt-source-panel"><div class="kicker">SOURCE STREAM / 实时素材源</div><div class="wt-source-tabs">'+sourceTabs+'</div><p class="minor">'+(wtSourceCounts.length?wtSourceCounts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join(' · '):'首次打开将采集真实素材')+' · 线索未经事实核验</p></div>'+ 
+ return heroHeader('02 / LIVE NEWSWIRE','漫画素材发现','实时新闻线索 · 六维规则预评估 · 选题优先级排序。评分用于筛选创作题材，不代表社交平台真实热度或事实已核验。','<button class="button dark" data-wt="news-refresh">⟳ 搜索 / 刷新素材</button>')+
+ '<div class="wt-source-panel"><div class="kicker">SOURCE STREAM / 新闻·经典·历史</div><div class="wt-source-tabs">'+sourceTabs+'</div><p class="minor">'+(wtSourceCounts.length?wtSourceCounts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join(' · '):'首次打开将采集真实素材')+' · 线索未经事实核验</p></div>'+ 
  '<div class="wt-filters">'+filters+'</div>'+
- '<div class="box wt-rank-toolbar"><div class="wt-rank-controls"><label class="wt-rank-search">关键词<input id="wtSearch" placeholder="检索标题、媒体、摘要…" value="'+e(wtQuery)+'"></label>'+wtRankControlOptions()+'</div>'+
+ '<div class="box wt-rank-toolbar"><div class="wt-rank-controls"><label class="wt-rank-search">关键词<input id="wtSearch" placeholder="查找故事、作者、人物、历史事件…" value="'+e(wtQuery)+'"></label>'+wtRankControlOptions()+'</div>'+
  '<div class="wt-rank-summary"><strong>'+items.length+'</strong> 条显示 / '+result.all+' 条已采集 · '+result.hidden+' 条未达综合门槛 · '+(wtFetching?'正在采集…':wtLastFetch?'最近采集 '+wtTime(wtLastFetch):'尚未采集')+'</div>'+
  '<p class="wt-rank-disclaimer">智能规则预评估 V'+wtEditorialRank.VERSION+' · 热度 20% + 影响力 20% + 可画性 20% + 冲突 20% + 新奇 10% + 来源追溯 10%。低于 60 分不展示；评分依据新闻标题、摘要、发布日期及题材信号，非大模型真实评价，非传播量统计，也不构成事实核验。</p>'+
  (wtNewsError?'<p class="wt-error">'+e(wtNewsError)+'</p>':'')+'</div>'+
@@ -65,8 +65,8 @@ function wtCharModal(c){modal(`<div class="kicker">CHARACTER BIBLE / BY DAVYLAB<
 function wtCharBible(){return (data.characters||[]).map(c=>`${c.name}: ${c.description}; 固定服饰 ${c.costume}; 色彩 ${c.colors}; 识别特征 ${c.traits}; 性格 ${c.personality}`).join('\n')||'纯原创虚构角色，无现实名人肖像';}
 function wtStudioAI(){const p=selected();if(!p)return '';const ready=!!wtConfig?.aiEnabled&&!!wtSession?.access_token;const disabled=ready&&!wtAiBusy?'':' disabled';const status=!wtConfig?.aiEnabled?'AI 模型费用尚未获批，暂未开启自动生成':!wtSession?.access_token?'请先登录账户，才可以调用模型':'角色档案与首格定妆照将帮助保持画风一致';return '<section class="box" style="margin-top:12px;margin-bottom:16px"><div class="kicker">AI WRITER & ART DIRECTOR</div><h2>AI 编剧与画面生成 <span class="wt-chip">'+(ready?'已连接':'待启用')+'</span></h2><p class="wt-note">'+e(status)+'。自动编剧生成九格文字初稿；绘图仅生成第 '+(ui.panel+1)+' 格。所有作品仍需人工核验事实和图片。</p><div class="buttons"><button class="button dark" data-wt="ai-script"'+disabled+'>✦ AI 九格编剧</button><button class="button" data-wt="ai-image"'+disabled+'>生成当前画格</button><button class="button" data-wt="ai-image-ref"'+disabled+'>参考首格生图</button><a class="button" href="#/characters">角色档案 ↗</a><a class="button" href="#/account">登录与同步 ↗</a></div></section>';}
 const wtOriginalStudio=studio;studio=function(){return (typeof wfHint==='function'?wfHint():'')+wtOriginalStudio()};
-async function wtFetchNews(force=false){if(wtFetching)return;wtFetching=true;wtNewsError='';render();try{const params=new URLSearchParams({category:wtCategory,limit:'60'});if(force)params.set('refresh','1');params.set('source',wtSource);let result=await wtJson(await fetch('/api/comic/discover?'+params.toString(),{cache:'no-store'}));wtNews=result.items||[];wtSourceCounts=result.counts||[];wtLastFetch=Date.now();wtNewsError=(result.warnings||[]).join('；');}catch(err){wtNewsError=err.message;}finally{wtFetching=false;render();}}
-async function wtSaveNews(i){let x=wtNews[Number(i)];if(!x)return;let found=data.topics.find(z=>z.source===x.url);if(found){notify('这条原始来源已在选题池');return;}const eventRaw=x.eventDate||x.occurrence_date||x.occurredAt||'';const date=String(eventRaw||x.published||'').slice(0,10);let t={id:uid(),title:x.title,category:x.category,summary:`原始来源：${x.source}。新闻线索尚未完成事实核验，请阅读全文后改编。`,source:x.url,eventDate:/^\d{4}-\d{2}-\d{2}$/.test(date)?date:'',eventDateBasis:eventRaw?'source_event':'published_candidate',heat:Math.max(1,Math.round(wtEditorialRank.evaluate(x).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate(x).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate(x).drawability/20)),ranking:wtEditorialRank.evaluate(x),stage:'待核验',createdAt:now(),publishedAt:x.published,sourceName:x.source,newsImage:x.image||'',verified:false};data.topics.unshift(t);persist();notify('已加入选题池，待核验后创作');}
+async function wtFetchNews(force=false){if(wtFetching)return;wtFetching=true;wtNewsError='';render();try{const params=new URLSearchParams({category:wtCategory,limit:'60'});if(force)params.set('refresh','1');params.set('source',wtSource);if(['classics','history'].includes(wtSource)&&wtQuery.trim())params.set('q',wtQuery.trim());let result=await wtJson(await fetch('/api/comic/discover?'+params.toString(),{cache:'no-store'}));wtNews=result.items||[];wtSourceCounts=result.counts||[];wtLastFetch=Date.now();wtNewsError=(result.warnings||[]).join('；');}catch(err){wtNewsError=err.message;}finally{wtFetching=false;render();}}
+async function wtSaveNews(i){let x=wtNews[Number(i)];if(!x)return;let found=data.topics.find(z=>z.source===x.url);if(found){notify('这条原始来源已在选题池');return;}const eventRaw=x.eventDate||x.occurrence_date||x.occurredAt||'';const date=String(eventRaw||x.published||'').slice(0,10);let t={id:uid(),title:x.title,category:x.category,summary:`原始来源：${x.source}。${x.evergreen?'经典/历史线索待核验，请检查权利与史料':'新闻线索尚未完成事实核验，请阅读全文后改编'}。`,source:x.url,evergreen:x.evergreen===true,rightsStatus:x.rights_status||'unknown',sourceId:x.source_id||'',eventDate:/^\d{4}-\d{2}-\d{2}$/.test(date)?date:'',eventDateBasis:eventRaw?'source_event':'published_candidate',heat:Math.max(1,Math.round(wtEditorialRank.evaluate(x).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate(x).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate(x).drawability/20)),ranking:wtEditorialRank.evaluate(x),stage:'待核验',createdAt:now(),publishedAt:x.published,sourceName:x.source,newsImage:x.image||'',verified:false};data.topics.unshift(t);persist();notify('已加入选题池，待核验后创作');}
 
 async function wtDraftFromNews(i){
  const x=wtNews[Number(i)];if(!x)return;
@@ -77,7 +77,7 @@ async function wtDraftFromNews(i){
  const p=emptyProject(t);
  p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻或研究线索；请先核对原文、事件日期及事实边界。';
  p.fiction='原创架空角色及情节，不复现或指控现实人物。';
- p.sourceURLs=x.url;p.sourceTitle=x.title;p.status='草稿';
+ p.sourceURLs=x.url;p.sourceTitle=x.title;p.status='草稿';p.evergreen=x.evergreen===true;p.sourceId=x.source_id||'';p.rightsStatus=x.rights_status||'unknown';
  data.projects.unshift(p);ui.selected=p.id;persist();
  nav('studio/'+p.id+'/0');notify('已创建未核验漫画草稿，可运行四 Skill 分镜制作');
 }
