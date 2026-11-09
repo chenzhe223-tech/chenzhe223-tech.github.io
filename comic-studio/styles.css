@@ -90,3 +90,11 @@
 .brief-state{border:1px dashed #c2c5b6;border-radius:10px;padding:35px;text-align:center;background:#fffdf8}.brief-state h3{font-size:16px}.brief-state p{color:#777;font-size:12px}
 @media(max-width:1100px){.brief-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:670px){.brief-masthead{min-height:235px;padding:22px}.brief-masthead h1{font-size:37px;margin:30px 0}.brief-masthead-bottom>span{display:none}.brief-brand{font-size:8px}.brief-toolbar{flex-direction:column;align-items:stretch}.brief-toolbar h2{font-size:28px}.brief-tools{width:100%}.brief-grid{grid-template-columns:1fr}.brief-spotlight,.brief-section-head{align-items:start}.brief-count{display:none}.brief-story-body{padding:15px}.brief-skill{grid-template-columns:35px minmax(0,1fr)}.brief-skill>a{grid-column:2;justify-self:start}.brief-tabs{flex-wrap:nowrap}.brief-statusbar{align-items:start}}
+
+/* AI Radar official daily cover — unchanged source poster */
+.brief-cover{display:grid;grid-template-columns:minmax(160px,260px) minmax(0,1fr);gap:24px;padding:20px;margin:5px 0 20px;background:#e5e3d9;border:1px solid #d5d3c8;border-radius:12px;align-items:center}
+.brief-cover-art{display:flex;justify-content:center;align-items:center;background:#d2d2c8;border-radius:8px;overflow:hidden;min-height:172px;max-height:240px}
+.brief-cover-art img{max-width:100%;max-height:240px;width:auto;height:auto;object-fit:contain;box-shadow:0 7px 18px #00000015}
+.brief-cover-copy h3{font:normal 28px/1.25 Georgia,'Songti SC',serif;margin:10px 0}
+.brief-cover-copy p{font-size:12px;color:#646b60;line-height:1.85;max-width:410px;margin:0 0 16px}
+@media(max-width:670px){.brief-cover{grid-template-columns:110px 1fr;gap:13px;padding:12px}.brief-cover-art{min-height:140px;max-height:180px}.brief-cover-art img{max-height:180px}.brief-cover-copy h3{font-size:20px}.brief-cover-copy p{font-size:11px;line-height:1.6}}
