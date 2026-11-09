@@ -10,6 +10,9 @@ on:
       - 'comic-studio/index.html'
       - 'comic-studio/app.js'
       - 'comic-studio/tests/production-desk.cjs'
+      - 'comic-studio/tests/character-deepseek.cjs'
+      - 'comic-studio/worker.js'
+      - 'comic-studio/personalize.js'
       - 'comic-studio/tests/service-worker-cache.cjs'
       - '.github/workflows/worldtoon-cache-qa.yml'
   workflow_dispatch:
@@ -31,7 +34,11 @@ jobs:
           node --check comic-studio/archive.js
           node --check comic-studio/sw.js
           node --check comic-studio/app.js
+          node --check comic-studio/worker.js
+          node --check comic-studio/personalize.js
       - name: Verify authenticated APIs bypass old service-worker cache
         run: node comic-studio/tests/service-worker-cache.cjs
       - name: Verify responsive Production Desk and live-status layout
         run: node comic-studio/tests/production-desk.cjs
+      - name: Verify DeepSeek free character AI and deprecation safety
+        run: node comic-studio/tests/character-deepseek.cjs
