@@ -2,6 +2,10 @@ name: WORLD/TOON static quality gate
 
 on:
   workflow_dispatch:
+  pull_request:
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-static-check.yml'
   push:
     branches: [main]
     paths:
@@ -29,7 +33,7 @@ jobs:
           node --check comic-studio/personalize.js
       - name: Exercise one-click research-first task generation
         run: node comic-studio/tests/task-flow.cjs
-      - name: Test four-axis editorial scoring and filtering
+      - name: Test six-dimension editorial scoring and filtering
         run: node comic-studio/tests/rankings.cjs
       - name: Check Worker module syntax
         run: node --check --input-type=module < comic-studio/worker.js
