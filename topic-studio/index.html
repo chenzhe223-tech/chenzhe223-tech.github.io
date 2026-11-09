@@ -736,6 +736,11 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 #appNavigation .desktop-source-links .source-nav{width:100%;min-width:0}
 @media(max-width:760px){#appNavigation .desktop-tools-section{display:none!important}}
 @media(prefers-reduced-motion:reduce){#appNavigation .desktop-more-chevron{transition:none}}
+
+/* Keep secondary Skill help at the moment of creation, not in global page hierarchy. */
+.workflow-skill-link{display:inline-flex;align-items:center;margin-top:10px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;line-height:1.5}
+.workflow-skill-link:hover{color:#204eaa}
+.workflow-skill-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -751,10 +756,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 <div class="content">
 <div class="mobile-app-cover" id="mobileAppCover"><div class="mobile-cover-head"><span>DAVYLAB / CONTENT STUDIO</span><strong>01 — EDITORIAL</strong></div><div class="mobile-cover-title">从灵感<br>到好文章<span class="mobile-cover-dot">.</span></div><div class="mobile-cover-bottom"><span>发现热点 · 收集选题 · 管理发布</span><span>BY DAVYLAB</span></div></div>
 <section class="hero"><div><div class="eyebrow">WECHAT CONTENT STUDIO · V1.0</div><h1>别让好选题，<br>只停留在脑子里。</h1><p>从 AI 热点和开源项目里找灵感，也把你每天做产品、遇到问题、学到的新方法收进来。先选一个值得讲的角度，再慢慢把它做成内容。</p></div><div class="heroactions"><button class="btn primary" id="newHero">＋ 记下一个念头</button><button class="btn" id="refreshRadar">↻ 刷新今日素材</button></div></section>
-<a href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener" aria-label="查看 DAVYLAB AI Instruction Standard Skill" style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 20px;padding:17px 20px;border:1px solid #dce4f2;border-radius:15px;background:linear-gradient(110deg,#eef3ff,#fff 72%);text-decoration:none;box-shadow:0 5px 18px #182a4108">
- <span style="display:flex;align-items:center;gap:13px;min-width:0"><span style="width:38px;height:38px;flex:0 0 38px;border-radius:12px;background:#e0e9ff;color:#315fc9;display:grid;place-items:center;font-size:20px;font-weight:900">✦</span><span><strong style="display:block;font-size:13px;color:#1b2e4a">DAVYLAB · AI 指令理解与完整交付 Skill</strong><span style="display:block;margin-top:3px;font-size:11px;color:#68778a">从理解选题意图、拆解创作任务，到文章、配图及发布材料逐项交付，避免遗漏。</span></span></span>
- <span style="font-size:11px;font-weight:800;color:#3769df;white-space:nowrap">查看 Skill 使用规范 ↗</span>
-</a>
+
 <div class="stats">
  <div class="stat"><div class="statlabel">今日热点素材</div><div class="statnum" id="statNews">—</div><div class="statfoot" id="statNewsFoot">正在读取 Davy Radar</div></div>
  <div class="stat"><div class="statlabel">可参考开源 Skill</div><div class="statnum" id="statSkills">—</div><div class="statfoot">公开 GitHub 仓库，不等于实际使用量</div></div>
@@ -960,7 +962,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 <section class="section" id="section-workflow"><div class="panel"><div class="panelhead"><div><h2>从灵感到公众号草稿</h2><p>有检查点的工作流，不是点一下就自动发文。每一步都保留真实状态。</p></div></div><div class="methodgrid">
  <div class="method"><div class="num">01 / DISCOVER</div><h3>发现与收集</h3><p>查看 Davy Radar 的真实来源，或记录产品开发中的问题。新闻内容先回到原文核实。</p></div>
  <div class="method"><div class="num">02 / SELECT</div><h3>判断值不值得写</h3><p>按读者价值、时效、实操性、差异化和品牌契合度评分。分数只是辅助，不是爆款预测。</p></div>
- <div class="method"><div class="num">03 / CREATE</div><h3>和 ChatGPT 一起写</h3><p>生成标题、结构、正文和素材清单。凡涉及事实的数据要核查并留下来源。</p></div>
+ <div class="method"><div class="num">03 / CREATE</div><h3>和 ChatGPT 一起写</h3><p>生成标题、结构、正文和素材清单。凡涉及事实的数据要核查并留下来源。</p><a class="workflow-skill-link" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener noreferrer">查看创作交付 Skill 使用规范 ↗</a></div>
  <div class="method"><div class="num">04 / REVIEW</div><h3>准备交给 WorkBuddy</h3><p>整理文章或贴图素材包。WorkBuddy 保存草稿并检查手机预览；缺图、错字或排版异常时停止。</p></div>
  <div class="method"><div class="num">05 / PUBLISH</div><h3>你本人决定发布</h3><p>后台草稿、手机预览和正式发表是三个不同状态。最终发布仍由你本人确认。</p></div>
  <div class="method"><div class="num">06 / LEARN</div><h3>记录反馈</h3><p>发布后记录阅读、点赞、在看、转发和真实留言，用结果调整后续选题。</p></div>
