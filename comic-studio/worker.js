@@ -23,7 +23,22 @@ const failure=(message,status=400)=>Response.json({error:message},{status,header
 function textDecode(s){return String(s||'').replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]*>/g,'').replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&#(\d+);/g,(_,c)=>String.fromCodePoint(Number(c))).trim();}
 const tag=(body,name)=>{let m=body.match(new RegExp('<'+name+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/'+name+'>','i'));return m?textDecode(m[1]):''};
 function safeNewsImage(v){try{const x=textDecode(v),u=new URL(x);return u.protocol==='https:'&&u.hostname.includes('.')&&!/\.(?:svg|gif)(?:$|\?)/i.test(u.pathname)?u.href:''}catch{return ''}}
-function extractRSSImage(x){for(const t of x.match(/<(?:media:thumbnail|media:content|enclosure)\b[^>]*>/gi)||[]){if(/\btype\s*=\s*["'](?!image\/)[^"']+["']/i.test(t))continue;const w=+(t.match(/\bwidth\s*=\s*["'](\d+)/i)?.[1]||0),h=+(t.match(/\bheight\s*=\s*["'](\d+)/i)?.[1]||0);if((w&&w<180)||(h&&h<110))continue;const y=safeNewsImage(t.match(/\burl\s*=\s*["']([^"']+)/i)?.[1]);if(y)return y;}const html=x.match(/<(?:description|content:encoded)\b[^>]*>([\s\S]*?)<\/(?:description|content:encoded)>/i)?.[1]||'';return safeNewsImage(html.match(/<img\b[^>]*?\b(?:src|data-src)\s*=\s*["']([^"']+)/i)?.[1])}
+function extractRSSImage(x){
+ for(const t of x.match(/<(?:media:thumbnail|media:content|enclosure)\b[^>]*>/gi)||[]){
+  if(/\btype\s*=\s*["'](?!image\/)[^"']+["']/i.test(t))continue;
+  const w=+(t.match(/\bwidth\s*=\s*["'](\d+)/i)?.[1]||0),h=+(t.match(/\bheight\s*=\s*["'](\d+)/i)?.[1]||0);
+  if((w&&w<180)||(h&&h<110))continue;
+  const image=safeNewsImage(t.match(/\burl\s*=\s*["']([^"']+)/i)?.[1]);if(image)return image;
+ }
+ // WordPress news feeds often provide a text-only <description> followed by full,
+ // illustrated <content:encoded>. Inspect the full content first.
+ const chunks=[x.match(/<content:encoded\b[^>]*>([\s\S]*?)<\/content:encoded>/i)?.[1],x.match(/<description\b[^>]*>([\s\S]*?)<\/description>/i)?.[1]].filter(Boolean);
+ for(const chunk of chunks){const html=chunk.replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"');
+  const img=html.match(/<img\b[^>]*?\b(?:src|data-src)\s*=\s*["']([^"']+)["']/i)?.[1];
+  const image=safeNewsImage(img);if(image)return image;
+ }
+ return '';
+}
 function parseRSS(xml,category){let parts=xml.match(/<item(?:\s[^>]*)?>[\s\S]*?<\/item>/gi)||[];return parts.slice(0,30).map(x=>{let rawTitle=tag(x,'title');let pub=tag(x,'pubDate');let published=Date.parse(pub);let source=tag(x,'source')||'Google News';let raw=tag(x,'link');let title=rawTitle.replace(/\s+-\s+[^-]+$/,'').trim();return {title,source,url:raw,published:published?new Date(published).toISOString():null,category,language:'global',provider:'Google News RSS',image:extractRSSImage(x),imageSource:'媒体 RSS 图片',summary:source==='Google News'?'':tag(x,'description').slice(0,170)}}).filter(x=>x.title.length>=8&&x.url.startsWith('https://'));}
 async function collectRSS(category){let q=QUERIES[category];let endpoint='https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:7d')+'&hl=en-US&gl=US&ceid=US:en';let r=await fetch(endpoint,{headers:{'user-agent':'WorldToonEditorial/2.0 (+https://worldtoon.chenzhe223.workers.dev)'}});if(!r.ok)throw Error('RSS '+r.status);let xml=await r.text();if(!xml.includes('<rss')&&!xml.includes('<item'))throw Error('RSS format unavailable');return parseRSS(xml,category)}
 const RSS_FEEDS={"国际政治":["https://feeds.bbci.co.uk/news/world/rss.xml","https://www.theguardian.com/world/rss"],"文化":["https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml"],"娱乐":["https://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml","https://variety.com/feed/"],"体育":["https://feeds.bbci.co.uk/sport/rss.xml","https://www.espn.com/espn/rss/news"],"人物":["https://feeds.bbci.co.uk/news/world/rss.xml"],"旅行":["https://www.theguardian.com/travel/rss"],"AI 科技":["https://techcrunch.com/category/artificial-intelligence/feed/","https://feeds.bbci.co.uk/news/technology/rss.xml"],"机器人":["https://www.therobotreport.com/feed/","https://feeds.bbci.co.uk/news/technology/rss.xml"],"商业财经":["https://feeds.bbci.co.uk/news/business/rss.xml"],"科学":["https://www.sciencedaily.com/rss/top/science.xml","https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"],"环境":["https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"],"健康":["https://feeds.bbci.co.uk/news/health/rss.xml"],"航空航天":["https://www.nasa.gov/feed/","https://feeds.bbci.co.uk/news/science_and_environment/rss.xml"]};
