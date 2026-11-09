@@ -93,4 +93,28 @@ assert(html.includes(".smart-autotoggle{grid-column:1/-1"), "Auto assign switch 
 assert(html.includes("#section-calendar .smart-schedule-stats{display:grid!important;grid-template-columns:repeat(3"), "Calendar stats must have three equal columns on mobile");
 assert(calendarScript.includes("一三五日"), "Missing compact poster schedule statistic");
 
+
+// Desktop navigation disclosure: clicking More must expand/collapse resource links.
+assert(ids.has("desktopMoreToggle") && ids.has("desktopSources"), "Desktop More controls are missing");
+assert(!html.includes('class="mobile-more"'), "Legacy inert desktop More button was not removed");
+const desktopMoreScript = scripts.find(code=>code.includes("desktopMoreToggle")&&code.includes("desktopSources"));
+assert(desktopMoreScript, "Desktop More interaction script is missing");
+const desktopBtn = {
+ attrs:{"aria-expanded":"false"},events:{},classes:new Set(),
+ getAttribute(k){return this.attrs[k]},
+ setAttribute(k,v){this.attrs[k]=v},
+ addEventListener(k,v){this.events[k]=v},
+ classList:{toggle(){}}
+};
+const desktopSources = {hidden:true};
+vm.runInNewContext(desktopMoreScript,{document:{getElementById(id){return id==="desktopMoreToggle"?desktopBtn:id==="desktopSources"?desktopSources:null;}}});
+assert.equal(desktopSources.hidden,true, "Desktop resources must start collapsed");
+desktopBtn.events.click();
+assert.equal(desktopBtn.attrs["aria-expanded"],"true", "Desktop More did not open");
+assert.equal(desktopSources.hidden,false, "Desktop resources are not shown");
+desktopBtn.events.click();
+assert.equal(desktopBtn.attrs["aria-expanded"],"false", "Desktop More did not close");
+assert.equal(desktopSources.hidden,true, "Desktop resources did not hide");
+assert(html.includes('id="mobileMoreToggle"'),"Mobile More must remain available");
+
 process.stdout.write("PASS: JS syntax, DOM references, 3 opportunity cards, XSS escape, filter, save, weekly plan, empty state; Radar "+radar.report_date+"\n");
