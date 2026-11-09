@@ -25,6 +25,8 @@ jobs:
           node --check comic-studio/extension.js
           node --check comic-studio/briefing.js
           node --check comic-studio/personalize.js
+      - name: Exercise one-click research-first task generation
+        run: node comic-studio/tests/task-flow.cjs
       - name: Check Worker module syntax
         run: node --check --input-type=module < comic-studio/worker.js
       - name: Check dual-track invariants
