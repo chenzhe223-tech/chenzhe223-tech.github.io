@@ -19,7 +19,7 @@ function setup(date){
  vm.createContext(ctx);
  vm.runInContext(script.replace('export default {','globalThis.__worker = {'),ctx,{filename:'worker.js'});
  const DB={prepare:()=>({bind:(key)=>({first:async()=>{const n=counters.get(key)||0;if(n>= (key.includes(':characters')? (key.startsWith('__worldtoon_global__')?5:2):2))return null;counters.set(key,n+1);return {uses:n+1};}})})};
- const AI={run:async(model,body)=>{calls.push(model);return {response:JSON.stringify({characters:[
+ const AI={run:async(model,body)=>{calls.push(model);return {response:'<think>这里出现无关的 {"fake":true} 推理草稿</think>\n'+JSON.stringify({characters:[
  {name:'沙丘钟表师',type:'虚构角色',description:'圆框眼镜与银白卷发',costume:'苔绿风衣',colors:'#455b45 / #e7ccad',traits:'三角鼻尖、左眼单片镜、铜制怀表',personality:'谨慎且幽默'},
  {name:'小风筝',type:'虚构角色',description:'橙色短发和雀斑',costume:'暖黄工作背心',colors:'暖黄和橘红',traits:'翘起短发、右脸雀斑、旧机械包',personality:'好奇且大胆'}]})}}};
  return {worker:ctx.__worker,calls,env:{AI,DB,AI_ENABLED:'false'}};
