@@ -43,17 +43,20 @@ function storyboard(p){
   const scene=clean(existing.scene)||beat[1].replace('主题',topic);
   const caption=clean(existing.caption)||('第 '+(i+1)+' 幕 · '+beat[0]);
   const dialogue=clean(existing.dialogue)||beat[2];
-  const prompt=clean(existing.prompt)||[
+  const previousPrompt=clean(existing.prompt)
+    .replace(/WorldToon museum references:.*$/,'')
+    .replace(/Visual references:.*?(?=Reserve clean bubble space)/,'').trim();
+  const promptBase=previousPrompt||[
    'ORIGINAL EDITORIAL COMIC | PAGE '+String(i+1).padStart(2,'0'),
    'Inspired by the public topic: '+topic+'. This is a fictional allegory, not a factual depiction.',
    'Shot: '+shot+'. Scene: '+scene,
    'Fixed character bible (same appearance in every panel): '+bible,
    'Style: '+style+'; sophisticated magazine illustration, warm paper palette, clean linework, cinematic composition.',
-   'Visual references: '+visualNote,
    'Reserve clean bubble space away from characters faces. Do not add AI-generated text; dialogue is lettered separately.',
    'No realistic likeness of real people, defamatory accusations, unlicensed logos or copied artwork.',
    'Portrait canvas 1080x1440.'
   ].join('\n');
+  const prompt=promptBase+'\nWorldToon museum references: '+visualNote;
   return {title:clean(existing.title)&&!/^第 \d+ 格$/.test(existing.title)?existing.title:beat[0],
    scene,caption,dialogue,prompt,shot,bubble_space:i%2?'top-right':'top-left',image:existing.image||'',id:existing.id};
  });
@@ -111,7 +114,7 @@ async function generateMissing(p){
  for(const i of missing){
   const panel=p.panels[i];if(!panel.scene?.trim())throw Error('第 '+(i+1)+' 格缺少画面描述；请先完成分镜');
   try{
-   const out=await wtCallAI('/api/ai/image',{title:p.title,scene:panel.scene,visualNotes:panel.prompt||'',characters:cast(p),references:[]});
+   const out=await wtCallAI('/api/ai/image',{title:p.title,scene:panel.scene,visualNotes:storyboard(p)[i].prompt,characters:cast(p),references:[]});
    if(!out.image)throw Error('图片接口未返回结果');
    const bin=atob(out.image),bytes=new Uint8Array(bin.length);
    for(let j=0;j<bin.length;j++)bytes[j]=bin.charCodeAt(j);
