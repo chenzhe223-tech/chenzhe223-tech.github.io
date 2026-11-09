@@ -1,6 +1,6 @@
 /* WORLD/TOON v2.5 · GitHub comic archive adapter. No model calls and no auto publication. */
 'use strict';
-const WT_ARCHIVE_REPO='chenzhe223-tech/davylab-worldtoon-comics';
+const WT_ARCHIVE_REPO='chenzhe223-tech/worldtoon';
 const WT_ARCHIVE_URL='https://github.com/'+WT_ARCHIVE_REPO;
 let wtArchiveSnapshot=null,wtArchiveError='',wtArchiveBusy=false,wtArchiveLastSync=0;
 const wtArchiveHtml=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
