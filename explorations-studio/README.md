@@ -112,3 +112,28 @@ P4: 图谱扩充：来源事实、素材版本、衍生图、专题、品牌规�
 - WorkBuddy 必须在 ChatGPT 完成 9 个独立 PNG，提供 ZIP、原文核验清单、文案与 QA 后才能进入上传和发布。缺少真实回执不得显示已发布。
 - 不直接写入微信，不修改每日 AI Radar 数据。
 - 自动任务领取、ChatGPT 成品文件回传数据库及 WorkBuddy 自动接单发表的 webhook/连接授权目前尚未完成端到端验证，属于下一阶段技术工作。
+
+
+## 2026-11-09 | GitHub 成品 → Studio 成果与历史档案同步 V0.5
+
+Studio 用户点击「成果工作台」或「历史档案室」中的「刷新 · 同步 GitHub」，将指定**私有仓库** chenzhe223-tech/workbuddy-workspace 的 ai-explorations/releases/index.json 中通过 QA 的正式 GitHub Releases，导入 Supabase 新表 public.explorations_deliveries。
+
+- **Studio 已发表**：ChatGPT 已完成九图且 GitHub 正式 Release 通过验收；这是 Studio 内作品发表/收录，不代表公众号实际发表。
+- **微信公众号状态**：独立存储为 wechat_status，不由 GitHub 发布成功推断。
+- **同步内容**：期号、版本、7 条新闻及原文、5 个 Skill 及原址、九图文件名/尺寸/SHA、GitHub Release ZIP 下载地址，带授权的单图预览。
+- **档案**：每期+修订版本独立保存；重复点击同步不会生成重复记录。历史档案查询与成果列表共享同一个云端数据来源。
+- **权限**：Supabase RLS 用户隔离；独立表 explorations_sync_owners 作为受信账号白名单；客户端**没有 GitHub 私有仓库 token**，后端逐次校验用户有效 Supabase session。
+- **验收**：服务器先检查 GitHub Release 已正式发布且包含 ZIP，下载实际 Release ZIP 验证 9 个 PNG 与 hash，以及 manifest/validated-manifest.json 中的7+5、QA。未经过 GitHub 验收的草稿绝不导入。
+- **性能**：同一期/版本只验证和导入一次，后续刷新跳过已有版本，避免每次重复下载大 ZIP。
+- **安全**：不向公开 GitHub Pages 复制私有素材，只有登录授权账户才能通过 Edge Function 读取。
+- **生产 Edge Function**：explorations-github-sync，对应源码 backend/explorations-github-sync/index.ts。
+
+### 初次连接私有 GitHub 仓库
+
+在 Supabase 项目 qjyqaydfezbpeimpvlcb 的 **Edge Function Secrets** 内，新增一个仅授予 chenzhe223-tech/workbuddy-workspace 仓库 Contents: Read 和 Metadata: Read（以及 Releases 读取所需）的 fine-grained GitHub token，密钥名 **EXPLORATIONS_GITHUB_TOKEN**。必须只在 Supabase 后台填写，禁止粘贴到聊天、公开源码、浏览器代码或 GitHub 仓库。
+
+没配凭证时，点刷新会明确提示「私有仓库同步尚需配置服务端 GitHub 访问凭证」，不会显示伪造的成功结果。
+
+### 核验边界
+
+代码已提交，Edge Function ACTIVE，网页和 JS 静态检查可验证。当前私有 GitHub 仓库在本次检查时没有 ready_for_workbuddy 的有效 Release，历史云端同步表为空。由于尚无用户登录测试会话，**刷新 → 私有 GitHub → 成果落库**全链路不能提前标为通过；需在配置 GitHub 只读凭证及首个完整九图 Release 后运行端到端验收。
