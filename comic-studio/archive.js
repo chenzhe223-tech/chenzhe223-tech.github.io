@@ -3,7 +3,7 @@
 const WT_ARCHIVE_REPO='chenzhe223-tech/worldtoon';
 const WT_ARCHIVE_URL='https://github.com/'+WT_ARCHIVE_REPO;
 const WT_ARCHIVE_CLIENT_REV='2.7.1';
-let wtArchiveSnapshot=null,wtArchiveError='',wtArchiveBusy=false,wtArchiveLastSync=0;
+let wtArchiveSnapshot=null,wtArchiveError='',wtArchiveBusy=false,wtArchiveLastSync=0,wtSharedStandalone=null;
 const wtArchiveHtml=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const wtArchiveAuth=()=>typeof wtSession!=='undefined'&&wtSession?.access_token||'';
 async function wtArchiveApi(path,options={}){
@@ -27,7 +27,7 @@ function wtArchiveSection(){const items=(wtArchiveSnapshot?.library?.items||[]).
 const WT_SHARED_PUBLICATION_SOURCE='https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/topic-studio/data/published-articles.json';
 function wtPublicationTitle(v){return String(v||'').normalize('NFKC').toLowerCase().replace(/[：:]\s*漫画改编\s*$/,'').replace(/[\s\p{P}\p{S}]/gu,'')}
 function wtPublicationMatches(p){
- const shared=wtArchiveSnapshot?.shared_publications,items=Array.isArray(shared?.articles)?shared.articles:[];
+ const shared=wtArchiveSnapshot?.shared_publications||wtSharedStandalone,items=Array.isArray(shared?.articles)?shared.articles:[];
  const tid=String(p?.handoff?.taskId||p?.handoff?.repoTaskId||'');
  const row=(wtArchiveSnapshot?.library?.items||[]).find(x=>x.task_id===tid);
  const linked=tid?items.filter(x=>x.task_id===tid):[];
@@ -65,7 +65,7 @@ function wtSharedHandoffPanel(p){
   '<details class="wt-shared-manual"><summary>备用：手工补录公众号链接</summary><div class="wf-form"><div class="field"><label for="wfReceipt">仅在共享档案无法自动关联时使用</label><input id="wfReceipt" type="url" placeholder="https://mp.weixin.qq.com/s/..." value="'+wtArchiveHtml(p?.handoff?.receipt||'')+'"></div><button class="button" data-wf="receipt">记录人工回执</button></div><p class="minor">手工录入只保存本地线索，不会伪造 WorkBuddy 的已发表回执或改变 GitHub 正式状态。</p></details></section>';
 }
 function wtSharedDeskCard(){
- const shared=wtArchiveSnapshot?.shared_publications;
+ const shared=wtArchiveSnapshot?.shared_publications||wtSharedStandalone;
  const total=shared?.status==='synced'?String(shared.total):'—';
  const items=Array.isArray(shared?.articles)?shared.articles:[];
  const linked=items.filter(a=>a.task_id&&(wtArchiveSnapshot?.library?.items||[]).some(t=>t.task_id===a.task_id));
@@ -114,9 +114,9 @@ async function wtArchiveRefresh({silent=false}={}){if(wtArchiveBusy)return;wtArc
  const result=await wtArchiveApi('sync');if(result.library?.schema!=='davylab.worldtoon.library.v1'||result.queue?.schema!=='davylab.worldtoon.workbuddy-queue.v1')throw Error('仓库目录格式不兼容');
  const a=result.library.items||[];const seenTask=new Set(),seenStory=new Set();const clean=[];
  for(const x of a){if(!x||!x.task_id||seenTask.has(x.task_id)||seenStory.has(x.dedupe_key))continue;seenTask.add(x.task_id);seenStory.add(x.dedupe_key);clean.push(x)}
- wtArchiveSnapshot={library:{...result.library,items:clean},queue:result.queue,shared_publications:result.shared_publications||{status:'unavailable',articles:[],total:null},repo:result.repo,mode:result.mode||'unknown',visibility:result.visibility||'unknown',configured:result.configured===true};wtArchiveLastSync=Date.now();
+ wtSharedStandalone=result.shared_publications||wtSharedStandalone;wtArchiveSnapshot={library:{...result.library,items:clean},queue:result.queue,shared_publications:result.shared_publications||wtSharedStandalone||{status:'unavailable',articles:[],total:null},repo:result.repo,mode:result.mode||'unknown',visibility:result.visibility||'unknown',configured:result.configured===true};wtArchiveLastSync=Date.now();
  if(!silent&&typeof notify==='function')notify(`仓库同步成功：${clean.length} 条任务、${result.queue.items?.length||0} 条待发表`);
- }catch(err){wtArchiveSnapshot=null;wtArchiveLastSync=0;wtArchiveError=err.name==='AbortError'?'仓库访问超时':String(err.message||err);if(!silent&&typeof notify==='function')notify(wtArchiveError)}finally{wtArchiveBusy=false;if(['archive','library','handoff'].includes(ui.route))render()}}
+ }catch(err){wtArchiveSnapshot=null;wtArchiveLastSync=0;wtArchiveError=err.name==='AbortError'?'仓库访问超时':String(err.message||err);try{wtSharedStandalone=await wtArchiveApi('publications')}catch{wtSharedStandalone={status:'unavailable',articles:[],total:null}}if(!silent&&typeof notify==='function')notify(wtArchiveError)}finally{wtArchiveBusy=false;if(['archive','library','handoff'].includes(ui.route))render()}}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+decodeURIComponent(u.pathname).replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
 async function wtArchiveKey(p){const sources=validSources(p).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(sources)].sort().join('\n');if(!normalized)normalized=String(p.title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized));return Array.from(new Uint8Array(buf),x=>x.toString(16).padStart(2,'0')).join('')}
 async function wtArchivePushTask(p,o,prompt){if(!wtArchiveAuth())throw Error('未登录：任务 ZIP 已保存在本机，但尚未自动派单到 GitHub');const key=await wtArchiveKey(p);if(!/^[a-f0-9]{64}$/.test(key))throw Error('去重指纹生成失败');
