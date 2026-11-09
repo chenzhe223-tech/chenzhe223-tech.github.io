@@ -1,0 +1,47 @@
+name: WORLD/TOON static quality gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-static-check.yml'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check browser scripts
+        run: |
+          node --check comic-studio/app.js
+          node --check comic-studio/archive.js
+          node --check comic-studio/extension.js
+          node --check comic-studio/briefing.js
+          node --check comic-studio/personalize.js
+      - name: Check Worker module syntax
+        run: node --check --input-type=module < comic-studio/worker.js
+      - name: Check dual-track invariants
+        shell: python
+        run: |
+          from pathlib import Path
+          root=Path('comic-studio')
+          source=(root/'worker.js').read_text('utf8')
+          archive=(root/'archive.js').read_text('utf8')
+          app=(root/'app.js').read_text('utf8')
+          html=(root/'index.html').read_text('utf8')
+          assert "chenzhe223-tech/worldtoon" in source and "chenzhe223-tech/worldtoon" in archive
+          assert "public_readonly" in source
+          assert "meta.private!==true" in source
+          assert "wtArchivePublicIndex" in source
+          assert "ready_for_workbuddy" in archive
+          assert "mark-published':notify(" in app, "Never allow local publication to replace repo receipts"
+          assert 'archive.js' in html and 'data-route="handoff"' in html
+          assert 'davylab-worldtoon-comics' not in (source+archive+app)
+          print('WORLD/TOON key production invariants passed')
