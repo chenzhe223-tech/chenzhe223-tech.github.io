@@ -1,5 +1,5 @@
 // WORLD/TOON 2.0 / By DAVYLAB — editorial news wire + restricted AI + GitHub static assets
-const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/e5c1dff6a0949dc759fc35c898e970a8fbef6d4e/comic-studio/';
+const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/92608fd7576c02b0e4274e69014b98077eb93950/comic-studio/';
 const SUPABASE_URL='https://qjyqaydfezbpeimpvlcb.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jtWLY4vYz2-VklNLoJqxVw_lMdhtfgG'; // replaced at deployment, public (not service role)
 const CONTENT={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
@@ -77,6 +77,35 @@ async function enrichSourceImages(items){
   }
  }catch{}}));
 }
+
+// DAVYLAB AI Radar: read-only bridge to the official published daily JSON.
+// The original Radar publishing automation and website remain independent.
+const RADAR_DATA='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/radar/data/';
+async function radarGetJson(file,ttl=180){
+ const response=await fetch(RADAR_DATA+file,{headers:{accept:'application/json'},signal:AbortSignal.timeout(9500),cf:{cacheEverything:true,cacheTtl:ttl}});
+ if(!response.ok)throw Error('上游简报数据源返回 '+response.status);
+ const json=await response.json();if(!json||typeof json!=='object')throw Error('上游简报格式异常');return json;
+}
+async function aiBriefing(url){
+ try{
+  if(url.pathname==='/api/ai-briefing/history'){
+   const h=await radarGetJson('history.json',600);
+   const days=(h.days||[]).map(x=>String(x).replace(/\.json$/,'')).filter(x=>/^\d{4}-\d{2}-\d{2}$/.test(x)).sort().reverse().slice(0,100);
+   return Response.json({days,source:'DAVYLAB AI Radar'},{headers:{'cache-control':'public,max-age=600','x-content-type-options':'nosniff'}});
+  }
+  const date=url.searchParams.get('date')||'latest';
+  if(date!=='latest'&&!/^\d{4}-\d{2}-\d{2}$/.test(date))return failure('日期格式不正确');
+  const raw=await radarGetJson(date==='latest'?'latest.json':('archive/'+date+'.json'),date==='latest'?120:3600);
+  if(!raw.report_date||!Array.isArray(raw.news)||!Array.isArray(raw.china_ai_news))throw Error('简报必要字段缺失');
+  const str=(v,max=1000)=>String(v||'').slice(0,max);
+  const https=(v)=>typeof v==='string'&&/^https:\/\//i.test(v)?v.slice(0,1900):'';
+  const story=(o)=>({title:str(o.title_zh||o.title,260),summary:str(o.summary_zh||o.summary,600),why:str(o.why_it_matters_zh||'',430),url:https(o.url),source:str(o.source,130),published:str(o.published,60),image:https(o.image_url),imageAlt:str(o.image_alt||o.title_zh||o.title,260),imageStatus:str(o.image_match_status||'',55),imageCredit:str(o.image_credit||'',120)});
+  const skill=(o)=>({name:str(o.name,170),description:str(o.description_zh||o.description,400),url:https(o.url),stars:typeof o.stars_total==='number'?o.stars_total:(typeof o.stars==='number'?o.stars:null),license:str(o.license_name||o.license,130)});
+  const editorial=raw.editorial||{};
+  return Response.json({date:raw.report_date,generatedAt:str(raw.generated_at,80),status:str(raw.status,35),source:'DAVYLAB AI Radar',sourceUrl:'https://chenzhe223-tech.github.io/radar/daily/',top5:(raw.top5||[]).slice(0,5).map(story),global:raw.news.slice(0,40).map(story),china:raw.china_ai_news.slice(0,40).map(story),skills:(raw.skills||[]).slice(0,12).map(skill),editorial:{core:str(editorial.core_zh,2000),trend:str(editorial.trend_zh,2000),question:str(editorial.next_question_zh,1500)},warning:raw.status==='ok'?'':'上游简报状态异常，内容仅供参考',qualityStatus:str(raw.quality_gate?.status||'',40)},{headers:{'cache-control':'public,max-age=120','x-content-type-options':'nosniff'}});
+ }catch(err){return Response.json({error:'AI 简报暂时无法读取：'+String(err?.message||err).slice(0,160)},{status:503,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
+}
+
 async function news(url){
  const cat=url.searchParams.get('category')||'全部';if(cat!=='全部'&&!QUERIES[cat])return failure('无效新闻分类');
  const limit=Math.min(60,Math.max(5,Number(url.searchParams.get('limit'))||24));
@@ -107,10 +136,11 @@ try{
  if(!out?.image)return failure('模型未返回图片',502);return Response.json({image:out.image,model:'flux-2-klein-4b',draft:true},{headers:RESULT_HEADERS});
 }catch(err){return failure('生成服务暂不可用：'+aiError(err),503)}
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.1.1',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true'},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.2.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true'},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true'},{headers:RESULT_HEADERS});
+ if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|extension\.js|styles\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|extension\.js|briefing\.js|styles\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
  try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.1','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}}
 };
