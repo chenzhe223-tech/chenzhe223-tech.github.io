@@ -1,0 +1,51 @@
+name: WORLD/TOON live Comic Engine smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-live-comic.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify-live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify live Worker endpoints and four-skill script
+        shell: python
+        run: |
+          import json, urllib.request, urllib.error, time
+          base='https://worldtoon.chenzhe223.workers.dev'
+          def read(path,timeout=22):
+              with urllib.request.urlopen(urllib.request.Request(base+path,headers={'User-Agent':'WorldToon-Live-QA/1.0','Cache-Control':'no-cache'}),timeout=timeout) as resp:
+                  return resp.status,resp.read(1600000)
+          def expect_json(path):
+              status,body=read(path)
+              assert status==200, (path,status,body[:200])
+              return json.loads(body)
+          h=expect_json('/health')
+          assert h.get('ok') is True,h
+          assert h.get('features',{}).get('script') is False,h
+          assert h.get('features',{}).get('image') is False,h
+          print('health OK; AI direct generation remains disabled')
+          status,src=read('/comic-engine.js')
+          assert status==200 and b'wtComicEngine' in src and b'TT_AutoManga' in src
+          print('four-skill workshop JavaScript is reachable')
+          result=expect_json('/api/comic/discover?source=hackernews&limit=8')
+          assert isinstance(result.get('items'),list) and result['items'],result
+          assert all(v.get('source_id')=='hackernews' and v.get('verification_status')=='pending_research' for v in result['items'])
+          assert all(v.get('url','').startswith('https://') for v in result['items'])
+          assert len(result['items'])<=8
+          print('Hacker News source verified online:',len(result['items']),'candidates')
+          try:
+              read('/api/comic/discover?source=invalid')
+          except urllib.error.HTTPError as ex:
+              assert ex.code==400
+              print('unknown-source validation OK')
+          else:raise AssertionError('invalid discovery source must not be accepted')
+          print('WORLD/TOON runtime source discovery and four-skill JS smoke passed.')
