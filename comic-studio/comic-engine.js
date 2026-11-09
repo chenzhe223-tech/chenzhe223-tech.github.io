@@ -121,6 +121,39 @@ async function generateMissing(p){
  }
  render();if(ok)notify('生成 '+ok+' 张画格，已保存草稿；请继续人工 QA');
 }
+async function inspectNine(p){
+ const errors=[],warnings=[],panels=[];
+ const all=Array.isArray(p.panels)?p.panels:[];
+ if(all.length!==9)errors.push('漫画应恰好九格');
+ for(let i=0;i<9;i++){
+  const panel=all[i]||{};
+  if(!panel.image){errors.push('第 '+(i+1)+' 格尚未有真实图片');panels.push({index:i+1,ok:false});continue}
+  try{
+   const blob=await getImageBlob(panel.image),bitmap=await createImageBitmap(blob);
+   const width=bitmap.width,height=bitmap.height;bitmap.close?.();
+   if(width<720||height<900)warnings.push('第 '+(i+1)+' 格尺寸偏低：'+width+'×'+height);
+   if(!panel.scene?.trim())warnings.push('第 '+(i+1)+' 格未记录完整场景');
+   if(!panel.dialogue?.trim()&&!panel.caption?.trim())warnings.push('第 '+(i+1)+' 格缺少可读对白或旁白');
+   panels.push({index:i+1,ok:true,width,height,bytes:blob.size,format:blob.type});
+  }catch(err){errors.push('第 '+(i+1)+' 格文件无法解码：'+String(err.message||err).slice(0,80));panels.push({index:i+1,ok:false})}
+ }
+ const sources=String(p.sourceURLs||'').split(/[\n,，]+/).map(x=>x.trim()).filter(Boolean);
+ if(sources.length&&!p.factNotes?.trim())warnings.push('尚未记录独立事实核验资料');
+ if(/待核验|未核验|pending/i.test(p.factNotes||''))warnings.push('事实标注仍为待核验');
+ if(['check_jurisdiction','unknown'].includes(p.rightsStatus||''))warnings.push('原著与译本或第三方素材权利仍待人工确认');
+ if((p.visualReferences||[]).some(r=>r.license!=='CC0'))errors.push('视觉参考库包含未确认 CC0 的馆藏');
+ const technical=errors.length===0?'technical_pass':'blocked';
+ return {schema:'davylab.worldtoon.comic-qa.v1',title:p.title,project_id:p.id,checked_at:new Date().toISOString(),
+  status:technical,author_approved:false,fact_checked:false,licensed_for_publication:false,
+  count:panels.filter(x=>x.ok).length,panels,errors,warnings,
+  notes:'自动检查只覆盖图片完整性、尺寸、基础内容与参考授权标记；无法替代事实、肖像、版权、中文错字与人物一致性人工审校。'};
+}
+async function exportQa(p){
+ const report=await inspectNine(p);
+ saveFile(new Blob([JSON.stringify(report,null,2)],{type:'application/json'}),'worldtoon-qa-'+p.id+'.json');
+ notify(report.errors.length?'九图预检发现 '+report.errors.length+' 项阻断，已下载报告':'九图文件技术预检通过，仍需完成人工与版权审核');
+}
+
 async function compose(p){
  const images=p.panels||[];
  if(images.length!==9||images.some(x=>!x.image))throw Error('九格均需先上传或生成真实图片；仅有分镜文字不能导出正式画格。');
@@ -154,7 +187,7 @@ function panel(p){
  '<div class="comic-engine-head"><div><h2>漫画制作引擎</h2><p class="minor">四 Skill 创作规则已接入；直接生成九格分镜、角色规范、逐格提示词，并可用现有画面合成 PNG。</p></div><span class="wt-chip">已完成画面 '+completed+'/9</span></div>'+
  '<div class="comic-skill-grid">'+rows+'</div>'+
  '<p class="minor">当前为浏览器原生制作能力；原版 Python/MCP 引擎及付费生图并未启用。剧本草稿不等于图片成品。</p>'+
- '<div class="buttons"><button type="button" class="button dark" data-comic="storyboard">生成九格分镜草稿</button><button type="button" class="button" data-comic="generate"'+(wtConfig?.aiEnabled&&wtSession?.access_token?'':' disabled title="需要模型权限与登录"')+'>续生成缺失画格</button><button type="button" class="button" data-comic="export">导出四 Skill 制作包</button><button type="button" class="button" data-comic="compose"'+(completed!==9?' disabled title="请先上传全部九格图片"':'')+'>九图排版导出</button></div></section>';
+ '<div class="buttons"><button type="button" class="button dark" data-comic="storyboard">生成九格分镜草稿</button><button type="button" class="button" data-comic="generate"'+(wtConfig?.aiEnabled&&wtSession?.access_token?'':' disabled title="需要模型权限与登录"')+'>续生成缺失画格</button><button type="button" class="button" data-comic="export">导出四 Skill 制作包</button><button type="button" class="button" data-comic="compose"'+(completed!==9?' disabled title="请先上传全部九格图片"':'')+'>九图排版导出</button><button type="button" class="button" data-comic="qa">九图质量预检</button></div></section>';
 }
 const previousStudio=studio;
 studio=function(){const p=selected();return previousStudio()+(p?panel(p):'')};
@@ -163,9 +196,9 @@ document.addEventListener('click',async ev=>{
  ev.preventDefault();ev.stopImmediatePropagation();
  const p=selected();if(!p)return;
  try{if(btn.dataset.comic==='storyboard')apply(p);else if(btn.dataset.comic==='export')exportProduction(p);
- else if(btn.dataset.comic==='compose')await compose(p);else if(btn.dataset.comic==='generate')await generateMissing(p);}
+ else if(btn.dataset.comic==='compose')await compose(p);else if(btn.dataset.comic==='generate')await generateMissing(p);else if(btn.dataset.comic==='qa')await exportQa(p);}
  catch(err){notify('漫画制作失败：'+String(err.message||err).slice(0,140))}
 },true);
-window.wtComicEngine={STEPS,BEATS,SHOTS,storyboard,cast,bundleEntries,refsForBundle};
+window.wtComicEngine={STEPS,BEATS,SHOTS,storyboard,cast,bundleEntries,refsForBundle,inspectNine};
 if(typeof render==='function'&&location.hash.startsWith('#/studio'))render();
 })();
