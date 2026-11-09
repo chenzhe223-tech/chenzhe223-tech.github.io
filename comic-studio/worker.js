@@ -215,6 +215,40 @@ async function wtArchivePublicIndex(path) {
  if(raw.length>900000)throw Error('仓库索引大小异常');
  return JSON.parse(raw);
 }
+// Shared public WeChat publication archive — one public JSON read per explicit Studio refresh.
+// It is external evidence, never a substitute for the private WorkBuddy receipt and QA.
+const WT_PUBLICATIONS_URL='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/topic-studio/data/published-articles.json';
+async function wtSharedPublications(){
+ try{
+  const r=await fetch(WT_PUBLICATIONS_URL,{headers:{accept:'application/json'},signal:AbortSignal.timeout(8500),cf:{cacheEverything:true,cacheTtl:60}});
+  if(!r.ok)throw Error('HTTP '+r.status);
+  const raw=await r.text();
+  if(raw.length>750000)throw Error('共享归档超出安全大小');
+  const data=JSON.parse(raw);
+  if(data?.schema_version!==1||!Array.isArray(data.articles)||data.articles.length>700)throw Error('共享档案格式不兼容');
+  const seen=new Set(),articles=[];
+  for(const a of data.articles){
+   const url=String(a?.url||'').trim();let u;
+   try{u=new URL(url)}catch{continue}
+   if(u.protocol!=='https:'||u.hostname!=='mp.weixin.qq.com'||!/^\\/s\\//.test(u.pathname))continue;
+   const id=String(a?.id||'').slice(0,100),key=u.pathname.replace(/\\/$/,'');
+   if(seen.has(key))continue;seen.add(key);
+   const taskId=String(a.worldtoon_task_id||a.worldtoonTaskId||a.task_id||'').slice(0,80);
+   articles.push({id,title:String(a.title||'').slice(0,230),url:u.href,
+    publishedAt:String(a.publishedAt||'').slice(0,35),format:String(a.format||'').slice(0,35),
+    column:String(a.column||'').slice(0,90),coverUrl:String(a.coverUrl||'').slice(0,400),
+    task_id:/^WT-[A-Za-z0-9-]{10,65}$/.test(taskId)?taskId:'',
+    revision:Number.isInteger(Number(a.worldtoon_revision))?Number(a.worldtoon_revision):null,
+    delivery_sha256:/^[0-9a-f]{64}$/i.test(String(a.worldtoon_delivery_sha256||''))?String(a.worldtoon_delivery_sha256).toLowerCase():'',
+    evidence_source:String(a.source||'').slice(0,100)});
+  }
+  return {status:'synced',source:'topic-studio/data/published-articles.json',
+   sync_method:String(data.sync_method||'').slice(0,80),
+   last_synced_at:String(data.last_synced_at||'').slice(0,50),
+   total:articles.length,articles:articles.slice(0,120)};
+ }catch(err){return {status:'unavailable',source:'topic-studio/data/published-articles.json',
+  error:String(err.message||err).slice(0,130),articles:[],total:null}}
+}
 function wtArchiveCheckCatalog(library,queue){
  if(library?.schema!=='davylab.worldtoon.library.v1'||queue?.schema!=='davylab.worldtoon.workbuddy-queue.v1'||!Array.isArray(library.items)||!Array.isArray(queue.items))throw Error('独立仓库目录协议不兼容');
  if(library.items.length>1500||queue.items.length>200)throw Error('仓库目录数据异常');
@@ -257,7 +291,8 @@ async function wtArchiveApi(request,env,url){
     mode='public_readonly';
    }
    wtArchiveCheckCatalog(library,queue);
-   return wtJson({repo:WT_REPO,visibility:meta.visibility,mode,configured:mode==='private_authenticated',library,queue,synced_at:new Date().toISOString()});
+   const shared_publications=await wtSharedPublications();
+   return wtJson({repo:WT_REPO,visibility:meta.visibility,mode,configured:mode==='private_authenticated',library,queue,shared_publications,synced_at:new Date().toISOString()});
   } catch(err){return wtJson({repo:WT_REPO,error:'漫画仓库同步失败：'+String(err.message||err).slice(0,160)},503)}
  }
  const auth=await wtArchiveAuth(request,env);
