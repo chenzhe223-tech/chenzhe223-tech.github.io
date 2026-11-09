@@ -310,3 +310,33 @@
  .comic-skill-grid{grid-template-columns:1fr}
  .comic-engine .buttons>.button{width:100%;text-align:center;justify-content:center}
 }
+
+
+/* WORLD/TOON evergreen books, history and CC0 art reference library */
+.heritage-visual-panel{margin-top:16px;border:1px solid #d9d3c7}
+.heritage-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.heritage-header h2{font-size:24px;margin:4px 0 8px}
+.heritage-header p{max-width:650px;line-height:1.6}
+.heritage-header>.wt-chip{white-space:nowrap}
+.heritage-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin:12px 0}
+.heritage-search input{min-height:43px;min-width:0;width:100%;border:1px solid #d4cfc5;background:#fffdf9;color:#27352e;border-radius:9px;padding:8px 12px}
+.heritage-presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:11px}
+.heritage-presets button{background:#f3f1e9;color:#515f52;border:1px solid #dad6cb;border-radius:8px;padding:7px 11px;font-size:12px;min-height:36px}
+.heritage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:14px 0}
+.heritage-art{border:1px solid #ddd8cc;border-radius:10px;overflow:hidden;background:#fbfaf6;min-width:0}
+.heritage-art-thumb{width:100%;aspect-ratio:4/3;background:#e9e7de;display:grid;place-items:center}
+.heritage-art-thumb img{width:100%;height:100%;object-fit:contain}
+.heritage-art-copy{padding:10px;display:flex;flex-direction:column;gap:5px;min-width:0}
+.heritage-art-copy strong{font-size:12px;line-height:1.4;overflow-wrap:anywhere}
+.heritage-art-copy .minor{font-size:11px;line-height:1.5}
+.heritage-art-copy .buttons{margin-top:6px;display:flex;gap:5px;flex-wrap:wrap}
+.heritage-art-copy .button{font-size:11px;padding:8px 9px}
+.heritage-license{font-size:10px;color:#37644c;font-weight:700}
+.heritage-pins{display:grid;gap:7px;margin:8px 0 12px}
+.heritage-pin{display:flex;align-items:center;gap:9px;padding:8px 10px;background:#f6f5ef;border:1px solid #e0ddd2;border-radius:8px;min-width:0}
+.heritage-pin-title{font-weight:650;font-size:12px;flex:1;overflow-wrap:anywhere;min-width:0}
+.heritage-pin .minor{font-size:10px}
+.heritage-pin .button{flex:none;padding:7px 10px;font-size:11px}
+.heritage-footnote{margin-top:8px;font-size:11px;line-height:1.7;color:#7b7c72}
+@media(max-width:900px){.heritage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.heritage-visual-panel{padding:14px!important}.heritage-header{flex-wrap:wrap}.heritage-search{grid-template-columns:minmax(0,1fr)}.heritage-search .button{width:100%}.heritage-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.heritage-art-copy{padding:7px}.heritage-art-copy .buttons{flex-direction:column}.heritage-art-copy .button{width:100%;text-align:center}.heritage-pin{flex-wrap:wrap}}
