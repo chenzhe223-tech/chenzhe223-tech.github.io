@@ -30,7 +30,7 @@ el("accountAvatar").textContent=logged?(session.user.email||"D").slice(0,1).toUp
 el("productionStartHint").textContent=logged?"已连接云端，按最新日报生成批次":"无需先登录浏览；启动生产时验证身份";
 if(el("resultLoginHint"))el("resultLoginHint").hidden=logged;
 const current=logged?session.user.id:"";if(current!==lastUserId){lastUserId=current;if(logged)setTimeout(refreshRuns,0);else{runs=[];selected=null;renderRuns();el("productionDetail").hidden=true;el("resultDetail").hidden=true}}
-if(!el("authDialog").hidden){el("authLogged").hidden=!logged;el("authForm").hidden=logged||authMode==="recover";el("authSwitch").hidden=logged;el("authForgot").hidden=logged}}
+if(!el("authDialog").hidden){if(el("authRecoverySection").hidden)el("authLogged").hidden=!logged;el("authForm").hidden=logged||authMode==="recover";el("authSwitch").hidden=logged;el("authForgot").hidden=logged}}
 async function auth(){try{const {data,error}=await client.auth.getSession();if(error)throw error;session=data.session;setAuthUI();const params=new URLSearchParams(location.search),hash=new URLSearchParams(location.hash.slice(1));const errorInfo=params.get("error_description")||hash.get("error_description");if(errorInfo){openAuth("login");feedback("原邮件链接未能完成登录，请使用邮箱与密码。原因："+errorInfo,true);history.replaceState({},document.title,location.pathname)}}catch(e){message("当前浏览器未建立有效登录状态，请使用账号密码。",true)}}
 function translateError(e){const s=(e.message||String(e)).toLowerCase();if(s.includes("invalid login credentials"))return"账号或密码不正确。若以前只用邮件链接登录，请点击『忘记密码』设置一次密码。";if(s.includes("email not confirmed"))return"请先完成首次注册邮箱确认，然后可直接用密码登录。";if(s.includes("already registered"))return"该邮箱已注册，请直接登录或使用密码找回。";if(s.includes("rate limit"))return"邮件服务触发发送限制。已有密码的账户可以直接登录；新验证邮件请稍后再试。";if(s.includes("password"))return"密码不符合要求或无效，请使用至少 8 位密码。";return e.message||"操作失败"}
 async function submitAuth(ev){ev.preventDefault();const email=el("authEmail").value.trim(),password=el("authPassword").value;if(!email||!password){feedback("请输入邮箱和密码",true);return}if(authMode==="register"&&password.length<8){feedback("注册密码至少需要 8 位",true);return}
@@ -62,6 +62,7 @@ el("authSwitch")?.addEventListener("click",()=>{if(authMode==="recover"||authMod
 el("authForgot")?.addEventListener("click",()=>{authMode="recover";updateAuthMode();el("authForm").hidden=true;el("authRecoverySection").hidden=true;el("authPassword").value="";feedback("填写上方邮箱后点击下面的『发送密码设置邮件』。");if(!el("authRecoverSend")){const b=document.createElement("button");b.id="authRecoverSend";b.type="button";b.className="primary-cta auth-submit";b.textContent="发送密码设置邮件 ↗";el("authForm").after(b);b.addEventListener("click",recoverPassword)}el("authRecoverSend").hidden=false;el("authEmail").closest("form").hidden=false;el("authPassword").parentElement.hidden=true;el("authSubmit").hidden=true});
 el("authReveal")?.addEventListener("click",()=>{const p=el("authPassword");p.type=p.type==="password"?"text":"password";el("authReveal").textContent=p.type==="text"?"隐藏":"显示"});
 el("authSavePassword")?.addEventListener("click",saveNewPassword);
+el("authSetPassword")?.addEventListener("click",()=>{if(!session)return;el("authLogged").hidden=true;el("authRecoverySection").hidden=false;el("authForm").hidden=true;el("authTitle").textContent="设置登录密码";el("authDescription").textContent="直接设置长期密码。下次打开 Studio 用邮箱和密码登录，不必再收邮件链接。";feedback("");});
 el("authContinue")?.addEventListener("click",closeAuth);
 const signout=async()=>{try{await client.auth.signOut();session=null;setAuthUI();closeAuth();message("已退出云端账号。")}catch(e){message("退出失败："+e.message,true)}};
 el("authSignout")?.addEventListener("click",signout);
@@ -69,7 +70,7 @@ el("productionLogout")?.addEventListener("click",signout);
 el("productionStart")?.addEventListener("click",start);
 el("productionRefresh")?.addEventListener("click",()=>{if(session)refreshRuns();else openAuth("login")});
 el("productionJson")?.addEventListener("click",exportPackage);
-client.auth.onAuthStateChange((event,s)=>{session=s;setAuthUI();if(event==="PASSWORD_RECOVERY"){openAuth("recover");el("authForm").hidden=true;el("authRecoverySection").hidden=false;el("authTitle").textContent="设置新密码";el("authDescription").textContent="验证已完成，现在可以设置你的长期登录密码。";feedback("请设置至少 8 位的新密码。")}});
+client.auth.onAuthStateChange((event,s)=>{session=s;setAuthUI();if(event==="PASSWORD_RECOVERY"){openAuth("recover");el("authForm").hidden=true;el("authRecoverySection").hidden=false;el("authLogged").hidden=true;el("authTitle").textContent="设置新密码";el("authDescription").textContent="验证已完成，现在可以设置你的长期登录密码。";feedback("请设置至少 8 位的新密码。")}});
 auth();
 }
 window.ProductionStudio={onShow(){init();if(session)refreshRuns()},start(){init();start()},openAccount(){init();openAuth(session?"account":"login")}};
