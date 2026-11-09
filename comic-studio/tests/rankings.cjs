@@ -39,5 +39,5 @@ assert.ok(html.indexOf('ranking.js')>html.indexOf('app.js')&&html.indexOf('ranki
 const extension=fs.readFileSync(path.join(__dirname,'..','extension.js'),'utf8');
 const briefing=fs.readFileSync(path.join(__dirname,'..','briefing.js'),'utf8');
 assert.ok(extension.includes('wtEditorialRank.select')&&extension.includes("n._sourceIndex"));
-assert.ok(briefing.includes('wtEditorialRank.select')&&briefing.includes('data-index="\\'+original'),'Briefing selection must map to source array');
+assert.ok(briefing.includes('wtEditorialRank.select')&&briefing.includes('n._sourceIndex')&&briefing.includes('data-index='),'Briefing selection must map to source array');
 console.log('WORLD/TOON ranking QA: score cutoff, rationale, 4 sorts, focus, query, route hooks and original action index passed.');
