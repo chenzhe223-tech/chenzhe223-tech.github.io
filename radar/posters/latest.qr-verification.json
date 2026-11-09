@@ -1,12 +1,12 @@
 {
-  "report_date": "2026-11-08",
+  "report_date": "2026-11-09",
   "expected_url": "https://chenzhe223-tech.github.io/radar/daily/",
-  "checked_at": "2026-11-08T10:08:41.345180+08:00",
-  "design_variant": "geometric-navy",
+  "checked_at": "2026-11-09T14:33:29.300180+08:00",
+  "design_variant": "mountain-editorial",
   "iso_year": 2026,
-  "iso_week": 45,
-  "iso_weekday": 7,
-  "style_cycle_index": 44,
+  "iso_week": 46,
+  "iso_weekday": 1,
+  "style_cycle_index": 45,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
   "checks": [
@@ -72,8 +72,8 @@
     "status": "PASS"
   },
   "layout": {
-    "region_count": 8,
-    "text_block_count": 15,
+    "region_count": 7,
+    "text_block_count": 22,
     "truncated_text_blocks": 0,
     "status": "PASS"
   },
@@ -90,7 +90,7 @@
   },
   "images": [
     {
-      "path": "radar/posters/2026-11-08.png",
+      "path": "radar/posters/2026-11-09.png",
       "decoded_url": "https://chenzhe223-tech.github.io/radar/daily/",
       "url_matches": true,
       "width": 1200,
@@ -100,15 +100,15 @@
         240
       ],
       "detected_qr_px": [
-        193.0,
-        193.0
+        199.0,
+        199.0
       ],
       "contrast_percentile_range": 255,
       "quiet_zone_px": {
-        "top_px": 23,
-        "bottom_px": 23,
-        "left_px": 23,
-        "right_px": 23
+        "top_px": 20,
+        "bottom_px": 20,
+        "left_px": 20,
+        "right_px": 20
       },
       "status": "PASS"
     },
@@ -123,15 +123,15 @@
         240
       ],
       "detected_qr_px": [
-        193.0,
-        193.0
+        199.0,
+        199.0
       ],
       "contrast_percentile_range": 255,
       "quiet_zone_px": {
-        "top_px": 23,
-        "bottom_px": 23,
-        "left_px": 23,
-        "right_px": 23
+        "top_px": 20,
+        "bottom_px": 20,
+        "left_px": 20,
+        "right_px": 20
       },
       "status": "PASS"
     }

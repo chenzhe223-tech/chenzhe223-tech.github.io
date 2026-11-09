@@ -1,81 +1,81 @@
 {
-  "report_date": "2026-11-08",
-  "poster": "radar/posters/2026-11-08.png",
+  "report_date": "2026-11-09",
+  "poster": "radar/posters/2026-11-09.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.marktechpost.com/2026/11/04/openai-gpt-image-2-6-flare-sunburst/",
-    "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
-    "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
-    "https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/",
-    "https://www.ithome.com/1/023/849.htm"
+    "https://www.leiphone.com/category/ai/0F072La1etrUN0Tr.html",
+    "https://www.marktechpost.com/2026/11/08/google-elephant-goldfish-model-plugin-spec-review-coding-agents/",
+    "https://www.theverge.com/ai-artificial-intelligence/1029552/apple-siri-ai-agentic",
+    "https://www.theverge.com/ai-artificial-intelligence/1029533/elvis-eminem-suno-ai-music-clone-lawsuit",
+    "https://www.ithome.com/1/024/241.htm"
   ],
   "news_titles": [
-    "OpenAI 推出 GPT-Image-2.6 Flare 与 Sunburst：新增 GIF、SVG 导出和 6 秒 API 生成",
-    "Together AI 发布 Together Compiler：智能体让推理最高提速 2.6 倍",
-    "衡量 AI 智能体如何处理日常湿实验室科研",
-    "Axiom Math 想把 AI 垃圾挡在数学之外",
-    "索尼全球首发“基于视觉语言模型的驾驶接管危险预警”，为驾驶员提供分级提示"
+    "MIT CSAIL 用 Astra 直接改写 Qwen 权重，0.016% 改动提升 MATH-500 成绩",
+    "谷歌发布 Elephant-Goldfish 模型插件，编码前先做规范与五轮零上下文审查",
+    "彭博社：苹果加紧让 Siri 更具智能体能力",
+    "猫王与埃米纳姆版权方起诉 Suno",
+    "曹操出行联合蚂蚁集团在杭州、厦门、重庆落地司机之家 AI 健康驿站"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.marktechpost.com/2026/11/04/openai-gpt-image-2-6-flare-sunburst/",
-      "image_source": "MarkTechPost",
+      "story_url": "https://www.leiphone.com/category/ai/0F072La1etrUN0Tr.html",
+      "image_source": "雷峰网·人工智能",
       "image_match_status": "feed_image",
-      "image_sha256": "5007ecf7f05597cb5400ccbbed67ec0395d390f798c0e5fc9ed9d04f0a08c058",
-      "rendered_image_sha256": "bee6e5f4a7c956beba95bd30ef26b3ef6be7e799cff8753ea34d0821de3ae921",
-      "rendered_visual_type": "info_card",
+      "image_sha256": "b7123032a1e3c2ac41f99b73e801ec128460ee5a1d7023ae53a29cc2ec2f9657",
+      "rendered_image_sha256": "b7123032a1e3c2ac41f99b73e801ec128460ee5a1d7023ae53a29cc2ec2f9657",
+      "rendered_visual_type": "verified_photo",
       "label_required": false,
-      "label_applied": true,
+      "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://www.marktechpost.com/2026/11/05/together-ai-together-compiler-continual-compilation-ai-inference/",
+      "story_url": "https://www.marktechpost.com/2026/11/08/google-elephant-goldfish-model-plugin-spec-review-coding-agents/",
       "image_source": "MarkTechPost",
       "image_match_status": "article_image",
-      "image_sha256": "c7246d7a59645fea99c1d35937fd48bb7b5440051a885f08727f13a994ce02bf",
-      "rendered_image_sha256": "c7246d7a59645fea99c1d35937fd48bb7b5440051a885f08727f13a994ce02bf",
+      "image_sha256": "e35380c1eec59e1c3a3e426bcbd290ea6e8b47aba968e856bed7a41036cf844e",
+      "rendered_image_sha256": "e35380c1eec59e1c3a3e426bcbd290ea6e8b47aba968e856bed7a41036cf844e",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://openai.com/index/measuring-how-ai-agents-handle-wet-lab-science",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "fb9d3e8fb8fc8b5bb0b1bdbe901931468b97260d2331c2892e8da6568b228b27",
-      "rendered_image_sha256": "e27be025688ac3eb32be21dd0b33eec7beb22cf2e4a42c1d9951ea3d94f0f5ad",
-      "rendered_visual_type": "info_card",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
-    },
-    {
-      "story_url": "https://techcrunch.com/2026/11/05/axiom-math-wants-to-keep-ai-slop-out-of-mathematics/",
-      "image_source": "TechCrunch AI",
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029552/apple-siri-ai-agentic",
+      "image_source": "The Verge AI",
       "image_match_status": "article_image",
-      "image_sha256": "6ef2f7912e193153103d641cbf9f26fe20bfb2ed51be28f80612d07ebf292186",
-      "rendered_image_sha256": "6ef2f7912e193153103d641cbf9f26fe20bfb2ed51be28f80612d07ebf292186",
+      "image_sha256": "8c8b8521d85fa5f297e5e04e981d88abf24637d1f43ca94ee2aee6238afafc4d",
+      "rendered_image_sha256": "8c8b8521d85fa5f297e5e04e981d88abf24637d1f43ca94ee2aee6238afafc4d",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://www.ithome.com/1/023/849.htm",
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1029533/elvis-eminem-suno-ai-music-clone-lawsuit",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "744e0c3e573e5f3d5487daf14da577e8079db3a247bde0e54fb53cc7281df65b",
+      "rendered_image_sha256": "744e0c3e573e5f3d5487daf14da577e8079db3a247bde0e54fb53cc7281df65b",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.ithome.com/1/024/241.htm",
       "image_source": "IT之家",
       "image_match_status": "feed_image",
-      "image_sha256": "9e51c11f9eab9ffaeb36ec2d0301c5cb45cb97b34db73f92587314636a47c675",
-      "rendered_image_sha256": "9e51c11f9eab9ffaeb36ec2d0301c5cb45cb97b34db73f92587314636a47c675",
+      "image_sha256": "7b220dca9a432fd243c3f6057ed17c564502bf2b1c14012a5bfb2022c5abfb31",
+      "rendered_image_sha256": "7b220dca9a432fd243c3f6057ed17c564502bf2b1c14012a5bfb2022c5abfb31",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "Leonxlnx/taste-skill",
-  "design": "geometric-navy",
+  "skill": "tt-a1i/archify",
+  "design": "mountain-editorial",
   "format": "PNG",
   "canvas": [
     1200,
@@ -83,40 +83,34 @@
   ],
   "layout_regions": {
     "masthead": [
-      58,
-      42,
-      1152,
-      110
-    ],
-    "geometric-hero": [
-      0,
-      0,
-      1200,
-      425
-    ],
-    "editorial-observation": [
       48,
-      450,
+      24,
       1152,
-      575
+      104
     ],
-    "three-column-news-grid": [
-      50,
-      608,
-      1150,
-      1122
+    "hero-title-date": [
+      48,
+      145,
+      1152,
+      520
     ],
-    "two-news-summary-row": [
-      50,
-      1136,
-      1150,
-      1280
+    "five-column-news-grid": [
+      48,
+      750,
+      1152,
+      1278
+    ],
+    "today-insight-banner": [
+      48,
+      1290,
+      868,
+      1425
     ],
     "skill-recommendation": [
       48,
-      1324,
+      1440,
       868,
-      1538
+      1688
     ],
     "right-qr-panel": [
       900,
@@ -125,185 +119,262 @@
       1664
     ],
     "brand-footer": [
-      0,
-      1700,
-      1200,
+      48,
+      1720,
+      1152,
       1800
     ]
   },
   "text_bounds": [
     {
-      "block": "paragraph",
-      "x": 64,
-      "y": 329,
-      "width": 1070,
-      "height": 25,
-      "actual_width": 836.0,
-      "line_count": 1,
+      "block": "hero_headline",
+      "x": 48,
+      "y": 557,
+      "width": 1100,
+      "height": 92,
+      "actual_width": 1077.9,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
-      "x": 250,
-      "y": 469,
-      "width": 850,
-      "height": 84,
-      "actual_width": 849.6,
+      "x": 50,
+      "y": 651,
+      "width": 1090,
+      "height": 22,
+      "actual_width": 831.5,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_title",
+      "x": 48,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 203.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_summary",
+      "x": 48,
+      "y": 889,
+      "width": 206,
+      "height": 36,
+      "actual_width": 200.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_why",
+      "x": 48,
+      "y": 968,
+      "width": 206,
+      "height": 17,
+      "actual_width": 117.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_title",
+      "x": 271,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 203.4,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_summary",
+      "x": 271,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 200.0,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_why",
+      "x": 271,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_title",
+      "x": 494,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 197.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_summary",
+      "x": 494,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 205.0,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_why",
+      "x": 494,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 202.8,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_title",
+      "x": 717,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 198.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_summary",
+      "x": 717,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 199.8,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_why",
+      "x": 717,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_title",
+      "x": 940,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 198.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_summary",
+      "x": 940,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 202.4,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_why",
+      "x": 940,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 204.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
+      "x": 190,
+      "y": 1305,
+      "width": 650,
+      "height": 46,
+      "actual_width": 649.7,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
       "x": 66,
-      "y": 823,
-      "width": 318,
-      "height": 75,
-      "actual_width": 314.9,
-      "line_count": 3,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 66,
-      "y": 906,
-      "width": 318,
-      "height": 105,
-      "actual_width": 317.1,
-      "line_count": 5,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 823,
-      "width": 318,
-      "height": 50,
-      "actual_width": 317.0,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 881,
-      "width": 318,
-      "height": 147,
-      "actual_width": 315.9,
-      "line_count": 7,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 816,
-      "y": 823,
-      "width": 318,
-      "height": 50,
-      "actual_width": 303.6,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 816,
-      "y": 881,
-      "width": 318,
-      "height": 105,
-      "actual_width": 314.1,
-      "line_count": 5,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 195,
-      "y": 1176,
-      "width": 372,
-      "height": 21,
-      "actual_width": 308.5,
-      "line_count": 1,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 195,
-      "y": 1201,
-      "width": 372,
+      "y": 1362,
+      "width": 780,
       "height": 17,
-      "actual_width": 68.6,
+      "actual_width": 607.5,
       "line_count": 1,
       "truncated": false,
       "overflow": false
     },
     {
-      "block": "paragraph",
-      "x": 758,
-      "y": 1176,
-      "width": 372,
-      "height": 42,
-      "actual_width": 360.0,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 758,
-      "y": 1222,
-      "width": 372,
-      "height": 17,
-      "actual_width": 182.0,
-      "line_count": 1,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 82,
-      "y": 1380,
-      "width": 550,
-      "height": 27,
-      "actual_width": 207.8,
-      "line_count": 1,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 82,
-      "y": 1434,
-      "width": 565,
+      "block": "skill_name",
+      "x": 80,
+      "y": 1490,
+      "width": 555,
       "height": 30,
-      "actual_width": 562.4,
+      "actual_width": 144.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1554,
+      "width": 565,
+      "height": 38,
+      "actual_width": 554.8,
       "line_count": 2,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
-      "x": 82,
-      "y": 1500,
-      "width": 550,
+      "x": 80,
+      "y": 1628,
+      "width": 565,
       "height": 14,
-      "actual_width": 312.9,
+      "actual_width": 376.5,
       "line_count": 1,
       "truncated": false,
       "overflow": false
     }
   ],
-  "design_variant": "geometric-navy",
+  "design_variant": "mountain-editorial",
   "iso_year": 2026,
-  "iso_week": 45,
-  "iso_weekday": 7,
-  "style_cycle_index": 44,
+  "iso_week": 46,
+  "iso_weekday": 1,
+  "style_cycle_index": 45,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-08T10:08:41.121452+08:00"
+  "generated_at": "2026-11-09T14:33:28.993874+08:00"
 }
