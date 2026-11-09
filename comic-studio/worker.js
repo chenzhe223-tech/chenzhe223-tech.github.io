@@ -34,8 +34,16 @@ function extractRSSImage(x){
  // illustrated <content:encoded>. Inspect the full content first.
  const chunks=[x.match(/<content:encoded\b[^>]*>([\s\S]*?)<\/content:encoded>/i)?.[1],x.match(/<description\b[^>]*>([\s\S]*?)<\/description>/i)?.[1]].filter(Boolean);
  for(const chunk of chunks){const html=chunk.replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"');
-  const img=html.match(/<img\b[^>]*?\b(?:src|data-src)\s*=\s*["']([^"']+)["']/i)?.[1];
-  const image=safeNewsImage(img);if(image)return image;
+  for(const tagText of html.match(/<img\b[^>]*>/gi)||[]){
+   const raw=tagText.match(/\b(?:src|data-src)\s*=\s*["']([^"']+)["']/i)?.[1];if(!raw)continue;
+   const label=tagText.match(/\balt\s*=\s*["']([^"']+)["']/i)?.[1]||'';
+   const detail=(raw+' '+label).toLowerCase();
+   if(/(?:banner|advert|adsense|sponsor|promo|social.share|logo|pixel|tracking|trr50)/i.test(detail))continue;
+   const w=Number(tagText.match(/\bwidth\s*=\s*["'](\d+)/i)?.[1]||0);
+   const h=Number(tagText.match(/\bheight\s*=\s*["'](\d+)/i)?.[1]||0);
+   if(w&&h&&(w/h>3.4||h/w>2.7||w<190||h<115))continue;
+   const image=safeNewsImage(raw);if(image)return image;
+  }
  }
  return '';
 }
