@@ -156,7 +156,8 @@ const wtOriginalCharacters=wtCharacters;
 wtCharacters=function(){
   const p=selected();
   const enabled=wtConfig?.characterAiEnabled===true;const active=!!(enabled&&wtSession?.access_token);
-  const note=active?'DeepSeek 角色引擎已就绪 · 免费额度内生成 · 每人每日 2 次':!enabled?'角色设计免费模型暂不可用，请稍后刷新':!wtSession?.access_token?'免费角色设计已开放，登录后即可使用':'免费模型待连接';
+  const modelName=wtConfig?.characterModel||'免费角色模型';
+  const note=active?modelName+' 已就绪 · 免费额度内生成 · 每人每日 2 次':!enabled?'角色设计免费模型暂不可用，请稍后刷新':!wtSession?.access_token?'免费角色设计已开放，登录后即可使用':'免费模型待连接';
   const button='<button type="button" class="button dark" data-persona="prepare">✦ AI 生成角色档案</button>';
   return wtOriginalCharacters()+
     '<section class="wt-ai wt-persona-entry"><div class="kicker">CHARACTER CREATION ENGINE</div><h2>AI 原创角色设计</h2><p>'+wtUiSafe(note)+'</p>'+
@@ -187,13 +188,16 @@ async function wtPersonaGenerate(form){
     const out=await wtCallAI('/api/ai/characters',{title:String(p?.title||'原创时事漫画').slice(0,150),concept:String(values.concept||'').slice(0,2000),style:String(values.style||'').slice(0,70),count:Math.min(4,Math.max(1,Number(values.count)||2))});
     if(!Array.isArray(out.characters)||!out.characters.length)throw Error('模型未返回有效角色档案');
     if(!Array.isArray(data.characters))data.characters=[];
+    const knownNames=new Set(data.characters.map(x=>String(x?.name||'').trim().toLocaleLowerCase()).filter(Boolean));
     let added=0;
     for(const c of out.characters.slice(0,4)){
       if(!c||typeof c!=='object'||!String(c.name||'').trim())continue;
+      const uniqueName=String(c.name).trim().toLocaleLowerCase();if(knownNames.has(uniqueName))continue;knownNames.add(uniqueName);
       data.characters.push({id:uid(),name:String(c.name).slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c.type)?c.type:'虚构角色',
         description:String(c.description||'').slice(0,1800),costume:String(c.costume||'').slice(0,400),colors:String(c.colors||'').slice(0,220),
         traits:String(c.traits||'').slice(0,950),personality:String(c.personality||'').slice(0,1200),portrait:'',origin:'ai-draft',aiModel:out.model||'',createdAt:now()});added++;
     }
+    if(!added){notify('生成角色与现有档案重名，已阻止重复保存');return}
     persist();closeModal();nav('characters');notify('新增 '+added+' 个角色草稿（'+(out.model||'免费模型')+'），可逐个编辑'+(out.modelFallback?'；已自动使用免费备用模型':'') );
   }catch(err){notify('角色生成失败：'+String(err.message||err).slice(0,140))}
   finally{wtAiBusy=false;if(submit?.isConnected)submit.disabled=false}
