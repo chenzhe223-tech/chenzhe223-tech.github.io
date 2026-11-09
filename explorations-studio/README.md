@@ -58,3 +58,36 @@ P4: 图谱扩充：来源事实、素材版本、衍生图、专题、品牌规�
 4. 在实际完成生图、审校、上传后，再修改任务状态并在「生产与交付」导出 WorkBuddy 任务单。
 
 当前默认不再用静态示例素材填充空账号。原来浏览器已经存储的记录不做迁移清理；请先备份并核对是否为旧演示数据。
+
+
+## 2026-11-09 | Production SOP V0.2
+
+### 已部署
+- **生产数据模型**：\`explorations_runs\`、\`explorations_assets\`，Supabase 新加坡区数据库，RLS 只允许登录用户读取自己的记录；前端匿名账户无写入权限。
+- **后端 Edge Function**：\`explorations-production\`，接收经过 \`auth.getUser\` 验证的登录用户 token，内置操作 \`start/list/detail\`，生产状态存于云端，不暴露服务端密钥。
+- **一键创建批次**：点击自动生产后，默认上一完整北京时间自然周，读取 \`/radar/data/history.json\` 和 7 天归档；无完整来源会明确阻止进入完成状态。
+- **自动初选**：自动从 \`top5/news/china_ai_news/skills\` 抽取并按 URL/标题去重，筛 7+5；排除该用户近 90 天已在周刊批次中选过的相同来源标识。**尚不等于 AI 语义事件级 90 天历史查重**。
+- **九条编辑稿**：成功筛选时写入 7 条新闻、2 条 Skill 合辑云端资产，附原文 URL、摘要、重要性和统一视觉规范；状态标记 \`image_status=not_generated\`。
+- **成果工作台**：云端批次、九条结果、阶段状态、阻塞原因及可导出的编辑草稿 JSON，不再要求手动二次挑选。
+- **代码**：\`explorations-studio/production.js\`、\`explorations-studio/backend/explorations-production/index.ts\`、\`explorations-studio/index.html\`。
+- **接口安全**：公开 URL 不能匿名触发生成，Edge Function 自行验证 JWT；关闭了平台级 verify_jwt 以兼容现代 publishable key，**不代表免认证**。
+
+### 严格尚未完成
+- 没有配置可由该后端调用的实际图像生成模型/API、媒体文件存储与版式渲染器，无法自动生成 9 张真实 PNG。
+- 没有接通独立可靠的官方来源逐条二次核验、跨 URL 事件语义去重和实际社交热度采集。
+- 没有 WorkBuddy 自动执行接口、公众号贴图上传与发布回执；仅提供可导出的 JSON 编辑清单。
+- 由于没有用户登录凭证，正式登录后一键点击到数据库插入的端到端功能测试**尚待实际登录验证**，不能将其标为 Functional Tested。
+- 这不是异步后台队列：Edge Function 在一次调用中完成来源读取与草稿入库。后续大规模生图须改为服务端持久队列、断点恢复、重试、幂等和日志。
+
+### 交付状态
+1. Code Completed：V0.2 代码已写入 GitHub。
+2. Build Passed：JS 静态语法检查通过（不等于前端所有第三方依赖都成功加载）。
+3. Runtime Verified：GitHub Pages 页面与脚本 HTTP 200；Edge Function ACTIVE；数据库新表存在且 RLS 已开启。
+4. Functional Tested：未完成登录后的端到端点击验收。
+5. Production Deployed：V0.2 基础设施已部署；**完整 9 PNG 自动生产/WorkBuddy 发布未上线**。
+
+### 下一阶段技术工作
+1. 确定已授权的图像生产 API 与费用预算，图像请求、结果永久存储、服务端合成中文排版与视觉 QC。
+2. 增加可靠后台 Job/队列、状态恢复、任务超时、失败重试、分段执行与可观察日志。
+3. 90 天新闻事件指纹及跨源语义去重；建立 verified source evidence，避免把 Radar 自动评分误称真实社会热度。
+4. 构建 WorkBuddy API/webhook 正式交接并验证草稿链接、发布回执，未经许可不公开发布。
