@@ -33,16 +33,28 @@ async function wtArchiveRefresh({silent=false}={}){if(wtArchiveBusy)return;wtArc
  for(const x of a){if(!x||!x.task_id||seenTask.has(x.task_id)||seenStory.has(x.dedupe_key))continue;seenTask.add(x.task_id);seenStory.add(x.dedupe_key);clean.push(x)}
  wtArchiveSnapshot={library:{...result.library,items:clean},queue:result.queue,repo:result.repo,mode:result.mode||'unknown',visibility:result.visibility||'unknown',configured:result.configured===true};wtArchiveLastSync=Date.now();
  if(!silent&&typeof notify==='function')notify(`仓库同步成功：${clean.length} 条任务、${result.queue.items?.length||0} 条待发表`);
- }catch(err){wtArchiveError=err.name==='AbortError'?'仓库访问超时':String(err.message||err);if(!silent&&typeof notify==='function')notify(wtArchiveError)}finally{wtArchiveBusy=false;if(['archive','library'].includes(ui.route))render()}}
+ }catch(err){wtArchiveError=err.name==='AbortError'?'仓库访问超时':String(err.message||err);if(!silent&&typeof notify==='function')notify(wtArchiveError)}finally{wtArchiveBusy=false;if(['archive','library','handoff'].includes(ui.route))render()}}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+u.pathname.replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
 async function wtArchiveKey(p){const sources=(p.sourceURLs||'').split(/\s+/).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(sources)].sort().join('\n');if(!normalized)normalized=String(p.title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized));return Array.from(new Uint8Array(buf),x=>x.toString(16).padStart(2,'0')).join('')}
 async function wtArchivePushTask(p,o,prompt){if(!wtArchiveAuth())throw Error('未登录：任务 ZIP 已保存在本机，但尚未自动派单到 GitHub');const key=await wtArchiveKey(p);if(!/^[a-f0-9]{64}$/.test(key))throw Error('去重指纹生成失败');
  const task={schema:'davylab.worldtoon.task.v2',task_id:o.task_id,title:p.title,subtitle:p.subtitle||'',category:p.category||'',status:'queued',dedupe_key:key,created_at:o.created_at||new Date().toISOString(),producer:'ChatGPT',publisher:'WorkBuddy',mode:o.mode,editorial:{sources:o.source?.urls||[],fact_notes:o.source?.verified_facts||'',fictionalization:o.adaptation?.strategy||'',disclaimer:o.adaptation?.disclaimer||''},panels:o.panels||[],characters:o.adaptation?.characters||'',description:o.story||'',original_task_schema:o.schema};
  const outcome=await wtArchiveApi('tasks',{method:'POST',body:JSON.stringify({task,prompt})});p.handoff={...p.handoff,repository:WT_ARCHIVE_REPO,repoQueuedAt:new Date().toISOString(),repoTaskPath:outcome.path,repoDedupeKey:key,repoCommit:outcome.commit};setChange(p,'GitHub 仓库正式派单：'+(outcome.existing?'已存在同一任务':'新工单'));return outcome;
 }
-function wtArchiveAutopoll(){if(['archive','library'].includes(location.hash.split('/')[1])&&Date.now()-wtArchiveLastSync>300000&&!wtArchiveBusy)wtArchiveRefresh({silent:true})}
+function wtArchiveAutopoll(){if(['archive','library','handoff'].includes(location.hash.split('/')[1])&&Date.now()-wtArchiveLastSync>300000&&!wtArchiveBusy)wtArchiveRefresh({silent:true})}
 document.addEventListener('click',ev=>{if(ev.target.closest('[data-archive="refresh"]')){ev.preventDefault();wtArchiveRefresh();}});
+// Keep the producer handoff tied to the same source-of-truth as the archive.
+function wtArchiveHandoffBanner(){
+ const snap=wtArchiveSnapshot,mode=snap?.mode,ready=snap?.queue?.items?.length||0;
+ const label=wtArchiveBusy?'扫描中':wtArchiveError?'暂不可用':mode==='public_readonly'?'公开只读 · 禁止派单':mode==='private_authenticated'?'私有仓库已连接':'等待仓库同步';
+ const detail=mode==='public_readonly'?'需先改为 Private 并配置 Worker 安全写入权限；本地任务 ZIP 不等于正式入仓。':
+             mode==='private_authenticated'?'任务写入仓库后由 ChatGPT 领取；作品验收后进入 WorkBuddy 队列。':
+             '平台将自动查询仓库，没收到真实提交和回执之前不会声称完成。';
+ return '<section class="box" style="margin-bottom:18px"><div class="sectionbar"><div><div class="kicker">TWO-TRACK / WORKFLOW STATUS</div><h3>Agent 协作交付 · '+wtArchiveHtml(label)+'</h3></div><a class="button" href="#/archive">查看完整状态 ↗</a></div><p class="minor">'+wtArchiveHtml(detail)+'</p><div class="buttons"><button class="button" data-archive="refresh">⟳ 同步仓库</button><span class="chip">待 WorkBuddy 发表：'+ready+'</span><span class="chip">A 轨大模型：停用</span></div></section>';
+}
+const wtArchiveBaseWorkflow=wtWorkflow;
+wtWorkflow=function(){return wtArchiveHandoffBanner()+wtArchiveBaseWorkflow()};
+
 const wtArchiveOldLibrary=library;library=function(){return wtArchiveSection()+wtArchiveOldLibrary()};
-window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/archive')||location.hash.startsWith('#/library'))wtArchiveAutopoll()});
+window.addEventListener('hashchange',()=>{if(['archive','library','handoff'].includes(location.hash.split('/')[1]))wtArchiveAutopoll()});
 setInterval(wtArchiveAutopoll,300000);
 queueMicrotask(()=>{if(location.hash.startsWith('#/archive'))parseRoute();wtArchiveAutopoll()});
