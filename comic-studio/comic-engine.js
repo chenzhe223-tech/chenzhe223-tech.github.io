@@ -142,4 +142,5 @@ document.addEventListener('click',async ev=>{
  catch(err){notify('漫画制作失败：'+String(err.message||err).slice(0,140))}
 },true);
 window.wtComicEngine={STEPS,BEATS,SHOTS,storyboard,cast,bundleEntries};
+if(typeof render==='function'&&location.hash.startsWith('#/studio'))render();
 })();
