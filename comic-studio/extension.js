@@ -116,3 +116,6 @@ function wfChange(ev){const x=ev.target,p=selected();if(x.id==='wfProject'){ui.s
 if(!document.querySelector('#wf-style'))wfStyle();
 document.addEventListener('click',wfClick);
 document.addEventListener('change',wfChange);
+
+// Re-render the handoff route after feature declarations are loaded.
+queueMicrotask(()=>{if(location.hash.startsWith("#/handoff"))parseRoute()});
