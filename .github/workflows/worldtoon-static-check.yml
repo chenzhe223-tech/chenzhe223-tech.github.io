@@ -43,5 +43,10 @@ jobs:
           assert "ready_for_workbuddy" in archive
           assert "mark-published':notify(" in app, "Never allow local publication to replace repo receipts"
           assert 'archive.js' in html and 'data-route="handoff"' in html
+          assert "research_required" in source and "t.research_required!==true" in source
+          assert "wfPrepareTask(p);" in app
+          assert '研究阶段' in app and 'verified_sources' in app
+          assert "research_required:o.research_required===true" in archive
+          assert "wfInlineEditor(p)" in app
           assert 'davylab-worldtoon-comics' not in (source+archive+app)
           print('WORLD/TOON key production invariants passed')
