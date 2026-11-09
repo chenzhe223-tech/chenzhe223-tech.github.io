@@ -7,7 +7,9 @@ const path=require('node:path');
 const script=fs.readFileSync(path.join(__dirname,'..','worker.js'),'utf8');
 const ui=fs.readFileSync(path.join(__dirname,'..','personalize.js'),'utf8');
 assert.match(ui,/characterAiEnabled/);
-assert.match(ui,/DeepSeek 角色引擎已就绪/);
+assert.match(ui,/characterAiEnabled/);
+assert.match(ui,/knownNames.has\(uniqueName\)/);
+assert.match(ui,/modelName\+' 已就绪/);
 assert.match(script,/@cf\/deepseek-ai\/deepseek-r1-distill-qwen-32b/);
 assert.match(script,/2026-11-20T00:00:00Z/);
 function setup(date){
