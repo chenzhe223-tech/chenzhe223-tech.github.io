@@ -166,7 +166,7 @@ async function wtArchiveAuth(req,env){if(!env.WORLDTOON_ARCHIVE_OWNER_UID||!env.
 async function wtArchiveMeta(env) {
  const headers={'accept':'application/vnd.github+json','user-agent':'WORLD-TOON/2.6'};
  if(env.WORLDTOON_GITHUB_TOKEN)headers.authorization='Bearer '+env.WORLDTOON_GITHUB_TOKEN;
- const r=await fetch(WT_API,{headers,signal:AbortSignal.timeout(9000),cf:{cacheEverything:true,cacheTtl:60}});
+ const r=await fetch(WT_API,{headers,signal:AbortSignal.timeout(9000)});
  if(r.status===404)return {exists:false,private:null,visibility:'unknown'};
  if(!r.ok)throw Error('GitHub 仓库状态读取失败 HTTP '+r.status);
  const v=await r.json();
