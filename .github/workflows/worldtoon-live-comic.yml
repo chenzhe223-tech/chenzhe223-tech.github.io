@@ -42,6 +42,16 @@ jobs:
           assert all(v.get('url','').startswith('https://') for v in result['items'])
           assert len(result['items'])<=8
           print('Hacker News source verified online:',len(result['items']),'candidates')
+          for feed in ('arxiv','news'):
+              try:
+                  result2=expect_json('/api/comic/discover?source='+feed+'&limit=5')
+                  assert result2.get('items') and all(x.get('source_id')==feed for x in result2['items'])
+                  print(feed,'online candidates:',len(result2['items']))
+              except (urllib.error.HTTPError,TimeoutError) as ex:
+                  print(feed,'temporarily unavailable (non-blocking):',str(ex)[:160])
+          combined=expect_json('/api/comic/discover?source=all&limit=12')
+          assert combined.get('items') and combined.get('counts')
+          print('aggregated-source status:',combined['counts'])
           try:
               read('/api/comic/discover?source=invalid')
           except urllib.error.HTTPError as ex:
