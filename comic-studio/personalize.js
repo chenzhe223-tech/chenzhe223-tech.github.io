@@ -155,13 +155,13 @@ function wtVisualClose(){
 const wtOriginalCharacters=wtCharacters;
 wtCharacters=function(){
   const p=selected();
-  const active=!!(wtConfig?.aiEnabled&&wtSession?.access_token);
-  const note=active?'已连接，可依据当前作品生成原创人物卡':'需要登录并在管理端启用 AI 模型，才可进行真实 AI 自动生成';
+  const enabled=wtConfig?.characterAiEnabled===true;const active=!!(enabled&&wtSession?.access_token);
+  const note=active?'DeepSeek 角色引擎已就绪 · 免费额度内生成 · 每人每日 2 次':!enabled?'角色设计免费模型暂不可用，请稍后刷新':!wtSession?.access_token?'免费角色设计已开放，登录后即可使用':'免费模型待连接';
   const button='<button type="button" class="button dark" data-persona="prepare">✦ AI 生成角色档案</button>';
   return wtOriginalCharacters()+
     '<section class="wt-ai wt-persona-entry"><div class="kicker">CHARACTER CREATION ENGINE</div><h2>AI 原创角色设计</h2><p>'+wtUiSafe(note)+'</p>'+
     '<p class="minor">以当前漫画“'+wtUiSafe(p?.title||'未选择作品')+'”为创作背景，生成外貌、服装、代表色、性格与跨格固定特征；生成后可逐项编辑。</p><div class="buttons">'+button+
-    '<a class="button" href="#/account">账户与 AI 状态 ↗</a></div></section>';
+    '<a class="button" href="#/account">账户与 AI 状态 ↗</a></div><p class="wt-note">模型：'+wtUiSafe(wtConfig?.characterModel||'DeepSeek R1 Distill')+'。生成可编辑的文字角色档案，不包含图片或自动发表。</p></section>';
 };
 function wtPersonaPrepare(){
   const p=selected();
@@ -171,14 +171,14 @@ function wtPersonaPrepare(){
     '<div class="field wide"><label>创作背景</label><textarea name="concept" required maxlength="2000">'+wtUiSafe(p?.description||p?.title||'一部原创时事讽刺漫画')+'</textarea></div>'+
     '<div class="field"><label>角色数量</label><select name="count"><option value="2">2 位</option><option value="3" selected>3 位</option><option value="4">4 位</option><option value="1">1 位</option></select></div>'+
     '<div class="field"><label>视觉调性</label><select name="style"><option>杂志式原创漫画</option><option>温暖手绘</option><option>黑色幽默</option><option>未来科幻</option></select></div></div>'+
-    '<p class="wt-note">'+(!wtConfig?.aiEnabled?'当前 AI 推理尚未启用，需审批费用后才能生成。':!wtSession?.access_token?'请先登录账户后再生成。':'每次点击均为单次 AI 调用，可能产生模型费用。')+'</p>'+
+    '<p class="wt-note">'+(!wtConfig?.characterAiEnabled?'免费角色模型暂不可用，请稍后重试。':!wtSession?.access_token?'请先登录 WORLD/TOON 账号后再生成。':'每人每日最多生成 2 次，成功后保存为可编辑草稿，仍需人工审核。')+'</p>'+
     '<div class="stepactions"><button type="button" data-action="modal-close" class="button">取消</button>'+
-    '<button class="button dark" type="submit" '+(!wtConfig?.aiEnabled||!wtSession?.access_token?'disabled':'')+'>确认生成角色草稿</button></div></form>');
+    '<button class="button dark" type="submit" '+(!wtConfig?.characterAiEnabled||!wtSession?.access_token?'disabled':'')+'>确认生成角色草稿</button></div></form>');
 }
 async function wtPersonaGenerate(form){
   if(wtAiBusy)return;
-  if(!wtConfig?.aiEnabled||!wtSession?.access_token){notify('AI 服务尚未启用或未登录');return}
-  if(!confirm('即将调用 AI 生成原创角色草稿，可能占用模型额度或产生费用。继续吗？'))return;
+  if(!wtConfig?.characterAiEnabled||!wtSession?.access_token){notify('请先登录，或检查免费角色模型连接状态');return}
+  if(!confirm('将使用免费模型额度生成角色文字档案（每人每日最多 2 次），确定继续？'))return;
   const values=Object.fromEntries(new FormData(form).entries());
   wtAiBusy=true;
   const submit=form.querySelector('button[type=submit]');if(submit)submit.disabled=true;
@@ -192,9 +192,9 @@ async function wtPersonaGenerate(form){
       if(!c||typeof c!=='object'||!String(c.name||'').trim())continue;
       data.characters.push({id:uid(),name:String(c.name).slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c.type)?c.type:'虚构角色',
         description:String(c.description||'').slice(0,1800),costume:String(c.costume||'').slice(0,400),colors:String(c.colors||'').slice(0,220),
-        traits:String(c.traits||'').slice(0,950),personality:String(c.personality||'').slice(0,1200),portrait:'',origin:'ai-draft',createdAt:now()});added++;
+        traits:String(c.traits||'').slice(0,950),personality:String(c.personality||'').slice(0,1200),portrait:'',origin:'ai-draft',aiModel:out.model||'',createdAt:now()});added++;
     }
-    persist();closeModal();nav('characters');notify('新增 '+added+' 个 AI 角色草稿，可逐个编辑或上传定妆照');
+    persist();closeModal();nav('characters');notify('新增 '+added+' 个角色草稿（'+(out.model||'免费模型')+'），可逐个编辑'+(out.modelFallback?'；已自动使用免费备用模型':'') );
   }catch(err){notify('角色生成失败：'+String(err.message||err).slice(0,140))}
   finally{wtAiBusy=false;if(submit?.isConnected)submit.disabled=false}
 }
