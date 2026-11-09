@@ -118,3 +118,28 @@
 /* WORLD/TOON v2.5 archive mobile layout */
 @media (max-width:720px){.grid-stat{grid-template-columns:repeat(2,minmax(0,1fr))!important}.grid-stat .box{padding:14px}.grid-stat h2{font-size:25px}}
 @media (max-width:390px){.grid-stat{gap:8px!important}.grid-stat .box{padding:11px}}
+
+
+/* WORLD/TOON v2.7 · transparent editorial priority scoring */
+.wt-rank-toolbar{margin:14px 0 18px;padding:20px!important}
+.wt-rank-controls{display:grid;grid-template-columns:minmax(210px,2fr) repeat(3,minmax(125px,1fr));gap:12px;align-items:end}
+.wt-rank-controls label{display:flex;flex-direction:column;gap:7px;min-width:0;font-size:11px;font-weight:700;letter-spacing:.01em;color:#525b53}
+.wt-rank-controls input,.wt-rank-controls select{box-sizing:border-box;display:block;width:100%;max-width:100%;height:42px;border:1px solid #d4d5cc;border-radius:7px;background:#fffdf9;padding:0 11px;color:#202925;font-size:12px;letter-spacing:0}
+.wt-rank-controls input:focus,.wt-rank-controls select:focus{outline:2px solid #8da99c;outline-offset:2px}
+.wt-rank-summary{font-size:12px;margin-top:16px;line-height:1.6;color:#556158}
+.wt-rank-summary strong{font:700 23px Georgia,serif;color:#b06c50;padding:0 4px}
+.wt-rank-disclaimer{font-size:11px;color:#7d8079;line-height:1.7;margin:8px 0 0}
+.wt-rankline{display:grid;grid-template-columns:1.18fr repeat(3,minmax(0,1fr));gap:5px;align-items:center;margin:0 0 11px;padding:9px 10px;border:1px solid #e3dfd5;border-radius:9px;background:#f7f5ef}
+.wt-rankline>div{min-width:0;display:flex;gap:5px;flex-direction:column;align-items:center;text-align:center;border-right:1px solid #e2dfd6}
+.wt-rankline>div:last-child{border:0}
+.wt-rankline span{font-size:10px;color:#6c746d;font-weight:600}
+.wt-rankline b{font:700 16px/1.2 Georgia,'Noto Sans SC',sans-serif;color:#27352e}
+.wt-rankprimary strong{font:700 26px/1 Georgia,serif;color:#b45f42}
+.wt-rankprimary small{display:none}
+.wt-rank-reason{font-size:11px;line-height:1.7;color:#7c8078;margin:2px 0 11px}
+.wt-rank-empty{grid-column:1/-1;text-align:center;padding:35px 20px}
+.wt-rank-empty h3{margin:0 0 5px}
+.brief-rankline{margin-bottom:3px}
+.brief-rank-toolbar{margin-bottom:22px}
+@media(max-width:1000px){.wt-rank-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.wt-rank-search{grid-column:1/-1}}
+@media(max-width:520px){.wt-rank-toolbar{padding:14px!important}.wt-rank-controls{gap:10px}.wt-rank-controls input,.wt-rank-controls select{font-size:12px;height:40px}.wt-rankline{padding:9px 5px;gap:2px}.wt-rankline b{font-size:15px}.wt-rankprimary strong{font-size:23px}.wt-rankline span{font-size:9px}.wt-rank-summary{font-size:11px}}
