@@ -17,9 +17,27 @@ function draw(){
  archiveRows();
  const released=$("mReleased"),archived=$("mArchived"),all=$("mAll");if(released)released.textContent=deliveries.length;if(archived)archived.textContent=deliveries.length;if(all)all.textContent=deliveries.length;
 }
-function open(id){const x=deliveries.find(r=>r.id===id);if(!x)return;openedId=id;
- const box=$("githubDeliveryDetails");box.hidden=false;
- box.innerHTML='<div class="eyebrow">ARCHIVE RECORD / '+esc(x.issue)+'</div><h3>第 '+esc(x.issue)+' 期 · V'+esc(x.revision)+'</h3><p class="github-delivery-meta">ChatGPT 创作成品已同步至 Studio。九图、文案和来源保存在私有 GitHub Release 中；公众号正式发表需 WorkBuddy 独立确认。</p><div class="github-posters">'+(x.posters||[]).sort((a,b)=>a.slot-b.slot).map(p=>'<div class="github-poster-item"><strong>'+String(p.slot).padStart(2,"0")+'</strong><span>'+esc(p.role==="news"?"新闻贴图":"Skill 推荐")+'</span><small>'+esc(p.width)+'×'+esc(p.height)+'</small></div>').join("")+'</div><a class="btn dark" href="'+esc(x.github_release_url)+'" target="_blank" rel="noopener noreferrer">打开九图素材包 ↗</a><h3>精选新闻</h3><div class="list">'+(x.news||[]).map(n=>'<div class="item"><span>'+esc(n.title)+'</span><a class="quiet-link" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">原文 ↗</a></div>').join("")+'</div><h3>推荐 Skill</h3><div class="list">'+(x.skills||[]).map(n=>'<div class="item"><span>'+esc(n.name)+'</span><a class="quiet-link" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">项目 ↗</a></div>').join("")+'</div>';
+let currentPreviewUrl=null;
+async function previewPoster(deliveryId,slot,button){
+ if(currentPreviewUrl){URL.revokeObjectURL(currentPreviewUrl);currentPreviewUrl=null}
+ const container=$("githubPosterPreview");if(!container)return;
+ container.innerHTML='<div class="studio-status">正在安全读取私有 GitHub 的原始 PNG …</div>';
+ button.disabled=true;
+ try{
+  const blob=await studio().githubPoster(deliveryId,slot);
+  if(blob.type!=="image/png")throw Error("服务器未返回 PNG 文件");
+  currentPreviewUrl=URL.createObjectURL(blob);
+  container.innerHTML='<figure style="margin:12px 0"><img style="width:min(100%,420px);height:auto;display:block;border:1px solid var(--line);border-radius:5px" alt="第'+slot+'张真实 PNG 预览"><figcaption class="footnote">第 '+slot+' 张 · GitHub 私有 Release 原图 · 仅供查看</figcaption></figure>';
+  container.querySelector("img").src=currentPreviewUrl;
+ }catch(e){container.textContent="预览失败："+e.message}
+ finally{button.disabled=false}
+}
+function open(id){const x=deliveries.find(r=>r.id===id);if(!x)return;
+ if(currentPreviewUrl){URL.revokeObjectURL(currentPreviewUrl);currentPreviewUrl=null}
+ openedId=id;const box=$("githubDeliveryDetails");box.hidden=false;
+ const posterHtml=(x.posters||[]).slice().sort((a,b)=>a.slot-b.slot).map(p=>'<button type="button" class="github-poster-item" data-preview="'+esc(p.slot)+'" title="查看真实 PNG"><strong>'+String(p.slot).padStart(2,"0")+'</strong><span>'+esc(p.role==="news"?"新闻贴图":"Skill 推荐")+'</span><small>'+esc(p.width)+'×'+esc(p.height)+' · 查看 ↗</small></button>').join("");
+ box.innerHTML='<div class="eyebrow">ARCHIVE RECORD / '+esc(x.issue)+'</div><h3>第 '+esc(x.issue)+' 期 · V'+esc(x.revision)+'</h3><p class="github-delivery-meta">ChatGPT 创作成品已同步至 Studio。点击下方九张素材可查看 GitHub 私有 Release 的真实 PNG；公众号正式发表需 WorkBuddy 独立确认。</p><div class="github-posters">'+posterHtml+'</div><div id="githubPosterPreview"></div><a class="btn dark" href="'+esc(x.github_release_url)+'" target="_blank" rel="noopener noreferrer">下载完整九图素材包 ↗</a><h3>精选新闻</h3><div class="list">'+(x.news||[]).map(n=>'<div class="item"><span>'+esc(n.title)+'</span><a class="quiet-link" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">原文 ↗</a></div>').join("")+'</div><h3>推荐 Skill</h3><div class="list">'+(x.skills||[]).map(n=>'<div class="item"><span>'+esc(n.name)+'</span><a class="quiet-link" href="'+esc(n.url)+'" target="_blank" rel="noopener noreferrer">项目 ↗</a></div>').join("")+'</div>';
+ box.querySelectorAll("[data-preview]").forEach(btn=>btn.addEventListener("click",()=>previewPoster(x.id,Number(btn.dataset.preview),btn)));
  box.scrollIntoView({block:"start",behavior:"smooth"});
 }
 async function list(){
