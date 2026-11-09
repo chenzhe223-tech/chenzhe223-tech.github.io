@@ -270,6 +270,7 @@ function wtArchiveCheckCatalog(library,queue){
 }
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
+ if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
  if(p==='/api/archive/status'&&method==='GET'){
   try {
    const meta=await wtArchiveMeta(env),writeReady=meta.private===true&&!!(env.WORLDTOON_ARCHIVE_OWNER_UID&&env.WORLDTOON_GITHUB_TOKEN);
