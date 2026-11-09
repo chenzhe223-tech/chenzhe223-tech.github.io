@@ -1,5 +1,5 @@
 // WORLD/TOON 2.0 / By DAVYLAB — editorial news wire + restricted AI + GitHub static assets
-const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/08a80b99aebda63ecf23ce2ead1e836c66992654/comic-studio/';
+const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/5e09a9fae0b1eb1f00ce98c8fb57e5bf257159b0/comic-studio/';
 const SUPABASE_URL='https://qjyqaydfezbpeimpvlcb.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jtWLY4vYz2-VklNLoJqxVw_lMdhtfgG'; // replaced at deployment, public (not service role)
 const CONTENT={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
