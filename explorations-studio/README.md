@@ -100,3 +100,15 @@ P4: 图谱扩充：来源事实、素材版本、衍生图、专题、品牌规�
 - 处理回跳链接错误显示、PASSWORD_RECOVERY 回调，以及登录成功后继续被中断的“启动生产”意图。
 - Supabase 共享项目此前 Auth 日志出现一些邮件一次性链接失效和发送限流，日志中也有来自其他 DAVYLAB 应用的请求，不能直接推断 Studio 的唯一根因。取消依赖 magic link 的主登录流程是针对体验与可靠性的修复。
 - 验收：GitHub Pages 主页面与 production.js HTTP 200；静态 JS 语法检查通过；所有脚本引用的表单控件在 DOM 中存在。尚未用真实账号完成密码登录 → 生产调用的浏览器端到端测试，因而不可宣称已验证此链路。
+
+
+## 2026-11-09 | 正式流程修订 V0.4
+
+**唯一正确路径：Studio 派单 → ChatGPT 完成全部创作 → WorkBuddy 上传/发布 → 状态回写 Studio。**
+
+- Studio 的 Edge Function `start` 只创建 `queued / awaiting_chatgpt` 创作委托与正式任务书，**不执行选题、写稿或图片生成**。可用 `work_order` 按批次获取任务书。
+- ChatGPT 每周 09:00 定时自动化已更新，优先读取平台委托；若该环境无法直接访问私有队列，仅能按既定日期从 AI Radar 报道独立创作，不能宣称该委托已被真正领取。
+- Studio 页面提供 **下载任务书** 和 **交给 ChatGPT**：后者复制明确委托提示词并打开 ChatGPT，由用户发送。当前不等于网站拥有 ChatGPT 对话创建 API 或已自动派发到 ChatGPT，须如实标注。
+- WorkBuddy 必须在 ChatGPT 完成 9 个独立 PNG，提供 ZIP、原文核验清单、文案与 QA 后才能进入上传和发布。缺少真实回执不得显示已发布。
+- 不直接写入微信，不修改每日 AI Radar 数据。
+- 自动任务领取、ChatGPT 成品文件回传数据库及 WorkBuddy 自动接单发表的 webhook/连接授权目前尚未完成端到端验证，属于下一阶段技术工作。
