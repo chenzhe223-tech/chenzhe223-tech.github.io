@@ -40,7 +40,7 @@ function wtArchiveDesk(){
  const items=rows.map(it=>{
   const issues=Array.isArray(it.issues)&&it.issues.length?'<p class="wt-dash-issue">'+wtArchiveHtml(it.issues.join('；'))+'</p>':'';
   const meta=(it.category?wtArchiveHtml(it.category)+' · ':'')+wtArchiveHtml(it.task_id)+' · '+wtArchiveDate(it.created_at);
-  return '<article class="wt-dash-task"><div class="wt-dash-task-main"><small>'+meta+'</small><h3>'+wtArchiveHtml(it.title)+'</h3>'+issues+'</div><span class="wt-dash-status wt-dash-status--'+(types[it.status]||'wait')+'">'+wtArchiveHtml(wtArchiveStateLabel(it))+'</span></article>';
+  return '<article class="wt-dash-task"><div class="wt-dash-task-main"><small>'+meta+'</small><h3><a class="wt-dash-task-link" href="'+WT_ARCHIVE_URL+'/tree/main/tasks/'+encodeURIComponent(it.task_id)+'" target="_blank" rel="noopener noreferrer">'+wtArchiveHtml(it.title)+' ↗</a></h3>'+issues+'</div><span class="wt-dash-status wt-dash-status--'+(types[it.status]||'wait')+'">'+wtArchiveHtml(wtArchiveStateLabel(it))+'</span></article>';
  }).join('');
  const empty=snap?'当前无仓库任务，可前往制作交接中心创建。':'尚未读取私有仓库。请登录后刷新；未连接不代表没有任务。';
  const message=wtArchiveError?'<p class="wt-dash-error">'+wtArchiveHtml(wtArchiveError)+'</p>':'';
