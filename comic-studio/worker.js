@@ -1,5 +1,5 @@
 // WORLD/TOON 2.0 / By DAVYLAB — editorial news wire + restricted AI + GitHub static assets
-const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/7ad5663d50eb354d8aa3bf4c8158ed6c281b6b5b/comic-studio/';
+const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/comic-studio/';
 const SUPABASE_URL='https://qjyqaydfezbpeimpvlcb.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jtWLY4vYz2-VklNLoJqxVw_lMdhtfgG'; // replaced at deployment, public (not service role)
 const CONTENT={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
@@ -164,12 +164,10 @@ async function wtArchiveAuth(req,env){if(!env.WORLDTOON_ARCHIVE_OWNER_UID||!env.
 // Archive metadata is never inferred from UI state. A Public repository permits
 // read-only public catalog preview; private repositories require owner auth.
 async function wtArchiveMeta(env) {
- // Anonymous reads never query rate-limited GitHub REST metadata. The public
- // catalog itself proves public accessibility; no privileged operation uses it.
+ // A private repository MUST NOT be inferred public from a failed anonymous raw URL.
+ // No credentials means configuration needed, not a missing repository or a fake empty catalog.
  if(!env.WORLDTOON_GITHUB_TOKEN) {
-  const catalogue=await wtArchivePublicIndex('library/index.json');
-  if(catalogue?.schema!=='davylab.worldtoon.library.v1')throw Error('公开漫画仓库索引不存在或格式错误');
-  return {exists:true,private:false,visibility:'public',default_branch:'main',readOnly:true};
+  return {exists:null,private:null,visibility:'unverified',readOnly:true,unconfigured:true};
  }
  const headers={'accept':'application/vnd.github+json','user-agent':'WORLD-TOON/2.6','authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN};
  const r=await fetch(WT_API,{headers,signal:AbortSignal.timeout(9000)});
@@ -211,12 +209,13 @@ async function wtArchiveApi(request,env,url){
  if(p==='/api/archive/status'&&method==='GET'){
   try {
    const meta=await wtArchiveMeta(env),writeReady=meta.private===true&&!!(env.WORLDTOON_ARCHIVE_OWNER_UID&&env.WORLDTOON_GITHUB_TOKEN);
-   return wtJson({repo:WT_REPO,exists:meta.exists,visibility:meta.visibility,readable:meta.exists&&(!meta.private||writeReady),configured:writeReady,mode:writeReady?'private_authenticated':meta.private?'private_unconfigured':'public_readonly',producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
+   return wtJson({repo:WT_REPO,exists:meta.exists,visibility:meta.visibility,readable:meta.exists&&(!meta.private||writeReady),configured:writeReady,mode:meta.unconfigured?'credentials_required':writeReady?'private_authenticated':meta.private?'private_unconfigured':'public_readonly',producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
   }catch(err){return wtJson({repo:WT_REPO,error:'GitHub 仓库状态暂不可用：'+String(err.message||err).slice(0,140)},503)}
  }
  if(p==='/api/archive/sync'&&method==='GET'){
   try {
    const meta=await wtArchiveMeta(env);
+   if(meta.unconfigured)return wtJson({repo:WT_REPO,code:'GITHUB_CREDENTIALS_REQUIRED',error:'私有 GitHub 仓库尚未在 Cloudflare Worker 配置安全访问凭证和管理员身份；请在服务端配置，不要在浏览器或聊天中粘贴密钥'},503);
    if(!meta.exists)return wtJson({repo:WT_REPO,error:'独立漫画仓库不存在或访问权限不足'},503);
    let library,queue,mode;
    if(meta.private) {

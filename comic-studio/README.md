@@ -26,3 +26,10 @@ https://worldtoon.chenzhe223.workers.dev/
 静态资源位于仓库 `comic-studio/`，Worker `worker.js` 代理该目录。Worker 绑定：`AI` Workers AI、`DB` D1、`AI_ENABLED` 默认 `false`。D1 SQL 见 `d1.sql`。
 
 By DAVYLAB · 把想法，做成能用的工具。
+## 2026-11-10 双轨验收更新
+
+- GitHub 交付仓 `chenzhe223-tech/worldtoon` 已核验为 Private。
+- 轨道 A 仍保留接口，不启用收费推理；两轨共用 GitHub 交付质量门禁。
+- 双轨中心显示 WorkBuddy 已接单、草稿已核验、正式发表等细分状态；后台凭证缺失时明确显示需要配置，不错误推断仓库为 Public。
+- Worker 静态源使用本站 `main/comic-studio/`，便于前端修改随提交更新；缓存到期后生效，保留 Git 提交用于回滚。
+- 仅配置 Cloudflare Worker 服务端的 GitHub 受限令牌和 Supabase 管理员 UID 才能正式派单；此处不保存密钥。
