@@ -80,4 +80,17 @@ assert.equal(node("opportunityCount").textContent,"1 条可选","Lens filter fai
 feed.splice(0);win.renderOpportunityRadar();
 assert(node("opportunityList").innerHTML.includes("正在准备选题素材"),"Empty state not rendered");
 assert(node("opportunityWeekPlan").innerHTML.includes("加载新闻后"),"Weekly plan did not reset when empty");
+
+// Smart calendar mobile layout guardrails (interactive behavior is also browser-tested).
+const calendarScript = fs.readFileSync(path.join(base, "smart-schedule.js"), "utf8");
+new vm.Script(calendarScript, {filename:"smart-schedule.js"});
+for (const id of ["smartStartDate","smartScheduleWindow","smartScheduleFilter","smartAutoAssign","smartScheduleStats","smartPlanNow","calendarList"]) {
+  assert(ids.has(id), "Missing smart calendar control: "+id);
+}
+assert(html.includes('role="switch" aria-label="新建选题自动排期"'), "Missing compact calendar switch");
+assert(html.includes("#section-calendar .smart-controls>label:nth-child(3){grid-column:1/-1}"), "Calendar filter must span full mobile row");
+assert(html.includes(".smart-autotoggle{grid-column:1/-1"), "Auto assign switch must span full mobile row");
+assert(html.includes("#section-calendar .smart-schedule-stats{display:grid!important;grid-template-columns:repeat(3"), "Calendar stats must have three equal columns on mobile");
+assert(calendarScript.includes("一三五日"), "Missing compact poster schedule statistic");
+
 process.stdout.write("PASS: JS syntax, DOM references, 3 opportunity cards, XSS escape, filter, save, weekly plan, empty state; Radar "+radar.report_date+"\n");
