@@ -164,18 +164,24 @@ async function wtArchiveAuth(req,env){if(!env.WORLDTOON_ARCHIVE_OWNER_UID||!env.
 // Archive metadata is never inferred from UI state. A Public repository permits
 // read-only public catalog preview; private repositories require owner auth.
 async function wtArchiveMeta(env) {
- const headers={'accept':'application/vnd.github+json','user-agent':'WORLD-TOON/2.6'};
- if(env.WORLDTOON_GITHUB_TOKEN)headers.authorization='Bearer '+env.WORLDTOON_GITHUB_TOKEN;
+ // Anonymous reads never query rate-limited GitHub REST metadata. The public
+ // catalog itself proves public accessibility; no privileged operation uses it.
+ if(!env.WORLDTOON_GITHUB_TOKEN) {
+  const catalogue=await wtArchivePublicIndex('library/index.json');
+  if(catalogue?.schema!=='davylab.worldtoon.library.v1')throw Error('公开漫画仓库索引不存在或格式错误');
+  return {exists:true,private:false,visibility:'public',default_branch:'main',readOnly:true};
+ }
+ const headers={'accept':'application/vnd.github+json','user-agent':'WORLD-TOON/2.6','authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN};
  const r=await fetch(WT_API,{headers,signal:AbortSignal.timeout(9000)});
  if(r.status===404)return {exists:false,private:null,visibility:'unknown'};
- if(!r.ok)throw Error('GitHub 仓库状态读取失败 HTTP '+r.status);
+ if(!r.ok)throw Error('GitHub 私有仓库状态读取失败 HTTP '+r.status);
  const v=await r.json();
  return {exists:true,private:v.private===true,visibility:v.private===true?'private':'public',default_branch:v.default_branch||'main'};
 }
 async function wtArchivePublicIndex(path) {
  if(!['library/index.json','queue/workbuddy.json'].includes(path))throw Error('未授权的目录路径');
  const url='https://raw.githubusercontent.com/'+WT_REPO+'/main/'+path;
- const res=await fetch(url,{signal:AbortSignal.timeout(9000),cf:{cacheEverything:true,cacheTtl:60}});
+ const res=await fetch(url,{signal:AbortSignal.timeout(9000),cf:{cacheEverything:true,cacheTtl:30}});
  if(!res.ok)throw Error('公开仓库索引读取失败 HTTP '+res.status);
  const raw=await res.text();
  if(raw.length>900000)throw Error('仓库索引大小异常');
