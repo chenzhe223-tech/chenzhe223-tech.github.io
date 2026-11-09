@@ -114,3 +114,7 @@
 .wf-form input,.wf-form select{max-width:100%}.wf-code{font:12px/1.7 ui-monospace,monospace;color:#575a55}
 .wf-instructions{line-height:1.8;font-size:13px}.wf-instructions strong{color:#28312b}
 @media(max-width:850px){.wf-layout{grid-template-columns:1fr}.wf-step{padding:19px}.wf-path{gap:5px}.wf-path span{font-size:11px}}
+
+/* WORLD/TOON v2.5 archive mobile layout */
+@media (max-width:720px){.grid-stat{grid-template-columns:repeat(2,minmax(0,1fr))!important}.grid-stat .box{padding:14px}.grid-stat h2{font-size:25px}}
+@media (max-width:390px){.grid-stat{gap:8px!important}.grid-stat .box{padding:11px}}
