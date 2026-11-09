@@ -5,10 +5,10 @@
  */
 (function(global){
  'use strict';
- const VERSION='1.0.0';
+ const VERSION='1.1.0';
  const MIN_PUBLIC=60;
- const weights=Object.freeze({heat:.32,impact:.36,drawability:.32});
- const labels=Object.freeze({overall:'综合评分',heat:'热度',impact:'影响力',drawability:'可画性',latest:'最新时间'});
+ const weights=Object.freeze({heat:.20,impact:.20,drawability:.20,conflict:.20,novelty:.10,credibility:.10});
+ const labels=Object.freeze({overall:'综合评分',heat:'热度',impact:'影响力',drawability:'可画性',conflict:'冲突与反转',novelty:'新奇程度',credibility:'来源可追溯',latest:'最新时间'});
  const patterns={
   heat:[
    [/(突发|最新|刚刚|breaking|today|now|live|viral|trending|震惊|爆火|引爆|hot topic)/i,9],
@@ -66,15 +66,19 @@
   const heat=clamp(39+time+category.heat+h.value+(verifiedURL?3:0));
   const impact=clamp(35+category.impact+im.value+(String(n.why||'').length>=25?5:0)+(verifiedURL?2:0));
   const drawability=clamp(39+category.drawability+dr.value+(n.image?3:0)+((title.match(/[:：—\-]/g)||[]).length?2:0));
-  const overall=clamp(heat*weights.heat+impact*weights.impact+drawability*weights.drawability);
+  const conflict=clamp(28+(/对决|角逐|交锋|碰撞|博弈|反转|争议|对抗|竞争|battle|clash|rival|versus|conflict|debate|twist/i.test(combined)?43:0)+(/:|：|—/.test(title)?9:0));
+  const novelty=clamp(30+(/首次|首个|突破|罕见|意外|创新|首次发现|first|new|breakthrough|unexpected|discover|novel|historic/i.test(combined)?45:0)+(dr.count>1?8:0));
+  // Source traceability is not independent source authentication or factual verification.
+  const credibility=clamp(23+(verifiedURL?22:0)+(String(n.source||'').trim()?12:0)+(Number.isFinite(Date.parse(n.published||''))?13:0));
+  const overall=clamp(heat*weights.heat+impact*weights.impact+drawability*weights.drawability+conflict*weights.conflict+novelty*weights.novelty+credibility*weights.credibility);
   const explanations=[
    time>=20?'近期发生或刚发布':'时效信号较弱',
    im.count>=2?'涉及多个行业/公共影响主题':'需要核实实际影响范围',
    dr.count>=2?'具备可视化人物/情节冲突':'需策划原创分镜和叙事'
   ];
-  return {overall,heat,impact,drawability,method:'rule_estimate',version:VERSION,
+  return {overall,heat,impact,drawability,conflict,novelty,credibility,method:'rule_estimate',version:VERSION,
    rationale:explanations.join('；')+'。',factChecked:false,sourceVerified:false,
-   explanation:'根据标题、摘要、栏目和时间的规则预评估；不代表实际社交平台热度或大模型审核结果'};
+   explanation:'基于标题、摘要、时间和来源完整度的六维规则预评估；并非实际热度、大模型评分、来源鉴真或事实核验'};
  }
  function decorate(rows,opts={}){
   return (Array.isArray(rows)?rows:[]).map((row,index)=>({...row,_rating:evaluate(row,opts),_sourceIndex:row?._sourceIndex??index}));
@@ -94,6 +98,10 @@
    if(focus==='heat80')return r.heat>=80;
    if(focus==='impact80')return r.impact>=80;
    if(focus==='drawability80')return r.drawability>=80;
+   if(focus==='conflict70')return r.conflict>=70;
+   if(focus==='conflict80')return r.conflict>=80;
+   if(focus==='novelty70')return r.novelty>=70;
+   if(focus==='credibility70')return r.credibility>=70;
    return true;
   });
   const found=focused.filter(n=>!query||[n.title,n.summary,n.source,n.why,n.category].some(x=>String(x||'').toLowerCase().includes(query)));
@@ -104,6 +112,6 @@
   });
   return {items:found,all:arr.length,eligible:eligible.length,hidden:arr.length-eligible.length,filtered:focused.length-found.length,minimum:overallMin,sort,focus};
  }
- function format(r){return '综合 '+r.overall+' / 热度 '+r.heat+' / 影响力 '+r.impact+' / 可画性 '+r.drawability}
+ function format(r){return '综合 '+r.overall+' / 热度 '+r.heat+' / 影响力 '+r.impact+' / 可画性 '+r.drawability+' / 冲突 '+r.conflict+' / 新奇 '+r.novelty+' / 来源可追溯 '+r.credibility}
  global.wtEditorialRank=Object.freeze({VERSION,MIN_PUBLIC,weights,labels,evaluate,decorate,select,format});
 })(window);

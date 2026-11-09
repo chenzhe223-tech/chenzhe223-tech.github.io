@@ -19,8 +19,8 @@ function wtNewsPicture(n,i){
   (image?'<span class="wt-news-image-label">来源媒体配图 · 请核对</span>':'')+'</div>';
 }
 function wtRankControlOptions(){
- const sorts=[['overall','综合评分 ↓'],['heat','热度 ↓'],['impact','影响力 ↓'],['drawability','可画性 ↓'],['latest','最新发布']];
- const filters=[['all','全部达标'],['heat70','热度 ≥70'],['heat80','热度 ≥80'],['impact70','影响力 ≥70'],['impact80','影响力 ≥80'],['drawability70','可画性 ≥70'],['drawability80','可画性 ≥80']];
+ const sorts=[['overall','综合评分 ↓'],['heat','热度 ↓'],['impact','影响力 ↓'],['drawability','可画性 ↓'],['conflict','冲突/反转 ↓'],['novelty','新奇 ↓'],['credibility','来源追溯 ↓'],['latest','最新发布']];
+ const filters=[['all','全部达标'],['heat70','热度 ≥70'],['heat80','热度 ≥80'],['impact70','影响力 ≥70'],['impact80','影响力 ≥80'],['drawability70','可画性 ≥70'],['drawability80','可画性 ≥80'],['conflict70','冲突 ≥70'],['conflict80','冲突 ≥80'],['novelty70','新奇 ≥70'],['credibility70','追溯 ≥70']];
  const option=(entries,value)=>entries.map(([k,label])=>'<option value="'+k+'"'+(k===value?' selected':'')+'>'+label+'</option>').join('');
  return '<label>排序<select id="wtRankSort" aria-label="按评分维度排序">'+option(sorts,wtRankSort)+'</select></label>'+
         '<label>优先维度<select id="wtRankFocus" aria-label="按评价维度筛选">'+option(filters,wtRankFocus)+'</select></label>'+
@@ -32,7 +32,8 @@ function wtRankBadge(item){
  '<div class="wt-rankprimary"><span>综合</span><strong>'+r.overall+'</strong><small>/100</small></div>'+
  '<div><span>热度</span><b>'+r.heat+'</b></div>'+
  '<div><span>影响力</span><b>'+r.impact+'</b></div>'+
- '<div><span>可画性</span><b>'+r.drawability+'</b></div></div>';
+ '<div><span>可画性</span><b>'+r.drawability+'</b></div>'+ 
+ '<div><span>冲突</span><b>'+r.conflict+'</b></div><div><span>新奇</span><b>'+r.novelty+'</b></div><div><span>追溯</span><b>'+r.credibility+'</b></div></div>';
 }
 function wtLive(){
  if(!wtNews.length&&!wtFetching&&!wtLastFetch&&!wtNewsError)setTimeout(()=>wtFetchNews(),0);
@@ -47,11 +48,11 @@ function wtLive(){
  '<p class="minor wt-news-source">'+e(n.source||'来源未标注')+' · '+e(n.language||'全球')+'</p>'+
  '<p class="wt-rank-reason">'+e(n._rating.rationale)+'</p>'+
  '<div class="buttons"><a href="'+e(safeURL(n.url))+'" target="_blank" rel="noopener noreferrer" class="button">阅读原文 ↗</a><button class="button dark" data-wt="save-news" data-index="'+n._sourceIndex+'">加入选题池</button></div></div></article>').join('');
- return heroHeader('02 / LIVE NEWSWIRE','全球热点雷达','实时新闻线索 · 四维智能预评估 · 选题优先级排序。评分用于筛选创作题材，不代表社交平台真实热度或事实已核验。','<button class="button dark" data-wt="news-refresh">⟳ 刷新实时新闻</button>')+
+ return heroHeader('02 / LIVE NEWSWIRE','全球热点雷达','实时新闻线索 · 六维规则预评估 · 选题优先级排序。评分用于筛选创作题材，不代表社交平台真实热度或事实已核验。','<button class="button dark" data-wt="news-refresh">⟳ 刷新实时新闻</button>')+
  '<div class="wt-filters">'+filters+'</div>'+
  '<div class="box wt-rank-toolbar"><div class="wt-rank-controls"><label class="wt-rank-search">关键词<input id="wtSearch" placeholder="检索标题、媒体、摘要…" value="'+e(wtQuery)+'"></label>'+wtRankControlOptions()+'</div>'+
  '<div class="wt-rank-summary"><strong>'+items.length+'</strong> 条显示 / '+result.all+' 条已采集 · '+result.hidden+' 条未达综合门槛 · '+(wtFetching?'正在采集…':wtLastFetch?'最近采集 '+wtTime(wtLastFetch):'尚未采集')+'</div>'+
- '<p class="wt-rank-disclaimer">智能规则预评估 V'+wtEditorialRank.VERSION+' · 热度 32% + 影响力 36% + 可画性 32%。低于 60 分不展示；评分依据新闻标题、摘要、发布日期及题材信号，非大模型真实评价，非传播量统计，也不构成事实核验。</p>'+
+ '<p class="wt-rank-disclaimer">智能规则预评估 V'+wtEditorialRank.VERSION+' · 热度 20% + 影响力 20% + 可画性 20% + 冲突 20% + 新奇 10% + 来源追溯 10%。低于 60 分不展示；评分依据新闻标题、摘要、发布日期及题材信号，非大模型真实评价，非传播量统计，也不构成事实核验。</p>'+
  (wtNewsError?'<p class="wt-error">'+e(wtNewsError)+'</p>':'')+'</div>'+
  '<div class="wt-news" style="margin-top:18px">'+(cards||'<div class="box wt-rank-empty"><h3>当前没有符合条件的新闻</h3><p>'+(wtFetching?'正在采集实时新闻…':!wtNews.length?'点击刷新实时新闻获取真实来源':'试试换一个类别或降低维度筛选；综合评分仍保持 ≥60 的展示门槛。')+'</p></div>')+'</div>';
 }
