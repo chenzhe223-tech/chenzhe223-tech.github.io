@@ -35,6 +35,12 @@ vm.runInContext(archive,actx);
  assert.equal(shared.status,'synced');assert.equal(shared.total,2);
  assert.equal(shared.articles[0].task_id,'WT-1234567890abcdef1234');
  assert.equal(shared.articles[1].task_id,'');
+ const publicResp=await vm.runInContext("__wtWorker.fetch(new Request('https://worldtoon.chenzhe223.workers.dev/api/archive/publications'),{},null)",wctx);
+ assert.equal(publicResp.status,200,'published public content can be read without private GitHub login');
+ const publicBody=await publicResp.json();assert.equal(publicBody.total,2);
+ const privateResp=await vm.runInContext("__wtWorker.fetch(new Request('https://worldtoon.chenzhe223.workers.dev/api/archive/sync'),{},null)",wctx);
+ assert.equal(privateResp.status,503,'private task catalog must remain inaccessible without credentials');
+
  actx.fixture={shared_publications:shared,library:{items:[
  {task_id:'WT-1234567890abcdef1234',status:'ready_for_workbuddy',title:'原创漫画 - 灯塔',receipt:null}
  ]},queue:{items:[]}};
@@ -54,5 +60,12 @@ vm.runInContext(archive,actx);
  const desk=vm.runInContext('wtSharedDeskCard()',actx);
  assert.match(desk,/公众号发表档案/);
  assert.match(desk,/已明确关联 WORLD\/TOON 工单 1 条/);
+ actx.public_copy=shared;
+ vm.runInContext('wtArchiveSnapshot=null;wtSharedStandalone=public_copy;',actx);
+ const guest=vm.runInContext('wtSharedDeskCard()',actx);
+ assert.match(guest,/公众号发表档案/);
+ assert.match(guest,/已从公众号共享库读取/);
+ assert.doesNotMatch(guest,/已明确关联 WORLD\/TOON 工单 1 条/);
+
  console.log('PASS: shared article ingestion, URL dedupe, exact ID association and title-only non-publication guard');
 })().catch(err=>{console.error(err);process.exit(1)});
