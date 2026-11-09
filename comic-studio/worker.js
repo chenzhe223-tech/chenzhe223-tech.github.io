@@ -122,20 +122,50 @@ async function authenticate(request,env){const auth=request.headers.get('authori
 async function quota(env,userId,kind,cap){if(!env.DB)throw Error('配额数据库未配置');let day=new Date().toISOString().slice(0,10);const key=userId+':'+day+':'+kind;let r=await env.DB.prepare('INSERT INTO usage_counts(id,uses,updated_at) VALUES(?,1,?) ON CONFLICT(id) DO UPDATE SET uses=uses+1,updated_at=excluded.updated_at WHERE uses<? RETURNING uses').bind(key,new Date().toISOString(),cap).first();if(!r)throw Error('今日模型使用上限已到，请明天再试');return r.uses;}
 function parseJSON(text){let s=String(text||'').trim().replace(/^```(?:json)?\s*/,'').replace(/```$/,'');try{return JSON.parse(s)}catch{let a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw Error('AI 回复不是有效 JSON')}}
 function aiError(err){let msg=String(err?.message||err);return msg.slice(0,250)}
-async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);if(env.AI_ENABLED!=='true')return failure('AI 生成已集成，但当前未启用计费模型；待确认模型费用与预算后开放。',503);if(!env.AI)return failure('AI 模型绑定未配置',503);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';const limit=type==='script'?3:type==='characters'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');try{await quota(env,'__worldtoon_global__',type,type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure(aiError(err),429)}
-try{
- if(type==='characters'){
+async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';if(type!=='characters'&&env.AI_ENABLED!=='true')return failure('生图与编剧模型尚未获批启用；角色设计可使用免费 DeepSeek。',503);if(!env.AI)return failure('AI 免费模型绑定未配置',503);const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');try{await quota(env,'__worldtoon_global__',type,type==='characters'?5:type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure('今 if(type==='characters'){
   const count=Math.max(1,Math.min(4,Number(body.count)||2));
-  const concept=String(body.concept||'').slice(0,2000),title=String(body.title||'原创漫画').slice(0,180);
-  if(!concept.trim())return failure('请提供漫画故事概念或世界观',400);
-  const sys='你是优秀的原创漫画角色设计师。依据公共新闻主题设计完全虚构的漫画人物：不同姓名、面容、外形、衣着、世界观与可识别特征。不得假冒或复制真实公众人物面容与身份，不得编造现实人物的违法、私生活、政治交易指控。设计应当适合跨多格保持视觉一致。只输出 JSON 对象，结构为 {"characters":[{"name":"角色名称","type":"虚构角色","description":"年龄段外形发型与面部视觉","costume":"固定服装与材质","colors":"主副配色","traits":"明确不变的视觉识别特征","personality":"背景动机性格"}]}。不得输出 Markdown 或前言。';
-  const msg=JSON.stringify({title,concept,style:String(body.style||'杂志式原创漫画').slice(0,100),count,fictional:true});
-  const response=await env.AI.run('@cf/google/gemma-4-26b-a4b-it',{messages:[{role:'system',content:sys},{role:'user',content:msg}],max_tokens:2100,temperature:0.7});
-  const parsed=parseJSON(response.response||response.choices?.[0]?.message?.content||'');
+  const concept=String(body.concept||'').slice(0,2000).trim();
+  const title=String(body.title||'原创漫画').slice(0,180);
+  if(concept.length<6)return failure('请输入至少六个字的故事背景或人物设定',400);
+  const style=['杂志式原创漫画','温暖手绘','黑色幽默','未来科幻'].includes(body.style)?body.style:'杂志式原创漫画';
+  const sys='你是 DAVYLAB 世界级原创漫画角色总监。围绕同一虚构故事，生成有辨识度、彼此差异明显、九格漫画中稳定一致的角色设计。角色全部原创，不使用现实公众人物或可识别的真实人物身份，不捏造真实人物的违法、私生活或其他事实指控。每个角色必须包含：中文姓名、类型、外貌与发型及五官轮廓、材质和服装、可复用的2-3个HEX主辅色或明确色名、至少3个跨画格不变的识别特征、性格和戏剧冲突功能。精确生成指定数量，避免重复角色和空洞套话。输出 JSON 对象（禁止 Markdown 或解释）：{"characters":[{"name":"角色名","type":"虚构角色","description":"外形与年龄段、发型五官","costume":"固定服饰","colors":"配色","traits":"稳定特征","personality":"动机性格"}]}。';
+  const msg=JSON.stringify({title,concept,style,count,fictional:true});
+  const useDeepSeek=Date.now()<Date.parse('2026-11-20T00:00:00Z');
+  let model='',response=null,fallbackReason='';
+  if(useDeepSeek){
+    try{
+      response=await env.AI.run('@cf/deepseek-ai/deepseek-r1-distill-qwen-32b',{
+        messages:[{role:'system',content:sys},{role:'user',content:msg}],
+        max_tokens:1450,temperature:0.55,response_format:{type:'json_object'}
+      });
+      model='deepseek-r1-distill-qwen-32b';
+    }catch(err){fallbackReason='DeepSeek 免费模型暂不可用';}
+  }else fallbackReason='DeepSeek 免费模型已下线';
+  if(!response){
+    response=await env.AI.run('@cf/google/gemma-4-26b-a4b-it',{
+      messages:[{role:'system',content:sys},{role:'user',content:msg}],
+      max_tokens:1650,temperature:0.65
+    });
+    model='gemma-4-26b-a4b-it';
+  }
+  let parsed;
+  try{parsed=parseJSON(response.response||response.choices?.[0]?.message?.content||'')}
+  catch(err){return failure('模型未返回可编辑的角色 JSON，请稍后调整故事背景再试',502)}
   if(!Array.isArray(parsed.characters)||parsed.characters.length<1)return failure('模型没有返回有效角色档案',502);
-  const chars=parsed.characters.slice(0,count).map(c=>({name:String(c?.name||'').slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c?.type)?c.type:'虚构角色',description:String(c?.description||'').slice(0,1700),costume:String(c?.costume||'').slice(0,400),colors:String(c?.colors||'').slice(0,220),traits:String(c?.traits||'').slice(0,950),personality:String(c?.personality||'').slice(0,1100)})).filter(c=>c.name.trim());
-  if(!chars.length)return failure('角色内容为空，请修改设定重试',502);
-  return Response.json({characters:chars,model:'gemma-4-26b-a4b-it',draft:true,requiresHumanReview:true},{headers:RESULT_HEADERS});
+  const names=new Set();
+  const chars=parsed.characters.slice(0,count).map(c=>({
+    name:String(c?.name||'').trim().slice(0,80),
+    type:['虚构角色','拟人化角色','抽象象征'].includes(c?.type)?c.type:'虚构角色',
+    description:String(c?.description||'').slice(0,1700),
+    costume:String(c?.costume||'').slice(0,400),
+    colors:String(c?.colors||'').slice(0,220),
+    traits:String(c?.traits||'').slice(0,950),
+    personality:String(c?.personality||'').slice(0,1100)
+  })).filter(c=>{if(!c.name||names.has(c.name)||!c.description||!c.traits)return false;names.add(c.name);return true});
+  if(!chars.length)return failure('模型返回的角色资料不完整，请修改背景重试',502);
+  return Response.json({characters:chars,model,provider:model.startsWith('deepseek')?'Cloudflare Workers AI · DeepSeek':'Cloudflare Workers AI · free fallback',modelFallback:!!fallbackReason,fallbackReason,draft:true,requiresHumanReview:true,freeTier:true},{headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
+ }
+{headers:RESULT_HEADERS});
  }
  if(type==='script'){
   const sys='你是专业中文编辑与原创漫画编剧。只把公共事件作为主题灵感，不能把待证实的新闻断言、犯罪、私人关系、政治交易或隐私编成可识别现实人物的指控。必须使用原创虚构人物，避免精确指向真实个人。创作有幽默感、高级杂志质感、戏剧节奏。仅输出合法JSON对象，格式 {"fiction":"...","panels":[{"title":"...","scene":"...","caption":"...","dialogue":"...","prompt":"..."}]}，panels必须恰好九个。禁止Markdown。';
@@ -262,9 +292,9 @@ async function wtArchiveApi(request,env,url){
  }
  return wtJson({error:'该仓库接口不存在或请求方法不被允许'},405)
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
- if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true'},{headers:RESULT_HEADERS});
+ if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
