@@ -25,7 +25,7 @@ function wtArchiveSection(){const items=(wtArchiveSnapshot?.library?.items||[]).
 }
 // Shared publication index is read-only. Matching a public article never grants a private QA approval.
 const WT_SHARED_PUBLICATION_SOURCE='https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/topic-studio/data/published-articles.json';
-function wtPublicationTitle(v){return String(v||'').normalize('NFKC').toLowerCase().replace(/[：:]\\s*漫画改编\\s*$/,'').replace(/[\\s\\p{P}\\p{S}]/gu,'')}
+function wtPublicationTitle(v){return String(v||'').normalize('NFKC').toLowerCase().replace(/[：:]\s*漫画改编\s*$/,'').replace(/[\s\p{P}\p{S}]/gu,'')}
 function wtPublicationMatches(p){
  const shared=wtArchiveSnapshot?.shared_publications,items=Array.isArray(shared?.articles)?shared.articles:[];
  const tid=String(p?.handoff?.taskId||p?.handoff?.repoTaskId||'');
