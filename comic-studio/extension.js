@@ -119,3 +119,8 @@ document.addEventListener('change',wfChange);
 
 // Re-render the handoff route after feature declarations are loaded.
 queueMicrotask(()=>{if(location.hash.startsWith("#/handoff"))parseRoute()});
+
+// Force explicit workflow export so app.js and personalized render wrappers can resolve the route.
+window.wtWorkflow=wtWorkflow;
+document.documentElement.dataset.wfModule='ready';
+setTimeout(()=>{if(location.hash.startsWith('#/handoff'))parseRoute()},0);
