@@ -51,4 +51,20 @@ assert.ok(extension.includes("data-wt=\"create-news\""),'One click to create com
 assert.ok(extension.includes('wtDraftFromNews'),'Create draft on original existing model');
 assert.ok(extension.includes('wtSourceCounts'),'Surface failed sources');
 assert.ok(extension.includes('wtNews.map((n,i)=>({...n,_sourceIndex:i})).filter('),'Category filtering must retain original record index');
+const visualScript=fs.readFileSync(path.join(root,'comic-visuals.js'),'utf8');
+vm.runInNewContext(visualScript,ctx);
+const visual=ctx.window.wtVisualStudio;
+assert.ok(visual);
+assert.equal(visual.suggestedQuery({title:'郑和下西洋'}),'ship');
+assert.equal(visual.suggestedQuery({title:'唐朝城墙'}),'Chinese art');
+const cc0={id:'met-1',title:'Historical Ship',source:'The Met Open Access',
+ license:'CC0',source_url:'https://www.metmuseum.org/art/collection/search/1',image:'https://example.org/ship.jpg'};
+const draft={...p,visualReferences:[cc0],panels:p.panels.map(x=>({...x}))};
+const firstPrompt=engine.storyboard(draft)[0].prompt;
+assert.ok(firstPrompt.includes(cc0.title)&&firstPrompt.includes(cc0.source_url),'Studio prompt must include latest museum reference');
+draft.panels[0].prompt=firstPrompt;
+draft.visualReferences=[{...cc0,id:'met-2',title:'Another Museum Artifact',source_url:'https://www.metmuseum.org/art/collection/search/2'}];
+const refreshed=engine.storyboard(draft)[0].prompt;
+assert.ok(refreshed.includes('Another Museum Artifact')&&!refreshed.includes('Historical Ship'),'Museum references should update, not accumulate stale rights data');
+assert.ok(engine.bundleEntries(draft).some(x=>x.name==='production/visual-references.json'),'ZIP must include reference license records');
 console.log('WORLD/TOON four-skill & discovery integration QA passed.');

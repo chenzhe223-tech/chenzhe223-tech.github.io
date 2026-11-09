@@ -1,8 +1,20 @@
 /* WORLD/TOON Visual Research: licensed museum images, as references only. */
 'use strict';
 (function(){
-let query='',busy=false,items=[],warning='',searched=false,counts=[];
+let query='',busy=false,items=[],warning='',searched=false,counts=[],lastAutoProject='';
 const presets=[['ancient ship','古代船舶'],['ancient China','中国古物'],['portrait','人物肖像'],['architecture','建筑场景'],['clothing','历史服饰'],['landscape','山川风景']];
+function suggestedQuery(p){
+ const x=String([p?.title,p?.sourceTitle,p?.description,p?.category].filter(Boolean).join(' ')).slice(0,1500);
+ if(/郑和|船|海洋|航海|ship|ocean|sea/i.test(x))return 'ship';
+ if(/唐|三国|宋朝|秦朝|丝绸|中国|China|Chinese|东亚/i.test(x))return 'Chinese art';
+ if(/Rome|Roman|罗马/i.test(x))return 'Roman';
+ if(/Greece|Greek|希腊/i.test(x))return 'Greek';
+ if(/建筑|寺庙|宫殿|castle|architecture/i.test(x))return 'architecture';
+ if(/机器人|发明|科技|scientific|机器|instrument/i.test(x))return 'scientific instrument';
+ if(/旅行|风景|山水|landscape/i.test(x))return 'landscape';
+ if(/服装|fashion|costume|衣着|传统服饰/i.test(x))return 'clothing';
+ return 'portrait';
+}
 function refList(p){return Array.isArray(p.visualReferences)?p.visualReferences:[]}
 function panel(p){
  const refs=refList(p);
@@ -13,7 +25,7 @@ function panel(p){
  '<span class="heritage-license">CC0 · 公有领域</span>'+
  '<div class="buttons"><a class="button" rel="noopener noreferrer" target="_blank" href="'+e(r.source_url)+'">馆藏记录</a>'+
  '<button type="button" class="button dark" data-visual="pin" data-index="'+i+'">加入参考</button></div></div></article>').join('');
- const helper=searched?(items.length?'找到 '+items.length+' 项 CC0 图片 · '+counts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join('、'):'无可用图片，请尝试其他英文关键词。'):'输入搜索词后检索馆藏的 CC0 开放图像；默认不下载、复制或绘制为最终漫画。';
+ const helper=searched?(items.length?'找到 '+items.length+' 项 CC0 图片 · '+counts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join('、'):'无可用图片，请尝试其他英文关键词。'):'进入作品后自动按主题匹配 CC0 馆藏；也可以手动修改关键词。仅作为创作参考，不直接复制为漫画画格。';
  return '<section class="box heritage-visual-panel" aria-label="视觉素材库"><div class="kicker">VISUAL REFERENCES / OPEN CULTURE</div>'+
  '<div class="heritage-header"><div><h2>视觉素材库</h2><p class="minor">大都会博物馆 + 克利夫兰艺术博物馆。仅展示明确开放的 CC0 藏品，供时代服饰、道具与场景参考。</p></div><span class="wt-chip">已选 '+refs.length+' 项</span></div>'+
  '<form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
@@ -47,7 +59,14 @@ function addReference(p,item){
  render();notify('已加入视觉参考库；新生成的分镜提示词会自动引用素材信息');
 }
 const previousStudio=studio;
-studio=function(){const p=selected();return previousStudio()+(p?panel(p):'')};
+studio=function(){
+ const p=selected();
+ if(p&&location.hash.startsWith('#/studio')&&lastAutoProject!==p.id){
+  lastAutoProject=p.id;query=suggestedQuery(p);items=[];counts=[];warning='';searched=false;
+  setTimeout(()=>search(query),0);
+ }
+ return previousStudio()+(p?panel(p):'');
+};
 document.addEventListener('click',ev=>{
  const btn=ev.target.closest('[data-visual]');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();
  const p=selected(),type=btn.dataset.visual;
@@ -61,6 +80,6 @@ document.addEventListener('submit',ev=>{
  ev.preventDefault();ev.stopImmediatePropagation();
  const q=ev.target.elements.q.value;search(q);
 },true);
-window.wtVisualStudio={panel,refList,addReference,presets};
+window.wtVisualStudio={panel,refList,addReference,presets,suggestedQuery};
 if(typeof render==='function'&&location.hash.startsWith('#/studio'))render();
 })();
