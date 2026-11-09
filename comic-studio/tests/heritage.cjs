@@ -51,7 +51,7 @@ vm.runInNewContext(worker.replace('export default {async fetch(','const defaultW
  assert.ok(html.includes('comic-visuals.js'));
  assert.ok(worker.includes('comic-visuals\\\\.js')||worker.includes('comic-visuals\\.js'));
  const js=fs.readFileSync(path.join(root,'comic-visuals.js'),'utf8');
- assert.ok(js.includes('license===\\'CC0\\'')||js.includes("x.license==='CC0'"),'Client filters license');
+ assert.ok(js.includes("x.license==='CC0'"),'Client filters license');
  const rankScript=fs.readFileSync(path.join(root,'ranking.js'),'utf8');
  const rankWin={};vm.runInNewContext(rankScript,{window:rankWin,Date,console});
  const classicScore=rankWin.wtEditorialRank.evaluate(classics.items[0],{now:Date.parse('2026-11-10T00:00:00Z')});
