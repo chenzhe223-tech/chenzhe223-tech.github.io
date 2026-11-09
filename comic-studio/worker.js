@@ -161,15 +161,77 @@ function wtUnb64(s){const bytes=atob(String(s||'').replace(/\s+/g,''));return ne
 async function wtGithub(env,repoPath,method='GET',obj=null){if(!env.WORLDTOON_GITHUB_TOKEN)throw Error('漫画仓库 GitHub Token 尚未配置');const url=WT_API+'/contents/'+repoPath;const r=await fetch(url,{method,headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5',...(obj?{'content-type':'application/json'}:{})},body:obj?JSON.stringify(obj):undefined,signal:AbortSignal.timeout(14000)});const json=await r.json().catch(()=>({message:'GitHub API response invalid'}));return {status:r.status,ok:r.ok,body:json}}
 async function wtGithubJson(env,path){const r=await wtGithub(env,path);if(!r.ok)throw Error(`GitHub 读取 ${path} 失败 (${r.status})`);const j=JSON.parse(wtUnb64(r.body.content));if(!j||typeof j!=='object')throw Error('仓库 JSON 无效');return j}
 async function wtArchiveAuth(req,env){if(!env.WORLDTOON_ARCHIVE_OWNER_UID||!env.WORLDTOON_GITHUB_TOKEN)return {error:'独立仓库尚未完成管理员配置',status:503};const user=await authenticate(req,env);if(!user)return {error:'请先登录 WORLD/TOON',status:401};if(user.id!==env.WORLDTOON_ARCHIVE_OWNER_UID)return {error:'当前账户没有漫画仓库管理权限',status:403};return {user}}
+// Archive metadata is never inferred from UI state. A Public repository permits
+// read-only public catalog preview; private repositories require owner auth.
+async function wtArchiveMeta(env) {
+ const headers={'accept':'application/vnd.github+json','user-agent':'WORLD-TOON/2.6'};
+ if(env.WORLDTOON_GITHUB_TOKEN)headers.authorization='Bearer '+env.WORLDTOON_GITHUB_TOKEN;
+ const r=await fetch(WT_API,{headers,signal:AbortSignal.timeout(9000),cf:{cacheEverything:true,cacheTtl:60}});
+ if(r.status===404)return {exists:false,private:null,visibility:'unknown'};
+ if(!r.ok)throw Error('GitHub 仓库状态读取失败 HTTP '+r.status);
+ const v=await r.json();
+ return {exists:true,private:v.private===true,visibility:v.private===true?'private':'public',default_branch:v.default_branch||'main'};
+}
+async function wtArchivePublicIndex(path) {
+ if(!['library/index.json','queue/workbuddy.json'].includes(path))throw Error('未授权的目录路径');
+ const url='https://raw.githubusercontent.com/'+WT_REPO+'/main/'+path;
+ const res=await fetch(url,{signal:AbortSignal.timeout(9000),cf:{cacheEverything:true,cacheTtl:60}});
+ if(!res.ok)throw Error('公开仓库索引读取失败 HTTP '+res.status);
+ const raw=await res.text();
+ if(raw.length>900000)throw Error('仓库索引大小异常');
+ return JSON.parse(raw);
+}
+function wtArchiveCheckCatalog(library,queue){
+ if(library?.schema!=='davylab.worldtoon.library.v1'||queue?.schema!=='davylab.worldtoon.workbuddy-queue.v1'||!Array.isArray(library.items)||!Array.isArray(queue.items))throw Error('独立仓库目录协议不兼容');
+ if(library.items.length>1500||queue.items.length>200)throw Error('仓库目录数据异常');
+ // Refuse duplicate IDs or duplicated real-story fingerprints in published shelf.
+ const ids=new Set(),publishedStories=new Set();
+ for(const item of library.items){
+  if(!item||typeof item.task_id!=='string'||ids.has(item.task_id))throw Error('漫画索引中存在重复任务');
+  ids.add(item.task_id);
+  if(item.status==='published'){
+   if(!item.receipt?.url||!/^https:\/\/mp\.weixin\.qq\.com\/s(?:\/|\?|$)/.test(item.receipt.url))throw Error('已发表作品缺少有效的微信回执链接');
+   if(item.dedupe_key&&publishedStories.has(item.dedupe_key))throw Error('已发表内容存在重复指纹');
+   if(item.dedupe_key)publishedStories.add(item.dedupe_key);
+  }
+ }
+ for(const item of queue.items){
+  if(!item?.task_id||!ids.has(item.task_id)||!item.author_approved||!item.delivery_sha256)throw Error('待发表队列含未验收任务');
+  if(library.items.find(x=>x.task_id===item.task_id)?.status!=='ready_for_workbuddy')throw Error('待发表状态与仓库目录不一致');
+ }
+}
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
- if(p==='/api/archive/status'&&method==='GET')return wtJson({repo:WT_REPO,configured:!!(env.WORLDTOON_ARCHIVE_OWNER_UID&&env.WORLDTOON_GITHUB_TOKEN),producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
- const auth=await wtArchiveAuth(request,env);if(auth.error)return wtJson({error:auth.error,repo:WT_REPO},auth.status);
+ if(p==='/api/archive/status'&&method==='GET'){
+  try {
+   const meta=await wtArchiveMeta(env),writeReady=meta.private===true&&!!(env.WORLDTOON_ARCHIVE_OWNER_UID&&env.WORLDTOON_GITHUB_TOKEN);
+   return wtJson({repo:WT_REPO,exists:meta.exists,visibility:meta.visibility,readable:meta.exists&&(!meta.private||writeReady),configured:writeReady,mode:writeReady?'private_authenticated':meta.private?'private_unconfigured':'public_readonly',producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
+  }catch(err){return wtJson({repo:WT_REPO,error:'GitHub 仓库状态暂不可用：'+String(err.message||err).slice(0,140)},503)}
+ }
  if(p==='/api/archive/sync'&&method==='GET'){
-  try{const [library,queue]=await Promise.all([wtGithubJson(env,'library/index.json'),wtGithubJson(env,'queue/workbuddy.json')]);
-   if(library.schema!=='davylab.worldtoon.library.v1'||queue.schema!=='davylab.worldtoon.workbuddy-queue.v1'||!Array.isArray(library.items)||!Array.isArray(queue.items))throw Error('独立仓库目录协议不兼容');
-   return wtJson({repo:WT_REPO,library,queue,synced_at:new Date().toISOString()})
-  }catch(err){return wtJson({error:'GitHub 漫画仓库不可访问或未初始化：'+String(err.message||err).slice(0,160)},503)}
+  try {
+   const meta=await wtArchiveMeta(env);
+   if(!meta.exists)return wtJson({repo:WT_REPO,error:'独立漫画仓库不存在或访问权限不足'},503);
+   let library,queue,mode;
+   if(meta.private) {
+    const auth=await wtArchiveAuth(request,env);if(auth.error)return wtJson({repo:WT_REPO,error:auth.error},auth.status);
+    [library,queue]=await Promise.all([wtGithubJson(env,'library/index.json'),wtGithubJson(env,'queue/workbuddy.json')]);
+    mode='private_authenticated';
+   } else {
+    [library,queue]=await Promise.all([wtArchivePublicIndex('library/index.json'),wtArchivePublicIndex('queue/workbuddy.json')]);
+    mode='public_readonly';
+   }
+   wtArchiveCheckCatalog(library,queue);
+   return wtJson({repo:WT_REPO,visibility:meta.visibility,mode,configured:mode==='private_authenticated',library,queue,synced_at:new Date().toISOString()});
+  } catch(err){return wtJson({repo:WT_REPO,error:'漫画仓库同步失败：'+String(err.message||err).slice(0,160)},503)}
+ }
+ const auth=await wtArchiveAuth(request,env);
+ if(auth.error)return wtJson({error:auth.error,repo:WT_REPO},auth.status);
+ if(method==='POST'&&p==='/api/archive/tasks'){
+  try {
+   const meta=await wtArchiveMeta(env);
+   if(!meta.exists||meta.private!==true)return wtJson({error:'必须先将 GitHub 漫画仓库设为 Private，公开仓库禁止派发未发表内容'},409);
+  }catch(err){return wtJson({error:'派单前无法核验 GitHub 仓库私有状态：'+String(err.message||err).slice(0,120)},503)}
  }
  if(p==='/api/archive/tasks'&&method==='POST'){
   let body;try{body=await request.json()}catch{return wtJson({error:'任务格式无效'},400)}
@@ -194,12 +256,12 @@ async function wtArchiveApi(request,env,url){
  }
  return wtJson({error:'该仓库接口不存在或请求方法不被允许'},405)
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.5.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.6.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.5','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}}
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.6','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}}
 };
