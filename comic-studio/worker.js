@@ -329,7 +329,7 @@ async function wtArchiveApi(request,env,url){
  return wtJson({error:'该仓库接口不存在或请求方法不被允许'},405)
 }
 
-const COMIC_SOURCES=[{id:'news',name:'全球热点'},{id:'hackernews',name:'Hacker News'},{id:'arxiv',name:'arXiv AI论文'}];
+const COMIC_SOURCES=[{id:'news',name:'全球热点'},{id:'hackernews',name:'Hacker News'},{id:'arxiv',name:'arXiv AI论文'},{id:'classics',name:'经典故事'},{id:'history',name:'历史脑洞'}];
 function comicNormalize(x,id){
  try{
   let u=new URL(String(x.url||''));if(u.protocol!=='https:'||u.username||u.password)return null;
@@ -343,7 +343,8 @@ function comicNormalize(x,id){
 }
 async function comicDiscover(url){
  const source=url.searchParams.get('source')||'all';
- if(!['all','news','hackernews','arxiv'].includes(source))return failure('未知素材来源',400);
+ if(!['all','news','hackernews','arxiv','classics','history'].includes(source))return failure('未知素材来源',400);
+ if(source==='classics'||source==='history')return heritageDiscover(source,String(url.searchParams.get('q')||'').slice(0,100),Math.min(90,Math.max(5,Number(url.searchParams.get('limit'))||60)));
  const tasks=[];
  if(source==='all'||source==='news')tasks.push({id:'news',run:async()=>{
   const r=await news(new URL('/api/news?category=全部&limit=60',url.origin));const json=await r.json();
@@ -384,11 +385,111 @@ async function comicDiscover(url){
   {headers:{'cache-control':'public,max-age=240','x-content-type-options':'nosniff'}});
 }
 
+
+// WORLD/TOON evergreen research and public-domain visual references.
+// Catalogue entries are discovery leads, not historical fact checks or cleared translations.
+async function heritageGetJSON(url,timeout=8500){
+ const r=await fetch(url,{headers:{accept:'application/json','user-agent':'WorldToon-Evergreen/1.0'},signal:AbortSignal.timeout(timeout)});
+ if(!r.ok)throw Error('上游 HTTP '+r.status);
+ const raw=await r.text();if(raw.length>1400000)throw Error('上游响应过大');
+ return JSON.parse(raw);
+}
+function heritageBook(x){
+ const id=Number(x?.id);if(!Number.isInteger(id)||id<=0)return null;
+ const title=String(x.title||'').slice(0,240);
+ const author=Array.isArray(x.authors)?x.authors.map(a=>a.name).filter(Boolean).slice(0,3).join(', '):'';
+ if(title.length<4)return null;
+ return {title,url:'https://www.gutenberg.org/ebooks/'+id,summary:'经典文学 · '+author+' · '+(x.languages||[]).join('/'),
+  category:'经典故事',source:'Project Gutenberg',source_id:'gutenberg',published:'',
+  image:'',evergreen:true,verification_status:'pending_research',rights_status:'check_jurisdiction',
+  classic_id:id,author,language:(x.languages||[])[0]||'',source_license_note:'原著美国公有领域不等于全球版权和翻译版本均已开放'};
+}
+function heritageEntity(x){
+ const id=String(x.id||'');
+ if(!/^Q\d+$/.test(id)||!x.label)return null;
+ return {title:String(x.label).slice(0,240),url:'https://www.wikidata.org/wiki/'+id,
+  summary:String(x.description||'历史人物或事件，待补充权威史料核验').slice(0,280),
+  category:'历史脑洞',source:'Wikidata',source_id:'wikidata',published:'',
+  image:'',evergreen:true,verification_status:'pending_research',rights_status:'metadata_attribution',
+  entity_id:id,source_license_note:'仅将结构化实体作为线索；历史解释需独立核验'};
+}
+async function heritageDiscover(source,query,limit){
+ const attempts=[];
+ if(source==='classics')attempts.push({id:'gutenberg',run:async()=>{
+  const qs=query?'?search='+encodeURIComponent(query):'?page=1';
+  const r=await heritageGetJSON('https://gutendex.com/books/'+qs,11000);
+  return (r.results||[]).map(heritageBook).filter(Boolean);
+ }});
+ if(source==='history')attempts.push({id:'wikidata',run:async()=>{
+  const terms=query?[query]:['三国','唐朝','丝绸之路','宋朝','秦朝'];
+  const results=await Promise.allSettled(terms.map(q=>heritageGetJSON(
+   'https://www.wikidata.org/w/api.php?action=wbsearchentities&search='+encodeURIComponent(q)+'&language=zh&uselang=zh&limit=12&format=json',9000)));
+  const rows=results.filter(r=>r.status==='fulfilled').flatMap(r=>r.value.search||[]);
+  if(!rows.length)throw Error('Wikidata 搜索当前不可用');
+  return rows.map(heritageEntity).filter(Boolean);
+ }});
+ const r=await Promise.allSettled(attempts.map(a=>a.run()));
+ const items=[],seen=new Set(),warnings=[],counts=[];
+ r.forEach((x,i)=>{
+  const id=attempts[i].id;
+  if(x.status==='rejected'){warnings.push(id+': '+String(x.reason?.message||x.reason).slice(0,140));counts.push({id,count:0,ok:false});return}
+  let count=0;
+  for(const entry of x.value){if(seen.has(entry.url))continue;seen.add(entry.url);items.push(entry);count++}
+  counts.push({id,count,ok:true});
+ });
+ if(!items.length)return Response.json({error:'经典与历史素材源暂不可用',warnings,counts},{status:503,headers:RESULT_HEADERS});
+ return Response.json({items:items.slice(0,limit),warnings,counts,evergreen:true,
+  verified:false,source,source_query:query,rights_policy:'research_before_adaptation',
+  collectedAt:new Date().toISOString()},{headers:{'cache-control':'public,max-age=1800','x-content-type-options':'nosniff'}});
+}
+function heritageArt(x,id){
+ if(id==='met'){
+  if(x?.isPublicDomain!==true||!x.primaryImageSmall||!x.objectURL)return null;
+  return {id:'met-'+x.objectID,title:String(x.title||'无题').slice(0,200),
+   artist:String(x.artistDisplayName||'未标注').slice(0,120),date:String(x.objectDate||'').slice(0,90),
+   image:x.primaryImageSmall,source_url:x.objectURL,source:'The Met Open Access',
+   license:'CC0',rights_verified:true,role:'visual_reference_only'};
+ }
+ if(x?.is_public_domain!==true||!x.image_id||!Number.isInteger(x.id))return null;
+ return {id:'aic-'+x.id,title:String(x.title||'无题').slice(0,200),
+  artist:String(x.artist_display||'').slice(0,120),date:String(x.date_display||'').slice(0,90),
+  image:'https://www.artic.edu/iiif/2/'+encodeURIComponent(x.image_id)+'/full/400,/0/default.jpg',
+  source_url:'https://www.artic.edu/artworks/'+x.id,source:'Art Institute of Chicago',
+  license:'CC0',rights_verified:true,role:'visual_reference_only'};
+}
+async function heritageVisuals(url){
+ const query=String(url.searchParams.get('q')||'').trim().slice(0,110);
+ if(query.length<2)return failure('请输入至少 2 个字的素材搜索词，建议英文主题',400);
+ const results=await Promise.allSettled([
+  (async()=>{
+   const r=await heritageGetJSON('https://api.artic.edu/api/v1/artworks/search?q='+encodeURIComponent(query)+
+     '&limit=18&fields=id,title,image_id,is_public_domain,artist_display,date_display',9000);
+   return (r.data||[]).map(x=>heritageArt(x,'aic')).filter(Boolean).slice(0,10)
+  })(),
+  (async()=>{
+   const r=await heritageGetJSON('https://collectionapi.metmuseum.org/public/collection/v1/search?hasImages=true&q='+encodeURIComponent(query),9000);
+   const ids=(r.objectIDs||[]).slice(0,12);
+   const objects=await Promise.allSettled(ids.map(id=>heritageGetJSON('https://collectionapi.metmuseum.org/public/collection/v1/objects/'+id,6500)));
+   return objects.filter(x=>x.status==='fulfilled').map(x=>heritageArt(x.value,'met')).filter(Boolean).slice(0,8)
+  })()
+ ]);
+ const images=[],warnings=[],counts=[];
+ for(let i=0;i<results.length;i++){
+  const key=i===0?'aic':'met',r=results[i];
+  if(r.status==='fulfilled'){images.push(...r.value);counts.push({id:key,count:r.value.length,ok:true})}
+  else{warnings.push(key+': '+String(r.reason?.message||r.reason).slice(0,140));counts.push({id:key,count:0,ok:false})}
+ }
+ return Response.json({items:images,query,counts,warnings,license:'CC0_only',
+  policy:'图片仅供创作参考；不得误认为历史原貌、新闻现场或人物肖像许可。'},
+  {headers:{'cache-control':'public,max-age=3600','x-content-type-options':'nosniff'}});
+}
+
 export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
+ if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|comic-engine\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
