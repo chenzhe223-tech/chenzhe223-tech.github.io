@@ -670,6 +670,59 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 @media(max-width:800px){.smart-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.smart-day{grid-template-columns:60px minmax(0,1fr)}.smart-day-label{padding:12px 8px}.smart-day-label strong{font-size:13px}.smart-slot{grid-template-columns:35px minmax(0,1fr) 48px;gap:6px;padding:10px 7px}.smart-slot-main strong{font-size:12px}.smart-schedule-stats span{flex:1 1 100px}}
 @media(max-width:380px){.smart-controls{gap:7px}.smart-slot{grid-template-columns:32px minmax(0,1fr) 44px;gap:5px}.smart-slot .btn{padding:6px 5px!important}.smart-slot-main strong{font-size:11px}}
 
+
+/* DAVYLAB smart editorial planner / compact mobile corrective, 2026-11-09.
+   Keep the existing data model and all JS identifiers unchanged. */
+.smart-toggle-copy{display:flex;flex-direction:column;gap:1px;min-width:0;line-height:1.4}
+.smart-toggle-copy strong{color:var(--ink);font-size:12px;font-weight:750}
+.smart-toggle-copy small{color:var(--muted);font-size:10px;font-weight:450}
+@media(max-width:760px){
+ #section-calendar .smart-schedule-panel{padding:13px 12px!important;margin:0 0 12px;overflow:visible}
+ #section-calendar .panelhead{display:flex!important;flex-direction:column;align-items:stretch;gap:12px}
+ #section-calendar .panelhead .eyebrow{font-size:9px;letter-spacing:1.1px}
+ #section-calendar .panelhead h2{font-size:19px;line-height:1.3;margin:4px 0 5px}
+ #section-calendar .panelhead p{font-size:12px;line-height:1.5;margin:0;color:var(--muted)}
+ #section-calendar .panelhead .paneltools{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;margin:0;gap:8px;flex:unset}
+ #section-calendar .panelhead .paneltools .btn{width:100%;min-width:0;height:42px;min-height:42px;padding:8px 5px!important;font-size:12px;white-space:nowrap;display:flex;align-items:center;justify-content:center}
+ #section-calendar .smart-controls{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 8px;margin:13px 0 12px;align-items:start}
+ #section-calendar .smart-controls>label{display:flex;min-width:0;flex-direction:column;gap:5px;font-size:11px;line-height:1.4;margin:0}
+ #section-calendar .smart-controls>label:nth-child(3){grid-column:1/-1}
+ #section-calendar .smart-controls>label.smart-autotoggle{grid-column:1/-1;display:flex!important;flex-direction:row!important;align-items:center;justify-content:space-between;gap:12px;min-width:0;min-height:55px;margin:0;padding:8px 12px;background:#f5f9fd;border:1px solid #dbe5f0;border-radius:11px}
+ #section-calendar .smart-controls input[type=date],#section-calendar .smart-controls select{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;min-height:43px;height:43px;padding:7px 9px;border-radius:10px;background:#fff;color:var(--ink);font-size:14px}
+ #section-calendar .smart-controls input[type=date]{-webkit-appearance:none;appearance:none;padding-right:6px}
+ #section-calendar .smart-controls select{padding-right:27px}
+ #section-calendar .smart-controls #smartAutoAssign{position:relative;appearance:none;-webkit-appearance:none;flex:0 0 42px;display:block!important;width:42px!important;height:25px!important;margin:0;border:0;border-radius:20px;background:#a8b8c8;cursor:pointer;box-shadow:inset 0 0 0 1px #a1b3c4;transition:background .16s}
+ #section-calendar .smart-controls #smartAutoAssign:checked{background:#167cda;box-shadow:inset 0 0 0 1px #167cda}
+ #section-calendar .smart-controls #smartAutoAssign::before{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;background:#fff;border-radius:50%;box-shadow:0 1px 3px #18334944;transition:transform .16s}
+ #section-calendar .smart-controls #smartAutoAssign:checked::before{transform:translateX(17px)}
+ #section-calendar .smart-controls #smartAutoAssign:focus-visible{outline:3px solid #1b88e555;outline-offset:3px}
+ #section-calendar .smart-schedule-stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:12px 0 13px}
+ #section-calendar .smart-schedule-stats span{display:flex;flex-direction:column;gap:3px;min-width:0;margin:0;padding:10px 7px;background:#f1f7fc;border:1px solid #dce7f0;border-radius:10px;font-size:10px;line-height:1.3;text-align:center;color:var(--muted)}
+ #section-calendar .smart-schedule-stats strong{display:block;font-size:16px;line-height:1.2;color:#17354d;white-space:nowrap}
+ #section-calendar .smart-schedule-stats small{display:block;font-size:10px;font-weight:400;line-height:1.2;color:#8190a0}
+ #section-calendar .smart-schedule-list{gap:9px}
+ #section-calendar .smart-day{grid-template-columns:54px minmax(0,1fr);width:100%;min-width:0;overflow:hidden;border-radius:12px}
+ #section-calendar .smart-day-label{gap:3px;padding:12px 5px;border-right:1px solid #e5edf5}
+ #section-calendar .smart-day-label strong{font-size:12px;letter-spacing:-.45px;white-space:nowrap}
+ #section-calendar .smart-day-label span{font-size:10px}
+ #section-calendar .smart-day-slots{min-width:0}
+ #section-calendar .smart-slot{display:grid;grid-template-columns:34px minmax(0,1fr) 47px;gap:7px;align-items:center;padding:10px 7px;min-width:0;overflow:hidden}
+ #section-calendar .smart-type{font-size:10px;padding:5px 2px;border-radius:6px}
+ #section-calendar .smart-slot-main{min-width:0;gap:4px}
+ #section-calendar .smart-slot-main strong{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere;font-size:12px;line-height:1.48;max-width:100%}
+ #section-calendar .smart-slot-main small{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:100%;font-size:9px;line-height:1.4}
+ #section-calendar .smart-slot .btn{width:47px;min-width:0!important;max-width:47px;border-radius:8px;padding:7px 2px!important;height:35px;min-height:35px;font-size:11px!important;line-height:1.2}
+ #section-calendar .smart-schedule-note{font-size:10px;line-height:1.55;margin:12px 1px 0}
+}
+@media(max-width:355px){
+ #section-calendar .smart-slot{grid-template-columns:30px minmax(0,1fr) 42px;gap:5px;padding:8px 5px}
+ #section-calendar .smart-slot .btn{width:42px;max-width:42px}
+ #section-calendar .smart-type{font-size:9px}
+ #section-calendar .smart-day{grid-template-columns:48px minmax(0,1fr)}
+ #section-calendar .smart-day-label{padding:9px 3px}
+ #section-calendar .smart-day-label strong{font-size:11px}
+ #section-calendar .smart-schedule-stats strong{font-size:14px}
+}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
@@ -838,7 +891,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
    <label>文章起排日期<input id="smartStartDate" type="date"></label>
    <label>查看未来<select id="smartScheduleWindow"><option value="14">14 天</option><option value="28" selected>28 天</option><option value="56">56 天</option></select></label>
    <label>筛选<select id="smartScheduleFilter"><option value="all">全部排期</option><option value="missing">仅看空档</option></select></label>
-   <label class="smart-autotoggle"><input id="smartAutoAssign" type="checkbox" checked> 新建选题自动排期</label>
+   <label class="smart-autotoggle"><span class="smart-toggle-copy"><strong>新建选题自动排期</strong><small>开启后自动匹配空档</small></span><input id="smartAutoAssign" type="checkbox" checked role="switch" aria-label="新建选题自动排期"></label>
   </div>
   <div class="smart-schedule-stats" id="smartScheduleStats" aria-live="polite"></div>
   <div id="calendarList" class="smart-schedule-list" aria-live="polite"><div class="empty">正在整理排期…</div></div>
