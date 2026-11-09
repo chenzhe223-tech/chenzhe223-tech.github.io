@@ -120,7 +120,7 @@ async function news(url){
 }
 async function authenticate(request,env){const auth=request.headers.get('authorization')||'';if(!auth.startsWith('Bearer '))return null;let r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'authorization':auth}});if(!r.ok)return null;let u=await r.json();return u?.id?u:null}
 async function quota(env,userId,kind,cap){if(!env.DB)throw Error('配额数据库未配置');let day=new Date().toISOString().slice(0,10);const key=userId+':'+day+':'+kind;let r=await env.DB.prepare('INSERT INTO usage_counts(id,uses,updated_at) VALUES(?,1,?) ON CONFLICT(id) DO UPDATE SET uses=uses+1,updated_at=excluded.updated_at WHERE uses<? RETURNING uses').bind(key,new Date().toISOString(),cap).first();if(!r)throw Error('今日模型使用上限已到，请明天再试');return r.uses;}
-function parseJSON(text){let s=String(text||'').trim().replace(/^```(?:json)?\s*/,'').replace(/```$/,'');try{return JSON.parse(s)}catch{let a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw Error('AI 回复不是有效 JSON')}}
+function parseJSON(text){let s=String(text||'').replace(/<think>[\s\S]*?<\/think>/gi,'').trim().replace(/^```(?:json)?\s*/,'').replace(/```$/,'');try{return JSON.parse(s)}catch{let a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw Error('AI 回复不是有效 JSON')}}
 function aiError(err){let msg=String(err?.message||err);return msg.slice(0,250)}
 async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';if(type!=='characters'&&env.AI_ENABLED!=='true')return failure('生图与编剧模型尚未获批启用；角色设计可使用免费 DeepSeek。',503);if(!env.AI)return failure('AI 免费模型绑定未配置',503);const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');try{await quota(env,'__worldtoon_global__',type,type==='characters'?5:type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure('今日免费生成额度已用完，请明天再试。',429)}
 try{
@@ -138,7 +138,7 @@ try{
     try{
       response=await env.AI.run('@cf/deepseek-ai/deepseek-r1-distill-qwen-32b',{
         messages:[{role:'system',content:sys},{role:'user',content:msg}],
-        max_tokens:1450,temperature:0.55,response_format:{type:'json_object'}
+        max_tokens:2100,temperature:0.55,response_format:{type:'json_object'}
       });
       model='deepseek-r1-distill-qwen-32b';
     }catch(err){fallbackReason='DeepSeek 免费模型暂不可用';}
