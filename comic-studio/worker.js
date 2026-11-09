@@ -1,5 +1,5 @@
 // WORLD/TOON 2.0 / By DAVYLAB — editorial news wire + restricted AI + GitHub static assets
-const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/92608fd7576c02b0e4274e69014b98077eb93950/comic-studio/';
+const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/1488fc19df97c2d61518dea181badce5f863dbb8/comic-studio/';
 const SUPABASE_URL='https://qjyqaydfezbpeimpvlcb.supabase.co';
 const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jtWLY4vYz2-VklNLoJqxVw_lMdhtfgG'; // replaced at deployment, public (not service role)
 const CONTENT={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
@@ -102,7 +102,7 @@ async function aiBriefing(url){
   const story=(o)=>({title:str(o.title_zh||o.title,260),summary:str(o.summary_zh||o.summary,600),why:str(o.why_it_matters_zh||'',430),url:https(o.url),source:str(o.source,130),published:str(o.published,60),image:https(o.image_url),imageAlt:str(o.image_alt||o.title_zh||o.title,260),imageStatus:str(o.image_match_status||'',55),imageCredit:str(o.image_credit||'',120)});
   const skill=(o)=>({name:str(o.name,170),description:str(o.description_zh||o.description,400),url:https(o.url),stars:typeof o.stars_total==='number'?o.stars_total:(typeof o.stars==='number'?o.stars:null),license:str(o.license_name||o.license,130)});
   const editorial=raw.editorial||{};
-  return Response.json({date:raw.report_date,generatedAt:str(raw.generated_at,80),status:str(raw.status,35),source:'DAVYLAB AI Radar',sourceUrl:'https://chenzhe223-tech.github.io/radar/daily/',top5:(raw.top5||[]).slice(0,5).map(story),global:raw.news.slice(0,40).map(story),china:raw.china_ai_news.slice(0,40).map(story),skills:(raw.skills||[]).slice(0,12).map(skill),editorial:{core:str(editorial.core_zh,2000),trend:str(editorial.trend_zh,2000),question:str(editorial.next_question_zh,1500)},warning:raw.status==='ok'?'':'上游简报状态异常，内容仅供参考',qualityStatus:str(raw.quality_gate?.status||'',40)},{headers:{'cache-control':'public,max-age=120','x-content-type-options':'nosniff'}});
+  return Response.json({date:raw.report_date,posterUrl:'https://chenzhe223-tech.github.io/radar/posters/'+encodeURIComponent(raw.report_date)+'.png',generatedAt:str(raw.generated_at,80),status:str(raw.status,35),source:'DAVYLAB AI Radar',sourceUrl:'https://chenzhe223-tech.github.io/radar/daily/',top5:(raw.top5||[]).slice(0,5).map(story),global:raw.news.slice(0,40).map(story),china:raw.china_ai_news.slice(0,40).map(story),skills:(raw.skills||[]).slice(0,12).map(skill),editorial:{core:str(editorial.core_zh,2000),trend:str(editorial.trend_zh,2000),question:str(editorial.next_question_zh,1500)},warning:raw.status==='ok'?'':'上游简报状态异常，内容仅供参考',qualityStatus:str(raw.quality_gate?.status||'',40)},{headers:{'cache-control':'public,max-age=120','x-content-type-options':'nosniff'}});
  }catch(err){return Response.json({error:'AI 简报暂时无法读取：'+String(err?.message||err).slice(0,160)},{status:503,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
 }
 
@@ -136,7 +136,7 @@ try{
  if(!out?.image)return failure('模型未返回图片',502);return Response.json({image:out.image,model:'flux-2-klein-4b',draft:true},{headers:RESULT_HEADERS});
 }catch(err){return failure('生成服务暂不可用：'+aiError(err),503)}
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.2.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true'},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.2.1',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true'},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
