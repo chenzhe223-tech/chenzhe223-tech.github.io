@@ -1,22 +1,54 @@
-// WORLD/TOON • By DAVYLAB • GitHub-backed Cloudflare Worker
-// Keeps the existing workers.dev hostname and serves the comic-studio/ static bundle.
+// WORLD/TOON 2.0 / By DAVYLAB — editorial news wire + restricted AI + GitHub static assets
 const ORIGIN='https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/comic-studio/';
-const MIME={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
-export default {
- async fetch(request){
-  const url=new URL(request.url);
-  if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'1.0',delivery:'GitHub-backed Cloudflare Worker',source:'comic-studio',at:new Date().toISOString()},{headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}});
-  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);
-  if(path.includes('..')||!(/^(index\.html|app\.js|styles\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)||/^assets\//.test(path)))return new Response('Not found',{status:404});
-  try{
-   const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;
-   const target=ORIGIN+path;
-   const upstream=await fetch(target,{cf:{cacheTtl:ttl,cacheEverything:true}});
-   if(!upstream.ok)return new Response('Asset unavailable',{status:upstream.status===404?404:503});
-   const ext=path.split('.').pop();
-   const headers=new Headers({'content-type':MIME[ext]||'application/octet-stream','cache-control':isAsset?'public, max-age=3600':'public, max-age=30','x-worldtoon-version':'1.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});
-   if(!isAsset)headers.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");
-   return new Response(upstream.body,{status:200,headers});
-  }catch{return new Response('Temporary origin error',{status:503})}
+const SUPABASE_URL='https://qjyqaydfezbpeimpvlcb.supabase.co';
+const SUPABASE_PUBLISHABLE_KEY='sb_publishable_jtWLY4vYz2-VklNLoJqxVw_lMdhtfgG'; // replaced at deployment, public (not service role)
+const CONTENT={html:'text/html; charset=utf-8',js:'text/javascript; charset=utf-8',css:'text/css; charset=utf-8',svg:'image/svg+xml',png:'image/png',webmanifest:'application/manifest+json',md:'text/markdown; charset=utf-8'};
+const QUERIES={
+'国际政治':'international politics diplomacy summit',
+'文化':'culture arts heritage museum',
+'娱乐':'entertainment cinema music film',
+'体育':'sports football basketball tennis',
+'人物':'scientists innovators artist leaders biography',
+'旅行':'travel tourism destinations aviation',
+'AI 科技':'artificial intelligence generative AI research',
+'机器人':'robotics humanoid robot automation',
+'商业财经':'global business finance markets',
+'科学':'science discovery research space',
+'环境':'climate environment energy biodiversity',
+'健康':'health medicine scientific breakthroughs',
+'航空航天':'space rocket satellite aerospace'
+};
+const RESULT_HEADERS={'cache-control':'no-store','x-content-type-options':'nosniff','access-control-allow-origin':'same-origin'};
+const failure=(message,status=400)=>Response.json({error:message},{status,headers:RESULT_HEADERS});
+function textDecode(s){return String(s||'').replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]*>/g,'').replace(/&amp;/gi,'&').replace(/&lt;/gi,'<').replace(/&gt;/gi,'>').replace(/&quot;/gi,'"').replace(/&#39;|&apos;/gi,"'").replace(/&#(\d+);/g,(_,c)=>String.fromCodePoint(Number(c))).trim();}
+const tag=(body,name)=>{let m=body.match(new RegExp('<'+name+'(?:\\s[^>]*)?>([\\s\\S]*?)<\\/'+name+'>','i'));return m?textDecode(m[1]):''};
+function parseRSS(xml,category){let parts=xml.match(/<item(?:\s[^>]*)?>[\s\S]*?<\/item>/gi)||[];return parts.slice(0,30).map(x=>{let rawTitle=tag(x,'title');let pub=tag(x,'pubDate');let published=Date.parse(pub);let source=tag(x,'source')||'Google News';let raw=tag(x,'link');let title=rawTitle.replace(/\s+-\s+[^-]+$/,'').trim();return {title,source,url:raw,published:published?new Date(published).toISOString():null,category,language:'global',provider:'Google News RSS'}}).filter(x=>x.title.length>=8&&x.url.startsWith('https://'));}
+async function collectRSS(category){let q=QUERIES[category];let endpoint='https://news.google.com/rss/search?q='+encodeURIComponent(q+' when:7d')+'&hl=en-US&gl=US&ceid=US:en';let r=await fetch(endpoint,{headers:{'user-agent':'WorldToonEditorial/2.0 (+https://worldtoon.chenzhe223.workers.dev)'}});if(!r.ok)throw Error('RSS '+r.status);let xml=await r.text();if(!xml.includes('<rss')&&!xml.includes('<item'))throw Error('RSS format unavailable');return parseRSS(xml,category)}
+async function collectGDELT(category){const query=QUERIES[category];const endpoint='https://api.gdeltproject.org/api/v2/doc/doc?query='+encodeURIComponent(query)+'&mode=artlist&maxrecords=20&format=json&timespan=7d&sort=datedesc';let r=await fetch(endpoint);if(!r.ok)throw Error('GDELT '+r.status);let j=await r.json();return (j.articles||[]).map(a=>({title:a.title||'',source:a.domain||'GDELT',url:a.url||'',published:a.seendate&&/^\d{8}T\d{6}Z$/.test(a.seendate)?new Date(a.seendate.replace(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/,'$1-$2-$3T$4:$5:$6Z')).toISOString():null,category,language:a.language||'',provider:'GDELT'})).filter(a=>a.title.length>8&&a.url.startsWith('https://'))}
+function uniqueNews(items){const seen=new Set();return items.filter(x=>{let key=(x.url||x.title).toLowerCase().replace(/\?.*$/,'').replace(/[^\p{L}\p{N}]/gu,'').slice(0,150);if(!key||seen.has(key))return false;seen.add(key);return true});}
+async function news(url){let cat=url.searchParams.get('category')||'全部';if(cat!=='全部'&&!QUERIES[cat])return failure('无效新闻分类');let limit=Math.min(60,Math.max(5,Number(url.searchParams.get('limit'))||24));let cats=cat==='全部'?Object.keys(QUERIES):[cat];let result=await Promise.allSettled(cats.map(async c=>{try{return await collectRSS(c)}catch{return collectGDELT(c)}}));let items=uniqueNews(result.flatMap(x=>x.status==='fulfilled'?x.value:[])).sort((a,b)=>(b.published||'').localeCompare(a.published||''));let warning=result.some(r=>r.status==='rejected')?'部分新闻来源暂不可用，已返回成功采集的来源；勿当作完整全球榜单。':'';if(!items.length)return failure('新闻源暂时无法连接，未返回模拟新闻，请稍后重试',503);return Response.json({items:items.slice(0,limit),category:cat,provider:'Google News RSS / GDELT',fetchedAt:new Date().toISOString(),warning},{headers:{'cache-control':'public,max-age=600','x-content-type-options':'nosniff'}})}
+async function authenticate(request,env){const auth=request.headers.get('authorization')||'';if(!auth.startsWith('Bearer '))return null;let r=await fetch(SUPABASE_URL+'/auth/v1/user',{headers:{'apikey':SUPABASE_PUBLISHABLE_KEY,'authorization':auth}});if(!r.ok)return null;let u=await r.json();return u?.id?u:null}
+async function quota(env,userId,kind,cap){if(!env.DB)throw Error('配额数据库未配置');let day=new Date().toISOString().slice(0,10);const key=userId+':'+day+':'+kind;let r=await env.DB.prepare('INSERT INTO usage_counts(id,uses,updated_at) VALUES(?,1,?) ON CONFLICT(id) DO UPDATE SET uses=uses+1,updated_at=excluded.updated_at WHERE uses<? RETURNING uses').bind(key,new Date().toISOString(),cap).first();if(!r)throw Error('今日模型使用上限已到，请明天再试');return r.uses;}
+function parseJSON(text){let s=String(text||'').trim().replace(/^```(?:json)?\s*/,'').replace(/```$/,'');try{return JSON.parse(s)}catch{let a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw Error('AI 回复不是有效 JSON')}}
+function aiError(err){let msg=String(err?.message||err);return msg.slice(0,250)}
+async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);if(env.AI_ENABLED!=='true')return failure('AI 生成已集成，但当前未启用计费模型；待确认模型费用与预算后开放。',503);if(!env.AI)return failure('AI 模型绑定未配置',503);let type=url.pathname.endsWith('/script')?'script':'image';const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>650000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs&&!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');try{await quota(env,user.id,type,limit)}catch(err){return failure(aiError(err),429)}
+try{
+ if(type==='script'){
+  const sys='你是专业中文编辑与原创漫画编剧。只把公共事件作为主题灵感，不能把待证实的新闻断言、犯罪、私人关系、政治交易或隐私编成可识别现实人物的指控。必须使用原创虚构人物，避免精确指向真实个人。创作有幽默感、高级杂志质感、戏剧节奏。仅输出合法JSON对象，格式 {"fiction":"...","panels":[{"title":"...","scene":"...","caption":"...","dialogue":"...","prompt":"..."}]}，panels必须恰好九个。禁止Markdown。';
+  const msg=JSON.stringify({title:body.title,description:body.description,sourceTitle:body.sourceTitle,sourceURLs:body.sourceURLs,factNotes:body.factNotes,fiction:body.fiction,tone:body.tone,characters:body.characters}).slice(0,11000);
+  const response=await env.AI.run('@cf/google/gemma-4-26b-a4b-it',{messages:[{role:'system',content:sys},{role:'user',content:msg}],max_tokens:3000,temperature:.6});
+  const parsed=parseJSON(response.response||response.choices?.[0]?.message?.content||'');if(!Array.isArray(parsed.panels)||parsed.panels.length!==9)return failure('生成文本不完整，请修改素材后重试',502);return Response.json({panels:parsed.panels,fiction:parsed.fiction||'',model:'gemma-4-26b-a4b-it',draft:true},{headers:RESULT_HEADERS});
  }
+ const form=new FormData();const prompt=`Original editorial comic art, sophisticated graphic novel, warm paper palette, crisp expressive characters, cinematic composition. NO text, NO readable letters, no logos. Original fictional people only. Scene: ${String(body.scene).slice(0,1800)}. Character bible (keep appearances consistent across images): ${String(body.characters||'').slice(0,2800)}. Art direction: ${String(body.visualNotes||'').slice(0,1000)}. Avoid identifiable real-world politician likenesses or defamatory depictions.`;
+ form.append('prompt',prompt);form.append('width','768');form.append('height','1024');if(body.reference?.data&&body.reference?.type&&body.reference.data.length<1400000){let binary=atob(body.reference.data),bytes=new Uint8Array(binary.length);for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);form.append('input_image_0',new Blob([bytes],{type:body.reference.type}),'reference.png');}
+ const req=new Response(form);const out=await env.AI.run('@cf/black-forest-labs/flux-2-klein-4b',{multipart:{body:req.body,contentType:req.headers.get('content-type')}});
+ if(!out?.image)return failure('模型未返回图片',502);return Response.json({image:out.image,model:'flux-2-klein-4b',draft:true},{headers:RESULT_HEADERS});
+}catch(err){return failure('生成服务暂不可用：'+aiError(err),503)}
+}
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.0',features:{news:true,auth:true,sync:true,script:env.AI_ENABLED==='true',image:env.AI_ENABLED==='true'},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+ if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true'},{headers:RESULT_HEADERS});
+ if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
+ if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|extension\.js|styles\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}}
 };
