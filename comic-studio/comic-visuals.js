@@ -15,7 +15,7 @@ function panel(p){
  '<button type="button" class="button dark" data-visual="pin" data-index="'+i+'">加入参考</button></div></div></article>').join('');
  const helper=searched?(items.length?'找到 '+items.length+' 项 CC0 图片 · '+counts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join('、'):'无可用图片，请尝试其他英文关键词。'):'输入搜索词后检索馆藏的 CC0 开放图像；默认不下载、复制或绘制为最终漫画。';
  return '<section class="box heritage-visual-panel" aria-label="视觉素材库"><div class="kicker">VISUAL REFERENCES / OPEN CULTURE</div>'+
- '<div class="heritage-header"><div><h2>视觉素材库</h2><p class="minor">大都会博物馆 + 芝加哥艺术博物馆。仅展示明确开放的 CC0 藏品，供时代服饰、道具与场景参考。</p></div><span class="wt-chip">已选 '+refs.length+' 项</span></div>'+
+ '<div class="heritage-header"><div><h2>视觉素材库</h2><p class="minor">大都会博物馆 + 克利夫兰艺术博物馆。仅展示明确开放的 CC0 藏品，供时代服饰、道具与场景参考。</p></div><span class="wt-chip">已选 '+refs.length+' 项</span></div>'+
  '<form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
  '<div class="heritage-presets">'+presets.map(([q,l])=>'<button type="button" data-visual="preset" data-query="'+e(q)+'">'+e(l)+'</button>').join('')+'</div>'+
  (refs.length?'<div class="heritage-pins">'+pins+'</div>':'')+
