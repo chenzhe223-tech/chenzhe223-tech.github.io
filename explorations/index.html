@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/><meta name="theme-color" content="#efebe2"/><meta name="description" content="DAVYLAB Explorations Studio 智能素材编辑室。启动专题、设计制作、档案检索、关系图谱与 WorkBuddy 交付。"/><title>Explorations Studio — By DAVYLAB</title><link rel="stylesheet" href="styles.css"/></head>
+<body>
+<div class="app-shell">
+<aside class="sidebar">
+  <div class="side-head"><div class="monogram">D<span>•</span></div><div><div class="brand-kicker">DAVYLAB / EDITORIAL</div><div class="brand-name">Explorations<br/><em>Studio</em></div></div></div>
+  <div class="side-divider"></div><div class="nav-group-label">WORKSPACE · 工作空间</div>
+  <nav id="nav">
+    <button data-view="home" class="nav-link active"><span class="nav-icon">◫</span> 工作台 <small>01</small></button>
+    <button data-view="editor" class="nav-link"><span class="nav-icon">✎</span> 创作室 <small>02</small></button>
+    <button data-view="library" class="nav-link"><span class="nav-icon">▦</span> 素材库 <small>03</small></button>
+    <button data-view="archive" class="nav-link"><span class="nav-icon">▤</span> 档案室 <small>04</small></button>
+    <button data-view="graph" class="nav-link"><span class="nav-icon">◎</span> 关系图谱 <small>05</small></button>
+    <button data-view="publish" class="nav-link"><span class="nav-icon">↗</span> 发布中心 <small>06</small></button>
+  </nav><div class="sidebar-bottom"><div class="issue-mark"><span class="active-dot"></span> 本地编辑模式 <small>PRIVATE</small></div><p>全球视野 · 编辑秩序 · 生活温度</p><span class="sidebar-brand">AI EXPLORATIONS<br/>By DAVYLAB</span></div>
+</aside>
+<div class="main-shell"><header class="topbar"><div class="breadcrumb"><span>AI EXPLORATIONS</span><span class="slash">/</span><strong id="breadcrumb-current">工作台</strong></div><div class="top-actions"><span class="top-date" id="today">2026</span><button class="ghost-button" id="backup-btn">备份数据 ↗</button><button class="dark-button" id="new-issue-btn">＋ 启动新一期</button></div></header><main id="view" aria-live="polite"></main><footer class="footer">AI EXPLORATIONS <span>·</span> By DAVYLAB <span class="right-foot">编辑的价值，在于选择与判断。 / EST. 2026</span></footer></div>
+</div><div class="toast" id="toast" role="status"></div><input id="image-input" hidden type="file" accept="image/png,image/jpeg,image/webp"/><input id="restore-input" hidden type="file" accept="application/json,.json"/>
+<script src="app.js"></script></body></html>
