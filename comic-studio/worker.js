@@ -209,7 +209,7 @@ async function wtArchiveApi(request,env,url){
  if(p==='/api/archive/status'&&method==='GET'){
   try {
    const meta=await wtArchiveMeta(env),writeReady=meta.private===true&&!!(env.WORLDTOON_ARCHIVE_OWNER_UID&&env.WORLDTOON_GITHUB_TOKEN);
-   return wtJson({repo:WT_REPO,exists:meta.exists,visibility:meta.visibility,readable:meta.exists&&(!meta.private||writeReady),configured:writeReady,mode:meta.unconfigured?'credentials_required':writeReady?'private_authenticated':meta.private?'private_unconfigured':'public_readonly',producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
+   return wtJson({repo:WT_REPO,exists:meta.exists,visibility:meta.visibility,readable:meta.exists===true&&(!meta.private||writeReady),configured:writeReady,mode:meta.unconfigured?'credentials_required':writeReady?'private_authenticated':meta.private?'private_unconfigured':'public_readonly',producer:'ChatGPT',publisher:'WorkBuddy',ai_direct_generation:false});
   }catch(err){return wtJson({repo:WT_REPO,error:'GitHub 仓库状态暂不可用：'+String(err.message||err).slice(0,140)},503)}
  }
  if(p==='/api/archive/sync'&&method==='GET'){
