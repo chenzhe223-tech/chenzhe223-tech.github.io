@@ -723,15 +723,28 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  #section-calendar .smart-day-label strong{font-size:11px}
  #section-calendar .smart-schedule-stats strong{font-size:14px}
 }
+
+/* DAVYLAB desktop: More tools is a real disclosure, not an inert mobile control */
+#appNavigation .desktop-tools-section{min-width:0}
+#appNavigation .desktop-more-toggle{width:100%;display:flex;align-items:center;gap:9px;text-align:left;border-radius:11px;min-height:42px;cursor:pointer}
+#appNavigation .desktop-more-title{flex:1;min-width:0;font-weight:650}
+#appNavigation .desktop-more-chevron{margin-left:auto;font-size:17px;line-height:1;transition:transform .18s ease}
+#appNavigation .desktop-more-toggle.expanded .desktop-more-chevron{transform:rotate(180deg)}
+#appNavigation #desktopSources[hidden]{display:none!important}
+#appNavigation .desktop-source-links{padding-top:9px;display:flex;flex-direction:column;gap:3px}
+#appNavigation .desktop-source-links .navlabel{padding:3px 10px 5px}
+#appNavigation .desktop-source-links .source-nav{width:100%;min-width:0}
+@media(max-width:760px){#appNavigation .desktop-tools-section{display:none!important}}
+@media(prefers-reduced-motion:reduce){#appNavigation .desktop-more-chevron{transition:none}}
 </style></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
-  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button><button class="mobile-more" type="button" aria-expanded="false" aria-label="更多栏目"><span class="ico">☰</span>更多</button>
+  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button>
  </div></div>
- <div><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div>
+ <div class="desktop-tools-section"><button class="nav desktop-more-toggle" id="desktopMoreToggle" type="button" aria-controls="desktopSources" aria-expanded="false"><span class="ico">☰</span><span class="desktop-more-title">更多工具</span><span class="desktop-more-chevron" aria-hidden="true">⌄</span></button><div id="desktopSources" class="desktop-source-links" hidden><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div></div>
  <div class="sidefoot">本地优先 · 无需注册<br>选题保存在当前浏览器。<br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
 </aside>
 <main><header class="topbar"><div class="crumb">DAVYLAB / <strong id="crumbTitle">选题发现</strong></div><div class="actions"><button class="btn small" id="openVisualSettings" type="button" aria-haspopup="dialog">✧ 视觉与动效</button><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
@@ -1604,7 +1617,14 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  apply();setTab("theme");window.setTimeout(animateElements,120);
 })();
 
-</script><script>(function(){const nav=document.querySelector('#appNavigation .navwrap');const more=nav&&nav.querySelector('.mobile-more');if(!more)return;more.addEventListener('click',()=>{const open=nav.classList.toggle('mobile-more-open');more.setAttribute('aria-expanded',String(open))});nav.querySelectorAll('.nav').forEach(b=>b.addEventListener('click',()=>{nav.classList.remove('mobile-more-open');more.setAttribute('aria-expanded','false')}));})();</script><script>(function(){
+</script><script>(function(){
+ const toggle=document.getElementById('desktopMoreToggle'),sources=document.getElementById('desktopSources');
+ if(!toggle||!sources)return;
+ function setOpen(open){sources.hidden=!open;toggle.setAttribute('aria-expanded',String(open));toggle.classList.toggle('expanded',open)}
+ toggle.addEventListener('click',()=>setOpen(toggle.getAttribute('aria-expanded')!=='true'));
+ toggle.addEventListener('keydown',e=>{if(e.key==='Escape')setOpen(false)});
+ setOpen(false);
+})();</script><script>(function(){
 const root=document.getElementById('mobileBottomNav'),panel=document.getElementById('mobileMorePanel'),toggle=document.getElementById('mobileMoreToggle');
 if(!root)return;
 const close=()=>{panel.classList.remove('open');toggle.setAttribute('aria-expanded','false')};
