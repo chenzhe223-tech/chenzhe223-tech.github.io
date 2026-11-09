@@ -8,6 +8,7 @@ const cfg={weekOffset:0,data:[],history:[],missing:[],news:[],skills:[],newsKeys
 function localToday(){const parts=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Singapore",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());const x={};for(const p of parts)if(p.type!=="literal")x[p.type]=p.value;return x.year+"-"+x.month+"-"+x.day}
 function dayShift(date,n){const d=new Date(date+"T12:00:00Z");d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
 function calcWeek(offset=0){const today=localToday(),wd=new Date(today+"T12:00:00Z").getUTCDay()||7;const monday=dayShift(today,1-wd-7-7*offset),sunday=dayShift(monday,6);const thursday=new Date(dayShift(monday,3)+"T12:00:00Z"),y=thursday.getUTCFullYear(),jan4=new Date(Date.UTC(y,0,4,12)),jan4d=jan4.getUTCDay()||7,week1=dayShift(jan4.toISOString().slice(0,10),1-jan4d),n=1+Math.round((new Date(monday+"T12:00:00Z")-new Date(week1+"T12:00:00Z"))/604800000);return {monday,sunday,issue:y+"-W"+String(n).padStart(2,"0"),days:Array.from({length:7},(_,i)=>dayShift(monday,i))}}
+function safeUrl(u){return /^https?:\/\//i.test(String(u||"").trim())}
 function canonical(u){try{const x=new URL(u);return (x.hostname.replace(/^www\./,"")+x.pathname.replace(/\/+$/,"")).toLowerCase()}catch{return String(u||"").trim().toLowerCase()}}
 function titleKey(t){return String(t||"").toLowerCase().replace(/[\s\p{P}\p{S}]+/gu,"").slice(0,90)}
 function zhDate(t){if(!t)return"";const d=new Date(t);if(!Number.isFinite(d.getTime()))return"";return new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Singapore",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(d).filter(p=>p.type!=="literal").reduce((o,p)=>(o[p.type]=p.value,o),{})}
@@ -20,17 +21,17 @@ function normalize(){const wm=calcWeek(cfg.weekOffset);const nmap=new Map(),byTi
 for(const rep of cfg.data){const daily=rep.report_date;
 for(const [field,items] of [["top5",rep.top5],["news",rep.news],["china_ai_news",rep.china_ai_news]]){
 if(!Array.isArray(items))continue;
-for(const item of items){if(!item||typeof item!=="object"||!item.url||!(item.title_zh||item.title))continue;
+for(const item of items){if(!item||typeof item!=="object"||!safeUrl(item.url)||!(item.title_zh||item.title))continue;
 const pub=publishedDay(item.published);
 if(!pub||pub<wm.monday||pub>wm.sunday)continue;
-const k=canonical(item.source_url||item.url),tk=titleKey(item.title_en||item.title);
+const k=canonical(safeUrl(item.source_url)?item.source_url:item.url),tk=titleKey(item.title_en||item.title);
 let it=nmap.get(k)||byTitle.get(tk);
-if(!it){it={key:k,url:item.source_url||item.url,title:item.title_zh||item.title,summary:item.summary_zh||item.summary||"",why:item.why_it_matters_zh||"",published:item.published,source:item.source||"",image:item.image_url||"",imageLicense:item.image_license||"",imageSource:item.image_source||"",days:new Set(),sections:new Set(),radarScore:0,refs:[],moreUrls:new Set()};nmap.set(k,it);byTitle.set(tk,it)}
+if(!it){it={key:k,url:safeUrl(item.source_url)?item.source_url:item.url,title:item.title_zh||item.title,summary:item.summary_zh||item.summary||"",why:item.why_it_matters_zh||"",published:item.published,source:item.source||"",image:item.image_url||"",imageLicense:item.image_license||"",imageSource:item.image_source||"",days:new Set(),sections:new Set(),radarScore:0,refs:[],moreUrls:new Set()};nmap.set(k,it);byTitle.set(tk,it)}
 it.days.add(daily);it.sections.add(field);it.moreUrls.add(item.url);it.refs.push({day:daily,section:field,url:item.url});
 if(field==="top5"){it.title=item.title_zh||item.title;it.summary=item.what_zh||item.summary_zh||it.summary;it.why=item.why_zh||item.why_it_matters_zh||it.why;it.radarScore=Math.max(it.radarScore,Number(item.total_score)||0)}
 }
 }
-if(Array.isArray(rep.skills))for(const sk of rep.skills){if(!sk||!sk.name||!sk.url)continue;const key=String(sk.canonical_id||canonical(sk.url)).toLowerCase();let it=smap.get(key);if(!it){it={key,name:sk.name,url:sk.url,description:sk.description_zh||sk.description||"",license:sk.license_name||sk.license||"",evidence_verified:!!sk.evidence_verified,quality_status:sk.quality_status||"",total_score:Number(sk.total_score)||0,stars:Number(sk.stars_total??sk.stars)||0,stars_7d:sk.stars_delta_7d??null,days:new Set(),refs:[]};smap.set(key,it)}it.days.add(daily);it.refs.push({day:daily,url:sk.url});if(Number(sk.total_score)>it.total_score)it.total_score=Number(sk.total_score);it.evidence_verified=it.evidence_verified||!!sk.evidence_verified}
+if(Array.isArray(rep.skills))for(const sk of rep.skills){if(!sk||!sk.name||!safeUrl(sk.url))continue;const key=String(sk.canonical_id||canonical(sk.url)).toLowerCase();let it=smap.get(key);if(!it){it={key,name:sk.name,url:sk.url,description:sk.description_zh||sk.description||"",license:sk.license_name||sk.license||"",evidence_verified:!!sk.evidence_verified,quality_status:sk.quality_status||"",total_score:Number(sk.total_score)||0,stars:Number(sk.stars_total??sk.stars)||0,stars_7d:sk.stars_delta_7d??null,days:new Set(),refs:[]};smap.set(key,it)}it.days.add(daily);it.refs.push({day:daily,url:sk.url});if(Number(sk.total_score)>it.total_score)it.total_score=Number(sk.total_score);it.evidence_verified=it.evidence_verified||!!sk.evidence_verified}
 }
 cfg.news=[...new Set(nmap.values())].sort((a,b)=>scoreNews(b)-scoreNews(a)||a.key.localeCompare(b.key));cfg.skills=[...smap.values()].sort((a,b)=>scoreSkill(b)-scoreSkill(a)||a.name.localeCompare(b.name));cfg.newsKeys=new Set(cfg.news.slice(0,7).map(x=>x.key));cfg.skillKeys=new Set(cfg.skills.slice(0,5).map(x=>x.key))}
 async function getJSON(path){const r=await fetch(API+path+"?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw Error(path+" HTTP "+r.status);return r.json()}
