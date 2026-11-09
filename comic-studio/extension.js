@@ -6,11 +6,11 @@ let wtSource='all',wtSourceCounts=[],wtCategory='全部',wtQuery='',wtNews=[],wt
 let wtRankSort='overall',wtRankFocus='all',wtRankMin=60;
 let wtConfig=null,wtSession=null,wtSyncTimer=null,wtCloudBusy=false,wtSyncedAt='',wtCloudError='',wtStatus='未登录';
 let wtSelectedCharacter='',wtPreviewImage='',wtRemoteRev=null;
-const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','机器人','商业财经','科学','环境','健康','航空航天'];
+const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','科技社区','机器人','商业财经','科学','环境','健康','航空航天'];
 const wtJson=async(res)=>{const body=await res.json().catch(()=>({error:'服务器响应无法解析'}));if(!res.ok)throw Error(body.error||body.message||`请求失败 ${res.status}`);return body;};
 const wtTime=v=>{try{return new Date(v).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}catch{return '—'}};
 
-const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
+const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','科技社区':'DEV','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
 function wtNewsPicture(n,i){
  const image=safeURL(n.image||''),kind=wtNewsSymbols[n.category]||'WORLD';
  return '<div class="wt-news-media '+(image?'has-photo':'is-fallback')+'">'+
