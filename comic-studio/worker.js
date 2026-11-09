@@ -30,13 +30,38 @@ const RSS_FEEDS={"国际政治":["https://feeds.bbci.co.uk/news/world/rss.xml","
 async function collectFeeds(category){const urls=RSS_FEEDS[category]||[];if(!urls.length)throw Error('No RSS feeds configured');return Promise.any(urls.map(async url=>{const r=await fetch(url,{headers:{'accept':'application/rss+xml,application/xml,text/xml,*/*'},signal:AbortSignal.timeout(6000)});if(!r.ok)throw Error('RSS HTTP '+r.status);const xml=await r.text();const items=parseRSS(xml,category).map(x=>({...x,source:x.source==='Google News'?new URL(url).hostname:x.source,provider:'Direct RSS'}));if(!items.length)throw Error('No valid RSS items: '+url);return items;}));}
 async function collectGDELT(category){const query=QUERIES[category];const endpoint='https://api.gdeltproject.org/api/v2/doc/doc?query='+encodeURIComponent(query)+'&mode=artlist&maxrecords=20&format=json&timespan=7d&sort=datedesc';let r=await fetch(endpoint,{signal:AbortSignal.timeout(7000)});if(!r.ok)throw Error('GDELT '+r.status);let j=await r.json();return (j.articles||[]).map(a=>({title:a.title||'',source:a.domain||'GDELT',url:a.url||'',published:a.seendate&&/^\d{8}T\d{6}Z$/.test(a.seendate)?new Date(a.seendate.replace(/^(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})Z$/,'$1-$2-$3T$4:$5:$6Z')).toISOString():null,category,language:a.language||'',provider:'GDELT',image:safeNewsImage(a.socialimage||a.image||''),imageSource:'GDELT 来源分享图'})).filter(a=>a.title.length>8&&a.url.startsWith('https://'))}
 function uniqueNews(items){const seen=new Set();return items.filter(x=>{let key=(x.url||x.title).toLowerCase().replace(/\?.*$/,'').replace(/[^\p{L}\p{N}]/gu,'').slice(0,150);if(!key||seen.has(key))return false;seen.add(key);return true});}
+
+function newsRelevant(item,category){
+ if(category!=='机器人')return true;
+ const host=(()=>{try{return new URL(item.url).hostname}catch{return ''}})();
+ if((host==='therobotreport.com'||host.endsWith('.therobotreport.com'))&&item.provider==='Direct RSS')return true;
+ return /\brobot(s|ic|ics)?\b|\bhumanoid\b|automation|boston dynamics|autonomous machine|robotics/i.test(item.title||'');
+}
+async function enrichSourceImages(items){
+ // Original-article metadata only; no unrelated stock photo or invented photo.
+ const trusted=['therobotreport.com','techcrunch.com','theguardian.com','variety.com','bbc.com','bbc.co.uk','nasa.gov','espn.com','sciencedaily.com'];
+ const missing=items.filter(x=>!x.image&&x.provider==='Direct RSS'&&(()=>{try{const h=new URL(x.url).hostname;return trusted.some(t=>h===t||h.endsWith('.'+t))}catch{return false}})()).slice(0,6);
+ await Promise.all(missing.map(async article=>{try{
+  const response=await fetch(article.url,{redirect:'error',headers:{accept:'text/html'},signal:AbortSignal.timeout(3000)});
+  if(!response.ok||!(response.headers.get('content-type')||'').includes('html'))return;
+  if(Number(response.headers.get('content-length')||0)>2500000)return;
+  const html=(await response.text()).slice(0,180000),metas=html.match(/<meta\b[^>]*>/gi)||[];
+  for(const meta of metas){const prop=meta.match(/\b(?:property|name)\s*=\s*["']([^"']+)["']/i)?.[1]||'';
+   if(!/^(og:image|og:image:secure_url|twitter:image|twitter:image:src)$/i.test(prop))continue;
+   const raw=meta.match(/\bcontent\s*=\s*["']([^"']+)["']/i)?.[1];if(!raw)continue;
+   const image=safeNewsImage(new URL(textDecode(raw),article.url).href);
+   if(image){article.image=image;article.imageSource='来源文章的 Open Graph 主图';break;}
+  }
+ }catch{}}));
+}
 async function news(url){
  const cat=url.searchParams.get('category')||'全部';if(cat!=='全部'&&!QUERIES[cat])return failure('无效新闻分类');
  const limit=Math.min(60,Math.max(5,Number(url.searchParams.get('limit'))||24));
  const cats=cat==='全部'?['国际政治','AI 科技','商业财经','文化','科学','体育']:[cat];
- const result=await Promise.allSettled(cats.map(async c=>{const res=await Promise.allSettled([collectFeeds(c),collectGDELT(c),collectRSS(c)]);const rows=res.flatMap(x=>x.status==='fulfilled'?x.value:[]);if(!rows.length)throw Error('新闻源不可用');return uniqueNews(rows);}));
+ const result=await Promise.allSettled(cats.map(async c=>{const res=await Promise.allSettled([collectFeeds(c),collectGDELT(c),collectRSS(c)]);const rows=res.flatMap(x=>x.status==='fulfilled'?x.value:[]);if(!rows.length)throw Error('新闻源不可用');return uniqueNews(rows.filter(x=>newsRelevant(x,c)));}));
  const items=uniqueNews(result.flatMap(r=>r.status==='fulfilled'?r.value:[]));
  const rank=x=>(Date.parse(x.published)||0)+(x.image?6*3600000:0);items.sort((a,b)=>rank(b)-rank(a));
+ await enrichSourceImages(items.slice(0,limit));
  const warning=result.some(r=>r.status==='rejected')?'部分新闻来源暂不可用，当前内容并非完整全球新闻榜单。':'';
  if(!items.length)return Response.json({error:'新闻源暂时无法连接；平台不提供模拟新闻',diagnostics:result.map((r,i)=>({category:cats[i],error:r.status==='rejected'?String(r.reason?.message||r.reason).slice(0,140):null}))},{status:503,headers:RESULT_HEADERS});
  return Response.json({items:items.slice(0,limit),category:cat,provider:'Google News RSS / Direct RSS / GDELT',fetchedAt:new Date().toISOString(),imagePolicy:'真实媒体 RSS 缩略图及 GDELT 分享图；缺失则显示占位图',warning},{headers:{'cache-control':'public,max-age=600','x-content-type-options':'nosniff'}});
