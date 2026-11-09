@@ -60,7 +60,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.equal(noSource.task.source.urls.length,0);
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
- assert.equal(noSource.project.handoff.repoQueuedAt,undefined,'Local ZIP is not GitHub delivery');
+ assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
  const withSource=await simulate({topicSource:'https://example.org/news'});
  assert.equal(withSource.task.source.urls[0],'https://example.org/news','Topic source must be inherited');
  assert.equal(withSource.task.research_required,true,'Unverified link is still research pending');
