@@ -6,12 +6,12 @@ const WT_UI_DEFAULT={
   groups:[
     {id:'discover',name:'发现与选题',items:['dashboard','live','ai-briefing','radar']},
     {id:'create',name:'创作与作品',items:['studio','characters','library']},
-    {id:'manage',name:'出版与管理',items:['publish','account','settings']}
+    {id:'manage',name:'出版与管理',items:['handoff','publish','account','settings']}
   ]
 };
 const WT_UI_LABELS={dashboard:'总览',live:'全球热点', 'ai-briefing':'AI 前沿简报',radar:'选题池',
-  studio:'创作工作台',characters:'角色档案',library:'漫画书架',publish:'出版中心',account:'登录与同步',settings:'数据管理'};
-const WT_UI_ICONS={dashboard:'◫',live:'◉','ai-briefing':'✳',radar:'◎',studio:'✦',characters:'♧',library:'▦',publish:'↗',account:'♙',settings:'⚙'};
+  studio:'创作工作台',characters:'角色档案',library:'漫画书架',handoff:'制作交接',publish:'出版中心',account:'登录与同步',settings:'数据管理'};
+const WT_UI_ICONS={dashboard:'◫',live:'◉','ai-briefing':'✳',radar:'◎',studio:'✦',characters:'♧',library:'▦',handoff:'⇄',publish:'↗',account:'♙',settings:'⚙'};
 const WT_UI_ROUTE=Object.keys(WT_UI_LABELS);
 const wtUiSafe=(x)=>e(String(x||'').slice(0,90));
 function wtVisualSettings(){
@@ -33,7 +33,7 @@ function wtVisualSettings(){
     clean.push({id:String(g.id||'group').slice(0,45),name:String(g.name||'导航分组').slice(0,22),items});
   }
   if(!clean.length)clean.push({id:'discover',name:'导航',items:[]});
-  for(const x of WT_UI_ROUTE)if(!seen.has(x))clean[0].items.push(x);
+  for(const x of WT_UI_ROUTE)if(!seen.has(x)){const g=x==='handoff'?(clean.find(g=>g.id==='manage')||clean[clean.length-1]):clean[0];if(x==='handoff'&&g.items.includes('publish'))g.items.splice(g.items.indexOf('publish'),0,x);else g.items.push(x)}
   s.groups=clean;
   return s;
 }
