@@ -28,7 +28,8 @@ function briefScores(n){
  const r=n._rating||wtEditorialRank.evaluate({...n,category:'AI 科技'});
  return '<div class="wt-rankline brief-rankline" aria-label="'+e(wtEditorialRank.format(r))+'">'+
  '<div class="wt-rankprimary"><span>综合</span><strong>'+r.overall+'</strong><small>/100</small></div>'+
- '<div><span>热度</span><b>'+r.heat+'</b></div><div><span>影响力</span><b>'+r.impact+'</b></div><div><span>可画性</span><b>'+r.drawability+'</b></div></div>';
+ '<div><span>热度</span><b>'+r.heat+'</b></div><div><span>影响力</span><b>'+r.impact+'</b></div><div><span>可画性</span><b>'+r.drawability+'</b></div>'+ 
+ '<div><span>冲突</span><b>'+r.conflict+'</b></div><div><span>新奇</span><b>'+r.novelty+'</b></div><div><span>追溯</span><b>'+r.credibility+'</b></div></div>';
 }
 function briefCard(n,i,k){
  const kind=n._sourceKind||k,original=Number.isInteger(n._sourceIndex)?n._sourceIndex:i;
@@ -42,8 +43,8 @@ function briefCard(n,i,k){
 function briefList(k){return briefRanked(k).items.map((x,i)=>briefCard(x,i,k)).join('')||'<div class="brief-state"><h3>目前没有达到筛选标准的新闻</h3><p>可以调整搜索词、维度条件或日期；综合评分最低门槛仍为 60。</p></div>'}
 function briefRankControls(){
  const opts=(list,val)=>list.map(([id,title])=>'<option value="'+id+'"'+(id===val?' selected':'')+'>'+title+'</option>').join('');
- const sorts=[['overall','综合评分 ↓'],['heat','热度 ↓'],['impact','影响力 ↓'],['drawability','可画性 ↓'],['latest','最新时间']];
- const focus=[['all','全部达标'],['heat70','热度 ≥70'],['heat80','热度 ≥80'],['impact70','影响力 ≥70'],['impact80','影响力 ≥80'],['drawability70','可画性 ≥70'],['drawability80','可画性 ≥80']];
+ const sorts=[['overall','综合评分 ↓'],['heat','热度 ↓'],['impact','影响力 ↓'],['drawability','可画性 ↓'],['conflict','冲突/反转 ↓'],['novelty','新奇 ↓'],['credibility','来源追溯 ↓'],['latest','最新时间']];
+ const focus=[['all','全部达标'],['heat70','热度 ≥70'],['heat80','热度 ≥80'],['impact70','影响力 ≥70'],['impact80','影响力 ≥80'],['drawability70','可画性 ≥70'],['drawability80','可画性 ≥80'],['conflict70','冲突 ≥70'],['conflict80','冲突 ≥80'],['novelty70','新奇 ≥70'],['credibility70','追溯 ≥70']];
  const selected=briefRanked(briefView==='ranked'?'ranked':briefView);
  return '<section class="box wt-rank-toolbar brief-rank-toolbar"><div class="wt-rank-controls">'+
  '<label class="wt-rank-search">搜索新闻<input id="briefRankSearch" value="'+e(briefSearch)+'" placeholder="标题、摘要、媒体、观点…"></label>'+
@@ -51,7 +52,7 @@ function briefRankControls(){
  '<label>优先检索<select id="briefRankFocus">'+opts(focus,briefFocus)+'</select></label>'+
  '<label>综合门槛<select id="briefRankMin">'+opts([['60','≥60 分'],['70','≥70 分'],['80','≥80 分'],['90','≥90 分']],String(briefMinimum))+'</select></label></div>'+
  '<div class="wt-rank-summary">本栏目 <strong>'+selected.items.length+'</strong> 条显示 / '+selected.all+' 条候选 · '+selected.hidden+' 条综合低分隐藏</div>'+
- '<p class="wt-rank-disclaimer">规则智能预评估 V'+wtEditorialRank.VERSION+' · 热度 32% / 影响力 36% / 可画性 32%。并非大模型评分或真实社交热度。仅过滤新闻卡片，不影响原版 AI Radar 日报、热门 Skill 和 DAVY’S NOTE。</p></section>';
+ '<p class="wt-rank-disclaimer">规则智能预评估 V'+wtEditorialRank.VERSION+' · 热度 20% / 影响力 20% / 可画性 20% / 冲突 20% / 新奇 10% / 来源追溯 10%。并非大模型评分或真实社交热度。仅过滤新闻卡片，不影响原版 AI Radar 日报、热门 Skill 和 DAVY’S NOTE。</p></section>';
 }
 function briefSkills(){return '<div class="brief-skill-list">'+(briefIssue?.skills||[]).map((s,i)=>'<article class="brief-skill"><span class="brief-skill-index">'+String(i+1).padStart(2,'0')+'</span><div><span class="brief-kicker">AI SKILL / RESEARCH</span><h3>'+e(s.name)+'</h3><p>'+e(s.description||'查看项目原文了解更多')+'</p><div class="brief-skill-meta">'+(typeof s.stars==='number'?'★ '+s.stars+' Stars':'')+' · '+e(s.license||'授权待确认')+'</div></div><a class="button" target="_blank" rel="noopener noreferrer" href="'+e(briefUrl(s.url)||BRIEF_SOURCE)+'">查看项目 ↗</a></article>').join('')+'</div>'}
 function briefNote(){const d=briefIssue?.editorial||{};return '<div class="brief-note"><div class="brief-note-head"><span class="brief-kicker">AN EDITORIAL VIEW / BY DAVYLAB</span><h2>DAVY’S NOTE</h2></div><section><h3>今天值得记住的事</h3><p>'+e(d.core||'暂无编辑观点')+'</p></section><section><h3>下一步趋势</h3><p>'+e(d.trend||'暂无趋势解读')+'</p></section><section><h3>留给创作者的问题</h3><p>'+e(d.question||'我们如何用漫画表达这个议题？')+'</p></section><p class="brief-disclosure">上述为简报观点，不能替代事实核验。</p></div>'}
