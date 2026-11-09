@@ -2,28 +2,32 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#f2efe7"><meta name="description" content="DAVYLAB WORLD/TOON — 全球热点，漫画重述。独立漫画创作、出版与管理工作台。">
-<title>WORLD/TOON — By DAVYLAB</title>
+<meta name="theme-color" content="#f2efe7"><meta name="description" content="DAVYLAB Comic Press — 全球热点，漫画重述。独立漫画创作、出版与管理工作台。">
+<title>COMIC PRESS — By DAVYLAB</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <div id="shell"><aside class="rail" aria-label="主导航">
-<a class="brand" href="#/dashboard" aria-label="WORLD/TOON 首页"><span class="brand-mark">W<span>·</span>T</span><span class="brand-name">WORLD<br>TOON<small>BY DAVYLAB</small></span></a>
+<a class="brand" href="#/dashboard" aria-label="Comic Press 首页"><span class="brand-mark">C<span>·</span>P</span><span class="brand-name">COMIC<br>PRESS<small>BY DAVYLAB</small></span></a>
 <div class="rail-heading">EDITORIAL STUDIO</div>
 <nav id="mainnav">
 <a href="#/dashboard" data-route="dashboard"><span class="nav-ico">◫</span> 总览 <small>01</small></a>
+<a href="#/live" data-route="live"><span class="nav-ico">◉</span> 全球热点 <small>02</small></a>
 <a href="#/radar" data-route="radar"><span class="nav-ico">◎</span> 热点素材 <small>02</small></a>
 <a href="#/library" data-route="library"><span class="nav-ico">▦</span> 漫画书架 <small>03</small></a>
 <a href="#/studio" data-route="studio"><span class="nav-ico">✦</span> 创作工作台 <small>04</small></a>
+<a href="#/characters" data-route="characters"><span class="nav-ico">♧</span> 角色档案 <small>06</small></a>
 <a href="#/publish" data-route="publish"><span class="nav-ico">↗</span> 出版中心 <small>05</small></a>
+<a href="#/account" data-route="account"><span class="nav-ico">♙</span> 登录与同步 <small>08</small></a>
 <a href="#/settings" data-route="settings"><span class="nav-ico">⚙</span> 数据管理 <small>06</small></a>
 </nav>
-<div class="rail-bottom"><span class="online-dot"></span> PRIVATE CREATOR SPACE <p>原创表达，来源可追溯。</p><span class="version">V1.0 · LOCAL FIRST</span></div>
+<div class="rail-bottom"><span class="online-dot"></span> PRIVATE CREATOR SPACE <p>原创表达，来源可追溯。</p><span class="version">V2.0 · HYBRID SYNC</span></div>
 </aside>
-<div class="workspace"><header class="topbar"><button id="menuToggle" class="iconbtn menu-button" aria-label="展开导航">☰</button><div class="breadcrumb">DAVYLAB <span>/</span> <b id="crumb">总览</b></div><div class="right-tools"><span class="data-chip" title="当前为本机数据，不会自动同步云端"><span class="online-dot"></span> 本机工作区</span><button id="topNew" class="button dark compact">＋ 新建作品</button></div></header>
+<div class="workspace"><header class="topbar"><button id="menuToggle" class="iconbtn menu-button" aria-label="展开导航">☰</button><div class="breadcrumb">DAVYLAB <span>/</span> <b id="crumb">总览</b></div><div class="right-tools"><span class="data-chip" title="当前为本机数据，不会自动同步云端"><span class="online-dot"></span> 本机优先 · 可云端同步</span><button id="topNew" class="button dark compact">＋ 新建作品</button></div></header>
 <main id="view" tabindex="-1"></main>
-<footer class="foot"><span>© 2026 DAVYLAB · WORLD/TOON</span><span>本平台不将虚构漫画作为真实新闻报道；发布前请核对来源与风险。</span></footer></div>
+<footer class="foot"><span>© 2026 DAVYLAB · COMIC PRESS</span><span>本平台不将虚构漫画作为真实新闻报道；发布前请核对来源与风险。</span></footer></div>
 </div>
 <div id="modalRoot" class="modal-root" hidden></div><div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script src="app.js" defer></script>
+<script src="extension.js" defer></script>
 </body></html>
