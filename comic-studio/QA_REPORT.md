@@ -14,3 +14,12 @@
 - 旧版保存在 GitHub 原始历史提交及 Cloudflare Worker 原脚本中
 - V0.1 的 localStorage 键 `davylab_worldtoon_v01` 迁移时不删除
 - 新版使用 `davylab-comic-press-v1`，并支持完整 ZIP 工作区导出
+
+## 生产环境核验（2026-11-09）
+
+- GitHub 发布提交：`f2bbfa2edd233b0c6218658d3267c42f874e10ac`，新增/更新 19 个文件（含首期 9 张独立图片与封面）。
+- Cloudflare Worker `worldtoon` 部署版本 `fce081f2-5f0c-4ce9-a991-0d580cc34c32`，API 确认 100% 流量生效；workers.dev 子域名已启用。
+- Firecrawl 实时抓取：`https://worldtoon.chenzhe223.workers.dev/` HTTP 200，页面显示 WORLD/TOON V1.0 与六个导航模块。
+- Firecrawl 独立线上浏览器（只读）检查：六个模块导航均可切换；创刊作品封面加载成功（naturalWidth 840）；阅读器第 1–9 格图片均可加载（naturalWidth 840），无断图；翻页交互正常。
+- 以上证明线上静态工作台可访问；不代表自动热点、AI 模型生图、真实平台直发或云端数据同步已经实现。
+- 编辑内容仅保存在访问者当前浏览器。跨设备不可自动同步，请先使用完整 ZIP 备份。
