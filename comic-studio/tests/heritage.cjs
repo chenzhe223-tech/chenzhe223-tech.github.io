@@ -15,11 +15,11 @@ const fakeFetch=async url=>{
   const name=new URL(u).searchParams.get('search');return {id:'Q'+(1000+['三国','唐朝','丝绸之路','宋朝','秦朝'].indexOf(name)*20+i),
    label:'History: '+name+' #'+i,description:'historical concept'};
  })});
- if(u.includes('api.artic.edu/api/v1/artworks/search'))return response({data:[
-  {id:42,image_id:'image-42',title:'Historic Portrait',is_public_domain:true,artist_display:'A. Artist',date_display:'1800'},
-  {id:43,image_id:'image-43',title:'Copyright Restricted',is_public_domain:false,artist_display:'B.'}
+ if(u.includes('openaccess-api.clevelandart.org/api/artworks'))return response({data:[
+  {id:42,title:'Historic Portrait',share_license_status:'CC0',images:{web:{url:'https://openaccess-cdn.clevelandart.org/image-42.jpg'}},url:'https://www.clevelandart.org/art/1942.1',creators:[{description:'A. Artist'}],creation_date:'1800'},
+  {id:43,title:'Copyright Restricted',share_license_status:'Copyrighted',images:{web:{url:'https://openaccess-cdn.clevelandart.org/image-43.jpg'}},url:'https://www.clevelandart.org/art/1942.2'}
  ]});
- if(u.includes('collectionapi.metmuseum.org/public/collection/v1/search'))return response({objectIDs:[4,5]});
+ if(u.includes('collectionapi.metmuseum.org/public/collection/v1.1/search'))return response({objectIDs:[4,5]});
  if(u.includes('collectionapi.metmuseum.org/public/collection/v1/objects/4'))return response({
   objectID:4,isPublicDomain:true,primaryImageSmall:'https://images.metmuseum.org/4.jpg',
   objectURL:'https://www.metmuseum.org/art/collection/search/4',title:'Historical Ship'});
@@ -44,7 +44,7 @@ vm.runInNewContext(worker.replace('export default {async fetch(','const defaultW
  assert.equal(art.items.length,2,'Exclude all non-CC0 artwork');
  assert.ok(art.items.every(x=>x.license==='CC0'&&x.rights_verified===true));
  assert.equal(art.items.filter(x=>x.source==='The Met Open Access').length,1);
- assert.equal(art.items.filter(x=>x.source==='Art Institute of Chicago').length,1);
+ assert.equal(art.items.filter(x=>x.source==='Cleveland Museum of Art').length,1);
  const req=await (await e.comicDiscover(new URL('https://example.org/api/comic/discover?source=classics'))).json();
  assert.equal(req.items.length,32,'Evergreen source is routed');
  const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
