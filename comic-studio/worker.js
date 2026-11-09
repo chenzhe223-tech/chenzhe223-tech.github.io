@@ -327,10 +327,67 @@ async function wtArchiveApi(request,env,url){
  }
  return wtJson({error:'该仓库接口不存在或请求方法不被允许'},405)
 }
+
+const COMIC_SOURCES=[{id:'news',name:'全球热点'},{id:'hackernews',name:'Hacker News'},{id:'arxiv',name:'arXiv AI论文'}];
+function comicNormalize(x,id){
+ try{
+  let u=new URL(String(x.url||''));if(u.protocol!=='https:'||u.username||u.password)return null;
+  let title=String(x.title||'').trim().slice(0,300);if(title.length<8)return null;
+  let ts=Date.parse(x.published||'');
+  return {title,url:u.href,summary:textDecode(x.summary||'').slice(0,500),
+   category:String(x.category||'AI 科技').slice(0,45),source:String(x.source||id).slice(0,90),
+   source_id:id,published:Number.isFinite(ts)?new Date(ts).toISOString():'',
+   image:safeNewsImage(x.image||''),verification_status:'pending_research',rights_status:'source_link_only'};
+ }catch{return null}
+}
+async function comicDiscover(url){
+ const source=url.searchParams.get('source')||'all';
+ if(!['all','news','hackernews','arxiv'].includes(source))return failure('未知素材来源',400);
+ const tasks=[];
+ if(source==='all'||source==='news')tasks.push({id:'news',run:async()=>{
+  const r=await news(new URL('/api/news?category=全部&limit=60',url.origin));const json=await r.json();
+  if(!r.ok)throw Error(json.error||'新闻源失败');return json.items||[];
+ }});
+ if(source==='all'||source==='hackernews')tasks.push({id:'hackernews',run:async()=>{
+  const r=await fetch('https://hn.algolia.com/api/v1/search?tags=front_page&hitsPerPage=40',{signal:AbortSignal.timeout(8500)});
+  if(!r.ok)throw Error('Hacker News HTTP '+r.status);
+  return ((await r.json()).hits||[]).slice(0,40).map(x=>({title:x.title||x.story_title,
+   url:x.url||'https://news.ycombinator.com/item?id='+encodeURIComponent(x.objectID),
+   published:x.created_at,summary:'HN points '+Number(x.points||0)+' · comments '+Number(x.num_comments||0),
+   category:'AI 科技',source:'Hacker News'}));
+ }});
+ if(source==='all'||source==='arxiv')tasks.push({id:'arxiv',run:async()=>{
+  const r=await fetch('https://rss.arxiv.org/rss/cs.AI',{signal:AbortSignal.timeout(9500)});
+  if(!r.ok)throw Error('arXiv HTTP '+r.status);
+  const xml=await r.text();if(xml.length>2000000||!xml.includes('<item'))throw Error('论文 RSS 不可解析');
+  return parseRSS(xml,'AI 科技').map(x=>({...x,source:'arXiv cs.AI'}));
+ }});
+ const responses=await Promise.allSettled(tasks.map(t=>t.run()));
+ const items=[],warnings=[],counts=[],seen=new Set();
+ for(let i=0;i<responses.length;i++){
+  const result=responses[i],id=tasks[i].id;let accepted=0;
+  if(result.status==='rejected'){warnings.push(id+': '+String(result.reason?.message||result.reason).slice(0,130));counts.push({id,ok:false,count:0});continue}
+  for(const raw of result.value){
+   const item=comicNormalize(raw,id);if(!item)continue;
+   const u=new URL(item.url);for(const k of [...u.searchParams.keys()])if(k.toLowerCase().startsWith('utm_')||['fbclid','gclid'].includes(k))u.searchParams.delete(k);
+   const key=u.hostname+u.pathname.replace(/\/$/,'')+u.search;
+   if(seen.has(key))continue;seen.add(key);items.push(item);accepted++;
+  }
+  counts.push({id,ok:true,count:accepted});
+ }
+ items.sort((a,b)=>(Date.parse(b.published)||0)-(Date.parse(a.published)||0));
+ if(!items.length)return Response.json({error:'全部素材源暂不可用',warnings,counts},{status:503,headers:RESULT_HEADERS});
+ return Response.json({items:items.slice(0,Math.min(90,Math.max(5,Number(url.searchParams.get('limit'))||60))),
+  sources:COMIC_SOURCES,counts,warnings,collectedAt:new Date().toISOString(),verified:false,
+  note:'仅供选题的未核验线索；不得自动认定事实或使用原文图片进行出版。'},
+  {headers:{'cache-control':'public,max-age=240','x-content-type-options':'nosniff'}});
+}
+
 export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
+ if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
