@@ -77,5 +77,5 @@ el("productionChatGPT")?.addEventListener("click",handToChatGPT);
 client.auth.onAuthStateChange((event,s)=>{session=s;setAuthUI();if(event==="PASSWORD_RECOVERY"){openAuth("recover");el("authForm").hidden=true;el("authRecoverySection").hidden=false;el("authLogged").hidden=true;el("authTitle").textContent="设置新密码";el("authDescription").textContent="验证已完成，现在可以设置你的长期登录密码。";feedback("请设置至少 8 位的新密码。")}});
 auth();
 }
-window.ProductionStudio={onShow(){init();if(session)refreshRuns()},start(){init();start()},openAccount(){init();openAuth(session?"account":"login")}};
+window.ProductionStudio={onShow(){init();if(session)refreshRuns()},start(){init();start()},openAccount(){init();openAuth(session?"account":"login")},async githubRequest(action){init();const value=await client.auth.getSession(),jwt=value.data.session?.access_token;if(!jwt)throw new Error("请先登录账号，再同步私有 GitHub 成果");const res=await fetch(SUPA+"/functions/v1/explorations-github-sync",{method:"POST",headers:{"Content-Type":"application/json","Authorization":"Bearer "+jwt,"apikey":KEY},body:JSON.stringify({action})});let data;try{data=await res.json()}catch{throw new Error("同步服务返回了无效数据")}if(!res.ok)throw Object.assign(new Error(data.error||"服务调用失败"),{code:data.code||""});return data},isLogged(){return !!session}};
 init();
