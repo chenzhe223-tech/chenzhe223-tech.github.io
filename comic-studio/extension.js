@@ -37,7 +37,7 @@ function wtRankBadge(item){
 }
 function wtLive(){
  if(!wtNews.length&&!wtFetching&&!wtLastFetch&&!wtNewsError)setTimeout(()=>wtFetchNews(),0);
- const all=wtNews.filter(n=>wtCategory==='全部'||n.category===wtCategory);
+ const all=wtNews.map((n,i)=>({...n,_sourceIndex:i})).filter(n=>wtCategory==='全部'||n.category===wtCategory);
  const judged=wtEditorialRank.decorate(all);
  const result=wtEditorialRank.select(judged,{sort:wtRankSort,focus:wtRankFocus,minimum:wtRankMin,query:wtQuery});
  const items=result.items;
