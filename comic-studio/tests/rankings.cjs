@@ -8,7 +8,8 @@ vm.runInNewContext(fs.readFileSync(path.join(__dirname,'..','ranking.js'),'utf8'
 const engine=browser.wtEditorialRank;
 assert.ok(engine);
 assert.equal(engine.MIN_PUBLIC,60);
-assert.equal(engine.weights.heat+engine.weights.impact+engine.weights.drawability,1);
+assert.equal(Object.values(engine.weights).reduce((a,b)=>a+b,0),1);
+assert.deepEqual(Object.keys(engine.weights),['heat','impact','drawability','conflict','novelty','credibility']);
 const now=Date.parse('2026-11-09T16:00:00Z');
 const strong={title:'OpenAI unveils first humanoid robot in global breakthrough, government regulation debated',summary:'Scientists showcase new chips and robot demonstrator; researchers and founders debate impact and safety.',published:'2026-11-09T12:00:00Z',category:'AI 科技',url:'https://example.org/news',source:'Example'};
 const weak={title:'Local garden picnic weekly report',summary:'Community conversation about a picnic.',published:'2022-01-01T00:00:00Z',category:'旅行',url:'https://example.org/other'};
@@ -18,6 +19,7 @@ assert.ok(a.overall>=60,'Strong event should pass');
 assert.ok(b.overall<60,'Weak stale story must be hidden');
 assert.equal(a.method,'rule_estimate','Never claim actual model judgment');
 assert.equal(a.factChecked,false);
+for(const key of ['conflict','novelty','credibility'])assert.ok(Number.isInteger(a[key])&&a[key]>=0&&a[key]<=100);
 assert.ok(a.heat>=60&&a.impact>=60&&a.drawability>=60);
 let records=engine.decorate([weak,strong,medium],{now});
 let p=engine.select(records,{minimum:60,sort:'overall'});
@@ -26,7 +28,7 @@ assert.equal(p.hidden,records.filter(x=>x._rating.overall<60).length);
 assert.equal(p.items[0]._sourceIndex,1,'Sort must keep original source index for Save action');
 assert.ok(engine.select(records,{minimum:30}).items.every(x=>x._rating.overall>=60),'Never show <60 even if caller asks for less');
 assert.equal(engine.select(records,{minimum:100}).items.length,0);
-for(const metric of ['heat','impact','drawability']){
+for(const metric of ['heat','impact','drawability','conflict','novelty','credibility']){
  const ranked=engine.select(records,{sort:metric}).items;
  assert.ok(ranked.every((x,i)=>!i||ranked[i-1]._rating[metric]>=x._rating[metric]));
 }
@@ -40,4 +42,4 @@ const extension=fs.readFileSync(path.join(__dirname,'..','extension.js'),'utf8')
 const briefing=fs.readFileSync(path.join(__dirname,'..','briefing.js'),'utf8');
 assert.ok(extension.includes('wtEditorialRank.select')&&extension.includes("n._sourceIndex"));
 assert.ok(briefing.includes('wtEditorialRank.select')&&briefing.includes('n._sourceIndex')&&briefing.includes('data-index='),'Briefing selection must map to source array');
-console.log('WORLD/TOON ranking QA: score cutoff, rationale, 4 sorts, focus, query, route hooks and original action index passed.');
+console.log('WORLD/TOON ranking QA: score cutoff, rationale, 7 sorts, focus, query, route hooks and original action index passed.');
