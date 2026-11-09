@@ -23,6 +23,58 @@ function wtArchiveDate(d){try{return d?new Date(d).toLocaleDateString('zh-CN'):'
 function wtArchiveSection(){const items=(wtArchiveSnapshot?.library?.items||[]).filter(x=>x.status==='published');const cards=items.slice(0,9).map(it=>`<article class="box" style="min-width:0"><div class="kicker">ARCHIVED / ${wtArchiveHtml(it.task_id)}</div><h3>${wtArchiveHtml(it.title)}</h3><p class="minor">${wtArchiveDate(it.receipt?.published_at)} · 第 ${Number(it.revision)||1} 版 · 正式发表回执</p><div class="buttons"><a class="button dark" href="${wtArchiveHtml(it.receipt?.url||'#')}" target="_blank" rel="noopener noreferrer">阅读公众号漫画 ↗</a></div></article>`).join('');
  return `<section class="box" style="margin-bottom:24px"><div class="sectionbar"><div><div class="kicker">GITHUB / PUBLISHED ARCHIVE</div><h2>仓库已发表漫画</h2></div><a class="button" href="#/archive">查看仓库同步状态 ↗</a></div>${items.length?`<div class="cards2">${cards}</div>`:`<p class="minor">${wtArchiveSnapshot?'仓库尚无经过回执核验的已发表作品。':'尚未从独立仓库取得正式目录；本机作品仍保留在下方。'}</p>`}</section>`;
 }
+// Shared publication index is read-only. Matching a public article never grants a private QA approval.
+const WT_SHARED_PUBLICATION_SOURCE='https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/topic-studio/data/published-articles.json';
+function wtPublicationTitle(v){return String(v||'').normalize('NFKC').toLowerCase().replace(/[：:]\\s*漫画改编\\s*$/,'').replace(/[\\s\\p{P}\\p{S}]/gu,'')}
+function wtPublicationMatches(p){
+ const shared=wtArchiveSnapshot?.shared_publications,items=Array.isArray(shared?.articles)?shared.articles:[];
+ const tid=String(p?.handoff?.taskId||p?.handoff?.repoTaskId||'');
+ const row=(wtArchiveSnapshot?.library?.items||[]).find(x=>x.task_id===tid);
+ const linked=tid?items.filter(x=>x.task_id===tid):[];
+ const name=wtPublicationTitle(p?.title||'');
+ // Legacy records without task ID are suggestions, never automatic proof of comic publication.
+ const suggested=name?items.filter(x=>!x.task_id&&wtPublicationTitle(x.title)===name):[];
+ const published= row?.status==='published'&&row?.receipt?.status==='published'?row.receipt:null;
+ return {shared,tid,row,linked,suggested,published};
+}
+function wtSharedLink(a){
+ const url=String(a?.url||'');
+ if(!/^https:\/\/mp\.weixin\.qq\.com\/s\//.test(url))return '';
+ return '<a href="'+wtArchiveHtml(url)+'" rel="noopener noreferrer" target="_blank">'+wtArchiveHtml(a.title||'阅读公众号文章')+' ↗</a>';
+}
+function wtSharedHandoffPanel(p){
+ const {shared,tid,linked,suggested,published}=wtPublicationMatches(p);
+ const total=shared?.status==='synced'?shared.total:'—';
+ const last=shared?.last_synced_at?wtArchiveHtml(shared.last_synced_at):'暂无成功同步记录';
+ let info='';
+ if(published){
+  info='<p class="wt-shared-confirm">已收到独立仓库核验的正式发表回执。<a href="'+wtArchiveHtml(published.url)+'" target="_blank" rel="noopener noreferrer">阅读已发表漫画 ↗</a></p>';
+ }else if(linked.length){
+  const a=linked[0];info='<p class="wt-shared-pending">共享档案已按任务编号 <strong>'+wtArchiveHtml(tid)+'</strong> 关联公众号文章。等待私有仓库 WorkBuddy 回执与图片 SHA/作者审核复核后，才会计入正式已发表。</p><div class="wt-shared-article">'+wtSharedLink(a)+'</div>';
+ }else if(suggested.length){
+  info='<p class="wt-shared-pending">发现标题相近的公众号文章，仅作为候选；缺少相同任务编号，不能自动认定为漫画成果。</p><div class="wt-shared-article">'+wtSharedLink(suggested[0])+'</div>';
+ }else{
+  info='<p class="wt-shared-empty">共享档案内暂未发现与当前漫画工单直接关联的已发表文章。不会据此修改当前作品状态。</p>';
+ }
+ const status=shared?.status==='synced'?'已读取 '+total+' 篇公众号文章':shared?.status==='unavailable'?'共享档案暂不可用':'等待首次读取';
+ return '<section class="wt-shared-panel" aria-label="公众号发表档案同步">'+
+  '<div class="wt-shared-head"><div><span class="wt-shared-eyebrow">PUBLISHED CONTENT SYNC</span><h2>公众号发表归档</h2></div><button type="button" class="button" data-archive="refresh">⟳ 读取共享档案</button></div>'+
+  '<div class="wt-shared-source"><strong>'+wtArchiveHtml(status)+'</strong><span>上次同步 '+last+'</span></div>'+
+  info+
+  '<p class="wt-shared-meta">来源：<a href="'+WT_SHARED_PUBLICATION_SOURCE+'" target="_blank" rel="noopener noreferrer">GitHub 共享文章档案 ↗</a> · 由 WorkBuddy 同步公众号后台真实发表记录；平台仅作读取，不直接写入共享库。</p>'+
+  '<details class="wt-shared-manual"><summary>备用：手工补录公众号链接</summary><div class="wf-form"><div class="field"><label for="wfReceipt">仅在共享档案无法自动关联时使用</label><input id="wfReceipt" type="url" placeholder="https://mp.weixin.qq.com/s/..." value="'+wtArchiveHtml(p?.handoff?.receipt||'')+'"></div><button class="button" data-wf="receipt">记录人工回执</button></div><p class="minor">手工录入只保存本地线索，不会伪造 WorkBuddy 的已发表回执或改变 GitHub 正式状态。</p></details></section>';
+}
+function wtSharedDeskCard(){
+ const shared=wtArchiveSnapshot?.shared_publications;
+ const total=shared?.status==='synced'?String(shared.total):'—';
+ const items=Array.isArray(shared?.articles)?shared.articles:[];
+ const linked=items.filter(a=>a.task_id&&(wtArchiveSnapshot?.library?.items||[]).some(t=>t.task_id===a.task_id));
+ const latest=items.slice(0,3).map(a=>'<li>'+wtSharedLink(a)+' <time>'+wtArchiveHtml(a.publishedAt||'')+'</time></li>').join('');
+ const status=shared?.status==='synced'?'已从公众号共享库读取':'未能读取共享库';
+ return '<section class="wt-dash-panel wt-shared-desk"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">SHARED PUBLICATIONS</p><h2>公众号发表档案 <span class="wt-dash-count">'+total+'</span></h2></div><a href="'+WT_SHARED_PUBLICATION_SOURCE+'" target="_blank" rel="noopener noreferrer">查看共享档案 ↗</a></header>'+
+  '<div class="wt-shared-desk-body"><p>'+wtArchiveHtml(status)+' · 已明确关联 WORLD/TOON 工单 '+linked.length+' 条 · 未关联内容不会视为漫画已发表。</p>'+
+  (latest?'<ul>'+latest+'</ul>':'<p class="wt-shared-empty">当前无可展示的正式公众号文章。</p>')+'</div></section>';
+}
 function wtArchiveDesk(){
  const snap=wtArchiveSnapshot,rows=snap?.library?.items||[],queue=snap?.queue?.items||[];
  const count=n=>snap?String(n):'—';
@@ -50,6 +102,7 @@ function wtArchiveDesk(){
   '<section class="wt-dash-connect" aria-label="仓库连接"><div class="wt-dash-connect-info"><div class="wt-dash-connect-title"><span class="wt-dash-dot wt-dash-dot--'+connectionTone+'"></span><strong>'+wtArchiveHtml(condition)+'</strong><span class="wt-dash-private">'+(snap?.visibility==='private'?'PRIVATE':'GITHUB')+'</span></div><p>chenzhe223-tech / worldtoon · 上次同步 '+wtArchiveHtml(time)+'</p>'+message+'</div><div class="wt-dash-connect-actions"><a href="#/handoff">制作交接 ↗</a><a href="#/account">账户与同步 ↗</a></div></section>'+
   (snap?.mode==='public_readonly'?'<p class="wt-dash-notice">当前仓库公开只读，未发表素材禁止写入。</p>':'')+
   '<section class="wt-dash-metrics" aria-label="任务统计">'+cards+'</section>'+
+  wtSharedDeskCard()+
   '<section class="wt-dash-panel wt-dash-workflow"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">WORKFLOW</p><h2>交付流程</h2></div><span>双轨创作 · 统一验收</span></header><ol class="wt-dash-steps">'+steps+'</ol></section>'+
   '<section class="wt-dash-panel wt-dash-queue"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">LIVE QUEUE</p><h2>当前任务 <span class="wt-dash-count">'+count(rows.length)+'</span></h2></div><a href="#/handoff">新建制作任务 ↗</a></header>'+
   (blocked.length?'<p class="wt-dash-notice">'+blocked.length+' 条任务需要复核，暂不进入自动发表队列。</p>':'')+
@@ -61,7 +114,7 @@ async function wtArchiveRefresh({silent=false}={}){if(wtArchiveBusy)return;wtArc
  const result=await wtArchiveApi('sync');if(result.library?.schema!=='davylab.worldtoon.library.v1'||result.queue?.schema!=='davylab.worldtoon.workbuddy-queue.v1')throw Error('仓库目录格式不兼容');
  const a=result.library.items||[];const seenTask=new Set(),seenStory=new Set();const clean=[];
  for(const x of a){if(!x||!x.task_id||seenTask.has(x.task_id)||seenStory.has(x.dedupe_key))continue;seenTask.add(x.task_id);seenStory.add(x.dedupe_key);clean.push(x)}
- wtArchiveSnapshot={library:{...result.library,items:clean},queue:result.queue,repo:result.repo,mode:result.mode||'unknown',visibility:result.visibility||'unknown',configured:result.configured===true};wtArchiveLastSync=Date.now();
+ wtArchiveSnapshot={library:{...result.library,items:clean},queue:result.queue,shared_publications:result.shared_publications||{status:'unavailable',articles:[],total:null},repo:result.repo,mode:result.mode||'unknown',visibility:result.visibility||'unknown',configured:result.configured===true};wtArchiveLastSync=Date.now();
  if(!silent&&typeof notify==='function')notify(`仓库同步成功：${clean.length} 条任务、${result.queue.items?.length||0} 条待发表`);
  }catch(err){wtArchiveSnapshot=null;wtArchiveLastSync=0;wtArchiveError=err.name==='AbortError'?'仓库访问超时':String(err.message||err);if(!silent&&typeof notify==='function')notify(wtArchiveError)}finally{wtArchiveBusy=false;if(['archive','library','handoff'].includes(ui.route))render()}}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+decodeURIComponent(u.pathname).replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
