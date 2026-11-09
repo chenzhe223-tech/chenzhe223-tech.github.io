@@ -456,6 +456,22 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     headline = str(editorial.get("headline_zh") or editorial.get("core_zh") or "AI 竞赛进入深水区：资本扩张与智能体安全并进")
     subline = str(editorial.get("poster_trend_zh") or editorial.get("trend_zh") or "AI 正从模型能力比拼走向任务执行、结果验证与真实场景落地。")
     draw.rectangle((48, 538, 118, 544), fill=orange)
+    def complete_lines(value, width, max_lines, sizes, fallback):
+        """Use complete source-derived text; never silently clip the poster."""
+        value = str(value or "").strip()
+        candidates = [value]
+        candidates.extend(part.strip() for part in re.split(r"[。！？；;\\n]", value) if part.strip())
+        candidates.append(fallback)
+        for candidate in dict.fromkeys(candidates):
+            if not candidate:
+                continue
+            for size in sizes:
+                selected_font = font(size, True)
+                lines = wrap(draw, candidate, selected_font, width)
+                if 0 < len(lines) <= max_lines:
+                    return lines, selected_font
+        raise RuntimeError("P0: no complete poster text fits its locked region")
+
     def clamped_lines(text, fnt, width, max_lines):
         lines = wrap(draw, str(text or ""), fnt, width)
         if len(lines) > max_lines:
@@ -467,8 +483,8 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         return lines
     y = 557
     headline_font = font(38, True)
-    headline_lines = clamped_lines(headline, headline_font, 1100, 2)
-    record_text_bounds(draw, headline_lines, (48, y), headline_font, 1100, 46, "hero_headline", len(wrap(draw, headline, headline_font, 1100)) > 2)
+    headline_lines, headline_font = complete_lines(headline, 1100, 2, (38, 34, 30, 26), "今日 AI 前沿重点速览")
+    record_text_bounds(draw, headline_lines, (48, y), headline_font, 1100, 46, "hero_headline")
     for line_text in headline_lines:
         draw.text((48, y), line_text, font=headline_font, fill=ink)
         y += 46
@@ -493,24 +509,24 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
         title = str(story.get("title_zh") or story.get("original_title") or story.get("title") or "AI 新闻")
         ty = 817
         title_font = font(18, True)
-        title_lines = clamped_lines(title, title_font, col_w - 4, 3)
-        record_text_bounds(draw, title_lines, (x, ty), title_font, col_w - 4, 22, f"story_{idx + 1}_title", len(wrap(draw, title, title_font, col_w - 4)) > 3)
+        title_lines, title_font = complete_lines(title, col_w - 4, 3, (18, 16, 14, 12), "新闻详情见网站")
+        record_text_bounds(draw, title_lines, (x, ty), title_font, col_w - 4, 22, f"story_{idx + 1}_title")
         for line_text in title_lines:
             draw.text((x, ty), line_text, font=title_font, fill=ink)
             ty += 22
         summary = str(story.get("poster_summary_zh") or story.get("what_zh") or story.get("summary_zh") or story.get("summary") or "")
         sy = 889
         summary_font = font(14)
-        summary_lines = clamped_lines(summary, summary_font, col_w - 4, 4)
-        record_text_bounds(draw, summary_lines, (x, sy), summary_font, col_w - 4, 18, f"story_{idx + 1}_summary", len(wrap(draw, summary, summary_font, col_w - 4)) > 4)
+        summary_lines, summary_font = complete_lines(summary, col_w - 4, 4, (14, 13, 12), "完整摘要与来源详见网站")
+        record_text_bounds(draw, summary_lines, (x, sy), summary_font, col_w - 4, 18, f"story_{idx + 1}_summary")
         for line_text in summary_lines:
             draw.text((x, sy), line_text, font=summary_font, fill=muted)
             sy += 18
         why = str(story.get("poster_why_zh") or story.get("why_zh") or story.get("why_it_matters_zh") or story.get("editor_judgment_zh") or "")
         wy = 968
         why_font = font(13, True)
-        why_lines = clamped_lines(why, why_font, col_w - 4, 3)
-        record_text_bounds(draw, why_lines, (x, wy), why_font, col_w - 4, 17, f"story_{idx + 1}_why", len(wrap(draw, why, why_font, col_w - 4)) > 3)
+        why_lines, why_font = complete_lines(why, col_w - 4, 3, (13, 12), "重要性解读详见网站")
+        record_text_bounds(draw, why_lines, (x, wy), why_font, col_w - 4, 17, f"story_{idx + 1}_why")
         for line_text in why_lines:
             draw.text((x, wy), line_text, font=why_font, fill=(52, 71, 96))
             wy += 17
