@@ -18,6 +18,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Check editorial scoring module syntax
+        run: node --check comic-studio/ranking.js
       - name: Check browser scripts
         run: |
           node --check comic-studio/app.js
@@ -27,6 +29,8 @@ jobs:
           node --check comic-studio/personalize.js
       - name: Exercise one-click research-first task generation
         run: node comic-studio/tests/task-flow.cjs
+      - name: Test four-axis editorial scoring and filtering
+        run: node comic-studio/tests/rankings.cjs
       - name: Check Worker module syntax
         run: node --check --input-type=module < comic-studio/worker.js
       - name: Check dual-track invariants
@@ -45,6 +49,8 @@ jobs:
           assert "ready_for_workbuddy" in archive
           assert "mark-published':notify(" in app, "Never allow local publication to replace repo receipts"
           assert 'archive.js' in html and 'data-route="handoff"' in html
+          assert 'ranking.js' in html and 'wtEditorialRank.select' in (root/'extension.js').read_text('utf8')
+          assert 'wtEditorialRank.select' in (root/'briefing.js').read_text('utf8')
           assert "research_required" in source and "t.research_required!==true" in source
           assert "wfPrepareTask(p);" in app
           assert '研究阶段' in app and 'verified_sources' in app
