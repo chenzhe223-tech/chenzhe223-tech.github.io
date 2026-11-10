@@ -1,0 +1,35 @@
+name: WorldToon responsive visual atlas browser acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/style-v3.js'
+      - 'comic-studio/style-v3.css'
+      - 'comic-studio/tests/style-gallery-browser.cjs'
+      - '.github/workflows/worldtoon-style-browser.yml'
+permissions:
+  contents: read
+jobs:
+  chromium:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install headless Chromium for real browser UI checks
+        run: |
+          npm install --no-save --no-audit playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify 20 original preview images at phone, tablet and desktop
+        run: node comic-studio/tests/style-gallery-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: worldtoon-style-browser-screenshots
+          path: |
+            worldtoon-ui-screenshots/
+            worldtoon-browser-qa.json
+          if-no-files-found: ignore
