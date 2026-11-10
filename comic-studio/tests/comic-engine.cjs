@@ -50,7 +50,7 @@ const extension=fs.readFileSync(path.join(root,'extension.js'),'utf8');
 assert.ok(extension.includes("data-wt=\"create-news\""),'One click to create comic project');
 assert.ok(extension.includes('wtDraftFromNews'),'Create draft on original existing model');
 assert.ok(extension.includes('wtSourceCounts'),'Surface failed sources');
-assert.ok(extension.includes('wtNews.map((n,i)=>({...n,_sourceIndex:i})).filter('),'Category filtering must retain original record index');
+assert.ok(extension.includes('wtNews.map((n,i)=>({...n,_sourceIndex:i}))')&&extension.includes('const filtered=pool.filter('),'Category filtering must retain original record index');
 const visualScript=fs.readFileSync(path.join(root,'comic-visuals.js'),'utf8');
 vm.runInNewContext(visualScript,ctx);
 const visual=ctx.window.wtVisualStudio;
