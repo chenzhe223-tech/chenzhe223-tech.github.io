@@ -38,6 +38,8 @@ jobs:
         run: node comic-studio/tests/comic-engine.cjs
       - name: Verify evergreen sources and CC0 public-domain gate
         run: node comic-studio/tests/heritage.cjs
+      - name: Verify D1 materialized discovery and instant category switching
+        run: node comic-studio/tests/discovery-cache.cjs
       - name: Exercise one-click research-first task generation
         run: node comic-studio/tests/task-flow.cjs
       - name: Test six-dimension editorial scoring and filtering
