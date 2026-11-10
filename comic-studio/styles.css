@@ -405,3 +405,23 @@
  .wt-catalog-heading span{max-width:145px;text-align:right}
  .wt-catalog-results .wt-news{grid-template-columns:1fr}
 }
+
+
+/* WORLD/TOON V3 · Compact accessible nested production navigation */
+.rail nav{min-height:0;overflow-y:auto;overflow-x:hidden;align-content:start;scrollbar-width:thin;scrollbar-color:#566158 transparent;padding-right:3px}
+.rail .brand,.rail .rail-heading,.rail .rail-bottom{flex-shrink:0}
+.rail nav .nav-group{display:grid;gap:2px;min-width:0}
+.rail nav .nav-parent{width:100%;font-weight:700}
+.rail nav .nav-parent.is-group-active{background:#2e3d33;color:#f4f6f0}
+.rail nav .nav-group-caret{font-size:16px;line-height:1;color:#93a99b;margin-left:auto}
+.rail nav .nav-children{display:grid;gap:2px;margin:0 0 4px 23px;padding:2px 0 2px 10px;border-left:1px solid #53645a}
+.rail nav .nav-child{font-size:12px;padding:9px 9px;min-height:36px;color:#b6c2b9;gap:8px;line-height:1.4;white-space:nowrap}
+.rail nav .nav-child-ico{font-family:Georgia,serif;font-size:15px;width:18px;flex:0 0 18px;text-align:center;color:#8eac95}
+.rail nav .nav-child.active{background:#43584a;color:#fff}
+.rail nav .nav-child.active .nav-child-ico{color:#dfc8ab}
+.rail nav .nav-child:hover{background:#37473d;color:#fff}
+@media(max-width:800px){
+ .rail{max-height:100dvh;min-height:100dvh}
+ .rail .brand{margin-bottom:24px}
+ .rail nav .nav-child{padding:10px 9px;min-height:40px}
+}
