@@ -787,8 +787,17 @@ const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫�
 let filter='全部';
 const esc=v=>String(v??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
 const STYLES=CATALOG.map(x=>({id:x.style_id,name:x.name,subtitle:x.subtitle,palette:x.palette,material:x.material,lighting:x.lighting,layout:x.layout,negative:x.negative,version:x.version}));
-function isReference(x){return !!(x?.status==='licensed'&&x.url&&x.source&&x.license&&/^https:\/\//.test(x.url))}
-function isSample(x){return !!(x?.status==='verified'&&x.url&&x.model&&x.model_version&&/^[a-f0-9]{64}$/.test(x.sha256)&&/^https:\/\//.test(x.url))}
+function isReference(x){
+ return !!(x?.status==='licensed'&&x.source&&x.author&&x.license&&x.usage_scope&&
+  x.asset_path?.startsWith('visual/style-atlas/')&&/^[a-f0-9]{64}$/.test(x.asset_sha256||'')&&
+  /^https:\/\//.test(x.url||'')&&!['unknown','unlicensed','all rights reserved'].includes(String(x.license).toLowerCase()));
+}
+function isSample(x){
+ return !!(x?.status==='verified'&&x.model&&x.model_version&&x.render_pipeline_version&&
+  x.generation_id&&['platform_ai','ChatGPT'].includes(x.producer)&&
+  x.placeholder_or_vector_rasterized===false&&x.asset_path?.startsWith('visual/style-atlas/')&&
+  /^[a-f0-9]{64}$/.test(x.sha256||'')&&x.sha256===x.asset_sha256&&/^https:\/\//.test(x.url||''));
+}
 function art(asset,kind){
  if(kind==='reference'&&isReference(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看授权风格参考"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="授权风格参考"></a>';
  if(kind==='sample'&&isSample(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看真实生成样张"><img loading="lazy" src="'+esc(asset.url)+'" alt="平台实际生成样张"></a>';
