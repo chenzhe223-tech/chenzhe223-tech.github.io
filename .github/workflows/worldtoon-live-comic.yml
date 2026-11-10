@@ -40,8 +40,12 @@ jobs:
           assert catalog.get('method')=='d1_snapshot_read',catalog
           assert len(catalog.get('stats',[]))==5,catalog
           assert catalog.get('fact_checked') is False,catalog
-          if catalog.get('ready'):
-              assert catalog.get('items'),'Ready catalog may not be empty'
+          assert catalog.get('ready'),('Scheduled or cold-start collection has not materialized',catalog.get('stats'))
+          assert len(catalog.get('items',[]))>=100,('Cached catalog must contain real source items',len(catalog.get('items',[])))
+          expected={'news','hackernews','arxiv','classics','history'}
+          assert expected=={x['id'] for x in catalog.get('stats',[]) if x.get('ready')},catalog.get('stats')
+          assert any(x.get('category')=='经典故事' for x in catalog['items']),'All-source catalog must include classics'
+          assert any(x.get('category')=='历史脑洞' for x in catalog['items']),'All-source catalog must include history'
           print('D1 snapshot catalog HTTP:',elapsed,'ms,ready:',catalog.get('ready'),'sources:',catalog.get('stats'))
           status,src=read('/comic-engine.js')
           assert status==200 and b'wtComicEngine' in src and b'TT_AutoManga' in src
