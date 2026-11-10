@@ -2,7 +2,7 @@
  * No hidden generation or publication. AI generation is explicitly user initiated.
  */
 'use strict';
-let wtSource='all',wtSourceCounts=[],wtCategory='全部',wtQuery='',wtNews=[],wtLastFetch=0,wtFetching=false,wtNewsError='',wtAiBusy=false,wtCatalogRequested=false,wtVisibleCount=12,wtCatalogLocal=false;
+let wtSource='all',wtSourceCounts=[],wtCategory='全部',wtQuery='',wtNews=[],wtLastFetch=0,wtFetching=false,wtNewsError='',wtAiBusy=false,wtCatalogRequested=false,wtVisibleCount=12,wtCatalogLocal=false,wtInitRetries=0;
 let wtRankSort='overall',wtRankFocus='all',wtRankMin=60;
 let wtConfig=null,wtSession=null,wtSyncTimer=null,wtCloudBusy=false,wtSyncedAt='',wtCloudError='',wtStatus='未登录';
 let wtSelectedCharacter='',wtPreviewImage='',wtRemoteRev=null;
@@ -110,9 +110,16 @@ async function wtFetchNews(){
    wtNews=result.items;wtLastFetch=result.lastUpdated||Date.now();wtCatalogLocal=false;
    try{localStorage.setItem('worldtoon_catalog_cache_v2',JSON.stringify({items:wtNews,stats:wtSourceCounts,lastUpdated:wtLastFetch,savedAt:Date.now()}))}catch{}
   }else if(!wtNews.length){wtNews=[];wtNewsError='后台素材库首次预热中，缓存创建后会自动显示；没有现场采集或伪造素材。';}
+  if(wtNews.length)wtInitRetries=0;
   if((result.warnings||[]).length)wtNewsError=(result.warnings||[]).join('；');
  }catch(err){wtNewsError='云端缓存暂不可用：'+err.message+(wtNews.length?' · 已恢复本机上次保存的素材':'');wtCatalogLocal=!!wtNews.length}
- finally{wtFetching=false;render()}
+ finally{
+  wtFetching=false;render();
+  if(!wtNews.length&&wtInitRetries<8){
+   wtInitRetries++;
+   setTimeout(()=>{if(location.hash.startsWith('#/live')&&!wtFetching)wtFetchNews()},8000);
+  }
+ }
 }
 async function wtSaveNews(i){let x=wtNews[Number(i)];if(!x)return;let found=data.topics.find(z=>z.source===x.url);if(found){notify('这条原始来源已在选题池');return;}const eventRaw=x.eventDate||x.occurrence_date||x.occurredAt||'';const date=String(eventRaw||x.published||'').slice(0,10);let t={id:uid(),title:x.title,category:x.category,summary:`原始来源：${x.source}。${x.evergreen?'经典/历史线索待核验，请检查权利与史料':'新闻线索尚未完成事实核验，请阅读全文后改编'}。`,source:x.url,evergreen:x.evergreen===true,rightsStatus:x.rights_status||'unknown',sourceId:x.source_id||'',eventDate:/^\d{4}-\d{2}-\d{2}$/.test(date)?date:'',eventDateBasis:eventRaw?'source_event':'published_candidate',heat:Math.max(1,Math.round(wtEditorialRank.evaluate(x).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate(x).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate(x).drawability/20)),ranking:wtEditorialRank.evaluate(x),stage:'待核验',createdAt:now(),publishedAt:x.published,sourceName:x.source,newsImage:x.image||'',verified:false};data.topics.unshift(t);persist();notify('已加入选题池，待核验后创作');}
 
