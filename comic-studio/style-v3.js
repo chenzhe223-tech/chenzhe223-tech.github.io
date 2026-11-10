@@ -871,7 +871,7 @@ document.addEventListener('input',ev=>{
  if(!c)return;
  const parser=document.createElement('div');parser.innerHTML=cards(c);
  const incoming=parser.querySelector('.wt-v3-grid');
- if(incoming)box.innerHTML=incoming.innerHTML;
+ if(incoming){box.innerHTML=incoming.innerHTML;if(typeof hydrateImages==='function')hydrateImages()}
  const found=parser.querySelector('.wt-v3-count');if(count&&found)count.textContent=found.textContent;
 },true);
 window.WTStyleV3={CATALOG,STYLES,cards,detail,isReference,isSample};
