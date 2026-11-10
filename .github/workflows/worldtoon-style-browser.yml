@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
     paths:
+      - 'comic-studio/index.html'
+      - 'comic-studio/app.js'
+      - 'comic-studio/styles.css'
+      - 'comic-studio/tests/handoff-subnav.cjs'
       - 'comic-studio/style-v3.js'
       - 'comic-studio/style-v3.css'
       - 'comic-studio/tests/style-gallery-browser.cjs'
@@ -25,6 +29,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Verify 20 original preview images at phone, tablet and desktop
         run: node comic-studio/tests/style-gallery-browser.cjs
+      - name: Verify Handoff navigation hierarchy, routing and mobile sidebar
+        run: node comic-studio/tests/handoff-subnav.cjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
