@@ -1,80 +1,80 @@
 {
-  "report_date": "2026-11-10",
-  "poster": "radar/posters/2026-11-10.png",
+  "report_date": "2026-11-11",
+  "poster": "radar/posters/2026-11-11.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.ithome.com/1/024/556.htm",
-    "https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
-    "https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/",
-    "https://www.marktechpost.com/2026/11/09/google-tpu-8i-max-tpu-8tx/",
-    "https://techcrunch.com/2026/11/09/anthropic-joins-ais-natural-gas-frenzy-buys-3-4b-worth-of-turbines/"
+    "https://www.theverge.com/ai-artificial-intelligence/1030787/google-gemini-4-carbon-public-rollout",
+    "https://techcrunch.com/2026/11/10/anthropic-launches-claude-meetings-to-turn-workplace-discussions-into-plans-and-tasks/",
+    "https://www.theverge.com/ai-artificial-intelligence/1030552/openai-chatgpt-business-agents-hub",
+    "https://www.ithome.com/1/025/191.htm",
+    "https://techcrunch.com/2026/11/10/oura-to-acquire-ai-native-primary-care-startup-counsel-health-for-625m/"
   ],
   "news_titles": [
-    "美团龙猫开源LongCat-2.5：1.6万亿参数、百万上下文",
-    "Anthropic发布Claude Fable 5.2与Mythos 5.2",
-    "Meta发布轻量模型Muse Ember，面向智能体执行",
-    "谷歌发布TPU 8i Max与TPU 8tx：双芯片与机密推理",
-    "Anthropic购入34亿美元天然气涡轮机"
+    "谷歌向公众发布 Gemini 4 Carbon，带代理“蜂群”功能",
+    "Anthropic 推出 Claude Meetings，把职场讨论转化为计划和任务",
+    "ChatGPT 将推出经过验证的 AI“商业代理”",
+    "MiniMax 开源 H3-Image 生图模型，称 10 秒生成一张 4K 图像",
+    "Oura 将以 6.25 亿美元收购 AI 原生初级保健初创公司 Counsel Health"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.ithome.com/1/024/556.htm",
-      "image_source": "IT之家",
-      "image_match_status": "feed_image",
-      "image_sha256": "f52cf698570f7894bad1de13fc3f6a12da03ffb68d152d09b5dae04ed7d2539d",
-      "rendered_image_sha256": "f52cf698570f7894bad1de13fc3f6a12da03ffb68d152d09b5dae04ed7d2539d",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030005/anthropic-claude-fable-mythos-5-2",
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030787/google-gemini-4-carbon-public-rollout",
       "image_source": "The Verge AI",
       "image_match_status": "article_image",
-      "image_sha256": "488be9a4a7a1a93bf27d3ba798917b407bdf6bfce4f75db7eae998ffd09a359f",
-      "rendered_image_sha256": "488be9a4a7a1a93bf27d3ba798917b407bdf6bfce4f75db7eae998ffd09a359f",
+      "image_sha256": "bed8c93c063d1d87bd5d3b2689f38fdd7e7b951407a464aebf76562c260b0d90",
+      "rendered_image_sha256": "bed8c93c063d1d87bd5d3b2689f38fdd7e7b951407a464aebf76562c260b0d90",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://techcrunch.com/2026/11/09/meta-releases-muse-ember-a-new-lightweight-model-for-agent-execution/",
+      "story_url": "https://techcrunch.com/2026/11/10/anthropic-launches-claude-meetings-to-turn-workplace-discussions-into-plans-and-tasks/",
       "image_source": "TechCrunch AI",
       "image_match_status": "article_image",
-      "image_sha256": "912e4fb6c10ff273f89f9f55692c93b90f5417af416328c9147272cf74545d7c",
-      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
-      "rendered_visual_type": "info_card",
-      "label_required": false,
-      "label_applied": true,
-      "label": null
-    },
-    {
-      "story_url": "https://www.marktechpost.com/2026/11/09/google-tpu-8i-max-tpu-8tx/",
-      "image_source": "MarkTechPost",
-      "image_match_status": "article_image",
-      "image_sha256": "d405298ffa484c0f6377706708e869acba8a7f25cbb07857a834ac4d88534d1f",
-      "rendered_image_sha256": "d405298ffa484c0f6377706708e869acba8a7f25cbb07857a834ac4d88534d1f",
+      "image_sha256": "5887b7e2e3a35bc6866ff768df2f963518817d7499def7993d939ab931a1da69",
+      "rendered_image_sha256": "5887b7e2e3a35bc6866ff768df2f963518817d7499def7993d939ab931a1da69",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     },
     {
-      "story_url": "https://techcrunch.com/2026/11/09/anthropic-joins-ais-natural-gas-frenzy-buys-3-4b-worth-of-turbines/",
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030552/openai-chatgpt-business-agents-hub",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "08e11b92da3397b495f5980b4d460c899980e0648114379a5e026aabf7553a72",
+      "rendered_image_sha256": "08e11b92da3397b495f5980b4d460c899980e0648114379a5e026aabf7553a72",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.ithome.com/1/025/191.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "99e5a24c741d821436488cc4b4a71e19bb5b5d113f4f5d6d87a6ea912f899309",
+      "rendered_image_sha256": "99e5a24c741d821436488cc4b4a71e19bb5b5d113f4f5d6d87a6ea912f899309",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/10/oura-to-acquire-ai-native-primary-care-startup-counsel-health-for-625m/",
       "image_source": "TechCrunch AI",
       "image_match_status": "article_image",
-      "image_sha256": "abb572e8be02fdba2a25a192537a8fed8b885c954156558081aa18e59665791b",
-      "rendered_image_sha256": "abb572e8be02fdba2a25a192537a8fed8b885c954156558081aa18e59665791b",
+      "image_sha256": "392ab5b80ebdd5fd88fbdc9e1c2984336938081ad6ad43a839483c4bb3f775b3",
+      "rendered_image_sha256": "392ab5b80ebdd5fd88fbdc9e1c2984336938081ad6ad43a839483c4bb3f775b3",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "cloudflare/security-audit-skill",
+  "skill": "Donchitos/Claude-Code-Game-Studios",
   "design": "mountain-editorial",
   "format": "PNG",
   "canvas": [
@@ -132,7 +132,7 @@
       "y": 557,
       "width": 1100,
       "height": 92,
-      "actual_width": 1064.0,
+      "actual_width": 1092.2,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -143,7 +143,7 @@
       "y": 651,
       "width": 1090,
       "height": 22,
-      "actual_width": 792.0,
+      "actual_width": 648.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -154,7 +154,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 204.7,
+      "actual_width": 203.4,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -164,9 +164,9 @@
       "x": 48,
       "y": 889,
       "width": 206,
-      "height": 18,
-      "actual_width": 71.0,
-      "line_count": 1,
+      "height": 36,
+      "actual_width": 196.0,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -176,7 +176,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 204.0,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -186,9 +186,9 @@
       "x": 271,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 204.8,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 202.1,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -197,9 +197,9 @@
       "x": 271,
       "y": 889,
       "width": 206,
-      "height": 72,
-      "actual_width": 204.0,
-      "line_count": 4,
+      "height": 18,
+      "actual_width": 68.6,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -209,7 +209,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 195.0,
+      "actual_width": 200.9,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -220,7 +220,7 @@
       "y": 817,
       "width": 206,
       "height": 44,
-      "actual_width": 197.6,
+      "actual_width": 199.9,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -231,7 +231,7 @@
       "y": 889,
       "width": 206,
       "height": 72,
-      "actual_width": 205.1,
+      "actual_width": 196.8,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -241,9 +241,9 @@
       "x": 494,
       "y": 968,
       "width": 206,
-      "height": 51,
-      "actual_width": 202.0,
-      "line_count": 3,
+      "height": 34,
+      "actual_width": 196.4,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -252,9 +252,9 @@
       "x": 717,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 204.2,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 198.9,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -263,9 +263,9 @@
       "x": 717,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 204.2,
-      "line_count": 2,
+      "height": 18,
+      "actual_width": 115.5,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -275,7 +275,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 195.0,
+      "actual_width": 203.4,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -285,9 +285,9 @@
       "x": 940,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 189.2,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 197.3,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -308,7 +308,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 195.0,
+      "actual_width": 200.9,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -330,7 +330,7 @@
       "y": 1362,
       "width": 780,
       "height": 17,
-      "actual_width": 602.0,
+      "actual_width": 434.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -341,7 +341,7 @@
       "y": 1490,
       "width": 555,
       "height": 30,
-      "actual_width": 327.1,
+      "actual_width": 431.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -352,7 +352,7 @@
       "y": 1554,
       "width": 565,
       "height": 38,
-      "actual_width": 555.0,
+      "actual_width": 560.4,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -363,7 +363,7 @@
       "y": 1628,
       "width": 565,
       "height": 14,
-      "actual_width": 60.0,
+      "actual_width": 356.3,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -372,9 +372,9 @@
   "design_variant": "mountain-editorial",
   "iso_year": 2026,
   "iso_week": 46,
-  "iso_weekday": 2,
+  "iso_weekday": 3,
   "style_cycle_index": 45,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-10T06:35:08.006801+08:00"
+  "generated_at": "2026-11-11T03:57:00.854726+08:00"
 }

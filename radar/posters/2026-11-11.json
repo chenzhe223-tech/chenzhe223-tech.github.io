@@ -1,0 +1,380 @@
+{
+  "report_date": "2026-11-11",
+  "poster": "radar/posters/2026-11-11.png",
+  "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "news_count": 5,
+  "news_urls": [
+    "https://www.theverge.com/ai-artificial-intelligence/1030787/google-gemini-4-carbon-public-rollout",
+    "https://techcrunch.com/2026/11/10/anthropic-launches-claude-meetings-to-turn-workplace-discussions-into-plans-and-tasks/",
+    "https://www.theverge.com/ai-artificial-intelligence/1030552/openai-chatgpt-business-agents-hub",
+    "https://www.ithome.com/1/025/191.htm",
+    "https://techcrunch.com/2026/11/10/oura-to-acquire-ai-native-primary-care-startup-counsel-health-for-625m/"
+  ],
+  "news_titles": [
+    "谷歌向公众发布 Gemini 4 Carbon，带代理“蜂群”功能",
+    "Anthropic 推出 Claude Meetings，把职场讨论转化为计划和任务",
+    "ChatGPT 将推出经过验证的 AI“商业代理”",
+    "MiniMax 开源 H3-Image 生图模型，称 10 秒生成一张 4K 图像",
+    "Oura 将以 6.25 亿美元收购 AI 原生初级保健初创公司 Counsel Health"
+  ],
+  "news_image_evidence": [
+    {
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030787/google-gemini-4-carbon-public-rollout",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "bed8c93c063d1d87bd5d3b2689f38fdd7e7b951407a464aebf76562c260b0d90",
+      "rendered_image_sha256": "bed8c93c063d1d87bd5d3b2689f38fdd7e7b951407a464aebf76562c260b0d90",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/10/anthropic-launches-claude-meetings-to-turn-workplace-discussions-into-plans-and-tasks/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "5887b7e2e3a35bc6866ff768df2f963518817d7499def7993d939ab931a1da69",
+      "rendered_image_sha256": "5887b7e2e3a35bc6866ff768df2f963518817d7499def7993d939ab931a1da69",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1030552/openai-chatgpt-business-agents-hub",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "08e11b92da3397b495f5980b4d460c899980e0648114379a5e026aabf7553a72",
+      "rendered_image_sha256": "08e11b92da3397b495f5980b4d460c899980e0648114379a5e026aabf7553a72",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.ithome.com/1/025/191.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "99e5a24c741d821436488cc4b4a71e19bb5b5d113f4f5d6d87a6ea912f899309",
+      "rendered_image_sha256": "99e5a24c741d821436488cc4b4a71e19bb5b5d113f4f5d6d87a6ea912f899309",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/10/oura-to-acquire-ai-native-primary-care-startup-counsel-health-for-625m/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "392ab5b80ebdd5fd88fbdc9e1c2984336938081ad6ad43a839483c4bb3f775b3",
+      "rendered_image_sha256": "392ab5b80ebdd5fd88fbdc9e1c2984336938081ad6ad43a839483c4bb3f775b3",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    }
+  ],
+  "skill": "Donchitos/Claude-Code-Game-Studios",
+  "design": "mountain-editorial",
+  "format": "PNG",
+  "canvas": [
+    1200,
+    1800
+  ],
+  "layout_regions": {
+    "masthead": [
+      48,
+      24,
+      1152,
+      104
+    ],
+    "hero-title-date": [
+      48,
+      145,
+      1152,
+      520
+    ],
+    "five-column-news-grid": [
+      48,
+      750,
+      1152,
+      1278
+    ],
+    "today-insight-banner": [
+      48,
+      1290,
+      868,
+      1425
+    ],
+    "skill-recommendation": [
+      48,
+      1440,
+      868,
+      1688
+    ],
+    "right-qr-panel": [
+      900,
+      1290,
+      1164,
+      1664
+    ],
+    "brand-footer": [
+      48,
+      1720,
+      1152,
+      1800
+    ]
+  },
+  "text_bounds": [
+    {
+      "block": "hero_headline",
+      "x": 48,
+      "y": 557,
+      "width": 1100,
+      "height": 92,
+      "actual_width": 1092.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 50,
+      "y": 651,
+      "width": 1090,
+      "height": 22,
+      "actual_width": 648.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_title",
+      "x": 48,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 203.4,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_summary",
+      "x": 48,
+      "y": 889,
+      "width": 206,
+      "height": 36,
+      "actual_width": 196.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_why",
+      "x": 48,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_title",
+      "x": 271,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 202.1,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_summary",
+      "x": 271,
+      "y": 889,
+      "width": 206,
+      "height": 18,
+      "actual_width": 68.6,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_why",
+      "x": 271,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_title",
+      "x": 494,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 199.9,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_summary",
+      "x": 494,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 196.8,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_why",
+      "x": 494,
+      "y": 968,
+      "width": 206,
+      "height": 34,
+      "actual_width": 196.4,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_title",
+      "x": 717,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 198.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_summary",
+      "x": 717,
+      "y": 889,
+      "width": 206,
+      "height": 18,
+      "actual_width": 115.5,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_why",
+      "x": 717,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 203.4,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_title",
+      "x": 940,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 197.3,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_summary",
+      "x": 940,
+      "y": 889,
+      "width": 206,
+      "height": 18,
+      "actual_width": 64.9,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_why",
+      "x": 940,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 190,
+      "y": 1305,
+      "width": 650,
+      "height": 46,
+      "actual_width": 646.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 1362,
+      "width": 780,
+      "height": 17,
+      "actual_width": 434.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "skill_name",
+      "x": 80,
+      "y": 1490,
+      "width": 555,
+      "height": 30,
+      "actual_width": 431.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1554,
+      "width": 565,
+      "height": 38,
+      "actual_width": 560.4,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1628,
+      "width": 565,
+      "height": 14,
+      "actual_width": 356.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    }
+  ],
+  "design_variant": "mountain-editorial",
+  "iso_year": 2026,
+  "iso_week": 46,
+  "iso_weekday": 3,
+  "style_cycle_index": 45,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.4.0",
+  "generated_at": "2026-11-11T03:57:00.854726+08:00"
+}
