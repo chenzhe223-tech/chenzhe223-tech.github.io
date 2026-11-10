@@ -6,6 +6,7 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
 const creative=fs.readFileSync(path.join(root,'creative-director.js'),'utf8');
+const visualV3=fs.readFileSync(path.join(root,'style-v3.js'),'utf8');
 const worker=fs.readFileSync(path.join(root,'worker.js'),'utf8');
 const archive=fs.readFileSync(path.join(root,'archive.js'),'utf8');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
@@ -21,10 +22,12 @@ const ctx={
  notify:x=>{lastMessage=x},confirm:()=>true,queueMicrotask:fn=>fn(),
  heroHeader:(...args)=>'<h1>'+args[1]+'</h1>',e:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
 };
+vm.runInNewContext(visualV3,ctx);
 vm.runInNewContext(creative,ctx);
 const director=ctx.window.wtDirector;
 assert.ok(director,'Director API registered');
-assert.equal(director.STYLES.length,6,'Six distinct production styles');
+assert.equal(ctx.window.WTStyleV3.CATALOG.length,20,'Twenty V3 independent styles');
+assert.equal(director.STYLES.length,26,'20 V3 and 6 backward-compatible production styles');
 assert.equal(director.ARCS.length,5,'Five narrative structures');
 let initial=director.readiness(source);
 assert.ok(initial.length>0,'Unreviewed project cannot be queued');
@@ -73,7 +76,12 @@ assert.ok(worker.includes('creative-director\\.js'),'Production Worker serves di
 assert.ok(html.includes('creative-director.js')&&html.includes('creative-director.css'),'App loads director modules');
 assert.ok(html.includes('#/director'),'Creative director has navigation');
 const paletteCss=fs.readFileSync(path.join(root,'creative-director.css'),'utf8');
-for(const st of director.STYLES)assert.ok(paletteCss.includes('.director-theme-'+st.id+'{'),'Every visual style gets CSP-safe palette');
+for(const st of director.STYLES.filter(x=>['editorial','warm','woodcut','cinematic','diagram','comic'].includes(x.id)))assert.ok(paletteCss.includes('.director-theme-'+st.id+'{'),'Legacy styles preserve original palette');
+assert.ok(visualV3.includes('wt-v3-card-visual'),'V3 atlas renders style-spec cards, not fake sample art');
+assert.ok(visualV3.includes('not_generated'),'Not-ready styles must be explicit');
 assert.ok(!/\sstyle="/.test(creative),'Director markup must not include CSP-blocked inline styles');
-assert.ok(creative.includes("director-theme-'+x.id"),'Theme palette uses external stylesheet classes');
-console.log('WORLD/TOON creative director: 6 styles, 5 arcs, storyboard, cast, manual lock, drift guard, GitHub handoff, server gate PASS');
+assert.ok(creative.includes('WTStyleV3.cards(c)'),'Director now reads the V3 style atlas');
+assert.ok(creative.includes('WTStyleV3.detail(c)'),'Director renders actual reference/sample provenance states');
+assert.ok(html.includes('style-v3.js')&&html.includes('style-v3.css'),'App must load V3 assets');
+assert.ok(worker.includes('style-v3\\.js')&&worker.includes('style-v3\\.css'),'Worker must allow V3 asset URLs');
+console.log('WORLD/TOON creative director: 20 professional styles + 6 legacy styles, storyboard, cast, SHA pilot gates and GitHub handoff PASS');
