@@ -134,3 +134,12 @@
 .director-pilot .buttons{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 12px}
 .director-pilot .buttons button:disabled{opacity:.55}
 @media(max-width:600px){.director-pilot{padding:13px!important}.director-pilot-heading{flex-direction:column}.director-pilot-grid{grid-template-columns:1fr;gap:10px}.director-pilot-image{aspect-ratio:16/10}}
+
+
+/* All editorial preview palettes are defined in served CSS; strict Worker CSP blocks inline styles. */
+.director-theme-editorial{--d-bg:#f0e7d8;--d-ink:#312c27;--d-a:#c26943;--d-b:#809387}
+.director-theme-warm{--d-bg:#f5e3cc;--d-ink:#526456;--d-a:#dd9f6e;--d-b:#bccec0}
+.director-theme-woodcut{--d-bg:#e9dbbe;--d-ink:#40392f;--d-a:#a36340;--d-b:#857d69}
+.director-theme-cinematic{--d-bg:#d5d2c9;--d-ink:#25343c;--d-a:#bd7d56;--d-b:#687e84}
+.director-theme-diagram{--d-bg:#f1efe7;--d-ink:#314f4e;--d-a:#d3a357;--d-b:#789f99}
+.director-theme-comic{--d-bg:#faf0e0;--d-ink:#283d37;--d-a:#e58d5a;--d-b:#a3b598}

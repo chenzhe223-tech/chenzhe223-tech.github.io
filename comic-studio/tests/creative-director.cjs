@@ -72,4 +72,8 @@ assert.ok(worker.includes('CREATIVE_APPROVAL_REQUIRED'),'Server enforces signed 
 assert.ok(worker.includes('creative-director\\.js'),'Production Worker serves director UI');
 assert.ok(html.includes('creative-director.js')&&html.includes('creative-director.css'),'App loads director modules');
 assert.ok(html.includes('#/director'),'Creative director has navigation');
+const paletteCss=fs.readFileSync(path.join(root,'creative-director.css'),'utf8');
+for(const st of director.STYLES)assert.ok(paletteCss.includes('.director-theme-'+st.id+'{'),'Every visual style gets CSP-safe palette');
+assert.ok(!/\sstyle="/.test(creative),'Director markup must not include CSP-blocked inline styles');
+assert.ok(creative.includes("director-theme-'+x.id"),'Theme palette uses external stylesheet classes');
 console.log('WORLD/TOON creative director: 6 styles, 5 arcs, storyboard, cast, manual lock, drift guard, GitHub handoff, server gate PASS');
