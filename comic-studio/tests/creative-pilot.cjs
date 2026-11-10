@@ -41,7 +41,8 @@ assert.ok(pilot,'Pilot module mounted');
 assert.ok(ctx.window.wtCreativeDirector().includes('director core'));
 assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreativeDirector().includes('试画'));
 (async()=>{
- let sample={type:'image/png',size:1024,name:'sample.png',arrayBuffer:async()=>new Uint8Array(1024).fill(7).buffer};
+ await assert.rejects(()=>pilot.upload(p,'character',{type:'image/jpeg',name:'wrong.jpg',size:50000}),/真实 PNG/);
+ let sample={type:'image/png',size:50000,name:'sample.png',arrayBuffer:async()=>new Uint8Array(50000).fill(7).buffer};
  await pilot.upload(p,'character',sample);
  assert.ok(p.creativeDirection.pilot.characterImage.startsWith('media:'));
  assert.equal(p.creativeDirection.pilotApproval,null);
@@ -60,6 +61,8 @@ assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreat
  assert.ok(worker.includes("p==='/api/archive/pilot-approval'"),'Worker provides real private receipt endpoint');
  assert.ok(worker.includes('creative.production_gates')||worker.includes('task.creative_direction?.production_gates'),'Receipt tied to initial locked task');
  assert.ok(html.includes('creative-pilot.js'));
+ assert.ok(fs.readFileSync(path.join(__dirname,'..','extension.js'),'utf8').includes('p.creativeDirection?.pilot?.characterImage'),'Signed character proof must be synced to cloud');
+ assert.ok(app.includes('p.creativeDirection?.pilot?.characterImage'),'Signed character proof must be present in backup/restore');
  let cloneRoute='';
  ctx.data={projects:[p]};ctx.ui={selected:p.id};ctx.persist=()=>{};
  ctx.nav=(route)=>{cloneRoute=route};let nextId=0;

@@ -34,7 +34,7 @@ const BEATS={
  chronicle:['确立时代与地点','交代人物处境','重要事件出现','不同立场交锋','历史背景补充','关键抉择','转折的影响','后来发生了什么','史料与留白']
 };
 const TITLES=['开场','铺垫','冲突','加压','转折','代价','反击','高潮','余韵'];
-let step=0;
+let step=0,lastProjectId='';
 const clean=s=>String(s??'').replace(/[\u0000-\u001f]/g,' ').trim();
 const style=id=>STYLES.find(x=>x.id===id)||STYLES[0];
 const arc=id=>ARCS.find(x=>x.id===id)||ARCS[0];
@@ -184,6 +184,7 @@ function review(p,c){
 function draw(){
  const p=selected();
  if(!p)return '<div class="box"><h2>尚未选择漫画作品</h2><a href="#/radar" class="button">前往选题池</a></div>';
+ if(lastProjectId!==p.id){step=0;lastProjectId=p.id}
  const c=ensure(p),locked=approved(p);
  const tabs=['画风定调','人物设定','九格故事','最终定版'];
  return '<div class="director-page">'+heroHeader('CREATIVE DIRECTOR / PRE-PRODUCTION','创意导演台',
@@ -197,7 +198,7 @@ function draw(){
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
  (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，先生成可修改的九格草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
- '<div class="director-actions"><button type="button" class="button" data-director-action="draft">生成／重做九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
+ '<div class="director-actions"><button type="button" class="button" data-director-action="draft">生成／重做九格脚本</button><button type="button" class="button" data-director-action="adopt">保留已有九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
  framePreview(p,c)+'</section>':'')+
  (step===3?review(p,c):'')+
  '<p class="director-footer">By DAVYLAB · 创意预制与锁定不等于事实认证、图像已经生成或内容允许发表。资料自动保存在当前作品，并可随原有账户同步。</p></div>';
@@ -206,6 +207,12 @@ async function action(type,p){
  if(!p)throw Error('请先选择作品');
  if(type==='next'){step=Math.min(3,step+1);render();return}
  if(type==='draft'){if(p.handoff?.repoQueuedAt)throw Error('该任务已正式入仓，不能覆盖分镜');draft(p);return}
+ if(type==='adopt'){
+  if(p.handoff?.repoQueuedAt)throw Error('本版任务已经派单，不可重签原稿');
+  if(!Array.isArray(p.panels)||p.panels.length!==9||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
+  const c=ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
+  setChange(p,'保留并提交已有九格分镜供作者审稿');render();notify('九格脚本已保留，没有覆盖已有画面或对白');return
+ }
  if(type==='approve'){approve(p);return}
 }
 document.addEventListener('click',ev=>{
