@@ -50,6 +50,25 @@ jobs:
           status,src=read('/comic-engine.js')
           assert status==200 and b'wtComicEngine' in src and b'TT_AutoManga' in src
           print('four-skill workshop JavaScript is reachable')
+          for resource,needle in [('/creative-director.js',b'wtDirector'),('/creative-pilot.js',b'wtPilot'),('/creative-director.css',b'director-styles')]:
+              for attempt in range(6):
+                  try:
+                      code,body=read(resource,timeout=14)
+                      assert code==200 and needle in body,(resource,code,body[:100])
+                      break
+                  except (urllib.error.HTTPError,TimeoutError,AssertionError):
+                      if attempt==5:raise
+                      time.sleep(5)
+              print('creative preproduction resource live:',resource)
+          unauth=urllib.request.Request(base+'/api/archive/pilot-approval',data=b'{}',method='POST',
+                       headers={'Content-Type':'application/json','User-Agent':'WorldToon-Live-QA/1.0'})
+          try:
+              urllib.request.urlopen(unauth,timeout=14)
+          except urllib.error.HTTPError as ex:
+              assert ex.code in (401,403),'Unauthorized pilot approval must be forbidden'
+              print('owner-only pilot approval returns',ex.code)
+          else:raise AssertionError('Anonymous users must not be able to approve pilot samples')
+
           result=expect_json('/api/comic/discover?source=hackernews&limit=8')
           assert isinstance(result.get('items'),list) and result['items'],result
           assert all(v.get('source_id')=='hackernews' and v.get('verification_status')=='pending_research' for v in result['items'])
