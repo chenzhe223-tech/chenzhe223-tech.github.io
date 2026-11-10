@@ -502,7 +502,18 @@ function wtCanonicalStory(url){
   return o.hostname.toLowerCase()+o.pathname.replace(/\/$/,'')+o.search
  }catch{return ''}
 }
-async function wtDiscoveryRead(env,url){
+async function wtStartColdBootstrap(env,ctx){
+ if(!ctx?.waitUntil||!env.DB)return false;
+ try{
+  const now=Date.now();
+  const granted=await env.DB.prepare("INSERT INTO wt_discovery_bootstrap(id,locked_until) VALUES('global',?) ON CONFLICT(id) DO UPDATE SET locked_until=excluded.locked_until WHERE wt_discovery_bootstrap.locked_until<? RETURNING locked_until")
+   .bind(now+600000,now).first();
+  if(!granted)return false;
+  ctx.waitUntil(wtDiscoveryScheduled({scheduledTime:now},env).catch(err=>console.error('WorldToon cold-start collection',String(err))));
+  return true;
+ }catch(err){console.error('Cold-start lock failed',String(err));return false}
+}
+async function wtDiscoveryRead(env,url,ctx){
  if(!env.DB)return failure('素材缓存数据库未配置',503);
  const requested=url.searchParams.get('source')||'all';
  if(requested!=='all'&&!WT_CACHE_SOURCES.includes(requested))return failure('未知素材来源',400);
@@ -510,6 +521,7 @@ async function wtDiscoveryRead(env,url){
  let rows;
  try{rows=(await env.DB.prepare('SELECT source,payload,item_count,collected_at,last_attempt_at,last_error FROM wt_discovery_snapshots').all()).results||[]}
  catch(err){return Response.json({error:'素材缓存无法读取，请检查数据库迁移',detail:String(err.message||err).slice(0,110)},{status:503,headers:RESULT_HEADERS})}
+ if(rows.length<WT_CACHE_SOURCES.length)await wtStartColdBootstrap(env,ctx);
  const at=Date.now(),items=[],seen=new Set(),stats=[],warnings=[];
  for(const source of WT_CACHE_SOURCES){
   if(requested!=='all'&&source!==requested)continue;
@@ -579,7 +591,7 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
- if(url.pathname==='/api/comic/catalog'&&request.method==='GET')return wtDiscoveryRead(env,url);
+ if(url.pathname==='/api/comic/catalog'&&request.method==='GET')return wtDiscoveryRead(env,url,ctx);
  if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
