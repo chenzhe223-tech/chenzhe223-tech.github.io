@@ -18,9 +18,13 @@
 <a href="#/library" data-route="library"><span class="nav-ico">▦</span> 漫画书架 <small>05</small></a>
 <a href="#/studio" data-route="studio"><span class="nav-ico">✦</span> 创作工作台 <small>06</small></a>
 <a href="#/characters" data-route="characters"><span class="nav-ico">♧</span> 角色档案 <small>07</small></a>
-<a href="#/director" data-route="director"><span class="nav-ico">◈</span> 创意导演台 <small>08</small></a>
-<a href="#/handoff" data-route="handoff"><span class="nav-ico">⇄</span> 制作交接 <small>09</small></a>
-<a href="#/archive" data-route="archive"><span class="nav-ico">▤</span> 生产调度 <small>09</small></a>
+<div class="nav-group" data-nav-group="handoff" aria-label="制作交接与子目录">
+<a href="#/handoff" class="nav-parent" data-route="handoff"><span class="nav-ico">⇄</span><span class="nav-label">制作交接</span><span class="nav-group-caret" aria-hidden="true">⌄</span></a>
+<div class="nav-children" aria-label="制作交接二级导航">
+<a href="#/director" data-route="director" class="nav-child"><span class="nav-child-ico" aria-hidden="true">◈</span>创意导演台</a>
+<a href="#/archive" data-route="archive" class="nav-child"><span class="nav-child-ico" aria-hidden="true">▤</span>生产调度中心</a>
+</div>
+</div>
 <a href="#/publish" data-route="publish"><span class="nav-ico">↗</span> 素材导出 <small>10</small></a>
 <a href="#/account" data-route="account"><span class="nav-ico">♙</span> 登录与同步 <small>11</small></a>
 <a href="#/settings" data-route="settings"><span class="nav-ico">⚙</span> 数据管理 <small>12</small></a>
