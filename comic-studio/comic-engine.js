@@ -26,15 +26,19 @@ const STEPS=[
 ];
 const clean=s=>String(s||'').replace(/[\u0000-\u001f]/g,' ').trim();
 function cast(p){
- const existing=clean(p.characters);
- const entries=(typeof data!=='undefined'?(data.characters||[]):[]).map(c=>[
-  clean(c.name),clean(c.description),clean(c.costume),clean(c.colors),clean(c.traits)
- ].filter(Boolean).join(' · ')).filter(Boolean);
- return [existing,...entries].filter(Boolean).join('\n')||'主角：原创观察员阿诺（短棕发、墨绿色外套、斜挎笔记本）；搭档：虚构机器人小点（奶油色圆头、橙色显示屏、银灰色关节）。所有九格保持固定外观、服装与配色。';
+ const locked=p?.creativeDirection?.cast;
+ if(Array.isArray(locked)&&locked.length)return locked.map((x,i)=>[
+  '角色 '+(i+1)+' '+clean(x.name)+' ('+clean(x.role)+')',
+  '固定容貌:'+clean(x.look),'固定服装:'+clean(x.clothes),
+  '固定识别道具:'+clean(x.symbol),'性格:'+clean(x.nature)
+ ].join(' / ')).join('\n');
+ const projectText=clean(p.characters);
+ return projectText||'未确定人物视觉规范，必须先到创意导演台固定角色外貌、服装与道具。';
 }
 function storyboard(p){
  const topic=clean(p.sourceTitle||p.title).slice(0,160);
- const style=clean(p.tone||'杂志风格');
+ const spec=p?.creativeDirection?.styleId&&window.wtDirector?.STYLES?.find(x=>x.id===p.creativeDirection.styleId);
+ const style=spec?(spec.name+'；固定色板 '+spec.palette.join(', ')+'；材质 '+spec.material+'；光线 '+spec.lighting+'；构图 '+spec.layout+'；禁用 '+spec.negative):clean(p.tone||'待导演台确定画风');
  const bible=cast(p);
  const refs=(Array.isArray(p.visualReferences)?p.visualReferences:[]).slice(0,12);
  const visualNote=refs.length?'Museum references (inspiration ONLY, not factual reconstruction): '+refs.map(r=>r.title+' / '+r.source+' / '+r.license+' / '+r.source_url).join(' | '):'No museum references selected.';
@@ -46,7 +50,7 @@ function storyboard(p){
   const previousPrompt=clean(existing.prompt)
     .replace(/WorldToon museum references:.*$/,'')
     .replace(/Visual references:.*?(?=Reserve clean bubble space)/,'').trim();
-  const promptBase=previousPrompt||[
+  const promptBase=(p?.creativeDirection?.approval?null:previousPrompt)||[
    'ORIGINAL EDITORIAL COMIC | PAGE '+String(i+1).padStart(2,'0'),
    'Inspired by the public topic: '+topic+'. This is a fictional allegory, not a factual depiction.',
    'Shot: '+shot+'. Scene: '+scene,

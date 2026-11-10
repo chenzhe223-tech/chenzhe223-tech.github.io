@@ -15,7 +15,7 @@ const region=[
   span('function wfTaskObject(', 'function wfHint('),
   span('function wfInitTask(', 'const wfImgExt=')
 ].join('\n');
-async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',title='国际科技趋势：漫画研究'}={}){
+async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',title='国际科技趋势：漫画研究',approved=true}={}){
  const project={id:'test-01',topicId:'topic-1',title,sourceTitle:'科技新闻的全球影响',
    category:'AI 科技',subtitle:'',description:'一个新闻线索，不是已核实事实',
    sourceURLs:source,factNotes:facts,fiction,characters:'',disclosure:'虚构漫画，不构成事实报道',
@@ -25,6 +25,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  const topics=[{id:'topic-1',title:project.sourceTitle,summary:project.description,source:topicSource}];
  const ctx={
    data:{topics},WF_SCHEMA:'davylab.worldtoon.task.v1',enc:new TextEncoder(),
+   wtDirector:{readiness:()=>approved?[]:['需要先确认画风与九格剧情'],exportBrief:()=>({version:1,style_id:'editorial',lock_status:'approved',characters:[{name:'阿一'},{name:'阿二'}],storyboard:project.panels,approval:{lock_hash:'a1b2c3d4',author_approved:true},production_gates:{pilot_required:true}})},
    now:()=>new Date('2026-11-09T00:00:00Z').toISOString(),
    uid:()=> 'testid',
    wfMode:p=>p.handoff?.mode||'hotspot',
@@ -44,11 +45,14 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
    console
  };
  vm.runInNewContext(region+"\nthis.functions={wfMakeTask,wfPrepareTask,wfCanTask,wfTaskReadiness};",ctx);
+ if(!approved){await assert.rejects(()=>ctx.functions.wfMakeTask(project),/请先补齐：.*确认画风/);assert.equal(captures.saved.length,0);return {blocked:true,captures}}
  await ctx.functions.wfMakeTask(project);
  return {project,captures,task:JSON.parse(new TextDecoder().decode(captures.files.find(x=>x.name==='task.json').bytes)),
          prompt:new TextDecoder().decode(captures.files.find(x=>x.name==='ChatGPT_制作指令.md').bytes)};
 }
 (async()=>{
+ const blocked=await simulate({approved:false});
+ assert.equal(blocked.blocked,true,'Unapproved creative directions must not create task ZIPs');
  const noSource=await simulate();
  assert.equal(noSource.captures.saved.length,1,'ZIP must be generated despite missing sources');
  assert.ok(noSource.captures.saved[0].name.endsWith('.zip'));
@@ -71,5 +75,5 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  const manual=await simulate({facts:'人工备注：需核验两项数据',fiction:'架空城市与虚构商战'});
  assert.equal(manual.project.factNotes,'人工备注：需核验两项数据');
  assert.equal(manual.project.fiction,'架空城市与虚构商战');
- console.log('WORLD/TOON TASK FLOW: 4 test scenarios passed; source-free idea generates a research-first ChatGPT ZIP');
+ console.log('WORLD/TOON TASK FLOW: pre-approval blocked; 4 approved research-first task scenarios passed');
 })().catch(err=>{console.error(err);process.exitCode=1});

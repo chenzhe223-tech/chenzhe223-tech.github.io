@@ -185,7 +185,7 @@ const WT_API='https://api.github.com/repos/'+WT_REPO;
 const WT_TASK_SCHEMA='davylab.worldtoon.task.v2';
 function wtJson(value,status=200){return Response.json(value,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+decodeURIComponent(u.pathname).replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
-async function wtArchiveKey(sources,title){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
+async function wtArchiveKey(sources,title,revision=''){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');if(revision){if(!/^r[2-9][0-9]*-[a-z0-9]{8}$/.test(revision))throw Error('创意修订标识非法');normalized+='\nrevision:'+revision}return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
 function wtB64(s){const x=new TextEncoder().encode(s);let result='';for(let i=0;i<x.length;i+=8192)result+=String.fromCharCode(...x.subarray(i,i+8192));return btoa(result)}
 function wtUnb64(s){const bytes=atob(String(s||'').replace(/\s+/g,''));return new TextDecoder().decode(Uint8Array.from(bytes,c=>c.charCodeAt(0)))}
 async function wtGithub(env,repoPath,method='GET',obj=null){if(!env.WORLDTOON_GITHUB_TOKEN)throw Error('漫画仓库 GitHub Token 尚未配置');const url=WT_API+'/contents/'+repoPath;const r=await fetch(url,{method,headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5',...(obj?{'content-type':'application/json'}:{})},body:obj?JSON.stringify(obj):undefined,signal:AbortSignal.timeout(14000)});const json=await r.json().catch(()=>({message:'GitHub API response invalid'}));return {status:r.status,ok:r.ok,body:json}}
@@ -268,6 +268,29 @@ function wtArchiveCheckCatalog(library,queue){
   if(library.items.find(x=>x.task_id===item.task_id)?.status!=='ready_for_workbuddy')throw Error('待发表状态与仓库目录不一致');
  }
 }
+async function wtVerifyPilotImage(env,taskId,fileName,expectedHash){
+ const path='tasks/'+taskId+'/pilot/'+fileName,original=await wtGithub(env,path);
+ if(!original.ok)return {ok:false,error:fileName+' 尚未在私有仓提交真实 PNG'};
+ if(Number(original.body?.size||0)>12*1024*1024||Number(original.body?.size||0)<40000)
+  return {ok:false,error:fileName+' 超出图片文件尺寸限制'};
+ let encoded=String(original.body?.content||'').replace(/\s+/g,'');
+ if(!encoded&&original.body?.sha){
+  const r=await fetch(WT_API+'/git/blobs/'+encodeURIComponent(original.body.sha),{
+   headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,
+    'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5'},
+   signal:AbortSignal.timeout(14000)});
+  if(!r.ok)return {ok:false,error:fileName+' 文件哈希读取失败'};
+  const blob=await r.json();
+  encoded=String(blob.content||'').replace(/\s+/g,'');
+ }
+ if(!encoded)return {ok:false,error:fileName+' GitHub 图像字节不可验证'};
+ const decoded=atob(encoded),bytes=Uint8Array.from(decoded,c=>c.charCodeAt(0));
+ if(bytes.length<40000||bytes.length>12*1024*1024||bytes[0]!==137||bytes[1]!==80||bytes[2]!==78||bytes[3]!==71)
+  return {ok:false,error:fileName+' 必须是真实 PNG'};
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+ return {ok:hash===expectedHash,error:hash===expectedHash?'':fileName+' SHA256 与作者实际审核的样稿不一致'};
+}
+
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
  if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
@@ -298,6 +321,49 @@ async function wtArchiveApi(request,env,url){
  }
  const auth=await wtArchiveAuth(request,env);
  if(auth.error)return wtJson({error:auth.error,repo:WT_REPO},auth.status);
+ if(method==='POST'&&p==='/api/archive/pilot-approval'){
+  let receipt;try{receipt=await request.json()}catch{return wtJson({error:'试画审批格式无效'},400)}
+  if(receipt?.schema!=='davylab.worldtoon.pilot-approval.v1'||receipt.author_approved!==true||
+    !/^WT-[a-f0-9]{20}$/.test(String(receipt.task_id||''))||
+    !/^[a-f0-9]{8}$/.test(String(receipt.lock_hash||''))||
+    ![receipt.character_sheet_sha256,receipt.pilot_frame_sha256].every(x=>/^[a-f0-9]{64}$/.test(String(x||'')))||
+    ![receipt.character_sheet_dimensions,receipt.pilot_frame_dimensions].every(x=>x&&
+      Number.isInteger(x.width)&&x.width>=640&&Number.isInteger(x.height)&&x.height>=640))
+    return wtJson({error:'请上传两张真实高分辨率图片，经作者确认后再签署审核回执'},422);
+  try{
+   const meta=await wtArchiveMeta(env);
+   if(meta.private!==true)return wtJson({error:'仅允许在私有漫画仓库签署试画回执'},409);
+   const original=await wtGithub(env,'tasks/'+receipt.task_id+'/task.json');
+   if(!original.ok)return wtJson({error:'找不到该漫画的正式创意任务'},404);
+   const task=JSON.parse(wtUnb64(original.body.content));
+   if(task.creative_direction?.approval?.lock_hash!==receipt.lock_hash||
+      task.creative_direction?.lock_status!=='approved'||
+      task.creative_direction?.production_gates?.pilot_required!==true)
+      return wtJson({error:'审核样稿与原任务锁定的创意方案不一致'},409);
+   const proofs=await Promise.all([
+    wtVerifyPilotImage(env,receipt.task_id,'character-sheet.png',receipt.character_sheet_sha256),
+    wtVerifyPilotImage(env,receipt.task_id,'pilot-01.png',receipt.pilot_frame_sha256)
+   ]);
+   if(proofs.some(x=>!x.ok))return wtJson({error:'GitHub 真实试画尚未与作者批准图一致：'+proofs.filter(x=>!x.ok).map(x=>x.error).join('；')},409);
+   const proofPath='tasks/'+receipt.task_id+'/pilot-approval.json';
+   const prior=await wtGithub(env,proofPath);
+   if(prior.ok){
+    const prev=JSON.parse(wtUnb64(prior.body.content));
+    if(prev.character_sheet_sha256===receipt.character_sheet_sha256&&prev.pilot_frame_sha256===receipt.pilot_frame_sha256&&prev.lock_hash===receipt.lock_hash)
+      return wtJson({existing:true,path:proofPath,commit:prior.body.sha});
+    return wtJson({error:'该任务已有不同版本的正式试画批准回执。必须通过新版本任务修订，不能覆盖作者签署'},409);
+   }
+   if(prior.status!==404)throw Error('GitHub 审核回执查询失败 '+prior.status);
+   const sanitized={schema:receipt.schema,task_id:receipt.task_id,lock_hash:receipt.lock_hash,
+    author_approved:true,scope:'character_sheet_and_pilot_frame_only',
+    approved_at:new Date().toISOString(),character_sheet_sha256:receipt.character_sheet_sha256,
+    pilot_frame_sha256:receipt.pilot_frame_sha256,character_sheet_dimensions:receipt.character_sheet_dimensions,
+    pilot_frame_dimensions:receipt.pilot_frame_dimensions,publication_approved:false};
+   const written=await wtGithub(env,proofPath,'PUT',{message:'feat(worldtoon): author approve visual pilot '+receipt.task_id,content:wtB64(JSON.stringify(sanitized,null,2)+'\n')});
+   if(!written.ok)throw Error('GitHub 试画回执写入失败 '+written.status);
+   return wtJson({existing:false,path:proofPath,commit:written.body.commit?.sha||''},201);
+  }catch(err){return wtJson({error:'试画审批暂未写入：'+String(err.message||err).slice(0,150)},503)}
+ }
  if(method==='POST'&&p==='/api/archive/tasks'){
   try {
    const meta=await wtArchiveMeta(env);
@@ -308,9 +374,19 @@ async function wtArchiveApi(request,env,url){
   let body;try{body=await request.json()}catch{return wtJson({error:'任务格式无效'},400)}
   const t=body?.task,prompt=body?.prompt;
   if(!t||t.schema!==WT_TASK_SCHEMA||t.status!=='queued'||t.producer!=='ChatGPT'||t.publisher!=='WorkBuddy'||typeof t.title!=='string'||t.title.length<2||t.title.length>200||typeof prompt!=='string'||prompt.length<80||prompt.length>90000||!Array.isArray(t.editorial?.sources)||t.editorial.sources.length>20||typeof t.editorial.fictionalization!=='string'||!t.editorial.fictionalization.trim()||!t.editorial.disclaimer) return wtJson({error:'任务缺少必要的核验资料、脱敏策略或生产指令'},400);
-  if(t.editorial.sources.length===0&&t.mode!=='original'&&t.research_required!==true)return wtJson({error:'无原始来源的热点任务必须明确标注“待核验／先研究”'},400);
+    const creative=t.creative_direction;
+  if(!creative||creative.version!==1||creative.lock_status!=='approved'||creative.approval?.author_approved!==true||
+    !/^[0-9a-f]{8}$/.test(String(creative.approval.lock_hash||''))||
+    !Array.isArray(creative.characters)||creative.characters.length<2||
+    !Array.isArray(creative.storyboard)||creative.storyboard.length!==9||
+    creative.storyboard.some((x,i)=>x.index!==i+1||String(x.scene||'').trim().length<30||
+      !(String(x.caption||'').trim()||String(x.dialogue||'').trim()))||
+    !creative.visual_rules?.size||!creative.cover_brief||
+    !prompt.includes(creative.approval.lock_hash)||!prompt.includes('character-sheet.png'))
+      return wtJson({code:'CREATIVE_APPROVAL_REQUIRED',error:'正式派单前必须锁定画风、人物和九格分镜，并要求 ChatGPT 先交角色定妆和首格样稿'},422);
+if(t.editorial.sources.length===0&&t.mode!=='original'&&t.research_required!==true)return wtJson({error:'无原始来源的热点任务必须明确标注“待核验／先研究”'},400);
   if(t.research_required===true&&t.mode==='hotspot'&&(!t.editorial.fact_notes||!t.editorial.fictionalization))return wtJson({error:'待核验任务需要事实边界与虚构改编安全规则'},400);
-  const key=await wtArchiveKey(t.editorial.sources,t.title);const id='WT-'+key.slice(0,20);
+  const key=await wtArchiveKey(t.editorial.sources,t.title,t.creative_revision||'');const id='WT-'+key.slice(0,20);
   if(t.dedupe_key!==key||t.task_id!==id)return wtJson({error:'任务 ID 或去重指纹不一致'},409);
   const path='tasks/'+id+'/task.json',promptPath='tasks/'+id+'/prompt.md';
   try{
@@ -596,6 +672,6 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
  try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };

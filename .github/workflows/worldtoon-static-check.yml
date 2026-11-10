@@ -27,6 +27,8 @@ jobs:
           node --check comic-studio/ranking.js
           node --check comic-studio/comic-engine.js
           node --check comic-studio/comic-visuals.js
+          node --check comic-studio/creative-director.js
+          node --check comic-studio/creative-pilot.js
       - name: Check browser scripts
         run: |
           node --check comic-studio/app.js
@@ -40,6 +42,10 @@ jobs:
         run: node comic-studio/tests/heritage.cjs
       - name: Verify D1 materialized discovery and instant category switching
         run: node comic-studio/tests/discovery-cache.cjs
+      - name: Verify creative director human signoff and GitHub contract
+        run: node comic-studio/tests/creative-director.cjs
+      - name: Verify visual pilot signed author approval
+        run: node comic-studio/tests/creative-pilot.cjs
       - name: Exercise one-click research-first task generation
         run: node comic-studio/tests/task-flow.cjs
       - name: Test six-dimension editorial scoring and filtering
