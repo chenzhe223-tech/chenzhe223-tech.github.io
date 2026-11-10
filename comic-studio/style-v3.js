@@ -794,29 +794,85 @@ function art(asset,kind){
  if(kind==='sample'&&isSample(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看真实生成样张"><img loading="lazy" src="'+esc(asset.url)+'" alt="平台实际生成样张"></a>';
  return '<span class="wt-v3-empty">'+(kind==='reference'?'授权参考图待配置':'真实生成样张尚未验证')+'</span>';
 }
+let searchTerm='';
+function pilotFor(c){
+ const p=typeof selected==='function'?selected():null;
+ const pilot=p?.creativeDirection?.pilot;
+ if(!pilot?.panelImage||p.creativeDirection.styleId!==c.styleId)return null;
+ if(!/^[a-f0-9]{64}$/.test(pilot.panelSha256||''))return null;
+ if(pilot.panelDimensions?.width!==1080||pilot.panelDimensions?.height!==1440)return null;
+ const approved=p.creativeDirection.pilotApproval;
+ return {src:pilot.panelImage,sha256:pilot.panelSha256,approved:!!(approved?.repo_commit&&approved.pilot_frame_sha256===pilot.panelSha256)};
+}
+function cardImage(x,c){
+ const proof=pilotFor(c);
+ if(c.styleId===x.style_id&&proof&&typeof mediaSrc==='function')
+  return '<span class="wt-v3-photo"><img alt="'+esc(x.name)+'当前作品实绘首图" loading="lazy" src="'+esc(mediaSrc(proof.src))+'" data-source="'+esc(proof.src)+'"><em>'+(proof.approved?'本作品已批准原图':'本作品待审核首图')+'</em></span>';
+ const asset=isReference(x.reference)?x.reference:isSample(x.sample)?x.sample:null;
+ if(asset)return '<span class="wt-v3-photo"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'可追溯视觉图像"><em>'+(isReference(x.reference)?'已授权风格参考':'已核验模型样张')+'</em></span>';
+ return '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE / '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉档案 · 暂无可核验图片<br>此处不是生成效果预览</em></span>';
+}
 function cards(c){
- const subset=CATALOG.filter(x=>filter==='全部'||x.category===filter);
- return '<div class="wt-v3-intro"><div><b>20 STYLES / VISUAL ATLAS</b><p>画风标准可以先选，真实图片必须经授权或实际生成后才能显示。当前不把排版示意冒充样张。</p></div><span>'+subset.length+' / 20</span></div>'+
+ const subset=CATALOG.filter(x=>(filter==='全部'||x.category===filter)&&(!searchTerm||[x.name,x.name_en,x.subtitle,x.material,x.subjects].join(' ').toLowerCase().includes(searchTerm.toLowerCase())));
+ return '<div class="wt-v3-intro"><div><b>WORLD/TOON · VISUAL ATLAS 03</b><p>先看真实来源，再确认正式首图。画风描述不是生成能力承诺。</p></div><span>20 STYLES</span></div>'+
+ '<div class="wt-v3-toolrow"><input type="search" data-wt-v3-query aria-label="检索漫画风格" placeholder="搜索画风、题材与视觉特征" value="'+esc(searchTerm)+'"><span class="wt-v3-count">找到 '+subset.length+' 种</span></div>'+
  '<div class="wt-v3-filters">'+CATEGORIES.map(x=>'<button type="button" data-wt-v3-filter="'+esc(x)+'" aria-pressed="'+(filter===x)+'" class="'+(filter===x?'is-active':'')+'">'+esc(x)+'</button>').join('')+'</div>'+
  '<div class="director-styles wt-v3-grid">'+subset.map(x=>'<button type="button" class="director-style wt-v3-card '+(c.styleId===x.style_id?'selected':'')+'" data-director-style="'+esc(x.style_id)+'" aria-pressed="'+(c.styleId===x.style_id)+'">'+
- '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE · '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉规范档案<br>非生成图片</em></span>'+
- '<strong>'+esc(x.name)+'</strong><small>'+esc(x.subtitle)+'</small><span class="wt-v3-card-status">实图待验证</span></button>').join('')+'</div>';
+ cardImage(x,c)+'<span class="wt-v3-card-meta"><b>'+esc(x.name)+'</b><small>'+esc(x.subtitle)+'</small><span class="wt-v3-subjects">'+esc(x.subjects.replace(/·/g,' / '))+'</span></span></button>').join('')+'</div>'+(subset.length?'':'<p class="wt-v3-nothing">没有符合条件的画风，请调整搜索。</p>');
 }
 function detail(c){
  const x=CATALOG.find(s=>s.style_id===c.styleId);
  if(!x)return '<p class="minor">此作品使用历史旧版画风；新建作品可选择 V3.0 画风。</p>';
  const quality=c.quality||'Premium';
+ const livePilot=pilotFor(c);
+ const pilotBlock=livePilot&&typeof mediaSrc==='function'?'<div class="wt-v3-pilot-proof"><b>当前作品 / 真实首图</b><img loading="lazy" data-source="'+esc(livePilot.src)+'" src="'+esc(mediaSrc(livePilot.src))+'" alt="当前作品的真实首格"><small>1080×1440 · SHA-256 '+esc(livePilot.sha256.slice(0,16))+'… · '+(livePilot.approved?'私有仓已核验批准':'待作者审核；不可批量制作')+'</small></div>':'<div class="wt-v3-pilot-pending">当前作品尚无真实首图。请完成派单与角色定妆、首格试画后，在下方审核区确认。</div>';
  return '<section class="wt-v3-detail"><div class="wt-v3-detail-head"><div><div class="kicker">'+String(x.number).padStart(2,'0')+' / WORLD/TOON VISUAL ATLAS</div><h3>'+esc(x.name)+'</h3><p>'+esc(x.name_en)+' · '+esc(x.subtitle)+'</p></div><span>未通过真实生图能力验证</span></div>'+
  '<div class="wt-v3-media"><div><b>风格参考 · RIGHTS CHECK</b><div class="wt-v3-asset">'+art(x.reference,'reference')+'</div><small>仅在来源、作者、许可可追溯后展示</small></div><div><b>真实生成样张 · MODEL OUTPUT</b><div class="wt-v3-asset">'+art(x.sample,'sample')+'</div><small>仅由正式生产模型生成、校验 SHA-256 后展示</small></div></div>'+
+ livePilot?pilotBlock:pilotBlock+
  '<div class="wt-v3-spec"><p><b>媒介与细节</b>'+esc(x.material)+'</p><p><b>光影</b>'+esc(x.lighting)+'</p><p><b>分镜</b>'+esc(x.layout)+'</p><p><b>适用题材</b>'+esc(x.subjects)+'</p><p><b>必须排除</b>'+esc(x.negative)+'</p></div>'+
  '<div class="wt-v3-production"><div><b>制作画质目标</b><p>目标级别不等于现有模型能力；出图实测与人工审核通过后才可标记达成。</p></div><div class="wt-v3-quality">'+['Standard','Premium','Cinematic'].map(v=>'<button type="button" data-wt-v3-quality="'+v+'" aria-pressed="'+(quality===v)+'" class="'+(quality===v?'is-active':'')+'">'+v+'</button>').join('')+'</div></div>'+
+ '<div class="wt-v3-actions"><button type="button" data-wt-v3-export-lock="1" '+(!livePilot?.approved?'disabled':'')+'>导出已批准风格锁定档案</button><span>正式模型信息由实际生产者填写并校验</span></div>'+
  '<p class="wt-v3-gate">真实预览必须为正式模型的原始 PNG，首图提交私有仓并经作者批准后按 SHA-256 原样进入最终第 01 张。当前 A 轨图像能力未认证，禁止用 CSS、SVG 或外部图片模拟生成成功。B 轨可按既有“角色定妆 + 首格试画”两阶段派单流程推进。</p></section>';
 }
 document.addEventListener('click',ev=>{
  const f=ev.target.closest('[data-wt-v3-filter]');
  if(f){ev.preventDefault();ev.stopImmediatePropagation();filter=f.dataset.wtV3Filter;render();return}
+ const lockButton=ev.target.closest('[data-wt-v3-export-lock]');
+ if(lockButton){ev.preventDefault();ev.stopImmediatePropagation();exportApprovedLock();return}
  const q=ev.target.closest('[data-wt-v3-quality]');
  if(q){ev.preventDefault();ev.stopImmediatePropagation();const p=selected();if(!p||p.handoff?.repoQueuedAt){notify('已有正式工单不可更改画质，请创建修订版');return}const c=window.wtDirector?.ensure(p);if(!c)return;c.quality=q.dataset.wtV3Quality;c.approval=null;c.reviewed=false;setChange(p,'调整目标画质为 '+c.quality+'（未声称模型已达到）');render()}
+},true);
+function exportApprovedLock(){
+ const p=typeof selected==='function'?selected():null,c=p?.creativeDirection,st=CATALOG.find(x=>x.style_id===c?.styleId),proof=pilotFor(c||{});
+ if(!c||!st||!proof?.approved)throw Error('需要经作者正式批准的真实首图才可导出风格锁定');
+ const lock={
+  schema:'davylab.worldtoon.style-lock.v3',task_id:p.handoff?.taskId||null,
+  style_id:st.style_id,style_version:st.version,quality_target:c.quality||'Premium',
+  model_id:null,model_version:null,render_pipeline_version:null,
+  characters:(c.cast||[]).map(x=>({name:x.name,appearance:x.look,costume:x.clothes,identity_marks:x.symbol})),
+  palette:st.palette,lighting:st.lighting,scene_rules:st.layout,
+  prompt_template:st.material+'；'+st.layout+'。保持人物面容、固定服装、背景细节。',
+  negative_prompt:st.negative+'；禁止简笔画、SVG 矢量占位、重采样冒充原生高分辨率',
+  aspect_ratio:'3:4',resolution:[1080,1440],
+  preview_sha256:proof.sha256,approved_at:c.pilotApproval.approved_at,
+  status:'awaiting_actual_model_provenance'
+ };
+ const payload=JSON.stringify(lock,null,2)+'\n';
+ const blob=new Blob([payload],{type:'application/json'});
+ saveFile(blob,'worldtoon-style-lock-draft-'+(p.handoff?.taskId||p.id)+'.json');
+ notify('风格锁定草案已导出；真实模型与管线版本由生产者填入，未填写不能通过验收');
+}
+document.addEventListener('input',ev=>{
+ if(!ev.target.matches?.('[data-wt-v3-query]'))return;
+ searchTerm=ev.target.value.slice(0,60);
+ const box=document.querySelector('.wt-v3-grid'),count=document.querySelector('.wt-v3-count');
+ if(!box)return;
+ const c=typeof selected==='function'?selected()?.creativeDirection:null;
+ if(!c)return;
+ const parser=document.createElement('div');parser.innerHTML=cards(c);
+ const incoming=parser.querySelector('.wt-v3-grid');
+ if(incoming)box.innerHTML=incoming.innerHTML;
+ const found=parser.querySelector('.wt-v3-count');if(count&&found)count.textContent=found.textContent;
 },true);
 window.WTStyleV3={CATALOG,STYLES,cards,detail,isReference,isSample};
 })();
