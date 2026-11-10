@@ -29,7 +29,7 @@ assert.match(cards,/不是生成效果预览/);
 const detail=lib.detail({styleId:'chinese-historical-epic',quality:'Premium'});
 assert.match(detail,/真实生成样张/);
 assert.match(detail,/未通过真实生图能力验证/);
-assert.match(detail,/style-lock/);
+assert.match(detail,/data-wt-v3-export-lock/);
 const sha='a'.repeat(64);
 scope.selected=()=>({creativeDirection:{styleId:'chinese-historical-epic',quality:'Premium',
  pilot:{panelImage:'media:original',panelSha256:sha,panelDimensions:{width:1080,height:1440}},
