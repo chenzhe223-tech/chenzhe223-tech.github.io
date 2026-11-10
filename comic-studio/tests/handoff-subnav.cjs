@@ -11,13 +11,15 @@ const {chromium}=require('playwright');
    const errors=[];
    page.on('pageerror',err=>errors.push(err.message));
    await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
-   const probe=await page.evaluate(()=>({
-      href:location.href,groupCount:document.querySelectorAll('#mainnav [data-nav-group="handoff"]').length,
-      navPreview:document.getElementById('mainnav')?.innerHTML?.slice(0,1500),
-      pageTitle:document.title
-   }));
-   console.log('NAV_PROBE',label,JSON.stringify(probe));
-   await page.waitForSelector('#mainnav [data-nav-group="handoff"]',{state:'attached',timeout:30000});
+   let found=false;
+   for(let attempt=0;attempt<48;attempt++){
+     await page.waitForTimeout(2500);
+     if(await page.locator('#mainnav [data-nav-group="handoff"]').count()===1){found=true;break}
+     if(attempt%6===5)console.log('WAIT_ORIGIN',label,'personalize.js origin CDN has not published new nav renderer');
+     await page.reload({waitUntil:'domcontentloaded',timeout:30000});
+   }
+   if(!found)throw Error(label+' LIVE origin missing nested production nav after retry; do not pass a local mock');
+   await page.waitForSelector('#mainnav [data-nav-group="handoff"]',{state:'attached',timeout:15000});
    const nav=page.locator('#mainnav');
    assert.equal(await nav.locator('a[data-route="handoff"]').count(),1);
    assert.equal(await nav.locator('a[data-route="director"]').count(),1);
