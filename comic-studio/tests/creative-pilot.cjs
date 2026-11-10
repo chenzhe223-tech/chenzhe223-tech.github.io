@@ -61,6 +61,8 @@ assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreat
  assert.ok(worker.includes("p==='/api/archive/pilot-approval'"),'Worker provides real private receipt endpoint');
  assert.ok(worker.includes('creative.production_gates')||worker.includes('task.creative_direction?.production_gates'),'Receipt tied to initial locked task');
  assert.ok(html.includes('creative-pilot.js'));
+ assert.ok(fs.readFileSync(path.join(__dirname,'..','extension.js'),'utf8').includes('p.creativeDirection?.pilot?.characterImage'),'Signed character proof must be synced to cloud');
+ assert.ok(app.includes('p.creativeDirection?.pilot?.characterImage'),'Signed character proof must be present in backup/restore');
  let cloneRoute='';
  ctx.data={projects:[p]};ctx.ui={selected:p.id};ctx.persist=()=>{};
  ctx.nav=(route)=>{cloneRoute=route};let nextId=0;
