@@ -298,6 +298,44 @@ async function wtArchiveApi(request,env,url){
  }
  const auth=await wtArchiveAuth(request,env);
  if(auth.error)return wtJson({error:auth.error,repo:WT_REPO},auth.status);
+ if(method==='POST'&&p==='/api/archive/pilot-approval'){
+  let receipt;try{receipt=await request.json()}catch{return wtJson({error:'试画审批格式无效'},400)}
+  if(receipt?.schema!=='davylab.worldtoon.pilot-approval.v1'||receipt.author_approved!==true||
+    !/^WT-[a-f0-9]{20}$/.test(String(receipt.task_id||''))||
+    !/^[a-f0-9]{8}$/.test(String(receipt.lock_hash||''))||
+    ![receipt.character_sheet_sha256,receipt.pilot_frame_sha256].every(x=>/^[a-f0-9]{64}$/.test(String(x||'')))||
+    ![receipt.character_sheet_dimensions,receipt.pilot_frame_dimensions].every(x=>x&&
+      Number.isInteger(x.width)&&x.width>=640&&Number.isInteger(x.height)&&x.height>=640))
+    return wtJson({error:'请上传两张真实高分辨率图片，经作者确认后再签署审核回执'},422);
+  try{
+   const meta=await wtArchiveMeta(env);
+   if(meta.private!==true)return wtJson({error:'仅允许在私有漫画仓库签署试画回执'},409);
+   const original=await wtGithub(env,'tasks/'+receipt.task_id+'/task.json');
+   if(!original.ok)return wtJson({error:'找不到该漫画的正式创意任务'},404);
+   const task=JSON.parse(wtUnb64(original.body.content));
+   if(task.creative_direction?.approval?.lock_hash!==receipt.lock_hash||
+      task.creative_direction?.lock_status!=='approved'||
+      task.creative_direction?.production_gates?.pilot_required!==true)
+      return wtJson({error:'审核样稿与原任务锁定的创意方案不一致'},409);
+   const proofPath='tasks/'+receipt.task_id+'/pilot-approval.json';
+   const prior=await wtGithub(env,proofPath);
+   if(prior.ok){
+    const prev=JSON.parse(wtUnb64(prior.body.content));
+    if(prev.character_sheet_sha256===receipt.character_sheet_sha256&&prev.pilot_frame_sha256===receipt.pilot_frame_sha256&&prev.lock_hash===receipt.lock_hash)
+      return wtJson({existing:true,path:proofPath,commit:prior.body.sha});
+    return wtJson({error:'该任务已有不同版本的正式试画批准回执。必须通过新版本任务修订，不能覆盖作者签署'},409);
+   }
+   if(prior.status!==404)throw Error('GitHub 审核回执查询失败 '+prior.status);
+   const sanitized={schema:receipt.schema,task_id:receipt.task_id,lock_hash:receipt.lock_hash,
+    author_approved:true,scope:'character_sheet_and_pilot_frame_only',
+    approved_at:new Date().toISOString(),character_sheet_sha256:receipt.character_sheet_sha256,
+    pilot_frame_sha256:receipt.pilot_frame_sha256,character_sheet_dimensions:receipt.character_sheet_dimensions,
+    pilot_frame_dimensions:receipt.pilot_frame_dimensions,publication_approved:false};
+   const written=await wtGithub(env,proofPath,'PUT',{message:'feat(worldtoon): author approve visual pilot '+receipt.task_id,content:wtB64(JSON.stringify(sanitized,null,2)+'\n')});
+   if(!written.ok)throw Error('GitHub 试画回执写入失败 '+written.status);
+   return wtJson({existing:false,path:proofPath,commit:written.body.commit?.sha||''},201);
+  }catch(err){return wtJson({error:'试画审批暂未写入：'+String(err.message||err).slice(0,150)},503)}
+ }
  if(method==='POST'&&p==='/api/archive/tasks'){
   try {
    const meta=await wtArchiveMeta(env);
@@ -606,6 +644,6 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
  try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
