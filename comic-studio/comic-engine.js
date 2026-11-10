@@ -24,6 +24,7 @@ const STEPS=[
  {name:'agent-comic-kit',role:'角色圣经与画格复核',ready:'角色一致性模板已接入',repo:'https://github.com/Saeyeon-developer/agent-comic-kit'},
  {name:'TT_AutoManga',role:'逐格素材与文字排版',ready:'浏览器本地合成已接入',repo:'https://github.com/TTDiang2/TT_AutoManga'}
 ];
+const isV3=p=>!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
 const clean=s=>String(s||'').replace(/[\u0000-\u001f]/g,' ').trim();
 function cast(p){
  const locked=p?.creativeDirection?.cast;
@@ -109,6 +110,7 @@ function wrapText(ctx,text,x,y,maxWidth,maxLines,lineHeight){
  return count;
 }
 async function generateMissing(p){
+ if(isV3(p))throw Error('V3 正式生图不能使用现有 768×1024 测试模型；请交由 ChatGPT 制作正式 1080×1440 原图并完成首格 SHA256 审核');
  if(!wtConfig?.aiEnabled){notify('生图模型尚未授权启用；请通过 ChatGPT 派单，或在明确费用后开放模型。');return}
  if(!wtSession?.access_token){notify('请先登录才能调用模型');return}
  const missing=p.panels.map((panel,i)=>panel.image?-1:i).filter(i=>i>=0);
@@ -130,6 +132,8 @@ async function generateMissing(p){
 }
 async function inspectNine(p){
  const errors=[],warnings=[],panels=[];
+ const strict=isV3(p);
+ if(strict&&!p.creativeDirection?.pilotApproval?.repo_commit)errors.push('V3 尚无作者确认的私有仓真实首图审核回执');
  const all=Array.isArray(p.panels)?p.panels:[];
  if(all.length!==9)errors.push('漫画应恰好九格');
  for(let i=0;i<9;i++){
@@ -138,7 +142,8 @@ async function inspectNine(p){
   try{
    const blob=await getImageBlob(panel.image),bitmap=await createImageBitmap(blob);
    const width=bitmap.width,height=bitmap.height;bitmap.close?.();
-   if(width<720||height<900)warnings.push('第 '+(i+1)+' 格尺寸偏低：'+width+'×'+height);
+   if(strict&&(width<1080||height<1440||Math.abs(width/height-0.75)>0.002))errors.push('V3 第 '+(i+1)+' 格不符合正式 3:4、1080×1440 起的尺寸要求：'+width+'×'+height);
+   else if(!strict&&(width<720||height<900))warnings.push('第 '+(i+1)+' 格尺寸偏低：'+width+'×'+height);
    if(!panel.scene?.trim())warnings.push('第 '+(i+1)+' 格未记录完整场景');
    if(!panel.dialogue?.trim()&&!panel.caption?.trim())warnings.push('第 '+(i+1)+' 格缺少可读对白或旁白');
    panels.push({index:i+1,ok:true,width,height,bytes:blob.size,format:blob.type});
@@ -162,6 +167,7 @@ async function exportQa(p){
 }
 
 async function compose(p){
+ if(isV3(p))throw Error('V3 不允许用 Canvas 重新绘制正式九格；请按原始图片经私有仓 QA 完成 SHA256 无损打包');
  const images=p.panels||[];
  if(images.length!==9||images.some(x=>!x.image))throw Error('九格均需先上传或生成真实图片；仅有分镜文字不能导出正式画格。');
  if(!confirm('将使用现有九张图片在本机合成带独立文字区的九张 PNG（不会自动审核或发表）。继续吗？'))return;
