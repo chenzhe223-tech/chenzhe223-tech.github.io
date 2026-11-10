@@ -96,3 +96,13 @@ body[data-wt-layout="wide"] .wt-news,body[data-wt-layout="wide"] .cards3{grid-te
  body[data-wt-nav="top"] .topbar{padding:0 12px}
 }
 @media print{.wt-ui-backdrop,.wt-ui-panel,.wt-ui-toolbar{display:none!important}}
+
+
+/* The production child links are built by Personal Design Studio, not static HTML. */
+#mainnav [data-nav-group="handoff"]{min-width:0}
+#mainnav [data-nav-group="handoff"] .nav-parent{width:100%}
+#mainnav [data-nav-group="handoff"] .nav-children{display:grid;gap:2px}
+body[data-wt-nav="top"] #mainnav [data-nav-group="handoff"]{display:flex;flex-direction:row;align-items:center;gap:5px}
+body[data-wt-nav="top"] #mainnav [data-nav-group="handoff"] .nav-children{display:flex;align-items:center;gap:3px;flex-wrap:wrap;border-left:1px solid #68766c;margin:0;padding:0 0 0 7px}
+body[data-wt-nav="top"] #mainnav [data-nav-group="handoff"] .nav-child{padding:8px 9px;min-height:34px}
+@media(max-width:800px){body:not([data-wt-nav="top"]) #mainnav [data-nav-group="handoff"] .nav-child{padding:10px 9px;min-height:40px}}
