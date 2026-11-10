@@ -1,0 +1,66 @@
+name: WorldToon live style atlas image acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/style-v3.js'
+      - 'comic-studio/style-v3.css'
+      - 'comic-studio/worker.js'
+      - 'comic-studio/assets/style-*.webp'
+      - '.github/workflows/worldtoon-style-assets-live.yml'
+permissions:
+  contents: read
+jobs:
+  visual-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify all twenty online pictures match committed source bytes and same-origin MIME
+        shell: python
+        run: |
+          import urllib.request, urllib.error, pathlib, hashlib, json, re, time
+          root=pathlib.Path('comic-studio')
+          js=(root/'style-v3.js').read_text('utf-8')
+          expect=json.loads(re.search(r'const STYLE_GUIDES=(\[[^;]+\]);',js).group(1))
+          assert len(expect)==20 and len(set(expect))==20
+          base='https://worldtoon.chenzhe223.workers.dev'
+          report={'schema':'davylab.worldtoon.style-live-assets.v1','base':base,'assets':[]}
+          def fetch(path):
+            last=None
+            for attempt in range(4):
+              try:
+                with urllib.request.urlopen(urllib.request.Request(base+path,headers={'User-Agent':'WorldToon-V3-Acceptance','Cache-Control':'no-cache'}),timeout=20) as r:
+                  return r.status, r.headers.get('Content-Type',''),r.read()
+              except (urllib.error.HTTPError,TimeoutError,urllib.error.URLError) as exc:
+                last=exc
+                time.sleep(3)
+            raise last
+          code,content_type,index=fetch('/')
+          assert code==200 and b'style-v3.js' in index and b'style-v3.css' in index
+          code,content_type,online_js=fetch('/style-v3.js')
+          assert code==200 and b'STYLE_GUIDES' in online_js and b'original_guide' in online_js
+          for i,sha in enumerate(expect,1):
+            name=f'style-{i:02d}.webp'
+            local=(root/'assets'/name).read_bytes()
+            assert hashlib.sha256(local).hexdigest()==sha,(name,'local file mismatch')
+            code,mime,body=fetch('/assets/'+name)
+            got=hashlib.sha256(body).hexdigest()
+            assert code==200,(name,code)
+            assert mime.startswith('image/webp'),(name,mime)
+            assert body[:4]==b'RIFF' and body[8:12]==b'WEBP',name
+            assert len(body)>10000,(name,'thumbnail missing or too small')
+            assert got==sha,(name,'online does not match exact committed picture')
+            report['assets'].append({'style':i,'file':name,'bytes':len(body),'mime':mime,'sha256':got,'passed':True})
+          code,_,css=fetch('/style-v3.css')
+          assert code==200 and b'object-fit:contain' in css
+          report['passed']=True
+          pathlib.Path('worldtoon-style-qa.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
+          print('PASS: All 20 original style guide images respond HTTP 200, have correct WebP MIME and matching SHA-256')
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: worldtoon-style-qa
+          path: worldtoon-style-qa.json
+          if-no-files-found: ignore
