@@ -19,7 +19,7 @@ function pilot(p){
   '<div class="director-pilot-grid">'+
   [['character','角色定妆图','characterImage'],['panel','首格试画','panelImage']].map(([type,title,key])=>
    '<article><strong>'+title+'</strong><div class="director-pilot-image">'+thumb(key,title)+'</div>'+
-   '<label class="button">上传真实'+title+'<input type="file" data-pilot-upload="'+type+'" accept="image/png,image/jpeg,image/webp" hidden></label></article>').join('')+
+   '<label class="button">上传真实'+title+'<input type="file" data-pilot-upload="'+type+'" accept="image/png" hidden></label></article>').join('')+
   '</div><p class="minor">核对人物的脸、体型、服装、标志道具、背景配色、镜头和中文文字留白。换图后必须重新批准。</p>'+
   '<label class="director-consent"><input type="checkbox" data-pilot-review="1" '+(c.pilotReviewed?'checked':'')+
   (receipt?.repo_commit?' disabled':'')+'> 我已亲自检查两张实际图片，与锁定的创意圣经一致。</label>'+
@@ -35,7 +35,7 @@ async function upload(p,type,file){
  if(!TYPES[type]||!file)throw Error('请选择真实样稿');
  const c=p.creativeDirection;
  if(!c?.approval?.lock_hash)throw Error('必须先确认创意方向');
- if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>12*1024*1024||file.size<128)throw Error('仅接受真实 PNG/JPEG/WebP，大小 12MB 以内');
+ if(file.type!=='image/png'||!file.name.toLowerCase().endsWith('.png')||file.size>12*1024*1024||file.size<40000)throw Error('样稿必须是与私有 GitHub 文件完全一致的真实 PNG（40KB～12MB）');
  const bytes=new Uint8Array(await file.arrayBuffer()),blob=wfImageFile(file.name,bytes);
  const image=await createImageBitmap(blob),width=image.width,height=image.height;image.close?.();
  if(width<640||height<640)throw Error('真实样稿宽高须至少640像素');
