@@ -790,8 +790,8 @@ const STYLES=CATALOG.map(x=>({id:x.style_id,name:x.name,subtitle:x.subtitle,pale
 function isReference(x){return !!(x?.status==='licensed'&&x.url&&x.source&&x.license&&/^https:\/\//.test(x.url))}
 function isSample(x){return !!(x?.status==='verified'&&x.url&&x.model&&x.model_version&&/^[a-f0-9]{64}$/.test(x.sha256)&&/^https:\/\//.test(x.url))}
 function art(asset,kind){
- if(kind==='reference'&&isReference(asset))return '<img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="授权风格参考">';
- if(kind==='sample'&&isSample(asset))return '<img loading="lazy" src="'+esc(asset.url)+'" alt="平台实际生成样张">';
+ if(kind==='reference'&&isReference(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看授权风格参考"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="授权风格参考"></a>';
+ if(kind==='sample'&&isSample(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看真实生成样张"><img loading="lazy" src="'+esc(asset.url)+'" alt="平台实际生成样张"></a>';
  return '<span class="wt-v3-empty">'+(kind==='reference'?'授权参考图待配置':'真实生成样张尚未验证')+'</span>';
 }
 function cards(c){
