@@ -41,7 +41,8 @@ assert.ok(pilot,'Pilot module mounted');
 assert.ok(ctx.window.wtCreativeDirector().includes('director core'));
 assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreativeDirector().includes('试画'));
 (async()=>{
- let sample={type:'image/png',size:1024,name:'sample.png',arrayBuffer:async()=>new Uint8Array(1024).fill(7).buffer};
+ await assert.rejects(()=>pilot.upload(p,'character',{type:'image/jpeg',name:'wrong.jpg',size:50000}),/真实 PNG/);
+ let sample={type:'image/png',size:50000,name:'sample.png',arrayBuffer:async()=>new Uint8Array(50000).fill(7).buffer};
  await pilot.upload(p,'character',sample);
  assert.ok(p.creativeDirection.pilot.characterImage.startsWith('media:'));
  assert.equal(p.creativeDirection.pilotApproval,null);
