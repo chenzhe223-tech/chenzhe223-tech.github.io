@@ -140,12 +140,12 @@ function field(k,label,value,min=0,kind='textarea'){
 }
 function styleCards(c){
  return '<div class="director-styles">'+STYLES.map(x=>'<button type="button" class="director-style '+(c.styleId===x.id?'selected':'')+'" data-director-style="'+x.id+'" aria-pressed="'+(c.styleId===x.id)+'">'+
- '<span class="director-style-art" style="--d-bg:'+x.palette[0]+';--d-ink:'+x.palette[1]+';--d-a:'+x.palette[2]+';--d-b:'+x.palette[3]+'"><i></i><b></b><em></em></span>'+
+ '<span class="director-style-art director-theme-'+x.id+'"><i></i><b></b><em></em></span>'+
  '<strong>'+e(x.name)+'</strong><small>'+e(x.subtitle)+'</small></button>').join('')+'</div>';
 }
 function stylePreview(c){
  const s=style(c.styleId);
- return '<div class="director-art-preview"><div class="director-art-sheet" style="--d-bg:'+s.palette[0]+';--d-ink:'+s.palette[1]+';--d-a:'+s.palette[2]+';--d-b:'+s.palette[3]+'"><span>WORLD / TOON</span><div class="director-wire-figure"><i></i><b></b></div><strong>'+e(s.name)+'</strong><small>配色与构图示意 · 非真实生图</small></div>'+
+ return '<div class="director-art-preview"><div class="director-art-sheet director-theme-'+s.id+'"><span>WORLD / TOON</span><div class="director-wire-figure"><i></i><b></b></div><strong>'+e(s.name)+'</strong><small>配色与构图示意 · 非真实生图</small></div>'+
  '<div class="director-art-rules"><b>统一视觉规范</b><p>材质：'+e(s.material)+'</p><p>光线：'+e(s.lighting)+'</p><p>构图：'+e(s.layout)+'</p><p>禁用：'+e(s.negative)+'</p><p>所有画格：1080×1440，3:4，中文另行排版</p></div></div>';
 }
 function narrative(p,c){
@@ -154,7 +154,7 @@ function narrative(p,c){
 }
 function castEditor(c){
  return '<div class="director-cast">'+c.cast.map((person,i)=>'<article class="director-character"><div class="director-character-head"><span>0'+(i+1)+'</span><strong>'+e(person.role)+'</strong></div>'+
- '<div class="director-character-avatar" style="--d-bg:'+style(c.styleId).palette[0]+';--d-ink:'+style(c.styleId).palette[1]+'"><i></i><b></b><small>角色版式示意 · 非定妆照</small></div>'+
+ '<div class="director-character-avatar director-theme-'+style(c.styleId).id+'"><i></i><b></b><small>角色版式示意 · 非定妆照</small></div>'+
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
  '<label>'+['角色姓名','固定容貌、发型与体型','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
