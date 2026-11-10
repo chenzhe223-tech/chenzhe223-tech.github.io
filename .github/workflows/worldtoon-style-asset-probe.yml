@@ -1,0 +1,38 @@
+name: WorldToon temporary style atlas source probe
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/worldtoon-style-asset-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: pip -q install pillow
+      - name: Probe signed Canva original asset
+        shell: python
+        run: |
+          import urllib.request,urllib.error
+          from PIL import Image
+          from io import BytesIO
+          urls=["https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2F333df01b-383c-4890-a308-e4a3c5ce94f9/watermark:F/width:160?csig=AAAAAAAAAAAAAAAAAAAAAJwrLE9ARFaLM61CN7XkRxb8HHQuCmO6DayyO2hv7Qr-&exp=1794321223&osig=AAAAAAAAAAAAAAAAAAAAAFz464wzWnm31s2DyxY_aj7KzVyiqDiZ0QvlnSFrRbRG&signer=media-rpc&token=AAIAAU0AJDMzM2RmMDFiLTM4M2MtNDg5MC1hMzA4LWU0YTNjNWNlOTRmOQAAAAABocXhDVipBFm1jvgFJ-tyk7XdX9QynY6cUQhhkHxvugIc-MTQKw&x-canva-quality=thumbnail","https://media.canva.com/v2/image-resize/format:PNG/height:200/quality:100/uri:ifs%3A%2F%2FM%2Fcfe9d53d-8c1f-4913-b4e4-189f0173482a/watermark:F/width:160?csig=AAAAAAAAAAAAAAAAAAAAAEYG2cGYpdFv3SRrBIvn1J_EthhZmrP1VW31Ajdn_NZO&exp=1794322598&osig=AAAAAAAAAAAAAAAAAAAAAKdb258WOUBpe6mFMfwzNVXL-yoET8gXQTVpkld97vaP&signer=media-rpc&token=AAIAAU0AJGNmZTlkNTNkLThjMWYtNDkxMy1iNGU0LTE4OWYwMTczNDgyYQAAAAABocX2CHDtbCeL45C7TMIPD6BEguTMFkjBMGxPqfCO6IXj1vpVtQ&x-canva-quality=thumbnail"]
+          for n,url in enumerate(urls,1):
+           candidates=[
+           ('signed-thumbnail',url),
+           ('signed-full-size',url.replace('/height:200/','/height:1402/').replace('/width:160?','/width:1122?')),
+           ('direct-resize',url.split('?')[0].replace('/height:200/','/height:1402/').replace('/width:160','/width:1122')),
+           ('direct-full',url.split('?')[0].replace('/height:200/','/height:1402/').replace('/width:160','/width:1122')+'?x-canva-quality=original')
+           ]
+           for key,variant in candidates:
+            try:
+             req=urllib.request.Request(variant,headers={'User-Agent':'Mozilla/5.0'})
+             with urllib.request.urlopen(req,timeout=20) as res:
+              b=res.read(8000000)
+             im=Image.open(BytesIO(b))
+             print(n,key,'SUCCESS',len(b),im.size)
+            except Exception as exc: print(n,key,'FAIL',str(exc)[:120])
+          
