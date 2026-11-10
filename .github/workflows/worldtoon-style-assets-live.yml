@@ -39,8 +39,13 @@ jobs:
             raise last
           code,content_type,index=fetch('/')
           assert code==200 and b'style-v3.js' in index and b'style-v3.css' in index
-          code,content_type,online_js=fetch('/style-v3.js')
-          assert code==200 and b'STYLE_GUIDES' in online_js and b'original_guide' in online_js
+          for _ in range(10):
+            code,content_type,online_js=fetch('/style-v3.js')
+            if code==200 and b'STYLE_GUIDES' in online_js and b'original_guide' in online_js:
+              break
+            time.sleep(6)
+          else:
+            raise AssertionError('The live Worker is serving a stale V3 script after 60 seconds; inspect raw GitHub/CF cache')
           for i,sha in enumerate(expect,1):
             name=f'style-{i:02d}.webp'
             local=(root/'assets'/name).read_bytes()
