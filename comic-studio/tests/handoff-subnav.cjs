@@ -11,7 +11,13 @@ const {chromium}=require('playwright');
    const errors=[];
    page.on('pageerror',err=>errors.push(err.message));
    await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
-   await page.waitForSelector('#mainnav [data-nav-group="handoff"]',{timeout:30000});
+   const probe=await page.evaluate(()=>({
+      href:location.href,groupCount:document.querySelectorAll('#mainnav [data-nav-group="handoff"]').length,
+      navPreview:document.getElementById('mainnav')?.innerHTML?.slice(0,1500),
+      pageTitle:document.title
+   }));
+   console.log('NAV_PROBE',label,JSON.stringify(probe));
+   await page.waitForSelector('#mainnav [data-nav-group="handoff"]',{state:'attached',timeout:30000});
    const nav=page.locator('#mainnav');
    assert.equal(await nav.locator('a[data-route="handoff"]').count(),1);
    assert.equal(await nav.locator('a[data-route="director"]').count(),1);
