@@ -134,7 +134,7 @@ async function wtDraftFromNews(i){
  p.fiction='原创架空角色及情节，不复现或指控现实人物。';
  p.sourceURLs=x.url;p.sourceTitle=x.title;p.status='草稿';p.evergreen=x.evergreen===true;p.sourceId=x.source_id||'';p.rightsStatus=x.rights_status||'unknown';
  data.projects.unshift(p);ui.selected=p.id;persist();
- nav('studio/'+p.id+'/0');notify('已创建未核验漫画草稿，可运行四 Skill 分镜制作');
+ nav('director/'+p.id);notify('已建立漫画草稿，进入创意导演台选择画风、角色与九格剧情');
 }
 
 async function wtLoadConfig(){try{wtConfig=await wtJson(await fetch('/api/config',{cache:'no-store'}));return wtConfig}catch(err){wtCloudError=err.message;return null}}
