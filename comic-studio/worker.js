@@ -268,6 +268,29 @@ function wtArchiveCheckCatalog(library,queue){
   if(library.items.find(x=>x.task_id===item.task_id)?.status!=='ready_for_workbuddy')throw Error('待发表状态与仓库目录不一致');
  }
 }
+async function wtVerifyPilotImage(env,taskId,fileName,expectedHash){
+ const path='tasks/'+taskId+'/pilot/'+fileName,original=await wtGithub(env,path);
+ if(!original.ok)return {ok:false,error:fileName+' 尚未在私有仓提交真实 PNG'};
+ if(Number(original.body?.size||0)>12*1024*1024||Number(original.body?.size||0)<40000)
+  return {ok:false,error:fileName+' 超出图片文件尺寸限制'};
+ let encoded=String(original.body?.content||'').replace(/\s+/g,'');
+ if(!encoded&&original.body?.sha){
+  const r=await fetch(WT_API+'/git/blobs/'+encodeURIComponent(original.body.sha),{
+   headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,
+    'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5'},
+   signal:AbortSignal.timeout(14000)});
+  if(!r.ok)return {ok:false,error:fileName+' 文件哈希读取失败'};
+  const blob=await r.json();
+  encoded=String(blob.content||'').replace(/\s+/g,'');
+ }
+ if(!encoded)return {ok:false,error:fileName+' GitHub 图像字节不可验证'};
+ const decoded=atob(encoded),bytes=Uint8Array.from(decoded,c=>c.charCodeAt(0));
+ if(bytes.length<40000||bytes.length>12*1024*1024||bytes[0]!==137||bytes[1]!==80||bytes[2]!==78||bytes[3]!==71)
+  return {ok:false,error:fileName+' 必须是真实 PNG'};
+ const hash=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+ return {ok:hash===expectedHash,error:hash===expectedHash?'':fileName+' SHA256 与作者实际审核的样稿不一致'};
+}
+
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
  if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
@@ -317,6 +340,11 @@ async function wtArchiveApi(request,env,url){
       task.creative_direction?.lock_status!=='approved'||
       task.creative_direction?.production_gates?.pilot_required!==true)
       return wtJson({error:'审核样稿与原任务锁定的创意方案不一致'},409);
+   const proofs=await Promise.all([
+    wtVerifyPilotImage(env,receipt.task_id,'character-sheet.png',receipt.character_sheet_sha256),
+    wtVerifyPilotImage(env,receipt.task_id,'pilot-01.png',receipt.pilot_frame_sha256)
+   ]);
+   if(proofs.some(x=>!x.ok))return wtJson({error:'GitHub 真实试画尚未与作者批准图一致：'+proofs.filter(x=>!x.ok).map(x=>x.error).join('；')},409);
    const proofPath='tasks/'+receipt.task_id+'/pilot-approval.json';
    const prior=await wtGithub(env,proofPath);
    if(prior.ok){
