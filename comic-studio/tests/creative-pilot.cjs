@@ -60,5 +60,21 @@ assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreat
  assert.ok(worker.includes("p==='/api/archive/pilot-approval'"),'Worker provides real private receipt endpoint');
  assert.ok(worker.includes('creative.production_gates')||worker.includes('task.creative_direction?.production_gates'),'Receipt tied to initial locked task');
  assert.ok(html.includes('creative-pilot.js'));
+ let cloneRoute='';
+ ctx.data={projects:[p]};ctx.ui={selected:p.id};ctx.persist=()=>{};
+ ctx.nav=(route)=>{cloneRoute=route};let nextId=0;
+ ctx.uid=()=>('creative'+(++nextId)+'abcdefghijkl');
+ pilot.revise(p);
+ assert.equal(ctx.data.projects.length,2,'Revision clones without modifying original');
+ const revised=ctx.data.projects[0];
+ assert.notEqual(revised.id,p.id);
+ assert.match(revised.creativeRevision,/^r2-[a-z0-9]{8}$/);
+ assert.equal(revised.handoff.repoQueuedAt,undefined);
+ assert.equal(revised.creativeDirection.approval,null);
+ assert.equal(revised.creativeDirection.pilotApproval,null);
+ assert.equal(revised.panels.length,p.panels?.length||0);
+ assert.ok(cloneRoute.startsWith('director/'));
+ assert.ok(p.creativeDirection.pilotApproval.repo_commit,'Previous GitHub approval is retained untouched');
+
  console.log('WORLD/TOON visual pilot QA: real image SHA256, owner review, signed GitHub receipt and continuation instruction PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
