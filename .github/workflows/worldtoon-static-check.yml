@@ -27,6 +27,7 @@ jobs:
           node --check comic-studio/ranking.js
           node --check comic-studio/comic-engine.js
           node --check comic-studio/comic-visuals.js
+          node --check comic-studio/style-v3.js
           node --check comic-studio/creative-director.js
           node --check comic-studio/creative-pilot.js
       - name: Check browser scripts
