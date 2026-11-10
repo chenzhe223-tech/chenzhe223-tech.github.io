@@ -6,6 +6,8 @@ on:
     paths:
       - 'comic-studio/index.html'
       - 'comic-studio/app.js'
+      - 'comic-studio/personalize.js'
+      - 'comic-studio/personalize.css'
       - 'comic-studio/styles.css'
       - 'comic-studio/tests/handoff-subnav.cjs'
       - 'comic-studio/style-v3.js'
