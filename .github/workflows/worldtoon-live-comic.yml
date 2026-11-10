@@ -47,6 +47,15 @@ jobs:
           assert any(x.get('category')=='经典故事' for x in catalog['items']),'All-source catalog must include classics'
           assert any(x.get('category')=='历史脑洞' for x in catalog['items']),'All-source catalog must include history'
           print('D1 snapshot catalog HTTP:',elapsed,'ms,ready:',catalog.get('ready'),'sources:',catalog.get('stats'))
+          # V3 resource proof: the deployed Worker must actually expose both new assets.
+          status,head=read('/')
+          assert status==200 and b'style-v3.js' in head and b'style-v3.css' in head
+          status,styles_js=read('/style-v3.js?v=3.0.0')
+          assert status==200 and b'Chinese Historical Epic' in styles_js and b'Japanese Luminous Anime' in styles_js
+          assert b'not_generated' in styles_js and b'not_licensed' in styles_js
+          status,styles_css=read('/style-v3.css?v=3.0.0')
+          assert status==200 and b'wt-v3-grid' in styles_css and b'max-width:650px' in styles_css
+          print('V3 live 20-style atlas JS/CSS HTTP 200; absent real images explicitly labeled')
           status,src=read('/comic-engine.js')
           assert status==200 and b'wtComicEngine' in src and b'TT_AutoManga' in src
           print('four-skill workshop JavaScript is reachable')
