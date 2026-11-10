@@ -783,6 +783,19 @@ const CATALOG=[
   "production_mode": "ChatGPT_pilot_required"
  }
 ];
+/* Each image is an original style GUIDE cut from the two ChatGPT-generated atlas plates.
+ * Do not count guides as verified native production samples or licensed third-party refs. */
+const STYLE_GUIDES=["3889424c6b93943a5cd88c906a78ce0c8280aab304ed0b2c20dbf5993329c450","bfcfe942e6fc778398f91937e72b5873c89f8b54205c0846f0f61a831f204834","d3029e0a02ee86b9ef89964cdc12a8f2403a478edf7d1dff6ca3993575308f9e","3ea7a74f0a83739821bf829eafef11fa9d8a490533d4be5c8c6cebd63d3b75d9","ccd0cd5d09f3dc0e99f1395b437d6380627cb0bfd3befd2e59e163852499ef17","d8e9aeaf7cb60907cf595b46fcc5e840c256aeff80d9fa5f13dc3ae3f98d08f6","149deda8f8825bef86e5952486c16ba81bfcc2776c5bd144c50d312d0a27c9ca","8aa6817bd7ce85b7616d324c1184e4f11e76ffc41c0a6a6cb6ca9c3243dfebd5","bcfffd2fbe5fdc8c42bfee5a1cb7dcb65186e75299955d77c72ea19237a0f6ba","2384272c91a5ebc1c6b3112cb9d38082aead167f6f0fdcc1f359068d3ac431d0","a8d81b8842129392ecd51c8bd3c0ea2bcfa713c42a0892b08bad0a02403636d2","dcfcf68098ce73e5ba332112200144884fccfbc1765415f2144206e3124ac964","5660186ad7b7c799fb6ed9182bfeceb0ac4a135f2e98157d01a09f5aa634a174","b0a298d848d5f572d17c7584150ce16023b5005b8c4039ff4a8e68320ef0d8b4","c2cae73e6281e9928130021116a4ffb0210b01476adc34dd49a9109ef67e5b92","41ead452d282f0c70fee1dacbe7435e4f4a942ff7ea2763ac617f47b82b586ab","68860fc0d5dfdb2f48eb3c54372b890f7224dc17e9ecf4f90ecb8fdfadb9efe8","f480eb41f7ae79bc71865de4be7adeb645c0ff4aff887a78759077620db21aa8","2ec788a9df786c68f3d95405c5540c84ca51fa3b5297142a089f901728cb1a15","eade9f31438c20990641e19c8cacbf56ad9cfc5ee42ab05fe830ff34644acabb"];
+CATALOG.forEach((style,index)=>{
+ const n=String(index+1).padStart(2,'0');
+ style.guide={
+  status:'original_guide',url:'/assets/style-'+n+'.webp',
+  source:'WORLD/TOON原创画风图鉴（ChatGPT生成）',
+  author:'WORLD/TOON · By DAVYLAB',license:'原创AI辅助插画，仅用于本站画风说明',
+  usage_scope:'visual_style_reference_only',asset_path:'comic-studio/assets/style-'+n+'.webp',
+  sha256:STYLE_GUIDES[index],number:index+1
+ };
+});
 const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松'];
 let filter='全部';
 const esc=v=>String(v??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
@@ -798,7 +811,10 @@ function isSample(x){
   x.placeholder_or_vector_rasterized===false&&x.asset_path?.startsWith('visual/style-atlas/')&&
   /^[a-f0-9]{64}$/.test(x.sha256||'')&&x.sha256===x.asset_sha256&&/^https:\/\//.test(x.url||''));
 }
+function isGuide(x){return !!(x?.status==='original_guide'&&x.url?.startsWith('/assets/style-')&&
+ /^[a-f0-9]{64}$/.test(x.sha256||'')&&x.usage_scope==='visual_style_reference_only')}
 function art(asset,kind){
+ if(kind==='guide'&&isGuide(asset))return '<a class="wt-v3-zoom wt-v3-guide-zoom" href="'+esc(asset.url)+'" target="_blank" rel="noopener noreferrer" aria-label="放大查看原创画风参考图"><img loading="lazy" src="'+esc(asset.url)+'" alt="原创漫画风格参考图，不代表已接入生成模型的最终效果"></a>';
  if(kind==='reference'&&isReference(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看授权风格参考"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="授权风格参考"></a>';
  if(kind==='sample'&&isSample(asset))return '<a class="wt-v3-zoom" target="_blank" rel="noopener noreferrer" href="'+esc(asset.url)+'" aria-label="放大查看真实生成样张"><img loading="lazy" src="'+esc(asset.url)+'" alt="平台实际生成样张"></a>';
  return '<span class="wt-v3-empty">'+(kind==='reference'?'授权参考图待配置':'真实生成样张尚未验证')+'</span>';
@@ -817,8 +833,8 @@ function cardImage(x,c){
  const proof=pilotFor(c);
  if(c.styleId===x.style_id&&proof&&typeof mediaSrc==='function')
   return '<span class="wt-v3-photo"><img alt="'+esc(x.name)+'当前作品实绘首图" loading="lazy" src="'+esc(mediaSrc(proof.src))+'" data-source="'+esc(proof.src)+'"><em>'+(proof.approved?'本作品已批准原图':'本作品待审核首图')+'</em></span>';
- const asset=isReference(x.reference)?x.reference:isSample(x.sample)?x.sample:null;
- if(asset)return '<span class="wt-v3-photo"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'可追溯视觉图像"><em>'+(isReference(x.reference)?'已授权风格参考':'已核验模型样张')+'</em></span>';
+ const asset=isGuide(x.guide)?x.guide:isReference(x.reference)?x.reference:isSample(x.sample)?x.sample:null;
+ if(asset)return '<span class="wt-v3-photo"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'可追溯视觉图像"><em>'+(isGuide(asset)?'原创风格参考 · 非成品':'已核验模型样张')+'</em></span>';
  return '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE / '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉档案 · 暂无可核验图片<br>此处不是生成效果预览</em></span>';
 }
 function cards(c){
@@ -836,7 +852,7 @@ function detail(c){
  const livePilot=pilotFor(c);
  const pilotBlock=livePilot&&typeof mediaSrc==='function'?'<div class="wt-v3-pilot-proof"><b>当前作品 / 真实首图</b><img loading="lazy" data-source="'+esc(livePilot.src)+'" src="'+esc(mediaSrc(livePilot.src))+'" alt="当前作品的真实首格"><small>1080×1440 · SHA-256 '+esc(livePilot.sha256.slice(0,16))+'… · '+(livePilot.approved?'私有仓已核验批准':'待作者审核；不可批量制作')+'</small></div>':'<div class="wt-v3-pilot-pending">当前作品尚无真实首图。请完成派单与角色定妆、首格试画后，在下方审核区确认。</div>';
  return '<section class="wt-v3-detail"><div class="wt-v3-detail-head"><div><div class="kicker">'+String(x.number).padStart(2,'0')+' / WORLD/TOON VISUAL ATLAS</div><h3>'+esc(x.name)+'</h3><p>'+esc(x.name_en)+' · '+esc(x.subtitle)+'</p></div><span>未通过真实生图能力验证</span></div>'+
- '<div class="wt-v3-media"><div><b>风格参考 · RIGHTS CHECK</b><div class="wt-v3-asset">'+art(x.reference,'reference')+'</div><small>仅在来源、作者、许可可追溯后展示</small></div><div><b>真实生成样张 · MODEL OUTPUT</b><div class="wt-v3-asset">'+art(x.sample,'sample')+'</div><small>仅由正式生产模型生成、校验 SHA-256 后展示</small></div></div>'+
+ '<div class="wt-v3-media"><div><b>原创画风参考 · STYLE GUIDE</b><div class="wt-v3-asset">'+art(x.guide,'guide')+'</div><small>原创示例图，仅辅助选择风格；不代表正式模型已验证画质</small></div><div><b>真实生成样张 · MODEL OUTPUT</b><div class="wt-v3-asset">'+art(x.sample,'sample')+'</div><small>仅由正式生产模型生成、校验 SHA-256 后展示</small></div></div>'+
  pilotBlock+
  '<div class="wt-v3-spec"><p><b>媒介与细节</b>'+esc(x.material)+'</p><p><b>光影</b>'+esc(x.lighting)+'</p><p><b>分镜</b>'+esc(x.layout)+'</p><p><b>适用题材</b>'+esc(x.subjects)+'</p><p><b>必须排除</b>'+esc(x.negative)+'</p></div>'+
  '<div class="wt-v3-production"><div><b>制作画质目标</b><p>目标级别不等于现有模型能力；出图实测与人工审核通过后才可标记达成。</p></div><div class="wt-v3-quality">'+['Standard','Premium','Cinematic'].map(v=>'<button type="button" data-wt-v3-quality="'+v+'" aria-pressed="'+(quality===v)+'" class="'+(quality===v?'is-active':'')+'">'+v+'</button>').join('')+'</div></div>'+
@@ -883,5 +899,5 @@ document.addEventListener('input',ev=>{
  if(incoming){box.innerHTML=incoming.innerHTML;if(typeof hydrateImages==='function')hydrateImages()}
  const found=parser.querySelector('.wt-v3-count');if(count&&found)count.textContent=found.textContent;
 },true);
-window.WTStyleV3={CATALOG,STYLES,cards,detail,isReference,isSample};
+window.WTStyleV3={CATALOG,STYLES,STYLE_GUIDES,cards,detail,isReference,isSample,isGuide};
 })();
