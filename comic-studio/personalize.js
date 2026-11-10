@@ -47,7 +47,8 @@ function wtVisualNav(){
   for(let i=0;i<s.groups.length;i++){
     const g=s.groups[i];
     const wrap=document.createElement('div');wrap.className='wt-nav-group';
-    const isCollapsed=s.collapsed.includes(g.id)&&!g.items.includes(ui.route);
+    const isCollapsed=s.collapsed.includes(g.id)&&!g.items.includes(ui.route)&&!(['director','archive'].includes(ui.route)&&g.items.includes('handoff'));
+
     const head=document.createElement('button');head.type='button';head.className='wt-nav-group-title';
     head.dataset.uiToggle=g.id;head.setAttribute('aria-expanded',String(!isCollapsed));
     head.innerHTML='<span class="wt-nav-group-dot">●</span><span></span><span class="wt-nav-caret">'+(isCollapsed?'＋':'−')+'</span>';
@@ -56,11 +57,32 @@ function wtVisualNav(){
     for(const route of g.items){
       index++;
       const link=document.createElement('a');link.href='#/'+route;link.dataset.route=route;
-      link.classList.toggle('active',ui.route===route);
+      const isActive=ui.route===route;
+      link.classList.toggle('active',isActive);
+      if(isActive)link.setAttribute('aria-current','page');
       const ico=document.createElement('span');ico.className='nav-ico';ico.textContent=WT_UI_ICONS[route];
       const name=document.createElement('span');name.className='wt-nav-text';name.textContent=s.labels[route]||WT_UI_LABELS[route];
       const small=document.createElement('small');small.textContent=String(index).padStart(2,'0');
-      link.append(ico,name,small);list.append(link);
+      link.append(ico,name,small);
+      if(route==='handoff'){
+        // Handoff is a clickable top-level route; the two production workspaces
+        // remain independently addressable fixed children in every saved nav layout.
+        const section=document.createElement('div');section.className='nav-group';section.dataset.navGroup='handoff';
+        link.classList.add('nav-parent');
+        link.classList.toggle('is-group-active',['handoff','director','archive'].includes(ui.route));
+        const children=document.createElement('div');children.className='nav-children';children.setAttribute('aria-label','制作交接二级导航');
+        for(const [childRoute,childLabel,childIcon] of [
+          ['director','创意导演台','◈'],['archive','生产调度中心','▤']
+        ]){
+          const sub=document.createElement('a');
+          sub.href='#/'+childRoute;sub.dataset.route=childRoute;sub.className='nav-child';
+          if(ui.route===childRoute){sub.classList.add('active');sub.setAttribute('aria-current','page')}
+          const icon=document.createElement('span');icon.className='nav-child-ico';icon.setAttribute('aria-hidden','true');icon.textContent=childIcon;
+          sub.append(icon,document.createTextNode(childLabel));
+          children.append(sub);
+        }
+        section.append(link,children);list.append(section);
+      }else list.append(link);
     }
     wrap.append(head,list);frag.append(wrap);
   }
