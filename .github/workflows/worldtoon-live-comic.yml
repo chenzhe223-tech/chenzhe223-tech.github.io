@@ -72,5 +72,15 @@ jobs:
           assert len(museum.get('items',[]))>=1,('No licensed museum references',museum)
           assert all(v.get('license')=='CC0' and v.get('rights_verified') is True for v in museum['items'])
           print('CC0 museum visual references online:',len(museum['items']),'sources',museum.get('counts'))
+          start=time.perf_counter()
+          catalog=expect_json('/api/comic/catalog?source=all&limit=250')
+          elapsed=round((time.perf_counter()-start)*1000)
+          assert catalog.get('schema')=='davylab.worldtoon.catalog.v2',catalog
+          assert catalog.get('method')=='d1_snapshot_read',catalog
+          assert len(catalog.get('stats',[]))==5,catalog
+          assert catalog.get('fact_checked') is False,catalog
+          if catalog.get('ready'):
+              assert catalog.get('items'),'Ready catalog may not be empty'
+          print('D1 snapshot catalog HTTP:',elapsed,'ms,ready:',catalog.get('ready'),'sources:',catalog.get('stats'))
           print('WORLD/TOON P0-P3 live endpoints, licensed artwork and model lock passed.')
           print('WORLD/TOON runtime source discovery and four-skill JS smoke passed.')

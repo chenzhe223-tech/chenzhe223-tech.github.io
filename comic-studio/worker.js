@@ -492,14 +492,98 @@ async function heritageVisuals(url){
   {headers:{'cache-control':'public,max-age=3600','x-content-type-options':'nosniff'}});
 }
 
+
+// Discovery Cache v2: serve only materialized D1 snapshots; never scrape on a user's click.
+const WT_CACHE_SOURCES=['news','hackernews','arxiv','classics','history'];
+const WT_CACHE_HOURS={news:2,hackernews:3,arxiv:4,classics:48,history:48};
+function wtCanonicalStory(url){
+ try{const o=new URL(url);if(o.protocol!=='https:')return '';
+  for(const key of [...o.searchParams.keys()])if(/^utm_|^(fbclid|gclid)$/i.test(key))o.searchParams.delete(key);
+  return o.hostname.toLowerCase()+o.pathname.replace(/\/$/,'')+o.search
+ }catch{return ''}
+}
+async function wtDiscoveryRead(env,url){
+ if(!env.DB)return failure('素材缓存数据库未配置',503);
+ const requested=url.searchParams.get('source')||'all';
+ if(requested!=='all'&&!WT_CACHE_SOURCES.includes(requested))return failure('未知素材来源',400);
+ const limit=Math.max(1,Math.min(250,Number(url.searchParams.get('limit'))||200));
+ let rows;
+ try{rows=(await env.DB.prepare('SELECT source,payload,item_count,collected_at,last_attempt_at,last_error FROM wt_discovery_snapshots').all()).results||[]}
+ catch(err){return Response.json({error:'素材缓存无法读取，请检查数据库迁移',detail:String(err.message||err).slice(0,110)},{status:503,headers:RESULT_HEADERS})}
+ const at=Date.now(),items=[],seen=new Set(),stats=[],warnings=[];
+ for(const source of WT_CACHE_SOURCES){
+  if(requested!=='all'&&source!==requested)continue;
+  const row=rows.find(r=>r.source===source);
+  if(!row){stats.push({id:source,count:0,ready:false,stale:true});continue}
+  let payload;try{payload=JSON.parse(row.payload)}catch{warnings.push(source+' 缓存损坏，待后台修复');continue}
+  const age=Math.max(0,at-Date.parse(row.collected_at||0));
+  const stale=!Number.isFinite(age)||age>WT_CACHE_HOURS[source]*3600000;
+  stats.push({id:source,count:row.item_count,ready:true,stale,collectedAt:row.collected_at,
+   lastAttemptAt:row.last_attempt_at,lastError:row.last_error||'',ageMinutes:Math.round(age/60000)});
+  if(row.last_error)warnings.push(source+' 最近一次后台更新失败，继续展示已保存数据');
+  for(const raw of payload.items||[]){
+   if(!raw||typeof raw!=='object'||typeof raw.url!=='string')continue;
+   const key=wtCanonicalStory(raw.url);if(!key||seen.has(key))continue;
+   seen.add(key);items.push({...raw,source_id:raw.source_id||source,cache_source:source});
+  }
+ }
+ const fresh=stats.filter(x=>x.ready).sort((a,b)=>Date.parse(b.collectedAt)-Date.parse(a.collectedAt));
+ const lastUpdated=fresh[0]?.collectedAt||null,ready=stats.some(x=>x.ready);
+ // Every source stays in its existing news/classics/history category. Front end does local filtering.
+ return Response.json({schema:'davylab.worldtoon.catalog.v2',items:items.slice(0,limit),
+  stats,warnings,source:requested,ready,initializing:!ready,complete:stats.every(x=>x.ready),
+  lastUpdated,method:'d1_snapshot_read',fact_checked:false,rights_cleared:false,
+  note:'只读后台缓存，未执行实时集采。数据为未经核验的选题线索，版权和史实需独立复核。'},
+  {headers:{'cache-control':'public,max-age=45,stale-while-revalidate=120','x-content-type-options':'nosniff'}});
+}
+async function wtRefreshOneSource(env,source){
+ const attempted=new Date().toISOString();
+ try{
+  const url=new URL('https://worldtoon.chenzhe223.workers.dev/api/comic/discover?source='+source+'&limit=90');
+  const response=await comicDiscover(url);
+  if(!response.ok)throw Error('采集 HTTP '+response.status);
+  const result=await response.json();const rows=Array.isArray(result.items)?result.items:[];
+  if(!rows.length)throw Error('未采集到任何可信来源，不覆盖缓存');
+  const clean=rows.slice(0,90).filter(x=>x&&typeof x.title==='string'&&wtCanonicalStory(x.url));
+  if(!clean.length)throw Error('所有来源链接无效，不覆盖缓存');
+  const data=JSON.stringify({schema:'davylab.worldtoon.snapshot.v2',source,items:clean});
+  if(data.length>250000)throw Error('来源数据超出安全大小上限');
+  const collected=new Date().toISOString();
+  await env.DB.prepare('INSERT INTO wt_discovery_snapshots(source,payload,item_count,collected_at,last_attempt_at,last_error) VALUES(?,?,?,?,?,NULL) ON CONFLICT(source) DO UPDATE SET payload=excluded.payload,item_count=excluded.item_count,collected_at=excluded.collected_at,last_attempt_at=excluded.last_attempt_at,last_error=NULL')
+   .bind(source,data,clean.length,collected,attempted).run();
+  return {source,ok:true,count:clean.length};
+ }catch(err){
+  const msg=String(err?.message||err).slice(0,160);
+  // Last successful payload remains unchanged. A failed refresh is never an empty snapshot.
+  try{await env.DB.prepare('UPDATE wt_discovery_snapshots SET last_attempt_at=?,last_error=? WHERE source=?')
+   .bind(attempted,msg,source).run()}catch{}
+  return {source,ok:false,error:msg};
+ }
+}
+async function wtDiscoveryScheduled(controller,env){
+ if(!env.DB)throw Error('WorldToon D1 binding missing');
+ const scheduledTime=Number(controller?.scheduledTime)||Date.now();
+ const day=new Date(scheduledTime),hour=day.getUTCHours(),minute=day.getUTCMinutes();
+ const current=(await env.DB.prepare('SELECT source FROM wt_discovery_snapshots').all()).results||[];
+ const has=new Set(current.map(x=>x.source));
+ const due=['news'];
+ for(const source of ['hackernews','arxiv'])if(minute===0||!has.has(source))due.push(source);
+ for(const source of ['classics','history'])if(hour===2&&minute===0||!has.has(source))due.push(source);
+ // First cron run fills every absent snapshot, later updates at the specified cadence.
+ const out=await Promise.all(due.map(source=>wtRefreshOneSource(env,source)));
+ console.log('WorldToon scheduled discovery refresh',JSON.stringify(out));
+ return out;
+}
+
 export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
+ if(url.pathname==='/api/comic/catalog'&&request.method==='GET')return wtDiscoveryRead(env,url);
  if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.png)$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}}
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
