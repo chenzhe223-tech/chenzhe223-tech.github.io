@@ -4,7 +4,7 @@
  */
 'use strict';
 (function(){
-const STYLES=[
+const LEGACY_STYLES=[
  {id:'editorial',name:'杂志墨线',subtitle:'高端商业与社会寓言',palette:['#f0e7d8','#312c27','#c26943','#809387'],
   material:'暖纸纹理、手绘墨线、适度写实',lighting:'柔和侧光、纸张留白',layout:'电影式景别切换、清晰主体',negative:'霓虹紫蓝、光滑塑料、假3D、拥挤文字'},
  {id:'warm',name:'温暖绘本',subtitle:'人物成长与生活观察',palette:['#f5e3cc','#526456','#dd9f6e','#bccec0'],
@@ -18,6 +18,7 @@ const STYLES=[
  {id:'comic',name:'手绘轻喜剧',subtitle:'反转、人间百态与讽刺',palette:['#faf0e0','#283d37','#e58d5a','#a3b598'],
   material:'动画感笔触、简练线条与平涂',lighting:'明快干净、温暖投影',layout:'强烈表情、动感镜头与节奏点',negative:'表情失控、手部畸形、人物五官不一致'}
 ];
+const STYLES=[...window.WTStyleV3.STYLES,...LEGACY_STYLES];
 const ARCS=[
  {id:'twist',name:'反转寓言',detail:'矛盾升级 → 重构认知 → 余味'},
  {id:'journey',name:'人物成长',detail:'欲望 → 挫折 → 改变'},
@@ -48,7 +49,7 @@ function defaultCast(category){
 function ensure(p){
  if(!p) return null;
  if(p.creativeDirection?.version===1)return p.creativeDirection;
- const c={version:1,styleId:/历史|经典|宗教|军事/.test(p.category||'')?'woodcut':/AI|科学|机器人/.test(p.category||'')?'diagram':'editorial',
+ const c={version:1,quality:'Premium',styleId:/历史|经典|宗教|军事/.test(p.category||'')?'chinese-historical-epic':/AI|科学|机器人/.test(p.category||'')?'futuristic-sci-fi':'western-cinematic',
   arcId:/历史|经典/.test(p.category||'')?'chronicle':/科学|AI|机器人/.test(p.category||'')?'explain':'twist',
   thesis:clean(p.description)||'从公开议题出发，通过原创人物讲出冲突、选择与结果。',
   world:/历史|经典/.test(p.category||'')?'取材于时代背景但不虚构史实结论的架空城镇':'与现实新闻不对应的架空城市',
@@ -82,7 +83,7 @@ function castText(c){return c.cast.map((x,i)=>[i+1+'. '+x.role+'：'+x.name,'外
 function payload(p){
  const c=ensure(p),s=style(c.styleId);
  return {
-  version:1,style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
+  version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
   narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
   characters:c.cast.map(x=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature)})),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
@@ -119,9 +120,9 @@ function readiness(p){const missing=checks(p);if(!missing.length&&!approved(p))m
 function exportBrief(p){
  if(!approved(p))throw Error('创作方案尚未锁定，禁止派单');
  const c=p.creativeDirection;
- return {...payload(p),lock_status:'approved',approval:{lock_hash:c.approval.lock_hash,approved_at:c.approval.approved_at,author_approved:true,approval_scope:'style_cast_storyboard',note:'锁定创意设定不等于事实核验或正式发表批准'},
+ return {...payload(p),style_lock:{schema:'davylab.worldtoon.style-lock.v3',style_id:c.styleId,style_version:'3.0.0',quality_target:c.quality||'Premium',aspect_ratio:'3:4',resolution:[1080,1440],render_pipeline:'same_model_preview_and_final_required',model_id:null,model_version:null,preview_sha256:null,character_reference_sha256:null,original_first_panel_required:true,production_status:'awaiting_real_pilot'},lock_status:'approved',approval:{lock_hash:c.approval.lock_hash,approved_at:c.approval.approved_at,author_approved:true,approval_scope:'style_cast_storyboard',note:'锁定创意设定不等于事实核验或正式发表批准'},
  production_gates:{pilot_required:true,pilot_artifacts:['character-sheet.png','pilot-01.png'],pilot_approval_required:true,
-  full_run_panel_count:9,independent_cover:true,character_continuity:true,source_verification_before_fact_claims:true,
+  full_run_panel_count:9,independent_cover:true,character_continuity:true,original_preview_is_panel_01:true,preview_sha256_equals_final_panel_01:true,min_resolution:[1080,1440],reject_svg_and_placeholder:true,source_verification_before_fact_claims:true,
   instructions:'先交付角色设定图与首格样稿由作者审阅；未获作者确认不得批量生成剩余画格或宣布完成。'}};
 }
 function commitEdit(p,label){const c=ensure(p);if(p.handoff?.repoQueuedAt)throw Error('此版本已正式入仓。请先复制为新版作品，再修改和派单');c.approval=null;c.reviewed=false;markDirty(p);setChange(p,label)}
@@ -138,16 +139,8 @@ function field(k,label,value,min=0,kind='textarea'){
  if(kind==='input')return '<label class="director-field">'+label+'<input data-director-field="'+k+'" maxlength="350" value="'+e(val)+'"></label>';
  return '<label class="director-field">'+label+'<textarea data-director-field="'+k+'" rows="3" maxlength="1600">'+e(val)+'</textarea></label>';
 }
-function styleCards(c){
- return '<div class="director-styles">'+STYLES.map(x=>'<button type="button" class="director-style '+(c.styleId===x.id?'selected':'')+'" data-director-style="'+x.id+'" aria-pressed="'+(c.styleId===x.id)+'">'+
- '<span class="director-style-art director-theme-'+x.id+'"><i></i><b></b><em></em></span>'+
- '<strong>'+e(x.name)+'</strong><small>'+e(x.subtitle)+'</small></button>').join('')+'</div>';
-}
-function stylePreview(c){
- const s=style(c.styleId);
- return '<div class="director-art-preview"><div class="director-art-sheet director-theme-'+s.id+'"><span>WORLD / TOON</span><div class="director-wire-figure"><i></i><b></b></div><strong>'+e(s.name)+'</strong><small>配色与构图示意 · 非真实生图</small></div>'+
- '<div class="director-art-rules"><b>统一视觉规范</b><p>材质：'+e(s.material)+'</p><p>光线：'+e(s.lighting)+'</p><p>构图：'+e(s.layout)+'</p><p>禁用：'+e(s.negative)+'</p><p>所有画格：1080×1440，3:4，中文另行排版</p></div></div>';
-}
+function styleCards(c){return window.WTStyleV3.cards(c)}
+function stylePreview(c){return window.WTStyleV3.detail(c)}
 function narrative(p,c){
  return '<div class="director-arcs">'+ARCS.map(x=>'<button type="button" data-director-arc="'+x.id+'" class="'+(c.arcId===x.id?'selected':'')+'"><strong>'+e(x.name)+'</strong><small>'+e(x.detail)+'</small></button>').join('')+'</div>'+
  '<div class="director-fields">'+field('thesis','故事一句话 · 核心表达',c.thesis)+field('world','人物所在世界与场景规则',c.world)+field('emotion','情绪与阅读节奏',c.emotion,'','input')+field('cover','独立封面视觉指令',c.cover)+'</div>';
