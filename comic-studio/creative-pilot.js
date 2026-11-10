@@ -24,7 +24,8 @@ function pilot(p){
   '<label class="director-consent"><input type="checkbox" data-pilot-review="1" '+(c.pilotReviewed?'checked':'')+
   (receipt?.repo_commit?' disabled':'')+'> 我已亲自检查两张实际图片，与锁定的创意圣经一致。</label>'+
   '<div class="buttons"><button type="button" class="button dark" data-pilot-action="approve" '+(busy||!queued||receipt?.repo_commit?'disabled':'')+'>批准试画并记录私有仓回执</button>'+
-  '<button type="button" class="button" data-pilot-action="copy" '+(receipt?.repo_commit?'':'disabled')+'>复制继续制作指令</button></div>'+
+  '<button type="button" class="button" data-pilot-action="copy" '+(receipt?.repo_commit?'':'disabled')+'>复制继续制作指令</button>'+ 
+  '<button type="button" class="button" data-pilot-action="revision" '+(!queued?'disabled':'')+'>试画不满意 · 创建新版本</button></div>'+
   '<p class="minor">'+(!queued?'先正式派单；ChatGPT 提交两张试画后，在这里进行作者审核。':
    receipt?.repo_commit?'创作样稿已获得 GitHub 私有仓确认，可按回执继续剩余画格。':
    '两张样稿上传后，点击批准会把锁码和图片 SHA256 写入私有 GitHub，不会自动发表。')+'</p></section>';
@@ -71,6 +72,28 @@ async function approve(p){
   notify('样稿已完成私有仓确认；可复制继续生产指令');
  }finally{busy=false;render()}
 }
+function revise(p){
+ if(!p.handoff?.repoQueuedAt)throw Error('未正式派单的作品可以直接返回前面步骤修改，无需新建修订版');
+ if(!confirm('试画或剧情不满意？建立独立的新版本会保留旧任务和审批记录，复制现有创作设定供你修改。继续吗？'))return;
+ const edition=Math.max(2,Number(p.creativeRevisionNumber||1)+1);
+ const token=uid().replace(/[^a-z0-9]/gi,'').toLowerCase().slice(-8).padStart(8,'0');
+ const clone=JSON.parse(JSON.stringify(p));
+ clone.id=uid();clone.creativeRevision='r'+edition+'-'+token;clone.creativeRevisionNumber=edition;
+ clone.createdAt=new Date().toISOString();clone.updatedAt=clone.createdAt;clone.status='草稿';
+ clone.archived=false;clone.deleted=false;clone.reviewedAt=null;clone.publishedAt=null;clone.cover='';
+ clone.checks=Array(6).fill(false);
+ clone.handoff={mode:p.handoff?.mode||'hotspot'};
+ clone.activity=[{at:clone.createdAt,detail:'从第'+(edition-1)+'版复制制作方案，等待重新审阅'}];
+ clone.panels=(clone.panels||[]).map(x=>({...x,id:uid(),image:''}));
+ if(clone.creativeDirection){
+  clone.creativeDirection.approval=null;clone.creativeDirection.reviewed=false;
+  clone.creativeDirection.pilot=null;clone.creativeDirection.pilotApproval=null;
+  clone.creativeDirection.pilotReviewed=false;
+ }
+ data.projects.unshift(clone);ui.selected=clone.id;persist();
+ nav('director/'+clone.id);notify('已创建独立修订版 V'+edition+'；旧任务保留不覆盖。重新确认后可生成新的 ChatGPT 工单。');
+}
+
 async function copy(p){
  const c=p.creativeDirection,a=c?.pilotApproval;
  if(!a?.repo_commit)throw Error('尚无已确认的 GitHub 样稿审核回执');
@@ -97,7 +120,7 @@ document.addEventListener('click',ev=>{
  const el=ev.target.closest('[data-pilot-action]');if(!el)return;
  ev.preventDefault();ev.stopImmediatePropagation();
  const p=selected();if(!p)return;
- Promise.resolve(el.dataset.pilotAction==='approve'?approve(p):copy(p)).catch(err=>notify('样稿验收：'+String(err.message||err)));
+ Promise.resolve(el.dataset.pilotAction==='approve'?approve(p):el.dataset.pilotAction==='revision'?revise(p):copy(p)).catch(err=>notify('样稿验收：'+String(err.message||err)));
 },true);
 document.addEventListener('change',ev=>{
  const el=ev.target,p=selected();if(!p||!el)return;
@@ -107,6 +130,6 @@ document.addEventListener('change',ev=>{
   p.creativeDirection.pilotApproval=null;setChange(p,'记录样稿复核状态');render();
  }
 },true);
-window.wtPilot={pilot,upload,approve,copy};
+window.wtPilot={pilot,upload,approve,copy,revise};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
 })();
