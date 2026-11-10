@@ -1,0 +1,31 @@
+name: WorldToon V3 Frontend & Production Guard
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/style-v3.js'
+      - 'comic-studio/style-v3.css'
+      - 'comic-studio/worker.js'
+      - 'comic-studio/creative-pilot.js'
+      - 'comic-studio/index.html'
+      - 'comic-studio/tests/style-v3-production.cjs'
+      - '.github/workflows/worldtoon-v3-frontend.yml'
+permissions:
+  contents: read
+jobs:
+  static-visual-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check script syntax
+        run: |
+          node --check comic-studio/style-v3.js
+          node --check comic-studio/creative-pilot.js
+          node --check comic-studio/worker.js
+      - name: Verify 20 style catalog, real pilot gate and Worker routing
+        run: node comic-studio/tests/style-v3-production.cjs
