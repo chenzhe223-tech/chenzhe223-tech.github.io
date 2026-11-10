@@ -14,7 +14,7 @@ function pilot(p){
   '<div class="director-pilot-missing">'+label+' · 尚未上传实际图片</div>';
  return '<section class="box director-pilot"><div class="director-pilot-heading"><div><div class="kicker">VISUAL PILOT / FIRST PROOF</div>'+
   '<h2>先看两张真样稿，再批量生成</h2>'+
-  '<p class="minor">ChatGPT 先交角色定妆和第一格试画；上传本区逐项审阅。CSS 配色示意不等于画风验收。</p></div>'+
+  '<p class="minor">ChatGPT 先交角色定妆及正式尺寸的第一格原图。审核通过后第一格原图不允许再生成或替换；CSS 示意不等于画质。</p></div>'+
   '<span class="director-status '+(receipt?.repo_commit?'ready':'')+'">'+(receipt?.repo_commit?'已批准样稿':'待样稿确认')+'</span></div>'+
   '<div class="director-pilot-grid">'+
   [['character','角色定妆图','characterImage'],['panel','首格试画','panelImage']].map(([type,title,key])=>
@@ -38,7 +38,10 @@ async function upload(p,type,file){
  if(file.type!=='image/png'||!file.name.toLowerCase().endsWith('.png')||file.size>12*1024*1024||file.size<40000)throw Error('样稿必须是与私有 GitHub 文件完全一致的真实 PNG（40KB～12MB）');
  const bytes=new Uint8Array(await file.arrayBuffer()),blob=wfImageFile(file.name,bytes);
  const image=await createImageBitmap(blob),width=image.width,height=image.height;image.close?.();
- if(width<640||height<640)throw Error('真实样稿宽高须至少640像素');
+ const strictV3=!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===c.styleId);
+ if(type==='panel'&&strictV3&&(width!==1080||height!==1440))throw Error('V3 首格真实预览必须是正式模型原生 1080×1440 PNG；不得将低分辨率图放大、裁切或重新渲染代替');
+ if(type==='character'&&strictV3&&(width<1080||height<1440))throw Error('V3 角色定妆图至少 1080×1440');
+ if(!strictV3&&(width<640||height<640))throw Error('真实样稿宽高须至少640像素');
  const sha=shaHex(await crypto.subtle.digest('SHA-256',bytes)),key=uid();
  await putMedia(key,blob);
  const old=c.pilot?.[TYPES[type]];
