@@ -185,7 +185,7 @@ const WT_API='https://api.github.com/repos/'+WT_REPO;
 const WT_TASK_SCHEMA='davylab.worldtoon.task.v2';
 function wtJson(value,status=200){return Response.json(value,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+decodeURIComponent(u.pathname).replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
-async function wtArchiveKey(sources,title){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
+async function wtArchiveKey(sources,title,revision=''){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');if(revision){if(!/^r[2-9][0-9]*-[a-z0-9]{8}$/.test(revision))throw Error('创意修订标识非法');normalized+='\nrevision:'+revision}return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
 function wtB64(s){const x=new TextEncoder().encode(s);let result='';for(let i=0;i<x.length;i+=8192)result+=String.fromCharCode(...x.subarray(i,i+8192));return btoa(result)}
 function wtUnb64(s){const bytes=atob(String(s||'').replace(/\s+/g,''));return new TextDecoder().decode(Uint8Array.from(bytes,c=>c.charCodeAt(0)))}
 async function wtGithub(env,repoPath,method='GET',obj=null){if(!env.WORLDTOON_GITHUB_TOKEN)throw Error('漫画仓库 GitHub Token 尚未配置');const url=WT_API+'/contents/'+repoPath;const r=await fetch(url,{method,headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5',...(obj?{'content-type':'application/json'}:{})},body:obj?JSON.stringify(obj):undefined,signal:AbortSignal.timeout(14000)});const json=await r.json().catch(()=>({message:'GitHub API response invalid'}));return {status:r.status,ok:r.ok,body:json}}
@@ -386,7 +386,7 @@ async function wtArchiveApi(request,env,url){
       return wtJson({code:'CREATIVE_APPROVAL_REQUIRED',error:'正式派单前必须锁定画风、人物和九格分镜，并要求 ChatGPT 先交角色定妆和首格样稿'},422);
 if(t.editorial.sources.length===0&&t.mode!=='original'&&t.research_required!==true)return wtJson({error:'无原始来源的热点任务必须明确标注“待核验／先研究”'},400);
   if(t.research_required===true&&t.mode==='hotspot'&&(!t.editorial.fact_notes||!t.editorial.fictionalization))return wtJson({error:'待核验任务需要事实边界与虚构改编安全规则'},400);
-  const key=await wtArchiveKey(t.editorial.sources,t.title);const id='WT-'+key.slice(0,20);
+  const key=await wtArchiveKey(t.editorial.sources,t.title,t.creative_revision||'');const id='WT-'+key.slice(0,20);
   if(t.dedupe_key!==key||t.task_id!==id)return wtJson({error:'任务 ID 或去重指纹不一致'},409);
   const path='tasks/'+id+'/task.json',promptPath='tasks/'+id+'/prompt.md';
   try{
