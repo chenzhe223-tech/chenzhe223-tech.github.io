@@ -122,6 +122,73 @@ async function authenticate(request,env){const auth=request.headers.get('authori
 async function quota(env,userId,kind,cap){if(!env.DB)throw Error('配额数据库未配置');let day=new Date().toISOString().slice(0,10);const key=userId+':'+day+':'+kind;let r=await env.DB.prepare('INSERT INTO usage_counts(id,uses,updated_at) VALUES(?,1,?) ON CONFLICT(id) DO UPDATE SET uses=uses+1,updated_at=excluded.updated_at WHERE uses<? RETURNING uses').bind(key,new Date().toISOString(),cap).first();if(!r)throw Error('今日模型使用上限已到，请明天再试');return r.uses;}
 function parseJSON(text){let s=String(text||'').replace(/<think>[\s\S]*?<\/think>/gi,'').trim().replace(/^```(?:json)?\s*/,'').replace(/```$/,'');try{return JSON.parse(s)}catch{let a=s.indexOf('{'),b=s.lastIndexOf('}');if(a>=0&&b>a)return JSON.parse(s.slice(a,b+1));throw Error('AI 回复不是有效 JSON')}}
 function aiError(err){let msg=String(err?.message||err);return msg.slice(0,250)}
+/* WORLD/TOON: storyboard-only inference, independent from the paid/disabled image pipeline.
+ * BYO API keys are request-scoped, never persisted, echoed, logged or exposed to frontend bundles. */
+async function wtStoryboardAI(request,env){
+ const auth=await authenticate(request,env);
+ if(!auth)return failure('请先登录后使用大模型生成；未登录仍可使用本地故事草稿和人工编辑。',401);
+ let body=await request.json().catch(()=>null);
+ if(!body||typeof body!=='object'||JSON.stringify(body).length>21000)return failure('剧情数据不完整或超过安全大小限制',400);
+ const provider=String(body.provider||'native');
+ if(!['native','deepseek','openai'].includes(provider))return failure('不支持该模型服务商',400);
+ const title=String(body.title||'').trim().slice(0,220),summary=String(body.summary||'').slice(0,1700);
+ if(title.length<2||summary.length<8)return failure('请先补充作品标题与故事背景',400);
+ if(provider==='native'&&!env.AI)return failure('当前未接入可用的内置文字模型，请使用本地故事草稿或自行接入API。',503);
+ const key=String(body.apiKey||'').trim();
+ if(provider!=='native'&&(key.length<12||key.length>320||/[\r\n]/.test(key)))return failure('请填写有效API Key（仅用于本次生成）',400);
+ const models={deepseek:['deepseek-chat'],openai:['gpt-4o-mini','gpt-4.1-mini']};
+ const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider][0]);
+ if(provider!=='native'&&!models[provider].includes(model))return failure('模型名称不在受支持列表中',400);
+ const story={title,summary,category:String(body.category||'').slice(0,100),
+  arc:String(body.arc||'反转寓言').slice(0,80),
+  thesis:String(body.thesis||'').slice(0,800),
+  world:String(body.world||'').slice(0,600),emotion:String(body.emotion||'').slice(0,300),
+  fiction:String(body.fiction||'').slice(0,600),
+  style:String(body.style||'').slice(0,200),styleRules:String(body.styleRules||'').slice(0,950),
+  cast:Array.isArray(body.cast)?body.cast.slice(0,4).map(x=>({
+   name:String(x?.name||'').slice(0,50),look:String(x?.look||'').slice(0,250),
+   clothes:String(x?.clothes||'').slice(0,250),symbol:String(x?.symbol||'').slice(0,130),
+   nature:String(x?.nature||'').slice(0,160)})):[],
+  episodes:Array.isArray(body.episodes)?body.episodes.slice(0,6).map(x=>String(x).slice(0,160)):[]
+ };
+ if(story.cast.length<2||story.cast.some(x=>!x.name))return failure('至少需要两位原创角色的设定',400);
+ try{
+  await quota(env,'__worldtoon_storyboard_global__',provider==='native'?'native':'external',provider==='native'?12:80);
+  await quota(env,auth.id,'storyboard_'+provider,provider==='native'?3:10);
+ }catch{return failure('今日九格AI生成额度已用完；可以使用本地故事草稿并逐格编辑。',429)}
+ const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作9格原创中文漫画剧本。九格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须9个，不要Markdown或其他说明。';
+ let answer='',actualModel=model;
+ try{
+  const messages=[{role:'system',content:system},{role:'user',content:JSON.stringify(story)}];
+  if(provider==='native'){
+   const result=await env.AI.run(model,{messages,max_tokens:3300,temperature:0.65});
+   answer=String(result?.response||result?.choices?.[0]?.message?.content||'');
+  }else{
+   const url=provider==='deepseek'?'https://api.deepseek.com/chat/completions':'https://api.openai.com/v1/chat/completions';
+   const result=await fetch(url,{method:'POST',signal:AbortSignal.timeout(38000),
+    headers:{'content-type':'application/json','authorization':'Bearer '+key},
+    body:JSON.stringify({model,messages,temperature:0.7,max_tokens:provider==='deepseek'?3800:3300,response_format:{type:'json_object'}})});
+   if(!result.ok)return failure('外部模型请求失败（HTTP '+result.status+'）。请检查余额、权限或模型名称。',502);
+   const parsed=await result.json();answer=String(parsed?.choices?.[0]?.message?.content||'');
+   actualModel=String(parsed?.model||model).slice(0,100);
+  }
+  const raw=parseJSON(answer);
+  if(!Array.isArray(raw.panels)||raw.panels.length!==9)return failure('模型未完整生成九格，请重试或使用本地草稿。',502);
+  const panels=raw.panels.map((x,i)=>{
+   const title=String(x?.title||'').trim().slice(0,100);
+   const scene=String(x?.scene||'').trim().slice(0,1700);
+   const caption=String(x?.caption||'').trim().slice(0,550);
+   const dialogue=String(x?.dialogue||'').trim().slice(0,550);
+   const prompt=String(x?.prompt||'').trim().slice(0,1200);
+   if(title.length<2||scene.length<32||!caption&&!dialogue)throw Error('模型第'+(i+1)+'格内容不完整');
+   return {title,scene,caption,dialogue,prompt};
+  });
+  return Response.json({panels,analysis:String(raw.analysis||'').slice(0,600),
+   provider,model:actualModel,method:'verified_model_response',generated_at:new Date().toISOString(),draft:true,
+   requiresHumanReview:true,rightsCleared:false,factChecked:false},
+   {headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
+ }catch(err){return failure('模型没有返回符合要求的九格草稿，请重试或使用本地规则建议。',502)}
+}
 async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';if(type!=='characters'&&env.AI_ENABLED!=='true')return failure('生图与编剧模型尚未获批启用；角色设计可使用免费 DeepSeek。',503);if(!env.AI)return failure('AI 免费模型绑定未配置',503);const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');if(type==='characters'&&String(body.concept||'').trim().length<6)return failure('请输入至少六个字的故事背景或人物设定',400);try{await quota(env,'__worldtoon_global__',type,type==='characters'?5:type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure('今日免费生成额度已用完，请明天再试。',429)}
 try{
  if(type==='characters'){
@@ -711,12 +778,13 @@ async function wtDiscoveryScheduled(controller,env){
 
 export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
- if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
+ if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,storyboardAiEnabled:!!env.AI,storyboardAiRequiresLogin:true,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/comic/catalog'&&request.method==='GET')return wtDiscoveryRead(env,url,ctx);
  if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
+ if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
  try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
