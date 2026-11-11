@@ -15,7 +15,14 @@ const path=require('node:path');
    const errors=[];
    page.on('pageerror',err=>errors.push(err.message));
    await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
-   await page.waitForFunction(()=>window.WTStyleV3?.CATALOG?.length===21,{timeout:30000});
+   let ready=false;
+   for(let attempt=0;attempt<22;attempt++){
+     ready=await page.evaluate(()=>window.WTStyleV3?.CATALOG?.length===21);
+     if(ready)break;
+     await page.waitForTimeout(4500);
+     await page.reload({waitUntil:'domcontentloaded',timeout:30000});
+   }
+   if(!ready)throw Error('Live WorldToon Creative Director has not deployed 21 styles; refusing a mock pass');
    await page.evaluate(()=>{
     const view=document.getElementById('view');
     view.innerHTML='<div class="director-page"><section class="box director-section"><h2>选择漫画画风</h2>'+
