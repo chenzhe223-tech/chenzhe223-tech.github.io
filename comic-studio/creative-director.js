@@ -388,7 +388,7 @@ async function handlePortraitUpload(el){
  person.portraitMedia='media:'+key;person.portraitSha256=sha;person.portraitExt=ext;
  person.portraitNotes='请依据授权照片保持面部骨相、眼鼻嘴比例、发型和自然表情的可辨识相似，转为原创3D漫画形象；不要声称原图是真实生成结果。';
  p.characters=castText(c);
- commitEdit(p,'保存授权真人肖像与 3D 拟人角色参考（本机加密存储依赖设备环境）');
+ commitEdit(p,'保存授权真人肖像与 3D 拟人角色参考（仅本机 IndexedDB，未上传远端）');
  render();notify('肖像参考已保存于当前设备；生成任务时将包含照片参考和 SHA256。');
 }
 document.addEventListener('change',ev=>{
