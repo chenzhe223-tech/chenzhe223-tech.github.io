@@ -11,7 +11,14 @@
  function beatOptions(x){
   if(Array.isArray(x?.beats)&&x.beats.length)return x.beats;
   const paragraphs=story.synopsis.split(/\n+/).map(v=>v.trim()).filter(v=>v.length>=15).slice(0,8);
-  return paragraphs.map((v,i)=>({id:'author-'+i,title:'作者提供的第 '+(i+1)+' 段',summary:v.slice(0,240),basis:'用户主动提供的可用剧情摘要（非自动抓取原文）',tags:[]}));
+  if(paragraphs.length)return paragraphs.map((v,i)=>({id:'author-'+i,title:'作者提供的第 '+(i+1)+' 段',summary:v.slice(0,240),basis:'用户主动提供的可用剧情摘要（非自动抓取原文）',tags:[]}));
+  // Book descriptions can contain attributable plot hints. Extract only their own
+  // sentences, labeled as metadata-derived choices, never invent chapter numbers.
+  if(x?.source_kind==='book_metadata'&&String(x.summary||'').length>50){
+    const parts=String(x.summary).split(/[。！？；.!?]/).map(v=>v.trim()).filter(v=>v.length>=23).slice(0,6);
+    return parts.map((v,i)=>({id:'meta-'+i,title:'书目简介线索 '+(i+1),summary:v.slice(0,200),basis:'Google Books 公开图书简介 · 非原著章节',tags:[]}));
+  }
+  return [];
  }
  function quick(id,label){return '<button type="button" class="button story-chip" data-story-quick="'+html(id)+'">'+html(label)+'</button>'}
  function bookResult(x,i){return '<article class="story-result" role="listitem">'+
@@ -30,7 +37,7 @@
   '<button class="button" data-story-back="1">返回结果</button></div>'+
   '<p class="story-rights '+(isProtected(x)?'warning':'')+'"><strong>'+html(isProtected(x)?'受版权保护／权利待核实':'公版候选')+'：</strong>'+html(x.rights_note||'请核对原作、版本和目标出版地区的版权与改编许可。')+'</p>'+
   (x.source_kind==='web_search_lead'?'<p class="story-note">此结果仅为公开报道线索，不代表剧名已核实。进入漫画制作前请查看实际作品资料。</p>':'')+
-  (!Array.isArray(x.beats)||!x.beats.length?'<label class="story-paste">补充你有权使用的剧情简介（每段一行）<textarea id="story-synopsis" rows="4" placeholder="请粘贴你有权使用的剧情概要；不可直接粘贴受保护作品的大段原文。">'+html(story.synopsis)+'</textarea></label>'+
+  (!Array.isArray(x.beats)||!x.beats.length?'<label class="story-paste">可补充更准确、你有权使用的剧情简介（每段一行）<textarea id="story-synopsis" rows="4" placeholder="请粘贴你有权使用的剧情概要；不可直接粘贴受保护作品的大段原文。">'+html(story.synopsis)+'</textarea></label>'+
    '<button type="button" class="button" data-story-parse="1">从概要提取可选片段</button><p class="story-note">仅按你输入的段落拆分，不伪造原著章节。若没有有效概要，可先浏览来源。</p>':'')+
   '<div class="story-beats">'+(beats.length?beats.map((b,i)=>
    '<label class="story-beat"><input type="checkbox" data-story-beat="'+html(b.id)+'" '+(story.chosen.has(String(b.id))?'checked':'')+'>'+
