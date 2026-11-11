@@ -75,7 +75,7 @@
   const officialAcademic=n.source_id==='academic_events'&&/^https:\/\/(?:www\.|rs-uks-score01\.)?royalsociety\.org\//.test(String(n.url||''))&&
    n.editorial_basis==='official_event_listing'&&/^\d{4}-\d{2}-\d{2}$/.test(String(n.eventDate||''));
   const detailedSeries=beats.length>=3&&episodes.length>=3;
-  const eventDays=officialAcademic?(Date.parse(n.eventDate+'T00:00:00Z')-opts.now||Date.now())/86400000:Infinity;
+  const eventDays=officialAcademic?(Date.parse(n.eventDate+'T00:00:00Z')-(Number.isFinite(opts.now)?opts.now:Date.now()))/86400000:Infinity;
   const eventNear=officialAcademic?(eventDays>=-1&&eventDays<=14?22:eventDays>=-1&&eventDays<=45?14:eventDays>=-1&&eventDays<=120?8:0):0;
   const heat=evergreen?clamp(62+h.value/2+(detailedSeries?5:0)):
    officialAcademic?clamp(50+eventNear):clamp(39+time+category.heat+h.value+(verifiedURL?3:0));
