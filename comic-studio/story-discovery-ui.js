@@ -8,6 +8,19 @@
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
+ function originalTopicChoices(x){
+  const label=String(x?.genre||x?.type||'').slice(0,80);
+  const domain=/玄幻|仙侠|修仙|妖/.test(label)?'架空修行世界':
+    /古风|历史|权谋/.test(label)?'原创古代城邦':
+    /家庭|伦理|亲情/.test(label)?'虚构家庭与社区':
+    /职场|银行|商战|总裁|都市/.test(label)?'架空都市职场':
+    /悬疑|推理|脑洞/.test(label)?'原创悬疑小镇':'原创当代城市';
+  return [
+   {id:'concept-identity',title:'原创方向 A · 身份反转',summary:domain+'中，一位平凡主人公意外获得新责任，通过自己的决定重新赢得信任。角色、冲突与结局均须重新创作。',basis:'AI 制作前的通用原创主题建议 · 不是原剧剧情',tags:['身份反转','成长']},
+   {id:'concept-choice',title:'原创方向 B · 价值抉择',summary:domain+'里，两名观点不同的成年人因一个公共难题结伴行动，在利益与原则之间作出艰难选择。',basis:'通用原创主题建议 · 非原著章节或原剧集数',tags:['价值抉择','人物冲突']},
+   {id:'concept-mystery',title:'原创方向 C · 悬念与误会',summary:domain+'出现一桩出人意料的误会，几位原创人物从不同角度寻找线索，最终发现问题根源并完成反转。',basis:'通用原创主题建议 · 不依赖受保护的具体故事',tags:['悬念','反转']}
+  ];
+ }
  function beatOptions(x){
   if(Array.isArray(x?.beats)&&x.beats.length)return x.beats;
   const paragraphs=story.synopsis.split(/\n+/).map(v=>v.trim()).filter(v=>v.length>=15).slice(0,8);
@@ -18,6 +31,9 @@
     const parts=String(x.summary).split(/[。！？；.!?]/).map(v=>v.trim()).filter(v=>v.length>=23).slice(0,6);
     return parts.map((v,i)=>({id:'meta-'+i,title:'书目简介线索 '+(i+1),summary:v.slice(0,200),basis:'Google Books 公开图书简介 · 非原著章节',tags:[]}));
   }
+  // Discovery metadata is not permission to invent missing source episodes.
+  // Only in the independent-original mode, offer visibly original themes.
+  if(story.mode==='original'&&x?.title)return originalTopicChoices(x);
   return [];
  }
  function quick(id,label){return '<button type="button" class="button story-chip" data-story-quick="'+html(id)+'">'+html(label)+'</button>'}
@@ -38,11 +54,11 @@
   '<p class="story-rights '+(isProtected(x)?'warning':'')+'"><strong>'+html(isProtected(x)?'受版权保护／权利待核实':'公版候选')+'：</strong>'+html(x.rights_note||'请核对原作、版本和目标出版地区的版权与改编许可。')+'</p>'+
   (x.source_kind==='web_search_lead'?'<p class="story-note">此结果仅为公开报道线索，不代表剧名已核实。进入漫画制作前请查看实际作品资料。</p>':'')+
   (!Array.isArray(x.beats)||!x.beats.length?'<label class="story-paste">可补充更准确、你有权使用的剧情简介（每段一行）<textarea id="story-synopsis" rows="4" placeholder="请粘贴你有权使用的剧情概要；不可直接粘贴受保护作品的大段原文。">'+html(story.synopsis)+'</textarea></label>'+
-   '<button type="button" class="button" data-story-parse="1">从概要提取可选片段</button><p class="story-note">仅按你输入的段落拆分，不伪造原著章节。若没有有效概要，可先浏览来源。</p>':'')+
+   '<button type="button" class="button" data-story-parse="1">从概要提取可选片段</button><p class="story-note">仅按你输入的段落拆分，不伪造原著章节。未核实剧情时，原创模式仅提供独立主题方向，不声称是原剧内容。</p>':'')+
   '<div class="story-beats">'+(beats.length?beats.map((b,i)=>
    '<label class="story-beat"><input type="checkbox" data-story-beat="'+html(b.id)+'" '+(story.chosen.has(String(b.id))?'checked':'')+'>'+
    '<span><strong>'+String(i+1).padStart(2,'0')+' · '+html(b.title)+'</strong><small>'+html(b.summary)+'</small><em>'+html(b.basis||'资料概要 · 非具体集数')+'</em></span></label>').join(''):
-   '<div class="story-none">缺少可核实的剧情分段。请先查看原始链接，或输入授权剧情简介，再选择片段。</div>')+'</div>'+
+   '<div class="story-none">暂缺可核实的原作剧情。忠实改编请补充有权使用的剧情概要；原创模式可选择独立主题方向。</div>')+'</div>'+
   '<div class="story-production-choices"><div><label for="story-adaptation">改编方式</label><select id="story-adaptation">'+
   '<option value="original"'+(story.mode==='original'?' selected':'')+'>全新原创故事（仅取抽象主题，不复刻人物）</option>'+
   '<option value="faithful"'+(story.mode==='faithful'?' selected':'')+'>忠实改编（须确认公版或有效授权）</option></select></div>'+
