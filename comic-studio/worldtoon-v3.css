@@ -87,3 +87,49 @@
   .wt3-books{grid-template-columns:minmax(0,1fr)}
   .wt3-book-info h3{font-size:16px}
 }
+
+
+/* WORLD/TOON owner QA · editorial two-column checklist.
+   Explicitly scoped to the publication gate; no effect on other checkbox UIs. */
+.wt3-final-review{padding:clamp(20px,2.2vw,34px);min-width:0}
+.wt3-final-review>h2{margin:10px 0 12px;font-size:clamp(22px,2.4vw,30px);line-height:1.35;letter-spacing:-.02em}
+.wt3-final-review>.minor{line-height:1.8;max-width:920px}
+.wt3-final-review>p:has(>strong){margin:19px 0 15px;line-height:1.7;font-size:13px}
+.wt3-qa-panel{margin:18px 0 22px;min-width:0}
+.wt3-qa-toolbar{display:flex;justify-content:space-between;align-items:center;gap:14px 20px;flex-wrap:wrap;margin-bottom:10px}
+.wt3-qa-toolbar-title{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;min-width:0}
+.wt3-qa-toolbar-title strong{font-size:16px;line-height:1.5;color:#342b26}
+.wt3-qa-toolbar-title span{font-size:13px;line-height:1.5;color:#796d60}
+.wt3-qa-toolbar-title b{font-size:16px;color:#3d5c4b;font-variant-numeric:tabular-nums}
+.wt3-qa-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.wt3-qa-actions .button{min-height:36px;padding:8px 14px;font-size:12px;line-height:1.4;border-radius:8px}
+.wt3-qa-actions .button:disabled{opacity:.45;cursor:default}
+.wt3-qa-hint{margin:0 0 16px;color:#756e64;font-size:12px;line-height:1.75}
+.wt3-final-review .wt3-qa-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;align-items:stretch;margin:0}
+.wt3-final-review .wt3-qa-item{display:flex;align-items:flex-start;gap:12px;box-sizing:border-box;min-width:0;margin:0;padding:15px 17px;min-height:74px;background:#faf8f3;border:1px solid #e4dbcf;border-radius:10px;cursor:pointer;line-height:1.65;transition:background .15s ease,border-color .15s ease}
+.wt3-final-review .wt3-qa-item:hover{border-color:#b7a693;background:#f7f2e9}
+.wt3-final-review .wt3-qa-item.is-checked{border-color:#afc2ad;background:#f2f6ee}
+.wt3-final-review .wt3-qa-item input[type=checkbox]{flex:0 0 18px;width:18px;height:18px;min-width:18px;margin:2px 0 0;accent-color:#41644e;cursor:pointer}
+.wt3-final-review .wt3-qa-item span{display:block;min-width:0;flex:1;color:#37312b;font-size:13px;font-weight:500;line-height:1.7;overflow-wrap:anywhere}
+.wt3-final-review>.field{margin:22px 0 18px;min-width:0}
+.wt3-final-review>.field>label{display:block;margin-bottom:9px;font-size:13px;line-height:1.6;font-weight:650}
+.wt3-final-review #wt3-sources{box-sizing:border-box;width:100%;min-height:94px;padding:14px 16px;border-radius:9px;font-size:13px;line-height:1.75;resize:vertical}
+.wt3-final-review .wt3-sign{display:flex;align-items:flex-start;gap:10px;max-width:980px;margin:18px 0;line-height:1.75;font-size:13px}
+.wt3-final-review .wt3-sign input{flex:0 0 17px;width:17px;height:17px;margin:3px 0 0;accent-color:#41644e}
+.wt3-final-review>.buttons{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 12px}
+.wt3-final-review>.buttons .button{min-height:40px}
+.wt3-final-review .wt3-review-progress{margin:12px 0 0;color:#7d7164;font-size:12px;line-height:1.65}
+.wt3-final-review .wt3-review-progress b{font-variant-numeric:tabular-nums;color:#395b48}
+@media(max-width:760px){
+ .wt3-final-review .wt3-qa-list{grid-template-columns:minmax(0,1fr);gap:9px}
+ .wt3-final-review .wt3-qa-item{min-height:0;padding:13px 14px}
+ .wt3-qa-toolbar{align-items:flex-start}
+}
+@media(max-width:480px){
+ .wt3-final-review{padding:16px}
+ .wt3-qa-toolbar-title{gap:7px 12px}
+ .wt3-qa-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+ .wt3-qa-actions .button{width:100%;min-width:0}
+ .wt3-final-review .wt3-qa-item span{font-size:12.5px;line-height:1.7}
+ .wt3-final-review>.buttons .button{width:100%}
+}
