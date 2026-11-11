@@ -134,27 +134,53 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(auto&&(!wtSession?.access_token||!wtConfig?.storyboardAiEnabled)){
   draft(p,false);return;
  }
- if(provider!=='native'){
-  if(!storyApiKey.trim()){notify('请输入 '+(provider==='deepseek'?'DeepSeek':'OpenAI')+' API Key，仅用于本次请求');return}
-  if(!auto&&!confirm('将使用你提供的第三方模型 API。供应商可能按使用量收费；确认本次调用？'))return;
+ if(provider==='deepseek'){
+  if(!auto&&!confirm('将调用当前 WORLD/TOON 已配置的 DeepSeek 服务端真实模型生成剧本，可能按 Token 计费。确认本次调用吗？'))return;
+ }else if(provider!=='native'){
+  if(!storyApiKey.trim()){notify('请输入 OpenAI API Key，仅用于本次请求');return}
+  if(!auto&&!confirm('将使用你提供的第三方模型 API，供应商可能按用量收费。确认本次调用？'))return;
  }
  if(!auto&&replace&&p.panels.some(x=>clean(x.scene))){
   if(!confirm('将用新剧本替换当前文字与分镜；不会删除已有的漫画图片。确定继续？'))return;
  }
  storyBusy=true;render();
  try{
-  if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
   const basis=digest(p);
-  const result=await wtCallAI('/api/ai/storyboard',aiStoryPayload(p,provider));
-  if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length!==p.panels.length)throw Error('没有收到九格完整的模型生成结果');
+  let result;
+  if(provider==='deepseek'){
+    if(typeof wtArchiveApi!=='function')throw Error('安全 DeepSeek 网关尚未加载');
+    const genre=p.plotGenre==='viral-melodrama'?'狗血网红爽剧':'通用故事';
+    const theme=p.dramaSubtype||'rebirth-bank-rich',intensity=Number(p.dramaIntensity||4);
+    const idea=(p.ideaSeed||p.description||ensure(p).thesis||'').slice(0,1100)+
+      (genre==='狗血网红爽剧'?'\\n【作者创作要求】原创成年人的都市重生逆袭、富婆/金融职场、网红热搜与合约男明星的情感纠葛。狗血反转强度 '+intensity+'/5；具体题材'+theme+'；每2–3格有反转，开场强悬念，结尾强钩子。全为架空虚构人物，不捏造真人丑闻。':'');
+    if(idea.trim().length<8||idea.length>1800)throw Error('请先完善8–1800字的故事核心构思');
+    const response=await wtArchiveApi('deepseek-expand',{method:'POST',
+      body:JSON.stringify({idea,title:p.title,category:genre,panel_count:p.panels.length,
+        genre:p.plotGenre||'general',drama_subtype:theme,drama_intensity:intensity,
+        series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
+    if(response?.method!=='verified_model_response'||!response.story?.panels)
+      throw Error('未收到真实 DeepSeek 结构化剧本');
+    result={method:'verified_model_response',provider:'deepseek',model:response.model||'deepseek-flash',
+      analysis:response.story.reasoning||'',panels:response.story.panels.map(x=>({
+        title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,prompt:x.visual_prompt}))};
+  }else{
+    if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
+    result=await wtCallAI('/api/ai/storyboard',aiStoryPayload(p,provider));
+  }
+  if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length<4||result.panels.length>60)
+     throw Error('模型未返回可用的4–60格完整分镜');
   if(selected()?.id!==p.id||p.handoff?.repoQueuedAt)throw Error('当前作品已切换或已派单，原始草稿未被覆盖');
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
+  if(result.panels.length!==p.panels.length){
+    if(p.panels.some(x=>x.image)||p.cover)throw Error('AI 推荐的新篇幅与已上传图片不匹配，请先建立修订作品');
+    p.panels=Array.from({length:result.panels.length},(_,i)=>p.panels[i]||makePanel(i));
+  }
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
   if(wrote)notify('已使用 '+(provider==='native'?'平台内置AI':provider==='deepseek'?'DeepSeek':'OpenAI')+' 生成可编辑九格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
    draft(p,false);notify('内置模型暂不可用，已退回本地规则草稿（非AI模型输出）');
-  }else notify('AI九格生成失败：'+String(err?.message||err).slice(0,110));
+  }else notify('AI剧本生成失败：'+String(err?.message||err).slice(0,110));
  }finally{storyBusy=false;render()}
 }
 function scheduleAutoStoryboard(p){
@@ -266,15 +292,15 @@ function storyControls(p,c){
  const origin=info?.method==='verified_model_response'?'AI生成 · '+(info.provider==='native'?'平台内置模型':info.provider==='deepseek'?'DeepSeek API':'OpenAI API')+(info.model?' · '+info.model:''):
     info?.method==='local_structure_rules'?'本地剧情分析规则 · 非AI模型输出':'尚未生成 · 将优先使用内置AI';
  const providerLabel=storyProvider==='deepseek'?'DeepSeek':storyProvider==='openai'?'OpenAI':'内置AI';
- return '<div class="director-ai-workflow" role="group" aria-label="九格剧本智能生成">'+
- '<div class="director-ai-head"><div><strong>自动编剧 · 九格完整分镜</strong><span>默认自动分析选题、人物与画风；模型结果和人工编辑都写入当前作品。</span></div>'+
+ return '<div class="director-ai-workflow" role="group" aria-label="动态篇幅剧本智能生成">'+
+ '<div class="director-ai-head"><div><strong>自动编剧 · 4–60 格完整分镜</strong><span>默认自动分析选题、人物与画风；模型结果和人工编辑都写入当前作品。</span></div>'+
  '<span class="director-ai-status">'+e(storyBusy?'生成中 · 请勿重复提交':origin)+'</span></div>'+
  '<div class="director-ai-grid"><label>生成方式<select data-director-provider>'+
  '<option value="native"'+(storyProvider==='native'?' selected':'')+'>内置AI · 已登录优先自动生成</option>'+
- '<option value="deepseek"'+(storyProvider==='deepseek'?' selected':'')+'>DeepSeek API · 自带密钥</option>'+
+ '<option value="deepseek"'+(storyProvider==='deepseek'?' selected':'')+'>DeepSeek API · 复用安全服务端密钥</option>'+
  '<option value="openai"'+(storyProvider==='openai'?' selected':'')+'>OpenAI API · 自带密钥</option></select></label>'+
- (storyProvider!=='native'?'<label>API Key · 本次网页会话使用，不保存到项目<input data-director-api-key type="password" autocomplete="off" spellcheck="false" placeholder="'+e(providerLabel)+' API Key" value="'+e(storyApiKey)+'"></label>':'<div class="director-ai-guide"><b>自动填充规则</b><span>仅在九格仍为空白时自动生成；若模型不可用，会明确回退本地规则草稿。</span></div>')+'</div>'+
- '<div class="director-ai-actions"><button type="button" class="button dark" data-director-action="ai"'+(storyBusy?' disabled':'')+'> '+(storyBusy?'正在生成…':'使用'+e(providerLabel)+'智能生成九格')+'</button>'+
+ (storyProvider==='openai'?'<label>API Key · 本次网页会话使用，不保存到项目<input data-director-api-key type="password" autocomplete="off" spellcheck="false" placeholder="'+e(providerLabel)+' API Key" value="'+e(storyApiKey)+'"></label>':'<div class="director-ai-guide"><b>安全模型配置</b><span>DeepSeek 复用 Cloudflare 服务端密钥，无需再次输入。内置 AI 可在空白时自动填写，模型不可用会明确标注本地规则草稿。</span></div>')+'</div>'+
+ '<div class="director-ai-actions"><button type="button" class="button dark" data-director-action="ai"'+(storyBusy?' disabled':'')+'> '+(storyBusy?'正在生成…':'使用'+e(providerLabel)+'智能生成剧本')+'</button>'+
  '<button type="button" class="button" data-director-action="fill"'+(storyBusy?' disabled':'')+'>仅填补空白字段</button>'+
  '<button type="button" class="button subtle" data-director-action="draft"'+(storyBusy?' disabled':'')+'>本地规则草稿</button></div>'+
  '<p class="director-ai-foot">AI草稿不等于事实核验或正式完成。内置模型使用已有平台配额；第三方API仅在你点击生成并确认后调用，可能产生费用。文字可逐格修改，最终需作者审阅锁定。</p>'+
