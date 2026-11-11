@@ -24,6 +24,15 @@ const base='https://worldtoon.chenzhe223.workers.dev';
   assert.ok(body.items.every(x=>x.rights_cleared===false));
   console.log('LIVE_UPSTREAM_PASS',source,body.items.length);
  }
+ const ev=catalog.items.filter(x=>x.cache_source==='academic_events');
+ for(const [id,end] of Object.entries({'academic-visual-plasticity':'2027-03-09','academic-material-discovery':'2027-03-16','academic-land-plants':'2027-03-23'})){
+  const event=ev.find(x=>x.id===id);
+  assert.ok(event,'Live event missing '+id);
+  assert.equal(event.event_end_date,end,'Published event end date inaccurate: '+id);
+ }
+ const human=catalog.items.find(x=>x.id==='nobel-2024-human-acts');
+ assert.equal(human?.url,'https://www.nobelprize.org/prizes/literature/2024/han/interview/');
+ console.log('LIVE_EDITORIAL_METADATA_PASS three official two-day meeting dates and Nobel work-specific source');
  const sourceIds=['literary_series','nobel_literature','academic_events'];
  assert.ok(catalog.items.filter(x=>sourceIds.includes(x.cache_source)).every(x=>x.rights_cleared===false));
  console.log('LIVE_D1_PASS',JSON.stringify(catalog.stats.filter(x=>sourceIds.includes(x.id))));
