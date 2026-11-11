@@ -89,7 +89,9 @@
      '<button class="button" data-archive="refresh">同步发表回执</button></div></section>';
  }
  function workspace(){
-   const p=selected();
+   const chosen=selected();
+   const p=chosen?.id==='sample-ba-zong-001'
+      ?activeProjects().find(x=>x.id!=='sample-ba-zong-001')||null:chosen;
    if(!p||p.id==='sample-ba-zong-001')return '<section class="wt4-workspace wt4-empty">'+
       '<div class="kicker">WORLD/TOON / NEW PROJECT</div><h1>开始一部好漫画</h1>'+
       '<p>从一句话、热门选题或已有系列进入。创建后在同一工作空间完成整个生产流程。</p>'+
@@ -126,6 +128,9 @@
  }
  function overview(){
    const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001');
+   const localIds=new Set(rows.map(p=>p.handoff?.taskId).filter(Boolean));
+   const remoteOnly=((typeof wtArchiveSnapshot==='undefined'?null:wtArchiveSnapshot)?.library?.items||[])
+     .filter(r=>r?.task_id&&!localIds.has(r.task_id));
    const cards=rows.slice(0,6).map(p=>{const s=state(p);
      return '<a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
        '<div><strong>'+html(p.title)+'</strong><small>'+html(s.agent)+' · '+html(s.label)+'</small></div>'+
@@ -134,7 +139,10 @@
      '<h2>继续制作</h2><p>所有作品都有一个当前位置和下一步，不必逐个寻找功能模块。</p></div>'+
      '<a class="button dark" href="#/workspace">进入作品工作空间 →</a></div>'+
      (cards?'<div class="wt4-home-list">'+cards+'</div>':
-       '<p class="wt4-home-empty">暂无真实项目，创建作品后将显示进度和下一步。</p>')+'</section>';
+       '<p class="wt4-home-empty">暂无本地创作，创建作品后将显示进度和下一步。</p>')+
+     (remoteOnly.length?'<div class="wt4-remote-hint"><strong>GitHub 中另有 '+remoteOnly.length+' 条工单</strong>'+
+       '<p>这些任务已在云端归档，但尚未与当前设备的本地作品关联。请在生产调度中心查看，不会自动创建或覆盖本地草稿。</p>'+
+       '<a class="button" href="#/archive">查看云端工单</a></div>':'')+'</section>';
  }
  const originalDashboard=dashboard;
  dashboard=function(){return overview()+originalDashboard()};
