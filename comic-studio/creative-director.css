@@ -143,3 +143,23 @@
 .director-theme-cinematic{--d-bg:#d5d2c9;--d-ink:#25343c;--d-a:#bd7d56;--d-b:#687e84}
 .director-theme-diagram{--d-bg:#f1efe7;--d-ink:#314f4e;--d-a:#d3a357;--d-b:#789f99}
 .director-theme-comic{--d-bg:#faf0e0;--d-ink:#283d37;--d-a:#e58d5a;--d-b:#a3b598}
+
+
+/* Creative Director · storyboard AI assisted authoring (not final artwork) */
+.director-ai-workflow{border:1px solid #d9d7cf;background:#f6f5ef;border-radius:12px;padding:16px 18px;margin:18px 0 20px;min-width:0}
+.director-ai-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.director-ai-head>div{display:grid;gap:5px;flex:1;min-width:210px}
+.director-ai-head strong{font-size:14px;line-height:1.4;color:#32493c}
+.director-ai-head>div>span{font-size:11px;line-height:1.65;color:#667368}
+.director-ai-status{max-width:100%;font-size:11px;font-weight:650;color:#516b55;background:#e8ede6;padding:7px 10px;border-radius:7px;overflow-wrap:anywhere}
+.director-ai-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;margin-top:14px}
+.director-ai-grid label{display:grid;gap:6px;min-width:0;font-size:11px;font-weight:700;color:#536555}
+.director-ai-grid select,.director-ai-grid input{min-width:0;width:100%;box-sizing:border-box;height:42px;border-radius:8px;border:1px solid #cfd6c9;padding:0 11px;color:#283c32;background:#fff;font:500 12px system-ui}
+.director-ai-guide{display:grid;gap:5px;padding:8px 12px;background:#ecefe8;border-radius:8px}
+.director-ai-guide b{font-size:11px;color:#45644d}
+.director-ai-guide span{font-size:11px;color:#647368;line-height:1.6}
+.director-ai-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.director-ai-actions button{min-height:38px}
+.director-ai-foot{font-size:11px;color:#758075;line-height:1.7;margin:12px 0 0}
+.director-ai-workflow [disabled]{opacity:.48;cursor:progress}
+@media(max-width:720px){.director-ai-workflow{padding:12px;margin:13px 0}.director-ai-grid{grid-template-columns:1fr;gap:9px}.director-ai-head{gap:8px}.director-ai-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.director-ai-actions button{width:100%;padding:9px 7px;font-size:11px}.director-ai-actions button:first-child{grid-column:1/-1}.director-ai-guide{padding:10px}}
