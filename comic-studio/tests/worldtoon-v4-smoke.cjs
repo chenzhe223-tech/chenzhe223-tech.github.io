@@ -18,6 +18,10 @@ assert.match(html,/worldtoon-v3\.css\?v=4\.0\.2/,'new workspace CSS is bundled i
 assert.match(engine,/WORKFLOW_V4_EMBED/,'built script includes v4 module');
 assert.ok(engine.trimEnd().endsWith(read('workflow-v4.js').trim()),'deployed script matches canonical v4 code');
 assert.ok(read('worldtoon-v3.css').trimEnd().endsWith(css.trim()),'deployed stylesheet matches canonical v4 code');
+assert.ok(read('styles.css').trimEnd().endsWith(read('mobile-refine.css').trim()),'existing mobile layout is included in Worker-allowed stylesheet');
+assert.match(html,/styles\.css\?v=4\.0\.2/,'mobile stylesheet uses a fresh allowed asset');
+assert.doesNotMatch(html,/href="mobile-refine\.css/,'mobile stylesheet must not 404 on Worker');
+
 assert.match(html,/经典创作编辑器/,'old editor remains reachable');
 assert.match(html,/原制作交接明细/,'old handoff remains available');
 for(const route of ['dashboard','live','workspace','production','library']) {
