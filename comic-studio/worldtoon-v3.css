@@ -252,3 +252,5 @@
 .wt4-work-area .wt4-stage-card>.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
 .wt4-work-area .wt4-stage-card>.buttons .button{min-height:39px}
 @media(max-width:600px){.wt4-work-area .wt4-stage-card>.buttons .button{flex:1 1 100%}}
+
+.wt4-model-status{margin:0 0 14px;padding:10px 13px;font-size:12px;line-height:1.65;color:#3e5848;background:#edf4eb;border:1px solid #d2e2d0;border-radius:8px}
