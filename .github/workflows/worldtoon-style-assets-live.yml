@@ -17,14 +17,14 @@ jobs:
     timeout-minutes: 9
     steps:
       - uses: actions/checkout@v4
-      - name: Verify all twenty online pictures match committed source bytes and same-origin MIME
+      - name: Verify all 21 online pictures match committed source bytes and same-origin MIME
         shell: python
         run: |
           import urllib.request, urllib.error, pathlib, hashlib, json, re, time
           root=pathlib.Path('comic-studio')
           js=(root/'style-v3.js').read_text('utf-8')
           expect=json.loads(re.search(r'const STYLE_GUIDES=(\[[^;]+\]);',js).group(1))
-          assert len(expect)==20 and len(set(expect))==20
+          assert len(expect)==21 and len(set(expect))==21
           base='https://worldtoon.chenzhe223.workers.dev'
           report={'schema':'davylab.worldtoon.style-live-assets.v1','base':base,'assets':[]}
           def fetch(path):
@@ -39,13 +39,13 @@ jobs:
             raise last
           code,content_type,index=fetch('/')
           assert code==200 and b'style-v3.js' in index and b'style-v3.css' in index
-          for _ in range(10):
+          for _ in range(24):
             code,content_type,online_js=fetch('/style-v3.js')
-            if code==200 and b'STYLE_GUIDES' in online_js and b'original_guide' in online_js:
+            if code==200 and b'STYLE_GUIDES' in online_js and b'original_guide' in online_js and b'japanese-pastoral-wonder' in online_js:
               break
             time.sleep(6)
           else:
-            raise AssertionError('The live Worker is serving a stale V3 script after 60 seconds; inspect raw GitHub/CF cache')
+            raise AssertionError('The live Worker is serving a stale V3 script after 144 seconds; inspect raw GitHub/CF cache')
           for i,sha in enumerate(expect,1):
             name=f'style-{i:02d}.webp'
             local=(root/'assets'/name).read_bytes()
@@ -62,7 +62,7 @@ jobs:
           assert code==200 and b'object-fit:contain' in css
           report['passed']=True
           pathlib.Path('worldtoon-style-qa.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
-          print('PASS: All 20 original style guide images respond HTTP 200, have correct WebP MIME and matching SHA-256')
+          print('PASS: All 21 original style guide images respond HTTP 200, have correct WebP MIME and matching SHA-256')
       - uses: actions/upload-artifact@v4
         if: always()
         with:
