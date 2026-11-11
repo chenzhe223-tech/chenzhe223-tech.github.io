@@ -21,3 +21,5 @@ jobs:
         run: node comic-studio/tests/worldtoon-v3-smoke.cjs
       - name: Verify 4.0 unified production journey and author gates
         run: node comic-studio/tests/worldtoon-v4-smoke.cjs
+      - name: Test DeepSeek expansion consent, timeout and error recovery
+        run: node comic-studio/tests/worldtoon-deepseek-smoke.cjs
