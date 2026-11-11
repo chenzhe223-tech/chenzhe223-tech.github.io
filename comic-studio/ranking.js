@@ -5,9 +5,9 @@
  */
 (function(global){
  'use strict';
- const VERSION='1.2.0';
+ const VERSION='1.3.0';
  const MIN_PUBLIC=60;
- const weights=Object.freeze({heat:.20,impact:.20,drawability:.20,conflict:.20,novelty:.10,credibility:.10});
+ const weights=Object.freeze({heat:.32,impact:.36,drawability:.32}); // WORLD/TOON editorial mandate; other dimensions remain diagnostics
  const labels=Object.freeze({overall:'综合评分',heat:'热度',impact:'影响力',drawability:'可画性',conflict:'冲突与反转',novelty:'新奇程度',credibility:'来源可追溯',latest:'最新时间'});
  const patterns={
   heat:[
@@ -35,7 +35,7 @@
  };
  const categoryBoost={
   '国际政治':{heat:2,impact:11,drawability:5},'AI 科技':{heat:3,impact:11,drawability:6},
-  '经典故事':{heat:12,impact:11,drawability:14},'历史脑洞':{heat:10,impact:14,drawability:12},'科技社区':{heat:2,impact:6,drawability:6},'机器人':{heat:3,impact:8,drawability:12},'商业财经':{heat:2,impact:9,drawability:6},
+  '经典故事':{heat:12,impact:11,drawability:14},'世界文学':{heat:12,impact:12,drawability:15},'诺奖文学':{heat:12,impact:12,drawability:15},'世界学术活动':{heat:7,impact:11,drawability:11},'历史脑洞':{heat:10,impact:14,drawability:12},'科技社区':{heat:2,impact:6,drawability:6},'机器人':{heat:3,impact:8,drawability:12},'商业财经':{heat:2,impact:9,drawability:6},
   '科学':{heat:1,impact:10,drawability:7},'航空航天':{heat:3,impact:9,drawability:12},
   '文化':{heat:3,impact:5,drawability:8},'娱乐':{heat:5,impact:4,drawability:11},
   '体育':{heat:5,impact:5,drawability:12},'人物':{heat:3,impact:5,drawability:11},
@@ -61,26 +61,43 @@
   const combined=(title+' '+context).toLowerCase();
   const category=categoryBoost[n.category]||categoryBoost['AI 科技'];
   const verifiedURL=/^https?:\/\/\S+/i.test(String(n.url||'')); // only URL presence, not fact-check
-  const evergreen=n.evergreen===true||['经典故事','历史脑洞'].includes(n.category);
+  const evergreen=n.evergreen===true||['经典故事','历史脑洞','世界文学','诺奖文学'].includes(n.category);
   const time=evergreen?0:recency(n.published,opts.now);
   const h=matched(combined,'heat',20),im=matched(combined,'impact',33),dr=matched(combined,'drawability',35);
-  const heat=evergreen?clamp(62+h.value/2):clamp(39+time+category.heat+h.value+(verifiedURL?3:0));
-  const impact=clamp(35+category.impact+im.value+(String(n.why||'').length>=25?5:0)+(verifiedURL?2:0));
-  const drawability=clamp(39+category.drawability+dr.value+(n.image?3:0)+((title.match(/[:：—\-]/g)||[]).length?2:0));
+  // Extra editorial potential is granted only for evidence-bearing original series outlines
+  // and matching primary-source landing URLs, never for a manually typed high score.
+  const beats=Array.isArray(n.story_beats)?n.story_beats.filter(x=>typeof x==='string'&&x.length>=3):[];
+  const episodes=Array.isArray(n.series_episodes)?n.series_episodes.filter(x=>typeof x==='string'&&x.length>=3):[];
+  const officialNobel=n.source_id==='nobel_literature'&&/^https:\/\/www\.nobelprize\.org\//.test(String(n.url||''))&&
+   n.editorial_basis==='nobel_official_bibliography';
+  const officialClassic=n.source_id==='literary_series'&&/^https:\/\/www\.gutenberg\.org\/ebooks\/\d+$/.test(String(n.url||''))&&
+   n.editorial_basis==='selected_public_domain_classic';
+  const officialAcademic=n.source_id==='academic_events'&&/^https:\/\/(?:www\.|rs-uks-score01\.)?royalsociety\.org\//.test(String(n.url||''))&&
+   n.editorial_basis==='official_event_listing'&&/^\d{4}-\d{2}-\d{2}$/.test(String(n.eventDate||''));
+  const detailedSeries=beats.length>=3&&episodes.length>=3;
+  const eventDays=officialAcademic?(Date.parse(n.eventDate+'T00:00:00Z')-opts.now||Date.now())/86400000:Infinity;
+  const eventNear=officialAcademic?(eventDays>=-1&&eventDays<=14?22:eventDays>=-1&&eventDays<=45?14:eventDays>=-1&&eventDays<=120?8:0):0;
+  const heat=evergreen?clamp(62+h.value/2+(detailedSeries?5:0)):
+   officialAcademic?clamp(50+eventNear):clamp(39+time+category.heat+h.value+(verifiedURL?3:0));
+  const impact=clamp(35+category.impact+im.value+(String(n.why||'').length>=25?5:0)+(verifiedURL?2:0)+
+    (officialNobel?28:officialClassic?22:officialAcademic?15:0));
+  const drawability=clamp(39+category.drawability+dr.value+(n.image?3:0)+((title.match(/[:：—\-]/g)||[]).length?2:0)+
+    (detailedSeries?24:0)+(episodes.length>=3?12:0));
+
   const conflict=clamp(28+(/对决|角逐|交锋|碰撞|博弈|反转|争议|对抗|竞争|battle|clash|rival|versus|conflict|debate|twist/i.test(combined)?43:0)+(/:|：|—/.test(title)?9:0));
   const novelty=clamp(30+(/首次|首个|突破|罕见|意外|创新|首次发现|first|new|breakthrough|unexpected|discover|novel|historic/i.test(combined)?45:0)+(dr.count>1?8:0));
   // Source traceability is not independent source authentication or factual verification.
   const credibility=clamp(23+(verifiedURL?22:0)+(String(n.source||'').trim()?12:0)+(Number.isFinite(Date.parse(n.published||''))?13:0));
   const metrics=evergreen?{heat,impact:Math.max(impact,66),drawability:Math.max(drawability,67),conflict:Math.max(conflict,53),novelty:Math.max(novelty,50),credibility:Math.max(credibility,verifiedURL?67:credibility)}:{heat,impact,drawability,conflict,novelty,credibility};
   const overall=clamp(Object.keys(weights).reduce((sum,key)=>sum+metrics[key]*weights[key],0));
-  const explanations=evergreen?['经典/历史素材按长期故事价值预评估，不进行新闻时效性扣分','历史和经典作品仍需分别核验事实、版权和翻译版本','评分不是实际传播热度或权威历史认证']: [
+  const explanations=evergreen?['经典/文学素材按长期故事价值预评估，不进行新闻时效性扣分',detailedSeries?'原创情节节点与三集以上系列提纲齐备':'需补充分集剧情依据','原著、译本、人物和视觉改编权需分别核验','评分不是实际网络传播热度或事实核验']: [
    time>=20?'近期发生或刚发布':'时效信号较弱',
    im.count>=2?'涉及多个行业/公共影响主题':'需要核实实际影响范围',
    dr.count>=2?'具备可视化人物/情节冲突':'需策划原创分镜和叙事'
   ];
-  return {overall,...metrics,method:evergreen?'evergreen_rule_estimate':'rule_estimate',version:VERSION,
+  return {overall,...metrics,method:evergreen?'evergreen_rule_estimate':officialAcademic?'event_rule_estimate':'rule_estimate',version:VERSION,
    rationale:explanations.join('；')+'。',factChecked:false,sourceVerified:false,
-   explanation:'基于标题、摘要、时间和来源完整度的六维规则预评估；并非实际热度、大模型评分、来源鉴真或事实核验'};
+   explanation:'基于来源、标题、摘要及经记录的原创分集策划的规则预评估；综合热度/影响力/可画性权重32/36/32。并非实际热度、大模型评分、来源鉴真或事实核验'};
  }
  function decorate(rows,opts={}){
   return (Array.isArray(rows)?rows:[]).map((row,index)=>({...row,_rating:evaluate(row,opts),_sourceIndex:row?._sourceIndex??index}));
