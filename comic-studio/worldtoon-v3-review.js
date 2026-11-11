@@ -17,28 +17,59 @@
   const h=p?.handoff||{},checked=h.finalChecklist||[],total=checked.filter(Boolean).length,
         staged=(h.stagedFiles||[]).length,uploaded=(h.stageUploaded||[]).length;
   const canSign=!!h.repoQueuedAt&&staged>0&&uploaded===staged;
+  const checkedCount=labels.reduce((n,_,i)=>n+(checked[i]===true?1:0),0);
   return '<section class="box wt3-final-review"><div class="kicker">PUBLICATION GATE / OWNER ONLY</div>'+
    '<h2>作者终审 · 向 GitHub 提交验收</h2>'+
    '<p class="minor">素材提交不等于发表。创意首图审批、来源核验和版权审校完成后，作者才可签署最终授权。GitHub Actions 独立验收后才进入 WorkBuddy 正式发表队列。</p>'+
    '<p><strong>GitHub 暂存进度：'+uploaded+'/'+staged+' 文件</strong> · '+(canSign?'可以进行最终复核':'尚未完成正式素材暂存，终审提交不可用')+'</p>'+
-   '<div class="wt3-qa-list">'+labels.map((label,i)=>'<label><input type="checkbox" data-wt3-qa="'+i+'" '+(checked[i]?'checked':'')+'><span>'+label+'</span></label>').join('')+'</div>'+
+   '<section class="wt3-qa-panel" aria-label="八项作品质量复核">'+
+     '<div class="wt3-qa-toolbar"><div class="wt3-qa-toolbar-title"><strong>作品质量复核</strong><span>已确认 <b data-wt3-qa-count>'+checkedCount+'</b> / '+labels.length+'</span></div>'+
+     '<div class="wt3-qa-actions"><button type="button" class="button" data-wt3-qa-action="select-all" '+(checkedCount===labels.length?'disabled':'')+'>一键全选</button>'+
+     '<button type="button" class="button" data-wt3-qa-action="clear" '+(checkedCount===0?'disabled':'')+'>清空</button></div></div>'+
+     '<p class="wt3-qa-hint">确认前请先实际检查画面、事实、版权与手机阅读效果。批量勾选仅节省操作，不替代独立审核或最终出版授权。</p>'+
+     '<div class="wt3-qa-list" role="group" aria-label="八项终审项目">'+labels.map((label,i)=>
+       '<label class="wt3-qa-item'+(checked[i]===true?' is-checked':'')+'"><input type="checkbox" data-wt3-qa="'+i+'" '+(checked[i]===true?'checked':'')+'><span>'+label+'</span></label>').join('')+'</div></section>'+
    '<div class="field"><label>已核验来源 URL（研究型任务必填，一行一条）</label>'+
     '<textarea id="wt3-sources" rows="2" placeholder="https://原始研究或官方资料">'+(typeof e==='function'?e(h.verifiedSources||''):h.verifiedSources||'')+'</textarea></div>'+
    '<label class="wt3-sign"><input type="checkbox" id="wt3-author-consent"><span>我以作品作者身份独立确认本次出版授权；此授权不代表作品已经成功发表。</span></label>'+
    '<div class="buttons"><button type="button" class="button dark" data-wt3-final="submit" '+(canSign?'':'disabled')+'>提交最终作者授权与 GitHub QA</button>'+
     '<button type="button" class="button" data-archive="refresh">刷新仓库验收</button></div>'+
-   '<p class="minor">八项人工复核：'+total+'/8 · '+(h.finalApprovalCommit?'已提交验收 Commit：'+String(h.finalApprovalCommit).slice(0,12):'尚未提交最终验收')+'</p></section>';
+   '<p class="minor wt3-review-progress">八项人工复核：<b data-wt3-qa-count>'+checkedCount+'</b>/8 · '+(h.finalApprovalCommit?'已提交验收 Commit：'+String(h.finalApprovalCommit).slice(0,12):'尚未提交最终验收')+'</p></section>';
  }
  const before=publish;
  publish=function(){return view(selected())+before()};
+ function reflectChecklist(p){
+   const root=document.querySelector('.wt3-final-review');if(!root)return;
+   const checks=p?.handoff?.finalChecklist||[];
+   const n=labels.reduce((total,_,i)=>total+(checks[i]===true?1:0),0);
+   root.querySelectorAll('[data-wt3-qa-count]').forEach(el=>el.textContent=String(n));
+   root.querySelectorAll('[data-wt3-qa]').forEach(input=>{
+     const active=checks[Number(input.dataset.wt3Qa)]===true;
+     input.checked=active;input.closest('.wt3-qa-item')?.classList.toggle('is-checked',active);
+   });
+   const select=root.querySelector('[data-wt3-qa-action="select-all"]');
+   const clear=root.querySelector('[data-wt3-qa-action="clear"]');
+   if(select)select.disabled=n===labels.length;
+   if(clear)clear.disabled=n===0;
+ }
  document.addEventListener('change',ev=>{
   const i=ev.target?.dataset?.wt3Qa,p=selected();
   if(i!=null&&p){p.handoff={...p.handoff,finalChecklist:[...(p.handoff?.finalChecklist||Array(8).fill(false))]};
-   p.handoff.finalChecklist[Number(i)]=!!ev.target.checked;setChange(p,'作者更新终审检查项');}
+   p.handoff.finalChecklist[Number(i)]=!!ev.target.checked;setChange(p,'作者更新终审检查项');reflectChecklist(p);}
   if(ev.target?.id==='wt3-sources'&&p){p.handoff={...p.handoff,verifiedSources:ev.target.value.slice(0,8000)};
    setChange(p,'更新作者确认的来源 URL')}
  },true);
  document.addEventListener('click',async ev=>{
+  const bulk=ev.target.closest('[data-wt3-qa-action]');
+  if(bulk){
+    ev.preventDefault();ev.stopImmediatePropagation();
+    const p=selected();if(!p)return;
+    const selectAll=bulk.dataset.wt3QaAction==='select-all';
+    if(!selectAll&&bulk.dataset.wt3QaAction!=='clear')return;
+    p.handoff={...p.handoff,finalChecklist:Array(labels.length).fill(selectAll)};
+    setChange(p,selectAll?'作者批量确认终审检查项':'作者清空终审检查项');
+    reflectChecklist(p);return;
+  }
   const b=ev.target.closest('[data-wt3-final]');if(!b)return;
   ev.preventDefault();ev.stopImmediatePropagation();const p=selected();
   try{
