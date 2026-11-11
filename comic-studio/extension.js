@@ -6,11 +6,11 @@ let wtSource='all',wtSourceCounts=[],wtCategory='全部',wtQuery='',wtNews=[],wt
 let wtRankSort='overall',wtRankFocus='all',wtRankMin=60;
 let wtConfig=null,wtSession=null,wtSyncTimer=null,wtCloudBusy=false,wtSyncedAt='',wtCloudError='',wtStatus='未登录';
 let wtSelectedCharacter='',wtPreviewImage='',wtRemoteRev=null;
-const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','经典故事','历史脑洞','科技社区','机器人','商业财经','科学','环境','健康','航空航天'];
+const wtCategories=['全部','国际政治','文化','娱乐','体育','人物','旅行','AI 科技','经典故事','世界文学','诺奖文学','世界学术活动','历史脑洞','科技社区','机器人','商业财经','科学','环境','健康','航空航天'];
 const wtJson=async(res)=>{const body=await res.json().catch(()=>({error:'服务器响应无法解析'}));if(!res.ok)throw Error(body.error||body.message||`请求失败 ${res.status}`);return body;};
 const wtTime=v=>{try{return new Date(v).toLocaleString('zh-CN',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}catch{return '—'}};
 
-const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','经典故事':'BOOK','历史脑洞':'HISTORY','科技社区':'DEV','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
+const wtNewsSymbols={'国际政治':'WORLD','文化':'CULTURE','娱乐':'CINEMA','体育':'SPORT','人物':'PEOPLE','旅行':'TRAVEL','AI 科技':'A.I.','经典故事':'BOOK','世界文学':'LITERATURE','诺奖文学':'NOBEL','世界学术活动':'ACADEMY','历史脑洞':'HISTORY','科技社区':'DEV','机器人':'ROBOT','商业财经':'MARKET','科学':'SCIENCE','环境':'EARTH','健康':'HEALTH','航空航天':'SPACE'};
 function wtNewsPicture(n,i){
  const image=safeURL(n.image||''),kind=wtNewsSymbols[n.category]||'WORLD';
  return '<div class="wt-news-media '+(image?'has-photo':'is-fallback')+'">'+
@@ -44,7 +44,7 @@ function wtLive(){
  const judged=wtEditorialRank.decorate(filtered);
  const result=wtEditorialRank.select(judged,{sort:wtRankSort,focus:wtRankFocus,minimum:wtRankMin,query:wtQuery});
  const allMatched=result.items,items=allMatched.slice(0,wtVisibleCount);
- const sourceDefs=[['all','综合精选'],['news','全球热点'],['hackernews','科技社区'],['arxiv','AI 前沿'],['classics','经典故事'],['history','历史故事']];
+ const sourceDefs=[['all','综合精选'],['news','全球热点'],['hackernews','科技社区'],['arxiv','AI 前沿'],['classics','经典故事'],['literary_series','世界文学系列'],['nobel_literature','诺奖作家作品'],['academic_events','世界学术活动'],['history','历史故事']];
  const total=wtSourceCounts.reduce((n,x)=>n+Number(x.count||0),0);
  const count=id=>id==='all'?total:Number(wtSourceCounts.find(x=>x.id===id)?.count||0);
  const sourceTabs=sourceDefs.map(([id,label])=>'<button type="button" class="'+(wtSource===id?'active':'')+'" data-wt="source" data-value="'+id+'"><strong>'+label+'</strong><span>'+(wtSourceCounts.length?(count(id)?count(id)+' 条':'待更新'):'—')+'</span></button>').join('');
@@ -54,16 +54,22 @@ function wtLive(){
  const lastSourceUpdate=freshness.length?wtTime(Math.max(...freshness)):'尚无素材';
  const unavailable=wtSourceCounts.filter(x=>!x.ready).map(x=>x.id).join('、');
  const sourceStatus=wtSourceCounts.length?'后台最近更新 '+lastSourceUpdate+(unavailable?' · 待初始化 '+unavailable:''):'等待首次后台采集';
- const brief=wtSource==='all'?'跨新闻、科技、文学与历史的统一素材池':'当前阅读 '+sourceDefs.find(x=>x[0]===wtSource)?.[1];
+ const brief=wtSource==='all'?'跨新闻、科研活动、诺奖文学、世界经典与历史的统一选题池':'当前阅读 '+sourceDefs.find(x=>x[0]===wtSource)?.[1];
+ const serialPicks=allMatched.filter(x=>x.serializable===true&&Array.isArray(x.series_episodes)&&x.series_episodes.length>=3);
+ const serialTop=(wtSource==='all'||['literary_series','nobel_literature','academic_events'].includes(wtSource))&&serialPicks.length&&wtCategory==='全部'&&!wtQuery
+  ?'<section class="wt-featured wt-series-featured"><div class="wt-featured-head"><strong>系列漫画优选</strong><span>可追溯来源与原创分集纲要 · 规则预评分</span></div><div class="wt-featured-grid">'+serialPicks.slice(0,3).map(x=>
+   '<article class="wt-featured-card"><span class="wt-featured-rank">'+e(x.category)+' · '+x._rating.overall+'分</span><strong>'+e(x.title)+'</strong><p class="wt-series-brief">'+e(x.series_episodes.slice(0,3).join(' / '))+'</p><button type="button" data-wt="create-news" data-index="'+x._sourceIndex+'">规划漫画系列 ↗</button></article>').join('')+'</div></section>':'';
  const top=wtSource==='all'&&wtCategory==='全部'&&!wtQuery&&allMatched.length
   ?'<section class="wt-featured"><div class="wt-featured-head"><strong>今日值得画</strong><span>来自已缓存素材 · 规则评分推荐</span></div><div class="wt-featured-grid">'+allMatched.slice(0,3).map((n,i)=>
    '<article class="wt-featured-card"><span class="wt-featured-rank">0'+(i+1)+' · '+e(n.category)+' · '+n._rating.overall+'分</span><strong>'+e(n.title)+'</strong><button type="button" data-wt="create-news" data-index="'+n._sourceIndex+'">制作漫画草稿 ↗</button></article>').join('')+'</div></section>':'';
  const cards=items.map((n,i)=>'<article class="wt-news-card">'+wtNewsPicture(n,i)+
   '<div class="wt-news-card-body"><div class="wt-status"><span class="wt-chip">'+e(n.category)+'</span><span class="wt-chip wt-unverified">待核验</span>'+
-  '<span class="wt-chip">'+(n.evergreen?'经典常青':e(n.published?wtTime(n.published):'日期待核实'))+'</span></div>'+
+  '<span class="wt-chip">'+(n.eventDate?'活动日期 '+e(n.eventDate):n.evergreen?'经典常青':e(n.published?wtTime(n.published):'日期待核实'))+'</span></div>'+
   '<h3>'+e(n.title)+'</h3>'+(n.summary?'<p class="wt-news-summary">'+e(n.summary)+'</p>':'')+
-  '<p class="minor wt-news-source">'+e(n.source||'原始来源待确认')+'</p>'+
-  '<div class="wt-catalog-score">综合预评分 <strong>'+n._rating.overall+'</strong><span>/100 · '+e(n._rating.method==='evergreen_rule_estimate'?'长期故事价值':'新闻选题价值')+'</span></div>'+
+  (n.series_episodes?.length>=3?'<div class="wt-series-outline"><b>连载建议 · '+n.series_episodes.length+' 个篇章</b><span>'+e(n.series_episodes.slice(0,3).join(' → '))+'</span></div>':'')+
+  '<p class="minor wt-news-source">'+e(n.source||'原始来源待确认')+(n.author?' · '+e(n.author):'')+'</p>'+
+  (n.rights_status==='copyright_permission_required'?'<p class="wt-rights-warning">著作权提醒：需要取得原作改编授权；可先做书评或原创主题解读。</p>':'')+
+  '<div class="wt-catalog-score">综合预评分 <strong>'+n._rating.overall+'</strong><span>/100 · '+e(n._rating.method==='evergreen_rule_estimate'?'长期故事价值':n._rating.method==='event_rule_estimate'?'学术活动策划价值':'新闻选题价值')+'</span></div>'+
   '<div class="buttons"><a href="'+e(safeURL(n.url))+'" target="_blank" rel="noopener noreferrer" class="button">核对原始来源</a>'+
   '<button type="button" class="button dark" data-wt="create-news" data-index="'+n._sourceIndex+'">创作漫画</button>'+
   '<button type="button" class="button" data-wt="save-news" data-index="'+n._sourceIndex+'">收藏选题</button></div></div></article>').join('');
@@ -72,10 +78,10 @@ function wtLive(){
   '当前分类没有达到所选评分与关键词条件的素材。试试清空搜索或切换其他已缓存来源。';
  const empty='<div class="box wt-rank-empty"><h3>'+(isEmpty?'素材库正在准备':'暂无匹配的漫画素材')+'</h3><p>'+message+'</p>'+
  '<div class="buttons"><button type="button" class="button" data-wt="clear-filters">恢复全部筛选</button><button type="button" class="button" data-wt="reload-cache">重新读取缓存</button></div></div>';
- return heroHeader('DISCOVERY / BY DAVYLAB','素材发现','打开即读 · 后台更新 · 经典故事、全球热点与 AI 研究统一筛选。选题均需事实及版权核验。')+
+ return heroHeader('DISCOVERY / BY DAVYLAB','素材发现','打开即读 · 后台更新 · 全球热点、世界文学名著、诺奖作家作品与学术活动专题。高分是规则预评估，正式改编仍需核验来源及版权。')+
  '<section class="wt-source-panel wt-catalog-sources"><div class="wt-source-head"><strong>探索故事</strong><span>'+e(sourceStatus)+'</span></div><div class="wt-source-tabs">'+sourceTabs+'</div>'+
  '<p class="minor">'+e(brief)+' · 分类切换不重新集采'+(wtCatalogLocal?' · 当前为本机上次成功缓存':'')+'</p></section>'+
- top+
+ top+serialTop+
  '<section class="box wt-catalog-toolbar"><div class="wt-catalog-search"><label class="wt-catalog-query">搜索素材<input id="wtSearch" type="search" placeholder="标题、作者、人物、历史事件…" value="'+e(wtQuery)+'"></label>'+
  '<button type="button" class="button" data-wt="reload-cache">⟳ 更新列表</button></div>'+
  '<div class="wt-filters wt-catalog-filters">'+filters+'</div>'+
@@ -104,7 +110,7 @@ function wtRestoreCatalog(){
 async function wtFetchNews(){
  if(wtFetching)return;wtFetching=true;wtCatalogRequested=true;wtNewsError='';render();
  try{
-  const result=await wtJson(await fetch('/api/comic/catalog?source=all&limit=250',{cache:'no-store'}));
+  const result=await wtJson(await fetch('/api/comic/catalog?source=all&limit=500',{cache:'no-store'}));
   wtSourceCounts=result.stats||[];
   if(Array.isArray(result.items)&&result.items.length){
    wtNews=result.items;wtLastFetch=result.lastUpdated||Date.now();wtCatalogLocal=false;
@@ -121,7 +127,7 @@ async function wtFetchNews(){
   }
  }
 }
-async function wtSaveNews(i){let x=wtNews[Number(i)];if(!x)return;let found=data.topics.find(z=>z.source===x.url);if(found){notify('这条原始来源已在选题池');return;}const eventRaw=x.eventDate||x.occurrence_date||x.occurredAt||'';const date=String(eventRaw||x.published||'').slice(0,10);let t={id:uid(),title:x.title,category:x.category,summary:`原始来源：${x.source}。${x.evergreen?'经典/历史线索待核验，请检查权利与史料':'新闻线索尚未完成事实核验，请阅读全文后改编'}。`,source:x.url,evergreen:x.evergreen===true,rightsStatus:x.rights_status||'unknown',sourceId:x.source_id||'',eventDate:/^\d{4}-\d{2}-\d{2}$/.test(date)?date:'',eventDateBasis:eventRaw?'source_event':'published_candidate',heat:Math.max(1,Math.round(wtEditorialRank.evaluate(x).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate(x).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate(x).drawability/20)),ranking:wtEditorialRank.evaluate(x),stage:'待核验',createdAt:now(),publishedAt:x.published,sourceName:x.source,newsImage:x.image||'',verified:false};data.topics.unshift(t);persist();notify('已加入选题池，待核验后创作');}
+async function wtSaveNews(i){let x=wtNews[Number(i)];if(!x)return;let found=data.topics.find(z=>z.source===x.url);if(found){notify('这条原始来源已在选题池');return;}const eventRaw=x.eventDate||x.occurrence_date||x.occurredAt||'';const date=String(eventRaw||x.published||'').slice(0,10);let t={id:uid(),title:x.title,category:x.category,seriesEpisodes:Array.isArray(x.series_episodes)?x.series_episodes.slice(0,8):[],storyBeats:Array.isArray(x.story_beats)?x.story_beats.slice(0,8):[],editorialBasis:x.editorial_basis||'',eventEndDate:x.event_end_date||'',summary:`原始来源：${x.source}。${x.evergreen?'经典/历史线索待核验，请检查权利与史料':'新闻线索尚未完成事实核验，请阅读全文后改编'}。`,source:x.url,evergreen:x.evergreen===true,rightsStatus:x.rights_status||'unknown',sourceId:x.source_id||'',eventDate:/^\d{4}-\d{2}-\d{2}$/.test(date)?date:'',eventDateBasis:eventRaw?'source_event':'published_candidate',heat:Math.max(1,Math.round(wtEditorialRank.evaluate(x).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate(x).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate(x).drawability/20)),ranking:wtEditorialRank.evaluate(x),stage:'待核验',createdAt:now(),publishedAt:x.published,sourceName:x.source,newsImage:x.image||'',verified:false};data.topics.unshift(t);persist();notify('已加入选题池，待核验后创作');}
 
 async function wtDraftFromNews(i){
  const x=wtNews[Number(i)];if(!x)return;
@@ -130,7 +136,7 @@ async function wtDraftFromNews(i){
  const existing=data.projects.find(z=>!z.deleted&&z.topicId===t.id);
  if(existing){ui.selected=existing.id;nav('studio/'+existing.id+'/0');notify('已打开这条选题的现有漫画草稿');return}
  const p=emptyProject(t);
- p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻或研究线索；请先核对原文、事件日期及事实边界。';
+ p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻、文学或研究线索；请先核对原文、活动日期、史实及版权。'+(Array.isArray(x.series_episodes)&&x.series_episodes.length?' 原创连载建议：'+x.series_episodes.join(' / '):'');
  p.fiction='原创架空角色及情节，不复现或指控现实人物。';
  p.sourceURLs=x.url;p.sourceTitle=x.title;p.status='草稿';p.evergreen=x.evergreen===true;p.sourceId=x.source_id||'';p.rightsStatus=x.rights_status||'unknown';
  data.projects.unshift(p);ui.selected=p.id;persist();
@@ -155,7 +161,7 @@ async function wtScript(){if(wtAiBusy)return;let p=selected();if(!p)return;if(!p
 async function wtImage(useReference=false){if(wtAiBusy)return;const p=selected();if(!p)return;const panel=p.panels[ui.panel];if(!panel?.scene?.trim()){notify('请先填写当前分镜画面描述');return;}if(!confirm('将调用单张 AI 图像生成模型，可能消耗免费额度或产生费用。确认执行？'))return;wtAiBusy=true;render();try{let sources=(data.characters||[]).filter(c=>c.portrait).sort((a,b)=>(Number(panel.scene.includes(b.name||'不存在'))-Number(panel.scene.includes(a.name||'不存在')))).slice(0,3).map(c=>({source:c.portrait,label:c.name}));if(useReference&&p.panels[0].image)sources.unshift({source:p.panels[0].image,label:'第一格画风'});sources=sources.slice(0,4);const references=[];for(const entry of sources){let blob;try{blob=await getImageBlob(entry.source)}catch{continue}const bmp=await createImageBitmap(blob);const ratio=Math.min(1,480/bmp.width,480/bmp.height);let canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bmp.width*ratio));canvas.height=Math.max(1,Math.round(bmp.height*ratio));canvas.getContext('2d').drawImage(bmp,0,0,canvas.width,canvas.height);const jpeg=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.58));if(!jpeg||jpeg.size>175000)continue;let bytes=new Uint8Array(await jpeg.arrayBuffer());let parts=[];for(let i=0;i<bytes.length;i+=8192)parts.push(String.fromCharCode(...bytes.subarray(i,i+8192)));references.push({data:btoa(parts.join('')),type:'image/jpeg',label:entry.label});}const out=await wtCallAI('/api/ai/image',{title:p.title,scene:panel.scene,visualNotes:panel.prompt||'',characters:wtCharBible()+'\n'+p.characters,references});if(!out.image)throw Error('模型没有返回有效图片');const bin=atob(out.image),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);const key=uid();await putMedia(key,new Blob([bytes],{type:'image/png'}));panel.image='media:'+key;markDirty(p);setChange(p,'生成第 '+(ui.panel+1)+' 格画面（引用 '+references.length+' 张定妆/风格图）');notify('画面已生成并保存为草稿，请审校角色一致性');}catch(err){notify('AI 生图未完成：'+err.message)}finally{wtAiBusy=false;render();}}
 document.addEventListener('change',async ev=>{const input=ev.target;if(!input?.matches?.('[data-wt-character-image]'))return;const c=(data.characters||[]).find(x=>x.id===input.dataset.wtCharacterImage);const file=input.files?.[0];if(!c||!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>8*1024*1024){notify('定妆照需为 JPG、PNG 或 WebP，文件小于 8 MB');return;}try{const key=uid();await putMedia(key,file);c.portrait='media:'+key;persist();render();notify('角色定妆照已保存；登录后可同步至私有云端');}catch(err){notify('定妆照保存失败：'+err.message);}},true);
 // Intercept only extension controls; keep v1 editor event handling intact.
-document.addEventListener('click',async ev=>{let btn=ev.target.closest('[data-wt]');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();let action=btn.dataset.wt,id=btn.dataset.id,val=btn.dataset.value;try{switch(action){case'source':wtSource=val;wtCategory='全部';wtVisibleCount=12;render();break;case'category':wtCategory=val;wtVisibleCount=12;render();break;case'news-refresh':case'reload-cache':await wtFetchNews();break;case'clear-filters':wtCategory='全部';wtQuery='';wtRankMin=60;wtRankFocus='all';wtVisibleCount=12;render();break;case'more':wtVisibleCount=Math.min(250,wtVisibleCount+12);render();break;case'save-news':await wtSaveNews(btn.dataset.index);break;case'create-news':await wtDraftFromNews(btn.dataset.index);break;case'char-new':wtCharModal();break;case'char-edit':wtCharModal((data.characters||[]).find(x=>x.id===id));break;case'char-delete':if(confirm('从角色档案中移除该角色？')){data.characters=data.characters.filter(x=>x.id!==id);persist();render()}break;case'char-prompt':{let c=data.characters.find(c=>c.id===id);copyText(`${c.name} / 角色圣经：${c.description}；固定服饰：${c.costume}；色彩：${c.colors}；唯一识别特征：${c.traits}；性格：${c.personality}。每张分镜保持外貌一致，避免模拟真实人物。`);break}case'sync-pull':await wtPull();break;case'sync-push':if(confirm('把当前本机作品上传并覆盖你的云端版本？'))await wtPush(true);break;case'signout':wtSession=null;wtRemoteRev=null;wtSaveSession();wtStatus='已退出';render();break;case'ai-script':await wtScript();break;case'ai-image':await wtImage(false);break;case'ai-image-ref':await wtImage(true);break;}}catch(err){notify('操作异常：'+err.message)}},true);
+document.addEventListener('click',async ev=>{let btn=ev.target.closest('[data-wt]');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();let action=btn.dataset.wt,id=btn.dataset.id,val=btn.dataset.value;try{switch(action){case'source':wtSource=val;wtCategory='全部';wtVisibleCount=12;render();break;case'category':wtCategory=val;wtVisibleCount=12;render();break;case'news-refresh':case'reload-cache':await wtFetchNews();break;case'clear-filters':wtCategory='全部';wtQuery='';wtRankMin=60;wtRankFocus='all';wtVisibleCount=12;render();break;case'more':wtVisibleCount=Math.min(500,wtVisibleCount+12);render();break;case'save-news':await wtSaveNews(btn.dataset.index);break;case'create-news':await wtDraftFromNews(btn.dataset.index);break;case'char-new':wtCharModal();break;case'char-edit':wtCharModal((data.characters||[]).find(x=>x.id===id));break;case'char-delete':if(confirm('从角色档案中移除该角色？')){data.characters=data.characters.filter(x=>x.id!==id);persist();render()}break;case'char-prompt':{let c=data.characters.find(c=>c.id===id);copyText(`${c.name} / 角色圣经：${c.description}；固定服饰：${c.costume}；色彩：${c.colors}；唯一识别特征：${c.traits}；性格：${c.personality}。每张分镜保持外貌一致，避免模拟真实人物。`);break}case'sync-pull':await wtPull();break;case'sync-push':if(confirm('把当前本机作品上传并覆盖你的云端版本？'))await wtPush(true);break;case'signout':wtSession=null;wtRemoteRev=null;wtSaveSession();wtStatus='已退出';render();break;case'ai-script':await wtScript();break;case'ai-image':await wtImage(false);break;case'ai-image-ref':await wtImage(true);break;}}catch(err){notify('操作异常：'+err.message)}},true);
 document.addEventListener('submit',ev=>{if(ev.target.id==='wtCharacterForm'){ev.preventDefault();ev.stopImmediatePropagation();let c=data.characters.find(c=>c.id===ev.target.dataset.id);if(!c){c={id:uid()};data.characters.push(c)}Object.assign(c,Object.fromEntries(new FormData(ev.target).entries()));persist();closeModal();render();notify('角色档案已保存')}if(ev.target.id==='wtLogin'){ev.preventDefault();ev.stopImmediatePropagation();let sub=ev.submitter?.value||'login';let form=ev.target;const email=form.elements.email.value, password=form.elements.password.value;wtAuthForm({elements:{email:{value:email},password:{value:password}}},sub)}},true);
 document.addEventListener('change',ev=>{const x=ev.target;if(!['wtRankSort','wtRankFocus','wtRankMin'].includes(x.id))return;ev.stopImmediatePropagation();if(x.id==='wtRankSort')wtRankSort=x.value;if(x.id==='wtRankFocus')wtRankFocus=x.value;if(x.id==='wtRankMin')wtRankMin=Math.max(60,Number(x.value)||60);wtVisibleCount=12;render()},true);
 document.addEventListener('input',ev=>{if(ev.target.id==='wtSearch'){wtQuery=ev.target.value;let root=document.querySelector('.wt-news');if(root){let caret=ev.target.selectionStart;render();let next=document.getElementById('wtSearch');next?.focus();next?.setSelectionRange(caret,caret)}}},true);
