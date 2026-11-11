@@ -36,6 +36,10 @@ const BEATS={
 };
 const TITLES=['开场','铺垫','冲突','加压','转折','代价','反击','高潮','余韵'];
 let step=0,lastProjectId='';
+const pendingAuto=new Set();
+let storyBusy=false,storyProvider='native',storyApiKey='',storyModel='';
+const providerModels={deepseek:'deepseek-chat',openai:'gpt-4o-mini'};
+
 const clean=s=>String(s??'').replace(/[\u0000-\u001f]/g,' ').trim();
 const style=id=>STYLES.find(x=>x.id===id)||STYLES[0];
 const arc=id=>ARCS.find(x=>x.id===id)||ARCS[0];
@@ -58,26 +62,100 @@ function ensure(p){
  p.creativeDirection=c;persist();return c;
 }
 function shotOf(i){return SHOTS[i]||'中景人物'}
-function draft(p){
- const c=ensure(p),subject=clean(p.sourceTitle||p.title).replace(/：漫画改编$/,'').slice(0,100);
- const names=c.cast.map(x=>clean(x.name)).filter(Boolean),a=names[0]||'主角',b=names[1]||'搭档';
+function localStoryboard(p){
+ const c=ensure(p),subject=clean(p.sourceTitle||p.title).replace(/：漫画改编$/,'').slice(0,95);
+ const a=clean(c.cast?.[0]?.name)||'主人公',b=clean(c.cast?.[1]?.name)||'搭档';
+ const time=/时间机器|time machine|时空|穿越/i.test(subject);
+ const object=time?'一台刻有同心圆刻度的铜制时间机器':/经典|文学|历史/.test(p.category||'')?'泛黄的手稿与一张重要的旧地图':'一份记录着矛盾证词的公开档案';
+ const conflict=clean(p.description||c.thesis).slice(0,115);
  const beats=BEATS[c.arcId]||BEATS.twist;
- const occupied=(p.panels||[]).some(x=>clean(x.scene));
- if(occupied&&!confirm('重新生成会覆盖当前九格脚本中的画面、对白与旁白；不会删除已有的图片。是否继续？'))return;
- p.panels.forEach((x,i)=>{
-  x.title=beats[i];
-  x.scene='镜头：'+shotOf(i)+'。场景：'+c.world+'。'+a+'与'+b+'围绕「'+subject+'」展开'+beats[i]+'的故事画面；遵守人物固定外观和统一光色规则。'+(i===8?'以开放式尾声收束。':'保留清晰视觉焦点。');
-  x.caption=['一件事，改变了他们看世界的方式。','起初，大家都以为答案很简单。','有人提出了另一种解释。','难题并没有就此结束。','他们发现，真正的问题可能在别处。','每种选择都要付出代价。','一条新线索让局面发生变化。','这一次，必须认真作出选择。','故事结束了，但问题仍值得追问。'][i];
-  x.dialogue=i%2===0?a+'：我们应该先把事情弄清楚。':b+'：还有什么是我们忽略的？';
-  x.prompt='';
- });
+ const stages=[
+  ['建立悬念',a+'在'+c.world+'发现'+object+'，'+b+'注意到它与「'+subject+'」有关，但两人的判断并不相同。','谁都以为这只是一件不起眼的小事。',a+'：如果它真能改变结果呢？'],
+  ['人物抉择',b+'伸手阻止'+a+'启动'+object+'，镜头切至两人截然不同的神色；桌上摊开与主题相关的线索，观众看到第一次利益冲突。','每一次选择，都有不愿承担的代价。',b+'：你确定我们理解它的意义吗？'],
+  ['首次尝试',a+'按下装置／展开档案，屋内的细节出现可见变化，'+b+'从地面拾起一件之前没人留意的证物。画面以近景强调动作因果。','他们选择了最容易相信的解释。',a+'：线索就在眼前。'],
+  ['新的阻力',a+'与'+b+'来到充满对立意见的公共场景，周围的人纷纷指向同一方向；前景的一处微小反常细节却与众人的结论冲突。','答案似乎近在咫尺，疑问却更多了。',b+'：所有人都这么说，就一定对吗？'],
+  ['谬误放大',a+'沿着错误的判断继续推进，场景中的'+object+'投下夸张的影子，'+b+'努力试图指出被忽略的证据。双方动作与前格衔接。','一个看似合理的答案，遮住了更重要的真相。',a+'：这不是我们想看到的吗？'],
+  ['代价显现',b+'把原先隐藏的事实摊在'+a+'面前，两人身后的环境呈现行为造成的影响；镜头压低，突出沉默和后果。','当代价出现时，谎言已经难以收回。',b+'：你还愿意承担这个结果吗？'],
+  ['线索反转',a+'忽然回头，发现一直被忽略的'+object+'有一处细节足以推翻此前判断；特写聚焦手指、证据和瞳孔的变化。','真正的线索，其实从一开始就在那里。',a+'：等等，我们是不是看错了？'],
+  ['因果揭示',a+'与'+b+'重新回到最初的场景，以反向构图复现开场；他们发现问题不是“谁拥有答案”，而是“谁承担选择”，用具体动作完成转折。','改变事情的不是工具，而是人的责任。',b+'：原来需要改变的，是我们的选择。'],
+  ['余韵收束',a+'没有再争辩，而是将'+object+'郑重放在两人之间；远景显现新一天的环境。留下一个与开场对照的视觉象征，让观众自己得出结论。','所有故事都会结束，但选择仍会继续。',a+'：下一次，我们会怎样做？']
+ ];
+ return stages.map((row,i)=>({title:(c.arcId==='twist'?beats[i]:row[0]).slice(0,100),
+  scene:'【'+shotOf(i)+'】'+row[1]+' 固定'+a+'、'+b+'的服装、脸型与识别道具。题材背景：'+conflict+'。',
+  caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
+}
+function applyStoryboard(p,panels,meta,replace=false){
+ if(p.handoff?.repoQueuedAt)throw Error('该版本已正式派单，不能修改既有故事');
+ if(!Array.isArray(panels)||panels.length!==9||!Array.isArray(p.panels)||p.panels.length!==9)throw Error('需要恰好九格内容');
+ const existing=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));
+ if(replace&&existing&&!confirm('这会替换你当前九格中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
+ const fields=['title','scene','caption','dialogue','prompt'];
+ let updated=0;
+ for(let i=0;i<9;i++){
+  for(const field of fields){
+   const cur=p.panels[i][field];
+   if(!replace&&clean(cur)&&!(field==='title'&&/^第 ?[1-9] 格$/.test(cur)))continue;
+   const value=clean(panels[i]?.[field]).slice(0,field==='title'?100:field==='scene'?1700:field==='prompt'?1200:550);
+   if(value){p.panels[i][field]=value;updated++}
+  }
+ }
+ const c=ensure(p);
  c.drafted=true;c.reviewed=false;c.approval=null;
- if(!clean(p.fiction))p.fiction='采用独立原创角色和架空地点，事实和虚构对白分别标明；不沿用可识别的真实人物关系与未经证实的指控。';
- if(!clean(p.sourceTitle))p.sourceTitle=p.title;
- if(!clean(p.description))p.description=c.thesis;
+ c.storyboardProvenance={method:meta.method||'local_structure_rules',provider:meta.provider||'local',
+  model:meta.model||null,at:new Date().toISOString(),analysis:clean(meta.analysis||'').slice(0,600),
+  fields_updated:updated,author_reviewed:false};
+ if(!clean(p.fiction))p.fiction='原创独立角色与架空地点；来源事实与虚构对白独立标注。';
  p.characters=castText(c);
- markDirty(p);setChange(p,'创建九格分镜草稿（规则建议，待作者审阅）');
- step=2;render();notify('已生成九格可编辑分镜草稿；逐格确认后才能锁定');
+ markDirty(p);setChange(p,meta.method==='verified_model_response'?'AI生成九格可编辑脚本（仍需人工复审）':'本地剧情规则生成九格草稿（非大模型输出）');
+ step=2;render();
+ return true;
+}
+function draft(p,replace=true){
+ const ok=applyStoryboard(p,localStoryboard(p),{method:'local_structure_rules',provider:'local',analysis:'本地结构化分镜建议，尚未经大模型分析'},replace);
+ if(ok)notify('已填写九格本地规则草稿；这不是 AI 模型输出，可继续逐格编辑');
+ return ok;
+}
+function aiStoryPayload(p,provider){
+ const c=ensure(p),st=style(c.styleId);
+ return {provider,model:providerModels[provider]||'',apiKey:provider==='native'?'':storyApiKey,
+  title:p.sourceTitle||p.title,summary:p.description||c.thesis,category:p.category,
+  arc:arc(c.arcId).name,thesis:c.thesis,world:c.world,emotion:c.emotion,fiction:p.fiction,
+  style:st.name,styleRules:[st.material,st.lighting,st.layout,st.negative].join('；'),
+  cast:c.cast,episodes:Array.isArray(p.seriesEpisodes)?p.seriesEpisodes:[]};
+}
+async function generateStory(p,{provider='native',auto=false,replace=false}={}){
+ if(storyBusy||p.handoff?.repoQueuedAt)return;
+ const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));
+ if(auto&&!empty)return;
+ if(auto&&(!wtSession?.access_token||!wtConfig?.storyboardAiEnabled)){
+  draft(p,false);return;
+ }
+ if(provider!=='native'){
+  if(!storyApiKey.trim()){notify('请输入 '+(provider==='deepseek'?'DeepSeek':'OpenAI')+' API Key，仅用于本次请求');return}
+  if(!auto&&!confirm('将使用你提供的第三方模型 API。供应商可能按使用量收费；确认本次调用？'))return;
+ }
+ if(!auto&&replace&&p.panels.some(x=>clean(x.scene))){
+  if(!confirm('将用新剧本替换当前文字与分镜；不会删除已有的漫画图片。确定继续？'))return;
+ }
+ storyBusy=true;render();
+ try{
+  if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
+  const result=await wtCallAI('/api/ai/storyboard',aiStoryPayload(p,provider));
+  if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length!==9)throw Error('没有收到九格完整的模型生成结果');
+  if(selected()?.id!==p.id||p.handoff?.repoQueuedAt)throw Error('当前作品已切换或已派单，原始草稿未被覆盖');
+  const wrote=applyStoryboard(p,result.panels,result,replace);
+  if(wrote)notify('已使用 '+(provider==='native'?'平台内置AI':provider==='deepseek'?'DeepSeek':'OpenAI')+' 生成可编辑九格草稿，请人工确认');
+ }catch(err){
+  if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
+   draft(p,false);notify('内置模型暂不可用，已退回本地规则草稿（非AI模型输出）');
+  }else notify('AI九格生成失败：'+String(err?.message||err).slice(0,110));
+ }finally{storyBusy=false;render()}
+}
+function scheduleAutoStoryboard(p){
+ if(!p||p.handoff?.repoQueuedAt||!Array.isArray(p.panels)||p.panels.length!==9||
+    p.panels.some(x=>clean(x.scene)||clean(x.dialogue)||clean(x.caption))||pendingAuto.has(p.id))return;
+ pendingAuto.add(p.id);
+ queueMicrotask(()=>{if(selected()?.id===p.id&&step===2)generateStory(p,{auto:true,provider:'native'});});
 }
 function castText(c){return c.cast.map((x,i)=>[i+1+'. '+x.role+'：'+x.name,'外貌与比例：'+x.look,'固定服饰：'+x.clothes,'识别道具：'+x.symbol,'性格：'+x.nature].join('；')).join('\n')}
 function payload(p){
