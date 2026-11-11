@@ -305,7 +305,12 @@
      deepseek.checked=true;deepseek.configured=r?.configured===true;
    }).catch(()=>{deepseek.checked=true;deepseek.configured=null;}).finally(()=>{
      deepseek.loading=false;
-     if(ui.route==='workspace'&&(ui.wt4Step===1||ui.wt4Step<0))render();
+     // Never re-render an active screenplay form after a read-only model probe:
+     // re-rendering can discard typed seed text or interrupt the consent UI.
+     const node=document.querySelector('.wt4-model-status');
+     if(node)node.textContent=(deepseek.configured===true?'DeepSeek 服务端已连接':
+       deepseek.configured===false?'DeepSeek API Key 尚未配置':'暂时无法核验 DeepSeek 登录或服务端状态')+
+       ' · 生成内容前仍需作者主动确认可能产生的模型费用';
    });
  }
 
