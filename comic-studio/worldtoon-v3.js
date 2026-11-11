@@ -328,6 +328,8 @@
     }else if(ev.target.id==='wt3-drama-subtype'){
       p.dramaSubtype=melodramaSubtypes.some(x=>x.id===ev.target.value)?ev.target.value:'rebirth-bank-rich';
     }else{p.dramaIntensity=Math.max(1,Math.min(5,Number(ev.target.value)||4))}
+    expandUI.pending=null;
+    if(expandUI.projectId===p.id)showExpandStatus('info','剧情设定已更新。请重新点击 DeepSeek 扩写并确认本次调用。',p.id);
     setChange(p,'保存 DeepSeek 剧情选项：'+p.plotGenre);render();return;
   }
   if(ev.target?.id==='wt3-agent'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.productionAgent=ev.target.value==='WorkBuddy'?'WorkBuddy':'ChatGPT';setChange(p,'切换 SOP 生产者：'+p.productionAgent);render()}}
