@@ -254,3 +254,17 @@
 @media(max-width:600px){.wt4-work-area .wt4-stage-card>.buttons .button{flex:1 1 100%}}
 
 .wt4-model-status{margin:0 0 14px;padding:10px 13px;font-size:12px;line-height:1.65;color:#3e5848;background:#edf4eb;border:1px solid #d2e2d0;border-radius:8px}
+
+
+/* DeepSeek editor: actionable, non-modal consent and persistent request feedback. */
+.wt3-expand-consent{margin:14px 0 10px;padding:14px 16px;border:1px solid #d6b18e;border-radius:10px;background:#fff8ed;color:#503b29}
+.wt3-expand-consent[hidden],.wt3-expand-feedback[hidden]{display:none!important}
+.wt3-expand-consent p{font-size:13px;line-height:1.7;margin:0 0 12px}
+.wt3-expand-consent .buttons{display:flex;flex-wrap:wrap;gap:9px;margin:0}
+.wt3-expand-consent .button{min-height:39px}
+.wt3-expand-feedback{font-size:13px;line-height:1.7;padding:11px 14px;margin:12px 0 0;border-radius:9px;border:1px solid #d3ddd0;background:#f3f7f0;color:#395c43;overflow-wrap:anywhere}
+.wt3-expand-feedback[data-state="confirm"]{background:#fff8ef;border-color:#e4cdb1;color:#7a4a24}
+.wt3-expand-feedback[data-state="loading"]{background:#edf2f4;border-color:#c8d8df;color:#3d6070}
+.wt3-expand-feedback[data-state="error"]{background:#fff2ef;border-color:#e8bdb6;color:#953f32}
+.wt3-expand-feedback[data-state="success"]{background:#edf6eb;border-color:#bfd7b8;color:#336a43}
+@media(max-width:600px){.wt3-expand-consent{padding:12px}.wt3-expand-consent .button{flex:1 1 100%}.wt3-expand-feedback{padding:10px 12px}}
