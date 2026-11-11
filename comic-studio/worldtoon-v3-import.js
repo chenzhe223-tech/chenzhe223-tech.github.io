@@ -37,7 +37,7 @@
   if(!file||!/.zip$/i.test(file.name))throw Error('请选择 ZIP 压缩包');
   const current=selected();if(!current)throw Error('请先建立或选择一个漫画作品');
   if(current.handoff?.importStatus==='uploading')throw Error('当前正在同步素材，请稍后再试');
-  pending.add(current.id);const created=[];
+  pending.add(current.id);const created=[];let staged=false;
   try{
    current.handoff={...current.handoff,importStatus:'校验压缩包'};
    setChange(current,'开始导入 ChatGPT 素材包');render();
@@ -86,13 +86,19 @@
       importedAt:now(),importManifest:manifest||null,importDetail:n+'张漫画 + 独立封面',
       stagedFiles:pieces.map(x=>({path:x.path,sha256:x.sha256||null,text:x.text||null,
        imageKey:x.blob?created[pieces.filter(y=>y.blob).findIndex(y=>y.path===x.path)]:null})),stageUploaded:[]};
+   staged=true;
    setChange(p,'正式 PNG 素材包导入并校验：'+n+'张画格 + 封面');
    render();notify('素材包导入成功；开始尝试安全暂存到 GitHub');
    if(taskId&&p.handoff.repoQueuedAt)await resume(p);
   }catch(error){
-    for(const key of created)await delMedia(key).catch(()=>{});
-    current.handoff={...current.handoff,importStatus:'导入失败',importDetail:String(error.message||error).slice(0,180)};
-    setChange(current,'素材包导入失败（未批准发表）');render();throw error;
+    // Never destroy locally staged image blobs after a partial GitHub upload:
+    // resume() needs them for idempotent retry of only missing files.
+    if(!staged)for(const key of created)await delMedia(key).catch(()=>{});
+    current.handoff={...current.handoff,
+      importStatus:staged?'GitHub 暂存部分完成 · 可重试':'导入失败',
+      importDetail:String(error.message||error).slice(0,180)};
+    setChange(current,staged?'GitHub 暂存中断，保留本地图片及重试状态':'素材包导入失败（未批准发表）');
+    render();throw error;
   }finally{pending.delete(current.id)}
  }
  async function resume(p){
