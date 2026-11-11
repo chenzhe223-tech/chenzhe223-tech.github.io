@@ -15,17 +15,17 @@ const path=require('node:path');
    const errors=[];
    page.on('pageerror',err=>errors.push(err.message));
    await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
-   await page.waitForFunction(()=>window.WTStyleV3?.CATALOG?.length===20,{timeout:30000});
+   await page.waitForFunction(()=>window.WTStyleV3?.CATALOG?.length===21,{timeout:30000});
    await page.evaluate(()=>{
     const view=document.getElementById('view');
     view.innerHTML='<div class="director-page"><section class="box director-section"><h2>选择漫画画风</h2>'+
-       window.WTStyleV3.cards({styleId:'chinese-historical-epic'})+
-       window.WTStyleV3.detail({styleId:'chinese-historical-epic'})+'</section></div>';
+       window.WTStyleV3.cards({styleId:'japanese-pastoral-wonder'})+
+       window.WTStyleV3.detail({styleId:'japanese-pastoral-wonder'})+'</section></div>';
     document.querySelectorAll('img').forEach(img=>{img.loading='eager'});
    });
    await page.waitForFunction(()=>{
       const pictures=[...document.querySelectorAll('.wt-v3-grid img')];
-      return pictures.length===20&&pictures.every(img=>img.complete&&img.naturalWidth>0);
+      return pictures.length===21&&pictures.every(img=>img.complete&&img.naturalWidth>0);
    },{timeout:55000});
    const metrics=await page.evaluate(()=>{
     const cards=[...document.querySelectorAll('.wt-v3-grid .wt-v3-card')];
@@ -44,10 +44,10 @@ const path=require('node:path');
       cardsWidth:m[0].width
     };
    });
-   if(metrics.count!==20||!metrics.valid||metrics.sources!==20||!metrics.widthsEqual||
+   if(metrics.count!==21||!metrics.valid||metrics.sources!==21||!metrics.widthsEqual||
       metrics.cropped||metrics.horizontalOverflow||!metrics.visibleGuide)
       throw Error(spec.label+' UI assertion failed: '+JSON.stringify(metrics));
-   await page.locator('.wt-v3-grid').screenshot({path:path.join('worldtoon-ui-screenshots',spec.label+'-20styles.png'),timeout:30000});
+   await page.locator('.wt-v3-grid').screenshot({path:path.join('worldtoon-ui-screenshots',spec.label+'-21styles.png'),timeout:30000});
    report.viewports.push({label:spec.label,...metrics,passed:true,pageErrors:errors.slice(0,5)});
    console.log(spec.label,'PASS',JSON.stringify(metrics));
    await page.close();
