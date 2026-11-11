@@ -1,57 +1,43 @@
-# WORLD/TOON 4.2 · 红果短剧与小说剧情选择
+# WORLD/TOON · 热剧 / 小说来源发现与漫画交接 QA
 
-**发布日期：** 2026-11-11  
-**定位：** 素材发现 → 网络书名/剧名检索 → 有据可查的剧情片段勾选 → 同一作品工作空间 AI 编剧 → 创意导演 → 既有双 SOP / GitHub QA / 作者最终授权。
+**完成日期：** 2026-11-11
+**线上入口：** https://worldtoon.chenzhe223.workers.dev/#/live
+**功能路径：** 素材发现 → 搜索短剧/小说/名著 → 查看来源与概要片段 → 选择原创或授权改编 → 进入原有编剧、导演与双 SOP。
 
-## 功能落地
+## 已交付
 
-1. 「素材发现」顶部新增独立但集成在原工作流内的 **红果热剧 · 网络小说 · 世界名著** 搜索区。按短剧、小说和综合类型查找，支持新搜索和有日期的精选热点快照。
-2. 原著/公开短剧剧情 **可勾选多个片段**、调整忠实改编与独立原创方式；选完自动建立真实本机项目，保留所选剧情、出典、创作描述和版权状态，并跳转 `#/workspace/<project_id>/1`。
-3. 公版示例：`简·爱` 来自 Project Gutenberg（https://www.gutenberg.org/ebooks/1260），6 个源于原著阶段的剧情候选；仅能认定美国公版，翻译、其他地区和插画另核权利。
-4. 商业短剧示例：`他过分野` 来自第三方公开作品介绍（https://www.soduanju.com/duanju/taguofenye.html），4 个有依据的**概要剧情节点**，明确不是精确的集数表；保留 `copyrighted` 权利状态。
-5. 红果热点：2026-11-11 有来源的第三方榜单前 10 名（含明确榜位和日期）+ 实时 Google News RSS 公开报道线索。显示快照日期和来源，不把第三方榜单冒充红果官方的实时播放统计。
-6. 在素材发现页面首次进入时，自动读取带日期的第三方热点快照；热门名次按已核实的当日榜单排序。搜索结果缓存 15 分钟，用户主动搜索可刷新。\n7. 其它小说：调用 Google Books 和 Gutendex 的公开**书目**接口；如可用，仅从带来源的描述句中提取“简介线索”，不捏造原著章节；无内容时允许作者输入有权使用的剧情摘要再拆为可选段落。
-8. 原有公版素材池、AI 简报、题库、漫画书架和两种 Agent SOP 保持不变；本功能不是模型生图工具。
-9. 直接忠实改编受保护作品：需作者确认授权并填写可查的授权证明 URL 才可通过 `wfCanTask` 的初步派单条件，之后 **仍须** 完成创意、真实首图、GitHub QA 和作者终审。独立原创模式只引用抽象主题，明确要求创造全新的角色、情节和对白。
+- 搜索入口接入现有“素材发现”页，支持短剧、小说、综合检索，以及带日期的红果题材榜单快照。
+- 作品卡显示来源、来源日期、身份核验状态、权利提示。新闻只提到题名时不冒充作品上架证明；书目接口只读取目录与简介，不抓取现代作品全文。
+- 《简·爱》候选链接到 Project Gutenberg，按公版候选处理，并提示地区、译本及插画另核权利。
+- 《他过分野》候选链接到第三方公开作品介绍，剧情节点标为公开简介概要，不虚构集数；保留受版权作品的原创改写与授权改编门禁。
+- 红果热榜快照收敛为同一第三方来源的 2026-11-11 前十榜位，显示来源日期与第三方口径，不把估算指数标成红果官方播放量；无法确认剧情的榜单条目不提供编造的剧情片段。
+- 搜索失败显示逐来源告警；零匹配显示明确空结果说明。选段进入原有漫画工作台，最终生产继续经过既有作者审核和 GitHub QA。
 
-## 文件与真实交付记录
+## 代码与仓库
 
-- `comic-studio/story-discovery.json`：来源与分镜候选索引，含版权状态及快照日期。
-- `comic-studio/story-discovery-service.js`：Cloudflare Worker 源码，在线读取上述索引，并在用户发起搜索后使用 Google Books / Gutendex / Google News RSS。
-- `comic-studio/story-discovery-ui.js`：独立可维护的剧情发现/选取逻辑，实际嵌入白名单允许的 `extension.js`。
-- `comic-studio/styles.css`：浏览器端双列结果、剧情复选框、版权提示及手机单列适配。
-- `comic-studio/app.js`：保存剧情选择至生产任务，增加忠实改编授权门禁。
-- `comic-studio/index.html` 和 `comic-studio/sw.js`：4.2.0 浏览器和 Service Worker 版本刷新。
-- `comic-studio/tests/worldtoon-story-discovery.cjs`：新增自动化回归脚本；已加入原有 GitHub Actions 回归工作流。
+- 搜索与标题身份规则：comic-studio/story-discovery-service.js
+- 搜索卡片、选段及工作台交接：comic-studio/story-discovery-ui.js（嵌入 Worker 白名单允许的 extension.js）
+- 日期榜单与作品索引：comic-studio/story-discovery.json
+- Worker 路由与健康版本：comic-studio/worker.js
+- 回归脚本：comic-studio/tests/worldtoon-story-discovery.cjs
 
-## 本次验证
+GitHub PR [#125](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/125) 已合并，合并提交 75f1a1dbc4bee2b251171a62d2acdc5dc50c4b0d。PR 上的 WORLD/TOON static quality gate 与 WorldToon mobile layout contract 两项 Actions 检查均成功。
 
-- Cloudflare Worker **真实部署新版本**，`/api/comic/story-search` GET 路由和 `wtStorySearch` 函数已从部署脚本回读；原有 6 项绑定仍完整，包括 D1、DeepSeek Key、GitHub Key；部署记录可获取。
-- 原 3.0、4.0 代码/行为烟雾测试在隔离 JS 模拟环境中均返回 **PASS**。
-- 搜索/选段/版权功能 **11/11** 模拟联动检查通过：两本指定素材命中、热点快照、图书目录、可选剧情、漫画草稿、AI 编剧入口、版权门禁。
-- GitHub `worldtoon-story-discovery.cjs` 脚本内容已在更新为 10 部热点资源后通过受控依赖模拟执行并输出 `WORLD/TOON STORY SEARCH PASS`；真实 GitHub Actions 云端成功回执尚未核实。
+## 真实验收记录
 
-## 未核实的节点（禁止假报通过）
+- Cloudflare Worker worldtoon 已通过 Replace Worker Script Content 上传 4.3.0 模块，deployment id 7b1e2b13f2ef4edcbf8c1daad9a3c55f；线上 /health 返回 storySearch:true 和 titleIdentityChecks:true。
+- 线上小说查询 简爱 返回《简·爱》来源卡与六个剧情候选；同次响应明确报告 Google Books HTTP 429、Gutendex 超时，仍展示可追溯的精选来源。
+- 线上短剧查询 他过分野 返回来源明确的第三方简介候选；同次响应明确报告 Google News RSS HTTP 503。
+- 线上未匹配小说关键词返回 items:[] 与“暂未找到匹配来源；可更换关键词或稍后重试”。
+- 浏览器中已检查桌面视口，并在 375×812、390×844、430×932 手机视口检查搜索、来源卡、片段选择及版权提示布局。
+- 本地 20 个非浏览器回归脚本通过。另有四项 Playwright 浏览器脚本因仓库未安装 playwright 依赖无法运行；上面的浏览器验收通过连接的实际浏览器完成。GitHub Actions 的静态质量和移动布局检查均成功。
 
-- 实际登录用户的浏览器 **实时网络搜索 GET 返回 HTTP 200** 与第三方上游可用性、不同网络条件下的 UI 操作与响应时间。
-- 桌面/手机端真实视觉截图与点击路径验收（源代码包含断点适配）。
-- 所有受保护小说/短剧的真实商业改编许可；此种授权须项目逐部取得。
-- AI 编剧真实付费 DeepSeek 扩写、漫画图片、封面及真实发布回执（仍按原 SOP 审核）。
+## 保留边界
 
-**下一次浏览器手动验收**：打开 https://worldtoon.chenzhe223.workers.dev/#/live ，点《简·爱》或《他过分野》快捷词 → 搜索结果 → 选择剧情 → 勾选一至多段 → 确认改编方式 → 建立漫画草稿，确认页面跳转到本作品 AI 编剧。若 API 返回明确错误，不应默默使用伪造结果。
+- 没有在作者的持久浏览器数据中创建测试项目；正式选择剧情后会沿用现有作品工作台及双 SOP。
+- 近年短剧/网络小说仍须逐作品核验改编许可；公网来源或公开简介不等同于授权。
+- DeepSeek 扩写、生图、作者终审、GitHub 成品验收和对外发表不由搜索功能自动触发。
+- 在线书目与新闻源有时会限流/超时；页面显示告警并可用带来源快照兜底，不声称上游始终可用。
 
 **By DAVYLAB · 把想法，做成能用的工具。**
-
-## 4.3 · 题名身份校验与生产 Worker 对齐（2026-11-11）
-
-- 红果热剧空关键词入口只显示带来源和日期的精选快照，不再把宽泛新闻结果冒充剧目候选。
-- 输入作品名后，Google News 候选必须在来源标题中命中规范化题名；卡片注明“来源提及该题名 · 作品身份待人工核对”。这表示文章确实提及题名，不表示作品已在红果上架。
-- Google Books 与 Gutendex 书目候选也须题名命中；展示来源链接和可用出版日期。图书简介仅用于短摘要候选，不抓取正文或自动伪造章节名。
-- 明确的服务端无结果错误会显示在素材发现页；HTTP 成功但零匹配则展示空结果说明。来源不可用时保留逐源告警。
-- 已将已部署 Worker 的现有代码快照纳入 GitHub `worker.js`，并把剧情搜索服务、路由和 `/health` 能力标志同步至 4.3.0；发布使用 `/content` 更新 Worker 模块内容，保留现有环境绑定。
-- 工作台交接、已有作品数据、编剧/导演阶段、SOP-B1/B2、作者授权与 GitHub QA 门禁均沿用原路径。此变更不触发 DeepSeek/生图付费调用，也不创建或发表漫画。
-
-### 本地回归
-
-2026-11-11 本地离线回归通过：剧情搜索题名匹配、来源状态与日期、空关键词快照、选择片段写入同一工作台、版权拦截；以及 WORLD/TOON 3.0/4.0、DeepSeek 授权、3D 风格、移动样式、生产调度、离线缓存等已有检查。线上部署与桌面/手机浏览器实测结果仅在本节追加真实运行记录后才标记完成。
 
