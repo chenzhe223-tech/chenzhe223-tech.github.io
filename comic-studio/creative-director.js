@@ -25,7 +25,8 @@ const ARCS=[
  {id:'journey',name:'人物成长',detail:'欲望 → 挫折 → 改变'},
  {id:'mystery',name:'悬疑探寻',detail:'疑点 → 证据 → 新理解'},
  {id:'explain',name:'知识解说',detail:'提出问题 → 类比拆解 → 应用'},
- {id:'chronicle',name:'历史纪事',detail:'时代背景 → 抉择 → 后果'}
+ {id:'chronicle',name:'历史纪事',detail:'时代背景 → 抉择 → 后果'},
+ {id:'viral-melodrama',name:'狗血网红爽剧',detail:'重生逆袭 → 身份反转 → 金钱权力与娱乐圈修罗场'}
 ];
 const SHOTS=['远景交代','中景人物','近景细节','对肩镜头','俯视关系','反打冲突','特写线索','低角度转折','远景余韵'];
 const BEATS={
@@ -33,7 +34,8 @@ const BEATS={
  journey:['渴望的东西','迈出第一步','遭遇阻力','关系出现变化','尝试新的方案','付出代价','找到同伴','做出真正选择','走向新的自己'],
  mystery:['突发线索','不合常理的细节','第一条路径','证据出现裂痕','人物意见分裂','追寻关键原因','被忽略的细节','谜底的重构','谨慎的结论'],
  explain:['提出一个问题','认识关键概念','用角色讲解机制','出现错误理解','第一层解释','看见具体例子','比较不同方案','形成解决路径','现实应用与局限'],
- chronicle:['确立时代与地点','交代人物处境','重要事件出现','不同立场交锋','历史背景补充','关键抉择','转折的影响','后来发生了什么','史料与留白']
+ chronicle:['确立时代与地点','交代人物处境','重要事件出现','不同立场交锋','历史背景补充','关键抉择','转折的影响','后来发生了什么','史料与留白'],
+ 'viral-melodrama':['重生/意外开局','财富或身份差距初显','前任/合约关系曝光','网红热搜引爆舆论','富婆逆袭反击','男明星真实动机反转','豪门与银行职场冲突','直播现场身份大反转','新反转钩子引出下一集']
 };
 const TITLES=['开场','铺垫','冲突','加压','转折','代价','反击','高潮','余韵'];
 let step=0,lastProjectId='';
@@ -54,8 +56,8 @@ function defaultCast(category){
 function ensure(p){
  if(!p) return null;
  if(p.creativeDirection?.version===1)return p.creativeDirection;
- const c={version:1,quality:'Premium',styleId:/历史|经典|宗教|军事/.test(p.category||'')?'chinese-historical-epic':/AI|科学|机器人/.test(p.category||'')?'futuristic-sci-fi':'western-cinematic',
-  arcId:/历史|经典/.test(p.category||'')?'chronicle':/科学|AI|机器人/.test(p.category||'')?'explain':'twist',
+ const c={version:1,quality:'Premium',styleId:/网红|狗血|爽剧|重生|娱乐圈/.test(p.category||'')?'dramatic-3d-vertical':/历史|经典|宗教|军事/.test(p.category||'')?'chinese-historical-epic':/AI|科学|机器人/.test(p.category||'')?'futuristic-sci-fi':'western-cinematic',
+  arcId:p.plotGenre==='viral-melodrama'?'viral-melodrama':/历史|经典/.test(p.category||'')?'chronicle':/科学|AI|机器人/.test(p.category||'')?'explain':'twist',
   thesis:clean(p.description)||'从公开议题出发，通过原创人物讲出冲突、选择与结果。',
   world:/历史|经典/.test(p.category||'')?'取材于时代背景但不虚构史实结论的架空城镇':'与现实新闻不对应的架空城市',
   emotion:'有趣、清楚、克制、有余味',cover:'简洁的大标题留白、完整原创人物、故事核心象征物、统一系列标识 By DAVYLAB',
@@ -121,7 +123,7 @@ function aiStoryPayload(p,provider){
  const c=ensure(p),st=style(c.styleId);
  return {provider,model:providerModels[provider]||'',apiKey:provider==='native'?'':storyApiKey,
   title:p.sourceTitle||p.title,summary:p.description||c.thesis,category:p.category,
-  arc:arc(c.arcId).name,thesis:c.thesis,world:c.world,emotion:c.emotion,fiction:p.fiction,
+  arc:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),thesis:c.thesis,world:c.world,emotion:c.emotion,fiction:p.fiction,
   style:st.name,styleRules:[st.material,st.lighting,st.layout,st.negative].join('；'),
   cast:c.cast,panel_count:p.panels.length,series_bible:p.seriesBible||null,episodes:Array.isArray(p.seriesEpisodes)?p.seriesEpisodes:[]};
 }
@@ -167,8 +169,8 @@ function payload(p){
  return {
   version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
   series_bible:p.seriesBible||null,series_identity:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,
-   narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
-  characters:c.cast.map(x=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature)})),
+   narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
+  characters:c.cast.map((x,i)=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature),portrait_reference:x.portraitConsent&&x.portraitMedia?{file:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(x.portraitExt||'png'),sha256:x.portraitSha256||null,usage:'authorized_visual_likeness_reference_only',source:'user_supplied_private',description:clean(x.portraitNotes||''),requires_actual_photo_for_generation:true}:null})),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
   cover_brief:clean(c.cover),
@@ -196,7 +198,8 @@ function checks(p){
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>x.license!=='CC0'))errs.push('视觉参考包含未确认 CC0 的馆藏');
- if(!c.drafted)errs.push('先生成并逐格审阅九格分镜');
+ if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
+ if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
  return errs;
 }
@@ -206,7 +209,7 @@ function exportBrief(p){
  if(!approved(p))throw Error('创作方案尚未锁定，禁止派单');
  const c=p.creativeDirection;
  return {...payload(p),style_lock:{schema:'davylab.worldtoon.style-lock.v3',style_id:c.styleId,style_version:'3.0.0',quality_target:c.quality||'Premium',aspect_ratio:'3:4',resolution:[1080,1440],render_pipeline:'same_model_preview_and_final_required',model_id:null,model_version:null,preview_sha256:null,character_reference_sha256:null,original_first_panel_required:true,production_status:'awaiting_real_pilot'},lock_status:'approved',approval:{lock_hash:c.approval.lock_hash,approved_at:c.approval.approved_at,author_approved:true,approval_scope:'style_cast_storyboard',note:'锁定创意设定不等于事实核验或正式发表批准'},
- production_gates:{pilot_required:true,pilot_artifacts:['character-sheet.png','pilot-01.png'],pilot_approval_required:true,
+ production_gates:{pilot_required:true,pilot_artifacts:['character-sheet.png','pilot-01.png'],pilot_approval_required:true,portrait_reference_requires_private_transfer:true,portrait_likeness_review_required:true,
   full_run_panel_count:p.panels.length,independent_cover:true,character_continuity:true,original_preview_is_panel_01:true,preview_sha256_equals_final_panel_01:true,min_resolution:[1080,1440],reject_svg_and_placeholder:true,source_verification_before_fact_claims:true,
   instructions:'先交付角色设定图与首格样稿由作者审阅；未获作者确认不得批量生成剩余画格或宣布完成。'}};
 }
@@ -235,7 +238,7 @@ function castEditor(c){
  return '<div class="director-cast">'+c.cast.map((person,i)=>'<article class="director-character"><div class="director-character-head"><span>0'+(i+1)+'</span><strong>'+e(person.role)+'</strong></div>'+
  '<div class="director-character-avatar director-theme-'+style(c.styleId).id+'"><i></i><b></b><small>角色版式示意 · 非定妆照</small></div>'+
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
- '<label>'+['角色姓名','固定容貌、发型与体型','每格不变的服装','可识别道具或标记','性格与行为'][j]+
+ '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
  '</div></article>').join('')+'</div>';
 }
