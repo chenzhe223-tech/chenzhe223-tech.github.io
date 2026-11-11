@@ -755,6 +755,122 @@
         "editorial_basis": "official_event_listing",
         "verification_status": "official_event_page_reviewed",
         "serializable": true
+      },
+      {
+        "id": "academic-neurips-2026",
+        "source": "NeurIPS 官方会议日程",
+        "url": "https://neurips.cc/Conferences/2026",
+        "title": "NeurIPS 2026｜神经信息处理系统国际会议",
+        "eventDate": "2026-12-06",
+        "event_end_date": "2026-12-13",
+        "summary": "2026年12月：悉尼主会场及亚特兰大、巴黎卫星会场举行机器学习研究会议。地点和具体日期以NeurIPS官方日程为准。",
+        "story_beats": [
+          "三座城市之间的研究对话",
+          "研究者提出新算法",
+          "一张海报改变讨论方向"
+        ],
+        "series_episodes": [
+          "研究如何被同行挑战",
+          "AI科学家的会议一周",
+          "论文从问题到证据"
+        ],
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "仅使用官方活动信息与原创科普主题；不复制会议PPT或未经许可的肖像、论文与图片。",
+        "why": "具有可核验的官方日程和可视化科研主题，适合用原创科学隐喻开展科普漫画。",
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-iclr-2027",
+        "source": "ICLR 官方会议日程",
+        "url": "https://www.iclr.cc/Conferences/2027/Dates",
+        "title": "ICLR 2027｜国际学习表征大会",
+        "eventDate": "2027-04-26",
+        "event_end_date": "2027-04-30",
+        "summary": "2027年4月26日至30日：国际学习表征大会主会及工作坊预计举行，具体地点以会议官方通知为准。",
+        "story_beats": [
+          "神经网络的内部表征",
+          "研究者互相质询",
+          "新方法的实验验证"
+        ],
+        "series_episodes": [
+          "机器如何表示世界",
+          "论文同行评议",
+          "没有万能模型"
+        ],
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "仅使用官方活动信息与原创科普主题；不复制会议PPT或未经许可的肖像、论文与图片。",
+        "why": "具有可核验的官方日程和可视化科研主题，适合用原创科学隐喻开展科普漫画。",
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-lindau-2027",
+        "source": "Lindau Nobel Laureate Meetings 官方活动日程",
+        "url": "https://www.lindau-nobel.org/future-meetings/",
+        "title": "2027 林岛诺贝尔奖得主大会｜生命科学",
+        "eventDate": "2027-06-27",
+        "event_end_date": "2027-07-02",
+        "summary": "2027年6月27日至7月2日：第76届林岛诺贝尔奖得主大会聚焦生理学或医学，计划汇聚诺奖得主和青年科学家。",
+        "story_beats": [
+          "青年学者与资深科学家面对面",
+          "一项医学难题引发辩论",
+          "实验台与讲台之间的路径"
+        ],
+        "series_episodes": [
+          "科学家的成长",
+          "一项发现如何诞生",
+          "下一代科学问题"
+        ],
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "仅使用官方活动信息与原创科普主题；不复制会议PPT或未经许可的肖像、论文与图片。",
+        "why": "具有可核验的官方日程和可视化科研主题，适合用原创科学隐喻开展科普漫画。",
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-neurips-paris-2026",
+        "source": "NeurIPS 官方会议日程",
+        "url": "https://neurips.cc/Conferences/2026/Dates",
+        "title": "NeurIPS 2026 巴黎卫星会场｜跨洲AI学术交流",
+        "eventDate": "2026-12-09",
+        "event_end_date": "2026-12-13",
+        "summary": "2026年12月9日至13日：巴黎卫星会场安排与NeurIPS 2026相关的学术会议及工作坊。详见主办方官方日程。",
+        "story_beats": [
+          "跨时区远程研究会",
+          "卫星会场的海报展示",
+          "城市之间的科学交流"
+        ],
+        "series_episodes": [
+          "同步的全球会议",
+          "新想法的边界",
+          "让不同学科坐在一桌"
+        ],
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "仅使用官方活动信息与原创科普主题；不复制会议PPT或未经许可的肖像、论文与图片。",
+        "why": "具有可核验的官方日程和可视化科研主题，适合用原创科学隐喻开展科普漫画。",
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
       }
     ]
   }
