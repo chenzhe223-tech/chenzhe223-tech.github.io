@@ -405,7 +405,7 @@ if(t.editorial.sources.length===0&&t.mode!=='original'&&t.research_required!==tr
  return wtJson({error:'该仓库接口不存在或请求方法不被允许'},405)
 }
 
-const COMIC_SOURCES=[{id:'news',name:'全球热点'},{id:'hackernews',name:'Hacker News'},{id:'arxiv',name:'arXiv AI论文'},{id:'classics',name:'经典故事'},{id:'history',name:'历史脑洞'}];
+const COMIC_SOURCES=[{id:'news',name:'全球热点'},{id:'hackernews',name:'Hacker News'},{id:'arxiv',name:'arXiv AI论文'},{id:'classics',name:'经典故事'},{id:'history',name:'历史脑洞'},{id:'literary_series',name:'世界文学连载'},{id:'nobel_literature',name:'诺奖文学作品'},{id:'academic_events',name:'世界学术活动'}];
 function comicNormalize(x,id){
  try{
   let u=new URL(String(x.url||''));if(u.protocol!=='https:'||u.username||u.password)return null;
@@ -419,8 +419,9 @@ function comicNormalize(x,id){
 }
 async function comicDiscover(url){
  const source=url.searchParams.get('source')||'all';
- if(!['all','news','hackernews','arxiv','classics','history'].includes(source))return failure('未知素材来源',400);
+ if(!['all','news','hackernews','arxiv','classics','history','literary_series','nobel_literature','academic_events'].includes(source))return failure('未知素材来源',400);
  if(source==='classics'||source==='history')return heritageDiscover(source,String(url.searchParams.get('q')||'').slice(0,100),Math.min(90,Math.max(5,Number(url.searchParams.get('limit'))||60)));
+ if(['literary_series','nobel_literature','academic_events'].includes(source))return editorialDiscover(source);
  const tasks=[];
  if(source==='all'||source==='news')tasks.push({id:'news',run:async()=>{
   const r=await news(new URL('/api/news?category=全部&limit=60',url.origin));const json=await r.json();
@@ -461,6 +462,42 @@ async function comicDiscover(url){
   {headers:{'cache-control':'public,max-age=240','x-content-type-options':'nosniff'}});
 }
 
+
+// Curated editorial leads are hosted as a versioned source-linked JSON file in the existing site repo.
+// No copyrighted story passage or novel text is transferred; the cards contain original editorial hooks.
+async function editorialDiscover(source){
+ try{
+  const r=await fetch(ORIGIN+'editorial-series.json',{signal:AbortSignal.timeout(9500),headers:{accept:'application/json'}});
+  if(!r.ok)throw Error('Editorial source '+r.status);
+  const raw=await r.text();if(raw.length>220000)throw Error('Editorial manifest too large');
+  const doc=JSON.parse(raw);
+  if(doc.schema!=='davylab.worldtoon.curated-discovery.v1'||!doc.sources||!Array.isArray(doc.sources[source]))throw Error('Editorial manifest schema mismatch');
+  const today=new Date().toISOString().slice(0,10);
+  const items=[],seen=new Set();
+  for(const entry of doc.sources[source]){
+   if(!entry||entry.source_id!==source||!entry.id||seen.has(entry.id))continue;
+   let u;try{u=new URL(String(entry.url||''))}catch{continue}
+   if(u.protocol!=='https:'||u.username||u.password||!u.hostname.includes('.'))continue;
+   if(source==='literary_series'&&u.hostname!=='www.gutenberg.org')continue;
+   if(source==='nobel_literature'&&u.hostname!=='www.nobelprize.org')continue;
+   if(source==='academic_events'&&!u.hostname.endsWith('royalsociety.org'))continue;
+   if(source==='academic_events'&&String(entry.event_end_date||entry.eventDate||'')<today)continue; // never advertise concluded events
+   const beats=Array.isArray(entry.story_beats)?entry.story_beats.filter(x=>typeof x==='string').slice(0,6):[];
+   const episodes=Array.isArray(entry.series_episodes)?entry.series_episodes.filter(x=>typeof x==='string').slice(0,6):[];
+   if(beats.length<3||episodes.length<3||String(entry.summary||'').length<20)continue;
+   seen.add(entry.id);
+   items.push({...entry,title:String(entry.title).slice(0,230),summary:String(entry.summary).slice(0,380),
+    why:String(entry.why||'').slice(0,280),story_beats:beats,series_episodes:episodes,
+    source_id:source,url:u.href,image:'',published:'',editorial_reviewed_on:doc.reviewed_on,
+    rights_cleared:false,fact_checked:false});
+  }
+  if(!items.length)throw Error('No verified editorial leads; old snapshot remains unchanged');
+  return Response.json({items,source,verified:false,rights_cleared:false,method:'source_linked_editorial_selection',
+   collectedAt:new Date().toISOString(),
+   note:'文学奖与学术活动均来自可追溯官方链接；原创连载构思不代表改编版权、学术事实或传播热度已核验。'},
+   {headers:{'cache-control':'public,max-age=1200','x-content-type-options':'nosniff'}});
+ }catch(err){return Response.json({error:'专题素材不可用',detail:String(err?.message||err).slice(0,140)},{status:503,headers:RESULT_HEADERS})}
+}
 
 // WORLD/TOON evergreen research and public-domain visual references.
 // Catalogue entries are discovery leads, not historical fact checks or cleared translations.
@@ -570,8 +607,8 @@ async function heritageVisuals(url){
 
 
 // Discovery Cache v2: serve only materialized D1 snapshots; never scrape on a user's click.
-const WT_CACHE_SOURCES=['news','hackernews','arxiv','classics','history'];
-const WT_CACHE_HOURS={news:2,hackernews:3,arxiv:4,classics:48,history:48};
+const WT_CACHE_SOURCES=['news','hackernews','arxiv','classics','history','literary_series','nobel_literature','academic_events'];
+const WT_CACHE_HOURS={news:2,hackernews:3,arxiv:4,classics:48,history:48,literary_series:48,nobel_literature:48,academic_events:8};
 function wtCanonicalStory(url){
  try{const o=new URL(url);if(o.protocol!=='https:')return '';
   for(const key of [...o.searchParams.keys()])if(/^utm_|^(fbclid|gclid)$/i.test(key))o.searchParams.delete(key);
@@ -593,12 +630,12 @@ async function wtDiscoveryRead(env,url,ctx){
  if(!env.DB)return failure('素材缓存数据库未配置',503);
  const requested=url.searchParams.get('source')||'all';
  if(requested!=='all'&&!WT_CACHE_SOURCES.includes(requested))return failure('未知素材来源',400);
- const limit=Math.max(1,Math.min(250,Number(url.searchParams.get('limit'))||200));
+ const limit=Math.max(1,Math.min(500,Number(url.searchParams.get('limit'))||500));
  let rows;
  try{rows=(await env.DB.prepare('SELECT source,payload,item_count,collected_at,last_attempt_at,last_error FROM wt_discovery_snapshots').all()).results||[]}
  catch(err){return Response.json({error:'素材缓存无法读取，请检查数据库迁移',detail:String(err.message||err).slice(0,110)},{status:503,headers:RESULT_HEADERS})}
  if(rows.length<WT_CACHE_SOURCES.length)await wtStartColdBootstrap(env,ctx);
- const at=Date.now(),items=[],seen=new Set(),stats=[],warnings=[];
+ const at=Date.now(),items=[],seen=new Set(),stats=[],warnings=[],buckets=new Map();
  for(const source of WT_CACHE_SOURCES){
   if(requested!=='all'&&source!==requested)continue;
   const row=rows.find(r=>r.source===source);
@@ -612,13 +649,20 @@ async function wtDiscoveryRead(env,url,ctx){
   for(const raw of payload.items||[]){
    if(!raw||typeof raw!=='object'||typeof raw.url!=='string')continue;
    const key=wtCanonicalStory(raw.url);if(!key||seen.has(key))continue;
-   seen.add(key);items.push({...raw,source_id:raw.source_id||source,cache_source:source});
+   seen.add(key);const item={...raw,source_id:raw.source_id||source,cache_source:source};items.push(item);if(!buckets.has(source))buckets.set(source,[]);buckets.get(source).push(item);
   }
  }
  const fresh=stats.filter(x=>x.ready).sort((a,b)=>Date.parse(b.collectedAt)-Date.parse(a.collectedAt));
  const lastUpdated=fresh[0]?.collectedAt||null,ready=stats.some(x=>x.ready);
- // Every source stays in its existing news/classics/history category. Front end does local filtering.
- return Response.json({schema:'davylab.worldtoon.catalog.v2',items:items.slice(0,limit),
+ // Round-robin across sources BEFORE the overall cap: early news feeds must not crowd out curated series.
+ const balanced=[];
+ if(requested==='all'){
+  const allBuckets=WT_CACHE_SOURCES.map(id=>buckets.get(id)||[]);
+  const maxDepth=Math.max(0,...allBuckets.map(a=>a.length));
+  for(let depth=0;depth<maxDepth&&balanced.length<limit;depth++)
+   for(const group of allBuckets)if(group[depth]&&balanced.length<limit)balanced.push(group[depth]);
+ }
+ return Response.json({schema:'davylab.worldtoon.catalog.v3',items:(requested==='all'?balanced:items).slice(0,limit),
   stats,warnings,source:requested,ready,initializing:!ready,complete:stats.every(x=>x.ready),
   lastUpdated,method:'d1_snapshot_read',fact_checked:false,rights_cleared:false,
   note:'只读后台缓存，未执行实时集采。数据为未经核验的选题线索，版权和史实需独立复核。'},
@@ -656,7 +700,8 @@ async function wtDiscoveryScheduled(controller,env){
  const has=new Set(current.map(x=>x.source));
  const due=['news'];
  for(const source of ['hackernews','arxiv'])if(minute===0||!has.has(source))due.push(source);
- for(const source of ['classics','history'])if(hour===2&&minute===0||!has.has(source))due.push(source);
+ for(const source of ['classics','history','literary_series','nobel_literature'])if((hour===2&&minute===0)||!has.has(source))due.push(source);
+ if((hour%6===2&&minute===0)||!has.has('academic_events'))due.push('academic_events');
  // First cron run fills every absent snapshot, later updates at the specified cadence.
  const out=await Promise.all(due.map(source=>wtRefreshOneSource(env,source)));
  console.log('WorldToon scheduled discovery refresh',JSON.stringify(out));
