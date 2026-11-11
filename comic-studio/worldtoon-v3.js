@@ -5,6 +5,28 @@
 (function(){
  const h=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const supported=['已发表','制作中','待制作'];
+ const plotGenres=[
+  {id:'general',name:'通用创作 · AI 自由编剧'},
+  {id:'viral-melodrama',name:'狗血网红爽剧 · 重生 / 豪门 / 娱乐圈'}
+ ];
+ const melodramaSubtypes=[
+  {id:'rebirth-bank-rich',name:'重生银行富婆 · 养成明星与身份大反转',
+   prompt:'重生归来成为金融圈富婆，投资或合约支持成年男明星，旧恋人和豪门关系纠缠，直播热搜与银行职场双线逆袭。人物均为成年原创虚构角色；人物关系写得幽默反差，不涉及强迫或色情场景。'},
+  {id:'celebrity-contract',name:'娱乐圈合约恋爱 · 假戏真做',
+   prompt:'成年女企业家与成年演员签订合作合约，意外被短视频媒体炒成恋爱绯闻；在名利、真感情与职业理想之间不断反转。'},
+  {id:'wealth-revenge',name:'豪门真假千金 · 逆袭打脸',
+   prompt:'成年女主被误解身份，借专业实力反转豪门与网红社交圈中的地位，每集留下夸张但逻辑自洽的身份反转钩子。'},
+  {id:'bank-influencer',name:'银行职场网红 · 权力与流量修罗场',
+   prompt:'架空银行中一名成年女高管面对直播带货、网红风波与资本局面，用聪明的选择反转职场偏见。'}
+ ];
+ const findSubtype=id=>melodramaSubtypes.find(x=>x.id===id)||melodramaSubtypes[0];
+ const dramaInstructions=p=>{
+   if(p.plotGenre!=='viral-melodrama')return '';
+   const tone=Math.max(1,Math.min(5,Number(p.dramaIntensity||4))),preset=findSubtype(p.dramaSubtype);
+   return '【作者选择的网红狗血短剧创作要求】'+preset.prompt+
+    '。狗血强度'+tone+'/5；节奏要快，首格强钩子，反差与反转明确；每2–3格设置一个情节悬念；高潮做身份、权力或情感逆袭，最后留下一集钩子。现代都市、富婆、成年男明星、网红热搜与商业职场关系可适度夸张，但需有因果，不要流水账或同一反转重复。角色是原创虚构成年人，不使用可识别真人传闻，不冒充事实报道。';
+ };
+
  const expandUI={pending:null,busy:false,projectId:null,message:'',kind:'info'};
  function showExpandStatus(kind,message,projectId){
    expandUI.kind=kind;expandUI.message=String(message||'');expandUI.projectId=projectId||expandUI.projectId;
@@ -179,6 +201,13 @@
    '<div class="wt3-controls"><div class="field wt3-seed"><label>一句话构思</label><textarea id="wt3-seed" rows="2" placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+h(p.ideaSeed||'')+'</textarea></div>'+
    '<div class="field"><label>制作 Agent</label><select id="wt3-agent" '+(locked?'disabled':'')+'><option value="ChatGPT"'+(agent==='ChatGPT'?' selected':'')+'>ChatGPT 创作 · WorkBuddy 发表</option><option value="WorkBuddy"'+(agent==='WorkBuddy'?' selected':'')+'>WorkBuddy 创作与发表</option></select></div>'+
    '<div class="field"><label>漫画篇幅 · 4–60 格</label><input id="wt3-count" type="number" min="4" max="60" value="'+count+'" '+(locked?'disabled':'')+'></div></div>'+
+   '<div class="wt3-drama-controls"><div class="field"><label>剧情类型 · DeepSeek 按此扩写</label><select id="wt3-plot-genre" '+(locked?'disabled':'')+'>'+plotGenres.map(x=>
+     '<option value="'+h(x.id)+'"'+((p.plotGenre||'general')===x.id?' selected':'')+'>'+h(x.name)+'</option>').join('')+'</select></div>'+
+   (p.plotGenre==='viral-melodrama'?'<div class="field"><label>狗血剧情主题</label><select id="wt3-drama-subtype" '+(locked?'disabled':'')+'>'+melodramaSubtypes.map(x=>
+     '<option value="'+h(x.id)+'"'+((p.dramaSubtype||'rebirth-bank-rich')===x.id?' selected':'')+'>'+h(x.name)+'</option>').join('')+'</select></div>'+
+     '<div class="field"><label>狗血反转强度 · 1–5</label><select id="wt3-drama-intensity" '+(locked?'disabled':'')+'>'+[1,2,3,4,5].map(n=>
+       '<option value="'+n+'"'+(Number(p.dramaIntensity||4)===n?' selected':'')+'>'+n+' / 5'+(n===4?' · 推荐':'')+'</option>').join('')+'</select></div>':'')+'</div>'+
+   (p.plotGenre==='viral-melodrama'?'<p class="wt3-drama-tip">已启用：重生 / 网红 / 银行富婆 / 娱乐圈剧情要求。AI 扩写将把剧种、强度、反转节奏写入真实请求，同时保留用户输入的原创构思。</p>':'')+
    '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand" '+(expandUI.busy?'disabled':'')+'>DeepSeek 扩写并推荐篇幅</button>'+
    '<button type="button" class="button" data-wt3-action="resize" '+(locked?'disabled':'')+'>应用篇幅</button>'+
    '<button type="button" class="button" data-wt3-action="director">进入创意导演台</button></div>'+
@@ -238,13 +267,16 @@
      if(p.handoff?.repoQueuedAt)throw Error('已派单作品不能被AI覆盖');
      const idea=document.querySelector('#wt3-seed')?.value?.trim()||'';
      if(idea!==pending.idea)throw Error('创意内容发生变化，请重新点击扩写以确认');
+     const modelIdea=idea+(p.plotGenre==='viral-melodrama'?'\\n'+dramaInstructions(p):'');
+     if(modelIdea.length>1800)throw Error('构思与剧情预设合计不可超过1800字，请适当缩短构思');
      expandUI.busy=true;expandUI.projectId=p.id;expandUI.pending=null;
      showExpandConsent(false);
      b.disabled=true;b.textContent='AI 剧本生成中…';
      const first=document.querySelector('[data-wt3-action="expand"]');if(first)first.disabled=true;
      showExpandStatus('loading','正在连接 DeepSeek 并生成分镜，请不要重复提交。模型响应可能需要约一分钟。',p.id);
      p.ideaSeed=idea;setChange(p,'作者确认真实 DeepSeek 剧本扩写请求');
-     const response=await wtArchiveApi('deepseek-expand',{method:'POST',body:JSON.stringify({idea,title:p.title,category:p.category,
+     const response=await wtArchiveApi('deepseek-expand',{method:'POST',body:JSON.stringify({idea:modelIdea,title:p.title,category:p.plotGenre==='viral-melodrama'?'原创网红短剧 / '+findSubtype(p.dramaSubtype).name:p.category,
+       genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||4),
        panel_count:p.panels.length,series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
      if(response.method!=='verified_model_response')throw Error('没有收到可验证的真实模型响应，拒绝用模板内容冒充结果');
      const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length<4||x.panels.length>60)throw Error('DeepSeek 未返回完整的分镜结构');
@@ -256,6 +288,7 @@
        scene:String(a.scene||'').slice(0,1700),caption:String(a.caption||'').slice(0,550),
        dialogue:String(a.dialogue||'').slice(0,550),prompt:String(a.visual_prompt||'').slice(0,1200),image:''}));
      const c=wtDirector.ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
+     if(p.plotGenre==='viral-melodrama')c.arcId='viral-melodrama';
      if(x.world)c.world=String(x.world).slice(0,600);
      if(x.theme)c.thesis=String(x.theme).slice(0,600);
      if(Array.isArray(x.characters)&&x.characters.length>=2)c.cast=x.characters.slice(0,12).map(v=>({
@@ -280,6 +313,23 @@
   }
  },true);
  document.addEventListener('change',ev=>{
+  if(['wt3-plot-genre','wt3-drama-subtype','wt3-drama-intensity'].includes(ev.target?.id)){
+    const p=selected();if(!p||p.handoff?.repoQueuedAt){notify('已派单任务不可改写本版剧情设定');return}
+    const seed=document.querySelector('#wt3-seed');if(seed)p.ideaSeed=seed.value.slice(0,1800);
+    if(ev.target.id==='wt3-plot-genre'){
+      p.plotGenre=ev.target.value==='viral-melodrama'?'viral-melodrama':'general';
+      if(p.plotGenre==='viral-melodrama'){
+        p.dramaSubtype=p.dramaSubtype||'rebirth-bank-rich';p.dramaIntensity=p.dramaIntensity||4;
+        if(!p.topicId&&!p.sourceURLs){p.handoff={...p.handoff,mode:'original'};
+          if(p.category==='AI 科技')p.category='都市网红短剧';}
+      }
+      if(p.creativeDirection){p.creativeDirection.arcId=p.plotGenre==='viral-melodrama'?'viral-melodrama':'twist';
+        p.creativeDirection.reviewed=false;p.creativeDirection.approval=null;}
+    }else if(ev.target.id==='wt3-drama-subtype'){
+      p.dramaSubtype=melodramaSubtypes.some(x=>x.id===ev.target.value)?ev.target.value:'rebirth-bank-rich';
+    }else{p.dramaIntensity=Math.max(1,Math.min(5,Number(ev.target.value)||4))}
+    setChange(p,'保存 DeepSeek 剧情选项：'+p.plotGenre);render();return;
+  }
   if(ev.target?.id==='wt3-agent'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.productionAgent=ev.target.value==='WorkBuddy'?'WorkBuddy':'ChatGPT';setChange(p,'切换 SOP 生产者：'+p.productionAgent);render()}}
   if(ev.target?.id==='wt3-seed'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.ideaSeed=ev.target.value.slice(0,1800);setChange(p,'保存漫画一句话构思')}}
  },true);
