@@ -439,6 +439,60 @@
 .wt-source-tabs button{min-width:110px}
 @media(max-width:680px){.wt-source-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.wt-source-tabs button{min-width:0;width:100%;min-height:45px}.wt-series-featured .wt-featured-grid{grid-template-columns:1fr}.wt-series-outline{padding:9px}}
 
+
+/* Source-grounded story-to-comic discovery: premium editorial layout. */
+.story-discovery{padding:22px 24px;margin:0 0 26px;border:1px solid #dbd2c5;background:#fffaf3;border-radius:14px;box-shadow:0 8px 34px rgba(44,36,27,.035);min-width:0}
+.story-discovery-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;padding-bottom:15px;border-bottom:1px solid #e9e1d6}
+.story-discovery-head h2{font-size:clamp(20px,2vw,29px);letter-spacing:-.6px;color:#332923;line-height:1.2;margin:7px 0 9px}
+.story-discovery-head p{font-size:12px;line-height:1.75;color:#7c6e61;max-width:760px;margin:0}
+.story-discovery-head>span{font-size:10px;letter-spacing:2px;color:#a57a5b;white-space:nowrap;margin-top:10px}
+.story-search-form{padding:18px 0 9px}.story-search-form>label{display:block;font-size:12px;font-weight:750;color:#493d33;margin-bottom:9px}
+.story-search-fields{display:grid;grid-template-columns:minmax(175px,230px) minmax(0,1fr) auto;gap:8px;align-items:center;min-width:0}
+.story-search-fields select,.story-search-fields input,.story-production-choices select,.story-proof input,.story-paste textarea{width:100%;min-width:0;border:1px solid #decfc0;border-radius:8px;background:#fff;color:#392f29;padding:10px 13px;font-size:13px;min-height:41px}
+.story-search-fields button{min-height:41px;white-space:nowrap}
+.story-quick{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0 12px}
+.story-quick .button{border-radius:999px;min-height:31px;padding:7px 12px;font-size:11px;background:#f6efe5;border:1px solid #e5d9ca;color:#5e5044}
+.story-results-top{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:13px 0 9px}
+.story-results-top strong{font-size:12px}.story-results-top small,.story-result small{font-size:11px;color:#88796a}
+.story-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.story-result{border:1px solid #e7dfd3;background:#fffefa;border-radius:10px;padding:15px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;min-width:0}
+.story-result h3{font-size:15px;line-height:1.45;margin:8px 0 8px;color:#2f3029}
+.story-result p,.story-selected-head p{font-size:12px;line-height:1.75;color:#6c6258;margin:6px 0 9px}
+.story-type,.story-rank{font-size:10px;padding:4px 7px;border-radius:4px;background:#eae9dd;color:#455d4a;display:inline-block;margin-right:5px}
+.story-rank{background:#f5eadb;color:#926849}
+.story-actions{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.story-actions a{font-size:12px;color:#906c51;text-decoration:underline;text-underline-offset:3px}
+.story-actions .button,.story-selection-foot .button{font-size:12px;min-height:36px;padding:8px 12px}
+.story-selected{border:1px solid #ddd2c4;background:#fff;border-radius:11px;padding:18px;margin-top:12px}
+.story-selected-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.story-selected-head h3{font-size:21px;color:#322c28;margin:5px 0}
+.story-selected-head .button{flex-shrink:0}
+.story-rights{font-size:12px;line-height:1.7;padding:11px 13px;background:#eef5ec;border:1px solid #d4e4cd;border-radius:8px;color:#425b40;margin:12px 0}
+.story-rights.warning{background:#fff4ea;border-color:#ead3bd;color:#805037}
+.story-beats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:12px}
+.story-beat{display:flex;align-items:flex-start;gap:9px;cursor:pointer;padding:12px;border-radius:9px;border:1px solid #e9e1d7;background:#faf8f3;min-width:0}
+.story-beat:has(input:checked){border-color:#6c8d75;background:#f0f5ed}
+.story-beat input{flex-shrink:0;margin-top:3px;accent-color:#476c56;width:16px;height:16px}
+.story-beat span{display:grid;gap:5px;min-width:0}
+.story-beat strong{font-size:13px;color:#374138}
+.story-beat small,.story-beat em{font-size:11px;line-height:1.6;color:#6f6d62;font-style:normal}
+.story-beat em{color:#9d7b62}
+.story-production-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(245px,1fr));gap:10px;margin-top:17px}
+.story-production-choices label,.story-paste{font-size:12px;color:#53483e;font-weight:650;line-height:1.7}
+.story-production-choices select{margin-top:6px}
+.story-proof{padding:11px 13px;border:1px solid #ebd1bf;border-radius:8px;background:#fff7ed}
+.story-proof input[type=checkbox]{width:16px;height:16px;min-height:0;margin-right:5px;vertical-align:middle}
+.story-proof label:has(input){display:block;margin-top:8px;font-size:11px}
+.story-paste{display:block;margin-top:14px}
+.story-paste textarea{display:block;margin-top:6px;min-height:90px}
+.story-selection-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;border-top:1px solid #ede5d9;margin-top:17px;padding-top:14px}
+.story-selection-foot span{font-size:12px;color:#73665b}
+.story-note{font-size:11px;line-height:1.6;color:#867565;margin:10px 0}
+.story-error{font-size:12px;color:#a34332;background:#fff0ed;border:1px solid #e9c3b9;padding:10px 12px;border-radius:8px;margin:9px 0}
+.story-none{padding:20px 12px;border:1px dashed #dbcbb9;color:#866d59;font-size:12px;text-align:center;border-radius:9px;grid-column:1/-1}
+@media(max-width:900px){.story-results{grid-template-columns:1fr}.story-beats{grid-template-columns:1fr}.story-search-fields{grid-template-columns:minmax(150px,200px) 1fr}.story-search-fields button{grid-column:1/-1;width:100%}}
+@media(max-width:600px){.story-discovery{padding:16px 13px;margin:0 0 18px}.story-discovery-head{gap:8px}.story-discovery-head>span{display:none}.story-search-fields{display:flex;flex-direction:column;align-items:stretch;gap:8px}.story-search-fields>*{width:100%;min-width:0}.story-search-fields button{grid-column:auto}.story-selected{padding:12px}.story-selected-head{flex-wrap:wrap}.story-selection-foot{flex-wrap:wrap}.story-selection-foot .button{flex:1 1 100%}}
+
 /* MOBILE_REFINE_EMBED — from mobile-refine.css, Worker static allowlist compatibility. */
 /* WORLD/TOON Mobile Refinement / 2026-11-10
    Overrides only layout and spacing. Existing data, route logic, colors,
