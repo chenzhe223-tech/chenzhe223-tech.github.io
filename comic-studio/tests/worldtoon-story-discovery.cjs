@@ -9,7 +9,7 @@ const wild=library.items.find(x=>x.id==='drama-ta-guo-fen-ye-2025');
 assert.equal(jane.beats.length,6,'public-domain Jane Eyre must expose sourced story arcs');
 assert.equal(wild.beats.length,4,'copyrighted He Guo Fen Ye must expose only supported public synopsis arcs');
 assert.equal(wild.rights,'copyrighted');
-assert.ok(library.items.filter(x=>x.rank_snapshot).length>=2,'date-stamped Hongguo third-party hot leads');
+assert.equal(library.items.filter(x=>x.rank_snapshot).length,10,'ten dated Hongguo third-party hot leads');
 for(const x of library.items){assert.ok(x.source.startsWith('https://'));assert.ok(x.rights_note)}
 const service=read('story-discovery-service.js'),uiCode=read('story-discovery-ui.js'),bundle=read('extension.js');
 for(const [name,src] of [['service',service],['ui',uiCode],['bundle',bundle]])assert.doesNotThrow(()=>new vm.Script(src),name+' must parse');
@@ -51,7 +51,8 @@ const find=async(type,q)=>{
  const j=await find('novel','简爱');
  assert.ok(j.some(x=>x.title==='简·爱'&&x.beats.length===6));
  const hot=await find('drama','');
- assert.ok(hot.some(x=>x.rank_snapshot),'hot results must carry a dated snapshot, not invented live ranking');
+ assert.equal(hot.filter(x=>x.rank_snapshot).length,10,'ten verified third-party hot snapshot titles');
+ assert.equal(hot[0].rank_snapshot,1,'hot list sorted by its explicit dated ranking');
  const book=await find('novel','海边的故事');
  assert.ok(book.some(x=>x.source_kind==='book_metadata'));
  const listeners={},projects=[],routes=[];
