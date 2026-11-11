@@ -17,7 +17,7 @@ const source={id:'p1',title:'海洋机器人：漫画改编',sourceTitle:'机器
 const listeners={};let edits=0;let rendered=0;let lastMessage='';
 const ctx={
  window:{},console,Math,Date,JSON,location:{hash:'#/director/p1'},
- document:{addEventListener:(k,fn)=>(listeners[k]=fn)},
+ document:{addEventListener:(k,fn)=>{(listeners[k]||(listeners[k]=[])).push(fn);}}, 
  selected:()=>source,render:()=>{rendered++},persist:()=>{},markDirty:()=>{},setChange:()=>{edits++},
  notify:x=>{lastMessage=x},confirm:()=>true,queueMicrotask:fn=>fn(),
  heroHeader:(...args)=>'<h1>'+args[1]+'</h1>',e:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))
@@ -26,9 +26,9 @@ vm.runInNewContext(visualV3,ctx);
 vm.runInNewContext(creative,ctx);
 const director=ctx.window.wtDirector;
 assert.ok(director,'Director API registered');
-assert.equal(ctx.window.WTStyleV3.CATALOG.length,21,'Twenty-one V3 independent styles');
-assert.equal(director.STYLES.length,27,'21 V3 and 6 backward-compatible production styles');
-assert.equal(director.ARCS.length,5,'Five narrative structures');
+assert.equal(ctx.window.WTStyleV3.CATALOG.length,25,'Twenty-five catalog styles including four new 3D render references');
+assert.equal(director.STYLES.length,31,'25 catalog styles and 6 backward-compatible production styles');
+assert.equal(director.ARCS.length,6,'Six narrative structures including viral short drama');
 let initial=director.readiness(source);
 assert.ok(initial.length>0,'Unreviewed project cannot be queued');
 const seed=director.ensure(source);
@@ -40,10 +40,10 @@ assert.ok(director.checks(source).includes('请勾选“已逐格审阅并确认
 let markup=ctx.window.wtCreativeDirector();
 for(const expected of ['创意导演台','画风定调','人物设定','九格故事','最终定版'])assert.ok(markup.includes(expected),'Missing visual feature '+expected);
 const fake=(dataset,extra={})=>({target:{closest:()=>({dataset,...extra})},preventDefault:()=>{},stopImmediatePropagation:()=>{}});
-listeners.click(fake({directorStep:'3'}));
+listeners.click[0](fake({directorStep:'3'}));
 seed.reviewed=true;
 assert.equal(director.checks(source).length,0,'All creative requirements complete before approving');
-listeners.click(fake({directorAction:'approve'}));
+listeners.click[0](fake({directorAction:'approve'}));
 assert.equal(director.approved(source),true,'Human approved locked blueprint');
 assert.equal(director.readiness(source).length,0);
 const payload=director.exportBrief(source);
@@ -64,7 +64,7 @@ assert.equal(director.approved(source),false,'Style changes invalidate lock');
 source.creativeDirection.styleId=payload.style_id;
 assert.equal(director.digest(source),before);
 source.handoff.repoQueuedAt=new Date().toISOString();
-listeners.change({target:{matches:()=>true,dataset:{directorField:'world'},value:'不同世界'},preventDefault:()=>{}});
+listeners.change[1]({target:{matches:()=>true,dataset:{directorField:'world'},value:'不同世界'},preventDefault:()=>{}});
 assert.notEqual(source.creativeDirection.world,'不同世界','Already queued task cannot change under same version');
 assert.ok(lastMessage.includes('不能直接覆盖'));
 assert.ok(app.includes("missing.push(...wtDirector.readiness(p))"),'App gates task readiness');
@@ -84,4 +84,4 @@ assert.ok(creative.includes('WTStyleV3.cards(c)'),'Director now reads the V3 sty
 assert.ok(creative.includes('WTStyleV3.detail(c)'),'Director renders actual reference/sample provenance states');
 assert.ok(html.includes('style-v3.js')&&html.includes('style-v3.css'),'App must load V3 assets');
 assert.ok(worker.includes('style-v3\\.js')&&worker.includes('style-v3\\.css'),'Worker must allow V3 asset URLs');
-console.log('WORLD/TOON creative director: 20 professional styles + 6 legacy styles, storyboard, cast, SHA pilot gates and GitHub handoff PASS');
+console.log('WORLD/TOON creative director: 25 catalog styles + 6 legacy styles, six narrative arcs, approved storyboard and GitHub gates PASS');
