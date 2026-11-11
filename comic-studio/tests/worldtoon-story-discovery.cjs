@@ -87,6 +87,18 @@ const find=async(type,q)=>{
  ux.createProjectFromStory();
  assert.equal(projects[0].storySourceSelection.adaptation,'original');
  assert.match(projects[0].ideaSeed,/独立原创/);
+ await ux.search('','drama',true);s=ux.state();
+ const lead=s.items.findIndex(x=>x.type==='drama'&&x.rank_snapshot===1);
+ assert.ok(lead>=0,'dated first-rank drama remains searchable');
+ ux.choose(lead);s=ux.state();
+ const originalOptions=ux.beatOptions(s.selected);
+ assert.equal(originalOptions.length,3,'hot lead without plot offers three ORIGINAL themes');
+ assert.ok(originalOptions.every(x=>/原创|非原剧|非原著/.test(x.basis)),'not an invented drama episode');
+ for(const fn of listeners.change||[])fn({target:{dataset:{storyBeat:'concept-identity'},checked:true}});
+ ux.createProjectFromStory();
+ assert.equal(projects[0].storySourceSelection.adaptation,'original');
+ assert.ok(projects[0].ideaSeed.includes('完全独立原创漫画'));
+ assert.equal(routes.at(-1),'workspace/'+projects[0].id+'/1');
  const a=read('app.js'),from=a.indexOf('function wfCanTask('),to=a.indexOf('function wfTaskObject(');
  const rightsContext={wtDirector:{readiness:()=>[]}};vm.createContext(rightsContext);
  vm.runInContext(a.slice(from,to)+'this.__gate=wfCanTask;',rightsContext);
