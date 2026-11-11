@@ -60,6 +60,7 @@ assert.equal(state(p).next,0,'new unscripted work starts with establishing an id
 p.title='海底城市';assert.equal(state(p).next,1,'named idea moves to writing');
 p.panels[0].scene='这是一段完整的镜头说明，记录海底城市人物冲突与叙事视角。';
 assert.equal(state(p).next,2,'story draft needs author creative sign-off');
+p.creativeDirection={approval:{lock_hash:'lock-hash-from-author',author_approved:true}};
 approved=true;
 assert.equal(state(p).next,3,'locked direction makes production next');
 p.handoff={taskId:'WT-11111111111111111111',repoQueuedAt:'2026-11-11T00:00:00Z'};
