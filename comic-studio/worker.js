@@ -252,7 +252,7 @@ const WT_API='https://api.github.com/repos/'+WT_REPO;
 const WT_TASK_SCHEMA='davylab.worldtoon.task.v2';
 function wtJson(value,status=200){return Response.json(value,{status,headers:{'cache-control':'no-store','x-content-type-options':'nosniff'}})}
 function wtArchiveCanonicalURL(s){try{const u=new URL(s.trim()),url=new URLSearchParams();for(const [k,v] of Array.from(u.searchParams.entries()).sort(([a],[b])=>a.localeCompare(b))){if(!k.toLowerCase().startsWith('utm_')&&!['fbclid','gclid'].includes(k))url.append(k,v)}return u.hostname.toLowerCase().replace(/^www\./,'')+decodeURIComponent(u.pathname).replace(/\/$/,'').toLowerCase()+'?'+url.toString()}catch{return ''}}
-async function wtArchiveKey(sources,title,revision=''){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');if(revision){if(!/^r[2-9][0-9]*-[a-z0-9]{8}$/.test(revision))throw Error('创意修订标识非法');normalized+='\nrevision:'+revision}return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
+async function wtArchiveKey(sources,title,revision='',series=null){const src=(Array.isArray(sources)?sources:[]).map(wtArchiveCanonicalURL).filter(Boolean);let normalized=[...new Set(src)].sort().join('\n');if(!normalized)normalized=String(title||'').toLowerCase().replace(/[^\p{L}\p{N}_]/gu,'');if(revision){if(!/^r[2-9][0-9]*-[a-z0-9]{8}$/.test(revision))throw Error('创意修订标识非法');normalized+='\nrevision:'+revision}if(series?.id&&series?.episode)normalized+='\nseries:'+series.id+':'+series.episode;return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized))),b=>b.toString(16).padStart(2,'0')).join('')}
 function wtB64(s){const x=new TextEncoder().encode(s);let result='';for(let i=0;i<x.length;i+=8192)result+=String.fromCharCode(...x.subarray(i,i+8192));return btoa(result)}
 function wtUnb64(s){const bytes=atob(String(s||'').replace(/\s+/g,''));return new TextDecoder().decode(Uint8Array.from(bytes,c=>c.charCodeAt(0)))}
 async function wtGithub(env,repoPath,method='GET',obj=null){if(!env.WORLDTOON_GITHUB_TOKEN)throw Error('漫画仓库 GitHub Token 尚未配置');const url=WT_API+'/contents/'+repoPath;const r=await fetch(url,{method,headers:{'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,'accept':'application/vnd.github+json','x-github-api-version':'2022-11-28','user-agent':'WORLD-TOON-Archive/2.5',...(obj?{'content-type':'application/json'}:{})},body:obj?JSON.stringify(obj):undefined,signal:AbortSignal.timeout(14000)});const json=await r.json().catch(()=>({message:'GitHub API response invalid'}));return {status:r.status,ok:r.ok,body:json}}
@@ -358,8 +358,196 @@ async function wtVerifyPilotImage(env,taskId,fileName,expectedHash){
  return {ok:hash===expectedHash,error:hash===expectedHash?'':fileName+' SHA256 与作者实际审核的样稿不一致'};
 }
 
+
+// WORLD/TOON 3.0 authenticated handoff. Staging is NOT approval or publication.
+function wt3Hex(bytes){return Array.from(new Uint8Array(bytes),x=>x.toString(16).padStart(2,'0')).join('')}
+function wt3Bytes64(bytes){
+ let t='';for(let i=0;i<bytes.length;i+=8192)t+=String.fromCharCode(...bytes.subarray(i,i+8192));
+ return btoa(t)
+}
+async function wt3GithubRaw(env,path){
+ const r=await wtGithub(env,path);
+ if(!r.ok)throw Error('素材不存在 '+r.status);
+ let encoded=r.body.content;
+ if(!encoded&&r.body.sha){
+  const b=await fetch(WT_API+'/git/blobs/'+r.body.sha,{headers:{
+   'authorization':'Bearer '+env.WORLDTOON_GITHUB_TOKEN,'accept':'application/vnd.github+json',
+   'user-agent':'WORLD-TOON/3.0'},signal:AbortSignal.timeout(20000)});
+  if(!b.ok)throw Error('无法读取 GitHub 原图 blob '+b.status);
+  encoded=(await b.json()).content;
+ }
+ if(typeof encoded!=='string'||!encoded)throw Error('GitHub 文件内容不可用');
+ const raw=atob(encoded.replace(/\s+/g,''));
+ return Uint8Array.from(raw,x=>x.charCodeAt(0))
+}
+async function wt3ArchiveV3(request,env,url){
+ const p=url.pathname,m=request.method,tid=url.searchParams.get('task_id')||'';
+ if(p==='/api/archive/deepseek-status'&&m==='GET'){
+  const auth=await wtArchiveAuth(request,env);
+  if(auth.error)return wtJson({error:auth.error},auth.status);
+  return wtJson({configured:!!env.WORLDTOON_DEEPSEEK_API_KEY,model:'deepseek-flash',paid_call_requires_explicit_author_action:true});
+ }
+ if(p==='/api/archive/deepseek-expand'&&m==='POST'){
+  const auth=await wtArchiveAuth(request,env);if(auth.error)return wtJson({error:auth.error},auth.status);
+  if(!env.WORLDTOON_DEEPSEEK_API_KEY)return wtJson({code:'DEEPSEEK_KEY_REQUIRED',error:'DeepSeek 真实模型尚未配置服务端 API Key。此接口不会用规则假冒模型响应。'},503);
+  let a;try{a=await request.json()}catch{return wtJson({error:'输入不是合法 JSON'},400)}
+  const idea=String(a?.idea||'').trim(),n=Number(a?.panel_count||9);
+  if(idea.length<8||idea.length>1800||!Number.isInteger(n)||n<4||n>60)return wtJson({error:'创意必须是8–1800字，篇幅4–60格'},400);
+  const bible=a?.series_bible&&typeof a.series_bible==='object'?JSON.stringify(a.series_bible).slice(0,8000):'无';
+  const prompt='请将下列构思改编为原创中文连续漫画剧本。仅输出一个完整 JSON 对象，不要 markdown。字段：title,subtitle,summary,world,theme,fictionalization,reasoning,characters数组(至少2位，含role,name,look,clothes,symbol,nature),panels数组(每格title,scene至少30汉字,caption,dialogue,visual_prompt)。请分析剧情复杂度，并推荐4–60格：不能为凑字数重复镜头。保持章节角色与画风圣经一致。不要无证据造谣真实人物。作者将逐格修改、审阅与签署；此响应不是生图也不是新闻事实核验。' +
+    '\n初始篇幅建议:'+n+'格\n故事构思:'+idea+
+    '\n题材:'+String(a.category||'原创').slice(0,80)+
+    '\n系列设定:'+bible+'\n前情摘要:'+String(a.previous_summary||'').slice(0,2000);
+  let upstream;
+  try{upstream=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',
+    headers:{authorization:'Bearer '+env.WORLDTOON_DEEPSEEK_API_KEY,'content-type':'application/json'},
+    body:JSON.stringify({model:'deepseek-flash',temperature:0.65,stream:false,
+      response_format:{type:'json_object'},
+      messages:[{role:'system',content:'你是高级中文漫画编剧。只返回可解析 JSON，禁止未经证实的现实指控。'},
+                {role:'user',content:prompt}],max_tokens:11000}),
+    signal:AbortSignal.timeout(55000)});}catch(err){return wtJson({error:'DeepSeek 服务不可用：'+String(err.message||err).slice(0,100)},503)}
+  if(!upstream.ok)return wtJson({error:'DeepSeek API 未完成请求（HTTP '+upstream.status+'）。请检查额度及配置。'},upstream.status===402?402:503);
+  const result=await upstream.json();
+  let story;try{story=JSON.parse(result.choices?.[0]?.message?.content||'')}catch{return wtJson({error:'DeepSeek 未返回有效的 JSON 漫画剧本'},502)}
+  if(!story||!Array.isArray(story.panels)||story.panels.length<4||story.panels.length>60||
+     !Array.isArray(story.characters)||story.characters.length<2)
+    return wtJson({error:'DeepSeek 生成内容未达到分镜与角色结构要求，可重新调整创意后重试'},422);
+  return wtJson({method:'verified_model_response',model:result.model||'deepseek-flash',
+    story,usage:result.usage?{total_tokens:result.usage.total_tokens}:null});
+ }
+ if(p==='/api/archive/cover'&&m==='GET'){
+  if(!/^WT-[a-f0-9]{20}$/.test(tid))return wtJson({error:'编号无效'},400);
+  try{
+   const catalog=await wtGithubJson(env,'library/index.json');
+   const item=(catalog.items||[]).find(x=>x.task_id===tid);
+   if(!item||item.status!=='published'||item.receipt?.status!=='published'||
+      item.cover!=='deliveries/'+tid+'/cover.png')return wtJson({error:'暂无经核验发表的封面'},404);
+   const raw=await wt3GithubRaw(env,item.cover);
+   return new Response(raw,{headers:{'content-type':'image/png','cache-control':'public,max-age=600',
+       'x-content-type-options':'nosniff','content-disposition':'inline; filename="cover.png"'}});
+  }catch(e){return wtJson({error:'封面读取暂不可用'},503)}
+ }
+ if(p==='/api/archive/assets'&&m==='PUT'){
+  const auth=await wtArchiveAuth(request,env);if(auth.error)return wtJson({error:auth.error},auth.status);
+  if(!/^WT-[a-f0-9]{20}$/.test(tid))return wtJson({error:'任务编号无效'},400);
+  const path=url.searchParams.get('path')||'';
+  const panel=path.match(/^panels\/(0[1-9]|[1-5][0-9]|60)\.png$/);
+  const image=!!panel||path==='cover.png',markdown=path==='caption.md'||path==='sources.md'||path==='style-lock.json';
+  if(!image&&!markdown)return wtJson({error:'只允许暂存封面、分镜和文案，不允许跳过 QA 写入 manifest'},403);
+  const taskResult=await wtGithub(env,'tasks/'+tid+'/task.json');
+  if(!taskResult.ok)return wtJson({error:'必须先正式 GitHub 派单'},404);
+  let task;try{task=JSON.parse(wtUnb64(taskResult.body.content))}catch{return wtJson({error:'正式任务资料损坏'},409)}
+  if(task.task_id!==tid||!['ChatGPT','WorkBuddy'].includes(task.producer))return wtJson({error:'不允许对非正式生产任务暂存'},403);
+  const panelCount=Number(task.panel_count||9);
+  if(panel&&Number(panel[1])>panelCount)return wtJson({error:'画格超出导演台批准的篇幅'},409);
+  const index=await wtGithubJson(env,'library/index.json');
+  const catalog=(index.items||[]).find(x=>x.task_id===tid);
+  if(catalog&&['published','ready_for_workbuddy','workbuddy_received','draft_uploaded','publishing'].includes(catalog.status))
+    return wtJson({error:'交付已进入出版流程，不允许覆盖；请建立新修订版本'},409);
+  const limit=image?20*1024*1024:150000;
+  if(Number(request.headers.get('content-length')||0)>limit)return wtJson({error:'单文件超出限制'},413);
+  const bytes=new Uint8Array(await request.arrayBuffer());
+  if(bytes.length<10||bytes.length>limit)return wtJson({error:'内容为空或超出大小限制'},413);
+  if(image&&!(bytes.length>=40000&&bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71))
+    return wtJson({error:'仅允许真实 PNG 文件，禁止 SVG、占位和错误图片格式'},422);
+  if(image){const view=new DataView(bytes.buffer);if(view.getUint32(16,false)<1080||view.getUint32(20,false)<1440)
+    return wtJson({error:'PNG 原图低于 1080×1440'},422)}
+  if(markdown){try{new TextDecoder('utf-8',{fatal:true}).decode(bytes)}catch{return wtJson({error:'文案必须为 UTF-8'},422)}}
+  const sha256=wt3Hex(await crypto.subtle.digest('SHA-256',bytes));
+  const gitBytes=new Uint8Array(new TextEncoder().encode('blob '+bytes.length+'\0').length+bytes.length);
+  const gitHead=new TextEncoder().encode('blob '+bytes.length+'\0');
+  gitBytes.set(gitHead);gitBytes.set(bytes,gitHead.length);
+  const gitSha=wt3Hex(await crypto.subtle.digest('SHA-1',gitBytes));
+  const remotePath='deliveries/'+tid+'/'+path,existing=await wtGithub(env,remotePath);
+  if(existing.ok&&existing.body.sha===gitSha)
+    return wtJson({task_id:tid,path,sha256,verified:true,existing:true,git_blob_sha:gitSha});
+  if(existing.ok)return wtJson({error:'GitHub 已存在不同内容，禁止无确认覆盖；须另建版本或人工修订'},409);
+  if(existing.status!==404)return wtJson({error:'仓库资源读取失败 '+existing.status},503);
+  const written=await wtGithub(env,remotePath,'PUT',{message:'feat(worldtoon): stage verified original asset '+tid+' '+path,
+     content:wt3Bytes64(bytes)});
+  if(!written.ok)return wtJson({error:'GitHub 文件提交失败 HTTP '+written.status},503);
+  const check=await wtGithub(env,remotePath);
+  if(!check.ok||check.body.sha!==gitSha)return wtJson({error:'GitHub 上传后校验未通过，请勿宣称交付'},503);
+  return wtJson({task_id:tid,path,sha256,verified:true,commit:written.body.commit?.sha||null,git_blob_sha:gitSha},201);
+ }
+
+ if(p==='/api/archive/final-approval'&&m==='POST'){
+  const auth=await wtArchiveAuth(request,env);if(auth.error)return wtJson({error:auth.error},auth.status);
+  let body;try{body=await request.json()}catch{return wtJson({error:'审核资料必须为 JSON'},400)}
+  const t=String(body?.task_id||'');
+  if(!/^WT-[a-f0-9]{20}$/.test(t)||body?.author_confirmed!==true||
+     body?.approval_scope!=='final_comic_publication'||
+     !Array.isArray(body?.reviewed_checks)||body.reviewed_checks.length!==8||
+     body.reviewed_checks.some(x=>x!==true))
+     return wtJson({error:'必须由已登录作者逐项检查质量、来源、版权并主动确认最终出版授权'},422);
+  const record=await wtGithub(env,'tasks/'+t+'/task.json');
+  if(!record.ok)return wtJson({error:'任务尚未正式 GitHub 派单'},404);
+  let task;try{task=JSON.parse(wtUnb64(record.body.content))}catch{return wtJson({error:'正式工单损坏'},409)}
+  if(task.task_id!==t||!['ChatGPT','WorkBuddy'].includes(task.producer))return wtJson({error:'生产者不匹配'},409);
+  const count=Number(task.panel_count||9);
+  if(!Number.isInteger(count)||count<4||count>60)return wtJson({error:'任务篇幅无效'},409);
+  if(task.creative_direction?.production_gates?.pilot_required){
+    const lock=task.creative_direction.approval?.lock_hash;
+    const pilot=await wtGithub(env,'tasks/'+t+'/pilot-approval.json');
+    if(!pilot.ok)return wtJson({error:'真实试画尚未由作者在创意导演台独立批准，不能进入最终出版审批'},409);
+    let proof;try{proof=JSON.parse(wtUnb64(pilot.body.content))}catch{return wtJson({error:'试画作者批准回执无效'},409)}
+    if(proof.author_approved!==true||proof.task_id!==t||proof.lock_hash!==lock)
+      return wtJson({error:'试画审批与该任务创意锁不一致'},409);
+  }
+  const original=body.manifest||{},assets=original.assets||{},sha=original.sha256||{},qa=original.qa||{};
+  const panels=Array.from({length:count},(_,i)=>'panels/'+String(i+1).padStart(2,'0')+'.png');
+  if(JSON.stringify(assets.panels)!==JSON.stringify(panels)||assets.cover!=='cover.png'||
+     assets.caption!=='caption.md'||assets.sources!=='sources.md')
+     return wtJson({error:'漫画图片与任务篇幅不一致；应为连续独立 PNG 与独立封面'},422);
+  const names=['cover.png',...panels,'caption.md','sources.md'];
+  if(names.some(path=>!/^[a-f0-9]{64}$/.test(String(sha[path]||''))))
+     return wtJson({error:'交付清单缺少真实文件 SHA256，请先完成全部素材暂存'},422);
+  const gates=task.creative_direction?.production_gates||{};
+  if(gates.preview_sha256_equals_final_panel_01===true){
+    if(!original.image_provenance||!original.image_provenance.model_id||
+       original.image_provenance.placeholder_or_vector_rasterized!==false)
+      return wtJson({error:'缺少实际生图模型和无占位图来源证明，禁止冒充精品漫画'},422);
+    for(const x of ['style_consistency','character_continuity','story_continuity','preview_identity','no_placeholders','model_resolution_verified'])
+      if(qa[x]!==true)return wtJson({error:'缺少人工核实的 V3 画风、角色与首图一致性质检：'+x},422);
+    const locked=await wtGithub(env,'deliveries/'+t+'/style-lock.json');
+    if(!locked.ok)return wtJson({error:'缺少实际 style-lock.json 与真实生成参数'},409);
+  }
+  if(task.research_required===true&&(!Array.isArray(original.verified_sources)||!original.verified_sources.length||
+    original.verified_sources.some(x=>typeof x!=='string'||!/^https?:\/\//.test(x))))
+    return wtJson({error:'现实热点尚缺少核实过的一手来源，拒绝最终出版批准'},422);
+  const required=['size_checked','visual_reviewed','chinese_text_reviewed','fiction_disclosed',
+                   'sources_checked','rights_checked','phone_previewed'];
+  if(required.some(x=>qa[x]!==true)||(count===9?qa.nine_images!==true:qa.panel_count_checked!==true))
+     return wtJson({error:'8项质量审核尚未逐项通过'},422);
+  // GitHub Actions will independently hash every actual asset, validate PNG and pilot,
+  // and build the publication queue only after the manifest is accepted.
+  const existing=await wtGithub(env,'deliveries/'+t+'/manifest.json');
+  if(existing.ok)return wtJson({error:'已有不可覆盖的最终验收清单；修订版必须新建任务'},409);
+  if(existing.status!==404)return wtJson({error:'无法核对当前验收清单'},503);
+  const preflight=await Promise.all(names.map(path=>wtGithub(env,'deliveries/'+t+'/'+path)));
+  if(preflight.some(x=>!x.ok))return wtJson({error:'GitHub 缺少真实成品文件，或暂存未全部成功'},409);
+  const sanitized={schema:'davylab.worldtoon.delivery.v2',task_id:t,title:task.title,producer:task.producer,
+    revision:1,ready_for_qa:true,author_approved:true,approved_at:new Date().toISOString(),
+    approved_by:'authenticated_worldtoon_owner',approval_scope:'final_comic_publication',
+    assets:{cover:'cover.png',panels,caption:'caption.md',sources:'sources.md'},
+    sha256:Object.fromEntries(names.map(x=>[x,sha[x]])),qa,
+    verified_sources:Array.isArray(original.verified_sources)?original.verified_sources:[],
+    image_provenance:original.image_provenance||undefined};
+  const written=await wtGithub(env,'deliveries/'+t+'/manifest.json','PUT',{message:'feat(worldtoon): owner final QA approval '+t,
+    content:wtB64(JSON.stringify(sanitized,null,2)+'\n')});
+  if(!written.ok)return wtJson({error:'最终验收记录 GitHub 提交失败 '+written.status},503);
+  return wtJson({task_id:t,manifest_path:'deliveries/'+t+'/manifest.json',
+    commit:written.body.commit?.sha||null,
+    status:'submitted_for_independent_github_actions_qa',
+    ready_for_workbuddy:false,published:false},201);
+ }
+
+ return null;
+}
+
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
+  const v3=await wt3ArchiveV3(request,env,url);if(v3)return v3;
  if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
  if(p==='/api/archive/status'&&method==='GET'){
   try {
@@ -440,12 +628,12 @@ async function wtArchiveApi(request,env,url){
  if(p==='/api/archive/tasks'&&method==='POST'){
   let body;try{body=await request.json()}catch{return wtJson({error:'任务格式无效'},400)}
   const t=body?.task,prompt=body?.prompt;
-  if(!t||t.schema!==WT_TASK_SCHEMA||t.status!=='queued'||t.producer!=='ChatGPT'||t.publisher!=='WorkBuddy'||typeof t.title!=='string'||t.title.length<2||t.title.length>200||typeof prompt!=='string'||prompt.length<80||prompt.length>90000||!Array.isArray(t.editorial?.sources)||t.editorial.sources.length>20||typeof t.editorial.fictionalization!=='string'||!t.editorial.fictionalization.trim()||!t.editorial.disclaimer) return wtJson({error:'任务缺少必要的核验资料、脱敏策略或生产指令'},400);
+  if(!t||t.schema!==WT_TASK_SCHEMA||t.status!=='queued'||!['ChatGPT','WorkBuddy'].includes(t.producer)||t.publisher!=='WorkBuddy'||typeof t.title!=='string'||t.title.length<2||t.title.length>200||typeof prompt!=='string'||prompt.length<80||prompt.length>90000||!Array.isArray(t.editorial?.sources)||t.editorial.sources.length>20||typeof t.editorial.fictionalization!=='string'||!t.editorial.fictionalization.trim()||!t.editorial.disclaimer) return wtJson({error:'任务缺少必要的核验资料、脱敏策略或生产指令'},400);
     const creative=t.creative_direction;
   if(!creative||creative.version!==1||creative.lock_status!=='approved'||creative.approval?.author_approved!==true||
     !/^[0-9a-f]{8}$/.test(String(creative.approval.lock_hash||''))||
     !Array.isArray(creative.characters)||creative.characters.length<2||
-    !Array.isArray(creative.storyboard)||creative.storyboard.length!==9||
+    !Array.isArray(creative.storyboard)||creative.storyboard.length!==(t.panel_count||9)||
     creative.storyboard.some((x,i)=>x.index!==i+1||String(x.scene||'').trim().length<30||
       !(String(x.caption||'').trim()||String(x.dialogue||'').trim()))||
     !creative.visual_rules?.size||!creative.cover_brief||
@@ -453,7 +641,7 @@ async function wtArchiveApi(request,env,url){
       return wtJson({code:'CREATIVE_APPROVAL_REQUIRED',error:'正式派单前必须锁定画风、人物和九格分镜，并要求 ChatGPT 先交角色定妆和首格样稿'},422);
 if(t.editorial.sources.length===0&&t.mode!=='original'&&t.research_required!==true)return wtJson({error:'无原始来源的热点任务必须明确标注“待核验／先研究”'},400);
   if(t.research_required===true&&t.mode==='hotspot'&&(!t.editorial.fact_notes||!t.editorial.fictionalization))return wtJson({error:'待核验任务需要事实边界与虚构改编安全规则'},400);
-  const key=await wtArchiveKey(t.editorial.sources,t.title,t.creative_revision||'');const id='WT-'+key.slice(0,20);
+  const key=await wtArchiveKey(t.editorial.sources,t.title,t.creative_revision||'',t.series);const id='WT-'+key.slice(0,20);
   if(t.dedupe_key!==key||t.task_id!==id)return wtJson({error:'任务 ID 或去重指纹不一致'},409);
   const path='tasks/'+id+'/task.json',promptPath='tasks/'+id+'/prompt.md';
   try{
@@ -776,16 +964,128 @@ async function wtDiscoveryScheduled(controller,env){
  return out;
 }
 
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'2.7.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+/* WORLD/TOON · Source-grounded drama / novel discovery endpoint.
+ * Injected into the existing Cloudflare Worker after source verification.
+ * This module searches only public metadata, never copies complete protected story text.
+ */
+const WT_STORY_SEARCH_ALLOWED=['all','drama','novel'];
+const wtStoryClean=v=>String(v??'').replace(/<[^>]{0,500}>/g,' ').replace(/&(?:amp|nbsp);/gi,' ').replace(/\s+/g,' ').trim();
+const wtStoryUrl=v=>{try{const u=new URL(String(v||''));return u.protocol==='https:'&&!u.username&&!u.password?u.href:''}catch{return ''}};
+const wtStoryKey=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[《》“”"'〈〉\s·・]/g,'').replace(/^(?:红果热剧|红果短剧|网络小说|世界名著|名著)/,'');
+const wtStoryTitleMatches=(title,q)=>{const needle=wtStoryKey(q),hay=wtStoryKey(title);return needle.length>=2&&hay.includes(needle)};
+async function wtStoryCurated(){
+ const r=await fetch(ORIGIN+'story-discovery.json',{signal:AbortSignal.timeout(8500)});
+ if(!r.ok)throw Error('剧情资源索引不可用 HTTP '+r.status);
+ const s=await r.text();if(s.length>100000)throw Error('剧情索引文件异常');
+ const x=JSON.parse(s);
+ if(x.schema!=='davylab.worldtoon.story-discovery.v1'||!Array.isArray(x.items))throw Error('剧情索引版本不兼容');
+ return {at:x.verified_on,items:x.items.filter(v=>v?.title&&wtStoryUrl(v.source)).slice(0,50)};
+}
+async function wtStoryBooks(q){
+ const url='https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('intitle:'+q)+'&maxResults=8&printType=books';
+ const r=await fetch(url,{signal:AbortSignal.timeout(9000)});
+ if(!r.ok)throw Error('Google Books HTTP '+r.status);
+ const j=await r.json();
+ return (j.items||[]).slice(0,8).map(x=>{
+  const v=x.volumeInfo||{},title=wtStoryClean(v.title||'').slice(0,150),
+    source=wtStoryUrl(v.canonicalVolumeLink||v.infoLink);
+  if(!title||!source)return null;
+  return {id:'books-'+String(x.id||'').slice(0,70),title,type:'novel',author:wtStoryClean((v.authors||[]).join('、')).slice(0,180),
+   source,source_name:'Google Books · 图书元数据',source_kind:'book_metadata',
+   summary:wtStoryClean(v.description||'').slice(0,280),
+   rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
+   beats:[],published:v.publishedDate||'',verified_on:new Date().toISOString().slice(0,10),
+   identity_status:'book_title_match',verification_status:'metadata_only'};
+ }).filter(x=>x&&wtStoryTitleMatches(x.title,q));
+}
+async function wtStoryPublicBooks(q){
+ const u='https://gutendex.com/books/?search='+encodeURIComponent(q);
+ const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
+ if(!r.ok)throw Error('Gutendex HTTP '+r.status);
+ const j=await r.json();
+ return (j.results||[]).slice(0,6).map(v=>({
+  id:'gutendex-'+v.id,title:wtStoryClean(v.title).slice(0,150),type:'classic',
+  author:wtStoryClean((v.authors||[]).map(x=>x.name).join('、')).slice(0,180),
+  source:'https://www.gutenberg.org/ebooks/'+v.id,source_name:'Project Gutenberg · 开放图书目录',
+  source_kind:'public_domain_catalog',summary:'目录检索到此经典书籍；尚未自动读取原著分章节正文。请查看原文后选择剧情。',
+  rights:'public_domain_us',rights_note:'仅为美国公版目录候选，需另行核对实际使用地区及具体版本的权利。',
+  beats:[],verified_on:new Date().toISOString().slice(0,10),
+  identity_status:'book_title_match',verification_status:'catalog_metadata_only'
+ })).filter(x=>wtStoryTitleMatches(x.title,q));
+}
+async function wtStoryDramaSearch(q){
+ // Search live Google News RSS for independently attributable title leads.
+ // Search results are not treated as episodes or official Hongguo viewing metrics.
+ // Empty-query discovery uses only dated, source-linked editorial snapshots.
+ // Live news is queried only for a named work and results must mention that exact title.
+ if(!q)return [];
+ const qq='"'+q+'" 红果短剧 剧情';
+ const endpoint='https://news.google.com/rss/search?q='+encodeURIComponent(qq)+'&hl=zh-CN&gl=CN&ceid=CN:zh-Hans';
+ const r=await fetch(endpoint,{signal:AbortSignal.timeout(9000)});
+ if(!r.ok)throw Error('Google News RSS HTTP '+r.status);
+ const rss=await r.text();
+ if(rss.length>1700000||!rss.includes('<rss'))throw Error('新闻检索格式异常');
+ return parseRSS(rss,'娱乐').slice(0,30).filter(x=>wtStoryTitleMatches(x.title,q)).slice(0,12).map((x,i)=>({
+   id:'news-'+i+'-'+(x.published||'').slice(0,20),title:wtStoryClean(x.title).slice(0,165),
+   type:'drama',source:wtStoryUrl(x.url),source_name:wtStoryClean(x.source||'Google News 来源').slice(0,100),
+   source_kind:'web_search_lead',rights:'unknown',rights_note:'网络检索线索不是剧集本身，未验证其红果上架身份、完整剧情或改编权。',
+   summary:'搜索引擎发现的公开报道线索；请点开原文核对。此卡不提供未核实的分集情节。',
+   beats:[],published:x.published||'',verified_on:new Date().toISOString().slice(0,10),
+   identity_status:'title_mentioned_in_source',verification_status:'source_lead_unverified'
+ })).filter(x=>x.source&&x.title);
+}
+async function wtStorySearch(request,env,url){
+ const type=url.searchParams.get('type')||'all',q=String(url.searchParams.get('q')||'').trim().slice(0,90);
+ if(!WT_STORY_SEARCH_ALLOWED.includes(type))return failure('未知剧情搜索类型',400);
+ if(q&&q.length<2)return failure('至少输入两个字符才能搜索',400);
+ const notes=[],merged=[];let curated;
+ try{curated=await wtStoryCurated();const key=wtStoryKey(q);
+  for(const v of curated.items){
+   if(type==='drama'&&v.type!=='drama')continue;
+   if(type==='novel'&&v.type==='drama')continue;
+   if(q&&!([v.title,...(v.aliases||[])].some(s=>wtStoryKey(s).includes(key))))continue;
+   merged.push({...v,source_status:'editorial_reviewed',snapshot_date:curated.at,
+    identity_status:'curated_title_match',verification_status:'source_metadata_reviewed'});
+  }
+ }catch(e){notes.push('精选索引不可用：'+String(e.message||e).slice(0,85))}
+ const jobs=[];
+ if(q&&type!=='drama'){
+  jobs.push({name:'Google Books',fn:()=>wtStoryBooks(q)});
+  jobs.push({name:'Gutendex',fn:()=>wtStoryPublicBooks(q)});
+ }
+ if(type!=='novel'&&q)jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
+ const results=await Promise.allSettled(jobs.map(x=>x.fn()));
+ for(let i=0;i<results.length;i++){
+  const res=results[i];if(res.status==='fulfilled')merged.push(...res.value);
+  else notes.push(jobs[i].name+' 暂不可用：'+String(res.reason?.message||res.reason).slice(0,90));
+ }
+ const clean=[],seen=new Set();
+ for(const item of merged){
+  const title=wtStoryClean(item.title).slice(0,160),source=wtStoryUrl(item.source);
+  if(!title||!source)continue;
+  const key=title.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'').slice(0,120);
+  if(seen.has(key))continue;
+  seen.add(key);clean.push({...item,title,source});
+ }
+ // Curated snapshot ranking is dated and source-backed; do not treat it as today's realtime platform metrics.
+ if(!q)clean.sort((a,b)=>Number(a.rank_snapshot||999)-Number(b.rank_snapshot||999));
+ // No fake fallback plot or rankings. Fail honestly on total outages, but keep curated matches.
+ if(!clean.length&&notes.length)return Response.json({items:[],warnings:notes,error:'暂未找到匹配来源；可更换关键词或稍后重试',searched_at:new Date().toISOString()},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=120'}});
+ return Response.json({schema:'davylab.worldtoon.story-search.v1',items:clean.slice(0,35),query:q,type,warnings:notes,
+  searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
+  model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
+}
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.3.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,storyboardAiEnabled:!!env.AI,storyboardAiRequiresLogin:true,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
  if(url.pathname==='/api/comic/catalog'&&request.method==='GET')return wtDiscoveryRead(env,url,ctx);
  if(url.pathname==='/api/comic/discover'&&request.method==='GET')return comicDiscover(url);
  if(url.pathname==='/api/comic/visuals'&&request.method==='GET')return heritageVisuals(url);
+ if(url.pathname==='/api/comic/story-search'&&request.method==='GET')return wtStorySearch(request,env,url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'2.7.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.3.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };

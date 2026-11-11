@@ -5,6 +5,8 @@
 const WT_STORY_SEARCH_ALLOWED=['all','drama','novel'];
 const wtStoryClean=v=>String(v??'').replace(/<[^>]{0,500}>/g,' ').replace(/&(?:amp|nbsp);/gi,' ').replace(/\s+/g,' ').trim();
 const wtStoryUrl=v=>{try{const u=new URL(String(v||''));return u.protocol==='https:'&&!u.username&&!u.password?u.href:''}catch{return ''}};
+const wtStoryKey=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[《》“”"'〈〉\s·・]/g,'').replace(/^(?:红果热剧|红果短剧|网络小说|世界名著|名著)/,'');
+const wtStoryTitleMatches=(title,q)=>{const needle=wtStoryKey(q),hay=wtStoryKey(title);return needle.length>=2&&hay.includes(needle)};
 async function wtStoryCurated(){
  const r=await fetch(ORIGIN+'story-discovery.json',{signal:AbortSignal.timeout(8500)});
  if(!r.ok)throw Error('剧情资源索引不可用 HTTP '+r.status);
@@ -26,8 +28,9 @@ async function wtStoryBooks(q){
    source,source_name:'Google Books · 图书元数据',source_kind:'book_metadata',
    summary:wtStoryClean(v.description||'').slice(0,280),
    rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
-   beats:[],verified_on:new Date().toISOString().slice(0,10)};
- }).filter(Boolean);
+   beats:[],published:v.publishedDate||'',verified_on:new Date().toISOString().slice(0,10),
+   identity_status:'book_title_match',verification_status:'metadata_only'};
+ }).filter(x=>x&&wtStoryTitleMatches(x.title,q));
 }
 async function wtStoryPublicBooks(q){
  const u='https://gutendex.com/books/?search='+encodeURIComponent(q);
@@ -40,24 +43,29 @@ async function wtStoryPublicBooks(q){
   source:'https://www.gutenberg.org/ebooks/'+v.id,source_name:'Project Gutenberg · 开放图书目录',
   source_kind:'public_domain_catalog',summary:'目录检索到此经典书籍；尚未自动读取原著分章节正文。请查看原文后选择剧情。',
   rights:'public_domain_us',rights_note:'仅为美国公版目录候选，需另行核对实际使用地区及具体版本的权利。',
-  beats:[],verified_on:new Date().toISOString().slice(0,10)
- }));
+  beats:[],verified_on:new Date().toISOString().slice(0,10),
+  identity_status:'book_title_match',verification_status:'catalog_metadata_only'
+ })).filter(x=>wtStoryTitleMatches(x.title,q));
 }
 async function wtStoryDramaSearch(q){
  // Search live Google News RSS for independently attributable title leads.
  // Search results are not treated as episodes or official Hongguo viewing metrics.
- const qq=q?('"'+q+'" 红果短剧 剧情'):('红果短剧 热播榜 新剧');
+ // Empty-query discovery uses only dated, source-linked editorial snapshots.
+ // Live news is queried only for a named work and results must mention that exact title.
+ if(!q)return [];
+ const qq='"'+q+'" 红果短剧 剧情';
  const endpoint='https://news.google.com/rss/search?q='+encodeURIComponent(qq)+'&hl=zh-CN&gl=CN&ceid=CN:zh-Hans';
  const r=await fetch(endpoint,{signal:AbortSignal.timeout(9000)});
  if(!r.ok)throw Error('Google News RSS HTTP '+r.status);
  const rss=await r.text();
  if(rss.length>1700000||!rss.includes('<rss'))throw Error('新闻检索格式异常');
- return parseRSS(rss,'娱乐').slice(0,12).map((x,i)=>({
+ return parseRSS(rss,'娱乐').slice(0,30).filter(x=>wtStoryTitleMatches(x.title,q)).slice(0,12).map((x,i)=>({
    id:'news-'+i+'-'+(x.published||'').slice(0,20),title:wtStoryClean(x.title).slice(0,165),
    type:'drama',source:wtStoryUrl(x.url),source_name:wtStoryClean(x.source||'Google News 来源').slice(0,100),
-   source_kind:'web_search_lead',rights:'unknown',rights_note:'网络检索线索不是剧集本身，未验证完整剧情或改编权。',
+   source_kind:'web_search_lead',rights:'unknown',rights_note:'网络检索线索不是剧集本身，未验证其红果上架身份、完整剧情或改编权。',
    summary:'搜索引擎发现的公开报道线索；请点开原文核对。此卡不提供未核实的分集情节。',
-   beats:[],published:x.published||'',verified_on:new Date().toISOString().slice(0,10)
+   beats:[],published:x.published||'',verified_on:new Date().toISOString().slice(0,10),
+   identity_status:'title_mentioned_in_source',verification_status:'source_lead_unverified'
  })).filter(x=>x.source&&x.title);
 }
 async function wtStorySearch(request,env,url){
@@ -65,12 +73,13 @@ async function wtStorySearch(request,env,url){
  if(!WT_STORY_SEARCH_ALLOWED.includes(type))return failure('未知剧情搜索类型',400);
  if(q&&q.length<2)return failure('至少输入两个字符才能搜索',400);
  const notes=[],merged=[];let curated;
- try{curated=await wtStoryCurated();const key=q.toLowerCase().replace(/[《》“”'\"〈〉\s·・]/g,'').replace(/^(?:红果热剧|红果短剧|网络小说|世界名著|名著)/,'');
+ try{curated=await wtStoryCurated();const key=wtStoryKey(q);
   for(const v of curated.items){
    if(type==='drama'&&v.type!=='drama')continue;
    if(type==='novel'&&v.type==='drama')continue;
-   if(q&&!([v.title,...(v.aliases||[])].some(s=>String(s||'').toLowerCase().replace(/[《》“”'\"〈〉\s·・]/g,'').includes(key))))continue;
-   merged.push({...v,source_status:'editorial_reviewed',snapshot_date:curated.at});
+   if(q&&!([v.title,...(v.aliases||[])].some(s=>wtStoryKey(s).includes(key))))continue;
+   merged.push({...v,source_status:'editorial_reviewed',snapshot_date:curated.at,
+    identity_status:'curated_title_match',verification_status:'source_metadata_reviewed'});
   }
  }catch(e){notes.push('精选索引不可用：'+String(e.message||e).slice(0,85))}
  const jobs=[];
@@ -78,7 +87,7 @@ async function wtStorySearch(request,env,url){
   jobs.push({name:'Google Books',fn:()=>wtStoryBooks(q)});
   jobs.push({name:'Gutendex',fn:()=>wtStoryPublicBooks(q)});
  }
- if(type!=='novel')jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
+ if(type!=='novel'&&q)jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
  const results=await Promise.allSettled(jobs.map(x=>x.fn()));
  for(let i=0;i<results.length;i++){
   const res=results[i];if(res.status==='fulfilled')merged.push(...res.value);
@@ -94,9 +103,10 @@ async function wtStorySearch(request,env,url){
  }
  // Curated snapshot ranking is dated and source-backed; do not treat it as today's realtime platform metrics.
  if(!q)clean.sort((a,b)=>Number(a.rank_snapshot||999)-Number(b.rank_snapshot||999));
- // No fake fallback plot or rankings. Fail honestly on total outages, but keep verified curated matches.
+ // No fake fallback plot or rankings. Fail honestly on total outages, but keep curated matches.
  if(!clean.length&&notes.length)return Response.json({items:[],warnings:notes,error:'暂未找到匹配来源；可更换关键词或稍后重试',searched_at:new Date().toISOString()},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=120'}});
  return Response.json({schema:'davylab.worldtoon.story-search.v1',items:clean.slice(0,35),query:q,type,warnings:notes,
-  searched_at:new Date().toISOString(),source_policy:'公共书目/报道线索和人工核对索引；非原著全文、非红果官方榜单、不代表改编授权',
+  searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
   model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
 }
+

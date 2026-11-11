@@ -209,11 +209,19 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   return [];
  }
  function quick(id,label){return '<button type="button" class="button story-chip" data-story-quick="'+html(id)+'">'+html(label)+'</button>'}
+ function identityLabel(x){
+  if(x?.rank_snapshot)return '第三方榜单记录 · '+html(x.verified_on||x.snapshot_date||'日期待核')+' · #'+html(x.rank_snapshot);
+  if(x?.identity_status==='title_mentioned_in_source')return '来源提及该题名 · 作品身份待人工核对';
+  if(x?.identity_status==='book_title_match')return '书目题名命中 · 不是剧情章节';
+  if(x?.identity_status==='curated_title_match')return '精选索引题名命中 · '+html(x.verified_on||x.snapshot_date||'日期待核');
+  return '作品身份待核对';
+ }
  function bookResult(x,i){return '<article class="story-result" role="listitem">'+
   '<div><span class="story-type">'+html(x.type==='drama'?'短剧／网络线索':x.type==='classic'?'经典文学':'网络小说／书目')+'</span>'+
-  (x.rank_snapshot?'<span class="story-rank">第三方榜单 '+html(x.verified_on||x.snapshot_date||'')+' · #'+x.rank_snapshot+'</span>':'')+
+  '<span class="story-rank">'+identityLabel(x)+'</span>'+
   '<h3>'+html(x.title)+'</h3><p>'+html(x.summary||'仅检索到书目／报道线索，请查看来源并提供剧情摘要。')+'</p>'+
-  '<small>'+html(x.source_name||'公开资料')+' · '+html(x.author||x.genre||'')+' · '+html(x.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实')+'</small></div>'+
+  '<small>'+html(x.source_name||'公开资料')+' · '+html(x.author||x.genre||'')+
+  (x.published?' · 来源日期 '+html(String(x.published).slice(0,10)):'')+' · '+html(x.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实')+'</small></div>'+
   '<div class="story-actions"><a target="_blank" rel="noopener noreferrer" href="'+html(limitedSource(x))+'">查看来源 ↗</a>'+
   '<button type="button" class="button dark" data-story-select="'+i+'">选择剧情 →</button></div></article>';
  }
@@ -273,7 +281,8 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
     try{
      const res=await fetch(u,{signal:abort.signal,cache:'no-store'});
      obj=await res.json().catch(()=>({error:'服务器返回格式异常'}));
-     if(!res.ok)throw Error(obj.error||'剧情搜索请求失败 HTTP '+res.status);
+     story.warnings=obj.warnings||[];
+     if(!res.ok||obj.error)throw Error(obj.error||'剧情搜索请求失败 HTTP '+res.status);
     }finally{clearTimeout(timeout)}
     if(!obj||!Array.isArray(obj.items))throw Error('剧情搜索接口未返回有效列表');
     try{localStorage.setItem(key,JSON.stringify({doc:obj,savedAt:Date.now()}))}catch{}
@@ -381,3 +390,4 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   loaded:story.loaded,error:story.error}),search,choose,createProjectFromStory,beatOptions,block};
  if(ui.route==='live')Promise.resolve().then(()=>{if(ui.route==='live')render()});
 })();
+

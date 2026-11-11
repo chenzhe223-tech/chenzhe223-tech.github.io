@@ -15,7 +15,7 @@ const cache={
 };
 const caches={
   open:async()=>cache,
-  keys:async()=>['davylab-comic-press-v2.3-personal-studio','davylab-comic-press-v2.7.1-api-safe'],
+  keys:async()=>['davylab-comic-press-v2.3-personal-studio','davylab-comic-press-v4.3.0-story-identity'],
   delete:async()=>true,
   match:async()=>null
 };
@@ -33,12 +33,13 @@ function isIntercepted(url,method='GET'){
   events.fetch({request:{url,method},respondWith:()=>{intercepted=true;}});
   return intercepted;
 }
-for(const route of ['/api/archive/sync','/api/archive/status','/api/config','/api/news','/health']){
+for(const route of ['/api/archive/sync','/api/archive/status','/api/config','/api/news','/api/comic/story-search','/health']){
   assert.equal(isIntercepted('https://worldtoon.chenzhe223.workers.dev'+route),false,route+' must use network directly');
 }
 assert.equal(isIntercepted('https://worldtoon.chenzhe223.workers.dev/archive.js'),true,'static scripts can use offline fallback');
 assert.equal(isIntercepted('https://worldtoon.chenzhe223.workers.dev/'),true,'offline app shell is allowed');
-assert.match(archive,/WT_ARCHIVE_CLIENT_REV='2\.7\.1'/);
+assert.match(archive,/WT_ARCHIVE_CLIENT_REV='3\.0\.0'/);
 assert.match(archive,/\?rev='/);
-assert.match(archive,/wtArchiveSnapshot=null;wtArchiveLastSync=0;/);
+assert.match(archive,/wtArchiveSnapshot=null,wtArchiveError=''.*wtArchiveLastSync=0/);
 console.log('PASS: auth APIs bypass SW cache, static shell retains offline fallback, stale dashboard cleared');
+

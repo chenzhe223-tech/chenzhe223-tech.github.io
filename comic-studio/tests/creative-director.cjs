@@ -43,7 +43,7 @@ const fake=(dataset,extra={})=>({target:{closest:()=>({dataset,...extra})},preve
 listeners.click[0](fake({directorStep:'3'}));
 seed.reviewed=true;
 assert.equal(director.checks(source).length,0,'All creative requirements complete before approving');
-listeners.click[0](fake({directorAction:'approve'}));
+for(const listener of listeners.click)listener(fake({directorAction:'approve'}));
 assert.equal(director.approved(source),true,'Human approved locked blueprint');
 assert.equal(director.readiness(source).length,0);
 const payload=director.exportBrief(source);
@@ -85,3 +85,4 @@ assert.ok(creative.includes('WTStyleV3.detail(c)'),'Director renders actual refe
 assert.ok(html.includes('style-v3.js')&&html.includes('style-v3.css'),'App must load V3 assets');
 assert.ok(worker.includes('style-v3\\.js')&&worker.includes('style-v3\\.css'),'Worker must allow V3 asset URLs');
 console.log('WORLD/TOON creative director: 25 catalog styles + 6 legacy styles, six narrative arcs, approved storyboard and GitHub gates PASS');
+
