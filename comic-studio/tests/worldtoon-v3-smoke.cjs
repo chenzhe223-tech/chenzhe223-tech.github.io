@@ -74,6 +74,6 @@ assert.match(index,/worldtoon-v3-review\.js\?v=4\.0\.1/,'new QA script cache rev
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-item\{[^}]*min-height:48px/,'compact checklist items should remain 48px high');
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-list\{[^}]*gap:8px 12px/,'QA grid spacing should remain compact and aligned');
 assert.match(shelfCss,/\.wt3-final-review #wt3-sources\{[^}]*min-height:68px/,'sources input should not consume excessive vertical space');
-assert.match(index,/worldtoon-v3\.css\?v=4\.0\.3/,'compact QA stylesheet cache revision');
+assert.match(index,/worldtoon-v3\.css\?v=4\.1\.0/,'compact QA stylesheet cache revision');
 
 console.log('WORLD/TOON 3.0 smoke PASS: '+scripts.length+' parsed JS modules + SOP, shelf, series, ZIP and QA guards');
