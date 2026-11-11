@@ -314,7 +314,12 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   nav('workspace/'+p.id+'/1');notify('剧情已选，创建 '+p.panels.length+' 格建议篇幅的漫画草稿；请在 AI 编剧中继续扩写');
  }
  const baseLive=wtLive;
- wtLive=function(){const existing=baseLive(),headEnd=existing.indexOf('</section>');return headEnd>=0?existing.slice(0,headEnd+10)+block()+existing.slice(headEnd+10):block()+existing};
+ wtLive=function(){
+  if(!story.loaded&&!story.busy&&ui.route==='live')
+   Promise.resolve().then(()=>{if(ui.route==='live'&&!story.loaded&&!story.busy)void search('','drama',false)});
+  const existing=baseLive(),headEnd=existing.indexOf('</section>');
+  return headEnd>=0?existing.slice(0,headEnd+10)+block()+existing.slice(headEnd+10):block()+existing;
+ };
  document.addEventListener('submit',ev=>{
   if(ev.target?.id!=='story-search-form')return;
   ev.preventDefault();ev.stopImmediatePropagation();
