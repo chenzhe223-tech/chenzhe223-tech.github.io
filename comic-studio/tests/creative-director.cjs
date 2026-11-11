@@ -38,7 +38,7 @@ assert.equal(source.panels.length,9);
 assert.ok(source.panels.every(x=>x.scene.length>=30&&x.title&&x.caption));
 assert.ok(director.checks(source).includes('请勾选“已逐格审阅并确认创意方向”'));
 let markup=ctx.window.wtCreativeDirector();
-for(const expected of ['创意导演台','画风定调','人物设定','九格故事','最终定版'])assert.ok(markup.includes(expected),'Missing visual feature '+expected);
+for(const expected of ['创意导演台','画风定调','人物设定','剧情分镜','最终定版'])assert.ok(markup.includes(expected),'Missing visual feature '+expected);
 const fake=(dataset,extra={})=>({target:{closest:()=>({dataset,...extra})},preventDefault:()=>{},stopImmediatePropagation:()=>{}});
 listeners.click[0](fake({directorStep:'3'}));
 seed.reviewed=true;
