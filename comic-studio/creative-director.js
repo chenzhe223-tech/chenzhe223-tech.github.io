@@ -236,7 +236,14 @@ function narrative(p,c){
 }
 function castEditor(c){
  return '<div class="director-cast">'+c.cast.map((person,i)=>'<article class="director-character"><div class="director-character-head"><span>0'+(i+1)+'</span><strong>'+e(person.role)+'</strong></div>'+
- '<div class="director-character-avatar director-theme-'+style(c.styleId).id+'"><i></i><b></b><small>角色版式示意 · 非定妆照</small></div>'+
+ (person.portraitConsent&&person.portraitMedia?
+    '<div class="director-portrait-preview"><img data-source="'+e(person.portraitMedia)+'" src="'+e(mediaSrc(person.portraitMedia))+'" alt="'+e(person.name)+'的本人授权参考照"><small>本人授权原照 · 非 AI 生成角色</small></div>':
+    '<div class="director-character-avatar director-theme-'+style(c.styleId).id+'"><i></i><b></b><small>角色版式示意 · 非定妆照</small></div>')+
+ '<div class="director-portrait-controls">'+
+ '<label class="director-portrait-consent"><input type="checkbox" data-director-portrait-consent="'+i+'" '+(person.portraitConsent?'checked':'')+'>我确认拥有此人肖像的使用授权，仅用于本作品的角色参考与交付</label>'+
+ '<label class="button director-portrait-upload">＋ 上传真人参考照（仅本机保存）<input type="file" hidden accept="image/png,image/jpeg,image/webp" data-director-portrait-upload="'+i+'" '+(!person.portraitConsent?'disabled':'')+'></label>'+
+ (person.portraitMedia?'<button type="button" class="button" data-director-portrait-remove="'+i+'">移除照片</button>':'')+
+ '<p>支持 PNG/JPEG/WebP，最多 8MB。AI 将参照骨相、发型和独特特征生成 3D 拟人角色；真实图像需由生产 Agent 完成并经作者审核。照片不公开入书架。</p></div>'+
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
  '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
@@ -354,6 +361,64 @@ document.addEventListener('change',ev=>{
   commitEdit(p,'调整并保存导演台创意设定');render();
  }catch(err){notify(String(err.message||err));render()}
 },true);
+// Keep likeness references private: IndexedDB for preview and the owner-approved
+// offline handoff ZIP. No public URL and no background upload to shared publications.
+async function handlePortraitUpload(el){
+ const p=selected();if(!p||p.handoff?.repoQueuedAt)throw Error('正式派单后不能改动本版肖像参考');
+ const i=Number(el.dataset.directorPortraitUpload),c=ensure(p),person=c.cast[i];
+ if(!person)throw Error('角色不存在');
+ if(person.portraitConsent!==true)throw Error('请先确认肖像使用授权，再上传照片');
+ const file=el.files?.[0];if(!file)return;
+ if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size<1024||file.size>8*1024*1024)
+    throw Error('照片仅接受 1KB–8MB 的 PNG/JPEG/WebP');
+ const bytes=new Uint8Array(await file.arrayBuffer());
+ const isPng=bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71,
+       isJpeg=bytes[0]===255&&bytes[1]===216&&bytes[2]===255,
+       isWebp=String.fromCharCode(...bytes.slice(0,4))==='RIFF'&&String.fromCharCode(...bytes.slice(8,12))==='WEBP';
+ if(!(isPng||isJpeg||isWebp))throw Error('图片文件内容不符合声明格式');
+ let bitmap;
+ try{
+  bitmap=await createImageBitmap(file);
+  if(bitmap.width<256||bitmap.height<256)throw Error('建议上传不低于 256×256 的正面或半身照片');
+ }finally{bitmap?.close()}
+ const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),
+   b=>b.toString(16).padStart(2,'0')).join('');
+ const ext=isPng?'png':isJpeg?'jpg':'webp',key='portrait-'+p.id+'-'+i+'-'+sha.slice(0,16);
+ await putMedia(key,file);
+ person.portraitMedia='media:'+key;person.portraitSha256=sha;person.portraitExt=ext;
+ person.portraitNotes='请依据授权照片保持面部骨相、眼鼻嘴比例、发型和自然表情的可辨识相似，转为原创3D漫画形象；不要声称原图是真实生成结果。';
+ p.characters=castText(c);
+ commitEdit(p,'保存授权真人肖像与 3D 拟人角色参考（本机加密存储依赖设备环境）');
+ render();notify('肖像参考已保存于当前设备；生成任务时将包含照片参考和 SHA256。');
+}
+document.addEventListener('change',ev=>{
+ const el=ev.target;
+ if(!el?.matches?.('[data-director-portrait-consent]'))return;
+ ev.stopImmediatePropagation();
+ try{
+  const p=selected();if(!p||p.handoff?.repoQueuedAt)throw Error('已派单作品不能改动肖像授权');
+  const c=ensure(p),person=c.cast[Number(el.dataset.directorPortraitConsent)];
+  if(!person)return;
+  person.portraitConsent=!!el.checked;
+  if(!person.portraitConsent){person.portraitMedia=null;person.portraitSha256=null;person.portraitExt=null}
+  commitEdit(p,person.portraitConsent?'作者确认肖像使用授权':'作者撤回肖像使用授权并停止使用肖像参考');
+  render();
+ }catch(e){notify(String(e.message||e));render()}
+},true);
+document.addEventListener('change',ev=>{
+ const el=ev.target;if(!el?.matches?.('[data-director-portrait-upload]'))return;
+ ev.stopImmediatePropagation();void handlePortraitUpload(el).catch(err=>notify('真人肖像上传失败：'+String(err.message||err)));
+},true);
+document.addEventListener('click',ev=>{
+ const el=ev.target.closest('[data-director-portrait-remove]');if(!el)return;
+ ev.preventDefault();ev.stopImmediatePropagation();
+ const p=selected();if(!p||p.handoff?.repoQueuedAt){notify('已派单任务请创建新修订版本');return}
+ const person=ensure(p).cast[Number(el.dataset.directorPortraitRemove)];
+ if(!person)return;
+ person.portraitMedia=null;person.portraitSha256=null;person.portraitExt=null;
+ commitEdit(p,'作者移除肖像参考照片');render();
+},true);
+
 window.wtCreativeDirector=draw;
 window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft,localStoryboard,applyStoryboard,aiStoryPayload,generateStory};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
