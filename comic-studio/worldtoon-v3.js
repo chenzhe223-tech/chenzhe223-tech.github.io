@@ -60,8 +60,12 @@
    const cards=shown.map(({r,p,state,publication})=>{
     const tid=r?.task_id||p?.handoff?.taskId||'',url=publication?publicationCover(publication.coverUrl):cover(r,p);
     const placeholder='<div class="wt3-placeholder"><span>WORLD<br>TOON</span></div>';
+    // Keep the authentic image (recorded in the GitHub publication archive).
+    // No guessed or unrelated cover is ever substituted.
     const src=url?placeholder+'<img '+(url.startsWith('media:')?'data-wt3-media="'+h(url.slice(6))+'" ':'')+
-     'src="'+h(url.startsWith('media:')?'':url)+'" alt="'+h((publication?.title||r?.title||p?.title||'')+(publication?'公众号发表封面':'漫画封面'))+
+     (url.startsWith('media:')?'':'src="'+h(url)+'" ')+
+     (publication?'data-wt3-wechat-cover="1" ':'')+
+     'referrerpolicy="no-referrer" decoding="async" alt="'+h((publication?.title||r?.title||p?.title||'')+(publication?'公众号发表封面':'漫画封面'))+
      '" loading="lazy">':placeholder;
     const name=h(publication?.title||r?.title||p?.title||'未命名作品'),series=h(p?.seriesTitle||r?.series?.id||''),episode=p?.seriesEpisode||r?.series?.episode||null;
     const published=isDone(r);
@@ -77,7 +81,21 @@
    }).join('');
    queueMicrotask(()=>{if(ui.route!=='library')return;
      document.querySelectorAll('.wt3-shelf .wt3-cover img').forEach(img=>{
-       img.addEventListener('error',()=>img.remove(),{once:true});
+       // WeChat's /0 original and /640 resized variant refer to the same asset.
+       // Try the alternate URL only once; never invent an unrelated image.
+       img.addEventListener('error',()=>{
+         if(!img.isConnected)return;
+         if(img.dataset.wt3WechatCover==='1'&&img.dataset.wt3Retry!=='1'){
+           img.dataset.wt3Retry='1';
+           try{
+             const u=new URL(img.currentSrc||img.src);
+             if(/(^|\\.)qpic\\.cn$/i.test(u.hostname)&&/\\/0$/.test(u.pathname)){
+               u.pathname=u.pathname.replace(/\\/0$/,'/640');img.src=u.href;return;
+             }
+           }catch{}
+         }
+         img.remove();
+       });
      });
      document.querySelectorAll('.wt3-shelf img[data-wt3-media]').forEach(async img=>{
        try{const url=await resolveImage('media:'+img.dataset.wt3Media);
@@ -140,7 +158,13 @@
   const p=selected(),base=originalStudio();if(!p)return base;
   const locked=!!p.handoff?.repoQueuedAt,agent=p.productionAgent||'ChatGPT',count=p.panels?.length||9;
   const setting='<section class="box wt3-work-panel"><div class="kicker">WORLD/TOON 3.0 / STORY ENGINE</div><h2>一条创意，开启一部漫画</h2>'+
-   '<p class="minor">编剧 → 创意导演台 → 生产 Agent → 交付验收 → 作品书架。真实 DeepSeek 模型仅在确认付费调用且服务端密钥可用时运行。</p>'+
+   '<p class="minor">编剧 → 创意导演台 → 生产 Agent → 交付验收 → 作品书架。DeepSeek 使用 Cloudflare Worker 的安全服务端密钥，同一平台账号多端共享，不在浏览器保存明文密钥。</p>'+
+   '<details class="wt3-deepseek-setup"><summary>首次配置 DeepSeek API · 一次保存，多设备通用</summary>'+
+   '<div class="wt3-deepseek-instructions"><p>1. 到 <a href="https://platform.deepseek.com/api_keys" target="_blank" rel="noopener noreferrer">DeepSeek 控制台</a>创建 API Key，并确保账户有可用额度。</p>'+
+   '<p>2. 到 <a href="https://dash.cloudflare.com/" target="_blank" rel="noopener noreferrer">Cloudflare 控制台</a> → Workers & Pages → worldtoon → Settings → Variables and Secrets → Add。</p>'+
+   '<p>3. 类型选择 <b>Secret</b>；名称填写 <code>WORLDTOON_DEEPSEEK_API_KEY</code>；Value 粘贴密钥，点击 Deploy。</p>'+
+   '<p>4. 回到平台并登录同一个账号，刷新后使用“DeepSeek 扩写”；不需要其他设备再输入密钥。</p>'+
+   '<p class="minor">密钥不要保存在 GitHub、前端 localStorage、聊天或普通明文变量。每次模型调用可能产生费用，仍需人工确认。</p></div></details>'+
    '<div class="wt3-controls"><div class="field wt3-seed"><label>一句话构思</label><textarea id="wt3-seed" rows="2" placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+h(p.ideaSeed||'')+'</textarea></div>'+
    '<div class="field"><label>制作 Agent</label><select id="wt3-agent" '+(locked?'disabled':'')+'><option value="ChatGPT"'+(agent==='ChatGPT'?' selected':'')+'>ChatGPT 创作 · WorkBuddy 发表</option><option value="WorkBuddy"'+(agent==='WorkBuddy'?' selected':'')+'>WorkBuddy 创作与发表</option></select></div>'+
    '<div class="field"><label>漫画篇幅 · 4–60 格</label><input id="wt3-count" type="number" min="4" max="60" value="'+count+'" '+(locked?'disabled':'')+'></div></div>'+
