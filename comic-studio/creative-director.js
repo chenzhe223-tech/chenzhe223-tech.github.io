@@ -88,7 +88,7 @@ function applyStoryboard(p,panels,meta,replace=false){
  if(p.handoff?.repoQueuedAt)throw Error('该版本已正式派单，不能修改既有故事');
  if(!Array.isArray(panels)||panels.length!==9||!Array.isArray(p.panels)||p.panels.length!==9)throw Error('需要恰好九格内容');
  const existing=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));
- if(replace&&existing&&!confirm('这会替换你当前九格中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
+ if(replace===true&&existing&&!confirm('这会替换你当前九格中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
  const fields=['title','scene','caption','dialogue','prompt'];
  let updated=0;
  for(let i=0;i<9;i++){
@@ -140,10 +140,12 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  storyBusy=true;render();
  try{
   if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
+  const basis=digest(p);
   const result=await wtCallAI('/api/ai/storyboard',aiStoryPayload(p,provider));
   if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length!==9)throw Error('没有收到九格完整的模型生成结果');
   if(selected()?.id!==p.id||p.handoff?.repoQueuedAt)throw Error('当前作品已切换或已派单，原始草稿未被覆盖');
-  const wrote=applyStoryboard(p,result.panels,result,replace);
+  if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
+  const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
   if(wrote)notify('已使用 '+(provider==='native'?'平台内置AI':provider==='deepseek'?'DeepSeek':'OpenAI')+' 生成可编辑九格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
@@ -241,6 +243,25 @@ function framePreview(p,c){
  return '<div class="director-board-info"><strong>'+e(arc(c.arcId).name)+' · 九格镜头表</strong><span>仅为镜头/文字预演，不是 AI 生成的最终图片</span></div>'+
  '<div class="director-board">'+rows+'</div>';
 }
+function storyControls(p,c){
+ const info=c.storyboardProvenance;
+ const origin=info?.method==='verified_model_response'?'AI生成 · '+(info.provider==='native'?'平台内置模型':info.provider==='deepseek'?'DeepSeek API':'OpenAI API')+(info.model?' · '+info.model:''):
+    info?.method==='local_structure_rules'?'本地剧情分析规则 · 非AI模型输出':'尚未生成 · 将优先使用内置AI';
+ const providerLabel=storyProvider==='deepseek'?'DeepSeek':storyProvider==='openai'?'OpenAI':'内置AI';
+ return '<div class="director-ai-workflow" role="group" aria-label="九格剧本智能生成">'+
+ '<div class="director-ai-head"><div><strong>自动编剧 · 九格完整分镜</strong><span>默认自动分析选题、人物与画风；模型结果和人工编辑都写入当前作品。</span></div>'+
+ '<span class="director-ai-status">'+e(storyBusy?'生成中 · 请勿重复提交':origin)+'</span></div>'+
+ '<div class="director-ai-grid"><label>生成方式<select data-director-provider>'+
+ '<option value="native"'+(storyProvider==='native'?' selected':'')+'>内置AI · 已登录优先自动生成</option>'+
+ '<option value="deepseek"'+(storyProvider==='deepseek'?' selected':'')+'>DeepSeek API · 自带密钥</option>'+
+ '<option value="openai"'+(storyProvider==='openai'?' selected':'')+'>OpenAI API · 自带密钥</option></select></label>'+
+ (storyProvider!=='native'?'<label>API Key · 本次网页会话使用，不保存到项目<input data-director-api-key type="password" autocomplete="off" spellcheck="false" placeholder="'+e(providerLabel)+' API Key" value="'+e(storyApiKey)+'"></label>':'<div class="director-ai-guide"><b>自动填充规则</b><span>仅在九格仍为空白时自动生成；若模型不可用，会明确回退本地规则草稿。</span></div>')+'</div>'+
+ '<div class="director-ai-actions"><button type="button" class="button dark" data-director-action="ai"'+(storyBusy?' disabled':'')+'> '+(storyBusy?'正在生成…':'使用'+e(providerLabel)+'智能生成九格')+'</button>'+
+ '<button type="button" class="button" data-director-action="fill"'+(storyBusy?' disabled':'')+'>仅填补空白字段</button>'+
+ '<button type="button" class="button subtle" data-director-action="draft"'+(storyBusy?' disabled':'')+'>本地规则草稿</button></div>'+
+ '<p class="director-ai-foot">AI草稿不等于事实核验或正式完成。内置模型使用已有平台配额；第三方API仅在你点击生成并确认后调用，可能产生费用。文字可逐格修改，最终需作者审阅锁定。</p>'+
+ '</div>';
+}
 function review(p,c){
  const errs=checks(p),locked=approved(p),count=p.panels.filter(x=>clean(x.scene).length>=30).length;
  return '<div class="director-review"><section class="director-review-summary"><h3>本次制作定版</h3><div class="director-review-kpis"><span><strong>'+e(style(c.styleId).name)+'</strong>画风</span><span><strong>'+c.cast.length+' 位</strong>固定人物</span><span><strong>'+count+'/9</strong>分镜完成</span></div>'+
@@ -269,15 +290,19 @@ function draw(){
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
  (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，先生成可修改的九格草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
- '<div class="director-actions"><button type="button" class="button" data-director-action="draft">生成／重做九格脚本</button><button type="button" class="button" data-director-action="adopt">保留已有九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
+ storyControls(p,c)+
+ '<div class="director-actions"><button type="button" class="button" data-director-action="adopt">保留已编辑九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
  framePreview(p,c)+'</section>':'')+
  (step===3?review(p,c):'')+
+ (step===2?(scheduleAutoStoryboard(p),''):'')+
  '<p class="director-footer">By DAVYLAB · 创意预制与锁定不等于事实认证、图像已经生成或内容允许发表。资料自动保存在当前作品，并可随原有账户同步。</p></div>';
 }
 async function action(type,p){
  if(!p)throw Error('请先选择作品');
  if(type==='next'){step=Math.min(3,step+1);render();return}
  if(type==='draft'){if(p.handoff?.repoQueuedAt)throw Error('该任务已正式入仓，不能覆盖分镜');draft(p);return}
+ if(type==='ai'){await generateStory(p,{provider:storyProvider,replace:true});return}
+ if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
  if(type==='adopt'){
   if(p.handoff?.repoQueuedAt)throw Error('本版任务已经派单，不可重签原稿');
   if(!Array.isArray(p.panels)||p.panels.length!==9||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
@@ -286,6 +311,16 @@ async function action(type,p){
  }
  if(type==='approve'){approve(p);return}
 }
+document.addEventListener('input',ev=>{
+ const el=ev.target;if(el?.matches?.('[data-director-api-key]'))storyApiKey=String(el.value||'').slice(0,320);
+},true);
+document.addEventListener('change',ev=>{
+ const el=ev.target;
+ if(!el?.matches?.('[data-director-provider]'))return;
+ ev.stopImmediatePropagation();
+ storyProvider=['native','deepseek','openai'].includes(el.value)?el.value:'native';
+ storyApiKey='';render();
+},true);
 document.addEventListener('click',ev=>{
  const el=ev.target.closest('[data-director-action],[data-director-step],[data-director-style],[data-director-arc]');if(!el)return;
  ev.preventDefault();ev.stopImmediatePropagation();
@@ -310,6 +345,6 @@ document.addEventListener('change',ev=>{
  }catch(err){notify(String(err.message||err));render()}
 },true);
 window.wtCreativeDirector=draw;
-window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft};
+window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft,localStoryboard,applyStoryboard,aiStoryPayload,generateStory};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
 })();
