@@ -11,6 +11,19 @@ assert.equal(data.schema,'davylab.worldtoon.curated-discovery.v1');
 assert.ok(data.sources.literary_series.length>=12);
 assert.ok(data.sources.nobel_literature.length>=6);
 assert.ok(data.sources.academic_events.length>=8);
+const expectedConferenceEndDates={
+ 'academic-visual-plasticity':'2027-03-09',
+ 'academic-material-discovery':'2027-03-16',
+ 'academic-land-plants':'2027-03-23'
+};
+const events=data.sources.academic_events;
+for(const [id,end] of Object.entries(expectedConferenceEndDates)){
+ const row=events.find(x=>x.id===id);
+ assert.ok(row,'Royal Society official event missing '+id);
+ assert.equal(row.event_end_date,end,'Multi-day event end date is incorrect: '+id);
+}
+const han=data.sources.nobel_literature.find(x=>x.id==='nobel-2024-human-acts');
+assert.equal(han.url,'https://www.nobelprize.org/prizes/literature/2024/han/interview/','Han Kang official source must discuss the actual work');
 const urls=new Set(),names=new Set();
 for(const [source,items] of Object.entries(data.sources)){
  for(const x of items){
