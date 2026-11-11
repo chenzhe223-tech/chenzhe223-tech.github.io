@@ -1,6 +1,6 @@
 /* WORLD/TOON offline shell v2.7.1. Authenticated APIs must NEVER be cached. */
 'use strict';
-const CACHE='davylab-comic-press-v4.0.0-integrated-workflow';
+const CACHE='davylab-comic-press-v4.0.1-unified-qa';
 const CORE=['./','./index.html','./app.js','./archive.js','./styles.css','./style-v3.css','./style-v3.js','./creative-director.js','./creative-pilot.js','./comic-engine.js','./creative-director.css','./extension.js','./briefing.js','./personalize.js','./personalize.css','./favicon.svg','./manifest.webmanifest'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));
