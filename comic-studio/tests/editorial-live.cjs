@@ -14,6 +14,16 @@ const base='https://worldtoon.chenzhe223.workers.dev';
   assert.ok(count>=min,'Live '+source+' underfilled: '+count);
   const stat=catalog.stats.find(x=>x.id===source);assert.ok(stat?.ready&&stat.count>=min);
  }
+ // Ensure future scheduled refresh can fetch actual versioned upstream material,
+ // not merely that someone manually seeded the first three D1 snapshots.
+ for(const [source,min] of [['literary_series',12],['nobel_literature',6],['academic_events',8]]){
+  const resp=await fetch(base+'/api/comic/discover?source='+source+'&limit=90',{headers:{'cache-control':'no-cache'}});
+  const body=await resp.json();
+  assert.equal(resp.status,200,'The next scheduled source refresh will fail: '+source+' '+JSON.stringify(body));
+  assert.ok(body.items?.length>=min,'Upstream editorial source '+source+' only has '+body.items?.length);
+  assert.ok(body.items.every(x=>x.rights_cleared===false));
+  console.log('LIVE_UPSTREAM_PASS',source,body.items.length);
+ }
  const sourceIds=['literary_series','nobel_literature','academic_events'];
  assert.ok(catalog.items.filter(x=>sourceIds.includes(x.cache_source)).every(x=>x.rights_cleared===false));
  console.log('LIVE_D1_PASS',JSON.stringify(catalog.stats.filter(x=>sourceIds.includes(x.id))));
