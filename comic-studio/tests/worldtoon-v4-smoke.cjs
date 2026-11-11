@@ -69,7 +69,7 @@ const shell=ctx.window.wt4Workspace();
 assert.equal(JSON.stringify(p),before,'project overview should never mutate saved work');
 assert.match(shell,/PROJECT JOURNEY/,'full project page rendered');
 assert.match(shell,/已确认/,'progress is visible');
-assert.equal((shell.match(/class="wt4-step/g)||[]).length,7,'seven integrated stages');
+assert.equal((shell.match(/class="wt4-step(?: |")/g)||[]).length,7,'seven integrated stages');
 assert.match(ctx.dashboard(),/legacy-home/,'legacy home is retained');
 ctx.ui.wt4Step=4;assert.match(ctx.window.wt4Workspace(),/成品回传与 QA/,'ZIP and QA stage available');
 ctx.ui.wt4Step=5;assert.match(ctx.window.wt4Workspace(),/publication-stage/,'author approval view is embedded');
