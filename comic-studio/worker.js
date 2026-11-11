@@ -480,7 +480,7 @@ async function editorialDiscover(source){
    if(u.protocol!=='https:'||u.username||u.password||!u.hostname.includes('.'))continue;
    if(source==='literary_series'&&u.hostname!=='www.gutenberg.org')continue;
    if(source==='nobel_literature'&&u.hostname!=='www.nobelprize.org')continue;
-   if(source==='academic_events'&&!u.hostname.endsWith('royalsociety.org'))continue;
+   if(source==='academic_events'&&!['royalsociety.org','www.royalsociety.org','rs-uks-score01.royalsociety.org','neurips.cc','www.neurips.cc','iclr.cc','www.iclr.cc','www.lindau-nobel.org'].includes(u.hostname))continue;
    if(source==='academic_events'&&String(entry.event_end_date||entry.eventDate||'')<today)continue; // never advertise concluded events
    const beats=Array.isArray(entry.story_beats)?entry.story_beats.filter(x=>typeof x==='string').slice(0,6):[];
    const episodes=Array.isArray(entry.series_episodes)?entry.series_episodes.filter(x=>typeof x==='string').slice(0,6):[];
