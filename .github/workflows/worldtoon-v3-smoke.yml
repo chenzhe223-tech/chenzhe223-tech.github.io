@@ -1,0 +1,21 @@
+name: WORLD/TOON 3.0 smoke checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-v3-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JS and P0-P3 functional contracts
+        run: node comic-studio/tests/worldtoon-v3-smoke.cjs
