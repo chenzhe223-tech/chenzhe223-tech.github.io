@@ -247,7 +247,9 @@ function castEditor(c){
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
  '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
- '</div></article>').join('')+'</div>';
+ '</div></article>').join('')+'</div>'+ 
+ '<div class="director-portrait-handoff"><button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+ 
+ '<p>仅打包已经授权的原始照片、角色设定、当前画风与 SHA256，交给 ChatGPT 生产真实角色定妆图。此按钮不会调用收费生图模型或上传照片。</p></div>';
 }
 function framePreview(p,c){
  const rows=(p.panels||[]).map((x,i)=>'<article class="director-panel"><div class="director-panel-frame">'+
@@ -313,9 +315,41 @@ function draw(){
  (step===2?(scheduleAutoStoryboard(p),''):'')+
  '<p class="director-footer">By DAVYLAB · 创意预制与锁定不等于事实认证、图像已经生成或内容允许发表。资料自动保存在当前作品，并可随原有账户同步。</p></div>';
 }
+async function exportPortraitReferencePack(p){
+ const c=ensure(p),refs=[];
+ const guide={title:p.title,style_id:c.styleId,style_name:style(c.styleId).name,
+  visual_style:{material:style(c.styleId).material,lighting:style(c.styleId).lighting,negative:style(c.styleId).negative},
+  genre:p.plotGenre||'general',characters:[]};
+ for(let i=0;i<c.cast.length;i++){
+  const person=c.cast[i];if(!person.portraitMedia)continue;
+  if(!person.portraitConsent)throw Error('未获得第'+(i+1)+'位角色肖像使用授权');
+  const blob=await getMedia(person.portraitMedia.slice(6));
+  if(!blob)throw Error('第'+(i+1)+'位角色照片不在当前设备，请重新上传');
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),
+      b=>b.toString(16).padStart(2,'0')).join('');
+  if(sha!==person.portraitSha256)throw Error('肖像照片 SHA256 与授权记录不一致');
+  const filename='references/portrait-'+String(i+1).padStart(2,'0')+'.'+(person.portraitExt||'png');
+  refs.push({name:filename,bytes});
+  guide.characters.push({name:person.name,role:person.role,look:person.look,clothes:person.clothes,
+    reference_file:filename,sha256:sha,portrait_usage:'subject_consented',priority:'retain recognizable face and hairstyle'});
+ }
+ if(!refs.length)throw Error('请先为至少一位角色上传已授权的真人照片');
+ const prompt='WORLD/TOON · By DAVYLAB · 真实肖像拟人化 3D 角色定妆任务\\n'+
+  '请使用附带的本人授权照片作为唯一身份参照，生成独立原创高品质 3D 漫画人物定妆图；优先保持面部骨相、眼鼻嘴比例、发型和气质的可识别相似度，再适度进行漫画化。'+
+  '保持成年人物比例与自然皮肤质感，禁止廉价塑料质感。人物身份和故事均属原创虚构，不要冒充真实照片或伪造真实人物事实。\\n'+
+  '所选画风：'+style(c.styleId).name+'；'+style(c.styleId).material+'；'+style(c.styleId).lighting+'。\\n'+
+  '先输出正式竖版3:4、至少1080x1440像素的角色定妆 PNG，待作者核对容貌后再开展全篇创作。';
+ const files=[{name:'portrait-brief.json',bytes:enc.encode(JSON.stringify(guide,null,2))},
+   {name:'生成指令.md',bytes:enc.encode(prompt)},...refs];
+ saveFile(packZip(files),'WORLD_TOON_3D肖像角色参考_'+safeName(p.title)+'.zip');
+ notify('已导出 '+refs.length+' 张授权照片的3D角色生产参考包。请私密交给制作 Agent，先验收定妆图。');
+}
+
 async function action(type,p){
  if(!p)throw Error('请先选择作品');
  if(type==='next'){step=Math.min(3,step+1);render();return}
+ if(type==='portrait-pack'){await exportPortraitReferencePack(p);return}
  if(type==='draft'){if(p.handoff?.repoQueuedAt)throw Error('该任务已正式入仓，不能覆盖分镜');draft(p);return}
  if(type==='ai'){await generateStory(p,{provider:storyProvider,replace:true});return}
  if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
