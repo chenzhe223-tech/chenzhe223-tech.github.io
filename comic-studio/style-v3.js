@@ -845,11 +845,23 @@ const THREE_D_STYLES=[
  {style_id:'editorial-3d-graphic',number:24,name:'时尚杂志 3D 图像小说',name_en:'Editorial 3D Graphic Novel',category:'3D 与数字角色',subtitle:'国际时尚影像 · 3D 人物结合漫画分镜',subjects:'现代都市 · 豪门职场 · 女性成长',palette:['#e9dfd2','#352c29','#a87658'],material:'电影级三维人物、编辑影像质感、高级织物与微妙的手绘后期层次',lighting:'时尚大片柔光，明暗精准克制',layout:'封面级大特写、竖屏叙事、角色写实容貌一致',negative:'低俗曝光、广告塑料感、浮夸珠宝、缺乏叙事的摆拍'},
  {style_id:'dramatic-3d-vertical',number:25,name:'爆款短剧 3D 漫画',name_en:'Vertical Drama 3D',category:'3D 与数字角色',subtitle:'重生逆袭 · 网红豪门 · 夸张戏剧性',subjects:'重生女主 · 银行富婆 · 娱乐圈反转 · 狗血爽剧',palette:['#e8d7c5','#362b2e','#bb624e'],material:'高精度三维成人角色，可信面部五官与妆发，时装层次，夸张情绪但避免塑料质感',lighting:'强叙事对比光、都市傍晚环境和精致反射',layout:'竖屏视觉冲突、人物关系反打、每2-3镜头一次钩子',negative:'人脸失真、低俗物化、刻板偏见、虚构内容影射真实人物'}
 ];
+const THREE_D_GUIDES={
+  22:{file:'style-22-3d-cinematic.webp',sha256:'cc050151194375a1093cf1f87883b5bf286fbddf2aafda4e9ddd3ad25f429428'},
+  23:{file:'style-23-3d-toon.webp',sha256:'7c7ae27cfd45e7dd472261b64b4dd0d94178295a618dd0ff64db514a47a3d07f'},
+  24:{file:'style-24-3d-editorial.webp',sha256:'08d2fc81d3409f7516b7df23d4e530ab88a7bcb437b12a44ef3323cd15b43d5a'},
+  25:{file:'style-25-3d-drama.webp',sha256:'3d4f3a8600c74c6519083a25c329fc63d5817c57975f192c742785b78ba7802b'}
+};
 for(const x of THREE_D_STYLES){
-  x.version='3.2.0';
+  const g=THREE_D_GUIDES[x.number];
+  x.version='3.2.1';
   x.reference={status:'not_licensed',url:null};
   x.sample={status:'not_generated',url:null};
-  x.guide={status:'not_generated',url:null};
+  x.guide={status:'original_guide',url:'/assets/'+g.file,
+    source:'WORLD/TOON 独立原创 3D 角色风格示意，2026-11-11 生成组图裁切',
+    author:'WORLD/TOON · By DAVYLAB',
+    license:'原创 AI 辅助插画，仅用于本站风格预览，不是正式生产模型样张',
+    usage_scope:'visual_style_reference_only',asset_path:'comic-studio/assets/'+g.file,
+    sha256:g.sha256,number:x.number};
   x.quality_capability={standard:false,premium:false,cinematic:false};
   x.production_mode='ChatGPT_or_WorkBuddy_pilot_required';
   CATALOG.push(x);
@@ -893,7 +905,7 @@ function cardImage(x,c){
  if(c.styleId===x.style_id&&proof&&typeof mediaSrc==='function')
   return '<span class="wt-v3-photo"><img alt="'+esc(x.name)+'当前作品实绘首图" loading="lazy" src="'+esc(mediaSrc(proof.src))+'" data-source="'+esc(proof.src)+'"><em>'+(proof.approved?'本作品已批准原图':'本作品待审核首图')+'</em></span>';
  const asset=isGuide(x.guide)?x.guide:isReference(x.reference)?x.reference:isSample(x.sample)?x.sample:null;
- if(asset)return '<span class="wt-v3-photo"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'可追溯视觉图像"><em>'+(isGuide(asset)?'原创风格参考 · 非成品':'已核验模型样张')+'</em></span>';
+ if(asset)return '<span class="wt-v3-photo '+(x.number>=22?'wt-v3-photo-3d':'')+'"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'原创 3D 风格效果示意，非正式制作成果"><em>'+(isGuide(asset)?'原创效果示意 · 非正式成品':'已核验模型样张')+'</em></span>';
  return '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE / '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉档案 · 暂无可核验图片<br>此处不是生成效果预览</em></span>';
 }
 function cards(c){
