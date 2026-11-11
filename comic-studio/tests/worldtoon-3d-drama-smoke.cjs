@@ -48,7 +48,7 @@ assert.equal(brief.characters[0].portrait_reference.sha256,'a'.repeat(64));
 assert.equal(brief.narrative.genre,'viral-melodrama');
 const directorUI=dirCtx.window.wtCreativeDirector();
 assert.match(directorUI,/电影级 3D 拟人角色/,'visual library displays 3D character style');
-directorEvents.click({target:{closest:selector=>({dataset:{directorStep:'2'}})},preventDefault(){}});
+directorEvents.click({target:{closest:selector=>({dataset:{directorStep:'2'}})},preventDefault(){},stopImmediatePropagation(){}});
 const narrativeUI=dirCtx.window.wtCreativeDirector();
 assert.match(narrativeUI,/狗血网红爽剧/,'narrative UI offers melodrama arc');
 assert.match(read('creative-director.js'),/data-director-portrait-upload/,'upload control and handler');
