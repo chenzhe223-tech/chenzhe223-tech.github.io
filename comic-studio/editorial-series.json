@@ -505,8 +505,8 @@
         "category": "诺奖文学",
         "title": "少年来了｜Human Acts",
         "author": "Han Kang",
-        "source": "NobelPrize.org 官方文学资料",
-        "url": "https://www.nobelprize.org/prizes/uncategorized/book-excerpts/",
+        "source": "NobelPrize.org · 韩江官方访谈（谈及《少年来了》）",
+        "url": "https://www.nobelprize.org/prizes/literature/2024/han/interview/",
         "evergreen": true,
         "published": "",
         "award_year": 2024,
@@ -526,7 +526,8 @@
           "文学如何记忆",
           "创伤与倾听",
           "守护人的尊严"
-        ]
+        ],
+        "source_link_note": "官方访谈中直接提及 Human Acts；此页面不是作品授权许可"
       },
       {
         "id": "nobel-2023-septology",
@@ -712,7 +713,7 @@
         "source": "The Royal Society 官方活动日程",
         "url": "https://www.royalsociety.org/science-events-and-lectures/2027/03/plasticity-after-visual-damage/",
         "eventDate": "2027-03-08",
-        "event_end_date": "2027-03-08",
+        "event_end_date": "2027-03-09",
         "published": "",
         "evergreen": false,
         "rights_status": "event_metadata_only",
@@ -731,7 +732,9 @@
         ],
         "editorial_basis": "official_event_listing",
         "verification_status": "official_event_page_reviewed",
-        "serializable": true
+        "serializable": true,
+        "event_date_verified_at": "2026-11-11",
+        "event_date_source": "Royal Society official event page"
       },
       {
         "id": "academic-material-discovery",
@@ -741,7 +744,7 @@
         "source": "The Royal Society 官方活动日程",
         "url": "https://www.royalsociety.org/science-events-and-lectures/2027/03/future-of-materials-discovery/",
         "eventDate": "2027-03-15",
-        "event_end_date": "2027-03-15",
+        "event_end_date": "2027-03-16",
         "published": "",
         "evergreen": false,
         "rights_status": "event_metadata_only",
@@ -760,7 +763,9 @@
         ],
         "editorial_basis": "official_event_listing",
         "verification_status": "official_event_page_reviewed",
-        "serializable": true
+        "serializable": true,
+        "event_date_verified_at": "2026-11-11",
+        "event_date_source": "Royal Society official event page"
       },
       {
         "id": "academic-land-plants",
@@ -770,7 +775,7 @@
         "source": "The Royal Society 官方活动日程",
         "url": "https://rs-uks-score01.royalsociety.org/science-events-and-lectures/2027/03/origins-of-land-plants/",
         "eventDate": "2027-03-22",
-        "event_end_date": "2027-03-22",
+        "event_end_date": "2027-03-23",
         "published": "",
         "evergreen": false,
         "rights_status": "event_metadata_only",
@@ -789,7 +794,9 @@
         ],
         "editorial_basis": "official_event_listing",
         "verification_status": "official_event_page_reviewed",
-        "serializable": true
+        "serializable": true,
+        "event_date_verified_at": "2026-11-11",
+        "event_date_source": "Royal Society official event page"
       },
       {
         "id": "academic-neurips-2026",
