@@ -23,3 +23,5 @@ jobs:
         run: node comic-studio/tests/worldtoon-v4-smoke.cjs
       - name: Test DeepSeek expansion consent, timeout and error recovery
         run: node comic-studio/tests/worldtoon-deepseek-smoke.cjs
+      - name: Validate 3D comic styles, portrait consent and viral plot templates
+        run: node comic-studio/tests/worldtoon-3d-drama-smoke.cjs
