@@ -34,18 +34,21 @@ jobs:
           assert h.get('features',{}).get('image') is False,h
           print('health OK; AI direct generation remains disabled')
           start=time.perf_counter()
-          catalog=expect_json('/api/comic/catalog?source=all&limit=250')
+          catalog=expect_json('/api/comic/catalog?source=all&limit=500')
           elapsed=round((time.perf_counter()-start)*1000)
-          assert catalog.get('schema')=='davylab.worldtoon.catalog.v2',catalog
+          assert catalog.get('schema')=='davylab.worldtoon.catalog.v3',catalog.get('schema')
           assert catalog.get('method')=='d1_snapshot_read',catalog
-          assert len(catalog.get('stats',[]))==5,catalog
+          assert len(catalog.get('stats',[]))==8,catalog.get('stats')
           assert catalog.get('fact_checked') is False,catalog
           assert catalog.get('ready'),('Scheduled or cold-start collection has not materialized',catalog.get('stats'))
           assert len(catalog.get('items',[]))>=100,('Cached catalog must contain real source items',len(catalog.get('items',[])))
-          expected={'news','hackernews','arxiv','classics','history'}
+          expected={'news','hackernews','arxiv','classics','history','literary_series','nobel_literature','academic_events'}
           assert expected=={x['id'] for x in catalog.get('stats',[]) if x.get('ready')},catalog.get('stats')
           assert any(x.get('category')=='经典故事' for x in catalog['items']),'All-source catalog must include classics'
           assert any(x.get('category')=='历史脑洞' for x in catalog['items']),'All-source catalog must include history'
+          assert any(x.get('category')=='世界文学' for x in catalog['items']),'All-source catalog must include literature series'
+          assert any(x.get('category')=='诺奖文学' for x in catalog['items']),'All-source catalog must include Nobel works'
+          assert any(x.get('category')=='世界学术活动' for x in catalog['items']),'All-source catalog must include academic events'
           print('D1 snapshot catalog HTTP:',elapsed,'ms,ready:',catalog.get('ready'),'sources:',catalog.get('stats'))
           # V3 resource proof: the deployed Worker must actually expose both new assets.
           status,head=read('/')
