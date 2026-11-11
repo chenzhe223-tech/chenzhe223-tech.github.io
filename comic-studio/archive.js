@@ -77,6 +77,14 @@ function wtSharedDeskCard(){
 }
 function wtArchiveDesk(){
  const snap=wtArchiveSnapshot,rows=snap?.library?.items||[],queue=snap?.queue?.items||[];
+ // Verified GitHub catalog remains authoritative; pending local work is never silently hidden.
+ const remoteIds=new Set(rows.map(x=>x.task_id));
+ const pendingLocal=(typeof activeProjects==='function'?activeProjects():[])
+  .filter(p=>p?.handoff?.taskId&&!remoteIds.has(p.handoff.taskId))
+  .map(p=>({title:p.title||'未命名创作',category:p.category||'',task_id:p.handoff.taskId,
+    created_at:p.handoff.taskAt||p.updatedAt||'',repoQueuedAt:p.handoff.repoQueuedAt||null,
+    repoError:p.handoff.repoError||''}))
+  .sort((a,b)=>String(b.created_at).localeCompare(String(a.created_at)));
  const count=n=>snap?String(n):'—';
  const queued=rows.filter(x=>x.status==='queued');
  const work=rows.filter(x=>['workbuddy_received','draft_uploaded','publishing'].includes(x.status));
@@ -89,7 +97,17 @@ function wtArchiveDesk(){
  const cards=stats.map(s=>'<article class="wt-dash-kpi"><span class="wt-dash-kpi-label">'+s[0]+' / '+s[1]+'</span><strong>'+count(s[2])+'</strong><small>'+wtArchiveHtml(s[3])+'</small></article>').join('');
  const steps=['选题入池','GitHub 派单','ChatGPT 创作','质量验收','WorkBuddy 发表','回执归档'].map((s,i)=>'<li><small>'+String(i+1).padStart(2,'0')+'</small><span>'+s+'</span></li>').join('');
  const types={queued:'wait',claimed:'active',ready_for_workbuddy:'active',workbuddy_received:'active',draft_uploaded:'active',publishing:'active',blocked:'warn',failed:'warn',published:'success'};
- const items=rows.map(it=>{
+ const localItems=pendingLocal.map(it=>{
+   const sent=!!it.repoQueuedAt;
+   const status=sent?'GitHub 已提交 · 待索引同步':'本地任务 · 尚未入仓';
+   const detail=it.repoError||(!sent?'请进入制作交接重新派单；本地 ZIP 不等于 GitHub 正式工单。':'提交记录已保存，等待仓库索引确认。');
+   return '<article class="wt-dash-task"><div class="wt-dash-task-main"><small>'+
+    wtArchiveHtml((it.category?it.category+' · ':'')+it.task_id)+' · '+wtArchiveDate(it.created_at)+
+    '</small><h3><a class="wt-dash-task-link" href="#/handoff">'+wtArchiveHtml(it.title)+' ↗</a></h3>'+
+    '<p class="wt-dash-issue">'+wtArchiveHtml(detail)+'</p></div><span class="wt-dash-status wt-dash-status--'+
+    (sent?'active':'warn')+'">'+wtArchiveHtml(status)+'</span></article>';
+  }).join('');
+ const items=localItems+rows.map(it=>{
   const issues=Array.isArray(it.issues)&&it.issues.length?'<p class="wt-dash-issue">'+wtArchiveHtml(it.issues.join('；'))+'</p>':'';
   const meta=(it.category?wtArchiveHtml(it.category)+' · ':'')+wtArchiveHtml(it.task_id)+' · '+wtArchiveDate(it.created_at);
   return '<article class="wt-dash-task"><div class="wt-dash-task-main"><small>'+meta+'</small><h3><a class="wt-dash-task-link" href="'+WT_ARCHIVE_URL+'/tree/main/tasks/'+encodeURIComponent(it.task_id)+'" target="_blank" rel="noopener noreferrer">'+wtArchiveHtml(it.title)+' ↗</a></h3>'+issues+'</div><span class="wt-dash-status wt-dash-status--'+(types[it.status]||'wait')+'">'+wtArchiveHtml(wtArchiveStateLabel(it))+'</span></article>';
@@ -104,8 +122,9 @@ function wtArchiveDesk(){
   '<section class="wt-dash-metrics" aria-label="任务统计">'+cards+'</section>'+
   wtSharedDeskCard()+
   '<section class="wt-dash-panel wt-dash-workflow"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">WORKFLOW</p><h2>交付流程</h2></div><span>双轨创作 · 统一验收</span></header><ol class="wt-dash-steps">'+steps+'</ol></section>'+
-  '<section class="wt-dash-panel wt-dash-queue"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">LIVE QUEUE</p><h2>当前任务 <span class="wt-dash-count">'+count(rows.length)+'</span></h2></div><a href="#/handoff">新建制作任务 ↗</a></header>'+
-  (blocked.length?'<p class="wt-dash-notice">'+blocked.length+' 条任务需要复核，暂不进入自动发表队列。</p>':'')+
+  '<section class="wt-dash-panel wt-dash-queue"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">LIVE QUEUE</p><h2>当前任务 <span class="wt-dash-count">'+count(rows.length+pendingLocal.length)+'</span></h2></div><a href="#/handoff">新建制作任务 ↗</a></header>'+
+  (pendingLocal.length?'<p class="wt-dash-notice">'+pendingLocal.length+' 条本地创建任务尚未进入 GitHub 正式索引，已单独列出；不计入仓库工单统计。</p>':'')+
+   (blocked.length?'<p class="wt-dash-notice">'+blocked.length+' 条任务需要复核，暂不进入自动发表队列。</p>':'')+
   '<div class="wt-dash-tasklist">'+(items||'<p class="wt-dash-empty">'+wtArchiveHtml(empty)+'</p>')+'</div></section>'+
   '<div class="wt-dash-tracks"><article><span>TRACK A / 接口预留</span><h3>平台自主生产</h3><p>保留自定义模型接口，当前未启用 AI 生图与收费推理。</p></article><article class="wt-dash-track-current"><span>TRACK B / 当前流程</span><h3>Agent 协作交付</h3><p>平台派单 → ChatGPT 创作 → GitHub 验收 → WorkBuddy 发表 → 回执归档。</p></article></div></div>';
 }
