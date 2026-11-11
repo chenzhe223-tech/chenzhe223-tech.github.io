@@ -210,6 +210,9 @@
   ev.preventDefault();const p=selected();if(!p)return;
   try{
    const op=b.dataset.wt3Action;
+   if(expandUI.busy&&['expand','expand-confirm'].includes(op)){
+     showExpandStatus('loading','正在生成分镜，请勿重复请求或重复计费。',p.id);return;
+   }
    if(op==='resize'){resize(p,document.querySelector('#wt3-count')?.value);return}
    if(op==='series-new'){seriesNew(p);return}
    if(op==='series-next'){seriesContinue(p);return}
@@ -273,7 +276,7 @@
   }finally{
     if(b.dataset.wt3Action==='expand-confirm')expandUI.busy=false;
     if(document.contains(b)){b.disabled=false;if(b.dataset.wt3Action==='expand-confirm')b.textContent='确认并开始生成'}
-    const first=document.querySelector('[data-wt3-action="expand"]');if(first)first.disabled=false;
+    const first=document.querySelector('[data-wt3-action="expand"]');if(first)first.disabled=expandUI.busy;
   }
  },true);
  document.addEventListener('change',ev=>{
