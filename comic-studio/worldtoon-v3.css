@@ -268,3 +268,13 @@
 .wt3-expand-feedback[data-state="error"]{background:#fff2ef;border-color:#e8bdb6;color:#953f32}
 .wt3-expand-feedback[data-state="success"]{background:#edf6eb;border-color:#bfd7b8;color:#336a43}
 @media(max-width:600px){.wt3-expand-consent{padding:12px}.wt3-expand-consent .button{flex:1 1 100%}.wt3-expand-feedback{padding:10px 12px}}
+
+
+/* Editable genre choices: visible in both classic writer and 4.0 workspace. */
+.wt3-drama-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:11px 0}
+.wt3-drama-controls .field{min-width:0}
+.wt3-drama-controls label{display:block;margin-bottom:7px;font-size:12px;font-weight:700;color:#4b3d33}
+.wt3-drama-controls select{width:100%;height:41px;min-width:0;padding:8px 11px;border:1px solid #d8cdbf;border-radius:8px;background:#fffcf7;font-size:13px;color:#49382f}
+.wt3-drama-tip{font-size:12px;line-height:1.65;color:#785b41;background:#fbf3e8;padding:10px 12px;border:1px solid #ecddca;border-radius:9px;margin:9px 0 13px}
+@media(max-width:900px){.wt3-drama-controls{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.wt3-drama-controls{grid-template-columns:1fr;gap:9px}.wt3-drama-controls select{height:42px}}
