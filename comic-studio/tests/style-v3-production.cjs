@@ -17,12 +17,12 @@ const scope={
 };
 vm.runInNewContext(script,scope,{filename:'style-v3.js'});
 const lib=scope.window.WTStyleV3;
-assert.equal(lib.CATALOG.length,20);
-assert.equal(new Set(lib.CATALOG.map(x=>x.style_id)).size,20);
+assert.equal(lib.CATALOG.length,21);
+assert.equal(new Set(lib.CATALOG.map(x=>x.style_id)).size,21);
 assert.ok(lib.CATALOG.every(x=>x.reference.status==='not_licensed'&&x.sample.status==='not_generated'));
 assert.ok(lib.CATALOG.every(x=>!lib.isReference(x.reference)&&!lib.isSample(x.sample)));
 assert.ok(lib.CATALOG.every(x=>!Object.values(x.quality_capability).some(Boolean)));
-assert.equal(lib.STYLE_GUIDES.length,20);
+assert.equal(lib.STYLE_GUIDES.length,21);
 assert.ok(lib.CATALOG.every(x=>lib.isGuide(x.guide)));
 const crypto=require('node:crypto');
 const assetHashes=new Set();
@@ -35,10 +35,16 @@ for(const [i,style] of lib.CATALOG.entries()){
  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),style.guide.sha256);
  assetHashes.add(style.guide.sha256);
 }
-assert.equal(assetHashes.size,20,'style references must be 20 different images');
+assert.equal(assetHashes.size,21,'style references must be 21 different images');
 
+const newStyle=lib.CATALOG.find(s=>s.style_id==='japanese-pastoral-wonder');
+assert.ok(newStyle&&newStyle.number===21,'new pastoral fantasy must be a distinct selectable style');
+assert.equal(newStyle.sample.status,'not_generated');
+assert.notEqual(newStyle.style_id,'japanese-hand-painted');
+assert.match(lib.detail({styleId:newStyle.style_id,quality:'Premium'}),/style-21\.webp/);
+assert.match(lib.detail({styleId:newStyle.style_id,quality:'Premium'}),/未通过真实生图能力验证/);
 const cards=lib.cards({styleId:'chinese-historical-epic'});
-assert.equal((cards.match(/data-director-style=/g)||[]).length,20);
+assert.equal((cards.match(/data-director-style=/g)||[]).length,21);
 assert.match(cards,/data-wt-v3-query/);
 assert.equal((cards.match(/原创风格参考 · 非成品/g)||[]).length,20);
 assert.equal((cards.match(/\.webp/g)||[]).length,20);
@@ -63,4 +69,4 @@ assert.match(worker,/webp:'image\/webp'/);
 assert.match(worker,/png\|webp/);
 assert.ok(page.indexOf('style-v3.js')<page.indexOf('creative-director.js'));
 assert.match(css,/max-width:650px/);
-console.log('V3 regression: 20 verified original WebP images, truthful sample badges, route and layout PASS');
+console.log('V3 regression: 21 verified original WebP images, truthful sample badges, route and layout PASS');
