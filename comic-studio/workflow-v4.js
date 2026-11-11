@@ -92,6 +92,7 @@
    const chosen=selected();
    const p=chosen?.id==='sample-ba-zong-001'
       ?activeProjects().find(x=>x.id!=='sample-ba-zong-001')||null:chosen;
+   if(p&&p!==chosen)ui.selected=p.id; // Route legacy editors to the same actual project, not demo content.
    if(!p||p.id==='sample-ba-zong-001')return '<section class="wt4-workspace wt4-empty">'+
       '<div class="kicker">WORLD/TOON / NEW PROJECT</div><h1>开始一部好漫画</h1>'+
       '<p>从一句话、热门选题或已有系列进入。创建后在同一工作空间完成整个生产流程。</p>'+
@@ -144,6 +145,12 @@
        '<p>这些任务已在云端归档，但尚未与当前设备的本地作品关联。请在生产调度中心查看，不会自动创建或覆盖本地草稿。</p>'+
        '<a class="button" href="#/archive">查看云端工单</a></div>':'')+'</section>';
  }
+ function production(){
+   const prev=ui.wt4Step;
+   ui.wt4Step=3;
+   try{return workspace()}finally{ui.wt4Step=prev}
+ }
+ window.wt4Production=production;
  const originalDashboard=dashboard;
  dashboard=function(){return overview()+originalDashboard()};
  document.addEventListener('click',ev=>{
