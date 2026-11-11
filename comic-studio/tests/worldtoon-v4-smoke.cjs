@@ -16,7 +16,8 @@ assert.match(app,/APP_KEY='davylab-comic-press-v1'/,'existing local storage key 
 assert.match(html,/workflow-v4\.js\?v=4\./,'new workspace loaded after established modules');
 assert.match(html,/workflow-v4\.css\?v=4\./,'responsive stylesheet loaded');
 assert.match(html,/经典创作编辑器/,'old editor remains reachable');
-for(const route of ['dashboard','live','workspace','handoff','library']) {
+assert.match(html,/原制作交接明细/,'old handoff remains available');
+for(const route of ['dashboard','live','workspace','production','library']) {
   assert.match(html,new RegExp('href="#/'+route+'"'),'primary navigation: '+route);
 }
 assert.match(engine,/nav\('workspace\/'\+v\.id\+'\/1'\)/,'series continuation inherits the unified workflow');
@@ -68,6 +69,7 @@ const before=JSON.stringify(p);
 const shell=ctx.window.wt4Workspace();
 assert.equal(JSON.stringify(p),before,'project overview should never mutate saved work');
 assert.match(shell,/PROJECT JOURNEY/,'full project page rendered');
+assert.match(ctx.window.wt4Production(),/production-stage/,'production main navigation embeds the same work area');
 assert.match(shell,/已确认/,'progress is visible');
 assert.equal((shell.match(/class="wt4-step(?: |")/g)||[]).length,7,'seven integrated stages');
 assert.match(ctx.dashboard(),/legacy-home/,'legacy home is retained');
