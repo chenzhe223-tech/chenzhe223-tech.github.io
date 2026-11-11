@@ -166,7 +166,8 @@ function payload(p){
  const c=ensure(p),s=style(c.styleId);
  return {
   version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
-  narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
+  series_bible:p.seriesBible||null,series_identity:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,
+   narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
   characters:c.cast.map(x=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature)})),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
@@ -191,6 +192,7 @@ function checks(p){
  if(!Array.isArray(c.cast)||c.cast.length<2)errs.push('至少锁定两名原创角色');
  if(c.cast?.some(x=>clean(x.name).length<2||clean(x.look).length<8||clean(x.clothes).length<6||clean(x.symbol).length<2))errs.push('角色姓名、外貌、服饰和识别特征必须完整');
  if(new Set((c.cast||[]).map(x=>clean(x.name))).size!==(c.cast||[]).length)errs.push('角色姓名不能重复');
+ if(p.seriesEpisode>1&&p.seriesBible){if(p.seriesBible.style_id&&p.seriesBible.style_id!==c.styleId)errs.push('续章画风必须与系列创作圣经一致');if(Array.isArray(p.seriesBible.characters)&&p.seriesBible.characters.length&&JSON.stringify(p.seriesBible.characters)!==JSON.stringify(c.cast))errs.push('系列续章角色外貌服饰需保持锁定，修改应建立新系列版本')}
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>x.license!=='CC0'))errs.push('视觉参考包含未确认 CC0 的馆藏');
@@ -214,7 +216,8 @@ function approve(p){
  if(errors.length)throw Error('暂无法定稿：'+errors.slice(0,3).join('；')+(errors.length>3?' 等'+errors.length+'项':''));
  if(p.handoff?.repoQueuedAt)throw Error('本版本已经正式派单，不可再次锁定覆盖');
  if(!confirm('确认画风、两名角色、故事主旨和九格分镜都是最终制作依据？锁定后任何修改都需要重新确认。'))return;
- const c=ensure(p);c.approval={lock_hash:digest(p),approved_at:new Date().toISOString(),author_approved:true};
+ const c=ensure(p);if(p.seriesId&&p.seriesEpisode===1){p.seriesBible={...(p.seriesBible||{}),title:p.seriesTitle||p.title,world:c.world,style_id:c.styleId,characters:structuredClone(c.cast),continuity:'固定角色容貌、比例、服饰、标记与视觉风格；续章可以改编剧情，但不可无故改造定妆'};}
+ c.approval={lock_hash:digest(p),approved_at:new Date().toISOString(),author_approved:true};
  setChange(p,'作者锁定创作导演方案（不代表对事实和出版的审核）');render();notify('创意定稿已锁定；可以创建 ChatGPT 制作任务');
 }
 function field(k,label,value,min=0,kind='textarea'){
