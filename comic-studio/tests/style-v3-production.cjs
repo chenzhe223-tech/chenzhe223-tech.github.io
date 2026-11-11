@@ -46,8 +46,8 @@ assert.match(lib.detail({styleId:newStyle.style_id,quality:'Premium'}),/未通�
 const cards=lib.cards({styleId:'chinese-historical-epic'});
 assert.equal((cards.match(/data-director-style=/g)||[]).length,21);
 assert.match(cards,/data-wt-v3-query/);
-assert.equal((cards.match(/原创风格参考 · 非成品/g)||[]).length,20);
-assert.equal((cards.match(/\.webp/g)||[]).length,20);
+assert.equal((cards.match(/原创风格参考 · 非成品/g)||[]).length,21);
+assert.equal((cards.match(/\.webp/g)||[]).length,21);
 const detail=lib.detail({styleId:'chinese-historical-epic',quality:'Premium'});
 assert.match(detail,/真实生成样张/);
 assert.match(detail,/原创画风参考/);
