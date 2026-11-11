@@ -41,7 +41,7 @@
     const href=published?h(r.receipt.url):p?'#/reader/'+encodeURIComponent(p.id):tid?'https://github.com/chenzhe223-tech/worldtoon/tree/main/tasks/'+encodeURIComponent(tid):'#/studio';
     return '<article class="wt3-book"><a href="'+href+'"'+(published||(!p&&tid)?' target="_blank" rel="noopener noreferrer"':'')+' class="wt3-cover" aria-label="'+name+'">'+src+'</a>'+
      '<div class="wt3-book-info"><small>'+h(r?.category||p?.category||'原创漫画')+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
-     '<p>'+h(p?.subtitle||r?.status==='blocked'?'制作进度需复核':p?.description||'')+'</p>'+
+     '<p>'+h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''))+'</p>'+
      '<span>'+h(state)+(r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
    }).join('');
    return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','正式发表由 GitHub 质量验收与公众号后台回执认定；制作中作品保留创作进度。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
