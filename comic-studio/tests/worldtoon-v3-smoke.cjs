@@ -22,4 +22,11 @@ assert.match(ingest,/crypto\.subtle\.digest\('SHA-256'/,'ZIP assets must be dige
 assert.match(ingest,/stagedFiles/,'ZIP upload must have recoverable staging');
 assert.match(review,/author_confirmed:true/,'final publication must require author approval');
 assert.match(review,/reviewed_checks/,'final QA checklist must be explicit');
+const shelfCss=read('worldtoon-v3.css');
+assert.match(shelfCss,/\.wt3-book-info h3\{font-size:17px;line-height:1\.6/,'comic shelf titles need comfortable line spacing');
+assert.match(shelfCss,/\.wt3-shelf \.toolbar/,'shelf filter and search alignment must be scoped');
+assert.match(shelfCss,/@media\(max-width:600px\)/,'mobile shelf readability must be maintained');
+assert.match(shelfCss,/\.wt3-book-info \.wt3-book-state/,'publication status must have its own separated row');
+assert.match(v3,/const meta=publication\?h\(publication\.format/,'published archive metadata should avoid repeated labels');
+assert.match(v3,/sharedRows\(\)/,'published shelf should reuse WeChat shared archive');
 console.log('WORLD/TOON 3.0 smoke PASS: '+scripts.length+' parsed JS modules + SOP, shelf, series, ZIP and QA guards');
