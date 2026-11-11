@@ -40,6 +40,7 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  assert.ok(local.every(x=>x.scene.length>=80&&!x.scene.includes('围绕「')));
  assert.ok(local[0].scene.includes('铜制时间机器'),'Specific subject should trigger a concrete scene');
  director.ensure(current);
+ ctx.window.wtCreativeDirector(); // initialize project selection before a user clicks the third tab
  click({directorStep:'2'});
  const html=ctx.window.wtCreativeDirector();
  assert.match(html,/自动编剧/);
