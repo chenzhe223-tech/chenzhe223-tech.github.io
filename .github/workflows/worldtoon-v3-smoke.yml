@@ -25,3 +25,5 @@ jobs:
         run: node comic-studio/tests/worldtoon-deepseek-smoke.cjs
       - name: Validate 3D comic styles, portrait consent and viral plot templates
         run: node comic-studio/tests/worldtoon-3d-drama-smoke.cjs
+      - name: Verify public-domain book and short-drama story search, scene selection, copyright guard
+        run: node comic-studio/tests/worldtoon-story-discovery.cjs
