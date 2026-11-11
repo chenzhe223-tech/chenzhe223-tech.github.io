@@ -1,0 +1,31 @@
+name: WorldToon nine-panel AI storyboard acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/creative-director.js'
+      - 'comic-studio/creative-director.css'
+      - 'comic-studio/worker.js'
+      - 'comic-studio/tests/director-storyboard-ai.cjs'
+      - 'comic-studio/tests/creative-director.cjs'
+      - '.github/workflows/worldtoon-storyboard-ai.yml'
+permissions:
+  contents: read
+jobs:
+  storyboard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Verify syntax
+        run: |
+          node --check comic-studio/creative-director.js
+          node --check comic-studio/worker.js
+          node --check comic-studio/tests/director-storyboard-ai.cjs
+      - name: AI and human nine-panel storyboard integration tests
+        run: |
+          node comic-studio/tests/creative-director.cjs
+          node comic-studio/tests/director-storyboard-ai.cjs
