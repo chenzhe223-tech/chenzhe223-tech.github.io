@@ -19,7 +19,7 @@ assert.match(engine,/WORKFLOW_V4_EMBED/,'built script includes v4 module');
 assert.ok(engine.trimEnd().endsWith(read('workflow-v4.js').trim()),'deployed script matches canonical v4 code');
 assert.ok(read('worldtoon-v3.css').trimEnd().endsWith(css.trim()),'deployed stylesheet matches canonical v4 code');
 assert.ok(read('styles.css').trimEnd().endsWith(read('mobile-refine.css').trim()),'existing mobile layout is included in Worker-allowed stylesheet');
-assert.match(html,/styles\.css\?v=4\.2\.0/,'mobile stylesheet uses a fresh allowed asset');
+assert.match(html,/styles\.css\?v=4\.3\.0/,'mobile stylesheet uses a fresh allowed asset');
 assert.doesNotMatch(html,/href="mobile-refine\.css/,'mobile stylesheet must not 404 on Worker');
 
 assert.match(html,/经典创作编辑器/,'old editor remains reachable');
@@ -93,3 +93,4 @@ assert.equal(navResult,'workspace/p1/3','stage button routes within one project'
 eventCallbacks.change({target:{id:'wt4-project',value:'p2'}});
 assert.equal(navResult,'workspace/p2','switching work keeps the chosen project');
 console.log('WORLD/TOON 4.0 smoke PASS: preserved data model, 7 phases, SOP, ZIP, approvals, series and navigation.');
+

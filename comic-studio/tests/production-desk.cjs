@@ -6,7 +6,7 @@ const vm=require('node:vm');
 const path=require('node:path');
 const read=f=>fs.readFileSync(path.join(__dirname,'..',f),'utf8');
 const src=read('archive.js'),css=read('styles.css');
-assert.match(read('index.html'),/data-nav-group="handoff"/);
+assert.match(read('index.html'),/data-route="handoff"/,'legacy handoff remains reachable from navigation');
 assert.match(read('app.js'),/archive:'生产调度中心'/);
 assert.match(read('personalize.js'),/生产调度中心/);
 assert.match(css,/\.wt-dash-metrics\{display:grid;grid-template-columns:repeat\(4,minmax\(0,1fr\)\)/);
@@ -47,3 +47,4 @@ assert.equal((page.match(/class="wt-dash-kpi"/g)||[]).length,4);
 assert.equal((page.match(/class="wt-dash-task"/g)||[]).length,3);
 assert.equal((page.match(/class="wt-dash-steps"/g)||[]).length,1);
 console.log('PASS: Production Desk compact markup, truthful counters and mobile CSS contract');
+
