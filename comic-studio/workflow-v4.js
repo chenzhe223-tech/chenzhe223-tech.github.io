@@ -7,6 +7,19 @@
  const stageNames=['创意立项','AI 编剧','创意定稿','漫画生产','成品验收','出版交付','作品入架'];
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const states=['queued','claimed','workbuddy_received','draft_uploaded','blocked','ready_for_workbuddy','publishing','published'];
+ const deepseek={checked:false,loading:false,configured:null};
+ function checkDeepSeek(){
+   if(deepseek.checked||deepseek.loading||typeof wtArchiveApi!=='function')return;
+   if(typeof wtSession==='undefined'||!wtSession?.access_token)return;
+   deepseek.loading=true;
+   wtArchiveApi('deepseek-status').then(r=>{
+     deepseek.checked=true;deepseek.configured=r?.configured===true;
+   }).catch(()=>{deepseek.checked=true;deepseek.configured=null;}).finally(()=>{
+     deepseek.loading=false;
+     if(ui.route==='workspace'&&(ui.wt4Step===1||ui.wt4Step<0))render();
+   });
+ }
+
  function remote(p){
    const tid=p?.handoff?.taskId||p?.handoff?.repoTaskId||'';
    const rows=(typeof wtArchiveSnapshot==='undefined'?null:wtArchiveSnapshot)?.library?.items||[];
@@ -54,7 +67,15 @@
  }
  function stageBody(p,i,s){
    if(i===0){const prev=ui.stage;ui.stage=0;const body=studioStage(p);ui.stage=prev;return body;}
-   if(i===1){const prev=ui.stage;ui.stage=2;const body=studio();ui.stage=prev;return body;}
+   if(i===1){
+     queueMicrotask(checkDeepSeek); // Read-only service configuration check; never bills the model.
+     const model=deepseek.configured===true?'DeepSeek 服务端已连接':
+       deepseek.configured===false?'DeepSeek API Key 尚未配置':
+       deepseek.loading?'正在核验 DeepSeek 服务端状态':'模型状态将在登录后核验';
+     const prev=ui.stage;ui.stage=2;const body=studio();ui.stage=prev;
+     return '<div class="wt4-model-status" role="status">'+html(model)+
+       ' · 生成内容前仍需作者主动确认可能产生的模型费用</div>'+body;
+   }
    if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
    if(i===3){
      const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
