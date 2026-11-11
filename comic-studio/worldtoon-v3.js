@@ -273,9 +273,11 @@
    const named=!!p&&!!p.title?.trim()&&p.title!=='未命名新作';
    const story=panels.some(x=>(x?.scene||'').trim().length>=20)||
      (!!p?.ideaSeed&&!!p?.description?.trim());
-   const director=!!p&&(typeof wtDirector==='object'
-     ?wtDirector.approved(p)
-     :p.creativeDirection?.approval?.author_approved===true);
+   // Avoid wtDirector.approved() initializing creativeDirection on untouched work.
+   const director=!!p?.creativeDirection?.approval?.lock_hash&&
+     (typeof wtDirector==='object'
+       ?wtDirector.approved(p)
+       :p.creativeDirection?.approval?.author_approved===true);
    const queued=!!h.repoQueuedAt&&!!h.taskId;
    const uploaded=Array.isArray(h.stagedFiles)&&h.stagedFiles.length>0&&
       h.stagedFiles.length===(h.stageUploaded||[]).length;
