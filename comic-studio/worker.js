@@ -648,6 +648,7 @@ async function wtDiscoveryRead(env,url,ctx){
   if(row.last_error)warnings.push(source+' 最近一次后台更新失败，继续展示已保存数据');
   for(const raw of payload.items||[]){
    if(!raw||typeof raw!=='object'||typeof raw.url!=='string')continue;
+   if(source==='academic_events'&&String(raw.event_end_date||raw.eventDate||'')<new Date(at).toISOString().slice(0,10))continue; // expiring events cannot remain 'upcoming' even if the snapshot is stale
    const key=wtCanonicalStory(raw.url);if(!key||seen.has(key))continue;
    seen.add(key);const item={...raw,source_id:raw.source_id||source,cache_source:source};items.push(item);if(!buckets.has(source))buckets.set(source,[]);buckets.get(source).push(item);
   }
