@@ -108,4 +108,8 @@
   }catch(error){notify('终审未完成：'+String(error.message||error).slice(0,150))}
   finally{if(document.contains(b)){b.disabled=false;b.textContent='提交最终作者授权与 GitHub QA'}}
  },true);
+ // The review module loads after the bundled 4.0 workspace. Repaint direct
+ // deep links once so the independent author sign-off is not visually missing.
+ if(['workspace','production','publish'].includes(ui.route))
+   queueMicrotask(()=>parseRoute());
 })();
