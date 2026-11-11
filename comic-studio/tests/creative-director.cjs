@@ -10,6 +10,7 @@ const visualV3=fs.readFileSync(path.join(root,'style-v3.js'),'utf8');
 const worker=fs.readFileSync(path.join(root,'worker.js'),'utf8');
 const archive=fs.readFileSync(path.join(root,'archive.js'),'utf8');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
+assert.match(html,/creative-director\.js\?v=4\.1\.1/,'cast-to-storyboard synchronization must bypass stale cached director script');
 const source={id:'p1',title:'海洋机器人：漫画改编',sourceTitle:'机器人如何探索海洋深处',category:'机器人',description:'在虚构海底研究站，两个原创角色用亲身经历解释科研技术的边界。',
  sourceURLs:'https://example.org/research',factNotes:'【待核验】请审查原文',fiction:'原创虚构海底城市，不影射真实公众人物。',
  disclosure:'这是虚构的科普故事，不代表真实新闻报道。',tone:'科学讽刺',characters:'',
@@ -37,6 +38,19 @@ director.draft(source);
 assert.equal(source.panels.length,9);
 assert.ok(source.panels.every(x=>x.scene.length>=30&&x.title&&x.caption));
 assert.ok(director.checks(source).includes('请勾选“已逐格审阅并确认创意方向”'));
+// A post-generation cast edit must propagate into matching story text without
+// disturbing unrelated hand-authored panel content.
+seed.cast[0].name='苏见微';seed.cast[0].look='黑长发，眉眼清晰';
+source.panels[0].scene='苏见微走进公寓，黑长发，眉眼清晰；暴雨仍在窗外，远处城市灯火映在玻璃上，房间里只剩钟声。';
+source.panels[0].dialogue='苏见微：我会自己作出选择。';
+const changeCast=(key,index,value)=>listeners.change[1]({target:{matches:()=>true,dataset:{directorCast:key,characterIndex:String(index)},value},preventDefault(){}});
+changeCast('name',0,'贺庭洲');
+assert.match(source.panels[0].scene,/贺庭洲走进公寓/,'renaming a character updates scene text');
+assert.match(source.panels[0].dialogue,/贺庭洲：/,'renaming a character updates dialogue');
+assert.match(source.panels[0].scene,/暴雨仍在窗外/,'sync preserves unrelated panel prose');
+changeCast('look',0,'银灰短发、左眉有浅色疤痕');
+assert.match(source.panels[0].scene,/银灰短发、左眉有浅色疤痕/,'appearance edits propagate to matching scene text');
+assert.equal(source.characters.includes('贺庭洲'),true,'cast bible and panel text stay aligned');
 let markup=ctx.window.wtCreativeDirector();
 for(const expected of ['创意导演台','画风定调','人物设定','剧情分镜','最终定版'])assert.ok(markup.includes(expected),'Missing visual feature '+expected);
 const fake=(dataset,extra={})=>({target:{closest:()=>({dataset,...extra})},preventDefault:()=>{},stopImmediatePropagation:()=>{}});
