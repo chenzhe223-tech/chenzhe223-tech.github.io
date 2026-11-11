@@ -6,6 +6,21 @@
  const h=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const supported=['已发表','制作中','待制作'];
  const remote=()=>wtArchiveSnapshot?.library?.items||[];
+ // Same read-only WeChat archive as the Production Desk. Publication records
+ // are evidence of a WeChat article, NOT independent proof of a finished comic.
+ const sharedArchive=()=>wtArchiveSnapshot?.shared_publications?.status==='synced'
+    ?wtArchiveSnapshot.shared_publications:wtSharedStandalone;
+ const wxLink=url=>/^https:\/\/mp\.weixin\.qq\.com\/s\/[A-Za-z0-9_-]+(?:[?#].*)?$/.test(String(url||''));
+ const publicationCover=raw=>{
+   try{
+     const u=new URL(String(raw||''));
+     if(!['http:','https:'].includes(u.protocol)||!/(^|\.)qpic\.cn$/i.test(u.hostname))return '';
+     u.protocol='https:';return u.href;
+   }catch{return ''}
+ };
+ const sharedRows=()=>sharedArchive()?.status==='synced'
+   ?(sharedArchive().articles||[]).filter(a=>wxLink(a.url))
+   :[];
  const isDone=r=>r?.status==='published'&&r.receipt?.status==='published'&&/^https:\/\/mp\.weixin\.qq\.com\/s\//.test(r.receipt.url||'');
  const kind=(p,r)=>{
    if(isDone(r))return '已发表';
@@ -28,23 +43,35 @@
      else map.set(id||'local-'+p.id,{r:null,p});
    }
    const items=[...map.values()].map(x=>({...x,state:kind(x.p,x.r)}));
+   // Deduplicate verified comics against their own WeChat publication records.
+   // Other genuine publications are shown with their original format label.
+   const verifiedUrls=new Set(items.filter(x=>isDone(x.r)).map(x=>x.r.receipt.url));
+   const seenPublications=new Set(verifiedUrls);
+   for(const pub of sharedRows()){
+     if(seenPublications.has(pub.url))continue;
+     seenPublications.add(pub.url);
+     items.push({r:null,p:null,publication:pub,state:'已发表'});
+   }
    const cat=ui.filter&&supported.includes(ui.filter)?ui.filter:'已发表';
    const q=(ui.search||'').trim().toLowerCase();
-   const shown=items.filter(x=>x.state===cat&&(!q||[x.p?.title,x.r?.title,x.p?.category,x.r?.category,x.p?.seriesTitle].join(' ').toLowerCase().includes(q)))
-      .sort((a,b)=>String(b.r?.created_at||b.p?.updatedAt||'').localeCompare(String(a.r?.created_at||a.p?.updatedAt||'')));
+   const shown=items.filter(x=>x.state===cat&&(!q||[x.p?.title,x.r?.title,x.p?.category,x.r?.category,x.p?.seriesTitle,x.publication?.title,x.publication?.column,x.publication?.format].join(' ').toLowerCase().includes(q)))
+      .sort((a,b)=>String(b.publication?.publishedAt||b.r?.receipt?.published_at||b.r?.created_at||b.p?.updatedAt||'').localeCompare(String(a.publication?.publishedAt||a.r?.receipt?.published_at||a.r?.created_at||a.p?.updatedAt||'')));
    const tabs=supported.map(t=>'<button type="button" data-wt3-tab="'+t+'" class="'+(t===cat?'active':'')+'">'+t+' <span>'+items.filter(x=>x.state===t).length+'</span></button>').join('');
-   const cards=shown.map(({r,p,state})=>{
-    const tid=r?.task_id||p?.handoff?.taskId||'',url=cover(r,p);
+   const cards=shown.map(({r,p,state,publication})=>{
+    const tid=r?.task_id||p?.handoff?.taskId||'',url=publication?publicationCover(publication.coverUrl):cover(r,p);
     const src=url?'<img '+(url.startsWith('media:')?'data-wt3-media="'+h(url.slice(6))+'" ':'')+
      'src="'+h(url.startsWith('media:')?'':url)+'" alt="'+h((r?.title||p?.title||'')+'漫画封面')+
      '" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="wt3-placeholder"><span>WORLD<br>TOON</span></div>';
-    const name=h(r?.title||p?.title||'未命名漫画'),series=h(p?.seriesTitle||r?.series?.id||''),episode=p?.seriesEpisode||r?.series?.episode||null;
+    const name=h(publication?.title||r?.title||p?.title||'未命名作品'),series=h(p?.seriesTitle||r?.series?.id||''),episode=p?.seriesEpisode||r?.series?.episode||null;
     const published=isDone(r);
-    const href=published?h(r.receipt.url):p?'#/reader/'+encodeURIComponent(p.id):tid?'https://github.com/chenzhe223-tech/worldtoon/tree/main/tasks/'+encodeURIComponent(tid):'#/studio';
-    return '<article class="wt3-book"><a href="'+href+'"'+(published||(!p&&tid)?' target="_blank" rel="noopener noreferrer"':'')+' class="wt3-cover" aria-label="'+name+'">'+src+'</a>'+
-     '<div class="wt3-book-info"><small>'+h(r?.category||p?.category||'原创漫画')+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
-     '<p>'+h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''))+'</p>'+
-     '<span>'+h(state)+(r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
+    const href=publication?h(publication.url):published?h(r.receipt.url):p?'#/reader/'+encodeURIComponent(p.id):tid?'https://github.com/chenzhe223-tech/worldtoon/tree/main/tasks/'+encodeURIComponent(tid):'#/studio';
+    const meta=publication?'公众号发表档案 · '+h(publication.format||'文章'):h(r?.category||p?.category||'原创漫画');
+    const desc=publication?'公众号已发表 · '+h(publication.publishedAt||'')+
+       (publication.task_id?' · 任务待核对':' · 非漫画成品认证'):h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''));
+    return '<article class="wt3-book"><a href="'+href+'"'+(published||publication||(!p&&tid)?' target="_blank" rel="noopener noreferrer"':'')+' class="wt3-cover" aria-label="'+name+'">'+src+'</a>'+
+     '<div class="wt3-book-info"><small>'+meta+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
+     '<p>'+desc+'</p>'+
+     '<span>'+h(state)+(publication?' · '+h(publication.format||'公众号内容'):r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
    }).join('');
    queueMicrotask(()=>{if(ui.route!=='library')return;
      document.querySelectorAll('.wt3-shelf img[data-wt3-media]').forEach(async img=>{
@@ -52,11 +79,12 @@
          if(url&&img.isConnected)img.src=url;
        }catch{img.alt='本地封面暂不可用'}});
    });
-   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','正式发表由 GitHub 质量验收与公众号后台回执认定；制作中作品保留创作进度。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
+   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','已发表内容与公众号发表档案同源；正式漫画仍经 GitHub 验收与 WorkBuddy 回执核对。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
     '<div class="wt3-shelf-meta">GitHub 真实归档：'+(wtArchiveSnapshot?rows.length+' 部':'尚未同步')+
-    ' · 未发表不作已发表展示'+(wtArchiveError?'<p class="wt3-error">'+h(wtArchiveError)+'</p>':'')+'</div>'+
+    ' · 公众号共享发表档案：'+(sharedArchive()?.status==='synced'?sharedRows().length+' 篇':'尚未同步')+
+    ' · 仅核验漫画才标记为漫画成品'+(wtArchiveError?'<p class="wt3-error">私有仓库同步：'+h(wtArchiveError)+'</p>':'')+'</div>'+
     '<div class="toolbar"><div class="tabbar wt3-tabs">'+tabs+'</div><input class="search" id="librarySearch" value="'+h(ui.search||'')+'" placeholder="搜索漫画、系列或题材" aria-label="搜索漫画"></div>'+
-    (cards?'<div class="wt3-books">'+cards+'</div>':'<div class="empty"><b>这一分类暂无作品</b><p>已发表需正式 GitHub 验收及 WorkBuddy 核验回执；新任务可在制作交接创建。</p></div>')+'</div>';
+    (cards?'<div class="wt3-books">'+cards+'</div>':'<div class="empty"><b>这一分类暂无作品</b><p>可同步公众号发表档案；未完成漫画在制作中或待制作查看。</p></div>')+'</div>';
  }
  function resize(p,n){
   if(!p||p.handoff?.repoQueuedAt)throw Error('已入仓工单不能直接修改分镜长度；请新建版本');
