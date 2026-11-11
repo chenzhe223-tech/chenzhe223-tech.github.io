@@ -18,7 +18,7 @@ async function wtArchiveApi(path,options={}){
     const body=await res.json().catch(()=>({error:'归档服务响应异常'}));if(!res.ok)throw Error(body.error||('HTTP '+res.status));return body;
   }finally{clearTimeout(timeout)}
 }
-function wtArchiveStateLabel(row){const names={queued:'等待 ChatGPT 领取',claimed:'ChatGPT 制作中',workbuddy_received:'WorkBuddy 已领取',draft_uploaded:'公众号草稿已核验',failed:'发布执行失败',blocked:'质量审查未通过',cancelled:'已取消',ready_for_workbuddy:'待 WorkBuddy 发表',publishing:'公众号发表中',published:'已发表并入档'};return names[row.status]||'未确认状态';}
+function wtArchiveStateLabel(row){const owner=row?.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT';const names={queued:'等待 '+owner+' 领取',claimed:owner+' 制作中',workbuddy_received:'WorkBuddy 已领取',draft_uploaded:'公众号草稿已核验',failed:'发布执行失败',blocked:'质量审查未通过',cancelled:'已取消',ready_for_workbuddy:'待 WorkBuddy 发表',publishing:'公众号发表中',published:'已发表并入档'};return names[row.status]||'未确认状态';}
 function wtArchiveDate(d){try{return d?new Date(d).toLocaleDateString('zh-CN'):'—'}catch{return '—'}}
 function wtArchiveSection(){const items=(wtArchiveSnapshot?.library?.items||[]).filter(x=>x.status==='published');const cards=items.slice(0,9).map(it=>`<article class="box" style="min-width:0"><div class="kicker">ARCHIVED / ${wtArchiveHtml(it.task_id)}</div><h3>${wtArchiveHtml(it.title)}</h3><p class="minor">${wtArchiveDate(it.receipt?.published_at)} · 第 ${Number(it.revision)||1} 版 · 正式发表回执</p><div class="buttons"><a class="button dark" href="${wtArchiveHtml(it.receipt?.url||'#')}" target="_blank" rel="noopener noreferrer">阅读公众号漫画 ↗</a></div></article>`).join('');
  return `<section class="box" style="margin-bottom:24px"><div class="sectionbar"><div><div class="kicker">GITHUB / PUBLISHED ARCHIVE</div><h2>仓库已发表漫画</h2></div><a class="button" href="#/archive">查看仓库同步状态 ↗</a></div>${items.length?`<div class="cards2">${cards}</div>`:`<p class="minor">${wtArchiveSnapshot?'仓库尚无经过回执核验的已发表作品。':'尚未从独立仓库取得正式目录；本机作品仍保留在下方。'}</p>`}</section>`;
@@ -93,7 +93,7 @@ function wtArchiveDesk(){
  const condition=wtArchiveBusy?'正在同步':wtArchiveError?(wtArchiveError.includes('登录')?'请先登录':'同步失败'):snap?.mode==='private_authenticated'?'私有仓库已连接':snap?.mode==='public_readonly'?'公开仓库 · 只读':'未连接';
  const connectionTone=wtArchiveError?'alert':snap?.mode==='private_authenticated'?'good':'pending';
  const time=snap&&wtArchiveLastSync?new Date(wtArchiveLastSync).toLocaleString('zh-CN',{timeZone:'Asia/Singapore',hour12:false}):'尚未同步';
- const stats=[['01','仓库任务',rows.length,'工单总数'],['02','ChatGPT 待领取',queued.length,'等待内容创作'],['03','WorkBuddy 待处理',queue.length,'处理中 '+work.length+' 条'],['04','已发表入档',published.length,'仅统计真实回执']];
+ const stats=[['01','仓库任务',rows.length,'工单总数'],['02','生产 Agent 待领取',queued.length,'ChatGPT / WorkBuddy'],['03','WorkBuddy 待处理',queue.length,'处理中 '+work.length+' 条'],['04','已发表入档',published.length,'仅统计真实回执']];
  const cards=stats.map(s=>'<article class="wt-dash-kpi"><span class="wt-dash-kpi-label">'+s[0]+' / '+s[1]+'</span><strong>'+count(s[2])+'</strong><small>'+wtArchiveHtml(s[3])+'</small></article>').join('');
  const steps=['选题入池','GitHub 派单','ChatGPT 创作','质量验收','WorkBuddy 发表','回执归档'].map((s,i)=>'<li><small>'+String(i+1).padStart(2,'0')+'</small><span>'+s+'</span></li>').join('');
  const types={queued:'wait',claimed:'active',ready_for_workbuddy:'active',workbuddy_received:'active',draft_uploaded:'active',publishing:'active',blocked:'warn',failed:'warn',published:'success'};
@@ -121,7 +121,7 @@ function wtArchiveDesk(){
   (snap?.mode==='public_readonly'?'<p class="wt-dash-notice">当前仓库公开只读，未发表素材禁止写入。</p>':'')+
   '<section class="wt-dash-metrics" aria-label="任务统计">'+cards+'</section>'+
   wtSharedDeskCard()+
-  '<section class="wt-dash-panel wt-dash-workflow"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">WORKFLOW</p><h2>交付流程</h2></div><span>双轨创作 · 统一验收</span></header><ol class="wt-dash-steps">'+steps+'</ol></section>'+
+  '<section class="wt-dash-panel wt-dash-workflow"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">WORKFLOW</p><h2>交付流程</h2></div><span>双 SOP · 独立验收</span></header><ol class="wt-dash-steps">'+steps+'</ol><p class="minor">SOP B：平台派单 → GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档</p></section>'+
   '<section class="wt-dash-panel wt-dash-queue"><header class="wt-dash-section-title"><div><p class="wt-dash-eyebrow">LIVE QUEUE</p><h2>当前任务 <span class="wt-dash-count">'+count(rows.length+pendingLocal.length)+'</span></h2></div><a href="#/handoff">新建制作任务 ↗</a></header>'+
   (pendingLocal.length?'<p class="wt-dash-notice">'+pendingLocal.length+' 条本地创建任务尚未进入 GitHub 正式索引，已单独列出；不计入仓库工单统计。</p>':'')+
    (blocked.length?'<p class="wt-dash-notice">'+blocked.length+' 条任务需要复核，暂不进入自动发表队列。</p>':'')+
