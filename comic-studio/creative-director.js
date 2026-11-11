@@ -1,6 +1,7 @@
 /* WORLD/TOON Creative Director: human-approved production design before ChatGPT dispatch.
- * CSS swatches and wireframe thumbnails are illustrative, NOT generated artwork.
- * No model is invoked and no publication approval is granted.
+ * Built-in storyboard model may be invoked on blank projects after login, subject to quota;
+ * source-specific local structured drafts are explicitly labeled when the model is unavailable.
+ * CSS wireframes are illustrative, NOT generated artwork; no publication approval is granted.
  */
 'use strict';
 (function(){
@@ -277,7 +278,7 @@ function review(p,c){
 function draw(){
  const p=selected();
  if(!p)return '<div class="box"><h2>尚未选择漫画作品</h2><a href="#/radar" class="button">前往选题池</a></div>';
- if(lastProjectId!==p.id){step=0;lastProjectId=p.id}
+ if(lastProjectId!==p.id){step=0;lastProjectId=p.id;storyApiKey='';storyProvider='native'}
  const c=ensure(p),locked=approved(p);
  const tabs=['画风定调','人物设定','九格故事','最终定版'];
  return '<div class="director-page">'+heroHeader('CREATIVE DIRECTOR / PRE-PRODUCTION','创意导演台',
