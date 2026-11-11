@@ -94,3 +94,12 @@
  .wt4-home-list{grid-template-columns:minmax(0,1fr)}
 }
 @media(max-width:385px){.wt4-steps{grid-template-columns:minmax(0,1fr)}.wt4-head-top{flex-wrap:wrap}.wt4-project-bar select{flex-basis:100%}}
+
+/* Related episodes are project-linked, not a second standalone series manager. */
+.wt4-series-chapters{margin:16px 0 20px;padding:14px 16px;background:#f8f3eb;border:1px solid #e6ddd0;border-radius:9px}
+.wt4-series-chapters h3{font-size:14px;margin:0 0 12px}
+.wt4-series-chapter{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:11px 0;border-top:1px solid #e5dbcd;text-decoration:none!important;color:#383229;font-size:12px;line-height:1.6}
+.wt4-series-chapter span{min-width:0;overflow-wrap:anywhere}
+.wt4-series-chapter small{white-space:nowrap;color:#6f826f}
+.wt4-series-chapter:hover{color:#a36446}
+@media(max-width:720px){.wt4-series-chapter{flex-wrap:wrap;gap:4px}}
