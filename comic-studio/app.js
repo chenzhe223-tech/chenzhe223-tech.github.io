@@ -87,7 +87,7 @@ async function wfMakeTask(p){
  const files=[{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:'ChatGPT_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode('独立漫画仓库：chenzhe223-tech/worldtoon。任务只在 GitHub 真实写入成功后才算派单；本 ZIP 是离线备份。ChatGPT 负责九张实图+封面并提交 deliveries/<task_id>/；WorkBuddy 扫描验收队列，发表后将真实回执写入 receipts/<task_id>.json。')}];
  saveFile(packZip(files),'WORLD_TOON_ChatGPT任务_'+safeName(p.title)+'.zip');
  if(typeof wtArchivePushTask!=='function'){p.handoff.repoError='仓库派单接口未加载';setChange(p,'仅生成本地备份，尚未入仓');render();notify('任务 ZIP 已生成，但尚未派单入仓');return}
- try{const result=await wtArchivePushTask(p,task,prompt);p.handoff.repoError=null;setChange(p,'GitHub 工单写入已确认');render();notify(result.existing?'GitHub 仓库已存在同一任务（已去重）':'GitHub 漫画仓库正式派单成功')}
+ try{const result=await wtArchivePushTask(p,task,prompt);p.handoff.repoError=null;setChange(p,'GitHub 工单写入已确认');render();notify(result.existing?'GitHub 仓库已存在同一任务（已去重）':'GitHub 漫画仓库正式派单成功');if(typeof wtArchiveRefresh==='function')void wtArchiveRefresh({silent:true}).catch(()=>{})}
  catch(err){p.handoff.repoQueuedAt=null;p.handoff.repoError=String(err?.message||err);setChange(p,'GitHub 派单未成功，本地 ZIP 已保留');render();notify('尚未派单到 GitHub：'+p.handoff.repoError)}
 }
 async function wfCopyPrompt(p){wfPrepareTask(p);const missing=wfCanTask(p);if(missing.length)throw Error('请先补齐：'+missing.join('、'));if(!wfGet(p).taskId)wfInitTask(p);if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}await copyText(wfPrompt(p));render()}
