@@ -13,8 +13,8 @@ for(const name of ['worldtoon-v3.js','worldtoon-v3-import.js','worldtoon-v3-revi
 const app=read('app.js'),archive=read('archive.js'),v3=read('worldtoon-v3.js'),ingest=read('worldtoon-v3-import.js'),review=read('worldtoon-v3-review.js');
 assert.match(app,/panel_count:p\.panels\.length/,'SOP must use variable panel count');
 assert.match(app,/i<p\.panels\.length/,'WorkBuddy manual pack must include all panels');
-assert.match(archive,/producer:p\.productionAgent/,'SOP must persist production agent');
-assert.match(archive,/series:p\.seriesId/,'series identity must persist');
+assert.match(archive,/producer:o\.producer/,'SOP must persist production agent');
+assert.match(archive,/series:o\.series/,'series identity must persist');
 assert.match(v3,/\['已发表','制作中','待制作'\]/,'shelf must have three user-facing states');
 assert.match(v3,/nextEpisode/,'series must calculate unique episode');
 assert.match(v3,/data-wt3-media/,'local cover must resolve media storage');
