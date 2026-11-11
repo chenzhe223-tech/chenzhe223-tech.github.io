@@ -9,7 +9,7 @@
  const isDone=r=>r?.status==='published'&&r.receipt?.status==='published'&&/^https:\/\/mp\.weixin\.qq\.com\/s\//.test(r.receipt.url||'');
  const kind=(p,r)=>{
    if(isDone(r))return '已发表';
-   if(r&&r.status==='queued')return '待制作';
+   if(r&&r.status==='queued')return p?.handoff?.importStatus||p?.panels?.some(x=>x.image?.startsWith('media:'))?'制作中':'待制作';
    if(r)return '制作中';
    if(p?.handoff?.repoQueuedAt||p?.handoff?.taskId||p?.panels?.some(x=>x.image?.startsWith('media:')))return '制作中';
    return '待制作';
