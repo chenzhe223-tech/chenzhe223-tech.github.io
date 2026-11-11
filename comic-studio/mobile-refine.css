@@ -78,3 +78,17 @@
   .hero h1 { font-size:clamp(43px,6vw,62px); }
   .metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
+
+
+/* 3D gallery QA: keep the mobile topbar within the device viewport.
+   Full appearance and synchronization controls remain reachable from sidebar settings. */
+@media (max-width:600px) {
+  .topbar { display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;max-width:100%;gap:7px;overflow:hidden; }
+  .topbar .breadcrumb { min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+  .topbar .right-tools { min-width:0;max-width:100%;gap:0;justify-self:end;flex-shrink:1; }
+  .topbar .right-tools .data-chip,
+  .topbar .right-tools .wt-ui-toolbar { display:none!important; }
+  .topbar #topNew { min-height:40px;padding:8px 9px;font-size:11px;white-space:nowrap; }
+  .director-page,.director-section,.director-styles.wt-v3-grid,
+  .wt-v3-intro,.wt-v3-toolrow,.wt-v3-detail { min-width:0;max-width:100%; }
+}
