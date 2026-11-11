@@ -82,11 +82,12 @@
  function seriesContinue(p){
   if(!p)throw Error('未选择作品');
   if(!p.seriesId)throw Error('请先创建系列');
+  const nextEpisode=Math.max(Number(p.seriesEpisode)||1,...data.projects.filter(x=>x.seriesId===p.seriesId).map(x=>Number(x.seriesEpisode)||0))+1;
   const v=emptyProject();
-  v.title=p.seriesTitle+' · 第'+((p.seriesEpisode||1)+1)+'章';
+  v.title=p.seriesTitle+' · 第'+nextEpisode+'章';
   v.subtitle='承接《'+p.title+'》';
   v.category=p.category;v.productionAgent=p.productionAgent||'ChatGPT';v.tone=p.tone;
-  v.seriesId=p.seriesId;v.seriesTitle=p.seriesTitle;v.seriesEpisode=(p.seriesEpisode||1)+1;
+  v.seriesId=p.seriesId;v.seriesTitle=p.seriesTitle;v.seriesEpisode=nextEpisode;
   v.previousTaskId=p.handoff?.taskId||null;
   v.seriesBible=structuredClone(p.seriesBible||{});v.description='接续上一章《'+p.title+'》：'+(p.description||'')+'。请延续人物关系、道具和已建立的故事世界，创作新的冲突与结局。';
   v.characters=p.characters;v.fiction=p.fiction;v.disclosure=p.disclosure;
