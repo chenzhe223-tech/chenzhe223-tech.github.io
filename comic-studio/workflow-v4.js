@@ -167,5 +167,5 @@
  },true);
  window.wt4Workspace=workspace;
  window.WT4Workflow={stageNames,state,verifiedPublished,remote};
- if(location.hash.startsWith('#/workspace'))queueMicrotask(()=>parseRoute());
+ if(location.hash.startsWith('#/workspace')||location.hash.startsWith('#/production'))queueMicrotask(()=>parseRoute());
 })();
