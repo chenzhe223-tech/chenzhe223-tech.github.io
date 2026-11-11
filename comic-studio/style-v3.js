@@ -784,6 +784,7 @@ const CATALOG=[
  },
  {
    "style_id": "japanese-pastoral-wonder",
+  "search_terms": "宫崎骏 吉卜力 日式手绘动画 温暖自然 田园幻想",
    "version": "3.1.0",
    "number": 21,
    "name": "日式田园奇想动画",
@@ -878,7 +879,7 @@ function cardImage(x,c){
  return '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE / '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉档案 · 暂无可核验图片<br>此处不是生成效果预览</em></span>';
 }
 function cards(c){
- const subset=CATALOG.filter(x=>(filter==='全部'||x.category===filter)&&(!searchTerm||[x.name,x.name_en,x.subtitle,x.material,x.subjects].join(' ').toLowerCase().includes(searchTerm.toLowerCase())));
+ const subset=CATALOG.filter(x=>(filter==='全部'||x.category===filter)&&(!searchTerm||[x.name,x.name_en,x.subtitle,x.material,x.subjects,x.search_terms||''].join(' ').toLowerCase().includes(searchTerm.toLowerCase())));
  return '<div class="wt-v3-intro"><div><b>WORLD/TOON · VISUAL ATLAS 03</b><p>先看真实来源，再确认正式首图。画风描述不是生成能力承诺。</p></div><span>'+CATALOG.length+' STYLES</span></div>'+
  '<div class="wt-v3-toolrow"><input type="search" data-wt-v3-query aria-label="检索漫画风格" placeholder="搜索画风、题材与视觉特征" value="'+esc(searchTerm)+'"><span class="wt-v3-count">找到 '+subset.length+' 种</span></div>'+
  '<div class="wt-v3-filters">'+CATEGORIES.map(x=>'<button type="button" data-wt-v3-filter="'+esc(x)+'" aria-pressed="'+(filter===x)+'" class="'+(filter===x?'is-active':'')+'">'+esc(x)+'</button>').join('')+'</div>'+
