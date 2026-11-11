@@ -425,3 +425,16 @@
  .rail .brand{margin-bottom:24px}
  .rail nav .nav-child{padding:10px 9px;min-height:40px}
 }
+
+/* WORLD/TOON curated serialized discovery · deliberate editorial UI */
+.wt-series-featured{margin:16px 0 24px;border-top:2px solid #647864;border-bottom:1px solid #ded8cc;padding:14px 0 22px}
+.wt-series-featured .wt-featured-head strong{font-size:17px;letter-spacing:-.02em}
+.wt-series-featured .wt-featured-card{background:#f1f0e8;border:1px solid #d7d8cb}
+.wt-series-brief{font-size:11px!important;line-height:1.65!important;color:#54635a!important;margin:8px 0 14px!important}
+.wt-series-outline{display:grid;gap:5px;margin:10px 0 13px;padding:11px 12px;border-left:2px solid #607c66;background:#f3f4ed;border-radius:0 7px 7px 0}
+.wt-series-outline b{font-size:11px;color:#355745}
+.wt-series-outline span{font-size:11px;line-height:1.65;color:#68766b}
+.wt-rights-warning{font-size:10px;line-height:1.65;color:#8b6347;background:#faf4e9;padding:7px 9px;border-radius:6px}
+.wt-source-tabs{display:flex;flex-wrap:wrap;gap:7px}
+.wt-source-tabs button{min-width:110px}
+@media(max-width:680px){.wt-source-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.wt-source-tabs button{min-width:0;width:100%;min-height:45px}.wt-series-featured .wt-featured-grid{grid-template-columns:1fr}.wt-series-outline{padding:9px}}
