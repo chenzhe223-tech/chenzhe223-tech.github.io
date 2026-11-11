@@ -1,0 +1,761 @@
+{
+  "schema": "davylab.worldtoon.curated-discovery.v1",
+  "reviewed_on": "2026-11-11",
+  "policy": "Only verified official bibliographic/event landing links; editorial ideas are original, not original-book excerpts or copyrighted adaptations. Never mark as factual event reporting or permission to publish.",
+  "sources": {
+    "literary_series": [
+      {
+        "id": "classic-84",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "弗兰肯斯坦｜Frankenstein",
+        "author": "Mary Shelley",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/84",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Mary Shelley经典文学连载选题。创造生命却拒绝承担责任。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "实验室的诞生",
+          "造物主转身离去",
+          "冰原上的追问",
+          "人与创造物的道德对峙"
+        ],
+        "series_episodes": [
+          "造物之夜",
+          "被遗弃的生命",
+          "追逐与审判"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-11",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "爱丽丝梦游仙境｜Alice’s Adventures in Wonderland",
+        "author": "Lewis Carroll",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/11",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Lewis Carroll经典文学连载选题。少女进入逻辑颠倒的奇幻国度。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "兔子洞坠落",
+          "饮茶桌的规则争辩",
+          "红心王后的庭审",
+          "荒诞世界的尺度变化"
+        ],
+        "series_episodes": [
+          "兔子洞",
+          "荒诞审判",
+          "寻找自己的判断"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-1184",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "基督山伯爵｜The Count of Monte Cristo",
+        "author": "Alexandre Dumas",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/1184",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Alexandre Dumas经典文学连载选题。被陷害的青年在复仇与宽恕之间选择。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "婚礼被捕",
+          "牢狱结识导师",
+          "神秘宝藏",
+          "身份重返社交场"
+        ],
+        "series_episodes": [
+          "蒙冤入狱",
+          "逃亡与蜕变",
+          "复仇的代价"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-103",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "八十天环游地球｜Around the World in Eighty Days",
+        "author": "Jules Verne",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/103",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Jules Verne经典文学连载选题。一场跨越大洲的时间竞赛。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "伦敦赌约",
+          "港口竞速",
+          "交通工具更迭",
+          "回到时钟面前"
+        ],
+        "series_episodes": [
+          "惊人的赌约",
+          "全球追逐",
+          "最后一天的反转"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-35",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "时间机器｜The Time Machine",
+        "author": "H. G. Wells",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/35",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "H. G. Wells经典文学连载选题。时间旅行者发现未来世界的社会分裂。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "维多利亚实验室",
+          "未来城市废墟",
+          "地下文明暗影",
+          "归来的空座椅"
+        ],
+        "series_episodes": [
+          "机器启程",
+          "未来之谜",
+          "文明代价"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-36",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "世界大战｜The War of the Worlds",
+        "author": "H. G. Wells",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/36",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "H. G. Wells经典文学连载选题。普通人在外星入侵中挣扎求生。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "落入地球的金属圆筒",
+          "陌生机械步行体",
+          "城市疏散",
+          "寂静街头的重建"
+        ],
+        "series_episodes": [
+          "天外异物",
+          "地面浩劫",
+          "失落与重生"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-1661",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "福尔摩斯探案集｜The Adventures of Sherlock Holmes",
+        "author": "Arthur Conan Doyle",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/1661",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Arthur Conan Doyle经典文学连载选题。细节反常牵出隐藏真相。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "贝克街的委托",
+          "一件不起眼的证物",
+          "伦敦雨夜跟踪",
+          "逻辑推理的揭示"
+        ],
+        "series_episodes": [
+          "线索之谜",
+          "动机迷局",
+          "最后的证据"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-46",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "圣诞颂歌｜A Christmas Carol",
+        "author": "Charles Dickens",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/46",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Charles Dickens经典文学连载选题。吝啬商人在时间与善意面前重新认识人生。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "冷漠商人的账簿",
+          "幽灵的来访",
+          "童年的记忆",
+          "改变命运的晨光"
+        ],
+        "series_episodes": [
+          "现实的牢笼",
+          "三次时间旅行",
+          "重新学会慷慨"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-43",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "化身博士｜Strange Case of Dr Jekyll and Mr Hyde",
+        "author": "R. L. Stevenson",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/43",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "R. L. Stevenson经典文学连载选题。体面与黑暗人格彼此拉扯。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "雾中伦敦街巷",
+          "紧锁的实验室",
+          "双重身影",
+          "镜中身份揭开"
+        ],
+        "series_episodes": [
+          "失踪的朋友",
+          "陌生人的影子",
+          "双重人格之谜"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-2701",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "白鲸｜Moby Dick",
+        "author": "Herman Melville",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/2701",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Herman Melville经典文学连载选题。复仇执念吞噬一整艘远洋船。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "海港招募",
+          "船长的伤痕",
+          "暴风中的追踪",
+          "巨鲸的身影"
+        ],
+        "series_episodes": [
+          "起航",
+          "人与巨鲸",
+          "执念的结局"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-1342",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "傲慢与偏见｜Pride and Prejudice",
+        "author": "Jane Austen",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/1342",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Jane Austen经典文学连载选题。家族期望和阶层偏见妨碍真实理解。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "乡间舞会",
+          "一封信的误读",
+          "家族餐桌",
+          "破除成见的相遇"
+        ],
+        "series_episodes": [
+          "第一印象",
+          "误会与选择",
+          "重新认识彼此"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-1260",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "简·爱｜Jane Eyre",
+        "author": "Charlotte Brontë",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/1260",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Charlotte Brontë经典文学连载选题。年轻女子在尊严、爱与自由之间做决定。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "孤儿院的走廊",
+          "迷雾中的庄园",
+          "阁楼的秘密",
+          "独立的远行"
+        ],
+        "series_episodes": [
+          "孤独童年",
+          "庄园之谜",
+          "寻回自我"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-345",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "德古拉｜Dracula",
+        "author": "Bram Stoker",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/345",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Bram Stoker经典文学连载选题。猎人们追踪古堡传来的不明恐怖。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "特兰西瓦尼亚城堡",
+          "不安的旅途日记",
+          "夜里的敲窗声",
+          "追逐吸血鬼的队伍"
+        ],
+        "series_episodes": [
+          "古堡契约",
+          "黑夜蔓延",
+          "最后的追逐"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "classic-1727",
+        "source_id": "literary_series",
+        "category": "世界文学",
+        "title": "奥德赛｜The Odyssey",
+        "author": "Homer",
+        "source": "Project Gutenberg",
+        "url": "https://www.gutenberg.org/ebooks/1727",
+        "published": "",
+        "evergreen": true,
+        "rights_status": "check_jurisdiction",
+        "rights_note": "古腾堡所列美国公有领域并不自动涵盖全球、译文、插画和电影版本；正式改编前逐项检查。",
+        "summary": "Homer经典文学连载选题。英雄远航归乡并试图重获家人与家园。以人物关系与命运转折组织原创漫画。",
+        "why": "有可识别的主角、可连续推进的冲突与明确场景，适合九格系列，不依赖当前新闻热度。",
+        "story_beats": [
+          "独眼巨人洞穴",
+          "海上风暴",
+          "塞壬歌声",
+          "归乡弓箭"
+        ],
+        "series_episodes": [
+          "未知海域",
+          "诱惑与考验",
+          "回家的代价"
+        ],
+        "editorial_basis": "selected_public_domain_classic",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      }
+    ],
+    "nobel_literature": [
+      {
+        "id": "nobel-2026-autobiography-of-red",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "红的自传｜Autobiography of Red",
+        "author": "Anne Carson",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/literature/2026/bio-bibliography/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2026,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 Anne Carson 代表作。神话中的红色意象,文本与现代都市并置,古今时间折叠。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "神话的当代生命",
+          "红色的象征",
+          "重写神话的方法"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-2025-satantango",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "撒旦探戈｜Satantango",
+        "author": "László Krasznahorkai",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/literature/2025/bio-bibliography/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2025,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 László Krasznahorkai 代表作。雨中的乡村,久别者回到小镇,希望与幻灭的背影。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "灾厄时代的艺术",
+          "迷失的共同体",
+          "救赎叙事"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-2024-the-vegetarian",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "素食者｜The Vegetarian",
+        "author": "Han Kang",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/literature/2024/bio-bibliography/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2024,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 Han Kang 代表作。餐桌的无声分歧,人物背影与压迫空间,植物隐喻。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "选择的力量",
+          "身体与社会",
+          "沉默的反抗"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-2024-human-acts",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "少年来了｜Human Acts",
+        "author": "Han Kang",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/uncategorized/book-excerpts/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2024,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 Han Kang 代表作。历史记忆档案,空椅子与城市街道,多视角证言。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "文学如何记忆",
+          "创伤与倾听",
+          "守护人的尊严"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-2023-septology",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "七部曲｜Septology",
+        "author": "Jon Fosse",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/literature/2023/bio-bibliography/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2023,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 Jon Fosse 代表作。画家的画布,双重身影,雪天街道。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "双重自我",
+          "生命的回声",
+          "艺术与沉默"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-2017-never-let-me-go",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "别让我走｜Never Let Me Go",
+        "author": "Kazuo Ishiguro",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/uncategorized/book-excerpts/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 2017,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 Kazuo Ishiguro 代表作。校园与边界,记忆里的旧物,无人回答的提问。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "寻找身份",
+          "伦理困境",
+          "记忆为何珍贵"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      },
+      {
+        "id": "nobel-1998-blindness",
+        "source_id": "nobel_literature",
+        "category": "诺奖文学",
+        "title": "失明症漫记｜Blindness",
+        "author": "José Saramago",
+        "source": "NobelPrize.org 官方文学资料",
+        "url": "https://www.nobelprize.org/prizes/literature/1998/saramago/lecture/",
+        "evergreen": true,
+        "published": "",
+        "award_year": 1998,
+        "rights_status": "copyright_permission_required",
+        "rights_note": "诺贝尔奖不赋予原著改编权；现代文学作品的剧情、人物和中文译文均须单独清权，未获许可仅可做书评、文学主题讨论或完全原创改编。",
+        "summary": "诺贝尔文学奖得主 José Saramago 代表作。熙攘城市骤然失序,一束反向的光,彼此扶持的人群。仅供文学研究和原创主题策划。",
+        "why": "作品身份及作品名来自诺贝尔奖官方资料；冲突与画面元素仅作为不复制文本/角色的原创漫画策划启发。",
+        "story_beats": [
+          "文明脆弱性",
+          "秩序与道德",
+          "人的互助"
+        ],
+        "editorial_basis": "nobel_official_bibliography",
+        "verification_status": "source_link_verified_selection_only",
+        "serializable": true
+      }
+    ],
+    "academic_events": [
+      {
+        "id": "academic-milner-complexity",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "Milner Prize Lecture: Highlights from 40 years of complexity theory",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://royalsociety.org/science-events-and-lectures/2026/11/milner-prize-lecture/",
+        "eventDate": "2026-11-12",
+        "event_end_date": "2026-11-12",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2026年11月12日：复杂性理论与计算极限的公开奖项讲座。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "看似简单的计算题",
+          "问题随规模暴涨",
+          "计算复杂性的边界"
+        ],
+        "series_episodes": [
+          "什么是难题",
+          "为什么会算不完",
+          "科学家的解题战"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-science-narratives",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "Science narratives and the public",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://www.royalsociety.org/science-events-and-lectures/2026/11/science-narratives-and-the-public/",
+        "eventDate": "2026-11-20",
+        "event_end_date": "2026-11-20",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2026年11月20日：科学家如何对公众讲述科学，讨论传播与误导。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "科学发现诞生",
+          "媒体镜头前的转译",
+          "信息过载的观众"
+        ],
+        "series_episodes": [
+          "研究与传播",
+          "误解是如何产生的",
+          "科学漫画的责任"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-neuromorphic",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "Innovating technologies for neuromorphic computing",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://royalsociety.org/science-events-and-lectures/2026/11/neuromorphic-computing/",
+        "eventDate": "2026-11-23",
+        "event_end_date": "2026-11-23",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2026年11月23日至25日：神经形态计算材料、硬件和未来低能耗AI研究会议。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "传统芯片的数据搬运",
+          "仿生神经元",
+          "低功耗设备的未来"
+        ],
+        "series_episodes": [
+          "大脑为何高效",
+          "让芯片学会联想",
+          "机器能量账单"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-visual-plasticity",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "Plasticity after visual system damage",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://www.royalsociety.org/science-events-and-lectures/2027/03/plasticity-after-visual-damage/",
+        "eventDate": "2027-03-08",
+        "event_end_date": "2027-03-08",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2027年3月8日至9日：视觉系统损伤后的神经可塑性研究会议。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "神经连接图",
+          "可塑性路径",
+          "实验室讨论"
+        ],
+        "series_episodes": [
+          "大脑如何重建",
+          "神经科学争议",
+          "康复中的未知"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-material-discovery",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "The future of materials discovery",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://www.royalsociety.org/science-events-and-lectures/2027/03/future-of-materials-discovery/",
+        "eventDate": "2027-03-15",
+        "event_end_date": "2027-03-15",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2027年3月15日至16日：AI、机器人实验室、材料科学与实验验证研究会议。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "材料组成的无限组合",
+          "AI提出结构候选",
+          "机器人实验失败后再试"
+        ],
+        "series_episodes": [
+          "发现新材料",
+          "实验与预测的角力",
+          "自动化科学家"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      },
+      {
+        "id": "academic-land-plants",
+        "source_id": "academic_events",
+        "category": "世界学术活动",
+        "title": "The origins of land plants: genomes, development, physiology and body plans",
+        "source": "The Royal Society 官方活动日程",
+        "url": "https://rs-uks-score01.royalsociety.org/science-events-and-lectures/2027/03/origins-of-land-plants/",
+        "eventDate": "2027-03-22",
+        "event_end_date": "2027-03-22",
+        "published": "",
+        "evergreen": false,
+        "rights_status": "event_metadata_only",
+        "rights_note": "活动标题、日期和研究主题作为事实线索使用；未经授权不复制讲者肖像、幻灯片或会议作品。",
+        "summary": "2027年3月22日至23日：植物登陆演化与基因组学研究会议。",
+        "why": "可将学术会议的研究问题改写为人物与科学概念拟人化的原创科普漫画，必须区分已证实结论与尚未解决的问题。",
+        "story_beats": [
+          "远古海岸线",
+          "第一批登陆植物",
+          "生命树的分叉"
+        ],
+        "series_episodes": [
+          "从海到陆",
+          "植物改变地球",
+          "演化证据探秘"
+        ],
+        "editorial_basis": "official_event_listing",
+        "verification_status": "official_event_page_reviewed",
+        "serializable": true
+      }
+    ]
+  }
+}
