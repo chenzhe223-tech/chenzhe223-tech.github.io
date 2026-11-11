@@ -295,10 +295,25 @@
    if(i===0){const prev=ui.stage;ui.stage=0;const body=studioStage(p);ui.stage=prev;return body;}
    if(i===1){const prev=ui.stage;ui.stage=2;const body=studio();ui.stage=prev;return body;}
    if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
-   if(i===3)return '<div class="wt4-callout">'+
-     '<h3>选择生产路线并正式派单</h3>'+
-     '<p>'+ (s.agent==='WorkBuddy'?'SOP B：GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → 发表 → 回执。':'SOP A：ChatGPT 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执。')+
-     '</p><p>此处复用现有派单接口，不重新签署授权或覆盖已入仓版本。</p></div>'+wtWorkflow();
+   if(i===3){
+     const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
+     const route=s.agent==='WorkBuddy'?
+       'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档':
+       'SOP A · ChatGPT 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档';
+     const action=queued?
+       (s.agent==='ChatGPT'?'<button class="button dark" data-wf="copy">复制当前制作指令</button>':
+         '<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>'):
+       '<button class="button dark" data-wf="task">生成工单并正式派单 →</button>';
+     return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
+       '<p>'+route+'</p><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
+       '<p>GitHub 工单：'+(queued?'已确认入仓':'尚未确认')+'</p>'+
+       '<p>当前状态：'+html(s.row?.status||p.handoff?.repoError||s.statusText)+'</p></div>'+
+       '<div class="buttons">'+action+
+       (queued?'<button class="button" data-wt4-step="4">进入成品验收 →</button>':'')+
+       '<button class="button" data-wt4-step="1">修改制作 Agent / 剧本</button></div>'+
+       '<details class="wt4-advanced"><summary>高级：查看完整任务派单、来源编辑和交接记录</summary>'+
+       wtWorkflow()+'</details></section>';
+   }
    if(i===4){
      const pack=typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'';
      const h=p.handoff||{},pilot=p.creativeDirection?.pilotApproval;
