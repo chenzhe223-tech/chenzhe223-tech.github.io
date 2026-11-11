@@ -73,6 +73,7 @@ const api=c.testCatalog;
  assert.ok(worker.includes('async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}'),'Worker must have cron entrypoint');
  const readFn=frontend.slice(frontend.indexOf('async function wtFetchNews()'),frontend.indexOf('async function wtSaveNews('));
  assert.ok(readFn.includes('/api/comic/catalog?source=all'),'UI reads cached all-source inventory');
+ assert.ok(readFn.includes('limit=500'),'Expanded discovery request must not cut off newly added editorial sources');
  assert.ok(!readFn.includes('/api/comic/discover'),'UI never directly scrapes external sources');
  assert.ok(frontend.includes("case'source':wtSource=val;wtCategory='全部';wtVisibleCount=12;render()"),'source tabs only change local state');
  assert.ok(frontend.includes("cache_source===wtSource"),'local source filtering');
