@@ -35,7 +35,9 @@
    const tabs=supported.map(t=>'<button type="button" data-wt3-tab="'+t+'" class="'+(t===cat?'active':'')+'">'+t+' <span>'+items.filter(x=>x.state===t).length+'</span></button>').join('');
    const cards=shown.map(({r,p,state})=>{
     const tid=r?.task_id||p?.handoff?.taskId||'',url=cover(r,p);
-    const src=url?'<img src="'+h(url)+'" alt="'+h((r?.title||p?.title||'')+'漫画封面')+'" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="wt3-placeholder"><span>WORLD<br>TOON</span></div>';
+    const src=url?'<img '+(url.startsWith('media:')?'data-wt3-media="'+h(url.slice(6))+'" ':'')+
+     'src="'+h(url.startsWith('media:')?'':url)+'" alt="'+h((r?.title||p?.title||'')+'漫画封面')+
+     '" loading="lazy" onerror="this.style.display=\'none\'">':'<div class="wt3-placeholder"><span>WORLD<br>TOON</span></div>';
     const name=h(r?.title||p?.title||'未命名漫画'),series=h(p?.seriesTitle||r?.series?.id||''),episode=p?.seriesEpisode||r?.series?.episode||null;
     const published=isDone(r);
     const href=published?h(r.receipt.url):p?'#/reader/'+encodeURIComponent(p.id):tid?'https://github.com/chenzhe223-tech/worldtoon/tree/main/tasks/'+encodeURIComponent(tid):'#/studio';
@@ -44,6 +46,12 @@
      '<p>'+h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''))+'</p>'+
      '<span>'+h(state)+(r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
    }).join('');
+   queueMicrotask(()=>{if(ui.route!=='library')return;
+     document.querySelectorAll('.wt3-shelf img[data-wt3-media]').forEach(async img=>{
+       try{const url=await resolveImage('media:'+img.dataset.wt3Media);
+         if(url&&img.isConnected)img.src=url;
+       }catch{img.alt='本地封面暂不可用'}});
+   });
    return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','正式发表由 GitHub 质量验收与公众号后台回执认定；制作中作品保留创作进度。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
     '<div class="wt3-shelf-meta">GitHub 真实归档：'+(wtArchiveSnapshot?rows.length+' 部':'尚未同步')+
     ' · 未发表不作已发表展示'+(wtArchiveError?'<p class="wt3-error">'+h(wtArchiveError)+'</p>':'')+'</div>'+
