@@ -175,3 +175,8 @@
 .director-portrait-upload{display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;font-size:12px}
 .director-portrait-controls>p{font-size:11px;line-height:1.65;color:#81746a;margin:0}
 @media(max-width:650px){.director-portrait-preview img{height:140px}.director-portrait-upload{width:100%}.director-portrait-controls{gap:10px}}
+
+.director-portrait-handoff{margin:13px 0 22px;padding:13px 15px;background:#f9f4ec;border:1px solid #e3d8ca;border-radius:10px;display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.director-portrait-handoff p{font-size:11px;color:#776b5e;line-height:1.65;margin:0;flex:1 1 300px}
+.director-portrait-handoff .button{min-height:41px;flex-shrink:0}
+@media(max-width:620px){.director-portrait-handoff .button{width:100%}}
