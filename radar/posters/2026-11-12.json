@@ -1,0 +1,380 @@
+{
+  "report_date": "2026-11-12",
+  "poster": "radar/posters/2026-11-12.png",
+  "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "news_count": 5,
+  "news_urls": [
+    "https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66",
+    "https://techcrunch.com/2026/11/11/openais-quarterly-revenue-reportedly-crosses-10b-for-the-first-time/",
+    "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/",
+    "https://www.theverge.com/tech/1031526/google-tabletop-ai-experiment-waitlist-availability",
+    "https://www.marktechpost.com/2026/11/10/ifm-pan-2-open-world-model/"
+  ],
+  "news_titles": [
+    "Google 发布 Gemini Robotics 2.5，聚焦灵巧性、可靠性与安全性",
+    "OpenAI 季度营收据报首次突破 100 亿美元",
+    "Gemini Decisions API：快速、校准的多模态决策",
+    "Google 的 Tabletop AI 实验让你构建自定义协作应用",
+    "MBZUAI 的 IFM 发布 PAN 2：面向物理 AI 的开源 29B 世界模型"
+  ],
+  "news_image_evidence": [
+    {
+      "story_url": "https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "4cd65d3950543bf09174793b043941781c3c2eea7537319c0860b482c19d007b",
+      "rendered_image_sha256": "9b8fa476cf27d0d907770d3145db74279b2a1fdad05d5f5fb3c7f0a351a88bc8",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/11/openais-quarterly-revenue-reportedly-crosses-10b-for-the-first-time/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "1919e27845275720f2539d13e242b6f544313b48f0a1f24ad0d208ac6374a257",
+      "rendered_image_sha256": "1919e27845275720f2539d13e242b6f544313b48f0a1f24ad0d208ac6374a257",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/",
+      "image_source": "Google AI Blog",
+      "image_match_status": "article_image",
+      "image_sha256": "8c81ad5ac18fcaaa0aaa6d1f5de3e96d80f9ff486dc3d20415137f33e7a84fda",
+      "rendered_image_sha256": "8c81ad5ac18fcaaa0aaa6d1f5de3e96d80f9ff486dc3d20415137f33e7a84fda",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.theverge.com/tech/1031526/google-tabletop-ai-experiment-waitlist-availability",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "3fe8bfeca42fddfb531f7aa10cd514e77b299fd9e22b5c6d0cace8106e2c0fee",
+      "rendered_image_sha256": "3fe8bfeca42fddfb531f7aa10cd514e77b299fd9e22b5c6d0cace8106e2c0fee",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/10/ifm-pan-2-open-world-model/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "5fe99ce0379a6d594221d3dcaf26f0d7219d399844c92b04cab7ddf3f576b58a",
+      "rendered_image_sha256": "5fe99ce0379a6d594221d3dcaf26f0d7219d399844c92b04cab7ddf3f576b58a",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    }
+  ],
+  "skill": "NVIDIA/SkillSpector",
+  "design": "mountain-editorial",
+  "format": "PNG",
+  "canvas": [
+    1200,
+    1800
+  ],
+  "layout_regions": {
+    "masthead": [
+      48,
+      24,
+      1152,
+      104
+    ],
+    "hero-title-date": [
+      48,
+      145,
+      1152,
+      520
+    ],
+    "five-column-news-grid": [
+      48,
+      750,
+      1152,
+      1278
+    ],
+    "today-insight-banner": [
+      48,
+      1290,
+      868,
+      1425
+    ],
+    "skill-recommendation": [
+      48,
+      1440,
+      868,
+      1688
+    ],
+    "right-qr-panel": [
+      900,
+      1290,
+      1164,
+      1664
+    ],
+    "brand-footer": [
+      48,
+      1720,
+      1152,
+      1800
+    ]
+  },
+  "text_bounds": [
+    {
+      "block": "hero_headline",
+      "x": 48,
+      "y": 557,
+      "width": 1100,
+      "height": 92,
+      "actual_width": 1081.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 50,
+      "y": 651,
+      "width": 1090,
+      "height": 22,
+      "actual_width": 752.1,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_title",
+      "x": 48,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 196.5,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_summary",
+      "x": 48,
+      "y": 889,
+      "width": 206,
+      "height": 18,
+      "actual_width": 98.8,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_why",
+      "x": 48,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_title",
+      "x": 271,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 191.7,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_summary",
+      "x": 271,
+      "y": 889,
+      "width": 206,
+      "height": 18,
+      "actual_width": 64.9,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_why",
+      "x": 271,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_title",
+      "x": 494,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 198.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_summary",
+      "x": 494,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 200.2,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_why",
+      "x": 494,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.5,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_title",
+      "x": 717,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 199.1,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_summary",
+      "x": 717,
+      "y": 889,
+      "width": 206,
+      "height": 54,
+      "actual_width": 203.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_why",
+      "x": 717,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_title",
+      "x": 940,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 203.5,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_summary",
+      "x": 940,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 201.6,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_why",
+      "x": 940,
+      "y": 968,
+      "width": 206,
+      "height": 34,
+      "actual_width": 200.9,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 190,
+      "y": 1305,
+      "width": 650,
+      "height": 46,
+      "actual_width": 641.9,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 1362,
+      "width": 780,
+      "height": 17,
+      "actual_width": 462.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "skill_name",
+      "x": 80,
+      "y": 1490,
+      "width": 555,
+      "height": 30,
+      "actual_width": 220.7,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1554,
+      "width": 565,
+      "height": 57,
+      "actual_width": 562.5,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1628,
+      "width": 565,
+      "height": 14,
+      "actual_width": 332.4,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    }
+  ],
+  "design_variant": "mountain-editorial",
+  "iso_year": 2026,
+  "iso_week": 46,
+  "iso_weekday": 4,
+  "style_cycle_index": 45,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.4.0",
+  "generated_at": "2026-11-12T02:51:24.438804+08:00"
+}
