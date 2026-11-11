@@ -142,7 +142,7 @@
   nav('workspace/'+p.id+'/1');notify('剧情已选，创建 '+p.panels.length+' 格建议篇幅的漫画草稿；请在 AI 编剧中继续扩写');
  }
  const baseLive=wtLive;
- wtLive=function(){return block()+baseLive()};
+ wtLive=function(){const existing=baseLive(),headEnd=existing.indexOf('</section>');return headEnd>=0?existing.slice(0,headEnd+10)+block()+existing.slice(headEnd+10):block()+existing};
  document.addEventListener('submit',ev=>{
   if(ev.target?.id!=='story-search-form')return;
   ev.preventDefault();ev.stopImmediatePropagation();
@@ -186,4 +186,5 @@
  },true);
  window.WTStoryDiscovery={state:()=>({items:story.items,selected:story.selected,mode:story.mode,chosen:[...story.chosen],
   loaded:story.loaded,error:story.error}),search,choose,createProjectFromStory,beatOptions,block};
+ if(ui.route==='live')Promise.resolve().then(()=>{if(ui.route==='live')render()});
 })();
