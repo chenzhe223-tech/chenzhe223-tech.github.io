@@ -92,6 +92,8 @@ async function wtStorySearch(request,env,url){
   if(seen.has(key))continue;
   seen.add(key);clean.push({...item,title,source});
  }
+ // Curated snapshot ranking is dated and source-backed; do not treat it as today's realtime platform metrics.
+ if(!q)clean.sort((a,b)=>Number(a.rank_snapshot||999)-Number(b.rank_snapshot||999));
  // No fake fallback plot or rankings. Fail honestly on total outages, but keep verified curated matches.
  if(!clean.length&&notes.length)return Response.json({items:[],warnings:notes,error:'暂未找到匹配来源；可更换关键词或稍后重试',searched_at:new Date().toISOString()},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=120'}});
  return Response.json({schema:'davylab.worldtoon.story-search.v1',items:clean.slice(0,35),query:q,type,warnings:notes,
