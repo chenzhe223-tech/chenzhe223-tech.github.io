@@ -1,4 +1,4 @@
-/* WORLD/TOON · 20-style visual library V3.0. Strictly separate visual descriptions from verified artwork. */
+/* WORLD/TOON · 21-style visual library V3.1. Strictly separate visual descriptions from verified artwork. */
 'use strict';
 (function(){
 const CATALOG=[
@@ -781,11 +781,50 @@ const CATALOG=[
    "cinematic": false
   },
   "production_mode": "ChatGPT_pilot_required"
+ },
+ {
+   "style_id": "japanese-pastoral-wonder",
+   "version": "3.1.0",
+   "number": 21,
+   "name": "日式田园奇想动画",
+   "name_en": "Japanese Pastoral Wonder Animation",
+   "category": "日本漫画与动画",
+   "subtitle": "自然奇想、温暖手绘冒险",
+   "material": "手绘水彩与赛璐璐结合的精细森林、乡间小镇、风车木屋、云海与奇异自然道具；人物五官细腻而富有生气",
+   "lighting": "晨昏柔和自然光、斑驳树荫、天空散射光与季节性空气透视",
+   "layout": "以天地与环境建立奇幻世界，再用完整人物动作、情绪近景与小规模冒险事件推进九格叙事",
+   "negative": "简笔画、塑料3D、无背景人物、模仿现成动画角色、复制既有动画的独特场景与道具、无意义霓虹",
+   "subjects": "自然·童话·环保·成长·冒险",
+   "palette": [
+     "#d6e6c6",
+     "#43685d",
+     "#d59b65"
+   ],
+   "reference": {
+     "status": "not_licensed",
+     "url": null,
+     "source": null,
+     "author": null,
+     "license": null
+   },
+   "sample": {
+     "status": "not_generated",
+     "url": null,
+     "model": null,
+     "model_version": null,
+     "sha256": null
+   },
+   "quality_capability": {
+     "standard": false,
+     "premium": false,
+     "cinematic": false
+   },
+   "production_mode": "ChatGPT_pilot_required"
  }
 ];
 /* Each image is an original style GUIDE cut from the two ChatGPT-generated atlas plates.
  * Do not count guides as verified native production samples or licensed third-party refs. */
-const STYLE_GUIDES=["3889424c6b93943a5cd88c906a78ce0c8280aab304ed0b2c20dbf5993329c450","bfcfe942e6fc778398f91937e72b5873c89f8b54205c0846f0f61a831f204834","d3029e0a02ee86b9ef89964cdc12a8f2403a478edf7d1dff6ca3993575308f9e","3ea7a74f0a83739821bf829eafef11fa9d8a490533d4be5c8c6cebd63d3b75d9","ccd0cd5d09f3dc0e99f1395b437d6380627cb0bfd3befd2e59e163852499ef17","d8e9aeaf7cb60907cf595b46fcc5e840c256aeff80d9fa5f13dc3ae3f98d08f6","149deda8f8825bef86e5952486c16ba81bfcc2776c5bd144c50d312d0a27c9ca","8aa6817bd7ce85b7616d324c1184e4f11e76ffc41c0a6a6cb6ca9c3243dfebd5","bcfffd2fbe5fdc8c42bfee5a1cb7dcb65186e75299955d77c72ea19237a0f6ba","2384272c91a5ebc1c6b3112cb9d38082aead167f6f0fdcc1f359068d3ac431d0","a8d81b8842129392ecd51c8bd3c0ea2bcfa713c42a0892b08bad0a02403636d2","dcfcf68098ce73e5ba332112200144884fccfbc1765415f2144206e3124ac964","5660186ad7b7c799fb6ed9182bfeceb0ac4a135f2e98157d01a09f5aa634a174","b0a298d848d5f572d17c7584150ce16023b5005b8c4039ff4a8e68320ef0d8b4","c2cae73e6281e9928130021116a4ffb0210b01476adc34dd49a9109ef67e5b92","41ead452d282f0c70fee1dacbe7435e4f4a942ff7ea2763ac617f47b82b586ab","68860fc0d5dfdb2f48eb3c54372b890f7224dc17e9ecf4f90ecb8fdfadb9efe8","f480eb41f7ae79bc71865de4be7adeb645c0ff4aff887a78759077620db21aa8","2ec788a9df786c68f3d95405c5540c84ca51fa3b5297142a089f901728cb1a15","eade9f31438c20990641e19c8cacbf56ad9cfc5ee42ab05fe830ff34644acabb"];
+const STYLE_GUIDES=["3889424c6b93943a5cd88c906a78ce0c8280aab304ed0b2c20dbf5993329c450","bfcfe942e6fc778398f91937e72b5873c89f8b54205c0846f0f61a831f204834","d3029e0a02ee86b9ef89964cdc12a8f2403a478edf7d1dff6ca3993575308f9e","3ea7a74f0a83739821bf829eafef11fa9d8a490533d4be5c8c6cebd63d3b75d9","ccd0cd5d09f3dc0e99f1395b437d6380627cb0bfd3befd2e59e163852499ef17","d8e9aeaf7cb60907cf595b46fcc5e840c256aeff80d9fa5f13dc3ae3f98d08f6","149deda8f8825bef86e5952486c16ba81bfcc2776c5bd144c50d312d0a27c9ca","8aa6817bd7ce85b7616d324c1184e4f11e76ffc41c0a6a6cb6ca9c3243dfebd5","bcfffd2fbe5fdc8c42bfee5a1cb7dcb65186e75299955d77c72ea19237a0f6ba","2384272c91a5ebc1c6b3112cb9d38082aead167f6f0fdcc1f359068d3ac431d0","a8d81b8842129392ecd51c8bd3c0ea2bcfa713c42a0892b08bad0a02403636d2","dcfcf68098ce73e5ba332112200144884fccfbc1765415f2144206e3124ac964","5660186ad7b7c799fb6ed9182bfeceb0ac4a135f2e98157d01a09f5aa634a174","b0a298d848d5f572d17c7584150ce16023b5005b8c4039ff4a8e68320ef0d8b4","c2cae73e6281e9928130021116a4ffb0210b01476adc34dd49a9109ef67e5b92","41ead452d282f0c70fee1dacbe7435e4f4a942ff7ea2763ac617f47b82b586ab","68860fc0d5dfdb2f48eb3c54372b890f7224dc17e9ecf4f90ecb8fdfadb9efe8","f480eb41f7ae79bc71865de4be7adeb645c0ff4aff887a78759077620db21aa8","2ec788a9df786c68f3d95405c5540c84ca51fa3b5297142a089f901728cb1a15","eade9f31438c20990641e19c8cacbf56ad9cfc5ee42ab05fe830ff34644acabb","d816d7acf644ac71826ae6d93e76b507a082a4770393e070f0080b069184e3e9"];
 CATALOG.forEach((style,index)=>{
  const n=String(index+1).padStart(2,'0');
  style.guide={
@@ -795,6 +834,7 @@ CATALOG.forEach((style,index)=>{
   usage_scope:'visual_style_reference_only',asset_path:'comic-studio/assets/style-'+n+'.webp',
   sha256:STYLE_GUIDES[index],number:index+1
  };
+ if(style.number===21)style.guide.source='ChatGPT原创画风视觉探索图中的第21种独立插画裁切，仅作风格选择参考；非正式生图模型样张';
 });
 const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松'];
 let filter='全部';
@@ -839,7 +879,7 @@ function cardImage(x,c){
 }
 function cards(c){
  const subset=CATALOG.filter(x=>(filter==='全部'||x.category===filter)&&(!searchTerm||[x.name,x.name_en,x.subtitle,x.material,x.subjects].join(' ').toLowerCase().includes(searchTerm.toLowerCase())));
- return '<div class="wt-v3-intro"><div><b>WORLD/TOON · VISUAL ATLAS 03</b><p>先看真实来源，再确认正式首图。画风描述不是生成能力承诺。</p></div><span>20 STYLES</span></div>'+
+ return '<div class="wt-v3-intro"><div><b>WORLD/TOON · VISUAL ATLAS 03</b><p>先看真实来源，再确认正式首图。画风描述不是生成能力承诺。</p></div><span>'+CATALOG.length+' STYLES</span></div>'+
  '<div class="wt-v3-toolrow"><input type="search" data-wt-v3-query aria-label="检索漫画风格" placeholder="搜索画风、题材与视觉特征" value="'+esc(searchTerm)+'"><span class="wt-v3-count">找到 '+subset.length+' 种</span></div>'+
  '<div class="wt-v3-filters">'+CATEGORIES.map(x=>'<button type="button" data-wt-v3-filter="'+esc(x)+'" aria-pressed="'+(filter===x)+'" class="'+(filter===x?'is-active':'')+'">'+esc(x)+'</button>').join('')+'</div>'+
  '<div class="director-styles wt-v3-grid">'+subset.map(x=>'<button type="button" class="director-style wt-v3-card '+(c.styleId===x.style_id?'selected':'')+'" data-director-style="'+esc(x.style_id)+'" aria-pressed="'+(c.styleId===x.style_id)+'">'+
