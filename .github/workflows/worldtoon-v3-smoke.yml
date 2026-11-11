@@ -1,4 +1,4 @@
-name: WORLD/TOON 3.0 smoke checks
+name: WORLD/TOON 3.0 and 4.0 production regression checks
 on:
   push:
     branches: [main]
@@ -17,5 +17,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Validate JS and P0-P3 functional contracts
+      - name: Validate existing 3.0 functional contracts
         run: node comic-studio/tests/worldtoon-v3-smoke.cjs
+      - name: Verify 4.0 unified production journey and author gates
+        run: node comic-studio/tests/worldtoon-v4-smoke.cjs
