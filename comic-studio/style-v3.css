@@ -62,3 +62,11 @@
 .wt-v3-actions span{font-size:11px;color:#788075}
 .wt-v3-asset{height:clamp(180px,23vw,310px)}
 @media(max-width:650px){.wt-v3-toolrow{gap:8px}.wt-v3-toolrow input{min-height:40px;padding:0 10px;font-size:12px}.wt-v3-card{padding:6px!important}.wt-v3-photo,.wt-v3-card-visual{height:140px;min-height:140px}.wt-v3-card-meta{padding:8px 3px 2px;min-height:100px}.wt-v3-card-meta b{font-size:12px}.wt-v3-card-meta small{font-size:10px!important}.wt-v3-subjects{font-size:9px}.wt-v3-card-visual strong{font-size:15px!important}.wt-v3-card-visual em{font-size:9px}.wt-v3-pilot-proof img{max-height:350px}.wt-v3-asset{height:230px}}
+
+
+/* 3D editorial preview images are ORIGINAL style examples, never production-model samples. */
+.wt-v3-photo-3d{background:#e6dcd2;border:1px solid rgba(69,58,47,.10)}
+.wt-v3-photo-3d img{object-fit:cover;object-position:50% 38%;background:#e6dcd2;transition:transform .25s ease}
+.wt-v3-card:hover .wt-v3-photo-3d img{transform:scale(1.025)}
+.wt-v3-photo-3d em{background:rgba(27,38,33,.86);max-width:calc(100% - 14px);white-space:normal}
+@media(max-width:650px){.wt-v3-photo-3d em{font-size:9px;padding:4px 5px;bottom:5px;left:5px}.wt-v3-photo-3d img{object-position:50% 32%}}
