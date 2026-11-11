@@ -107,3 +107,11 @@
 .wt4-remote-hint{margin-top:14px;padding:14px 16px;background:#f7f3eb;border:1px solid #e7dacb;border-radius:9px}
 .wt4-remote-hint strong{font-size:13px;color:#493a2d}
 .wt4-remote-hint p{font-size:12px;line-height:1.7;color:#75695e;margin:6px 0 10px}
+
+.wt4-advanced{margin-top:18px;border-top:1px solid #e3d9cb;padding-top:12px}
+.wt4-advanced>summary{cursor:pointer;color:#6c6358;font-size:12px;font-weight:650;line-height:1.6;list-style:revert;padding:7px 0}
+.wt4-advanced>.wt3-sop{margin-top:12px}
+.wt4-work-area>.editor-header{display:none}
+.wt4-work-area .wt4-stage-card>.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.wt4-work-area .wt4-stage-card>.buttons .button{min-height:39px}
+@media(max-width:600px){.wt4-work-area .wt4-stage-card>.buttons .button{flex:1 1 100%}}
