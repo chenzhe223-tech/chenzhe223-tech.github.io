@@ -103,3 +103,7 @@
 .wt4-series-chapter small{white-space:nowrap;color:#6f826f}
 .wt4-series-chapter:hover{color:#a36446}
 @media(max-width:720px){.wt4-series-chapter{flex-wrap:wrap;gap:4px}}
+
+.wt4-remote-hint{margin-top:14px;padding:14px 16px;background:#f7f3eb;border:1px solid #e7dacb;border-radius:9px}
+.wt4-remote-hint strong{font-size:13px;color:#493a2d}
+.wt4-remote-hint p{font-size:12px;line-height:1.7;color:#75695e;margin:6px 0 10px}
