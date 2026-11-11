@@ -124,7 +124,12 @@
    }
    p.handoff.importStatus='GitHub 文件暂存完成 · 等待质量审核与独立作者授权';
    setChange(p,'所有素材已提交 GitHub 暂存；未生成 QA 通过的 manifest，不会进入发表队列');
+   // Confirmed upload is not QA approval. Reveal the next safe action
+   // without changing or signing any of the independent author gates.
    render();notify('真实素材已写入 GitHub；请完成创意试画审核与最终出版审批');
+   if(typeof wtArchiveRefresh==='function')void wtArchiveRefresh({silent:true}).catch(()=>{});
+   if(ui.route==='workspace'&&selected()?.id===p.id&&p.creativeDirection?.pilotApproval?.repo_commit)
+     nav('workspace/'+p.id+'/5');
   }catch(error){
    p.handoff.importStatus='GitHub 暂存部分完成 · 可重试';
    p.handoff.importDetail=String(error.message||error).slice(0,150);setChange(p,'GitHub 部分文件上传失败，保留完成记录');
