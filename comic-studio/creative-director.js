@@ -260,6 +260,25 @@ function exportBrief(p){
   instructions:'先交付角色设定图与首格样稿由作者审阅；未获作者确认不得批量生成剩余画格或宣布完成。'}};
 }
 function commitEdit(p,label){const c=ensure(p);if(p.handoff?.repoQueuedAt)throw Error('此版本已正式入仓。请先复制为新版作品，再修改和派单');c.approval=null;c.reviewed=false;markDirty(p);setChange(p,label)}
+function syncCastFieldIntoPanels(p,c,index,key,value){
+ const person=c.cast[index];if(!person)return false;
+ const before=String(person[key]||''),after=String(value||'').slice(0,500);
+ if(before===after)return false;
+ // Treat the cast card as the source of truth for exact strings already present
+ // in the AI draft. Replace only that character's prior value; keep every other
+ // piece of authored panel text intact.
+ const minLength=key==='name'?1:2;
+ if(before.length>=minLength){
+  for(const panel of p.panels||[]){
+   for(const field of ['title','scene','caption','dialogue','prompt']){
+    if(typeof panel[field]==='string'&&panel[field].includes(before))
+     panel[field]=panel[field].split(before).join(after);
+   }
+  }
+ }
+ person[key]=after;
+ return true;
+}
 function approve(p){
  const errors=checks(p);
  if(errors.length)throw Error('暂无法定稿：'+errors.slice(0,3).join('；')+(errors.length>3?' 等'+errors.length+'项':''));
@@ -437,7 +456,7 @@ document.addEventListener('change',ev=>{
   const c=ensure(p);
   if(el.dataset.directorReviewed){c.reviewed=el.checked;c.approval=null;setChange(p,'更新九格分镜审阅状态');render();return}
   if(el.dataset.directorField){c[el.dataset.directorField]=el.value.slice(0,1600)}
-  if(el.dataset.directorCast){const i=Number(el.dataset.characterIndex);if(!c.cast[i])return;c.cast[i][el.dataset.directorCast]=el.value.slice(0,500);p.characters=castText(c)}
+  if(el.dataset.directorCast){const i=Number(el.dataset.characterIndex);if(!c.cast[i])return;syncCastFieldIntoPanels(p,c,i,el.dataset.directorCast,el.value);p.characters=castText(c);if(c.storyboardProvenance)c.storyboardProvenance.authorEdited=true}
   if(el.dataset.directorPanel){const i=Number(el.dataset.panelIndex);if(!p.panels[i])return;p.panels[i][el.dataset.directorPanel]=el.value.slice(0,1700);c.drafted=true;if(c.storyboardProvenance)c.storyboardProvenance.authorEdited=true}
   commitEdit(p,'调整并保存导演台创意设定');render();
  }catch(err){notify(String(err.message||err));render()}
@@ -504,3 +523,4 @@ window.wtCreativeDirector=draw;
 window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft,localStoryboard,applyStoryboard,aiStoryPayload,generateStory};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
 })();
+
