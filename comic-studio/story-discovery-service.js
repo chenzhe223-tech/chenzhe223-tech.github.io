@@ -65,11 +65,11 @@ async function wtStorySearch(request,env,url){
  if(!WT_STORY_SEARCH_ALLOWED.includes(type))return failure('未知剧情搜索类型',400);
  if(q&&q.length<2)return failure('至少输入两个字符才能搜索',400);
  const notes=[],merged=[];let curated;
- try{curated=await wtStoryCurated();const key=q.toLowerCase().replace(/[\s·・]/g,'');
+ try{curated=await wtStoryCurated();const key=q.toLowerCase().replace(/[《》“”'\"〈〉\s·・]/g,'').replace(/^(?:红果热剧|红果短剧|网络小说|世界名著|名著)/,'');
   for(const v of curated.items){
    if(type==='drama'&&v.type!=='drama')continue;
    if(type==='novel'&&v.type==='drama')continue;
-   if(q&&!([v.title,...(v.aliases||[])].some(s=>String(s||'').toLowerCase().replace(/[\s·・]/g,'').includes(key))))continue;
+   if(q&&!([v.title,...(v.aliases||[])].some(s=>String(s||'').toLowerCase().replace(/[《》“”'\"〈〉\s·・]/g,'').includes(key))))continue;
    merged.push({...v,source_status:'editorial_reviewed',snapshot_date:curated.at});
   }
  }catch(e){notes.push('精选索引不可用：'+String(e.message||e).slice(0,85))}
