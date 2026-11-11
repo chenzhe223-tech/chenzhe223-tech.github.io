@@ -41,3 +41,13 @@
 **下一次浏览器手动验收**：打开 https://worldtoon.chenzhe223.workers.dev/#/live ，点《简·爱》或《他过分野》快捷词 → 搜索结果 → 选择剧情 → 勾选一至多段 → 确认改编方式 → 建立漫画草稿，确认页面跳转到本作品 AI 编剧。若 API 返回明确错误，不应默默使用伪造结果。
 
 **By DAVYLAB · 把想法，做成能用的工具。**
+
+## 4.2.1 补充升级：仅有热剧题名时也能原创立项
+
+- 搜索结果只有红果榜单题名和题材、尚无可信原剧分集剧情时，在**独立原创**模式显示三个可勾选方向：身份反转、价值抉择、悬念与误会。
+- 三个方向是**平台提供的通用原创主题建议，不是原著、原剧的真实章节或剧情**；不应描述成“从原剧提取”。
+- 原创构思写入已有 `storySourceSelection`，保留来源索引、版权标记，并使用独立人物与剧情进入 `#/workspace/<project_id>/1`。
+- 忠实改编受版权保护的小说/短剧仍要求有效作者授权信息，不能通过选原创选项绕开授权后再复制原剧情。
+- 新版已同步至 Worker 允许访问的 `extension.js`，浏览器版本 `4.2.1`，Service Worker 缓存键也已更新。
+- 已在 `tests/worldtoon-story-discovery.cjs` 新增空白剧情热门剧的原创方向与路由模拟测试；完整模拟测试输出 `WORLD/TOON STORY SEARCH PASS`。
+- Cloudflare 已部署的 Worker 包含真实搜索路由 `/api/comic/story-search`、Google Books、Gutendex、公开 RSS 资料索引，但本次未独立验证登录浏览器的实时请求成功和 GitHub Actions 云端运行结果。
