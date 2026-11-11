@@ -75,9 +75,16 @@
        '<button class="button" data-archive="refresh">同步 GitHub 验收状态</button></section>';
    }
    if(i===5)return publish();
+   const chapters=p.seriesId?activeProjects().filter(x=>x.seriesId===p.seriesId)
+     .sort((a,b)=>(Number(a.seriesEpisode)||0)-(Number(b.seriesEpisode)||0)):[];
+   const list=chapters.length?'<div class="wt4-series-chapters"><h3>系列章节 · '+html(p.seriesTitle||p.title)+'</h3>'+
+     chapters.map(x=>'<a class="wt4-series-chapter" href="#/workspace/'+encodeURIComponent(x.id)+'">'+
+       '<span>第 '+(Number(x.seriesEpisode)||1)+' 章 · '+html(x.title)+'</span>'+
+       '<small>'+html(state(x).published?'已发表':'制作中')+' →</small></a>').join('')+'</div>':'';
    return '<section class="box wt4-stage-card"><h2>作品归档与续作</h2>'+
      '<p>'+html(s.published?'已核验发表，可到书架查看。':'尚无可核实的正式发表回执，不能提前标记已发表。')+'</p>'+
-     '<div class="buttons"><a class="button dark" href="#/library">打开漫画书架</a>'+
+     list+'<div class="buttons"><a class="button dark" href="#/library">打开漫画书架</a>'+
+     '<button class="button" data-wt3-action="series-new"'+(p.seriesId||p.handoff?.repoQueuedAt?' disabled':'')+'>创建原创系列</button>'+
      '<button class="button" data-wt3-action="series-next"'+(!p.seriesId?' disabled':'')+'>接续系列下一章</button>'+
      '<button class="button" data-archive="refresh">同步发表回执</button></div></section>';
  }
