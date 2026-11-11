@@ -41,7 +41,7 @@ const qaRoot={
 };
 const qaProject={handoff:{finalChecklist:Array(8).fill(false),stagedFiles:[],stageUploaded:[]}};
 const qaContext={
- publish:()=>'', selected:()=>qaProject,setChange(){},notify(){},
+ ui:{route:'dashboard'}, publish:()=>'', selected:()=>qaProject,setChange(){},notify(){},
  document:{
    addEventListener:(type,fn)=>{qaEvents[type]=fn},
    querySelector:selector=>selector==='.wt3-final-review'?qaRoot:null,
