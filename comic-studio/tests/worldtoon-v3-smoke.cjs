@@ -1,0 +1,25 @@
+'use strict';
+const fs=require('node:fs');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const path=require('node:path');
+const base=path.resolve(__dirname,'..');
+const read=name=>fs.readFileSync(path.join(base,name),'utf8');
+const scripts=['app.js','archive.js','worldtoon-v3.js','worldtoon-v3-import.js','worldtoon-v3-review.js','creative-director.js','creative-pilot.js'];
+for(const file of scripts)assert.doesNotThrow(()=>new vm.Script(read(file),{filename:file}),file+' JavaScript syntax');
+const index=read('index.html');
+for(const name of ['worldtoon-v3.js','worldtoon-v3-import.js','worldtoon-v3-review.js','worldtoon-v3.css'])
+ assert.ok(index.includes(name),name+' must load from the platform');
+const app=read('app.js'),archive=read('archive.js'),v3=read('worldtoon-v3.js'),ingest=read('worldtoon-v3-import.js'),review=read('worldtoon-v3-review.js');
+assert.match(app,/panel_count:p\.panels\.length/,'SOP must use variable panel count');
+assert.match(app,/i<p\.panels\.length/,'WorkBuddy manual pack must include all panels');
+assert.match(archive,/producer:p\.productionAgent/,'SOP must persist production agent');
+assert.match(archive,/series:p\.seriesId/,'series identity must persist');
+assert.match(v3,/\['已发表','制作中','待制作'\]/,'shelf must have three user-facing states');
+assert.match(v3,/nextEpisode/,'series must calculate unique episode');
+assert.match(v3,/data-wt3-media/,'local cover must resolve media storage');
+assert.match(ingest,/crypto\.subtle\.digest\('SHA-256'/,'ZIP assets must be digested');
+assert.match(ingest,/stagedFiles/,'ZIP upload must have recoverable staging');
+assert.match(review,/author_confirmed:true/,'final publication must require author approval');
+assert.match(review,/reviewed_checks/,'final QA checklist must be explicit');
+console.log('WORLD/TOON 3.0 smoke PASS: '+scripts.length+' parsed JS modules + SOP, shelf, series, ZIP and QA guards');
