@@ -1,0 +1,37 @@
+name: WorldToon editorial discovery production contract
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/editorial-series.json'
+      - 'comic-studio/worker.js'
+      - 'comic-studio/ranking.js'
+      - 'comic-studio/extension.js'
+      - 'comic-studio/styles.css'
+      - 'comic-studio/tests/editorial-series.cjs'
+      - 'comic-studio/tests/discovery-cache.cjs'
+      - 'comic-studio/tests/rankings.cjs'
+      - '.github/workflows/worldtoon-discovery-editorial.yml'
+permissions:
+  contents: read
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Syntax and source data
+        run: |
+          node --check comic-studio/worker.js
+          node --check comic-studio/extension.js
+          node --check comic-studio/ranking.js
+          node -e "let d=require('./comic-studio/editorial-series.json');console.log(Object.fromEntries(Object.entries(d.sources).map(([k,v])=>[k,v.length])))"
+      - name: Existing and newly added discovery tests
+        run: |
+          node comic-studio/tests/rankings.cjs
+          node comic-studio/tests/heritage.cjs
+          node comic-studio/tests/discovery-cache.cjs
+          node comic-studio/tests/editorial-series.cjs
