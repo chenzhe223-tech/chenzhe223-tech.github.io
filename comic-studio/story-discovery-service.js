@@ -24,7 +24,7 @@ async function wtStoryBooks(q){
   if(!title||!source)return null;
   return {id:'books-'+String(x.id||'').slice(0,70),title,type:'novel',author:wtStoryClean((v.authors||[]).join('、')).slice(0,180),
    source,source_name:'Google Books · 图书元数据',source_kind:'book_metadata',
-   summary:wtStoryClean(v.description||'').slice(0,750),
+   summary:wtStoryClean(v.description||'').slice(0,280),
    rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
    beats:[],verified_on:new Date().toISOString().slice(0,10)};
  }).filter(Boolean);
