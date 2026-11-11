@@ -636,7 +636,7 @@ async function wtDiscoveryRead(env,url,ctx){
  catch(err){return Response.json({error:'素材缓存无法读取，请检查数据库迁移',detail:String(err.message||err).slice(0,110)},{status:503,headers:RESULT_HEADERS})}
  if(rows.length<WT_CACHE_SOURCES.length)await wtStartColdBootstrap(env,ctx);
  const at=Date.now(),items=[],seen=new Set(),stats=[],warnings=[],buckets=new Map();
- for(const source of WT_CACHE_SOURCES){
+ for(const source of (requested==='all'?['literary_series','nobel_literature','academic_events','classics','history','arxiv','hackernews','news']:WT_CACHE_SOURCES)){
   if(requested!=='all'&&source!==requested)continue;
   const row=rows.find(r=>r.source===source);
   if(!row){stats.push({id:source,count:0,ready:false,stale:true});continue}
