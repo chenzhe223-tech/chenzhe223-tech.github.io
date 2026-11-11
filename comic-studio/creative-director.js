@@ -81,18 +81,19 @@ function localStoryboard(p){
   ['因果揭示',a+'与'+b+'重新回到最初的场景，以反向构图复现开场；他们发现问题不是“谁拥有答案”，而是“谁承担选择”，用具体动作完成转折。','改变事情的不是工具，而是人的责任。',b+'：原来需要改变的，是我们的选择。'],
   ['余韵收束',a+'没有再争辩，而是将'+object+'郑重放在两人之间；远景显现新一天的环境。留下一个与开场对照的视觉象征，让观众自己得出结论。','所有故事都会结束，但选择仍会继续。',a+'：下一次，我们会怎样做？']
  ];
- return stages.map((row,i)=>({title:(c.arcId==='twist'?beats[i]:row[0]).slice(0,100),
+ const expanded=Array.from({length:p.panels.length},(_,i)=>stages[Math.min(8,Math.floor(i*9/p.panels.length))]);
+ return expanded.map((row,i)=>({title:(c.arcId==='twist'?beats[Math.min(8,Math.floor(i*9/p.panels.length))]:row[0]).slice(0,100),
   scene:'【'+shotOf(i)+'】'+row[1]+' 固定'+a+'、'+b+'的服装、脸型与识别道具。题材背景：'+conflict+'。',
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
 }
 function applyStoryboard(p,panels,meta,replace=false){
  if(p.handoff?.repoQueuedAt)throw Error('该版本已正式派单，不能修改既有故事');
- if(!Array.isArray(panels)||panels.length!==9||!Array.isArray(p.panels)||p.panels.length!==9)throw Error('需要恰好九格内容');
+ if(!Array.isArray(panels)||!Array.isArray(p.panels)||panels.length!==p.panels.length||p.panels.length<4||p.panels.length>60)throw Error('分镜数量必须与作品篇幅一致（4–60格）');
  const existing=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));
  if(replace===true&&existing&&!confirm('这会替换你当前九格中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
  const fields=['title','scene','caption','dialogue','prompt'];
  let updated=0;
- for(let i=0;i<9;i++){
+ for(let i=0;i<p.panels.length;i++){
   for(const field of fields){
    const cur=p.panels[i][field];
    if(!replace&&clean(cur)&&!(field==='title'&&/^第 ?[1-9] 格$/.test(cur)))continue;
@@ -122,7 +123,7 @@ function aiStoryPayload(p,provider){
   title:p.sourceTitle||p.title,summary:p.description||c.thesis,category:p.category,
   arc:arc(c.arcId).name,thesis:c.thesis,world:c.world,emotion:c.emotion,fiction:p.fiction,
   style:st.name,styleRules:[st.material,st.lighting,st.layout,st.negative].join('；'),
-  cast:c.cast,episodes:Array.isArray(p.seriesEpisodes)?p.seriesEpisodes:[]};
+  cast:c.cast,panel_count:p.panels.length,series_bible:p.seriesBible||null,episodes:Array.isArray(p.seriesEpisodes)?p.seriesEpisodes:[]};
 }
 async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
@@ -143,7 +144,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
   const basis=digest(p);
   const result=await wtCallAI('/api/ai/storyboard',aiStoryPayload(p,provider));
-  if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length!==9)throw Error('没有收到九格完整的模型生成结果');
+  if(result?.method!=='verified_model_response'||!Array.isArray(result.panels)||result.panels.length!==p.panels.length)throw Error('没有收到九格完整的模型生成结果');
   if(selected()?.id!==p.id||p.handoff?.repoQueuedAt)throw Error('当前作品已切换或已派单，原始草稿未被覆盖');
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
@@ -155,7 +156,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  }finally{storyBusy=false;render()}
 }
 function scheduleAutoStoryboard(p){
- if(!p||p.handoff?.repoQueuedAt||!Array.isArray(p.panels)||p.panels.length!==9||
+ if(!p||p.handoff?.repoQueuedAt||!Array.isArray(p.panels)||(p.panels.length<4||p.panels.length>60)||
     p.panels.some(x=>clean(x.scene)||clean(x.dialogue)||clean(x.caption))||pendingAuto.has(p.id))return;
  pendingAuto.add(p.id);
  queueMicrotask(()=>{if(selected()?.id===p.id&&step===2)generateStory(p,{auto:true,provider:'native'});});
@@ -190,8 +191,8 @@ function checks(p){
  if(!Array.isArray(c.cast)||c.cast.length<2)errs.push('至少锁定两名原创角色');
  if(c.cast?.some(x=>clean(x.name).length<2||clean(x.look).length<8||clean(x.clothes).length<6||clean(x.symbol).length<2))errs.push('角色姓名、外貌、服饰和识别特征必须完整');
  if(new Set((c.cast||[]).map(x=>clean(x.name))).size!==(c.cast||[]).length)errs.push('角色姓名不能重复');
- if(!Array.isArray(p.panels)||p.panels.length!==9)errs.push('必须恰好九格分镜');
- else for(let i=0;i<9;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
+ if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
+ else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>x.license!=='CC0'))errs.push('视觉参考包含未确认 CC0 的馆藏');
  if(!c.drafted)errs.push('先生成并逐格审阅九格分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
@@ -204,7 +205,7 @@ function exportBrief(p){
  const c=p.creativeDirection;
  return {...payload(p),style_lock:{schema:'davylab.worldtoon.style-lock.v3',style_id:c.styleId,style_version:'3.0.0',quality_target:c.quality||'Premium',aspect_ratio:'3:4',resolution:[1080,1440],render_pipeline:'same_model_preview_and_final_required',model_id:null,model_version:null,preview_sha256:null,character_reference_sha256:null,original_first_panel_required:true,production_status:'awaiting_real_pilot'},lock_status:'approved',approval:{lock_hash:c.approval.lock_hash,approved_at:c.approval.approved_at,author_approved:true,approval_scope:'style_cast_storyboard',note:'锁定创意设定不等于事实核验或正式发表批准'},
  production_gates:{pilot_required:true,pilot_artifacts:['character-sheet.png','pilot-01.png'],pilot_approval_required:true,
-  full_run_panel_count:9,independent_cover:true,character_continuity:true,original_preview_is_panel_01:true,preview_sha256_equals_final_panel_01:true,min_resolution:[1080,1440],reject_svg_and_placeholder:true,source_verification_before_fact_claims:true,
+  full_run_panel_count:p.panels.length,independent_cover:true,character_continuity:true,original_preview_is_panel_01:true,preview_sha256_equals_final_panel_01:true,min_resolution:[1080,1440],reject_svg_and_placeholder:true,source_verification_before_fact_claims:true,
   instructions:'先交付角色设定图与首格样稿由作者审阅；未获作者确认不得批量生成剩余画格或宣布完成。'}};
 }
 function commitEdit(p,label){const c=ensure(p);if(p.handoff?.repoQueuedAt)throw Error('此版本已正式入仓。请先复制为新版作品，再修改和派单');c.approval=null;c.reviewed=false;markDirty(p);setChange(p,label)}
@@ -237,12 +238,12 @@ function castEditor(c){
 }
 function framePreview(p,c){
  const rows=(p.panels||[]).map((x,i)=>'<article class="director-panel"><div class="director-panel-frame">'+
- '<span>0'+(i+1)+' / 09</span><strong>'+e(shotOf(i))+'</strong><div class="director-panel-art"><i></i><b></b></div></div>'+
+ '<span>'+String(i+1).padStart(2,'0')+' / '+String(p.panels.length).padStart(2,'0')+'</span><strong>'+e(shotOf(i))+'</strong><div class="director-panel-art"><i></i><b></b></div></div>'+
  '<div class="director-panel-edit"><label>画格主题<input data-director-panel="title" data-panel-index="'+i+'" value="'+e(x.title)+'" maxlength="100"></label>'+
  '<label>镜头与画面<textarea rows="3" data-director-panel="scene" data-panel-index="'+i+'" maxlength="1700">'+e(x.scene)+'</textarea></label>'+
  '<label>旁白<textarea rows="2" data-director-panel="caption" data-panel-index="'+i+'" maxlength="550">'+e(x.caption)+'</textarea></label>'+
  '<label>对白<textarea rows="2" data-director-panel="dialogue" data-panel-index="'+i+'" maxlength="550">'+e(x.dialogue)+'</textarea></label></div></article>').join('');
- return '<div class="director-board-info"><strong>'+e(arc(c.arcId).name)+' · 九格镜头表</strong><span>仅为镜头/文字预演，不是 AI 生成的最终图片</span></div>'+
+ return '<div class="director-board-info"><strong>'+e(arc(c.arcId).name)+' · '+p.panels.length+'格镜头表</strong><span>仅为镜头/文字预演，不是 AI 生成的最终图片</span></div>'+
  '<div class="director-board">'+rows+'</div>';
 }
 function storyControls(p,c){
@@ -266,7 +267,7 @@ function storyControls(p,c){
 }
 function review(p,c){
  const errs=checks(p),locked=approved(p),count=p.panels.filter(x=>clean(x.scene).length>=30).length;
- return '<div class="director-review"><section class="director-review-summary"><h3>本次制作定版</h3><div class="director-review-kpis"><span><strong>'+e(style(c.styleId).name)+'</strong>画风</span><span><strong>'+c.cast.length+' 位</strong>固定人物</span><span><strong>'+count+'/9</strong>分镜完成</span></div>'+
+ return '<div class="director-review"><section class="director-review-summary"><h3>本次制作定版</h3><div class="director-review-kpis"><span><strong>'+e(style(c.styleId).name)+'</strong>画风</span><span><strong>'+c.cast.length+' 位</strong>固定人物</span><span><strong>'+count+'/'+p.panels.length+'</strong>分镜完成</span></div>'+
  '<p>情节：'+e(arc(c.arcId).name)+' · '+e(c.thesis)+'</p>'+
  '<p>后续 ChatGPT 必须先交一张角色定妆图和首格试画，作者确认后才能继续制作其余画格；实际图片和风格一致性仍需验收。</p>'+
  (locked?'<p class="director-approved">制作方案已锁定 · '+e(c.approval.approved_at)+' · 锁码 '+e(c.approval.lock_hash)+'</p>':
@@ -280,18 +281,18 @@ function draw(){
  if(!p)return '<div class="box"><h2>尚未选择漫画作品</h2><a href="#/radar" class="button">前往选题池</a></div>';
  if(lastProjectId!==p.id){step=0;lastProjectId=p.id;storyApiKey='';storyProvider='native'}
  const c=ensure(p),locked=approved(p);
- const tabs=['画风定调','人物设定','九格故事','最终定版'];
+ const tabs=['画风定调','人物设定','剧情分镜','最终定版'];
  return '<div class="director-page">'+heroHeader('CREATIVE DIRECTOR / PRE-PRODUCTION','创意导演台',
   '先确定样子、人物和剧情，再把锁定的制作标准交给 ChatGPT。这里的画面仅是配色和镜头示意，不是实际生成效果。',
   '<a class="button" href="#/handoff/'+e(p.id)+'">制作交接 →</a>')+
  '<div class="director-head"><div><span class="director-kicker">正在制作</span><h2>'+e(p.title)+'</h2><p>'+e(p.category)+' · '+e(c.thesis)+'</p></div>'+
  '<span class="director-status '+(locked?'ready':'')+'">'+(locked?'已锁定 · 可派单':'创作设定待确认')+'</span></div>'+
  '<div class="director-tabs">'+tabs.map((t,i)=>'<button type="button" data-director-step="'+i+'" class="'+(step===i?'active':'')+'"><span>0'+(i+1)+'</span>'+t+'</button>').join('')+'</div>'+
- (step===0?'<section class="box director-section"><h2>选择一套贯穿九张漫画的视觉语言</h2><p class="minor">选择后，统一色板、线条、灯光、构图与禁用项将写入正式生产任务。此处不是实际生图展示。</p>'+styleCards(c)+stylePreview(c)+
+ (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">选择后，统一色板、线条、灯光、构图与禁用项将写入正式生产任务。此处不是实际生图展示。</p>'+styleCards(c)+stylePreview(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 人物设定 →</button></div></section>':'')+
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
- (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，先生成可修改的九格草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
+ (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，生成可修改的分镜草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
  storyControls(p,c)+
  '<div class="director-actions"><button type="button" class="button" data-director-action="adopt">保留已编辑九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
  framePreview(p,c)+'</section>':'')+
@@ -307,7 +308,7 @@ async function action(type,p){
  if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
  if(type==='adopt'){
   if(p.handoff?.repoQueuedAt)throw Error('本版任务已经派单，不可重签原稿');
-  if(!Array.isArray(p.panels)||p.panels.length!==9||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
+  if(!Array.isArray(p.panels)||(p.panels.length<4||p.panels.length>60)||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
   const c=ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
   if(!c.storyboardProvenance)c.storyboardProvenance={method:'manual_unverified',provider:'manual',model:null,at:new Date().toISOString(),authorEdited:true};
   setChange(p,'保留并提交已有九格分镜供作者审稿');render();notify('九格脚本已保留，没有覆盖已有画面或对白');return
