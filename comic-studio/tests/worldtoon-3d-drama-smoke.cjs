@@ -25,9 +25,9 @@ const project={
  panels:Array.from({length:9},()=>({title:'',scene:'',caption:'',dialogue:'',prompt:'',image:''})),
  handoff:{mode:'original'},description:'重生之银行富婆和成年男明星的恋爱修罗场'
 };
-const directorEvents={};
+const directorEvents={click:[]};
 const dirCtx={
- window:{WTStyleV3:atlas},document:{addEventListener(t,fn){if(t==='click')directorEvents.click=fn}},location:{hash:'#/test'},
+ window:{WTStyleV3:atlas},document:{addEventListener(t,fn){if(t==='click')directorEvents.click.push(fn)}},location:{hash:'#/test'},
  queueMicrotask(){},selected:()=>project,persist(){},e:x=>String(x??''),heroHeader:()=>'',
  setChange(){},markDirty(){},render(){},notify(){},now:()=>new Date().toISOString(),
  mediaSrc:x=>x,putMedia:async()=>{},getMedia:async()=>null,
@@ -48,7 +48,7 @@ assert.equal(brief.characters[0].portrait_reference.sha256,'a'.repeat(64));
 assert.equal(brief.narrative.genre,'viral-melodrama');
 const directorUI=dirCtx.window.wtCreativeDirector();
 assert.match(directorUI,/电影级 3D 拟人角色/,'visual library displays 3D character style');
-directorEvents.click({target:{closest:selector=>({dataset:{directorStep:'2'}})},preventDefault(){},stopImmediatePropagation(){}});
+directorEvents.click[0]({target:{closest:selector=>({dataset:{directorStep:'2'}})},preventDefault(){},stopImmediatePropagation(){}});
 const narrativeUI=dirCtx.window.wtCreativeDirector();
 assert.match(narrativeUI,/狗血网红爽剧/,'narrative UI offers melodrama arc');
 assert.match(read('creative-director.js'),/data-director-portrait-upload/,'upload control and handler');
