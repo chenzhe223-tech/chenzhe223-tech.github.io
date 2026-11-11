@@ -13,8 +13,8 @@ const app=read('app.js'),html=read('index.html'),engine=read('worldtoon-v3.js'),
 assert.match(app,/'workspace'[,']/, 'workspace exists in legacy router');
 assert.match(app,/nav\('workspace\/'\+p\.id\)/,'new project opens integrated workspace');
 assert.match(app,/APP_KEY='davylab-comic-press-v1'/,'existing local storage key preserved');
-assert.match(html,/worldtoon-v3\.js\?v=4\.0\.0/,'new workspace is bundled into the Worker-allowlisted script');
-assert.match(html,/worldtoon-v3\.css\?v=4\.0\.0/,'new workspace CSS is bundled into the Worker-allowlisted stylesheet');
+assert.match(html,/worldtoon-v3\.js\?v=4\.0\.1/,'new workspace is bundled into the Worker-allowlisted script');
+assert.match(html,/worldtoon-v3\.css\?v=4\.0\.1/,'new workspace CSS is bundled into the Worker-allowlisted stylesheet');
 assert.match(engine,/WORKFLOW_V4_EMBED/,'built script includes v4 module');
 assert.ok(engine.trimEnd().endsWith(read('workflow-v4.js').trim()),'deployed script matches canonical v4 code');
 assert.ok(read('worldtoon-v3.css').trimEnd().endsWith(css.trim()),'deployed stylesheet matches canonical v4 code');
@@ -30,6 +30,7 @@ assert.match(archive,/Keep the last verified catalog/,'stale sync must not hide 
 assert.match(app,/wfMode\(p\)!=='original'&&!validSources\(p\)\.length/,'original fiction must not require fabricated news URLs');
 assert.match(app,/task\.producer==='WorkBuddy'/,'handoff pack uses the chosen production agent');
 assert.match(css,/@media\(max-width:720px\)/,'mobile workspaces collapse into readable layouts');
+assert.match(read('workflow-v4.js'),/wtArchiveApi\('deepseek-status'\)/,'DeepSeek status uses authenticated read-only probe');
 assert.match(css,/\.wt4-series-chapters/,'series navigation is inside the workspace');
 const eventCallbacks={};
 const p={id:'p1',title:'未命名新作',category:'科幻',panels:Array.from({length:9},()=>({scene:'',image:''})),handoff:{},productionAgent:'ChatGPT'};
