@@ -8,7 +8,7 @@
 .wt3-books{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:20px;margin-top:22px}
 .wt3-book{background:#fffdf9;border:1px solid var(--wt3-edge);border-radius:13px;overflow:hidden;min-width:0;box-shadow:0 4px 13px rgba(32,40,31,.035)}
 .wt3-cover{display:block;position:relative;aspect-ratio:3/4;background:#e8e5db;overflow:hidden}
-.wt3-cover img{width:100%;height:100%;object-fit:contain;display:block;background:#eeeae0}
+.wt3-cover img{position:absolute;inset:0;z-index:2;width:100%;height:100%;object-fit:contain;display:block;background:#eeeae0}
 .wt3-placeholder{width:100%;height:100%;display:grid;place-items:center;background:linear-gradient(135deg,#e4dac9,#b6bcae);color:#313a32;font-family:Georgia,serif;letter-spacing:4px;text-align:center;font-size:25px;line-height:1.4}
 .wt3-book-info{padding:13px 15px 17px;display:grid;gap:6px}
 .wt3-book-info small{font-size:11px;color:#657167}
@@ -29,3 +29,7 @@
 .wt3-sop-grid span{padding:12px 14px;line-height:1.7;background:#f5f2eb;border-radius:10px;font-size:12px}
 @media(max-width:800px){.wt3-controls{grid-template-columns:repeat(2,minmax(0,1fr))}.wt3-seed{grid-column:1/-1}.wt3-sop-grid{grid-template-columns:1fr}}
 @media(max-width:520px){.wt3-books{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.wt3-book-info{padding:10px}.wt3-book-info h3{font-size:14px}.wt3-work-panel{padding:15px}.wt3-controls{grid-template-columns:1fr}.wt3-seed{grid-column:auto}.wt3-work-panel .button{white-space:normal}}
+
+/* Published WeChat cover remains visible when the image loads; fallback underneath */
+.wt3-cover .wt3-placeholder{position:absolute;inset:0;z-index:1}
+.wt3-shelf-note{font-size:12px;line-height:1.65;color:#6d716a;margin:8px 0 12px;max-width:850px}
