@@ -366,10 +366,12 @@
      '<button class="button" data-archive="refresh">同步发表回执</button></div></section>';
  }
  function workspace(){
-   const chosen=selected();
-   const p=chosen?.id==='sample-ba-zong-001'
-      ?activeProjects().find(x=>x.id!=='sample-ba-zong-001')||null:chosen;
-   if(p&&p!==chosen)ui.selected=p.id; // Route legacy editors to the same actual project, not demo content.
+   const candidates=activeProjects().filter(x=>x.id!=='sample-ba-zong-001')
+     .sort((a,b)=>String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));
+   const explicit=location.hash.startsWith('#/workspace/')?selected():null;
+   const chosen=explicit||(ui.wt4LastId?findProject(ui.wt4LastId):null)||candidates[0]||selected();
+   const p=chosen?.id==='sample-ba-zong-001'?null:chosen;
+   if(p){ui.wt4LastId=p.id;ui.selected=p.id;} // UI context only; never rewrite the stored project.
    if(!p||p.id==='sample-ba-zong-001')return '<section class="wt4-workspace wt4-empty">'+
       '<div class="kicker">WORLD/TOON / NEW PROJECT</div><h1>开始一部好漫画</h1>'+
       '<p>从一句话、热门选题或已有系列进入。创建后在同一工作空间完成整个生产流程。</p>'+
@@ -405,7 +407,8 @@
      '<footer class="wt4-footer">自动保存本地草稿；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
  }
  function overview(){
-   const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001');
+   const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001')
+     .sort((a,b)=>String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));
    const localIds=new Set(rows.map(p=>p.handoff?.taskId).filter(Boolean));
    const remoteOnly=((typeof wtArchiveSnapshot==='undefined'?null:wtArchiveSnapshot)?.library?.items||[])
      .filter(r=>r?.task_id&&!localIds.has(r.task_id));
