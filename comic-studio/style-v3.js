@@ -837,7 +837,25 @@ CATALOG.forEach((style,index)=>{
  };
  if(style.number===21)style.guide.source='ChatGPT原创画风视觉探索图中的第21种独立插画裁切，仅作风格选择参考；非正式生图模型样张';
 });
-const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松'];
+// 3D character directions are curated visual specifications only: no invented model sample.
+// Real output requires a reference-aware producer and independently approved first pilot.
+const THREE_D_STYLES=[
+ {style_id:'cinematic-3d-character',number:22,name:'电影级 3D 拟人角色',name_en:'Cinematic 3D Character',category:'3D 与数字角色',subtitle:'肖像相似度优先 · 真实面部比例与精致电影光',subjects:'真人照片转拟人角色 · 成人肖像 · 电影短剧',palette:['#e6d7c7','#332b29','#ab7757'],material:'高质量三维角色、自然皮肤微纹理、可信面部骨相、细腻发丝、电影级服装材质',lighting:'柔和轮廓光与受控自然补光，避免磨皮',layout:'镜头中的容貌比例稳定、表情自然、全身与近景连续',negative:'橡皮塑料脸、过度美颜、眼睛夸张变形、身份漂移、未授权肖像、浮夸霓虹'},
+ {style_id:'stylized-3d-toon',number:23,name:'高级 3D 卡通拟人',name_en:'Stylized 3D Toon',category:'3D 与数字角色',subtitle:'夸张表情与真人辨识度平衡 · 轻喜剧',subjects:'都市轻喜剧 · 真人转卡通 · 角色连载',palette:['#e9cfaf','#354b43','#db8e64'],material:'高端三维卡通造型、比例适度夸张、真实骨相对应、织物和头发具有层次',lighting:'温暖电影棚光、细腻环境光遮蔽与柔和阴影',layout:'夸张动作但脸型、发型与关键辨识点一致；丰富表情',negative:'廉价玩具塑料、高饱和荧光、儿童化畸形比例、面部漂移'},
+ {style_id:'editorial-3d-graphic',number:24,name:'时尚杂志 3D 图像小说',name_en:'Editorial 3D Graphic Novel',category:'3D 与数字角色',subtitle:'国际时尚影像 · 3D 人物结合漫画分镜',subjects:'现代都市 · 豪门职场 · 女性成长',palette:['#e9dfd2','#352c29','#a87658'],material:'电影级三维人物、编辑影像质感、高级织物与微妙的手绘后期层次',lighting:'时尚大片柔光，明暗精准克制',layout:'封面级大特写、竖屏叙事、角色写实容貌一致',negative:'低俗曝光、广告塑料感、浮夸珠宝、缺乏叙事的摆拍'},
+ {style_id:'dramatic-3d-vertical',number:25,name:'爆款短剧 3D 漫画',name_en:'Vertical Drama 3D',category:'3D 与数字角色',subtitle:'重生逆袭 · 网红豪门 · 夸张戏剧性',subjects:'重生女主 · 银行富婆 · 娱乐圈反转 · 狗血爽剧',palette:['#e8d7c5','#362b2e','#bb624e'],material:'高精度三维成人角色，可信面部五官与妆发，时装层次，夸张情绪但避免塑料质感',lighting:'强叙事对比光、都市傍晚环境和精致反射',layout:'竖屏视觉冲突、人物关系反打、每2-3镜头一次钩子',negative:'人脸失真、低俗物化、刻板偏见、虚构内容影射真实人物'}
+];
+for(const x of THREE_D_STYLES){
+  x.version='3.2.0';
+  x.reference={status:'not_licensed',url:null};
+  x.sample={status:'not_generated',url:null};
+  x.guide={status:'not_generated',url:null};
+  x.quality_capability={standard:false,premium:false,cinematic:false};
+  x.production_mode='ChatGPT_or_WorkBuddy_pilot_required';
+  CATALOG.push(x);
+}
+
+const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松','3D 与数字角色'];
 let filter='全部';
 const esc=v=>String(v??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
 const STYLES=CATALOG.map(x=>({id:x.style_id,name:x.name,subtitle:x.subtitle,palette:x.palette,material:x.material,lighting:x.lighting,layout:x.layout,negative:x.negative,version:x.version}));
