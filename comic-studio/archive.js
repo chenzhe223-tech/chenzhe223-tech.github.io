@@ -10,7 +10,7 @@ async function wtArchiveApi(path,options={}){
   const headers=new Headers(options.headers||{});const access=wtArchiveAuth();
   if(access)headers.set('authorization','Bearer '+access);
   if(options.body&&!headers.has('content-type'))headers.set('content-type','application/json');
-  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),15000);
+  const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),String(path).startsWith('assets?')?45000:15000);
   // Cache-bust GETs until existing clients upgrade their older, API-caching Service Worker.
   const method=String(options.method||'GET').toUpperCase();
   const endpoint='/api/archive/'+path+(method==='GET'?'?rev='+WT_ARCHIVE_CLIENT_REV+'&_='+Date.now():'');
