@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
 const vm=require('node:vm');
+const crypto=require('node:crypto');
 const base=path.resolve(__dirname,'..');
 const read=name=>fs.readFileSync(path.join(base,name),'utf8');
 for(const name of ['style-v3.js','creative-director.js','worldtoon-v3.js','app.js','archive.js']){
@@ -18,7 +19,21 @@ for(const id of styleIds){
  assert.ok(entry,id+' exists');
  assert.equal(entry.category,'3D 与数字角色');
  assert.equal(entry.sample.status,'not_generated','no fictitious finished render');
+ const guide=entry.guide;
+ assert.equal(guide.status,'original_guide','each style must carry an actual original rendered image');
+ assert.ok(atlas.isGuide(guide),'guide must have a verified first-party URL and SHA256');
+ assert.match(guide.url,/^\/assets\/style-(22|23|24|25)-3d-[a-z]+\.webp$/,'asset URL must match Worker allowlist');
+ const bytes=fs.readFileSync(path.join(base,guide.url.slice(1)));
+ assert.equal(bytes.subarray(0,4).toString('ascii'),'RIFF','original file must be WebP binary');
+ assert.equal(bytes.subarray(8,12).toString('ascii'),'WEBP','image format must be correct');
+ assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),guide.sha256,'the original image bytes must match SHA256 metadata');
+ assert.ok(bytes.length>18000,'image must contain nontrivial raster detail');
 }
+const imageGallery=atlas.cards({styleId:'cinematic-3d-character'});
+for(const n of [22,23,24,25])assert.match(imageGallery,new RegExp('style-'+n+'-3d-[a-z]+\\.webp'),'style '+n+' appears with actual image in gallery');
+assert.match(imageGallery,/wt-v3-photo-3d/,'3D cards should receive dedicated image styling');
+assert.match(atlas.detail({styleId:'dramatic-3d-vertical'}),/style-25-3d-drama\.webp/,'selected style shows its own enlarged visual');
+assert.match(fs.readFileSync(path.join(base,'style-v3.css'),'utf8'),/\.wt-v3-photo-3d/,'the asset crops are styled on mobile');
 const project={
  id:'p-drama',title:'银行富婆的热搜人生',category:'都市网红短剧',
  plotGenre:'viral-melodrama',dramaSubtype:'rebirth-bank-rich',dramaIntensity:5,
