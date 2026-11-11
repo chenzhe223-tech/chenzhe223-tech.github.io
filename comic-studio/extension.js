@@ -342,6 +342,12 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
    }
   }catch(e){story.error=String(e.message||e);notify(story.error);render()}
  },true);
+ document.addEventListener('input',ev=>{
+  const x=ev.target;
+  if(x?.id==='story-query')story.query=String(x.value||'').slice(0,90);
+  if(x?.id==='story-synopsis')story.synopsis=String(x.value||'').slice(0,4800);
+  if(x?.id==='story-rights-url')story.rightsURL=String(x.value||'').slice(0,500);
+ },true);
  document.addEventListener('change',ev=>{
   const x=ev.target;
   if(x?.dataset?.storyBeat!==undefined){if(x.checked)story.chosen.add(x.dataset.storyBeat);
