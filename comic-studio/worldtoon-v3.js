@@ -150,7 +150,7 @@
     v.creativeDirection.thesis=v.description;
   }
   v.panels=Array.from({length:p.panels.length},(_,i)=>makePanel(i));
-  data.projects.unshift(v);ui.selected=v.id;persist();nav('director/'+v.id);
+  data.projects.unshift(v);ui.selected=v.id;persist();nav('workspace/'+v.id+'/1');
   notify('新续章已创建；人物画风作为参考锁定，仍须作者审阅新剧情');
  }
  const originalStudio=studio;
