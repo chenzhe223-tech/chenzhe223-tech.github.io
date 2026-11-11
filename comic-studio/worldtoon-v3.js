@@ -5,6 +5,17 @@
 (function(){
  const h=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const supported=['已发表','制作中','待制作'];
+ const expandUI={pending:null,busy:false,projectId:null,message:'',kind:'info'};
+ function showExpandStatus(kind,message,projectId){
+   expandUI.kind=kind;expandUI.message=String(message||'');expandUI.projectId=projectId||expandUI.projectId;
+   const node=document.querySelector('#wt3-expand-feedback');
+   if(node){node.textContent=expandUI.message;node.dataset.state=kind;node.hidden=!expandUI.message;}
+ }
+ function showExpandConsent(on){
+   const node=document.querySelector('#wt3-expand-consent');
+   if(node)node.hidden=!on;
+ }
+
  const remote=()=>wtArchiveSnapshot?.library?.items||[];
  // Same read-only WeChat archive as the Production Desk. Publication records
  // are evidence of a WeChat article, NOT independent proof of a finished comic.
@@ -168,9 +179,16 @@
    '<div class="wt3-controls"><div class="field wt3-seed"><label>一句话构思</label><textarea id="wt3-seed" rows="2" placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+h(p.ideaSeed||'')+'</textarea></div>'+
    '<div class="field"><label>制作 Agent</label><select id="wt3-agent" '+(locked?'disabled':'')+'><option value="ChatGPT"'+(agent==='ChatGPT'?' selected':'')+'>ChatGPT 创作 · WorkBuddy 发表</option><option value="WorkBuddy"'+(agent==='WorkBuddy'?' selected':'')+'>WorkBuddy 创作与发表</option></select></div>'+
    '<div class="field"><label>漫画篇幅 · 4–60 格</label><input id="wt3-count" type="number" min="4" max="60" value="'+count+'" '+(locked?'disabled':'')+'></div></div>'+
-   '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand">DeepSeek 扩写并推荐篇幅</button>'+
+   '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand" '+(expandUI.busy?'disabled':'')+'>DeepSeek 扩写并推荐篇幅</button>'+
    '<button type="button" class="button" data-wt3-action="resize" '+(locked?'disabled':'')+'>应用篇幅</button>'+
    '<button type="button" class="button" data-wt3-action="director">进入创意导演台</button></div>'+
+   '<div class="wt3-expand-consent" id="wt3-expand-consent" '+(expandUI.pending?.projectId===p.id?'':'hidden')+'>'+
+   '<p><strong>确认本次 AI 扩写</strong> · 将调用真实 DeepSeek API，可能按 Token 产生费用。确认后才开始请求，不会自动重复计费。</p>'+
+   '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand-confirm">确认并开始生成</button>'+
+   '<button type="button" class="button" data-wt3-action="expand-cancel">取消</button></div></div>'+
+   '<p class="wt3-expand-feedback" id="wt3-expand-feedback" role="status" aria-live="polite" '+
+   (expandUI.projectId===p.id&&expandUI.message?'data-state="'+h(expandUI.kind)+'"':'hidden')+'>'+
+   (expandUI.projectId===p.id?h(expandUI.message):'')+'</p>'+
    '<div class="wt3-series"><h3>系列与续章</h3><p class="minor">'+h(p.seriesTitle||'尚未创建系列')+(p.seriesId?' · 第'+(p.seriesEpisode||1)+'章':'')+'</p>'+
    '<div class="buttons"><button type="button" class="button" data-wt3-action="series-new" '+(locked?'disabled':'')+'>设为新系列首章</button>'+
    '<button type="button" class="button" data-wt3-action="series-next" '+(!p.seriesId?'disabled':'')+'>接续创作下一章</button></div></div>'+
@@ -197,13 +215,35 @@
    if(op==='series-next'){seriesContinue(p);return}
    if(op==='director'){nav('director/'+p.id);return}
    if(op==='expand'){
+     if(expandUI.busy)throw Error('DeepSeek 正在处理，请勿重复提交');
      if(p.handoff?.repoQueuedAt)throw Error('已派单作品不能被AI覆盖');
      const idea=document.querySelector('#wt3-seed')?.value?.trim()||'';
      if(idea.length<8||idea.length>1800)throw Error('请输入8–1800字的漫画构思');
-     if(!confirm('将调用真实 DeepSeek API 生成可编辑编剧草稿。可能产生按 Token 计费的费用；确认本次请求吗？'))return;
-     b.disabled=true;b.textContent='正在生成剧本…';p.ideaSeed=idea;setChange(p,'作者发起 DeepSeek 剧本扩写');
+     expandUI.pending={projectId:p.id,idea};expandUI.projectId=p.id;
+     showExpandConsent(true);
+     showExpandStatus('confirm','请在下方确认本次真实模型调用及可能的 Token 费用。',p.id);
+     return;
+   }
+   if(op==='expand-cancel'){
+     expandUI.pending=null;showExpandConsent(false);
+     showExpandStatus('info','已取消：没有调用模型，也不会产生本次请求费用。',p.id);return;
+   }
+   if(op==='expand-confirm'){
+     if(expandUI.busy)throw Error('DeepSeek 正在处理，请勿重复提交');
+     const pending=expandUI.pending;
+     if(!pending||pending.projectId!==p.id)throw Error('请先输入构思并确认调用');
+     if(p.handoff?.repoQueuedAt)throw Error('已派单作品不能被AI覆盖');
+     const idea=document.querySelector('#wt3-seed')?.value?.trim()||'';
+     if(idea!==pending.idea)throw Error('创意内容发生变化，请重新点击扩写以确认');
+     expandUI.busy=true;expandUI.projectId=p.id;expandUI.pending=null;
+     showExpandConsent(false);
+     b.disabled=true;b.textContent='AI 剧本生成中…';
+     const first=document.querySelector('[data-wt3-action="expand"]');if(first)first.disabled=true;
+     showExpandStatus('loading','正在连接 DeepSeek 并生成分镜，请不要重复提交。模型响应可能需要约一分钟。',p.id);
+     p.ideaSeed=idea;setChange(p,'作者确认真实 DeepSeek 剧本扩写请求');
      const response=await wtArchiveApi('deepseek-expand',{method:'POST',body:JSON.stringify({idea,title:p.title,category:p.category,
        panel_count:p.panels.length,series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
+     if(response.method!=='verified_model_response')throw Error('没有收到可验证的真实模型响应，拒绝用模板内容冒充结果');
      const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length<4||x.panels.length>60)throw Error('DeepSeek 未返回完整的分镜结构');
      if(p.handoff?.repoQueuedAt)throw Error('该作品已经派单，拒绝覆盖');
      p.title=String(x.title||p.title).slice(0,180);p.subtitle=String(x.subtitle||'').slice(0,240);
@@ -221,10 +261,20 @@
      c.storyboardProvenance={method:'verified_model_response',provider:'deepseek',model:response.model||'deepseek-flash',
        at:now(),author_reviewed:false,analysis:String(x.reasoning||'').slice(0,600)};
      p.characters=wtDirector.castText(c);setChange(p,'DeepSeek 正式 API 返回可编辑的 '+p.panels.length+'格漫画剧本');
+     showExpandStatus('success','真实模型生成成功：'+p.panels.length+' 格分镜已保存，正在进入创意导演台。',p.id);
      nav('director/'+p.id);notify('DeepSeek 结构化剧本已生成；请在导演台逐格审阅和锁定');
    }
-  }catch(error){notify('操作未完成：'+String(error.message||error).slice(0,130))}
-  finally{if(document.contains(b)){b.disabled=false;if(b.dataset.wt3Action==='expand')b.textContent='DeepSeek 扩写并推荐篇幅'}}
+  }catch(error){
+    const msg='操作未完成：'+String(error.message||error).slice(0,250);
+    if(['expand','expand-confirm','expand-cancel'].includes(b.dataset.wt3Action)){
+      expandUI.pending=null;showExpandConsent(false);showExpandStatus('error',msg,p.id);
+    }
+    notify(msg);
+  }finally{
+    if(b.dataset.wt3Action==='expand-confirm')expandUI.busy=false;
+    if(document.contains(b)){b.disabled=false;if(b.dataset.wt3Action==='expand-confirm')b.textContent='确认并开始生成'}
+    const first=document.querySelector('[data-wt3-action="expand"]');if(first)first.disabled=false;
+  }
  },true);
  document.addEventListener('change',ev=>{
   if(ev.target?.id==='wt3-agent'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.productionAgent=ev.target.value==='WorkBuddy'?'WorkBuddy':'ChatGPT';setChange(p,'切换 SOP 生产者：'+p.productionAgent);render()}}
