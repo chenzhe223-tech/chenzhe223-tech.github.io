@@ -19,7 +19,7 @@
    }catch{return ''}
  };
  const sharedRows=()=>sharedArchive()?.status==='synced'
-   ?(sharedArchive().articles||[]).filter(a=>wxLink(a.url))
+   ?(sharedArchive().articles||[]).filter(a=>a?.format==='贴图'&&wxLink(a.url))
    :[];
  const isDone=r=>r?.status==='published'&&r.receipt?.status==='published'&&/^https:\/\/mp\.weixin\.qq\.com\/s\//.test(r.receipt.url||'');
  const kind=(p,r)=>{
@@ -44,7 +44,7 @@
    }
    const items=[...map.values()].map(x=>({...x,state:kind(x.p,x.r)}));
    // Deduplicate verified comics against their own WeChat publication records.
-   // Other genuine publications are shown with their original format label.
+   // Only genuine WeChat image-post records (贴图) appear on this shelf; articles remain in the shared publication archive.
    const verifiedUrls=new Set(items.filter(x=>isDone(x.r)).map(x=>x.r.receipt.url));
    const seenPublications=new Set(verifiedUrls);
    for(const pub of sharedRows()){
@@ -84,12 +84,12 @@
          if(url&&img.isConnected)img.src=url;
        }catch{img.alt='本地封面暂不可用'}});
    });
-   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','已发表内容与公众号发表档案同源；正式漫画仍经 GitHub 验收与 WorkBuddy 回执核对。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
+   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','只展示公众号贴图与已核验漫画，正式漫画仍经 GitHub 验收与 WorkBuddy 回执核对。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
     '<div class="wt3-shelf-meta">GitHub 真实归档：'+(wtArchiveSnapshot?rows.length+' 部':'尚未同步')+
-    ' · 公众号共享发表档案：'+(sharedArchive()?.status==='synced'?sharedRows().length+' 篇':'尚未同步')+
+    ' · 公众号已发表贴图：'+(sharedArchive()?.status==='synced'?sharedRows().length+' 篇':'尚未同步')+
     ' · 仅核验漫画才标记为漫画成品'+(wtArchiveError?'<p class="wt3-error">私有仓库同步：'+h(wtArchiveError)+'</p>':'')+'</div>'+
     '<div class="toolbar"><div class="tabbar wt3-tabs">'+tabs+'</div><input class="search" id="librarySearch" value="'+h(ui.search||'')+'" placeholder="搜索漫画、系列或题材" aria-label="搜索漫画"></div>'+
-    (cat==='已发表'&&sharedRows().length?'<p class="wt3-shelf-note">公众号已发表文章和贴图来自共享发表档案；只有通过 GitHub 验收与回执核对的作品才标记为正式漫画。</p>':'')+
+    (cat==='已发表'&&sharedRows().length?'<p class="wt3-shelf-note">本栏目仅展示公众号已发表贴图；普通图文文章留在公众号发表档案，正式漫画仍需 GitHub 验收和 WorkBuddy 回执。</p>':'')+
     (cards?'<div class="wt3-books">'+cards+'</div>':'<div class="empty"><b>这一分类暂无作品</b><p>可同步公众号发表档案；未完成漫画在制作中或待制作查看。</p></div>')+'</div>';
  }
  function resize(p,n){
