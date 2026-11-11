@@ -66,13 +66,14 @@
     const name=h(publication?.title||r?.title||p?.title||'未命名作品'),series=h(p?.seriesTitle||r?.series?.id||''),episode=p?.seriesEpisode||r?.series?.episode||null;
     const published=isDone(r);
     const href=publication?h(publication.url):published?h(r.receipt.url):p?'#/reader/'+encodeURIComponent(p.id):tid?'https://github.com/chenzhe223-tech/worldtoon/tree/main/tasks/'+encodeURIComponent(tid):'#/studio';
-    const meta=publication?'公众号发表档案 · '+h(publication.format||'文章'):h(r?.category||p?.category||'原创漫画');
-    const desc=publication?'发表于 '+h(publication.publishedAt||'')+' · '+h(publication.format||'公众号内容')+
-       (publication.task_id?' · 漫画工单待核对':''):h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''));
+    // Avoid repeating format and status in three different lines of every card.
+    const meta=publication?h(publication.format||'公众号内容'):h(r?.category||p?.category||'原创漫画');
+    const desc=publication?('发布于 '+h(publication.publishedAt||'日期待同步')+
+       (publication.task_id?' · 漫画工单待核对':'')):h(p?.subtitle||(r?.status==='blocked'?'制作进度需复核':p?.description||''));
     return '<article class="wt3-book"><a href="'+href+'"'+(published||publication||(!p&&tid)?' target="_blank" rel="noopener noreferrer"':'')+' class="wt3-cover" aria-label="'+name+'">'+src+'</a>'+
-     '<div class="wt3-book-info"><small>'+meta+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
-     '<p>'+desc+'</p>'+
-     '<span>'+h(state)+(publication?' · '+h(publication.format||'公众号内容'):r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
+     '<div class="wt3-book-info"><small class="wt3-book-category">'+meta+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
+     '<p class="wt3-book-description">'+desc+'</p>'+
+     '<span class="wt3-book-state">'+h(state)+(publication?'':r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
    }).join('');
    queueMicrotask(()=>{if(ui.route!=='library')return;
      document.querySelectorAll('.wt3-shelf .wt3-cover img').forEach(img=>{
