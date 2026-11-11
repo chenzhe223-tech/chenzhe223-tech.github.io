@@ -89,8 +89,8 @@
            img.dataset.wt3Retry='1';
            try{
              const u=new URL(img.currentSrc||img.src);
-             if(/(^|\\.)qpic\\.cn$/i.test(u.hostname)&&/\\/0$/.test(u.pathname)){
-               u.pathname=u.pathname.replace(/\\/0$/,'/640');img.src=u.href;return;
+             if(u.hostname.toLowerCase().endsWith('.qpic.cn')&&u.pathname.endsWith('/0')){
+               u.pathname=u.pathname.slice(0,-2)+'/640';img.src=u.href;return;
              }
            }catch{}
          }
