@@ -1,0 +1,24 @@
+name: WorldToon AI storyboard live browser acceptance
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/tests/storyboard-live-browser.cjs'
+      - '.github/workflows/worldtoon-storyboard-live.yml'
+permissions:
+  contents: read
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install Chromium for authentic UI checks
+        run: |
+          npm install --no-save --no-audit playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Cloudflare API security, mobile and desktop storyboard UI
+        run: node comic-studio/tests/storyboard-live-browser.cjs
