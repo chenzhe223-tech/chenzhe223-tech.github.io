@@ -167,6 +167,7 @@ function payload(p){
   narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
   characters:c.cast.map(x=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature)})),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
+  storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
   cover_brief:clean(c.cover),
   visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,role:'visual_reference_only'}))
  };
@@ -307,6 +308,7 @@ async function action(type,p){
   if(p.handoff?.repoQueuedAt)throw Error('本版任务已经派单，不可重签原稿');
   if(!Array.isArray(p.panels)||p.panels.length!==9||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
   const c=ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
+  if(!c.storyboardProvenance)c.storyboardProvenance={method:'manual_unverified',provider:'manual',model:null,at:new Date().toISOString(),authorEdited:true};
   setChange(p,'保留并提交已有九格分镜供作者审稿');render();notify('九格脚本已保留，没有覆盖已有画面或对白');return
  }
  if(type==='approve'){approve(p);return}
@@ -340,7 +342,7 @@ document.addEventListener('change',ev=>{
   if(el.dataset.directorReviewed){c.reviewed=el.checked;c.approval=null;setChange(p,'更新九格分镜审阅状态');render();return}
   if(el.dataset.directorField){c[el.dataset.directorField]=el.value.slice(0,1600)}
   if(el.dataset.directorCast){const i=Number(el.dataset.characterIndex);if(!c.cast[i])return;c.cast[i][el.dataset.directorCast]=el.value.slice(0,500);p.characters=castText(c)}
-  if(el.dataset.directorPanel){const i=Number(el.dataset.panelIndex);if(!p.panels[i])return;p.panels[i][el.dataset.directorPanel]=el.value.slice(0,1700);c.drafted=true}
+  if(el.dataset.directorPanel){const i=Number(el.dataset.panelIndex);if(!p.panels[i])return;p.panels[i][el.dataset.directorPanel]=el.value.slice(0,1700);c.drafted=true;if(c.storyboardProvenance)c.storyboardProvenance.authorEdited=true}
   commitEdit(p,'调整并保存导演台创意设定');render();
  }catch(err){notify(String(err.message||err));render()}
 },true);
