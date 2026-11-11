@@ -294,7 +294,8 @@ function castEditor(c){
  '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
  '</div></article>').join('')+'</div>'+ 
- '<div class="director-portrait-handoff"><button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+ 
+ '<div class="director-portrait-handoff"><button type="button" class="button" data-director-style="cinematic-3d-character">一键选用电影级 3D 拟人画风</button>'+ 
+ '<button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+ 
  '<p>仅打包已经授权的原始照片、角色设定、当前画风与 SHA256，交给 ChatGPT 生产真实角色定妆图。此按钮不会调用收费生图模型或上传照片。</p></div>';
 }
 function framePreview(p,c){
