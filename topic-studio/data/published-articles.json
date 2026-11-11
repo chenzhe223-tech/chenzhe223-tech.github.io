@@ -4,9 +4,53 @@
   "account_ghid": "",
   "sync_method": "workbuddy-browser",
   "sync_status": "synced_via_browser",
-  "last_synced_at": "2026-11-10T01:00:52.000+08:00",
+  "last_synced_at": "2026-11-12T01:00:52.000+08:00",
   "notes": "Auto-synced from DAVYLAB WeChat Official Account backend 发表记录 via logged-in browser session. Drafts and previews excluded.",
   "articles": [
+    {
+      "id": "fNXwLAS1ACHdku-DzYo4JA",
+      "title": "蜀汉有限公司：一场持续42年的创业",
+      "url": "https://mp.weixin.qq.com/s/fNXwLAS1ACHdku-DzYo4JA",
+      "publishedAt": "2026-11-11",
+      "column": "用漫画观察这个世界",
+      "format": "贴图",
+      "summary": "公元 221 年，成都城里，一家怀揣雄心的「创业公司」开张了。\n\n它有远大的愿景、能干的伙伴，也有绕不过去的资源、组织与战略难题。42 年后，蜀汉落下帷幕。\n\n如果把这段历史写成一份创业复盘：理想怎样落地？决定如何付诸实践？一个组织，又怎样穿过接班、成本与竞争的考验？\n\n这次，用九张漫画重新读懂蜀汉。\n\n画面顺序：01 起步｜02 愿景｜03 现实｜04 人才｜05 北望｜06 传承｜07 经营｜08 终局｜09 回望\n\nDAVY LAB'S NOTE：理想给一个时代方向，现实让每个决定有了重量。一个故事的价值，不只在它是否成功，也在于它留下了哪些值得我们继续思考的问题。\n\n【说明】本作品参照《三国志》相关记载，对历史结构做现代企业化的幽默改写。「公司」「融资」「账本」都是叙事隐喻；阿蜀、老掌柜、算先生为原创虚构角色，画中对话并非历史人物真实言论，也不指向任何现实个人、企业或机构。史实与虚构的边界、原典出处源自网络信息。\n\nWORLD/TOON · By DAVYLAB\n<a class=\"wx_topic_link\" topic-id=\"mwaf1wf3-06dygy\" style=\"color: var(--weui-LINK) !important;\" data-topic=\"1\" data-recommend=\"\">#三国历史</a> #蜀汉 #原创漫画",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5KCZNqZyS4ia1hYicY0FHBIrjajZ6Bfllfszb0ADWBstKJkRCSadQJAEQ4vsq4Genro3puKJvMJHEUAWguwobcSDt5ULCOZiab7Tg/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "v8sEHwsvQybfgotI2nM0ig",
+      "title": "交不出卷的机器",
+      "url": "https://mp.weixin.qq.com/s/v8sEHwsvQybfgotI2nM0ig",
+      "publishedAt": "2026-11-10",
+      "column": "用漫画观察这个世界",
+      "format": "贴图",
+      "summary": "阿呆在印刷间捡起一张数学草稿，从桌边一路读到门口，结果又读回了第一句。阿瓜顺着纸带，打开了机盖。\n\nMIT CSAIL 的一次实验里，GPT-6 Astra 调整了 Qwen3.5-0.8B 约 0.016% 的权重。九幅漫画，跟着阿呆与阿瓜看清那卷写不完的草稿，以及终于出现的最后一行。\n\n本作品是基于公共议题创作的虚构漫画，AI 辅助绘制，不构成对真实人物的指控。研究原文：https://rikiyat.github.io/blog/weight-space-programming/\n\n— WORLD/TOON · By DAVYLAB",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5KwwH0TWuVHgBVn7AKqULbNdYS1SHT6MSdvbibISGHBlc0nQNhGBU6sYIr1qYTtnlMmUJ9K8mzM44ZlLl418zcpiauCTGp3ribCCM/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "NeBcQZp2WRnwrTPY-FWqYA",
+      "title": "从一个想法到一个真正能用的 App，我离不开",
+      "url": "https://mp.weixin.qq.com/s/NeBcQZp2WRnwrTPY-FWqYA",
+      "publishedAt": "2026-11-10",
+      "column": "",
+      "format": "贴图",
+      "summary": "以前有个做 App 的想法，得先找程序员、凑预算。现在 AI 能直接把想法写成代码。\n\n可代码跑起来还得三样东西：放代码的地方、让网站运行的平台、存数据的数据库。这三件事，正好对应 GitHub、Cloudflare 和 Supabase。\n\nGitHub 就是个项目档案库。代码放进去，每次修改都留档，改坏了还能退回上一版。连自动测试和发布都能按规则跑起来。\n\nCloudflare 负责把网站推上网。新项目优先看它的 Workers，既能放网页文件，也能跑后端代码。它还有个 D1 数据库，专门存用户提交的数据。\n\nSupabase 更像一个现成的后端管家。登录、存数据、传图片、多设备同步，一套全包了。不过免费项目一周不用就会被暂停，长期在线的得想清楚。\n\n这三个不是非用不可。简单工具可能只要前两个，复杂应用才需要全套。AI 只是帮你写出代码，真正要把想法做成产品，还得懂点这些基本盘。",
+      "coverUrl": "http://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5IGING6QMO6iaZVII6y0R2MbY0zFlWicGbLI21jWsXQZbLf136jPOoMKUhzoXp8cdu5hzDZSYg7tHDWKpQibeqiaBXiaZAd5BFI0MYU/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "LZiICCn2XGPVkpE2BlfuBQ",
+      "title": "从一个想法到一个真正能用的 App，我离不开这三个平台",
+      "url": "https://mp.weixin.qq.com/s/LZiICCn2XGPVkpE2BlfuBQ",
+      "publishedAt": "2026-11-10",
+      "column": "DAVYLAB 的 AI 实验室",
+      "format": "文章",
+      "summary": "AI 能帮你写代码，但让应用真正跑起来，还需要三个平台：GitHub 管代码，Cloudflare 管发布和运行，Supabase 管数据和用户。用我自己的项目，讲清它们各管什么。",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5J9XgRUDtMnMFv4gCAniaTViaDp15d4RVmXfTiapQuia8rTltlBaHDicLxq7JtMfASgiaqUACJwb6N5IibucN9EmbARothsKa8v9vS75Y/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
     {
       "id": "jMs5v3_z2OZ5acg3gtcVDw",
       "title": "这一周，AI 真正变化的 7 个地方",
