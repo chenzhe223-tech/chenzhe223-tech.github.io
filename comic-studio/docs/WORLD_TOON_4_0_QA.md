@@ -26,7 +26,9 @@ The currently deployed Cloudflare Worker fetches public static resources from th
 - Source integration checks: **19 / 19 pass** at the checked revision.
 - Worker static path allowlist comparison: **21 / 21 pass** against the actual script returned by Cloudflare.
 - Cloudflare Worker secret binding names were checked (no secret values retrieved or logged).
-- Automated GitHub regression workflow was updated to include `worldtoon-v3-smoke.cjs` and `worldtoon-v4-smoke.cjs`.
+- Static references were matched against the live Cloudflare Worker path allowlist; all 21 page assets were permitted, including the consolidated mobile stylesheet.
+- A genuine production-queue or published-receipt test was not fabricated to force end-to-end acceptance.
+- Automated GitHub regression workflow was updated to include `worldtoon-v3-smoke.cjs` and `worldtoon-v4-smoke.cjs`. Both complete smoke scripts were also executed in an isolated V8-compatible test harness, returning `PASS` for both suites. This does not substitute for the separate GitHub Actions runner status.
 
 ## Important limitations (NOT accepted yet)
 
