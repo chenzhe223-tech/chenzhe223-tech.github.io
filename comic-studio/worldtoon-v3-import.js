@@ -74,6 +74,8 @@
    const sourcesFile=findByName(files,name=>/(?:^|\/)sources\.md$/i.test(name));
    pieces.push({path:'caption.md',text:captionFile?readText(captionFile[1]):'《'+current.title+'》\n'+(current.description||'')+'\n'+(current.disclosure||'原创漫画')+'\nWORLD/TOON · By DAVYLAB'});
    pieces.push({path:'sources.md',text:sourcesFile?readText(sourcesFile[1]):'来源待核验：\n'+(current.sourceURLs||'原创漫画，不涉及真实来源')+'\n'+(current.factNotes||'')});
+   const styleFile=findByName(files,name=>/(?:^|\/)style-lock\.json$/i.test(name));
+   if(styleFile)pieces.push({path:'style-lock.json',text:readText(styleFile[1])});
    for(const piece of pieces.filter(x=>x.blob)){const key=uid();await putMedia(key,piece.blob);created.push(key);localImages.push('media:'+key)}
    const p=current;
    if(p.panels.length!==n&&p.handoff?.repoQueuedAt)throw Error('已入仓工单的篇幅不可变动，请按已批准数量重新交付');
@@ -81,7 +83,7 @@
    p.panels=Array.from({length:n},(_,i)=>({...p.panels[i]||makePanel(i),image:localImages[i+1]}));
    p.cover=localImages[0];p.status='待审核';p.checks=Array(6).fill(false);p.reviewedAt=null;
    p.handoff={...p.handoff,taskId:taskId||p.handoff?.taskId||'',importStatus:'本地校验完成，待远端暂存',
-      importedAt:now(),importDetail:n+'张漫画 + 独立封面',
+      importedAt:now(),importManifest:manifest||null,importDetail:n+'张漫画 + 独立封面',
       stagedFiles:pieces.map(x=>({path:x.path,sha256:x.sha256||null,text:x.text||null,
        imageKey:x.blob?created[pieces.filter(y=>y.blob).findIndex(y=>y.path===x.path)]:null})),stageUploaded:[]};
    setChange(p,'正式 PNG 素材包导入并校验：'+n+'张画格 + 封面');
