@@ -38,6 +38,7 @@ function check(ok, name, detail = '') {
         const fixture = {
           url: 'https://example.com/qa-source',
           curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
+          title: 'Synthetic X News QA fixture',
           title_zh: '合成 X News QA <script>window.__xss=1</script>',
           summary_zh: '仅用于本地自动化验证的合成样本。',
           published: '2026-11-11T00:00:00Z'
