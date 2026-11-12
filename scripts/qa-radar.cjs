@@ -164,7 +164,7 @@ function check(ok, name, detail = '') {
         const images = [...document.querySelectorAll('#top5List .story-image img')];
         const generated = images.filter(img => img.closest('.story-image--generated'));
         return { nonHttps: images.filter(img => !new RegExp('^https://').test(img.getAttribute('src') || '')).length, generatedCount: generated.length,
-          generatedAssetsValid: generated.every(img => img.getAttribute('src') === '../assets/radar-robotics-dexterity-illustration.jpg' && /AI-generated conceptual illustration/i.test(img.alt) && img.closest('.story-image--generated')?.textContent.includes('AI-GENERATED ILLUSTRATION')) };
+          generatedAssetsValid: generated.every(img => img.getAttribute('src') === '../assets/radar-robotics-dexterity-illustration.jpg' && /(AI-generated conceptual illustration|AI 生成概念插画)/i.test(img.alt) && img.closest('.story-image--generated')?.textContent.includes('AI-GENERATED ILLUSTRATION')) };
       });
       check(top5ImageAudit.nonHttps === top5ImageAudit.generatedCount && top5ImageAudit.generatedCount <= 1 && top5ImageAudit.generatedAssetsValid, viewport.name + ': every non-HTTPS Top5 visual is the exact labeled first-party illustration, all other story photos remain HTTPS', JSON.stringify(top5ImageAudit));
       check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
@@ -360,7 +360,7 @@ function check(ok, name, detail = '') {
         top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color,
         leadTextOnly: document.querySelector('#leadStory')?.classList.contains('text-only')
       }));
-      const exactGeneratedIllustration = heroImageAudit.sourceUrl === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66' && heroImageAudit.status === 'thematic_fallback' && /Gemini Robotics 2\\.5/i.test(heroImageAudit.title);
+      const exactGeneratedIllustration = heroImageAudit.sourceUrl === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66' && heroImageAudit.status === 'thematic_fallback' && /Gemini Robotics 2\.5/i.test(heroImageAudit.title);
       const leadVisualPass = heroImageAudit.eligible
         ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage
         : exactGeneratedIllustration
