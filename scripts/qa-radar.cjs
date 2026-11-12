@@ -74,13 +74,13 @@ function check(ok, name, detail = '') {
         sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
         kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
         rank: getComputedStyle(document.querySelector('.top5-rank')).fontFamily,
-        metric: getComputedStyle(document.querySelector('.metric strong')).fontFamily,
+        reportDate: getComputedStyle(document.querySelector('#reportDate')).fontFamily,
         metadata: getComputedStyle(document.querySelector('.meta')).fontVariantNumeric
       }));
       check(/Georgia|Times New Roman/.test(typeRoles.sectionHeading) && /Georgia|Times New Roman/.test(typeRoles.kicker),
         viewport.name + ': English editorial headings use the serif type role', JSON.stringify(typeRoles));
-      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.metric) && typeRoles.metadata.includes('tabular-nums'),
-        viewport.name + ': ranks, metrics and metadata use aligned data typography', JSON.stringify(typeRoles));
+      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && typeRoles.metadata.includes('tabular-nums'),
+        viewport.name + ': ranks, report dates and metadata use aligned data typography', JSON.stringify(typeRoles));
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
