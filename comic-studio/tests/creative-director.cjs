@@ -10,7 +10,7 @@ const visualV3=fs.readFileSync(path.join(root,'style-v3.js'),'utf8');
 const worker=fs.readFileSync(path.join(root,'worker.js'),'utf8');
 const archive=fs.readFileSync(path.join(root,'archive.js'),'utf8');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert.match(html,/creative-director\.js\?v=4\.1\.1/,'cast-to-storyboard synchronization must bypass stale cached director script');
+assert.match(html,/creative-director\.js\?v=4\.2\.0/,'cast-to-storyboard synchronization and provider options must bypass stale cached director script');
 const source={id:'p1',title:'海洋机器人：漫画改编',sourceTitle:'机器人如何探索海洋深处',category:'机器人',description:'在虚构海底研究站，两个原创角色用亲身经历解释科研技术的边界。',
  sourceURLs:'https://example.org/research',factNotes:'【待核验】请审查原文',fiction:'原创虚构海底城市，不影射真实公众人物。',
  disclosure:'这是虚构的科普故事，不代表真实新闻报道。',tone:'科学讽刺',characters:'',

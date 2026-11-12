@@ -130,15 +130,18 @@ async function wtStoryboardAI(request,env){
  let body=await request.json().catch(()=>null);
  if(!body||typeof body!=='object'||JSON.stringify(body).length>21000)return failure('剧情数据不完整或超过安全大小限制',400);
  const provider=String(body.provider||'native');
- if(!['native','deepseek','openai'].includes(provider))return failure('不支持该模型服务商',400);
+ if(!['native','deepseek','openai','claude','gemini','kimi','qwen'].includes(provider))return failure('不支持该模型服务商',400);
  const title=String(body.title||'').trim().slice(0,220),summary=String(body.summary||'').slice(0,1700);
  if(title.length<2||summary.length<8)return failure('请先补充作品标题与故事背景',400);
  if(provider==='native'&&!env.AI)return failure('当前未接入可用的内置文字模型，请使用本地故事草稿或自行接入API。',503);
  const key=String(body.apiKey||'').trim();
  if(provider!=='native'&&(key.length<12||key.length>320||/[\r\n]/.test(key)))return failure('请填写有效API Key（仅用于本次生成）',400);
- const models={deepseek:['deepseek-chat'],openai:['gpt-4o-mini','gpt-4.1-mini']};
- const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider][0]);
- if(provider!=='native'&&!models[provider].includes(model))return failure('模型名称不在受支持列表中',400);
+ const models={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
+ const modelPatterns={deepseek:/^deepseek-[a-z0-9.-]{1,80}$/i,openai:/^(?:gpt-[a-z0-9.-]{1,80}|o[1-9](?:-[a-z0-9.-]{1,70})?)$/i,
+  claude:/^claude-[a-z0-9.-]{1,80}$/i,gemini:/^gemini-[a-z0-9.-]{1,80}$/i,
+  kimi:/^(?:kimi|moonshot)-[a-z0-9.-]{1,80}$/i,qwen:/^qwen[a-z0-9.-]{1,80}$/i};
+ const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider]).trim();
+ if(provider!=='native'&&!modelPatterns[provider].test(model))return failure('模型名称格式与所选服务商不匹配',400);
  const story={title,summary,category:String(body.category||'').slice(0,100),
   arc:String(body.arc||'反转寓言').slice(0,80),
   thesis:String(body.thesis||'').slice(0,800),
@@ -163,12 +166,27 @@ async function wtStoryboardAI(request,env){
   if(provider==='native'){
    const result=await env.AI.run(model,{messages,max_tokens:3300,temperature:0.65});
    answer=String(result?.response||result?.choices?.[0]?.message?.content||'');
+  }else if(provider==='claude'){
+   const result=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:AbortSignal.timeout(38000),
+    headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({model,system,messages:[{role:'user',content:JSON.stringify(story)}],max_tokens:3800,temperature:0.7})});
+   if(!result.ok)return failure('Claude 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
+   const parsed=await result.json();answer=String((parsed?.content||[]).find(x=>x?.type==='text')?.text||'');
+   actualModel=String(parsed?.model||model).slice(0,100);
+  }else if(provider==='gemini'){
+   const result=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',signal:AbortSignal.timeout(38000),
+    headers:{'content-type':'application/json','x-goog-api-key':key},
+    body:JSON.stringify({systemInstruction:{parts:[{text:system}]},contents:[{role:'user',parts:[{text:JSON.stringify(story)}]}],generationConfig:{temperature:0.7,maxOutputTokens:3800,responseMimeType:'application/json'}})});
+   if(!result.ok)return failure('Gemini 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
+   const parsed=await result.json();answer=String(parsed?.candidates?.[0]?.content?.parts?.map(x=>x?.text||'').join('')||'');
+   actualModel=model;
   }else{
-   const url=provider==='deepseek'?'https://api.deepseek.com/chat/completions':'https://api.openai.com/v1/chat/completions';
-   const result=await fetch(url,{method:'POST',signal:AbortSignal.timeout(38000),
+   const endpoints={deepseek:'https://api.deepseek.com/chat/completions',openai:'https://api.openai.com/v1/chat/completions',
+    kimi:'https://api.moonshot.cn/v1/chat/completions',qwen:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'};
+   const result=await fetch(endpoints[provider],{method:'POST',signal:AbortSignal.timeout(38000),
     headers:{'content-type':'application/json','authorization':'Bearer '+key},
-    body:JSON.stringify({model,messages,temperature:0.7,max_tokens:provider==='deepseek'?3800:3300,response_format:{type:'json_object'}})});
-   if(!result.ok)return failure('外部模型请求失败（HTTP '+result.status+'）。请检查余额、权限或模型名称。',502);
+    body:JSON.stringify({model,messages,temperature:0.7,max_tokens:3800,...(provider==='openai'?{response_format:{type:'json_object'}}:{})})});
+   if(!result.ok)return failure(provider+' 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
    const parsed=await result.json();answer=String(parsed?.choices?.[0]?.message?.content||'');
    actualModel=String(parsed?.model||model).slice(0,100);
   }
@@ -1107,7 +1125,7 @@ async function wtStorySearch(request,env,url){
   searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
   model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.3.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.4.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true,storyboardProviders:['native','deepseek','openai','claude','gemini','kimi','qwen']},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,storyboardAiEnabled:!!env.AI,storyboardAiRequiresLogin:true,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
@@ -1119,5 +1137,5 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.3.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.4.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
