@@ -268,7 +268,7 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
-        await page.waitForFunction(date => window.reportData?.report_date === date, archiveOption, { timeout: 10000 });
+        await page.waitForFunction(date => reportData?.report_date === date, archiveOption, { timeout: 10000 });
         const archivedSkillHandoff = await page.evaluate(() => {
           const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
           const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
@@ -284,7 +284,7 @@ function check(ok, name, detail = '') {
           try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
           const result = {
             available: true,
-            renderedDate: window.reportData?.report_date || '',
+            renderedDate: reportData?.report_date || '',
             nianboxDate: nianboxQueue[0]?.reportDate || '',
             keypocketDate: keypocketQueue[0]?.reportDate || ''
           };
