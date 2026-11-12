@@ -79,7 +79,8 @@
 
 /* 3D editorial preview images are ORIGINAL style examples, never production-model samples. */
 .wt-v3-photo-3d{background:#e6dcd2;border:1px solid rgba(69,58,47,.10)}
-.wt-v3-photo-3d img{object-fit:cover;object-position:50% 38%;background:#e6dcd2;transition:transform .25s ease}
+.wt-v3-photo-3d img{object-fit:contain;object-position:center;background:#e6dcd2;transition:transform .25s ease}
 .wt-v3-card:hover .wt-v3-photo-3d img{transform:scale(1.025)}
 .wt-v3-photo-3d em{background:rgba(27,38,33,.86);max-width:calc(100% - 14px);white-space:normal}
-@media(max-width:650px){.wt-v3-photo-3d em{font-size:9px;padding:4px 5px;bottom:5px;left:5px}.wt-v3-photo-3d img{object-position:50% 32%}}
+@media(max-width:650px){.wt-v3-photo-3d em{font-size:9px;padding:4px 5px;bottom:5px;left:5px}.wt-v3-photo-3d img{object-position:center}}
+
