@@ -232,15 +232,30 @@ function check(ok, name, detail = '') {
           importLinkPayload = encoded ? JSON.parse(encoded) : null;
         } catch {}
         const nb = nianboxQueue[0], kp = keypocketQueue[0];
+        let nbUrl = null, nbSourcePage = null;
+        try { nbUrl = new URL(nb?.url || ''); } catch {}
+        try { nbSourcePage = new URL(nb?.sourcePage || ''); } catch {}
+        const nianboxReceiverContract = Boolean(
+          nb && typeof nb.id === 'string' && nb.id.startsWith('davy-radar-') &&
+          nb.source === 'davy-radar' && Number.isFinite(nb.createdAt) &&
+          typeof nb.name === 'string' && nb.name.length > 0 && nb.name.length <= 180 &&
+          nbUrl?.protocol === 'https:' && nbUrl.hostname === 'github.com' &&
+          !nbUrl.username && !nbUrl.password && nbUrl.pathname.split('/').filter(Boolean).length >= 2 &&
+          (nb.description || '').length <= 2400 && (nb.topics || '').length <= 500 &&
+          nb.reportDate === expectedDate &&
+          nbSourcePage?.pathname.startsWith('/radar/daily')
+        );
         return {
           available: true,
           nianboxQueued: nianboxQueue.length === 1 && nb?.source === 'davy-radar' && nb?.name === expectedName && nb?.url === expectedUrl && nb?.reportDate === expectedDate,
+          nianboxReceiverContract,
           keypocketQueued: keypocketQueue.length === 1 && kp?.source === 'davy-radar' && kp?.name === expectedName && kp?.url === expectedUrl && kp?.reportDate === expectedDate,
           keypocketImportLink: Boolean(importLinkPayload && importLinkPayload.source === 'davy-radar' && importLinkPayload.name === expectedName && importLinkPayload.url === expectedUrl && importLinkPayload.reportDate === expectedDate)
         };
       });
       check(skillSaveAudit.available, viewport.name + ': Skill save actions exist before interaction');
       check(skillSaveAudit.nianboxQueued, viewport.name + ': clicking the featured Skill writes its matching NianBox queue record', JSON.stringify(skillSaveAudit));
+      check(skillSaveAudit.nianboxReceiverContract, viewport.name + ': NianBox queue record meets the receiving app import contract', JSON.stringify(skillSaveAudit));
       check(skillSaveAudit.keypocketQueued && skillSaveAudit.keypocketImportLink, viewport.name + ': clicking the featured Skill writes its matching KeyPocket queue and preserves the import link payload', JSON.stringify(skillSaveAudit));
       check(await page.locator('#archiveDate option').count() >= 2, viewport.name + ': history date options loaded');
       const posterUrl = new URL('../posters/latest.png', base).href;
