@@ -445,9 +445,19 @@ function check(ok, name, detail = '') {
       };
       const report = { report_date: viewport.date, xnews_voices: [fixture] };
       const endpoint = viewport.date === '2026-11-12' ? 'latest' : 'archive/' + viewport.date;
-      await page.route('**/radar/data/' + endpoint + '.json*', route => route.fulfill({
-        status: 200, contentType: 'application/json', body: JSON.stringify(report)
-      }));
+      let fixtureResponseServed = false;
+      const dataRequests = [];
+      await page.route('**/*', async route => {
+        const requestUrl = route.request().url();
+        const pathname = new URL(requestUrl).pathname;
+        if (requestUrl.includes('/radar/data/')) dataRequests.push(requestUrl);
+        if (pathname.endsWith('/radar/data/' + endpoint + '.json')) {
+          fixtureResponseServed = true;
+          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(report) });
+        } else {
+          await route.continue();
+        }
+      });
       let readerTarget = new URL('../read/', base);
       if (viewport.useHomepageRoute && syntheticXnewsReaderRoute) {
         readerTarget = new URL(syntheticXnewsReaderRoute, base);
@@ -455,14 +465,23 @@ function check(ok, name, detail = '') {
         readerTarget.search = new URLSearchParams({ type: 'xnews', id: '0', date: viewport.date }).toString();
       }
       const response = await page.goto(readerTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
-      check(!!response && response.status() < 400, viewport.name + ': X News deep-read route loads with fixture data', 'HTTP ' + (response && response.status()));
-      await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
-      check((await page.locator('#content .title').innerText()).trim() === fixture.title_zh, viewport.name + ': X News deep reader shows the matching story title');
-      check((await page.locator('#content').innerText()).includes(fixture.summary_zh), viewport.name + ': X News deep reader renders the supplied summary');
-      check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': X News deep reader preserves the requested briefing date');
+      check(!!response && response.status() < 400, viewport.name + ': X News deep-read route loads', 'HTTP ' + (response && response.status()) + ' ' + readerTarget.href);
+      check(fixtureResponseServed, viewport.name + ': matching latest/archive X News fixture is served', JSON.stringify(dataRequests));
+      const titleLocator = page.locator('#content .title');
+      const titleCount = await titleLocator.count();
+      check(titleCount === 1, viewport.name + ': X News deep reader renders a story title', JSON.stringify({ url: readerTarget.href, dataRequests, content: await page.locator('#content').innerText() }));
+      if (titleCount === 1) {
+        check((await titleLocator.innerText()).trim() === fixture.title_zh, viewport.name + ': X News deep reader shows the matching story title');
+        check((await page.locator('#content').innerText()).includes(fixture.summary_zh), viewport.name + ': X News deep reader renders the supplied summary');
+        check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': X News deep reader preserves the requested briefing date');
+      } else {
+        check(false, viewport.name + ': X News deep reader shows the matching story title');
+        check(false, viewport.name + ': X News deep reader renders the supplied summary');
+        check(false, viewport.name + ': X News deep reader preserves the requested briefing date');
+      }
       const sourceLinks = page.locator('.rail-links a[target="_blank"]');
-      check(await sourceLinks.count() === 2, viewport.name + ': original and curated X News links are both visible');
-      if (await sourceLinks.count() === 2) {
+      check(titleCount === 1 && await sourceLinks.count() === 2, viewport.name + ': original and curated X News links are both visible');
+      if (titleCount === 1 && await sourceLinks.count() === 2) {
         const links = await sourceLinks.evaluateAll(nodes => nodes.map(a => ({ href: a.href, rel: a.rel })));
         check(links[0].href === fixture.url && links[0].rel.includes('noopener') && links[0].rel.includes('noreferrer'),
           viewport.name + ': original X News source link is HTTPS and opener-safe', JSON.stringify(links[0]));
@@ -470,10 +489,10 @@ function check(ok, name, detail = '') {
           viewport.name + ': X News editorial link is host-restricted and opener-safe', JSON.stringify(links[1]));
       }
       const returnHref = await page.locator('.rail-links a[href^="../daily/"]').getAttribute('href');
-      check(returnHref === '../daily/?date=' + viewport.date, viewport.name + ': X News deep reader returns to the matching issue', returnHref || '');
+      check(titleCount === 1 && returnHref === '../daily/?date=' + viewport.date, viewport.name + ': X News deep reader returns to the matching issue', returnHref || '');
       await page.getByRole('button', { name: 'EN' }).click();
-      check((await page.locator('#content .title').innerText()).trim() === fixture.title_en, viewport.name + ': X News deep reader switches to English');
-      check((await page.locator('#content').innerText()).includes(fixture.summary_en), viewport.name + ': X News deep reader localizes the supplied summary');
+      check(titleCount === 1 && (await titleLocator.innerText()).trim() === fixture.title_en, viewport.name + ': X News deep reader switches to English');
+      check(titleCount === 1 && (await page.locator('#content').innerText()).includes(fixture.summary_en), viewport.name + ': X News deep reader localizes the supplied summary');
       await page.getByRole('button', { name: '中文' }).click();
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
