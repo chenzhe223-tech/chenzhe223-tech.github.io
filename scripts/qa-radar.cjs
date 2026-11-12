@@ -24,6 +24,13 @@ function check(ok, name, detail = '') {
       await page.waitForTimeout(700);
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
+      const heroImageAudit = await page.evaluate(() => {
+        const story = reportData?.top5?.[0];
+        const declared = document.documentElement.style.getPropertyValue('--hero-photo').trim();
+        const eligible = story?.image_match_status === 'article_image' && /^https:\/\//.test(story?.image_url || '');
+        return { eligible, hasLeadImage: eligible ? declared.includes(new URL(story.image_url).href) : declared === 'none', status: story?.image_match_status || 'missing', declaration: declared };
+      });
+      check(heroImageAudit.hasLeadImage, viewport.name + ': hero only uses a verified lead article image', JSON.stringify(heroImageAudit));
       const sourceNewsCount = await page.locator('#newsList .item').count();
       check(sourceNewsCount > 0, viewport.name + ': source news rendered', 'count=' + sourceNewsCount);
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
