@@ -1041,8 +1041,9 @@ function wtBookTerms(q){
  return pair?[q,...pair.filter(t=>wtStoryKey(t)!==k)]:[q];
 }
 function wtBookMatches(title,q){
- const k=wtStoryKey(title);
- return wtBookTerms(q).some(t=>{const v=wtStoryKey(t);return v.length>1&&(k.includes(v)||(k.length>5&&v.includes(k)))});
+ const fold=v=>wtStoryKey(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ const k=fold(title);
+ return wtBookTerms(q).some(t=>{const v=fold(t);return v.length>1&&(k.includes(v)||(k.length>5&&v.includes(k)))});
 }
 async function wtOpenLibrary(q){
  const u='https://openlibrary.org/search.json?'+new URLSearchParams({title:q,limit:'15',fields:'key,title,author_name,first_publish_year,cover_i'});
