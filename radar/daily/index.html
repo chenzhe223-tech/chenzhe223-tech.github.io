@@ -1169,7 +1169,7 @@ function generatedRoboticsIllustration(x){
  const title=[x.title_zh,x.title_en,x.original_title,x.title].filter(Boolean).join(" ");
  if(source!=="https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66"
      ||String(x.image_match_status||"")!=="thematic_fallback"
-     ||!/Gemini Robotics 2\\.5/i.test(title))return "";
+     ||!/Gemini Robotics 2\.5/i.test(title))return "";
  const alt=currentLang==="en"
    ?"AI-generated conceptual illustration of robotic dexterity; not a photograph of the reported event."
    :"AI 生成概念插画：机器人灵巧性示意，非报道现场照片。";
