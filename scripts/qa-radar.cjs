@@ -475,6 +475,7 @@ function check(ok, name, detail = '') {
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
       const bodyColor = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
       check(bodyColor !== 'rgba(0, 0, 0, 0)', viewport.name + ': page has computed background', bodyColor);
+      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': language switch works');
@@ -523,6 +524,7 @@ function check(ok, name, detail = '') {
       check(await page.locator('.rail-links a[href^="../daily/"]').count() === 1, viewport.name + ': return-to-briefing link is present');
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
+      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
@@ -631,6 +633,7 @@ function check(ok, name, detail = '') {
       await page.getByRole('button', { name: '中文' }).click();
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
+      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       const returnLink = page.locator('.rail-links a[href^="../daily/"]');
       const [returnResponse] = await Promise.all([
