@@ -208,6 +208,40 @@ function check(ok, name, detail = '') {
       check(await page.locator('#featuredSkill [data-nb-skill-save]').count() === 1, viewport.name + ': featured Skill has one-click NianBox save action');
       check(await page.locator('#skillList [data-nb-skill-save]').count() > 0, viewport.name + ': ranked Skills have NianBox save actions');
       check((await page.locator('#featuredSkill [data-nb-skill-save]').getAttribute('href') || '').includes('/niantou-box-app/'), viewport.name + ': NianBox action points to the real app URL');
+      const skillSaveAudit = await page.evaluate(() => {
+        const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
+        const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
+        if (!nianbox || !keypocket) return { available: false };
+        const expectedName = nianbox.dataset.skillName || '';
+        const expectedUrl = nianbox.dataset.skillUrl || '';
+        const expectedDate = nianbox.dataset.reportDate || '';
+        localStorage.removeItem('nb.radar.pending-skill.v1');
+        localStorage.removeItem('kp.radar.pending-skills.v1');
+        const clickWithoutNavigation = link => {
+          link.addEventListener('click', event => event.preventDefault(), { once: true });
+          link.click();
+        };
+        clickWithoutNavigation(nianbox);
+        clickWithoutNavigation(keypocket);
+        let nianboxQueue = [], keypocketQueue = [];
+        try { nianboxQueue = JSON.parse(localStorage.getItem('nb.radar.pending-skill.v1') || '[]'); } catch {}
+        try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
+        let importLinkPayload = null;
+        try {
+          const encoded = new URL(keypocket.href).searchParams.get('kp_capture');
+          importLinkPayload = encoded ? JSON.parse(encoded) : null;
+        } catch {}
+        const nb = nianboxQueue[0], kp = keypocketQueue[0];
+        return {
+          available: true,
+          nianboxQueued: nianboxQueue.length === 1 && nb?.source === 'davy-radar' && nb?.name === expectedName && nb?.url === expectedUrl && nb?.reportDate === expectedDate,
+          keypocketQueued: keypocketQueue.length === 1 && kp?.source === 'davy-radar' && kp?.name === expectedName && kp?.url === expectedUrl && kp?.reportDate === expectedDate,
+          keypocketImportLink: Boolean(importLinkPayload && importLinkPayload.source === 'davy-radar' && importLinkPayload.name === expectedName && importLinkPayload.url === expectedUrl && importLinkPayload.reportDate === expectedDate)
+        };
+      });
+      check(skillSaveAudit.available, viewport.name + ': Skill save actions exist before interaction');
+      check(skillSaveAudit.nianboxQueued, viewport.name + ': clicking the featured Skill writes its matching NianBox queue record', JSON.stringify(skillSaveAudit));
+      check(skillSaveAudit.keypocketQueued && skillSaveAudit.keypocketImportLink, viewport.name + ': clicking the featured Skill writes its matching KeyPocket queue and preserves the import link payload', JSON.stringify(skillSaveAudit));
       check(await page.locator('#archiveDate option').count() >= 2, viewport.name + ': history date options loaded');
       const posterUrl = new URL('../posters/latest.png', base).href;
       const posterResponse = await page.request.get(posterUrl);
