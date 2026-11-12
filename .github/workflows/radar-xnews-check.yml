@@ -6,6 +6,9 @@ on:
       - 'radar/scripts/xnews_sources.py'
       - 'radar/scripts/build_daily.py'
       - 'radar/tests/test_xnews_sources.py'
+      - 'radar/scripts/pages_preflight.py'
+      - 'radar/scripts/test_pages_preflight.py'
+      - '.github/workflows/pages.yml'
       - '.github/workflows/radar-xnews-check.yml'
   workflow_dispatch:
 
