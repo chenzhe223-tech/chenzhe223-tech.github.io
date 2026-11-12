@@ -308,8 +308,8 @@ function check(ok, name, detail = '') {
         top5Background: getComputedStyle(document.querySelector('#top5List .top5-card')).backgroundColor,
         top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color
       }));
-      check(editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage,
-        viewport.name + ': lead story uses a verified image with readable overlay title', JSON.stringify(editorialLayoutAudit));
+      check(editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage === heroImageAudit.eligible,
+        viewport.name + ': lead story uses only a verified article image when one exists, with a readable overlay title', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible }));
       check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
         viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
       check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');
