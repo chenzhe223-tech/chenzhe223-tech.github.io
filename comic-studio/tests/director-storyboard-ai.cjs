@@ -110,4 +110,3 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  assert.equal(externalRequests,6,'Reject unsupported provider and mismatched model before network access');
  console.log('PASS: owner-auth native model; DeepSeek, OpenAI, Claude, Gemini, Kimi and Qwen proxies; provider/model validation; provenance; no publication approval');
 })().catch(err=>{console.error(err);process.exitCode=1});
-
