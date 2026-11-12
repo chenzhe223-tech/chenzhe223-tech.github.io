@@ -505,18 +505,9 @@ function check(ok, name, detail = '') {
         summary_zh: '用于验证真实页面路由、原始来源和中文编辑链接的合成测试内容。',
         summary_en: 'Synthetic content for verifying the real page route, original source and Chinese editorial link.',
         published: '2026-11-11T00:00:00Z',
-        source: 'X News QA',
-        category_zh: '国际视角',
-        category_en: 'International perspective',
-        why_it_matters_zh: '验证 X News 深读页的关键内容。',
-        why_it_matters_en: 'Verifies key content in the X News deep reader.',
-        editor_judgment_zh: '仅为自动化测试夹具。',
-        editor_judgment_en: 'Automation fixture only.',
-        opportunity_risk_zh: '不代表真实新闻。',
-        opportunity_risk_en: 'Not real news.',
-        action_zh: '不作业务判断。',
-        action_en: 'No business decision.',
-        scores: { innovation: 6, practicality: 6, feasibility: 6, impact: 6, opportunity: 6 }
+        source: 'X News · 海外发现',
+        source_kind: 'curated_secondary',
+        verification_status: 'source_not_independently_verified'
       };
       let report;
       const endpoint = 'archive/' + viewport.date;
@@ -567,6 +558,12 @@ function check(ok, name, detail = '') {
       if (titleCount === 1) {
         check((await titleLocator.innerText()).trim() === fixture.title_zh, viewport.name + ': X News deep reader shows the matching story title');
         check((await page.locator('#content').innerText()).includes(fixture.summary_zh), viewport.name + ': X News deep reader renders the supplied summary');
+        check(await page.locator('.story .section').count() === 1,
+          viewport.name + ': real-shape X News fixture renders only the supplied summary section without invented editorial fields');
+        check(await page.locator('.story .scores').count() === 0,
+          viewport.name + ': X News deep reader omits unavailable assessment scores');
+        check((await page.locator('#content .category').innerText()).includes(fixture.source),
+          viewport.name + ': missing category falls back to the real X News source label');
         check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': X News deep reader preserves the requested briefing date');
       } else {
         check(false, viewport.name + ': X News deep reader shows the matching story title');
