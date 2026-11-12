@@ -86,6 +86,21 @@ class XNewsFeedTests(unittest.TestCase):
         ]), now=NOW)
         self.assertEqual(len(stories), 1)
 
+    def test_collect_ingests_compatible_feed_payload(self):
+        calls = []
+
+        def fetch(url, accept, timeout):
+            calls.append((url, accept, timeout))
+            return make_feed([{}])
+
+        stories, status = collect_xnews_articles(fetch, now=NOW)
+        self.assertEqual(status, "ok")
+        self.assertEqual(len(stories), 1)
+        self.assertEqual(stories[0]["source_kind"], "curated_secondary")
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(calls[0][0], "https://xnews.qiaomu.ai/feed.xml")
+        self.assertEqual(calls[0][2], 10)
+
     def test_unavailable_feed_does_not_throw(self):
         def offline(*_args, **_kwargs):
             raise TimeoutError("source offline")
