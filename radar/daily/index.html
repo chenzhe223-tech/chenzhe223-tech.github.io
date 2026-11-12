@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#F5F4EF"><meta name="description" content="Davy Radar：用通俗语言看懂 AI 新闻、工具与创作机会。">
+<meta name="theme-color" content="#F7F5F0"><meta name="description" content="Davy Radar：用通俗语言看懂 AI 新闻、工具与创作机会。">
 <title>AI 前沿简报 · DAVYLAB</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <meta name="color-scheme" content="light"><link rel="stylesheet" href="../assets/design-system.css">
 <style>
@@ -978,6 +978,18 @@ section{scroll-margin-top:78px!important;margin-bottom:38px!important}.section-h
 @media(max-width:900px){#ai{grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr)!important;column-gap:20px!important}}
 @media(max-width:760px){.wrap{width:calc(100% - 28px)!important}.nav{height:52px!important}.brand{font-size:18px!important}.primary-nav{display:none!important}header{padding:0 0 14px!important}.brief-date-bar{margin-bottom:10px!important}.hero-panel{min-height:250px!important;padding:22px 18px!important;background-image:linear-gradient(0deg,rgba(247,245,240,.97),rgba(247,245,240,.78) 58%,rgba(247,245,240,.12)),var(--hero-photo)!important;background-position:center 42%!important}.hero-copy{max-width:100%!important}h1,#featureTitle{max-width:11ch!important;font-size:clamp(32px,9vw,42px)!important}.sub{max-width:34ch!important;font-size:12px!important}.hero-actions a{min-height:36px!important;flex:0 1 auto!important}.tabs{margin-bottom:18px!important;gap:18px!important}#ai{display:block!important}#leadStory{margin-bottom:22px}.lead-story>a{min-height:260px!important}.lead-story h2{font-size:24px!important}#editorialCore{margin:14px 0 18px!important}#top5List{display:grid!important;grid-template-columns:1fr!important}#top5List:before{font-size:18px!important}.top5-card{padding:10px 0!important}.top5-card h3{font-size:14px!important}#xnewsVoicesSection .list{grid-template-columns:repeat(2,minmax(0,1fr))!important}#xnewsVoices .item{padding:12px!important}.china-news-grid{grid-template-columns:1fr!important}.china-news-grid .top5-card .story-image{aspect-ratio:16/9!important}.mobile-dock{grid-template-columns:repeat(5,minmax(0,1fr))!important;padding-left:5px!important;padding-right:5px!important}.mobile-dock a{font-size:9px!important}}
 @media(max-width:430px){#xnewsVoicesSection .list{grid-template-columns:1fr!important}.lead-story>a{min-height:238px!important}}
+</style><style id="radar-v2-contrast">
+:root{--copper-ink:#815334;--sage-ink:#4D6353;--copper-dark:#875633}
+a,.nav-right>a,.archive-button,.top5-card .meta a,.footer a{color:var(--copper-ink)!important}
+.brief-eyebrow,.hero-kicker{font-family:var(--serif)!important;color:var(--copper-ink)!important}
+.brief-date-line strong{font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important}
+#editorialCore strong{color:var(--copper-ink)!important}
+.hero-actions>a:not(.secondary){background:var(--copper-dark)!important;background-image:none!important;color:#fff!important;border-color:var(--copper-dark)!important}
+.lead-story-label,.top5-card .top5-rank,.china-news-grid .top5-rank{background:var(--copper-dark)!important;color:#fff!important}
+.top5-card .top5-rank{font:600 10px var(--mono)!important}
+.top5-card .story-label{color:var(--sage-ink)!important}
+.top5-card .meta{font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important}
+.china-news-grid .china-category{color:#815334!important}
 </style></head>
 <body><div class="wrap">
 <nav class="nav"><a class="brand" href="../daily/" aria-label="AI Radar by DAVYLAB">AI RADAR <small>BY DAVYLAB</small></a><div class="primary-nav" aria-label="主导航"><a href="#ai" data-i18n="navToday">今日简报</a><a id="deepReadNav" href="#ai" data-i18n="navDeep">深度阅读</a><a href="#chinaAI" data-i18n="navChina">中国 AI</a><a href="#skills" data-i18n="navTools">研究与工具</a><a href="#archiveDate" data-i18n="navArchive">历史简报</a></div><div class="nav-right"><div class="lang-switch" role="group" aria-label="语言 / Language"><button class="lang-btn active" id="langZh" type="button" aria-pressed="true" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEn" type="button" aria-pressed="false" onclick="setLang('en')">EN</button></div><a href="../" data-i18n="back">← 返回 Davy Radar</a></div></nav>
