@@ -179,6 +179,13 @@ function check(ok, name, detail = '') {
         if (!hasSynthesis) check(!isVisible, viewport.name + ': internal missing-analysis status is hidden from readers');
       }
       check(await page.locator('#featureTitle').innerText().then(x => x.trim().length > 0), viewport.name + ': lead feature has a headline');
+      const heroEditorialStyles = await page.evaluate(() => {
+        const title = getComputedStyle(document.querySelector('#featureTitle'));
+        const action = getComputedStyle(document.querySelector('.hero-actions>a:not(.secondary)'));
+        return { titleBackground: title.backgroundImage, titleColor: title.webkitTextFillColor || title.color, actionBackground: action.backgroundImage, actionColor: action.backgroundColor };
+      });
+      check(heroEditorialStyles.titleBackground === 'none' && heroEditorialStyles.titleColor === 'rgb(22, 37, 60)', viewport.name + ': lead feature title uses solid editorial ink', JSON.stringify(heroEditorialStyles));
+      check(heroEditorialStyles.actionBackground === 'none' && heroEditorialStyles.actionColor === 'rgb(30, 59, 94)', viewport.name + ': primary hero action uses solid editorial navy', JSON.stringify(heroEditorialStyles));
       const storyLabel = await page.locator('#top5List .story-label').first().innerText();
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
