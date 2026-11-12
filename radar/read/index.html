@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#F7F5F0"><link rel="stylesheet" href="../assets/design-system.css">
-<title>深度阅读 · DAVYLAB AI Radar</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<title>深度阅读 · DAVYLAB AI Radar</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--wide:var(--page-width)}
 *{box-sizing:border-box}html{background:var(--paper);scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}a{color:inherit;text-decoration:none}a:hover{color:var(--accent)}button{font:inherit}.wrap{width:min(var(--wide),calc(100% - 56px));margin:auto}.masthead{display:flex;align-items:center;gap:28px;min-height:76px;border-bottom:1px solid var(--rule)}.brand{font-size:17px;font-weight:800;letter-spacing:-.045em;white-space:nowrap}.brand span{color:var(--accent)}.nav{display:flex;gap:24px;margin-left:auto;font-size:12px;color:#596a7d}.nav a:first-child,.nav a[data-nav="deep"]{color:var(--ink)}.lang{display:flex;gap:2px;border:1px solid #ccd4dc;background:white;padding:2px}.lang button{border:0;background:none;color:#54677a;padding:5px 9px;font-size:10px;cursor:pointer}.lang button.active{background:#1c3554;color:white}.crumb{display:flex;gap:10px;align-items:center;margin:20px 0 28px;color:#6e7b8a;font-size:11px}.crumb a{text-decoration:underline;text-underline-offset:3px;color:#315f83}.eyebrow{font:11px/1.5 var(--serif);letter-spacing:.14em;text-transform:uppercase;color:#59708a}.layout{display:grid;grid-template-columns:minmax(0,790px) minmax(210px,1fr);gap:clamp(30px,6vw,82px);align-items:start}.story{min-width:0}.category{display:inline-block;margin:12px 0;color:#38638a;font-size:11px;letter-spacing:.04em}.title{margin:6px 0 22px;font-size:clamp(36px,5.1vw,62px);font-weight:680;letter-spacing:-.055em;line-height:1.16;text-wrap:pretty}.dek{font-size:19px;line-height:1.72;color:#4b5c70;max-width:740px}.cover{width:100%;aspect-ratio:16/8.3;object-fit:cover;margin:30px 0 16px;background:#e6e7e4}.caption{font-size:10px;color:#798493;margin:0 0 34px}.provenance{display:flex;flex-wrap:wrap;gap:10px 18px;padding:15px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:11px;color:#687589}.provenance strong{color:#263c56;font-weight:650}.section{padding:30px 0;border-bottom:1px solid var(--rule)}.section h2{font-size:22px;letter-spacing:-.04em;margin:0 0 12px}.section p{white-space:pre-wrap;color:#46566a;margin:0;font-size:15px}.judgment{border-left:2px solid var(--accent);padding-left:17px}.scores{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;padding:16px 0}.score{border-top:2px solid #9aafc1;padding-top:8px}.score b{font:22px var(--mono);font-variant-numeric:tabular-nums;color:#254e71}.score span{display:block;color:#758191;font-size:10px;line-height:1.45}.rail{position:sticky;top:25px;border-top:2px solid var(--accent);padding-top:13px}.rail h2{font:14px var(--serif);letter-spacing:.08em;margin:0 0 16px}.rail p,.rail li{font-size:11px;line-height:1.8;color:#657386}.rail ul{padding-left:16px}.rail-links{display:grid;gap:8px;margin:19px 0}.rail-links a,.action{display:flex;justify-content:center;align-items:center;border:1px solid #c5ced8;background:transparent;padding:9px 12px;font-size:11px;color:#274760;text-align:center}.rail-links a.primary,.action.primary{background:#1e3b5e;color:white;border-color:#1e3b5e}.notice{margin:17px 0;padding:12px;border:1px solid #d5dbe1;background:#efeee8;color:#5e6b7a;font-size:10px;line-height:1.7}.notice[hidden]{display:none}.footer{border-top:1px solid var(--rule);margin-top:60px;padding:24px 0 40px;font-size:10px;color:#748191}.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 15px;background:#1c3554;color:white;font-size:11px;opacity:0;transition:opacity .2s;pointer-events:none}.toast.show{opacity:1}.empty{margin:30px 0;padding:28px 0;border-top:1px solid var(--rule);font-size:14px;color:#637184}
@@ -22,6 +22,17 @@ a,.nav a,.crumb a,.category,.eyebrow{color:var(--copper-ink)!important}
 .nav a:first-child,.nav a[data-nav=deep],.score b{color:var(--ink)!important}
 .rail-links a.primary,.action.primary{background:var(--copper-dark)!important;border-color:var(--copper-dark)!important;color:white!important}
 .meta,.provenance{font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important}
+
+@media(max-width:760px){
+ body{padding-bottom:82px!important}
+ .reader-action-dock{position:fixed;z-index:30;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:7px max(12px,env(safe-area-inset-left)) calc(7px + env(safe-area-inset-bottom));background:rgba(248,247,243,.97);border-top:1px solid var(--rule);backdrop-filter:blur(14px)}
+ .reader-action-dock button{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;min-height:45px;border:0;background:transparent;color:var(--ink);cursor:pointer}
+ .reader-action-dock button span{font:18px/1 var(--serif);color:var(--accent)}
+ .reader-action-dock button b{font:10px/1.3 var(--sans);font-weight:500}
+ .reader-action-dock button[aria-pressed="true"] span,.reader-action-dock button[aria-pressed="true"] b{color:#815334}
+}
+body[data-reader-size="large"] .dek,body[data-reader-size="large"] .section p{font-size:calc(1em * 1.12)!important}
+body[data-reader-size="larger"] .dek,body[data-reader-size="larger"] .section p{font-size:calc(1em * 1.24)!important}
 </style></head>
 <body>
 <div class="wrap">
@@ -29,7 +40,7 @@ a,.nav a,.crumb a,.category,.eyebrow{color:var(--copper-ink)!important}
 <div class="crumb"><a id="backBrief" href="../daily/" data-nav="back">← 返回每日简报</a><span>/</span><span id="crumbType">深度阅读</span></div>
 <main id="content"><div class="eyebrow">DAVYLAB AI RADAR · DEEP READ</div><div class="empty" role="status">正在读取这篇情报…</div></main>
 <footer class="footer">Davy Radar · 看见趋势，发现机会。<span id="footerDate" style="float:right"></span></footer>
-</div><nav class="mobile-dock" aria-label="移动端主导航"><a id="dockToday" href="../daily/" data-nav="today">今日</a><a id="dockDeep" href="../daily/#ai" data-nav="deep">深读</a><a id="dockChina" href="../daily/#chinaAI" data-nav="china">发现</a><a id="dockTools" href="../daily/#skills" data-nav="tools">知识库</a><a id="dockArchive" href="../daily/#archiveDate" data-nav="archive">我的</a></nav><div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div><nav class="reader-action-dock" aria-label="深读操作"><button id="readerFontSize" type="button" aria-pressed="false"><span aria-hidden="true">Aa</span><b id="readerFontLabel">字号</b></button><button id="readerBookmarkAction" type="button" aria-pressed="false"><span aria-hidden="true">♡</span><b id="readerBookmarkLabel">收藏</b></button><button id="readerShareAction" type="button"><span aria-hidden="true">↗</span><b id="readerShareLabel">分享</b></button></nav><div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script>
 (()=>{
 const q=new URLSearchParams(location.search),type=q.get("type")||"top5",id=Number.parseInt(q.get("id")||"0",10),date=q.get("date")||"",langState={value:"zh"};
@@ -59,6 +70,41 @@ function render(d,items){const story=(items||[])[id];if(!story){$("content").inn
  const share=$("share");if(share)share.onclick=async()=>{try{await navigator.clipboard.writeText(location.href);showToast(text("链接已复制","Link copied"))}catch{showToast(text("无法访问剪贴板，请手动复制地址栏链接。","Clipboard unavailable. Copy the address bar link."))}};
 }
 function switchLang(next){langState.value=next;const nav={today:["今日简报","Today"],deep:["深度阅读","Deep reads"],china:["中国 AI","China AI"],tools:["研究与工具","Research & tools"],archive:["历史简报","Archive"],back:["← 返回每日简报","← Back to briefing"]};document.querySelectorAll("[data-nav]").forEach(n=>{const pair=nav[n.dataset.nav];if(pair)n.textContent=pair[next==="en"?1:0]});document.querySelectorAll("[data-nav=deep]").forEach(n=>n.href=location.href);$("zh").classList.toggle("active",next==="zh");$("en").classList.toggle("active",next==="en");document.documentElement.lang=next==="zh"?"zh-CN":"en";if(window.briefData)render(window.briefData,window.storyList)}
+
+const savedReadKey="davy-radar-deep-read:"+type+":"+(safeDate||"latest")+":"+id;
+function syncReaderBookmark(){
+ const button=$("readerBookmarkAction");if(!button)return;
+ let saved=false;
+ try{const current=JSON.parse(localStorage.getItem("davy-radar.saved-deep-reads.v1")||"[]");saved=Array.isArray(current)&&current.includes(savedReadKey)}catch{}
+ button.setAttribute("aria-pressed",String(saved));
+ $("readerBookmarkLabel").textContent=saved?text("已收藏","Saved"):text("收藏","Save");
+}
+$("readerFontSize").onclick=()=>{
+ const order=["normal","large","larger"],current=document.body.dataset.readerSize||"normal";
+ const next=order[(order.indexOf(current)+1)%order.length];document.body.dataset.readerSize=next;
+ $("readerFontSize").setAttribute("aria-pressed",String(next!=="normal"));
+ $("readerFontLabel").textContent=next==="normal"?text("字号","Text size"):next==="large"?text("字号＋","Text size +"):text("字号＋＋","Text size ++");
+};
+$("readerBookmarkAction").onclick=()=>{
+ try{
+  let current=JSON.parse(localStorage.getItem("davy-radar.saved-deep-reads.v1")||"[]");
+  if(!Array.isArray(current))current=[];
+  current=current.filter(value=>typeof value==="string");
+  const existing=current.includes(savedReadKey);
+  current=existing?current.filter(value=>value!==savedReadKey):[...current,savedReadKey].slice(-200);
+  localStorage.setItem("davy-radar.saved-deep-reads.v1",JSON.stringify(current));
+  syncReaderBookmark();
+  showToast(existing?text("已取消收藏","Removed from saved reads"):text("已加入收藏","Saved for later"));
+ }catch{showToast(text("本机存储不可用，未保存。","Local storage is unavailable; nothing was saved."))}
+};
+$("readerShareAction").onclick=async()=>{
+ let copied=false;
+ try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(location.href);copied=true}}catch{}
+ if(!copied){const field=document.createElement("textarea");field.value=location.href;field.setAttribute("readonly","");field.style.position="fixed";field.style.opacity="0";document.body.appendChild(field);field.select();try{copied=document.execCommand("copy")}catch{}field.remove()}
+ showToast(copied?text("链接已复制","Link copied"):text("请手动复制地址栏链接。","Copy the address bar link."));
+};
+syncReaderBookmark();
+
 $("zh").onclick=()=>switchLang("zh");$("en").onclick=()=>switchLang("en");
 document.querySelectorAll("[data-nav=deep]").forEach(n=>n.href=location.href);
 fetch(dataUrl+"?ts="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Briefing unavailable");return r.json()}).then(d=>{window.briefData=d;const key={top5:"top5",xnews:"xnews_voices",china:"china_ai_news",news:"news"}[type]||"top5";window.storyList=d[key]||[];render(d,window.storyList)}).catch(()=>{$("content").innerHTML='<div class="eyebrow">DAVYLAB AI RADAR · DEEP READ</div><div class="empty">'+text("无法读取这期日报。请回到首页并重新选择。","Could not load this briefing. Return to the homepage and choose a story again.")+'</div>'});
