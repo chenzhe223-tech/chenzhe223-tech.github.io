@@ -335,11 +335,12 @@ function check(ok, name, detail = '') {
           const large=size>=24||(size>=18.66&&weight>=700);
           const minimum=large?3:4.5;
           results.push({text:text.slice(0,90),selector:el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(el.classList.length?'.'+[...el.classList].slice(0,3).join('.'):''),
-            ratio:Number(worst.ratio.toFixed(2)),minimum,foreground:[Math.round(worst.foreground.r),Math.round(worst.foreground.g),Math.round(worst.foreground.b)].join(','),
+            ratio:Number(worst.ratio.toFixed(2)),rawRatio:worst.ratio,minimum,foreground:[Math.round(worst.foreground.r),Math.round(worst.foreground.g),Math.round(worst.foreground.b)].join(','),
             background:[Math.round(worst.background.r),Math.round(worst.background.g),Math.round(worst.background.b)].join(','),opacity:Number(opacity.toFixed(3))});
         }
-        const failures=results.filter(x=>x.ratio+0.01<x.minimum);
-        return {checked:results.length,failures:failures.slice(0,40),failureCount:failures.length,minimumRatio:results.length?Math.min(...results.map(x=>x.ratio)):null};
+        const failures=results.filter(x=>x.rawRatio<x.minimum);
+        const worst=results.reduce((current,x)=>!current||x.rawRatio<current.rawRatio?x:current,null);
+        return {checked:results.length,failures:failures.slice(0,40),failureCount:failures.length,minimumRatio:worst?worst.rawRatio:null,worst};
       });
       check(contrastAudit.checked > 50, viewport.name + ': contrast audit checked rendered text', 'checked=' + contrastAudit.checked);
       check(contrastAudit.failureCount === 0, viewport.name + ': WCAG AA text contrast passes for all visible text (4.5:1 normal, 3:1 large)', JSON.stringify({checked:contrastAudit.checked,minimumRatio:contrastAudit.minimumRatio,failureCount:contrastAudit.failureCount,failures:contrastAudit.failures.slice(0,12)}));
