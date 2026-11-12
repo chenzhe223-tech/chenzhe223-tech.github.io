@@ -175,7 +175,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  * Embedded in extension.js to honor the deployed Worker static allowlist.
  */
 (function(){
- const story={type:'drama',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:''};
+ const story={type:'all',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:''};
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
@@ -257,9 +257,9 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
    '<form id="story-search-form" class="story-search-form"><label for="story-query">作品名 / 原著名 / 关键词</label><div class="story-search-fields">'+
    '<select id="story-type" aria-label="搜索类别"><option value="drama"'+(story.type==='drama'?' selected':'')+'>红果短剧 / 网剧</option>'+
    '<option value="novel"'+(story.type==='novel'?' selected':'')+'>小说 / 世界名著</option><option value="all"'+(story.type==='all'?' selected':'')+'>全网综合</option></select>'+
-   '<input id="story-query" maxlength="90" placeholder="输入：他过分野、简爱、Jane Eyre…" value="'+html(story.query)+'">'+
+   '<input id="story-query" maxlength="90" placeholder="搜索世界名著：悲惨世界、红楼梦、百年孤独、Jane Eyre…" value="'+html(story.query)+'">'+
    '<button class="button dark" type="submit" '+(story.busy?'disabled':'')+'>'+(story.busy?'正在核查…':'搜索作品与剧情')+'</button></div></form>'+
-   '<div class="story-quick">'+quick('他过分野','《他过分野》')+quick('简爱','《简·爱》')+
+   '<div class="story-quick">'+quick('悲惨世界','《悲惨世界》')+quick('红楼梦','《红楼梦》')+quick('百年孤独','《百年孤独》')+quick('他过分野','《他过分野》')+
    '<button type="button" class="button story-chip" data-story-hot="1">查看红果热点快照 / 网络新线索</button></div>'+
    (story.error?'<div class="story-error" role="alert">'+html(story.error)+'</div>':'')+
    (story.warnings.length?'<p class="story-note">部分来源暂不可用：'+html(story.warnings.join('；'))+'</p>':'')+
@@ -271,7 +271,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   if(story.busy)return;
   story.busy=true;story.error='';story.warnings=[];story.query=q;story.type=type;story.selected=null;story.chosen.clear();
   render();
-  const key='wt-story-cache-'+type+'-'+q.toLowerCase();let fromCache=false;
+  const key='wt-story-cache-v2-'+type+'-'+q.toLowerCase();let fromCache=false;
   try{
    let obj=null;
    if(!force){try{const old=JSON.parse(localStorage.getItem(key)||'null');if(old&&Date.now()-old.savedAt<900000){obj=old.doc;fromCache=true}}catch{}}
@@ -357,7 +357,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   if(!el)return;ev.preventDefault();ev.stopImmediatePropagation();
   try{
    if(el.dataset.storyQuick!==undefined){
-    const q=el.dataset.storyQuick;void search(q,q==='简爱'?'novel':'drama',true);
+    const q=el.dataset.storyQuick;void search(q,q==='他过分野'?'drama':'novel',true);
    }else if(el.dataset.storyHot!==undefined)void search('','drama',true);
    else if(el.dataset.storySelect!==undefined)choose(el.dataset.storySelect);
    else if(el.dataset.storyBack!==undefined){story.selected=null;story.chosen.clear();render()}
