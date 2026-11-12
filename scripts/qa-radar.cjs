@@ -268,6 +268,34 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
+        await page.waitForFunction(date => window.reportData?.report_date === date, archiveOption, { timeout: 10000 });
+        const archivedSkillHandoff = await page.evaluate(() => {
+          const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
+          const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
+          if (!nianbox || !keypocket) return { available: false };
+          localStorage.removeItem('nb.radar.pending-skill.v1');
+          localStorage.removeItem('kp.radar.pending-skills.v1');
+          for (const link of [nianbox, keypocket]) {
+            link.addEventListener('click', event => event.preventDefault(), { once: true });
+            link.click();
+          }
+          let nianboxQueue = [], keypocketQueue = [];
+          try { nianboxQueue = JSON.parse(localStorage.getItem('nb.radar.pending-skill.v1') || '[]'); } catch {}
+          try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
+          const result = {
+            available: true,
+            renderedDate: window.reportData?.report_date || '',
+            nianboxDate: nianboxQueue[0]?.reportDate || '',
+            keypocketDate: keypocketQueue[0]?.reportDate || ''
+          };
+          localStorage.removeItem('nb.radar.pending-skill.v1');
+          localStorage.removeItem('kp.radar.pending-skills.v1');
+          return result;
+        });
+        check(archivedSkillHandoff.available && archivedSkillHandoff.renderedDate === archiveOption,
+          viewport.name + ': selected archive data replaces the current report before Skill save', JSON.stringify(archivedSkillHandoff));
+        check(archivedSkillHandoff.nianboxDate === archiveOption && archivedSkillHandoff.keypocketDate === archiveOption,
+          viewport.name + ': archived Skill save preserves the selected issue date in both handoff queues', JSON.stringify(archivedSkillHandoff));
         await page.goto(base, { waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForTimeout(500);
       }
