@@ -21,6 +21,11 @@ try:
 except ModuleNotFoundError:
     from skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, enrich_growth_metrics, score_candidate
 
+try:
+    from radar.scripts.xnews_sources import collect_xnews_articles
+except ModuleNotFoundError:
+    from xnews_sources import collect_xnews_articles
+
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
 ARCHIVE = DATA / "archive"
@@ -156,7 +161,7 @@ def _history_stories(today: str) -> list[dict]:
                 raise ValueError("archive root is not an object")
         except Exception as exc:
             raise RuntimeError(f"Cannot read historical archive {path.name}: {type(exc).__name__}") from exc
-        for section in ("news", "top5", "china_ai_news", "china_news", "top_news"):
+        for section in ("news", "top5", "china_ai_news", "china_news", "top_news", "xnews_voices"):
             values = doc.get(section, [])
             if not isinstance(values, list):
                 continue
@@ -922,6 +927,21 @@ def main() -> None:
     recent = [x for x in items if not x["published"] or dt.datetime.fromisoformat(x["published"].replace("Z", "+00:00")) >= cutoff]
     recent.sort(key=lambda x: x.get("published") or "", reverse=True)
     recent = filter_historical_duplicates(recent, "global_news", now.astimezone(TZ).date().isoformat())
+    # Supplementary long-form reading: do not replace or dilute the verified
+    # five-story editorial and China AI minimum. This optional source can fail
+    # without affecting routine publication.
+    if os.environ.get("RADAR_USE_XNEWS", "true").strip().lower() in {"true", "1", "yes", "on"}:
+        xnews_voices, xnews_status = collect_xnews_articles(http_get, now=now)
+    else:
+        xnews_voices, xnews_status = [], "disabled"
+    if xnews_voices:
+        today_key = now.astimezone(TZ).date().isoformat()
+        xnews_voices = filter_historical_duplicates(xnews_voices, "xnews_voices", today_key)
+        same_day = [{**item, "_current_date": today_key} for item in recent]
+        xnews_voices = [
+            item for item in xnews_voices
+            if not _duplicate_match(item, same_day, today_key)
+        ][:6]
     skills = collect_skills()
     china_ai_news, china_sources_ok = collect_china_ai_news(now)
     report = {
@@ -933,6 +953,8 @@ def main() -> None:
         "sources_ok": source_success,
         "sources_total": len(FEEDS),
         "news": recent[:20],
+        "xnews_voices": xnews_voices,
+        "xnews_status": xnews_status,
         "china_ai_news": china_ai_news,
         "historical_dedupe": {
             "status": "ok",
@@ -947,6 +969,7 @@ def main() -> None:
         "skill_radar": SKILL_RADAR_DIAGNOSTICS,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
+            "xnews_sources": "optional X News RSS v1: original author/source URL and source pubDate; short attributed editorial excerpt only; not independent fact verification",
             "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI, Google News China-AI, IT Home, InfoQ China and OSChina RSS; filtered for China-related AI entities and timestamps within seven days",
             "china_ai_news_minimum": CHINA_NEWS_MIN,
             "china_ai_news_target": CHINA_NEWS_TARGET,
