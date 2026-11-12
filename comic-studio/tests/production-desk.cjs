@@ -47,4 +47,3 @@ assert.equal((page.match(/class="wt-dash-kpi"/g)||[]).length,4);
 assert.equal((page.match(/class="wt-dash-task"/g)||[]).length,3);
 assert.equal((page.match(/class="wt-dash-steps"/g)||[]).length,1);
 console.log('PASS: Production Desk compact markup, truthful counters and mobile CSS contract');
-

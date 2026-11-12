@@ -109,4 +109,3 @@ async function wtStorySearch(request,env,url){
   searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
   model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
 }
-

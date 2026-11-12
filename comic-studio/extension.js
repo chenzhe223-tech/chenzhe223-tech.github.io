@@ -93,9 +93,21 @@ function wtLive(){
  (allMatched.length>items.length?'<div class="wt-catalog-more"><button type="button" class="button" data-wt="more">查看更多 · 尚有 '+(allMatched.length-items.length)+' 条</button></div>':'')+'</section>';
 }
 document.addEventListener('error',ev=>{const img=ev.target;if(!img?.matches?.('img[data-wt-news-image]'))return;const box=img.closest('.wt-news-media');if(box){box.classList.remove('has-photo');box.classList.add('is-fallback');img.remove()}},true);
-function wtCharacters(){const cards=(data.characters||[]).map(c=>'<article class="wt-character">'+(c.portrait?'<img src="'+e(c.portrait)+'" alt="'+e(c.name)+'的原创定妆照" style="display:block;width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:13px">':'<div style="min-height:110px;background:#e7e9df;border-radius:9px;display:grid;place-items:center;color:#66736b;margin-bottom:13px">NO REFERENCE PORTRAIT</div>')+'<span class="wt-chip">'+e(c.type||'虚构角色')+'</span><h3>'+e(c.name)+'</h3><p>'+e(c.description||'未填写角色外形')+'</p><p class="minor">服饰：'+e(c.costume||'待设定')+' · 配色：'+e(c.colors||'待设定')+'</p><p class="minor">固定识别特征：'+e(c.traits||'待设定')+'</p><div class="buttons"><label class="button" style="cursor:pointer">上传定妆照<input type="file" accept="image/png,image/jpeg,image/webp" data-wt-character-image="'+e(c.id)+'" hidden></label><button class="button" data-wt="char-edit" data-id="'+e(c.id)+'">编辑档案</button><button class="button" data-wt="char-prompt" data-id="'+e(c.id)+'">复制参考提示</button><button class="button" data-wt="char-delete" data-id="'+e(c.id)+'">移除</button></div></article>').join('');return heroHeader('06 / THE CAST','角色一致性档案','记录原创角色的外貌、服饰与性格，为角色上传定妆照以提高跨格一致性。','<button class="button dark" data-wt="char-new">＋ 新建角色档案</button>')+'<div class="wt-ai"><strong>定妆照与参考图</strong><p>一位角色一张固定视觉参考；单次生成可引用多位角色的图片与第 1 格画风图。只能上传有权使用的原创或授权素材，不得借此模拟真实人士的私人行为。</p></div><div class="wt-grid">'+(cards||'<div class="box">角色档案尚为空，添加第一位原创虚构角色。</div>')+'</div>';}
+function wtCharacters(){
+ const p=selected(),ids=window.WTCharacterContinuity;
+ const cards=(data.characters||[]).map(c=>{
+  const nativeName=c.originalName||c.name||'未命名角色';
+  const display=ids?.displayName(data,c.characterId||c.id,p?.id)||nativeName;
+  return `<article class="wt-character">${c.portrait?`<img src="${e(c.portrait)}" alt="${e(display)}的原创定妆照" style="display:block;width:100%;height:190px;object-fit:cover;border-radius:10px;margin-bottom:13px">`:'<div style="min-height:110px;background:#e7e9df;border-radius:9px;display:grid;place-items:center;color:#66736b;margin-bottom:13px">NO REFERENCE PORTRAIT</div>'}<span class="wt-chip">${e(c.type||'虚构角色')}</span><h3>${e(display)}</h3><p class="minor">原生名：${e(nativeName)}${display!==nativeName?' · 本作漫画名：'+e(display):''}</p><p>${e(c.description||'未填写角色外形')}</p><p class="minor">服饰：${e(c.costume||'待设定')} · 配色：${e(c.colors||'待设定')}</p><p class="minor">固定识别特征：${e(c.traits||'待设定')}</p><div class="buttons"><label class="button" style="cursor:pointer">上传定妆照<input type="file" accept="image/png,image/jpeg,image/webp" data-wt-character-image="${e(c.id)}" hidden></label><button class="button" data-wt="char-edit" data-id="${e(c.id)}">编辑档案</button><button class="button" data-wt="char-prompt" data-id="${e(c.id)}">复制参考提示</button><button class="button" data-wt="char-delete" data-id="${e(c.id)}">移除</button></div></article>`;
+ }).join('');
+ return heroHeader('06 / THE CAST','角色一致性档案','当前工作区可跨漫画复用角色身份；每部作品可使用自己的漫画名。','<button class="button dark" data-wt="char-new">＋ 新建角色档案</button>')+'<div class="wt-ai"><strong>定妆照与参考图</strong><p>一位角色一张固定视觉参考；单次生成可引用多位角色的图片与第 1 格画风图。只能上传有权使用的原创或授权素材，不得借此模拟真实人士的私人行为。</p></div><div class="wt-grid">'+(cards||'<div class="box">角色档案尚为空，添加第一位原创虚构角色。</div>')+'</div>';
+}
 function wtAccount(){const heading=heroHeader('ACCOUNT / PRIVATE CLOUD','登录与多端同步','邮箱账户 · 私有作品与图片存储 · 冲突保护 · 本地优先。未登录不会上传作品。');const foot='<section class="box"><h2>数据与备份</h2><p>本地草稿保存在当前浏览器；登录后可以手动或在编辑时同步至私有云端。请在大改前导出完整 ZIP 备份。</p><a href="#/settings" class="button">前往数据管理 ↗</a></section>';if(wtSession?.access_token){return heading+'<section class="box"><div class="kicker">PRIVATE CLOUD / SIGNED IN</div><h2>'+e(wtSession.user?.email||'已登录')+'</h2><p class="wt-note">'+e(wtStatus)+(wtRemoteRev===null?' · 尚未建立云端版本基线':' · 云端修订 '+wtRemoteRev)+(wtSyncedAt?' · 最近同步 '+e(wtSyncedAt):'')+'</p>'+(wtCloudError?'<p class="wt-error">'+e(wtCloudError)+'</p>':'')+'<div class="buttons"><button class="button dark" data-wt="sync-pull">从云端恢复到本机</button><button class="button" data-wt="sync-push">将本机备份至云端</button><button class="button" data-wt="signout">退出登录</button></div><p class="wt-note">新设备请先从云端恢复。同步采用版本冲突保护，避免不同设备静默覆盖。云端图像只能由所属用户读取。</p></section>'+foot;}return heading+'<section class="box"><div class="kicker">SECURE SIGN IN</div><h2>登录你的私人漫画工作室</h2><form id="wtLogin" autocomplete="on"><div class="fields"><div class="field"><label for="wtEmail">邮箱地址</label><input id="wtEmail" type="email" name="email" autocomplete="email" required placeholder="you@example.com"></div><div class="field"><label for="wtPassword">账户密码</label><input id="wtPassword" type="password" name="password" autocomplete="current-password" minlength="8" required placeholder="至少 8 位"></div></div><div class="buttons" style="margin-top:18px"><button class="button dark" type="submit" name="mode" value="login">登录</button><button class="button" type="submit" name="mode" value="signup">注册账户</button></div></form><p class="wt-note">仅主动注册、登录时发送邮箱密码到 Supabase Auth。新账户可能需要邮件确认；未登录期间不会上传本机作品。</p>'+(wtCloudError?'<p class="wt-error">'+e(wtCloudError)+'</p>':'')+'<p class="minor">'+e(wtStatus)+'</p></section>'+foot;}
-function wtCharModal(c){modal(`<div class="kicker">CHARACTER BIBLE / BY DAVYLAB</div><h2>${c?'编辑':'创建'}原创角色</h2><form id="wtCharacterForm" data-id="${e(c?.id||'')}"><div class="fields"><div class="field"><label>角色名称</label><input name="name" maxlength="80" required value="${e(c?.name||'')}"></div><div class="field"><label>类型</label><select name="type"><option>虚构角色</option><option>拟人化角色</option><option>抽象象征</option></select></div><div class="field wide"><label>外形及发型</label><textarea name="description" maxlength="1800">${e(c?.description||'')}</textarea></div><div class="field"><label>固定服饰</label><input name="costume" value="${e(c?.costume||'')}"></div><div class="field"><label>代表色彩</label><input name="colors" value="${e(c?.colors||'')}"></div><div class="field wide"><label>不可改变的识别特征</label><textarea name="traits">${e(c?.traits||'')}</textarea></div><div class="field wide"><label>人物背景与性格</label><textarea name="personality">${e(c?.personality||'')}</textarea></div></div><div class="stepactions"><button class="button" type="button" data-action="modal-close">取消</button><button class="button dark">保存角色</button></div></form>`);}
+function wtCharModal(c){
+ const p=selected(),ids=window.WTCharacterContinuity,nativeName=c?.originalName||c?.name||'';
+ const comicName=c&&p?ids?.displayName(data,c.characterId||c.id,p.id)||nativeName:'';
+ modal(`<div class="kicker">CHARACTER BIBLE / BY DAVYLAB</div><h2>${c?'编辑':'创建'}原创角色</h2><form id="wtCharacterForm" data-id="${e(c?.id||'')}" data-project-id="${e(p?.id||'')}"><div class="fields"><div class="field"><label>原生角色名</label><input name="originalName" maxlength="80" required value="${e(nativeName)}"></div>${p?`<div class="field"><label>本作品漫画名</label><input name="comicName" maxlength="80" value="${e(comicName)}"><small>只影响《${e(p.title||'当前作品')}》，不会更改其他漫画中的角色名。</small></div>`:''}<div class="field"><label>类型</label><select name="type"><option>虚构角色</option><option>拟人化角色</option><option>抽象象征</option></select></div><div class="field wide"><label>外形及发型</label><textarea name="description" maxlength="1800">${e(c?.description||'')}</textarea></div><div class="field"><label>固定服饰</label><input name="costume" value="${e(c?.costume||'')}"></div><div class="field"><label>代表色彩</label><input name="colors" value="${e(c?.colors||'')}"></div><div class="field wide"><label>不可改变的识别特征</label><textarea name="traits">${e(c?.traits||'')}</textarea></div><div class="field wide"><label>人物背景与性格</label><textarea name="personality">${e(c?.personality||'')}</textarea></div></div><div class="stepactions"><button class="button" type="button" data-action="modal-close">取消</button><button class="button dark">保存角色</button></div></form>`);
+}
 function wtCharBible(){return (data.characters||[]).map(c=>`${c.name}: ${c.description}; 固定服饰 ${c.costume}; 色彩 ${c.colors}; 识别特征 ${c.traits}; 性格 ${c.personality}`).join('\n')||'纯原创虚构角色，无现实名人肖像';}
 function wtStudioAI(){const p=selected();if(!p)return '';const ready=!!wtConfig?.aiEnabled&&!!wtSession?.access_token;const disabled=ready&&!wtAiBusy?'':' disabled';const status=!wtConfig?.aiEnabled?'AI 模型费用尚未获批，暂未开启自动生成':!wtSession?.access_token?'请先登录账户，才可以调用模型':'角色档案与首格定妆照将帮助保持画风一致';return '<section class="box" style="margin-top:12px;margin-bottom:16px"><div class="kicker">AI WRITER & ART DIRECTOR</div><h2>AI 编剧与画面生成 <span class="wt-chip">'+(ready?'已连接':'待启用')+'</span></h2><p class="wt-note">'+e(status)+'。自动编剧生成九格文字初稿；绘图仅生成第 '+(ui.panel+1)+' 格。所有作品仍需人工核验事实和图片。</p><div class="buttons"><button class="button dark" data-wt="ai-script"'+disabled+'>✦ AI 九格编剧</button><button class="button" data-wt="ai-image"'+disabled+'>生成当前画格</button><button class="button" data-wt="ai-image-ref"'+disabled+'>参考首格生图</button><a class="button" href="#/characters">角色档案 ↗</a><a class="button" href="#/account">登录与同步 ↗</a></div></section>';}
 const wtOriginalStudio=studio;studio=function(){return (typeof wfHint==='function'?wfHint():'')+wtOriginalStudio()};
@@ -162,11 +174,11 @@ async function wtImage(useReference=false){if(wtAiBusy)return;const p=selected()
 document.addEventListener('change',async ev=>{const input=ev.target;if(!input?.matches?.('[data-wt-character-image]'))return;const c=(data.characters||[]).find(x=>x.id===input.dataset.wtCharacterImage);const file=input.files?.[0];if(!c||!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>8*1024*1024){notify('定妆照需为 JPG、PNG 或 WebP，文件小于 8 MB');return;}try{const key=uid();await putMedia(key,file);c.portrait='media:'+key;persist();render();notify('角色定妆照已保存；登录后可同步至私有云端');}catch(err){notify('定妆照保存失败：'+err.message);}},true);
 // Intercept only extension controls; keep v1 editor event handling intact.
 document.addEventListener('click',async ev=>{let btn=ev.target.closest('[data-wt]');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();let action=btn.dataset.wt,id=btn.dataset.id,val=btn.dataset.value;try{switch(action){case'source':wtSource=val;wtCategory='全部';wtVisibleCount=12;render();break;case'category':wtCategory=val;wtVisibleCount=12;render();break;case'news-refresh':case'reload-cache':await wtFetchNews();break;case'clear-filters':wtCategory='全部';wtQuery='';wtRankMin=60;wtRankFocus='all';wtVisibleCount=12;render();break;case'more':wtVisibleCount=Math.min(500,wtVisibleCount+12);render();break;case'save-news':await wtSaveNews(btn.dataset.index);break;case'create-news':await wtDraftFromNews(btn.dataset.index);break;case'char-new':wtCharModal();break;case'char-edit':wtCharModal((data.characters||[]).find(x=>x.id===id));break;case'char-delete':if(confirm('从角色档案中移除该角色？')){data.characters=data.characters.filter(x=>x.id!==id);persist();render()}break;case'char-prompt':{let c=data.characters.find(c=>c.id===id);copyText(`${c.name} / 角色圣经：${c.description}；固定服饰：${c.costume}；色彩：${c.colors}；唯一识别特征：${c.traits}；性格：${c.personality}。每张分镜保持外貌一致，避免模拟真实人物。`);break}case'sync-pull':await wtPull();break;case'sync-push':if(confirm('把当前本机作品上传并覆盖你的云端版本？'))await wtPush(true);break;case'signout':wtSession=null;wtRemoteRev=null;wtSaveSession();wtStatus='已退出';render();break;case'ai-script':await wtScript();break;case'ai-image':await wtImage(false);break;case'ai-image-ref':await wtImage(true);break;}}catch(err){notify('操作异常：'+err.message)}},true);
-document.addEventListener('submit',ev=>{if(ev.target.id==='wtCharacterForm'){ev.preventDefault();ev.stopImmediatePropagation();let c=data.characters.find(c=>c.id===ev.target.dataset.id);if(!c){c={id:uid()};data.characters.push(c)}Object.assign(c,Object.fromEntries(new FormData(ev.target).entries()));persist();closeModal();render();notify('角色档案已保存')}if(ev.target.id==='wtLogin'){ev.preventDefault();ev.stopImmediatePropagation();let sub=ev.submitter?.value||'login';let form=ev.target;const email=form.elements.email.value, password=form.elements.password.value;wtAuthForm({elements:{email:{value:email},password:{value:password}}},sub)}},true);
+document.addEventListener('submit',ev=>{if(ev.target.id==='wtCharacterForm'){ev.preventDefault();ev.stopImmediatePropagation();if(!Array.isArray(data.characters))data.characters=[];let c=data.characters.find(x=>x.id===ev.target.dataset.id);if(!c){const id=uid();c={id,characterId:id,comicNames:[]};data.characters.push(c)}window.WTCharacterContinuity?.normalizeWorkspace(data);const values=Object.fromEntries(new FormData(ev.target).entries());const nativeName=String(values.originalName||values.name||'').trim();delete values.originalName;delete values.comicName;delete values.name;Object.assign(c,values,{name:nativeName,originalName:nativeName});if(ev.target.dataset.projectId)window.WTCharacterContinuity?.setComicName(data,c.characterId,ev.target.dataset.projectId,ev.target.elements.comicName?.value||nativeName);persist();closeModal();render();notify('角色档案已保存')}if(ev.target.id==='wtLogin'){ev.preventDefault();ev.stopImmediatePropagation();let sub=ev.submitter?.value||'login';let form=ev.target;const email=form.elements.email.value, password=form.elements.password.value;wtAuthForm({elements:{email:{value:email},password:{value:password}}},sub)}},true);
 document.addEventListener('change',ev=>{const x=ev.target;if(!['wtRankSort','wtRankFocus','wtRankMin'].includes(x.id))return;ev.stopImmediatePropagation();if(x.id==='wtRankSort')wtRankSort=x.value;if(x.id==='wtRankFocus')wtRankFocus=x.value;if(x.id==='wtRankMin')wtRankMin=Math.max(60,Number(x.value)||60);wtVisibleCount=12;render()},true);
 document.addEventListener('input',ev=>{if(ev.target.id==='wtSearch'){wtQuery=ev.target.value;let root=document.querySelector('.wt-news');if(root){let caret=ev.target.selectionStart;render();let next=document.getElementById('wtSearch');next?.focus();next?.setSelectionRange(caret,caret)}}},true);
 render();
-(async()=>{wtRestoreCatalog();await wtLoadConfig();try{wtSession=JSON.parse(localStorage.getItem('worldtoon_auth_session')||'null');if(wtSession){await wtEnsureToken();wtStatus='已登录，等待首次同步操作'}}catch{wtSession=null;wtSaveSession();}if(location.hash.startsWith('#/live'))wtFetchNews();render()})();
+(async()=>{wtRestoreCatalog();if(window.WTCharacterContinuity){const before=JSON.stringify(data.characters||[]);window.WTCharacterContinuity.normalizeWorkspace(data);if(JSON.stringify(data.characters||[])!==before)persist()}await wtLoadConfig();try{wtSession=JSON.parse(localStorage.getItem('worldtoon_auth_session')||'null');if(wtSession){await wtEnsureToken();wtStatus='已登录，等待首次同步操作'}}catch{wtSession=null;wtSaveSession();}if(location.hash.startsWith('#/live'))wtFetchNews();render()})();
 window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&&!wtNews.length&&!wtFetching)wtFetchNews();});
 
 /* WORLD_TOON_STORY_DISCOVERY_V1 — canonical story-discovery-ui.js embedded for Worker allowlist. */
@@ -175,11 +187,12 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  * Embedded in extension.js to honor the deployed Worker static allowlist.
  */
 (function(){
- const story={type:'all',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:''};
+ const story={type:'drama',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:''};
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
+ const flowCard=x=>window.WTDiscoveryFlow?.card(x)||{identityLabel:'作品身份待核对',heatLabel:'未核实热度',heatEvidenceDate:'',publishedDate:String(x?.published||'').slice(0,10),sourceName:x?.source_name||'公开资料',rightsLabel:x?.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实'};
  function originalTopicChoices(x){
   const label=String(x?.genre||x?.type||'').slice(0,80);
   const domain=/玄幻|仙侠|修仙|妖/.test(label)?'架空修行世界':
@@ -210,18 +223,15 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  }
  function quick(id,label){return '<button type="button" class="button story-chip" data-story-quick="'+html(id)+'">'+html(label)+'</button>'}
  function identityLabel(x){
-  if(x?.rank_snapshot)return '第三方榜单记录 · '+html(x.verified_on||x.snapshot_date||'日期待核')+' · #'+html(x.rank_snapshot);
-  if(x?.identity_status==='title_mentioned_in_source')return '来源提及该题名 · 作品身份待人工核对';
-  if(x?.identity_status==='book_title_match')return '书目题名命中 · 不是剧情章节';
-  if(x?.identity_status==='curated_title_match')return '精选索引题名命中 · '+html(x.verified_on||x.snapshot_date||'日期待核');
-  return '作品身份待核对';
+  const card=flowCard(x),rank=x?.rank_snapshot?(' · #'+html(x.rank_snapshot)):'';
+  return html(card.identityLabel)+(card.heatEvidenceDate?' · '+html(card.heatEvidenceDate):'')+rank;
  }
  function bookResult(x,i){return '<article class="story-result" role="listitem">'+
   '<div><span class="story-type">'+html(x.type==='drama'?'短剧／网络线索':x.type==='classic'?'经典文学':'网络小说／书目')+'</span>'+
   '<span class="story-rank">'+identityLabel(x)+'</span>'+
   '<h3>'+html(x.title)+'</h3><p>'+html(x.summary||'仅检索到书目／报道线索，请查看来源并提供剧情摘要。')+'</p>'+
-  '<small>'+html(x.source_name||'公开资料')+' · '+html(x.author||x.genre||'')+
-  (x.published?' · 来源日期 '+html(String(x.published).slice(0,10)):'')+' · '+html(x.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实')+'</small></div>'+
+  '<small>'+html(flowCard(x).sourceName)+' · '+html(x.author||x.genre||'')+
+  (flowCard(x).publishedDate?' · 来源日期 '+html(flowCard(x).publishedDate):' · 来源日期待核')+' · '+html(flowCard(x).heatLabel)+' · '+html(flowCard(x).rightsLabel)+'</small></div>'+
   '<div class="story-actions"><a target="_blank" rel="noopener noreferrer" href="'+html(limitedSource(x))+'">查看来源 ↗</a>'+
   '<button type="button" class="button dark" data-story-select="'+i+'">选择剧情 →</button></div></article>';
  }
@@ -252,32 +262,33 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  function block(){
   return '<section class="story-discovery" id="storyDiscovery"><div class="story-discovery-head"><div>'+
    '<div class="kicker">WORLD/TOON · STORY SOURCE DESK</div><h2>红果热剧 · 网络小说 · 世界名著</h2>'+
-   '<p>先查作品与来源，再选剧情片段，最后进入同一个漫画工作空间。热度展示仅作线索，不冒充红果官方数据。</p></div>'+
-   '<span>STORY → PANELS</span></div>'+
+   '<p>先查来源与作品身份，再核对版权并选择可用剧情，最后进入现有编剧 → 导演 → 生产工作台。所有榜单显示来源与日期，未核实热度会明确标记。</p></div>'+
+   '<span>来源 → 身份/版权 → 剧情候选 → 工作台</span></div>'+
+   '<ol class="story-flow-steps"><li>搜索来源</li><li>核对作品身份与权利</li><li>选择剧情弧线或原创灵感</li><li>进入编剧与生产 SOP</li></ol>'+
    '<form id="story-search-form" class="story-search-form"><label for="story-query">作品名 / 原著名 / 关键词</label><div class="story-search-fields">'+
    '<select id="story-type" aria-label="搜索类别"><option value="drama"'+(story.type==='drama'?' selected':'')+'>红果短剧 / 网剧</option>'+
    '<option value="novel"'+(story.type==='novel'?' selected':'')+'>小说 / 世界名著</option><option value="all"'+(story.type==='all'?' selected':'')+'>全网综合</option></select>'+
-   '<input id="story-query" maxlength="90" placeholder="搜索世界名著：悲惨世界、红楼梦、百年孤独、Jane Eyre…" value="'+html(story.query)+'">'+
+   '<input id="story-query" maxlength="90" placeholder="输入：他过分野、简爱、Jane Eyre…" value="'+html(story.query)+'">'+
    '<button class="button dark" type="submit" '+(story.busy?'disabled':'')+'>'+(story.busy?'正在核查…':'搜索作品与剧情')+'</button></div></form>'+
-   '<div class="story-quick">'+quick('悲惨世界','《悲惨世界》')+quick('红楼梦','《红楼梦》')+quick('百年孤独','《百年孤独》')+quick('他过分野','《他过分野》')+
-   '<button type="button" class="button story-chip" data-story-hot="1">查看红果热点快照 / 网络新线索</button></div>'+
-   (story.error?'<div class="story-error" role="alert">'+html(story.error)+'</div>':'')+
+   '<div class="story-quick">'+quick('他过分野','《他过分野》')+quick('简爱','《简·爱》')+
+   '<button type="button" class="button story-chip" data-story-hot="1">查看带日期的第三方短剧榜单快照 / 网络题名线索</button></div>'+
+   (story.error?'<div class="story-error" role="alert"><strong>'+html(window.WTDiscoveryFlow?.errorState(/timeout|超时|abort/i.test(story.error)?'timeout':'failure').title||'搜索失败')+'</strong><p>'+html(story.error)+'</p><small>来源失败状态不会替换成推测剧情或模拟热度。</small></div>':'')+
    (story.warnings.length?'<p class="story-note">部分来源暂不可用：'+html(story.warnings.join('；'))+'</p>':'')+
    (story.loaded?'<div class="story-results-top"><strong>'+story.items.length+' 条候选资料</strong><small>查询时间 '+html(story.when||'')+(story.sourceAge?' · '+html(story.sourceAge):'')+' · 源自公开书目与报道、已核对精选资料；非原著全文</small></div>':'')+
-   (story.selected?selection():(story.loaded?'<div class="story-results" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none">没有找到可核实的候选作品。试试原名、作者名，或切换小说／短剧分类。</div>')+'</div>':''))+
+   (story.selected?selection():(story.loaded?'<div class="story-results" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none"><strong>'+html(window.WTDiscoveryFlow?.errorState('empty').title||'没有匹配结果')+'</strong><p>'+html(window.WTDiscoveryFlow?.errorState('empty').message||'试试原名、作者名，或切换小说／短剧分类。')+'</p></div>')+'</div>':''))+
    '</section>';
  }
  async function search(q,type,force){
   if(story.busy)return;
   story.busy=true;story.error='';story.warnings=[];story.query=q;story.type=type;story.selected=null;story.chosen.clear();
   render();
-  const key='wt-story-cache-v2-'+type+'-'+q.toLowerCase();let fromCache=false;
+  const key='wt-story-cache-'+type+'-'+q.toLowerCase();let fromCache=false;
   try{
    let obj=null;
    if(!force){try{const old=JSON.parse(localStorage.getItem(key)||'null');if(old&&Date.now()-old.savedAt<900000){obj=old.doc;fromCache=true}}catch{}}
    if(!obj){
     const u='/api/comic/story-search?type='+encodeURIComponent(type)+'&q='+encodeURIComponent(q);
-    const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),26000);
+    const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),18000);
     try{
      const res=await fetch(u,{signal:abort.signal,cache:'no-store'});
      obj=await res.json().catch(()=>({error:'服务器返回格式异常'}));
@@ -357,7 +368,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   if(!el)return;ev.preventDefault();ev.stopImmediatePropagation();
   try{
    if(el.dataset.storyQuick!==undefined){
-    const q=el.dataset.storyQuick;void search(q,q==='他过分野'?'drama':'novel',true);
+    const q=el.dataset.storyQuick;void search(q,q==='简爱'?'novel':'drama',true);
    }else if(el.dataset.storyHot!==undefined)void search('','drama',true);
    else if(el.dataset.storySelect!==undefined)choose(el.dataset.storySelect);
    else if(el.dataset.storyBack!==undefined){story.selected=null;story.chosen.clear();render()}
@@ -390,4 +401,3 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   loaded:story.loaded,error:story.error}),search,choose,createProjectFromStory,beatOptions,block};
  if(ui.route==='live')Promise.resolve().then(()=>{if(ui.route==='live')render()});
 })();
-

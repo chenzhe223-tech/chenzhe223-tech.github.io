@@ -41,10 +41,17 @@ function storyboard(p){
  const spec=p?.creativeDirection?.styleId&&window.wtDirector?.STYLES?.find(x=>x.id===p.creativeDirection.styleId);
  const style=spec?(spec.name+'；固定色板 '+spec.palette.join(', ')+'；材质 '+spec.material+'；光线 '+spec.lighting+'；构图 '+spec.layout+'；禁用 '+spec.negative):clean(p.tone||'待导演台确定画风');
  const bible=cast(p);
- const refs=(Array.isArray(p.visualReferences)?p.visualReferences:[]).slice(0,12);
- const visualNote=refs.length?'Museum references (inspiration ONLY, not factual reconstruction): '+refs.map(r=>r.title+' / '+r.source+' / '+r.license+' / '+r.source_url).join(' | '):'No museum references selected.';
  return BEATS.map((beat,i)=>{
   const shot=SHOTS[i],existing=p.panels?.[i]||{};
+  const panelText=clean([existing.scene,existing.dialogue,existing.prompt].join(' '));
+  const refs=(Array.isArray(p.visualReferences)?p.visualReferences:[]).filter(r=>{
+   const target=r.appliesTo;if(!target)return true; // Legacy projects used project-wide references.
+   if(target.scope==='project')return true;
+   if(target.scope==='panel')return String(target.targetId)===String(i+1)||String(target.targetId)===String(existing.id||'');
+   if(target.scope==='character')return !!target.characterName&&panelText.includes(String(target.characterName));
+   return false;
+  }).slice(0,12);
+  const visualNote=refs.length?'Visual references (inspiration ONLY; apply only to this target): '+refs.map(r=>(r.assetTypeLabel||r.assetType||'reference')+' · '+r.title+' / '+r.source+' / '+r.license+' / '+r.source_url).join(' | '):'No visual references assigned to this panel.';
   const scene=clean(existing.scene)||beat[1].replace('主题',topic);
   const caption=clean(existing.caption)||('第 '+(i+1)+' 幕 · '+beat[0]);
   const dialogue=clean(existing.dialogue)||beat[2];
@@ -82,8 +89,15 @@ function apply(p){
  setChange(p,'四阶段 Skill 方法生成九格分镜初稿；真实画面尚待制作/复核');
  ui.stage=2;render();notify('九格分镜初稿已建立；可继续逐格生图或上传原创图片');
 }
-function refsForBundle(p){return (Array.isArray(p.visualReferences)?p.visualReferences:[]).slice(0,24).map(r=>({id:r.id,title:r.title,source:r.source,date:r.date,license:r.license,source_url:r.source_url,image:r.image,role:'visual_reference_only'}))}
+function refsForBundle(p){return (Array.isArray(p.visualReferences)?p.visualReferences:[]).slice(0,24).map(r=>({id:r.id,title:r.title,source:r.source,date:r.date,license:r.license,license_evidence_url:r.license_evidence_url||'',rightsStatus:r.rightsStatus||'legacy_review_required',rights_verified:r.rights_verified===true,assetType:r.assetType||'legacy_unclassified',assetTypeLabel:r.assetTypeLabel||'',appliesTo:r.appliesTo||{scope:'project',targetId:'project'},source_url:r.source_url,image:r.image,role:'visual_reference_only'}))}
 function bundleEntries(p){
+ const refs=Array.isArray(p.visualReferences)?p.visualReferences:[];
+ for(const ref of refs){
+  const licensed=ref.license==='CC0'&&(ref.rightsStatus==='verified_cc0'||!ref.rightsStatus)||ref.rightsStatus==='author_self_owned'&&ref.rights_verified===true||ref.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(ref.license_evidence_url||''));
+  if(!licensed)throw Error('视觉素材「'+clean(ref.title)+'」缺少 CC0、自有确认或授权凭证，不能加入生产包');
+  if(!ref.assetType||!ref.appliesTo||ref.assetType==='legacy_unclassified')throw Error('视觉素材「'+clean(ref.title)+'」尚未分类或指定应用对象，请先整理后再导出');
+  const check=window.wtVisualStudio?.validateApplication?.(ref,ref.appliesTo);if(check&&!check.ok)throw Error('视觉素材「'+clean(ref.title)+'」的应用范围无效：'+check.reason);
+ }
  const parts=storyboard(p);const title=clean(p.title);
  const files=[
   {name:'production/brief.json',bytes:JSON.stringify({schema:'davylab.worldtoon.comic-engine.v1',title,source:clean(p.sourceURLs),research_required:true,verified:false,author_approved:false,style:p.tone,format:p.format,adapters:STEPS,disclosure:p.disclosure},null,2)},
@@ -153,7 +167,8 @@ async function inspectNine(p){
  if(sources.length&&!p.factNotes?.trim())warnings.push('尚未记录独立事实核验资料');
  if(/待核验|未核验|pending/i.test(p.factNotes||''))warnings.push('事实标注仍为待核验');
  if(['check_jurisdiction','unknown'].includes(p.rightsStatus||''))warnings.push('原著与译本或第三方素材权利仍待人工确认');
- if((p.visualReferences||[]).some(r=>r.license!=='CC0'))errors.push('视觉参考库包含未确认 CC0 的馆藏');
+ if((p.visualReferences||[]).some(r=>!(r.license==='CC0'&&(r.rightsStatus==='verified_cc0'||!r.rightsStatus))&&!(r.rightsStatus==='author_self_owned'&&r.rights_verified===true)&&!(r.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(r.license_evidence_url||'')))))errors.push('视觉参考库包含缺少 CC0、自有确认或授权凭证的素材');
+ if((p.visualReferences||[]).some(r=>!r.assetType||!r.appliesTo||r.assetType==='legacy_unclassified'))errors.push('视觉参考缺少素材分类或应用对象');
  const technical=errors.length===0?'technical_pass':'blocked';
  return {schema:'davylab.worldtoon.comic-qa.v1',title:p.title,project_id:p.id,checked_at:new Date().toISOString(),
   status:technical,author_approved:false,fact_checked:false,licensed_for_publication:false,
