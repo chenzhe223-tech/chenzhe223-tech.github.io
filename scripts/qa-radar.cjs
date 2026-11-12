@@ -33,6 +33,42 @@ function check(ok, name, detail = '') {
       check(heroImageAudit.hasLeadImage, viewport.name + ': hero only uses a verified lead article image', JSON.stringify(heroImageAudit));
       const sourceNewsCount = await page.locator('#newsList .item').count();
       check(sourceNewsCount > 0, viewport.name + ': source news rendered', 'count=' + sourceNewsCount);
+      const xnewsFixtureAudit = await page.evaluate(() => {
+        const original = reportData?.xnews_voices;
+        const fixture = {
+          url: 'https://example.com/qa-source',
+          curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
+          title_zh: '合成 X News QA <script>window.__xss=1</script>',
+          summary_zh: '仅用于本地自动化验证的合成样本。',
+          published: '2026-11-11T00:00:00Z'
+        };
+        renderXnewsVoices([
+          fixture,
+          { url: 'javascript:alert(1)', curated_url: 'https://xnews.qiaomu.ai/invalid', title: 'invalid scheme' }
+        ]);
+        const section = document.querySelector('#xnewsVoicesSection');
+        const root = document.querySelector('#xnewsVoices');
+        const article = root?.querySelector('.item');
+        const title = article?.querySelector('h3')?.textContent || '';
+        const source = article?.querySelector('a[target="_blank"]');
+        const editorial = [...(article?.querySelectorAll('a[target="_blank"]') || [])].find(a => a.href.startsWith('https://xnews.qiaomu.ai/'));
+        const audit = {
+          visible: Boolean(section && getComputedStyle(section).display !== 'none'),
+          count: root?.querySelectorAll('.item').length || 0,
+          literalEscapedTitle: title === fixture.title_zh && !article?.querySelector('script'),
+          sourceSafe: source?.href === fixture.url && source.rel.includes('noopener') && source.rel.includes('noreferrer'),
+          editorialSafe: Boolean(editorial && editorial.href === fixture.curated_url && editorial.rel.includes('noopener') && editorial.rel.includes('noreferrer')),
+          deepReadRoute: article?.querySelector('h3 a')?.getAttribute('href') || ''
+        };
+        renderXnewsVoices([]);
+        audit.emptyHidden = Boolean(section && getComputedStyle(section).display === 'none' && root?.querySelectorAll('.item').length === 0);
+        renderXnewsVoices(original || []);
+        return audit;
+      });
+      check(xnewsFixtureAudit.visible && xnewsFixtureAudit.count === 1, viewport.name + ': X News fixture shows only valid HTTPS entries', JSON.stringify(xnewsFixtureAudit));
+      check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
+      check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
+      check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyHidden, viewport.name + ': X News deep-read route and truthful empty state work');
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
