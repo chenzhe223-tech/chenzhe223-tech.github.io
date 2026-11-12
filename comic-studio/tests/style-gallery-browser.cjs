@@ -17,22 +17,24 @@ const path=require('node:path');
    await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
    let ready=false;
    for(let attempt=0;attempt<22;attempt++){
-     ready=await page.evaluate(()=>window.WTStyleV3?.CATALOG?.length===21);
+     ready=await page.evaluate(()=>window.WTStyleV3?.CATALOG?.length===25);
      if(ready)break;
      await page.waitForTimeout(4500);
      await page.reload({waitUntil:'domcontentloaded',timeout:30000});
    }
-   if(!ready)throw Error('Live WorldToon Creative Director has not deployed 21 styles; refusing a mock pass');
+   if(!ready)throw Error('Live WorldToon Creative Director has not deployed 25 styles; refusing a mock pass');
    await page.evaluate(()=>{
     const view=document.getElementById('view');
     view.innerHTML='<div class="director-page"><section class="box director-section"><h2>选择漫画画风</h2>'+
        window.WTStyleV3.cards({styleId:'japanese-pastoral-wonder'})+
        window.WTStyleV3.detail({styleId:'japanese-pastoral-wonder'})+'</section></div>';
+    document.querySelector('.wt-v3-allstyles').open=true;
+    document.querySelector('.wt-v3-selected-detail').open=true;
     document.querySelectorAll('img').forEach(img=>{img.loading='eager'});
    });
    await page.waitForFunction(()=>{
       const pictures=[...document.querySelectorAll('.wt-v3-grid img')];
-      return pictures.length===21&&pictures.every(img=>img.complete&&img.naturalWidth>0);
+      return pictures.length===25&&pictures.every(img=>img.complete&&img.naturalWidth>0);
    },{timeout:55000});
    const metrics=await page.evaluate(()=>{
     const cards=[...document.querySelectorAll('.wt-v3-grid .wt-v3-card')];
@@ -51,10 +53,10 @@ const path=require('node:path');
       cardsWidth:m[0].width
     };
    });
-   if(metrics.count!==21||!metrics.valid||metrics.sources!==21||!metrics.widthsEqual||
+   if(metrics.count!==25||!metrics.valid||metrics.sources!==25||!metrics.widthsEqual||
       metrics.cropped||metrics.horizontalOverflow||!metrics.visibleGuide)
       throw Error(spec.label+' UI assertion failed: '+JSON.stringify(metrics));
-   await page.locator('.wt-v3-grid').screenshot({path:path.join('worldtoon-ui-screenshots',spec.label+'-21styles.png'),timeout:30000});
+   await page.locator('.wt-v3-grid').screenshot({path:path.join('worldtoon-ui-screenshots',spec.label+'-25styles.png'),timeout:30000});
    report.viewports.push({label:spec.label,...metrics,passed:true,pageErrors:errors.slice(0,5)});
    console.log(spec.label,'PASS',JSON.stringify(metrics));
    await page.close();

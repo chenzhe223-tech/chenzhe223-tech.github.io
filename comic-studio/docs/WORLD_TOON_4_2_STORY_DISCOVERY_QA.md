@@ -51,3 +51,4 @@ GitHub PR [#126](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pu
 - 缓存版本更新为 creative-director.js?v=4.1.1。
 - 回归脚本 creative-director.cjs 覆盖改名、外貌替换及其他对白保留；creative-director.cjs 与 worldtoon-deepseek-smoke.cjs 均通过。
 
+GitHub PR [#127](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/127) 已合并，提交 f5c30bf5e5227425b389ecb87be66548b3719890；WORLD/TOON static quality gate 与 WorldToon mobile layout contract 均通过。

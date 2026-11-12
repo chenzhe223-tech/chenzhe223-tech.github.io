@@ -27,5 +27,5 @@ jobs:
           node --check comic-studio/style-v3.js
           node --check comic-studio/creative-pilot.js
           node --check comic-studio/worker.js
-      - name: Verify 20 style catalog, real pilot gate and Worker routing
+      - name: Verify 25 style catalog, compact selector, real pilot gate and Worker routing
         run: node comic-studio/tests/style-v3-production.cjs

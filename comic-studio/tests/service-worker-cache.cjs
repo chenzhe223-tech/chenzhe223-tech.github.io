@@ -42,4 +42,3 @@ assert.match(archive,/WT_ARCHIVE_CLIENT_REV='3\.0\.0'/);
 assert.match(archive,/\?rev='/);
 assert.match(archive,/wtArchiveSnapshot=null,wtArchiveError=''.*wtArchiveLastSync=0/);
 console.log('PASS: auth APIs bypass SW cache, static shell retains offline fallback, stale dashboard cleared');
-

@@ -1,5 +1,9 @@
 name: WORLD/TOON 3.0 and 4.0 production regression checks
 on:
+  pull_request:
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-v3-smoke.yml'
   push:
     branches: [main]
     paths:
@@ -21,9 +25,24 @@ jobs:
         run: node comic-studio/tests/worldtoon-v3-smoke.cjs
       - name: Verify 4.0 unified production journey and author gates
         run: node comic-studio/tests/worldtoon-v4-smoke.cjs
+      - name: Verify reusable character identity, DeepSeek profiles and storyboard sync
+        run: |
+          node comic-studio/tests/character-continuity.cjs
+          node comic-studio/tests/character-deepseek.cjs
+          node comic-studio/tests/director-storyboard-ai.cjs
+      - name: Verify series planning and source-linked discovery workflows
+        run: |
+          node comic-studio/tests/series-planner.cjs
+          node comic-studio/tests/editorial-series.cjs
+          node comic-studio/tests/discovery-flow.cjs
       - name: Test DeepSeek expansion consent, timeout and error recovery
         run: node comic-studio/tests/worldtoon-deepseek-smoke.cjs
       - name: Validate 3D comic styles, portrait consent and viral plot templates
         run: node comic-studio/tests/worldtoon-3d-drama-smoke.cjs
       - name: Verify public-domain book and short-drama story search, scene selection, copyright guard
         run: node comic-studio/tests/worldtoon-story-discovery.cjs
+      - name: Verify context-bound visual references, compact style selection and responsive layout
+        run: |
+          node comic-studio/tests/comic-engine.cjs
+          node comic-studio/tests/style-v3-production.cjs
+          node comic-studio/tests/mobile-layout.cjs

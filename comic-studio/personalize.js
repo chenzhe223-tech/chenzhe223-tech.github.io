@@ -193,36 +193,41 @@ function wtPersonaPrepare(){
     '<form id="wtPersonaForm"><div class="fields">'+
     '<div class="field wide"><label>创作背景</label><textarea name="concept" required maxlength="2000">'+wtUiSafe(p?.description||p?.title||'一部原创时事讽刺漫画')+'</textarea></div>'+
     '<div class="field"><label>角色数量</label><select name="count"><option value="2">2 位</option><option value="3" selected>3 位</option><option value="4">4 位</option><option value="1">1 位</option></select></div>'+
-    '<div class="field"><label>视觉调性</label><select name="style"><option>杂志式原创漫画</option><option>温暖手绘</option><option>黑色幽默</option><option>未来科幻</option></select></div></div>'+
-    '<p class="wt-note">'+(!wtConfig?.characterAiEnabled?'免费角色模型暂不可用，请稍后重试。':!wtSession?.access_token?'请先登录 WORLD/TOON 账号后再生成。':'每人每日最多生成 2 次，成功后保存为可编辑草稿，仍需人工审核。')+'</p>'+
+    '<div class="field"><label>视觉调性</label><select name="style"><option>杂志式原创漫画</option><option>温暖手绘</option><option>黑色幽默</option><option>未来科幻</option></select></div>'+
+    '<div class="field"><label>角色档案模型</label><select name="provider"><option value="native">平台内置模型 · 免费额度</option><option value="deepseek">DeepSeek · 自带密钥</option></select></div>'+
+    '<div class="field wide" data-persona-key-wrap hidden><label>DeepSeek API Key（仅用于本次请求）</label><input name="apiKey" type="password" autocomplete="off" maxlength="320" placeholder="仅当前请求使用，不会保存"><small>DeepSeek 可能按用量收费，请先确认供应商价格。</small></div></div>'+
+    '<p class="wt-note">'+(!wtConfig?.characterAiEnabled?'内置免费模型暂不可用，可选择 DeepSeek 并提供自己的 API Key。':!wtSession?.access_token?'请先登录 WORLD/TOON 账号后再生成。':'生成结果保存为可编辑草稿，仍需人工审核。')+'</p>'+
     '<div class="stepactions"><button type="button" data-action="modal-close" class="button">取消</button>'+
-    '<button class="button dark" type="submit" '+(!wtConfig?.characterAiEnabled||!wtSession?.access_token?'disabled':'')+'>确认生成角色草稿</button></div></form>');
+    '<button class="button dark" type="submit" '+(!wtSession?.access_token?'disabled':'')+'>确认生成角色草稿</button></div></form>');
 }
 async function wtPersonaGenerate(form){
   if(wtAiBusy)return;
   if(!wtConfig?.characterAiEnabled||!wtSession?.access_token){notify('请先登录，或检查免费角色模型连接状态');return}
-  if(!confirm('将使用免费模型额度生成角色文字档案（每人每日最多 2 次），确定继续？'))return;
   const values=Object.fromEntries(new FormData(form).entries());
+  const provider=values.provider==='deepseek'?'deepseek':'native';
+  if(provider==='native'&&!wtConfig?.characterAiEnabled){notify('内置角色模型暂不可用，请选择 DeepSeek 或稍后重试');return}
+  if(provider==='deepseek'&&String(values.apiKey||'').trim().length<12){notify('请输入本次调用用的 DeepSeek API Key');return}
+  if(!confirm(provider==='deepseek'?'将把 API Key 仅用于本次 DeepSeek 请求；供应商可能按用量收费。确认调用？':'将使用平台内置模型额度生成角色档案，确认调用？'))return;
   wtAiBusy=true;
   const submit=form.querySelector('button[type=submit]');if(submit)submit.disabled=true;
   try{
     const p=selected();
-    const out=await wtCallAI('/api/ai/characters',{title:String(p?.title||'原创时事漫画').slice(0,150),concept:String(values.concept||'').slice(0,2000),style:String(values.style||'').slice(0,70),count:Math.min(4,Math.max(1,Number(values.count)||2))});
+    const out=await wtCallAI('/api/ai/characters',{provider,apiKey:provider==='deepseek'?String(values.apiKey||'').trim():'',title:String(p?.title||'原创时事漫画').slice(0,150),concept:String(values.concept||'').slice(0,2000),style:String(values.style||'').slice(0,70),count:Math.min(4,Math.max(1,Number(values.count)||2))});
     if(!Array.isArray(out.characters)||!out.characters.length)throw Error('模型未返回有效角色档案');
     if(!Array.isArray(data.characters))data.characters=[];
-    const knownNames=new Set(data.characters.map(x=>String(x?.name||'').trim().toLocaleLowerCase()).filter(Boolean));
-    let added=0;
+    const project=selected();let added=0;const leads=out.characters.filter(c=>['female_lead','male_lead','女主','男主','female lead','male lead'].includes(String(c?.role||'').toLowerCase()));
+    if(project&&leads.length&&window.WTCharacterContinuity){const enrolled=window.WTCharacterContinuity.upsertGenerated(data,project,leads);added+=enrolled.added+enrolled.linked}
     for(const c of out.characters.slice(0,4)){
-      if(!c||typeof c!=='object'||!String(c.name||'').trim())continue;
-      const uniqueName=String(c.name).trim().toLocaleLowerCase();if(knownNames.has(uniqueName))continue;knownNames.add(uniqueName);
-      data.characters.push({id:uid(),name:String(c.name).slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c.type)?c.type:'虚构角色',
+      if(!c||typeof c!=='object'||!String(c.name||'').trim()||['female_lead','male_lead','女主','男主','female lead','male lead'].includes(String(c.role||'').toLowerCase()))continue;
+      const id=uid();data.characters.push({id,characterId:id,originalName:String(c.name).slice(0,80),comicNames:[],name:String(c.name).slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c.type)?c.type:'虚构角色',
         description:String(c.description||'').slice(0,1800),costume:String(c.costume||'').slice(0,400),colors:String(c.colors||'').slice(0,220),
         traits:String(c.traits||'').slice(0,950),personality:String(c.personality||'').slice(0,1200),portrait:'',origin:'ai-draft',aiModel:out.model||'',createdAt:now()});added++;
     }
     if(!added){notify('生成角色与现有档案重名，已阻止重复保存');return}
     persist();closeModal();nav('characters');notify('新增 '+added+' 个角色草稿（'+(out.model||'免费模型')+'），可逐个编辑'+(out.modelFallback?'；已自动使用免费备用模型':'') );
   }catch(err){notify('角色生成失败：'+String(err.message||err).slice(0,140))}
-  finally{wtAiBusy=false;if(submit?.isConnected)submit.disabled=false}
+  finally{if(form.elements.apiKey)form.elements.apiKey.value='';wtAiBusy=false;if(submit?.isConnected)submit.disabled=false}
 }
+document.addEventListener('change',ev=>{if(ev.target?.name!=='provider'||ev.target.form?.id!=='wtPersonaForm')return;const wrap=ev.target.form.querySelector('[data-persona-key-wrap]');if(wrap)wrap.hidden=ev.target.value!=='deepseek'},true);
 document.addEventListener('click',ev=>{const t=ev.target.closest('[data-persona]');if(!t)return;ev.preventDefault();ev.stopImmediatePropagation();if(t.dataset.persona==='prepare')wtPersonaPrepare()},true);
 document.addEventListener('submit',ev=>{if(ev.target?.id!=='wtPersonaForm')return;ev.preventDefault();ev.stopImmediatePropagation();wtPersonaGenerate(ev.target)},true);

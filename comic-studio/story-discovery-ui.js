@@ -8,6 +8,7 @@
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
+ const flowCard=x=>window.WTDiscoveryFlow?.card(x)||{identityLabel:'作品身份待核对',heatLabel:'未核实热度',heatEvidenceDate:'',publishedDate:String(x?.published||'').slice(0,10),sourceName:x?.source_name||'公开资料',rightsLabel:x?.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实'};
  function originalTopicChoices(x){
   const label=String(x?.genre||x?.type||'').slice(0,80);
   const domain=/玄幻|仙侠|修仙|妖/.test(label)?'架空修行世界':
@@ -38,18 +39,15 @@
  }
  function quick(id,label){return '<button type="button" class="button story-chip" data-story-quick="'+html(id)+'">'+html(label)+'</button>'}
  function identityLabel(x){
-  if(x?.rank_snapshot)return '第三方榜单记录 · '+html(x.verified_on||x.snapshot_date||'日期待核')+' · #'+html(x.rank_snapshot);
-  if(x?.identity_status==='title_mentioned_in_source')return '来源提及该题名 · 作品身份待人工核对';
-  if(x?.identity_status==='book_title_match')return '书目题名命中 · 不是剧情章节';
-  if(x?.identity_status==='curated_title_match')return '精选索引题名命中 · '+html(x.verified_on||x.snapshot_date||'日期待核');
-  return '作品身份待核对';
+  const card=flowCard(x),rank=x?.rank_snapshot?(' · #'+html(x.rank_snapshot)):'';
+  return html(card.identityLabel)+(card.heatEvidenceDate?' · '+html(card.heatEvidenceDate):'')+rank;
  }
  function bookResult(x,i){return '<article class="story-result" role="listitem">'+
   '<div><span class="story-type">'+html(x.type==='drama'?'短剧／网络线索':x.type==='classic'?'经典文学':'网络小说／书目')+'</span>'+
   '<span class="story-rank">'+identityLabel(x)+'</span>'+
   '<h3>'+html(x.title)+'</h3><p>'+html(x.summary||'仅检索到书目／报道线索，请查看来源并提供剧情摘要。')+'</p>'+
-  '<small>'+html(x.source_name||'公开资料')+' · '+html(x.author||x.genre||'')+
-  (x.published?' · 来源日期 '+html(String(x.published).slice(0,10)):'')+' · '+html(x.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实')+'</small></div>'+
+  '<small>'+html(flowCard(x).sourceName)+' · '+html(x.author||x.genre||'')+
+  (flowCard(x).publishedDate?' · 来源日期 '+html(flowCard(x).publishedDate):' · 来源日期待核')+' · '+html(flowCard(x).heatLabel)+' · '+html(flowCard(x).rightsLabel)+'</small></div>'+
   '<div class="story-actions"><a target="_blank" rel="noopener noreferrer" href="'+html(limitedSource(x))+'">查看来源 ↗</a>'+
   '<button type="button" class="button dark" data-story-select="'+i+'">选择剧情 →</button></div></article>';
  }
@@ -80,19 +78,20 @@
  function block(){
   return '<section class="story-discovery" id="storyDiscovery"><div class="story-discovery-head"><div>'+
    '<div class="kicker">WORLD/TOON · STORY SOURCE DESK</div><h2>红果热剧 · 网络小说 · 世界名著</h2>'+
-   '<p>先查作品与来源，再选剧情片段，最后进入同一个漫画工作空间。热度展示仅作线索，不冒充红果官方数据。</p></div>'+
-   '<span>STORY → PANELS</span></div>'+
+   '<p>先查来源与作品身份，再核对版权并选择可用剧情，最后进入现有编剧 → 导演 → 生产工作台。所有榜单显示来源与日期，未核实热度会明确标记。</p></div>'+
+   '<span>来源 → 身份/版权 → 剧情候选 → 工作台</span></div>'+
+   '<ol class="story-flow-steps"><li>搜索来源</li><li>核对作品身份与权利</li><li>选择剧情弧线或原创灵感</li><li>进入编剧与生产 SOP</li></ol>'+
    '<form id="story-search-form" class="story-search-form"><label for="story-query">作品名 / 原著名 / 关键词</label><div class="story-search-fields">'+
    '<select id="story-type" aria-label="搜索类别"><option value="drama"'+(story.type==='drama'?' selected':'')+'>红果短剧 / 网剧</option>'+
    '<option value="novel"'+(story.type==='novel'?' selected':'')+'>小说 / 世界名著</option><option value="all"'+(story.type==='all'?' selected':'')+'>全网综合</option></select>'+
    '<input id="story-query" maxlength="90" placeholder="输入：他过分野、简爱、Jane Eyre…" value="'+html(story.query)+'">'+
    '<button class="button dark" type="submit" '+(story.busy?'disabled':'')+'>'+(story.busy?'正在核查…':'搜索作品与剧情')+'</button></div></form>'+
    '<div class="story-quick">'+quick('他过分野','《他过分野》')+quick('简爱','《简·爱》')+
-   '<button type="button" class="button story-chip" data-story-hot="1">查看红果热点快照 / 网络新线索</button></div>'+
-   (story.error?'<div class="story-error" role="alert">'+html(story.error)+'</div>':'')+
+   '<button type="button" class="button story-chip" data-story-hot="1">查看带日期的第三方短剧榜单快照 / 网络题名线索</button></div>'+
+   (story.error?'<div class="story-error" role="alert"><strong>'+html(window.WTDiscoveryFlow?.errorState(/timeout|超时|abort/i.test(story.error)?'timeout':'failure').title||'搜索失败')+'</strong><p>'+html(story.error)+'</p><small>来源失败状态不会替换成推测剧情或模拟热度。</small></div>':'')+
    (story.warnings.length?'<p class="story-note">部分来源暂不可用：'+html(story.warnings.join('；'))+'</p>':'')+
    (story.loaded?'<div class="story-results-top"><strong>'+story.items.length+' 条候选资料</strong><small>查询时间 '+html(story.when||'')+(story.sourceAge?' · '+html(story.sourceAge):'')+' · 源自公开书目与报道、已核对精选资料；非原著全文</small></div>':'')+
-   (story.selected?selection():(story.loaded?'<div class="story-results" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none">没有找到可核实的候选作品。试试原名、作者名，或切换小说／短剧分类。</div>')+'</div>':''))+
+   (story.selected?selection():(story.loaded?'<div class="story-results" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none"><strong>'+html(window.WTDiscoveryFlow?.errorState('empty').title||'没有匹配结果')+'</strong><p>'+html(window.WTDiscoveryFlow?.errorState('empty').message||'试试原名、作者名，或切换小说／短剧分类。')+'</p></div>')+'</div>':''))+
    '</section>';
  }
  async function search(q,type,force){
@@ -218,4 +217,3 @@
   loaded:story.loaded,error:story.error}),search,choose,createProjectFromStory,beatOptions,block};
  if(ui.route==='live')Promise.resolve().then(()=>{if(ui.route==='live')render()});
 })();
-

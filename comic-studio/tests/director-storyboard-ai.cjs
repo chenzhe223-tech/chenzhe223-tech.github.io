@@ -17,15 +17,16 @@ function makeProject(id){
   panels:Array.from({length:9},(_,i)=>({title:'第 '+(i+1)+' 格',scene:'',caption:'',dialogue:'',prompt:'',image:''})),
   characters:'',handoff:{},status:'草稿'};
 }
-let current=makeProject('p1'),calls=0,alertText='',reviewCount=0;
+let current=makeProject('p1'),calls=0,alertText='',reviewCount=0,enrolled=[];
+current.creativeDirection={version:1,cast:[{role:'女主',name:'林晚',look:'短发',clothes:'米色外套',symbol:'怀表',nature:'果断'},{role:'男主',name:'顾行舟',look:'黑发',clothes:'深色风衣',symbol:'钢笔',nature:'谨慎'}]};
 const handlers={};
 const ctx={
- window:{WTStyleV3:{STYLES:[{id:'chinese-historical-epic',name:'国风史诗写实',material:'厚涂',lighting:'侧光',layout:'电影级',negative:'简笔画',palette:['#eee','#555']},
+ window:{WTCharacterContinuity:{upsertGenerated:(data,project,candidates)=>{enrolled.push({project,candidates});return {added:2,linked:0,unresolved:[]}}},WTStyleV3:{STYLES:[{id:'chinese-historical-epic',name:'国风史诗写实',material:'厚涂',lighting:'侧光',layout:'电影级',negative:'简笔画',palette:['#eee','#555']},
  {id:'western-cinematic',name:'欧美电影',material:'写实',lighting:'柔光',layout:'远景',negative:'粗糙',palette:['#eee','#555']},
  {id:'futuristic-sci-fi',name:'未来科幻',material:'科幻',lighting:'科幻光',layout:'精细',negative:'塑料',palette:['#eee','#555']}],
  cards(){return ''},detail(){return ''}}},
  location:{hash:'#/director/p1'},document:{addEventListener:(type,fn)=>(handlers[type]??=[]).push(fn)},
- selected:()=>current,markDirty(){},persist(){},setChange(){},render(){},notify(s){alertText=s},confirm(){return true},
+ data:{characters:[]},selected:()=>current,markDirty(){},persist(){},setChange(){},render(){},notify(s){alertText=s},confirm(){return true},
  e:s=>String(s??''),heroHeader:()=>'header',wtSession:{access_token:'test-token'},
  wtConfig:{storyboardAiEnabled:true},wtCallAI:async(route,data)=>{calls++;assert.equal(route,'/api/ai/storyboard');assert.equal(data.provider,'native');assert.equal(data.cast.length,2);return {panels,method:'verified_model_response',provider:'native',model:'gemma-4-26b-a4b-it'}},
  queueMicrotask:fn=>Promise.resolve().then(fn),Math,Date,JSON
@@ -51,6 +52,7 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  assert.equal(calls,1,'AI-first storyboard should run once for blank nine-frame project');
  assert.equal(current.panels[0].title,panels[0].title);
  assert.equal(current.creativeDirection.storyboardProvenance.method,'verified_model_response');
+ assert.equal(enrolled.length,1,'accepted screenplay should enroll explicit leads into shared profile archive');assert.equal(enrolled[0].candidates.length,2);
  assert.equal(current.creativeDirection.approval,null);
  current.panels[0].dialogue='作者亲自修改的内容';
  const update=director.applyStoryboard(current,panels,{method:'verified_model_response',provider:'native',model:'gemma'},false);

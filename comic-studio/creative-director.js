@@ -131,6 +131,11 @@ function applyStoryboard(p,panels,meta,replace=false){
   fields_updated:updated,author_reviewed:false};
  if(!clean(p.fiction))p.fiction='原创独立角色与架空地点；来源事实与虚构对白独立标注。';
  p.characters=castText(c);
+ if(typeof data!=='undefined'&&window.WTCharacterContinuity){
+  const enrolled=window.WTCharacterContinuity.upsertGenerated(data,p,c.cast.map(x=>({...x,originalName:x.originalName||x.name,comicName:x.comicName||x.name})));
+  if(enrolled.unresolved.length)p.characterProfileReview={status:'needs_author_role_confirmation',candidates:enrolled.unresolved};
+  else if(p.characterProfileReview?.status==='needs_author_role_confirmation')delete p.characterProfileReview;
+ }
  markDirty(p);setChange(p,meta.method==='verified_model_response'?'AI生成九格可编辑脚本（仍需人工复审）':'本地剧情规则生成九格草稿（非大模型输出）');
  step=2;render();
  return true;
@@ -222,7 +227,7 @@ function payload(p){
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
   cover_brief:clean(c.cover),
-  visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,role:'visual_reference_only'}))
+  visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,license_evidence_url:x.license_evidence_url||'',rights_verified:x.rights_verified===true,rights_status:x.rightsStatus||'legacy_review_required',asset_type:x.assetType||'legacy_unclassified',asset_type_label:x.assetTypeLabel||'',applies_to:x.appliesTo||{scope:'project',targetId:'project'},role:'visual_reference_only'}))
  };
 }
 function digest(p){
@@ -245,7 +250,7 @@ function checks(p){
  if(p.seriesEpisode>1&&p.seriesBible){if(p.seriesBible.style_id&&p.seriesBible.style_id!==c.styleId)errs.push('续章画风必须与系列创作圣经一致');if(Array.isArray(p.seriesBible.characters)&&p.seriesBible.characters.length&&JSON.stringify(p.seriesBible.characters)!==JSON.stringify(c.cast))errs.push('系列续章角色外貌服饰需保持锁定，修改应建立新系列版本')}
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
- if((p.visualReferences||[]).some(x=>x.license!=='CC0'))errs.push('视觉参考包含未确认 CC0 的馆藏');
+ if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
@@ -314,9 +319,9 @@ function castEditor(c){
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
  '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
- '</div></article>').join('')+'</div>'+ 
- '<div class="director-portrait-handoff"><button type="button" class="button" data-director-style="cinematic-3d-character">一键选用电影级 3D 拟人画风</button>'+ 
- '<button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+ 
+ '</div></article>').join('')+'</div>'+
+ '<div class="director-portrait-handoff"><button type="button" class="button" data-director-style="cinematic-3d-character">一键选用电影级 3D 拟人画风</button>'+
+ '<button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+
  '<p>仅打包已经授权的原始照片、角色设定、当前画风与 SHA256，交给 ChatGPT 生产真实角色定妆图。此按钮不会调用收费生图模型或上传照片。</p></div>';
 }
 function framePreview(p,c){
@@ -377,7 +382,7 @@ function draw(){
  '<div class="director-head"><div><span class="director-kicker">正在制作</span><h2>'+e(p.title)+'</h2><p>'+e(p.category)+' · '+e(c.thesis)+'</p></div>'+
  '<span class="director-status '+(locked?'ready':'')+'">'+(locked?'已锁定 · 可派单':'创作设定待确认')+'</span></div>'+
  '<div class="director-tabs">'+tabs.map((t,i)=>'<button type="button" data-director-step="'+i+'" class="'+(step===i?'active':'')+'"><span>0'+(i+1)+'</span>'+t+'</button>').join('')+'</div>'+
- (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">选择后，统一色板、线条、灯光、构图与禁用项将写入正式生产任务。此处不是实际生图展示。</p>'+styleCards(c)+stylePreview(c)+
+ (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">先从当前推荐中快速选择；需要更多选项时展开完整图鉴。画风描述与参考图不是正式生图结果。</p>'+styleCards(c)+'<details class="wt-v3-selected-detail"><summary>查看当前画风的材质、光影、构图与样张状态</summary>'+stylePreview(c)+'</details>'+ 
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 人物设定 →</button></div></section>':'')+
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
@@ -533,4 +538,3 @@ window.wtCreativeDirector=draw;
 window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft,localStoryboard,applyStoryboard,aiStoryPayload,generateStory};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
 })();
-
