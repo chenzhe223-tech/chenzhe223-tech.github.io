@@ -64,7 +64,7 @@ function render(d,items){const story=(items||[])[id];if(!story){$("content").inn
  const published=x.published?new Date(x.published).toLocaleString(isEn()?"en-US":"zh-CN",{dateStyle:"medium",timeStyle:"short",timeZone:"Asia/Shanghai"}):text("时间未核实","Publication time unavailable");
  const generatedIllustration=String(x.source_url||x.url||"")==="https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66"
    &&String(x.image_match_status||"")==="thematic_fallback"
-   &&/Gemini Robotics 2\\.5/i.test(String(name||""));
+   &&/Gemini Robotics 2\.5/i.test(String(name||""));
  const image=generatedIllustration?"../assets/radar-robotics-dexterity-illustration.jpg":(/^https:\/\//i.test(x.image_url||"")?x.image_url:"");
  const imageAlt=generatedIllustration
    ?text("AI 生成概念插画：机器人灵巧性示意，非报道现场照片。","AI-generated conceptual illustration of robotic dexterity; not a photograph of the reported event.")
