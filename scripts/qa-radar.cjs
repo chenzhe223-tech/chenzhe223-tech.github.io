@@ -111,6 +111,22 @@ function check(ok, name, detail = '') {
       check(chinaGridColumns === 1, viewport.name + ': China AI stories use the approved single-column side rail', 'columns=' + chinaGridColumns);
       const chinaCards = page.locator('#chinaAINewsList .china-ai-card');
       const chinaCount = await chinaCards.count();
+      const expectedChinaCount = await page.evaluate(() => Array.isArray(window.__qaRadarData?.china_ai_news) ? window.__qaRadarData.china_ai_news.length : 0);
+      check(chinaCount === expectedChinaCount, viewport.name + ': all real China AI stories remain available in the sidebar module', 'rendered=' + chinaCount + ', expected=' + expectedChinaCount);
+      const chinaMore = page.locator('#chinaAINewsList details.china-ai-more');
+      const visibleChinaCount = await page.locator('#chinaAINewsList > .china-ai-card:visible').count();
+      check(visibleChinaCount === Math.min(3, chinaCount) && (chinaCount <= 3 ? await chinaMore.count() === 0 : await chinaMore.count() === 1 && !(await chinaMore.evaluate(el => el.open))),
+        viewport.name + ': sidebar previews three stories and keeps remaining stories in a collapsed, discoverable list',
+        JSON.stringify({ visibleChinaCount, chinaCount, morePanels: await chinaMore.count() }));
+      if (await chinaMore.count()) {
+        await chinaMore.locator('summary').click();
+        check(await chinaMore.evaluate(el => el.open) && await chinaMore.locator('.china-ai-card:visible').count() === chinaCount - 3,
+          viewport.name + ': expanding China AI reveals every additional story');
+        await chinaMore.locator('summary').click();
+      }
+      const railPoster = page.locator('#chinaAI .rail-poster');
+      check(await railPoster.getAttribute('href') === '../posters/latest.png' && await railPoster.locator('img').getAttribute('src') === '../posters/latest.png',
+        viewport.name + ': China AI sidebar links to the existing daily poster');
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
