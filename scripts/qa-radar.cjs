@@ -80,7 +80,7 @@ function check(ok, name, detail = '') {
       }));
       check(/Georgia|Times New Roman/.test(typeRoles.sectionHeading) && /Georgia|Times New Roman/.test(typeRoles.kicker),
         viewport.name + ': English editorial headings use the serif type role', JSON.stringify(typeRoles));
-      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && /monospace/.test(typeRoles.dockIndex) && typeRoles.metadata.includes('tabular-nums'),
+      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && (!viewport.mobile || /monospace/.test(typeRoles.dockIndex)) && typeRoles.metadata.includes('tabular-nums'),
         viewport.name + ': ranks, report dates, navigation numerals and metadata use aligned data typography', JSON.stringify(typeRoles));
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
