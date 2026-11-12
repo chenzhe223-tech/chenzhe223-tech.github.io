@@ -27,7 +27,7 @@ const path=require('node:path');
     const view=document.getElementById('view');
     view.innerHTML='<div class="director-page"><section class="box director-section"><h2>选择漫画画风</h2>'+
        window.WTStyleV3.cards({styleId:'japanese-pastoral-wonder'})+
-       window.WTStyleV3.detail({styleId:'japanese-pastoral-wonder'})+'</section></div>';
+       '<details class="wt-v3-selected-detail"><summary>当前画风预览</summary>'+window.WTStyleV3.detail({styleId:'japanese-pastoral-wonder'})+'</details></section></div>';
     document.querySelector('.wt-v3-allstyles').open=true;
     document.querySelector('.wt-v3-selected-detail').open=true;
     document.querySelectorAll('img').forEach(img=>{img.loading='eager'});
