@@ -1005,7 +1005,7 @@ function applyDailyHeroTheme(date,story){
  const key=String(date||new Date().toISOString().slice(0,10));
  const parsedDate=new Date(key+"T00:00:00Z");
  const dayIndex=Number.isFinite(parsedDate.getTime())?Math.floor(parsedDate.getTime()/86400000):Math.floor(Date.now()/86400000);
- const slot=((dayIndex%photos.length)+photos.length)%photos.length;
+ const slot=((dayIndex%themes.length)+themes.length)%themes.length;
  const theme=themes[slot];
  let articleImage="";
  try{
