@@ -25,6 +25,14 @@ function check(ok, name, detail = '') {
       await page.evaluate(async () => { const selectedDate=new URLSearchParams(location.search).get('date'); const source=selectedDate?'../data/archive/'+encodeURIComponent(selectedDate)+'.json':'../data/latest.json'; window.__qaRadarData=await fetch(source,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA report data unavailable: '+response.status);return response.json()}); });
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
+      const mobileEditorialLayout = await page.evaluate(() => {
+        const box = selector => { const el=document.querySelector(selector); if(!el)return null; const r=el.getBoundingClientRect(); return {top:r.top+scrollY,bottom:r.bottom+scrollY,height:r.height}; };
+        return {hero:box('.hero-panel'),lead:box('#leadStory'),top5:box('#top5List'),core:box('#editorialCore')};
+      });
+      check(!viewport.mobile || (mobileEditorialLayout.hero?.height <= 225 && mobileEditorialLayout.lead?.top < 390
+        && mobileEditorialLayout.top5?.top >= mobileEditorialLayout.lead?.bottom
+        && mobileEditorialLayout.core?.top > mobileEditorialLayout.top5?.top),
+        viewport.name + ': mobile first screen follows the approved compact hero → lead → Top 5 hierarchy', JSON.stringify(mobileEditorialLayout));
       const navigationAudit = await page.evaluate(() => ({
         desktop: [...document.querySelectorAll('.primary-nav a')].map(link => ({ label: link.innerText.trim(), href: link.getAttribute('href') })),
         mobile: [...document.querySelectorAll('.mobile-dock a')].map(link => ({ label: link.querySelector('b')?.innerText.trim() || '', href: link.getAttribute('href') })),
