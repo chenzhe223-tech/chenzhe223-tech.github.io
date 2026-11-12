@@ -16,7 +16,7 @@
  --surface-soft:#F1EFE9;
  --serif:"Playfair Display",Georgia,"Times New Roman","Songti SC",serif;
  --sans:"Inter","Source Han Sans SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;
- --mono:"Inter",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+ --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
  --page-width:1180px;
  --gutter:clamp(18px,4vw,56px);
  --radius:4px
