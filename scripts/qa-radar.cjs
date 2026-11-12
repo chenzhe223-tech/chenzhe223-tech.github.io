@@ -24,6 +24,12 @@ function check(ok, name, detail = '') {
       await page.waitForTimeout(700);
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
+      const browserThemeAudit = await page.evaluate(() => ({
+        themeColor: document.querySelector('meta[name="theme-color"]')?.content?.trim().toLowerCase() || '',
+        paperToken: getComputedStyle(document.documentElement).getPropertyValue('--paper').trim().toLowerCase()
+      }));
+      check(browserThemeAudit.themeColor === browserThemeAudit.paperToken && browserThemeAudit.paperToken !== '',
+        viewport.name + ': browser theme color matches the shared paper token', JSON.stringify(browserThemeAudit));
       const heroImageAudit = await page.evaluate(() => {
         const story = reportData?.top5?.[0];
         const declared = document.documentElement.style.getPropertyValue('--hero-photo').trim();
