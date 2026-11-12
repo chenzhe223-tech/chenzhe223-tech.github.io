@@ -533,6 +533,25 @@ function check(ok, name, detail = '') {
       check(!!response && response.status() < 400, viewport.name + ': deep reader loads', 'HTTP ' + (response && response.status()));
       await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
       check((await page.locator('#content .title').innerText()).length > 8, viewport.name + ': real story title is visible');
+      const readerIllustrationAudit = await page.evaluate(async () => {
+        const date = new URLSearchParams(location.search).get('date') || '';
+        const response = await fetch('../data/archive/' + encodeURIComponent(date) + '.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Reader image audit report unavailable: ' + response.status);
+        const report = await response.json();
+        const story = report?.top5?.[0] || {};
+        const title = [story.title_zh, story.title_en, story.original_title, story.title].filter(Boolean).join(' ');
+        const expected = String(story.source_url || story.url || '') === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66'
+          && story.image_match_status === 'thematic_fallback' && /Gemini Robotics 2\.5/i.test(title);
+        const image = document.querySelector('#content img.cover');
+        return { expected, src: image?.getAttribute('src') || '', loaded: Boolean(image?.complete && image.naturalWidth > 0),
+          alt: image?.alt || '', caption: document.querySelector('#content .caption')?.innerText || '' };
+      });
+      check(readerIllustrationAudit.expected
+        ? readerIllustrationAudit.src === '../assets/radar-robotics-dexterity-illustration.jpg' && readerIllustrationAudit.loaded
+          && /(AI-generated conceptual illustration|AI 生成概念插画)/i.test(readerIllustrationAudit.alt)
+          && /(not a news photograph|非新闻现场照片)/i.test(readerIllustrationAudit.caption)
+        : readerIllustrationAudit.src !== '../assets/radar-robotics-dexterity-illustration.jpg',
+        viewport.name + ': deep reader shows the labeled illustration only for its matching story and loads the asset', JSON.stringify(readerIllustrationAudit));
       const readerTypeRoles = await page.evaluate(() => ({
         title: getComputedStyle(document.querySelector('#content .title')).fontFamily,
         score: getComputedStyle(document.querySelector('#content .score b')).fontFamily,
@@ -630,6 +649,8 @@ function check(ok, name, detail = '') {
       const storyHref = storyCount === 1 ? await storyLink.getAttribute('href') : '';
       check(Boolean(storyHref && storyHref.includes('type=xnews') && storyHref.includes('date=' + viewport.date)),
         viewport.name + ': homepage X News story links to its dated deep-read route', storyHref || '');
+      check(await page.locator('#xnewsVoicesSection').isVisible(), viewport.name + ': synthetic X News fixture is visible on the briefing homepage');
+      await page.screenshot({ path: path.join(out, viewport.name + '-home-fixture.png'), fullPage: true });
       let fixtureResponseServed = false;
       const dataRequests = [];
       await page.route('**/*', async route => {
