@@ -23,3 +23,22 @@ jobs:
           python-version: '3.11'
       - name: Check X News RSS adapter contracts (offline)
         run: python -m unittest discover -s radar/tests -p 'test_xnews_sources.py' -v
+      - name: Check live upstream RSS compatibility (external, non-blocking)
+        continue-on-error: true
+        run: |
+          python - <<'PY'
+          import datetime as dt
+          import urllib.request
+          from radar.scripts.xnews_sources import FEED_URL, parse_xnews_feed
+          request = urllib.request.Request(
+              FEED_URL, headers={"User-Agent": "DavyRadar/1.0 (+https://chenzhe223-tech.github.io/radar/daily/)"}
+          )
+          with urllib.request.urlopen(request, timeout=12) as response:
+              payload = response.read(3_000_001)
+          stories, status = parse_xnews_feed(payload, now=dt.datetime.now(dt.timezone.utc))
+          print("Live X News RSS status:", status, "qualifying original sources:", len(stories))
+          for story in stories[:2]:
+              print("Source:", story["published"], story["url"])
+          if status != "ok" or not stories:
+              raise SystemExit("Live feed did not return qualifying compatible items")
+          PY
