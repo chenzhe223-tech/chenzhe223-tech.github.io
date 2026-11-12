@@ -991,17 +991,8 @@ en:{back:"← Back to Davy Radar",navToday:"Today",navDeep:"Deep reads",navChina
 };
 function t(key){return (copy[currentLang]&&copy[currentLang][key])||copy.zh[key]||key}
 
-function applyDailyHeroTheme(date){
+function applyDailyHeroTheme(date,story){
  const root=document.documentElement;
- const photos=[
-  "photo-1470252649378-9c29740c9fa8",
-  "photo-1498050108023-c5249f4df085",
-  "photo-1518770660439-4636190af475",
-  "photo-1531297484001-80022131f5a1",
-  "photo-1518837695005-2083093ee35b",
-  "photo-1500534623283-312aade485b7",
-  "photo-1519389950473-47ba0277781c"
- ];
  const themes=[
   {left:"rgba(255,247,230,.97)",mid:"rgba(255,238,219,.82)",right:"rgba(255,221,205,.15)",a:"#ef7659",b:"#6566e9"},
   {left:"rgba(255,246,239,.97)",mid:"rgba(255,230,226,.83)",right:"rgba(255,219,222,.16)",a:"#e96982",b:"#7867ee"},
@@ -1016,7 +1007,12 @@ function applyDailyHeroTheme(date){
  const dayIndex=Number.isFinite(parsedDate.getTime())?Math.floor(parsedDate.getTime()/86400000):Math.floor(Date.now()/86400000);
  const slot=((dayIndex%photos.length)+photos.length)%photos.length;
  const theme=themes[slot];
- root.style.setProperty("--hero-photo",'url("https://images.unsplash.com/'+photos[slot]+'?auto=format&fit=crop&w=1800&q=85")');
+ let articleImage="";
+ try{
+  const candidate=new URL(story?.image_url||"");
+  if(candidate.protocol==="https:"&&story?.image_match_status==="article_image")articleImage=candidate.href;
+ }catch{}
+ root.style.setProperty("--hero-photo",articleImage?"url("+JSON.stringify(articleImage)+")":"none");
  root.style.setProperty("--hero-wash-left",theme.left);
  root.style.setProperty("--hero-wash-mid",theme.mid);
  root.style.setProperty("--hero-wash-right",theme.right);
@@ -1185,7 +1181,7 @@ function renderSkills(items){
  }).join(""):'<div class="empty">'+esc(t("skillEmpty"))+'</div>';
 }
 function renderFeatured(items){const x=(items||[])[0];const fallback=(reportData?.news||[])[0];const sourceBacked=!!x;const story=x||fallback;if(!story)return;const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");if(title)$("featureTitle").textContent=title;if(summary)$("featureSub").textContent=summary;const a=document.querySelector(".hero-actions a");const url=story.source_url||story.url;if(a&&url){a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=currentLang==="en"?"↗ Read the lead story":"↗ 阅读本期焦点原文"}const kicker=document.querySelector(".hero-kicker span");if(kicker&&!sourceBacked)kicker.textContent=currentLang==="en"?"DAILY AI FIELD NOTES · SOURCE STORY":"AI 前沿简报 · 本期焦点新闻线索"}function formatReportDate(dateString){const match=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(dateString||""));if(!match)return {short:dateString||t("headline"),full:""};const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);const d=new Date(year,month-1,day,12);const locale=currentLang==="en"?"en-US":"zh-CN";const short=currentLang==="en"?d.toLocaleDateString(locale,{month:"short",day:"numeric"}):`${month}月${day}日`;return {short,full:d.toLocaleDateString(locale,{year:"numeric",month:"long",day:"numeric",weekday:"long"})}}
-function renderAll(data){applyDailyHeroTheme(data.report_date);renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderXnewsVoices(data.xnews_voices||[]);renderChinaAINews(data.china_ai_news||[]);renderSkills(data.skills||[]);renderFeaturedSkill(data.skills||[]);const date=formatReportDate(data.report_date);$("reportDate").textContent=date.short;$("reportDateFull").textContent=date.full;const statusNode=$("status");if(statusNode)statusNode.textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
+function renderAll(data){applyDailyHeroTheme(data.report_date,(data.top5||[])[0]);renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderXnewsVoices(data.xnews_voices||[]);renderChinaAINews(data.china_ai_news||[]);renderSkills(data.skills||[]);renderFeaturedSkill(data.skills||[]);const date=formatReportDate(data.report_date);$("reportDate").textContent=date.short;$("reportDateFull").textContent=date.full;const statusNode=$("status");if(statusNode)statusNode.textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
 // Keep ranking numbers hidden until a pointer enters a card; touch devices retain a faint accessible marker because they have no hover state.
 document.addEventListener("pointerover",function(event){const card=event.target&&event.target.closest?event.target.closest(".top5-card"):null;if(card)card.classList.add("rank-active")});
 document.addEventListener("pointerout",function(event){const card=event.target&&event.target.closest?event.target.closest(".top5-card"):null;if(card&&(!event.relatedTarget||!card.contains(event.relatedTarget)))card.classList.remove("rank-active")});
