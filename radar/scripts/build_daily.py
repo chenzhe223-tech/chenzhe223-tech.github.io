@@ -905,6 +905,32 @@ def collect_skills() -> list[dict]:
     print(f"[skill-pick] date={today_text} theme={theme_name} selected={len(selected)} verified={len(verified)} historical_exclusions={len(historical_exclusions)} history={history['status']} coverage_days={history['coverage_days']}")
     return selected
 
+def collect_xnews_report_fields(http_get_fn, *, now: dt.datetime, recent: list[dict], enabled: bool | None = None) -> dict[str, object]:
+    """Return explicit X News status and voices fields for the daily report.
+
+    X News is optional: collector failures remain an explicit empty state and do
+    not suppress the verified core briefing.
+    """
+    if enabled is None:
+        enabled = os.environ.get("RADAR_USE_XNEWS", "true").strip().lower() in {"true", "1", "yes", "on"}
+    if enabled:
+        voices, status = collect_xnews_articles(http_get_fn, now=now)
+    else:
+        voices, status = [], "disabled"
+
+    if not isinstance(status, str) or not status.strip():
+        voices, status = [], "unavailable"
+    if not isinstance(voices, list):
+        voices, status = [], "incompatible_schema"
+
+    if voices:
+        today_key = now.astimezone(TZ).date().isoformat()
+        voices = filter_historical_duplicates(voices, "xnews_voices", today_key)
+        same_day = [{**item, "_current_date": today_key} for item in recent]
+        voices = [item for item in voices if not _duplicate_match(item, same_day, today_key)][:6]
+    return {"xnews_voices": voices, "xnews_status": status}
+
+
 def main() -> None:
     now = dt.datetime.now(TZ)
     news: list[dict] = []
@@ -930,18 +956,7 @@ def main() -> None:
     # Supplementary long-form reading: do not replace or dilute the verified
     # five-story editorial and China AI minimum. This optional source can fail
     # without affecting routine publication.
-    if os.environ.get("RADAR_USE_XNEWS", "true").strip().lower() in {"true", "1", "yes", "on"}:
-        xnews_voices, xnews_status = collect_xnews_articles(http_get, now=now)
-    else:
-        xnews_voices, xnews_status = [], "disabled"
-    if xnews_voices:
-        today_key = now.astimezone(TZ).date().isoformat()
-        xnews_voices = filter_historical_duplicates(xnews_voices, "xnews_voices", today_key)
-        same_day = [{**item, "_current_date": today_key} for item in recent]
-        xnews_voices = [
-            item for item in xnews_voices
-            if not _duplicate_match(item, same_day, today_key)
-        ][:6]
+    xnews_report_fields = collect_xnews_report_fields(http_get, now=now, recent=recent)
     skills = collect_skills()
     china_ai_news, china_sources_ok = collect_china_ai_news(now)
     report = {
@@ -953,8 +968,7 @@ def main() -> None:
         "sources_ok": source_success,
         "sources_total": len(FEEDS),
         "news": recent[:20],
-        "xnews_voices": xnews_voices,
-        "xnews_status": xnews_status,
+        **xnews_report_fields,
         "china_ai_news": china_ai_news,
         "historical_dedupe": {
             "status": "ok",
