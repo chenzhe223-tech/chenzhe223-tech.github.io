@@ -29,11 +29,11 @@ body {
 }
 
 /* Editorial type roles: serif English headings, tabular monospaced data. */
-.hero-kicker, .brief-eyebrow, .section-head h2 {
+.hero-kicker, .brief-eyebrow, .section-head h2, .title {
   font-family: var(--serif), "PingFang SC", "Microsoft YaHei", sans-serif;
 }
 .num, .top5-rank, .metric strong, .brief-date-line strong, .date strong,
-.dimension span, .date-full, .status, .meta {
+.dimension span, .date-full, .status, .meta, .provenance {
   font-family: var(--mono);
   font-variant-numeric: tabular-nums;
 }
