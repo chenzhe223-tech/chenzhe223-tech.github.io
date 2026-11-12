@@ -105,8 +105,8 @@ function check(ok, name, detail = '') {
         if (chinaCount > 0) {
           const chinaCard = chinaCards.first();
           const initialOpacity = Number(await chinaCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
-          const initialRankStateOk = initialOpacity < 0.1;
-          check(initialRankStateOk, viewport.name + ': China AI rank is transparent before interaction on all devices', 'opacity=' + initialOpacity);
+          const initialRankStateOk = initialOpacity > 0.9;
+          check(initialRankStateOk, viewport.name + ': China AI rank remains visible in the approved editorial card', 'opacity=' + initialOpacity);
           await chinaCard.hover();
           await page.waitForTimeout(240);
           const hoverState = await chinaCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
@@ -193,8 +193,8 @@ function check(ok, name, detail = '') {
       if (count > 0) {
         const topStoryCard = cards.first();
         const initialOpacity = Number(await topStoryCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
-        const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
-        check(initialRankStateOk, viewport.name + ': top-story rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
+        const initialRankStateOk = initialOpacity > 0.9;
+        check(initialRankStateOk, viewport.name + ': Top5 rank is visible before interaction as shown in the approved design', 'opacity=' + initialOpacity);
         await topStoryCard.hover();
         await page.waitForTimeout(240);
         const hoverState = await topStoryCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
@@ -301,9 +301,18 @@ function check(ok, name, detail = '') {
       }
 
       const firstCard = page.locator('#top5List .top5-card').first();
-      const cardStyles = await firstCard.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, text: getComputedStyle(el.querySelector('p')).color, title: getComputedStyle(el.querySelector('h3')).color }));
-      check(cardStyles.background === 'rgb(255, 255, 255)', viewport.name + ': story card has solid light background', JSON.stringify(cardStyles));
-      check(cardStyles.text === 'rgb(71, 85, 105)' && cardStyles.title === 'rgb(31, 41, 55)', viewport.name + ': story text uses the shared contrast tokens', JSON.stringify(cardStyles));
+      const editorialLayoutAudit = await page.evaluate(() => ({
+        leadBackground: getComputedStyle(document.querySelector('#leadStory')).backgroundColor,
+        leadTitle: getComputedStyle(document.querySelector('#leadStory h2')).color,
+        leadImage: !!document.querySelector('#leadStory .story-image img'),
+        top5Background: getComputedStyle(document.querySelector('#top5List .top5-card')).backgroundColor,
+        top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color
+      }));
+      check(editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage,
+        viewport.name + ': lead story uses a verified image with readable overlay title', JSON.stringify(editorialLayoutAudit));
+      check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
+        viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
+      check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');
       const editorial = page.locator('#editorialCore');
       if (await editorial.count()) {
         const isVisible = await editorial.isVisible();
@@ -316,8 +325,8 @@ function check(ok, name, detail = '') {
         const action = getComputedStyle(document.querySelector('.hero-actions>a:not(.secondary)'));
         return { titleBackground: title.backgroundImage, titleColor: title.webkitTextFillColor || title.color, actionBackground: action.backgroundImage, actionColor: action.backgroundColor };
       });
-      check(heroEditorialStyles.titleBackground === 'none' && heroEditorialStyles.titleColor === 'rgb(22, 37, 60)', viewport.name + ': lead feature title uses solid editorial ink', JSON.stringify(heroEditorialStyles));
-      check(heroEditorialStyles.actionBackground === 'none' && heroEditorialStyles.actionColor === 'rgb(30, 59, 94)', viewport.name + ': primary hero action uses solid editorial navy', JSON.stringify(heroEditorialStyles));
+      check(heroEditorialStyles.titleBackground === 'none' && heroEditorialStyles.titleColor === 'rgb(32, 35, 32)', viewport.name + ': global masthead uses solid editorial ink', JSON.stringify(heroEditorialStyles));
+      check(heroEditorialStyles.actionBackground === 'none' && heroEditorialStyles.actionColor === 'rgb(135, 86, 51)', viewport.name + ': primary hero action uses accessible copper', JSON.stringify(heroEditorialStyles));
       const storyLabel = await page.locator('#top5List .story-label').first().innerText();
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
