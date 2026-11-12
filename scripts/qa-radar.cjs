@@ -14,7 +14,7 @@ function check(ok, name, detail = '') {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }]) {
+    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -291,6 +291,32 @@ function check(ok, name, detail = '') {
       await page.getByRole('button', { name: '中文' }).click();
       check(await page.locator('html').getAttribute('lang') === 'zh-CN', viewport.name + ': language switches back');
       check(errors.length === 0, viewport.name + ': no JavaScript errors', errors.join('; '));
+      await page.close();
+    }
+    for (const viewport of [
+      { name: 'reader-desktop', width: 1440, height: 1000, mobile: false, date: '2026-11-12' },
+      { name: 'reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
+      { name: 'reader-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
+    ]) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      const readerUrl = new URL('../read/', base);
+      readerUrl.search = new URLSearchParams({ type: 'top5', id: '0', date: viewport.date }).toString();
+      const response = await page.goto(readerUrl.href, { waitUntil: 'networkidle', timeout: 30000 });
+      check(!!response && response.status() < 400, viewport.name + ': deep reader loads', 'HTTP ' + (response && response.status()));
+      await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
+      check((await page.locator('#content .title').innerText()).length > 8, viewport.name + ': real story title is visible');
+      check(await page.locator('#content .provenance').isVisible(), viewport.name + ': source and date provenance is visible');
+      check(await page.locator('#content .scores').isVisible(), viewport.name + ': five-dimension assessment is visible');
+      check(await page.locator('.rail-links a[href^="../daily/"]').count() === 1, viewport.name + ': return-to-briefing link is present');
+      const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+      check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
+      await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
+      await page.getByRole('button', { name: 'EN' }).click();
+      check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
+      check((await page.locator('#content').innerText()).includes('Five dimensions'), viewport.name + ': assessment is localized in English');
+      check(errors.length === 0, viewport.name + ': deep reader has no JavaScript errors', errors.join('; '));
       await page.close();
     }
   } catch (error) {
