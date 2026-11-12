@@ -441,12 +441,18 @@ function check(ok, name, detail = '') {
         action_en: 'No business decision.',
         scores: { innovation: 6, practicality: 6, feasibility: 6, impact: 6, opportunity: 6 }
       };
-      const report = { report_date: viewport.date, xnews_voices: [fixture] };
+      let report;
       const endpoint = 'archive/' + viewport.date;
       const homeTarget = new URL('../daily/', base);
       homeTarget.search = new URLSearchParams({ date: viewport.date }).toString();
       const homeResponse = await page.goto(homeTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
       check(!!homeResponse && homeResponse.status() < 400, viewport.name + ': dated daily homepage loads before X News selection', 'HTTP ' + (homeResponse && homeResponse.status()));
+      report = await page.evaluate(({ item, date }) => {
+        const data = JSON.parse(JSON.stringify(reportData || {}));
+        data.report_date = date;
+        data.xnews_voices = [item];
+        return data;
+      }, { item: fixture, date: viewport.date });
       await page.evaluate(item => renderXnewsVoices([item]), fixture);
       const storyLink = page.locator('#xnewsVoices .item h3 a');
       const storyCount = await storyLink.count();
@@ -508,7 +514,19 @@ function check(ok, name, detail = '') {
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
-      check(errors.length === 0, viewport.name + ': X News deep reader has no JavaScript errors', errors.join('; '));
+      const returnLink = page.locator('.rail-links a[href^="../daily/"]');
+      const [returnResponse] = await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }),
+        returnLink.click()
+      ]);
+      check(!!returnResponse && returnResponse.status() < 400, viewport.name + ': clicking return opens the daily briefing', 'HTTP ' + (returnResponse && returnResponse.status()) + ' ' + page.url());
+      const returnedUrl = new URL(page.url());
+      check(returnedUrl.pathname.endsWith('/radar/daily/') && returnedUrl.searchParams.get('date') === viewport.date,
+        viewport.name + ': return click restores the matching issue URL', page.url());
+      await page.locator('#reportDate').waitFor({ state: 'visible', timeout: 10000 });
+      const returnedDate = await page.locator('#reportDate').innerText();
+      check(returnedDate.includes(viewport.date), viewport.name + ': returned daily page shows the matching date', returnedDate);
+      check(errors.length === 0, viewport.name + ': X News deep reader and return navigation have no JavaScript errors', errors.join('; '));
       await page.close();
     }
   } catch (error) {
