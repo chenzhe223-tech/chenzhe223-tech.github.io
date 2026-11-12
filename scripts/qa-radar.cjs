@@ -14,7 +14,7 @@ function check(ok, name, detail = '') {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'desktop-1280', width: 1280, height: 800, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
+    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'desktop-1440x900', width: 1440, height: 900, mobile: false }, { name: 'desktop-1280', width: 1280, height: 800, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -319,6 +319,7 @@ function check(ok, name, detail = '') {
     }
     for (const viewport of [
       { name: 'reader-desktop', width: 1440, height: 1000, mobile: false, date: '2026-11-12' },
+      { name: 'reader-desktop-1440x900', width: 1440, height: 900, mobile: false, date: '2026-11-12' },
       { name: 'reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
       { name: 'reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
     ]) {
