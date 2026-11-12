@@ -163,7 +163,7 @@ function check(ok, name, detail = '') {
       const top5ImageAudit = await page.evaluate(() => {
         const images = [...document.querySelectorAll('#top5List .story-image img')];
         const generated = images.filter(img => img.closest('.story-image--generated'));
-        return { nonHttps: images.filter(img => !/^https:\\/\\//.test(img.getAttribute('src') || '')).length, generatedCount: generated.length,
+        return { nonHttps: images.filter(img => !new RegExp('^https://').test(img.getAttribute('src') || '')).length, generatedCount: generated.length,
           generatedAssetsValid: generated.every(img => img.getAttribute('src') === '../assets/radar-robotics-dexterity-illustration.jpg' && /AI-generated conceptual illustration/i.test(img.alt) && img.closest('.story-image--generated')?.textContent.includes('AI-GENERATED ILLUSTRATION')) };
       });
       check(top5ImageAudit.nonHttps === top5ImageAudit.generatedCount && top5ImageAudit.generatedCount <= 1 && top5ImageAudit.generatedAssetsValid, viewport.name + ': every non-HTTPS Top5 visual is the exact labeled first-party illustration, all other story photos remain HTTPS', JSON.stringify(top5ImageAudit));
