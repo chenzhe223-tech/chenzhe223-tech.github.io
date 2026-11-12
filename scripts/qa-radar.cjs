@@ -59,7 +59,7 @@ function check(ok, name, detail = '') {
         const story = window.__qaRadarData?.top5?.[0];
         const declared = document.documentElement.style.getPropertyValue('--hero-photo').trim();
         const eligible = story?.image_match_status === 'article_image' && /^https:\/\//.test(story?.image_url || '');
-        return { eligible, hasLeadImage: eligible ? declared.includes(new URL(story.image_url).href) : declared === 'none', status: story?.image_match_status || 'missing', declaration: declared };
+        return { eligible, hasLeadImage: eligible ? declared.includes(new URL(story.image_url).href) : declared === 'none', status: story?.image_match_status || 'missing', sourceUrl: String(story?.source_url || story?.url || ''), title: String(story?.title_zh || story?.title || ''), declaration: declared };
       });
       check(heroImageAudit.hasLeadImage, viewport.name + ': hero only uses a verified lead article image', JSON.stringify(heroImageAudit));
       const sourceNewsCount = await page.locator('#newsList .item').count();
@@ -160,7 +160,13 @@ function check(ok, name, detail = '') {
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
       check(await page.locator('#top5List .story-image').count() <= 5, viewport.name + ': news without verified photographs stays text-first');
-      check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
+      const top5ImageAudit = await page.evaluate(() => {
+        const images = [...document.querySelectorAll('#top5List .story-image img')];
+        const generated = images.filter(img => img.closest('.story-image--generated'));
+        return { nonHttps: images.filter(img => !/^https:\\/\\//.test(img.getAttribute('src') || '')).length, generatedCount: generated.length,
+          generatedAssetsValid: generated.every(img => img.getAttribute('src') === '../assets/radar-robotics-dexterity-illustration.jpg' && /AI-generated conceptual illustration/i.test(img.alt) && img.closest('.story-image--generated')?.textContent.includes('AI-GENERATED ILLUSTRATION')) };
+      });
+      check(top5ImageAudit.nonHttps === top5ImageAudit.generatedCount && top5ImageAudit.generatedCount <= 1 && top5ImageAudit.generatedAssetsValid, viewport.name + ': every non-HTTPS Top5 visual is the exact labeled first-party illustration, all other story photos remain HTTPS', JSON.stringify(top5ImageAudit));
       check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
       const imageDuplicates = await page.evaluate(() => {
         const seen=new Map(),duplicates=[];
@@ -347,12 +353,21 @@ function check(ok, name, detail = '') {
         leadBackground: getComputedStyle(document.querySelector('#leadStory')).backgroundColor,
         leadTitle: getComputedStyle(document.querySelector('#leadStory h2')).color,
         leadImage: !!document.querySelector('#leadStory .story-image img'),
+        leadImageUrl: document.querySelector('#leadStory .story-image img')?.getAttribute('src') || '',
+        leadImageLoaded: Boolean(document.querySelector('#leadStory .story-image img')?.complete && document.querySelector('#leadStory .story-image img')?.naturalWidth > 0),
+        generatedLabel: document.querySelector('#leadStory .editorial-illustration-tag')?.textContent?.trim() || '',
         top5Background: getComputedStyle(document.querySelector('#top5List .top5-card')).backgroundColor,
         top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color,
         leadTextOnly: document.querySelector('#leadStory')?.classList.contains('text-only')
       }));
-      check((heroImageAudit.eligible ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)') && editorialLayoutAudit.leadImage === heroImageAudit.eligible,
-        viewport.name + ': lead story uses only a verified article image when one exists, with a readable overlay title', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible }));
+      const exactGeneratedIllustration = heroImageAudit.sourceUrl === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66' && heroImageAudit.status === 'thematic_fallback' && /Gemini Robotics 2\\.5/i.test(heroImageAudit.title);
+      const leadVisualPass = heroImageAudit.eligible
+        ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage
+        : exactGeneratedIllustration
+          ? !editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadImage && editorialLayoutAudit.leadImageUrl === '../assets/radar-robotics-dexterity-illustration.jpg' && editorialLayoutAudit.leadImageLoaded && editorialLayoutAudit.generatedLabel.includes('AI-GENERATED ILLUSTRATION') && editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)'
+          : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)' && !editorialLayoutAudit.leadImage;
+      check(leadVisualPass,
+        viewport.name + ': lead art is verified photography or a matching, explicitly labeled editorial illustration; unknown fallbacks stay text-first', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible, exactGeneratedIllustration }));
       check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
         viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
       check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');
