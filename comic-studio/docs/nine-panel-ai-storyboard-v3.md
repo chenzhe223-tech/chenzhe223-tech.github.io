@@ -28,4 +28,3 @@ The production page `#/director` now automatically prepares a nine-panel screenp
 1. Genuine `@cf/google/gemma-4-26b-a4b-it` inference from an authenticated production user token: **NOT YET TESTED LIVE**. Mock tests and public model catalog availability do not establish actual quality or free allowance. No unauthorized paid model inference should be triggered solely for QA.
 2. Real third-party network success (DeepSeek, OpenAI, Claude, Gemini, Kimi and Qwen): **NOT TESTED LIVE** without user-provided keys and explicit consent for provider billing. Do not report a provider as connected until a real authorized request succeeds.
 3. Future visual image production and 9 real PNG deliveries remain entirely separate and require visual QA.
-
