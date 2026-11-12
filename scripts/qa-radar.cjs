@@ -444,7 +444,7 @@ function check(ok, name, detail = '') {
         scores: { innovation: 6, practicality: 6, feasibility: 6, impact: 6, opportunity: 6 }
       };
       const report = { report_date: viewport.date, xnews_voices: [fixture] };
-      const endpoint = viewport.date === '2026-11-12' ? 'latest' : 'archive/' + viewport.date;
+      const endpoint = 'archive/' + viewport.date;
       let fixtureResponseServed = false;
       const dataRequests = [];
       await page.route('**/*', async route => {
