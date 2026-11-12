@@ -291,6 +291,16 @@ function check(ok, name, detail = '') {
       await page.getByRole('button', { name: '中文' }).click();
       check(await page.locator('html').getAttribute('lang') === 'zh-CN', viewport.name + ': language switches back');
       check(errors.length === 0, viewport.name + ': no JavaScript errors', errors.join('; '));
+      const deepReadLink = page.locator('#top5List a[href*="../read/"]').first();
+      check(await deepReadLink.count() === 1, viewport.name + ': first story has a deep-reader route');
+      if (await deepReadLink.count()) {
+        await deepReadLink.click();
+        await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
+        check(new URL(page.url()).pathname.includes('/radar/read/'), viewport.name + ': story opens in the deep reader', page.url());
+        await page.goBack({ waitUntil: 'networkidle', timeout: 30000 });
+        await page.waitForSelector('#reportDate', { timeout: 10000 });
+        check(new URL(page.url()).pathname.endsWith('/radar/daily/') && (await page.locator('#reportDate').innerText()).includes('2026-11-12'), viewport.name + ': browser back restores the briefing', page.url());
+      }
       await page.close();
     }
     for (const viewport of [
