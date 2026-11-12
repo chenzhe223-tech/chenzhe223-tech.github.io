@@ -5,7 +5,7 @@ from pathlib import Path
 from unittest.mock import patch
 import os
 from radar.scripts import build_daily
-from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate
+from radar.scripts.build_daily import CHINA_NEWS_MIN, rank_diverse_china_items, verify_skill_candidate, collect_xnews_report_fields
 from radar.scripts.run_horizon import build_selection_pool, ensure_story_fallback, merge_manual_editorial_sources
 
 class _FakeHttpResponse:
@@ -19,6 +19,30 @@ class _FakeHttpResponse:
 
 
 class DailyBriefContractTests(unittest.TestCase):
+
+    def test_daily_report_xnews_fields_keep_live_collector_output(self):
+        now = dt.datetime(2026, 11, 12, 1, 0, tzinfo=dt.timezone.utc)
+        voice = {"url": "https://x.com/researcher/status/123", "title": "X News discovery"}
+        with patch.object(build_daily, "collect_xnews_articles", return_value=([voice], "ok")) as collector:
+            with patch.object(build_daily, "filter_historical_duplicates", side_effect=lambda items, *_args: items):
+                with patch.object(build_daily, "_duplicate_match", return_value=False):
+                    fields = collect_xnews_report_fields(lambda *_args, **_kwargs: b"", now=now, recent=[], enabled=True)
+        self.assertEqual(fields["xnews_status"], "ok")
+        self.assertEqual(fields["xnews_voices"], [voice])
+        collector.assert_called_once()
+
+    def test_daily_report_xnews_keeps_explicit_empty_state(self):
+        now = dt.datetime(2026, 11, 12, 1, 0, tzinfo=dt.timezone.utc)
+        with patch.object(build_daily, "collect_xnews_articles", return_value=([], "no_recent")):
+            fields = collect_xnews_report_fields(lambda *_args, **_kwargs: b"", now=now, recent=[], enabled=True)
+        self.assertEqual(fields, {"xnews_voices": [], "xnews_status": "no_recent"})
+
+    def test_daily_report_xnews_invalid_status_is_explicit_unavailable(self):
+        now = dt.datetime(2026, 11, 12, 1, 0, tzinfo=dt.timezone.utc)
+        with patch.object(build_daily, "collect_xnews_articles", return_value=([{"title": "orphan"}], "  ")):
+            fields = collect_xnews_report_fields(lambda *_args, **_kwargs: b"", now=now, recent=[], enabled=True)
+        self.assertEqual(fields, {"xnews_voices": [], "xnews_status": "unavailable"})
+
 
     def test_github_api_requests_use_workflow_token_without_leaking_to_other_hosts(self):
         with patch.dict(os.environ, {"GITHUB_TOKEN": "unit-test-token"}):
