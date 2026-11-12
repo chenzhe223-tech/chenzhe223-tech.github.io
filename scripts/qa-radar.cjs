@@ -14,7 +14,7 @@ function check(ok, name, detail = '') {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
+    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'desktop-1280', width: 1280, height: 800, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -296,7 +296,7 @@ function check(ok, name, detail = '') {
     for (const viewport of [
       { name: 'reader-desktop', width: 1440, height: 1000, mobile: false, date: '2026-11-12' },
       { name: 'reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
-      { name: 'reader-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
+      { name: 'reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
     ]) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
       const errors = [];
@@ -308,6 +308,7 @@ function check(ok, name, detail = '') {
       await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
       check((await page.locator('#content .title').innerText()).length > 8, viewport.name + ': real story title is visible');
       check(await page.locator('#content .provenance').isVisible(), viewport.name + ': source and date provenance is visible');
+      check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': requested briefing date is shown in reader rail');
       check(await page.locator('#content .scores').isVisible(), viewport.name + ': five-dimension assessment is visible');
       check(await page.locator('.rail-links a[href^="../daily/"]').count() === 1, viewport.name + ': return-to-briefing link is present');
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
