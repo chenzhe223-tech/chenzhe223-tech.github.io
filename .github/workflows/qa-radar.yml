@@ -54,6 +54,12 @@ jobs:
             ~/.npm
             ~/.cache/ms-playwright
           key: ${{ runner.os }}-radar-playwright-v1
+      - name: Install CJK fonts for faithful browser screenshots
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fonts-noto-cjk
+          fc-cache -f
+          fc-list :lang=zh | head -n 1
       - name: Install Playwright
         run: |
           npm init -y
