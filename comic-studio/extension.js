@@ -277,7 +277,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
    if(!force){try{const old=JSON.parse(localStorage.getItem(key)||'null');if(old&&Date.now()-old.savedAt<900000){obj=old.doc;fromCache=true}}catch{}}
    if(!obj){
     const u='/api/comic/story-search?type='+encodeURIComponent(type)+'&q='+encodeURIComponent(q);
-    const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),18000);
+    const abort=new AbortController(),timeout=setTimeout(()=>abort.abort(),26000);
     try{
      const res=await fetch(u,{signal:abort.signal,cache:'no-store'});
      obj=await res.json().catch(()=>({error:'服务器返回格式异常'}));
