@@ -930,7 +930,10 @@ def main() -> None:
     # Supplementary long-form reading: do not replace or dilute the verified
     # five-story editorial and China AI minimum. This optional source can fail
     # without affecting routine publication.
-    xnews_voices, xnews_status = collect_xnews_articles(http_get, now=now)
+    if os.environ.get("RADAR_USE_XNEWS", "true").strip().lower() in {"true", "1", "yes", "on"}:
+        xnews_voices, xnews_status = collect_xnews_articles(http_get, now=now)
+    else:
+        xnews_voices, xnews_status = [], "disabled"
     if xnews_voices:
         today_key = now.astimezone(TZ).date().isoformat()
         xnews_voices = filter_historical_duplicates(xnews_voices, "xnews_voices", today_key)
