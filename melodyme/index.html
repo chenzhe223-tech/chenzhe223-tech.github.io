@@ -95,7 +95,7 @@
 <div id="musiccard" class="music-layout"><div class="album" style="width:100%;height:auto;aspect-ratio:1">♫</div><div class="music-detail"><h3 class="music-title" id="musicname">还没找到这首歌</h3><div class="music-artist" id="musicartist">你的记忆，可以从旋律开始</div><p class="music-meta" id="musicmeta">搜索歌名或歌手，确认后将显示真实封面与可用试听。</p><div class="player-actions"><button class="music-link" id="listenIdentify" type="button"><span>◉</span> 听音识歌</button><button class="music-link secondary-link" id="downloadInline" type="button" title="下载记忆海报" aria-label="下载记忆海报">↓ 海报</button></div></div></div>
 <div id="identifyNotice" class="identify-notice" aria-live="polite">点击「听音识歌」可尝试唤起设备上的音乐识别服务。</div><div id="musicresults-player"></div><div class="privacy">歌曲资料来自公开音乐目录。识曲由设备上的音乐识别服务完成；网页不会在后台录音。</div>
 </div></section>
-<section class="artwork-panel" aria-label="记忆海报"><div class="poster" id="poster"><div class="ai-cover-frame poster-art-frame" id="aiCoverFrame" aria-label="唯一主海报图片"><div class="ai-cover-placeholder" id="aiCoverPlaceholder"><span>♫</span><strong>为这段记忆生成一张海报</strong><small>只使用风格、情绪与场景关键词，不发送完整故事。</small></div><img id="aiCoverImage" alt="AI 生成封面（非真实专辑封面）" loading="lazy" hidden></div><div class="poster-copy"><small>MELODYME · A PERSONAL SOUNDTRACK</small><h3 id="postertitle">那些被旋律<br>记住的时刻</h3><p id="posterartist" class="poster-artist" hidden></p><small id="postersong">A SONG · A MEMORY · YOUR STORY</small></div></div><div class="poster-tools"><button class="primary" id="download" type="button">↓ 下载海报</button><button class="ghost" id="regenerateCover" type="button">重新生成</button><p id="aiCoverStatus" class="muted poster-status" role="status">AI 海报尚未生成</p></div><p class="muted poster-disclosure">AI 生成海报 · 创作装饰 · 非真实专辑封面</p></section>
+<section class="artwork-panel" aria-label="记忆海报"><div class="poster" id="poster"><div class="ai-cover-frame poster-art-frame" id="aiCoverFrame" aria-label="唯一主海报图片"><div class="ai-cover-placeholder" id="aiCoverPlaceholder"><span>♫</span><strong>为这段记忆生成一张海报</strong><small>只使用风格、情绪与场景关键词，不发送完整故事。</small></div><img id="aiCoverImage" alt="AI 生成封面（非真实专辑封面）" loading="lazy" hidden></div><div class="poster-copy"><small>MELODYME · A PERSONAL SOUNDTRACK</small><h3 id="postertitle">那些被旋律<br>记住的时刻</h3><p id="posterartist" class="poster-artist" hidden></p><small id="postersong">A SONG · A MEMORY · YOUR STORY</small></div></div><div class="poster-tools"><button class="primary" id="download" type="button">↓ 下载海报</button><button class="ghost" id="openSharedPoster" type="button">统一海报工坊 ↗</button><button class="ghost" id="regenerateCover" type="button">重新生成</button><p id="aiCoverStatus" class="muted poster-status" role="status">AI 海报尚未生成</p></div><p class="muted poster-disclosure">AI 生成海报 · 创作装饰 · 非真实专辑封面</p></section>
 <section class="story-panel" aria-label="我的音乐故事"><div class="story-editor-head"><strong>我的音乐故事</strong><button class="icon-action" id="copyStory" type="button" aria-label="复制我的音乐故事" title="复制文案">⧉</button></div><textarea class="field" id="storycopy" aria-label="我的音乐故事，可编辑" placeholder="这里会生成一段自然、散文式的音乐记忆……" ></textarea><div class="actions story-actions"><button class="primary" id="save">保存这份作品</button><button class="ghost" id="regen">重新生成故事</button></div></section>
 </div></div></section></div></section>
 <section class="section hidden" id="works"><div class="secthead"><div class="eyebrow">YOUR COLLECTION</div><h2>收藏那些，值得再听一次的时刻。</h2><p>作品保存在当前浏览器中，不会自动公开。</p></div><div class="card"><button class="primary" id="new">开启新旅程 +</button><p id="empty" class="muted">还没有保存的作品。每一段记忆，都可以成为起点。</p><div class="saved" id="saved"></div></div></section></main>
@@ -449,4 +449,17 @@ button:disabled{opacity:.55;cursor:wait}
 @media(prefers-reduced-motion:reduce){.poster-art-frame img{transition:none!important}}
 </style><style id="melodyme-gsap-motion-accessibility">@media(prefers-reduced-motion:reduce){.city-map-route-accent.is-playing{animation:none!important;stroke-dashoffset:0!important}.city-map-card.is-playing .playing-glyph{animation:none!important}}</style><script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-<script src="gsap-motion.js" defer></script></body></html>
+<script src="gsap-motion.js" defer></script><script>
+(function(){
+ const button=document.getElementById("openSharedPoster");if(!button)return;
+ button.addEventListener("click",function(){
+  const title=(document.getElementById("postertitle")?.innerText||"一段旋律，一份记忆").trim();
+  const artist=(document.getElementById("posterartist")?.innerText||"").trim();
+  const song=(document.getElementById("postersong")?.innerText||"MELODYME · A PERSONAL SOUNDTRACK").trim();
+  const story=(document.getElementById("storycopy")?.value||"").trim();
+  const config={title:title,subtitle:[artist,song,story].filter(Boolean).join("\n\n").slice(0,220),signature:"MELODYME",theme:"paper",style:"cinematic",motion:"rise",duration:800,fontEn:"Inter",fontZh:"Noto Sans SC"};
+  location.href="../motion-lab/motion-poster.html#poster="+encodeURIComponent(JSON.stringify(config));
+ });
+})();
+</script>
+</body></html>

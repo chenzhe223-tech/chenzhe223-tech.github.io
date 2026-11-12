@@ -277,10 +277,14 @@
               (node.querySelector && node.querySelector("#cityMapCanvas, #cityRoutePath"));
           });
         });
-        if (!mapChanged) return;
-        bindRouteIfPresent();
-        initButtonFeedback();
-        if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        // Always re-check the stable route selector after DOM insertions.
+        // Some renderers replace SVG descendants without exposing the expected
+        // wrapper as MutationRecord.target, so a narrow filter can miss the route.
+        if (mapChanged || document.querySelector("#cityMapCanvas #cityRoutePath")) {
+          bindRouteIfPresent();
+          initButtonFeedback();
+          if (window.ScrollTrigger) window.ScrollTrigger.refresh();
+        }
       }).observe(observerRoot, { childList: true, subtree: true });
     }
   }

@@ -182,18 +182,25 @@ jobs:
           if (await page.locator('#cityAudio').getAttribute('preload') !== 'none') throw new Error('music preview must not preload');
           if (await page.locator('#cityAudio').getAttribute('src') !== 'https://audio-ssl.itunes.apple.com/qa-preview.m4a') throw new Error('city map must use the exact catalog preview URL');
           await page.locator('#buildCityMap').click();
-          await page.locator('#cityRouteSvg').waitFor({state:'visible'});
+          try {
+            await page.locator('#cityRouteSvg').waitFor({state:'visible', timeout:10000});
+          } catch (error) {
+            const diagnostic = await page.evaluate(() => ({
+              status: document.querySelector('#cityMapStatus')?.innerText,
+              title: document.querySelector('#cityMapTitle')?.innerText,
+              canvas: document.querySelector('#cityMapCanvas')?.innerText,
+              resolved: typeof window.__melodymeQaResolved !== 'undefined' ? window.__melodymeQaResolved : null
+            }));
+            throw new Error('City map route did not render: ' + JSON.stringify(diagnostic) + '; ' + error.message);
+          }
           if (await page.locator('#cityMapCanvas .city-map-pin').count() !== 4) throw new Error('map must show four geocoded city stops');
           const gsapLoaded = await page.evaluate(() => !!window.gsap);
           const reducedMotion = await page.evaluate(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
           if (gsapLoaded && !reducedMotion) {
             await page.waitForFunction(() => {
               const path = document.querySelector('#cityMapCanvas #cityRoutePath');
-              return path && path.style.animation === 'none';
-            }, null, { timeout: 3000 });
-            if (!(await page.locator('#cityMapCanvas #cityRoutePath').evaluate(el => el.style.strokeDasharray === '1'))) {
-              throw new Error('GSAP should bind to the dynamically rendered city route');
-            }
+              return path && path.style.animation === 'none' && path.style.strokeDasharray === '1';
+            }, null, { timeout: 5000 });
           }
           if (!(await page.locator('#cityMapStatus').innerText()).includes('高德地图')) throw new Error('map must disclose AMap coordinate source');
           if (await page.locator('#cityPlayJourney').isDisabled()) throw new Error('selected preview track should enable journey playback');
