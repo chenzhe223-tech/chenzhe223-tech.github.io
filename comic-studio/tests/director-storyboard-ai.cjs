@@ -46,6 +46,7 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  assert.match(html,/自动编剧/);
  assert.match(html,/DeepSeek API/);
  assert.match(html,/OpenAI API/);
+ for(const label of ['Claude','Gemini','Kimi','通义千问'])assert.ok(html.includes(label+' · 自带密钥'),label+' must be selectable');
  await new Promise(r=>setTimeout(r,30));
  assert.equal(calls,1,'AI-first storyboard should run once for blank nine-frame project');
  assert.equal(current.panels[0].title,panels[0].title);
@@ -76,7 +77,13 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  let externalRequests=0;
  sandbox.fetch=async(url,opts)=>{
   if(String(url).includes('/auth/v1/user'))return Response.json({id:'test-user'});
-  if(String(url).includes('api.deepseek.com')){externalRequests++;assert.equal(opts.headers.authorization,'Bearer sk-temporary-secret');return Response.json({model:'deepseek-chat',choices:[{message:{content:JSON.stringify({analysis:'反转价值',panels})}}]});}
+  const story=JSON.stringify({analysis:'反转价值',panels});
+  if(String(url).includes('api.deepseek.com')||String(url).includes('api.openai.com')||String(url).includes('api.moonshot.cn')||String(url).includes('dashscope.aliyuncs.com')){
+   externalRequests++;assert.equal(opts.headers.authorization,'Bearer sk-temporary-secret');
+   return Response.json({model:JSON.parse(opts.body).model,choices:[{message:{content:story}}]});
+  }
+  if(String(url).includes('api.anthropic.com')){externalRequests++;assert.equal(opts.headers['x-api-key'],'sk-temporary-secret');assert.equal(opts.headers['anthropic-version'],'2023-06-01');return Response.json({model:'claude-test',content:[{type:'text',text:story}]});}
+  if(String(url).includes('generativelanguage.googleapis.com')){externalRequests++;assert.equal(opts.headers['x-goog-api-key'],'sk-temporary-secret');return Response.json({candidates:[{content:{parts:[{text:story}]}}]});}
   throw Error('Unexpected network call: '+url);
  };
  vm.runInNewContext(worker.replace('export default {async fetch(','const workerImpl={async fetch(')+'\nglobalThis.storyTest=wtStoryboardAI;',sandbox,{filename:'worker.js'});
@@ -91,7 +98,16 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  assert.equal(byo.status,200);
  const generated=await byo.json();assert.equal(generated.panels.length,9);assert.equal(externalRequests,1);
  assert.equal(generated.factChecked,false);assert.equal(generated.rightsCleared,false);
+ for(const provider of ['openai','claude','gemini','kimi','qwen']){
+  const response=await sandbox.storyTest(req({...good,provider,apiKey:'sk-temporary-secret'}),env);
+  assert.equal(response.status,200,provider+' should return a verified nine-panel draft');
+  const output=await response.json();assert.equal(output.provider,provider);assert.equal(output.panels.length,9);
+ }
+ assert.equal(externalRequests,6,'each supported provider must use its fixed upstream API');
+ const invalidModel=await sandbox.storyTest(req({...good,provider:'claude',model:'gemini-2.5-flash',apiKey:'sk-temporary-secret'}),env);
+ assert.equal(invalidModel.status,400,'model IDs from another provider must be rejected before network access');
  const bad=await sandbox.storyTest(req({...good,provider:'untrusted',apiKey:'anything'}),env);assert.equal(bad.status,400);
- assert.equal(externalRequests,1,'Reject untrusted provider before any network request');
- console.log('PASS: owner-auth native model, BYO DeepSeek proxy, untrusted provider block, provenance and no publication approval');
+ assert.equal(externalRequests,6,'Reject unsupported provider and mismatched model before network access');
+ console.log('PASS: owner-auth native model; DeepSeek, OpenAI, Claude, Gemini, Kimi and Qwen proxies; provider/model validation; provenance; no publication approval');
 })().catch(err=>{console.error(err);process.exitCode=1});
+
