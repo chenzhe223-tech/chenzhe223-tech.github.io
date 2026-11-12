@@ -136,8 +136,7 @@ async function wtStoryboardAI(request,env){
  if(provider==='native'&&!env.AI)return failure('当前未接入可用的内置文字模型，请使用本地故事草稿或自行接入API。',503);
  const key=String(body.apiKey||'').trim();
  if(provider!=='native'&&(key.length<12||key.length>320||/[\r\n]/.test(key)))return failure('请填写有效API Key（仅用于本次生成）',400);
- const models={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',
-  gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
+ const models={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
  const modelPatterns={deepseek:/^deepseek-[a-z0-9.-]{1,80}$/i,openai:/^(?:gpt-[a-z0-9.-]{1,80}|o[1-9](?:-[a-z0-9.-]{1,70})?)$/i,
   claude:/^claude-[a-z0-9.-]{1,80}$/i,gemini:/^gemini-[a-z0-9.-]{1,80}$/i,
   kimi:/^(?:kimi|moonshot)-[a-z0-9.-]{1,80}$/i,qwen:/^qwen[a-z0-9.-]{1,80}$/i};
@@ -1015,7 +1014,7 @@ async function wtStoryBooks(q){
    rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
    beats:[],published:v.publishedDate||'',verified_on:new Date().toISOString().slice(0,10),
    identity_status:'book_title_match',verification_status:'metadata_only'};
- }).filter(x=>x&&wtStoryTitleMatches(x.title,q));
+ }).filter(x=>x&&wtBookMatches(x.title,q));
 }
 async function wtStoryPublicBooks(q){
  const u='https://gutendex.com/books/?search='+encodeURIComponent(q);
@@ -1030,7 +1029,7 @@ async function wtStoryPublicBooks(q){
   rights:'public_domain_us',rights_note:'仅为美国公版目录候选，需另行核对实际使用地区及具体版本的权利。',
   beats:[],verified_on:new Date().toISOString().slice(0,10),
   identity_status:'book_title_match',verification_status:'catalog_metadata_only'
- })).filter(x=>wtStoryTitleMatches(x.title,q));
+ })).filter(x=>wtBookMatches(x.title,q));
 }
 async function wtStoryDramaSearch(q){
  // Search live Google News RSS for independently attributable title leads.
@@ -1053,6 +1052,34 @@ async function wtStoryDramaSearch(q){
    identity_status:'title_mentioned_in_source',verification_status:'source_lead_unverified'
  })).filter(x=>x.source&&x.title);
 }
+
+const WT_BOOK_ALIASES=[["简爱","Jane Eyre"],["悲惨世界","Les Miserables"],["战争与和平","War and Peace"],["傲慢与偏见","Pride and Prejudice"],["呼啸山庄","Wuthering Heights"],["基督山伯爵","The Count of Monte Cristo"],["双城记","A Tale of Two Cities"],["远大前程","Great Expectations"],["雾都孤儿","Oliver Twist"],["红与黑","The Red and the Black"],["包法利夫人","Madame Bovary"],["安娜卡列尼娜","Anna Karenina"],["罪与罚","Crime and Punishment"],["卡拉马佐夫兄弟","The Brothers Karamazov"],["堂吉诃德","Don Quixote"],["百年孤独","One Hundred Years of Solitude"],["霍乱时期的爱情","Love in the Time of Cholera"],["老人与海","The Old Man and the Sea"],["了不起的盖茨比","The Great Gatsby"],["杀死一只知更鸟","To Kill a Mockingbird"],["一九八四","1984"],["动物农场","Animal Farm"],["美丽新世界","Brave New World"],["局外人","The Stranger"],["变形记","The Metamorphosis"],["小王子","The Little Prince"],["鲁滨逊漂流记","Robinson Crusoe"],["爱丽丝梦游仙境","Alice's Adventures in Wonderland"],["海底两万里","Twenty Thousand Leagues Under the Seas"],["巴黎圣母院","The Hunchback of Notre Dame"],["红楼梦","Dream of the Red Chamber"],["西游记","Journey to the West"],["三国演义","Romance of the Three Kingdoms"],["水浒传","Water Margin"],["雪国","Snow Country"],["挪威的森林","Norwegian Wood"],["人间失格","No Longer Human"],["源氏物语","The Tale of Genji"],["追忆似水年华","In Search of Lost Time"],["尤利西斯","Ulysses"],["神曲","Divine Comedy"],["伊利亚特","The Iliad"],["奥德赛","The Odyssey"],["哈姆雷特","Hamlet"],["麦克白","Macbeth"],["罗密欧与朱丽叶","Romeo and Juliet"]];
+function wtBookTerms(q){
+ const k=wtStoryKey(q),pair=WT_BOOK_ALIASES.find(a=>a.some(t=>wtStoryKey(t)===k));
+ return pair?[q,...pair.filter(t=>wtStoryKey(t)!==k)]:[q];
+}
+function wtBookMatches(title,q){
+ const fold=v=>wtStoryKey(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+ const k=fold(title);
+ return wtBookTerms(q).some(t=>{const v=fold(t);return v.length>1&&(k.includes(v)||(k.length>5&&v.includes(k)))});
+}
+async function wtOpenLibrary(q){
+ const u='https://openlibrary.org/search.json?'+new URLSearchParams({title:q,limit:'15',fields:'key,title,author_name,first_publish_year,cover_i'});
+ const r=await fetch(u,{signal:AbortSignal.timeout(9000)});
+ if(!r.ok)throw Error('Open Library '+r.status);
+ const j=await r.json();
+ return (j.docs||[]).filter(v=>v.key&&v.title&&wtBookMatches(v.title,q)).slice(0,10).map(v=>({
+  id:'openlibrary-'+String(v.key).replace(/[^a-zA-Z0-9]/g,'-'),title:wtStoryClean(v.title).slice(0,150),
+  type:'classic',author:wtStoryClean((v.author_name||[]).slice(0,3).join('、')).slice(0,180),
+  source:'https://openlibrary.org'+v.key,source_name:'Open Library · 全球书目',
+  source_kind:'book_metadata',cover:v.cover_i?'https://covers.openlibrary.org/b/id/'+v.cover_i+'-M.jpg':'',
+  summary:'全球文学书目记录；请核对原作及版权后选择漫画改编剧情。',
+  published:v.first_publish_year?String(v.first_publish_year):'',
+  rights:'unknown',rights_note:'书目可检索不代表作品、译本或封面已获商业改编授权。',
+  beats:[],verified_on:new Date().toISOString().slice(0,10),
+  identity_status:'cross_language_title_match',verification_status:'catalog_metadata_only'
+ }));
+}
 async function wtStorySearch(request,env,url){
  const type=url.searchParams.get('type')||'all',q=String(url.searchParams.get('q')||'').trim().slice(0,90);
  if(!WT_STORY_SEARCH_ALLOWED.includes(type))return failure('未知剧情搜索类型',400);
@@ -1069,8 +1096,12 @@ async function wtStorySearch(request,env,url){
  }catch(e){notes.push('精选索引不可用：'+String(e.message||e).slice(0,85))}
  const jobs=[];
  if(q&&type!=='drama'){
-  jobs.push({name:'Google Books',fn:()=>wtStoryBooks(q)});
-  jobs.push({name:'Gutendex',fn:()=>wtStoryPublicBooks(q)});
+  const terms=[...new Set(wtBookTerms(q))].slice(0,2);
+  for(const term of terms){
+   jobs.push({name:'Google Books '+term,fn:()=>wtStoryBooks(term)});
+   jobs.push({name:'Open Library '+term,fn:()=>wtOpenLibrary(term)});
+   jobs.push({name:'Gutendex '+term,fn:()=>wtStoryPublicBooks(term)});
+  }
  }
  if(type!=='novel'&&q)jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
  const results=await Promise.allSettled(jobs.map(x=>x.fn()));
@@ -1106,6 +1137,5 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
  const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.3.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.4.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
-
