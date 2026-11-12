@@ -6,6 +6,7 @@ const base = process.env.RADAR_TEST_URL || 'http://127.0.0.1:4173/radar/daily/';
 const out = 'test-results/radar';
 fs.mkdirSync(out, { recursive: true });
 const results = [];
+let syntheticXnewsReaderRoute = '';
 function check(ok, name, detail = '') {
   results.push({ status: ok ? 'PASS' : 'FAIL', name, detail: String(detail) });
   console.log('[' + (ok ? 'PASS' : 'FAIL') + '] ' + name + (detail ? ' — ' + detail : ''));
@@ -76,6 +77,7 @@ function check(ok, name, detail = '') {
       check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
       check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
       check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyHidden, viewport.name + ': X News deep-read route and truthful empty state work');
+      if (!syntheticXnewsReaderRoute) syntheticXnewsReaderRoute = xnewsFixtureAudit.deepReadRoute;
       const typeRoles = await page.evaluate(() => ({
         sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
         kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
@@ -407,6 +409,76 @@ function check(ok, name, detail = '') {
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
       check((await page.locator('#content').innerText()).includes('Five dimensions'), viewport.name + ': assessment is localized in English');
       check(errors.length === 0, viewport.name + ': deep reader has no JavaScript errors', errors.join('; '));
+      await page.close();
+    }
+    const xnewsDeepReadCases = [
+      { name: 'xnews-reader-desktop', width: 1440, height: 900, mobile: false, date: '2026-11-12', useHomepageRoute: true },
+      { name: 'xnews-reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12', useHomepageRoute: true },
+      { name: 'xnews-reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11', useHomepageRoute: false }
+    ];
+    for (const viewport of xnewsDeepReadCases) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      const fixture = {
+        url: 'https://example.com/qa-xnews-original',
+        source_url: 'https://example.com/qa-xnews-original',
+        curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
+        title: 'Synthetic X News QA fixture',
+        title_zh: '合成 X News 深读验收样本',
+        title_en: 'Synthetic X News deep-read fixture',
+        summary_zh: '用于验证真实页面路由、原始来源和中文编辑链接的合成测试内容。',
+        summary_en: 'Synthetic content for verifying the real page route, original source and Chinese editorial link.',
+        published: '2026-11-11T00:00:00Z',
+        source: 'X News QA',
+        category_zh: '国际视角',
+        category_en: 'International perspective',
+        why_it_matters_zh: '验证 X News 深读页的关键内容。',
+        why_it_matters_en: 'Verifies key content in the X News deep reader.',
+        editor_judgment_zh: '仅为自动化测试夹具。',
+        editor_judgment_en: 'Automation fixture only.',
+        opportunity_risk_zh: '不代表真实新闻。',
+        opportunity_risk_en: 'Not real news.',
+        action_zh: '不作业务判断。',
+        action_en: 'No business decision.',
+        scores: { innovation: 6, practicality: 6, feasibility: 6, impact: 6, opportunity: 6 }
+      };
+      const report = { report_date: viewport.date, xnews_voices: [fixture] };
+      const endpoint = viewport.date === '2026-11-12' ? 'latest' : 'archive/' + viewport.date;
+      await page.route('**/radar/data/' + endpoint + '.json*', route => route.fulfill({
+        status: 200, contentType: 'application/json', body: JSON.stringify(report)
+      }));
+      let readerTarget = new URL('../read/', base);
+      if (viewport.useHomepageRoute && syntheticXnewsReaderRoute) {
+        readerTarget = new URL(syntheticXnewsReaderRoute, base);
+      } else {
+        readerTarget.search = new URLSearchParams({ type: 'xnews', id: '0', date: viewport.date }).toString();
+      }
+      const response = await page.goto(readerTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
+      check(!!response && response.status() < 400, viewport.name + ': X News deep-read route loads with fixture data', 'HTTP ' + (response && response.status()));
+      await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
+      check((await page.locator('#content .title').innerText()).trim() === fixture.title_zh, viewport.name + ': X News deep reader shows the matching story title');
+      check((await page.locator('#content').innerText()).includes(fixture.summary_zh), viewport.name + ': X News deep reader renders the supplied summary');
+      check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': X News deep reader preserves the requested briefing date');
+      const sourceLinks = page.locator('.rail-links a[target="_blank"]');
+      check(await sourceLinks.count() === 2, viewport.name + ': original and curated X News links are both visible');
+      if (await sourceLinks.count() === 2) {
+        const links = await sourceLinks.evaluateAll(nodes => nodes.map(a => ({ href: a.href, rel: a.rel })));
+        check(links[0].href === fixture.url && links[0].rel.includes('noopener') && links[0].rel.includes('noreferrer'),
+          viewport.name + ': original X News source link is HTTPS and opener-safe', JSON.stringify(links[0]));
+        check(links[1].href === fixture.curated_url && links[1].rel.includes('noopener') && links[1].rel.includes('noreferrer'),
+          viewport.name + ': X News editorial link is host-restricted and opener-safe', JSON.stringify(links[1]));
+      }
+      const returnHref = await page.locator('.rail-links a[href^="../daily/"]').getAttribute('href');
+      check(returnHref === '../daily/?date=' + viewport.date, viewport.name + ': X News deep reader returns to the matching issue', returnHref || '');
+      await page.getByRole('button', { name: 'EN' }).click();
+      check((await page.locator('#content .title').innerText()).trim() === fixture.title_en, viewport.name + ': X News deep reader switches to English');
+      check((await page.locator('#content').innerText()).includes(fixture.summary_en), viewport.name + ': X News deep reader localizes the supplied summary');
+      await page.getByRole('button', { name: '中文' }).click();
+      const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+      check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
+      await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
+      check(errors.length === 0, viewport.name + ': X News deep reader has no JavaScript errors', errors.join('; '));
       await page.close();
     }
   } catch (error) {
