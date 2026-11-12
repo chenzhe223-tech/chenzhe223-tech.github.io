@@ -75,12 +75,13 @@ function check(ok, name, detail = '') {
         kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
         rank: getComputedStyle(document.querySelector('.top5-rank')).fontFamily,
         reportDate: getComputedStyle(document.querySelector('#reportDate')).fontFamily,
+        dockIndex: getComputedStyle(document.querySelector('.mobile-dock a span')).fontFamily,
         metadata: getComputedStyle(document.querySelector('.meta')).fontVariantNumeric
       }));
       check(/Georgia|Times New Roman/.test(typeRoles.sectionHeading) && /Georgia|Times New Roman/.test(typeRoles.kicker),
         viewport.name + ': English editorial headings use the serif type role', JSON.stringify(typeRoles));
-      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && typeRoles.metadata.includes('tabular-nums'),
-        viewport.name + ': ranks, report dates and metadata use aligned data typography', JSON.stringify(typeRoles));
+      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && /monospace/.test(typeRoles.dockIndex) && typeRoles.metadata.includes('tabular-nums'),
+        viewport.name + ': ranks, report dates, navigation numerals and metadata use aligned data typography', JSON.stringify(typeRoles));
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
@@ -380,6 +381,14 @@ function check(ok, name, detail = '') {
       check(!!response && response.status() < 400, viewport.name + ': deep reader loads', 'HTTP ' + (response && response.status()));
       await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
       check((await page.locator('#content .title').innerText()).length > 8, viewport.name + ': real story title is visible');
+      const readerTypeRoles = await page.evaluate(() => ({
+        title: getComputedStyle(document.querySelector('#content .title')).fontFamily,
+        score: getComputedStyle(document.querySelector('#content .score b')).fontFamily,
+        provenanceNumeric: getComputedStyle(document.querySelector('#content .provenance')).fontVariantNumeric
+      }));
+      check(/Georgia|Times New Roman/.test(readerTypeRoles.title), viewport.name + ': deep-read title uses the editorial serif role', JSON.stringify(readerTypeRoles));
+      check(/monospace/.test(readerTypeRoles.score) && readerTypeRoles.provenanceNumeric.includes('tabular-nums'),
+        viewport.name + ': deep-read scores and provenance use aligned data typography', JSON.stringify(readerTypeRoles));
       check(await page.locator('#content .provenance').isVisible(), viewport.name + ': source and date provenance is visible');
       check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': requested briefing date is shown in reader rail');
       check(await page.locator('#content .scores').isVisible(), viewport.name + ': five-dimension assessment is visible');
