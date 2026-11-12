@@ -22,6 +22,7 @@ function check(ok, name, detail = '') {
       check(!!response && response.status() < 400, viewport.name + ': daily page loads', 'HTTP ' + (response && response.status()));
       await page.waitForSelector('#reportDate', { timeout: 10000 });
       await page.waitForTimeout(700);
+      await page.evaluate(async () => { const selectedDate=new URLSearchParams(location.search).get('date'); const source=selectedDate?'../data/archive/'+encodeURIComponent(selectedDate)+'.json':'../data/latest.json'; window.__qaRadarData=await fetch(source,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA report data unavailable: '+response.status);return response.json()}); });
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
       const browserThemeAudit = await page.evaluate(() => ({
@@ -31,7 +32,7 @@ function check(ok, name, detail = '') {
       check(browserThemeAudit.themeColor === browserThemeAudit.paperToken && browserThemeAudit.paperToken !== '',
         viewport.name + ': browser theme color matches the shared paper token', JSON.stringify(browserThemeAudit));
       const heroImageAudit = await page.evaluate(() => {
-        const story = reportData?.top5?.[0];
+        const story = window.__qaRadarData?.top5?.[0];
         const declared = document.documentElement.style.getPropertyValue('--hero-photo').trim();
         const eligible = story?.image_match_status === 'article_image' && /^https:\/\//.test(story?.image_url || '');
         return { eligible, hasLeadImage: eligible ? declared.includes(new URL(story.image_url).href) : declared === 'none', status: story?.image_match_status || 'missing', declaration: declared };
@@ -40,7 +41,7 @@ function check(ok, name, detail = '') {
       const sourceNewsCount = await page.locator('#newsList .item').count();
       check(sourceNewsCount > 0, viewport.name + ': source news rendered', 'count=' + sourceNewsCount);
       const xnewsFixtureAudit = await page.evaluate(() => {
-        const original = reportData?.xnews_voices;
+        const original = window.__qaRadarData?.xnews_voices;
         const fixture = {
           url: 'https://example.com/qa-source',
           curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
@@ -123,7 +124,7 @@ function check(ok, name, detail = '') {
       check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
       const imageDuplicates = await page.evaluate(() => {
         const seen=new Map(),duplicates=[];
-        const stories=[...(reportData?.top5||[]),...(reportData?.china_ai_news||[])];
+        const stories=[...(window.__qaRadarData?.top5||[]),...(window.__qaRadarData?.china_ai_news||[])];
         for(const item of stories){
           if(!item?.image_url || ['thematic_fallback','image_unavailable','thematic_fallback_budget_exhausted'].includes(item.image_match_status))continue;
           if(item.image_display_mode==='info_card')continue;
@@ -268,7 +269,7 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
-        await page.waitForFunction(date => reportData?.report_date === date, archiveOption, { timeout: 10000 });
+        await page.waitForFunction(date => window.__qaRadarData?.report_date === date, archiveOption, { timeout: 10000 });
         const archivedSkillHandoff = await page.evaluate(() => {
           const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
           const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
@@ -284,7 +285,7 @@ function check(ok, name, detail = '') {
           try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
           const result = {
             available: true,
-            renderedDate: reportData?.report_date || '',
+            renderedDate: window.__qaRadarData?.report_date || '',
             nianboxDate: nianboxQueue[0]?.reportDate || '',
             keypocketDate: keypocketQueue[0]?.reportDate || ''
           };
@@ -525,7 +526,7 @@ function check(ok, name, detail = '') {
       const homeResponse = await page.goto(homeTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
       check(!!homeResponse && homeResponse.status() < 400, viewport.name + ': dated daily homepage loads before X News selection', 'HTTP ' + (homeResponse && homeResponse.status()));
       report = await page.evaluate(({ item, date }) => {
-        const data = JSON.parse(JSON.stringify(reportData || {}));
+        const data = JSON.parse(JSON.stringify(window.__qaRadarData || {}));
         data.report_date = date;
         data.xnews_voices = [item];
         return data;
