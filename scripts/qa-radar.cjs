@@ -70,6 +70,17 @@ function check(ok, name, detail = '') {
       check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
       check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
       check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyHidden, viewport.name + ': X News deep-read route and truthful empty state work');
+      const typeRoles = await page.evaluate(() => ({
+        sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
+        kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
+        rank: getComputedStyle(document.querySelector('.top5-rank')).fontFamily,
+        metric: getComputedStyle(document.querySelector('.metric strong')).fontFamily,
+        metadata: getComputedStyle(document.querySelector('.meta')).fontVariantNumeric
+      }));
+      check(/Georgia|Times New Roman/.test(typeRoles.sectionHeading) && /Georgia|Times New Roman/.test(typeRoles.kicker),
+        viewport.name + ': English editorial headings use the serif type role', JSON.stringify(typeRoles));
+      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.metric) && typeRoles.metadata.includes('tabular-nums'),
+        viewport.name + ': ranks, metrics and metadata use aligned data typography', JSON.stringify(typeRoles));
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
