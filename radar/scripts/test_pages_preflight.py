@@ -32,6 +32,9 @@ class PagesPreflightXNewsContractTests(unittest.TestCase):
         workflow = Path(".github/workflows/pages.yml").read_text(encoding="utf-8")
         self.assertIn("from radar.scripts.pages_preflight import report_has_explicit_xnews_state", workflow)
         self.assertIn("and report_has_explicit_xnews_state(report)", workflow)
+        self.assertIn("if not report_has_explicit_xnews_state(d):", workflow)
+        self.assertIn("assert report_has_explicit_xnews_state(data)", workflow)
+        self.assertIn("if not report_has_explicit_xnews_state(report):", workflow)
 
 
 if __name__ == "__main__":
