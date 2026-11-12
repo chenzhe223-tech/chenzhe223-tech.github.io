@@ -522,6 +522,39 @@ function check(ok, name, detail = '') {
       check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': requested briefing date is shown in reader rail');
       check(await page.locator('#content .scores').isVisible(), viewport.name + ': five-dimension assessment is visible');
       check(await page.locator('.rail-links a[href^="../daily/"]').count() === 1, viewport.name + ': return-to-briefing link is present');
+      const readerActions = page.locator('.reader-action-dock');
+      check(viewport.mobile ? await readerActions.isVisible() : !(await readerActions.isVisible()),
+        viewport.name + ': reader action dock is visible only on mobile');
+      if (viewport.mobile) {
+        check(await readerActions.locator('button').count() === 3,
+          viewport.name + ': mobile reader exposes type size, bookmark and share actions');
+        const defaultFontSize = Number(await page.locator('#content .dek').evaluate(el => parseFloat(getComputedStyle(el).fontSize)));
+        await page.locator('#readerFontSize').click();
+        const enlargedFontSize = Number(await page.locator('#content .dek').evaluate(el => parseFloat(getComputedStyle(el).fontSize)));
+        check(enlargedFontSize > defaultFontSize && await page.locator('body').getAttribute('data-reader-size') === 'large',
+          viewport.name + ': mobile reader type-size control enlarges article text', JSON.stringify({ defaultFontSize, enlargedFontSize }));
+        await page.locator('#readerFontSize').click();
+        await page.locator('#readerFontSize').click();
+        check(await page.locator('body').getAttribute('data-reader-size') === 'normal',
+          viewport.name + ': mobile reader type-size control cycles back to the default');
+        await page.locator('#readerBookmarkAction').click();
+        const bookmarkState = await page.evaluate(() => ({
+          pressed: document.querySelector('#readerBookmarkAction')?.getAttribute('aria-pressed'),
+          stored: JSON.parse(localStorage.getItem('davy-radar.saved-deep-reads.v1') || '[]').length
+        }));
+        check(bookmarkState.pressed === 'true' && bookmarkState.stored === 1,
+          viewport.name + ': bookmark action persists the selected deep read locally', JSON.stringify(bookmarkState));
+        await page.locator('#readerBookmarkAction').click();
+        check(await page.locator('#readerBookmarkAction').getAttribute('aria-pressed') === 'false',
+          viewport.name + ': bookmark action removes the saved deep read on the second tap');
+        await page.evaluate(() => {
+          window.__qaSharedUrl = '';
+          Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async value => { window.__qaSharedUrl = value; } } });
+        });
+        await page.locator('#readerShareAction').click();
+        check(await page.evaluate(() => window.__qaSharedUrl === location.href),
+          viewport.name + ': share action copies the current deep-read URL', await page.evaluate(() => window.__qaSharedUrl));
+      }
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
       if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
