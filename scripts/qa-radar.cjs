@@ -6,7 +6,6 @@ const base = process.env.RADAR_TEST_URL || 'http://127.0.0.1:4173/radar/daily/';
 const out = 'test-results/radar';
 fs.mkdirSync(out, { recursive: true });
 const results = [];
-let syntheticXnewsReaderRoute = '';
 function check(ok, name, detail = '') {
   results.push({ status: ok ? 'PASS' : 'FAIL', name, detail: String(detail) });
   console.log('[' + (ok ? 'PASS' : 'FAIL') + '] ' + name + (detail ? ' — ' + detail : ''));
@@ -77,7 +76,6 @@ function check(ok, name, detail = '') {
       check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
       check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
       check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyHidden, viewport.name + ': X News deep-read route and truthful empty state work');
-      if (!syntheticXnewsReaderRoute) syntheticXnewsReaderRoute = xnewsFixtureAudit.deepReadRoute;
       const typeRoles = await page.evaluate(() => ({
         sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
         kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
@@ -412,9 +410,9 @@ function check(ok, name, detail = '') {
       await page.close();
     }
     const xnewsDeepReadCases = [
-      { name: 'xnews-reader-desktop', width: 1440, height: 900, mobile: false, date: '2026-11-12', useHomepageRoute: true },
-      { name: 'xnews-reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12', useHomepageRoute: true },
-      { name: 'xnews-reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11', useHomepageRoute: false }
+      { name: 'xnews-reader-desktop', width: 1440, height: 900, mobile: false, date: '2026-11-12' },
+      { name: 'xnews-reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
+      { name: 'xnews-reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
     ];
     for (const viewport of xnewsDeepReadCases) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
@@ -445,6 +443,17 @@ function check(ok, name, detail = '') {
       };
       const report = { report_date: viewport.date, xnews_voices: [fixture] };
       const endpoint = 'archive/' + viewport.date;
+      const homeTarget = new URL('../daily/', base);
+      homeTarget.search = new URLSearchParams({ date: viewport.date }).toString();
+      const homeResponse = await page.goto(homeTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
+      check(!!homeResponse && homeResponse.status() < 400, viewport.name + ': dated daily homepage loads before X News selection', 'HTTP ' + (homeResponse && homeResponse.status()));
+      await page.evaluate(item => renderXnewsVoices([item]), fixture);
+      const storyLink = page.locator('#xnewsVoices .item h3 a');
+      const storyCount = await storyLink.count();
+      check(storyCount === 1, viewport.name + ': homepage displays the X News fixture as a selectable story');
+      const storyHref = storyCount === 1 ? await storyLink.getAttribute('href') : '';
+      check(Boolean(storyHref && storyHref.includes('type=xnews') && storyHref.includes('date=' + viewport.date)),
+        viewport.name + ': homepage X News story links to its dated deep-read route', storyHref || '');
       let fixtureResponseServed = false;
       const dataRequests = [];
       await page.route('**/*', async route => {
@@ -458,15 +467,17 @@ function check(ok, name, detail = '') {
           await route.continue();
         }
       });
-      let readerTarget = new URL('../read/', base);
-      if (viewport.useHomepageRoute && syntheticXnewsReaderRoute) {
-        readerTarget = new URL(syntheticXnewsReaderRoute, base);
-      } else {
-        readerTarget.search = new URLSearchParams({ type: 'xnews', id: '0', date: viewport.date }).toString();
+      let readerResponse = null;
+      if (storyCount === 1) {
+        [readerResponse] = await Promise.all([
+          page.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }),
+          storyLink.click()
+        ]);
       }
-      const response = await page.goto(readerTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
-      check(!!response && response.status() < 400, viewport.name + ': X News deep-read route loads', 'HTTP ' + (response && response.status()) + ' ' + readerTarget.href);
-      check(fixtureResponseServed, viewport.name + ': matching latest/archive X News fixture is served', JSON.stringify(dataRequests));
+      check(!!readerResponse && readerResponse.status() < 400, viewport.name + ': clicking the X News story opens its deep reader', 'HTTP ' + (readerResponse && readerResponse.status()) + ' ' + page.url());
+      check(new URL(page.url()).pathname === '/radar/read/', viewport.name + ': X News click reaches the reader route', page.url());
+      check(fixtureResponseServed, viewport.name + ': matching dated archive X News fixture is served', JSON.stringify(dataRequests));
+      const readerTarget = new URL(page.url());
       const titleLocator = page.locator('#content .title');
       const titleCount = await titleLocator.count();
       check(titleCount === 1, viewport.name + ': X News deep reader renders a story title', JSON.stringify({ url: readerTarget.href, dataRequests, content: await page.locator('#content').innerText() }));
