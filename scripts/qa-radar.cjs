@@ -92,7 +92,7 @@ function check(ok, name, detail = '') {
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-      check(chinaGridColumns === (viewport.mobile ? 1 : 2), viewport.name + ': China AI card grid uses balanced columns', 'columns=' + chinaGridColumns);
+      check(chinaGridColumns === 1, viewport.name + ': China AI stories use the approved single-column side rail', 'columns=' + chinaGridColumns);
       const chinaCards = page.locator('#chinaAINewsList .china-ai-card');
       const chinaCount = await chinaCards.count();
       if (chinaCount > 0) {
@@ -269,7 +269,8 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
-        await page.waitForFunction(date => window.__qaRadarData?.report_date === date, archiveOption, { timeout: 10000 });
+        await page.waitForFunction(date => document.querySelector('#featuredSkill [data-nb-skill-save]')?.dataset.reportDate === date, archiveOption, { timeout: 10000 });
+        await page.evaluate(async date => { window.__qaRadarData=await fetch('../data/archive/'+encodeURIComponent(date)+'.json',{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA archive data unavailable: '+response.status);return response.json()}); }, archiveOption);
         const archivedSkillHandoff = await page.evaluate(() => {
           const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
           const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
