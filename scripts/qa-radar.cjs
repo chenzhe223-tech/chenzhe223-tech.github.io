@@ -27,7 +27,7 @@ function check(ok, name, detail = '') {
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
       const navigationAudit = await page.evaluate(() => ({
         desktop: [...document.querySelectorAll('.primary-nav a')].map(link => ({ label: link.innerText.trim(), href: link.getAttribute('href') })),
-        mobile: [...document.querySelectorAll('.mobile-dock a')].map(link => ({ label: link.innerText.trim(), href: link.getAttribute('href') })),
+        mobile: [...document.querySelectorAll('.mobile-dock a')].map(link => ({ label: link.querySelector('b')?.innerText.trim() || '', href: link.getAttribute('href') })),
         mobileVisible: getComputedStyle(document.querySelector('.mobile-dock')).display !== 'none'
       }));
       const desktopLabels = navigationAudit.desktop.map(link => link.label);
@@ -38,7 +38,7 @@ function check(ok, name, detail = '') {
         && (!viewport.mobile || navigationAudit.mobileVisible),
         viewport.name + ': mobile navigation matches the approved five-section order and is visible on touch screens', JSON.stringify(navigationAudit));
       check(navigationAudit.desktop[0]?.href === '#ai' && navigationAudit.desktop[1]?.href === '#news'
-        && navigationAudit.desktop[2]?.href === '#top5List' && navigationAudit.desktop[3]?.href === '#skills'
+        && navigationAudit.desktop[2]?.href?.startsWith('../read/?type=top5&') && navigationAudit.desktop[3]?.href === '#skills'
         && navigationAudit.desktop[4]?.href?.includes('/niantou-box-app/'),
         viewport.name + ': desktop navigation routes to existing briefing, discovery, deep-read, library and saved-items destinations');
       const browserThemeAudit = await page.evaluate(() => ({
