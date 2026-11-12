@@ -69,14 +69,14 @@ function check(ok, name, detail = '') {
           deepReadRoute: article?.querySelector('h3 a')?.getAttribute('href') || ''
         };
         renderXnewsVoices([]);
-        audit.emptyHidden = Boolean(section && getComputedStyle(section).display === 'none' && root?.querySelectorAll('.item').length === 0);
+        audit.emptyVisible = Boolean(section && getComputedStyle(section).display !== 'none' && root?.querySelector('.xnews-empty') && root.querySelectorAll('.item').length === 0);
         renderXnewsVoices(original || []);
         return audit;
       });
       check(xnewsFixtureAudit.visible && xnewsFixtureAudit.count === 1, viewport.name + ': X News fixture shows only valid HTTPS entries', JSON.stringify(xnewsFixtureAudit));
       check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
       check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
-      check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyHidden, viewport.name + ': X News deep-read route and truthful empty state work');
+      check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyVisible, viewport.name + ': X News deep-read route and truthful empty state work');
       const typeRoles = await page.evaluate(() => ({
         sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
         kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
@@ -307,9 +307,10 @@ function check(ok, name, detail = '') {
         leadTitle: getComputedStyle(document.querySelector('#leadStory h2')).color,
         leadImage: !!document.querySelector('#leadStory .story-image img'),
         top5Background: getComputedStyle(document.querySelector('#top5List .top5-card')).backgroundColor,
-        top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color
+        top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color,
+        leadTextOnly: document.querySelector('#leadStory')?.classList.contains('text-only')
       }));
-      check(editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage === heroImageAudit.eligible,
+      check((heroImageAudit.eligible ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)') && editorialLayoutAudit.leadImage === heroImageAudit.eligible,
         viewport.name + ': lead story uses only a verified article image when one exists, with a readable overlay title', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible }));
       check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
         viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
