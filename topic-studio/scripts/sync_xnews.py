@@ -7,7 +7,7 @@ Fail closed: a failed/empty upstream request must not overwrite the last good sn
 from __future__ import annotations
 
 import argparse
-from datetime import datetime, date, timezone
+from datetime import datetime, date, timedelta, timezone
 import ipaddress
 import json
 import pathlib
@@ -69,7 +69,7 @@ def build_snapshot(records: object, synced_at: str) -> dict:
             published = date.fromisoformat(raw_date)
         except ValueError:
             continue
-        if published > datetime.now(timezone.utc).date().replace(year=datetime.now(timezone.utc).year + 1):
+        if published > datetime.now(timezone.utc).date() + timedelta(days=366):
             continue
         source_key = original.lower().split("#", 1)[0].rstrip("/")
         if slug in seen_ids or source_key in seen_original:
@@ -91,14 +91,15 @@ def build_snapshot(records: object, synced_at: str) -> dict:
     result.sort(key=lambda v: (v["date"], v["id"]), reverse=True)
     if len(result) < 3:
         raise ValueError("XNews index yielded fewer than 3 valid distinct articles; keep last good snapshot")
+    trimmed = result[:100]
     return {
         "schema_version": 1,
         "source": "XNews (joeseesun/xnews)",
         "source_index": SOURCE,
         "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
         "synced_at": synced_at,
-        "count": len(result),
-        "articles": result[:100],
+        "count": len(trimmed),
+        "articles": trimmed,
     }
 
 
