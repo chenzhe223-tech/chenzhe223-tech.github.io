@@ -569,6 +569,7 @@ jobs:
           import datetime as dt, hashlib, json, time, urllib.request, cv2, numpy as np
           from pathlib import Path
           from zoneinfo import ZoneInfo
+          from radar.scripts.pages_preflight import report_has_explicit_xnews_state
           from radar.scripts.poster_style import poster_style_metadata
 
           base = 'https://chenzhe223-tech.github.io/radar/'

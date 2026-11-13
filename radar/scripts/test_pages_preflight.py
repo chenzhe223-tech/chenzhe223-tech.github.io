@@ -1,12 +1,29 @@
 """Regression tests for the Pages refresh contract."""
 
 import unittest
+import ast
+import textwrap
 from pathlib import Path
 
 from radar.scripts.pages_preflight import report_has_explicit_xnews_state
 
 
 class PagesPreflightXNewsContractTests(unittest.TestCase):
+    def test_each_python_step_imports_the_contract_it_calls(self):
+        yaml = Path(".github/workflows/pages.yml").read_text(encoding="utf-8")
+        uses = 0
+        name = "report_has_explicit_xnews_state"
+        for chunk in yaml.split("<<'PY'")[1:]:
+            lines = chunk.splitlines()
+            end = next(i for i, line in enumerate(lines) if line.strip() == "PY")
+            script = textwrap.dedent("\n".join(lines[:end]))
+            tree = ast.parse(script)
+            if any(isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == name for n in ast.walk(tree)):
+                uses += 1
+                imports = [a.name for n in tree.body if isinstance(n, ast.ImportFrom)
+                           and n.module == "radar.scripts.pages_preflight" for a in n.names]
+                self.assertIn(name, imports, script[:240])
+        self.assertGreaterEqual(uses, 4)
     def test_missing_status_requires_refresh(self):
         self.assertFalse(report_has_explicit_xnews_state({"xnews_voices": []}))
 
