@@ -95,6 +95,9 @@ async function test(){
     assert.ok((await page.locator('.wt4-step').allTextContents()).join(' ').includes('剧情分镜'));
     assert.equal(await page.locator('.wt4-story-journey').count(),1,'story is one compact integrated stage');
     assert.equal(await page.locator('.wt3-work-panel').count(),1,'exactly one real DeepSeek expansion panel, no legacy duplication');
+    assert.equal(await page.locator('#wt3-agent').count(),0,'producer dispatch must not clutter story development');
+    assert.equal(await page.locator('.wt3-series').count(),0,'series operations remain in their later dedicated stage');
+    assert.equal(await page.locator('.wt4-story-compact').count(),1,'minimal editor is visible in stage one');
     assert.equal(await page.locator('#wt3-seed').inputValue(),'一位小邮差发现月亮上的信件正在消失');
     await page.locator('[data-wt3-action="expand"]').click();
     await page.locator('#wt3-expand-consent').waitFor({state:'visible'});
