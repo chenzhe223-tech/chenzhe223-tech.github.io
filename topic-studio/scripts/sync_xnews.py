@@ -17,6 +17,7 @@ from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
 SOURCE = "https://xnews.qiaomu.ai/articles.json"
+SOURCE_MIRROR = "https://raw.githubusercontent.com/joeseesun/xnews/main/public/articles.json"
 DEST = pathlib.Path(__file__).resolve().parents[1] / "data" / "xnews-discovery.json"
 SLUG = re.compile(r"^[a-z0-9][a-z0-9-]{0,100}$")
 
@@ -104,15 +105,29 @@ def build_snapshot(records: object, synced_at: str) -> dict:
 
 
 def fetch_upstream(url: str = SOURCE) -> object:
-    req = Request(url, headers={"User-Agent": "DAVYLAB-TopicStudio/1.0 (public editorial discovery)", "Accept": "application/json"})
-    with urlopen(req, timeout=20) as response:
-        if response.status != 200:
-            raise ValueError("Upstream returned HTTP " + str(response.status))
-        size_limit = 2_000_000
-        raw = response.read(size_limit + 1)
-        if len(raw) > size_limit:
-            raise ValueError("Upstream JSON exceeds 2 MB safety limit")
-    return json.loads(raw.decode("utf-8"))
+    """Use XNews's published index; if its origin is down, try the upstream GitHub mirror."""
+    targets = [url] + ([SOURCE_MIRROR] if url == SOURCE else [])
+    errors = []
+    for endpoint in targets:
+        try:
+            req = Request(endpoint, headers={
+                "User-Agent": "DAVYLAB-TopicStudio/1.0 (public editorial discovery)",
+                "Accept": "application/json",
+            })
+            with urlopen(req, timeout=20) as response:
+                if response.status != 200:
+                    raise ValueError("HTTP " + str(response.status))
+                size_limit = 2_000_000
+                raw = response.read(size_limit + 1)
+                if len(raw) > size_limit:
+                    raise ValueError("JSON exceeds 2 MB limit")
+            data = json.loads(raw.decode("utf-8"))
+            if not isinstance(data, list):
+                raise ValueError("Expected a JSON article array")
+            return data
+        except Exception as exc:
+            errors.append(endpoint + ": " + str(exc))
+    raise ValueError("All public XNews index origins failed: " + "; ".join(errors))
 
 
 def main() -> int:
