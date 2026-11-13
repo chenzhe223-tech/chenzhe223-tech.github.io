@@ -99,6 +99,24 @@ def scenario(page, label):
         measurements.append({"page":section,**measurement})
         if label in ("desktop","mobile"):
             page.screenshot(path=str(BASE/"qa"/("page-"+label+"-"+section+".png")), full_page=False)
+    # Regression: global layout presets must NOT turn entire modules into narrow grid cells.
+    preset_checks=0
+    if label in ("desktop","mobile"):
+        defaults=page.evaluate("() => ({preset:document.body.getAttribute('data-layout-preset'),columns:document.body.getAttribute('data-layout-columns')})")
+        for preset in ["editorial","balanced","compact","bento","split","vertical"]:
+            page.evaluate("(p)=>{document.body.dataset.layoutPreset=p;document.body.dataset.layoutColumns='3'}",preset)
+            for module in ["library","visual","calendar","published","workflow","growth","research"]:
+                result=visit_section(page,module)
+                check(result["display"]=="block",label+"/"+preset+"/"+module+": module root forced into layout grid")
+                check(result["firstChildFraction"]>=0.70,label+"/"+preset+"/"+module+": layout preset squeezed module")
+                check(result["pageOverflow"]<=3,label+"/"+preset+"/"+module+": layout preset overflow")
+                preset_checks+=1
+        page.evaluate("""d=>{
+            if(d.preset===null)document.body.removeAttribute('data-layout-preset');
+            else document.body.setAttribute('data-layout-preset',d.preset);
+            if(d.columns===null)document.body.removeAttribute('data-layout-columns');
+            else document.body.setAttribute('data-layout-columns',d.columns);
+        }""",defaults)
     # Test the previously broken visual-layout geometry.
     visit_section(page,"visual")
     shell=page.locator("#section-visual .vd-shell")
@@ -176,7 +194,7 @@ def scenario(page, label):
     check(len(get_local(page,"davylab-topic-studio-v1"))>=2,label+": source bookmark lost after navigation")
     return {"viewport":label,"pages":measurements,"visual":visual_layout,
             "bookmarkPersisted":True,"bookmarkReveal":True,"growthLinkedExperiment":True,
-            "researchSourceBrief":True,"overflow":stats(page,"library")["pageOverflow"]}
+            "researchSourceBrief":True,"presetChecks":preset_checks,"overflow":stats(page,"library")["pageOverflow"]}
 
 
 def main():
