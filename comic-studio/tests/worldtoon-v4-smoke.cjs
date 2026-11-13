@@ -147,7 +147,8 @@ aiDraft.handoff.repoQueuedAt='2026-11-13T00:00:00Z';
 assert.equal(syncCharacterBible(aiDraft),false,'queued tasks cannot silently mutate cast');
 
 assert.doesNotMatch(read('workflow-v4.js'),/AI 已生成所有图片/,'no fake AI success');
-assert.match(read('workflow-v4.js'),/确认本次 AI 扩写|调用已配置的真实模型/,'paid inference requires explicit action');
+assert.match(engine,/确认本次 AI 扩写/,'existing DeepSeek expansion still demands explicit billing consent');
+assert.match(read('workflow-v4.js'),/调用前需要独立确认费用/,'compact V4 story stage retains billing warning');
 
 const n=ctx.data.projects.length;
 saveEntry('idea',{seed:'机器人拒绝上班，于是全城召开仲裁大会'});
