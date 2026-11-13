@@ -195,6 +195,8 @@
       '<label>性别 / 性别认同（可自定义）<input name="gender" maxlength="80" placeholder="可留空"></label>'+
       '<label>年龄设定<input name="age" maxlength="80" placeholder="例如：青年"></label>'+
       '<label>职业 / 身份<input name="profession" maxlength="120"></label>'+
+      '<label>固定识别道具<input name="traits" maxlength="220" placeholder="如：银色指南针"></label>'+ 
+      '<label>角色主色<input name="colors" maxlength="140" placeholder="如：墨绿、米白"></label>'+
       '<label>外观与识别特征<textarea name="description" maxlength="1800" required></textarea></label>'+
       '<label>服装与道具<textarea name="costume" maxlength="700"></textarea></label>'+
       '<label>性格与角色关系<textarea name="personality" maxlength="950"></textarea></label></div>'+
@@ -317,7 +319,7 @@
      gender:String(values.gender||'').trim(),age:String(values.age||'').trim(),
      profession:String(values.profession||'').trim(),description:look,
      costume:String(values.costume||'').trim(),personality:String(values.personality||'').trim(),
-     traits:'',colors:'',portrait:'',origin:'author_confirmed',originProjectId:p.id,comicNames:[]};
+     traits:String(values.traits||'').trim(),colors:String(values.colors||'').trim(),portrait:'',origin:'author_confirmed',originProjectId:p.id,comicNames:[]};
    data.characters.push(c);linkCharacter(p,c);notify('角色资产已建档并与作品版本锁定');
    nav('workspace/'+p.id+'/1');
  }
