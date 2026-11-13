@@ -173,7 +173,7 @@ let data;try{let raw=JSON.parse(localStorage.getItem(APP_KEY)||'null');if(raw&&A
 
 data.characters=data.characters||[];
 let ui={route:'dashboard',selected:data.projects[0]?.id||'sample-ba-zong-001',stage:0,panel:0,filter:'全部',topicFilter:'全部',search:'',reader:0,rev:0};
-function persist(){try{localStorage.setItem(APP_KEY,JSON.stringify(data));if(typeof wtScheduleSync==='function')wtScheduleSync();return true}catch(err){notify('保存失败：本机存储空间可能不足，请先导出备份');return false}}
+function persist(){try{localStorage.setItem(APP_KEY,JSON.stringify(data));ui.wt4PersistError=false;const status=document.querySelector('[data-wt4-save-status]');if(status){status.textContent='本机已保存 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});status.dataset.state='saved'}if(typeof wtScheduleSync==='function')wtScheduleSync();return true}catch(err){ui.wt4PersistError=true;const status=document.querySelector('[data-wt4-save-status]');if(status){status.textContent='保存失败 · 当前修改可能在刷新后丢失，请导出备份';status.dataset.state='error'}notify('保存失败：本机存储空间可能不足，请先导出备份');return false}}
 function setChange(p,desc){p.updatedAt=now();if(desc){p.activity=p.activity||[];p.activity.unshift({at:now(),detail:desc});p.activity=p.activity.slice(0,60)}persist()}
 function markDirty(p){if(p.status==='已审核'||p.status==='已发布'){p.status='草稿';p.checks=Array(6).fill(false);p.reviewedAt=null;p.publishedAt=null;}setChange(p)}
 const activeProjects=()=>data.projects.filter(p=>!p.deleted&&!p.archived);
