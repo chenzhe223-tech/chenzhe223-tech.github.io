@@ -63,11 +63,15 @@ jobs:
             topic-studio/qa/discover-*.png
           if-no-files-found: ignore
           retention-days: 7
-      - name: Commit verified QA metrics
+      - name: Commit transparent QA results (pass or fail)
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
-          test -f topic-studio/qa/discover-ui-latest.json
+          if [ ! -f topic-studio/qa/discover-ui-latest.json ]; then
+            echo "QA report unavailable; browser setup may have failed."
+            exit 0
+          fi
           git config user.name "DAVYLAB Topic Studio QA"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add topic-studio/qa/discover-ui-latest.json
