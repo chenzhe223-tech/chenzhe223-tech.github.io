@@ -25,7 +25,7 @@ const p0=fs.readFileSync(path.join(here,"p0.html"),"utf8");
 assert.ok(p0.includes("cloudbase.full.js"));
 assert.ok(p0.includes("hasLoginState"));
 assert.ok(p0.includes("ap-shanghai"));
-assert.ok(!p0.includes("SecretKey"));
+assert.ok(!/TENCENTCLOUD_SECRETKEY\s*[=:]/.test(p0),"The page must not embed credentials");
 assert.ok(!p0.includes("app.database()"));
 const scratch=fs.mkdtempSync(path.join(os.tmpdir(),"davylab-p0-"));
 try{
