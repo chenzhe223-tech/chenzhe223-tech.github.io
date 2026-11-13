@@ -223,7 +223,29 @@
    '<button type="button" class="button" data-wt3-action="series-next" '+(!p.seriesId?'disabled':'')+'>接续创作下一章</button></div></div>'+
    (typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'')+'</section>';
   const needle='<div class="editor-header"';
-  if(window.WT4_STORY_PANEL_ONLY===true)return setting;
+  if(window.WT4_STORY_PANEL_ONLY===true){
+   // Only story-development controls belong in V4 step 1.
+   // Production Agent, ZIP import, series and publishing stay in their own stages.
+   const genre='<label class="wt3-compact-field">剧情类型 <select id="wt3-plot-genre" '+(locked?'disabled':'')+'>'+
+     plotGenres.map(x=>'<option value="'+h(x.id)+'"'+((p.plotGenre||'general')===x.id?' selected':'')+'>'+h(x.name)+'</option>').join('')+'</select></label>';
+   const drama=p.plotGenre==='viral-melodrama'?'<div class="wt3-compact-drama">'+
+     '<label>剧情主题<select id="wt3-drama-subtype" '+(locked?'disabled':'')+'>'+
+     melodramaSubtypes.map(x=>'<option value="'+h(x.id)+'"'+((p.dramaSubtype||'rebirth-bank-rich')===x.id?' selected':'')+'>'+h(x.name)+'</option>').join('')+'</select></label>'+
+     '<label>反转强度<select id="wt3-drama-intensity" '+(locked?'disabled':'')+'>'+
+     [1,2,3,4,5].map(n=>'<option value="'+n+'"'+(Number(p.dramaIntensity||4)===n?' selected':'')+'>'+n+'</option>').join('')+'</select></label></div>':'';
+   return '<section class="box wt3-work-panel wt4-story-compact"><div class="kicker">AI STORY DEVELOPMENT</div>'+
+     '<h2>AI 辅助编剧</h2><p class="minor">按需扩写故事、角色与分镜。模型调用前必须确认 Token 费用，不自动触发。</p>'+
+     '<label class="wt3-compact-field">一句话构思<textarea id="wt3-seed" rows="3" placeholder="输入灵感、剧情或想改变的故事走向">'+h(p.ideaSeed||'')+'</textarea></label>'+
+     genre+drama+
+     '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand" '+(expandUI.busy?'disabled':'')+'>DeepSeek 真实扩写</button></div>'+
+     '<div class="wt3-expand-consent" id="wt3-expand-consent" '+(expandUI.pending?.projectId===p.id?'':'hidden')+'>'+
+     '<p><strong>确认本次 AI 扩写</strong> · 将调用真实 DeepSeek API，可能按 Token 产生费用。确认后才开始请求。</p>'+
+     '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand-confirm">确认并开始生成</button>'+
+     '<button type="button" class="button" data-wt3-action="expand-cancel">取消</button></div></div>'+
+     '<p class="wt3-expand-feedback" id="wt3-expand-feedback" role="status" aria-live="polite" '+
+     (expandUI.projectId===p.id&&expandUI.message?'data-state="'+h(expandUI.kind)+'"':'hidden')+'>'+
+     (expandUI.projectId===p.id?h(expandUI.message):'')+'</p></section>';
+  }
   return base.includes(needle)?base.replace(needle,setting+'<div class="editor-header"'):setting+base;
  };
  const originalHandoff=wtWorkflow;
