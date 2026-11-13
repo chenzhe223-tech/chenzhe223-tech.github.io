@@ -9,7 +9,7 @@ const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 const css=fs.readFileSync(path.join(__dirname,'../worldtoon-v3.css'),'utf8');
 
 assert.match(api,/deepseek-expand'\)\?75000/,'DeepSeek must have a dedicated 75s timeout, not the generic 15s');
-assert.match(html,/worldtoon-v3\.js\?v=4\.6\.0/,'updated story engine must bust stale service worker cache');
+assert.match(html,/worldtoon-v3\.js\?v=4\.7\.0/,'updated story engine must bust stale service worker cache');
 assert.match(html,/archive\.js\?v=4\.0\.3/,'API client timeout fix must load');
 assert.match(css,/\.wt3-expand-feedback\[data-state="error"\]/,'errors must stay visible in the story editor');
 
