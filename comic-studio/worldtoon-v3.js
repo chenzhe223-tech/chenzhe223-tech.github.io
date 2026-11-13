@@ -321,7 +321,9 @@
        at:now(),author_reviewed:false,analysis:String(x.reasoning||'').slice(0,600)};
      p.characters=wtDirector.castText(c);setChange(p,'DeepSeek 正式 API 返回可编辑的 '+p.panels.length+'格漫画剧本');
      showExpandStatus('success','真实模型生成成功：'+p.panels.length+' 格分镜已保存，正在进入创意导演台。',p.id);
-     nav('director/'+p.id);notify('DeepSeek 结构化剧本已生成；请在导演台逐格审阅和锁定');
+     const unifiedV4=location.hash.startsWith('#/workspace/');
+     nav((unifiedV4?'workspace/':'director/')+p.id+(unifiedV4?'/1':''));
+     notify('DeepSeek 结构化剧本已保存；'+(unifiedV4?'请在角色设定中确认人物并继续七步制作':'请在导演台逐格审阅和锁定'));
    }
   }catch(error){
     const msg='操作未完成：'+String(error.message||error).slice(0,250);
