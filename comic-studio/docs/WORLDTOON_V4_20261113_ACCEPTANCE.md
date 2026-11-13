@@ -79,3 +79,13 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - Frontend static, mobile-layout and V3/V4 contract CI on commit `ea62a8d3f676b0906cb49febf3c08fbb2d691a2f` all PASS. Private QA repository `chenzhe223-tech/worldtoon` PR #7 schema/role-version CI on `0f29614075453a4597699c0ab98a76e4aa3ad2f8` PASS.
 - V4 formal ZIPs now verify `assets[].sha256` when re-imported, and refuse wrong project ID, wrong role ID/version or mismatched style lock; verified browser behavior is strictly **local technical workflow** without remote upload or publication.
 - Existing production Cloudflare Worker still represents the older deployed release; no paid model inferencing, author approval, final visual QA or verified WorkBuddy publication has occurred.
+
+
+## P0/P1 durability and tablet expansion — 2026-11-13
+
+- **Atomic draft creation:** One-sentence and author-defined projects now construct the complete record before the first localStorage write, instead of persisting an empty project. A quota failure rolls back the new draft in memory, preserves the previous project and blocks misleading navigation.
+- **Truthful save feedback:** Active editor reflects success/failure in the data-wt4-save-status UI. If an edit fails to save, the warning explicitly says it may be lost on refresh. Cloud sync remains separately unverified.
+- **Real Chrome tablet UAT:** 820×1180 portrait and 1180×820 landscape; tested all three entry cards, an actual self-authored project, seven steps, cast and storyboard pages, and absence of horizontal overflow. Screenshot evidence uploaded.
+- **Storage-exhaustion browser test:** Intentional localStorage.setItem rejection verified truthful failure notification, no phantom draft route, unchanged persisted project count.
+- **CI evidence:** Commit ab2b1edbc0a9181e78961570b513377e39f58501: GitHub Actions 43413772760 passed eight real browser flows, including the new tablet and storage failure tests; other V3/V4, mobile and static quality checks also passed. Browser evidence artifact 14030372906 includes screenshots and synthetic technical images, NOT publishable comic artwork.
+- **Remaining:** Paid image inference was not authorized, high-quality real comic sample not generated, authenticated publication and deployed release not accepted. PR #139 remains draft.
