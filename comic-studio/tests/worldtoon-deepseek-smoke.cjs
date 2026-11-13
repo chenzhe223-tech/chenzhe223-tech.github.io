@@ -13,7 +13,7 @@ assert.match(html,/worldtoon-v3\.js\?v=4\.7\.0/,'updated story engine must bust 
 assert.match(html,/archive\.js\?v=4\.0\.3/,'API client timeout fix must load');
 assert.match(css,/\.wt3-expand-feedback\[data-state="error"\]/,'errors must stay visible in the story editor');
 
-function setup(apiBehavior){
+function setup(apiBehavior,routeHash='#/studio/test-1'){
   const listeners={},messages=[];
   const project={id:'test-1',title:'原创短篇',category:'幻想',handoff:{},
     panels:Array.from({length:9},()=>({title:'',scene:''}))};
@@ -33,7 +33,7 @@ function setup(apiBehavior){
   };
   let calls=0,route='';
   const ctx={
-    window:{addEventListener(){}},document:doc,location:{hash:'#/studio/test-1'},queueMicrotask(){},
+    window:{addEventListener(){}},document:doc,location:{hash:routeHash},queueMicrotask(){},
     studio:()=>'<div class="editor-header">existing editor</div>',
     wtWorkflow:()=>'',library:()=>'',selected:()=>project,
     wtArchiveSnapshot:{library:{items:[]}},wtSharedStandalone:null,
@@ -70,6 +70,14 @@ const story={method:'verified_model_response',model:'deepseek-flash',story:{
  assert.equal(good.calls(),1,'exactly one paid request after explicit confirmation');
  assert.equal(good.project.panels.length,4,'real response adjusts panel count');
  assert.equal(good.route(),'director/test-1','success continues to director');
+
+ const unified=setup(async()=>story,'#/workspace/test-1/0');
+ await unified.click(unified.action);
+ assert.equal(unified.calls(),0,'unified studio still requires explicit consent');
+ await unified.click(unified.accept);
+ assert.equal(unified.calls(),1);
+ assert.equal(unified.route(),'workspace/test-1/1','V4 AI success remains in the seven-step flow and opens character confirmation');
+
  assert.equal(good.feedback.dataset.state,'success','success is shown');
  assert.equal(good.action.disabled,false,'button recovers');
  const failed=setup(async()=>{throw Error('DeepSeek 额度不足或登录失效')});
