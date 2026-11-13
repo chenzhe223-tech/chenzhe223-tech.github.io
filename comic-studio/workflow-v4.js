@@ -215,7 +215,7 @@
  }
  function production(){
    const prev=ui.wt4Step;
-   ui.wt4Step=3;
+   ui.wt4Step=4;
    try{return workspace()}finally{ui.wt4Step=prev}
  }
  window.wt4Production=production;
