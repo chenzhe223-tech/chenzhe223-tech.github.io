@@ -310,3 +310,10 @@
 .wt4-create-grid>*,.wt4-entry form>*{min-width:0}
 @media(max-width:950px){.wt4-create-grid{grid-template-columns:1fr}.wt4-entry{padding:21px}.wt4-entry-links{margin-top:0}.wt4-entry form .button{margin-top:8px}}
 @media(max-width:600px){.wt4-create{padding:17px 14px;border-radius:12px}.wt4-create-head h1{font-size:28px}.wt4-entry{padding:18px}.wt4-entry h2{font-size:22px}.wt4-stage-intro{padding:14px}.wt4-entry-links .button{flex:1 1 45%}}
+.wt4-role-picker{display:flex;flex-wrap:wrap;align-items:end;gap:10px;margin:15px 0}
+.wt4-role-picker label{font-size:12px;display:flex;flex-direction:column;gap:5px;flex:1 1 170px}
+.wt4-role-picker select{width:100%;min-height:42px;border:1px solid #d4cabd;border-radius:8px;background:#fff;padding:9px 12px}
+.wt4-character-tags{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.wt4-character-tag{border:1px solid #e0d5c6;background:#f4eee4;border-radius:100px;padding:6px 11px;font-size:12px}
+.wt4-character-tag small{font-size:10px;color:#706253}
+@media(max-width:650px){.wt4-role-picker{align-items:stretch}.wt4-role-picker .button{flex:1 1 45%}}
