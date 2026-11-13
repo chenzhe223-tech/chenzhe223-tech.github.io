@@ -10,6 +10,11 @@ on:
       - "topic-studio/workspace-layout-guard-v5.css"
       - "topic-studio/productivity-desk-v1.css"
       - "topic-studio/productivity-desk-v1.js"
+      - "topic-studio/hotspot-ranker.js"
+      - "topic-studio/hotspot-recommender.js"
+      - "topic-studio/hotspot-recommender.css"
+      - "topic-studio/data/hotspot-signals.json"
+      - "topic-studio/tests/hotspot-recommender.test.cjs"
       - "topic-studio/tests/all-pages-browser-smoke.py"
       - ".github/workflows/topic-studio-all-pages-qa.yml"
   workflow_dispatch:
@@ -40,6 +45,8 @@ jobs:
           else
             python -m playwright install --with-deps chromium
           fi
+      - name: Verify deterministic Top-10 ranking
+        run: node topic-studio/tests/hotspot-recommender.test.cjs
       - name: Test all eight pages and cross-module workflows
         shell: bash
         run: |
