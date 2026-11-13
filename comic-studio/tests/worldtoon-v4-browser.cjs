@@ -70,6 +70,12 @@ async function test(){
     await page.goto(base,{waitUntil:'domcontentloaded'});
     await page.locator('[data-wt4-entry="idea"]').waitFor({timeout:20000});
     assert.equal(await page.locator('.wt4-entry-card').count(),3,'all three creation paths are real button controls');
+    const titleAppearance=await page.evaluate(()=>{
+      const check=s=>{const el=document.querySelector(s),cs=getComputedStyle(el),r=el.getBoundingClientRect();return {text:el.textContent,color:cs.color,background:cs.backgroundColor,font:cs.font,opacity:cs.opacity,visibility:cs.visibility,display:cs.display,width:r.width,height:r.height}};
+      return {heading:check('.wt4-entry-intro h1'),card:check('.wt4-entry-card strong')};
+    });
+    console.log('Real Chrome heading paint diagnostics:',JSON.stringify(titleAppearance));
+    assert.ok(titleAppearance.heading.text.length>0&&titleAppearance.card.text.length>0,'heading and card titles exist in browser DOM');
     await page.screenshot({path:path.join(out,'desktop-entry.png'),fullPage:true});
     await page.locator('[data-wt4-entry="idea"]').click();
     await page.locator('#wt4-seed').fill('一位小邮差发现月亮上的信件正在消失');
