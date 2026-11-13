@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "status": "ok",
-  "synced_at": "2026-11-13T10:54:03+00:00",
+  "synced_at": "2026-11-13T10:58:17+00:00",
   "window_days": 31,
   "sources": [
     "Hacker News Algolia public search",
     "GitHub public repository search"
   ],
   "engagement_note": "HN points/comments are per-story public counts; GitHub stars are cumulative repository stars, NOT daily growth. Neither measures WeChat readers or universal popularity.",
-  "count": 156,
+  "count": 157,
   "items": [
     {
       "id": "hn-50481354",
@@ -76,6 +76,19 @@
       "github_stars": null
     },
     {
+      "id": "hn-50480583",
+      "kind": "hackernews",
+      "title": "Show HN: Luma – Type a phrase, jump to the second it was said in any local video",
+      "summary": "",
+      "url": "https://github.com/sakurartro/luma",
+      "discussion_url": "https://news.ycombinator.com/item?id=50480583",
+      "published": "2026-11-13T09:21:03+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
       "id": "hn-50480580",
       "kind": "hackernews",
       "title": "AI agents bring down wind farm within two hours",
@@ -85,6 +98,19 @@
       "published": "2026-11-13T09:20:58+00:00",
       "source": "Hacker News",
       "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50480379",
+      "kind": "hackernews",
+      "title": "Russia loses almost half a million lives in war on Ukraine",
+      "summary": "",
+      "url": "https://www.ft.com/content/7377e093-d58e-4303-853a-5aa82b6a747e",
+      "discussion_url": "https://news.ycombinator.com/item?id=50480379",
+      "published": "2026-11-13T08:57:44+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -336,6 +362,19 @@
       "github_stars": null
     },
     {
+      "id": "hn-50475620",
+      "kind": "hackernews",
+      "title": "Ask HN: Have you noticed an increase of rejections when sending to Yahoo email?",
+      "summary": "",
+      "url": "https://news.ycombinator.com/item?id=50475620",
+      "discussion_url": "https://news.ycombinator.com/item?id=50475620",
+      "published": "2026-11-12T22:58:14+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
       "id": "hn-50475092",
       "kind": "hackernews",
       "title": "LLMs can learn (some) multi-step reasoning on filler tokens",
@@ -423,6 +462,19 @@
       "published": "2026-11-12T19:52:01+00:00",
       "source": "Hacker News",
       "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50473179",
+      "kind": "hackernews",
+      "title": "Grow your Llama army, win the territory",
+      "summary": "",
+      "url": "https://warlama.com/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50473179",
+      "published": "2026-11-12T19:50:42+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -635,6 +687,32 @@
       "github_stars": null
     },
     {
+      "id": "hn-50471095",
+      "kind": "hackernews",
+      "title": "ParseBench-2: Severity-Aware Evaluation of Document Parsing",
+      "summary": "",
+      "url": "https://huggingface.co/datasets/llamaindex/ParseBench-2",
+      "discussion_url": "https://news.ycombinator.com/item?id=50471095",
+      "published": "2026-11-12T17:39:20+00:00",
+      "source": "Hacker News",
+      "hn_points": 5,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50470634",
+      "kind": "hackernews",
+      "title": "Request for Collaboration on a Message Mirror Security Architecture",
+      "summary": "",
+      "url": "https://ajs-consult-llc.github.io/mirror-encryption-rfc/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50470634",
+      "published": "2026-11-12T17:10:38+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
       "id": "hn-50470463",
       "kind": "hackernews",
       "title": "How much of GitHub's most-starred AI tooling is written by coding agents?",
@@ -645,6 +723,19 @@
       "source": "Hacker News",
       "hn_points": 1,
       "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50470445",
+      "kind": "hackernews",
+      "title": "AWS Lambda Web Functions keep billing memory ~7 minutes after the last request",
+      "summary": "",
+      "url": "https://www.easel.sh/blog/lambda-web-functions-idle-memory",
+      "discussion_url": "https://news.ycombinator.com/item?id=50470445",
+      "published": "2026-11-12T16:59:26+00:00",
+      "source": "Hacker News",
+      "hn_points": 76,
+      "hn_comments": 29,
       "github_stars": null
     },
     {
@@ -700,6 +791,19 @@
       "github_stars": null
     },
     {
+      "id": "hn-50470314",
+      "kind": "hackernews",
+      "title": "Show HN: Stop the app permission popups on macOS",
+      "summary": "",
+      "url": "https://github.com/piercefreeman/trustme",
+      "discussion_url": "https://news.ycombinator.com/item?id=50470314",
+      "published": "2026-11-12T16:50:35+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
       "id": "hn-50470160",
       "kind": "hackernews",
       "title": "Perplexity Teammates: always-on AI agents that message your coworkers in Slack",
@@ -739,19 +843,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50469605",
-      "kind": "hackernews",
-      "title": "Show HN: Armin – Modern Anki alternative with prerrequisite graphs",
-      "summary": "",
-      "url": "https://armincards.app/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50469605",
-      "published": "2026-11-12T16:03:33+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50469267",
       "kind": "hackernews",
       "title": "Show HN: Cinnamon AI – an agent for your family",
@@ -778,19 +869,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50468888",
-      "kind": "hackernews",
-      "title": "I'm making LLMs work on small and old devices",
-      "summary": "",
-      "url": "https://github.com/hyperionaidev/smolmaxxing/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50468888",
-      "published": "2026-11-12T15:23:10+00:00",
-      "source": "Hacker News",
-      "hn_points": 379,
-      "hn_comments": 135,
-      "github_stars": null
-    },
-    {
       "id": "hn-50468886",
       "kind": "hackernews",
       "title": "Show HN: Senku, an AI agent that can control your phone in background",
@@ -814,19 +892,6 @@
       "source": "Hacker News",
       "hn_points": 4,
       "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50467717",
-      "kind": "hackernews",
-      "title": "Tell HN: I'm working on original approaches to tag-based file organization",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50467717",
-      "discussion_url": "https://news.ycombinator.com/item?id=50467717",
-      "published": "2026-11-12T14:23:23+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 1,
       "github_stars": null
     },
     {
@@ -878,58 +943,6 @@
       "published": "2026-11-12T14:02:16+00:00",
       "source": "Hacker News",
       "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50467154",
-      "kind": "hackernews",
-      "title": "Show HN: MergeMax, a monthly ranking of public merged PRs on GitHub",
-      "summary": "",
-      "url": "https://mergemax.dev",
-      "discussion_url": "https://news.ycombinator.com/item?id=50467154",
-      "published": "2026-11-12T13:57:52+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50467087",
-      "kind": "hackernews",
-      "title": "Jensen Huang resigns",
-      "summary": "",
-      "url": "https://apnews.com/article/nvidia-megaspeed-china-singapore-huang-5403f152a601cf82ce939f1d24fffa0f",
-      "discussion_url": "https://news.ycombinator.com/item?id=50467087",
-      "published": "2026-11-12T13:52:29+00:00",
-      "source": "Hacker News",
-      "hn_points": 3595,
-      "hn_comments": 3164,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50467011",
-      "kind": "hackernews",
-      "title": "Show HN: Record Test, benchmarking LLMs on legal transcript editing",
-      "summary": "",
-      "url": "https://github.com/heydonna-app/record-test-bench",
-      "discussion_url": "https://news.ycombinator.com/item?id=50467011",
-      "published": "2026-11-12T13:46:54+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50466805",
-      "kind": "hackernews",
-      "title": "Making Immersive LLM Chat Experiences More Accessible",
-      "summary": "",
-      "url": "https://www.smashingmagazine.com/2026/11/making-immersive-llm-chat-experiences-more-accessible/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50466805",
-      "published": "2026-11-12T13:29:37+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
       "hn_comments": 0,
       "github_stars": null
     },
