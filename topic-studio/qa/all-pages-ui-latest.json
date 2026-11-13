@@ -1,8 +1,456 @@
 {
-  "status": "fail",
-  "tested_at": "2026-11-13T10:18:15+00:00",
+  "status": "pass",
+  "tested_at": "2026-11-13T10:19:29+00:00",
   "method": "Chromium Playwright local static test, synthetic localStorage only",
   "scope": "checkout smoke test, not production Pages or real user/account data",
-  "results": [],
-  "error": "Error: BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     playwright install                                     ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+  "results": [
+    {
+      "viewport": "ultrawide",
+      "pages": [
+        {
+          "page": "discover",
+          "visible": true,
+          "display": "flex",
+          "width": 1424,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1424,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1520
+        },
+        {
+          "page": "library",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "visual",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "calendar",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "published",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "workflow",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "growth",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        },
+        {
+          "page": "research",
+          "visible": true,
+          "display": "block",
+          "width": 1426,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1426,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1510
+        }
+      ],
+      "visual": {
+        "grid": "731.109px 674.891px",
+        "width": 1426,
+        "columns": 2
+      },
+      "bookmarkPersisted": true,
+      "bookmarkReveal": true,
+      "growthLinkedExperiment": true,
+      "researchSourceBrief": true,
+      "overflow": 0,
+      "runtimeExceptions": 0
+    },
+    {
+      "viewport": "desktop",
+      "pages": [
+        {
+          "page": "discover",
+          "visible": true,
+          "display": "flex",
+          "width": 1139,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1139,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "library",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "visual",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "calendar",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "published",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "workflow",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "growth",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        },
+        {
+          "page": "research",
+          "visible": true,
+          "display": "block",
+          "width": 1143,
+          "firstChildLeft": 0,
+          "firstChildWidth": 1143,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 1215
+        }
+      ],
+      "visual": {
+        "grid": "583.953px 539.031px",
+        "width": 1143,
+        "columns": 2
+      },
+      "bookmarkPersisted": true,
+      "bookmarkReveal": true,
+      "growthLinkedExperiment": true,
+      "researchSourceBrief": true,
+      "overflow": 0,
+      "runtimeExceptions": 0
+    },
+    {
+      "viewport": "tablet",
+      "pages": [
+        {
+          "page": "discover",
+          "visible": true,
+          "display": "flex",
+          "width": 759,
+          "firstChildLeft": 0,
+          "firstChildWidth": 759,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "library",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "visual",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "calendar",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "published",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "workflow",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "growth",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        },
+        {
+          "page": "research",
+          "visible": true,
+          "display": "block",
+          "width": 748,
+          "firstChildLeft": 0,
+          "firstChildWidth": 748,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 799
+        }
+      ],
+      "visual": {
+        "grid": "747.812px",
+        "width": 747.8125,
+        "columns": 2
+      },
+      "bookmarkPersisted": true,
+      "bookmarkReveal": true,
+      "growthLinkedExperiment": true,
+      "researchSourceBrief": true,
+      "overflow": 0,
+      "runtimeExceptions": 0
+    },
+    {
+      "viewport": "mobile",
+      "pages": [
+        {
+          "page": "discover",
+          "visible": true,
+          "display": "flex",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "library",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "visual",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "calendar",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "published",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "workflow",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "growth",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        },
+        {
+          "page": "research",
+          "visible": true,
+          "display": "block",
+          "width": 366,
+          "firstChildLeft": 0,
+          "firstChildWidth": 366,
+          "firstChildFraction": 1,
+          "pageOverflow": 0,
+          "sectionOverflow": 0,
+          "contentWidth": 390
+        }
+      ],
+      "visual": {
+        "grid": "366px",
+        "width": 366,
+        "columns": 2
+      },
+      "bookmarkPersisted": true,
+      "bookmarkReveal": true,
+      "growthLinkedExperiment": true,
+      "researchSourceBrief": true,
+      "overflow": 0,
+      "runtimeExceptions": 0
+    }
+  ]
 }
