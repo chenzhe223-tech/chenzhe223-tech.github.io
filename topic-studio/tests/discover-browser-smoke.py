@@ -115,4 +115,15 @@ def run():
 
 
 if __name__ == "__main__":
-    raise SystemExit(run())
+    try:
+        raise SystemExit(run())
+    except Exception as error:
+        REPORT.parent.mkdir(parents=True, exist_ok=True)
+        failure = {
+            "status": "fail",
+            "tested_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "scope": "Local Chromium QA only; not a production verification",
+            "error": type(error).__name__ + ": " + str(error),
+        }
+        REPORT.write_text(json.dumps(failure, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        raise
