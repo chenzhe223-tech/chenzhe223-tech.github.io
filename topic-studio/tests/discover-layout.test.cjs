@@ -53,4 +53,18 @@ assert.ok(xnews.includes("state.visible+=6"));
 for(const [name,source] of [["navigation",nav],["XNews",xnews],["opportunities",opportunity]]){
  new vm.Script(source,{filename:name});
 }
+// Interactive smoke: toolbox quick links must open details and scroll without error.
+let clickHandler=null,scrollCalls=0,prevented=0;
+const details={tagName:"DETAILS",open:false,scrollIntoView(){scrollCalls++}};
+const navigation={contains:()=>true,addEventListener:(event,callback)=>{if(event==="click")clickHandler=callback}};
+const sandbox={
+ document:{getElementById:id=>id==="section-discover"?{querySelector:()=>navigation}:id==="discoverIdeas"?details:null},
+ window:{matchMedia:()=>({matches:true})}
+};
+vm.runInNewContext(nav,sandbox,{timeout:1500});
+assert.equal(typeof clickHandler,"function","Discover quick navigation click handler");
+clickHandler({target:{closest:()=>({dataset:{discoverTarget:"discoverIdeas"}})},preventDefault(){prevented++}});
+assert.equal(details.open,true,"Original idea tools expand on navigation");
+assert.equal(scrollCalls,1,"Expanded toolbox is scrolled into view");
+assert.equal(prevented,1,"Native jump suppressed only when revealing closed details");
 console.log("PASS discovery layout: 12-grid, order, IDs, mobile widths, controls, JS syntax, six-card density");
