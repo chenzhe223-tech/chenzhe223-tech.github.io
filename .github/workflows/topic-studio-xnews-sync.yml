@@ -1,6 +1,13 @@
 name: Topic Studio · Refresh XNews discovery index
 
 on:
+  push:
+    paths:
+      - "topic-studio/xnews-discovery.js"
+      - "topic-studio/scripts/sync_xnews.py"
+      - "topic-studio/tests/test_xnews_sync.py"
+      - "topic-studio/tests/xnews-integration.test.cjs"
+      - ".github/workflows/topic-studio-xnews-sync.yml"
   schedule:
     # 09:25 Beijing/Singapore time, after XNews's suggested 08:00 daily update.
     - cron: "25 1 * * *"
@@ -26,6 +33,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Test source merge, adoption, fallback and escaped rendering
+        run: node topic-studio/tests/xnews-integration.test.cjs
       - name: Test metadata contracts before sync
         run: python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v
       - name: Fetch public XNews article-index metadata
