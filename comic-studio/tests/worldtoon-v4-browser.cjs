@@ -326,6 +326,32 @@ async function test(){
       reports.push({test:'real Chrome tablet portrait + landscape, three-entry creation and seven-step navigation',result:'passed'});
     }finally{await tablet.close()}
 
+    // Verify real storage-exhaustion behavior: no false "saved" UI and no old-project overwrite.
+    const exhausted=await browser.newContext({viewport:{width:1280,height:800}});
+    try{
+      const storagePage=await exhausted.newPage();
+      storagePage.on('pageerror',e=>errors.push('storage-recovery: '+e.message));
+      await storagePage.goto(base,{waitUntil:'domcontentloaded'});
+      await storagePage.locator('[data-wt4-entry="idea"]').waitFor();
+      const before=await storagePage.evaluate(()=>JSON.parse(localStorage.getItem('davylab-comic-press-v1')).projects.length);
+      await storagePage.evaluate(()=>{
+        const real=Storage.prototype.setItem;
+        Storage.prototype.setItem=function(key,value){
+          if(key==='davylab-comic-press-v1')throw new DOMException('Storage quota exhausted','QuotaExceededError');
+          return real.call(this,key,value);
+        };
+      });
+      await storagePage.locator('[data-wt4-entry="idea"]').click();
+      await storagePage.locator('#wt4-seed').fill('断电前未保存的星际列车故事');
+      await storagePage.locator('[data-wt4-create="idea"] [type="submit"]').click();
+      assert.ok((await storagePage.locator('#toast').textContent()).includes('创建未保存'),'failure message must be truthful');
+      assert.ok((await storagePage.evaluate(()=>location.hash)).startsWith('#/dashboard'),
+        'failed save must not navigate to a misleading draft workspace');
+      const after=await storagePage.evaluate(()=>JSON.parse(localStorage.getItem('davylab-comic-press-v1')).projects.length);
+      assert.equal(after,before,'no phantom new project after storage failure');
+      reports.push({test:'real Chrome quota-exceeded failure preserves original stored projects and blocks false navigation',result:'passed'});
+    }finally{await exhausted.close()}
+
     assert.deepEqual(errors,[],'browser JavaScript execution errors');
     fs.writeFileSync(path.join(out,'qa.json'),JSON.stringify({status:'PASS',environment:'offline local Chrome, no account and no paid model',generated_at:new Date().toISOString(),reports,limitations:['Illustrations are synthetic technical fixtures, never comic QA','No authenticated Supabase/Cloudflare API test','No live deployment verification']},null,2));
     console.log('WORLD/TOON V4 browser E2E PASS:\n'+reports.map(x=>'  - '+x.test+': '+x.result).join('\n'));
