@@ -148,6 +148,7 @@ function rank(raw,options={}){
      evidenceCount:1,channels:s.groups||[s.group],latestDays:s.days,evidence:[s],kind:"单来源专题 · 待进一步验证",sourceVerified:false});
   }
  }
+ result.sort((a,b)=>b.score-a.score||b.evidenceCount-a.evidenceCount||a.name.localeCompare(b.name,"zh-CN"));
  return{recommendations:result.map((r,i)=>({...r,rank:i+1})),available:signals.length,domains:new Set(signals.flatMap(x=>x.groups||[x.group])).size,
     periodDays:age,mode,generatedAt:now.toISOString(),sourceCount:signals.length,expected:10,
     warning:result.length<10?"有效来源不足，只展示有真实链接的候选，不补造假热点。":"",
