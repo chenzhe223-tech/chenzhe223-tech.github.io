@@ -15,7 +15,7 @@ for(const x of library.items){assert.ok(x.source.startsWith('https://'));assert.
 const service=read('story-discovery-service.js'),uiCode=read('story-discovery-ui.js'),bundle=read('extension.js');
 for(const [name,src] of [['service',service],['ui',uiCode],['bundle',bundle]])assert.doesNotThrow(()=>new vm.Script(src),name+' must parse');
 assert.ok(bundle.trimEnd().endsWith(uiCode.trim()),'runtime extension must embed updated story UI');
-assert.match(read('index.html'),/extension\.js\?v=4\.6\.1/,'browser must use fresh script');
+assert.match(read('index.html'),/extension\.js\?v=4\.7\.0/,'browser must use fresh script');
 assert.match(read('styles.css'),/\.story-discovery/,'mobile and desktop styles are served');
 const worker=read('worker.js');
 assert.ok(worker.includes(service.trim()),'deployed Worker must contain the canonical story search service');
