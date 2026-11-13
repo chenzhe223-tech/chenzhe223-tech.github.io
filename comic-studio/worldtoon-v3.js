@@ -507,14 +507,23 @@
        '<small>作品内的修改不会写回角色档案原型。派单后锁定版本，不支持静默更换。</small></article>';
    }).join('');
    const unlinked=catalog.filter(c=>!ids.some(x=>String(x.characterId)===String(c.characterId||c.id)));
+   const originatingWork=c=>(data.projects||[]).find(x=>String(x.id)===String(c.originProjectId))?.title||'未标记作品';
+   const facets=[['gender','性别'],['age','年龄'],['profession','职业'],['work','来源作品']];
+   const selectFacets=facets.map(([key,label])=>{
+     const values=[...new Set(unlinked.map(c=>String(key==='work'?originatingWork(c):c[key]||'').trim()).filter(Boolean))].sort();
+     return '<label>'+label+'<select data-wt4-char-filter="'+key+'"><option value="">全部</option>'+values.map(v=>
+       '<option value="'+html(v)+'">'+html(v)+'</option>').join('')+'</select></label>';
+   }).join('');
    const options=unlinked.map(c=>'<option value="'+html(c.characterId||c.id)+'">'+
-     html(c.originalName||c.name||'角色')+' · '+html(c.gender||'性别未设定')+' · v'+html(c.version||1)+'</option>').join('');
+     html(c.originalName||c.name||'角色')+' · '+html(c.gender||'性别未设定')+' · '+html(c.age||'年龄未设定')+
+     ' · '+html(c.profession||'身份未设定')+' · '+html(originatingWork(c))+' · v'+html(c.version||1)+'</option>').join('');
    return '<section class="wt4-character-workspace"><div class="wt4-stage-note"><strong>角色资产库 · Character Bible</strong>'+
     '<p>按角色 ID 和版本引用，项目只保存快照与作品内覆盖项。不会覆盖历史作品或原型；人像参考须确认肖像使用权。</p></div>'+
     '<div class="wt4-char-section"><h3>本作品角色（'+ids.length+'）</h3>'+
     (linked||'<p class="wt4-muted">尚未关联角色。请从库中选择，或确认新角色并建档。</p>')+'</div>'+
     (locked?'<p class="wt4-warning">已正式派单：角色版本锁定，修改请建立新修订作品。</p>':
       '<div class="wt4-char-picker"><label for="wt4-char-asset">复用既有角色</label>'+
+      '<div class="wt4-char-filter-grid">'+selectFacets+'</div>'+ 
       '<select id="wt4-char-asset">'+(options||'<option value="">暂无其他可复用角色</option>')+'</select>'+
       '<button class="button" data-wt4-character-link'+(!options?' disabled':'')+'>关联并锁定当前版本</button></div>'+
       '<form class="wt4-char-create" data-wt4-character-create><h3>确认原创角色并建档</h3>'+
@@ -711,6 +720,24 @@
      ev.preventDefault();ev.stopImmediatePropagation();const p=selected();
      if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('已锁定创意方案的作品不能直接变更角色');
      newCharacter(p,Object.fromEntries(new FormData(form).entries()));
+   }
+ },true);
+ document.addEventListener('change',ev=>{
+   if(!ev.target?.matches?.('[data-wt4-char-filter]'))return;
+   const project=selected(),refs=new Set((project?.characterRefs||[]).map(x=>String(x.characterId)));
+   const values={};document.querySelectorAll('[data-wt4-char-filter]').forEach(el=>{values[el.dataset.wt4CharFilter]=el.value});
+   const menu=document.querySelector('#wt4-char-asset');if(!menu)return;
+   const matches=(data.characters||[]).filter(c=>{
+     const id=String(c.characterId||c.id||'');if(refs.has(id))return false;
+     const origin=(data.projects||[]).find(p=>String(p.id)===String(c.originProjectId))?.title||'未标记作品';
+     return ['gender','age','profession'].every(k=>!values[k]||String(c[k]||'')===values[k])&&(!values.work||origin===values.work);
+   });
+   menu.replaceChildren();
+   if(!matches.length){const option=document.createElement('option');option.value='';option.textContent='此筛选暂无可用角色';menu.add(option);return}
+   for(const c of matches){
+     const option=document.createElement('option');option.value=String(c.characterId||c.id);
+     option.textContent=[c.originalName||c.name||'角色',c.gender||'',c.age||'',c.profession||''].filter(Boolean).join(' · ');
+     menu.add(option);
    }
  },true);
  document.addEventListener('change',ev=>{
