@@ -219,10 +219,22 @@ function scheduleAutoStoryboard(p){
 function castText(c){return c.cast.map((x,i)=>[i+1+'. '+x.role+'：'+x.name,'外貌与比例：'+x.look,'固定服饰：'+x.clothes,'识别道具：'+x.symbol,'性格：'+x.nature].join('；')).join('\n')}
 function payload(p){
  const c=ensure(p),s=style(c.styleId);
+ // Frozen library character snapshots are additional authoritative production references.
+ const assetBible=Array.isArray(p.characterRefs)?p.characterRefs.filter(r=>r?.snapshot).map(r=>{
+   const v=r.snapshot,over=p.characterOverrides?.[r.characterId]||{};
+   return {character_id:clean(r.characterId),version:Math.max(1,Number(r.version)||1),
+    project_name:clean(r.comicName||v.originalName),original_name:clean(v.originalName),
+    appearance:clean(v.description),outfit:clean(v.costume),
+    identifying_traits:clean(v.traits),personality:clean(v.personality),
+    look_override:clean(over.look),outfit_override:clean(over.costume),
+    gender:clean(v.gender),age:clean(v.age),profession:clean(v.profession)};
+ }):[];
+
  return {
   version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
   series_bible:p.seriesBible||null,series_identity:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,
    narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
+  ...(assetBible.length?{character_bible:assetBible}:{}),
   characters:c.cast.map((x,i)=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature),portrait_reference:x.portraitConsent&&x.portraitMedia?{file:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(x.portraitExt||'png'),sha256:x.portraitSha256||null,usage:'authorized_visual_likeness_reference_only',source:'user_supplied_private',description:clean(x.portraitNotes||''),requires_actual_photo_for_generation:true}:null})),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
