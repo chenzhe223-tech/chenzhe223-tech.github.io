@@ -741,7 +741,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 .workflow-skill-link{display:inline-flex;align-items:center;margin-top:10px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;line-height:1.5}
 .workflow-skill-link:hover{color:#204eaa}
 .workflow-skill-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-</style><link rel="stylesheet" href="./visual-direction-studio.css?v=1"></head>
+</style><link rel="stylesheet" href="./visual-direction-studio.css?v=1"><link rel="stylesheet" href="./xnews-discovery.css?v=1"></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="visual"><span>◈</span>配图策划</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
@@ -769,7 +769,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <section class="opportunity-hub" aria-labelledby="opportunityTitle">
   <div class="opportunity-heading">
    <div><div class="op-kicker">DISCOVER / EDITORIAL SIGNALS</div><h2 id="opportunityTitle">从最新 AI 动态里，发现值得写的题目</h2><p>从真实新闻里找线索，再判断是否能帮读者解决问题。</p></div>
-   <button class="btn op-refesh" id="opportunityRefresh" type="button">更新素材</button>
+   <div class="xnews-head-actions" style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><a class="btn small xnews-jump" href="#xnewsDiscovery">XNews 海外精选</a><button class="btn op-refesh" id="opportunityRefresh" type="button">更新素材</button></div>
   </div>
   <div class="opportunity-dashboard-meta"><span id="sourceStatus" role="status">正在连接 AI Radar…</span><span id="opportunityCount">— 条可选</span></div>
   <div class="op-track-panel">
@@ -792,7 +792,33 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   </div>
   <div id="opportunityList" class="opportunity-grid" aria-live="polite"><div class="op-empty">连接真实新闻素材中…</div></div>
   <details class="op-plan"><summary>7 天 3 篇：尝试吸引、留住新读者</summary><div id="opportunityWeekPlan">正在准备来源明确的内容组合…</div><p class="op-plan-note">这是一组编辑实验建议，不是流量预测；只有手动加入选题池后才保存，发布仍需作者批准。</p></details>
-  <div class="opportunity-footer"><span id="opportunityUpdated">数据以 Davy Radar 为准；优先级不是阅读量或粉丝增长预测。</span><button class="btn small" type="button" id="opportunityShowMore" hidden>查看更多</button></div>
+  <div class="opportunity-footer"><span id="opportunityUpdated">AI Radar + XNews 两路线索；事实以原始出处为准，优先级不是阅读量或粉丝增长预测。</span><button class="btn small" type="button" id="opportunityShowMore" hidden>查看更多</button></div>
+ </section>
+
+ <section class="xnews-hub" id="xnewsDiscovery" aria-labelledby="xnewsTitle">
+  <div class="xnews-head">
+   <div><div class="xnews-kicker">DISCOVER / GLOBAL CREATOR SIGNALS</div><h2 id="xnewsTitle">XNews 海外精选</h2><p>海外 AI 创始人观点、长文与视频线索，与 DAVYLAB AI Radar 共同参与选题推荐。中文摘要仅供发现，事实以原始出处为准。</p></div>
+   <button type="button" class="btn small" id="xnewsRefresh">刷新线索</button>
+  </div>
+  <div class="xnews-status"><span id="xnewsStatus" role="status">正在读取 XNews 内容镜像…</span><strong id="xnewsCount" aria-live="polite">等待数据</strong></div>
+  <div class="xnews-filters" role="group" aria-label="海外 AI 选题方向">
+   <button type="button" data-x-lens="all" class="active" aria-pressed="true">全部</button>
+   <button type="button" data-x-lens="agents" aria-pressed="false">Agent / 自动化</button>
+   <button type="button" data-x-lens="models" aria-pressed="false">模型与研究</button>
+   <button type="button" data-x-lens="products" aria-pressed="false">工具产品</button>
+   <button type="button" data-x-lens="business" aria-pressed="false">商业市场</button>
+   <button type="button" data-x-lens="creative" aria-pressed="false">创作设计</button>
+   <button type="button" data-x-lens="safety" aria-pressed="false">安全治理</button>
+  </div>
+  <div class="xnews-toolbar">
+   <input type="search" id="xnewsSearch" aria-label="搜索 XNews 海外精选" placeholder="搜索创始人、产品、模型、观点…" autocomplete="off">
+   <select id="xnewsSort" aria-label="XNews 排序"><option value="relevance">编辑优先级</option><option value="newest">日期最新</option></select><label>标题 / 导读 / 标签</label>
+  </div>
+  <div class="xnews-grid" id="xnewsList" aria-live="polite"><div class="xnews-empty"><strong>正在准备海外精选内容…</strong><p>同步源未就绪时，原有 AI Radar 不受影响。</p></div></div>
+  <div class="xnews-bottom">
+   <button type="button" id="xnewsMore" hidden>查看更多</button>
+   <p class="xnews-notice">数据来自 <a href="https://xnews.qiaomu.ai/" target="_blank" rel="noopener noreferrer">XNews · 向阳乔木</a>（<a href="https://github.com/joeseesun/xnews" target="_blank" rel="noopener noreferrer">MIT 开源代码</a>）。仅引用公开标题与短导读，不搬运全文；优先级是内部编辑评估，不代表真实热度、阅读量或涨粉预测。<span id="xnewsUpdated"></span></p>
+  </div>
  </section>
  <details class="discover-detail">
   <summary>发现更多选题来源 <span>从公开平台核查热点与研究</span></summary>
@@ -1700,4 +1726,4 @@ root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=
 document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
 document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
 const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
-})();</script><script src="./opportunity-engine.js"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script></body></html>
+})();</script><script src="./opportunity-engine.js"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script><script src="./xnews-discovery.js?v=1"></script></body></html>
