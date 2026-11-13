@@ -2,9 +2,9 @@
 const assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path");
 const ranker=require("../hotspot-ranker.js");
 const root=path.resolve(__dirname,"../..");
-const raw=JSON.parse(fs.readFileSync(path.join(root,"../radar/data/latest.json"),"utf8"));
-const xnews=JSON.parse(fs.readFileSync(path.join(root,"data/xnews-discovery.json"),"utf8"));
-const hotspot=JSON.parse(fs.readFileSync(path.join(root,"data/hotspot-signals.json"),"utf8"));
+const raw=JSON.parse(fs.readFileSync(path.join(root,"radar/data/latest.json"),"utf8"));
+const xnews=JSON.parse(fs.readFileSync(path.join(root,"topic-studio/data/xnews-discovery.json"),"utf8"));
+const hotspot=JSON.parse(fs.readFileSync(path.join(root,"topic-studio/data/hotspot-signals.json"),"utf8"));
 const now=new Date(hotspot.synced_at);
 const examples=[
  ...(raw.news||[]).map(x=>({title:x.title_zh||x.title,summary:x.summary_zh||x.summary,url:x.url,source:x.source,published:x.published})),
