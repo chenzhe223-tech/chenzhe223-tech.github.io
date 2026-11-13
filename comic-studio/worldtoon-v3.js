@@ -551,10 +551,27 @@
  function stageBody(p,i,s){
    if(i===0){
      queueMicrotask(checkDeepSeek);
-     const was=ui.stage;ui.stage=0;
-     let body;try{body=studio()}finally{ui.stage=was}
-     return '<div class="wt4-stage-note"><strong>01 · 故事方案</strong><p>'+html(sourceHint(p))+
-       '。请先完成标题、创意、来源与事实边界；AI 扩写按钮调用已配置的真实模型，仍需独立确认费用。</p></div>'+body;
+     const was=ui.stage,only=window.WT4_STORY_PANEL_ONLY;
+     let ai='';
+     ui.stage=0;window.WT4_STORY_PANEL_ONLY=true;
+     try{ai=studio()}finally{ui.stage=was;window.WT4_STORY_PANEL_ONLY=only}
+     const locked=!!p.handoff?.repoQueuedAt;
+     const field=(label,key,multi=false,ph='')=>'<label>'+label+
+       (multi?'<textarea data-project-field="'+key+'" placeholder="'+html(ph)+'"'+(locked?' disabled':'')+'>'+
+         html(p[key]||'')+'</textarea>':
+         '<input data-project-field="'+key+'" value="'+html(p[key]||'')+'" placeholder="'+html(ph)+'"'+(locked?' disabled':'')+'>')+'</label>';
+     const storyFields='<section class="box wt4-story-form"><h3>作品与剧情</h3><p>保留源材料、AI 辅助和人工修改的边界；下方 DeepSeek 按钮为真实接口，调用前需要独立确认费用。</p>'+
+       '<div class="wt4-story-fields">'+field('漫画名称','title',false,'请给漫画一个名称')+
+       field('核心剧情简介','description',true,'人物、矛盾与转折')+'</div></section>';
+     const research='<details class="wt4-source-review"><summary>来源核验与创作声明（热点改编必填）</summary><div class="wt4-story-fields">'+
+       field('原事件或作品标题','sourceTitle')+
+       field('原始来源链接（一行一条）','sourceURLs',true,'https://...')+
+       field('事实核验和未知项','factNotes',true,'已确认的事实、日期及仍待核验处')+
+       field('原创角色和虚构改编策略','fiction',true,'如何防止误导性指向或侵权')+
+       field('对外披露声明','disclosure',true,'告知读者真实事件与虚构部分的区别')+'</div></details>';
+     return '<div class="wt4-story-journey"><div class="wt4-stage-note"><strong>01 · 故事方案</strong><p>'+html(sourceHint(p))+
+       '。先完善标题和剧情，再按需要使用 AI 编剧；真实生图和作品发表需要独立验收。</p></div>'+
+       storyFields+'<div class="wt4-ai-story">'+ai+'</div>'+research+'</div>';
    }
    if(i===1)return characterStage(p);
    if(i===2)return '<div class="wt4-stage-note"><strong>03 · 剧情分镜</strong><p>逐格编辑画面、对白和镜头。规则模板不等于 AI 已生成；完整分镜必须经作者确认。</p></div>'+withEditor(p,2);
