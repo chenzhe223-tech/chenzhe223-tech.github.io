@@ -16,7 +16,7 @@ const state={all:[],filter:"all",query:"",sort:"relevance",visible:9,loaded:fals
 const html=v=>typeof safe==="function"?safe(v):String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const url=v=>{try{const parsed=new URL(String(v||""));if(!["https:","http:"].includes(parsed.protocol))return"#";if(!parsed.hostname||parsed.username||parsed.password)return"#";return parsed.href}catch{return"#"}};
 const canonical=v=>url(v).split("#")[0].replace(/\/$/,"").toLowerCase();
-const keyTitle=v=>String(v||"").toLowerCase().replace(/[\W_\s，。：；！、“”‘’「」【】（）\u3000]/g,"").slice(0,70);
+const keyTitle=v=>String(v||"").toLowerCase().replace(/[^a-z0-9\u4e00-\u9fff]/gi,"").slice(0,70);
 function daysFrom(date){
  if(!/^\d{4}-\d\d-\d\d$/.test(String(date||"")))return 999;
  const n=Date.parse(date+"T00:00:00+08:00");
