@@ -82,7 +82,9 @@ p.handoff={taskId:'WT-11111111111111111111',repoQueuedAt:'2026-11-11T00:00:00Z'}
 assert.equal(state(p).next,4,'queued task is not generated artwork');
 p.handoff.stagedFiles=Array.from({length:10},(_,i)=>({path:i?'panels/'+i+'.png':'cover.png'}));
 p.handoff.stageUploaded=p.handoff.stagedFiles.map(x=>x.path);
-assert.equal(state(p).next,5,'files uploaded still require independent QA');
+assert.equal(state(p).next,4,'local stagedFiles must not masquerade as verified remote upload');
+ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'draft_uploaded'}];
+assert.equal(state(p).next,5,'verified remote upload may enter QA, but cannot skip it');
 ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'ready_for_workbuddy'}];
 assert.equal(state(p).next,6,'remote independent QA can advance to export/publish');
 ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'published',receipt:{status:'published',url:'https://mp.weixin.qq.com/s/RealArticle'}}];
