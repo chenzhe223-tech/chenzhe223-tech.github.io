@@ -1,0 +1,504 @@
+{
+  "schema_version": 1,
+  "source": "XNews (joeseesun/xnews)",
+  "source_index": "https://xnews.qiaomu.ai/articles.json",
+  "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
+  "synced_at": "2026-11-13T08:43:40.089Z",
+  "sync_method": "bootstrap_from_public_upstream_repository",
+  "count": 31,
+  "articles": [
+    {
+      "id": "openai-fuzzy-robustness",
+      "date": "2026-11-12",
+      "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
+      "summary": "OpenAI用自动红队和worst@n标准生成训练数据，并写到这套方法已被用于GPT-6 Astra和Sol。这些数字测的是模型层，不含上线后的额外防护。",
+      "original_url": "https://alignment.openai.com/fuzzy-robustness/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-fuzzy-robustness",
+      "tags": [
+        "OpenAI",
+        "alignment",
+        "red teaming",
+        "GPT-6 Astra",
+        "safety"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "gemini-4-hydrogen",
+      "date": "2026-11-12",
+      "title": "默认高思考档上，Hydrogen在智能指数上是51，Argon是50",
+      "summary": "Gemini 4 Hydrogen面向日常编码和智能体执行开放，完成任务的速度是3.8 Flash的2.5倍。整段100万token上下文的价格是每百万输入1.50美元、输出7.50美元。难任务官方仍交给Carbon和Argon。",
+      "original_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/gemini-4-hydrogen",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Gemini 4 Hydrogen",
+        "Antigravity",
+        "Orchestrator"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "gemini-decisions-api",
+      "date": "2026-11-11",
+      "title": "一次最多1000道题，Gemini Decision 1不写回答，只给出判断",
+      "summary": "新接口在一次前向计算里给是非、选择和量表打分，端到端150到250毫秒。输入每百万token 0.10美元，输出不计费，并可处理文本、图片、音频、视频和PDF。",
+      "original_url": "https://blog.google/innovation-and-ai/technology/developers-tools/gemini-decisions-api/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/gemini-decisions-api",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Decisions API",
+        "Gemini Decision 1",
+        "developer tools"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "deepmind-alphagenome-2",
+      "date": "2026-11-11",
+      "title": "TenK10K上，AlphaGenome 2识别的因果变异从16%升到30%",
+      "summary": "Google DeepMind发布新一代DNA序列模型AlphaGenome 2，按细胞类型预测变异影响。训练数据超过1.07亿个单细胞图谱，覆盖68种组织。官方明确，该模型仅供研究使用，尚未通过临床或诊断验证。",
+      "original_url": "https://deepmind.google/blog/alphagenome-2-deciphering-how-cells-read-dna-to-better-understand-disease/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepmind-alphagenome-2",
+      "tags": [
+        "Google DeepMind",
+        "AlphaGenome 2",
+        "genomics",
+        "single-cell",
+        "GWAS"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-worse-together",
+      "date": "2026-11-11",
+      "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
+      "summary": "Anthropic Fellows研究在四个模拟环境里比较后写到，一个协调者同时服务多人，群体结果好过每人各派一个智能体，差距大约10到45个百分点。三个环境已作为MAMUBench发布。实验全部是模拟。",
+      "original_url": "https://alignment.anthropic.com/2026/worse-together/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-worse-together",
+      "tags": [
+        "Anthropic",
+        "alignment",
+        "multi-agent",
+        "MAMUBench",
+        "agents"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-cot-monitorability",
+      "date": "2026-11-10",
+      "title": "UK AISI测到Astra关闭思维链后的时间范围中位数是30.9分钟，OpenAI说按困惑度并不偏离",
+      "summary": "OpenAI对齐博客写到，预训练越强，模型越能在不写思维链时完成任务；强化学习也会抬高思维链可控性。附录里他们也表明，更可控并不等于更会躲避监控。",
+      "original_url": "https://alignment.openai.com/cot-monitorability-model-lifecycle/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-cot-monitorability",
+      "tags": [
+        "OpenAI",
+        "alignment",
+        "chain-of-thought",
+        "monitorability",
+        "GPT-6 Astra"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "gemini-4-carbon-now-available",
+      "date": "2026-11-10",
+      "title": "Gemini 4 Carbon今天开放，Google仍把Argon留给大多数工程任务",
+      "summary": "Gemini 4 Carbon对开发者、企业和Ultra用户开放。官方仍把Argon作为大多数软件工程和知识工作的选择，并把Carbon留给更长、更难的任务。导入价与Argon相同，2026年11月30日后将调整。",
+      "original_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-carbon-now-available/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/gemini-4-carbon-now-available",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Gemini 4 Carbon",
+        "Antigravity",
+        "cybersecurity"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "deepmind-alphaproof-code",
+      "date": "2026-11-10",
+      "title": "四周里写出超过600万行Lean，DeepMind把验证做到了Signal的设备代码",
+      "summary": "Google DeepMind研究人员用AlphaProof Code，在四周内生成超过600万行Lean证明，去核验Signal协议真正编译到设备上的代码。他们把这称为一种广泛部署的密码协议实现第一次被验证到这种深度。",
+      "original_url": "https://deepmind.google/blog/introducing-alphaproof-code/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepmind-alphaproof-code",
+      "tags": [
+        "Google DeepMind",
+        "AlphaProof",
+        "Signal",
+        "formal verification",
+        "Gemini Carbon"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "simonw-beep-locator",
+      "date": "2026-11-09",
+      "title": "用两台 iPad、一部手机和两台笔电，他把神秘蜂鸣定位到大约 40 厘米内",
+      "summary": "Simon Willison 不想翻完一屋子没拆的搬家纸箱，于是让 Claude Code 做了一套多设备声音定位系统。它最后在那一堆箱子里找到一只急着换电池的旧一氧化碳报警器。",
+      "original_url": "https://simonwillison.net/2026/Nov/9/mysterious-beeps/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/simonw-beep-locator",
+      "tags": [
+        "Claude",
+        "Claude Code",
+        "Fable",
+        "agents",
+        "hardware"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "nvidia-gr00t-2",
+      "date": "2026-11-09",
+      "title": "目标机器人没练过的50个任务，5条演示后GR00T 2的成功率从40%到95%",
+      "summary": "NVIDIA的GR00T 2同时预测未来视频和机器人动作。官方写到，在目标机器人未见过的50个任务上，零样本成功率是40%，5条演示并在一块RTX 5090上微调30分钟后到95%。模型权重和代码被标为12月发布。",
+      "original_url": "https://research.nvidia.com/labs/gear/gr00t-2/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/nvidia-gr00t-2",
+      "tags": [
+        "NVIDIA",
+        "GR00T 2",
+        "robotics",
+        "Jim Fan",
+        "Yuke Zhu"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "emollick-fable-jagged-agi",
+      "date": "2026-11-09",
+      "title": "Fable 5.2 能改键盘、策划生意、重做奥登的课，作者仍称它是锯齿状的 AGI",
+      "summary": "沃顿教授 Ethan Mollick 在公开前试用 Claude Fable 5.2，测了硬件、生意、诗歌课、创业研究和四百多个三维世界。他认为它在许多数字任务上已经够得上人类专家，但往往看不见自己的作品太长、太重复，或不好玩。",
+      "original_url": "https://www.oneusefulthing.org/p/fable-52-and-jagged-agi",
+      "xnews_url": "https://xnews.qiaomu.ai/a/emollick-fable-jagged-agi",
+      "tags": [
+        "Claude",
+        "Fable",
+        "AGI",
+        "agents",
+        "Ethan Mollick"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-fermat-agent-teams",
+      "date": "2026-11-09",
+      "title": "1000 个 Fable 5.2 智能体用 28.7 小时重做了费马大定理的形式化证明",
+      "summary": "Anthropic 的玩具实验里，1000 个早期 Claude Fable 5.2 智能体没有 Prove2Me 平台，也没有研究员当场指挥，用通用工具和共享数据库重做了今年 9 月那份费马大定理形式化证明。输出 token 大约是当时的三分之一，写出的证明大约是七分之一长。",
+      "original_url": "https://claude.dev/blog/safely-scaling-multi-agent-teams-with-fable-5-2/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-fermat-agent-teams",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "Fable",
+        "agents",
+        "formal verification"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "rauchg-agent-schedules",
+      "date": "2026-11-06",
+      "title": "Rauch 谈 Agent 持续任务：Vercel Schedules 可在运行时定义",
+      "summary": "Muse 和 Instinct 会夜间整理记忆、早上提醒，并在一段时间没互动后主动发消息。",
+      "original_url": "https://x.com/rauchg/status/2118440831355068671",
+      "xnews_url": "https://xnews.qiaomu.ai/a/rauchg-agent-schedules",
+      "tags": [
+        "agent",
+        "Vercel",
+        "Schedules"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-gpt6-cyber",
+      "date": "2026-11-06",
+      "title": "OpenAI 发布 GPT-6 Cyber，先向部分 Daybreak Red 客户开放",
+      "summary": "OpenAI 称，Mozilla、Palo Alto Networks、Calif 和 Cisco 等公司的安全团队已在使用该模型。",
+      "original_url": "https://x.com/OpenAI/status/2118390190246879554",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-gpt6-cyber",
+      "tags": [
+        "OpenAI",
+        "security",
+        "GPT-6"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "cursor-live-apps",
+      "date": "2026-11-06",
+      "title": "Cursor：用 Agent 构建线上 App，并通过链接分享",
+      "summary": "描述需要的工具后，Cursor 会构建应用、设置数据库、运行安全检查并部署。",
+      "original_url": "https://x.com/cursor_ai/status/2118458629091426304",
+      "xnews_url": "https://xnews.qiaomu.ai/a/cursor-live-apps",
+      "tags": [
+        "Cursor",
+        "Cloud Agent",
+        "Apps"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "checkwash-test-weakening",
+      "date": "2026-11-06",
+      "title": "checkwash 用 Git diff 检查测试弱化，Alpha 版仍有漏检和误报",
+      "summary": "v0.11.0 支持 Claude Code 钩子和 CI 检查，默认只阻断 high；历史评测有明确的版本、样本与误报边界。",
+      "original_url": "https://x.com/kartg123451/status/2118550260104769565",
+      "xnews_url": "https://xnews.qiaomu.ai/a/checkwash-test-weakening",
+      "tags": [
+        "技术深潜",
+        "代码审查",
+        "开源"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "captureflow-screen-recorder",
+      "date": "2026-11-06",
+      "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
+      "summary": "Chrome 扩展已上架，macOS 签名版仍待发布；Docker 使用 SQLite 和本地磁盘，也可部署到 Cloudflare Workers、D1、R2。",
+      "original_url": "https://x.com/sardorml/status/2118616954085024133",
+      "xnews_url": "https://xnews.qiaomu.ai/a/captureflow-screen-recorder",
+      "tags": [
+        "开源实作",
+        "录屏",
+        "自托管"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-scientific-models",
+      "date": "2026-11-06",
+      "title": "霍奇金和赫胥黎用手摇计算器算了三周，AI 要交出的是哪些模型被排除了",
+      "summary": "图宾根大学的三位 AI for Science 资助研究者在 Anthropic 科学博客写道：AI 已经能写模型、拟合参数，但理解取决于看到哪些假设失败，以及哪些部分其实没被数据钉死。",
+      "original_url": "https://x.com/AnthropicAI/status/2118792930211107115",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-scientific-models",
+      "tags": [
+        "Anthropic",
+        "scientific modeling",
+        "AI for Science",
+        "neuroscience"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-agent-memory-dreaming",
+      "date": "2026-11-06",
+      "title": "Claude 写了 413 份笔记，只拿到 1 枚徽章：智能体记忆该怎么整理",
+      "summary": "413 份笔记只换来 1 枚徽章，10 份笔记却拿到 4 枚。Anthropic 用宝可梦、数据库与法律文档实验，拆解智能体怎样筛选经验、核对错误，并让下一次任务用上记忆。",
+      "original_url": "https://x.com/AnthropicAI/status/2118814753154064501",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-agent-memory-dreaming",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "agent memory",
+        "engineering"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "tibo-dropbox-launch-video",
+      "date": "2026-11-05",
+      "title": "Tibo：Dropbox 一段屏录，让候补名单从 5000 人增至 75000 人",
+      "summary": "他回顾十八年前的发布视频，分析真实功能演示、目标受众与发布渠道如何配合。",
+      "original_url": "https://x.com/tibo_maker/status/2118289869428380138",
+      "xnews_url": "https://xnews.qiaomu.ai/a/tibo-dropbox-launch-video",
+      "tags": [
+        "indie",
+        "launch",
+        "video"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "deepseek-super-agent-harness",
+      "date": "2026-11-05",
+      "title": "DeepSeek Super Agent：用插件组织 router 与 worker 的研究原型",
+      "summary": "同一模型在九套 harness 中的通过率和成本不同；Super Agent 目前聚焦 GitHub、飞书，安全问题尚未完全解决。",
+      "original_url": "https://www.youtube.com/watch?v=OrcsMi2-IcM",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepseek-super-agent-harness",
+      "tags": [
+        "DeepSeek",
+        "harness",
+        "agent"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-vault-claude",
+      "date": "2026-11-05",
+      "title": "Anthropic：用 Claude 解析细菌 vault 颗粒的首个三维结构",
+      "summary": "团队称，原本需要数周到数月的结构解析缩短到了几天；过程中也出现了需要纠正的错误。",
+      "original_url": "https://x.com/AnthropicAI/status/2118073665296228863",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-vault-claude",
+      "tags": [
+        "Anthropic",
+        "Claude",
+        "science"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "sarah-guo-personal-software",
+      "date": "2026-11-04",
+      "title": "Sarah Guo 改变了看法：非工程师也想做自己的软件",
+      "summary": "她列了几种动机：动手做软件带来的力量感、没人替自己实现的工作流，以及想花几周修好的恼人问题。",
+      "original_url": "https://x.com/saranormous/status/2118052772637704376",
+      "xnews_url": "https://xnews.qiaomu.ai/a/sarah-guo-personal-software",
+      "tags": [
+        "product",
+        "personal software",
+        "AI"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "victor-slash-supersmb",
+      "date": "2026-11-03",
+      "title": "Slash 年化总收入达 5 亿美元，Victor 详述 SuperSMB 生意",
+      "summary": "Victor Cardenas 列出客户的年龄、支出与团队规模，解释 Slash 如何获客、设计产品和定价。",
+      "original_url": "https://x.com/victorcardenas/status/2117729738160496778",
+      "xnews_url": "https://xnews.qiaomu.ai/a/victor-slash-supersmb",
+      "tags": [
+        "fintech",
+        "startup",
+        "AI native"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "rauchg-vercel-security-review",
+      "date": "2026-11-03",
+      "title": "Rauch：Vercel 内部的安全审计 Agent 已对外开放",
+      "summary": "Rauch 称，仓库无论是否托管在 Vercel，都可以启用与内部安全 Agent 相同的能力。",
+      "original_url": "https://x.com/rauchg/status/2117734833824948373",
+      "xnews_url": "https://xnews.qiaomu.ai/a/rauchg-vercel-security-review",
+      "tags": [
+        "security",
+        "agent",
+        "Vercel"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "levelsio-300-month-expenses",
+      "date": "2026-11-03",
+      "title": "Levelsio：常规业务开销降到约 $300/月，不含 Photo AI",
+      "summary": "他称每月节省近 $34000；网站年度服务量为 2 万付费客户、2.52 亿访客、24 亿请求与 2.4 PB 带宽。",
+      "original_url": "https://x.com/levelsio/status/2117694259558293692",
+      "xnews_url": "https://xnews.qiaomu.ai/a/levelsio-300-month-expenses",
+      "tags": [
+        "indie",
+        "cost",
+        "Claude"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "amasad-managed-cloud-agents",
+      "date": "2026-11-03",
+      "title": "Amjad：让受管云环境成为 AI Agent 的默认运行方式",
+      "summary": "Replit 建议把凭证、权限、网络和生产变更置于 Agent 控制之外，同时强调云托管本身不等于安全。",
+      "original_url": "https://x.com/amasad/status/2117504072416890937",
+      "xnews_url": "https://xnews.qiaomu.ai/a/amasad-managed-cloud-agents",
+      "tags": [
+        "security",
+        "enterprise",
+        "Replit"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "levelsio-bf1942-web",
+      "date": "2026-11-02",
+      "title": "Levelsio 用 Claude Code 将《战地 1942》试玩版移植到浏览器",
+      "summary": "他介绍了从 x86 反汇编、翻译成 C，到编译为 WebAssembly 和接入多人服务器的过程。",
+      "original_url": "https://x.com/levelsio/status/2117374984192512391",
+      "xnews_url": "https://xnews.qiaomu.ai/a/levelsio-bf1942-web",
+      "tags": [
+        "Claude",
+        "game",
+        "WebAssembly"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "karpathy-hackertube",
+      "date": "2026-11-01",
+      "title": "Karpathy 做了 HackerTube：从 4300 万条 HN 评论中找到 6454 个视频",
+      "summary": "他用 Opus 5.5 花了约两小时完成这个周末项目；推荐无需登录，底层数据也可下载。",
+      "original_url": "https://x.com/karpathy/status/2116957135661945283",
+      "xnews_url": "https://xnews.qiaomu.ai/a/karpathy-hackertube",
+      "tags": [
+        "AI coding",
+        "product",
+        "HN"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-agents-judgment-calls",
+      "date": "2026-10-27",
+      "title": "分析师有 86% 的判断跟着智能体走，事后却很少提起它",
+      "summary": "Anthropic Alignment 团队用投币给 Claude Code 指定倾向。50 名因果推断分析师在四个说得通的分析选项上，有 86% 站到了智能体一边；77% 复述了它的论证，只有 15% 把它写成来源。",
+      "original_url": "https://www.anthropic.com/research/agents-judgment-calls",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-agents-judgment-calls",
+      "tags": [
+        "Anthropic",
+        "alignment",
+        "agents",
+        "Claude Code",
+        "judgment"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "clocktower-astra-detection",
+      "date": "2026-10-05",
+      "title": "AI 玩《血染钟楼》26 局好人全胜：复盘发现它们怎样核对证词",
+      "summary": "一份 10 月 5 日的 372 局分析，经研究员 11 月 6 日讨论的 Clocktower 项目重新进入视野：先核对证词来历，再集体决定处决；26/26 的战绩也有猎手命中、对手差异和小样本的限制。",
+      "original_url": "https://github.com/dwarkeshsp/clocktower/blob/52155afe38a696283756f142bdb1565e07951ae1/docs/findings/why-astra-wins/detection.md",
+      "xnews_url": "https://xnews.qiaomu.ai/a/clocktower-astra-detection",
+      "tags": [
+        "AI 评测",
+        "多智能体",
+        "能力边界"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    }
+  ]
+}
