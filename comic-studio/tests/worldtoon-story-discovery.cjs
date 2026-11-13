@@ -3,6 +3,7 @@ const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
 const base=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(base,p),'utf8');
 const library=JSON.parse(read('story-discovery.json'));
+const discoveryFlow=require('../discovery-flow.js');
 assert.equal(library.schema,'davylab.worldtoon.story-discovery.v1');
 const jane=library.items.find(x=>x.id==='novel-jane-eyre-1847');
 const wild=library.items.find(x=>x.id==='drama-ta-guo-fen-ye-2025');
@@ -14,7 +15,7 @@ for(const x of library.items){assert.ok(x.source.startsWith('https://'));assert.
 const service=read('story-discovery-service.js'),uiCode=read('story-discovery-ui.js'),bundle=read('extension.js');
 for(const [name,src] of [['service',service],['ui',uiCode],['bundle',bundle]])assert.doesNotThrow(()=>new vm.Script(src),name+' must parse');
 assert.ok(bundle.trimEnd().endsWith(uiCode.trim()),'runtime extension must embed updated story UI');
-assert.match(read('index.html'),/extension\.js\?v=4\.3\.0/,'browser must use fresh script');
+assert.match(read('index.html'),/extension\.js\?v=4\.6\.1/,'browser must use fresh script');
 assert.match(read('styles.css'),/\.story-discovery/,'mobile and desktop styles are served');
 const worker=read('worker.js');
 assert.ok(worker.includes(service.trim()),'deployed Worker must contain the canonical story search service');
@@ -77,7 +78,7 @@ const find=async(type,q)=>{
  const listeners={},projects=[],routes=[];
  const els={'#story-rights-url':{value:''},'#story-rights-consent':{checked:false},'#story-selected-count':{textContent:''}};
  const browserCtx={
-  window:{},document:{addEventListener(t,fn){(listeners[t]||(listeners[t]=[])).push(fn)},
+  window:{WTDiscoveryFlow:discoveryFlow},document:{addEventListener(t,fn){(listeners[t]||(listeners[t]=[])).push(fn)},
     querySelector:t=>els[t]||null},wtLive:()=>'<p>existing discovery catalog</p>',
   render(){},notify(){},persist(){},nav:r=>routes.push(r),
   data:{projects},ui:{route:'live'},emptyProject:()=>({id:'proj-'+(projects.length+1),panels:[],handoff:{}}),
@@ -90,7 +91,21 @@ const find=async(type,q)=>{
  const ux=browserCtx.window.WTStoryDiscovery;
  assert.match(browserCtx.wtLive(),/红果热剧/);
  assert.match(browserCtx.wtLive(),/existing discovery catalog/);
+ assert.match(ux.block(),/核对作品身份与权利/,'the discovery page should show the review-to-workbench sequence');
  await ux.search('简爱','novel',true);let s=ux.state();
+ s.items.push({id:'fixture-2',title:'候选二',type:'novel',source:'https://example.com/2'},{id:'fixture-3',title:'候选三',type:'novel',source:'https://example.com/3'});
+ let markup=ux.block();
+ assert.match(markup,/展开其余 1 条资料/,'only two story candidates are visible by default');
+ assert.equal((markup.match(/story-result-collapsed/g)||[]).length,1,'all results after the second are collapsed');
+ assert.match(markup,/aria-expanded="false"/,'collapse state is announced accessibly');
+ const toggleEvent={target:{closest:selector=>selector.includes('data-story-results-toggle')?{dataset:{storyResultsToggle:'1'}}:null},preventDefault(){},stopImmediatePropagation(){}};
+ for(const fn of listeners.click||[])fn(toggleEvent);
+ markup=ux.block();
+ assert.match(markup,/aria-expanded="true"/,'expand action updates accessible state');
+ assert.doesNotMatch(markup,/story-result-collapsed/,'expanded results are all visible');
+ await ux.search('简爱','novel',true);s=ux.state();
+ s.items.push({id:'fixture-2',title:'候选二',type:'novel',source:'https://example.com/2'},{id:'fixture-3',title:'候选三',type:'novel',source:'https://example.com/3'});
+ assert.match(ux.block(),/aria-expanded="false"/,'a new search resets results to collapsed');
  ux.choose(s.items.findIndex(x=>x.title==='简·爱'));s=ux.state();
  assert.equal(ux.beatOptions(s.selected).length,6);
  assert.equal(s.mode,'faithful');
@@ -116,4 +131,3 @@ const find=async(type,q)=>{
  assert.equal(rightsContext.__gate(mock).length,0,'rights evidence only clears this gate, not QA or final author approval');
  console.log('WORLD/TOON STORY SEARCH PASS: sourced title match, dates, no invented hot results, UI handoff and copyright gates');
 })().catch(e=>{console.error(e);process.exitCode=1});
-

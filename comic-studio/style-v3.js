@@ -910,11 +910,16 @@ function cardImage(x,c){
 }
 function cards(c){
  const subset=CATALOG.filter(x=>(filter==='全部'||x.category===filter)&&(!searchTerm||[x.name,x.name_en,x.subtitle,x.material,x.subjects,x.search_terms||''].join(' ').toLowerCase().includes(searchTerm.toLowerCase())));
+ const selected=CATALOG.find(x=>x.style_id===c.styleId),related=selected?CATALOG.filter(x=>x.category===selected.category&&x.style_id!==selected.style_id):[];
+ const quick=Array.from(new Map([selected,...related,...CATALOG].filter(Boolean).map(x=>[x.style_id,x])).values()).slice(0,4),open=!!(searchTerm||filter!=='全部');
+ const card=x=>'<button type="button" class="director-style wt-v3-card '+(c.styleId===x.style_id?'selected':'')+'" data-director-style="'+esc(x.style_id)+'" aria-pressed="'+(c.styleId===x.style_id)+'">'+cardImage(x,c)+'<span class="wt-v3-card-meta"><b>'+esc(x.name)+'</b><small>'+esc(x.subtitle)+'</small><span class="wt-v3-subjects">'+esc(x.subjects.replace(/·/g,' / '))+'</span></span></button>';
  return '<div class="wt-v3-intro"><div><b>WORLD/TOON · VISUAL ATLAS 03</b><p>先看真实来源，再确认正式首图。画风描述不是生成能力承诺。</p></div><span>'+CATALOG.length+' STYLES</span></div>'+
- '<div class="wt-v3-toolrow"><input type="search" data-wt-v3-query aria-label="检索漫画风格" placeholder="搜索画风、题材与视觉特征" value="'+esc(searchTerm)+'"><span class="wt-v3-count">找到 '+subset.length+' 种</span></div>'+
- '<div class="wt-v3-filters">'+CATEGORIES.map(x=>'<button type="button" data-wt-v3-filter="'+esc(x)+'" aria-pressed="'+(filter===x)+'" class="'+(filter===x?'is-active':'')+'">'+esc(x)+'</button>').join('')+'</div>'+
- '<div class="director-styles wt-v3-grid">'+subset.map(x=>'<button type="button" class="director-style wt-v3-card '+(c.styleId===x.style_id?'selected':'')+'" data-director-style="'+esc(x.style_id)+'" aria-pressed="'+(c.styleId===x.style_id)+'">'+
- cardImage(x,c)+'<span class="wt-v3-card-meta"><b>'+esc(x.name)+'</b><small>'+esc(x.subtitle)+'</small><span class="wt-v3-subjects">'+esc(x.subjects.replace(/·/g,' / '))+'</span></span></button>').join('')+'</div>'+(subset.length?'':'<p class="wt-v3-nothing">没有符合条件的画风，请调整搜索。</p>');
+ '<div class="wt-v3-quick-head"><strong>推荐与当前选择</strong><small>'+esc(selected?.name||'先选择画风')+' · '+(selected?'相近风格可横向对比':'')+'</small></div>'+ 
+ '<div class="wt-v3-quick-grid">'+quick.map(card).join('')+'</div>'+ 
+ '<details class="wt-v3-allstyles" '+(open?'open':'')+'><summary>浏览全部 '+CATALOG.length+' 种画风 <span>按类别筛选 · 展开后查看详细预览</span></summary>'+ 
+ '<div class="wt-v3-toolrow"><input type="search" data-wt-v3-query aria-label="检索漫画风格" placeholder="搜索画风、题材与视觉特征" value="'+esc(searchTerm)+'"><span class="wt-v3-count">找到 '+subset.length+' 种</span></div>'+ 
+ '<div class="wt-v3-filters">'+CATEGORIES.map(x=>'<button type="button" data-wt-v3-filter="'+esc(x)+'" aria-pressed="'+(filter===x)+'" class="'+(filter===x?'is-active':'')+'">'+esc(x)+'</button>').join('')+'</div>'+ 
+ '<div class="director-styles wt-v3-grid">'+subset.map(card).join('')+'</div>'+(subset.length?'':'<p class="wt-v3-nothing">没有符合条件的画风，请调整搜索。</p>')+'</details>';
 }
 function detail(c){
  const x=CATALOG.find(s=>s.style_id===c.styleId);

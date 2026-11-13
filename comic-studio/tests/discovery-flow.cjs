@@ -1,0 +1,11 @@
+'use strict';
+const assert=require('node:assert/strict');
+const flow=require('../discovery-flow.js');
+const ids=new Set(flow.categories.map(x=>x.id));
+for(const id of ['all','drama','novel','news','literary_series','nobel_literature','academic_events','history','arxiv'])assert.ok(ids.has(id),'missing discovery category '+id);
+const hot=flow.card({title:'他过分野',summary:'媒体报道提及该剧名，尚未核实上架信息。',source_name:'公开新闻',source:'https://news.example/item',published:'2026-11-10',source_kind:'web_search_lead',identity_status:'title_mentioned_in_source',rights:'unknown',rank_snapshot:null});
+assert.equal(hot.sourceName,'公开新闻');assert.equal(hot.identityLabel,'来源提及该题名 · 上架身份待核对');assert.equal(hot.heatLabel,'未核实热度');assert.equal(hot.storyDestination,'single_story');assert.equal(hot.publishedDate,'2026-11-10');
+const snapshot=flow.card({title:'短剧甲',summary:'榜单快照',source_name:'第三方榜单',source:'https://rank.example/',rank_snapshot:3,verified_on:'2026-10-01',rights:'unknown'});
+assert.equal(snapshot.heatLabel,'第三方榜单记录（非红果官方数据）');assert.equal(snapshot.heatEvidenceDate,'2026-10-01');
+assert.equal(flow.errorState('timeout').title,'搜索超时');assert.equal(flow.errorState('empty').title,'没有匹配结果');
+console.log('PASS: category/source mapping, truthful heat and identity labels, dates and explicit search states');

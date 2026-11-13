@@ -41,7 +41,8 @@ const TITLES=['开场','铺垫','冲突','加压','转折','代价','反击','�
 let step=0,lastProjectId='';
 const pendingAuto=new Set();
 let storyBusy=false,storyProvider='native',storyApiKey='',storyModel='';
-const providerModels={deepseek:'deepseek-chat',openai:'gpt-4o-mini'};
+const providerModels={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
+const byoProviders=['deepseek','openai','claude','gemini','kimi','qwen'];
 
 const clean=s=>String(s??'').replace(/[\u0000-\u001f]/g,' ').trim();
 const style=id=>STYLES.find(x=>x.id===id)||STYLES[0];
@@ -130,6 +131,11 @@ function applyStoryboard(p,panels,meta,replace=false){
   fields_updated:updated,author_reviewed:false};
  if(!clean(p.fiction))p.fiction='原创独立角色与架空地点；来源事实与虚构对白独立标注。';
  p.characters=castText(c);
+ if(typeof data!=='undefined'&&window.WTCharacterContinuity){
+  const enrolled=window.WTCharacterContinuity.upsertGenerated(data,p,c.cast.map(x=>({...x,originalName:x.originalName||x.name,comicName:x.comicName||x.name})));
+  if(enrolled.unresolved.length)p.characterProfileReview={status:'needs_author_role_confirmation',candidates:enrolled.unresolved};
+  else if(p.characterProfileReview?.status==='needs_author_role_confirmation')delete p.characterProfileReview;
+ }
  markDirty(p);setChange(p,meta.method==='verified_model_response'?'AI生成九格可编辑脚本（仍需人工复审）':'本地剧情规则生成九格草稿（非大模型输出）');
  step=2;render();
  return true;
@@ -141,7 +147,7 @@ function draft(p,replace=true){
 }
 function aiStoryPayload(p,provider){
  const c=ensure(p),st=style(c.styleId);
- return {provider,model:providerModels[provider]||'',apiKey:provider==='native'?'':storyApiKey,
+ return {provider,model:storyModel||providerModels[provider]||'',apiKey:provider==='native'?'':storyApiKey,
   title:p.sourceTitle||p.title,summary:p.description||c.thesis,category:p.category,
   arc:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),thesis:c.thesis,world:c.world,emotion:c.emotion,fiction:p.fiction,
   style:st.name,styleRules:[st.material,st.lighting,st.layout,st.negative].join('；'),
@@ -155,9 +161,10 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   draft(p,false);return;
  }
  if(provider==='deepseek'){
-  if(!auto&&!confirm('将调用当前 WORLD/TOON 已配置的 DeepSeek 服务端真实模型生成剧本，可能按 Token 计费。确认本次调用吗？'))return;
+  if(!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
+  if(!auto&&!confirm('将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
  }else if(provider!=='native'){
-  if(!storyApiKey.trim()){notify('请输入 OpenAI API Key，仅用于本次请求');return}
+  if(!storyApiKey.trim()){notify('请输入'+({openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'模型服务商')+' API Key，仅用于本次请求');return}
   if(!auto&&!confirm('将使用你提供的第三方模型 API，供应商可能按用量收费。确认本次调用？'))return;
  }
  if(!auto&&replace&&p.panels.some(x=>clean(x.scene))){
@@ -196,7 +203,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
     p.panels=Array.from({length:result.panels.length},(_,i)=>p.panels[i]||makePanel(i));
   }
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
-  if(wrote)notify('已使用 '+(provider==='native'?'平台内置AI':provider==='deepseek'?'DeepSeek':'OpenAI')+' 生成可编辑九格草稿，请人工确认');
+  if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑九格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
    draft(p,false);notify('内置模型暂不可用，已退回本地规则草稿（非AI模型输出）');
@@ -220,7 +227,7 @@ function payload(p){
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
   cover_brief:clean(c.cover),
-  visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,role:'visual_reference_only'}))
+  visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,license_evidence_url:x.license_evidence_url||'',rights_verified:x.rights_verified===true,rights_status:x.rightsStatus||'legacy_review_required',asset_type:x.assetType||'legacy_unclassified',asset_type_label:x.assetTypeLabel||'',applies_to:x.appliesTo||{scope:'project',targetId:'project'},role:'visual_reference_only'}))
  };
 }
 function digest(p){
@@ -243,7 +250,7 @@ function checks(p){
  if(p.seriesEpisode>1&&p.seriesBible){if(p.seriesBible.style_id&&p.seriesBible.style_id!==c.styleId)errs.push('续章画风必须与系列创作圣经一致');if(Array.isArray(p.seriesBible.characters)&&p.seriesBible.characters.length&&JSON.stringify(p.seriesBible.characters)!==JSON.stringify(c.cast))errs.push('系列续章角色外貌服饰需保持锁定，修改应建立新系列版本')}
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
- if((p.visualReferences||[]).some(x=>x.license!=='CC0'))errs.push('视觉参考包含未确认 CC0 的馆藏');
+ if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
@@ -312,9 +319,9 @@ function castEditor(c){
  '<div class="director-character-fields">'+['name','look','clothes','symbol','nature'].map((key,j)=>
  '<label>'+['角色姓名','固定容貌、发型与体型（可参照授权真人照片）','每格不变的服装','可识别道具或标记','性格与行为'][j]+
  (key==='look'||key==='clothes'?'<textarea rows="2"':'<input type="text"')+' data-director-cast="'+key+'" data-character-index="'+i+'" maxlength="500"'+(key==='look'||key==='clothes'?'>'+e(person[key])+'</textarea>':' value="'+e(person[key])+'">')+'</label>').join('')+
- '</div></article>').join('')+'</div>'+ 
- '<div class="director-portrait-handoff"><button type="button" class="button" data-director-style="cinematic-3d-character">一键选用电影级 3D 拟人画风</button>'+ 
- '<button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+ 
+ '</div></article>').join('')+'</div>'+
+ '<div class="director-portrait-handoff"><button type="button" class="button" data-director-style="cinematic-3d-character">一键选用电影级 3D 拟人画风</button>'+
+ '<button type="button" class="button dark" data-director-action="portrait-pack">导出真人 → 3D 角色参考包</button>'+
  '<p>仅打包已经授权的原始照片、角色设定、当前画风与 SHA256，交给 ChatGPT 生产真实角色定妆图。此按钮不会调用收费生图模型或上传照片。</p></div>';
 }
 function framePreview(p,c){
@@ -329,17 +336,23 @@ function framePreview(p,c){
 }
 function storyControls(p,c){
  const info=c.storyboardProvenance;
- const origin=info?.method==='verified_model_response'?'AI生成 · '+(info.provider==='native'?'平台内置模型':info.provider==='deepseek'?'DeepSeek API':'OpenAI API')+(info.model?' · '+info.model:''):
+ const providerNames={native:'平台内置模型',deepseek:'DeepSeek API',openai:'OpenAI API',claude:'Claude API',gemini:'Gemini API',kimi:'Kimi API',qwen:'通义千问 API'};
+ const origin=info?.method==='verified_model_response'?'AI生成 · '+(providerNames[info.provider]||'第三方模型')+(info.model?' · '+info.model:''):
     info?.method==='local_structure_rules'?'本地剧情分析规则 · 非AI模型输出':'尚未生成 · 将优先使用内置AI';
- const providerLabel=storyProvider==='deepseek'?'DeepSeek':storyProvider==='openai'?'OpenAI':'内置AI';
+ const providerLabels={native:'内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'};
+ const providerLabel=providerLabels[storyProvider]||'内置AI';
  return '<div class="director-ai-workflow" role="group" aria-label="动态篇幅剧本智能生成">'+
  '<div class="director-ai-head"><div><strong>自动编剧 · 4–60 格完整分镜</strong><span>默认自动分析选题、人物与画风；模型结果和人工编辑都写入当前作品。</span></div>'+
  '<span class="director-ai-status">'+e(storyBusy?'生成中 · 请勿重复提交':origin)+'</span></div>'+
  '<div class="director-ai-grid"><label>生成方式<select data-director-provider>'+
  '<option value="native"'+(storyProvider==='native'?' selected':'')+'>内置AI · 已登录优先自动生成</option>'+
- '<option value="deepseek"'+(storyProvider==='deepseek'?' selected':'')+'>DeepSeek API · 复用安全服务端密钥</option>'+
- '<option value="openai"'+(storyProvider==='openai'?' selected':'')+'>OpenAI API · 自带密钥</option></select></label>'+
- (storyProvider==='openai'?'<label>API Key · 本次网页会话使用，不保存到项目<input data-director-api-key type="password" autocomplete="off" spellcheck="false" placeholder="'+e(providerLabel)+' API Key" value="'+e(storyApiKey)+'"></label>':'<div class="director-ai-guide"><b>安全模型配置</b><span>DeepSeek 复用 Cloudflare 服务端密钥，无需再次输入。内置 AI 可在空白时自动填写，模型不可用会明确标注本地规则草稿。</span></div>')+'</div>'+
+ '<option value="deepseek"'+(storyProvider==='deepseek'?' selected':'')+'>DeepSeek API · 自带密钥（仅本次生成）</option>'+
+ '<option value="openai"'+(storyProvider==='openai'?' selected':'')+'>OpenAI API · 自带密钥</option>'+
+ '<option value="claude"'+(storyProvider==='claude'?' selected':'')+'>Claude · 自带密钥</option>'+
+ '<option value="gemini"'+(storyProvider==='gemini'?' selected':'')+'>Gemini · 自带密钥</option>'+
+ '<option value="kimi"'+(storyProvider==='kimi'?' selected':'')+'>Kimi · 自带密钥</option>'+
+ '<option value="qwen"'+(storyProvider==='qwen'?' selected':'')+'>通义千问 · 自带密钥</option></select></label>'+
+ (byoProviders.includes(storyProvider)?'<label>模型名称<input data-director-model type="text" autocomplete="off" spellcheck="false" maxlength="100" value="'+e(storyModel||providerModels[storyProvider])+'" placeholder="'+e(providerModels[storyProvider])+'"></label><label>API Key · 本次网页会话使用，不保存到项目<input data-director-api-key type="password" autocomplete="off" spellcheck="false" placeholder="'+e(providerLabel)+' API Key" value="'+e(storyApiKey)+'"></label>':'<div class="director-ai-guide"><b>模型配置</b><span>内置 AI 使用平台配额；密钥模式将密钥仅随本次请求发往固定供应商接口，不写入作品或浏览器存储。模型不可用时会明确提示，不冒充生成成功。</span></div>')+'</div>'+
  '<div class="director-ai-actions"><button type="button" class="button dark" data-director-action="ai"'+(storyBusy?' disabled':'')+'> '+(storyBusy?'正在生成…':'使用'+e(providerLabel)+'智能生成剧本')+'</button>'+
  '<button type="button" class="button" data-director-action="fill"'+(storyBusy?' disabled':'')+'>仅填补空白字段</button>'+
  '<button type="button" class="button subtle" data-director-action="draft"'+(storyBusy?' disabled':'')+'>本地规则草稿</button></div>'+
@@ -360,7 +373,7 @@ function review(p,c){
 function draw(){
  const p=selected();
  if(!p)return '<div class="box"><h2>尚未选择漫画作品</h2><a href="#/radar" class="button">前往选题池</a></div>';
- if(lastProjectId!==p.id){step=0;lastProjectId=p.id;storyApiKey='';storyProvider='native'}
+ if(lastProjectId!==p.id){step=0;lastProjectId=p.id;storyApiKey='';storyModel='';storyProvider='native'}
  const c=ensure(p),locked=approved(p);
  const tabs=['画风定调','人物设定','剧情分镜','最终定版'];
  return '<div class="director-page">'+heroHeader('CREATIVE DIRECTOR / PRE-PRODUCTION','创意导演台',
@@ -369,7 +382,7 @@ function draw(){
  '<div class="director-head"><div><span class="director-kicker">正在制作</span><h2>'+e(p.title)+'</h2><p>'+e(p.category)+' · '+e(c.thesis)+'</p></div>'+
  '<span class="director-status '+(locked?'ready':'')+'">'+(locked?'已锁定 · 可派单':'创作设定待确认')+'</span></div>'+
  '<div class="director-tabs">'+tabs.map((t,i)=>'<button type="button" data-director-step="'+i+'" class="'+(step===i?'active':'')+'"><span>0'+(i+1)+'</span>'+t+'</button>').join('')+'</div>'+
- (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">选择后，统一色板、线条、灯光、构图与禁用项将写入正式生产任务。此处不是实际生图展示。</p>'+styleCards(c)+stylePreview(c)+
+ (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">先从当前推荐中快速选择；需要更多选项时展开完整图鉴。画风描述与参考图不是正式生图结果。</p>'+styleCards(c)+'<details class="wt-v3-selected-detail"><summary>查看当前画风的材质、光影、构图与样张状态</summary>'+stylePreview(c)+'</details>'+ 
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 人物设定 →</button></div></section>':'')+
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
@@ -429,14 +442,16 @@ async function action(type,p){
  if(type==='approve'){approve(p);return}
 }
 document.addEventListener('input',ev=>{
- const el=ev.target;if(el?.matches?.('[data-director-api-key]'))storyApiKey=String(el.value||'').slice(0,320);
+ const el=ev.target;
+ if(el?.matches?.('[data-director-api-key]'))storyApiKey=String(el.value||'').slice(0,320);
+ if(el?.matches?.('[data-director-model]'))storyModel=String(el.value||'').slice(0,100);
 },true);
 document.addEventListener('change',ev=>{
  const el=ev.target;
  if(!el?.matches?.('[data-director-provider]'))return;
  ev.stopImmediatePropagation();
- storyProvider=['native','deepseek','openai'].includes(el.value)?el.value:'native';
- storyApiKey='';render();
+ storyProvider=['native','deepseek',...byoProviders].includes(el.value)?el.value:'native';
+ storyApiKey='';storyModel=providerModels[storyProvider]||'';render();
 },true);
 document.addEventListener('click',ev=>{
  const el=ev.target.closest('[data-director-action],[data-director-step],[data-director-style],[data-director-arc]');if(!el)return;
@@ -523,4 +538,3 @@ window.wtCreativeDirector=draw;
 window.wtDirector={STYLES,ARCS,ensure,payload,digest,checks,readiness,approved,exportBrief,castText,shotOf,draft,localStoryboard,applyStoryboard,aiStoryPayload,generateStory};
 if(location.hash.startsWith('#/director'))queueMicrotask(()=>render());
 })();
-

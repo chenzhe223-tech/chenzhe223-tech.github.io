@@ -29,7 +29,7 @@ jobs:
         run: |
           npm install --no-save --no-audit playwright@1.56.1
           npx playwright install --with-deps chromium
-      - name: Verify 20 original preview images at phone, tablet and desktop
+      - name: Verify 25 original preview images and compact selector at phone, tablet and desktop
         run: node comic-studio/tests/style-gallery-browser.cjs
       - name: Verify Handoff navigation hierarchy, routing and mobile sidebar
         run: node comic-studio/tests/handoff-subnav.cjs

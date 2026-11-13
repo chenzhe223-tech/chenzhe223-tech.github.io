@@ -130,15 +130,19 @@ async function wtStoryboardAI(request,env){
  let body=await request.json().catch(()=>null);
  if(!body||typeof body!=='object'||JSON.stringify(body).length>21000)return failure('剧情数据不完整或超过安全大小限制',400);
  const provider=String(body.provider||'native');
- if(!['native','deepseek','openai'].includes(provider))return failure('不支持该模型服务商',400);
+ if(!['native','deepseek','openai','claude','gemini','kimi','qwen'].includes(provider))return failure('不支持该模型服务商',400);
  const title=String(body.title||'').trim().slice(0,220),summary=String(body.summary||'').slice(0,1700);
  if(title.length<2||summary.length<8)return failure('请先补充作品标题与故事背景',400);
  if(provider==='native'&&!env.AI)return failure('当前未接入可用的内置文字模型，请使用本地故事草稿或自行接入API。',503);
  const key=String(body.apiKey||'').trim();
  if(provider!=='native'&&(key.length<12||key.length>320||/[\r\n]/.test(key)))return failure('请填写有效API Key（仅用于本次生成）',400);
- const models={deepseek:['deepseek-chat'],openai:['gpt-4o-mini','gpt-4.1-mini']};
- const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider][0]);
- if(provider!=='native'&&!models[provider].includes(model))return failure('模型名称不在受支持列表中',400);
+ const models={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',
+  gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
+ const modelPatterns={deepseek:/^deepseek-[a-z0-9.-]{1,80}$/i,openai:/^(?:gpt-[a-z0-9.-]{1,80}|o[1-9](?:-[a-z0-9.-]{1,70})?)$/i,
+  claude:/^claude-[a-z0-9.-]{1,80}$/i,gemini:/^gemini-[a-z0-9.-]{1,80}$/i,
+  kimi:/^(?:kimi|moonshot)-[a-z0-9.-]{1,80}$/i,qwen:/^qwen[a-z0-9.-]{1,80}$/i};
+ const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider]).trim();
+ if(provider!=='native'&&!modelPatterns[provider].test(model))return failure('模型名称格式与所选服务商不匹配',400);
  const story={title,summary,category:String(body.category||'').slice(0,100),
   arc:String(body.arc||'反转寓言').slice(0,80),
   thesis:String(body.thesis||'').slice(0,800),
@@ -163,12 +167,27 @@ async function wtStoryboardAI(request,env){
   if(provider==='native'){
    const result=await env.AI.run(model,{messages,max_tokens:3300,temperature:0.65});
    answer=String(result?.response||result?.choices?.[0]?.message?.content||'');
+  }else if(provider==='claude'){
+   const result=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:AbortSignal.timeout(38000),
+    headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({model,system,messages:[{role:'user',content:JSON.stringify(story)}],max_tokens:3800,temperature:0.7})});
+   if(!result.ok)return failure('Claude 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
+   const parsed=await result.json();answer=String((parsed?.content||[]).find(x=>x?.type==='text')?.text||'');
+   actualModel=String(parsed?.model||model).slice(0,100);
+  }else if(provider==='gemini'){
+   const result=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',signal:AbortSignal.timeout(38000),
+    headers:{'content-type':'application/json','x-goog-api-key':key},
+    body:JSON.stringify({systemInstruction:{parts:[{text:system}]},contents:[{role:'user',parts:[{text:JSON.stringify(story)}]}],generationConfig:{temperature:0.7,maxOutputTokens:3800,responseMimeType:'application/json'}})});
+   if(!result.ok)return failure('Gemini 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
+   const parsed=await result.json();answer=String(parsed?.candidates?.[0]?.content?.parts?.map(x=>x?.text||'').join('')||'');
+   actualModel=model;
   }else{
-   const url=provider==='deepseek'?'https://api.deepseek.com/chat/completions':'https://api.openai.com/v1/chat/completions';
-   const result=await fetch(url,{method:'POST',signal:AbortSignal.timeout(38000),
+   const endpoints={deepseek:'https://api.deepseek.com/chat/completions',openai:'https://api.openai.com/v1/chat/completions',
+    kimi:'https://api.moonshot.cn/v1/chat/completions',qwen:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'};
+   const result=await fetch(endpoints[provider],{method:'POST',signal:AbortSignal.timeout(38000),
     headers:{'content-type':'application/json','authorization':'Bearer '+key},
-    body:JSON.stringify({model,messages,temperature:0.7,max_tokens:provider==='deepseek'?3800:3300,response_format:{type:'json_object'}})});
-   if(!result.ok)return failure('外部模型请求失败（HTTP '+result.status+'）。请检查余额、权限或模型名称。',502);
+    body:JSON.stringify({model,messages,temperature:0.7,max_tokens:3800,...(provider==='openai'?{response_format:{type:'json_object'}}:{})})});
+   if(!result.ok)return failure(provider+' 请求失败（HTTP '+result.status+'）。请检查密钥、额度或模型名称。',502);
    const parsed=await result.json();answer=String(parsed?.choices?.[0]?.message?.content||'');
    actualModel=String(parsed?.model||model).slice(0,100);
   }
@@ -189,7 +208,58 @@ async function wtStoryboardAI(request,env){
    {headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
  }catch(err){return failure('模型没有返回符合要求的九格草稿，请重试或使用本地规则建议。',502)}
 }
-async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';if(type!=='characters'&&env.AI_ENABLED!=='true')return failure('生图与编剧模型尚未获批启用；角色设计可使用免费 DeepSeek。',503);if(!env.AI)return failure('AI 免费模型绑定未配置',503);const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');if(type==='characters'&&String(body.concept||'').trim().length<6)return failure('请输入至少六个字的故事背景或人物设定',400);try{await quota(env,'__worldtoon_global__',type,type==='characters'?5:type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure('今日免费生成额度已用完，请明天再试。',429)}
+/* Season-level planning is a draft-only route: creator confirms the whole plan in-browser before any project writes. */
+async function wtSeriesPlanAI(request,env){
+ const auth=await authenticate(request,env);if(!auth)return failure('请先登录后使用 AI 系列规划。',401);
+ const body=await request.json().catch(()=>null);if(!body||typeof body!=='object'||JSON.stringify(body).length>32000)return failure('系列规划参数无效或过大',400);
+ const provider=String(body.provider||'native');if(!['native','deepseek','openai','claude','gemini','kimi','qwen'].includes(provider))return failure('不支持该模型服务商',400);
+ const count=Number(body.episodeCount);if(!Number.isInteger(count)||count<2||count>30)return failure('系列总集数须为 2–30 集',400);
+ const title=String(body.seriesTitle||'').trim().slice(0,120),theme=String(body.theme||'').trim().slice(0,500),audience=String(body.audience||'').trim().slice(0,160),originality=String(body.originalityStatus||'original');
+ if(title.length<2||theme.length<8)return failure('请填写系列名称和主题',400);
+ if(!['original','public_domain','authorized'].includes(originality))return failure('版权状态无效；受保护作品需改写为原创灵感或提供授权',400);
+ const source=body.source&&typeof body.source==='object'?{title:String(body.source.title||'').slice(0,160),url:String(body.source.url||'').slice(0,600),date:String(body.source.date||'').slice(0,40),rightsStatus:originality,authorizationReference:String(body.source.authorizationReference||'').slice(0,220)}:null;
+ if(originality==='authorized'&&!source?.authorizationReference)return failure('授权作品需填写授权凭证说明',400);
+ if(originality==='public_domain'&&!source?.url)return failure('公版作品需提供作品身份核验来源链接',400);
+ if(source?.url&&!/^https:\/\//i.test(source.url))return failure('来源链接须为 HTTPS',400);
+ const cast=Array.isArray(body.cast)?body.cast.slice(0,12).map(c=>({characterId:String(c?.characterId||'').slice(0,120),role:String(c?.role||'').slice(0,80),comicName:String(c?.comicName||c?.name||'').slice(0,80),look:String(c?.look||'').slice(0,320),costume:String(c?.costume||'').slice(0,320),traits:String(c?.traits||'').slice(0,240)})):[];
+ if(!cast.length||cast.some(c=>!c.characterId||!c.comicName||!c.look||!c.costume))return failure('请先选择带有稳定角色身份、外形和固定服饰的角色档案',400);
+ const key=String(body.apiKey||'').trim(),models={deepseek:'deepseek-chat',openai:'gpt-4o-mini',claude:'claude-sonnet-4-20250514',gemini:'gemini-2.5-flash',kimi:'kimi-k2-0905-preview',qwen:'qwen-plus'};
+ if(provider!=='native'&&(key.length<12||key.length>320||/[\r\n]/.test(key)))return failure('请提供本次请求使用的 API Key',400);
+ const patterns={deepseek:/^deepseek-[a-z0-9.-]{1,80}$/i,openai:/^(?:gpt-[a-z0-9.-]{1,80}|o[1-9](?:-[a-z0-9.-]{1,70})?)$/i,claude:/^claude-[a-z0-9.-]{1,80}$/i,gemini:/^gemini-[a-z0-9.-]{1,80}$/i,kimi:/^(?:kimi|moonshot)-[a-z0-9.-]{1,80}$/i,qwen:/^qwen[a-z0-9.-]{1,80}$/i};
+ const model=provider==='native'?'@cf/google/gemma-4-26b-a4b-it':String(body.model||models[provider]).trim();if(provider!=='native'&&!patterns[provider].test(model))return failure('模型名称与服务商不匹配',400);if(provider==='native'&&env.AI_ENABLED!=='true')return failure('内置文字模型尚未开放，请改用自带密钥的模型',503);if(provider==='native'&&!env.AI)return failure('内置文字模型暂不可用，请改用自带密钥的模型',503);
+ try{await quota(env,'__worldtoon_series_global__',provider==='native'?'native':'external',provider==='native'?40:120);await quota(env,auth.id,'series_plan_'+provider,provider==='native'?4:8)}catch{return failure('今日系列规划额度已用完，请明天再试。',429)}
+ const brief={seriesTitle:title,theme,audience,episodeCount:count,originalityStatus:originality,source,cast,existingSeriesBible:body.existingSeriesBible||null};
+ const system='你是 WORLD/TOON 原创系列漫画总策划。请一次规划完整'+count+'集，每集都有独立冲突、推进和结尾钩子，并共同服务全季故事弧。保持提供角色的身份、漫画名、外貌、固定服饰和关系一致。拒绝复制受保护作品人物、对白和独特情节；受版权灵感只抽象主题并另创人物/地点/关系/事件，公版或授权只使用明确许可范围。不要抓取或请求全文。生成完整 JSON：{"arc":"全季故事弧","bible":{"world":"...","styleId":"western-cinematic","wardrobeRules":"...","characters":[{"characterId":"...","role":"...","comicName":"...","look":"...","costume":"...","traits":"..."}]},"episodes":[{"episode":1,"title":"...","summary":"至少30字","beats":["...","...","..."],"castIds":["..."],"wardrobeNotes":"...","location":"..."}]}。集数必须从1连续到'+count+'，每集角色引用必须使用输入角色ID，拒绝Markdown。';
+ let answer='',actualModel=model;
+ try{
+  if(provider==='native'){const out=await env.AI.run(model,{messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(brief)}],max_tokens:Math.min(10000,1200+count*420),temperature:.5});answer=String(out?.response||out?.choices?.[0]?.message?.content||'')}
+  else if(provider==='claude'){const out=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:AbortSignal.timeout(50000),headers:{'content-type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01'},body:JSON.stringify({model,system,messages:[{role:'user',content:JSON.stringify(brief)}],max_tokens:Math.min(12000,1600+count*450)})});if(!out.ok)return failure('Claude 请求失败（HTTP '+out.status+'）',502);const json=await out.json();answer=String((json.content||[]).find(x=>x.type==='text')?.text||'');actualModel=String(json.model||model).slice(0,100)}
+  else if(provider==='gemini'){const out=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',signal:AbortSignal.timeout(50000),headers:{'content-type':'application/json','x-goog-api-key':key},body:JSON.stringify({systemInstruction:{parts:[{text:system}]},contents:[{role:'user',parts:[{text:JSON.stringify(brief)}]}],generationConfig:{temperature:.5,maxOutputTokens:Math.min(12000,1600+count*450),responseMimeType:'application/json'}})});if(!out.ok)return failure('Gemini 请求失败（HTTP '+out.status+'）',502);const json=await out.json();answer=String(json?.candidates?.[0]?.content?.parts?.map(x=>x.text||'').join('')||'')}
+  else{const endpoints={deepseek:'https://api.deepseek.com/chat/completions',openai:'https://api.openai.com/v1/chat/completions',kimi:'https://api.moonshot.cn/v1/chat/completions',qwen:'https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions'};const out=await fetch(endpoints[provider],{method:'POST',signal:AbortSignal.timeout(50000),headers:{'content-type':'application/json','authorization':'Bearer '+key},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify(brief)}],temperature:.5,max_tokens:Math.min(12000,1600+count*450),...(provider==='openai'?{response_format:{type:'json_object'}}:{})})});if(!out.ok)return failure(provider+' 请求失败（HTTP '+out.status+'）',502);const json=await out.json();answer=String(json?.choices?.[0]?.message?.content||'');actualModel=String(json?.model||model).slice(0,100)}
+  const raw=parseJSON(answer),episodes=Array.isArray(raw.episodes)?raw.episodes:[];if(episodes.length!==count)return failure('模型未完整规划全部集数，未创建任何作品；请重试。',502);
+  const ids=new Set(cast.map(x=>x.characterId));const cleanEpisodes=episodes.map((ep,i)=>({episode:i+1,title:String(ep?.title||'').trim().slice(0,120),summary:String(ep?.summary||'').trim().slice(0,1200),beats:Array.isArray(ep?.beats)?ep.beats.slice(0,8).map(x=>String(x).slice(0,180)):[],castIds:Array.isArray(ep?.castIds)?ep.castIds.map(String).filter(id=>ids.has(id)):[],wardrobeNotes:String(ep?.wardrobeNotes||'').slice(0,500),location:String(ep?.location||'').slice(0,240)}));
+  if(cleanEpisodes.some(x=>!x.title||x.summary.length<20||x.beats.length<3||!x.castIds.length||!x.wardrobeNotes||!x.location))return failure('模型返回的逐集内容或连续性信息不完整，未创建作品。',502);
+  return Response.json({seriesTitle:title,theme,audience,episodeCount:count,version:Number(body.version)||1,arc:String(raw.arc||'').slice(0,1800),bible:{...raw.bible,world:String(raw.bible?.world||'').slice(0,1200),styleId:String(raw.bible?.styleId||'western-cinematic').slice(0,100),wardrobeRules:String(raw.bible?.wardrobeRules||'').slice(0,800),characters:cast},episodes:cleanEpisodes,provider,model:actualModel,draft:true,requiresHumanReview:true,rightsCleared:false,source,originalityStatus:originality},{headers:{...RESULT_HEADERS,'cache-control':'no-store'}})
+ }catch{return failure('系列规划模型未返回符合要求的完整草稿；未创建任何作品。',502)}
+}
+async function ai(request,env,url){let user=await authenticate(request,env);if(!user)return failure('请先登录账户以使用 AI 功能',401);let type=url.pathname.endsWith('/script')?'script':url.pathname.endsWith('/characters')?'characters':'image';if(type!=='characters'&&env.AI_ENABLED!=='true')return failure('生图与编剧模型尚未获批启用；角色设计可使用免费 DeepSeek。',503);const limit=type==='script'?3:2;let body=await request.json().catch(()=>null);if(!body||JSON.stringify(body).length>1250000)return failure('参数格式无效或参考图过大',413);if(type==='script'&&(!body.title||!body.sourceURLs||!body.factNotes))return failure('请提供有效来源与事实笔记');if(type==='image'&&!body.scene)return failure('请先填写画面描述');if(type==='characters'&&String(body.concept||'').trim().length<6)return failure('请输入至少六个字的故事背景或人物设定',400);
+if(type==='characters'&&body.provider==='deepseek'){
+ const key=String(body.apiKey||'').trim();if(key.length<12||key.length>320||/[\r\n]/.test(key))return failure('请填写有效 DeepSeek API Key（仅用于本次请求）',400);
+ const model=String(body.model||'deepseek-chat').trim();if(!/^deepseek-[a-z0-9.-]{1,80}$/i.test(model))return failure('模型名称与 DeepSeek 服务商不匹配',400);
+ try{await quota(env,'__worldtoon_global__','characters_deepseek',80);await quota(env,user.id,'characters_deepseek',5)}catch{return failure('今日 DeepSeek 角色生成额度已用完，请明天再试。',429)}
+ try{
+  const count=Math.max(1,Math.min(4,Number(body.count)||2)),title=String(body.title||'原创漫画').slice(0,180),concept=String(body.concept||'').slice(0,2000).trim(),style=['杂志式原创漫画','温暖手绘','黑色幽默','未来科幻'].includes(body.style)?body.style:'杂志式原创漫画';
+  const system='你是 DAVYLAB 原创漫画角色总监。围绕虚构故事创作不同且可持续的角色，禁止公众人物或真实人物肖像/丑闻。请精确生成指定数量角色，每个角色明确 role（female_lead、male_lead、supporting 或 uncertain），name、type、description、costume、colors、traits、personality。主角须明确标注性别主角类型；不能判断时用 uncertain。输出 JSON：{"characters":[{"role":"female_lead","name":"...","type":"虚构角色","description":"...","costume":"...","colors":"...","traits":"...","personality":"..."}]}，不要Markdown。';
+  const upstream=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',signal:AbortSignal.timeout(38000),headers:{'content-type':'application/json','authorization':'Bearer '+key},body:JSON.stringify({model,messages:[{role:'system',content:system},{role:'user',content:JSON.stringify({title,concept,style,count,fictional:true})}],temperature:.55,max_tokens:2400,response_format:{type:'json_object'}})});
+  if(!upstream.ok)return failure('DeepSeek 请求失败（HTTP '+upstream.status+'）。请检查密钥、额度或模型名称。',502);
+  const payload=await upstream.json(),raw=payload?.choices?.[0]?.message?.content||'',parsed=parseJSON(raw),names=new Set();
+  const chars=(Array.isArray(parsed.characters)?parsed.characters:[]).slice(0,count).map(c=>({role:['female_lead','male_lead','supporting','uncertain'].includes(c?.role)?c.role:'uncertain',name:String(c?.name||'').trim().slice(0,80),type:['虚构角色','拟人化角色','抽象象征'].includes(c?.type)?c.type:'虚构角色',description:String(c?.description||'').slice(0,1700),costume:String(c?.costume||'').slice(0,400),colors:String(c?.colors||'').slice(0,220),traits:String(c?.traits||'').slice(0,950),personality:String(c?.personality||'').slice(0,1100)})).filter(c=>{if(!c.name||names.has(c.name)||!c.description||!c.traits)return false;names.add(c.name);return true});
+  if(!chars.length)return failure('DeepSeek 未返回有效角色档案，请调整设定后重试。',502);
+  return Response.json({characters:chars,model:String(payload?.model||body.model||'deepseek-chat').slice(0,100),provider:'deepseek',draft:true,requiresHumanReview:true,freeTier:false},{headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
+ }catch{return failure('DeepSeek 未返回符合要求的角色草稿，请检查服务状态后重试。',502)}
+}
+if(!env.AI)return failure('AI 免费模型绑定未配置',503);
+try{await quota(env,'__worldtoon_global__',type,type==='characters'?5:type==='image'?24:12);await quota(env,user.id,type,limit)}catch(err){return failure('今日免费生成额度已用完，请明天再试。',429)}
 try{
  if(type==='characters'){
   const count=Math.max(1,Math.min(4,Number(body.count)||2));
@@ -197,7 +267,7 @@ try{
   const title=String(body.title||'原创漫画').slice(0,180);
   if(concept.length<6)return failure('请输入至少六个字的故事背景或人物设定',400);
   const style=['杂志式原创漫画','温暖手绘','黑色幽默','未来科幻'].includes(body.style)?body.style:'杂志式原创漫画';
-  const sys='你是 DAVYLAB 世界级原创漫画角色总监。围绕同一虚构故事，生成有辨识度、彼此差异明显、九格漫画中稳定一致的角色设计。角色全部原创，不使用现实公众人物或可识别的真实人物身份，不捏造真实人物的违法、私生活或其他事实指控。每个角色必须包含：中文姓名、类型、外貌与发型及五官轮廓、材质和服装、可复用的2-3个HEX主辅色或明确色名、至少3个跨画格不变的识别特征、性格和戏剧冲突功能。精确生成指定数量，避免重复角色和空洞套话。输出 JSON 对象（禁止 Markdown 或解释）：{"characters":[{"name":"角色名","type":"虚构角色","description":"外形与年龄段、发型五官","costume":"固定服饰","colors":"配色","traits":"稳定特征","personality":"动机性格"}]}。';
+  const sys='你是 DAVYLAB 世界级原创漫画角色总监。围绕同一虚构故事，生成有辨识度、彼此差异明显、九格漫画中稳定一致的角色设计。角色全部原创，不使用现实公众人物或可识别的真实人物身份，不捏造真实人物的违法、私生活或其他事实指控。每个角色必须包含：role（female_lead、male_lead、supporting 或 uncertain）、中文姓名、类型、外貌与发型及五官轮廓、材质和服装、可复用的2-3个HEX主辅色或明确色名、至少3个跨画格不变的识别特征、性格和戏剧冲突功能。精确生成指定数量，避免重复角色和空洞套话。输出 JSON 对象（禁止 Markdown 或解释）：{"characters":[{"role":"female_lead","name":"角色名","type":"虚构角色","description":"外形与年龄段、发型五官","costume":"固定服饰","colors":"配色","traits":"稳定特征","personality":"动机性格"}]}。';
   const msg=JSON.stringify({title,concept,style,count,fictional:true});
   const useDeepSeek=Date.now()<Date.parse('2026-11-20T00:00:00Z');
   let model='',response=null,fallbackReason='';
@@ -223,6 +293,7 @@ try{
   if(!Array.isArray(parsed.characters)||parsed.characters.length<1)return failure('模型没有返回有效角色档案',502);
   const names=new Set();
   const chars=parsed.characters.slice(0,count).map(c=>({
+    role:['female_lead','male_lead','supporting','uncertain'].includes(c?.role)?c.role:'uncertain',
     name:String(c?.name||'').trim().slice(0,80),
     type:['虚构角色','拟人化角色','抽象象征'].includes(c?.type)?c.type:'虚构角色',
     description:String(c?.description||'').slice(0,1700),
@@ -996,7 +1067,7 @@ async function wtStoryBooks(q){
    rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
    beats:[],published:v.publishedDate||'',verified_on:new Date().toISOString().slice(0,10),
    identity_status:'book_title_match',verification_status:'metadata_only'};
- }).filter(x=>x&&wtBookMatches(x.title,q));
+ }).filter(x=>x&&wtStoryTitleMatches(x.title,q));
 }
 async function wtStoryPublicBooks(q){
  const u='https://gutendex.com/books/?search='+encodeURIComponent(q);
@@ -1011,7 +1082,7 @@ async function wtStoryPublicBooks(q){
   rights:'public_domain_us',rights_note:'仅为美国公版目录候选，需另行核对实际使用地区及具体版本的权利。',
   beats:[],verified_on:new Date().toISOString().slice(0,10),
   identity_status:'book_title_match',verification_status:'catalog_metadata_only'
- })).filter(x=>wtBookMatches(x.title,q));
+ })).filter(x=>wtStoryTitleMatches(x.title,q));
 }
 async function wtStoryDramaSearch(q){
  // Search live Google News RSS for independently attributable title leads.
@@ -1034,34 +1105,6 @@ async function wtStoryDramaSearch(q){
    identity_status:'title_mentioned_in_source',verification_status:'source_lead_unverified'
  })).filter(x=>x.source&&x.title);
 }
-
-const WT_BOOK_ALIASES=[["简爱","Jane Eyre"],["悲惨世界","Les Miserables"],["战争与和平","War and Peace"],["傲慢与偏见","Pride and Prejudice"],["呼啸山庄","Wuthering Heights"],["基督山伯爵","The Count of Monte Cristo"],["双城记","A Tale of Two Cities"],["远大前程","Great Expectations"],["雾都孤儿","Oliver Twist"],["红与黑","The Red and the Black"],["包法利夫人","Madame Bovary"],["安娜卡列尼娜","Anna Karenina"],["罪与罚","Crime and Punishment"],["卡拉马佐夫兄弟","The Brothers Karamazov"],["堂吉诃德","Don Quixote"],["百年孤独","One Hundred Years of Solitude"],["霍乱时期的爱情","Love in the Time of Cholera"],["老人与海","The Old Man and the Sea"],["了不起的盖茨比","The Great Gatsby"],["杀死一只知更鸟","To Kill a Mockingbird"],["一九八四","1984"],["动物农场","Animal Farm"],["美丽新世界","Brave New World"],["局外人","The Stranger"],["变形记","The Metamorphosis"],["小王子","The Little Prince"],["鲁滨逊漂流记","Robinson Crusoe"],["爱丽丝梦游仙境","Alice's Adventures in Wonderland"],["海底两万里","Twenty Thousand Leagues Under the Seas"],["巴黎圣母院","The Hunchback of Notre Dame"],["红楼梦","Dream of the Red Chamber"],["西游记","Journey to the West"],["三国演义","Romance of the Three Kingdoms"],["水浒传","Water Margin"],["雪国","Snow Country"],["挪威的森林","Norwegian Wood"],["人间失格","No Longer Human"],["源氏物语","The Tale of Genji"],["追忆似水年华","In Search of Lost Time"],["尤利西斯","Ulysses"],["神曲","Divine Comedy"],["伊利亚特","The Iliad"],["奥德赛","The Odyssey"],["哈姆雷特","Hamlet"],["麦克白","Macbeth"],["罗密欧与朱丽叶","Romeo and Juliet"]];
-function wtBookTerms(q){
- const k=wtStoryKey(q),pair=WT_BOOK_ALIASES.find(a=>a.some(t=>wtStoryKey(t)===k));
- return pair?[q,...pair.filter(t=>wtStoryKey(t)!==k)]:[q];
-}
-function wtBookMatches(title,q){
- const fold=v=>wtStoryKey(v).normalize('NFD').replace(/[\u0300-\u036f]/g,'');
- const k=fold(title);
- return wtBookTerms(q).some(t=>{const v=fold(t);return v.length>1&&(k.includes(v)||(k.length>5&&v.includes(k)))});
-}
-async function wtOpenLibrary(q){
- const u='https://openlibrary.org/search.json?'+new URLSearchParams({title:q,limit:'15',fields:'key,title,author_name,first_publish_year,cover_i'});
- const r=await fetch(u,{signal:AbortSignal.timeout(9000)});
- if(!r.ok)throw Error('Open Library '+r.status);
- const j=await r.json();
- return (j.docs||[]).filter(v=>v.key&&v.title&&wtBookMatches(v.title,q)).slice(0,10).map(v=>({
-  id:'openlibrary-'+String(v.key).replace(/[^a-zA-Z0-9]/g,'-'),title:wtStoryClean(v.title).slice(0,150),
-  type:'classic',author:wtStoryClean((v.author_name||[]).slice(0,3).join('、')).slice(0,180),
-  source:'https://openlibrary.org'+v.key,source_name:'Open Library · 全球书目',
-  source_kind:'book_metadata',cover:v.cover_i?'https://covers.openlibrary.org/b/id/'+v.cover_i+'-M.jpg':'',
-  summary:'全球文学书目记录；请核对原作及版权后选择漫画改编剧情。',
-  published:v.first_publish_year?String(v.first_publish_year):'',
-  rights:'unknown',rights_note:'书目可检索不代表作品、译本或封面已获商业改编授权。',
-  beats:[],verified_on:new Date().toISOString().slice(0,10),
-  identity_status:'cross_language_title_match',verification_status:'catalog_metadata_only'
- }));
-}
 async function wtStorySearch(request,env,url){
  const type=url.searchParams.get('type')||'all',q=String(url.searchParams.get('q')||'').trim().slice(0,90);
  if(!WT_STORY_SEARCH_ALLOWED.includes(type))return failure('未知剧情搜索类型',400);
@@ -1078,12 +1121,8 @@ async function wtStorySearch(request,env,url){
  }catch(e){notes.push('精选索引不可用：'+String(e.message||e).slice(0,85))}
  const jobs=[];
  if(q&&type!=='drama'){
-  const terms=[...new Set(wtBookTerms(q))].slice(0,2);
-  for(const term of terms){
-   jobs.push({name:'Google Books '+term,fn:()=>wtStoryBooks(term)});
-   jobs.push({name:'Open Library '+term,fn:()=>wtOpenLibrary(term)});
-   jobs.push({name:'Gutendex '+term,fn:()=>wtStoryPublicBooks(term)});
-  }
+  jobs.push({name:'Google Books',fn:()=>wtStoryBooks(q)});
+  jobs.push({name:'Gutendex',fn:()=>wtStoryPublicBooks(q)});
  }
  if(type!=='novel'&&q)jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
  const results=await Promise.allSettled(jobs.map(x=>x.fn()));
@@ -1107,7 +1146,7 @@ async function wtStorySearch(request,env,url){
   searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
   model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
 }
-export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.3.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true},at:new Date().toISOString()},{headers:RESULT_HEADERS});
+export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.6.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true,seriesPlanning:true,storyboardProviders:['native','deepseek','openai','claude','gemini','kimi','qwen']},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,storyboardAiEnabled:!!env.AI,storyboardAiRequiresLogin:true,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
  if((url.pathname==='/api/ai-briefing'||url.pathname==='/api/ai-briefing/history')&&request.method==='GET')return aiBriefing(url);
@@ -1117,7 +1156,8 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/comic/story-search'&&request.method==='GET')return wtStorySearch(request,env,url);
  if(url.pathname==='/api/news'&&request.method==='GET')return news(url);
  if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
+ if(url.pathname==='/api/ai/series-plan'){if(request.method!=='POST')return failure('Method not allowed',405);return wtSeriesPlanAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
- try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.3.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|discovery-flow\.js|series-planner\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
+ try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.6.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
