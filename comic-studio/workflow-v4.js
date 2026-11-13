@@ -47,8 +47,11 @@
    const uploaded=Array.isArray(h.stagedFiles)&&h.stagedFiles.length>=panels.length+1&&
       h.stagedFiles.length===(h.stageUploaded||[]).length;
    const qa=!!row&&['ready_for_workbuddy','publishing','published'].includes(row.status);
+   // Local upload flags are not proof that GitHub received usable artwork.
+   // Only a repository-derived catalog state may advance the formal generation gate.
+   const remoteUploaded=!!row&&['draft_uploaded','ready_for_workbuddy','publishing','published'].includes(row.status);
    const published=verifiedPublished(row);
-   const completed=[story,cast,board,style,qa||uploaded,qa,published];
+   const completed=[story,cast,board,style,remoteUploaded,qa,published];
    const missing=completed.indexOf(false);
    const next=missing===-1?6:missing;
    const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
@@ -57,7 +60,8 @@
    const statusText=published?'已核验发表回执，作品可归档':
      qa?'GitHub 成品已验收；正式发表仍需独立授权和回执':
      row?.status==='blocked'?'GitHub QA 未通过，请按具体问题修复':
-     uploaded?'远程文件已上传，待独立质量验收':
+     remoteUploaded?'GitHub 已识别远端成品，待独立质量验收':
+     uploaded?'本机记录了上传尝试，尚未取得 GitHub 核验结果':
      h.repoQueuedAt?'已派单；正式生图与成品仍需核验':
      !story?'完善故事方案与原创性说明':
      !cast?'选择或确认角色，锁定作品专用角色版本':
