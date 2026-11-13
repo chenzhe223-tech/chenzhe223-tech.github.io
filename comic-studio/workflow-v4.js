@@ -136,11 +136,7 @@
    const chosen=explicit||(ui.wt4LastId?findProject(ui.wt4LastId):null)||candidates[0]||selected();
    const p=chosen?.id==='sample-ba-zong-001'?null:chosen;
    if(p){ui.wt4LastId=p.id;ui.selected=p.id;} // UI context only; never rewrite the stored project.
-   if(!p||p.id==='sample-ba-zong-001')return '<section class="wt4-workspace wt4-empty">'+
-      '<div class="kicker">WORLD/TOON / NEW PROJECT</div><h1>开始一部好漫画</h1>'+
-      '<p>从一句话、热门选题或已有系列进入。创建后在同一工作空间完成整个生产流程。</p>'+
-      '<div class="buttons"><button class="button dark" data-action="new">＋ 创建作品</button>'+
-      '<a class="button" href="#/live">从素材发现选题</a><a class="button" href="#/library">查看已有作品</a></div></section>';
+   if(!p||p.id==='sample-ba-zong-001')return creationEntries();
    const s=state(p),i=Number.isInteger(ui.wt4Step)&&ui.wt4Step>=0&&ui.wt4Step<7?ui.wt4Step:s.next;
    const done=s.completed.filter(Boolean).length;
    const options=activeProjects().filter(x=>x.id!=='sample-ba-zong-001')
@@ -171,6 +167,14 @@
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
      '<footer class="wt4-footer">自动保存本地草稿；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
  }
+ function creationEntries(){
+   return '<section class="wt4-create" aria-label="选择创作方式"><div class="wt4-create-head"><div class="kicker">START / WORLD TOON</div><h1>你想如何开始漫画创作？</h1><p>三种入口，一个项目，七步完成漫画创作。</p></div>'+
+   '<div class="wt4-create-grid">'+
+   '<article class="wt4-entry"><span>01 / DISCOVERY</span><h2>热点改编</h2><p>从全球热点、AI 前沿简报及选题池直接选择素材。</p><div class="wt4-entry-links"><a class="button dark" href="#/live">全球热点</a><a class="button" href="#/ai-briefing">AI 简报</a><a class="button" href="#/radar">选题池</a></div></article>'+
+   '<article class="wt4-entry"><span>02 / ONE LINE</span><h2>一句话创作</h2><p>输入灵感，随后由现有 AI 编剧扩写；模型调用需先确认费用。</p><form id="wt4-idea-form"><label for="wt4-idea">一句话灵感</label><textarea id="wt4-idea" name="idea" required minlength="8" maxlength="1800" rows="3" placeholder="例如：一枚芯片试图通过五个国家的海关"></textarea><button class="button dark" type="submit">创建故事方案</button></form></article>'+
+   '<article class="wt4-entry"><span>03 / ORIGINAL</span><h2>自主创作</h2><p>由你决定漫画名称、主题和剧情，AI 只提供辅助。</p><form id="wt4-original-form"><label for="wt4-title">漫画名称</label><input id="wt4-title" name="title" required maxlength="120" placeholder="输入作品名称"><label for="wt4-theme">主题与剧情</label><textarea id="wt4-theme" name="theme" maxlength="1800" rows="2" placeholder="故事设定、人物关系与主要冲突"></textarea><button class="button dark" type="submit">创建原创项目</button></form></article>'+
+   '</div></section>';
+ }
  function overview(){
    const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001')
      .sort((a,b)=>String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));
@@ -181,7 +185,7 @@
      return '<a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
        '<div><strong>'+html(p.title)+'</strong><small>'+html(s.agent)+' · '+html(s.label)+'</small></div>'+
        '<span>'+html(stageNames[s.next])+' →</span></a>';}).join('');
-   return '<section class="wt4-home"><div class="wt4-home-head"><div><div class="kicker">YOUR PRODUCTION</div>'+
+   return creationEntries()+'<section class="wt4-home"><div class="wt4-home-head"><div><div class="kicker">YOUR PRODUCTION</div>'+
      '<h2>继续制作</h2><p>所有作品都有一个当前位置和下一步，不必逐个寻找功能模块。</p></div>'+
      '<a class="button dark" href="#/workspace">进入作品工作空间 →</a></div>'+
      (cards?'<div class="wt4-home-list">'+cards+'</div>':
@@ -197,7 +201,7 @@
  }
  window.wt4Production=production;
  const originalDashboard=dashboard;
- dashboard=function(){return overview()+originalDashboard()};
+ dashboard=function(){return overview()+'<details class="wt4-legacy"><summary>历史工作台与高级入口</summary>'+originalDashboard()+'</details>'};
  document.addEventListener('click',ev=>{
    const b=ev.target.closest('[data-wt4-step]');if(!b)return;
    ev.preventDefault();ev.stopImmediatePropagation();
@@ -210,7 +214,25 @@
    const id=ev.target.value;if(!findProject(id))return;
    ui.selected=id;nav('workspace/'+id); // No project data mutation.
  },true);
+ document.addEventListener('submit',ev=>{
+   if(!['wt4-idea-form','wt4-original-form'].includes(ev.target?.id))return;
+   ev.preventDefault();
+   const f=ev.target,original=f.id==='wt4-original-form';
+   const idea=String(f.elements?.idea?.value||'').trim();
+   const title=String(f.elements?.title?.value||'').trim();
+   const theme=String(f.elements?.theme?.value||'').trim();
+   if(original&&!title){notify('请输入漫画名称');return;}
+   if(!original&&(idea.length<8||idea.length>1800)){notify('一句话创意需要 8–1800 字');return;}
+   newProject();
+   const p=selected();if(!p)return;
+   p.creationPath=original?'original':'one_line';
+   p.title=original?title:'灵感 · '+idea.slice(0,40);
+   if(original){p.description=theme;p.fiction='原创虚构';}
+   else{p.ideaSeed=idea;p.fiction='原创虚构';}
+   setChange(p,'从创作入口建立草稿：'+p.creationPath);
+   nav('workspace/'+p.id+'/0');
+ },true);
  window.wt4Workspace=workspace;
- window.WT4Workflow={stageNames,state,verifiedPublished,remote};
+ window.WT4Workflow={stageNames,state,verifiedPublished,remote,creationEntries};
  if(location.hash.startsWith('#/workspace')||location.hash.startsWith('#/production'))queueMicrotask(()=>parseRoute());
 })();
