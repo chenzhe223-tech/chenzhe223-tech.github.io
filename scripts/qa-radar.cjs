@@ -33,6 +33,9 @@ function check(ok, name, detail = '') {
         && mobileEditorialLayout.top5?.top >= mobileEditorialLayout.lead?.bottom
         && mobileEditorialLayout.core?.top > mobileEditorialLayout.top5?.top),
         viewport.name + ': mobile first screen follows the approved compact hero → lead → Top 5 hierarchy', JSON.stringify(mobileEditorialLayout));
+      const leadBounds = await page.locator('#leadStory h2').boundingBox();
+      check(leadBounds && leadBounds.width > 100 && leadBounds.height > 10,
+        viewport.name + ': lead headline has visible text at this breakpoint', JSON.stringify(leadBounds));
       const navigationAudit = await page.evaluate(() => ({
         desktop: [...document.querySelectorAll('.primary-nav a')].map(link => ({ label: link.innerText.trim(), href: link.getAttribute('href') })),
         mobile: [...document.querySelectorAll('.mobile-dock a')].map(link => ({ label: link.querySelector('b')?.innerText.trim() || '', href: link.getAttribute('href') })),
@@ -498,7 +501,7 @@ function check(ok, name, detail = '') {
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
       const bodyColor = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
       check(bodyColor !== 'rgba(0, 0, 0, 0)', viewport.name + ': page has computed background', bodyColor);
-      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': language switch works');
@@ -514,7 +517,8 @@ function check(ok, name, detail = '') {
         check(new URL(page.url()).pathname.includes('/radar/read/'), viewport.name + ': story opens in the deep reader', page.url());
         await page.goBack({ waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForSelector('#reportDate', { timeout: 10000 });
-        check(new URL(page.url()).pathname.endsWith('/radar/daily/') && (await page.locator('#reportDate').innerText()).includes('2026-11-12'), viewport.name + ': browser back restores the briefing', page.url());
+        await page.waitForFunction(date => document.querySelector('#reportDate')?.textContent.includes(date), currentReportDate);
+        check(new URL(page.url()).pathname.endsWith('/radar/daily/') && (await page.locator('#reportDate').innerText()).includes(currentReportDate), viewport.name + ': browser back restores the briefing', page.url());
       }
       await page.close();
     }
@@ -599,7 +603,7 @@ function check(ok, name, detail = '') {
       }
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
-      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
@@ -710,7 +714,7 @@ function check(ok, name, detail = '') {
       await page.getByRole('button', { name: '中文' }).click();
       const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
-      if (viewport.mobile) await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       const returnLink = page.locator('.rail-links a[href^="../daily/"]');
       const [returnResponse] = await Promise.all([

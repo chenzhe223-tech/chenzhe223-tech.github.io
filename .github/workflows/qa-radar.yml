@@ -5,6 +5,8 @@ on:
     branches: [main]
     paths:
       - "radar/daily/**"
+      - "radar/read/**"
+      - "radar/assets/**"
       - "radar/data/**"
       - "radar/scripts/**"
       - "scripts/qa-radar.cjs"
