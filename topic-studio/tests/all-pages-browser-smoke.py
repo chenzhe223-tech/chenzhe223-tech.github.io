@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 from pathlib import Path
 from datetime import datetime, timezone
 from playwright.sync_api import sync_playwright
@@ -171,7 +172,11 @@ def main():
             "results":[]}
     try:
         with sync_playwright() as browser_api:
-            browser=browser_api.chromium.launch(headless=True,args=["--no-sandbox","--disable-dev-shm-usage"])
+            launcher={"headless":True,"args":["--no-sandbox","--disable-dev-shm-usage"]}
+            system_chrome=shutil.which("google-chrome") or shutil.which("chromium") or shutil.which("chromium-browser")
+            if system_chrome:
+                launcher["executable_path"]=system_chrome
+            browser=browser_api.chromium.launch(**launcher)
             try:
                 for name,w,h in VIEWPORTS:
                     page=browser.new_page(viewport={"width":w,"height":h},device_scale_factor=1)
