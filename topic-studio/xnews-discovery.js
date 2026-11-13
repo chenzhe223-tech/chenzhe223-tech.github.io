@@ -151,7 +151,7 @@ function render(){
  '<a href="'+html(a.xnews_url)+'" target="_blank" rel="noopener noreferrer">中文阅读</a>'+
  '<a href="'+html(a.original_url)+'" target="_blank" rel="noopener noreferrer">原文</a>'+
  '<button type="button" data-x-prompt="'+html(a.id)+'">创作指令</button>'+
- '<button type="button" class="xnews-add" data-x-add="'+html(a.id)+'"'+(inPool(a)?" disabled":"")+'>'+(inPool(a)?"已入池":"加入文章选题")+'</button>'+
+ '<button type="button" class="xnews-add" '+(inPool(a)?'data-x-view="'+html(a.id)+'"':'data-x-add="'+html(a.id)+'"')+'>'+(inPool(a)?"查看选题":"加入文章选题")+'</button>'+
  '<button type="button" data-x-poster="'+html(a.id)+'"'+(inPool(a)?" disabled":"")+'>转贴图选题</button></div></div></article>').join("");
  more.hidden=items.length<=state.visible;
  more.textContent="查看剩余 "+Math.max(0,items.length-state.visible)+" 条";
@@ -182,12 +182,13 @@ async function load(noCache=false){
 }
 root.addEventListener("click",e=>{
  const btn=e.target.closest("button");if(!btn)return;
- const action=btn.dataset.xPoster?"poster":btn.dataset.xAdd?"add":btn.dataset.xPrompt?"prompt":null;
+ const action=btn.dataset.xView?"view":btn.dataset.xPoster?"poster":btn.dataset.xAdd?"add":btn.dataset.xPrompt?"prompt":null;
  if(!action)return;
- const id=btn.dataset.xPoster||btn.dataset.xAdd||btn.dataset.xPrompt,a=state.all.find(x=>x.id===id);if(!a)return;
+ const id=btn.dataset.xView||btn.dataset.xPoster||btn.dataset.xAdd||btn.dataset.xPrompt,a=state.all.find(x=>x.id===id);if(!a)return;
  const entry=toFeed(a);
- if(action==="poster"){entry.requestedFormat="贴图";addFeed(entry);render();return}
- if(action==="add"){addFeed(entry);render();return}
+ if(action==="view"){window.DAVYLABTopicPool?.reveal?.(a.original_url);return}
+ if(action==="poster"){entry.requestedFormat="贴图";addFeed(entry);render();window.DAVYLABTopicPool?.reveal?.(a.original_url);return}
+ if(action==="add"){addFeed(entry);render();window.DAVYLABTopicPool?.reveal?.(a.original_url);return}
  showPrompt(entry);changeSection("library");$x("promptBox")?.scrollIntoView({behavior:"smooth",block:"center"});
  if(typeof toast==="function")toast("已生成创作指令；请核验原文");
 });
