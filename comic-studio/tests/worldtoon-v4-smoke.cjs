@@ -126,6 +126,11 @@ assert.match(app,/case 'zip-formal':await exportFormalPackage\(findProject\(id\)
 assert.match(app,/ready_for_qa:false,author_approved:false/,'local export never bypasses independent QA or approval');
 assert.match(app,/await crypto\.subtle\.digest\('SHA-256',raw\)/,'ZIP source proof uses real SHA256');
 assert.match(read('workflow-v4.js'),/data-action="zip-formal"/,'stage seven exposes complete ZIP export');
+
+assert.match(engine,/wt4-story-compact/,'V4 uses a dedicated simplified AI-story panel');
+assert.match(engine,/if\(window.WT4_STORY_PANEL_ONLY===true\)/,'compact story panel is only activated inside V4 stage');
+assert.match(engine,/AI STORY DEVELOPMENT/,'compact writing stage labels real model honestly');
+
 const aiDraft={id:'ai-need-approval',title:'等待人物确认',description:'AI 创作中的虚构角色',
  panels:Array.from({length:9},()=>({scene:''})),handoff:{},
  characterRefs:[{characterId:'ai-char-draft',role:'female_lead',comicName:'阿夏',pending_author_review:true}]};
