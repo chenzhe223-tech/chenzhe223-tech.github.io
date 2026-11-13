@@ -223,6 +223,7 @@
    '<button type="button" class="button" data-wt3-action="series-next" '+(!p.seriesId?'disabled':'')+'>接续创作下一章</button></div></div>'+
    (typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'')+'</section>';
   const needle='<div class="editor-header"';
+  if(window.WT4_STORY_PANEL_ONLY===true)return setting;
   return base.includes(needle)?base.replace(needle,setting+'<div class="editor-header"'):setting+base;
  };
  const originalHandoff=wtWorkflow;
