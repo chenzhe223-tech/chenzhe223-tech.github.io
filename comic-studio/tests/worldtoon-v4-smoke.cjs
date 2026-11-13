@@ -46,7 +46,7 @@ const ctx={
   data:{projects:[p,p2],topics:[],characters:[]},dashboard:()=>'<main id="legacy-home">Existing dashboard</main>',
   selected:()=>current,activeProjects:()=>[p,p2],findProject:id=>[p,p2].find(x=>x.id===id)||null,
   e:v=>String(v??'').replace(/[&<>"']/g,''),wtArchiveSnapshot:{library:{items:[]}},
-  wtDirector:{approved:()=>approved},studioStage:()=>'<section id="source-stage">Source editor</section>',
+  wtDirector:{approved:()=>approved,ensure:p=>(p.creativeDirection ||= {version:1,cast:[]})},studioStage:()=>'<section id="source-stage">Source editor</section>',
   studio:()=>'<section id="ai-stage">DeepSeek editor</section>',
   wtCreativeDirector:()=>'<section id="director-stage">Story bible editor</section>',
   wtWorkflow:()=>'<section id="production-stage">Agent handoff editor</section>',
@@ -54,7 +54,7 @@ const ctx={
   nav:route=>{navResult=route;},render(){},setChange:(p,desc)=>{p.updatedAt='2026-11-13T09:00:00Z'},notify:()=>{},newProject:()=>{current={id:'new-p',title:'未命名新作',panels:Array.from({length:9},()=>({scene:''})),handoff:{}};ctx.data.projects.unshift(current)},
 };
 vm.runInNewContext(read('workflow-v4.js'),ctx,{filename:'workflow-v4.js'});
-const {state,verifiedPublished,stageNames,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry}=ctx.window.WT4Workflow;
+const {state,verifiedPublished,stageNames,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft,syncCharacterBible}=ctx.window.WT4Workflow;
 assert.deepEqual(Array.from(stageNames),['故事方案','角色设定','剧情分镜','视觉风格','正式生成','审阅精修','导出发布']);
 assert.equal(state(p).next,0,'empty work starts at story');
 p.title='海底城市';
@@ -124,6 +124,28 @@ assert.match(app,/case 'zip-formal':await exportFormalPackage\(findProject\(id\)
 assert.match(app,/ready_for_qa:false,author_approved:false/,'local export never bypasses independent QA or approval');
 assert.match(app,/await crypto\.subtle\.digest\('SHA-256',raw\)/,'ZIP source proof uses real SHA256');
 assert.match(read('workflow-v4.js'),/data-action="zip-formal"/,'stage seven exposes complete ZIP export');
+const aiDraft={id:'ai-need-approval',title:'等待人物确认',description:'AI 创作中的虚构角色',
+ panels:Array.from({length:9},()=>({scene:''})),handoff:{},
+ characterRefs:[{characterId:'ai-char-draft',role:'female_lead',comicName:'阿夏',pending_author_review:true}]};
+ctx.data.projects.push(aiDraft);
+ctx.data.characters.push({id:'ai-char-draft',characterId:'ai-char-draft',originProjectId:'ai-need-approval',
+ origin:'ai-draft',reviewStatus:'pending_author_confirmation',version:1,name:'阿夏',originalName:'阿夏',
+ description:'短棕发、绿色眼睛和左眉星点',costume:'深蓝色制服和银色背包',traits:'黄色怀表',personality:'积极但谨慎'});
+assert.equal(state(aiDraft).next,1,'unapproved AI character is never considered production-ready');
+assert.match(characterStage(aiDraft),/确认人物设定并建档/,'proposed role must show explicit author confirmation');
+assert.equal(confirmAIDraft(aiDraft,'not-existing'),false,'unknown role cannot be signed');
+assert.equal(confirmAIDraft(aiDraft,'ai-char-draft'),true,'author confirms AI role');
+assert.equal(aiDraft.characterRefs[0].pending_author_review,false);
+assert.equal(aiDraft.characterRefs[0].snapshot.characterId,'ai-char-draft');
+assert.equal(ctx.data.characters.at(-1).origin,'author_confirmed_ai');
+assert.equal(state(aiDraft).next,2,'role confirmation unlocks storyboard only');
+assert.equal(syncCharacterBible(aiDraft),true,'author explicitly synchronizes fixed character to director');
+assert.equal(aiDraft.creativeDirection.cast[0].name,'阿夏');
+assert.equal(aiDraft.creativeDirection.cast[0].characterId,'ai-char-draft');
+assert.equal(aiDraft.creativeDirection.approval,null,'role synchronization never fabricates creative approval');
+aiDraft.handoff.repoQueuedAt='2026-11-13T00:00:00Z';
+assert.equal(syncCharacterBible(aiDraft),false,'queued tasks cannot silently mutate cast');
+
 assert.doesNotMatch(read('workflow-v4.js'),/AI 已生成所有图片/,'no fake AI success');
 assert.match(read('workflow-v4.js'),/确认本次 AI 扩写|调用已配置的真实模型/,'paid inference requires explicit action');
 
