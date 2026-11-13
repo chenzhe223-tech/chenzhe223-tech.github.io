@@ -36,6 +36,18 @@ const director=ctx.window.wtDirector;
 const click=dataset=>handlers.click.forEach(fn=>fn({target:{closest:()=>({dataset})},preventDefault(){},stopImmediatePropagation(){}}));
 const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagation(){},preventDefault(){}}));
 (async()=>{
+ const pinnedProject=makeProject('asset-test');
+ pinnedProject.characterRefs=[{characterId:'asset-9',version:4,comicName:'航海家',
+   snapshot:{originalName:'黎舟',description:'黑色短发与银框眼镜',costume:'深绿色长袍',traits:'怀表',personality:'谨慎',gender:'非二元',age:'成年',profession:'史学家'}}];
+ pinnedProject.characterOverrides={'asset-9':{look:'银色发夹',costume:'白色内衬'}};
+ const firstBible=director.payload(pinnedProject).character_bible;
+ assert.equal(firstBible.length,1,'director exports locked role bible into formal production');
+ assert.equal(firstBible[0].character_id,'asset-9');
+ assert.equal(firstBible[0].version,4);
+ assert.equal(firstBible[0].appearance,'黑色短发与银框眼镜');
+ assert.equal(firstBible[0].look_override,'银色发夹');
+ assert.equal(firstBible[0].gender,'非二元','custom gender preserved in production payload');
+ assert.equal(director.payload(makeProject('legacy')).character_bible,undefined,'legacy director payload remains unchanged');
  assert.equal(director.localStoryboard(current).length,9);
  const local=director.localStoryboard(current);
  assert.ok(local.every(x=>x.scene.length>=80&&!x.scene.includes('围绕「')));
