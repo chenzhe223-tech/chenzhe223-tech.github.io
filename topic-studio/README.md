@@ -128,3 +128,15 @@
 - 原功能：保留 opportunityList、opportunityLens、xnewsList、xnewsSearch、feedList、ideaInput、topicList 等所有原 ID；不修改数据格式、XNews 内容版权边界、选题审核状态或公众号发表权限。
 - 文件：topic-studio/discover-layout-v3.css、topic-studio/discover-layout-v3.js、topic-studio/index.html；视图无外部付费依赖。GitHub Actions 中的 topic-studio/tests/discover-layout.test.cjs 检查 HTML 结构、唯一 ID、分区顺序、响应式规则与导航打开工具箱。
 - 实际验证范围：GitHub 结构检查和 Node 回归测试通过。GitHub Actions 使用真正 Chromium 浏览器、从本地静态网站验证 1440px/1024px/390px 三种视口；编辑精选分别显示 3/2/1 列，XNews 首屏均为 6 条，窗口及模块横向溢出均为 0px，两个来源左右边界相同，原创灵感工具可通过导航正常展开。可核实的报告位于 topic-studio/qa/discover-ui-latest.json。此验证是仓库构建版本的浏览器验收，不等于正式 Pages URL 的跨设备实机视觉与发布后线上验证。
+
+
+## 选题发现 V4：阅读型工作台精修（2026-11-13）
+
+- 背景：用户提供超宽屏截图，发现旧版在高分辨率时横向拉伸、文字和按钮过小、信息主次不清。这次在 CloudBase 数据迁移前优先优化 UI，不触碰数据库和真实稿件。
+- 页面框架：居中的最大 1520px 阅读工作区；浅灰背景、白色编辑面板，取消此页叠加的蓝色玻璃渐变。统计卡片四等分，栏目标题、来源标签、正文、按钮分层清楚。
+- 信息组织：顶部标题与四项导航；AI Radar 编辑精选和 XNews 海外精选改成互斥来源标签页，不再同时纵向堆满两套卡片。素材检索与原创灵感按需展开。
+- 来源卡片：电脑和平板采用双列，窄屏单列；标准字号和边距统一。6 条首屏，保留筛选、查看更多、原文、生成创作指令及入池。
+- 原全局布局预设仍作用于其他页面；选题发现有独立可读性样式，避免被全局 Bento、三列、超宽偏好挤窄。保留 V3 文件便于回滚。
+- 实现：topic-studio/editorial-workspace-v4.css、topic-studio/editorial-workspace-v4.js，HTML 使用带版本号的入口。
+- 实测：Chromium 在 2560/1440/1024/768/390px 五种视口均通过；来源标签切换、返回、原创灵感展开正常；横向溢出 0px。报告 topic-studio/qa/discover-ui-latest.json。此报告验证仓库构建版本，不能代替 GitHub Pages 正式网址的独立线上视觉验收。
+- 安全：本轮没有迁移本地选题，没有写腾讯云数据库，也没有改变 draft/approved/published 或微信发布流程。
