@@ -235,7 +235,7 @@ function payload(p){
   series_bible:p.seriesBible||null,series_identity:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,
    narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
   ...(assetBible.length?{character_bible:assetBible}:{}),
-  characters:c.cast.map((x,i)=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature),portrait_reference:x.portraitConsent&&x.portraitMedia?{file:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(x.portraitExt||'png'),sha256:x.portraitSha256||null,usage:'authorized_visual_likeness_reference_only',source:'user_supplied_private',description:clean(x.portraitNotes||''),requires_actual_photo_for_generation:true}:null})),
+  characters:c.cast.map((x,i)=>{const pinned=assetBible.find(v=>v.project_name===clean(x.name)||v.original_name===clean(x.name));return {role:clean(x.role),name:clean(x.name),look:pinned?([pinned.appearance,pinned.look_override].filter(Boolean).join('；')):clean(x.look),clothes:pinned?([pinned.outfit,pinned.outfit_override].filter(Boolean).join('；')):clean(x.clothes),symbol:pinned?clean(pinned.identifying_traits):clean(x.symbol),nature:pinned?clean(pinned.personality):clean(x.nature),...(pinned?{character_id:pinned.character_id,character_version:pinned.version}:{}),portrait_reference:x.portraitConsent&&x.portraitMedia?{file:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(x.portraitExt||'png'),sha256:x.portraitSha256||null,usage:'authorized_visual_likeness_reference_only',source:'user_supplied_private',description:clean(x.portraitNotes||''),requires_actual_photo_for_generation:true}:null}}),
   storyboard:(p.panels||[]).map((x,i)=>({index:i+1,title:clean(x.title),shot:shotOf(i),scene:clean(x.scene),caption:clean(x.caption),dialogue:clean(x.dialogue),custom_prompt:clean(x.prompt)})),
   storyboard_generation:c.storyboardProvenance?{method:c.storyboardProvenance.method,provider:c.storyboardProvenance.provider,model:c.storyboardProvenance.model,generated_at:c.storyboardProvenance.at,author_modified:!!c.storyboardProvenance.authorEdited,analysis:clean(c.storyboardProvenance.analysis)}:{method:'manual_unverified'},
   cover_brief:clean(c.cover),
@@ -251,6 +251,7 @@ function digest(p){
 function checks(p){
  if(!p)return ['未选择作品'];
  const c=ensure(p),errs=[];
+ if((p.characterRefs||[]).some(r=>r.pending_author_review===true))errs.push('存在 AI 人物草稿，必须先在角色设定中由作者确认并建档');
  if(clean(c.thesis).length<12)errs.push('故事主旨至少12字');
  if(clean(c.world).length<8)errs.push('故事发生的世界和地点至少8字');
  if(clean(c.cover).length<12)errs.push('封面视觉方案至少12字');
@@ -258,6 +259,7 @@ function checks(p){
  if(!ARCS.some(s=>s.id===c.arcId))errs.push('选择剧情结构');
  if(!Array.isArray(c.cast)||c.cast.length<2)errs.push('至少锁定两名原创角色');
  if(c.cast?.some(x=>clean(x.name).length<2||clean(x.look).length<8||clean(x.clothes).length<6||clean(x.symbol).length<2))errs.push('角色姓名、外貌、服饰和识别特征必须完整');
+ if((p.characterRefs||[]).some(r=>r.snapshot&&!c.cast.some(x=>clean(x.name)===clean(r.comicName||r.snapshot.originalName))))errs.push('已锁定角色与导演台人物名单不同，请先同步 Character Bible 到创意导演台');
  if(new Set((c.cast||[]).map(x=>clean(x.name))).size!==(c.cast||[]).length)errs.push('角色姓名不能重复');
  if(p.seriesEpisode>1&&p.seriesBible){if(p.seriesBible.style_id&&p.seriesBible.style_id!==c.styleId)errs.push('续章画风必须与系列创作圣经一致');if(Array.isArray(p.seriesBible.characters)&&p.seriesBible.characters.length&&JSON.stringify(p.seriesBible.characters)!==JSON.stringify(c.cast))errs.push('系列续章角色外貌服饰需保持锁定，修改应建立新系列版本')}
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
