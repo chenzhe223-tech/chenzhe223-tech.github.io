@@ -1,0 +1,56 @@
+name: DAVYLAB Topic Studio - Public Hotspot Signals
+
+on:
+  push:
+    paths:
+      - "topic-studio/scripts/sync_hotspots.py"
+      - "topic-studio/tests/test_hotspot_sync.py"
+      - "topic-studio/hotspot-recommender.js"
+      - "topic-studio/tests/hotspot-recommender.test.cjs"
+      - ".github/workflows/topic-studio-hotspots.yml"
+  schedule:
+    # Every morning 09:50 Asia/Shanghai, after AI Radar and XNews aggregation.
+    - cron: "50 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: davylab-topic-studio-hotspot-signals
+  cancel-in-progress: false
+
+jobs:
+  refresh-public-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate collector contract
+        run: python -m unittest discover -s topic-studio/tests -p 'test_hotspot_sync.py' -v
+      - name: Validate recommendation ranking and source evidence
+        run: |
+          if [ -f topic-studio/tests/hotspot-recommender.test.cjs ]; then
+            node topic-studio/tests/hotspot-recommender.test.cjs
+          fi
+      - name: Fetch public discussion and repository signals
+        run: python topic-studio/scripts/sync_hotspots.py
+      - name: Commit updated public metadata (no user data)
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "DAVYLAB Topic Studio Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add topic-studio/data/hotspot-signals.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(topic-studio): refresh public AI hotspot signals [skip ci]"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin HEAD:"$GITHUB_REF_NAME"
+          else
+            echo "No valid new public signals."
+          fi
