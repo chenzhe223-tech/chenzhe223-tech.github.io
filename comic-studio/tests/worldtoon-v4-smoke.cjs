@@ -89,6 +89,7 @@ ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'published
 assert.equal(state(p).next,6,'published is terminal');
 assert.equal(verifiedPublished({status:'published',receipt:{status:'draft_uploaded',url:'https://mp.weixin.qq.com/s/RealArticle'}}),false);
 assert.equal(verifiedPublished({status:'published',receipt:{status:'published',url:'https://example.invalid/fake'}}),false);
+ctx.ui.wt4Step=2;
 const saved=JSON.stringify(p),shell=ctx.window.wt4Workspace();
 assert.equal(JSON.stringify(p),saved,'render cannot mutate project or its character bible');
 assert.match(shell,/PROJECT JOURNEY/);
