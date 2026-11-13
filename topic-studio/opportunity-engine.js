@@ -92,7 +92,7 @@ function renderWeekPlan(){
  for(const o of options){let x=all.find(a=>a.type===o.type&&!used.has(a.url));if(!x)x=all.find(a=>!used.has(a.url));if(!x)continue;used.add(x.url);found.push({...o,x});}
  if(!found.length){el.innerHTML='<p>加载新闻后会给出 3 篇来源明确的编辑组合。</p>';return;}
  el.innerHTML=found.map((p,i)=>'<div class="op-week-row"><div><strong>'+esc(p.label)+'</strong><span>'+esc(p.why)+'</span><p>'+esc(p.x.angle||p.x.title)+'</p><small>来源：'+esc(p.x.source)+' · '+esc(String(p.x.published||"日期待核实").slice(0,10))+'</small></div><button type="button" data-week-add="'+items().indexOf(p.x)+'">入池</button></div>').join('')+'<button type="button" class="btn small" id="opGrowthJump">查看 7/30 日增长复盘 →</button>';
- el.querySelectorAll('[data-week-add]').forEach(b=>b.addEventListener('click',()=>{const x=items()[Number(b.dataset.weekAdd)];if(x&&typeof addFeed==='function'){addFeed(x);draw();}}));
+ el.querySelectorAll('[data-week-add]').forEach(b=>b.addEventListener('click',()=>{const x=items()[Number(b.dataset.weekAdd)];if(x&&typeof addFeed==='function'){addFeed(x);draw();window.DAVYLABTopicPool?.reveal?.(x.url);}}));
  $op('opGrowthJump')?.addEventListener('click',()=>{if(typeof changeSection==='function')changeSection('growth')});
 }
 
@@ -107,15 +107,16 @@ $op("opportunityLens")?.querySelectorAll("[data-lens]").forEach(b=>{const active
 if(!all.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>正在准备选题素材</strong><p>若长时间没有内容，请点击「重新获取」。不会用假新闻占位。</p><button type="button" class="btn" id="opRetry">重新获取</button></div>';$op("opRetry")?.addEventListener("click",()=>{if(typeof loadRadar==="function")loadRadar()});return;}
 if(!filtered.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>当前方向没有匹配的素材</strong><p>切换赛道或清空搜索，可以继续查找。</p></div>';return;}
 root.innerHTML=filtered.slice(0,state.limit).map((x,j)=>{
-const index=all.indexOf(x),d=days(x),already=typeof topics!=="undefined"&&topics.some(t=>t.sourceUrl===x.url);
+const index=all.indexOf(x),d=days(x),already=typeof topics!=="undefined"&&topics.some(t=>String(t.sourceUrl||"").trim()===String(x.url||"").trim());
 const cite=(x.published?String(x.published).slice(0,10):"日期待核实");
-return '<article class="opportunity-card"><div class="op-card-top"><span class="op-type">'+esc(lensNames[theme(x)]||"AI 新闻")+'</span><span class="op-fresh '+(d>7?"old":"")+'">'+tag(x)+'</span></div><h3>'+esc(sampleTitle(x))+'</h3><p class="op-angle">编辑切入：'+esc(x.angle||"先读原文，再判断对普通人有什么价值")+'</p><div class="op-micro"><span>适合：'+esc(audience(x))+'</span><span>'+esc(x.source||"来源待核实")+' · '+esc(cite)+'</span></div><div class="op-card-bottom"><span class="op-rank" title="根据时效、内容匹配、来源完整性计算；非真实热度或涨粉预测">编辑优先级 '+rank(x)+'/100</span><div class="op-actions"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">读原文</a><button type="button" data-op-prompt="'+index+'">创作指令</button><button type="button" class="op-add" data-op-add="'+index+'" '+(already?"disabled":"")+'>'+(already?"已收藏":"收进选题池")+'</button></div></div></article>';
+return '<article class="opportunity-card"><div class="op-card-top"><span class="op-type">'+esc(lensNames[theme(x)]||"AI 新闻")+'</span><span class="op-fresh '+(d>7?"old":"")+'">'+tag(x)+'</span></div><h3>'+esc(sampleTitle(x))+'</h3><p class="op-angle">编辑切入：'+esc(x.angle||"先读原文，再判断对普通人有什么价值")+'</p><div class="op-micro"><span>适合：'+esc(audience(x))+'</span><span>'+esc(x.source||"来源待核实")+' · '+esc(cite)+'</span></div><div class="op-card-bottom"><span class="op-rank" title="根据时效、内容匹配、来源完整性计算；非真实热度或涨粉预测">编辑优先级 '+rank(x)+'/100</span><div class="op-actions"><a href="'+url(x.url)+'" target="_blank" rel="noopener noreferrer">读原文</a><button type="button" data-op-prompt="'+index+'">创作指令</button><button type="button" class="op-add" '+(already?'data-op-view="'+esc(x.url)+'"':'data-op-add="'+index+'"')+'>'+(already?"查看收藏":"收进选题池")+'</button></div></div></article>';
 }).join("");
 root.querySelectorAll("[data-op-add]").forEach(btn=>btn.addEventListener("click",()=>{
-const x=items()[Number(btn.dataset.opAdd)];if(!x||typeof addFeed!=="function")return;addFeed(x);draw();
+const x=all[Number(btn.dataset.opAdd)];if(!x||typeof addFeed!=="function")return;addFeed(x);draw();window.DAVYLABTopicPool?.reveal?.(x.url);
 }));
+root.querySelectorAll("[data-op-view]").forEach(btn=>btn.addEventListener("click",()=>{window.DAVYLABTopicPool?.reveal?.(btn.dataset.opView);if(!window.DAVYLABTopicPool&&typeof changeSection==="function")changeSection("library");}));
 root.querySelectorAll("[data-op-prompt]").forEach(btn=>btn.addEventListener("click",()=>{
-const x=items()[Number(btn.dataset.opPrompt)];if(!x||typeof showPrompt!=="function")return;
+const x=all[Number(btn.dataset.opPrompt)];if(!x||typeof showPrompt!=="function")return;
 showPrompt({title:x.angle||x.title,angle:x.angle||"",summary:x.summary||"",sourceTitle:x.title,sourceUrl:x.url,sourceName:x.source,column:x.category||"AI 创造机会雷达",format:"文章"});changeSection("library");$op("promptBox")?.scrollIntoView({behavior:"smooth",block:"center"});if(typeof toast==="function")toast("已生成创作指令，来源待核实");
 }));
 const more=$op("opportunityShowMore");if(more){more.hidden=filtered.length<=state.limit;more.textContent="继续看更多（剩余 "+Math.max(0,filtered.length-state.limit)+" 条）";}
