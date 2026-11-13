@@ -260,6 +260,13 @@ async function exportFormalPackage(p){
    if(v.getUint32(12)!==0x49484452)throw Error(label+'缺少 PNG IHDR 结构');
    const width=v.getUint32(16),height=v.getUint32(20);
    if(width<1080||height<1440)throw Error(label+'仅有 '+width+'×'+height+'，低于1080×1440验收线');
+   if(width*4!==height*3)throw Error(label+'不是3:4竖版比例，请使用原生合规画幅，禁止低清拉伸');
+   const tail=[0,0,0,0,73,69,78,68,174,66,96,130];
+   if(!tail.every((x,i)=>raw[raw.length-12+i]===x))throw Error(label+'缺少合法 PNG 结束结构，图像可能截断');
+   if(typeof createImageBitmap==='function'){
+    let decoded;try{decoded=await createImageBitmap(blob)}catch{throw Error(label+'像素解码失败，PNG 已损坏')}
+    try{if(decoded.width!==width||decoded.height!==height)throw Error(label+'图片实际解码尺寸与头部信息不一致')}finally{decoded.close?.()}
+   }
    const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',raw));
    const sha256=Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
    return {raw,sha256,width,height};
