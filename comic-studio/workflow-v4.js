@@ -325,7 +325,7 @@
  }
  function production(){
    const prev=ui.wt4Step;
-   ui.wt4Step=3;
+   ui.wt4Step=4;
    try{return workspace()}finally{ui.wt4Step=prev}
  }
  window.wt4Production=production;
@@ -383,6 +383,6 @@
    setChange(p,'更新角色作品内版本覆盖，不修改角色资产库');
  },true);
  window.wt4Workspace=workspace;
- window.WT4Workflow={stageNames,state,verifiedPublished,remote};
+ window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry};
  if(location.hash.startsWith('#/workspace')||location.hash.startsWith('#/production'))queueMicrotask(()=>parseRoute());
 })();
