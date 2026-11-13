@@ -84,4 +84,16 @@ assert.equal(scoped.visualReferences[2].license_evidence_url,'https://rights.exa
 assert.throws(()=>engine.bundleEntries({...scoped,visualReferences:[{...scoped.visualReferences[2],rightsStatus:'unknown',license_evidence_url:''}]}),/缺少 CC0/,'unsupported licenses must be blocked at packaging');
 assert.equal(Array.from(visual.referencesForPanel(scoped,0),x=>x.id).join(','),'wardrobe-ref,self-art','only targeted and project-wide licensed references should be sent for this panel');
 assert.equal(Array.from(visual.referencesForPanel(scoped,1),x=>x.id).join(','),'self-art','panel-specific references must not spread to another panel');
+
+const castLocked={...p,characterRefs:[{characterId:'asset-7',version:3,comicName:'航海家',
+ snapshot:{originalName:'黎舟',description:'固定的银色圆框眼镜和短发',costume:'墨绿色防风外套',traits:'指南针',personality:'谨慎'}}],
+ characterOverrides:{'asset-7':{look:'左眉小疤痕',costume:'腰间铜色扣饰'}},
+ panels:p.panels.map(x=>({...x}))};
+const promptWithBible=engine.storyboard(castLocked)[0].prompt;
+for(const marker of ['Character ID asset-7','locked v3','固定的银色圆框眼镜和短发','左眉小疤痕','墨绿色防风外套','腰间铜色扣饰']){
+ assert.ok(promptWithBible.includes(marker),'character lock must reach storyboard image prompt: '+marker);
+}
+assert.equal(engine.storyboard(castLocked)[8].prompt.includes('Character ID asset-7'),true,'same version across every panel');
+assert.equal(engine.storyboard(p)[0].prompt.includes('Character ID asset-7'),false,'legacy works remain unchanged');
+
 console.log('WORLD/TOON four-skill & discovery integration QA passed.');
