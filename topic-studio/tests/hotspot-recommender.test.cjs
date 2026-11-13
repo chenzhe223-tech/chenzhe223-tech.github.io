@@ -21,6 +21,7 @@ assert.ok(ranked.recommendations.every((x,i)=>x.rank===i+1&&x.score>=0&&x.score<
 assert.ok(ranked.recommendations.every(x=>x.evidence.length>0&&x.evidence[0].url.startsWith("http")));
 assert.ok(ranked.recommendations.every((x,i,a)=>i===0||a[i-1].score>=x.score),"Ranking order not monotonic");
 assert.ok(ranked.recommendations.every(x=>x.evidenceCount>=1));
+assert.ok(ranked.recommendations.every(x=>x.score===Math.min(100,Object.values(x.breakdown).reduce((a,b)=>a+b,0))),"Displayed editorial sub-scores must add to the total");
 assert.ok(ranked.recommendations.some(x=>x.channels.includes("Hacker News")||x.channels.includes("GitHub Search")),"No independently collected data used");
 for(const mode of ["balanced","discussion","practical"]){
  const alt=ranker.rank(examples,{now,mode,days:14});
@@ -39,6 +40,9 @@ const dup=ranker.normalise([
 ],now);
 assert.equal(dup.length,1,"Tracking parameters cannot create fake additional stories");
 assert.equal(dup[0].groups?.length,2,"Cross-channel provenance should be preserved");
+const zero=ranker.normalise([{title:"AI agents in actual production workflows",url:"https://example.org/zero",published:now.toISOString(),hn_points:0,hn_comments:0},{title:"AI agents in actual production workflows",url:"https://example.org/zero",published:now.toISOString(),source:"HN",hn_points:0,hn_comments:0}],now);
+assert.equal(zero[0].hnPoints,0,"Observed zero is not missing data");
+assert.equal(zero[0].hnComments,0);
 const report={
   status:"pass",
   method:"Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
