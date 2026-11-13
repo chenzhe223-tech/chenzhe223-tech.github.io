@@ -59,6 +59,8 @@ header .hero-panel {
 .story .title { font-size: clamp(34px,3.5vw,52px) !important; }
 .story .provenance { margin: 14px 0; }
 .story .caption { color: #555a53; }
+.reading-icon { background: none; border: none; color: var(--ink); font: 20px var(--sans); cursor: pointer; padding: 4px 8px; }
+#deskBookmark { margin-left: auto; }
 .story .judgment { background: #f0e9df; padding: 18px !important; border-radius: 8px; }
 .reader-back, #readerMenu { display: none; }
 @media (min-width: 761px) {
@@ -68,6 +70,11 @@ header .hero-panel {
   header .tabs { margin-bottom: 0 !important; }
   header:has(.hero-panel) .tabs { display: none !important; }
   #top5List .top5-card { padding: 9px 0 !important; }
+  #ai > #top5List { grid-row: 1; }
+  #ai { margin-bottom: 24px !important; }
+  #leadStory > a, #leadStory.text-only .lead-story-copy { height: 100%; }
+  #top5List .top5-card .meta { margin-top: 2px !important; }
+  #top5List .top5-card .story-label { margin: 0 !important; }
 }
 @media (max-width: 760px) {
   .nav-right { margin-left: auto; gap: 4px; }
@@ -95,6 +102,7 @@ header .hero-panel {
   .masthead { position: relative; }
   .masthead .brand, .masthead + .crumb { display: none; }
   .reader-back, #readerMenu { display: grid; place-items: center; border: 0; background: none; min-width: 42px; min-height: 42px; color: var(--ink); font-size: 24px; cursor: pointer; }
+  .reading-icon { display: none; }
   .masthead .lang { margin-left: auto; }
   .masthead .nav.expanded { display: grid; position: absolute; z-index: 5; top: 100%; right: 0; min-width: 155px; padding: 10px 18px; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); }
   .masthead .nav.expanded a { padding: 8px 0; }
