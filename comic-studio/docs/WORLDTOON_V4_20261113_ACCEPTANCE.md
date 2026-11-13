@@ -17,7 +17,7 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - The story stage now renders one compact story form plus the existing live DeepSeek consent panel (rather than stacking the full legacy editor); legacy advanced routes remain accessible. In the real Chrome screenshot, the mobile work page height dropped from 5,505 CSS px to approximately 3,156 CSS px.
 
 ### P1 — Character Bible
-- Author-confirmed characters enter the existing shared character catalog with stable ID, editable gender/age/profession/personality, `version=1`; selection offers gender/age/profession/origin-work facets.
+- Author-confirmed characters enter the existing shared character catalog with stable ID, editable gender/age/profession/personality, `version=1`; selection offers gender/age/profession/origin-work facets. Newly created V4 projects opt into complete AI cast enrollment; identity deduplication matches project + role + original character name, never role alone. Legacy projects retain lead-only enrollment.
 - Linking a character snapshots immutable ID/version/appearance/outfit into the project; `characterOverrides` and aliases are scoped to one comic. No changes to the original asset on project edits.
 - AI-proposed characters remain `pending_author_confirmation` until the author explicitly confirms their draft into a fixed v1 asset; unconfirmed actors cannot enter the reusable selector or pass the director lock. The author can explicitly synchronize the pinned assets into the director cast.
 - Director formal payload adds a character-bible record only for projects with pinned character references. The storyboard production prompt uses the same pinned version in all nine panels.
