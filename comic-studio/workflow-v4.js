@@ -4,7 +4,7 @@
  */
 'use strict';
 (function(){
- const stageNames=['创意立项','AI 编剧','创意定稿','漫画生产','成品验收','出版交付','作品入架'];
+ const stageNames=['故事方案','角色设定','剧情分镜','视觉风格','正式生成','审阅精修','导出发布'];
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const states=['queued','claimed','workbuddy_received','draft_uploaded','blocked','ready_for_workbuddy','publishing','published'];
  const deepseek={checked:false,loading:false,configured:null};
@@ -37,8 +37,9 @@
  function state(p){
    const row=remote(p),h=p?.handoff||{},panels=p?.panels||[];
    const named=!!p&&!!p.title?.trim()&&p.title!=='未命名新作';
-   const story=panels.some(x=>(x?.scene||'').trim().length>=20)||
-     (!!p?.ideaSeed&&!!p?.description?.trim());
+   const story=!!(p?.ideaSeed?.trim()||p?.description?.trim());
+   const hasCharacter=!!(p?.characterBible?.characters?.length||(p?.characterRefs||[]).length||String(p?.characters||'').trim());
+   const storyboard=panels.some(x=>(x?.scene||'').trim().length>=20);
    // Avoid wtDirector.approved() initializing creativeDirection on untouched work.
    const director=!!p?.creativeDirection?.approval?.lock_hash&&
      (typeof wtDirector==='object'
@@ -49,17 +50,16 @@
       h.stagedFiles.length===(h.stageUploaded||[]).length;
    const qa=!!row&&['ready_for_workbuddy','publishing','published'].includes(row.status);
    const published=verifiedPublished(row);
-   const completed=[named,story,director,queued,qa,published,published];
+   const completed=[named&&story,hasCharacter,storyboard,director,uploaded,qa,published];
    // An existing remote task can precede local state after an account/device switch.
    // Show it as a remotely evidenced state, but do not invent missing approvals.
    let next=0;
-   if(published)next=6;
-   else if(qa)next=5;
-   else if(uploaded||['blocked','draft_uploaded'].includes(row?.status))next=4;
-   else if(queued||states.includes(row?.status))next=3;
-   else if(director)next=3;
-   else if(story)next=2;
-   else if(named)next=1;
+   if(published||qa)next=6;
+   else if(uploaded||['blocked','draft_uploaded'].includes(row?.status))next=5;
+   else if(queued||states.includes(row?.status)||director)next=4;
+   else if(storyboard)next=3;
+   else if(hasCharacter)next=2;
+   else if(named&&story)next=1;
    const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
    const pending=!!p&&h.taskId&&!row;
    const label=published?'已发表':(row?.status==='blocked'?'质量复核待修复':
@@ -73,18 +73,15 @@
    return {row,completed,next,agent,pending,label,statusText,uploaded,published};
  }
  function stageBody(p,i,s){
-   if(i===0){const prev=ui.stage;ui.stage=0;const body=studioStage(p);ui.stage=prev;return body;}
-   if(i===1){
-     queueMicrotask(checkDeepSeek); // Read-only service configuration check; never bills the model.
-     const model=deepseek.configured===true?'DeepSeek 服务端已连接':
-       deepseek.configured===false?'DeepSeek API Key 尚未配置':
-       deepseek.loading?'正在核验 DeepSeek 服务端状态':'模型状态将在登录后核验';
-     const prev=ui.stage;ui.stage=2;const body=studio();ui.stage=prev;
-     return '<div class="wt4-model-status" role="status">'+html(model)+
-       ' · 生成内容前仍需作者主动确认可能产生的模型费用</div>'+body;
+   if(i===0){const prev=ui.stage;ui.stage=0;const body=studio();ui.stage=prev;return '<section class="wt4-stage-intro"><h2>故事方案</h2><p>在这里输入灵感、设置来源，使用已有 AI 编剧扩写；收费模型调用必须另行确认。</p></section>'+body;}
+   if(i===1){const prev=ui.stage;ui.stage=1;const body=studioStage(p);ui.stage=prev;
+     return '<section class="wt4-stage-intro"><h2>角色设定</h2><p>设定人物与外观，可复用角色库；正式生产前需锁定角色版本。</p><a class="button" href="#/characters">打开角色资产库</a></section>'+body;
    }
-   if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
-   if(i===3){
+   if(i===2){const prev=ui.stage;ui.stage=2;const body=studioStage(p);ui.stage=prev;
+     return '<section class="wt4-stage-intro"><h2>剧情分镜</h2><p>逐格编辑镜头、旁白和对白；返回修改不意味着自动通过审核。</p></section>'+body;
+   }
+   if(i===3)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
+   if(i===4){
      const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
      const route=s.agent==='WorkBuddy'?
        'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档':
@@ -98,12 +95,12 @@
        '<p>GitHub 工单：'+(queued?'已确认入仓':'尚未确认')+'</p>'+
        '<p>当前状态：'+html(s.row?.status||p.handoff?.repoError||s.statusText)+'</p></div>'+
        '<div class="buttons">'+action+
-       (queued?'<button class="button" data-wt4-step="4">进入成品验收 →</button>':'')+
-       '<button class="button" data-wt4-step="1">修改制作 Agent / 剧本</button></div>'+
+       (queued?'<button class="button" data-wt4-step="5">进入成品验收 →</button>':'')+
+       '<button class="button" data-wt4-step="0">修改制作 Agent / 剧本</button></div>'+
        '<details class="wt4-advanced"><summary>高级：查看完整任务派单、来源编辑和交接记录</summary>'+
        wtWorkflow()+'</details></section>';
    }
-   if(i===4){
+   if(i===5){
      const pack=typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'';
      const h=p.handoff||{},pilot=p.creativeDirection?.pilotApproval;
      const notice=s.agent==='WorkBuddy'?
@@ -117,7 +114,7 @@
        '<a class="button" href="#/director/'+encodeURIComponent(p.id)+'">查看试制样稿审批</a> '+
        '<button class="button" data-archive="refresh">同步 GitHub 验收状态</button></section>';
    }
-   if(i===5)return publish();
+   if(i===6)return '<section class="wt4-stage-intro"><h2>导出发布</h2><p>素材导出、GitHub QA、作者审批和发表回执是不同步骤。</p></section>'+publish();
    const chapters=p.seriesId?activeProjects().filter(x=>x.seriesId===p.seriesId)
      .sort((a,b)=>(Number(a.seriesEpisode)||0)-(Number(b.seriesEpisode)||0)):[];
    const list=chapters.length?'<div class="wt4-series-chapters"><h3>系列章节 · '+html(p.seriesTitle||p.title)+'</h3>'+
@@ -152,7 +149,8 @@
      (s.completed[idx]?' done':'')+'" data-wt4-step="'+idx+'" aria-current="'+(i===idx?'step':'false')+'">'+
      '<span class="wt4-step-number">'+(s.completed[idx]?'✓':String(idx+1).padStart(2,'0'))+'</span>'+
      '<span>'+title+'</span></button>').join('');
-   const next=i<6?'<button class="button" data-wt4-step="'+(i+1)+'">查看下一阶段 →</button>':'';
+   const prev=i>0?'<button class="button" data-wt4-step="'+(i-1)+'">← 上一步</button>':'';
+   const next=i<6?'<button class="button dark" data-wt4-step="'+(i+1)+'">下一步 →</button>':'';
    return '<div class="wt4-workspace"><header class="wt4-head"><div class="kicker">WORLD/TOON / PROJECT JOURNEY</div>'+
      '<div class="wt4-head-top"><div><h1>'+html(p.title)+'</h1>'+
      '<p>'+html(p.seriesTitle?(p.seriesTitle+' · 第'+(p.seriesEpisode||1)+'章'):p.category||'原创漫画')+
@@ -168,7 +166,7 @@
      '<strong>'+html(stageNames[s.next])+'</strong><p>'+html(s.statusText)+'</p></div>'+
      '<button class="button dark" data-wt4-step="'+s.next+'">继续制作 →</button></section>'+
      '<section class="wt4-editor"><div class="wt4-editor-header"><div><span>STAGE '+String(i+1).padStart(2,'0')+' / 07</span>'+
-     '<h2>'+html(stageNames[i])+'</h2></div><div class="buttons">'+next+
+     '<h2>'+html(stageNames[i])+'</h2></div><div class="buttons">'+prev+next+
      '<a class="button" href="#/reader/'+encodeURIComponent(p.id)+'">阅读预览</a></div></div>'+
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
      '<footer class="wt4-footer">自动保存本地草稿；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
