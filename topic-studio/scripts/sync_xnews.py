@@ -124,7 +124,7 @@ def fetch_upstream(url: str = SOURCE) -> object:
             data = json.loads(raw.decode("utf-8"))
             if not isinstance(data, list):
                 raise ValueError("Expected a JSON article array")
-            return data
+            return data, endpoint
         except Exception as exc:
             errors.append(endpoint + ": " + str(exc))
     raise ValueError("All public XNews index origins failed: " + "; ".join(errors))
@@ -136,8 +136,13 @@ def main() -> int:
     parser.add_argument("--output", type=pathlib.Path, default=DEST)
     args = parser.parse_args()
     try:
-        records = json.loads(args.input.read_text(encoding="utf-8")) if args.input else fetch_upstream()
+        if args.input:
+            records = json.loads(args.input.read_text(encoding="utf-8"))
+            fetched_from = "offline_input"
+        else:
+            records, fetched_from = fetch_upstream()
         snapshot = build_snapshot(records, datetime.now(timezone.utc).isoformat(timespec="seconds"))
+        snapshot["fetched_from"] = fetched_from
         args.output.parent.mkdir(parents=True, exist_ok=True)
         tmp = args.output.with_name(args.output.name + ".tmp")
         tmp.write_text(json.dumps(snapshot, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
