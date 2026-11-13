@@ -5,7 +5,7 @@ const css=fs.readFileSync('comic-studio/mobile-refine.css','utf8');
 const bundled=fs.readFileSync('comic-studio/styles.css','utf8');
 const styleCss=fs.readFileSync('comic-studio/style-v3.css','utf8');
 assert.ok(bundled.trimEnd().endsWith(css.trim()),'responsive CSS must stay bundled in the Worker-allowed stylesheet');
-assert.match(html,/styles\.css\?v=4\.6\.0/);
+assert.match(html,/styles\.css\?v=4\.6\.1/);
 assert.match(html,/style-v3\.css\?v=3\.3\.0/);
 assert.match(html,/style-v3\.js\?v=3\.3\.0/);
 for(const selector of ['.hero h1','.hero .buttons','.metrics','.metric','.sectionbar','.statusflow','.split .cards2 .outline','.box .buttons','.foot']) {
