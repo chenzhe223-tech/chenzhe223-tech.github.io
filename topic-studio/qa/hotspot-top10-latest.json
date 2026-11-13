@@ -1,0 +1,341 @@
+{
+  "status": "pass",
+  "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
+  "source_synced_at": "2026-11-13T11:00:57+00:00",
+  "generated_at": "2026-11-13T11:01:10.183Z",
+  "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
+  "available_sources": 192,
+  "recommendations": [
+    {
+      "rank": 1,
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 93,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 13,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 17,
+      "channels": [
+        "AI Radar",
+        "GitHub Search",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "kesslernity/awesome-copilot-cowork-skills",
+          "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills",
+          "source": "GitHub Skills",
+          "published": "2026-11-12T19:53:46.000Z"
+        },
+        {
+          "title": "mrhlaingbwardev/agentic-hacking-skills",
+          "url": "https://github.com/mrhlaingbwardev/agentic-hacking-skills",
+          "source": "GitHub public repositories",
+          "published": "2026-11-01T04:00:04.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 2,
+      "id": "memory",
+      "name": "Agent 记忆、检索和知识管理",
+      "score": 93,
+      "editorial_breakdown": {
+        "freshness": 28,
+        "channelCoverage": 24,
+        "observableDiscussion": 12,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 8,
+      "channels": [
+        "XNews",
+        "GitHub Search",
+        "Hacker News",
+        "AI Radar"
+      ],
+      "exampleSources": [
+        {
+          "title": "Claude 写了 413 份笔记，只拿到 1 枚徽章：智能体记忆该怎么整理",
+          "url": "https://x.com/AnthropicAI/status/2118814753154064501",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        },
+        {
+          "title": "gh9ko8y/graphmemory",
+          "url": "https://github.com/gh9ko8y/graphmemory",
+          "source": "GitHub public repositories",
+          "published": "2026-10-30T12:53:31.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "open-source",
+      "name": "开源 AI 项目深度实测",
+      "score": 88,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 8,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 31,
+      "channels": [
+        "AI Radar",
+        "Hacker News",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "Hugging Face CEO誓言在黄仁勋离职后继续为开源AI而战",
+          "url": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit",
+          "source": "TechCrunch AI",
+          "published": "2026-11-12T17:36:40.000Z"
+        },
+        {
+          "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
+          "url": "https://x.com/sardorml/status/2118616954085024133",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "coding",
+      "name": "AI 编程与真实应用交付",
+      "score": 84,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 4,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 45,
+      "channels": [
+        "Hacker News",
+        "XNews",
+        "AI Radar"
+      ],
+      "exampleSources": [
+        {
+          "title": "JetBrains Air: Run and review coding agents inside the IDE",
+          "url": "https://blog.jetbrains.com/ai/2026/11/air-in-jetbrains-ides-ga",
+          "source": "Hacker News",
+          "published": "2026-11-11T13:25:27.000Z"
+        },
+        {
+          "title": "AI Coding CLI Tools to Try Beyond Claude Code and Codex",
+          "url": "https://medium.com/@ajseven/7-ai-coding-cli-tools-to-try-beyond-claude-code-and-codex-e95155e153bd7AICodingCLIToolstoTryBeyondClaudeCodeandCodex",
+          "source": "Hacker News",
+          "published": "2026-11-11T04:55:23.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "id": "enterprise",
+      "name": "AI 进入传统企业与专业行业",
+      "score": 84,
+      "editorial_breakdown": {
+        "freshness": 26,
+        "channelCoverage": 18,
+        "observableDiscussion": 11,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 4,
+      "channels": [
+        "AI Radar",
+        "Hacker News",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "AI chatbots are recommending fake retail websites, study finds",
+          "url": "https://www.theverge.com/ai-artificial-intelligence/1032020/gemini-chatgpt-perplexity-shopping-test-risky-fake-websites-citations",
+          "source": "The Verge AI",
+          "published": "2026-11-12T17:00:00.000Z"
+        },
+        {
+          "title": "Show HN: Kapso – Iterative learning from enterprise data",
+          "url": "https://news.ycombinator.com/item?id=50471281",
+          "source": "Hacker News",
+          "published": "2026-11-12T17:51:23.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
+      "score": 83,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 3,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 64,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "Nectar推出AI智能体，为品牌自动化达人发现与联络",
+          "url": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands",
+          "source": "TechCrunch AI",
+          "published": "2026-11-12T19:11:00.000Z"
+        },
+        {
+          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
+          "url": "https://alignment.anthropic.com/2026/worse-together",
+          "source": "XNews",
+          "published": "2026-11-11T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "safety",
+      "name": "AI 安全、隐私与可靠性",
+      "score": 83,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 4,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 17,
+      "channels": [
+        "XNews",
+        "Hacker News",
+        "AI Radar"
+      ],
+      "exampleSources": [
+        {
+          "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
+          "url": "https://alignment.openai.com/fuzzy-robustness",
+          "source": "XNews",
+          "published": "2026-11-12T18:13:02.000Z"
+        },
+        {
+          "title": "CyberGate – vLLM plugin to unlock cybersecurity without weight edits",
+          "url": "https://github.com/kncshw/cybergate",
+          "source": "Hacker News",
+          "published": "2026-11-13T00:52:32.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "id": "infrastructure",
+      "name": "AI 算力、芯片与使用成本",
+      "score": 83,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 4,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 15,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "黄仁勋离职令英伟达对开源的支持存疑",
+          "url": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question",
+          "source": "TechCrunch AI",
+          "published": "2026-11-12T18:39:23.000Z"
+        },
+        {
+          "title": "Five ways Jensen Huang’s ouster from Nvidia could damage the AI industry",
+          "url": "https://techcrunch.com/2026/11/12/five-ways-jensen-huangs-ouster-from-nvidia-could-damage-the-ai-industry",
+          "source": "TechCrunch AI",
+          "published": "2026-11-12T16:32:33.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "id": "content",
+      "name": "AI 创作、内容和视觉表达",
+      "score": 82,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 3,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 14,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "Vincentwei1021/video-shotcraft",
+          "url": "https://github.com/Vincentwei1021/video-shotcraft",
+          "source": "GitHub Skills",
+          "published": "2026-11-12T19:57:18.000Z"
+        },
+        {
+          "title": "多模态“源神”！MiniMax开源SOTA生图模型，原生4K，一张两毛",
+          "url": "https://www.qbitai.com/2026/11/509440.html",
+          "source": "量子位",
+          "published": "2026-11-12T11:36:20.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "id": "verification",
+      "name": "AI 可验证工程与质量验收",
+      "score": 80,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
+        "observableDiscussion": 3,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 10,
+      "channels": [
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "四周里写出超过600万行Lean，DeepMind把验证做到了Signal的设备代码",
+          "url": "https://deepmind.google/blog/introducing-alphaproof-code",
+          "source": "XNews",
+          "published": "2026-11-10T00:00:00.000Z"
+        },
+        {
+          "title": "checkwash 用 Git diff 检查测试弱化，Alpha 版仍有漏检和误报",
+          "url": "https://x.com/kartg123451/status/2118550260104769565",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        }
+      ]
+    }
+  ],
+  "warning": "编辑推荐分（0–100，规则计算）= 时效 + 来源渠道覆盖 + 可观测平台讨论信号 + 读者适配 + 原文可追溯；不是全网热度或公众号涨粉预测。Hacker News points/comments 与 GitHub stars 为不同平台指标。"
+}
