@@ -74,8 +74,27 @@
  }
  function stageBody(p,i,s){
    if(i===0){const prev=ui.stage;ui.stage=0;const body=studio();ui.stage=prev;return '<section class="wt4-stage-intro"><h2>故事方案</h2><p>在这里输入灵感、设置来源，使用已有 AI 编剧扩写；收费模型调用必须另行确认。</p></section>'+body;}
-   if(i===1){const prev=ui.stage;ui.stage=1;const body=studioStage(p);ui.stage=prev;
-     return '<section class="wt4-stage-intro"><h2>角色设定</h2><p>设定人物与外观，可复用角色库；正式生产前需锁定角色版本。</p><a class="button" href="#/characters">打开角色资产库</a></section>'+body;
+   if(i===1){
+     const prev=ui.stage;ui.stage=1;const body=studioStage(p);ui.stage=prev;
+     const library=Array.isArray(data?.characters)?data.characters.filter(c=>c&&(c.characterId||c.id)):[];
+     const options=library.map(c=>'<option value="'+html(c.characterId||c.id)+'">'+
+       html(c.originalName||c.name||'未命名角色')+(c.reviewStatus==='pending_approval'?' · 待确认':'')+'</option>').join('');
+     const refs=(p.characterRefs||[]).map(r=>{
+       const c=library.find(c=>String(c.characterId||c.id)===String(r.characterId));
+       return '<span class="wt4-character-tag">'+html(r.comicName||c?.originalName||c?.name||r.characterId)+
+         ' <small>V'+html(r.characterVersion||c?.bibleVersion||'1')+'</small></span>';
+     }).join('');
+     const frozen=!!p.handoff?.repoQueuedAt||!!p.creativeDirection?.approval?.lock_hash;
+     return '<section class="wt4-stage-intro"><h2>角色设定 · Character Bible</h2>'+
+       '<p>从角色库引用原型，本作品单独保存名称、设定和版本快照。已批准的角色档案不会被未来修改覆盖。</p>'+
+       '<div class="wt4-role-picker"><label>角色库<select id="wt4-character-select">'+
+       (options||'<option value="">暂无角色档案</option>')+'</select></label>'+
+       '<button type="button" class="button" data-wt4-role="link" '+(!options||frozen?'disabled':'')+'>引用角色</button>'+
+       '<button type="button" class="button dark" data-wt4-role="lock" '+(!(p.characterRefs||[]).length||frozen?'disabled':'')+'>确认并锁定版本</button>'+
+       '<a class="button" href="#/characters">管理角色档案</a></div>'+
+       '<div class="wt4-character-tags">'+(refs||'<span class="minor">本作品尚无已引用角色。</span>')+'</div>'+
+       '<p class="minor">版本状态：'+html(p.characterBible?.lockedAt?'已锁定 V'+p.characterBible.revision:
+          '尚未锁定')+'；AI 新增人物须先由作者保存并确认。</p></section>'+body;
    }
    if(i===2){const prev=ui.stage;ui.stage=2;const body=studioStage(p);ui.stage=prev;
      return '<section class="wt4-stage-intro"><h2>剧情分镜</h2><p>逐格编辑镜头、旁白和对白；返回修改不意味着自动通过审核。</p></section>'+body;
@@ -203,6 +222,26 @@
  const originalDashboard=dashboard;
  dashboard=function(){return overview()+'<details class="wt4-legacy"><summary>历史工作台与高级入口</summary>'+originalDashboard()+'</details>'};
  document.addEventListener('click',ev=>{
+   const role=ev.target.closest('[data-wt4-role]');
+   if(role){
+     ev.preventDefault();ev.stopImmediatePropagation();
+     const p=selected(),api=window.WTCharacterContinuity;
+     if(!p||!api){notify('角色服务暂不可用');return}
+     try{
+       if(role.dataset.wt4Role==='link'){
+         const characterId=document.querySelector('#wt4-character-select')?.value;
+         const result=api.linkExisting(data,p,characterId);
+         if(!result.ok)throw Error(result.reason==='character_awaits_author_review'?'请先在角色库确认 AI 角色草稿':
+           result.reason==='approved_work_requires_new_revision'?'作品已锁定，需先建立新的创意修订版本':'请选择可用的角色档案');
+         if(result.linked)setChange(p,'引用已有角色：'+result.characterId);
+       }else if(role.dataset.wt4Role==='lock'){
+         const bible=api.lockProjectBible(data,p);
+         setChange(p,'确认角色圣经 V'+bible.revision);
+       }
+       render();
+     }catch(error){notify('角色操作未完成：'+error.message)}
+     return;
+   }
    const b=ev.target.closest('[data-wt4-step]');if(!b)return;
    ev.preventDefault();ev.stopImmediatePropagation();
    const p=selected();if(!p)return;
