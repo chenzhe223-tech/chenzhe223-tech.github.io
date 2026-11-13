@@ -127,4 +127,4 @@
 - 设计细节：清晰的标题三级字阶、正文行高、统一按钮高度、来源说明、卡片边界、12 栅格间距；尊重系统减少动态效果设置和原有键盘焦点样式。
 - 原功能：保留 opportunityList、opportunityLens、xnewsList、xnewsSearch、feedList、ideaInput、topicList 等所有原 ID；不修改数据格式、XNews 内容版权边界、选题审核状态或公众号发表权限。
 - 文件：topic-studio/discover-layout-v3.css、topic-studio/discover-layout-v3.js、topic-studio/index.html；视图无外部付费依赖。GitHub Actions 中的 topic-studio/tests/discover-layout.test.cjs 检查 HTML 结构、唯一 ID、分区顺序、响应式规则与导航打开工具箱。
-- 实际验证范围：GitHub 源文件结构/语法校验已完成。自动化脚本需有真实成功运行记录才算通过；正式站点手机/PC 逐分辨率视觉、卡片溢出与点击回归，尚未通过在线浏览器独立验收，不能冒称全部验收完成。
+- 实际验证范围：GitHub 结构检查和 Node 回归测试通过。GitHub Actions 使用真正 Chromium 浏览器、从本地静态网站验证 1440px/1024px/390px 三种视口；编辑精选分别显示 3/2/1 列，XNews 首屏均为 6 条，窗口及模块横向溢出均为 0px，两个来源左右边界相同，原创灵感工具可通过导航正常展开。可核实的报告位于 topic-studio/qa/discover-ui-latest.json。此验证是仓库构建版本的浏览器验收，不等于正式 Pages URL 的跨设备实机视觉与发布后线上验证。
