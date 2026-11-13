@@ -101,7 +101,8 @@ const all=items(),filtered=readData(),count=$op("opportunityCount"),stamp=$op("o
 const report=typeof radarData!=="undefined" && radarData ? String(radarData.report_date||"") : "";
 if(count)count.textContent=filtered.length+" 条可选";
 renderTracks();renderWeekPlan();
-if(stamp)stamp.textContent=report ? "来源：DAVYLAB AI Radar · 数据日期 "+report+"（非全网热搜排名）" : "等待 AI Radar 数据；建议排序不代表真实阅读量";
+const xnewsCount=all.filter(x=>x.origin==="xnews").length;
+if(stamp)stamp.textContent=report ? "来源：DAVYLAB AI Radar（"+report+"）"+(xnewsCount?" + XNews 海外精选（"+xnewsCount+"条）":"")+" · 非全网热度榜" : (xnewsCount?"来源：XNews 海外精选（"+xnewsCount+"条） · AI Radar 当前不可用；非真实热度榜":"等待 AI Radar 数据；建议排序不代表真实阅读量");
 $op("opportunityLens")?.querySelectorAll("[data-lens]").forEach(b=>{const active=b.dataset.lens===state.lens;b.classList.toggle("active",active);b.setAttribute("aria-pressed",String(active));});
 if(!all.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>正在准备选题素材</strong><p>若长时间没有内容，请点击「重新获取」。不会用假新闻占位。</p><button type="button" class="btn" id="opRetry">重新获取</button></div>';$op("opRetry")?.addEventListener("click",()=>{if(typeof loadRadar==="function")loadRadar()});return;}
 if(!filtered.length){if($op("opportunityShowMore"))$op("opportunityShowMore").hidden=true;root.innerHTML='<div class="op-empty"><strong>当前方向没有匹配的素材</strong><p>切换赛道或清空搜索，可以继续查找。</p></div>';return;}
