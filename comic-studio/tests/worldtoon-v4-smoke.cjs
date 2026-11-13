@@ -119,6 +119,11 @@ assert.equal(navResult,'workspace/p1/3');
 const selector=eventCallbacks.change.find(fn=>String(fn).includes("wt4-project"));
 selector({target:{id:'wt4-project',value:'p2'}});
 assert.equal(navResult,'workspace/p2');
+assert.match(app,/async function exportFormalPackage\(p\)/,'complete package generator exists');
+assert.match(app,/case 'zip-formal':await exportFormalPackage\(findProject\(id\)\)/,'real one-click export action is wired');
+assert.match(app,/ready_for_qa:false,author_approved:false/,'local export never bypasses independent QA or approval');
+assert.match(app,/await crypto\.subtle\.digest\('SHA-256',raw\)/,'ZIP source proof uses real SHA256');
+assert.match(read('workflow-v4.js'),/data-action="zip-formal"/,'stage seven exposes complete ZIP export');
 assert.doesNotMatch(read('workflow-v4.js'),/AI 已生成所有图片/,'no fake AI success');
 assert.match(read('workflow-v4.js'),/确认本次 AI 扩写|调用已配置的真实模型/,'paid inference requires explicit action');
 
