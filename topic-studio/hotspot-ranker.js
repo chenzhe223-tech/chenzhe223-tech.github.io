@@ -67,9 +67,9 @@ function normalise(input,now=new Date()){
   if(!seen.has(link)){seen.set(link,record);continue}
   const old=seen.get(link);
   old.groups=[...new Set([...(old.groups||[old.group]),record.group])];
-  old.hnPoints=Math.max(old.hnPoints??0,record.hnPoints??0)||old.hnPoints||record.hnPoints;
-  old.hnComments=Math.max(old.hnComments??0,record.hnComments??0)||old.hnComments||record.hnComments;
-  old.githubStars=Math.max(old.githubStars??0,record.githubStars??0)||old.githubStars||record.githubStars;
+  if(record.hnPoints!==null)old.hnPoints=old.hnPoints===null?record.hnPoints:Math.max(old.hnPoints,record.hnPoints);
+  if(record.hnComments!==null)old.hnComments=old.hnComments===null?record.hnComments:Math.max(old.hnComments,record.hnComments);
+  if(record.githubStars!==null)old.githubStars=old.githubStars===null?record.githubStars:Math.max(old.githubStars,record.githubStars);
   old.discussionUrl=old.discussionUrl||record.discussionUrl;
   old.published=old.days<=record.days?old.published:record.published;
   old.days=Math.min(old.days,record.days);
@@ -144,12 +144,12 @@ function rank(raw,options={}){
    if(result.length===10)break;
    if(used.has(s.url))continue;used.add(s.url);
    const title="新闻专题｜"+s.title.slice(0,44);
+   const scored=scoreLane({fit:12},[s],mode);
    result.push({id:"story-"+result.length+"-"+s.url,name:title,
      audience:"关注 AI 新动态的非程序员读者",promise:"将一条可核查的热点解释为普通人能理解的问题",
      action:"核查原文、厘清技术边界并撰写一篇独立解读",mode,
-     score:Math.min(80,Math.round(freshness(s.days)*.8+engagement([s])*.5+17)),
-     breakdown:{freshness:freshness(s.days),channelCoverage:3,observableDiscussion:engagement([s]),readerFit:12,sourceTrace:s.published?4:1},
-     evidenceCount:1,channels:s.groups||[s.group],latestDays:s.days,evidence:[s],kind:"单来源专题 · 待进一步验证",sourceVerified:false});
+     score:scored.total,breakdown:scored.parts,
+     evidenceCount:1,channels:scored.channels,latestDays:s.days,evidence:[s],kind:"单来源专题 · 待进一步验证",sourceVerified:false});
   }
  }
  result.sort((a,b)=>b.score-a.score||b.evidenceCount-a.evidenceCount||a.name.localeCompare(b.name,"zh-CN"));
