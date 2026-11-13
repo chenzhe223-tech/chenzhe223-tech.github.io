@@ -51,4 +51,38 @@ function workspace(){return {characters:[
  assert.equal(WTCharacterContinuity.displayName(data,first.characterId,'project-c'),'沈知夏');
 }
 
+
+{
+ const data={characters:[{id:'c-1',characterId:'c-1',originalName:'叶澜',description:'白色短发',costume:'蓝色外套',gender:'自定义',age:'29',occupation:'调查员',reviewStatus:'pending_approval',bibleVersion:1}]};
+ const story={id:'chapter-1',panels:[{characterIds:['c-1']}]};
+ const pending=WTCharacterContinuity.linkExisting(data,story,'c-1');
+ assert.equal(pending.ok,false,'unapproved AI character draft cannot enter a locked project');
+ data.characters[0].reviewStatus='approved';
+ const linked=WTCharacterContinuity.linkExisting(data,story,'c-1',{comicName:'夜舟',role:'lead',overrides:{costume:'风衣'}});
+ assert.equal(linked.ok,true);
+ assert.equal(linked.linked,true);
+ assert.equal(WTCharacterContinuity.linkExisting(data,story,'c-1').linked,false,'retry reuses the same role without duplicating it');
+ const bible=WTCharacterContinuity.lockProjectBible(data,story);
+ assert.equal(bible.characters[0].characterId,'c-1');
+ assert.equal(bible.characters[0].version,'1');
+ assert.equal(bible.characters[0].comicName,'夜舟');
+ assert.equal(bible.characters[0].costume,'风衣');
+ assert.equal(WTCharacterContinuity.validateProjectBible(story).ok,true);
+ data.characters[0].description='完全不同的长发';
+ data.characters[0].costume='红色裙装';
+ data.characters[0].bibleVersion=2;
+ assert.equal(WTCharacterContinuity.getLockedCharacter(story,'c-1').appearance,'白色短发','future library edits must not mutate the work');
+ assert.equal(WTCharacterContinuity.getLockedCharacter(story,'c-1').costume,'风衣','project costume overrides are frozen');
+ const separate={id:'chapter-2',panels:[]};
+ WTCharacterContinuity.linkExisting(data,separate,'c-1',{comicName:'雪崖'});
+ const newer=WTCharacterContinuity.lockProjectBible(data,separate);
+ assert.equal(newer.characters[0].version,'2','new works use the updated character version');
+ assert.equal(data.characters[0].originalName,'叶澜','new works do not rewrite original identity');
+ story.panels[0].characterIds=['c-1','missing-person'];
+ assert.equal(WTCharacterContinuity.validateProjectBible(story).ok,false,'panels may only reference locked characters');
+ story.handoff={repoQueuedAt:'true'};
+ assert.equal(WTCharacterContinuity.linkExisting(data,story,'c-1').ok,false,'dispatched productions cannot mutate a role version');
+ assert.throws(()=>WTCharacterContinuity.lockProjectBible(data,story),/不得静默改写/);
+}
+
 console.log('PASS: legacy profiles, same-name separation, project aliases, and idempotent lead enrollment');
