@@ -238,7 +238,7 @@ async function test(){
     // Exercise actual existing ZIP import: reject tampering and then accept the intact
     // technical fixture without remote GitHub publication, QA or author signatures.
     await page.goto(base+'#/workspace/'+self.id+'/5');
-    await page.locator('#wt3-zip').waitFor();
+    await page.locator('#wt3-zip').waitFor({state:'attached'}); // file input intentionally hidden behind a styled label
     const stamp=Buffer.from('"sha256": "');
     const at=zip.indexOf(stamp);
     assert.ok(at>0,'V4 manifest hashes are present in ZIP');
