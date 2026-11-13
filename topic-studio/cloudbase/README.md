@@ -61,3 +61,24 @@
 - https://docs.cloudbase.net/authentication-v2/method/sdk-init
 - https://docs.cloudbase.net/database/security-rules
 - https://docs.cloudbase.net/database/postgresql/data-permission
+
+
+## 可选的官方 CloudBase 连接方式（无需把密钥发给 ChatGPT）
+
+腾讯云已提供 **CloudBase 官方远端 MCP + OAuth 授权**：
+
+```json
+{
+  "mcpServers": {
+    "cloudbase": {
+      "type": "http",
+      "url": "https://tcb-api.cloud.tencent.com/mcp/v1"
+    }
+  }
+}
+```
+
+在支持 OAuth 的工作工具里（腾讯云官方文档明确列有 WorkBuddy）连接后，使用腾讯云账号完成网页授权，并**只选择目标主环境**；授权完成后再执行只读的 `auth(status)` / 查询环境数据库类型，确认无误才开展数据库部署。此连接方式不需要你在聊天中发送 SecretId / SecretKey。ChatGPT 当前对话没有直接连接到你的 CloudBase 控制台，不能把已提交的 P0 文件视为真实云端部署。
+
+官方文档：https://docs.cloudbase.net/ai/cloudbase-ai-toolkit/connection-modes
+官方 WorkBuddy 接入：https://docs.cloudbase.net/ai/cloudbase-ai-toolkit/ide-setup/workbuddy
