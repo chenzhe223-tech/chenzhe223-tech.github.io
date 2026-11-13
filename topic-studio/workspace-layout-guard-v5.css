@@ -1,0 +1,294 @@
+/* DAVYLAB Topic Studio · Workspace Layout Guard V5.
+  Fixes global layout preset applying columns to entire section roots (not inner cards).
+  Keeps data/UI actions unchanged. Does not affect editor's V4 discovery tabs.
+*/
+body:has(.section.active:not(#section-discover)){
+ background:#f5f7fa!important;
+}
+body:has(.section.active:not(#section-discover)) main>.content{
+ width:min(100%,1510px)!important;
+ max-width:1510px!important;
+ margin-inline:auto!important;
+ padding:30px clamp(18px,2.5vw,42px) 90px!important;
+ min-width:0!important;
+}
+body:has(.section.active:not(#section-discover)) main>.content>.hero,
+body:has(.section.active:not(#section-discover)) main>.content>.stats,
+body:has(.section.active:not(#section-discover)) main>.content>.mobile-app-cover{
+ display:none!important;
+}
+body[data-layout-preset] .section.active:not(#section-discover),
+body[data-layout-columns] .section.active:not(#section-discover),
+.section.active:not(#section-discover){
+ display:block!important;
+ grid-template-columns:none!important;
+ width:100%!important;
+ max-width:none!important;
+ min-width:0!important;
+}
+.section.active:not(#section-discover)>.panel,
+.section.active:not(#section-discover)>.hero,
+.section.active:not(#section-discover)>.research-sourcepanel,
+.section.active:not(#section-discover)>.growth-hero,
+.section.active:not(#section-discover)>.growth-grid{
+ width:100%!important;
+ max-width:100%!important;
+ min-width:0!important;
+ grid-column:auto!important;
+}
+body:has(.section.active:not(#section-discover)) aside{
+ background:#fff!important;
+ border-right:1px solid #dfe7ee!important;
+ backdrop-filter:none!important;
+ box-shadow:none!important;
+ color:#2e4861!important;
+}
+body:has(.section.active:not(#section-discover)) aside .sideintro{display:none!important}
+body:has(.section.active:not(#section-discover)) aside .nav{
+ color:#5d7286!important;
+ font-size:13px!important;
+ padding:11px 12px!important;
+ border-radius:9px!important;
+ box-shadow:none!important;
+}
+body:has(.section.active:not(#section-discover)) aside .nav.active{
+ background:#e8f2fa!important;color:#225f8b!important;font-weight:760!important;
+}
+body:has(.section.active:not(#section-discover)) aside .nav:hover{background:#f0f6fa!important}
+body:has(.section.active:not(#section-discover)) .topbar{
+ background:rgba(255,255,255,.96)!important;
+ border-bottom:1px solid #e3eaf0!important;
+}
+.section.active:not(#section-discover)>.hero{
+ display:flex!important;
+ align-items:flex-end!important;
+ justify-content:space-between!important;
+ gap:24px!important;
+ margin:2px 0 24px!important;
+ padding:7px 0 17px!important;
+ border-bottom:1px solid #dfe7ed!important;
+}
+.section.active:not(#section-discover)>.hero>div:first-child{
+ flex:1 1 auto;max-width:780px;min-width:0;
+}
+.section.active:not(#section-discover)>.hero h1{
+ font-size:clamp(27px,2.7vw,39px)!important;
+ line-height:1.24!important;
+ letter-spacing:-1.2px!important;
+ color:#1d344b!important;
+ margin:7px 0 12px!important;
+}
+.section.active:not(#section-discover)>.hero p{
+ max-width:740px!important;
+ font-size:13px!important;
+ line-height:1.75!important;
+ color:#6a7f92!important;
+ margin:0!important;
+}
+.section.active:not(#section-discover)>.hero .heroactions{
+ display:flex!important;
+ justify-content:flex-end!important;
+ align-items:center!important;
+ gap:8px!important;
+ flex-wrap:wrap!important;
+ flex:0 1 48%!important;
+ max-width:530px;
+}
+.section.active:not(#section-discover)>.hero .heroactions .btn{
+ min-height:38px!important;
+ padding:9px 12px!important;
+ font-size:12px!important;
+ border-radius:9px!important;
+ box-shadow:none!important;
+}
+/* Clear editing surfaces, not blue glass layers. */
+.section.active:not(#section-discover) .panel{
+ background:#fff!important;
+ border:1px solid #dce5ec!important;
+ box-shadow:none!important;
+ backdrop-filter:none!important;
+ border-radius:15px!important;
+ padding:clamp(18px,2.05vw,27px)!important;
+ margin-bottom:18px!important;
+}
+.section.active:not(#section-discover) .panelhead{
+ display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;
+ margin-bottom:18px!important;
+}
+.section.active:not(#section-discover) .panelhead h2{
+ font-size:19px!important;
+ font-weight:780!important;
+ line-height:1.35!important;
+ color:#203a54!important;
+}
+.section.active:not(#section-discover) .panelhead p{
+ font-size:12px!important;line-height:1.7!important;color:#6d8294!important;
+}
+.section.active:not(#section-discover) :is(.panel,.research-sourcepanel,.growth-target,.growth-mini,.topiccard,.published-card,.growth-item){
+ min-width:0!important;
+}
+.section.active:not(#section-discover) input:not([type="checkbox"]):not([type="radio"]):not([type="color"]):not([type="range"]),
+.section.active:not(#section-discover) select,
+.section.active:not(#section-discover) textarea{
+ max-width:100%;
+ border:1px solid #dbe6ee;
+ border-radius:9px;
+ color:#274159;
+ font-size:13px;
+ line-height:1.65;
+}
+.section.active:not(#section-discover) label{line-height:1.5}
+.section.active:not(#section-discover) button{white-space:normal}
+.section.active:not(#section-discover) .btn.primary{background:#2874ad!important;border-color:#2874ad!important;color:white!important;box-shadow:none!important}
+.section.active:not(#section-discover) .btn:hover{box-shadow:none!important}
+/* Visual design must remain genuinely 2-column, independently of the global preset. */
+#section-visual .vd-heading{
+ width:100%;
+ padding:5px 0 21px;
+ margin:0;
+ border-bottom:1px solid #dde5ed;
+ align-items:flex-end;
+ gap:20px;
+}
+#section-visual .vd-heading h1{
+ font-size:clamp(28px,2.5vw,38px)!important;
+ color:#203850!important;
+ line-height:1.25!important;
+ letter-spacing:-1.2px;
+}
+#section-visual .vd-heading p{font-size:13px!important;line-height:1.7!important;color:#6a7f92!important}
+#section-visual .vd-shell{
+ display:grid!important;
+ grid-template-columns:minmax(0,1.04fr) minmax(360px,.96fr)!important;
+ gap:20px!important;
+ align-items:start!important;
+ margin:21px 0 0!important;
+}
+#section-visual .vd-column{display:grid!important;gap:17px!important;min-width:0!important}
+#section-visual .vd-column>.vd-panel{
+ width:100%!important;
+ min-width:0!important;
+ background:white!important;
+ padding:24px!important;
+ border:1px solid #dbe5ed!important;
+ border-radius:14px!important;
+ box-shadow:none!important;
+ margin:0!important;
+}
+#section-visual .vd-column:last-child{position:sticky;top:83px;align-self:start;}
+#section-visual .vd-panel-title h2{font-size:17px!important;}
+#section-visual .vd-field label{font-size:12px!important;}
+#section-visual .vd-field input:not([type=color]),#section-visual .vd-field select,#section-visual .vd-field textarea{
+ font-size:13px!important;
+ padding:11px 12px!important;
+ line-height:1.6!important;
+ min-height:42px!important;
+ background:#fff!important;
+}
+#section-visual .vd-field textarea.vd-text-large{min-height:100px!important}
+#section-visual .vd-choice-list{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+#section-visual .vd-choice{padding:10px!important;}
+#section-visual .vd-choice.selected{padding:9px!important;}
+#section-visual .vd-mini{height:95px!important;}
+#section-visual .vd-choice-copy strong{font-size:12px!important;}
+#section-visual .vd-choice-copy small{font-size:10px!important;}
+#section-visual .vd-preview-frame{background:#edf3f7!important;padding:16px!important;}
+#section-visual .vd-preview-stage strong{font-size:clamp(17px,2vw,29px)!important;}
+#section-visual .vd-preview-stage .vd-preview-kicker{font-size:11px!important;}
+#section-visual .vd-preview-caption{font-size:11px!important;}
+#section-visual .vd-inner-preview{min-width:180px!important;max-width:225px!important;}
+/* Growth and research: full-width main surface with native, intentionally sized subgrids. */
+#section-growth>.growth-hero{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(260px,.55fr)!important;gap:16px!important;align-items:stretch!important;}
+#section-growth .growth-target{min-width:0!important;padding:27px!important;border-radius:14px!important;background:#1f405e!important;}
+#section-growth .growth-target h2{font-size:26px!important;line-height:1.32!important}
+#section-growth .growth-target p{font-size:13px!important;line-height:1.6!important;}
+#section-growth .growth-kpi strong{font-size:25px!important;}
+#section-growth .growth-side{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:12px!important;align-items:stretch!important;}
+#section-growth .growth-mini{padding:17px!important;border-radius:12px!important;background:white!important;}
+#section-growth .growth-mini strong{font-size:21px!important}
+#section-growth .growth-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px!important}
+#section-growth .growth-action-panel,#section-growth .growth-review-panel{width:100%!important;}
+#section-growth .growth-action-item{grid-template-columns:37px minmax(0,1fr) auto!important;gap:12px!important;}
+#section-growth .growth-action-copy h3{font-size:14px!important}
+#section-growth .growth-action-copy p{font-size:12px!important;}
+#section-research .research-sourcepanel{
+ padding:21px 24px!important;background:#fff!important;
+ border:1px solid #dbe6ef!important;border-radius:14px!important;
+ margin:0 0 17px!important;
+}
+#section-research .research-sourcegrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:11px!important;}
+#section-research .research-sourcegrid a{padding:15px!important;border-radius:10px!important;}
+#section-research>.panel{width:100%!important;display:block!important;}
+#section-library .topiccard-focused{
+ border:2px solid #277db5!important;
+ box-shadow:0 0 0 4px #2a7eb621!important;
+ background:#f6fbff!important;
+ scroll-margin:130px;
+}
+#section-library .library-quickbar{
+ display:flex;align-items:center;justify-content:space-between;
+ gap:10px;flex-wrap:wrap;
+ background:#f4f8fb;
+ border:1px solid #e2e9f1;
+ border-radius:10px;
+ padding:10px 13px;
+ margin:0 0 13px;
+ color:#657c90;
+ font-size:12px;
+}
+#section-library .library-quickbar button{font-size:12px!important}
+#section-library .topiclist{display:grid!important;grid-template-columns:1fr!important;gap:12px!important;}
+@media(max-width:1120px){
+ #section-visual .vd-shell{grid-template-columns:1fr!important}
+ #section-visual .vd-column:last-child{position:static!important}
+ #section-growth>.growth-hero{grid-template-columns:1fr!important}
+ #section-growth .growth-grid{grid-template-columns:1fr!important}
+}
+@media(max-width:900px){
+ .section.active:not(#section-discover)>.hero{flex-direction:column!important;align-items:stretch!important;}
+ .section.active:not(#section-discover)>.hero .heroactions{flex:0 0 auto!important;max-width:none!important;justify-content:flex-start!important;}
+ #section-research .research-sourcegrid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+@media(max-width:760px){
+ body:has(.section.active:not(#section-discover)) main>.content{
+  max-width:100%!important;width:100%!important;
+  padding:13px 12px calc(90px + env(safe-area-inset-bottom))!important;
+  overflow-x:clip!important;
+ }
+ body[data-layout-preset] .section.active:not(#section-discover),
+ body[data-layout-columns] .section.active:not(#section-discover){
+  display:block!important;grid-template-columns:none!important;
+ }
+ .section.active:not(#section-discover)>.hero{
+  margin:0 0 12px!important;padding:2px 0 12px!important;
+  align-items:stretch!important;
+ }
+ .section.active:not(#section-discover)>.hero h1{font-size:24px!important;letter-spacing:-.6px!important}
+ .section.active:not(#section-discover)>.hero p{font-size:12px!important}
+ .section.active:not(#section-discover)>.hero .heroactions{
+  flex:0 0 auto!important;display:flex!important;flex-wrap:wrap!important;
+  align-items:stretch!important;gap:7px!important;
+ }
+ .section.active:not(#section-discover)>.hero .heroactions .btn{min-height:36px!important;font-size:11px!important;padding:8px 10px!important}
+ .section.active:not(#section-discover) .panel{padding:15px!important;border-radius:12px!important;margin-bottom:12px!important}
+ .section.active:not(#section-discover) .panelhead h2{font-size:17px!important}
+ #section-visual .vd-heading{padding:0 0 15px!important}
+ #section-visual .vd-heading h1{font-size:25px!important;}
+ #section-visual .vd-shell{margin-top:13px!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ #section-visual .vd-column>.vd-panel{padding:15px!important}
+ #section-visual .vd-mini{height:73px!important}
+ #section-visual .vd-inner-preview{min-width:132px!important}
+ #section-growth .growth-target{padding:17px!important}
+ #section-growth .growth-target h2{font-size:22px!important}
+ #section-growth .growth-side{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ #section-growth .growth-grid{grid-template-columns:1fr!important}
+ #section-growth .growth-action-item{grid-template-columns:30px minmax(0,1fr)!important}
+ #section-growth .growth-action-item>button{grid-column:2;justify-self:start}
+ #section-research .research-sourcepanel{padding:15px!important}
+ #section-library .topiccard{min-width:0!important}
+}
+@media(max-width:380px){
+ #section-visual .vd-choice-copy strong{font-size:10px!important}
+ #section-growth .growth-kpi strong{font-size:18px!important}
+ #section-research .research-sourcegrid{grid-template-columns:1fr!important;}
+}
