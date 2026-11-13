@@ -56,7 +56,8 @@ function researchHtml(){
  '<div class="pd-kpis"><div><strong id="pdSourcesMatched">—</strong><span>关键词匹配线索</span></div><div><strong id="pdSourcesTotal">—</strong><span>可访问来源记录</span></div><div><strong id="pdBenchCount">—</strong><span>已记录对标账号</span></div></div>'+
  '<div class="pd-list-head"><strong>来源与选题机会</strong><span id="pdSourceStatus">等待来源索引</span></div>'+
  '<div id="pdSourceList" class="pd-source-list" aria-live="polite"></div>'+
- '<div class="pd-brief"><div class="pd-list-head"><strong>研究简报（可修改）</strong><span>生成规则框架，不代表已完成事实核查</span></div><textarea id="pdResearchBrief" rows="8" placeholder="选择领域并点击“形成研究简报”，根据已加载的来源自动整理公开线索、编辑假设与核查任务。"></textarea><div class="pd-actions"><button id="pdCopyBrief" type="button">复制简报</button><button id="pdSaveBrief" type="button">保存本机研究档案</button><button id="pdDownloadBrief" type="button">导出 Markdown</button><span id="pdBriefStatus" role="status">内容可修改，未自动发布</span></div></div>';
+ '<div class="pd-brief"><div class="pd-list-head"><strong>研究简报（可修改）</strong><span>生成规则框架，不代表已完成事实核查</span></div><textarea id="pdResearchBrief" rows="8" placeholder="选择领域并点击“形成研究简报”，根据已加载的来源自动整理公开线索、编辑假设与核查任务。"></textarea><div class="pd-actions"><button id="pdCopyBrief" type="button">复制简报</button><button id="pdSaveBrief" type="button">保存本机研究档案</button><button id="pdDownloadBrief" type="button">导出 Markdown</button><span id="pdBriefStatus" role="status">内容可修改，未自动发布</span></div></div>'+
+ '<div class="pd-history"><div class="pd-list-head"><strong>已保存的研究档案</strong><span>当前浏览器 · 点击继续编辑</span></div><div id="pdBriefArchive" class="pd-brief-archive" aria-live="polite"></div></div>';
  el("section-research").querySelector(".hero")?.insertAdjacentElement("afterend",node);
 }
 function growthHtml(){
@@ -148,7 +149,12 @@ function renderSprint(){
  el("pdGrowthReviewDue").textContent=due.length;
  const list=el("pdExperimentList");
  const connected=growth.experiments.filter(e=>e.sourceTopicId).slice().sort((a,b)=>String(b.createdAt||b.date||"").localeCompare(String(a.createdAt||a.date||""))).slice(0,5);
- list.innerHTML=connected.length?connected.map(e=>'<article class="pd-experiment"><div><strong>'+esc(e.title)+'</strong><p>'+esc(e.experimentQuestion||"已关联选题，等待补充假设")+'</p></div><span>'+esc(e.status==="published"?"已录入发表状态":"待核验")+'</span></article>').join(""):'<div class="pd-empty">还没有与选题直接关联的实验。先从左侧选择现有选题，再创建首个可复盘实验。</div>';
+ list.innerHTML=connected.length?connected.map(e=>'<article class="pd-experiment"><div><strong>'+esc(e.title)+'</strong><p>'+esc(e.experimentQuestion||"已关联选题，等待补充假设")+'</p></div><span>'+esc(e.status==="published"?"已录入发表状态":"待核验")+'</span><button type="button" data-pd-edit="'+esc(e.id)+'">继续编辑</button></article>').join(""):'<div class="pd-empty">还没有与选题直接关联的实验。先从左侧选择现有选题，再创建首个可复盘实验。</div>';
+ list.querySelectorAll("[data-pd-edit]").forEach(button=>button.addEventListener("click",()=>{
+  const editor=[...document.querySelectorAll("#viralExperimentList [data-viral-edit]")].find(x=>x.dataset.viralEdit===button.dataset.pdEdit);
+  if(editor){editor.click();el("viralExperimentForm")?.scrollIntoView({behavior:"smooth",block:"center"});}
+  else el("pdGrowthStatus").textContent="未找到实验编辑入口，请从下方实验池打开。";
+ }));
 }
 function selectedTopic(){return topics.find(t=>t.id===el("pdGrowthTopic")?.value)}
 function growthCard(){
@@ -189,6 +195,32 @@ function createExperiment(){
  const input=el("viralTitle");if(input)input.value=t.title;
  if(typeof toast==="function")toast("选题已连接到本机增长实验池");
 }
+function storedBriefs(){
+ try{const raw=JSON.parse(localStorage.getItem(BRIEF_STORE)||"[]");return Array.isArray(raw)?raw:[]}catch{return[]}
+}
+function renderSavedBriefs(){
+ const box=el("pdBriefArchive");if(!box)return;
+ const list=storedBriefs().slice(0,40);
+ if(!list.length){box.innerHTML='<div class="pd-empty">还没有保存的研究简报。生成后点击“保存本机研究档案”，下一次就能继续编辑。</div>';return}
+ box.innerHTML=list.map(item=>'<article class="pd-saved"><div><strong>'+esc(plain(item.topic,100)||"未命名研究")+'</strong><small>'+esc(String(item.updatedAt||"").slice(0,16).replace("T"," "))+' · 本机草稿</small></div><div class="pd-actions"><button type="button" data-pd-load="'+esc(item.id)+'">继续编辑</button><button type="button" data-pd-remove="'+esc(item.id)+'">删除</button></div></article>').join("");
+ box.querySelectorAll("[data-pd-load]").forEach(button=>button.addEventListener("click",()=>{
+  const found=storedBriefs().find(x=>x.id===button.dataset.pdLoad);if(!found)return;
+  el("pdResearchQuery").value=found.topic||"";
+  el("pdResearchBrief").value=found.body||"";
+  el("pdResearchBrief").dataset.briefId=found.id;
+  el("pdBriefStatus").textContent="已打开已保存的研究简报，可修改后再次保存。";
+  el("pdResearchBrief").scrollIntoView({behavior:"smooth",block:"center"});
+ }));
+ box.querySelectorAll("[data-pd-remove]").forEach(button=>button.addEventListener("click",()=>{
+  const id=button.dataset.pdRemove;
+  if(!confirm("确认从当前浏览器删除这份研究简报？请先确认已备份。"))return;
+  const next=storedBriefs().filter(x=>x.id!==id);
+  try{localStorage.setItem(BRIEF_STORE,JSON.stringify(next))}catch{el("pdBriefStatus").textContent="删除失败：本机存储不可写";return}
+  if(el("pdResearchBrief").dataset.briefId===id)delete el("pdResearchBrief").dataset.briefId;
+  renderSavedBriefs();
+  el("pdBriefStatus").textContent="已删除该本地研究档案；编辑框内容暂时保留。";
+ }));
+}
 function initResearch(){
  researchHtml();
  el("pdResearchQuery").value=el("researchNiche")?.value||"";
@@ -198,6 +230,7 @@ function initResearch(){
  el("pdBuildBrief").addEventListener("click",()=>{
   if(!el("pdResearchQuery").value.trim()&&!el("researchNiche")?.value.trim()){el("pdBriefStatus").textContent="请先选择要研究的赛道或关键词";return}
   el("pdResearchBrief").value=briefText();
+  delete el("pdResearchBrief").dataset.briefId;
   el("pdBriefStatus").textContent="已生成编辑框架和真实来源清单；需进一步查原文核实。";
  });
  el("pdCopyBrief").addEventListener("click",()=>copy(el("pdResearchBrief").value,el("pdBriefStatus")));
@@ -209,14 +242,18 @@ function initResearch(){
  el("pdSaveBrief").addEventListener("click",()=>{
   const value=el("pdResearchBrief").value.trim();if(!value){el("pdBriefStatus").textContent="先生成或填写简报内容";return}
   try{
-   let data=[];try{data=JSON.parse(localStorage.getItem(BRIEF_STORE)||"[]")}catch{}
-   if(!Array.isArray(data))data=[];
-   data.unshift({id:"r_"+Date.now(),topic:plain(el("pdResearchQuery").value||el("researchNiche")?.value,120),body:value,updatedAt:new Date().toISOString(),status:"draft"});
+   let data=storedBriefs();
+   const editing=el("pdResearchBrief").dataset.briefId;
+   const existing=editing?data.find(x=>x.id===editing):null;
+   const saved={id:existing?.id||"r_"+Date.now(),topic:plain(el("pdResearchQuery").value||el("researchNiche")?.value,120),body:value,updatedAt:new Date().toISOString(),status:"draft"};
+   data=data.filter(x=>x.id!==saved.id);data.unshift(saved);
    localStorage.setItem(BRIEF_STORE,JSON.stringify(data.slice(0,40)));
-   el("pdBriefStatus").textContent="已保存本机档案（最多40篇）；不代表完成原文核验。";
+   el("pdResearchBrief").dataset.briefId=saved.id;
+   renderSavedBriefs();
+   el("pdBriefStatus").textContent="已保存本机档案（最多40篇）；可以从下方继续编辑。";
   }catch{el("pdBriefStatus").textContent="本地存储失败，请复制或导出研究简报。"}
  });
- renderSources();
+ renderSources();renderSavedBriefs();
 }
 function initGrowth(){
  growthHtml();
@@ -236,6 +273,10 @@ saveTopics=function(){oldSaveTopics();renderSprint();renderSources()};
 const oldSaveGrowth=saveGrowth;
 saveGrowth=function(){oldSaveGrowth();renderSprint()};
 const oldSection=changeSection;
-changeSection=function(section){oldSection(section);if(section==="growth")renderSprint();if(section==="research")renderSources()};
+changeSection=function(section){oldSection(section);if(section==="growth")renderSprint();if(section==="research"){renderSources();renderSavedBriefs()}};
+const oldOpportunityRender=window.renderOpportunityRadar;
+if(typeof oldOpportunityRender==="function"){
+ window.renderOpportunityRadar=function(){oldOpportunityRender();if(el("pdSourceList"))renderSources()};
+}
 window.DAVYLABProductivity={version:"1.0.0",renderSources,renderSprint,briefText,growthCard,createExperiment};
 })();
