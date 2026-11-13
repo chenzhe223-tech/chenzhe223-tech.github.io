@@ -281,11 +281,7 @@
    const chosen=explicit||(ui.wt4LastId?findProject(ui.wt4LastId):null)||candidates[0]||selected();
    const p=chosen?.id==='sample-ba-zong-001'?null:chosen;
    if(p){ui.wt4LastId=p.id;ui.selected=p.id;} // UI context only; never rewrite the stored project.
-   if(!p||p.id==='sample-ba-zong-001')return entryHub()+'<section class="wt4-workspace wt4-empty">'+
-      '<div class="kicker">WORLD/TOON / NEW PROJECT</div><h1>开始一部好漫画</h1>'+
-      '<p>从一句话、热门选题或已有系列进入。创建后在同一工作空间完成整个生产流程。</p>'+
-      '<div class="buttons"><button class="button dark" data-action="new">＋ 创建作品</button>'+
-      '<a class="button" href="#/live">从素材发现选题</a><a class="button" href="#/library">查看已有作品</a></div></section>';
+   if(!p||p.id==='sample-ba-zong-001')return entryHub();
    const s=state(p),i=Number.isInteger(ui.wt4Step)&&ui.wt4Step>=0&&ui.wt4Step<7?ui.wt4Step:s.next;
    const done=s.completed.filter(Boolean).length;
    const options=activeProjects().filter(x=>x.id!=='sample-ba-zong-001')
