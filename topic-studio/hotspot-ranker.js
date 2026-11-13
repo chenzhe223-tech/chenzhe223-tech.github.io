@@ -106,8 +106,9 @@ function scoreLane(lane,evidence,mode="balanced"){
  const multiplier=mode==="discussion"?{fresh:0.75,breadth:1,signals:1.75,utility:.65,trace:.5}:
   mode==="practical"?{fresh:.7,breadth:.8,signals:.5,utility:1.9,trace:1}:{
   fresh:1,breadth:1,signals:1,utility:1.25,trace:1};
- const total=Math.min(100,Math.round(f*multiplier.fresh+breadth*multiplier.breadth+signals*multiplier.signals+useful*multiplier.utility+trace*multiplier.trace));
- return{total,parts:{freshness:f,channelCoverage:breadth,observableDiscussion:signals,readerFit:useful,sourceTrace:trace},
+ const weighted={freshness:Math.round(f*multiplier.fresh),channelCoverage:Math.round(breadth*multiplier.breadth),observableDiscussion:Math.round(signals*multiplier.signals),readerFit:Math.round(useful*multiplier.utility),sourceTrace:Math.round(trace*multiplier.trace)};
+ const total=Math.min(100,Object.values(weighted).reduce((sum,n)=>sum+n,0));
+ return{total,parts:weighted,raw:{freshness:f,channelCoverage:breadth,observableDiscussion:signals,readerFit:useful,sourceTrace:trace},
         days:latest,count:totals,channels:[...channels]};
 }
 function rank(raw,options={}){
