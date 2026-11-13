@@ -114,4 +114,4 @@
 - 入池：沿用现有选题池、智能排期、创作指令和配图策划；保留 origin=xnews、中文阅读来源、原始来源发布日期及待核实状态。相同链接/原标题不会重复加入，也不会自动批准、发文或发图。
 - 失效保护：同源快照不可读取则退回本机最后一次有效数据并显式标注历史缓存；两者都失败时提示错误并保留外部源站入口，原有 Radar 继续独立工作。
 - 版权：XNews 仓库代码采用 MIT，并不意味着其译写正文、媒体或上游原创文章都允许任意转载。本模块仅引用带出处的公开标题/少量导读；数据、人物和产品结论需要独立查阅原文核实。
-- 离线回归：运行 python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v 及 node topic-studio/tests/xnews-integration.test.cjs，覆盖元数据规范、危险 URL、去重、空源不覆盖、聚合、入池、创作指令、历史缓存和 HTML 转义。首次定时任务及真实线上手机/PC 的端到端验收，需另行核验。
+- 离线回归：运行 python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v 及 node topic-studio/tests/xnews-integration.test.cjs，覆盖元数据规范、危险 URL、去重、空源不覆盖、聚合、入池、创作指令、历史缓存和 HTML 转义。推送触发的自动同步已成功生成真实快照提交（例如 https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/commit/70fbe7a200ebcbdcafc84cdbe7f5a98aad77773c ），同步任务前的 Python/Node 测试通过；每日 cron 定点执行与真实线上手机/PC 的端到端交互仍待独立核验。
