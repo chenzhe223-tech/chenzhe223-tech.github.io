@@ -17,7 +17,7 @@
     const seen = new Set();
     for (const [stories, link] of sections) {
       for (const [i, story] of (stories || []).entries()) {
-        const title = (en ? story.title_en : story.title_zh) || story.title || story.full_name;
+        const title = (en ? story.title_en : story.title_zh) || story.title || story.full_name || story.name;
         if (!title || seen.has(title) || !title.toLocaleLowerCase().includes(query)) continue;
         const href = link(story, i);
         if (!href || !(/^(https:\/\/|\.\.\/read\/\?)/i).test(href)) continue;
