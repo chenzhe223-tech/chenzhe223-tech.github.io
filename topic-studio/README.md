@@ -115,3 +115,16 @@
 - 失效保护：同源快照不可读取则退回本机最后一次有效数据并显式标注历史缓存；两者都失败时提示错误并保留外部源站入口，原有 Radar 继续独立工作。
 - 版权：XNews 仓库代码采用 MIT，并不意味着其译写正文、媒体或上游原创文章都允许任意转载。本模块仅引用带出处的公开标题/少量导读；数据、人物和产品结论需要独立查阅原文核实。
 - 离线回归：运行 python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v 及 node topic-studio/tests/xnews-integration.test.cjs，覆盖元数据规范、危险 URL、去重、空源不覆盖、聚合、入池、创作指令、历史缓存和 HTML 转义。推送触发的自动同步已成功生成真实快照提交（例如 https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/commit/70fbe7a200ebcbdcafc84cdbe7f5a98aad77773c ），同步任务前的 Python/Node 测试通过；每日 cron 定点执行与真实线上手机/PC 的端到端交互仍待独立核验。
+
+
+## 选题发现 V3：页面几何与内容层级重构（2026-11-13）
+
+- 背景：原全局布局预设将选题发现里的 AI Radar 与 XNews 当成普通 section 子卡片，在编辑 / 平衡 / Bento / 多列模式下挤成不合理的左右布局，导致文本拥挤、按钮细碎、来源层级不清。
+- 本轮仅锁定「选题发现」自身的 12 栅格版式；不改变其他导航页的用户布局预设。改为「入口与导航 → AI Radar 编辑精选 → XNews 海外精选 → 深入研究工具箱」四层结构，两个来源完整分区、全宽呈现。
+- 电脑大屏：来源卡片 3 列，宽度较窄的屏幕 2 列，手机端 1 列；内容工作区最大宽度约 1640px，居中并增加明确的章节间距及卡片最小留白。
+- 内容入口：顶部四张等宽快捷导航（编辑精选、海外观点、素材检索、原创灵感）；点击后定位对应模块，后两项自动展开隐藏的原有表单。
+- 信息降噪：重复的 XNews 链接移出 Radar 标题区；XNews 默认 6 条而不是 9 条、仍保留「查看更多」、分类、搜索、排序和两种入池方式。高级检索、外部来源、原创灵感统一折叠进三卡工具箱，展开后横跨整个工作区。
+- 设计细节：清晰的标题三级字阶、正文行高、统一按钮高度、来源说明、卡片边界、12 栅格间距；尊重系统减少动态效果设置和原有键盘焦点样式。
+- 原功能：保留 opportunityList、opportunityLens、xnewsList、xnewsSearch、feedList、ideaInput、topicList 等所有原 ID；不修改数据格式、XNews 内容版权边界、选题审核状态或公众号发表权限。
+- 文件：topic-studio/discover-layout-v3.css、topic-studio/discover-layout-v3.js、topic-studio/index.html；视图无外部付费依赖。GitHub Actions 中的 topic-studio/tests/discover-layout.test.cjs 检查 HTML 结构、唯一 ID、分区顺序、响应式规则与导航打开工具箱。
+- 实际验证范围：GitHub 源文件结构/语法校验已完成。自动化脚本需有真实成功运行记录才算通过；正式站点手机/PC 逐分辨率视觉、卡片溢出与点击回归，尚未通过在线浏览器独立验收，不能冒称全部验收完成。
