@@ -39,4 +39,22 @@ const dup=ranker.normalise([
 ],now);
 assert.equal(dup.length,1,"Tracking parameters cannot create fake additional stories");
 assert.equal(dup[0].groups?.length,2,"Cross-channel provenance should be preserved");
+const report={
+  status:"pass",
+  method:"Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
+  source_synced_at:hotspot.synced_at,
+  generated_at:new Date().toISOString(),
+  scope:"Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
+  available_sources:ranked.sourceCount,
+  recommendations:ranked.recommendations.map(r=>({
+    rank:r.rank,id:r.id,name:r.name,score:r.score,editorial_breakdown:r.breakdown,
+    evidenceCount:r.evidenceCount,channels:r.channels,
+    exampleSources:r.evidence.slice(0,2).map(e=>({title:e.title,url:e.url,source:e.source,published:e.published}))
+  })),
+  warning:ranked.methodology
+};
+const reportPath=path.join(root,"topic-studio/qa/hotspot-top10-latest.json");
+fs.mkdirSync(path.dirname(reportPath),{recursive:true});
+fs.writeFileSync(reportPath,JSON.stringify(report,null,2)+"\n","utf8");
 console.log("PASS hotspot Top 10 ranking: provenance, 10 choices, weights, date windows, anti-fake, dedupe");
+
