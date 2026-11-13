@@ -71,3 +71,11 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - Fixed full-cast AI role import for newly created V4 works, including supporting roles and custom gender. Character upserts now deduplicate by original name plus role within one project; previously two same-role leads could incorrectly reuse an ID. Legacy enrollment defaults unchanged.
 - Formal generation-step progression no longer accepts a local `stagedFiles`/`stageUploaded` count as proof of upload. Only repository-derived verified `draft_uploaded`, `ready_for_workbuddy`, `publishing` or `published` status can mark step 5 complete; remote uploaded still requires separate QA and author approval.
 - Added corresponding regression assertions. These are code and isolated test protections, not proof of real artwork or publication.
+
+
+## GitHub automation evidence (2026-11-13 latest)
+
+- Frontend GitHub Actions run `43412006808`: **PASS** on real Chrome desktop/mobile, screenshot captures, three creation paths, author-confirmed AI character, refresh recovery, billing consent cancel, actual ZIP download and decompression, full 9+cover original SHA256 comparison, **tampered manifest SHA256 rejection**, and successful local ZIP importer round-trip. Browser evidence uploaded as `worldtoon-v4-browser-evidence` (artifact `14028954401`). All image contents are synthetic test fixtures, not commercial comic illustrations.
+- Frontend static, mobile-layout and V3/V4 contract CI on commit `ea62a8d3f676b0906cb49febf3c08fbb2d691a2f` all PASS. Private QA repository `chenzhe223-tech/worldtoon` PR #7 schema/role-version CI on `0f29614075453a4597699c0ab98a76e4aa3ad2f8` PASS.
+- V4 formal ZIPs now verify `assets[].sha256` when re-imported, and refuse wrong project ID, wrong role ID/version or mismatched style lock; verified browser behavior is strictly **local technical workflow** without remote upload or publication.
+- Existing production Cloudflare Worker still represents the older deployed release; no paid model inferencing, author approval, final visual QA or verified WorkBuddy publication has occurred.
