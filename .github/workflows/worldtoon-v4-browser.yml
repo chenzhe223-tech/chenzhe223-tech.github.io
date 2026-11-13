@@ -35,6 +35,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: worldtoon-v4-browser-evidence
-          path: comic-studio/.browser-evidence/
+          path: comic-studio/browser-evidence/
           if-no-files-found: warn
           retention-days: 7
