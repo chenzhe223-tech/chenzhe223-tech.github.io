@@ -286,7 +286,7 @@ async function exportFormalPackage(p){
    title:p.title,project_id:p.id,task_id:p.handoff?.taskId||null,
    panel_count:p.panels.length,assets,character_versions:(p.characterRefs||[]).map(x=>({id:x.characterId,version:x.version||1})),
    style_id:p.creativeDirection?.styleId||null,
-   artwork_origin:'original_uploaded_png_bytes',generated_by_model:false,
+   artwork_origin:'browser_uploaded_native_png_unverified_rights',generated_by_model:null,rights_status:'not_verified',
    verified_png_dimensions:true,ready_for_qa:false,author_approved:false,
    github_delivered:false,workbuddy_ready:false,published:false,
    warning:'图像尺寸、格式和SHA256检查不是视觉一致性、事实核验、肖像许可、作者审核或正式发表的证明'
