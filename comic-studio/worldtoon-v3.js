@@ -528,6 +528,7 @@
     '<p>按角色 ID 和版本引用，项目只保存快照与作品内覆盖项。不会覆盖历史作品或原型；人像参考须确认肖像使用权。</p></div>'+
     '<div class="wt4-char-section"><h3>本作品角色（'+ids.length+'）</h3>'+
     (linked||'<p class="wt4-muted">尚未关联角色。请从库中选择，或确认新角色并建档。</p>')+'</div>'+
+    (!locked&&ids.some(r=>r.snapshot)?'<button type="button" class="button" data-wt4-sync-character-bible>同步已确认角色至创意导演人物设定</button>':'')+
     (locked?'<p class="wt4-warning">已正式派单：角色版本锁定，修改请建立新修订作品。</p>':
       '<div class="wt4-char-picker"><label for="wt4-char-asset">复用既有角色</label>'+
       '<div class="wt4-char-filter-grid">'+selectFacets+'</div>'+ 
@@ -538,6 +539,8 @@
       '<label>性别 / 性别认同（可自定义）<input name="gender" maxlength="80" placeholder="可留空"></label>'+
       '<label>年龄设定<input name="age" maxlength="80" placeholder="例如：青年"></label>'+
       '<label>职业 / 身份<input name="profession" maxlength="120"></label>'+
+      '<label>固定识别道具<input name="traits" maxlength="220" placeholder="如：银色指南针"></label>'+ 
+      '<label>角色主色<input name="colors" maxlength="140" placeholder="如：墨绿、米白"></label>'+
       '<label>外观与识别特征<textarea name="description" maxlength="1800" required></textarea></label>'+
       '<label>服装与道具<textarea name="costume" maxlength="700"></textarea></label>'+
       '<label>性格与角色关系<textarea name="personality" maxlength="950"></textarea></label></div>'+
@@ -604,6 +607,29 @@
    setChange(p,'从'+(type==='idea'?'一句话创作':'自主创作')+'入口立项');
    nav('workspace/'+p.id+'/0');
  }
+ function syncCharacterBible(p){
+   if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash||typeof wtDirector!=='object'||typeof wtDirector.ensure!=='function')return false;
+   const confirmed=(p.characterRefs||[]).filter(r=>r.snapshot&&!r.pending_author_review);
+   if(!confirmed.length)return false;
+   const director=wtDirector.ensure(p);
+   if(!Array.isArray(director.cast))director.cast=[];
+   for(const ref of confirmed){
+     const snap=ref.snapshot,local=p.characterOverrides?.[ref.characterId]||{};
+     const name=String(ref.comicName||snap.originalName||'').trim();
+     if(!name)continue;
+     let actor=director.cast.find(c=>String(c.name||'').trim()===name);
+     if(!actor){actor={role:ref.role||'配角',name,look:'',clothes:'',symbol:'',nature:''};director.cast.push(actor)}
+     actor.look=[snap.description,local.look].filter(Boolean).join('；');
+     actor.clothes=[snap.costume,local.costume].filter(Boolean).join('；');
+     actor.symbol=snap.traits||actor.symbol;
+     actor.nature=snap.personality||actor.nature;
+     actor.characterId=ref.characterId;actor.characterVersion=ref.version;
+   }
+   director.reviewed=false;
+   director.approval=null;
+   setChange(p,'将已确认 Character Bible 同步到创意导演台，需重新审阅确认');
+   return true;
+ }
  function confirmAIDraft(p,id){
    if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return false;
    const ref=(p.characterRefs||[]).find(r=>String(r.characterId)===String(id));
@@ -637,7 +663,7 @@
      gender:String(values.gender||'').trim(),age:String(values.age||'').trim(),
      profession:String(values.profession||'').trim(),description:look,
      costume:String(values.costume||'').trim(),personality:String(values.personality||'').trim(),
-     traits:'',colors:'',portrait:'',origin:'author_confirmed',originProjectId:p.id,comicNames:[]};
+     traits:String(values.traits||'').trim(),colors:String(values.colors||'').trim(),portrait:'',origin:'author_confirmed',originProjectId:p.id,comicNames:[]};
    data.characters.push(c);linkCharacter(p,c);notify('角色资产已建档并与作品版本锁定');
    nav('workspace/'+p.id+'/1');
  }
@@ -726,6 +752,11 @@
      if(!t)return notify('选题不存在，请刷新选题池');
      newProject(t);const p=selected();p.entryType='hotspot';p.handoff={...(p.handoff||{}),mode:'hotspot'};
      setChange(p,'从热点改编入口导入选题');nav('workspace/'+p.id+'/0');return}
+   if(ev.target.closest('[data-wt4-sync-character-bible]')){
+     ev.preventDefault();const p=selected();
+     if(!syncCharacterBible(p))return notify('角色尚未完成确认，或项目已锁定，不允许同步');
+     notify('角色已同步到导演台，需重新确认剧情与画风');nav('workspace/'+p.id+'/3');return;
+   }
    const pending=ev.target.closest('[data-wt4-confirm-role]');
    if(pending){ev.preventDefault();const p=selected(),id=pending.dataset.wt4ConfirmRole;
      if(!confirmAIDraft(p,id))return notify('人物外观与服饰必须完整，且只能由原作品作者在创意锁定前确认');
@@ -780,6 +811,6 @@
    setChange(p,'更新角色作品内版本覆盖，不修改角色资产库');
  },true);
  window.wt4Workspace=workspace;
- window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft};
+ window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft,syncCharacterBible};
  if(location.hash.startsWith('#/workspace')||location.hash.startsWith('#/production'))queueMicrotask(()=>parseRoute());
 })();
