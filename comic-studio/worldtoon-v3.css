@@ -371,3 +371,5 @@
 .wt4-story-compact .wt3-compact-drama{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .wt4-story-compact .wt3-expand-consent[hidden],.wt4-story-compact .wt3-expand-feedback[hidden]{display:none}
 @media(max-width:640px){.wt4-story-compact{gap:10px}.wt4-story-compact .wt3-compact-drama{grid-template-columns:1fr}}
+.wt4-footer [data-wt4-save-status]{font-weight:650;color:#486852}
+.wt4-footer [data-wt4-save-status][data-state="error"]{color:#a3432f}
