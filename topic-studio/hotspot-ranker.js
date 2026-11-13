@@ -21,12 +21,12 @@ const lanes=[
  {id:"research",name:"AI 科研与可验证发现",audience:"关注科学突破又不想被标题带偏的读者",promise:"区分真实科研成果、模型辅助和未经证实的发现",action:"逐项核对论文、实验条件和同行验证",fit:12,pattern:/science|scientif|科研|论文|research|paper|math|mathematic|biology|genomic|protein|physics|考古|arxiv/ig},
  {id:"robotics",name:"具身智能与机器人走向现实",audience:"对机器人改变生活和工作感兴趣的人",promise:"看清演示视频与实际部署之间的距离",action:"研究真实机器人演示的测试环境与成功率口径",fit:12,pattern:/robot|机器人|具身|physical ai|embodied|gr00t|humanoid|自动驾驶|robotic/ig},
  {id:"open-source",name:"开源 AI 项目深度实测",audience:"希望用免费工具解决实际问题的学习者",promise:"把热门仓库还原成能否安装、能否用、怎么用",action:"选择开源项目记录安装、许可和失败场景",fit:15,pattern:/github|open.source|开源|repository|repo|hugging.face|self.host|自托管|docker|license|开源项目/ig},
- {id:"business",name:"AI 创业与商业模式验证",audience:"准备把 AI 工具做成产品的创作者",promise:"从真实付费价值、获客和成本看商业机会",action:"拆解公开案例与可核实的业务指标",fit:14,pattern:/startup|创业|business|commercial|盈利|营收|revenue|customers|pricing|moneti|付费|融资|独角兽|用户增长|saas/ig},
+ {id:"business",name:"AI 创业与商业模式验证",audience:"准备把 AI 工具做成产品的创作者",promise:"从真实付费价值、获客和成本看商业机会",action:"拆解公开案例与可核实的业务指标",fit:14,pattern:/AI startup|AI创业|AI 创业|AI business|AI 商业|AI SaaS|创业|business model|商业模式|moneti|付费|融资|营收|revenue|用户增长|saas/ig},
  {id:"content",name:"AI 创作、内容和视觉表达",audience:"公众号作者与独立内容创作者",promise:"把 AI 生成变为稳定、可检查的原创内容流程",action:"同一主题做两种视觉方案与可读性验证",fit:14,pattern:/image|video|design|visual|画图|设计|漫画|海报|生图|视频|内容创作|imagegen|visual generation|motion|animation/ig},
  {id:"memory",name:"Agent 记忆、检索和知识管理",audience:"需要让 AI 长期理解项目背景的人",promise:"解释记忆/RAG/知识库的工作机理和局限",action:"比较无记忆与可检索上下文的真实任务结果",fit:15,pattern:/memory|记忆|rag|retriev|知识库|long.context|上下文|context window|向量|vector|持久化/ig},
- {id:"education",name:"普通人的 AI 学习方法",audience:"没有编程基础又持续学习 AI 的人",promise:"把新术语和前沿技术拆成能照做的课程",action:"将新闻转成三层讲解、练习题和实际操作",fit:15,pattern:/education|learn|学(?:习|院|校)|教育|课程|academy|teach|tutorial|beginner|小白|教师|学生/ig},
+ {id:"education",name:"普通人的 AI 学习方法",audience:"没有编程基础又持续学习 AI 的人",promise:"把新术语和前沿技术拆成能照做的课程",action:"将新闻转成三层讲解、练习题和实际操作",fit:15,pattern:/education|learning app|学习工具|学习方法|AI 学习|学(?:习|院|校)|教育|课程|academy|teach|tutorial|beginner|小白|教师|学生/ig},
  {id:"infrastructure",name:"AI 算力、芯片与使用成本",audience:"做采购成本分析和 AI 产品选择的职场人",promise:"理解芯片、算力、推理费用对实际工具成本的影响",action:"对官方公开价格和实际使用量做透明测算",fit:14,pattern:/chip|gpu|芯片|算力|hardware|计算成本|compute|inference cost|api price|token pric|cost|成本|英伟达|nvidia/ig},
- {id:"enterprise",name:"AI 进入传统企业与专业行业",audience:"来自工程、采购、财务和运营行业的人",promise:"把行业经验与自动化工具结合起来，而不是空谈取代",action:"选取实际流程定义输入、审批和可审计结果",fit:15,pattern:/enterprise|retail|procurement|采购|工程|造价|财务|传统行业|企业|医疗|法律|行业|workflow business/ig},
+ {id:"enterprise",name:"AI 进入传统企业与专业行业",audience:"来自工程、采购、财务和运营行业的人",promise:"把行业经验与自动化工具结合起来，而不是空谈取代",action:"选取实际流程定义输入、审批和可审计结果",fit:15,pattern:/enterprise|retail|procurement|采购|造价|财务|传统行业|企业应用|企业工作流|企业采购|医疗|法律|行业场景|business operations|customer support/ig},
  {id:"verification",name:"AI 可验证工程与质量验收",audience:"希望 AI 产出可信赖软件与结果的人",promise:"把测试、回归、验收和形式化证明解释清楚",action:"制定一套失败不可降标的测试矩阵",fit:15,pattern:/formal verification|lean|proof|verification|verified|test|qa|质量|测试|验收|质量保障|代码审查|checkwash/ig},
 ];
 const MAX_DAYS=30;
@@ -99,7 +99,10 @@ function scoreLane(lane,evidence,mode="balanced"){
  const latest=Math.min(...evidence.map(x=>x.days<0?31:x.days));
  const channels=new Set(evidence.flatMap(x=>x.groups||[x.group]));
  const totals=evidence.length;
- const f=freshness(latest),breadth=Math.min(25,Math.max(0,(channels.size-1)*9)+Math.min(15,totals*3));
+ const dates=evidence.map(x=>x.days).filter(d=>d>=0).sort((a,b)=>a-b);
+ const representativeAge=dates[Math.min(2,dates.length-1)]??31;
+ const f=Math.round(freshness(latest)*.55+freshness(representativeAge)*.45);
+ const breadth=Math.min(25,Math.min(13,channels.size*3)+Math.min(12,Math.round(4*Math.log2(1+totals))));
  const signals=engagement(evidence);
  const useful=lane.fit||12;
  const trace=Math.min(10,evidence.filter(x=>x.url&&x.published).length*3+Math.min(channels.size,2));
