@@ -12,7 +12,7 @@ const lenses={
  all:"全部主题",agents:"Agent / 自动化",models:"模型与研究",products:"工具与产品",
  business:"商业与市场",creative:"创作与设计",safety:"安全与治理"
 };
-const state={all:[],filter:"all",query:"",sort:"relevance",visible:9,loaded:false,error:"",meta:null,cached:false};
+const state={all:[],filter:"all",query:"",sort:"relevance",visible:6,loaded:false,error:"",meta:null,cached:false};
 const html=v=>typeof safe==="function"?safe(v):String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const url=v=>{try{const parsed=new URL(String(v||""));if(!["https:","http:"].includes(parsed.protocol))return"#";if(!parsed.hostname||parsed.username||parsed.password)return"#";return parsed.href}catch{return"#"}};
 const canonical=v=>url(v).split("#")[0].replace(/\/$/,"").toLowerCase();
@@ -192,13 +192,13 @@ root.addEventListener("click",e=>{
  if(typeof toast==="function")toast("已生成创作指令；请核验原文");
 });
 root.querySelectorAll("[data-x-lens]").forEach(b=>b.addEventListener("click",()=>{
- state.filter=b.dataset.xLens;state.visible=9;
+ state.filter=b.dataset.xLens;state.visible=6;
  root.querySelectorAll("[data-x-lens]").forEach(x=>{x.classList.toggle("active",x===b);x.setAttribute("aria-pressed",String(x===b))});
  render();
 }));
-$x("xnewsSearch")?.addEventListener("input",e=>{state.query=e.target.value;state.visible=9;render()});
+$x("xnewsSearch")?.addEventListener("input",e=>{state.query=e.target.value;state.visible=6;render()});
 $x("xnewsSort")?.addEventListener("change",e=>{state.sort=e.target.value;render()});
-$x("xnewsMore")?.addEventListener("click",()=>{state.visible+=9;render()});
+$x("xnewsMore")?.addEventListener("click",()=>{state.visible+=6;render()});
 $x("xnewsRefresh")?.addEventListener("click",()=>load(true));
 const baseSaveTopics=saveTopics;
 saveTopics=function(){baseSaveTopics();if(state.loaded)render()};
