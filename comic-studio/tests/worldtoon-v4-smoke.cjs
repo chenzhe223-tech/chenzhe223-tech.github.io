@@ -95,7 +95,7 @@ ctx.ui.wt4Step=2;
 const saved=JSON.stringify(p),shell=ctx.window.wt4Workspace();
 assert.equal(JSON.stringify(p),saved,'render cannot mutate project or its character bible');
 assert.match(shell,/PROJECT JOURNEY/);
-assert.match(shell,/保存状态/,'save state displayed');
+assert.match(shell,/data-wt4-save-status/,'live truthful save-state control displayed');
 assert.equal((shell.match(/class="wt4-step(?: |")/g)||[]).length,7,'seven stages');
 assert.match(shell,/下一步/);
 const home=ctx.dashboard();
