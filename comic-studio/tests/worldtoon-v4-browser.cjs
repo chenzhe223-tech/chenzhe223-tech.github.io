@@ -88,6 +88,15 @@ async function test(){
     assert.ok(!idea.creativeDirection?.approval,'no fabricated approval');
     assert.ok(!idea.handoff?.repoQueuedAt,'creating a local project does not fake GitHub handoff');
     assert.ok((await page.locator('.wt4-step').allTextContents()).join(' ').includes('剧情分镜'));
+    assert.equal(await page.locator('.wt4-story-journey').count(),1,'story is one compact integrated stage');
+    assert.equal(await page.locator('.wt3-work-panel').count(),1,'exactly one real DeepSeek expansion panel, no legacy duplication');
+    assert.equal(await page.locator('#wt3-seed').inputValue(),'一位小邮差发现月亮上的信件正在消失');
+    await page.locator('[data-wt3-action="expand"]').click();
+    await page.locator('#wt3-expand-consent').waitFor({state:'visible'});
+    const consent=await page.locator('#wt3-expand-consent').textContent();
+    assert.match(consent,/可能按 Token 产生费用/,'no unconsented model call');
+    await page.locator('[data-wt3-action="expand-cancel"]').click();
+    assert.equal(await page.locator('#wt3-expand-consent').isVisible(),false,'cancel model request before fees');
     await page.locator('.wt4-steps [data-wt4-step="1"]').click();
     await page.locator('[data-wt4-character-create] [name="name"]').fill('阿月');
     await page.locator('[data-wt4-character-create] [name="gender"]').fill('自定义身份');
@@ -211,7 +220,8 @@ async function test(){
     await phone.locator('[data-wt4-create="author"] [name="description"]').fill('手机端创建作品并能进入七步制作');
     await phone.locator('[data-wt4-create="author"] [type="submit"]').click();
     await phone.locator('.wt4-step').first().waitFor();
-    const geometry2=await phone.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth}));
+    const geometry2=await phone.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth,bodyHeight:document.body.scrollHeight}));
+    assert.ok(geometry2.bodyHeight<4000,'mobile story stage must not nest giant legacy editors: '+JSON.stringify(geometry2));
     assert.ok(geometry2.content<=geometry2.viewport+2,'no horizontal workspace overflow on phone: '+JSON.stringify(geometry2));
     await phone.screenshot({path:path.join(out,'mobile-workspace.png'),fullPage:true});
     reports.push({test:'real Chromium mobile tap, create, responsive viewport',result:'passed'});
