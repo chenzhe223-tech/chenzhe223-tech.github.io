@@ -488,7 +488,7 @@
  function characterStage(p){
    const ids=Array.isArray(p.characterRefs)?p.characterRefs:[];
    const catalog=Array.isArray(data.characters)?data.characters:[];
-   const locked=!!p.handoff?.repoQueuedAt;
+   const locked=!!(p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash);
    const linked=ids.map(ref=>{
      const original=catalog.find(x=>String(x.characterId||x.id)===String(ref.characterId));
      const snap=ref.snapshot|| (original?characterSnapshot(original):null);
@@ -698,7 +698,7 @@
      setChange(p,'从热点改编入口导入选题');nav('workspace/'+p.id+'/0');return}
    const link=ev.target.closest('[data-wt4-character-link]');
    if(link){ev.preventDefault();const p=selected(),id=document.querySelector('#wt4-char-asset')?.value;
-     if(!p||p.handoff?.repoQueuedAt)return notify('角色已锁定，请新建修订版');
+     if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('角色已锁定，请新建修订版');
      const c=(data.characters||[]).find(x=>String(x.characterId||x.id)===String(id));
      if(!c)return notify('请选择角色资产');
      if(!linkCharacter(p,c))return notify('该角色已关联当前作品');
@@ -709,14 +709,14 @@
    if(mode){ev.preventDefault();ev.stopImmediatePropagation();const values=Object.fromEntries(new FormData(form).entries());saveEntry(mode,values);return}
    if(form?.hasAttribute('data-wt4-character-create')){
      ev.preventDefault();ev.stopImmediatePropagation();const p=selected();
-     if(!p||p.handoff?.repoQueuedAt)return notify('已派单作品不能直接变更角色');
+     if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('已锁定创意方案的作品不能直接变更角色');
      newCharacter(p,Object.fromEntries(new FormData(form).entries()));
    }
  },true);
  document.addEventListener('change',ev=>{
    const field=ev.target?.dataset?.wt4CharField,id=ev.target?.dataset?.wt4CharacterEdit;
    if(!field||!id)return;
-   const p=selected();if(!p||p.handoff?.repoQueuedAt)return notify('已派单作品不能直接变更角色');
+   const p=selected();if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('已锁定创意方案的作品不能直接变更角色');
    const ref=(p.characterRefs||[]).find(x=>String(x.characterId)===String(id));
    if(!ref)return;
    if(field==='comicName'){ref.comicName=ev.target.value;}
