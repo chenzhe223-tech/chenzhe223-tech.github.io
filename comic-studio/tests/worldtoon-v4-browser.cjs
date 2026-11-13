@@ -12,7 +12,7 @@ const zlib=require('node:zlib');
 const {chromium}=require('playwright-core');
 
 const root=path.resolve(__dirname,'..');
-const out=path.join(root,'.browser-evidence');
+const out=path.join(root,'browser-evidence');
 fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml','.png':'image/png','.webmanifest':'application/manifest+json'};
 const server=http.createServer((request,response)=>{
@@ -82,7 +82,7 @@ async function test(){
     assert.ok(!idea.creativeDirection?.approval,'no fabricated approval');
     assert.ok(!idea.handoff?.repoQueuedAt,'creating a local project does not fake GitHub handoff');
     assert.ok((await page.locator('.wt4-step').allTextContents()).join(' ').includes('剧情分镜'));
-    await page.locator('[data-wt4-step="1"]').click();
+    await page.locator('.wt4-steps [data-wt4-step="1"]').click();
     await page.locator('[data-wt4-character-create] [name="name"]').fill('阿月');
     await page.locator('[data-wt4-character-create] [name="gender"]').fill('自定义身份');
     await page.locator('[data-wt4-character-create] [name="age"]').fill('成年');
@@ -97,7 +97,7 @@ async function test(){
     assert.equal(character.original.gender,'自定义身份');
     assert.equal(character.role.snapshot.description,'短黑发与棕色眼睛，右手有星星纹章');
     assert.equal(character.role.version,1);
-    await page.locator('[data-wt4-step="2"]').click();
+    await page.locator('.wt4-steps [data-wt4-step="2"]').click();
     await page.locator('[data-panel-field="scene"][data-panel-index="0"]').fill('月光照亮邮局，一个陌生包裹从天而降，阿月屏住呼吸。');
     await page.reload();
     await page.locator('[data-panel-field="scene"][data-panel-index="0"]').waitFor();
@@ -114,7 +114,7 @@ async function test(){
     await page.locator('[data-wt4-create="author"] [type="submit"]').click();
     const self=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).projects.find(x=>x.title==='星际邮局'),KEY);
     assert.ok(self?.id&&self.entryType==='author'&&self.handoff.mode==='original','self-authored path persisted');
-    await page.locator('[data-wt4-step="1"]').click();
+    await page.locator('.wt4-steps [data-wt4-step="1"]').click();
     await page.locator('#wt4-char-asset').selectOption(character.original.characterId);
     await page.locator('[data-wt4-character-link]').click();
     const origBefore=await page.evaluate(({key,id})=>JSON.parse(localStorage.getItem(key)).characters.find(c=>c.characterId===id),{key:KEY,id:character.original.characterId});
