@@ -187,7 +187,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  * Embedded in extension.js to honor the deployed Worker static allowlist.
  */
 (function(){
- const story={type:'drama',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:''};
+ const story={type:'drama',query:'',items:[],selected:null,chosen:new Set(),mode:'original',busy:false,loaded:false,error:'',warnings:[],when:'',synopsis:'',rightsURL:'',rightsConsent:false,sourceAge:'',resultsExpanded:false};
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
@@ -226,7 +226,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   const card=flowCard(x),rank=x?.rank_snapshot?(' · #'+html(x.rank_snapshot)):'';
   return html(card.identityLabel)+(card.heatEvidenceDate?' · '+html(card.heatEvidenceDate):'')+rank;
  }
- function bookResult(x,i){return '<article class="story-result" role="listitem">'+
+ function bookResult(x,i){return '<article class="story-result'+(i>=2&&!story.resultsExpanded?' story-result-collapsed':'')+'" role="listitem">'+
   '<div><span class="story-type">'+html(x.type==='drama'?'短剧／网络线索':x.type==='classic'?'经典文学':'网络小说／书目')+'</span>'+
   '<span class="story-rank">'+identityLabel(x)+'</span>'+
   '<h3>'+html(x.title)+'</h3><p>'+html(x.summary||'仅检索到书目／报道线索，请查看来源并提供剧情摘要。')+'</p>'+
@@ -275,12 +275,12 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
    (story.error?'<div class="story-error" role="alert"><strong>'+html(window.WTDiscoveryFlow?.errorState(/timeout|超时|abort/i.test(story.error)?'timeout':'failure').title||'搜索失败')+'</strong><p>'+html(story.error)+'</p><small>来源失败状态不会替换成推测剧情或模拟热度。</small></div>':'')+
    (story.warnings.length?'<p class="story-note">部分来源暂不可用：'+html(story.warnings.join('；'))+'</p>':'')+
    (story.loaded?'<div class="story-results-top"><strong>'+story.items.length+' 条候选资料</strong><small>查询时间 '+html(story.when||'')+(story.sourceAge?' · '+html(story.sourceAge):'')+' · 源自公开书目与报道、已核对精选资料；非原著全文</small></div>':'')+
-   (story.selected?selection():(story.loaded?'<div class="story-results" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none"><strong>'+html(window.WTDiscoveryFlow?.errorState('empty').title||'没有匹配结果')+'</strong><p>'+html(window.WTDiscoveryFlow?.errorState('empty').message||'试试原名、作者名，或切换小说／短剧分类。')+'</p></div>')+'</div>':''))+
+   (story.selected?selection():(story.loaded?'<div class="story-results" id="storyResultCards" role="list">'+(story.items.length?story.items.map(bookResult).join(''):'<div class="story-none"><strong>'+html(window.WTDiscoveryFlow?.errorState('empty').title||'没有匹配结果')+'</strong><p>'+html(window.WTDiscoveryFlow?.errorState('empty').message||'试试原名、作者名，或切换小说／短剧分类。')+'</p></div>')+'</div>'+(story.items.length>2?'<div class="story-results-toggle-wrap"><button type="button" class="button story-results-toggle" data-story-results-toggle="1" aria-controls="storyResultCards" aria-expanded="'+(story.resultsExpanded?'true':'false')+'">'+(story.resultsExpanded?'收起资料':'展开其余 '+(story.items.length-2)+' 条资料')+'</button></div>':''):''))+
    '</section>';
  }
  async function search(q,type,force){
   if(story.busy)return;
-  story.busy=true;story.error='';story.warnings=[];story.query=q;story.type=type;story.selected=null;story.chosen.clear();
+  story.busy=true;story.error='';story.warnings=[];story.query=q;story.type=type;story.selected=null;story.resultsExpanded=false;story.chosen.clear();
   render();
   const key='wt-story-cache-'+type+'-'+q.toLowerCase();let fromCache=false;
   try{
@@ -364,10 +364,11 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   void search(q,type,true);
  },true);
  document.addEventListener('click',ev=>{
-  const el=ev.target.closest('[data-story-quick],[data-story-hot],[data-story-select],[data-story-back],[data-story-parse],[data-story-create]');
+  const el=ev.target.closest('[data-story-quick],[data-story-hot],[data-story-select],[data-story-back],[data-story-parse],[data-story-create],[data-story-results-toggle]');
   if(!el)return;ev.preventDefault();ev.stopImmediatePropagation();
   try{
-   if(el.dataset.storyQuick!==undefined){
+   if(el.dataset.storyResultsToggle!==undefined){story.resultsExpanded=!story.resultsExpanded;render()}
+   else if(el.dataset.storyQuick!==undefined){
     const q=el.dataset.storyQuick;void search(q,q==='简爱'?'novel':'drama',true);
    }else if(el.dataset.storyHot!==undefined)void search('','drama',true);
    else if(el.dataset.storySelect!==undefined)choose(el.dataset.storySelect);
