@@ -382,7 +382,9 @@
    const row=remote(p),h=p?.handoff||{},panels=p?.panels||[];
    const named=!!p&&!!String(p.title||'').trim()&&p.title!=='未命名新作';
    const story=named&&!!String(p.description||p.ideaSeed||'').trim();
-   const cast=!!(p?.characterRefs?.length||p?.characters?.trim()||p?.creativeDirection?.cast?.some(x=>x.name&&x.look));
+   const refs=Array.isArray(p?.characterRefs)?p.characterRefs:[];
+   const pendingCharacters=refs.some(r=>r.pending_author_review===true||(data.characters||[]).some(c=>String(c.characterId||c.id)===String(r.characterId)&&c.origin==='ai-draft'));
+   const cast=!pendingCharacters&&!!(refs.length||p?.characters?.trim()||p?.creativeDirection?.cast?.some(x=>x.name&&x.look));
    const board=panels.length>=4&&panels.every(x=>String(x?.scene||'').trim().length>=12);
    const style=!!p?.creativeDirection?.styleId&&!!p?.creativeDirection?.approval?.lock_hash&&
       (typeof wtDirector==='object'?wtDirector.approved(p):p.creativeDirection.approval.author_approved===true);
@@ -492,6 +494,11 @@
    const linked=ids.map(ref=>{
      const original=catalog.find(x=>String(x.characterId||x.id)===String(ref.characterId));
      const snap=ref.snapshot|| (original?characterSnapshot(original):null);
+     const waiting=ref.pending_author_review===true||original?.origin==='ai-draft';
+     if(waiting)return '<article class="wt4-character-card wt4-pending-character"><div class="wt4-character-head"><strong>'+html(ref.comicName||original?.originalName||'待确认角色')+'</strong><small>AI 人物建议 · 未确认入库</small></div>'+
+       '<p>'+html(original?.description||'外观待完善')+' · '+html(original?.costume||'服装待完善')+'</p>'+
+       '<p class="wt4-warning">这是 AI 生成人物草稿。作者确认后才能进入正式角色资产库、锁定版本并用于生产。</p>'+
+       (locked?'':'<button class="button dark" data-wt4-confirm-role="'+html(ref.characterId)+'">确认人物设定并建档</button>')+'</article>';
      if(!snap)return '<p class="wt4-warning">角色 '+html(ref.characterId)+' 在资产库中不存在，原始项目引用已保留，需人工修复。</p>';
      const local=p.characterOverrides?.[ref.characterId]||{};
      return '<article class="wt4-character-card"><div class="wt4-character-head"><strong>'+
@@ -506,7 +513,7 @@
        '" data-wt4-char-field="costume"'+(locked?' disabled':'')+'>'+html(local.costume||'')+'</textarea></label></div>'+
        '<small>作品内的修改不会写回角色档案原型。派单后锁定版本，不支持静默更换。</small></article>';
    }).join('');
-   const unlinked=catalog.filter(c=>!ids.some(x=>String(x.characterId)===String(c.characterId||c.id)));
+   const unlinked=catalog.filter(c=>c.origin!=='ai-draft'&&!ids.some(x=>String(x.characterId)===String(c.characterId||c.id)));
    const originatingWork=c=>(data.projects||[]).find(x=>String(x.id)===String(c.originProjectId))?.title||'未标记作品';
    const facets=[['gender','性别'],['age','年龄'],['profession','职业'],['work','来源作品']];
    const selectFacets=facets.map(([key,label])=>{
@@ -596,6 +603,22 @@
    else {p.title=String(values.title).trim();p.description=String(values.description).trim();p.category=String(values.category||'原创故事').trim()||'原创故事';p.ideaSeed=p.description;}
    setChange(p,'从'+(type==='idea'?'一句话创作':'自主创作')+'入口立项');
    nav('workspace/'+p.id+'/0');
+ }
+ function confirmAIDraft(p,id){
+   if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return false;
+   const ref=(p.characterRefs||[]).find(r=>String(r.characterId)===String(id));
+   const original=(data.characters||[]).find(c=>String(c.characterId||c.id)===String(id));
+   if(!ref||!original||original.origin!=='ai-draft'||String(original.originProjectId)!==String(p.id))return false;
+   if(!String(original.description||'').trim()||!String(original.costume||'').trim())return false;
+   original.version=Math.max(1,Number(original.version)||1);
+   original.origin='author_confirmed_ai';
+   original.reviewStatus='confirmed';
+   original.authorConfirmedAt=new Date().toISOString();
+   ref.version=original.version;
+   ref.snapshot=characterSnapshot(original);
+   ref.pending_author_review=false;
+   setChange(p,'作者确认 AI 原创角色 '+(original.originalName||original.name)+'，固定 v'+original.version);
+   return true;
  }
  function linkCharacter(p,c){
    if(!Array.isArray(p.characterRefs))p.characterRefs=[];
@@ -703,6 +726,10 @@
      if(!t)return notify('选题不存在，请刷新选题池');
      newProject(t);const p=selected();p.entryType='hotspot';p.handoff={...(p.handoff||{}),mode:'hotspot'};
      setChange(p,'从热点改编入口导入选题');nav('workspace/'+p.id+'/0');return}
+   const pending=ev.target.closest('[data-wt4-confirm-role]');
+   if(pending){ev.preventDefault();const p=selected(),id=pending.dataset.wt4ConfirmRole;
+     if(!confirmAIDraft(p,id))return notify('人物外观与服饰必须完整，且只能由原作品作者在创意锁定前确认');
+     notify('人物已确认建档，后续生成将使用锁定版本');nav('workspace/'+p.id+'/1');return}
    const link=ev.target.closest('[data-wt4-character-link]');
    if(link){ev.preventDefault();const p=selected(),id=document.querySelector('#wt4-char-asset')?.value;
      if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('角色已锁定，请新建修订版');
@@ -726,6 +753,7 @@
    const values={};document.querySelectorAll('[data-wt4-char-filter]').forEach(el=>{values[el.dataset.wt4CharFilter]=el.value});
    const menu=document.querySelector('#wt4-char-asset');if(!menu)return;
    const matches=(data.characters||[]).filter(c=>{
+     if(c.origin==='ai-draft')return false;
      const id=String(c.characterId||c.id||'');if(refs.has(id))return false;
      const origin=(data.projects||[]).find(p=>String(p.id)===String(c.originProjectId))?.title||'未标记作品';
      return ['gender','age','profession'].every(k=>!values[k]||String(c[k]||'')===values[k])&&(!values.work||origin===values.work);
@@ -752,6 +780,6 @@
    setChange(p,'更新角色作品内版本覆盖，不修改角色资产库');
  },true);
  window.wt4Workspace=workspace;
- window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry};
+ window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft};
  if(location.hash.startsWith('#/workspace')||location.hash.startsWith('#/production'))queueMicrotask(()=>parseRoute());
 })();
