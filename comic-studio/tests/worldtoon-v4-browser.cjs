@@ -33,7 +33,12 @@ function png(width,height,r,g,b){
   const raw=Buffer.alloc((width*3+1)*height);
   for(let y=0;y<height;y++){
     const off=y*(width*3+1);
-    for(let x=0;x<width;x++){raw[off+1+x*3]=r;raw[off+2+x*3]=g;raw[off+3+x*3]=b;}
+    for(let x=0;x<width;x++){
+      // Nonart technical fixture: a small pseudo-random patch keeps the native PNG
+      // above the existing 40KB upload integrity gate. It is never publishable art.
+      const n=(x<230&&y<230)?((Math.imul(x+11,1103515245)^Math.imul(y+29,2654435761)^Math.imul(r+41,16807))>>>0):0;
+      raw[off+1+x*3]=n?(n&255):r;raw[off+2+x*3]=n?((n>>>8)&255):g;raw[off+3+x*3]=n?((n>>>16)&255):b;
+    }
   }
   const crcTable=Array.from({length:256},(_,i)=>{let n=i;for(let j=0;j<8;j++)n=(n&1)?0xedb88320^(n>>>1):(n>>>1);return n>>>0;});
   const crc32=bytes=>{let c=0xffffffff;for(const v of bytes)c=crcTable[(c^v)&255]^(c>>>8);return(c^0xffffffff)>>>0;};
@@ -229,6 +234,38 @@ async function test(){
     assert.match(entries.get('caption.md').toString(),/星际邮局/);
     assert.match(entries.get('sources.md').toString(),/原创虚构故事/);
     fs.writeFileSync(path.join(out,'synthetic-technical-test-ONLY.zip'),zip);
+
+    // Exercise actual existing ZIP import: reject tampering and then accept the intact
+    // technical fixture without remote GitHub publication, QA or author signatures.
+    await page.goto(base+'#/workspace/'+self.id+'/5');
+    await page.locator('#wt3-zip').waitFor();
+    const stamp=Buffer.from('"sha256": "');
+    const at=zip.indexOf(stamp);
+    assert.ok(at>0,'V4 manifest hashes are present in ZIP');
+    const forged=Buffer.from(zip);forged.fill(48,at+stamp.length,at+stamp.length+64); // zeros
+    await page.locator('#wt3-zip').setInputFiles({name:'tampered-v4-fixture.zip',mimeType:'application/zip',buffer:forged});
+    await page.waitForFunction(({key,id})=>{
+      const p=JSON.parse(localStorage.getItem(key)).projects.find(x=>x.id===id);
+      return p?.handoff?.importStatus==='导入失败';
+    },{key:KEY,id:self.id},{timeout:15000});
+    const tamperedFeedback=await page.evaluate(({key,id})=>{
+      const p=JSON.parse(localStorage.getItem(key)).projects.find(x=>x.id===id);
+      return p.handoff.importDetail;
+    },{key:KEY,id:self.id});
+    assert.match(tamperedFeedback,/V4 画格原图 SHA256 不匹配/,'tampered PNG/hash bundle is rejected');
+    await page.locator('#wt3-zip').setInputFiles({name:'untouched-v4-fixture.zip',mimeType:'application/zip',buffer:zip});
+    await page.waitForFunction(({key,id})=>{
+      const p=JSON.parse(localStorage.getItem(key)).projects.find(x=>x.id===id);
+      return p?.handoff?.importStatus==='本地校验完成，待远端暂存';
+    },{key:KEY,id:self.id},{timeout:20000});
+    const staged=await page.evaluate(({key,id})=>{
+      const p=JSON.parse(localStorage.getItem(key)).projects.find(x=>x.id===id);
+      return {status:p.handoff.importStatus,assets:p.handoff.stagedFiles?.length,queuedAt:p.handoff.repoQueuedAt,authorApproved:p.handoff?.authorApproved};
+    },{key:KEY,id:self.id});
+    assert.equal(staged.assets,12,'9 panels, cover, caption and sources staged locally with genuine SHA checks');
+    assert.ok(!staged.queuedAt&&!staged.authorApproved,'local import never claims approval or GitHub upload');
+    reports.push({test:'V4 ZIP corrupted-hash rejection + actual existing importer round-trip',result:'passed (synthetic fixture only)'});
+
     reports.push({test:'independent 9+cover native PNG integrity → ZIP download and unpack',result:'passed (synthetic fixture, not artwork QA)'});
 
     // A genuinely isolated phone viewport: no side-scrolling, three tappable entries.
