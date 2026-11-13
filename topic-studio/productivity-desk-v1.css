@@ -1,0 +1,153 @@
+/* DAVYLAB · Productivity Desk V1 — compact sources and guided experiments */
+.productivity-desk{
+ background:#fff;
+ border:1px solid #dbe5ec;
+ border-radius:15px;
+ padding:26px;
+ margin:0 0 18px;
+ box-shadow:0 5px 18px rgba(36,58,78,.045);
+ min-width:0;
+}
+.productivity-desk .pd-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;margin-bottom:19px}
+.productivity-desk .pd-head h2{font-size:23px;font-weight:780;line-height:1.3;letter-spacing:-.5px;margin:4px 0 8px;color:#1d3a55}
+.productivity-desk .pd-head p{font-size:13px;line-height:1.7;color:#6b7f92;max-width:740px;margin:0}
+.productivity-desk .pd-kicker{font-size:10px;letter-spacing:1.6px;font-weight:850;color:#5080a4}
+.productivity-desk .pd-indicator{flex:0 0 auto;align-self:center;padding:8px 12px;border-radius:30px;border:1px solid #dce8f1;background:#f3f8fc;color:#4b7596;font-size:11px;font-weight:750}
+.productivity-desk .pd-tools{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:9px;align-items:center;margin:0 0 17px}
+.productivity-desk .pd-tools .pd-label{grid-column:1/-1;display:block;color:#617a90;font-size:12px;font-weight:700;line-height:1.4}
+.productivity-desk .pd-tools input{height:43px;min-width:0;width:100%;padding:10px 13px;border:1px solid #dbe5ec;border-radius:9px;font-size:13px;outline-offset:2px;background:#fff;color:#1e3a51}
+.productivity-desk button{
+ cursor:pointer;
+ border:1px solid #d9e4ed;
+ border-radius:9px;
+ background:#fff;
+ color:#315d80;
+ font-weight:750;
+ font-size:12px;
+ padding:10px 13px;
+ min-height:40px;
+ line-height:1.3;
+ transition:border-color .16s ease,background .16s ease;
+}
+.productivity-desk button:hover{background:#f1f7fb;border-color:#a7c6dd}
+.productivity-desk button:focus-visible,.productivity-desk input:focus-visible,.productivity-desk textarea:focus-visible,.productivity-desk select:focus-visible{outline:2px solid #2875af;outline-offset:2px}
+.productivity-desk button.pd-primary{background:#286f9f;color:#fff;border-color:#286f9f}
+.productivity-desk button.pd-primary:hover{background:#1b5b85;color:#fff}
+.productivity-desk .pd-kpis{
+ display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+ gap:11px;margin:0 0 20px;
+}
+.productivity-desk .pd-kpis>div{
+ background:#f3f8fb;
+ border:1px solid #e1eaf1;
+ border-radius:11px;
+ padding:17px 18px;
+ display:flex;flex-direction:column;gap:4px;
+ min-width:0;
+}
+.productivity-desk .pd-kpis strong{font-size:26px;line-height:1.1;letter-spacing:-.7px;color:#1a4c75;font-weight:850}
+.productivity-desk .pd-kpis span{font-size:11px;color:#73899d;line-height:1.4}
+.productivity-desk .pd-list-head{display:flex;justify-content:space-between;gap:13px;align-items:baseline;border-bottom:1px solid #e4edf3;padding:0 1px 12px;margin:0 0 12px}
+.productivity-desk .pd-list-head strong{font-size:15px;color:#233e56;font-weight:790}
+.productivity-desk .pd-list-head span{font-size:11px;color:#8b9ca9}
+.productivity-desk .pd-source-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;min-width:0}
+.productivity-desk .pd-source{
+ display:flex;flex-direction:column;gap:9px;
+ min-width:0;
+ padding:17px;
+ border:1px solid #e0e9ef;
+ border-radius:11px;
+ background:#fff;
+ min-height:177px;
+}
+.productivity-desk .pd-source:hover{border-color:#a8cadf}
+.productivity-desk .pd-source-meta{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap;color:#72889b;font-size:10px;line-height:1.4}
+.productivity-desk .pd-source-meta span:first-child{font-weight:750;color:#356f98;background:#eff6fb;padding:4px 7px;border-radius:6px}
+.productivity-desk .pd-source h3{font-size:15px;line-height:1.55;font-weight:770;color:#23415a;margin:0;overflow-wrap:anywhere}
+.productivity-desk .pd-source p{color:#6e8293;font-size:12px;line-height:1.6;margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.productivity-desk .pd-actions{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin-top:10px}
+.productivity-desk .pd-source .pd-actions{margin-top:auto}
+.productivity-desk .pd-actions a{
+ display:inline-flex;align-items:center;
+ color:#306b96;text-decoration:none;
+ border:1px solid #d9e5ed;
+ border-radius:8px;
+ font-size:12px;
+ font-weight:730;
+ padding:10px 12px;
+ min-height:39px;
+}
+.productivity-desk .pd-actions a:hover{border-color:#9abbda;background:#f5f9fc}
+.productivity-desk .pd-brief{margin-top:22px;border-top:1px solid #e7edf2;padding-top:19px}
+.productivity-desk .pd-brief textarea{
+ display:block;width:100%;max-width:100%;min-height:210px;
+ padding:16px 17px;
+ background:#fbfcfe;
+ border:1px solid #dce6ef;
+ border-radius:10px;
+ font-family:"SFMono-Regular",Consolas,"Microsoft Yahei",monospace;
+ font-size:12px;line-height:1.8;color:#325066;
+ resize:vertical;
+}
+.productivity-desk .pd-actions [role=status],.productivity-desk #pdBriefStatus,.productivity-desk #pdGrowthStatus{
+ font-size:11px;line-height:1.7;color:#617e92;
+ flex:1 0 180px;
+}
+.productivity-desk .pd-empty{grid-column:1/-1;font-size:12px;line-height:1.7;color:#7890a0;background:#f5f9fb;border:1px dashed #d9e6ef;border-radius:10px;padding:18px}
+.productivity-desk .pd-workflow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.productivity-desk .pd-workstep{
+ display:flex;flex-direction:column;gap:9px;
+ border:1px solid #e0e9f0;border-radius:12px;
+ padding:16px 15px;min-width:0;background:#fcfdfe;
+}
+.productivity-desk .pd-step-num{
+ width:27px;height:27px;display:grid;place-items:center;background:#e8f3fb;
+ color:#2d729e;border-radius:8px;font-weight:850;font-size:11px;
+}
+.productivity-desk .pd-workstep label{font-size:12px;font-weight:750;color:#324e64}
+.productivity-desk .pd-workstep select,.productivity-desk .pd-workstep input{
+ width:100%;min-width:0;max-width:100%;min-height:43px;
+ padding:9px 12px;border:1px solid #dbe6ed;
+ border-radius:9px;background:#fff;color:#24445c;
+ font-size:13px;
+}
+.productivity-desk .pd-experiment-list{display:grid;gap:8px}
+.productivity-desk .pd-experiment{
+ display:flex;justify-content:space-between;align-items:center;gap:15px;
+ padding:15px 16px;
+ border:1px solid #e3ebf1;
+ border-radius:10px;background:#fafcfe;
+}
+.productivity-desk .pd-experiment strong{font-size:13px;color:#263f58;line-height:1.55}
+.productivity-desk .pd-experiment p{font-size:11px;color:#71899a;line-height:1.6;margin:4px 0 0}
+.productivity-desk .pd-experiment>span{white-space:nowrap;flex:0 0 auto;border-radius:30px;background:#edf5fa;color:#407696;padding:7px 9px;font-size:10px;font-weight:750}
+@media(max-width:1050px){
+ .productivity-desk .pd-source-list{grid-template-columns:1fr}
+ .productivity-desk .pd-workflow{grid-template-columns:1fr}
+ .productivity-desk .pd-workstep{padding:14px}
+}
+@media(max-width:760px){
+ .productivity-desk{padding:15px!important;margin-bottom:12px!important;border-radius:12px!important}
+ .productivity-desk .pd-head{flex-direction:column;gap:9px;margin-bottom:14px}
+ .productivity-desk .pd-head h2{font-size:20px}
+ .productivity-desk .pd-head p{font-size:12px}
+ .productivity-desk .pd-indicator{align-self:flex-start;font-size:10px;padding:6px 9px}
+ .productivity-desk .pd-tools{grid-template-columns:1fr 1fr;gap:7px}
+ .productivity-desk .pd-tools .pd-label,.productivity-desk .pd-tools input{grid-column:1/-1}
+ .productivity-desk .pd-tools button{min-width:0;font-size:11px;padding:8px 9px;min-height:37px}
+ .productivity-desk .pd-kpis{gap:6px;margin-bottom:14px}
+ .productivity-desk .pd-kpis>div{padding:12px 9px}
+ .productivity-desk .pd-kpis strong{font-size:20px}
+ .productivity-desk .pd-kpis span{font-size:10px}
+ .productivity-desk .pd-list-head{align-items:start}
+ .productivity-desk .pd-list-head strong{font-size:13px}
+ .productivity-desk .pd-list-head span{font-size:10px}
+ .productivity-desk .pd-source{padding:13px;gap:7px;min-height:0}
+ .productivity-desk .pd-source h3{font-size:14px}
+ .productivity-desk .pd-source p{font-size:11px}
+ .productivity-desk .pd-brief textarea{min-height:185px;font-size:11px;padding:12px}
+ .productivity-desk button,.productivity-desk .pd-actions a{font-size:11px;min-height:35px;padding:8px 10px}
+ .productivity-desk .pd-experiment{align-items:start}
+ .productivity-desk .pd-experiment>span{font-size:9px}
+}
+@media(prefers-reduced-motion:reduce){.productivity-desk button{transition:none}}
