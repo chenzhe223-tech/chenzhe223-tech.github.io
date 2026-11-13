@@ -108,8 +108,8 @@
 - 上游：[XNews 官网](https://xnews.qiaomu.ai/) / [开源仓库](https://github.com/joeseesun/xnews)（代码 MIT）。XNews 是公开的海外内容译写/精选项目，并非本平台的可执行 Skill；这里只把它作为外部内容线索来源。
 - 入口：现有「选题发现」的机会观察区域新增 XNews 海外精选快捷入口；下方内嵌 XNews 发现卡片。保留原有 DAVYLAB AI Radar、赛道研究和原创灵感。
 - 数据：站点读取同源 topic-studio/data/xnews-discovery.json，不要求浏览器直接跨域访问第三方。首批来自上游 GitHub 公共 articles.json 索引；只保留标题、≤240 字的短导读、日期、标签、XNews 中文阅读链接和原始出处；不复制全文及媒体，也不伪造流量。
-- 更新：GitHub Actions .github/workflows/topic-studio-xnews-sync.yml 于每日 09:25（UTC+8）执行；Python 脚本 topic-studio/scripts/sync_xnews.py 先读取 https://xnews.qiaomu.ai/articles.json，失败后尝试上游 GitHub Raw 公共镜像；遇到超时、空数据或结构异常保留最后一次有效快照。Actions 必须实际启用且具备写权限，文件存在不等于已经成功运行。
-- 功能：按 Agent、模型研究、工具产品、商业、安全、创作分类；按关键词搜索、日期和内部编辑优先级排序；点击中文阅读、原始出处、创作指令或加入选题池。
+- 更新：GitHub Actions .github/workflows/topic-studio-xnews-sync.yml 于每日 09:25（UTC+8）执行；Python 脚本 topic-studio/scripts/sync_xnews.py 先读取 https://xnews.qiaomu.ai/articles.json，失败后尝试上游 GitHub Raw 公共镜像，同时在同步快照里记录实际使用的 fetched_from 地址；遇到超时、空数据或结构异常保留最后一次有效快照。Actions 必须实际启用且具备写权限，文件存在不等于已经成功运行。
+- 功能：按 Agent、模型研究、工具产品、商业、安全、创作分类；按关键词搜索、日期和内部编辑优先级排序；点击中文阅读、原始出处、创作指令，或选择「加入文章选题」「转贴图选题」两条入池路径；贴图进入现有周一/三/五/日智能排期。
 - 统一发现：XNews 元数据按原文链接去重后进入已有 AI Radar 机会雷达的主题聚类与推荐列表；遇到重复链接时原有 AI Radar 条目优先，XNews 独立区仍有对应的中文阅读入口。不会覆盖 Radar 上游计数或原始数据。
 - 入池：沿用现有选题池、智能排期、创作指令和配图策划；保留 origin=xnews、中文阅读来源、原始来源发布日期及待核实状态。相同链接/原标题不会重复加入，也不会自动批准、发文或发图。
 - 失效保护：同源快照不可读取则退回本机最后一次有效数据并显式标注历史缓存；两者都失败时提示错误并保留外部源站入口，原有 Radar 继续独立工作。
