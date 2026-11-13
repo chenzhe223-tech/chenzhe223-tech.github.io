@@ -55,7 +55,7 @@ function normalise(input,now=new Date()){
   const iso=r.published||r.date||r.updated||"";
   if(iso){const d=new Date(iso);if(Number.isFinite(d.getTime())){date=d.toISOString();days=Math.floor((now.getTime()-d.getTime())/86400000);}}
   if(days < -1 || days>MAX_DAYS)continue;
-  const scoreValue=(v)=>Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=10000000?Number(v):null;
+  const scoreValue=(v)=>(v===null||v===undefined||v==="")?null:(Number.isInteger(Number(v))&&Number(v)>=0&&Number(v)<=10000000?Number(v):null);
   const record={
     title,summary:clean(r.summary||r.description||r.why,340),
     url:link,originalUrl:link,source:clean(r.source||"公开来源",80),
