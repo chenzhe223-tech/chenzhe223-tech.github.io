@@ -293,6 +293,39 @@ async function test(){
     await phone.screenshot({path:path.join(out,'mobile-workspace.png'),fullPage:true});
     reports.push({test:'real Chromium mobile tap, create, responsive viewport',result:'passed'});
     await mobile.close();
+
+    // Tablet is a separate real browser context, not an emulated CSS assertion.
+    const tablet=await browser.newContext({viewport:{width:820,height:1180},hasTouch:true,deviceScaleFactor:1.5});
+    try{
+      const pad=await tablet.newPage();
+      pad.on('pageerror',e=>errors.push('tablet: '+e.message));
+      await pad.goto(base,{waitUntil:'domcontentloaded'});
+      await pad.locator('[data-wt4-entry="author"]').waitFor();
+      assert.equal(await pad.locator('.wt4-entry-card').count(),3,'tablet has all three creation paths');
+      const entryGeom=await pad.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth}));
+      assert.ok(entryGeom.content<=entryGeom.viewport+2,'tablet portrait homepage overflow: '+JSON.stringify(entryGeom));
+      await pad.locator('[data-wt4-entry="author"]').click();
+      await pad.locator('[data-wt4-create="author"] [name="title"]').fill('平板端独立验收作品');
+      await pad.locator('[data-wt4-create="author"] [name="description"]').fill('测试平板端创建漫画，切换角色与剧情分镜，再旋转屏幕');
+      await pad.locator('[data-wt4-create="author"] [type="submit"]').click();
+      await pad.locator('.wt4-step').first().waitFor();
+      assert.equal(await pad.locator('.wt4-step').count(),7);
+      await pad.screenshot({path:path.join(out,'tablet-portrait.png'),fullPage:true});
+      const id=await pad.evaluate(()=>location.hash.split('/')[2]);
+      await pad.goto(base+'#/workspace/'+id+'/1');
+      await pad.locator('.wt4-character-workspace').waitFor();
+      await pad.goto(base+'#/workspace/'+id+'/2');
+      await pad.locator('[data-panel-index="0"][data-panel-field="scene"]').waitFor();
+      await pad.setViewportSize({width:1180,height:820});
+      await pad.waitForTimeout(160);
+      const landscape=await pad.evaluate(()=>({content:document.documentElement.scrollWidth,viewport:innerWidth,
+        steps:document.querySelectorAll('.wt4-step').length}));
+      assert.ok(landscape.content<=landscape.viewport+2,'tablet landscape workspace overflow: '+JSON.stringify(landscape));
+      assert.equal(landscape.steps,7,'tablet rotation retains unified seven-step workflow');
+      await pad.screenshot({path:path.join(out,'tablet-landscape.png'),fullPage:true});
+      reports.push({test:'real Chrome tablet portrait + landscape, three-entry creation and seven-step navigation',result:'passed'});
+    }finally{await tablet.close()}
+
     assert.deepEqual(errors,[],'browser JavaScript execution errors');
     fs.writeFileSync(path.join(out,'qa.json'),JSON.stringify({status:'PASS',environment:'offline local Chrome, no account and no paid model',generated_at:new Date().toISOString(),reports,limitations:['Illustrations are synthetic technical fixtures, never comic QA','No authenticated Supabase/Cloudflare API test','No live deployment verification']},null,2));
     console.log('WORLD/TOON V4 browser E2E PASS:\n'+reports.map(x=>'  - '+x.test+': '+x.result).join('\n'));
