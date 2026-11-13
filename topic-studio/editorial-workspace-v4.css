@@ -377,3 +377,45 @@ body[data-layout-columns] #section-discover.section.active,
 @media(prefers-reduced-motion:reduce){
  #section-discover .discover-quicknav a,#section-discover .opportunity-card,#section-discover .xnews-card{transition:none!important;}
 }
+
+
+/* Shell alignment: remove the older translucent blue/glass look while in discovery. */
+body:has(#section-discover.active) aside{
+ background:#fff!important;
+ border-right:1px solid #e1e8ee!important;
+ color:#375168!important;
+ box-shadow:none!important;
+ backdrop-filter:none!important;
+}
+body:has(#section-discover.active) aside .sideintro{display:none!important;}
+body:has(#section-discover.active) aside .brand{padding:3px 8px 15px!important;border-bottom:1px solid #e7edf1;}
+body:has(#section-discover.active) aside .mark{
+ background:#2c76aa!important;
+ color:#fff!important;
+ box-shadow:none!important;
+ border-radius:11px!important;
+}
+body:has(#section-discover.active) aside .navlabel{color:#9aa7b4!important;font-size:10px!important;font-weight:750!important;}
+body:has(#section-discover.active) aside .nav{
+ padding:12px 11px!important;
+ border-radius:9px!important;
+ font-size:13px!important;
+ color:#53677b!important;
+ background:transparent;
+ box-shadow:none!important;
+}
+body:has(#section-discover.active) aside .nav.active{
+ background:#e9f3fb!important;
+ color:#215c8f!important;
+ font-weight:800!important;
+}
+body:has(#section-discover.active) aside .nav:hover{background:#f1f6fa!important;}
+body:has(#section-discover.active) .topbar .crumb{font-size:13px!important;color:#586f82!important;}
+body:has(#section-discover.active) .topbar .actions .btn{font-size:12px!important;border-radius:9px!important;box-shadow:none!important;}
+body:has(#section-discover.active) .topbar .actions .btn.primary{
+ background:#2b71a8!important;border-color:#2b71a8!important;color:white!important;
+}
+@media(max-width:760px){
+ body:has(#section-discover.active) aside{box-shadow:none!important;}
+ body:has(#section-discover.active) aside .nav{font-size:12px!important;padding:9px 6px!important;}
+}
