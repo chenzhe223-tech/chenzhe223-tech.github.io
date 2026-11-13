@@ -40,10 +40,21 @@ const server=http.createServer((req,res)=>{
    await page.screenshot({path:'worldtoon-v4-screenshots/'+scenario.name+'-start.png',fullPage:true});
    if(scenario.mode==='hotspot'){
     assert.equal(await page.locator('a[href="#/live"]').count()>0,true);
-    await page.locator('.wt4-entry a[href="#/live"]').click();
-    await page.waitForFunction(()=>location.hash==='#/live');
-    assert.equal(await page.evaluate(()=>location.hash),'#/live');
-    report.tests.push({viewport:scenario.name,flow:'hotspot discovery route',passed:true});
+    await page.evaluate(()=>{
+     data.topics.unshift({id:'v4-browser-fixture',title:'仅用于隔离测试的虚构热点',summary:'该热点为自动化测试夹具，不是新闻事实。',
+      stage:'待核验',category:'AI 科技',heat:1,impact:1,story:1,source:'',isSample:true});
+     persist();
+    });
+    await page.locator('.wt4-entry a[href="#/radar"]').click();
+    await page.waitForFunction(()=>location.hash==='#/radar');
+    await page.locator('[data-action="topic-to-project"][data-id="v4-browser-fixture"]').click();
+    await page.waitForFunction(()=>location.hash.startsWith('#/workspace/')&&!!document.querySelector('.wt4-workspace'),{timeout:12000});
+    const actual=await page.evaluate(()=>({path:selected().creationPath,id:selected().id,sourceTitle:selected().sourceTitle||selected().title,
+      saved:JSON.parse(localStorage.getItem('davylab-comic-press-v1')||'{}').projects.some(x=>x.id===selected().id)}));
+    assert.equal(actual.path,'hotspot');
+    assert.equal(actual.saved,true);
+    assert.ok(actual.sourceTitle.includes('虚构热点'));
+    report.tests.push({viewport:scenario.name,flow:'hotspot to real project',source_claims:'test fixture, not news fact',passed:true});
    } else {
     if(scenario.mode==='one_line'){
      await page.locator('#wt4-idea').fill('未来城市里，一枚芯片意外成为所有人的护照');
