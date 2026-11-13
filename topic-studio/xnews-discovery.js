@@ -97,6 +97,21 @@ addFeed=function(item){
  if(topics.some(t=>canonical(t.sourceUrl)===canonical(sourceUrl)||keyTitle(t.sourceTitle)===keyTitle(item.title))){
    toast("这条来源或同题选题已在选题池中");return;
  }
+ if(item.requestedFormat==="贴图"){
+   topics.unshift({
+     id:uid(),title:"一张图看懂："+String(item.title||"海外 AI 观点").slice(0,70),
+     angle:"以 XNews 发现的公开观点为线索，一图解释关键概念和现实意义；所有数字、人物与原始观点须回到原文核验。",
+     summary:item.summary||"",sourceTitle:item.title||"",sourceUrl:item.url,
+     sourcePageUrl:item.xnewsUrl||item.sourcePageUrl||"",
+     sourceName:"XNews · 向阳乔木",sourcePublishedAt:item.published||"",
+     factCheckStatus:"待核实",origin:"xnews",format:"贴图",
+     status:"inbox",plannedDate:"",createdAt:new Date().toISOString(),
+     scores:{reader:3,timely:3,practical:3,distinct:3,brand:4}
+   });
+   saveTopics();
+   toast("已加入贴图选题，等待核实与制作");
+   return;
+ }
  const before=topics.length;
  baseAddFeed(item);
  if(topics.length>before){
@@ -136,7 +151,8 @@ function render(){
  '<a href="'+html(a.xnews_url)+'" target="_blank" rel="noopener noreferrer">中文阅读</a>'+
  '<a href="'+html(a.original_url)+'" target="_blank" rel="noopener noreferrer">原文</a>'+
  '<button type="button" data-x-prompt="'+html(a.id)+'">创作指令</button>'+
- '<button type="button" class="xnews-add" data-x-add="'+html(a.id)+'"'+(inPool(a)?" disabled":"")+'>'+(inPool(a)?"已入池":"加入选题池")+'</button></div></div></article>').join("");
+ '<button type="button" class="xnews-add" data-x-add="'+html(a.id)+'"'+(inPool(a)?" disabled":"")+'>'+(inPool(a)?"已入池":"加入文章选题")+'</button>'+
+ '<button type="button" data-x-poster="'+html(a.id)+'"'+(inPool(a)?" disabled":"")+'>转贴图选题</button></div></div></article>').join("");
  more.hidden=items.length<=state.visible;
  more.textContent="查看剩余 "+Math.max(0,items.length-state.visible)+" 条";
  const synced=state.meta?.synced_at;
@@ -166,10 +182,11 @@ async function load(noCache=false){
 }
 root.addEventListener("click",e=>{
  const btn=e.target.closest("button");if(!btn)return;
- const action=btn.dataset.xAdd?"add":btn.dataset.xPrompt?"prompt":null;
+ const action=btn.dataset.xPoster?"poster":btn.dataset.xAdd?"add":btn.dataset.xPrompt?"prompt":null;
  if(!action)return;
- const id=btn.dataset.xAdd||btn.dataset.xPrompt,a=state.all.find(x=>x.id===id);if(!a)return;
+ const id=btn.dataset.xPoster||btn.dataset.xAdd||btn.dataset.xPrompt,a=state.all.find(x=>x.id===id);if(!a)return;
  const entry=toFeed(a);
+ if(action==="poster"){entry.requestedFormat="贴图";addFeed(entry);render();return}
  if(action==="add"){addFeed(entry);render();return}
  showPrompt(entry);changeSection("library");$x("promptBox")?.scrollIntoView({behavior:"smooth",block:"center"});
  if(typeof toast==="function")toast("已生成创作指令；请核验原文");
