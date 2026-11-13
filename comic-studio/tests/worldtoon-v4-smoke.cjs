@@ -121,4 +121,21 @@ selector({target:{id:'wt4-project',value:'p2'}});
 assert.equal(navResult,'workspace/p2');
 assert.doesNotMatch(read('workflow-v4.js'),/AI 已生成所有图片/,'no fake AI success');
 assert.match(read('workflow-v4.js'),/确认本次 AI 扩写|调用已配置的真实模型/,'paid inference requires explicit action');
+
+const n=ctx.data.projects.length;
+saveEntry('idea',{seed:'机器人拒绝上班，于是全城召开仲裁大会'});
+assert.equal(ctx.data.projects.length,n+1,'one-sentence form makes a real local project record');
+assert.equal(current.entryType,'idea');assert.equal(current.handoff.mode,'original');
+assert.match(current.description,/机器人拒绝上班/,'seed persisted in same project');
+assert.equal(navResult,'workspace/new-p/0','idea path joins seven-step workspace');
+saveEntry('author',{title:'月亮邮局',description:'老邮差修补月亮邮局的最后一封信',category:'童话'});
+assert.equal(ctx.data.projects.length,n+2,'self-authored path makes project record');
+assert.equal(current.entryType,'author');assert.equal(current.title,'月亮邮局');assert.equal(current.handoff.mode,'original');
+const hotspot=eventCallbacks.click.find(fn=>String(fn).includes("data-wt4-topic"));
+ctx.data.topics=[{id:'newshot-01',title:'公开新闻线索',source:'https://example.org/article'}];
+hotspot({target:{closest:selector=>selector==='[data-wt4-topic]'?{dataset:{wt4Topic:'newshot-01'}}:null},preventDefault(){}});
+assert.equal(ctx.data.projects.length,n+3,'hotspot path makes project record');
+assert.equal(current.entryType,'hotspot');assert.equal(current.handoff.mode,'hotspot');
+assert.equal(navResult,'workspace/new-p/0','all entries route to same unified stage');
+
 console.log('WORLD/TOON V4.1 smoke PASS: three creation paths, seven stages, character snapshots, local immutability, QA gates and navigation.');
