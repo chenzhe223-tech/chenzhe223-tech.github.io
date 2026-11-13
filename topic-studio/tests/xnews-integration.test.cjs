@@ -36,7 +36,7 @@ async function run(){
   await f.api.load(true);
   assert.equal(f.api.status().loaded,true);
   assert.equal(f.api.getItems().length,fixtureJson.count);
-  assert.equal((f.nodes.xnewsList.innerHTML.match(/class="xnews-card"/g)||[]).length,Math.min(9,fixtureJson.count));
+  assert.equal((f.nodes.xnewsList.innerHTML.match(/class="xnews-card"/g)||[]).length,Math.min(6,fixtureJson.count));
   assert.ok(f.nodes.xnewsList.innerHTML.includes("中文阅读"));
   assert.ok(f.nodes.xnewsList.innerHTML.includes("原文"));
   const merged=f.env.getFeed();
