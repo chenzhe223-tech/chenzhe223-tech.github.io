@@ -24,7 +24,7 @@ const STEPS=[
  {name:'agent-comic-kit',role:'角色圣经与画格复核',ready:'角色一致性模板已接入',repo:'https://github.com/Saeyeon-developer/agent-comic-kit'},
  {name:'TT_AutoManga',role:'逐格素材与文字排版',ready:'浏览器本地合成已接入',repo:'https://github.com/TTDiang2/TT_AutoManga'}
 ];
-const isV3=p=>!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
+const isV3=p=>['hotspot','one_line','original'].includes(p?.creationPath)||!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
 const clean=s=>String(s||'').replace(/[\u0000-\u001f]/g,' ').trim();
 function cast(p){
  const bible=p?.characterBible;
