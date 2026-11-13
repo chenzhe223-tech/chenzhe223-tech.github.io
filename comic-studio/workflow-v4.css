@@ -224,3 +224,13 @@
 .wt4-source-review summary{cursor:pointer;font-size:14px;font-weight:700;color:#3a332b}
 .wt4-source-review .wt4-story-fields{padding:20px 0 4px}
 @media(max-width:720px){.wt4-story-fields{grid-template-columns:1fr}.wt4-story-fields label:has(textarea){grid-column:auto}.wt4-story-form h3{font-size:18px}}
+
+/* V4 story: keep editorial creation compact and reserve import/publishing for later stages. */
+.wt4-story-compact{display:grid;gap:12px}
+.wt4-story-compact h2{margin:0;font-size:clamp(19px,2vw,23px)}
+.wt4-story-compact .wt3-compact-field,.wt4-story-compact .wt3-compact-drama label{display:grid;gap:7px;color:#61594f;font-size:12px}
+.wt4-story-compact textarea,.wt4-story-compact select{width:100%;max-width:100%;box-sizing:border-box;background:#fffefa;color:#302a23;border:1px solid #d7cfc4;border-radius:8px;padding:11px;min-width:0;font:inherit}
+.wt4-story-compact textarea{min-height:100px;resize:vertical;line-height:1.6}
+.wt4-story-compact .wt3-compact-drama{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.wt4-story-compact .wt3-expand-consent[hidden],.wt4-story-compact .wt3-expand-feedback[hidden]{display:none}
+@media(max-width:640px){.wt4-story-compact{gap:10px}.wt4-story-compact .wt3-compact-drama{grid-template-columns:1fr}}
