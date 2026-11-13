@@ -33,20 +33,17 @@ jobs:
           python-version: "3.12"
       - name: Validate collector contract
         run: python -m unittest discover -s topic-studio/tests -p 'test_hotspot_sync.py' -v
-      - name: Validate recommendation ranking and source evidence
-        run: |
-          if [ -f topic-studio/tests/hotspot-recommender.test.cjs ]; then
-            node topic-studio/tests/hotspot-recommender.test.cjs
-          fi
       - name: Fetch public discussion and repository signals
         run: python topic-studio/scripts/sync_hotspots.py
+      - name: Validate and export Top-10 ranked evidence
+        run: node topic-studio/tests/hotspot-recommender.test.cjs
       - name: Commit updated public metadata (no user data)
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "DAVYLAB Topic Studio Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add topic-studio/data/hotspot-signals.json
+          git add topic-studio/data/hotspot-signals.json topic-studio/qa/hotspot-top10-latest.json
           if ! git diff --cached --quiet; then
             git commit -m "data(topic-studio): refresh public AI hotspot signals [skip ci]"
             git pull --rebase origin "$GITHUB_REF_NAME"
