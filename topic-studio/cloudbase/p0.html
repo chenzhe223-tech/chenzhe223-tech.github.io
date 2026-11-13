@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DAVYLAB CloudBase · P0 接入诊断（只读）</title>
+<style>
+:root{font-family:system-ui,-apple-system,"Microsoft Yahei",sans-serif;color:#17314a;background:#f4f7fc}
+*{box-sizing:border-box}body{margin:0}.shell{max-width:760px;margin:7vh auto;padding:20px}
+.hero{padding:28px;background:#fff;border:1px solid #dae4ef;border-radius:16px}.kicker{font-size:11px;font-weight:800;letter-spacing:1.3px;color:#477da9}h1{font-size:27px;line-height:1.3;margin:9px 0 13px}p,li{font-size:13px;line-height:1.8;color:#63788e}
+label{display:block;font-weight:750;font-size:12px;margin:16px 0 6px}input{width:100%;padding:11px;border:1px solid #d5e2f0;border-radius:9px;font:13px monospace}
+button{border:0;background:#225d8e;color:#fff;padding:11px 16px;font-weight:700;border-radius:9px;cursor:pointer;margin:12px 0}
+button:disabled{opacity:.65;cursor:wait}.result{padding:13px;background:#f0f5fa;border-radius:9px;font-size:12px;line-height:1.8;white-space:pre-line;min-height:64px}
+.checks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:20px 0 0}
+.check{padding:13px;border-radius:10px;border:1px solid #e0eaf4;background:#fafcff}
+.check strong{display:block;font-size:12px}.check span{font-size:11px;color:#8596aa}
+.warning{margin-top:17px;border-top:1px solid #e4ebf2;padding-top:15px}
+@media(max-width:560px){.shell{padding:12px;margin:15px auto}.hero{padding:19px}.checks{grid-template-columns:1fr}h1{font-size:23px}}
+</style>
+</head>
+<body><main class="shell"><div class="hero">
+ <div class="kicker">DAVYLAB / CLOUD DATA / P0</div>
+ <h1>CloudBase 上海环境接入检查</h1>
+ <p>这里只做 SDK 初始化和本浏览器登录态读取。<strong>不会写数据库、上传选题、保存密码或开启同步。</strong>请在腾讯云控制台确认数据库类型后，再执行后续操作。</p>
+ <label for="env">目标环境 ID（不属于密钥）</label>
+ <input id="env" type="text" autocomplete="off" spellcheck="false" value="cloud1-d3guyfuxtfeef189a">
+ <button id="verify" type="button">只读检查 SDK 与当前登录态</button>
+ <div id="result" class="result" role="status" aria-live="polite">等待开始。注意：SDK 初始化成功不代表云端数据库已验证。</div>
+ <div class="checks">
+  <div class="check"><strong>环境地域</strong><span>上海 ap-shanghai（目标值）</span></div>
+  <div class="check"><strong>数据库类型</strong><span>待在 CloudBase 控制台核实</span></div>
+  <div class="check"><strong>用户身份认证</strong><span>待登录并核实</span></div>
+  <div class="check"><strong>数据权限</strong><span>待通过隔离测试</span></div>
+ </div>
+ <p class="warning">不支持在本页输入 UIN、APPID、SecretId、SecretKey、数据库密码。敏感配置只应在腾讯云安全管理端设置。返回 <a href="../">公众号选题工作台</a>。</p>
+</div></main>
+<script src="https://static.cloudbase.net/cloudbase-js-sdk/3.0.1/cloudbase.full.js"></script>
+<script>
+"use strict";
+document.getElementById("verify").addEventListener("click",async function(){
+ const button=this,result=document.getElementById("result");
+ const env=document.getElementById("env").value.trim();
+ if(!/^[-a-z0-9]{8,80}$/.test(env)){result.textContent="环境 ID 格式有误；未发起任何操作。";return}
+ if(!window.cloudbase||typeof window.cloudbase.init!=="function"){result.textContent="CloudBase SDK 脚本未加载，请检查浏览器网络。未接触业务数据。";return}
+ button.disabled=true;
+ try{
+  const app=window.cloudbase.init({env:env,region:"ap-shanghai"});
+  const auth=app.auth();
+  let state;
+  try{state=await auth.hasLoginState()}catch{state=null}
+  result.textContent="SDK 初始化：通过（仅本地 SDK 对象）\n登录状态："+(state?"检测到已有会话（尚未验证身份和权限）":"未检测到有效会话")+
+  "\n数据库类型：未知（请在腾讯云控制台核对）\n云端写入：未执行\n跨设备同步：未启用";
+ }catch(err){result.textContent="SDK 初始化未完成："+String(err?.message||err).slice(0,180)+"\n无任何业务数据上传。"}
+ finally{button.disabled=false}
+});
+</script>
+</body></html>
