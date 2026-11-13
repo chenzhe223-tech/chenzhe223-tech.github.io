@@ -383,7 +383,7 @@
      '<h2>'+html(stageNames[i])+'</h2></div><div class="buttons">'+next+
      '<a class="button" href="#/reader/'+encodeURIComponent(p.id)+'">阅读预览</a></div></div>'+
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
-     '<footer class="wt4-footer" role="status">保存状态：本机草稿已记录最后修改时间 '+html(p.updatedAt||'未知')+'。云端同步需登录并核验；GitHub 只认可实际入仓的工单和成品。所有审批均需作者独立确认。</footer></div>';
+     '<footer class="wt4-footer" role="status"><strong data-wt4-save-status data-state="'+(ui.wt4PersistError?'error':'saved')+'">'+(ui.wt4PersistError?'保存失败 · 当前修改可能在刷新后丢失':'本机草稿已保存 · '+html(p.updatedAt||'时间未知'))+'</strong>。云端同步需登录并核验；GitHub 只认可实际入仓的工单和成品。所有审批均需作者独立确认。</footer></div>';
  }
  function overview(){
    const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001')
