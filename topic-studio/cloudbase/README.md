@@ -5,7 +5,7 @@
 ## 已确认的信息
 
 - 地域：`ap-shanghai`
-- 主环境 ID（Web SDK 使用，属于非保密标识）：`cloud1-d3guyfuxtfeef189a`
+- 主环境 ID：在腾讯云控制台确认；暂不写入公开仓库，P0 诊断时由用户在浏览器输入。
 - 第二环境：仅视为独立环境，不擅自部署或切换
 - 已购买：CloudBase 个人版，成交价由用户提供为 ¥19.9。该价格不代表 CloudBase 之外的任何服务都已免费。
 - 主账号 UIN、APPID 不用于前端 SDK 初始化，因此这里不记录；**任何 SecretId / SecretKey / AppSecret / Publishable Key / 数据库密码都不得写入此公开仓库**。
