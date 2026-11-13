@@ -1,6 +1,6 @@
 {
   "status": "pass",
-  "tested_at": "2026-11-13T10:24:50+00:00",
+  "tested_at": "2026-11-13T10:27:58+00:00",
   "method": "Chromium Playwright local static test, synthetic localStorage only",
   "scope": "checkout smoke test, not production Pages or real user/account data",
   "results": [
@@ -113,6 +113,7 @@
       "bookmarkReveal": true,
       "growthLinkedExperiment": true,
       "researchSourceBrief": true,
+      "presetChecks": 0,
       "overflow": 0,
       "runtimeExceptions": 0
     },
@@ -225,6 +226,7 @@
       "bookmarkReveal": true,
       "growthLinkedExperiment": true,
       "researchSourceBrief": true,
+      "presetChecks": 42,
       "overflow": 0,
       "runtimeExceptions": 0
     },
@@ -337,6 +339,7 @@
       "bookmarkReveal": true,
       "growthLinkedExperiment": true,
       "researchSourceBrief": true,
+      "presetChecks": 0,
       "overflow": 0,
       "runtimeExceptions": 0
     },
@@ -449,6 +452,7 @@
       "bookmarkReveal": true,
       "growthLinkedExperiment": true,
       "researchSourceBrief": true,
+      "presetChecks": 42,
       "overflow": 0,
       "runtimeExceptions": 0
     }
