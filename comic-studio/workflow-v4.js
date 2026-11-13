@@ -38,7 +38,7 @@
    const row=remote(p),h=p?.handoff||{},panels=p?.panels||[];
    const named=!!p&&!!p.title?.trim()&&p.title!=='未命名新作';
    const story=!!(p?.ideaSeed?.trim()||p?.description?.trim());
-   const hasCharacter=!!(p?.characterBible?.characters?.length||(p?.characterRefs||[]).length||String(p?.characters||'').trim());
+   const hasCharacter=p?.creationPath?!!(p?.characterBible?.characters?.length&&!p?.characterBibleNeedsReview):!!(p?.characterBible?.characters?.length||(p?.characterRefs||[]).length||String(p?.characters||'').trim());
    const storyboard=panels.some(x=>(x?.scene||'').trim().length>=20);
    // Avoid wtDirector.approved() initializing creativeDirection on untouched work.
    const director=!!p?.creativeDirection?.approval?.lock_hash&&
@@ -184,7 +184,7 @@
      '<h2>'+html(stageNames[i])+'</h2></div><div class="buttons">'+prev+next+
      '<a class="button" href="#/reader/'+encodeURIComponent(p.id)+'">阅读预览</a></div></div>'+
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
-     '<footer class="wt4-footer">自动保存本地草稿；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
+     '<footer class="wt4-footer">本地草稿已记录 · 最后修改 '+html(p.updatedAt||'未知')+'；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
  }
  function creationEntries(){
    return '<section class="wt4-create" aria-label="选择创作方式"><div class="wt4-create-head"><div class="kicker">START / WORLD TOON</div><h1>你想如何开始漫画创作？</h1><p>三种入口，一个项目，七步完成漫画创作。</p></div>'+
