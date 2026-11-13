@@ -341,3 +341,6 @@
  .wt4-workspace .wt4-editor-header .buttons{width:100%}
 }
 @media(prefers-reduced-motion:reduce){.wt4-entry-card{transition:none}.wt4-entry-card:is(:hover,:focus-visible,.active){transform:none}}
+.wt4-char-filter-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;grid-column:1/-1}
+.wt4-char-filter-grid select{width:100%;min-width:0;padding:10px;border:1px solid #d9d1c5;border-radius:8px;background:#fff}
+@media(max-width:640px){.wt4-char-filter-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
