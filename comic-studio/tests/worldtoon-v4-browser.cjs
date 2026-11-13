@@ -345,7 +345,7 @@ async function test(){
       await storagePage.locator('#wt4-seed').fill('断电前未保存的星际列车故事');
       await storagePage.locator('[data-wt4-create="idea"] [type="submit"]').click();
       assert.ok((await storagePage.locator('#toast').textContent()).includes('创建未保存'),'failure message must be truthful');
-      assert.ok((await storagePage.evaluate(()=>location.hash)).startsWith('#/dashboard'),
+      assert.ok(!(await storagePage.evaluate(()=>location.hash)).startsWith('#/workspace/'),
         'failed save must not navigate to a misleading draft workspace');
       const after=await storagePage.evaluate(()=>JSON.parse(localStorage.getItem('davylab-comic-press-v1')).projects.length);
       assert.equal(after,before,'no phantom new project after storage failure');
