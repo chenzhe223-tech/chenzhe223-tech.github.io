@@ -277,12 +277,16 @@
  function saveEntry(type,values){
    if(type==='idea'&&!String(values.seed||'').trim())return notify('请先输入创作灵感');
    if(type==='author'&&(!String(values.title||'').trim()||!String(values.description||'').trim()))return notify('请填写漫画名称和剧情概要');
-   newProject();const p=selected();
-   p.entryType=type;p.handoff={...(p.handoff||{}),mode:'original'};
-   if(type==='idea'){p.ideaSeed=String(values.seed).trim();p.description=p.ideaSeed;p.category='原创故事';}
-   else {p.title=String(values.title).trim();p.description=String(values.description).trim();p.category=String(values.category||'原创故事').trim()||'原创故事';p.ideaSeed=p.description;}
-   setChange(p,'从'+(type==='idea'?'一句话创作':'自主创作')+'入口立项');
-   nav('workspace/'+p.id+'/0');
+   // Construct the entire new work before its first persistence: no partially saved seed draft.
+   const p=newProject(null,draft=>{
+     draft.entryType=type;draft.handoff={...(draft.handoff||{}),mode:'original'};
+     if(type==='idea'){draft.ideaSeed=String(values.seed).trim();draft.description=draft.ideaSeed;draft.category='原创故事';}
+     else {draft.title=String(values.title).trim();draft.description=String(values.description).trim();
+       draft.category=String(values.category||'原创故事').trim()||'原创故事';draft.ideaSeed=draft.description;}
+     draft.activity=[{at:draft.createdAt||new Date().toISOString(),
+       detail:'从'+(type==='idea'?'一句话创作':'自主创作')+'入口立项'}];
+   });
+   if(p)nav('workspace/'+p.id+'/0');
  }
  function syncCharacterBible(p){
    if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash||typeof wtDirector!=='object'||typeof wtDirector.ensure!=='function')return false;
