@@ -1,0 +1,110 @@
+/* Homepage and reader share the type, paper, rules and spacing of the approved board. */
+:root {
+  --headline: "Playfair Display", Georgia, "Noto Serif CJK SC", "Songti SC", SimSun, serif;
+  --card-edge: 10px;
+}
+.brand, .nav .brand, .masthead .brand { font-family: var(--headline) !important; }
+.brand { white-space: nowrap; }
+.primary-nav { margin-inline: auto; }
+.primary-nav [aria-current], .nav [aria-current] { border-bottom: 2px solid var(--copper); }
+.nav-right { display: flex; align-items: center; gap: 12px; }
+.nav-right .subscribe { padding: 6px 13px; background: #875633; color: white !important; border-radius: 7px; }
+.edition-search { border: 0; background: transparent; color: var(--ink); padding: 9px; cursor: pointer; }
+.glass { display: block; width: 15px; height: 15px; border: 1.8px solid currentColor; border-radius: 50%; position: relative; }
+.glass::after { content: ""; position: absolute; width: 7px; height: 2px; background: currentColor; bottom: -2px; right: -5px; transform: rotate(45deg); }
+.edition-dialog { width: min(500px, 92vw); max-height: 78vh; border: 1px solid var(--rule); border-radius: 12px; background: var(--paper); color: var(--ink); padding: 22px; }
+.edition-dialog::backdrop { background: rgba(32,35,32,.42); }
+.edition-dialog form { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.edition-dialog button { border: 0; background: transparent; font-size: 18px; cursor: pointer; }
+.edition-dialog input { width: 100%; padding: 12px; color: var(--ink); border: 1px solid var(--rule); border-radius: 5px; }
+.edition-dialog ul { list-style: none; margin: 12px 0 0; padding: 0; }
+.edition-dialog li { padding: 9px 0; border-bottom: 1px solid var(--rule); }
+.voice-cover { display: block; aspect-ratio: 16/10; overflow: hidden; margin: -12px -12px 12px; border-radius: 8px 8px 0 0; }
+.voice-cover img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.voice-cover[hidden], .story img[hidden] { display: none; }
+header .hero-panel {
+  background-color: var(--paper) !important;
+  background-image: linear-gradient(90deg,var(--paper) 8%,rgba(247,245,240,.93) 35%,rgba(247,245,240,0) 74%),url("./mountain-masthead.webp") !important;
+  background-size: 100% 100%, auto 115% !important;
+  background-repeat: no-repeat !important;
+  background-position: right center !important;
+  border: 0 !important;
+  min-height: 232px !important;
+}
+.hero-panel .brief-date-bar { border: 0 !important; margin: 0 !important; padding: 2px 0 !important; min-height: 0; background: transparent !important; }
+.brief-date-bar .brief-eyebrow { display: none; }
+.hero-panel .hero-kicker { background: none !important; border: 0 !important; padding: 0 !important; }
+.hero-kicker i { display: none; }
+.hero-panel .hero-copy { width: auto !important; max-width: 100% !important; }
+.hero-panel .archive-button { background: var(--paper) !important; border-radius: 6px; padding: 6px 9px; }
+.hero-panel .hero { display: block; margin-top: 6px !important; }
+.hero-panel #featureTitle { font-family: var(--headline) !important; max-width: none !important; font-size: clamp(35px,4vw,56px) !important; }
+.lead-story, #top5List, #chinaAI, .rail-poster { border-radius: var(--card-edge); }
+#ai { align-items: stretch; }
+#ai > #leadStory { width: 100%; align-self: stretch; }
+#top5List { padding: 14px 20px !important; border: 1px solid var(--rule); background: var(--surface); align-self: start; }
+#top5List .top5-card .story-label { background: none !important; border: 0 !important; padding: 0 !important; }
+#top5List .top5-card h3, .lead-story h2, .section-head h2, #top5List::before, .title { font-family: var(--headline) !important; }
+#chinaAI { padding: 16px; border: 1px solid var(--rule); }
+#chinaAINewsList .china-ai-card { border: 0 !important; border-bottom: 1px solid var(--rule) !important; background: transparent !important; }
+#chinaAINewsList .china-ai-card:not(:first-child) .story-image, #chinaAINewsList .china-ai-card p, #chinaAINewsList .top5-card::after { display: none !important; }
+#chinaAINewsList .top5-content { padding: 8px 0 !important; }
+#chinaAINewsList .top5-rank { float: left; margin: 8px; }
+#chinaAINewsList a, #xnewsVoices h3 a { color: var(--ink) !important; text-decoration: none; }
+#chinaAINewsList a:hover, #xnewsVoices h3 a:hover { text-decoration: underline; }
+#xnewsVoices .item { border-radius: var(--card-edge); }
+#xnewsVoices .explain { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.material-meta { display: flex; gap: 8px; flex-wrap: wrap; }
+.story .cover { border-radius: var(--card-edge); }
+.story .title { font-size: clamp(34px,3.5vw,52px) !important; }
+.story .provenance { margin: 14px 0; }
+.story .caption { color: #555a53; }
+.reading-icon { background: none; border: none; color: var(--ink); font: 20px var(--sans); cursor: pointer; padding: 4px 8px; }
+#deskBookmark { margin-left: auto; }
+.story .judgment { background: #f0e9df; padding: 18px !important; border-radius: 8px; }
+.reader-back, #readerMenu { display: none; }
+@media (min-width: 761px) {
+  .nav:has(.primary-nav) { display: grid !important; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); }
+  .nav .nav-right { justify-self: end; }
+  .hero-panel .brief-date-actions { margin-left: auto; }
+  header .tabs { margin-bottom: 0 !important; }
+  header:has(.hero-panel) .tabs { display: none !important; }
+  #top5List .top5-card { padding: 9px 0 !important; }
+  #ai > #top5List { grid-row: 1; }
+  #ai { margin-bottom: 24px !important; }
+  #leadStory > a, #leadStory.text-only .lead-story-copy { height: 100%; }
+  #top5List .top5-card .meta { margin-top: 2px !important; }
+  #top5List .top5-card .story-label { margin: 0 !important; }
+}
+@media (max-width: 760px) {
+  .nav-right { margin-left: auto; gap: 4px; }
+  .nav-right .subscribe { display: none; }
+  header .hero-panel { min-height: 190px !important; padding: 12px 16px !important; background-size: 100% 100%,auto 80% !important; background-position: right bottom !important; }
+  .hero-panel #featureTitle { max-width: 8em !important; font-size: 30px !important; line-height: 1.18 !important; }
+  .hero-panel .brief-date-copy { min-width: 0; }
+  header .tabs { gap: 16px !important; }
+  #ai > #top5List { width: 100%; }
+  #leadStory .lead-story-copy { max-width: 100%; }
+  #leadStory.has-image > a { display: flex; align-items: flex-end; }
+  #leadStory.has-image .lead-story-copy { position: relative !important; inset: auto !important; width: 100%; padding: 16px !important; }
+  .nav .brand small { display: none; }
+  #leadStory .lead-story-copy h2 { font-size: 24px !important; line-height: 1.23 !important; }
+  #leadStory .lead-story-copy p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #content > .eyebrow, #content > .category { display: none; }
+  .story { display: flex; flex-direction: column; }
+  .story .cover { order: -5; margin: 4px 0 0 !important; aspect-ratio: 16/8.8 !important; }
+  .story .caption { order: -4; margin: 4px 0 !important; }
+  .story .title { order: -3; font-size: 28px !important; line-height: 1.22 !important; margin: 12px 0 4px; }
+  .story .provenance { order: -2; padding: 8px 0; margin: 4px 0 8px; }
+  .story .judgment { order: -1; margin: 8px 0; }
+  .story .dek { margin: 8px 0; }
+  .story .dek.repeated-excerpt { display: none; }
+  .masthead { position: relative; }
+  .masthead .brand, .masthead + .crumb { display: none; }
+  .reader-back, #readerMenu { display: grid; place-items: center; border: 0; background: none; min-width: 42px; min-height: 42px; color: var(--ink); font-size: 24px; cursor: pointer; }
+  .reading-icon { display: none; }
+  .masthead .lang { margin-left: auto; }
+  .masthead .nav.expanded { display: grid; position: absolute; z-index: 5; top: 100%; right: 0; min-width: 155px; padding: 10px 18px; border: 1px solid var(--rule); border-radius: 8px; background: var(--paper); }
+  .masthead .nav.expanded a { padding: 8px 0; }
+  #content { padding-top: 8px; }
+}

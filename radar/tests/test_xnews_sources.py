@@ -29,7 +29,7 @@ def make_feed(records, *, include_versions=True):
                     "url": record.get("source_url", "https://x.com/researcher/status/123"),
                     "title": "Original research post",
                     "lang": "en",
-                    "html": "<p>Original full article</p>",
+                    "html": record.get("original_html", "<p>Original full article</p>"),
                 },
                 "rewrite": {
                     "title": record.get("title", "模型研究新进展"),
@@ -44,6 +44,13 @@ def make_feed(records, *, include_versions=True):
 
 
 class XNewsFeedTests(unittest.TestCase):
+    def test_only_https_image_from_original_version_is_used(self):
+        raw = '<img src="data:untrusted"><img src="https://original.example/figure.png" alt="Source figure">'
+        stories, status = parse_xnews_feed(make_feed([{"original_html": raw}]), now=NOW)
+        self.assertEqual(status, "ok")
+        self.assertEqual(stories[0]["image_url"], "https://original.example/figure.png")
+        self.assertEqual(stories[0]["image_alt"], "Source figure")
+        self.assertEqual(stories[0]["image_match_status"], "article_image")
     def test_uses_original_url_and_source_published_date(self):
         stories, status = parse_xnews_feed(make_feed([{}]), now=NOW)
         self.assertEqual(status, "ok")
@@ -85,6 +92,21 @@ class XNewsFeedTests(unittest.TestCase):
             {"title": "观察二"},
         ]), now=NOW)
         self.assertEqual(len(stories), 1)
+
+    def test_collect_ingests_compatible_feed_payload(self):
+        calls = []
+
+        def fetch(url, accept, timeout):
+            calls.append((url, accept, timeout))
+            return make_feed([{}])
+
+        stories, status = collect_xnews_articles(fetch, now=NOW)
+        self.assertEqual(status, "ok")
+        self.assertEqual(len(stories), 1)
+        self.assertEqual(stories[0]["source_kind"], "curated_secondary")
+        self.assertEqual(len(calls), 1)
+        self.assertEqual(calls[0][0], "https://xnews.qiaomu.ai/feed.xml")
+        self.assertEqual(calls[0][2], 10)
 
     def test_unavailable_feed_does_not_throw(self):
         def offline(*_args, **_kwargs):

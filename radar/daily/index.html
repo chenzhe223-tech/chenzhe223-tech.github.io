@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#080f20"><meta name="description" content="Davy Radar：用通俗语言看懂 AI 新闻、工具与创作机会。">
-<title>AI 前沿简报 · DAVYLAB</title>
-<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#F7F5F0"><meta name="description" content="Davy Radar：用通俗语言看懂 AI 新闻、工具与创作机会。">
+<title>AI 前沿简报 · DAVYLAB</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="light"><link rel="stylesheet" href="../assets/design-system.css">
 <style>
 :root{color-scheme:dark;--bg:#080f20;--ink:#f4f7ff;--muted:#9cafd0;--cyan:#8be6ff;--lime:#d7ff74;--violet:#b8a7ff;--orange:#ffbd79}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 8% 0%,#345dbb2b,transparent 34%),radial-gradient(ellipse at 92% 8%,#8050b525,transparent 32%),var(--bg);color:var(--ink);font:15px/1.7 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif}
@@ -101,7 +101,7 @@ section{scroll-margin-top:18px;margin-bottom:36px}
 }
 
 /* AI Frontiers Briefing — editorial design system */
-:root{color-scheme:light;--paper:#f5f4ef;--bg:#f5f4ef;--ink:#17243a;--muted:#667387;--cyan:#275d91;--lime:#dbe7f1;--violet:#dce4ee;--orange:#8b6339;--line:#d9dde3}
+:root{--bg:var(--paper);--cyan:var(--accent);--lime:#dbe7f1;--violet:#dce4ee;--orange:#8b6339}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;background:var(--paper)}
 body{background:var(--paper);color:var(--ink);font:16px/1.75 -apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:0}
@@ -555,8 +555,8 @@ section{margin-bottom:40px}
 /* WCAG 2.2 AA contrast system — single final source of truth for the editorial interface. */
 :root{
  color-scheme:light;
- --paper:#F5F6F8;
- --bg:#F5F6F8;
+ --paper:#F5F4EF;
+ --bg:#F5F4EF;
  --ink:#1F2937;
  --muted:#475569;
  --dim:#475569;
@@ -566,7 +566,7 @@ section{margin-bottom:40px}
  --text-secondary:#475569;
  --text-link:#1D4ED8;
  --text-link-hover:#1E40AF;
- --surface-page:#F5F6F8;
+ --surface-page:#F5F4EF;
  --surface-card:#FFFFFF;
  --surface-tag:#EEF2F7;
  --text-tag:#334155;
@@ -849,43 +849,251 @@ header{padding-top:4px}
 @media(hover:none){.top5-card .top5-rank{opacity:0!important}.top5-card:active .top5-rank{opacity:.92!important}}
 .story-image .image-credit{display:none!important}
 @media(prefers-reduced-motion:reduce){.top5-card .top5-rank{transition:none}}
+/* DAVYLAB AI Radar 2.0 · editorial intelligence system */
+
+html{background:var(--paper);scroll-padding-top:88px}
+body{background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;line-height:1.72}
+.wrap{width:min(var(--page-width),calc(100% - var(--gutter)*2))}
+.nav{height:76px;border-bottom:1px solid var(--rule);gap:30px}
+.brand{font-size:18px;color:var(--ink);letter-spacing:-.04em}
+.brand span{color:var(--accent)}
+.primary-nav{display:flex;gap:clamp(18px,3vw,38px);align-items:center;margin-left:auto}
+.primary-nav a{font-size:12px;color:#5c6878;letter-spacing:.02em;white-space:nowrap;position:relative;padding:28px 0}
+.primary-nav a:hover,.primary-nav a:focus-visible{color:var(--accent)}
+.nav-right{gap:14px}
+.nav-right>a{font-size:11px;color:#68778a;white-space:nowrap}
+.lang-switch{height:34px;width:92px;flex-basis:92px;border-radius:2px;padding:1px}
+.lang-btn{min-height:30px;border-radius:1px;font-size:11px}
+header{padding:20px 0 22px}
+.brief-date-bar{border-bottom:1px solid var(--rule);padding:14px 0!important;margin:0 0 22px!important;align-items:center}
+.brief-eyebrow,.hero-kicker,.section-head>p,.story-label{font-family:var(--serif);letter-spacing:.11em}
+.brief-date-line{font-size:13px;color:#606E7D}
+.brief-date-line strong{color:var(--ink);font-size:17px;letter-spacing:.01em}
+#reportDate{display:inline-block!important;visibility:visible!important;opacity:1!important;min-height:1em}
+.archive-button{background:transparent!important;border:0!important;padding:8px 0!important;color:#476580!important;font-size:11px!important}
+.brief-date-actions select{border-radius:2px!important;border-color:#cbd2da!important}
+.hero-panel{border:0;border-radius:0;background-color:#e8e7e1;background-image:linear-gradient(90deg,var(--hero-wash-left),var(--hero-wash-mid) 48%,var(--hero-wash-right)),var(--hero-photo);background-position:center;background-size:cover;box-shadow:none;min-height:390px;padding:clamp(28px,5.2vw,64px);display:block}
+.hero-panel:before{width:3px;background:var(--accent)}
+.hero-kicker{color:#4e6780;font-size:10px;letter-spacing:.14em}
+.hero-kicker i{background:#426d91}
+.hero{width:100%;margin:20px 0 0;align-items:end}
+.hero-copy{max-width:690px}
+h1{font-size:clamp(36px,5vw,61px);line-height:1.12;letter-spacing:-.055em;color:#16253c;margin:14px 0 16px}
+.sub{color:#48596e;font-size:15px;line-height:1.85;max-width:590px}
+.hero-actions{margin-top:24px}
+.hero-actions a{background:#1e3b5e;color:white;border-radius:2px;padding:11px 16px;font-size:11px;font-weight:700}
+.hero-actions a.secondary{color:#243c57;background:rgba(255,255,255,.82);border-color:#cbd3dc}
+.tabs{margin:0;padding:0 0 11px;border-bottom:1px solid var(--rule);gap:26px;overflow:visible}
+.tab{padding:7px 0;border:0;border-radius:0;background:none;color:#667386;font-size:11px}
+.tab.active,.tab:hover{background:none;border:0;color:var(--accent);box-shadow:inset 0 -2px var(--accent)}
+section{scroll-margin-top:30px;margin:0 0 52px}
+.section-head{margin:0 0 16px;padding-bottom:12px;border-bottom:1px solid var(--rule)}
+.section-head h2{font-size:clamp(22px,2.5vw,30px);font-weight:650;letter-spacing:-.045em;gap:10px}
+.section-head p{font-size:10px;color:#7a8795}
+.section-icon{display:none}
+.section-intro{font-size:13px;color:#617083;max-width:730px;margin:0 0 20px}
+.top5-grid{grid-template-columns:repeat(12,minmax(0,1fr));gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.top5-card{grid-column:span 6;position:relative;display:block;padding:24px 24px 24px 0;border:0;border-radius:0;background:transparent;box-shadow:none!important;transform:none!important}
+.top5-card:first-child{grid-column:span 7;border-right:1px solid var(--rule);padding-right:30px}
+.top5-card:nth-child(2){grid-column:span 5;padding-left:30px}
+.top5-card:nth-child(n+3){grid-column:span 4;border-top:1px solid var(--rule);padding-right:24px}
+.top5-card:nth-child(3n+1):not(:first-child){padding-left:0}
+.top5-card:nth-child(3n+2){padding-left:24px;border-left:1px solid var(--rule)}
+.top5-card:nth-child(3n){padding-left:24px;border-left:1px solid var(--rule);padding-right:0}
+.top5-card .story-image{margin:0 0 17px;border-radius:0;aspect-ratio:16/8;overflow:hidden}
+.top5-card:first-child .story-image{aspect-ratio:16/7.2}
+.top5-card .top5-rank{position:absolute;top:32px;left:8px;background:#f5f4ef;color:#1e3b5e;border:0;border-radius:0;font:18px var(--mono);font-variant-numeric:tabular-nums;width:auto;height:auto;padding:4px 9px}
+.china-news-grid{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:16px;border:0}
+.china-news-grid>.china-ai-card{grid-column:auto!important;min-width:0}
+.top5-card h3{font-size:clamp(17px,1.7vw,23px);line-height:1.4;letter-spacing:-.025em;color:#18273d;margin:11px 0 12px}
+.top5-card p{color:#57677a;font-size:13px;line-height:1.82;margin:8px 0}
+.top5-card p strong{color:#283f5a;font-weight:650}
+.top5-card .story-label{display:block;color:#496783;font-size:9px;background:none;border:0;padding:0;text-transform:uppercase}
+.top5-card .meta{font-size:10px;color:#707d8b;border-top:1px solid #e4e5e2;padding-top:10px;gap:14px}
+.top5-card .meta a{color:#245c89!important;text-decoration:underline;text-underline-offset:3px}
+.item{border:0;border-top:1px solid var(--rule);border-radius:0;background:transparent;padding:20px 0;grid-template-columns:34px minmax(0,1fr);gap:18px;transform:none!important}
+.item h3{font-size:18px;line-height:1.45;color:#1a2a40}
+.item p,.item .explain{font-size:13px;line-height:1.85;color:#59697d!important}
+.num{background:none;border:0;border-radius:0;color:#55748f;font:18px var(--mono);font-variant-numeric:tabular-nums;width:auto;height:auto;place-items:start;padding-top:1px}
+.story-label,.pill,.skill-badge,.featured-skill .skill-tags span{border-radius:2px}
+.featured-skill{padding:25px 0;border:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);background:none;gap:clamp(24px,5vw,70px)}
+.featured-skill h3{font-size:30px;letter-spacing:-.04em}
+.featured-skill p{color:#536276;font-size:13px}
+.featured-skill .skill-tags span{background:#e8edf0;color:#385873}
+.featured-skill .skill-cta{border-radius:2px}
+.more-news,.more-skills{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);border-radius:0;background:none}
+.more-news summary,.more-skills summary{padding:16px 0;color:#274d6d}
+.method .item{border:0;border-top:2px solid var(--accent);padding:22px 0}
+.footer{border-color:var(--rule);color:#76818f}
+.footer a{color:#285f92}
+.mobile-dock{display:none}
+@media(max-width:760px){
+ .wrap{width:calc(100% - 36px)}
+ .nav{height:58px;gap:12px}
+ .primary-nav{display:none}
+ .nav-right>a{display:none}
+ .nav-right{margin-left:auto}
+ header{padding:10px 0 14px}
+ .brief-date-bar{margin-bottom:12px!important;padding:8px 0!important}
+ .hero-panel{min-height:340px;padding:26px 20px;background-image:linear-gradient(90deg,var(--hero-wash-left),var(--hero-wash-mid) 74%,var(--hero-wash-right)),var(--hero-photo);background-position:58% center}
+ h1{font-size:clamp(34px,9vw,46px);max-width:14ch}
+ .sub{font-size:13px;line-height:1.75}
+ .tabs{overflow-x:auto;gap:19px;scrollbar-width:none;white-space:nowrap}
+ .tabs::-webkit-scrollbar{display:none}
+ .tab{flex:0 0 auto}
+ section{margin-bottom:36px}
+ .section-head{align-items:center;margin-bottom:12px}
+ .section-head h2{font-size:21px}
+ .section-head p{display:none}
+ .top5-grid{display:block}
+ .china-news-grid{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:11px}
+ .top5-card,.top5-card:first-child,.top5-card:nth-child(2),.top5-card:nth-child(n+3),.top5-card:nth-child(3n+2),.top5-card:nth-child(3n){padding:18px 0;border:0;border-top:1px solid var(--rule)}
+ .top5-card:first-child{border-top:0}
+ .top5-card .story-image,.top5-card:first-child .story-image{aspect-ratio:16/9;margin-bottom:13px}
+ .top5-card .top5-rank{top:25px;left:8px;font-size:16px}
+ .top5-card h3{font-size:19px}
+ .top5-card p{font-size:13px}
+ .featured-skill{grid-template-columns:1fr;gap:6px;padding:19px 0}
+ .featured-skill h3{font-size:25px}
+ .item{grid-template-columns:27px minmax(0,1fr);gap:11px;padding:16px 0}
+ .item h3{font-size:16px}
+ .mobile-dock{position:fixed;z-index:20;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(5,1fr);padding:9px max(12px,env(safe-area-inset-left)) calc(9px + env(safe-area-inset-bottom));background:rgba(248,247,243,.97);border-top:1px solid var(--rule);backdrop-filter:blur(14px)}
+ .mobile-dock a{display:flex;flex-direction:column;align-items:center;gap:2px;color:#596779;font-size:10px}
+ .mobile-dock a span{font:11px var(--mono);font-variant-numeric:tabular-nums;color:#506477}
+ .mobile-dock a b{font-weight:600}
+ body{padding-bottom:62px}
+}
+@media(max-width:390px){.wrap{width:calc(100% - 28px)}.brief-date-actions{width:96px!important}.lang-switch{width:82px;flex-basis:82px}}
+/* The final editorial layer removes legacy gradient treatments. */
+#featureTitle{background:none!important;background-image:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;color:#16253c!important;-webkit-text-fill-color:#16253c!important}
+.hero-actions>a:not(.secondary){background:#1e3b5e!important;background-image:none!important;color:#fff!important;border-color:#1e3b5e!important}
 </style>
-</head>
+<style id="radar-v2-approved">
+:root{color-scheme:light!important;--paper:#F7F5F0;--bg:#F7F5F0;--ink:#202320;--muted:#686C66;--accent:#A36E48;--copper:#A36E48;--sage:#76867B;--mist:#EBE9E5;--rule:#DDDAD3;--line:#DDDAD3;--surface:#FFFEFB;--surface-soft:#F1EFE9;--serif:"Playfair Display",Georgia,"Songti SC",serif;--sans:"Inter","Source Han Sans SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif;--mono:"Inter",ui-monospace,Consolas,monospace;--page-width:1440px;--gutter:clamp(16px,2vw,30px)}
+body{background:var(--paper)!important;color:var(--ink)!important;font-family:var(--sans)!important}.wrap{width:min(var(--page-width),calc(100% - var(--gutter)*2))!important}.nav{height:58px!important;gap:clamp(12px,2vw,28px)!important;border-color:var(--rule)!important}.brand{font:600 21px var(--serif)!important;letter-spacing:.015em!important;color:var(--ink)!important}.brand small{font:9px var(--sans)!important;letter-spacing:.12em;color:var(--muted)!important}.primary-nav{gap:clamp(15px,2.5vw,34px)!important}.primary-nav a{padding:20px 0!important;color:#474B46!important;font:500 12px var(--sans)!important}.primary-nav a:hover{color:var(--copper)!important}.nav-right>a,.archive-button{color:var(--copper)!important}.lang-switch{border-color:var(--rule)!important;background:transparent!important;border-radius:3px!important}.lang-btn{color:#62665F!important;border-radius:2px!important}.lang-btn.active{background:var(--ink)!important;color:#fff!important}.brief-date-bar{margin:0 0 14px!important;padding:10px 0!important;border-color:var(--rule)!important}.brief-eyebrow{font:10px var(--sans)!important;letter-spacing:.16em!important;color:var(--copper)!important}.brief-date-line,.brief-date-line strong{font-family:var(--sans)!important;color:var(--ink)!important}.brief-date-copy .date-full{color:var(--muted)!important}header{padding:0 0 22px!important}.hero-panel{min-height:306px!important;padding:32px clamp(24px,3vw,44px)!important;border:1px solid #e6e0d6!important;border-radius:5px!important;background-image:linear-gradient(90deg,rgba(247,245,240,.98),rgba(247,245,240,.9) 39%,rgba(247,245,240,.18) 76%),var(--hero-photo)!important;background-position:center 54%!important;background-size:cover!important;box-shadow:none!important}.hero-panel:before{display:none!important}.hero-kicker{font:10px var(--sans)!important;letter-spacing:.16em!important;color:#76543D!important}.hero-kicker i{width:5px!important;height:5px!important;background:var(--copper)!important}.hero{margin:16px 0 0!important}.hero-copy{max-width:560px!important}h1,#featureTitle{max-width:12em!important;color:var(--ink)!important;font:600 clamp(38px,4.4vw,62px)/1.12 var(--serif)!important;letter-spacing:-.035em!important;background:none!important;-webkit-text-fill-color:var(--ink)!important}.sub{max-width:510px!important;color:#4E514C!important;font:14px/1.8 var(--sans)!important}.hero-actions{margin-top:19px!important;gap:9px!important}.hero-actions a{min-height:38px!important;padding:9px 15px!important;border-radius:3px!important;background:var(--copper)!important;border:1px solid var(--copper)!important;color:white!important;font:600 11px var(--sans)!important}.hero-actions a.secondary{background:transparent!important;color:var(--ink)!important;border:1px solid #9D9A90!important}.tabs{gap:clamp(15px,2.2vw,30px)!important;margin:0 0 24px!important;padding:0 0 8px!important;border-color:var(--rule)!important}.tab,.tab.active,.tab:hover{min-height:34px!important;color:#50544E!important;font:500 12px var(--sans)!important}.tab.active{color:var(--ink)!important;box-shadow:inset 0 -2px var(--copper)!important}
+#ai{display:grid!important;grid-template-columns:minmax(0,7fr) minmax(300px,4fr)!important;column-gap:clamp(22px,3vw,38px)!important;align-items:start}#ai>.section-head,#aiList{display:none!important}#leadStory{grid-column:1;grid-row:1;min-width:0}#editorialCore{grid-column:1;grid-row:2;margin:14px 0 0!important;padding:14px 0!important;border:0!important;border-top:1px solid var(--rule)!important;background:transparent!important;color:var(--ink)!important}#editorialCore strong{font:600 11px var(--sans)!important;letter-spacing:.09em;color:var(--copper)!important}#editorialCore p{font:14px/1.75 var(--sans)!important;color:#41453F!important}#editorialCore small{color:var(--muted)!important}#top5List{grid-column:2;grid-row:1/span 2;display:grid!important;grid-template-columns:1fr!important;gap:0!important;margin:0!important;border:0!important}#top5List:before{content:"今日五大热点";display:block;padding:5px 0 12px;border-bottom:1px solid var(--rule);font:600 20px/1.35 var(--serif);color:var(--ink)}
+.lead-story{position:relative;background:var(--ink);overflow:hidden}.lead-story>a{position:relative;display:block;min-height:335px;color:white!important}.lead-story .story-image{position:absolute;inset:0;margin:0!important;width:100%;height:100%;aspect-ratio:auto!important;background:#D8D2C8!important}.lead-story .story-image:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(18,19,17,.92),rgba(18,19,17,.52) 35%,transparent 78%)}.lead-story .story-image img{width:100%;height:100%;object-fit:cover!important}.lead-story-copy{position:absolute;inset:auto 0 0;padding:clamp(18px,2vw,26px);color:#fff}.lead-story-label{display:inline-block;margin-bottom:9px;padding:4px 8px;background:var(--copper);color:#fff;font:600 10px var(--sans)}.lead-story h2{max-width:21ch;margin:0 0 8px;color:white;font:600 clamp(22px,2.3vw,32px)/1.25 var(--serif);letter-spacing:-.02em}.lead-story p{max-width:60ch;margin:0;color:rgba(255,255,255,.88);font:12px/1.65 var(--sans)}.lead-story-meta{display:flex;justify-content:space-between;gap:12px;margin-top:12px;color:#F2EDE4;font:10px var(--sans)}
+.top5-card,.top5-card:first-child,.top5-card:nth-child(2),.top5-card:nth-child(n+3){grid-column:auto!important;display:grid!important;grid-template-columns:29px minmax(0,1fr) 15px!important;gap:9px!important;align-items:start;padding:11px 0!important;border:0!important;border-bottom:1px solid var(--rule)!important;background:transparent!important}.top5-card .story-image{display:none!important}.top5-card .top5-rank{position:static!important;grid-column:1;grid-row:1;background:var(--copper)!important;color:white!important;opacity:1!important;transform:none!important;width:25px!important;height:25px!important;padding:4px!important;text-align:center;font:600 10px var(--sans)!important}.top5-content{grid-column:2;grid-row:1;padding:0!important}.top5-card .story-label{margin:0 0 4px!important;color:var(--sage)!important;font:600 8px var(--sans)!important;letter-spacing:.06em!important}.top5-card h3{margin:0!important;color:var(--ink)!important;font:600 13px/1.45 var(--sans)!important;letter-spacing:0!important}.top5-card p,.top5-card .dimension-grid,.top5-card .action-box{display:none!important}.top5-card .meta{display:flex;gap:9px!important;flex-wrap:wrap;margin-top:5px!important;padding:0!important;border:0!important;font:9px var(--sans)!important;color:var(--muted)!important}.top5-card .meta a{color:var(--copper)!important}.top5-card:after{content:"→";grid-column:3;grid-row:1;color:var(--copper);font:16px var(--sans)}
+section{scroll-margin-top:78px!important;margin-bottom:38px!important}.section-head{margin:0 0 13px!important;padding:0 0 8px!important;border-color:var(--rule)!important}.section-head h2{font:600 clamp(21px,2.5vw,28px)/1.3 var(--serif)!important;letter-spacing:-.025em!important;color:var(--ink)!important}.section-head p,.section-intro{color:var(--muted)!important}.section-intro{font:12px/1.7 var(--sans)!important}#xnewsVoicesSection .list{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important}#xnewsVoices .item{display:block!important;padding:15px!important;border:1px solid var(--rule)!important;background:var(--surface)!important}#xnewsVoices .num{display:none!important}#xnewsVoices .item h3{font:600 16px/1.4 var(--serif)!important;color:var(--ink)!important}#xnewsVoices .item p{font:12px/1.7 var(--sans)!important;color:#51554F!important}#xnewsVoices .meta{font:10px var(--sans)!important;color:var(--muted)!important}.china-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px!important}.china-news-grid .top5-card,.china-news-grid .top5-card:nth-child(n){display:block!important;padding:0!important;border:1px solid var(--rule)!important;background:var(--surface)!important}.china-news-grid .top5-card .story-image{display:block!important;height:auto!important;aspect-ratio:16/8!important;margin:0!important}.china-news-grid .top5-content{padding:13px 15px!important}.china-news-grid .top5-rank{top:9px!important;left:9px!important;opacity:1!important;width:25px!important;height:25px!important;background:var(--copper)!important}.china-news-grid .top5-card h3{font:600 16px/1.4 var(--serif)!important}.china-news-grid .top5-card p{display:-webkit-box!important;color:#535750!important;font:12px/1.65 var(--sans)!important}.china-news-grid .top5-card .meta{padding-top:9px!important;border-top:1px solid var(--rule)!important}.item{border-color:var(--rule)!important}.item h3{color:var(--ink)!important;font-family:var(--serif)!important}.item p,.item .explain{color:#50544E!important}.num{color:var(--copper)!important}.featured-skill{border-color:var(--rule)!important}.featured-skill h3{font-family:var(--serif)!important;color:var(--ink)!important}.featured-skill .skill-tags span{background:var(--mist)!important;color:#4D5D52!important}.featured-skill .skill-cta,.skill-save-cta{background:var(--copper)!important;border-color:var(--copper)!important;color:white!important}.more-news,.more-skills{border-color:var(--rule)!important}.more-news summary,.more-skills summary{color:var(--ink)!important}.footer{border-color:var(--rule)!important;color:var(--muted)!important}.footer a{color:var(--copper)!important}.mobile-dock{background:rgba(247,245,240,.98)!important;border-color:var(--rule)!important}.mobile-dock a{color:#555A53!important}.mobile-dock a span{color:var(--copper)!important}
+@media(max-width:900px){#ai{grid-template-columns:minmax(0,1.2fr) minmax(270px,.8fr)!important;column-gap:20px!important}}
+@media(max-width:760px){.wrap{width:calc(100% - 28px)!important}.nav{height:52px!important}.brand{font-size:18px!important}.primary-nav{display:none!important}header{padding:0 0 14px!important}.brief-date-bar{margin-bottom:10px!important}.hero-panel{min-height:250px!important;padding:22px 18px!important;background-image:linear-gradient(0deg,rgba(247,245,240,.97),rgba(247,245,240,.78) 58%,rgba(247,245,240,.12)),var(--hero-photo)!important;background-position:center 42%!important}.hero-copy{max-width:100%!important}h1,#featureTitle{max-width:11ch!important;font-size:clamp(32px,9vw,42px)!important}.sub{max-width:34ch!important;font-size:12px!important}.hero-actions a{min-height:36px!important;flex:0 1 auto!important}.tabs{margin-bottom:18px!important;gap:18px!important}#ai{display:block!important}#leadStory{margin-bottom:22px}.lead-story>a{min-height:260px!important}.lead-story h2{font-size:24px!important}#editorialCore{margin:14px 0 18px!important}#top5List{display:grid!important;grid-template-columns:1fr!important}#top5List:before{font-size:18px!important}.top5-card{padding:10px 0!important}.top5-card h3{font-size:14px!important}#xnewsVoicesSection .list{grid-template-columns:repeat(2,minmax(0,1fr))!important}#xnewsVoices .item{padding:12px!important}.china-news-grid{grid-template-columns:1fr!important}.china-news-grid .top5-card .story-image{aspect-ratio:16/9!important}.mobile-dock{grid-template-columns:repeat(5,minmax(0,1fr))!important;padding-left:5px!important;padding-right:5px!important}.mobile-dock a{font-size:9px!important}}
+@media(max-width:430px){#xnewsVoicesSection .list{grid-template-columns:1fr!important}.lead-story>a{min-height:238px!important}}
+</style><style id="radar-v2-contrast">
+:root{--copper-ink:#815334;--sage-ink:#4D6353;--copper-dark:#875633}
+a,.nav-right>a,.archive-button,.top5-card .meta a,.footer a{color:var(--copper-ink)!important}
+.brief-eyebrow,.hero-kicker{font-family:var(--serif)!important;color:var(--copper-ink)!important}
+.brief-date-line strong{font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important}
+#editorialCore strong{color:var(--copper-ink)!important}
+.hero-actions>a:not(.secondary){background:var(--copper-dark)!important;background-image:none!important;color:#fff!important;border-color:var(--copper-dark)!important}
+.lead-story-label,.top5-card .top5-rank,.china-news-grid .top5-rank{background:var(--copper-dark)!important;color:#fff!important}
+.top5-card .top5-rank{font:600 10px var(--mono)!important}
+.top5-card .story-label{color:var(--sage-ink)!important}
+.top5-card .meta{font-family:var(--mono)!important;font-variant-numeric:tabular-nums!important}
+.china-news-grid .china-category{color:#815334!important}
+</style><style id="radar-v2-aa-final">
+.featured-skill .skill-cta,.skill-save-cta{background:#875633!important;border-color:#875633!important;color:#fff!important}
+.num{color:#815334!important}
+.mobile-dock a span{color:#815334!important}
+</style><style id="radar-v2-layout-refinement">
+:root{--sans:"Inter","Noto Sans SC","Source Han Sans SC","Noto Sans CJK SC","Microsoft YaHei",sans-serif}
+.hero-panel{background-image:linear-gradient(90deg,rgba(247,245,240,.98),rgba(247,245,240,.9) 39%,rgba(247,245,240,.18) 76%),var(--hero-photo),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1800&q=85')!important}
+.secondary-editorial-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(18px,2.6vw,32px);align-items:start;margin:0 0 38px}
+#xnewsVoicesSection{grid-column:span 8;min-width:0}
+#chinaAI{grid-column:span 4;min-width:0}
+#xnewsVoicesSection .section-head h2,#chinaAI .section-head h2{font-size:clamp(19px,2vw,24px)!important}
+#xnewsVoicesSection .list{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:11px!important}
+#xnewsVoices .item{height:100%;padding:13px!important}
+#xnewsVoices .item h3{font-size:14px!important}
+#xnewsVoices .item .meta{gap:7px!important}
+.xnews-empty{margin:0!important;padding:18px!important;min-height:118px;border-left:3px solid var(--sage);background:var(--mist);color:#454A44!important}
+.china-ai-more{margin:10px 0 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
+.china-ai-more>summary{cursor:pointer;list-style:none;padding:11px 0;color:#815334;font:600 11px var(--sans)}
+.china-ai-more>summary::-webkit-details-marker{display:none}
+.china-ai-more .china-ai-card{padding:9px 0!important}
+.rail-poster{display:grid;grid-template-columns:minmax(84px,34%) 1fr;align-items:center;gap:12px;margin:18px 0 0;padding:9px;border:1px solid var(--rule);background:var(--surface);color:var(--ink)!important}
+.rail-poster img{display:block;width:100%;height:82px;object-fit:cover;background:var(--mist)}
+.rail-poster strong,.rail-poster small{display:block}
+.rail-poster strong{font:600 13px var(--serif)}
+.rail-poster small{margin-top:5px;color:#62665F;font:10px/1.5 var(--sans)}
+@media(max-width:850px){.rail-poster{grid-template-columns:96px 1fr}.rail-poster img{height:64px}}
+
+.xnews-empty a{display:inline-block;margin-top:8px;color:#815334!important;text-decoration:underline;text-underline-offset:3px}
+.china-news-grid{grid-template-columns:1fr!important;gap:9px!important;margin-top:12px!important}
+.china-news-grid .top5-card .story-image{aspect-ratio:16/7!important}
+.china-news-grid .top5-content{padding:10px 12px!important}
+.china-news-grid .top5-card h3{font-size:14px!important}
+.china-news-grid .top5-card p{-webkit-line-clamp:3!important;font-size:11px!important}
+.lead-story.text-only{background:var(--mist)!important;border:1px solid var(--rule)!important;border-left:3px solid var(--copper)!important}
+.lead-story.text-only>a{min-height:300px!important;color:var(--ink)!important}
+.lead-story.text-only .story-image{display:none!important}
+.lead-story.text-only .lead-story-copy{position:relative!important;inset:auto!important;display:flex;flex-direction:column;justify-content:center;min-height:300px;padding:clamp(22px,3vw,38px)!important;color:var(--ink)!important}
+.lead-story.text-only .lead-story-label{align-self:flex-start;background:#875633!important;color:#fff!important}
+.lead-story.text-only h2{color:var(--ink)!important;font-size:clamp(25px,3vw,40px)!important}
+.lead-story.text-only p{color:#4E514C!important;font-size:14px!important}
+.lead-story.text-only .lead-story-meta{color:#62665F!important}
+@media(max-width:900px){
+ .secondary-editorial-grid{grid-template-columns:1fr}
+ #xnewsVoicesSection,#chinaAI{grid-column:auto}
+ #xnewsVoicesSection .list{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .china-news-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+.hero-panel{min-height:275px!important}
+.hero-actions{display:none!important}
+@media(max-width:760px){
+ header{padding:6px 0 8px!important}
+ .brief-date-bar{padding:5px 0!important;margin-bottom:7px!important}
+ .hero-panel{min-height:205px!important;padding:14px 18px!important}
+ .hero{margin-top:10px!important}
+ h1,#featureTitle{font-size:clamp(31px,8.4vw,39px)!important;line-height:1.1!important;margin:8px 0!important}
+ .sub{font-size:12px!important;line-height:1.55!important}
+ #ai{display:flex!important;flex-direction:column!important}
+ #leadStory{order:1!important}
+ #top5List{order:2!important}
+ #editorialCore{order:3!important}
+ .lead-story.text-only>a,.lead-story.text-only .lead-story-copy{min-height:215px!important;padding:16px!important}
+ .lead-story.text-only h2{font-size:22px!important;line-height:1.25!important}
+ .lead-story.text-only p{font-size:12px!important;line-height:1.6!important}
+ .hero-panel{background-image:linear-gradient(0deg,rgba(247,245,240,.97),rgba(247,245,240,.78) 58%,rgba(247,245,240,.12)),var(--hero-photo),url('https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=85')!important}
+ .secondary-editorial-grid{display:block}
+ #xnewsVoicesSection,#chinaAI{margin-bottom:28px!important}
+ #xnewsVoicesSection .list,.china-news-grid{grid-template-columns:1fr!important}
+ .tabs{margin-bottom:8px!important}
+ #leadStory{margin-bottom:12px!important}
+ .lead-story.text-only>a,.lead-story.text-only .lead-story-copy{min-height:205px!important;padding:14px!important}
+ .lead-story.text-only h2{font-size:22px!important;line-height:1.25!important}
+ .lead-story.text-only p{font-size:12px!important;line-height:1.6!important}
+}
+
+.story-image--generated{background:#D8D2C8!important}
+.story-image--generated img{object-position:72% center!important}
+.editorial-illustration-tag{position:absolute;top:12px;right:12px;z-index:4;padding:5px 8px;border:1px solid rgba(32,35,32,.18);border-radius:2px;background:rgba(247,245,240,.96);color:var(--ink);font:600 9px/1.2 var(--sans);letter-spacing:.045em}
+</style><link rel="stylesheet" href="../assets/editorial.css"><script src="../assets/edition-media.js"></script></head>
 <body><div class="wrap">
-<nav class="nav"><a class="brand" href="../">AI <span>前沿简报</span> <small style="font-weight:500;color:#7b8798"> / DAVYLAB</small></a><div class="nav-right"><div class="lang-switch" role="group" aria-label="语言 / Language"><button class="lang-btn active" id="langZh" type="button" aria-pressed="true" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEn" type="button" aria-pressed="false" onclick="setLang('en')">EN</button></div><a href="../" data-i18n="back">← 返回 Davy Radar</a></div></nav>
-<div class="brief-date-bar" aria-label="简报日期与历史简报"><div class="brief-date-copy"><span class="brief-eyebrow">DAILY BRIEFING</span><div class="brief-date-line"><span data-i18n="todayBrief">今日简报</span><strong id="reportDate">正在读取日报…</strong></div><span id="reportDateFull" class="date-full"></span></div><div class="brief-date-actions"><label for="archiveDate" class="archive-button"><span aria-hidden="true">▦</span><span data-i18n="archiveLabel">历史简报</span><span aria-hidden="true">⌄</span></label><select id="archiveDate" aria-label="选择历史简报日期"><option value="">加载历史记录…</option></select></div></div>
-<header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">DAILY AI BRIEFING · 看见趋势，发现机会</span></div><div class="hero"><div class="hero-copy"><h1 id="featureTitle" data-i18n="heroTitle">AI 前沿简报</h1><p class="sub" id="featureSub" data-i18n="heroSub">看见趋势 · 发现机会 · 打开新可能。每日精选真正值得关注的 AI 进展。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div></div></div>
-<nav class="tabs" aria-label="简报栏目"><a class="tab active" href="#ai" data-i18n="tabInsights">✨ 今日观察</a><a class="tab" href="#chinaAI" data-i18n="tabChina">🇨🇳 中国 AI 动态</a><a class="tab" href="#dailySkill" data-i18n="tabDailySkill">✦ 今日 Skill 推荐</a><a class="tab" href="#skills" data-i18n="tabSkills">🧰 创作工具箱</a><a class="tab" href="#news" data-i18n="tabMore">更多 →</a></nav></header>
-<section id="ai"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><div id="editorialCore" class="editorial-core" hidden></div><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
+<nav class="nav"><a class="brand" href="../daily/" aria-label="AI Radar by DAVYLAB">AI RADAR <small>BY DAVYLAB</small></a><div class="primary-nav" aria-label="主导航"><a aria-current="page" href="#ai" data-i18n="navToday">今日</a><a href="#news" data-i18n="navDiscover">发现</a><a id="deepReadNav" href="#top5List" data-i18n="navDeep">深读</a><a href="#skills" data-i18n="navKnowledge">知识库</a><a href="https://chenzhe223-tech.github.io/niantou-box-app/#/" target="_blank" rel="noopener noreferrer" data-i18n="navMine">我的</a></div><div class="nav-right"><button class="edition-search" aria-label="搜索本期简报 / Search this issue" type="button" id="openSearch"><span class="glass" aria-hidden="true"></span></button><a class="subscribe" href="../data/brief.xml" data-i18n="subscribe">订阅</a><div class="lang-switch" role="group" aria-label="语言 / Language"><button class="lang-btn active" id="langZh" type="button" aria-pressed="true" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEn" type="button" aria-pressed="false" onclick="setLang('en')">EN</button></div><a href="../" data-i18n="back">← 返回 Davy Radar</a></div></nav>
+<header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">GLOBAL AI INTELLIGENCE</span></div><div class="brief-date-bar" aria-label="简报日期与历史简报"><div class="brief-date-copy"><span class="brief-eyebrow">DAILY BRIEFING</span><div class="brief-date-line"><span data-i18n="todayBrief">今日简报</span><strong id="reportDate">正在读取日报…</strong></div><span id="reportDateFull" class="date-full"></span></div><div class="brief-date-actions"><label for="archiveDate" class="archive-button"><span aria-hidden="true">▦</span><span data-i18n="archiveLabel">历史简报</span><span aria-hidden="true">⌄</span></label><select id="archiveDate" aria-label="选择历史简报日期"><option value="">加载历史记录…</option></select></div></div><div class="hero"><div class="hero-copy"><h1 id="featureTitle" data-i18n="heroTitle">理解 AI 世界的每一天。</h1><p class="sub" id="featureSub" data-i18n="heroSub">全球 AI 新闻、技术突破与深度观点，一站阅读。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div></div></div>
+<nav class="tabs" aria-label="简报栏目"><a class="tab active" href="#ai" data-i18n="navToday">今日</a><a class="tab" href="#news" data-i18n="navDiscover">发现</a><a class="tab" id="deepReadTab" href="#xnewsVoicesSection" data-i18n="navDeep">深读</a><a class="tab" href="#chinaAI" data-i18n="navChina">中国 AI</a><a class="tab" href="#skills" data-i18n="navResearch">研究</a></nav></header>
+<section id="ai" aria-label="今日头条与五大热点"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><article id="leadStory" class="lead-story" aria-label="今日头条"><div class="empty">正在读取今日头条…</div></article><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
+<div class="secondary-editorial-grid"><section id="xnewsVoicesSection" style="display:none"><div class="section-head"><h2><span class="section-icon">🌍</span><span>海外深度 · X News 精读</span></h2><p>创始人观点 · AI 视频 · 原文可追溯</p></div><p class="section-intro">来自 <a href="https://xnews.qiaomu.ai/" target="_blank" rel="noopener noreferrer">X News · 海外发现</a> 的补充阅读线索。保留原作者出处与中文编辑解读链接；入选不等于 DAVYLAB 已独立核验其结论。</p><div id="xnewsVoices" class="list"></div></section><section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><p class="section-intro" data-i18n="chinaIntro">聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。</p><div id="chinaAINewsList" class="top5-grid china-news-grid"><div class="empty">正在读取中国 AI 动态…</div></div><a class="rail-poster" href="../posters/latest.png" target="_blank" rel="noopener noreferrer"><img src="../posters/latest.png" alt="AI Radar daily poster"><span><strong>今日简报海报</strong><small>AI Daily · 下载高清海报 ↗</small></span></a></section></div>
+<div id="editorialCore" class="editorial-core" hidden></div>
 <section id="dailySkill"><div class="section-head"><h2><span class="section-icon">✦</span><span>今日推荐 · 值得尝试的 Skill</span></h2><p>功能 · 推荐理由 · 应用范围</p></div><div id="featuredSkill" class="featured-skill"><div class="empty">正在读取今日推荐…</div></div></section>
 <section id="news"><div class="section-head"><h2><span class="section-icon">📰</span><span data-i18n="newsHeading">AI 新鲜事</span></h2><p data-i18n="newsSub">完整来源列表 · 按需展开</p></div><p class="section-intro" data-i18n="newsIntro">以下为采集到的其他新闻线索，作为补充核查，不与每日五大热点争夺注意力。</p><details class="more-news"><summary>展开其他新闻线索 <span>补充阅读 · 不计入五大热点</span></summary><div id="newsList" class="list"><div class="empty">正在读取最新情报…</div></div></details></section>
-<section id="xnewsVoicesSection" style="display:none"><div class="section-head"><h2><span class="section-icon">🌍</span><span>海外长帖 · 深度阅读</span></h2><p>创始人观点 · AI 视频 · 原文可追溯</p></div><p class="section-intro">来自 <a href="https://xnews.qiaomu.ai/" target="_blank" rel="noopener noreferrer">X News · 海外发现</a> 的补充阅读线索。保留原作者出处与中文编辑解读链接；入选不等于 DAVYLAB 已独立核验其结论。</p><div id="xnewsVoices" class="list"></div></section>
-<section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><p class="section-intro" data-i18n="chinaIntro">聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。</p><div id="chinaAINewsList" class="top5-grid china-news-grid"><div class="empty">正在读取中国 AI 动态…</div></div></section>
 <section id="skills"><div class="section-head"><h2><span class="section-icon">🧰</span><span data-i18n="skillsHeading">创作工具箱 · 热门 Skill</span></h2><p data-i18n="skillsSub">从别人做好的工具开始</p></div><p class="section-intro" data-i18n="skillsIntro">Skill 可以理解为给 AI 的一套可复用工作方法或能力说明。点开项目，看看它能否帮你少走几步。</p><details class="more-skills"><summary><span data-i18n="expandSkills">展开热门 Skill 榜单</span><span data-i18n="skillsHint">公开仓库 · 可直接查看原项目</span></summary><div id="skillList" class="list"><div class="empty">正在读取 Skill 榜单…</div></div></details></section>
 <section id="method"><div class="section-head"><h2><span class="section-icon">🔎</span><span data-i18n="methodHeading">数据说明 · 透明比热闹重要</span></h2></div><div class="item"><div class="num">i</div><div><h3 data-i18n="methodTitle">公开数据，不伪造结论</h3><p data-i18n="methodBody">新闻来自公开 RSS / 官方博客与技术社区，展示来源与原文链接。Skill 榜单依据公开 GitHub 仓库的 Star 数、最近更新时间及与 Skill 主题的相关性整理；Star 不是安装量，也不等同于真实使用人数。网络源可能临时不可用，页面会显示最近一次成功生成的日报。</p><div class="meta"><span class="pill">RSS / Official blogs</span><span class="pill">GitHub API</span></div></div></div></section>
 <footer class="footer"><span data-i18n="footerLine">AI 前沿简报 · DAVYLAB</span><br><span data-i18n="footerFlow">看见趋势 · 发现机会 · 打开新可能。</span><br><a href="https://github.com/Thysrael/Horizon" data-i18n="horizonLink">基于 Horizon 开源项目的采集理念</a> · <a href="https://chenzhe223-tech.github.io/">DAVYLAB</a></footer>
 </div>
+<nav class="mobile-dock" aria-label="移动端主导航"><a href="#ai"><span aria-hidden="true">⌂</span><b data-i18n="navToday">今日</b></a><a href="#news"><span aria-hidden="true">◉</span><b data-i18n="navDiscover">发现</b></a><a id="deepReadDock" href="#top5List"><span aria-hidden="true">▤</span><b data-i18n="navDeep">深读</b></a><a href="#chinaAI"><span aria-hidden="true">◈</span><b data-i18n="navChina">中国 AI</b></a><a href="#skills"><span aria-hidden="true">⌘</span><b data-i18n="navResearch">研究</b></a></nav>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 let currentLang="zh",reportData=null,latestReportDate=null;
 const copy={
-zh:{back:"← 返回 Davy Radar",todayBrief:"今日简报",archiveLabel:"历史简报",tabChina:"🇨🇳 中国 AI 动态",tabDailySkill:"✦ 今日 Skill 推荐",tabMore:"更多",kicker:"DAILY AI FIELD NOTES · 每日探索",heroTitle:"今天，AI 世界有什么新可能？",heroSub:"不只告诉你发生了什么，也帮你理解它为什么值得关注，以及你可以从哪里开始。",exploreNews:"✦ 看看今天发生了什么",exploreSkills:"⌘ 发现可用工具",tabInsights:"✨ 今日观察",tabNews:"📰 AI 新鲜事",tabSkills:"🧰 创作工具箱",tabMethod:"🔎 数据说明",metricNews:"📰 今日情报",metricSkills:"🧰 可探索工具",metricSources:"✓ 可用信息源",expandSkills:"展开热门 Skill 榜单",skillsHint:"公开仓库 · 可查看原项目",metricRule:"🧭 阅读原则",traceable:"有据可查",aiHeading:"今日五大热点 · 看懂并行动",aiSub:"Horizon × DeepSeek · 重点与行动线索",aiIntro:"每天只读 5 条：技术突破、产品应用、行业影响、商业动态、值得关注。每条区分事实与编辑判断，并提供来源和可执行方向。",top5Empty:"今日五大热点尚未生成，请先浏览下方原始新闻。",dimInnovation:"创新性",dimPracticality:"实用性",dimFeasibility:"可行性",dimImpact:"影响力",dimOpportunity:"机会价值",actionLabel:"可以马上做什么",whyLabel:"为什么值得关注",whatLabel:"发生了什么",scoreLabel:"五维评分",confidenceLabel:"判断把握",readSource:"查看原始来源",newsHeading:"AI 新鲜事",newsSub:"先看懂，再打开原文",newsIntro:"每条情报尽量回答：发生了什么、为什么值得关注、你能从中得到什么启发。",chinaHeading:"中国 AI 发展动态",chinaSub:"国产模型 · 产品应用 · 芯片算力 · 具身智能",chinaIntro:"聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。",chinaEmpty:"暂时没有检索到符合条件的中国 AI 新动态；我们不会用海外新闻填充此栏目。",chinaArchiveEmpty:"该历史日报早于中国 AI 模块上线，因此没有对应归档数据。",chinaSource:"中文来源",skillsHeading:"创作工具箱 · 热门 Skill",skillsSub:"从别人做好的工具开始",skillsIntro:"Skill 可以理解为给 AI 的一套可复用工作方法或能力说明。点开项目，看看它能否帮你少走几步。",methodHeading:"数据说明 · 透明比热闹重要",methodTitle:"公开数据，不伪造结论",methodBody:"新闻来自公开 RSS / 官方博客与技术社区，展示来源与原文链接。Skill 榜单依据公开 GitHub 仓库的 Star 数、最近更新时间及与 Skill 主题的相关性整理；Star 不是安装量，也不等同于真实使用人数。网络源可能临时不可用，页面会显示最近一次成功生成的日报。",footerLine:"Davy Radar · AI 创造机会雷达",footerFlow:"发现 → 判断 → 沉淀 → 创造。",horizonLink:"基于 Horizon 开源项目的采集理念",aiTitle:"今天值得关注什么",source:"来源",why:"为什么值得关注",openSource:"↗ 阅读原文",published:"发布时间",rank:"热度参考",updated:"更新于",loading:"正在读取日报…",newsEmpty:"本次没有获取到新闻，请稍后再试。",skillEmpty:"本次没有获取到 Skill 榜单。",aiWaiting:"AI 机会研判尚未生成，新闻与工具榜单仍可浏览。",dateUnknown:"日期未知",status:"数据状态",sources:"数据源成功",plan:"北京时间 09:00 计划更新",skillType:"开源 AI 工具",aiAnalysis:"AI 解读",headline:"今日情报",scoreNote:"按公开数据排序；Star 不是实际使用人数。",fallbackSummary:"打开原文了解详情。"},
-en:{back:"← Back to Davy Radar",todayBrief:"Today’s Briefing",archiveLabel:"Archive",tabChina:"🇨🇳 China AI",tabDailySkill:"✦ Today’s Skill Pick",tabMore:"More",kicker:"DAILY AI FIELD NOTES · EXPLORE",heroTitle:"What new possibilities are emerging in AI today?",heroSub:"More than headlines: understand what changed, why it matters, and where you could start.",exploreNews:"✦ Explore today's stories",exploreSkills:"⌘ Discover useful tools",tabInsights:"✨ Today's Briefing",tabNews:"📰 AI Stories",tabSkills:"🧰 Creator Toolkit",tabMethod:"🔎 About the Data",metricNews:"📰 Stories Today",metricSkills:"🧰 Tools to Explore",metricSources:"✓ Sources available",expandSkills:"Explore trending Skills",skillsHint:"Public repositories · Open original projects",metricRule:"🧭 Our Principle",traceable:"Source-backed",aiHeading:"Today's Briefing · Opportunity Signals",aiSub:"Horizon × DeepSeek · Key takeaways and next steps",aiIntro:"Five stories per day, scored on innovation, practicality, feasibility, impact, and opportunity value. Each story includes a concrete next step.",top5Empty:"Today’s top five are not ready yet. Explore the source stories below.",dimInnovation:"Innovation",dimPracticality:"Practicality",dimFeasibility:"Feasibility",dimImpact:"Impact",dimOpportunity:"Opportunity",actionLabel:"A concrete next step",whyLabel:"Why it matters",whatLabel:"What happened",scoreLabel:"Five-dimension score",confidenceLabel:"Confidence",readSource:"Open original source",newsHeading:"Fresh from the AI World",newsSub:"Understand first, then open the source",newsIntro:"Each story aims to explain what happened, why it matters, and what you might learn from it.",chinaHeading:"China AI Developments",chinaSub:"Chinese Models · Products · Compute · Embodied AI",chinaIntro:"Focused on China-based AI companies, research institutions and real-world adoption. Stories must include a source link and a verifiable recent publication date.",chinaEmpty:"No qualifying recent China AI stories were found. We will not fill this section with unrelated overseas news.",chinaArchiveEmpty:"This archived briefing predates the China AI module, so no historical records are available.",chinaSource:"Chinese source",skillsHeading:"Creator Toolkit · Trending Skills",skillsSub:"Start with tools others have already built",skillsIntro:"A Skill is a reusable set of instructions or workflow capabilities for AI. Open a project to see whether it can save you a few steps.",methodHeading:"About the Data · Clarity over Hype",methodTitle:"Public data, no fabricated claims",methodBody:"News comes from public RSS feeds, official blogs and tech communities, with source links. The Skill list uses public GitHub stars, update recency and topic relevance. Stars are not installs or actual user counts. If a source is temporarily unavailable, the page keeps the most recently generated report.",footerLine:"Davy Radar · AI Creation Opportunity Radar",footerFlow:"Discover → Evaluate → Capture → Create.",horizonLink:"Collection approach inspired by the open-source Horizon project",aiTitle:"What deserves your attention today",source:"Source",why:"Why it matters",openSource:"↗ Read source",published:"Published",rank:"Popularity signal",updated:"Updated",loading:"Loading today's report…",newsEmpty:"No stories were collected this time. Please check back soon.",skillEmpty:"No Skill rankings are available right now.",aiWaiting:"The AI briefing isn't ready yet. You can still explore the news and tools below.",dateUnknown:"Date unknown",status:"Data status",sources:"Sources succeeded",plan:"Scheduled for 07:30 Beijing time",skillType:"Open-source AI tool",aiAnalysis:"AI briefing",headline:"Today's intelligence",scoreNote:"Ranked using public signals; stars are not actual user counts.",fallbackSummary:"Open the original source for details."}
+zh:{subscribe:"订阅",back:"← 返回 Davy Radar",navToday:"今日",navDiscover:"发现",navDeep:"深读",navChina:"中国 AI",navKnowledge:"知识库",navMine:"我的",navResearch:"研究",todayBrief:"今日简报",archiveLabel:"历史简报",tabChina:"🇨🇳 中国 AI 动态",tabDailySkill:"✦ 今日 Skill 推荐",tabMore:"更多",kicker:"DAILY AI FIELD NOTES · 每日探索",heroTitle:"理解 AI 世界的每一天。",heroSub:"全球 AI 新闻、技术突破与深度观点，一站阅读。",exploreNews:"✦ 看看今天发生了什么",exploreSkills:"⌘ 发现可用工具",tabInsights:"✨ 今日观察",tabNews:"📰 AI 新鲜事",tabSkills:"🧰 创作工具箱",tabMethod:"🔎 数据说明",metricNews:"📰 今日情报",metricSkills:"🧰 可探索工具",metricSources:"✓ 可用信息源",expandSkills:"展开热门 Skill 榜单",skillsHint:"公开仓库 · 可查看原项目",metricRule:"🧭 阅读原则",traceable:"有据可查",aiHeading:"今日五大热点 · 看懂并行动",aiSub:"Horizon × DeepSeek · 重点与行动线索",aiIntro:"每天只读 5 条：技术突破、产品应用、行业影响、商业动态、值得关注。每条区分事实与编辑判断，并提供来源和可执行方向。",top5Empty:"今日五大热点尚未生成，请先浏览下方原始新闻。",dimInnovation:"创新性",dimPracticality:"实用性",dimFeasibility:"可行性",dimImpact:"影响力",dimOpportunity:"机会价值",actionLabel:"可以马上做什么",whyLabel:"为什么值得关注",whatLabel:"发生了什么",scoreLabel:"五维评分",confidenceLabel:"判断把握",readSource:"查看原始来源",newsHeading:"AI 新鲜事",newsSub:"先看懂，再打开原文",newsIntro:"每条情报尽量回答：发生了什么、为什么值得关注、你能从中得到什么启发。",chinaHeading:"中国 AI 发展动态",chinaSub:"国产模型 · 产品应用 · 芯片算力 · 具身智能",chinaIntro:"聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。",chinaEmpty:"暂时没有检索到符合条件的中国 AI 新动态；我们不会用海外新闻填充此栏目。",chinaArchiveEmpty:"该历史日报早于中国 AI 模块上线，因此没有对应归档数据。",chinaSource:"中文来源",skillsHeading:"创作工具箱 · 热门 Skill",skillsSub:"从别人做好的工具开始",skillsIntro:"Skill 可以理解为给 AI 的一套可复用工作方法或能力说明。点开项目，看看它能否帮你少走几步。",methodHeading:"数据说明 · 透明比热闹重要",methodTitle:"公开数据，不伪造结论",methodBody:"新闻来自公开 RSS / 官方博客与技术社区，展示来源与原文链接。Skill 榜单依据公开 GitHub 仓库的 Star 数、最近更新时间及与 Skill 主题的相关性整理；Star 不是安装量，也不等同于真实使用人数。网络源可能临时不可用，页面会显示最近一次成功生成的日报。",footerLine:"Davy Radar · AI 创造机会雷达",footerFlow:"发现 → 判断 → 沉淀 → 创造。",horizonLink:"基于 Horizon 开源项目的采集理念",aiTitle:"今天值得关注什么",source:"来源",why:"为什么值得关注",openSource:"↗ 阅读原文",published:"发布时间",rank:"热度参考",updated:"更新于",loading:"正在读取日报…",newsEmpty:"本次没有获取到新闻，请稍后再试。",skillEmpty:"本次没有获取到 Skill 榜单。",aiWaiting:"AI 机会研判尚未生成，新闻与工具榜单仍可浏览。",dateUnknown:"日期未知",status:"数据状态",sources:"数据源成功",plan:"北京时间 09:00 计划更新",skillType:"开源 AI 工具",aiAnalysis:"AI 解读",headline:"今日情报",scoreNote:"按公开数据排序；Star 不是实际使用人数。",fallbackSummary:"打开原文了解详情。"},
+en:{subscribe:"Subscribe",back:"← Back to Davy Radar",navToday:"Today",navDiscover:"Discover",navDeep:"Deep reads",navChina:"China AI",navKnowledge:"Library",navMine:"Mine",navResearch:"Research",todayBrief:"Today’s Briefing",archiveLabel:"Archive",tabChina:"🇨🇳 China AI",tabDailySkill:"✦ Today’s Skill Pick",tabMore:"More",kicker:"DAILY AI FIELD NOTES · EXPLORE",heroTitle:"Understand the AI world, every day.",heroSub:"Global AI news, technical breakthroughs, and thoughtful perspectives in one daily read.",exploreNews:"✦ Explore today's stories",exploreSkills:"⌘ Discover useful tools",tabInsights:"✨ Today's Briefing",tabNews:"📰 AI Stories",tabSkills:"🧰 Creator Toolkit",tabMethod:"🔎 About the Data",metricNews:"📰 Stories Today",metricSkills:"🧰 Tools to Explore",metricSources:"✓ Sources available",expandSkills:"Explore trending Skills",skillsHint:"Public repositories · Open original projects",metricRule:"🧭 Our Principle",traceable:"Source-backed",aiHeading:"Today's Briefing · Opportunity Signals",aiSub:"Horizon × DeepSeek · Key takeaways and next steps",aiIntro:"Five stories per day, scored on innovation, practicality, feasibility, impact, and opportunity value. Each story includes a concrete next step.",top5Empty:"Today’s top five are not ready yet. Explore the source stories below.",dimInnovation:"Innovation",dimPracticality:"Practicality",dimFeasibility:"Feasibility",dimImpact:"Impact",dimOpportunity:"Opportunity",actionLabel:"A concrete next step",whyLabel:"Why it matters",whatLabel:"What happened",scoreLabel:"Five-dimension score",confidenceLabel:"Confidence",readSource:"Open original source",newsHeading:"Fresh from the AI World",newsSub:"Understand first, then open the source",newsIntro:"Each story aims to explain what happened, why it matters, and what you might learn from it.",chinaHeading:"China AI Developments",chinaSub:"Chinese Models · Products · Compute · Embodied AI",chinaIntro:"Focused on China-based AI companies, research institutions and real-world adoption. Stories must include a source link and a verifiable recent publication date.",chinaEmpty:"No qualifying recent China AI stories were found. We will not fill this section with unrelated overseas news.",chinaArchiveEmpty:"This archived briefing predates the China AI module, so no historical records are available.",chinaSource:"Chinese source",skillsHeading:"Creator Toolkit · Trending Skills",skillsSub:"Start with tools others have already built",skillsIntro:"A Skill is a reusable set of instructions or workflow capabilities for AI. Open a project to see whether it can save you a few steps.",methodHeading:"About the Data · Clarity over Hype",methodTitle:"Public data, no fabricated claims",methodBody:"News comes from public RSS feeds, official blogs and tech communities, with source links. The Skill list uses public GitHub stars, update recency and topic relevance. Stars are not installs or actual user counts. If a source is temporarily unavailable, the page keeps the most recently generated report.",footerLine:"Davy Radar · AI Creation Opportunity Radar",footerFlow:"Discover → Evaluate → Capture → Create.",horizonLink:"Collection approach inspired by the open-source Horizon project",aiTitle:"What deserves your attention today",source:"Source",why:"Why it matters",openSource:"↗ Read source",published:"Published",rank:"Popularity signal",updated:"Updated",loading:"Loading today's report…",newsEmpty:"No stories were collected this time. Please check back soon.",skillEmpty:"No Skill rankings are available right now.",aiWaiting:"The AI briefing isn't ready yet. You can still explore the news and tools below.",dateUnknown:"Date unknown",status:"Data status",sources:"Sources succeeded",plan:"Scheduled for 07:30 Beijing time",skillType:"Open-source AI tool",aiAnalysis:"AI briefing",headline:"Today's intelligence",scoreNote:"Ranked using public signals; stars are not actual user counts.",fallbackSummary:"Open the original source for details."}
 };
 function t(key){return (copy[currentLang]&&copy[currentLang][key])||copy.zh[key]||key}
 
-function applyDailyHeroTheme(date){
+function applyDailyHeroTheme(date,story){
  const root=document.documentElement;
- const photos=[
-  "photo-1470252649378-9c29740c9fa8",
-  "photo-1498050108023-c5249f4df085",
-  "photo-1518770660439-4636190af475",
-  "photo-1531297484001-80022131f5a1",
-  "photo-1518837695005-2083093ee35b",
-  "photo-1500534623283-312aade485b7",
-  "photo-1519389950473-47ba0277781c"
- ];
  const themes=[
   {left:"rgba(255,247,230,.97)",mid:"rgba(255,238,219,.82)",right:"rgba(255,221,205,.15)",a:"#ef7659",b:"#6566e9"},
   {left:"rgba(255,246,239,.97)",mid:"rgba(255,230,226,.83)",right:"rgba(255,219,222,.16)",a:"#e96982",b:"#7867ee"},
@@ -898,9 +1106,14 @@ function applyDailyHeroTheme(date){
  const key=String(date||new Date().toISOString().slice(0,10));
  const parsedDate=new Date(key+"T00:00:00Z");
  const dayIndex=Number.isFinite(parsedDate.getTime())?Math.floor(parsedDate.getTime()/86400000):Math.floor(Date.now()/86400000);
- const slot=((dayIndex%photos.length)+photos.length)%photos.length;
+ const slot=((dayIndex%themes.length)+themes.length)%themes.length;
  const theme=themes[slot];
- root.style.setProperty("--hero-photo",'url("https://images.unsplash.com/'+photos[slot]+'?auto=format&fit=crop&w=1800&q=85")');
+ let articleImage="";
+ try{
+  const candidate=new URL(story?.image_url||"");
+  if(candidate.protocol==="https:"&&story?.image_match_status==="article_image")articleImage=candidate.href;
+ }catch{}
+ root.style.setProperty("--hero-photo",articleImage?"url("+JSON.stringify(articleImage)+")":"none");
  root.style.setProperty("--hero-wash-left",theme.left);
  root.style.setProperty("--hero-wash-mid",theme.mid);
  root.style.setProperty("--hero-wash-right",theme.right);
@@ -951,7 +1164,21 @@ function radarImageLoaded(img){
    container.style.removeProperty("--radar-image-bleed");
  }
 }
+function generatedRoboticsIllustration(x){
+ const source=String(x.source_url||x.url||"");
+ const title=[x.title_zh,x.title_en,x.original_title,x.title].filter(Boolean).join(" ");
+ if(source!=="https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66"
+     ||String(x.image_match_status||"")!=="thematic_fallback"
+     ||!/Gemini Robotics 2\.5/i.test(title))return "";
+ const alt=currentLang==="en"
+   ?"AI-generated conceptual illustration of robotic dexterity; not a photograph of the reported event."
+   :"AI 生成概念插画：机器人灵巧性示意，非报道现场照片。";
+ const label="AI生成示意图 · AI-GENERATED ILLUSTRATION";
+ return '<figure class="story-image story-image--generated" aria-label="'+esc(alt)+'"><img src="../assets/radar-robotics-dexterity-illustration.jpg" alt="'+esc(alt)+'" loading="eager"><span class="editorial-illustration-tag">'+label+'</span></figure>';
+}
 function storyImageMarkup(x){
+ const editorialIllustration=generatedRoboticsIllustration(x);
+ if(editorialIllustration)return editorialIllustration;
  const supplied=typeof x.image_url==="string"&&x.image_url.startsWith("https://")?x.image_url:"";
  const status=String(x.image_match_status||"");
  const source=String(x.image_source||"").toLowerCase();
@@ -975,6 +1202,7 @@ function storyImageMarkup(x){
 function renderTop5(items){
  const root=$("top5List");if(!root)return;
  const data=(items||[]).slice(0,5);
+ const deepUrl=data.length?deepReadHref("top5",0):"../read/";["deepReadNav","deepReadDock","deepReadTab"].forEach(id=>{const link=$(id);if(link)link.href=deepUrl});
  const dims=[["innovation","dimInnovation"],["practicality","dimPracticality"],["feasibility","dimFeasibility"],["impact","dimImpact"],["opportunity","dimOpportunity"]];
 
  if(data.length<5||data.some(x=>x.fallback||!x.scores||!x.source_url)){
@@ -994,7 +1222,7 @@ function renderTop5(items){
    const scores=x.scores||{};
    const confidence=String(x.confidence||"medium").toLowerCase();
    const confidenceText=confidence==="low"?(currentLang==="en"?"LOW · VERIFY":"低置信度 · 待独立验证"):confidence==="medium"?(currentLang==="en"?"MEDIUM":"中置信度"):(currentLang==="en"?"HIGH":"高置信度");
-   return '<article class="top5-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(category)+'</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(confidenceText)+'</span><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
+   return '<article class="top5-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><div class="story-label">'+esc(category)+'</div><h3>'+esc(title)+'</h3><p><strong>'+esc(t("whatLabel"))+' · </strong>'+esc(what)+'</p><p><strong>'+esc(t("whyLabel"))+' · </strong>'+esc(why)+'</p><div class="meta"><span>'+esc(t("confidenceLabel"))+': '+esc(confidenceText)+'</span><a href="'+esc(deepReadHref("top5",i))+'">'+esc(currentLang==="en"?"Deep read":"深读详情")+' ↗</a><a href="'+esc(x.source_url||"#")+'" target="_blank" rel="noopener noreferrer">'+esc(t("readSource"))+' ↗</a></div></div></article>';
  }).join("");
 }
 function renderFeaturedSkill(items){
@@ -1020,22 +1248,30 @@ function renderChinaAINews(items){
   {"模型与技术进展":"Models & Research","产品与产业应用":"Products & Adoption","芯片与算力":"Chips & Compute","具身智能与智能终端":"Embodied AI & Devices","产业与生态":"Industry & Ecosystem"}:
   {"模型与技术进展":"模型与技术进展","产品与产业应用":"产品与产业应用","芯片与算力":"芯片与算力","具身智能与智能终端":"具身智能与智能终端","产业与生态":"产业与生态"};
  const stories=Array.isArray(items)?items.filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&x.title):[];
- root.innerHTML=stories.length?stories.map((x,i)=>{
+ const renderStory=(x,i)=>{
   const title=currentLang==="zh"?(x.title_zh||(/[\u3400-\u9fff]/.test(x.title||"")?x.title:"中文标题暂不可用，请查看原文")):(x.title_en||x.title_zh||x.title);
   const summary=currentLang==="zh"?(x.summary_zh||(/[\u3400-\u9fff]/.test(x.summary||"")?x.summary:"中文摘要暂不可用，请查看原文")):(x.summary_en||x.summary_zh||x.summary);
   const category=labels[x.category]||(currentLang==="en"?"China AI":"中国 AI");
   return '<article class="top5-card china-ai-card">'+storyImageMarkup(x)+'<div class="top5-rank">0'+(i+1)+'</div><div class="top5-content"><span class="china-category">'+esc(category)+'</span><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p>'+esc(summary||t("fallbackSummary"))+'</p><div class="meta china-story-source"><span class="pill">'+esc(x.source||t("chinaSource"))+'</span><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+' ↗</a></div></div></article>';
- }).join(""):'<div class="empty">'+esc(Array.isArray(reportData?.china_ai_news)?t("chinaEmpty"):t("chinaArchiveEmpty"))+'</div>';
+ };
+ if(!stories.length){root.innerHTML='<div class="empty">'+esc(Array.isArray(reportData?.china_ai_news)?t("chinaEmpty"):t("chinaArchiveEmpty"))+'</div>';return}
+ const featured=stories.slice(0,3).map(renderStory).join("");
+ const additional=stories.slice(3).map((story,index)=>renderStory(story,index+3)).join("");
+ const moreLabel=currentLang==="en"?"More China AI developments":"更多中国 AI 动态";
+ root.innerHTML=featured+(additional?'<details class="china-ai-more"><summary>'+esc(moreLabel)+' · '+stories.slice(3).length+'</summary>'+additional+'</details>':"");
 }
+function deepReadHref(type,index){const date=reportData?.report_date||latestReportDate||"";return "../read/?type="+encodeURIComponent(type)+"&id="+encodeURIComponent(index)+"&date="+encodeURIComponent(date)}
 function renderXnewsVoices(items){
  const section=$("xnewsVoicesSection"),root=$("xnewsVoices");if(!section||!root)return;
- const stories=(Array.isArray(items)?items:[]).filter(x=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.curated_url==="string"&&x.curated_url.startsWith("https://xnews.qiaomu.ai/")&&x.title);
- section.style.display=stories.length?"":"none";
- root.innerHTML=stories.slice(0,6).map((x,i)=>{
+ const stories=(Array.isArray(items)?items:[]).map((x,index)=>({x,index})).filter(({x})=>x&&typeof x.url==="string"&&x.url.startsWith("https://")&&typeof x.curated_url==="string"&&x.curated_url.startsWith("https://xnews.qiaomu.ai/")&&x.title);
+ section.style.display="";
+ root.innerHTML=stories.length?stories.slice(0,6).map(({x,index},i)=>{
   const title=currentLang==="en"?(x.title_en||x.title):(x.title_zh||x.title);
   const summary=currentLang==="en"?(x.summary_en||""):(x.summary_zh||x.summary||"");
-  return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">X NEWS · '+esc(currentLang==="en"?"International voices":"海外精选")+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><span class="pill">'+esc(currentLang==="en"?"Curated · not independently verified":"二次编辑 · 待独立核验")+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Original source ↗":"原作者原文 ↗")+'</a><a href="'+esc(x.curated_url)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Chinese editorial ↗":"X News 中文解读 ↗")+'</a></div></div></article>';
- }).join("");
+  const hasCover=x.image_match_status==="article_image" && /^https:\/\//i.test(x.image_url||"");
+  const cover=hasCover ? '<a class="voice-cover" aria-hidden="true" tabindex="-1" href="'+esc(deepReadHref("xnews",index))+'"><img loading="lazy" referrerpolicy="no-referrer" alt="'+esc(x.image_alt||title)+'" src="'+esc(editionImage(x)||x.image_url)+'" onerror="this.parentElement.hidden=true"></a>' : "";
+  return '<article class="item">'+cover+'<div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">X NEWS · '+esc(currentLang==="en"?"International voices":"海外精选")+'</div><h3><a href="'+esc(deepReadHref("xnews",index))+'">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p><div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><span class="pill">'+esc(currentLang==="en"?"Curated · not independently verified":"二次编辑 · 待独立核验")+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Original source ↗":"原作者原文 ↗")+'</a><a href="'+esc(x.curated_url)+'" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Chinese editorial ↗":"X News 中文解读 ↗")+'</a></div></div></article>';
+ }).join(""):'<div class="empty xnews-empty">'+esc(currentLang==="en"?"No verified X News deep reads are available in this issue.":"本期暂无通过来源校验的 X News 深读。")+' <a href="https://xnews.qiaomu.ai/" target="_blank" rel="noopener noreferrer">'+esc(currentLang==="en"?"Explore X News ↗":"查看 X News 海外发现 ↗")+'</a></div>';
 }
 function renderNews(items){const countNode=$("newsCount");if(countNode)countNode.textContent=items.length;const root=$("newsList");if(!root)return;root.innerHTML=items.length?items.map((x,i)=>{const title=currentLang==="zh"?(x.title_zh||x.title):(x.title_en||x.title);const summary=currentLang==="zh"?(x.summary_zh||x.summary):(x.summary_en||x.summary);const why=currentLang==="zh"?(x.why_it_matters_zh||""):(x.why_it_matters_en||"");return '<article class="item"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="story-label">✦ '+esc(x.source||t("source"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(title)+'</a></h3><p class="explain">'+esc(summary||t("fallbackSummary"))+'</p>'+(why?'<div class="why"><strong>'+esc(t("why"))+' · </strong>'+esc(why)+'</div>':'')+'<div class="meta"><span>'+esc(t("published"))+' · '+esc(dateFmt(x.published))+'</span><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(t("openSource"))+'</a></div></div></article>'}).join(""):'<div class="empty">'+esc(t("newsEmpty"))+'</div>'}
 const NIANBOX_APP_URL="https://chenzhe223-tech.github.io/niantou-box-app/#/";
@@ -1066,8 +1302,28 @@ function renderSkills(items){
   return '<article class="item skill"><div class="num">'+String(i+1).padStart(2,"0")+'</div><div><div class="skill-badge">✦ '+esc(t("skillType"))+'</div><h3><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.name||"Community Skill")+'</a></h3><p class="explain">'+esc(description||t("fallbackSummary"))+'</p><div class="meta"><span class="pill">'+esc(x.language||"Multi-language")+'</span><span>'+esc(t("updated"))+' '+esc((x.updated||"").slice(0,10)||t("dateUnknown"))+'</span></div><div class="skill-actions skill-actions--list">'+skillSaveLink(x)+'</div></div><div class="stars">'+(x.stars != null && x.stars !== "" ? "★ "+Number(x.stars).toLocaleString("en-US") : (currentLang==="en"?"Popularity unverified":"热度未核实"))+'<div style="font-size:9px;color:var(--muted);font-weight:400;margin-top:3px">'+esc(t("rank"))+'</div></div></article>';
  }).join(""):'<div class="empty">'+esc(t("skillEmpty"))+'</div>';
 }
-function renderFeatured(items){const x=(items||[])[0];const fallback=(reportData?.news||[])[0];const sourceBacked=!!x;const story=x||fallback;if(!story)return;const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");if(title)$("featureTitle").textContent=title;if(summary)$("featureSub").textContent=summary;const a=document.querySelector(".hero-actions a");const url=story.source_url||story.url;if(a&&url){a.href=url;a.target="_blank";a.rel="noopener noreferrer";a.textContent=currentLang==="en"?"↗ Read the lead story":"↗ 阅读本期焦点原文"}const kicker=document.querySelector(".hero-kicker span");if(kicker&&!sourceBacked)kicker.textContent=currentLang==="en"?"DAILY AI FIELD NOTES · SOURCE STORY":"AI 前沿简报 · 本期焦点新闻线索"}function formatReportDate(dateString){const match=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(dateString||""));if(!match)return {short:dateString||t("headline"),full:""};const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);const d=new Date(year,month-1,day,12);const locale=currentLang==="en"?"en-US":"zh-CN";const short=currentLang==="en"?d.toLocaleDateString(locale,{month:"short",day:"numeric"}):`${month}月${day}日`;return {short,full:d.toLocaleDateString(locale,{year:"numeric",month:"long",day:"numeric",weekday:"long"})}}
-function renderAll(data){applyDailyHeroTheme(data.report_date);renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderXnewsVoices(data.xnews_voices||[]);renderChinaAINews(data.china_ai_news||[]);renderSkills(data.skills||[]);renderFeaturedSkill(data.skills||[]);const date=formatReportDate(data.report_date);$("reportDate").textContent=date.short;$("reportDateFull").textContent=date.full;const statusNode=$("status");if(statusNode)statusNode.textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
+function renderFeatured(items){
+ const root=$("leadStory");
+ if(!root)return;
+ const story=(items||[])[0]||(reportData?.news||[])[0];
+ if(!story){root.innerHTML="";return}
+ const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);
+ const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");
+ const source=story.source||story.source_name||"AI Radar";
+ const published=dateFmt(story.published);
+ const deep=deepReadHref("top5",0);
+ const media=storyImageMarkup(story);
+ const hasImage=media.includes("<img");
+ const leadLabel=currentLang==="en"?"TODAY'S LEAD":"今日头条";
+ root.classList.toggle("has-image",hasImage);
+ root.classList.toggle("text-only",!hasImage);
+ root.innerHTML=`<a href="${esc(deep)}" aria-label="${esc(currentLang==="en"?"Open lead story deep read":"打开头条深读")}">${media}<div class="lead-story-copy"><span class="lead-story-label">${esc(leadLabel)}</span><h2>${esc(title||"Untitled story")}</h2><p>${esc(summary||t("fallbackSummary"))}</p><div class="lead-story-meta"><span>${esc(source)} · ${esc(published)}</span><span>${esc(currentLang==="en"?"Deep read →":"深读 →")}</span></div></div></a>`;
+ const leadImage=root.querySelector(".story-image img");
+ if(leadImage && editionImage(story,true)) leadImage.src=editionImage(story,true);
+
+}
+function formatReportDate(dateString){const match=/^(\\d{4})-(\\d{2})-(\\d{2})$/.exec(String(dateString||""));if(!match)return {short:dateString||t("headline"),full:""};const year=Number(match[1]),month=Number(match[2]),day=Number(match[3]);const d=new Date(year,month-1,day,12);const locale=currentLang==="en"?"en-US":"zh-CN";const short=currentLang==="en"?d.toLocaleDateString(locale,{month:"short",day:"numeric"}):`${month}月${day}日`;return {short,full:d.toLocaleDateString(locale,{year:"numeric",month:"long",day:"numeric",weekday:"long"})}}
+function renderAll(data){applyDailyHeroTheme(data.report_date,(data.top5||[])[0]);renderAI(data.ai_analysis);renderEditorial(data);renderFeatured(data.top5||[]);renderTop5(data.top5||[]);renderNews(data.news||[]);renderXnewsVoices(data.xnews_voices||[]);renderChinaAINews(data.china_ai_news||[]);renderSkills(data.skills||[]);renderFeaturedSkill(data.skills||[]);const date=formatReportDate(data.report_date);$("reportDate").textContent=date.short;$("reportDateFull").textContent=date.full;const statusNode=$("status");if(statusNode)statusNode.textContent=t("status")+": "+(data.status||"ok")+" · "+t("sources")+" "+(data.sources_ok??"—")+" / "+(data.sources_total??"—")+" · "+t("scoreNote")}
 // Keep ranking numbers hidden until a pointer enters a card; touch devices retain a faint accessible marker because they have no hover state.
 document.addEventListener("pointerover",function(event){const card=event.target&&event.target.closest?event.target.closest(".top5-card"):null;if(card)card.classList.add("rank-active")});
 document.addEventListener("pointerout",function(event){const card=event.target&&event.target.closest?event.target.closest(".top5-card"):null;if(card&&(!event.relatedTarget||!card.contains(event.relatedTarget)))card.classList.remove("rank-active")});
@@ -1151,5 +1407,12 @@ document.addEventListener("click",event=>{
   event.preventDefault();showRadarToast(currentLang==="en"?"Browser storage is unavailable. Nothing was sent; allow site storage and try again.":"浏览器本机存储不可用，未保存。请允许此网站使用本机存储后重试。");
  }
 });
-</script></body></html>
+</script><dialog id="editionSearch" class="edition-dialog" aria-labelledby="searchTitle">
+  <form method="dialog"><strong id="searchTitle">搜索本期简报</strong><button aria-label="关闭 / Close">×</button></form>
+  <input id="editionQuery" type="search" aria-labelledby="searchTitle" autofocus>
+  <ul id="editionResults" aria-live="polite"></ul>
+</dialog>
+<script src="../assets/edition-search.js"></script>
+</body></html>
 <!-- Radar daily refresh trigger: 2026-10-28. Content is regenerated by the daily pipeline. -->
+

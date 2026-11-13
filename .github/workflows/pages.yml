@@ -66,6 +66,7 @@ jobs:
           from pathlib import Path
           from zoneinfo import ZoneInfo
           from radar.scripts.poster_style import poster_style_metadata
+          from radar.scripts.pages_preflight import report_has_explicit_xnews_state
           timezone = ZoneInfo('Asia/Shanghai')
           now_local = dt.datetime.now(timezone)
           today = now_local.date().isoformat()
@@ -102,6 +103,7 @@ jobs:
                   and len(report.get('top5', [])) == 5
                   and all(str(story.get('image_url') or '').startswith('https://') for story in report.get('china_ai_news', []) if isinstance(story, dict))
                   and len(report.get('china_ai_news', [])) >= 6
+                  and report_has_explicit_xnews_state(report)
                   and bool((report.get('skills') or [{}])[0].get('license'))
                   and bool((report.get('skills') or [{}])[0].get('official_website_verified'))
                   and bool((report.get('skills') or [{}])[0].get('readme_verified'))
@@ -272,8 +274,11 @@ jobs:
           import datetime as dt, json
           from pathlib import Path
           from zoneinfo import ZoneInfo
+          from radar.scripts.pages_preflight import report_has_explicit_xnews_state
           p = Path('radar/data/latest.json')
           d = json.loads(p.read_text(encoding='utf-8'))
+          if not report_has_explicit_xnews_state(d):
+              raise SystemExit('Missing explicit X News status and voices list; refusing to publish an incomplete report')
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
           if d.get('report_date') != today or not d.get('generated_at', '').startswith(today):
               raise SystemExit(f"Stale date: report={d.get('report_date')} generated={d.get('generated_at')} expected={today}")
@@ -373,6 +378,8 @@ jobs:
           if [ -d radar/data/skill-candidates ]; then
             cp -a radar/data/skill-candidates/. "$SNAPSHOT/skill-candidates/"
           fi
+          python radar/scripts/brief_feed.py
+          cp radar/data/brief.xml "$SNAPSHOT/brief.xml"
           cp radar/data/latest.json "$SNAPSHOT/latest.json"
           cp radar/data/image-cache.json "$SNAPSHOT/image-cache.json"
           cp radar/data/history.json "$SNAPSHOT/history.json"
@@ -467,6 +474,7 @@ jobs:
           mkdir -p radar/data/archive radar/posters
           rm -rf radar/data/skill-candidates
           mkdir -p radar/data/skill-candidates
+          cp "$SNAPSHOT/brief.xml" radar/data/brief.xml
           cp "$SNAPSHOT/latest.json" radar/data/latest.json
           cp "$SNAPSHOT/image-cache.json" radar/data/image-cache.json
           cp "$SNAPSHOT/history.json" radar/data/history.json
@@ -478,7 +486,7 @@ jobs:
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
           cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
           cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
-          git add radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
+          git add radar/data/brief.xml radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'
             git push origin HEAD:main
@@ -517,8 +525,11 @@ jobs:
           import datetime as dt, json
           from pathlib import Path
           from zoneinfo import ZoneInfo
+          from radar.scripts.pages_preflight import report_has_explicit_xnews_state
           today = dt.datetime.now(ZoneInfo('Asia/Shanghai')).date().isoformat()
           report = json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          if not report_has_explicit_xnews_state(report):
+              raise SystemExit('Candidate main report has no explicit X News status and voices list')
           poster = json.loads(Path('radar/posters/latest.json').read_text(encoding='utf-8'))
           qr = json.loads(Path('radar/posters/latest.qr-verification.json').read_text(encoding='utf-8'))
           if report.get('report_date') != today:
@@ -593,6 +604,7 @@ jobs:
                       report_bytes = response.read()
                   assert_matches_repo('radar/data/latest.json', report_bytes)
                   data = json.loads(report_bytes.decode('utf-8'))
+                  assert report_has_explicit_xnews_state(data), 'live report has no explicit X News status and voices list'
                   assert data.get('report_date') == today, f"report_date={data.get('report_date')!r}, expected {today}"
                   assert data.get('generated_at', '').startswith(today), 'generated_at date mismatch'
                   assert ((data.get('top5_status') == 'ai_curated' and (data.get('localization') or {}).get('status') == 'ok') or (data.get('top5_status') == 'editorial_curated' and (data.get('localization') or {}).get('status') == 'manual_editorial_verified' and (data.get('localization') or {}).get('provider') == 'DAVYLAB editorial review' and (data.get('localization') or {}).get('sources_checked') == 5)) and len(data.get('top5') or []) == 5, 'live report is missing five verified and localized stories'

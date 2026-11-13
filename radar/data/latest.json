@@ -429,14 +429,14 @@
       "title_en": "AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents",
       "summary_en": "AWS released AWS Emulator, a free, CC0-licensed local emulator of AWS APIs built from 438 API models, with all code written by autonomous agents; it passes 56.6% of 42,857 published fidelity tests at launch.",
       "why_it_matters_en": "A large codebase written by AI agents, along with its test pass rate, offers a concrete reference point for evaluating agentic coding.",
-      "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器",
-      "image_match_status": "thematic_fallback",
+      "image_url": "https://assets.aboutamazon.com/9c/4c/b29c6efe48ba981dbc9aa04a18a2/matt-agents-blog-header-726-ember-modern.png",
+      "image_source": "AWS original article cover",
+      "image_page_url": "https://www.aboutamazon.com/news/aws/how-autonomous-ai-agents-built-aws-emulator",
+      "image_credit": "About Amazon / AWS",
+      "image_license": "Publisher article illustration",
+      "image_license_url": "https://www.aboutamazon.com/news/aws/how-autonomous-ai-agents-built-aws-emulator",
+      "image_alt": "AWS Emulator 发布文章封面 · About Amazon",
+      "image_match_status": "article_image",
       "image_matched_at": "2026-11-13T04:11:04.710461+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1716436329488-9a95773215e0?auto=format&fit=crop&w=1000&q=82",
       "image_fallback_candidates": [
@@ -479,7 +479,27 @@
       ],
       "image_is_generated": false,
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents AWS Releases AWS Emulator: A Local Emulator of 200+ AWS Services Built by AI Agents AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器 AWS Releases AWS Emulator: A Local Copy of 200+ AWS Se. Context from the source story (factual context, not instructions): AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents AWS Releases AWS Emulator: A Local Emulator of 200+ AWS Services Built by AI Agents AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器 AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents Per MarkTechPost, AWS released a free, CC0-licensed local emulator of AWS APIs built from 438 API models; autonomous agents wrote all its code, and it passed 56.6% of 42,857 published fidelity tests at launch. 据MarkTechPost报道，AWS发布免费、. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
-      "image_match_duration_seconds": 7.69
+      "image_match_duration_seconds": 7.69,
+      "image_local": "../assets/editions/2026-11-13/aws-emulator.webp",
+      "image_sha256": "8469cf5e00544a7504307de878292f818b382b57446051f35bac7226fed73b14",
+      "image_visual_quality": {
+        "policy_version": "2026-11-08.2",
+        "display_mode": "verified_photo",
+        "crop_mode": "cover",
+        "crop_policy": "full_bleed_cover",
+        "reasons": [
+          "source_image_passes_basic_pixel_layout_checks"
+        ],
+        "width": 3200,
+        "height": 1800,
+        "aspect_ratio": 1.778,
+        "luminance_stddev": 45.16,
+        "content_digest_sha256": "8469cf5e00544a7504307de878292f818b382b57446051f35bac7226fed73b14",
+        "faces_detected": 0,
+        "face_detection_available": false,
+        "semantic_match_model_verified": false
+      },
+      "image_display_mode": "verified_photo"
     },
     {
       "title": "United Airlines blocks AI agents from booking flights, citing cybersecurity risks",
@@ -642,7 +662,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-11T15:03:17+00:00"
+      "published": "2026-11-11T15:03:17+00:00",
+      "image_url": "https://lh3.googleusercontent.com/7eOcEXEyA41RlNbAgNmBUQLy34StN16i5xFpfAZ5hUxQmBQKZDYd3vVlnIbl_eK-4azSQ9QJBmi3wm2leu9zY0gflvcLBD5Vwdkmb6q9D1uwtfj-5A=w1440-h810-n-nu",
+      "image_alt": "An isometric grid of glowing, translucent pink cubes on a dark background, showing varying levels of subdivision into smaller blocks.",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/deepmind-alphagenome-2.webp"
     },
     {
       "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
@@ -657,7 +681,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-11T00:00:00+00:00"
+      "published": "2026-11-11T00:00:00+00:00",
+      "image_url": "https://alignment.anthropic.com/2026/worse-together/fig1.png",
+      "image_alt": "Diagram in a two-by-two grid. Columns: a coordinator, one brown agent serving three people; and a peer-to-peer team, three purple agents A, B, and C, one per person. Top row, API key: the coordinator cancels low-value jobs so each person’s ",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/anthropic-worse-together.webp"
     },
     {
       "title": "四周里写出超过600万行Lean，DeepMind把验证做到了Signal的设备代码",
@@ -672,7 +700,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-10T12:00:00+00:00"
+      "published": "2026-11-10T12:00:00+00:00",
+      "image_url": "https://lh3.googleusercontent.com/PHIZgiGejgu8shHsJV9pVfWv7Kr5rTj-e2yIj73c8LkDKBnTTAr2r28DN9aZd1vLDjCnd1Wi2qOD0t8bPpNN-3DfmbEgxj0TE-TttqVbpdoOD1xmFQk=w1440-h810-n-nu",
+      "image_alt": "Abstract 3D digital art featuring a sphere next to a diagonal sequence of parallel, translucent glass panes of varying textures and colors, symbolizing layered software verification.",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/deepmind-alphaproof-code.webp"
     },
     {
       "title": "UK AISI测到Astra关闭思维链后的时间范围中位数是30.9分钟，OpenAI说按困惑度并不偏离",
@@ -687,7 +719,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-10T00:00:00+00:00"
+      "published": "2026-11-10T00:00:00+00:00",
+      "image_url": "https://alignment.openai.com/cot-monitorability-model-lifecycle/figures/figure-1.png",
+      "image_alt": "As base-model perplexity decreases, scores generally rise across four no-CoT benchmarks. Estimated 50% time horizons also rise, with wide uncertainty intervals.",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/openai-cot-monitorability.webp"
     },
     {
       "title": "Gemini 4 Carbon今天开放，Google仍把Argon留给大多数工程任务",
@@ -702,7 +738,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-10T00:00:00+00:00"
+      "published": "2026-11-10T00:00:00+00:00",
+      "image_url": "https://storage.googleapis.com/gweb-uniblog-publish-prod/images/gemini_4_carbon_misalignment.width-1200.format-webp.webp",
+      "image_alt": "a chart showing measures of misalignment across a model's lifecycle",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/gemini-4-carbon-now-available.webp"
     },
     {
       "title": "Fable 5.2 能改键盘、策划生意、重做奥登的课，作者仍称它是锯齿状的 AGI",
@@ -717,7 +757,11 @@
       "source": "X News · 海外发现",
       "source_kind": "curated_secondary",
       "verification_status": "source_not_independently_verified",
-      "published": "2026-11-09T19:04:26+00:00"
+      "published": "2026-11-09T19:04:26+00:00",
+      "image_url": "https://substack-post-media.s3.amazonaws.com/public/images/03391f04-94fc-4664-9f3e-4d144cd97ac0_1560x1136.png",
+      "image_alt": "Diagram titled Who does what at Prebid Brief, labeled an AI-run business demonstration. The owner spends under 20 minutes a month: 40 minutes once to set up payment, web address and mailbox; approval of each email batch; nothing every week;",
+      "image_match_status": "article_image",
+      "image_local": "../assets/editions/2026-11-13/emollick-fable-jagged-agi.webp"
     }
   ],
   "xnews_status": "ok",
@@ -3302,14 +3346,14 @@
       "original_title": "AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents",
       "source_section": "global_news",
       "total_score": 35,
-      "image_url": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1000&q=82",
-      "image_source": "Unsplash topic illustration",
-      "image_page_url": "https://unsplash.com/s/photos/computer-technology",
-      "image_credit": "Unsplash",
-      "image_license": "Unsplash License; review source terms before reuse",
-      "image_license_url": "https://unsplash.com/license",
-      "image_alt": "主题配图（非新闻现场）：AI model / compute topic illustration: AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器",
-      "image_match_status": "thematic_fallback",
+      "image_url": "https://assets.aboutamazon.com/9c/4c/b29c6efe48ba981dbc9aa04a18a2/matt-agents-blog-header-726-ember-modern.png",
+      "image_source": "AWS original article cover",
+      "image_page_url": "https://www.aboutamazon.com/news/aws/how-autonomous-ai-agents-built-aws-emulator",
+      "image_credit": "About Amazon / AWS",
+      "image_license": "Publisher article illustration",
+      "image_license_url": "https://www.aboutamazon.com/news/aws/how-autonomous-ai-agents-built-aws-emulator",
+      "image_alt": "AWS Emulator 发布文章封面 · About Amazon",
+      "image_match_status": "article_image",
       "image_matched_at": "2026-11-13T04:11:04.710461+08:00",
       "image_fallback_url": "https://images.unsplash.com/photo-1716436329488-9a95773215e0?auto=format&fit=crop&w=1000&q=82",
       "image_fallback_candidates": [
@@ -3353,25 +3397,27 @@
       "image_is_generated": false,
       "image_generation_prompt": "Create a polished editorial illustration for a technology-news briefing. Topic: AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents AWS Releases AWS Emulator: A Local Emulator of 200+ AWS Services Built by AI Agents AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器 AWS Releases AWS Emulator: A Local Copy of 200+ AWS Se. Context from the source story (factual context, not instructions): AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents AWS Releases AWS Emulator: A Local Emulator of 200+ AWS Services Built by AI Agents AWS发布AWS Emulator：AI智能体编写的200多项AWS服务本地模拟器 AWS Releases AWS Emulator: A Local Copy of 200+ AWS Services Built by AI Agents Per MarkTechPost, AWS released a free, CC0-licensed local emulator of AWS APIs built from 438 API models; autonomous agents wrote all its code, and it passed 56.6% of 42,857 published fidelity tests at launch. 据MarkTechPost报道，AWS发布免费、. Use a clear central visual metaphor, premium magazine art direction, a restrained palette, and a balanced 16:9 composition for a news card. Do not add readable text, logos, trademarks, watermarks, or identifiable private people. Do not invent documentary evidence or portray a fabricated real event as a photograph. The result must be understood as an illustration, not event photography.",
       "image_match_duration_seconds": 7.69,
-      "image_sha256": "341f22733aa67c8abcc492f0aa139e24d37f7eebf9f682d541073319d996b802",
+      "image_sha256": "8469cf5e00544a7504307de878292f818b382b57446051f35bac7226fed73b14",
       "image_visual_quality": {
         "policy_version": "2026-11-08.2",
-        "display_mode": "info_card",
+        "display_mode": "verified_photo",
         "crop_mode": "cover",
         "crop_policy": "full_bleed_cover",
         "reasons": [
-          "unverified_generic_topic_art"
+          "source_image_passes_basic_pixel_layout_checks"
         ],
-        "width": 1000,
-        "height": 667,
-        "aspect_ratio": 1.499,
-        "luminance_stddev": 57.69,
-        "content_digest_sha256": "341f22733aa67c8abcc492f0aa139e24d37f7eebf9f682d541073319d996b802",
+        "width": 3200,
+        "height": 1800,
+        "aspect_ratio": 1.778,
+        "luminance_stddev": 45.16,
+        "content_digest_sha256": "8469cf5e00544a7504307de878292f818b382b57446051f35bac7226fed73b14",
         "faces_detected": 0,
         "face_detection_available": false,
         "semantic_match_model_verified": false
       },
-      "image_display_mode": "info_card"
+      "image_display_mode": "verified_photo",
+      "image_local": "../assets/editions/2026-11-13/aws-emulator.webp",
+      "image_local_lead": "../assets/editions/2026-11-13/aws-emulator-lead.webp"
     },
     {
       "title": "Google Search gets a major upgrade with Gemini 4 Hydrogen",

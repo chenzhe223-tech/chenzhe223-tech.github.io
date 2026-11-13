@@ -14,6 +14,7 @@ import re
 import urllib.parse
 import xml.etree.ElementTree as ET
 from email.utils import parsedate_to_datetime
+from html.parser import HTMLParser
 
 FEED_URL = "https://xnews.qiaomu.ai/feed.xml"
 CURATED_HOST = "xnews.qiaomu.ai"
@@ -55,6 +56,22 @@ def _short_excerpt(markdown: object) -> str:
         if len(line) >= 24:
             return line[:120].rstrip("，,；;。 ") + ("…" if len(line) > 120 else "")
     return ""
+
+
+class SourceImage(HTMLParser):
+    """Keep the first original image reference without rendering provider HTML."""
+    def __init__(self):
+        super().__init__()
+        self.fields = {}
+
+    def handle_starttag(self, tag, attrs):
+        if tag != "img" or self.fields:
+            return
+        values = dict(attrs)
+        url = _https_url(values.get("src"))
+        if url:
+            self.fields = {"image_url": url, "image_alt": (values.get("alt") or "")[:240],
+                           "image_match_status": "article_image"}
 
 
 def parse_xnews_feed(payload: bytes, *, now: dt.datetime | None = None) -> tuple[list[dict], str]:
@@ -117,8 +134,12 @@ def parse_xnews_feed(payload: bytes, *, now: dt.datetime | None = None) -> tuple
         # The curated prose is a secondary source. Preserve its provenance
         # and a very short attributed excerpt; no article body or media is copied.
         excerpt = _short_excerpt(rewrite.get("markdown"))
+        media = SourceImage()
+        if isinstance(original.get("html"), str):
+            media.feed(original["html"])
         seen.add(source_url)
         items.append({
+            **media.fields,
             "title": title_zh[:220],
             "title_zh": title_zh[:220],
             "title_en": title_en[:220],

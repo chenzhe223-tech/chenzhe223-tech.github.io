@@ -14,7 +14,7 @@ function check(ok, name, detail = '') {
   let browser;
   try {
     browser = await chromium.launch({ headless: true });
-    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }]) {
+    for (const viewport of [{ name: 'desktop', width: 1440, height: 1000, mobile: false }, { name: 'desktop-1440x900', width: 1440, height: 900, mobile: false }, { name: 'desktop-1280', width: 1280, height: 800, mobile: false }, { name: 'mobile', width: 390, height: 844, mobile: true }, { name: 'mobile-360', width: 360, height: 800, mobile: true }]) {
       const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
       const errors = [];
       page.on('pageerror', e => errors.push(e.message));
@@ -22,16 +22,122 @@ function check(ok, name, detail = '') {
       check(!!response && response.status() < 400, viewport.name + ': daily page loads', 'HTTP ' + (response && response.status()));
       await page.waitForSelector('#reportDate', { timeout: 10000 });
       await page.waitForTimeout(700);
+      await page.evaluate(async () => { const selectedDate=new URLSearchParams(location.search).get('date'); const source=selectedDate?'../data/archive/'+encodeURIComponent(selectedDate)+'.json':'../data/latest.json'; window.__qaRadarData=await fetch(source,{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA report data unavailable: '+response.status);return response.json()}); });
       await page.locator('details.more-news, details.more-skills').evaluateAll(nodes => nodes.forEach(el => { el.open = true; }));
       check((await page.title()).includes('AI 前沿简报'), viewport.name + ': page title');
+      const mobileEditorialLayout = await page.evaluate(() => {
+        const box = selector => { const el=document.querySelector(selector); if(!el)return null; const r=el.getBoundingClientRect(); return {top:r.top+scrollY,bottom:r.bottom+scrollY,height:r.height}; };
+        return {hero:box('.hero-panel'),lead:box('#leadStory'),top5:box('#top5List'),core:box('#editorialCore')};
+      });
+      check(!viewport.mobile || (mobileEditorialLayout.hero?.height <= 225 && mobileEditorialLayout.lead?.top < 390
+        && mobileEditorialLayout.top5?.top >= mobileEditorialLayout.lead?.bottom
+        && mobileEditorialLayout.core?.top > mobileEditorialLayout.top5?.top),
+        viewport.name + ': mobile first screen follows the approved compact hero → lead → Top 5 hierarchy', JSON.stringify(mobileEditorialLayout));
+      const leadBounds = await page.locator('#leadStory h2').boundingBox();
+      check(leadBounds && leadBounds.width > 100 && leadBounds.height > 10,
+        viewport.name + ': lead headline has visible text at this breakpoint', JSON.stringify(leadBounds));
+      const navigationAudit = await page.evaluate(() => ({
+        desktop: [...document.querySelectorAll('.primary-nav a')].map(link => ({ label: link.innerText.trim(), href: link.getAttribute('href') })),
+        mobile: [...document.querySelectorAll('.mobile-dock a')].map(link => ({ label: link.querySelector('b')?.innerText.trim() || '', href: link.getAttribute('href') })),
+        mobileVisible: getComputedStyle(document.querySelector('.mobile-dock')).display !== 'none'
+      }));
+      const desktopLabels = navigationAudit.desktop.map(link => link.label);
+      const mobileLabels = navigationAudit.mobile.map(link => link.label);
+      check(JSON.stringify(desktopLabels) === JSON.stringify(['今日','发现','深读','知识库','我的']),
+        viewport.name + ': desktop navigation matches the approved five-section order', JSON.stringify(navigationAudit));
+      check(JSON.stringify(mobileLabels) === JSON.stringify(['今日','发现','深读','中国 AI','研究'])
+        && (!viewport.mobile || navigationAudit.mobileVisible),
+        viewport.name + ': mobile navigation matches the approved five-section order and is visible on touch screens', JSON.stringify(navigationAudit));
+      check(navigationAudit.desktop[0]?.href === '#ai' && navigationAudit.desktop[1]?.href === '#news'
+        && navigationAudit.desktop[2]?.href?.startsWith('../read/?type=top5&') && navigationAudit.desktop[3]?.href === '#skills'
+        && navigationAudit.desktop[4]?.href?.includes('/niantou-box-app/'),
+        viewport.name + ': desktop navigation routes to existing briefing, discovery, deep-read, library and saved-items destinations');
+      const browserThemeAudit = await page.evaluate(() => ({
+        themeColor: document.querySelector('meta[name="theme-color"]')?.content?.trim().toLowerCase() || '',
+        paperToken: getComputedStyle(document.documentElement).getPropertyValue('--paper').trim().toLowerCase()
+      }));
+      check(browserThemeAudit.themeColor === browserThemeAudit.paperToken && browserThemeAudit.paperToken !== '',
+        viewport.name + ': browser theme color matches the shared paper token', JSON.stringify(browserThemeAudit));
+      const heroImageAudit = await page.evaluate(() => {
+        const story = window.__qaRadarData?.top5?.[0];
+        const declared = document.documentElement.style.getPropertyValue('--hero-photo').trim();
+        const eligible = story?.image_match_status === 'article_image' && /^https:\/\//.test(story?.image_url || '');
+        return { eligible, hasLeadImage: eligible ? declared.includes(new URL(story.image_url).href) : declared === 'none', status: story?.image_match_status || 'missing', sourceUrl: String(story?.source_url || story?.url || ''), title: String(story?.title_zh || story?.title || ''), declaration: declared };
+      });
+      check(heroImageAudit.hasLeadImage, viewport.name + ': hero only uses a verified lead article image', JSON.stringify(heroImageAudit));
       const sourceNewsCount = await page.locator('#newsList .item').count();
       check(sourceNewsCount > 0, viewport.name + ': source news rendered', 'count=' + sourceNewsCount);
+      const xnewsFixtureAudit = await page.evaluate(() => {
+        const original = window.__qaRadarData?.xnews_voices;
+        const fixture = {
+          url: 'https://example.com/qa-source',
+          curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
+          title: 'Synthetic X News QA fixture',
+          title_zh: '合成 X News QA <script>window.__xss=1</script>',
+          summary_zh: '仅用于本地自动化验证的合成样本。',
+          published: '2026-11-11T00:00:00Z'
+        };
+        renderXnewsVoices([
+          fixture,
+          { url: 'javascript:alert(1)', curated_url: 'https://xnews.qiaomu.ai/invalid', title: 'invalid scheme' }
+        ]);
+        const section = document.querySelector('#xnewsVoicesSection');
+        const root = document.querySelector('#xnewsVoices');
+        const article = root?.querySelector('.item');
+        const title = article?.querySelector('h3')?.textContent || '';
+        const source = article?.querySelector('a[target="_blank"]');
+        const editorial = [...(article?.querySelectorAll('a[target="_blank"]') || [])].find(a => a.href.startsWith('https://xnews.qiaomu.ai/'));
+        const audit = {
+          visible: Boolean(section && getComputedStyle(section).display !== 'none'),
+          count: root?.querySelectorAll('.item').length || 0,
+          literalEscapedTitle: title === fixture.title_zh && !article?.querySelector('script'),
+          sourceSafe: source?.href === fixture.url && source.rel.includes('noopener') && source.rel.includes('noreferrer'),
+          editorialSafe: Boolean(editorial && editorial.href === fixture.curated_url && editorial.rel.includes('noopener') && editorial.rel.includes('noreferrer')),
+          deepReadRoute: article?.querySelector('h3 a')?.getAttribute('href') || ''
+        };
+        renderXnewsVoices([]);
+        audit.emptyVisible = Boolean(section && getComputedStyle(section).display !== 'none' && root?.querySelector('.xnews-empty') && root.querySelectorAll('.item').length === 0);
+        renderXnewsVoices(original || []);
+        return audit;
+      });
+      check(xnewsFixtureAudit.visible && xnewsFixtureAudit.count === 1, viewport.name + ': X News fixture shows only valid HTTPS entries', JSON.stringify(xnewsFixtureAudit));
+      check(xnewsFixtureAudit.literalEscapedTitle, viewport.name + ': X News content is rendered as text, not executable HTML');
+      check(xnewsFixtureAudit.sourceSafe && xnewsFixtureAudit.editorialSafe, viewport.name + ': X News original and editorial links use safe HTTPS destinations');
+      check(xnewsFixtureAudit.deepReadRoute.includes('type=xnews') && xnewsFixtureAudit.emptyVisible, viewport.name + ': X News deep-read route and truthful empty state work');
+      const typeRoles = await page.evaluate(() => ({
+        sectionHeading: getComputedStyle(document.querySelector('.section-head h2')).fontFamily,
+        kicker: getComputedStyle(document.querySelector('.hero-kicker')).fontFamily,
+        rank: getComputedStyle(document.querySelector('.top5-rank')).fontFamily,
+        reportDate: getComputedStyle(document.querySelector('#reportDate')).fontFamily,
+        dockIndex: getComputedStyle(document.querySelector('.mobile-dock a span')).fontFamily,
+        metadata: getComputedStyle(document.querySelector('.meta')).fontVariantNumeric
+      }));
+      check(/Georgia|Times New Roman/.test(typeRoles.sectionHeading) && /Georgia|Times New Roman/.test(typeRoles.kicker),
+        viewport.name + ': English editorial headings use the serif type role', JSON.stringify(typeRoles));
+      check(/monospace/.test(typeRoles.rank) && /monospace/.test(typeRoles.reportDate) && (!viewport.mobile || /monospace/.test(typeRoles.dockIndex)) && typeRoles.metadata.includes('tabular-nums'),
+        viewport.name + ': ranks, report dates, navigation numerals and metadata use aligned data typography', JSON.stringify(typeRoles));
       check(await page.locator('#chinaAI').count() === 1, viewport.name + ': China AI developments module exists');
       check(await page.locator('#chinaAINewsList').isVisible(), viewport.name + ': China AI module is visible');
       const chinaGridColumns = await page.locator('#chinaAINewsList').evaluate(el => getComputedStyle(el).gridTemplateColumns.split(' ').length);
-      check(chinaGridColumns === (viewport.mobile ? 1 : 2), viewport.name + ': China AI card grid uses balanced columns', 'columns=' + chinaGridColumns);
+      check(chinaGridColumns === 1, viewport.name + ': China AI stories use the approved single-column side rail', 'columns=' + chinaGridColumns);
       const chinaCards = page.locator('#chinaAINewsList .china-ai-card');
       const chinaCount = await chinaCards.count();
+      const expectedChinaCount = await page.evaluate(() => Array.isArray(window.__qaRadarData?.china_ai_news) ? window.__qaRadarData.china_ai_news.length : 0);
+      check(chinaCount === expectedChinaCount, viewport.name + ': all real China AI stories remain available in the sidebar module', 'rendered=' + chinaCount + ', expected=' + expectedChinaCount);
+      const chinaMore = page.locator('#chinaAINewsList details.china-ai-more');
+      const visibleChinaCount = await page.locator('#chinaAINewsList > .china-ai-card:visible').count();
+      check(visibleChinaCount === Math.min(3, chinaCount) && (chinaCount <= 3 ? await chinaMore.count() === 0 : await chinaMore.count() === 1 && !(await chinaMore.evaluate(el => el.open))),
+        viewport.name + ': sidebar previews three stories and keeps remaining stories in a collapsed, discoverable list',
+        JSON.stringify({ visibleChinaCount, chinaCount, morePanels: await chinaMore.count() }));
+      if (await chinaMore.count()) {
+        await chinaMore.locator('summary').click();
+        check(await chinaMore.evaluate(el => el.open) && await chinaMore.locator('.china-ai-card:visible').count() === chinaCount - 3,
+          viewport.name + ': expanding China AI reveals every additional story');
+        await chinaMore.locator('summary').click();
+      }
+      const railPoster = page.locator('#chinaAI .rail-poster');
+      check(await railPoster.getAttribute('href') === '../posters/latest.png' && await railPoster.locator('img').getAttribute('src') === '../posters/latest.png',
+        viewport.name + ': China AI sidebar links to the existing daily poster');
       if (chinaCount > 0) {
         check(await page.locator('#chinaAINewsList a[href^="https://"]').count() >= chinaCount, viewport.name + ': China AI stories have HTTPS source links', 'cards=' + chinaCount);
         check(await page.locator('#chinaAINewsList .china-category').count() === chinaCount, viewport.name + ': China AI stories have topic labels');
@@ -43,8 +149,8 @@ function check(ok, name, detail = '') {
         if (chinaCount > 0) {
           const chinaCard = chinaCards.first();
           const initialOpacity = Number(await chinaCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
-          const initialRankStateOk = initialOpacity < 0.1;
-          check(initialRankStateOk, viewport.name + ': China AI rank is transparent before interaction on all devices', 'opacity=' + initialOpacity);
+          const initialRankStateOk = initialOpacity > 0.9;
+          check(initialRankStateOk, viewport.name + ': China AI rank remains visible in the approved editorial card', 'opacity=' + initialOpacity);
           await chinaCard.hover();
           await page.waitForTimeout(240);
           const hoverState = await chinaCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
@@ -57,11 +163,17 @@ function check(ok, name, detail = '') {
       const count = await cards.count();
       check(count === 5, viewport.name + ': five story cards visible', 'count=' + count);
       check(await page.locator('#top5List .story-image').count() <= 5, viewport.name + ': news without verified photographs stays text-first');
-      check(await page.locator('#top5List .story-image img:not([src^="https://"])').count() === 0, viewport.name + ': all visible news photos use HTTPS sources');
+      const top5ImageAudit = await page.evaluate(() => {
+        const images = [...document.querySelectorAll('#top5List .story-image img')];
+        const generated = images.filter(img => img.closest('.story-image--generated'));
+        return { nonHttps: images.filter(img => !new RegExp('^https://').test(img.getAttribute('src') || '')).length, generatedCount: generated.length,
+          generatedAssetsValid: generated.every(img => img.getAttribute('src') === '../assets/radar-robotics-dexterity-illustration.jpg' && /(AI-generated conceptual illustration|AI 生成概念插画)/i.test(img.alt) && img.closest('.story-image--generated')?.textContent.includes('AI-GENERATED ILLUSTRATION')) };
+      });
+      check(top5ImageAudit.nonHttps === top5ImageAudit.generatedCount && top5ImageAudit.generatedCount <= 1 && top5ImageAudit.generatedAssetsValid, viewport.name + ': every non-HTTPS Top5 visual is the exact labeled first-party illustration, all other story photos remain HTTPS', JSON.stringify(top5ImageAudit));
       check(await page.locator('#top5List .story-topic-illustration, #top5List .story-info-card').count() === 0, viewport.name + ': repetitive blue AI icon placeholders removed');
       const imageDuplicates = await page.evaluate(() => {
         const seen=new Map(),duplicates=[];
-        const stories=[...(reportData?.top5||[]),...(reportData?.china_ai_news||[])];
+        const stories=[...(window.__qaRadarData?.top5||[]),...(window.__qaRadarData?.china_ai_news||[])];
         for(const item of stories){
           if(!item?.image_url || ['thematic_fallback','image_unavailable','thematic_fallback_budget_exhausted'].includes(item.image_match_status))continue;
           if(item.image_display_mode==='info_card')continue;
@@ -131,8 +243,8 @@ function check(ok, name, detail = '') {
       if (count > 0) {
         const topStoryCard = cards.first();
         const initialOpacity = Number(await topStoryCard.evaluate(el => getComputedStyle(el.querySelector('.top5-rank')).opacity));
-        const initialRankStateOk = viewport.mobile ? initialOpacity <= 0.25 : initialOpacity < 0.1;
-        check(initialRankStateOk, viewport.name + ': top-story rank is hidden on desktop and faint on touch devices before interaction', 'opacity=' + initialOpacity);
+        const initialRankStateOk = initialOpacity > 0.9;
+        check(initialRankStateOk, viewport.name + ': Top5 rank is visible before interaction as shown in the approved design', 'opacity=' + initialOpacity);
         await topStoryCard.hover();
         await page.waitForTimeout(240);
         const hoverState = await topStoryCard.evaluate(el => ({ hovered: el.matches(':hover'), active: el.classList.contains('rank-active'), opacity: Number(getComputedStyle(el.querySelector('.top5-rank')).opacity) }));
@@ -146,6 +258,55 @@ function check(ok, name, detail = '') {
       check(await page.locator('#featuredSkill [data-nb-skill-save]').count() === 1, viewport.name + ': featured Skill has one-click NianBox save action');
       check(await page.locator('#skillList [data-nb-skill-save]').count() > 0, viewport.name + ': ranked Skills have NianBox save actions');
       check((await page.locator('#featuredSkill [data-nb-skill-save]').getAttribute('href') || '').includes('/niantou-box-app/'), viewport.name + ': NianBox action points to the real app URL');
+      const skillSaveAudit = await page.evaluate(() => {
+        const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
+        const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
+        if (!nianbox || !keypocket) return { available: false };
+        const expectedName = nianbox.dataset.skillName || '';
+        const expectedUrl = nianbox.dataset.skillUrl || '';
+        const expectedDate = nianbox.dataset.reportDate || '';
+        localStorage.removeItem('nb.radar.pending-skill.v1');
+        localStorage.removeItem('kp.radar.pending-skills.v1');
+        const clickWithoutNavigation = link => {
+          link.addEventListener('click', event => event.preventDefault(), { once: true });
+          link.click();
+        };
+        clickWithoutNavigation(nianbox);
+        clickWithoutNavigation(keypocket);
+        let nianboxQueue = [], keypocketQueue = [];
+        try { nianboxQueue = JSON.parse(localStorage.getItem('nb.radar.pending-skill.v1') || '[]'); } catch {}
+        try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
+        let importLinkPayload = null;
+        try {
+          const encoded = new URL(keypocket.href).searchParams.get('kp_capture');
+          importLinkPayload = encoded ? JSON.parse(encoded) : null;
+        } catch {}
+        const nb = nianboxQueue[0], kp = keypocketQueue[0];
+        let nbUrl = null, nbSourcePage = null;
+        try { nbUrl = new URL(nb?.url || ''); } catch {}
+        try { nbSourcePage = new URL(nb?.sourcePage || ''); } catch {}
+        const nianboxReceiverContract = Boolean(
+          nb && typeof nb.id === 'string' && nb.id.startsWith('davy-radar-') &&
+          nb.source === 'davy-radar' && Number.isFinite(nb.createdAt) &&
+          typeof nb.name === 'string' && nb.name.length > 0 && nb.name.length <= 180 &&
+          nbUrl?.protocol === 'https:' && nbUrl.hostname === 'github.com' &&
+          !nbUrl.username && !nbUrl.password && nbUrl.pathname.split('/').filter(Boolean).length >= 2 &&
+          (nb.description || '').length <= 2400 && (nb.topics || '').length <= 500 &&
+          nb.reportDate === expectedDate &&
+          nbSourcePage?.pathname.startsWith('/radar/daily')
+        );
+        return {
+          available: true,
+          nianboxQueued: nianboxQueue.length === 1 && nb?.source === 'davy-radar' && nb?.name === expectedName && nb?.url === expectedUrl && nb?.reportDate === expectedDate,
+          nianboxReceiverContract,
+          keypocketQueued: keypocketQueue.length === 1 && kp?.source === 'davy-radar' && kp?.name === expectedName && kp?.url === expectedUrl && kp?.reportDate === expectedDate,
+          keypocketImportLink: Boolean(importLinkPayload && importLinkPayload.source === 'davy-radar' && importLinkPayload.name === expectedName && importLinkPayload.url === expectedUrl && importLinkPayload.reportDate === expectedDate)
+        };
+      });
+      check(skillSaveAudit.available, viewport.name + ': Skill save actions exist before interaction');
+      check(skillSaveAudit.nianboxQueued, viewport.name + ': clicking the featured Skill writes its matching NianBox queue record', JSON.stringify(skillSaveAudit));
+      check(skillSaveAudit.nianboxReceiverContract, viewport.name + ': NianBox queue record meets the receiving app import contract', JSON.stringify(skillSaveAudit));
+      check(skillSaveAudit.keypocketQueued && skillSaveAudit.keypocketImportLink, viewport.name + ': clicking the featured Skill writes its matching KeyPocket queue and preserves the import link payload', JSON.stringify(skillSaveAudit));
       check(await page.locator('#archiveDate option').count() >= 2, viewport.name + ': history date options loaded');
       const posterUrl = new URL('../posters/latest.png', base).href;
       const posterResponse = await page.request.get(posterUrl);
@@ -157,14 +318,62 @@ function check(ok, name, detail = '') {
         await page.locator('#archiveDate').selectOption(archiveOption);
         await page.waitForTimeout(500);
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
+        await page.waitForFunction(date => document.querySelector('#featuredSkill [data-nb-skill-save]')?.dataset.reportDate === date, archiveOption, { timeout: 10000 });
+        await page.evaluate(async date => { window.__qaRadarData=await fetch('../data/archive/'+encodeURIComponent(date)+'.json',{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA archive data unavailable: '+response.status);return response.json()}); }, archiveOption);
+        const archivedSkillHandoff = await page.evaluate(() => {
+          const nianbox = document.querySelector('#featuredSkill [data-nb-skill-save]');
+          const keypocket = document.querySelector('#featuredSkill [data-kp-skill-save]');
+          if (!nianbox || !keypocket) return { available: false };
+          localStorage.removeItem('nb.radar.pending-skill.v1');
+          localStorage.removeItem('kp.radar.pending-skills.v1');
+          for (const link of [nianbox, keypocket]) {
+            link.addEventListener('click', event => event.preventDefault(), { once: true });
+            link.click();
+          }
+          let nianboxQueue = [], keypocketQueue = [];
+          try { nianboxQueue = JSON.parse(localStorage.getItem('nb.radar.pending-skill.v1') || '[]'); } catch {}
+          try { keypocketQueue = JSON.parse(localStorage.getItem('kp.radar.pending-skills.v1') || '[]'); } catch {}
+          const result = {
+            available: true,
+            renderedDate: window.__qaRadarData?.report_date || '',
+            nianboxDate: nianboxQueue[0]?.reportDate || '',
+            keypocketDate: keypocketQueue[0]?.reportDate || ''
+          };
+          localStorage.removeItem('nb.radar.pending-skill.v1');
+          localStorage.removeItem('kp.radar.pending-skills.v1');
+          return result;
+        });
+        check(archivedSkillHandoff.available && archivedSkillHandoff.renderedDate === archiveOption,
+          viewport.name + ': selected archive data replaces the current report before Skill save', JSON.stringify(archivedSkillHandoff));
+        check(archivedSkillHandoff.nianboxDate === archiveOption && archivedSkillHandoff.keypocketDate === archiveOption,
+          viewport.name + ': archived Skill save preserves the selected issue date in both handoff queues', JSON.stringify(archivedSkillHandoff));
         await page.goto(base, { waitUntil: 'networkidle', timeout: 30000 });
         await page.waitForTimeout(500);
       }
 
       const firstCard = page.locator('#top5List .top5-card').first();
-      const cardStyles = await firstCard.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, text: getComputedStyle(el.querySelector('p')).color, title: getComputedStyle(el.querySelector('h3')).color }));
-      check(cardStyles.background === 'rgb(255, 255, 255)', viewport.name + ': story card has solid light background', JSON.stringify(cardStyles));
-      check(cardStyles.text === 'rgb(71, 85, 105)' && cardStyles.title === 'rgb(31, 41, 55)', viewport.name + ': story text uses the shared contrast tokens', JSON.stringify(cardStyles));
+      const editorialLayoutAudit = await page.evaluate(() => ({
+        leadBackground: getComputedStyle(document.querySelector('#leadStory')).backgroundColor,
+        leadTitle: getComputedStyle(document.querySelector('#leadStory h2')).color,
+        leadImage: !!document.querySelector('#leadStory .story-image img'),
+        leadImageUrl: document.querySelector('#leadStory .story-image img')?.getAttribute('src') || '',
+        leadImageLoaded: Boolean(document.querySelector('#leadStory .story-image img')?.complete && document.querySelector('#leadStory .story-image img')?.naturalWidth > 0),
+        generatedLabel: document.querySelector('#leadStory .editorial-illustration-tag')?.textContent?.trim() || '',
+        top5Background: getComputedStyle(document.querySelector('#top5List .top5-card')).backgroundColor,
+        top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color,
+        leadTextOnly: document.querySelector('#leadStory')?.classList.contains('text-only')
+      }));
+      const exactGeneratedIllustration = heroImageAudit.sourceUrl === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66' && heroImageAudit.status === 'thematic_fallback' && /Gemini Robotics 2\.5/i.test(heroImageAudit.title);
+      const leadVisualPass = heroImageAudit.eligible
+        ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage
+        : exactGeneratedIllustration
+          ? !editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadImage && editorialLayoutAudit.leadImageUrl === '../assets/radar-robotics-dexterity-illustration.jpg' && editorialLayoutAudit.leadImageLoaded && editorialLayoutAudit.generatedLabel.includes('AI-GENERATED ILLUSTRATION') && editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)'
+          : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)' && !editorialLayoutAudit.leadImage;
+      check(leadVisualPass,
+        viewport.name + ': lead art is verified photography or a matching, explicitly labeled editorial illustration; unknown fallbacks stay text-first', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible, exactGeneratedIllustration }));
+      check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
+        viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
+      check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');
       const editorial = page.locator('#editorialCore');
       if (await editorial.count()) {
         const isVisible = await editorial.isVisible();
@@ -172,6 +381,13 @@ function check(ok, name, detail = '') {
         if (!hasSynthesis) check(!isVisible, viewport.name + ': internal missing-analysis status is hidden from readers');
       }
       check(await page.locator('#featureTitle').innerText().then(x => x.trim().length > 0), viewport.name + ': lead feature has a headline');
+      const heroEditorialStyles = await page.evaluate(() => {
+        const title = getComputedStyle(document.querySelector('#featureTitle'));
+        const action = getComputedStyle(document.querySelector('.hero-actions>a:not(.secondary)'));
+        return { titleBackground: title.backgroundImage, titleColor: title.webkitTextFillColor || title.color, actionBackground: action.backgroundImage, actionColor: action.backgroundColor };
+      });
+      check(heroEditorialStyles.titleBackground === 'none' && heroEditorialStyles.titleColor === 'rgb(32, 35, 32)', viewport.name + ': global masthead uses solid editorial ink', JSON.stringify(heroEditorialStyles));
+      check(heroEditorialStyles.actionBackground === 'none' && heroEditorialStyles.actionColor === 'rgb(135, 86, 51)', viewport.name + ': primary hero action uses accessible copper', JSON.stringify(heroEditorialStyles));
       const storyLabel = await page.locator('#top5List .story-label').first().innerText();
       if (storyLabel.includes('暂不可用') || storyLabel.includes('UNAVAILABLE')) {
         const cardsText = await cards.allInnerTexts();
@@ -272,11 +488,12 @@ function check(ok, name, detail = '') {
           const large=size>=24||(size>=18.66&&weight>=700);
           const minimum=large?3:4.5;
           results.push({text:text.slice(0,90),selector:el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(el.classList.length?'.'+[...el.classList].slice(0,3).join('.'):''),
-            ratio:Number(worst.ratio.toFixed(2)),minimum,foreground:[Math.round(worst.foreground.r),Math.round(worst.foreground.g),Math.round(worst.foreground.b)].join(','),
+            ratio:Number(worst.ratio.toFixed(2)),rawRatio:worst.ratio,minimum,foreground:[Math.round(worst.foreground.r),Math.round(worst.foreground.g),Math.round(worst.foreground.b)].join(','),
             background:[Math.round(worst.background.r),Math.round(worst.background.g),Math.round(worst.background.b)].join(','),opacity:Number(opacity.toFixed(3))});
         }
-        const failures=results.filter(x=>x.ratio+0.01<x.minimum);
-        return {checked:results.length,failures:failures.slice(0,40),failureCount:failures.length,minimumRatio:results.length?Math.min(...results.map(x=>x.ratio)):null};
+        const failures=results.filter(x=>x.rawRatio<x.minimum);
+        const worst=results.reduce((current,x)=>!current||x.rawRatio<current.rawRatio?x:current,null);
+        return {checked:results.length,failures:failures.slice(0,40),failureCount:failures.length,minimumRatio:worst?worst.rawRatio:null,worst};
       });
       check(contrastAudit.checked > 50, viewport.name + ': contrast audit checked rendered text', 'checked=' + contrastAudit.checked);
       check(contrastAudit.failureCount === 0, viewport.name + ': WCAG AA text contrast passes for all visible text (4.5:1 normal, 3:1 large)', JSON.stringify({checked:contrastAudit.checked,minimumRatio:contrastAudit.minimumRatio,failureCount:contrastAudit.failureCount,failures:contrastAudit.failures.slice(0,12)}));
@@ -284,6 +501,7 @@ function check(ok, name, detail = '') {
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': no horizontal page overflow', JSON.stringify(overflow));
       const bodyColor = await page.locator('body').evaluate(el => getComputedStyle(el).backgroundColor);
       check(bodyColor !== 'rgba(0, 0, 0, 0)', viewport.name + ': page has computed background', bodyColor);
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
       await page.getByRole('button', { name: 'EN' }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': language switch works');
@@ -291,6 +509,226 @@ function check(ok, name, detail = '') {
       await page.getByRole('button', { name: '中文' }).click();
       check(await page.locator('html').getAttribute('lang') === 'zh-CN', viewport.name + ': language switches back');
       check(errors.length === 0, viewport.name + ': no JavaScript errors', errors.join('; '));
+      const deepReadLink = page.locator('#top5List a[href*="../read/"]').first();
+      check(await deepReadLink.count() === 1, viewport.name + ': first story has a deep-reader route');
+      if (await deepReadLink.count()) {
+        await deepReadLink.click();
+        await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
+        check(new URL(page.url()).pathname.includes('/radar/read/'), viewport.name + ': story opens in the deep reader', page.url());
+        await page.goBack({ waitUntil: 'networkidle', timeout: 30000 });
+        await page.waitForSelector('#reportDate', { timeout: 10000 });
+        await page.waitForFunction(date => document.querySelector('#reportDate')?.textContent.includes(date), currentReportDate);
+        check(new URL(page.url()).pathname.endsWith('/radar/daily/') && (await page.locator('#reportDate').innerText()).includes(currentReportDate), viewport.name + ': browser back restores the briefing', page.url());
+      }
+      await page.close();
+    }
+    for (const viewport of [
+      { name: 'reader-desktop', width: 1440, height: 1000, mobile: false, date: '2026-11-12' },
+      { name: 'reader-desktop-1440x900', width: 1440, height: 900, mobile: false, date: '2026-11-12' },
+      { name: 'reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
+      { name: 'reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
+    ]) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      const readerUrl = new URL('../read/', base);
+      readerUrl.search = new URLSearchParams({ type: 'top5', id: '0', date: viewport.date }).toString();
+      const response = await page.goto(readerUrl.href, { waitUntil: 'networkidle', timeout: 30000 });
+      check(!!response && response.status() < 400, viewport.name + ': deep reader loads', 'HTTP ' + (response && response.status()));
+      await page.locator('#content .title').waitFor({ state: 'visible', timeout: 10000 });
+      check((await page.locator('#content .title').innerText()).length > 8, viewport.name + ': real story title is visible');
+      const readerIllustrationAudit = await page.evaluate(async () => {
+        const date = new URLSearchParams(location.search).get('date') || '';
+        const response = await fetch('../data/archive/' + encodeURIComponent(date) + '.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error('Reader image audit report unavailable: ' + response.status);
+        const report = await response.json();
+        const story = report?.top5?.[0] || {};
+        const title = [story.title_zh, story.title_en, story.original_title, story.title].filter(Boolean).join(' ');
+        const expected = String(story.source_url || story.url || '') === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66'
+          && story.image_match_status === 'thematic_fallback' && /Gemini Robotics 2\.5/i.test(title);
+        const image = document.querySelector('#content img.cover');
+        return { expected, src: image?.getAttribute('src') || '', loaded: Boolean(image?.complete && image.naturalWidth > 0),
+          alt: image?.alt || '', caption: document.querySelector('#content .caption')?.innerText || '' };
+      });
+      check(readerIllustrationAudit.expected
+        ? readerIllustrationAudit.src === '../assets/radar-robotics-dexterity-illustration.jpg' && readerIllustrationAudit.loaded
+          && /(AI-generated conceptual illustration|AI 生成概念插画)/i.test(readerIllustrationAudit.alt)
+          && /(not a news photograph|非新闻现场照片)/i.test(readerIllustrationAudit.caption)
+        : readerIllustrationAudit.src !== '../assets/radar-robotics-dexterity-illustration.jpg',
+        viewport.name + ': deep reader shows the labeled illustration only for its matching story and loads the asset', JSON.stringify(readerIllustrationAudit));
+      const readerTypeRoles = await page.evaluate(() => ({
+        title: getComputedStyle(document.querySelector('#content .title')).fontFamily,
+        score: getComputedStyle(document.querySelector('#content .score b')).fontFamily,
+        provenanceNumeric: getComputedStyle(document.querySelector('#content .provenance')).fontVariantNumeric
+      }));
+      check(/Georgia|Times New Roman/.test(readerTypeRoles.title), viewport.name + ': deep-read title uses the editorial serif role', JSON.stringify(readerTypeRoles));
+      check(/monospace/.test(readerTypeRoles.score) && readerTypeRoles.provenanceNumeric.includes('tabular-nums'),
+        viewport.name + ': deep-read scores and provenance use aligned data typography', JSON.stringify(readerTypeRoles));
+      check(await page.locator('#content .provenance').isVisible(), viewport.name + ': source and date provenance is visible');
+      check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': requested briefing date is shown in reader rail');
+      check(await page.locator('#content .scores').isVisible(), viewport.name + ': five-dimension assessment is visible');
+      check(await page.locator('.rail-links a[href^="../daily/"]').count() === 1, viewport.name + ': return-to-briefing link is present');
+      const readerActions = page.locator('.reader-action-dock');
+      check(viewport.mobile ? await readerActions.isVisible() : !(await readerActions.isVisible()),
+        viewport.name + ': reader action dock is visible only on mobile');
+      if (viewport.mobile) {
+        check(await readerActions.locator('button').count() === 3,
+          viewport.name + ': mobile reader exposes type size, bookmark and share actions');
+        const defaultFontSize = Number(await page.locator('#content .dek').evaluate(el => parseFloat(getComputedStyle(el).fontSize)));
+        await page.locator('#readerFontSize').click();
+        const enlargedFontSize = Number(await page.locator('#content .dek').evaluate(el => parseFloat(getComputedStyle(el).fontSize)));
+        check(enlargedFontSize > defaultFontSize && await page.locator('body').getAttribute('data-reader-size') === 'large',
+          viewport.name + ': mobile reader type-size control enlarges article text', JSON.stringify({ defaultFontSize, enlargedFontSize }));
+        await page.locator('#readerFontSize').click();
+        await page.locator('#readerFontSize').click();
+        check(await page.locator('body').getAttribute('data-reader-size') === 'normal',
+          viewport.name + ': mobile reader type-size control cycles back to the default');
+        await page.locator('#readerBookmarkAction').click();
+        const bookmarkState = await page.evaluate(() => ({
+          pressed: document.querySelector('#readerBookmarkAction')?.getAttribute('aria-pressed'),
+          stored: JSON.parse(localStorage.getItem('davy-radar.saved-deep-reads.v1') || '[]').length
+        }));
+        check(bookmarkState.pressed === 'true' && bookmarkState.stored === 1,
+          viewport.name + ': bookmark action persists the selected deep read locally', JSON.stringify(bookmarkState));
+        await page.locator('#readerBookmarkAction').click();
+        check(await page.locator('#readerBookmarkAction').getAttribute('aria-pressed') === 'false',
+          viewport.name + ': bookmark action removes the saved deep read on the second tap');
+        await page.evaluate(() => {
+          window.__qaSharedUrl = '';
+          Object.defineProperty(navigator, 'clipboard', { configurable: true, value: { writeText: async value => { window.__qaSharedUrl = value; } } });
+        });
+        await page.locator('#readerShareAction').click();
+        check(await page.evaluate(() => window.__qaSharedUrl === location.href),
+          viewport.name + ': share action copies the current deep-read URL', await page.evaluate(() => window.__qaSharedUrl));
+      }
+      const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+      check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
+      await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
+      await page.getByRole('button', { name: 'EN' }).click();
+      check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
+      check((await page.locator('#content').innerText()).includes('Five dimensions'), viewport.name + ': assessment is localized in English');
+      check(errors.length === 0, viewport.name + ': deep reader has no JavaScript errors', errors.join('; '));
+      await page.close();
+    }
+    const xnewsDeepReadCases = [
+      { name: 'xnews-reader-desktop', width: 1440, height: 900, mobile: false, date: '2026-11-12' },
+      { name: 'xnews-reader-mobile', width: 390, height: 844, mobile: true, date: '2026-11-12' },
+      { name: 'xnews-reader-archive-360', width: 360, height: 800, mobile: true, date: '2026-11-11' }
+    ];
+    for (const viewport of xnewsDeepReadCases) {
+      const page = await browser.newPage({ viewport: { width: viewport.width, height: viewport.height }, isMobile: viewport.mobile, hasTouch: viewport.mobile });
+      const errors = [];
+      page.on('pageerror', e => errors.push(e.message));
+      const fixture = {
+        url: 'https://example.com/qa-xnews-original',
+        source_url: 'https://example.com/qa-xnews-original',
+        curated_url: 'https://xnews.qiaomu.ai/qa-fixture',
+        title: 'Synthetic X News QA fixture',
+        title_zh: '合成 X News 深读验收样本',
+        title_en: 'Synthetic X News deep-read fixture',
+        summary_zh: '用于验证真实页面路由、原始来源和中文编辑链接的合成测试内容。',
+        summary_en: 'Synthetic content for verifying the real page route, original source and Chinese editorial link.',
+        published: '2026-11-11T00:00:00Z',
+        source: 'X News · 海外发现',
+        source_kind: 'curated_secondary',
+        verification_status: 'source_not_independently_verified'
+      };
+      let report;
+      const endpoint = 'archive/' + viewport.date;
+      const homeTarget = new URL('../daily/', base);
+      homeTarget.search = new URLSearchParams({ date: viewport.date }).toString();
+      const homeResponse = await page.goto(homeTarget.href, { waitUntil: 'networkidle', timeout: 30000 });
+      check(!!homeResponse && homeResponse.status() < 400, viewport.name + ': dated daily homepage loads before X News selection', 'HTTP ' + (homeResponse && homeResponse.status()));
+      report = await page.evaluate(({ item, date }) => {
+        const data = JSON.parse(JSON.stringify(window.__qaRadarData || {}));
+        data.report_date = date;
+        data.xnews_voices = [item];
+        return data;
+      }, { item: fixture, date: viewport.date });
+      await page.evaluate(item => renderXnewsVoices([item]), fixture);
+      const storyLink = page.locator('#xnewsVoices .item h3 a');
+      const storyCount = await storyLink.count();
+      check(storyCount === 1, viewport.name + ': homepage displays the X News fixture as a selectable story');
+      const storyHref = storyCount === 1 ? await storyLink.getAttribute('href') : '';
+      check(Boolean(storyHref && storyHref.includes('type=xnews') && storyHref.includes('date=' + viewport.date)),
+        viewport.name + ': homepage X News story links to its dated deep-read route', storyHref || '');
+      check(await page.locator('#xnewsVoicesSection').isVisible(), viewport.name + ': synthetic X News fixture is visible on the briefing homepage');
+      await page.screenshot({ path: path.join(out, viewport.name + '-home-fixture.png'), fullPage: true });
+      let fixtureResponseServed = false;
+      const dataRequests = [];
+      await page.route('**/*', async route => {
+        const requestUrl = route.request().url();
+        const pathname = new URL(requestUrl).pathname;
+        if (requestUrl.includes('/radar/data/')) dataRequests.push(requestUrl);
+        if (pathname.endsWith('/radar/data/' + endpoint + '.json')) {
+          fixtureResponseServed = true;
+          await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(report) });
+        } else {
+          await route.continue();
+        }
+      });
+      let readerResponse = null;
+      if (storyCount === 1) {
+        [readerResponse] = await Promise.all([
+          page.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }),
+          storyLink.click()
+        ]);
+      }
+      check(!!readerResponse && readerResponse.status() < 400, viewport.name + ': clicking the X News story opens its deep reader', 'HTTP ' + (readerResponse && readerResponse.status()) + ' ' + page.url());
+      check(new URL(page.url()).pathname === '/radar/read/', viewport.name + ': X News click reaches the reader route', page.url());
+      check(fixtureResponseServed, viewport.name + ': matching dated archive X News fixture is served', JSON.stringify(dataRequests));
+      const readerTarget = new URL(page.url());
+      const titleLocator = page.locator('#content .title');
+      const titleCount = await titleLocator.count();
+      check(titleCount === 1, viewport.name + ': X News deep reader renders a story title', JSON.stringify({ url: readerTarget.href, dataRequests, content: await page.locator('#content').innerText() }));
+      if (titleCount === 1) {
+        check((await titleLocator.innerText()).trim() === fixture.title_zh, viewport.name + ': X News deep reader shows the matching story title');
+        check((await page.locator('#content').innerText()).includes(fixture.summary_zh), viewport.name + ': X News deep reader renders the supplied summary');
+        check(await page.locator('.story .section').count() === 1,
+          viewport.name + ': real-shape X News fixture renders only the supplied summary section without invented editorial fields');
+        check(await page.locator('.story .scores').count() === 0,
+          viewport.name + ': X News deep reader omits unavailable assessment scores');
+        check((await page.locator('#content .category').innerText()).includes(fixture.source),
+          viewport.name + ': missing category falls back to the real X News source label');
+        check((await page.locator('.rail').innerText()).includes(viewport.date), viewport.name + ': X News deep reader preserves the requested briefing date');
+      } else {
+        check(false, viewport.name + ': X News deep reader shows the matching story title');
+        check(false, viewport.name + ': X News deep reader renders the supplied summary');
+        check(false, viewport.name + ': X News deep reader preserves the requested briefing date');
+      }
+      const sourceLinks = page.locator('.rail-links a[target="_blank"]');
+      check(titleCount === 1 && await sourceLinks.count() === 2, viewport.name + ': original and curated X News links are both visible');
+      if (titleCount === 1 && await sourceLinks.count() === 2) {
+        const links = await sourceLinks.evaluateAll(nodes => nodes.map(a => ({ href: a.href, rel: a.rel })));
+        check(links[0].href === fixture.url && links[0].rel.includes('noopener') && links[0].rel.includes('noreferrer'),
+          viewport.name + ': original X News source link is HTTPS and opener-safe', JSON.stringify(links[0]));
+        check(links[1].href === fixture.curated_url && links[1].rel.includes('noopener') && links[1].rel.includes('noreferrer'),
+          viewport.name + ': X News editorial link is host-restricted and opener-safe', JSON.stringify(links[1]));
+      }
+      const returnHref = await page.locator('.rail-links a[href^="../daily/"]').getAttribute('href');
+      check(titleCount === 1 && returnHref === '../daily/?date=' + viewport.date, viewport.name + ': X News deep reader returns to the matching issue', returnHref || '');
+      await page.getByRole('button', { name: 'EN' }).click();
+      check(titleCount === 1 && (await titleLocator.innerText()).trim() === fixture.title_en, viewport.name + ': X News deep reader switches to English');
+      check(titleCount === 1 && (await page.locator('#content').innerText()).includes(fixture.summary_en), viewport.name + ': X News deep reader localizes the supplied summary');
+      await page.getByRole('button', { name: '中文' }).click();
+      const overflow = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
+      check(overflow.document <= overflow.viewport + 2, viewport.name + ': X News deep reader has no horizontal overflow', JSON.stringify(overflow));
+      await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
+      await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
+      const returnLink = page.locator('.rail-links a[href^="../daily/"]');
+      const [returnResponse] = await Promise.all([
+        page.waitForNavigation({ waitUntil: 'networkidle', timeout: 30000 }),
+        returnLink.click()
+      ]);
+      check(!!returnResponse && returnResponse.status() < 400, viewport.name + ': clicking return opens the daily briefing', 'HTTP ' + (returnResponse && returnResponse.status()) + ' ' + page.url());
+      const returnedUrl = new URL(page.url());
+      check(returnedUrl.pathname.endsWith('/radar/daily/') && returnedUrl.searchParams.get('date') === viewport.date,
+        viewport.name + ': return click restores the matching issue URL', page.url());
+      await page.locator('#reportDate').waitFor({ state: 'visible', timeout: 10000 });
+      const returnedDate = await page.locator('#reportDate').innerText();
+      check(returnedDate.includes(viewport.date), viewport.name + ': returned daily page shows the matching date', returnedDate);
+      check(errors.length === 0, viewport.name + ': X News deep reader and return navigation have no JavaScript errors', errors.join('; '));
       await page.close();
     }
   } catch (error) {
