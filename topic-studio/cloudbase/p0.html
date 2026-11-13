@@ -21,7 +21,7 @@ button:disabled{opacity:.65;cursor:wait}.result{padding:13px;background:#f0f5fa;
  <h1>CloudBase 上海环境接入检查</h1>
  <p>这里只做 SDK 初始化和本浏览器登录态读取。<strong>不会写数据库、上传选题、保存密码或开启同步。</strong>请在腾讯云控制台确认数据库类型后，再执行后续操作。</p>
  <label for="env">目标环境 ID（不属于密钥）</label>
- <input id="env" type="text" autocomplete="off" spellcheck="false" value="cloud1-d3guyfuxtfeef189a">
+ <input id="env" type="text" autocomplete="off" spellcheck="false" placeholder="从腾讯云控制台粘贴主环境 ID">
  <button id="verify" type="button">只读检查 SDK 与当前登录态</button>
  <div id="result" class="result" role="status" aria-live="polite">等待开始。注意：SDK 初始化成功不代表云端数据库已验证。</div>
  <div class="checks">
