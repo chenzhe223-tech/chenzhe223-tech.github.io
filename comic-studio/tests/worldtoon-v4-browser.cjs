@@ -112,6 +112,33 @@ async function test(){
     assert.equal(character.original.gender,'自定义身份');
     assert.equal(character.role.snapshot.description,'短黑发与棕色眼睛，右手有星星纹章');
     assert.equal(character.role.version,1);
+    // Simulate a clearly labeled AI-character suggestion, without invoking any model.
+    await page.evaluate(({key,id})=>{
+      const store=JSON.parse(localStorage.getItem(key)),p=store.projects.find(x=>x.id===id);
+      store.characters.push({id:'e2e-ai-draft',characterId:'e2e-ai-draft',origin:'ai-draft',
+        reviewStatus:'pending_author_confirmation',version:1,originProjectId:id,
+        originalName:'星点',name:'星点',description:'圆形发光眼睛和金色眉形',
+        costume:'棕色邮差制服与米黄色腰包',traits:'银色邮戳',personality:'沉稳'});
+      p.characterRefs.push({characterId:'e2e-ai-draft',role:'supporting',comicName:'星点',pending_author_review:true});
+      localStorage.setItem(key,JSON.stringify(store));
+    },{key:KEY,id:idea.id});
+    await page.reload();
+    await page.locator('[data-wt4-confirm-role="e2e-ai-draft"]').waitFor();
+    assert.match(await page.locator('.wt4-pending-character').textContent(),/未确认入库/);
+    await page.screenshot({path:path.join(out,'desktop-ai-character-review.png'),fullPage:true});
+    await page.locator('[data-wt4-confirm-role="e2e-ai-draft"]').click();
+    const confirmed=await page.evaluate(key=>{
+      const store=JSON.parse(localStorage.getItem(key));
+      return store.characters.find(c=>c.characterId==='e2e-ai-draft');
+    },KEY);
+    assert.equal(confirmed.origin,'author_confirmed_ai','only an explicit author click confirms the AI draft');
+    await page.locator('[data-wt4-sync-character-bible]').click();
+    const synced=await page.evaluate(({key,id})=>{
+      const store=JSON.parse(localStorage.getItem(key));
+      return store.projects.find(p=>p.id===id).creativeDirection;
+    },{key:KEY,id:idea.id});
+    assert.ok(synced.cast.find(x=>x.characterId==='e2e-ai-draft'),'confirmed role reached the exact director cast');
+    assert.equal(synced.approval,null,'synchronization cannot set author approval');
     await page.locator('.wt4-steps [data-wt4-step="2"]').click();
     await page.locator('[data-panel-field="scene"][data-panel-index="0"]').fill('月光照亮邮局，一个陌生包裹从天而降，阿月屏住呼吸。');
     await page.reload();
