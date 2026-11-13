@@ -209,7 +209,9 @@
      legacyStageBody(p,3,s)+withEditor(p,3);
    if(i===5)return '<div class="wt4-stage-note"><strong>06 · 审阅精修</strong><p>逐格检查高清尺寸、文字可读性、服装一致性、版权与来源。可返回任意画格编辑，历史的独立审批不会被假造。</p></div>'+
      legacyStageBody(p,4,s)+withEditor(p,4);
-   return '<div class="wt4-stage-note"><strong>07 · 导出发布</strong><p>图片与封面必须真实存在；ZIP 下载、Github 成品上传、作者最终批准和 WorkBuddy 发表回执分别验收。</p></div>'+
+   return '<div class="wt4-stage-note"><strong>07 · 导出发布</strong><p>图片与封面必须真实存在；ZIP 下载、GitHub 成品上传、作者最终批准和 WorkBuddy 发表回执分别验收。</p></div>'+
+     '<section class="box wt4-stage-card"><h3>完整高清 PNG 正式素材包</h3><p>仅封装真实上传的独立 PNG：逐张检查 1080×1440 尺寸、SHA256 与重复画格；包含独立封面、公众号文案、来源清单和待审 manifest。不生成示意图、不自动批准或发表。</p>'+
+     '<button class="button dark" data-action="zip-formal" data-id="'+html(p.id)+'">校验并一键下载完整 PNG 素材包</button></section>'+
      legacyStageBody(p,5,s)+legacyStageBody(p,6,s);
  }
  function entryHub(){
