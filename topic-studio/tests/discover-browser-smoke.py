@@ -64,6 +64,7 @@ def run():
         "scope": "Local build/layout smoke test only; not a live production QA claim",
         "results": [],
     }
+    REPORT.parent.mkdir(parents=True, exist_ok=True)
     with sync_playwright() as playwright:
         launcher = {"headless": True, "args": ["--no-sandbox", "--disable-dev-shm-usage"]}
         if chrome:
