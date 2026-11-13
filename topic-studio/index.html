@@ -741,7 +741,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 .workflow-skill-link{display:inline-flex;align-items:center;margin-top:10px;font-size:12px;font-weight:700;color:var(--blue);text-decoration:none;border-bottom:1px solid currentColor;padding-bottom:2px;line-height:1.5}
 .workflow-skill-link:hover{color:#204eaa}
 .workflow-skill-link:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
-</style><link rel="stylesheet" href="./visual-direction-studio.css?v=1"><link rel="stylesheet" href="./xnews-discovery.css?v=1"><link rel="stylesheet" href="./discover-layout-v3.css?v=20261113-a"><link rel="stylesheet" href="./editorial-workspace-v4.css?v=20261113-v4a"><link rel="stylesheet" href="./workspace-layout-guard-v5.css?v=20261113-v5a"><link rel="stylesheet" href="./productivity-desk-v1.css?v=20261113-p1a"></head>
+</style><link rel="stylesheet" href="./visual-direction-studio.css?v=1"><link rel="stylesheet" href="./xnews-discovery.css?v=1"><link rel="stylesheet" href="./discover-layout-v3.css?v=20261113-a"><link rel="stylesheet" href="./editorial-workspace-v4.css?v=20261113-v4a"><link rel="stylesheet" href="./workspace-layout-guard-v5.css?v=20261113-v5a"><link rel="stylesheet" href="./productivity-desk-v1.css?v=20261113-p1b"></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"><span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="visual"><span>◈</span>配图策划</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
  <div class="brand"><div class="mark">D</div><div><b>DAVYLAB</b><small>SPARK & PULSE</small></div></div>
@@ -1105,7 +1105,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   <div class="growth-side">
    <div class="growth-mini"><span>本月爆款实验目标</span><strong>至少 3 次</strong><span>目标是实验次数，不保证爆款结果</span></div>
    <div class="growth-mini"><span>常规内容节奏</span><strong>隔日一篇</strong><span>约每月 15 篇，依实际排期调整</span></div>
-   <div class="growth-mini"><span>每日新闻贴图</span><strong id="posterTaskCount">0 期</strong><span>本地记录的贴图任务数</span></div>
+   <div class="growth-mini"><span>每周贴图排期</span><strong id="posterTaskCount">0 期</strong><span>本地记录的贴图任务数</span></div>
    <div class="growth-mini"><span>本月实验进度</span><strong id="viralExperimentCount">0 / 3</strong><span>已建立的本月实验记录</span></div>
   </div>
  </div>
@@ -1154,7 +1154,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   </div>
   <div>
    <div class="panel">
-    <div class="panelhead"><div><h2>每日 AI 新闻贴图任务</h2><p>追踪从新闻简报到 WorkBuddy 草稿准备的状态。这里不直接连接微信后台。</p></div></div>
+    <div class="panelhead"><div><h2>AI 新闻贴图制作任务</h2><p>追踪从新闻简报到 WorkBuddy 草稿准备的状态。这里不直接连接微信后台。</p></div></div>
     <form id="posterTaskForm" class="growth-form">
      <div class="field full"><label for="posterTitle">本期主题 / 任务名称 *</label><input id="posterTitle" required maxlength="140" placeholder="例如：AI 前沿新闻贴图 · 2026-10-29"></div>
      <div class="field"><label for="posterDate">内容日期</label><input id="posterDate" type="date"></div>
@@ -1448,7 +1448,7 @@ const GROWTH_TASKS=[
  {title:"扫描海外官方发布与原始论文",detail:"优先找原始来源，记录发布时间与核验状态。"},
  {title:"建立至少 3 个本月爆款实验",detail:"覆盖不同角度，避免只追同一种热点。"},
  {title:"完成隔日发文排期",detail:"提前准备内容储备，避免临时赶稿。"},
- {title:"制作并验收每日新闻贴图",detail:"逐张检查文字、尺寸、来源和手机可读性。"},
+ {title:"按周一、三、五、日排期制作与验收贴图",detail:"逐张检查文字、尺寸、来源和手机可读性。"},
  {title:"复盘阅读、分享与净增订阅",detail:"用真实数据决定下一周的选题。"}
 ];
 const GROWTH_STATUS={queued:"待制作",creating:"制作中",qa_passed:"素材验收通过",ready_for_workbuddy:"待交 WorkBuddy",draft_saved:"草稿已保存（已核验）",published:"已发表（已核验）",blocked:"阻塞 / 待修正"};
@@ -1741,4 +1741,4 @@ root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=
 document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
 document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
 const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
-})();</script><script src="./opportunity-engine.js?v=20261113-collection-fix"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script><script src="./xnews-discovery.js?v=20261113-collection-fix"></script><script src="./discover-layout-v3.js?v=20261113-a"></script><script src="./editorial-workspace-v4.js?v=20261113-v4a"></script><script src="./topic-pool-reliability.js?v=20261113-fix1"></script><script src="./productivity-desk-v1.js?v=20261113-p1a"></script></body></html>
+})();</script><script src="./opportunity-engine.js?v=20261113-collection-fix"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script><script src="./xnews-discovery.js?v=20261113-collection-fix"></script><script src="./discover-layout-v3.js?v=20261113-a"></script><script src="./editorial-workspace-v4.js?v=20261113-v4a"></script><script src="./topic-pool-reliability.js?v=20261113-fix1"></script><script src="./productivity-desk-v1.js?v=20261113-p1b"></script></body></html>
