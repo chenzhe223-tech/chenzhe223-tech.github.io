@@ -352,6 +352,30 @@ async function test(){
       reports.push({test:'real Chrome quota-exceeded failure preserves original stored projects and blocks false navigation',result:'passed'});
     }finally{await exhausted.close()}
 
+    // A broken cloud-sync scheduling callback must not turn a successful local write into a false failure.
+    const syncContext=await browser.newContext({viewport:{width:1280,height:800}});
+    try{
+      const syncPage=await syncContext.newPage();
+      syncPage.on('pageerror',e=>errors.push('sync-resilience: '+e.message));
+      await syncPage.goto(base,{waitUntil:'domcontentloaded'});
+      await syncPage.locator('[data-wt4-entry="author"]').waitFor();
+      await syncPage.evaluate(()=>{
+        window.wtScheduleSync=()=>{throw new Error('synthetic sync scheduling failure')};
+      });
+      await syncPage.locator('[data-wt4-entry="author"]').click();
+      await syncPage.locator('[data-wt4-create="author"] [name="title"]').fill('离线同步容错测试');
+      await syncPage.locator('[data-wt4-create="author"] [name="description"]').fill('云端任务调度异常时仍应当保存本机原始创作内容');
+      await syncPage.locator('[data-wt4-create="author"] [type="submit"]').click();
+      await syncPage.waitForFunction(()=>location.hash.startsWith('#/workspace/'));
+      const localSaved=await syncPage.evaluate(()=>{
+        const id=location.hash.split('/')[2];
+        return JSON.parse(localStorage.getItem('davylab-comic-press-v1')).projects.some(p=>p.id===id&&p.title==='离线同步容错测试');
+      });
+      assert.ok(localSaved,'cloud-sync scheduling error must not roll back a successfully persisted local work');
+      assert.equal(await syncPage.locator('[data-wt4-save-status]').getAttribute('data-state'),'saved');
+      reports.push({test:'local save remains durable when optional cloud-sync scheduler fails',result:'passed'});
+    }finally{await syncContext.close()}
+
     assert.deepEqual(errors,[],'browser JavaScript execution errors');
     fs.writeFileSync(path.join(out,'qa.json'),JSON.stringify({status:'PASS',environment:'offline local Chrome, no account and no paid model',generated_at:new Date().toISOString(),reports,limitations:['Illustrations are synthetic technical fixtures, never comic QA','No authenticated Supabase/Cloudflare API test','No live deployment verification']},null,2));
     console.log('WORLD/TOON V4 browser E2E PASS:\n'+reports.map(x=>'  - '+x.test+': '+x.result).join('\n'));
