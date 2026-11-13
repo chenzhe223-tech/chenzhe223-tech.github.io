@@ -1,0 +1,78 @@
+name: Topic Studio · Discovery UI QA
+
+on:
+  push:
+    paths:
+      - "topic-studio/index.html"
+      - "topic-studio/discover-layout-v3.css"
+      - "topic-studio/discover-layout-v3.js"
+      - "topic-studio/xnews-discovery.css"
+      - "topic-studio/xnews-discovery.js"
+      - "topic-studio/opportunity-engine.js"
+      - "topic-studio/tests/discover-browser-smoke.py"
+      - "topic-studio/tests/discover-layout.test.cjs"
+      - ".github/workflows/topic-studio-discover-ui-qa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: topic-studio-discover-ui-qa
+  cancel-in-progress: false
+
+jobs:
+  discover-ui-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout current repository
+        uses: actions/checkout@v4
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify structural and interaction contracts
+        run: |
+          node topic-studio/tests/discover-layout.test.cjs
+          node topic-studio/tests/xnews-integration.test.cjs
+      - name: Prepare headless browser
+        run: |
+          python -m pip install --quiet playwright==1.56.0
+          if command -v google-chrome >/dev/null 2>&1; then
+            google-chrome --version
+          else
+            python -m playwright install --with-deps chromium
+          fi
+      - name: Check desktop tablet and mobile discovery layouts
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/topic-studio-http.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 2
+          python topic-studio/tests/discover-browser-smoke.py
+      - name: Upload screenshots for manual visual review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: topic-studio-discovery-ui
+          path: |
+            topic-studio/qa/discover-ui-latest.json
+            topic-studio/qa/discover-*.png
+          if-no-files-found: ignore
+          retention-days: 7
+      - name: Commit verified QA metrics
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f topic-studio/qa/discover-ui-latest.json
+          git config user.name "DAVYLAB Topic Studio QA"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add topic-studio/qa/discover-ui-latest.json
+          if ! git diff --cached --quiet; then
+            git commit -m "test(topic-studio): verified discovery browser QA [skip ci]"
+            git pull --rebase origin "$GITHUB_REF_NAME"
+            git push origin HEAD:"$GITHUB_REF_NAME"
+          fi
