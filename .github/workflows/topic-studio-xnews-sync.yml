@@ -3,6 +3,12 @@ name: Topic Studio · Refresh XNews discovery index
 on:
   push:
     paths:
+      - "topic-studio/index.html"
+      - "topic-studio/discover-layout-v3.css"
+      - "topic-studio/discover-layout-v3.js"
+      - "topic-studio/opportunity-engine.js"
+      - "topic-studio/xnews-discovery.css"
+      - "topic-studio/tests/discover-layout.test.cjs"
       - "topic-studio/xnews-discovery.js"
       - "topic-studio/scripts/sync_xnews.py"
       - "topic-studio/tests/test_xnews_sync.py"
@@ -33,6 +39,8 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - name: Verify responsive discovery layout and existing controls
+        run: node topic-studio/tests/discover-layout.test.cjs
       - name: Test source merge, adoption, fallback and escaped rendering
         run: node topic-studio/tests/xnews-integration.test.cjs
       - name: Test metadata contracts before sync
