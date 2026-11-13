@@ -1,0 +1,8 @@
+{
+  "status": "fail",
+  "tested_at": "2026-11-13T10:18:15+00:00",
+  "method": "Chromium Playwright local static test, synthetic localStorage only",
+  "scope": "checkout smoke test, not production Pages or real user/account data",
+  "results": [],
+  "error": "Error: BrowserType.launch: Executable doesn't exist at /home/runner/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell\n╔════════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just installed or updated.       ║\n║ Please run the following command to download new browsers: ║\n║                                                            ║\n║     playwright install                                     ║\n║                                                            ║\n║ <3 Playwright Team                                         ║\n╚════════════════════════════════════════════════════════════╝"
+}
