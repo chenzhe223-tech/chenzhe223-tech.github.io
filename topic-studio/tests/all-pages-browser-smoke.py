@@ -117,6 +117,9 @@ def scenario(page, label):
     linked=[e for e in growth.get("experiments",[]) if e.get("sourceTopicId")=="qa-seeded-topic-001"]
     check(len(linked)==1,label+": growth experiment was not created or duplicated")
     check(linked[0].get("status")=="planned",label+": growth experiment incorrectly published")
+    page.locator("#pdExperimentList [data-pd-edit]").first.click()
+    check(page.locator("#viralExperimentForm").get_attribute("data-edit-id")==linked[0].get("id"),
+          label+": linked experiment cannot be reopened for editing")
     page.locator("#pdCreateExperiment").click()
     growth=get_local(page,"davylab-growth-lab-v1")
     check(sum(1 for e in growth.get("experiments",[]) if e.get("sourceTopicId")=="qa-seeded-topic-001")==1,label+": duplicate experiment created")
@@ -130,6 +133,18 @@ def scenario(page, label):
     brief=page.locator("#pdResearchBrief").input_value()
     check("原文：" in brief and "https://" in brief,label+": source-backed brief absent")
     check("尚未独立核验" in brief,label+": research brief missing evidence status")
+    page.locator("#pdSaveBrief").click()
+    stored=get_local(page,"davylab-topic-research-briefs-v1")
+    check(len(stored)==1,label+": research brief not persisted")
+    page.locator("#pdResearchBrief").fill(brief+"\n## QA 自定义备注：人工核查中")
+    page.locator("#pdSaveBrief").click()
+    stored=get_local(page,"davylab-topic-research-briefs-v1")
+    check(len(stored)==1,label+": editing research brief created a duplicate")
+    check("QA 自定义备注" in stored[0]["body"],label+": research brief update lost changes")
+    page.locator("#pdResearchBrief").fill("")
+    page.locator("#pdBriefArchive [data-pd-load]").first.click()
+    check("QA 自定义备注" in page.locator("#pdResearchBrief").input_value(),
+          label+": saved research brief could not be reopened")
     # Regression: bookmark always reveals exact persisted source even if status/format/search hide it.
     visit_section(page,"library")
     page.locator("#searchTopics").fill("definitely-absent")
