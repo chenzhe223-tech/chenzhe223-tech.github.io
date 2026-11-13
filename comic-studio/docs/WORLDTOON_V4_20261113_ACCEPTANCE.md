@@ -16,7 +16,7 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - The source mode of imported news is explicitly marked as research-required; original ideas use `handoff.mode=original` instead of inventing news URLs.
 
 ### P1 — Character Bible
-- Author-confirmed characters enter the existing shared character catalog with stable ID, editable gender/age/profession/personality, `version=1`.
+- Author-confirmed characters enter the existing shared character catalog with stable ID, editable gender/age/profession/personality, `version=1`; selection offers gender/age/profession/origin-work facets.
 - Linking a character snapshots immutable ID/version/appearance/outfit into the project; `characterOverrides` and aliases are scoped to one comic. No changes to the original asset on project edits.
 - Director formal payload adds a character-bible record only for projects with pinned character references. The storyboard production prompt uses the same pinned version in all nine panels.
 - For approved/queued projects, character edits must create a revision rather than changing a locked definition. Older projects without references keep their legacy contract.
@@ -26,7 +26,7 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - Paid model consent and server-side image model gates remain unchanged. Generating real new 1080×1440 illustrations and guaranteeing preview-to-final identity are **NOT** demonstrated here.
 
 ### P3 — export and verification compatibility
-- Reuses existing ZIP import, standalone panel image export, private GitHub image verification and publisher queue/archive mechanisms. Actual complete nine-PNG plus cover+caption+sources verified export is **NOT** accepted until a real task satisfies all contract checks.
+- Adds a real local original-byte PNG ZIP builder: requires every separate native PNG and distinct cover at least 1080×1440, rejects duplicate panels, records actual SHA256, includes caption/sources and `manifest.json` with explicit QA/author/publish=false. It never synthesizes missing images. **A genuine downloaded ZIP and human visual QA have NOT yet been verified**; only the source and automated contract tests exist. Existing GitHub QA and WorkBuddy remain separate.
 - No destructive database migrations; route and style changes are incremental and opt-in.
 - Responsive CSS changed, desktop/mobile static contract checks exist. Authenticated multi-device GUI click tests are still required.
 
