@@ -65,3 +65,9 @@ This change is a **draft PR** to the existing deployed frontend source `comic-st
 - Native role and storyboard regression: `node comic-studio/tests/worldtoon-v4-smoke.cjs`; `node comic-studio/tests/comic-engine.cjs`.
 - Private contract: `python -m unittest discover -s tests -p 'test_v4_character_contract.py' -v` with `jsonschema==4.25.1`; the existing index/QA remains fail-closed.
 - Browser screenshot/artifact: GitHub Actions run 43410613464 contains `worldtoon-v4-browser-evidence`, including named desktop/mobile PNG screenshots and a **test fixture-only ZIP**.
+
+## V4.0 ongoing follow-up — 2026-11-13
+
+- Fixed full-cast AI role import for newly created V4 works, including supporting roles and custom gender. Character upserts now deduplicate by original name plus role within one project; previously two same-role leads could incorrectly reuse an ID. Legacy enrollment defaults unchanged.
+- Formal generation-step progression no longer accepts a local `stagedFiles`/`stageUploaded` count as proof of upload. Only repository-derived verified `draft_uploaded`, `ready_for_workbuddy`, `publishing` or `published` status can mark step 5 complete; remote uploaded still requires separate QA and author approval.
+- Added corresponding regression assertions. These are code and isolated test protections, not proof of real artwork or publication.
