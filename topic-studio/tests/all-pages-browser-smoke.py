@@ -163,6 +163,39 @@ def scenario(page, label):
     page.locator("#pdBriefArchive [data-pd-load]").first.click()
     check("QA 自定义备注" in page.locator("#pdResearchBrief").input_value(),
           label+": saved research brief could not be reopened")
+    # Top-10 research ranker: actual checked-in public signals, auditable scores and user choice.
+    page.wait_for_function(
+        "() => Boolean(window.DAVYLABHotspotRecommendation?.status().signals>0 && window.DAVYLABHotspotRecommendation?.getOptions().length===10)",
+        timeout=25000
+    )
+    top=page.evaluate("() => window.DAVYLABHotspotRecommendation.getOptions()")
+    check(len(top)==10,label+": ranker did not generate exactly ten source-backed plans")
+    check(len({x["id"] for x in top})==10,label+": duplicate ranked directions")
+    check(all(x["rank"]==i+1 and x["evidence"][0]["url"].startswith("http") for i,x in enumerate(top)),
+          label+": invalid rankings or missing real links")
+    check(all(top[i]["score"]>=top[i+1]["score"] for i in range(9)),
+          label+": recommendations not sorted by disclosed score")
+    check(page.locator("#hotspotCards .hotspot-card").count()==10,label+": UI did not show ten plans")
+    page.locator("#hotspotCards [data-hotspot-action='choose']").first.click()
+    check(page.locator("#researchNiche").input_value()==top[0]["name"],
+          label+": choosing a niche did not populate research form")
+    page.locator("#hotspotCards [data-hotspot-action='pilot']").first.click()
+    series=page.locator("#seriesPaste").input_value()
+    check(len(series.splitlines())==5,label+": no five-post pilot generated")
+    check(page.locator("#seriesPreview .growth-item").count()==5,label+": pilot preview not connected to existing series creator")
+    page.locator("#hotspotMode").select_option("discussion")
+    check(page.locator("#hotspotCards .hotspot-card").count()==10,label+": discussion re-ranking lost proposals")
+    page.locator("#hotspotMode").select_option("practical")
+    check(page.locator("#hotspotCards .hotspot-card").count()==10,label+": practical re-ranking lost proposals")
+    page.locator("#hotspotRange").select_option("30")
+    check(page.locator("#hotspotCards .hotspot-card").count()==10,label+": extended time-window lost proposals")
+    page.locator("#hotspotCards [data-hotspot-action='add']").first.click()
+    check("active" in (page.locator("#section-library").get_attribute("class") or ""),
+          label+": source-backed ranked topic didn't enter library")
+    imported=get_local(page,"davylab-topic-studio-v1")
+    check(any(t.get("origin")=="hotspot-ranked" and t.get("factCheckStatus")=="待核实" and
+              t.get("sourceUrl","").startswith("http") and t.get("status")=="inbox" for t in imported),
+          label+": ranked topic lost original evidence or review status")
     # Regression: bookmark always reveals exact persisted source even if status/format/search hide it.
     visit_section(page,"library")
     page.locator("#searchTopics").fill("definitely-absent")
@@ -194,7 +227,7 @@ def scenario(page, label):
     check(len(get_local(page,"davylab-topic-studio-v1"))>=2,label+": source bookmark lost after navigation")
     return {"viewport":label,"pages":measurements,"visual":visual_layout,
             "bookmarkPersisted":True,"bookmarkReveal":True,"growthLinkedExperiment":True,
-            "researchSourceBrief":True,"presetChecks":preset_checks,"overflow":stats(page,"library")["pageOverflow"]}
+            "researchSourceBrief":True,"rankedTenOptions":True,"presetChecks":preset_checks,"overflow":stats(page,"library")["pageOverflow"]}
 
 
 def main():
