@@ -1,0 +1,47 @@
+name: Topic Studio · Refresh XNews discovery index
+
+on:
+  schedule:
+    # 09:25 Beijing/Singapore time, after XNews's suggested 08:00 daily update.
+    - cron: "25 1 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: davylab-topic-studio-xnews
+  cancel-in-progress: false
+
+jobs:
+  sync-xnews-metadata:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout primary repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Test metadata contracts before sync
+        run: python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v
+      - name: Fetch public XNews article-index metadata
+        run: python topic-studio/scripts/sync_xnews.py
+      - name: Validate new snapshot
+        run: python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v
+      - name: Commit index only if changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "DAVYLAB Topic Studio Bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add topic-studio/data/xnews-discovery.json
+          if ! git diff --cached --quiet; then
+            git commit -m "data(topic-studio): refresh public XNews discovery metadata [skip ci]"
+            git push origin HEAD:"$GITHUB_REF_NAME"
+          else
+            echo "No public XNews metadata changes."
+          fi
