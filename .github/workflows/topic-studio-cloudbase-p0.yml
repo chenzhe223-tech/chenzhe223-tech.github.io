@@ -1,0 +1,26 @@
+name: Topic Studio - CloudBase Shanghai P0 safety checks
+
+on:
+  push:
+    paths:
+      - "topic-studio/cloudbase/**"
+      - ".github/workflows/topic-studio-cloudbase-p0.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  safety-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout source (no Tencent credentials)
+        uses: actions/checkout@v4
+      - name: Validate local migration and CloudBase access policy
+        run: node topic-studio/cloudbase/test-p0.cjs
+      - name: Confirm no CloudBase deploy was attempted
+        run: |
+          echo "P0 source validation only."
+          echo "No Tencent Cloud API credentials used."
+          echo "No database or live user data changed."
