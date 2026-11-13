@@ -477,7 +477,7 @@
        '<a class="button" href="#/director/'+encodeURIComponent(p.id)+'">查看试制样稿审批</a> '+
        '<button class="button" data-archive="refresh">同步 GitHub 验收状态</button></section>';
    }
-   if(i===6)return '<section class="wt4-stage-intro"><h2>导出发布</h2><p>素材导出、GitHub QA、作者审批和发表回执是不同步骤。</p></section>'+publish();
+   if(i===6)return '<section class="wt4-stage-intro"><h2>导出发布</h2><p>完整 WorkBuddy 发表包包含独立漫画画格、封面、公众号文案、来源清单和交接指令。仅在作者人工审核及图片完整后允许导出；本地下载不等于 GitHub 已验收或公众号已发表。</p><button type="button" class="button dark" data-wf="publishpack">一键导出全部正式素材 ZIP</button><a class="button" href="#/archive">查看 GitHub 正式验收与发表回执</a></section>'+publish();
    const chapters=p.seriesId?activeProjects().filter(x=>x.seriesId===p.seriesId)
      .sort((a,b)=>(Number(a.seriesEpisode)||0)-(Number(b.seriesEpisode)||0)):[];
    const list=chapters.length?'<div class="wt4-series-chapters"><h3>系列章节 · '+html(p.seriesTitle||p.title)+'</h3>'+
