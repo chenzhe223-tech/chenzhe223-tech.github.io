@@ -1,0 +1,110 @@
+/* DAVYLAB · Hotspot-driven Research / top 10 editorial intelligence */
+#section-research .hotspot-workbench{
+ width:100%;min-width:0;margin:0 0 20px;
+ padding:clamp(19px,2.25vw,29px);
+ border:1px solid #d9e5ed;border-radius:17px;background:#fff;
+ box-shadow:0 6px 24px rgba(30,63,88,.045);
+}
+.hotspot-heading{display:flex;gap:22px;align-items:center;justify-content:space-between;margin:0 0 22px}
+.hotspot-heading>div{min-width:0;max-width:840px}
+.hotspot-heading .hotspot-eyebrow{font-size:10px;letter-spacing:2px;color:#397a9e;font-weight:850}
+.hotspot-heading h2{margin:7px 0 10px!important;font-size:clamp(22px,2.3vw,30px)!important;font-weight:800;color:#183650;letter-spacing:-.7px;line-height:1.3}
+.hotspot-heading p{font-size:13px;color:#617d91;line-height:1.75;margin:0}
+#hotspotTop10 button{font:inherit;cursor:pointer;border-radius:9px;line-height:1.3;font-weight:710;font-size:12px;border:1px solid #d9e6ef;background:#fff;color:#305f7c;padding:10px 13px;min-height:39px}
+#hotspotTop10 button:hover{background:#edf6fb;border-color:#a8c9df}
+#hotspotTop10 button:focus-visible,#hotspotTop10 select:focus-visible,#hotspotTop10 a:focus-visible{outline:2px solid #2879b7;outline-offset:2px}
+#hotspotReload{flex:0 0 auto!important;white-space:nowrap}
+#hotspotReload:disabled{opacity:.5;cursor:wait}
+.hotspot-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:16px}
+.hotspot-summary>div{padding:17px 18px;border:1px solid #e1e9ee;border-radius:11px;background:#f4f8fb;display:flex;flex-direction:column;gap:5px;min-width:0}
+.hotspot-summary span{font-size:11px;font-weight:650;color:#668094}
+.hotspot-summary strong{font-size:23px;letter-spacing:-.6px;color:#1b4c71;font-weight:800;line-height:1.1}
+#hotspotCollected{font-size:16px!important;letter-spacing:0}
+.hotspot-controls{display:flex;gap:13px;align-items:end;flex-wrap:wrap;border-top:1px solid #e8edf1;border-bottom:1px solid #e8edf1;padding:16px 0}
+.hotspot-controls label{display:flex;flex-direction:column;gap:7px;color:#506b80;font-weight:750;font-size:12px}
+.hotspot-controls select{min-width:156px;min-height:42px;padding:9px 33px 9px 12px;border:1px solid #d7e4ec;border-radius:9px;font-size:13px;background:white;color:#274961}
+.hotspot-controls .hotspot-method{font-size:11px;line-height:1.6;color:#7690a3;margin-left:auto;max-width:390px}
+.hotspot-status{padding:14px 0;color:#697f92;font-size:12px;line-height:1.7}
+.hotspot-subhead{display:flex;gap:12px;justify-content:space-between;align-items:baseline;margin:0 0 14px}
+.hotspot-subhead h3{font-size:16px;font-weight:850;letter-spacing:.3px;color:#193c59;margin:0}
+.hotspot-subhead span{font-size:11px;color:#7e93a4;line-height:1.5}
+.hotspot-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:stretch}
+.hotspot-card{
+ display:flex;flex-direction:column;gap:12px;min-width:0;min-height:335px;
+ padding:21px 22px 19px;background:#fff;border:1px solid #dbe6ed;border-radius:12px;
+ transition:border-color .15s ease,background .15s ease;
+}
+.hotspot-card:hover{border-color:#acc8d9}
+.hotspot-card.is-selected{border:2px solid #2e77a9;background:#fafdff;padding:20px 21px 18px}
+.hotspot-card-top{display:flex;gap:8px;align-items:center}
+.hotspot-rank{width:36px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;background:#214b68;font-size:14px;font-weight:850}
+.hotspot-kind{border-radius:6px;padding:6px 8px;color:#52778e;background:#f0f6f9;font-size:10px;font-weight:720}
+.hotspot-score{margin-left:auto;font-size:11px;color:#8091a2;white-space:nowrap}
+.hotspot-score b{font-size:25px;line-height:1;color:#1c638f;font-weight:850}
+.hotspot-card h3{font-size:18px!important;letter-spacing:-.2px;color:#1b3950;font-weight:770;line-height:1.43;margin:0}
+.hotspot-promise{font-size:13px!important;line-height:1.7;color:#516d83;margin:0}
+.hotspot-audience{font-size:12px;color:#637f91;line-height:1.55;margin:0}
+.hotspot-audience b{display:inline-block;margin-right:4px;color:#2b678d}
+.hotspot-facts{display:flex;flex-wrap:wrap;gap:6px}
+.hotspot-facts span{font-size:10px;line-height:1.5;padding:6px 8px;border-radius:7px;color:#456f89;background:#f0f6fa}
+.hotspot-bar{width:100%;height:5px;border-radius:10px;background:#e8eff4;overflow:hidden}
+.hotspot-bar i{display:block;height:100%;border-radius:10px;background:#2d7fb6}
+.hotspot-key-source{display:flex;flex-direction:column;gap:6px;font-size:11px;border-left:3px solid #c4ddeb;padding-left:10px;min-width:0}
+.hotspot-key-source strong{font-size:10px;letter-spacing:.4px;color:#7a92a4}
+.hotspot-key-source a{font-size:12px;color:#256c99;line-height:1.5;text-decoration:none;overflow-wrap:anywhere}
+.hotspot-key-source a:hover{text-decoration:underline}
+.hotspot-details{font-size:12px;color:#647d91;line-height:1.65;padding:10px 0;border-top:1px solid #edf1f4}
+.hotspot-details summary{cursor:pointer;color:#255e84;font-size:12px;font-weight:770}
+.hotspot-details p{font-size:11px;line-height:1.65;margin:10px 0}
+.hotspot-details ol{padding-left:18px;margin:8px 0}
+.hotspot-details li{margin-bottom:12px;overflow-wrap:anywhere}
+.hotspot-details li>a{display:inline-block;font-size:12px;font-weight:700;color:#236c9a;text-decoration:none;line-height:1.55}
+.hotspot-details li>a:hover{text-decoration:underline}
+.hotspot-details li>small{display:block;color:#738ea1;font-size:10px;line-height:1.55}
+.hotspot-details li>a:last-child:not(:first-child){font-size:10px;margin-top:2px}
+.hotspot-actions{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin-top:auto;padding-top:12px;border-top:1px solid #ebf1f5}
+#hotspotTop10 .hotspot-actions button{font-size:11px;padding:8px 10px;min-height:36px}
+#hotspotTop10 .hotspot-actions .hotspot-select{background:#246d9f!important;border-color:#246d9f!important;color:white!important}
+#hotspotTop10 .hotspot-actions .hotspot-select:hover{background:#185b89!important}
+.hotspot-selected{display:flex;gap:24px;align-items:center;justify-content:space-between;padding:17px 20px;border:1px solid #b2d1e3;background:#f3f9fd;border-radius:11px;margin-top:17px;min-width:0}
+.hotspot-selected[hidden]{display:none!important}
+.hotspot-selected>div{min-width:0}
+.hotspot-selected b{font-size:14px;color:#275979;line-height:1.5}
+.hotspot-selected p{font-size:12px;line-height:1.65;color:#53778e;margin:6px 0}
+.hotspot-selected small{font-size:11px;color:#7a91a2;line-height:1.5}
+.hotspot-selected>strong{font-size:21px;color:#216d9d;white-space:nowrap}
+.hotspot-footnote{font-size:11px;line-height:1.8;color:#758b9e;border-top:1px solid #e7edf2;margin:20px 0 0;padding-top:16px}
+.hotspot-empty{grid-column:1/-1;padding:25px 18px;border:1px dashed #cbdde9;border-radius:10px;background:#f5f9fc;color:#647f90;font-size:13px;line-height:1.8}
+@media(max-width:1130px){
+ .hotspot-cards{grid-template-columns:1fr}
+ .hotspot-controls .hotspot-method{max-width:100%;margin-left:0}
+}
+@media(max-width:760px){
+ #section-research .hotspot-workbench{padding:15px;border-radius:12px;margin-bottom:12px}
+ .hotspot-heading{align-items:flex-start;flex-direction:column;gap:11px}
+ .hotspot-heading h2{font-size:21px!important}
+ .hotspot-heading p{font-size:12px}
+ #hotspotReload{font-size:11px!important}
+ .hotspot-summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ .hotspot-summary>div{padding:12px 11px}
+ .hotspot-summary strong{font-size:21px}
+ #hotspotCollected{font-size:14px!important}
+ .hotspot-controls{gap:9px;align-items:stretch}
+ .hotspot-controls label{flex:1 1 40%;min-width:0}
+ .hotspot-controls select{width:100%;min-width:0;padding:9px 7px;font-size:12px}
+ .hotspot-controls .hotspot-method{font-size:10px}
+ .hotspot-subhead{align-items:flex-start;flex-direction:column}
+ .hotspot-subhead h3{font-size:15px}
+ .hotspot-subhead span{font-size:10px}
+ .hotspot-card{padding:15px;min-height:0;gap:10px}
+ .hotspot-card.is-selected{padding:14px}
+ .hotspot-card h3{font-size:16px!important}
+ .hotspot-promise{font-size:12px!important}
+ .hotspot-rank{width:30px;height:30px}
+ .hotspot-score b{font-size:22px}
+ .hotspot-facts span{font-size:9px}
+ #hotspotTop10 .hotspot-actions button{font-size:10px;min-height:35px;padding:8px}
+ .hotspot-selected{padding:13px;gap:9px;flex-direction:column;align-items:flex-start}
+ .hotspot-selected>strong{font-size:18px}
+}
+@media(prefers-reduced-motion:reduce){.hotspot-card{transition:none}}
