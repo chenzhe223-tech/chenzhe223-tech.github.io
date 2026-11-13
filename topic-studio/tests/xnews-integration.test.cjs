@@ -18,6 +18,7 @@ function fixture(){
     fetch:async()=>{if(failure)throw Error("simulated outage");return{ok:true,json:async()=>payload}},
     URL,Date,window:{renderOpportunityRadar(){messages.push("op")}},
     topics,radarData:{news:[]},feedCache:[],
+    uid(){return "topic-"+(topics.length+1)},
     renderFeed(){messages.push("radar")},saveTopics(){messages.push("save")},
     getFeed(){return[{type:"news",title:"DAVYLAB Radar",url:"https://example.org/radar"}]},
     addFeed(x){topics.unshift({id:"topic",title:x.angle,sourceTitle:x.title,sourceUrl:x.url,status:"inbox",origin:"radar"})},
@@ -49,6 +50,13 @@ async function run(){
   assert.equal(f.topics[0].factCheckStatus,"待核实");
   f.env.addFeed(item);
   assert.equal(f.topics.length,1);
+  const posterSource=merged.filter(x=>x.origin==="xnews")[1];
+  f.env.addFeed({...posterSource,requestedFormat:"贴图"});
+  assert.equal(f.topics.length,2);
+  assert.equal(f.topics[0].format,"贴图");
+  assert.equal(f.topics[0].origin,"xnews");
+  assert.equal(f.topics[0].factCheckStatus,"待核实");
+  assert.ok(f.nodes.xnewsList.innerHTML.includes("转贴图选题"));
   f.env.showPrompt(item);
   assert.ok(f.nodes.promptBox.value.includes("【XNews 中文阅读】"));
   f.fail(true);await f.api.load(true);
