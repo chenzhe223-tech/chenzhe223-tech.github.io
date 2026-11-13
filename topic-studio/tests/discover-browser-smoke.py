@@ -17,8 +17,10 @@ ROOT = Path(__file__).resolve().parents[1]
 REPORT = ROOT / "qa" / "discover-ui-latest.json"
 SERVER = os.getenv("TOPIC_STUDIO_TEST_URL", "http://127.0.0.1:8765/topic-studio/")
 VIEWPORTS = [
-    ("desktop", 1440, 900, 3),
+    ("ultrawide", 2560, 1440, 2),
+    ("desktop", 1440, 900, 2),
     ("tablet", 1024, 768, 2),
+    ("small_tablet", 768, 980, 1),
     ("mobile", 390, 844, 1),
 ]
 STABLE_IDS = [
@@ -47,10 +49,15 @@ def measure(page):
           });
           const overflow = Math.max(0, document.documentElement.scrollWidth-window.innerWidth);
           const fontSize = tiles.length ? parseFloat(getComputedStyle(tiles[0].querySelector('h3')).fontSize) : null;
+          const content = document.querySelector('main>.content').getBoundingClientRect();
           return {viewport:innerWidth, listColumns:cols, opportunityCards:tiles.length,
                   xnewsCards:xnews.length, viewportOverflow:overflow,
                   sectionOverflow:Math.max(0,pageEl.scrollWidth-pageEl.clientWidth),
-                  cardTitlePx:fontSize, sources:sourceRects};
+                  cardTitlePx:fontSize, sources:sourceRects,
+                  contentWidth:Math.round(content.width),
+                  currentSource:pageEl.dataset.activeSource,
+                  visibleRadar:getComputedStyle(pageEl.querySelector('.opportunity-hub')).display!=='none',
+                  visibleXnews:getComputedStyle(pageEl.querySelector('.xnews-hub')).display!=='none'};
         }"""
     )
 
@@ -60,7 +67,7 @@ def run():
     output = {
         "status": "pass",
         "tested_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "method": "Chromium headless via Playwright, localhost static site, no publication",
+        "method": "Chromium headless via Playwright, localhost static site, no publication, V4 editorial tabs",
         "scope": "Local build/layout smoke test only; not a live production QA claim",
         "results": [],
     }
@@ -92,10 +99,25 @@ def run():
                             f"{name}: page horizontal overflow: {measured['viewportOverflow']}")
                 assert_true(measured["cardTitlePx"] >= 14,
                             f"{name}: opportunity card title is too small")
-                assert_true(abs(measured["sources"][0]["x"]-measured["sources"][1]["x"]) <= 2,
-                            f"{name}: primary source sections have different left edges")
-                assert_true(abs(measured["sources"][0]["width"]-measured["sources"][1]["width"]) <= 2,
-                            f"{name}: primary source sections have different widths")
+                assert_true(measured["visibleRadar"] and not measured["visibleXnews"],
+                            f"{name}: expected only Radar on initial V4 tab")
+                assert_true(measured["currentSource"] == "radar",
+                            f"{name}: Radar tab should be active by default")
+                assert_true(measured["contentWidth"] <= 1521,
+                            f"{name}: page is too wide for readable editorial content")
+                page.locator(".discover-quicknav [data-discover-target='xnewsTitle']").click()
+                xnews_measure = measure(page)
+                assert_true(xnews_measure["visibleXnews"] and not xnews_measure["visibleRadar"],
+                            f"{name}: XNews tab did not replace Radar panel")
+                assert_true(xnews_measure["xnewsCards"] == 6, f"{name}: XNews entries missing after tab switch")
+                assert_true(xnews_measure["viewportOverflow"] <= 3,
+                            f"{name}: XNews tab caused horizontal overflow")
+                assert_true(abs(measured["sources"][0]["x"]-xnews_measure["sources"][1]["x"]) <= 2,
+                            f"{name}: tab panels have different left alignment")
+                assert_true(abs(measured["sources"][0]["width"]-xnews_measure["sources"][1]["width"]) <= 2,
+                            f"{name}: tab panels have different content width")
+                page.locator(".discover-quicknav [data-discover-target='opportunityTitle']").click()
+                assert_true(measure(page)["visibleRadar"],f"{name}: Radar not restored")
                 page.locator(".discover-quicknav [data-discover-target='discoverIdeas']").click()
                 assert_true(page.locator("#discoverIdeas").evaluate("(el) => el.open"),
                             f"{name}: original idea toolbox did not open")
@@ -104,7 +126,7 @@ def run():
                 assert_true(measure(page)["viewportOverflow"] <= 3,
                             f"{name}: toolbox causes horizontal overflow when opened")
                 page.screenshot(path=str(ROOT / "qa" / ("discover-" + name + ".png")), full_page=False)
-                output["results"].append({"viewport": name, **measured, "ideaToolboxOpened": True})
+                output["results"].append({"viewport": name, **measured, "ideaToolboxOpened": True, "xnewsTabWorked": True})
                 page.close()
         finally:
             browser.close()
