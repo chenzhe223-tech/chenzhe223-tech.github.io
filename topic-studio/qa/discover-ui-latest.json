@@ -1,6 +1,133 @@
 {
-  "status": "fail",
-  "tested_at": "2026-11-13T09:50:26+00:00",
-  "scope": "Local Chromium QA only; not a production verification",
-  "error": "AssertionError: desktop: expected 3 columns, got 2"
+  "status": "pass",
+  "tested_at": "2026-11-13T09:51:14+00:00",
+  "method": "Chromium headless via Playwright, localhost static site, no publication, V4 editorial tabs",
+  "scope": "Local build/layout smoke test only; not a live production QA claim",
+  "results": [
+    {
+      "viewport": 2560,
+      "listColumns": 2,
+      "opportunityCards": 6,
+      "xnewsCards": 6,
+      "viewportOverflow": 0,
+      "sectionOverflow": 0,
+      "cardTitlePx": 17,
+      "sources": [
+        {
+          "x": 681,
+          "width": 1424
+        },
+        {
+          "x": 0,
+          "width": 0
+        }
+      ],
+      "contentWidth": 1520,
+      "currentSource": "radar",
+      "visibleRadar": true,
+      "visibleXnews": false,
+      "ideaToolboxOpened": true,
+      "xnewsTabWorked": true
+    },
+    {
+      "viewport": 1440,
+      "listColumns": 2,
+      "opportunityCards": 6,
+      "xnewsCards": 6,
+      "viewportOverflow": 0,
+      "sectionOverflow": 0,
+      "cardTitlePx": 17,
+      "sources": [
+        {
+          "x": 263,
+          "width": 1139
+        },
+        {
+          "x": 0,
+          "width": 0
+        }
+      ],
+      "contentWidth": 1215,
+      "currentSource": "radar",
+      "visibleRadar": true,
+      "visibleXnews": false,
+      "ideaToolboxOpened": true,
+      "xnewsTabWorked": true
+    },
+    {
+      "viewport": 1024,
+      "listColumns": 2,
+      "opportunityCards": 6,
+      "xnewsCards": 6,
+      "viewportOverflow": 0,
+      "sectionOverflow": 0,
+      "cardTitlePx": 17,
+      "sources": [
+        {
+          "x": 245,
+          "width": 759
+        },
+        {
+          "x": 0,
+          "width": 0
+        }
+      ],
+      "contentWidth": 799,
+      "currentSource": "radar",
+      "visibleRadar": true,
+      "visibleXnews": false,
+      "ideaToolboxOpened": true,
+      "xnewsTabWorked": true
+    },
+    {
+      "viewport": 768,
+      "listColumns": 1,
+      "opportunityCards": 6,
+      "xnewsCards": 6,
+      "viewportOverflow": 0,
+      "sectionOverflow": 0,
+      "cardTitlePx": 17,
+      "sources": [
+        {
+          "x": 245,
+          "width": 503
+        },
+        {
+          "x": 0,
+          "width": 0
+        }
+      ],
+      "contentWidth": 543,
+      "currentSource": "radar",
+      "visibleRadar": true,
+      "visibleXnews": false,
+      "ideaToolboxOpened": true,
+      "xnewsTabWorked": true
+    },
+    {
+      "viewport": 390,
+      "listColumns": 1,
+      "opportunityCards": 6,
+      "xnewsCards": 6,
+      "viewportOverflow": 0,
+      "sectionOverflow": 0,
+      "cardTitlePx": 15,
+      "sources": [
+        {
+          "x": 12,
+          "width": 366
+        },
+        {
+          "x": 0,
+          "width": 0
+        }
+      ],
+      "contentWidth": 390,
+      "currentSource": "radar",
+      "visibleRadar": true,
+      "visibleXnews": false,
+      "ideaToolboxOpened": true,
+      "xnewsTabWorked": true
+    }
+  ]
 }
