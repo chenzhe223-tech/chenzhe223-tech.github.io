@@ -474,7 +474,19 @@ async function test(){
         pageText:(document.querySelector('#content')?.innerText||document.body.innerText).slice(0,300)
       }),{key:KEY,id:originalId});
       console.log('Duplicate acceptance diagnostics:',JSON.stringify(copyBefore));
-      await cp.locator('[data-action="duplicate"][data-id="'+originalId+'"]').click();
+      const duplicateButton=cp.locator('[data-action="duplicate"][data-id="'+originalId+'"]');
+      await duplicateButton.waitFor({state:'visible',timeout:15000}).catch(async err=>{
+        const current=await cp.evaluate(()=>({
+          hash:location.hash,route:typeof ui!=='undefined'?ui.route:null,
+          viewText:document.querySelector('#view')?.textContent?.slice(0,1100),
+          viewHTML:document.querySelector('#view')?.innerHTML?.slice(0,450),
+          href:location.href,readyState:document.readyState,
+          scripts:[...document.scripts].filter(x=>x.src).map(x=>({url:x.src,loaded:x.readyState||''}))
+        }));
+        console.error('Duplicate button missing after reload:',JSON.stringify({...current,errors}));
+        throw err;
+      });
+      await duplicateButton.click();
       await cp.waitForFunction(old=>location.hash.startsWith('#/workspace/')&&location.hash.split('/')[2]!==old,originalId);
       const copyResult=await cp.evaluate(({key,id})=>{
         const d=JSON.parse(localStorage.getItem(key)),old=d.projects.find(p=>p.id===id),
