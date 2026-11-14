@@ -459,6 +459,7 @@ async function test(){
           approval:{lock_hash:'deadbeef',author_approved:true,approved_at:'2026-11-14T01:00:00Z'},
           pilotApproval:{repo_commit:'a'.repeat(40)},pilot:{approved:true}};
         p.author_approved=true;p.finalApproval={approved:true};
+        p.cover='media:old-published-cover';p.panels[0].image='media:old-published-panel';
         p.characterRefs=[{characterId:'original-asset',version:3,comicName:'保留角色',
           snapshot:{characterId:'original-asset',version:3,originalName:'保留角色',description:'红色披风'}}];
         localStorage.setItem(key,JSON.stringify(d));
@@ -499,6 +500,8 @@ async function test(){
       const c=copyResult.copy;assert.ok(c&&c.id!==originalId,'new work has unique identity');
       assert.equal(c.status,'草稿');assert.ok(c.checks.every(x=>!x),'new draft resets all review flags');
       assert.equal(c.reviewedAt,null);assert.equal(c.publishedAt,null);
+      assert.equal(c.cover,'','a new edition must never inherit the old published cover');
+      assert.ok(c.panels.every(x=>!x.image),'a new edition must retain script but not previously published image assets');
       assert.ok(!c.handoff.taskId&&!c.handoff.repoQueuedAt&&!c.handoff.stageUploaded&&!c.handoff.receipt,
         'new draft cannot borrow GitHub task, uploaded hashes or publisher receipt');
       assert.equal(c.creativeDirection.approval,null);
