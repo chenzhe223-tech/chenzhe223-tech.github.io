@@ -456,6 +456,14 @@ async function test(){
       },{key:KEY,id:originalId});
       await cp.goto(base+'#/library');
       await cp.reload();
+      const copyBefore=await cp.evaluate(({key,id})=>({
+        hash:location.hash,route:typeof ui!=='undefined'?ui.route:null,
+        projectCount:JSON.parse(localStorage.getItem(key))?.projects?.length,
+        sourceStatus:JSON.parse(localStorage.getItem(key))?.projects?.find(p=>p.id===id)?.status,
+        copyButtons:[...document.querySelectorAll('[data-action="duplicate"]')].map(e=>e.dataset.id),
+        pageText:(document.querySelector('#content')?.innerText||document.body.innerText).slice(0,300)
+      }),{key:KEY,id:originalId});
+      console.log('Duplicate acceptance diagnostics:',JSON.stringify(copyBefore));
       await cp.locator('[data-action="duplicate"][data-id="'+originalId+'"]').click();
       await cp.waitForFunction(old=>location.hash.startsWith('#/workspace/')&&location.hash.split('/')[2]!==old,originalId);
       const copyResult=await cp.evaluate(({key,id})=>{
