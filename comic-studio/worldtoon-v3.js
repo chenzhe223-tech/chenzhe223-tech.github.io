@@ -419,8 +419,17 @@
    const pendingCharacters=refs.some(r=>r.pending_author_review===true||(data.characters||[]).some(c=>String(c.characterId||c.id)===String(r.characterId)&&c.origin==='ai-draft'));
    const cast=!pendingCharacters&&!!(refs.length||p?.characters?.trim()||p?.creativeDirection?.cast?.some(x=>x.name&&x.look));
    const board=panels.length>=4&&panels.every(x=>String(x?.scene||'').trim().length>=12);
-   const style=!!p?.creativeDirection?.styleId&&!!p?.creativeDirection?.approval?.lock_hash&&
-      (typeof wtDirector==='object'?wtDirector.approved(p):p.creativeDirection.approval.author_approved===true);
+   // Legacy or partially imported director records must not crash the entire
+   // V4 workspace; an incomplete creative bible is *unapproved*, never repaired
+   // or silently promoted to an author-signed style lock.
+   let directorApproved=false;
+   if(p?.creativeDirection?.approval?.lock_hash){
+     try{
+       directorApproved=typeof wtDirector==='object'&&typeof wtDirector.approved==='function'?
+         wtDirector.approved(p)===true:p.creativeDirection.approval.author_approved===true;
+     }catch(_invalidDirector){directorApproved=false}
+   }
+   const style=!!p?.creativeDirection?.styleId&&!!directorApproved;
    const uploaded=Array.isArray(h.stagedFiles)&&h.stagedFiles.length>=panels.length+1&&
       h.stagedFiles.length===(h.stageUploaded||[]).length;
    const qa=!!row&&['ready_for_workbuddy','publishing','published'].includes(row.status);
