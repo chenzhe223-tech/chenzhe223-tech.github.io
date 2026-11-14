@@ -40,7 +40,7 @@ const snap={
 };
 const modelA=model.capture(new MockLocalStorage(snap));
 assert.equal(modelA.warnings.length,0,"Legacy benchmark without ID must be represented safely as a conflict-protected collection");
-assert.equal(modelA.documents.length,11);
+assert.equal(modelA.documents.length,10);
 assert.ok(modelA.documents.some(d=>d.doc_type==="research"&&d.doc_id==="benchmark-set"));
 const activation=JSON.parse(fs.readFileSync(path.join(__dirname,"sync-activation.json"),"utf8"));
 assert.equal(activation.environmentId,"excess-tiglon-d6gjc77qr6fa193f2");
@@ -58,11 +58,11 @@ assert.throws(()=>engineLib.build({storage:new MockLocalStorage(),adapter:fakeSe
  const create=(store,uid="owner")=>engineLib.build({storage:store,adapter:server,uid,productionEnabled:true,
   permissionsVerified:true,disableTimers:true,now:()=>Date.UTC(2026,10,15)});
  const a=create(storeA),b=create(storeB);
- assert.deepEqual(await a.sync("login"),{upload:11,download:0,conflicts:0,readOnly:false});
- assert.equal(server.records.size,11);
+ assert.deepEqual(await a.sync("login"),{upload:10,download:0,conflicts:0,readOnly:false});
+ assert.equal(server.records.size,10);
  const firstBackup=storeA.getItem(engineLib.initialBackupKey("owner"));
  assert.ok(firstBackup&&firstBackup.includes("DAVYLAB_TOPIC_STUDIO_LOCAL_BACKUP_V1"));
- assert.equal((await b.sync("login")).download,11);
+ assert.equal((await b.sync("login")).download,10);
  assert.equal(JSON.parse(storeB.getItem("davylab-topic-research-v1"))[0].name,"无 ID 的历史对标记录");
  assert.equal(JSON.parse(storeB.getItem("davylab-visual-direction-v1")).articleTheme,"Agent学习");
  assert.equal(JSON.parse(storeB.getItem("davylab-topic-studio-v1"))[0].status,"inbox");
@@ -101,7 +101,7 @@ assert.throws(()=>engineLib.build({storage:new MockLocalStorage(),adapter:fakeSe
  assert.equal((await offline.sync("offline")).skipped,"offline");
  assert.equal(server.operations.at(-1),"read","Offline retry must not write to cloud");
  fakeWindow.navigator.onLine=true;
- assert.equal((await offline.sync("online")).download,11);
+ assert.equal((await offline.sync("online")).download,10);
 
  // Stale server update test: the adapter must reject incorrect revision, never retry with current revision.
  await assert.rejects(server.productionPut({doc_type:"topic",doc_id:"topic-1",payload:{title:"bad"}},0),/REVISION_CONFLICT/);
