@@ -116,7 +116,19 @@ async function test(){
     await page.waitForFunction(({key,id})=>{
       const p=JSON.parse(localStorage.getItem(key))?.projects?.find(x=>x.id===id);
       return (p?.characterRefs||[]).length>0;
-    },{key:KEY,id:idea.id},{timeout:10000});
+    },{key:KEY,id:idea.id},{timeout:10000}).catch(async err=>{
+      const evidence=await page.evaluate(({key,id})=>{
+        const d=JSON.parse(localStorage.getItem(key)),p=d.projects.find(x=>x.id===id),form=document.querySelector('[data-wt4-character-create]');
+        return {hash:location.hash,selected:typeof selected==='function'?selected()?.id:null,
+          formPresent:!!form,formValid:form?.checkValidity(),
+          fields:[...(form?.elements||[])].map(x=>({name:x.name,value:x.value,valid:x.validity.valid})),
+          refs:p?.characterRefs?.length||0,catalogSize:d.characters.length,
+          toast:document.querySelector('#toast')?.textContent,
+          mainText:document.querySelector('main')?.innerText?.slice(-360)};
+      },{key:KEY,id:idea.id});
+      console.error('FAILED role persistence E2E diagnostics:',JSON.stringify({...evidence,errors}));
+      throw err;
+    });
     const roleDebug=await page.evaluate(({key,id})=>{
       const store=JSON.parse(localStorage.getItem(key));
       const p=store.projects.find(x=>x.id===id);
