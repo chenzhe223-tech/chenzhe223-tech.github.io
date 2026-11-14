@@ -13,6 +13,8 @@ on:
       - "topic-studio/hotspot-ranker.js"
       - "topic-studio/hotspot-recommender.js"
       - "topic-studio/hotspot-recommender.css"
+      - "topic-studio/brand/**"
+      - "topic-studio/tests/brand-identity.test.cjs"
       - "topic-studio/data/hotspot-signals.json"
       - "topic-studio/tests/hotspot-recommender.test.cjs"
       - "topic-studio/tests/all-pages-browser-smoke.py"
@@ -45,6 +47,8 @@ jobs:
           else
             python -m playwright install --with-deps chromium
           fi
+      - name: Verify DAVYLAB branding assets and UI integration
+        run: node topic-studio/tests/brand-identity.test.cjs
       - name: Verify deterministic Top-10 ranking
         run: node topic-studio/tests/hotspot-recommender.test.cjs
       - name: Test all eight pages and cross-module workflows
