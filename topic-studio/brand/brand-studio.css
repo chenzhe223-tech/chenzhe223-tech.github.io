@@ -86,12 +86,12 @@
 .mobile-app-cover:before{
  content:"";pointer-events:none;position:absolute;
  right:-25px;top:-20px;width:180px;height:180px;opacity:.12;
- background:url("./brand/davylab-studio-symbol.svg") center/contain no-repeat;
+ background:url("./davylab-studio-symbol.svg") center/contain no-repeat;
  transform:rotate(-15deg);
 }
 .mobile-app-cover .mobile-cover-head:before{
  content:"";display:inline-block;width:23px;height:23px;
- background:url("./brand/davylab-studio-mark.svg") center/contain no-repeat;
+ background:url("./davylab-studio-mark.svg") center/contain no-repeat;
  vertical-align:middle;margin-right:8px;border-radius:6px;
 }
 .content>.hero .eyebrow,
