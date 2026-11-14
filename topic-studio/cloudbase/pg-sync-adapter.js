@@ -67,6 +67,31 @@
    return {plan:core.compare(localDocuments,remote,baseDocuments),
     remoteCount:remote.length,readOnly:true,cloudWrites:0,localWrites:0};
   }
+  async function productionPut(document,expectedRevision){
+   if(!verified||options.productionEnabled!==true||options.permissionsVerified!==true)
+    throw Error("PRODUCTION_WRITE_ACTIVATION_REQUIRED");
+   await verifyPrincipal();
+   if(!document||!["topic","research","growth","settings","published_record"].includes(document.doc_type)
+      ||typeof document.doc_id!=="string"||document.doc_id.length<1||document.doc_id.length>512
+      ||!document.payload||typeof document.payload!=="object"||Array.isArray(document.payload)
+      ||!Number.isInteger(expectedRevision)||expectedRevision<0)
+    throw Error("INVALID_PRODUCTION_SYNC_DOCUMENT");
+   const result=await db.rpc(RPC,{
+    p_type:document.doc_type,p_id:document.doc_id,p_payload:clone(document.payload),
+    p_expected_revision:expectedRevision
+   });
+   if(result?.error){
+    const msg=String(result.error.message||result.error.code||"unknown");
+    if(/REVISION_CONFLICT|23505|40001|TOMBSTONE/i.test(msg))
+     throw Error("SYNC_REVISION_CONFLICT");
+    throw Error("PG_PRODUCTION_WRITE_REJECTED: "+msg.slice(0,180));
+   }
+   const response=Array.isArray(result?.data)?result.data[0]:result?.data;
+   if(!response||response.doc_id!==document.doc_id||response.doc_type!==document.doc_type
+      ||!Number.isInteger(response.revision)||response.revision<1)
+    throw Error("PG_PRODUCTION_ACK_INVALID");
+   return{doc_type:response.doc_type,doc_id:response.doc_id,revision:response.revision};
+  }
   async function syntheticPut(document,expectedRevision,authorization){
    if(!verified||authorization!=="EXPLICIT_SYNTHETIC_TEST_ONLY")
      throw Error("SYNTHETIC_WRITE_GATE_NOT_PASSED");
@@ -90,8 +115,10 @@
     inserted:payload.inserted===true,unchanged:payload.unchanged===true};
   }
   return Object.freeze({environmentId:ENVIRONMENT_ID,table:TABLE,version:"1.0-p1",
-   verifyPrincipal,list,preview,syntheticPut,mode:"manual-synthetic-test-only",
-   productionWritesEnabled:false,automaticDownloadsEnabled:false});
+   verifyPrincipal,list,preview,syntheticPut,productionPut,
+   mode:options.productionEnabled===true&&options.permissionsVerified===true?"authorized-production":"manual-synthetic-test-only",
+   productionWritesEnabled:options.productionEnabled===true&&options.permissionsVerified===true,
+   automaticDownloadsEnabled:options.downloadsEnabled===true&&options.permissionsVerified===true});
  }
  return Object.freeze({ENVIRONMENT_ID,TABLE,RPC,QA_PREFIX,create,rowsToDocuments});
 });
