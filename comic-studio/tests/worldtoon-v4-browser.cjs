@@ -374,6 +374,37 @@ async function test(){
       reports.push({test:'real Chrome quota-exceeded failure preserves original stored projects and blocks false navigation',result:'passed'});
     }finally{await exhausted.close()}
 
+    // A failed character-asset save must not leave an orphan in the catalog or an unpersisted role link.
+    const roleQuota=await browser.newContext({viewport:{width:1280,height:800}});
+    try{
+      const rolePage=await roleQuota.newPage();
+      rolePage.on('pageerror',e=>errors.push('role-quota: '+e.message));
+      await rolePage.goto(base,{waitUntil:'domcontentloaded'});
+      await rolePage.locator('[data-wt4-entry="idea"]').click();
+      await rolePage.locator('#wt4-seed').fill('角色建档异常恢复测试');
+      await rolePage.locator('[data-wt4-create="idea"] [type="submit"]').click();
+      await rolePage.locator('.wt4-steps [data-wt4-step="1"]').click();
+      const countsBefore=await rolePage.evaluate(()=>{const d=JSON.parse(localStorage.getItem('davylab-comic-press-v1'));return {roles:d.characters.length,refs:d.projects.find(p=>p.ideaSeed==='角色建档异常恢复测试')?.characterRefs?.length||0}});
+      await rolePage.evaluate(()=>{
+        const original=Storage.prototype.setItem;
+        Storage.prototype.setItem=function(key,value){
+          if(key==='davylab-comic-press-v1')throw new DOMException('Synthetic quota failure','QuotaExceededError');
+          return original.call(this,key,value);
+        };
+      });
+      await rolePage.locator('[data-wt4-character-create] [name="name"]').fill('不会残留的角色');
+      await rolePage.locator('[data-wt4-character-create] [name="description"]').fill('圆眼睛，墨绿色制服，银色边框');
+      await rolePage.locator('[data-wt4-character-create] [type="submit"]').click();
+      assert.match(await rolePage.locator('#toast').textContent(),/角色建档未完成/,'role-save failure is reported explicitly');
+      const countsAfter=await rolePage.evaluate(()=>{
+        const d=JSON.parse(localStorage.getItem('davylab-comic-press-v1'));
+        const p=d.projects.find(x=>x.ideaSeed==='角色建档异常恢复测试');
+        return {roles:d.characters.length,refs:p?.characterRefs?.length||0};
+      });
+      assert.deepEqual(countsAfter,countsBefore,'failed character creation must not persist an orphan or altered role list');
+      reports.push({test:'real Chrome character-asset quota failure rolls back and reports accurately',result:'passed'});
+    }finally{await roleQuota.close()}
+
     // A broken cloud-sync scheduling callback must not turn a successful local write into a false failure.
     const syncContext=await browser.newContext({viewport:{width:1280,height:800}});
     try{
