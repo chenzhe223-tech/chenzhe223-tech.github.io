@@ -307,9 +307,10 @@ async function main() {
     await page.locator("#saveVisualLayout").click();
     await page.locator("#closeVisualSettings").click();
 
+    await page.setViewportSize({ width: 1440, height: 1000 });
     await page.locator("#discoverIdeas").evaluate(el => { el.open = true; });
     await page.locator("#ideaInput").fill("普通人如何用 AI 做出第一个小产品");
-    await page.getByRole("button", { name: /分析并生成方向/ }).click();
+    await page.locator("#analyzeIdeas").click();
     await page.locator("#aiState").waitFor();
     await page.waitForTimeout(150);
     assert.match(await page.locator("#aiState").innerText(), /请先点击|登录|连接/, "AI analysis must require an authenticated NianBox session");
