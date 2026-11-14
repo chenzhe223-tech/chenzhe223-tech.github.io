@@ -105,6 +105,16 @@ assert.equal(state(p).label,'发表回执待核验','user sees explicit receipt 
 ctx.wtArchiveSnapshot.library.items=[verifiedRow];
 assert.equal(verifiedPublished({status:'published',receipt:{status:'draft_uploaded',url:'https://mp.weixin.qq.com/s/RealArticle'}}),false);
 assert.equal(verifiedPublished({status:'published',receipt:{status:'published',url:'https://example.invalid/fake'}}),false);
+// A legacy or partial director approval must not crash the unified workspace.
+const directorBefore=ctx.wtDirector.approved;
+const originalDirection=p.creativeDirection;
+p.creativeDirection={styleId:'western-cinematic',approval:{lock_hash:'deadbeef',author_approved:true}};
+ctx.wtDirector.approved=()=>{throw new TypeError('legacy director misses storyboard');};
+assert.equal(state(p).completed[3],false,'malformed approval fails closed, not auto-approved');
+ctx.ui.wt4Step=1;
+assert.match(ctx.window.wt4Workspace(),/复制为新作/,'V4 editor must still offer an independent project copy');
+ctx.wtDirector.approved=directorBefore;
+p.creativeDirection=originalDirection;
 ctx.ui.wt4Step=2;
 const saved=JSON.stringify(p),shell=ctx.window.wt4Workspace();
 assert.equal(JSON.stringify(p),saved,'render cannot mutate project or its character bible');
