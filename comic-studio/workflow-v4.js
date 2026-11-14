@@ -452,8 +452,9 @@
    const topic=ev.target.closest('[data-wt4-topic]');
    if(topic){ev.preventDefault();const t=(data.topics||[]).find(x=>String(x.id)===String(topic.dataset.wt4Topic));
      if(!t)return notify('选题不存在，请刷新选题池');
-     newProject(t);const p=selected();p.entryType='hotspot';p.handoff={...(p.handoff||{}),mode:'hotspot'};
-     setChange(p,'从热点改编入口导入选题');nav('workspace/'+p.id+'/0');return}
+     // Never modify a previous work if the new hotspot draft could not be persisted.
+     const p=newProject(t);if(!p)return;
+     nav('workspace/'+p.id+'/0');return}
    if(ev.target.closest('[data-wt4-sync-character-bible]')){
      ev.preventDefault();const p=selected();
      if(!syncCharacterBible(p))return notify('角色尚未完成确认，或项目已锁定，不允许同步');
