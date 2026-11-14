@@ -388,6 +388,44 @@ async function test(){
       reports.push({test:'real Chrome quota-exceeded failure preserves original stored projects and blocks false navigation',result:'passed'});
     }finally{await exhausted.close()}
 
+    // Hotspot creation must never open or rewrite an existing project on a failed initial save.
+    const hotQuota=await browser.newContext({viewport:{width:1280,height:800}});
+    try{
+      const hp=await hotQuota.newPage();hp.on('pageerror',e=>errors.push('hotspot-quota: '+e.message));
+      await hp.goto(base,{waitUntil:'domcontentloaded'});
+      await hp.locator('[data-wt4-entry="author"]').click();
+      await hp.locator('[data-wt4-create="author"] [name="title"]').fill('必须保留的旧作');
+      await hp.locator('[data-wt4-create="author"] [name="description"]').fill('原有故事不允许被失败的热点创建覆盖或重标记');
+      await hp.locator('[data-wt4-create="author"] [type="submit"]').click();
+      const oldWork=await hp.evaluate(()=>{
+        const d=JSON.parse(localStorage.getItem('davylab-comic-press-v1'));
+        const p=d.projects.find(p=>p.title==='必须保留的旧作');
+        d.topics.unshift({id:'test-hotspot-quota',title:'未证实的热点测试',summary:'不得篡改旧作品',source:'https://example.org/lead'});
+        localStorage.setItem('davylab-comic-press-v1',JSON.stringify(d));
+        return {id:p.id,title:p.title,entryType:p.entryType,description:p.description,count:d.projects.length};
+      });
+      await hp.goto(base+'#/dashboard');
+      await hp.locator('[data-wt4-entry="hotspot"]').click();
+      await hp.locator('[data-wt4-topic="test-hotspot-quota"]').waitFor();
+      await hp.evaluate(()=>{
+        const set=Storage.prototype.setItem;
+        Storage.prototype.setItem=function(key,value){
+          if(key==='davylab-comic-press-v1')throw new DOMException('Synthetic hotspot quota','QuotaExceededError');
+          return set.call(this,key,value);
+        };
+      });
+      await hp.locator('[data-wt4-topic="test-hotspot-quota"]').click();
+      assert.ok(!(await hp.evaluate(()=>location.hash)).startsWith('#/workspace/'),
+        'failed hotspot creation must not navigate into the previously selected project');
+      const persisted=await hp.evaluate(id=>{
+        const d=JSON.parse(localStorage.getItem('davylab-comic-press-v1'));
+        const p=d.projects.find(p=>p.id===id);
+        return {id:p.id,title:p.title,entryType:p.entryType,description:p.description,count:d.projects.length};
+      },oldWork.id);
+      assert.deepEqual(persisted,oldWork,'failed hotspot creation must preserve the exact original project');
+      reports.push({test:'real Chrome hotspot quota failure never modifies or redirects into an existing comic',result:'passed'});
+    }finally{await hotQuota.close()}
+
     // A failed character-asset save must not leave an orphan in the catalog or an unpersisted role link.
     const roleQuota=await browser.newContext({viewport:{width:1280,height:800}});
     try{
