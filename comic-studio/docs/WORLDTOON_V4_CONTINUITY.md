@@ -82,3 +82,34 @@
   - 移动端 `43569228538`
   - Chrome 浏览器 E2E `43569228568`（现共 11 项路径）
 - 上述是技术质量证据，不是模型真实输出、用户跨设备认证、Cloudflare V4 发布或公众号发表证明；**G1–G5 阻碍仍保留**。下一次自动续推先确认本文件后续源码 HEAD 和 CI，不得只使用此历史绿色 SHA 认定最新版本通过。
+
+## 9. 2026-11-14 20:40 SGT · 真实重绘丢字/旧导演损坏/作品复制恢复
+
+本轮起点 PR #139 HEAD `1101c09c828e7becf974954c23ea81c3d2d95bf1`，该提交静态/布局/回归三项成功，但真实 Chrome job `43594583760` 失败：连续角色字段填写过程中 `characterName` 丢失。这不是可以忽略的偶发失败。
+
+### 已真实修复
+
+- `workflow-v4.js` 中角色建档新增项目 ID 隔离的 **内存临时表单快照**，input capture + render 前 FormData 双保险，支持异步重绘后还原姓名、外观、服饰及其他原有字段；仅提交成功后清除，未经显式确认不创建角色资产。
+- Chrome 自动化新增 **填写角色名称后强制调用 `render()` 两次**、检查原始内容保留，再验证确认建档及版本引用。相关改动同步进 Worker allowlist 的 `worldtoon-v3.js`。
+- 旧导演数据可能只有 `styleId` / `approval`，没有完整故事板。旧实现 `wtDirector.approved` 会 `TypeError`，造成新 V4 工作区加载失败并回退旧编辑器。新实现 **异常即未审批**，绝不代签锁定，并保持工作区可用。
+- 正式漫画书架页面已升级为已发表展示，不再承担旧版所有编辑操作；因此已在 V4 作品工作区明确恢复 **「复制为新作」**，沿用既有只复制剧本与固定角色版本、剥离远端任务/作者审批/发表回执的安全逻辑。
+- 浏览器回归改为从 **真实 V4 工作区** 执行复制，验证旧作内容/工单完整，新作审批均清零。测试中的旧版不完整导演结构保留为真实兼容性回归夹具。
+
+### 最新验收（代码提交）
+
+- Canonical JS / Embedded JS / tests HEAD: `e2b95f6c218d595806367bce80897491186ccb75`
+- 四项 GitHub Actions **均已完成 success**：
+  - static quality: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/43595922921
+  - mobile: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/43595922871
+  - V3/V4 unit regressions: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/43595922873
+  - actual Chrome browser E2E: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/43595922864
+- Chrome E2E **12 workflows**: 三入口/七步骤、作者确认角色和跨重绘恢复、原始角色库隔离、技术合成 9 PNG+独立封面哈希/ZIP 导入、手机和平板、容量故障回滚、热点创建不覆盖旧作品、复制不继承 GitHub 审批/工单、云同步调度失败本地仍保留。**合成图片仅作技术校验，不等于正式商业美术。**
+- Cloudflare 只读部署检查：现网 Worker `worldtoon` 最新仍是 `2026-11-12T06:45:53Z` 发布版本 `be6759cc-5ca8-44a4-9e71-c236c6156fc4`，本次 V4 仍**未部署**。不可拿 GitHub 绿灯冒充线上验收。
+
+### 下一轮唯一恢复优先级
+
+1. 先读取此文件并检查 PR #139 是否出现更新 HEAD；不沿用旧 SHA 冒充新测试。
+2. 启动经用户授权的 **真实登录双设备 UAT**，验证 Supabase RLS、跨设备新增/覆盖冲突、离线恢复及服务端安全策略；没有认证环境不得声明通过。
+3. 只有在 **明确的模型用量/费用授权** 后才调用生成模型；先真实产出角色定妆和第一格、SHA256 入私有仓，并让作者独立确认；然后才生成 9 格 PNG+独立封面并做逐图手机 QA，确保预览和成图一致。
+4. 私有 GitHub 工单/真实文件/Manifest/独立终审/WorkBuddy 状态需要按仓库协议实测，不能写人工回执。公众号发表仅在 WorkBuddy 严格授权条件下进行。
+5. G1-G5 依旧 BLOCKED；**P0/P1 代码层测试通过不代表整个 V4.0 产品升级交付完成**。维持草稿 PR、未授权不合并/不部署/不收费/不发表。
