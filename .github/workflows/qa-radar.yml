@@ -79,11 +79,15 @@ jobs:
           exit 1
       - name: Test daily briefing on desktop and mobile
         run: node scripts/qa-radar.cjs
+      - name: Verify complete images, readable cards and balanced responsive layout
+        run: node scripts/qa-radar-reading.cjs
       - name: Upload daily briefing screenshots and report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ai-daily-brief-qa
-          path: test-results/radar/
+          path: |
+            test-results/radar/
+            test-results/radar-reading/
           if-no-files-found: warn
           retention-days: 14
