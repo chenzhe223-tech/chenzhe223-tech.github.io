@@ -51,7 +51,7 @@ const ctx={
   wtCreativeDirector:()=>'<section id="director-stage">Story bible editor</section>',
   wtWorkflow:()=>'<section id="production-stage">Agent handoff editor</section>',
   publish:()=>'<section id="publication-stage">Author QA editor</section>',
-  nav:route=>{navResult=route;},render(){},setChange:(p,desc)=>{p.updatedAt='2026-11-13T09:00:00Z'},notify:()=>{},newProject:(topic,prepare)=>{current={id:'new-p',title:'未命名新作',panels:Array.from({length:9},()=>({scene:''})),handoff:{}};if(prepare)prepare(current);ctx.data.projects.unshift(current);return current},
+  nav:route=>{navResult=route;},render(){},setChange:(p,desc)=>{p.updatedAt='2026-11-13T09:00:00Z'},notify:()=>{},newProject:(topic,prepare)=>{current={id:'new-p',title:topic?.title||'未命名新作',panels:Array.from({length:9},()=>({scene:''})),handoff:{}};if(topic){current.entryType='hotspot';current.topicId=topic.id;current.handoff.mode='hotspot'}if(prepare)prepare(current);ctx.data.projects.unshift(current);return current},
 };
 vm.runInNewContext(read('workflow-v4.js'),ctx,{filename:'workflow-v4.js'});
 const {state,verifiedPublished,stageNames,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft,syncCharacterBible}=ctx.window.WT4Workflow;
