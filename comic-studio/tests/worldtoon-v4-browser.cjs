@@ -427,6 +427,56 @@ async function test(){
       reports.push({test:'real Chrome hotspot quota failure never modifies or redirects into an existing comic',result:'passed'});
     }finally{await hotQuota.close()}
 
+    // A copy is a NEW draft, never a copy of original publisher and approval identity.
+    const copyCtx=await browser.newContext({viewport:{width:1280,height:850}});
+    try{
+      const cp=await copyCtx.newPage();
+      cp.on('pageerror',e=>errors.push('duplicate: '+e.message));
+      await cp.goto(base,{waitUntil:'domcontentloaded'});
+      await cp.locator('[data-wt4-entry="author"]').click();
+      await cp.locator('[data-wt4-create="author"] [name="title"]').fill('原作和独立授权');
+      await cp.locator('[data-wt4-create="author"] [name="description"]').fill('测试作品副本必须具有全新工单身份与独立的发布审批');
+      await cp.locator('[data-wt4-create="author"] [type="submit"]').click();
+      const originalId=await cp.evaluate(()=>location.hash.split('/')[2]);
+      const source=await cp.evaluate(({key,id})=>{
+        const d=JSON.parse(localStorage.getItem(key)),p=d.projects.find(x=>x.id===id);
+        p.status='已发布';p.reviewedAt='2026-11-14T01:00:00Z';p.publishedAt='2026-11-14T01:10:00Z';
+        p.checks=Array(6).fill(true);
+        p.handoff={mode:'original',taskId:'WT-'+'a'.repeat(20),
+          repoQueuedAt:'2026-11-14T01:00:00Z',stageUploaded:['panels/01.png'],
+          importStatus:'GitHub 文件暂存完成',receipt:{status:'published'}};
+        p.creativeDirection={version:1,styleId:'western-cinematic',reviewed:true,
+          approval:{lock_hash:'deadbeef',author_approved:true,approved_at:'2026-11-14T01:00:00Z'},
+          pilotApproval:{repo_commit:'a'.repeat(40)},pilot:{approved:true}};
+        p.author_approved=true;p.finalApproval={approved:true};
+        p.characterRefs=[{characterId:'original-asset',version:3,comicName:'保留角色',
+          snapshot:{characterId:'original-asset',version:3,originalName:'保留角色',description:'红色披风'}}];
+        localStorage.setItem(key,JSON.stringify(d));
+        return JSON.stringify(p);
+      },{key:KEY,id:originalId});
+      await cp.goto(base+'#/library');
+      await cp.reload();
+      await cp.locator('[data-action="duplicate"][data-id="'+originalId+'"]').click();
+      await cp.waitForFunction(old=>location.hash.startsWith('#/workspace/')&&location.hash.split('/')[2]!==old,originalId);
+      const copyResult=await cp.evaluate(({key,id})=>{
+        const d=JSON.parse(localStorage.getItem(key)),old=d.projects.find(p=>p.id===id),
+          copied=d.projects.find(p=>p.title==='原作和独立授权 · 副本');
+        return {original:JSON.stringify(old),copy:copied,total:d.projects.length,route:location.hash};
+      },{key:KEY,id:originalId});
+      assert.equal(copyResult.original,source,'duplicate operation must never rewrite original record');
+      const c=copyResult.copy;assert.ok(c&&c.id!==originalId,'new work has unique identity');
+      assert.equal(c.status,'草稿');assert.ok(c.checks.every(x=>!x),'new draft resets all review flags');
+      assert.equal(c.reviewedAt,null);assert.equal(c.publishedAt,null);
+      assert.ok(!c.handoff.taskId&&!c.handoff.repoQueuedAt&&!c.handoff.stageUploaded&&!c.handoff.receipt,
+        'new draft cannot borrow GitHub task, uploaded hashes or publisher receipt');
+      assert.equal(c.creativeDirection.approval,null);
+      assert.equal(c.creativeDirection.reviewed,false);
+      assert.ok(!c.creativeDirection.pilotApproval&&!c.creativeDirection.pilot);
+      assert.ok(!c.author_approved&&!c.finalApproval);
+      assert.equal(c.characterRefs[0].version,3,'reuse pinned character version without altering catalog');
+      reports.push({test:'real Chrome duplicate preserves original and strips remote GitHub task + independent author approvals',result:'passed'});
+    }finally{await copyCtx.close()}
+
     // A failed character-asset save must not leave an orphan in the catalog or an unpersisted role link.
     const roleQuota=await browser.newContext({viewport:{width:1280,height:800}});
     try{
