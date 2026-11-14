@@ -322,7 +322,7 @@ async function main() {
     await page.getByRole("button", { name: "导入选中灵感" }).click();
     await page.getByRole("button", { name: "我的选题池" }).click();
     await page.getByText("我想写一篇普通人如何用 AI 做出第一个小产品的文章。", { exact: false }).first().waitFor();
-    assert.equal(await page.locator("#topicList .topiccard").count(), 1, "manual NianBox fallback import adds one idea");
+    assert.equal(await page.locator("#topicList .topiccard").count(), 3, "manual NianBox fallback adds one idea to the two existing series topics");
 
     await page.locator('#topicList button[data-a="prompt"]').first().click();
     assert.ok((await page.locator("#promptBox").inputValue()).includes("事实核查"), "creation prompt includes fact-checking instructions");
