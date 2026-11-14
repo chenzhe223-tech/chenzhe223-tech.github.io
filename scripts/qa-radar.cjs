@@ -316,7 +316,7 @@ function check(ok, name, detail = '') {
       const archiveOption = await page.locator('#archiveDate option').nth(archiveOptionCount > 2 ? 2 : 1).getAttribute('value');
       if (archiveOption) {
         await page.locator('#archiveDate').selectOption(archiveOption);
-        await page.waitForTimeout(500);
+        await page.waitForURL(url=>url.searchParams.get('date')===archiveOption,{timeout:10000});
         check(new URL(page.url()).searchParams.get('date') === archiveOption, viewport.name + ': history selection updates URL', page.url());
         await page.waitForFunction(date => document.querySelector('#featuredSkill [data-nb-skill-save]')?.dataset.reportDate === date, archiveOption, { timeout: 10000 });
         await page.evaluate(async date => { window.__qaRadarData=await fetch('../data/archive/'+encodeURIComponent(date)+'.json',{cache:'no-store'}).then(response=>{if(!response.ok)throw Error('QA archive data unavailable: '+response.status);return response.json()}); }, archiveOption);
@@ -353,6 +353,7 @@ function check(ok, name, detail = '') {
 
       const firstCard = page.locator('#top5List .top5-card').first();
       const editorialLayoutAudit = await page.evaluate(() => ({
+        selectedIndex: Number(new URL(document.querySelector('#leadStory a').href).searchParams.get('id')),
         leadBackground: getComputedStyle(document.querySelector('#leadStory')).backgroundColor,
         leadTitle: getComputedStyle(document.querySelector('#leadStory h2')).color,
         leadImage: !!document.querySelector('#leadStory .story-image img'),
@@ -363,14 +364,33 @@ function check(ok, name, detail = '') {
         top5Title: getComputedStyle(document.querySelector('#top5List .top5-card h3')).color,
         leadTextOnly: document.querySelector('#leadStory')?.classList.contains('text-only')
       }));
-      const exactGeneratedIllustration = heroImageAudit.sourceUrl === 'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66' && heroImageAudit.status === 'thematic_fallback' && /Gemini Robotics 2\.5/i.test(heroImageAudit.title);
-      const leadVisualPass = heroImageAudit.eligible
+      const leadSelection = await page.evaluate(() => {
+        const stories=reportData?.top5 || [];
+        const illustrated=stories.findIndex(story=>story.image_match_status==='article_image'&&storyImageMarkup(story).includes('<img'));
+        return {index:Math.max(0,illustrated),eligible:illustrated>=0};
+      });
+      const leadVisualPass = leadSelection.eligible
         ? editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)' && editorialLayoutAudit.leadImage
-        : exactGeneratedIllustration
-          ? !editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadImage && editorialLayoutAudit.leadImageUrl === '../assets/radar-robotics-dexterity-illustration.jpg' && editorialLayoutAudit.leadImageLoaded && editorialLayoutAudit.generatedLabel.includes('AI-GENERATED ILLUSTRATION') && editorialLayoutAudit.leadBackground === 'rgb(32, 35, 32)' && editorialLayoutAudit.leadTitle === 'rgb(255, 255, 255)'
-          : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)' && !editorialLayoutAudit.leadImage;
+        : editorialLayoutAudit.leadTextOnly && editorialLayoutAudit.leadBackground === 'rgb(235, 233, 229)' && editorialLayoutAudit.leadTitle === 'rgb(32, 35, 32)' && !editorialLayoutAudit.leadImage;
       check(leadVisualPass,
-        viewport.name + ': lead art is verified photography or a matching, explicitly labeled editorial illustration; unknown fallbacks stay text-first', JSON.stringify({ ...editorialLayoutAudit, imageEligible: heroImageAudit.eligible, exactGeneratedIllustration }));
+        viewport.name + ': lead uses a publisher image when available; an entirely unillustrated shortlist stays truthful', JSON.stringify({ ...editorialLayoutAudit, leadSelection }));
+      check(editorialLayoutAudit.selectedIndex===leadSelection.index,
+        viewport.name + ': illustrated lead preserves the selected story deep-read index');
+      const leadFallbackAudit=await page.evaluate(()=>{
+        const original=reportData.top5;
+        const rankingBefore=document.querySelector('#top5List').innerHTML;
+        const first={title_zh:'无原图首条',image_match_status:'thematic_fallback',image_url:'https://images.unsplash.com/stock.jpg'};
+        const second={title_zh:'原文配图第二条',image_match_status:'article_image',image_url:'https://example.com/publisher.jpg'};
+        renderFeatured([first,second]);
+        const selected=document.querySelector('#leadStory a');
+        const illustrated=selected.querySelector('h2').textContent===second.title_zh&&new URL(selected.href).searchParams.get('id')==='1'&&!!selected.querySelector('img');
+        renderFeatured([first,{...second,image_match_status:'image_unavailable'}]);
+        const textOnly=document.querySelector('#leadStory').classList.contains('text-only')&&!document.querySelector('#leadStory img');
+        renderFeatured(original);
+        return {illustrated,textOnly,rankingUnchanged:document.querySelector('#top5List').innerHTML===rankingBefore};
+      });
+      check(leadFallbackAudit.illustrated&&leadFallbackAudit.textOnly&&leadFallbackAudit.rankingUnchanged,
+        viewport.name + ': missing first-story artwork retains an illustrated lead, correct link and original Top5 ranking; no fabricated fallback',JSON.stringify(leadFallbackAudit));
       check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
         viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
       check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');

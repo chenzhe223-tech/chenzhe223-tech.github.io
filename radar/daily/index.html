@@ -1305,13 +1305,17 @@ function renderSkills(items){
 function renderFeatured(items){
  const root=$("leadStory");
  if(!root)return;
- const story=(items||[])[0]||(reportData?.news||[])[0];
+ const shortlist=items||[];
+ // Keep Top5 ranking intact; the illustrated lead must have its own publisher image.
+ const illustrated=shortlist.findIndex(story=>story.image_match_status==="article_image"&&storyImageMarkup(story).includes("<img"));
+ const leadIndex=illustrated<0?0:illustrated;
+ const story=shortlist[leadIndex]||(reportData?.news||[])[0];
  if(!story){root.innerHTML="";return}
  const title=currentLang==="en"?(story.title_en||story.original_title||story.title_zh||story.title):(story.title_zh||story.original_title||story.title_en||story.title);
  const summary=currentLang==="en"?(story.why_en||story.what_en||story.why_it_matters_en||story.summary_en||story.summary||""):(story.why_zh||story.what_zh||story.why_it_matters_zh||story.summary_zh||story.summary||"");
  const source=story.source||story.source_name||"AI Radar";
  const published=dateFmt(story.published);
- const deep=deepReadHref("top5",0);
+ const deep=deepReadHref(shortlist.length?"top5":"news",leadIndex);
  const media=storyImageMarkup(story);
  const hasImage=media.includes("<img");
  const leadLabel=currentLang==="en"?"TODAY'S LEAD":"今日头条";

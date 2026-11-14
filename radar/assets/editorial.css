@@ -45,6 +45,11 @@ header .hero-panel {
 #top5List { padding: 14px 20px !important; border: 1px solid var(--rule); background: var(--surface); align-self: start; }
 #top5List .top5-card .story-label { background: none !important; border: 0 !important; padding: 0 !important; }
 #top5List .top5-card h3, .lead-story h2, .section-head h2, #top5List::before, .title { font-family: var(--headline) !important; }
+#leadStory.has-image .story-image::after { z-index: 2; }
+#leadStory.has-image .lead-story-copy {
+  z-index: 3;
+  background: linear-gradient(0deg,rgba(18,19,17,.94),rgba(18,19,17,.82) calc(100% - 28px),transparent);
+}
 #chinaAI { padding: 16px; border: 1px solid var(--rule); }
 #chinaAINewsList .china-ai-card { border: 0 !important; border-bottom: 1px solid var(--rule) !important; background: transparent !important; }
 #chinaAINewsList .china-ai-card:not(:first-child) .story-image, #chinaAINewsList .china-ai-card p, #chinaAINewsList .top5-card::after { display: none !important; }
