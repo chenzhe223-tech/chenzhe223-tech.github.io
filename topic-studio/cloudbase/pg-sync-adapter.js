@@ -33,11 +33,21 @@
   const db=options.rdb;
   if(!db||typeof db.from!=="function"||typeof db.rpc!=="function")throw Error("AUTHENTICATED_CLOUDBASE_RDB_REQUIRED");
   let verified=Boolean(options.connectionValidated);
-  let initialized=false;
+  let principalVerified=false;
+  async function verifyPrincipal(){
+   if(!verified)throw Error("LIVE_RLS_PERMISSION_GATE_NOT_PASSED");
+   if(principalVerified)return true;
+   const result=await db.rpc("davylab_ts_v1_is_allowed",{});
+   if(result?.error)throw Error("PG_IDENTITY_GATE_REJECTED");
+   const status=Array.isArray(result?.data)?result.data[0]:result?.data;
+   if(status!==true)throw Error("PG_OWNER_NOT_ALLOWLISTED_OR_NOT_LOGGED_IN");
+   principalVerified=true;
+   return true;
+  }
   async function list(){
    // Query relies on CloudBase PG table GRANT+RLS, not a caller-provided owner ID.
    // We deliberately do not send owner_uid (or any secret) from the browser.
-   if(!verified)throw Error("LIVE_RLS_PERMISSION_GATE_NOT_PASSED");
+   await verifyPrincipal();
    const docs=[];
    for(let offset=0;offset<5000;offset+=PAGE_SIZE){
     let query=db.from(TABLE).select("doc_type,doc_id,payload,revision,updated_at,deleted_at");
@@ -60,6 +70,7 @@
   async function syntheticPut(document,expectedRevision,authorization){
    if(!verified||authorization!=="EXPLICIT_SYNTHETIC_TEST_ONLY")
      throw Error("SYNTHETIC_WRITE_GATE_NOT_PASSED");
+   await verifyPrincipal();
    if(!document||typeof document.doc_id!=="string"
       ||!document.doc_id.startsWith(QA_PREFIX)
       ||!["topic","research","growth","settings","published_record"].includes(document.doc_type)
@@ -79,7 +90,7 @@
     inserted:payload.inserted===true,unchanged:payload.unchanged===true};
   }
   return Object.freeze({environmentId:ENVIRONMENT_ID,table:TABLE,version:"1.0-p1",
-   list,preview,syntheticPut,mode:"manual-synthetic-test-only",
+   verifyPrincipal,list,preview,syntheticPut,mode:"manual-synthetic-test-only",
    productionWritesEnabled:false,automaticDownloadsEnabled:false});
  }
  return Object.freeze({ENVIRONMENT_ID,TABLE,RPC,QA_PREFIX,create,rowsToDocuments});
