@@ -84,6 +84,28 @@ def scenario(page, label):
     page.goto(URL+"?qa=all-pages-v1", wait_until="domcontentloaded", timeout=30000)
     page.wait_for_function("() => Boolean(window.DAVYLABXNews?.status().loaded && window.DAVYLABTopicPool && window.DAVYLABProductivity)", timeout=30000)
     page.wait_for_selector("#opportunityList .opportunity-card", timeout=18000)
+    # Brand vector identity must load and remain readable in every supported viewport.
+    page.wait_for_function("() => Boolean(document.querySelector('#appNavigation .brand-symbol')?.naturalWidth>0)", timeout=15000)
+    brand=page.evaluate("""() => {
+        const logo=document.querySelector('#appNavigation .brand-symbol');
+        const crumb=document.querySelector('.topbar .crumb-brand-mark');
+        const name=document.querySelector('#appNavigation .brand b');
+        return {
+          logoLoaded:logo.complete&&logo.naturalWidth>0,
+          logoSize:Math.round(logo.getBoundingClientRect().width),
+          crumbLoaded:crumb.complete&&crumb.naturalWidth>0,
+          wordmark:name.textContent.trim(),
+          brandColor:getComputedStyle(document.documentElement).getPropertyValue('--dl-brand-navy').trim(),
+          accentColor:getComputedStyle(document.documentElement).getPropertyValue('--dl-brand-blue').trim(),
+          sidebarOverflow:Math.max(0,document.querySelector('#appNavigation').scrollWidth-document.querySelector('#appNavigation').clientWidth),
+          documentOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)
+        };
+    }""")
+    check(brand["logoLoaded"] and brand["crumbLoaded"],label+": brand SVG assets not rendered")
+    check(brand["wordmark"]=="DAVYLAB",label+": incorrect brand name")
+    check(brand["brandColor"]=="#142B40" and brand["accentColor"]=="#2D78D7",label+": brand tokens not loaded")
+    check(brand["sidebarOverflow"]<=2 and brand["documentOverflow"]<=3,label+": brand mark caused overflow")
+    check(brand["logoSize"]>=30,label+": logo became unreadably small")
     check(len(get_local(page, "davylab-topic-studio-v1"))>=1, label+": seed missing")
     measurements=[]
     for section in PAGES:
@@ -227,7 +249,7 @@ def scenario(page, label):
     check(len(get_local(page,"davylab-topic-studio-v1"))>=2,label+": source bookmark lost after navigation")
     return {"viewport":label,"pages":measurements,"visual":visual_layout,
             "bookmarkPersisted":True,"bookmarkReveal":True,"growthLinkedExperiment":True,
-            "researchSourceBrief":True,"rankedTenOptions":True,"presetChecks":preset_checks,"overflow":stats(page,"library")["pageOverflow"]}
+            "researchSourceBrief":True,"rankedTenOptions":True,"brand":brand,"presetChecks":preset_checks,"overflow":stats(page,"library")["pageOverflow"]}
 
 
 def main():
