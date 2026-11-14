@@ -169,6 +169,10 @@ function setup(){
  else choices=picks();
  index=0;renderCards();populate(choices[0]);renderTopics();
 }
-window.DAVYLABVisualDirection={version:"1.0.0",chooseIds,fromPreset,spec,rules,load,ai,presets:PRESETS.map(x=>x.id)};
+window.DAVYLABVisualDirection={version:"1.1.0",chooseIds,fromPreset,spec,rules,load,ai,presets:PRESETS.map(x=>x.id),refreshFromStorage(){
+ let draft=null;try{draft=JSON.parse(localStorage.getItem(STORAGE)||"null")}catch{}
+ if(draft?.version===1){el("vdTheme").value=draft.articleTheme||"";choices=[normalize(draft),...picks().slice(1)];index=0;renderCards();populate(choices[0]);}
+ updateSelect();
+}};
 setup();
 })();
