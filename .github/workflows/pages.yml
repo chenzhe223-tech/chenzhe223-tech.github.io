@@ -326,6 +326,12 @@ jobs:
           print(f"PASS: {today}; news={len(news)}; fresh_72h={len(fresh)}; China AI={len(fresh_china)} (minimum 6); sources={d.get('sources_ok')}/{d.get('sources_total')}")
           PY
         if: steps.preflight.outputs.skip != 'true'
+      - name: Cache original source artwork for stable daily reading
+        if: steps.preflight.outputs.skip != 'true'
+        timeout-minutes: 2
+        run: |
+          python -m unittest radar.scripts.test_cache_edition_media -v
+          timeout 90s python -m radar.scripts.cache_edition_media
       - name: Generate daily infographic poster
         timeout-minutes: 8
         if: steps.preflight.outputs.skip != 'true'
@@ -379,6 +385,10 @@ jobs:
             cp -a radar/data/skill-candidates/. "$SNAPSHOT/skill-candidates/"
           fi
           python radar/scripts/brief_feed.py
+          mkdir -p "$SNAPSHOT/editions"
+          if [ -d "radar/assets/editions/$TODAY" ]; then
+            cp -a "radar/assets/editions/$TODAY/." "$SNAPSHOT/editions/"
+          fi
           cp radar/data/brief.xml "$SNAPSHOT/brief.xml"
           cp radar/data/latest.json "$SNAPSHOT/latest.json"
           cp radar/data/image-cache.json "$SNAPSHOT/image-cache.json"
@@ -486,6 +496,9 @@ jobs:
           cp "$SNAPSHOT/latest-poster.json" radar/posters/latest.json
           cp "$SNAPSHOT/latest-qr-verification.json" radar/posters/latest.qr-verification.json
           cp -a "$SNAPSHOT/skill-candidates/." radar/data/skill-candidates/
+          mkdir -p "radar/assets/editions/$TODAY"
+          cp -a "$SNAPSHOT/editions/." "radar/assets/editions/$TODAY/"
+          git add "radar/assets/editions/$TODAY"
           git add radar/data/brief.xml radar/data/latest.json radar/data/image-cache.json radar/data/history.json radar/data/skill-candidates/ "radar/data/archive/$TODAY.json" "radar/posters/$TODAY.png" "radar/posters/$TODAY.json" "radar/posters/$TODAY.qr-verification.json" radar/posters/latest.png radar/posters/latest.json radar/posters/latest.qr-verification.json
           if ! git diff --cached --quiet; then
             git commit -m 'chore(radar): refresh daily AI brief'

@@ -366,7 +366,8 @@ function check(ok, name, detail = '') {
       }));
       const leadSelection = await page.evaluate(() => {
         const stories=reportData?.top5 || [];
-        const illustrated=stories.findIndex(story=>story.image_match_status==='article_image'&&storyImageMarkup(story).includes('<img'));
+        const cached=stories.findIndex(story=>editionImage(story)&&storyImageMarkup(story).includes('<img'));
+        const illustrated=cached>=0?cached:stories.findIndex(story=>story.image_match_status==='article_image'&&storyImageMarkup(story).includes('<img'));
         return {index:Math.max(0,illustrated),eligible:illustrated>=0};
       });
       const leadVisualPass = leadSelection.eligible
