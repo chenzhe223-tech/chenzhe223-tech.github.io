@@ -229,3 +229,12 @@
 - 品牌样式只增量覆盖相关识别元素；已有选题、排期、研究和增长数据不迁移、不删除，文章独立配图遵循每篇视觉方案，不自动统一为产品 UI 配色。
 - 测试：topic-studio/tests/brand-identity.test.cjs 检查 SVG 与 DOM 引用；topic-studio/tests/all-pages-browser-smoke.py 新增四种屏幕真实加载断言；.github/workflows/topic-studio-all-pages-qa.yml 已配置测试与变更触发。**本轮须用更新后的测试报告验收，不能使用旧版报告冒充新品牌通过。**
 - 此次未调用腾讯云 CloudBase，未触发微信后台发布或更改文章审批状态。
+
+## 增长实验室手机日期输入错位修复（2026-11-14）
+
+- 问题：iPhone Safari 下增长目标卡片的“目标起始日期”和“目标截止日期”沿用双列表单，系统原生 date 控件的最小宽度可能超出网格单元，出现相互重叠。
+- 修复：新增 `topic-studio/mobile-growth-form-fix.css` 并在 index.html 最后引入带版本号的样式。对所有增长目标输入框限制 `min-width:0`、`box-sizing:border-box`、`max-width:100%`；在宽度不超过 620px 时两个 date 字段分别独占整行，阅读中位数独占整行，宽度不超过 360px 时所有字段单列；保留较宽屏幕双列。
+- 针对增长实验室其它日期字段应用同样的缩放边界，并在移动端单独成行。不会影响所存订阅数、日期值、实验数据及已发文章状态。
+- 自动化：`tests/all-pages-browser-smoke.py` 新增日期输入 rect 内外边界、互相碰撞、320/360/390/414px 窄屏断言；CI 已将此 CSS 加入改动触发。
+- 已在独立构造的表单复现环境中用真实 Chromium 检查 320/360/375/390/414/620/621/768/1440px，日期字段无碰撞、全部在卡片内、页面无横向溢出（注意：这是隔离表单渲染测试，不是整站 iOS Safari 实机验收）。
+- GitHub Pages 已检查新样式 URL 成功引用；真正 iPhone Safari 仍建议刷新后由用户确认。不能用过时的跨页面 QA 报告替代本次变更后的回归结果。
