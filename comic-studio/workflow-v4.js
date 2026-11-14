@@ -156,7 +156,25 @@
      traits:String(c.traits||''),personality:String(c.personality||''),colors:String(c.colors||''),
      portrait:String(c.portrait||'')};
  }
+ // Preserve unsubmitted actor fields whenever asynchronous refresh replaces the editor.
+ // UI-only draft, keyed per project: this does not create an asset or grant author approval.
+ const characterDraftFields=['characterName','gender','age','profession','traits','colors','description','costume','personality'];
+ function characterDraft(p){
+   if(!ui.wt4CharacterDrafts)ui.wt4CharacterDrafts={};
+   const pid=String(p.id);
+   const form=document.querySelector('[data-wt4-character-create]');
+   if(form?.dataset.wt4CharacterProject===pid){
+     const values=Object.fromEntries(new FormData(form).entries());
+     const draft=ui.wt4CharacterDrafts[pid]||{};
+     for(const field of characterDraftFields){
+       if(Object.prototype.hasOwnProperty.call(values,field))draft[field]=String(values[field]??'');
+     }
+     ui.wt4CharacterDrafts[pid]=draft;
+   }
+   return ui.wt4CharacterDrafts[pid]||{};
+ }
  function characterStage(p){
+   const draft=characterDraft(p),dv=key=>html(draft[key]||'');
    const ids=Array.isArray(p.characterRefs)?p.characterRefs:[];
    const catalog=Array.isArray(data.characters)?data.characters:[];
    const locked=!!(p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash);
@@ -203,16 +221,16 @@
       '<div class="wt4-char-filter-grid">'+selectFacets+'</div>'+ 
       '<select id="wt4-char-asset">'+(options||'<option value="">暂无其他可复用角色</option>')+'</select>'+
       '<button class="button" data-wt4-character-link'+(!options?' disabled':'')+'>关联并锁定当前版本</button></div>'+
-      '<form class="wt4-char-create" data-wt4-character-create autocomplete="off"><h3>确认原创角色并建档</h3>'+
-      '<div class="wt4-char-fields"><label>角色名称<input name="characterName" autocomplete="off" maxlength="80" required placeholder="例如：黎舟"></label>'+
-      '<label>性别 / 性别认同（可自定义）<input name="gender" maxlength="80" placeholder="可留空"></label>'+
-      '<label>年龄设定<input name="age" maxlength="80" placeholder="例如：青年"></label>'+
-      '<label>职业 / 身份<input name="profession" maxlength="120"></label>'+
-      '<label>固定识别道具<input name="traits" maxlength="220" placeholder="如：银色指南针"></label>'+ 
-      '<label>角色主色<input name="colors" maxlength="140" placeholder="如：墨绿、米白"></label>'+
-      '<label>外观与识别特征<textarea name="description" maxlength="1800" required></textarea></label>'+
-      '<label>服装与道具<textarea name="costume" maxlength="700"></textarea></label>'+
-      '<label>性格与角色关系<textarea name="personality" maxlength="950"></textarea></label></div>'+
+      '<form class="wt4-char-create" data-wt4-character-create data-wt4-character-project="'+html(p.id)+'" autocomplete="off"><h3>确认原创角色并建档</h3>'+
+      '<div class="wt4-char-fields"><label>角色名称<input name="characterName" autocomplete="off" maxlength="80" required placeholder="例如：黎舟" value="'+dv('characterName')+'"></label>'+
+      '<label>性别 / 性别认同（可自定义）<input name="gender" maxlength="80" placeholder="可留空" value="'+dv('gender')+'"></label>'+
+      '<label>年龄设定<input name="age" maxlength="80" placeholder="例如：青年" value="'+dv('age')+'"></label>'+
+      '<label>职业 / 身份<input name="profession" maxlength="120" value="'+dv('profession')+'"></label>'+
+      '<label>固定识别道具<input name="traits" maxlength="220" placeholder="如：银色指南针" value="'+dv('traits')+'"></label>'+ 
+      '<label>角色主色<input name="colors" maxlength="140" placeholder="如：墨绿、米白" value="'+dv('colors')+'"></label>'+
+      '<label>外观与识别特征<textarea name="description" maxlength="1800" required>'+dv('description')+'</textarea></label>'+
+      '<label>服装与道具<textarea name="costume" maxlength="700">'+dv('costume')+'</textarea></label>'+
+      '<label>性格与角色关系<textarea name="personality" maxlength="950">'+dv('personality')+'</textarea></label></div>'+
       '<button class="button dark" type="submit">确认建档并加入作品</button></form>')+
     '<p class="wt4-quiet">已有 AI 编剧或导演人物设定可在创意导演台核对。只有作者确认建档，才会成为可复用角色资产。</p></section>';
  }
@@ -366,6 +384,7 @@
      notify('角色建档未完成，未写入本机存储；请检查空间后重试');
      return;
    }
+   if(ui.wt4CharacterDrafts)delete ui.wt4CharacterDrafts[String(p.id)];
    notify('角色资产已建档并与作品版本锁定');
    nav('workspace/'+p.id+'/1');
  }
@@ -471,6 +490,16 @@
      if(!c)return notify('请选择角色资产');
      if(!linkCharacter(p,c))return notify('该角色已关联当前作品');
      nav('workspace/'+p.id+'/1');}
+ },true);
+ document.addEventListener('input',ev=>{
+   const el=ev.target,form=el?.closest?.('[data-wt4-character-create]');
+   if(!form||!characterDraftFields.includes(el.name))return;
+   const pid=form.dataset.wt4CharacterProject;
+   if(!pid)return;
+   if(!ui.wt4CharacterDrafts)ui.wt4CharacterDrafts={};
+   const draft=ui.wt4CharacterDrafts[pid]||{};
+   draft[el.name]=String(el.value??'');
+   ui.wt4CharacterDrafts[pid]=draft;
  },true);
  document.addEventListener('submit',ev=>{
    const form=ev.target,mode=form?.dataset?.wt4Create;
