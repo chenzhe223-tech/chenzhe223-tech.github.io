@@ -106,12 +106,14 @@ async function test(){
     await page.locator('[data-wt3-action="expand-cancel"]').click();
     assert.equal(await page.locator('#wt3-expand-consent').isVisible(),false,'cancel model request before fees');
     await page.locator('.wt4-steps [data-wt4-step="1"]').click();
-    await page.locator('[data-wt4-character-create] [name="name"]').fill('阿月');
+    await page.locator('[data-wt4-character-create] [name="characterName"]').fill('阿月');
     await page.locator('[data-wt4-character-create] [name="gender"]').fill('自定义身份');
     await page.locator('[data-wt4-character-create] [name="age"]').fill('成年');
     await page.locator('[data-wt4-character-create] [name="profession"]').fill('邮差');
     await page.locator('[data-wt4-character-create] [name="description"]').fill('短黑发与棕色眼睛，右手有星星纹章');
     await page.locator('[data-wt4-character-create] [name="costume"]').fill('米黄色工装外套');
+    assert.equal(await page.locator('[data-wt4-character-create] [name="characterName"]').inputValue(),'阿月',
+      'character name must not be erased while other role fields are being completed');
     await page.locator('[data-wt4-character-create] [type="submit"]').click();
     await page.waitForFunction(({key,id})=>{
       const p=JSON.parse(localStorage.getItem(key))?.projects?.find(x=>x.id===id);
@@ -404,7 +406,7 @@ async function test(){
           return original.call(this,key,value);
         };
       });
-      await rolePage.locator('[data-wt4-character-create] [name="name"]').fill('不会残留的角色');
+      await rolePage.locator('[data-wt4-character-create] [name="characterName"]').fill('不会残留的角色');
       await rolePage.locator('[data-wt4-character-create] [name="description"]').fill('圆眼睛，墨绿色制服，银色边框');
       await rolePage.locator('[data-wt4-character-create] [type="submit"]').click();
       assert.match(await rolePage.locator('#toast').textContent(),/角色建档未完成/,'role-save failure is reported explicitly');
