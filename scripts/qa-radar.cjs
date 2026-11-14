@@ -366,7 +366,7 @@ function check(ok, name, detail = '') {
       }));
       const leadSelection = await page.evaluate(() => {
         const stories=reportData?.top5 || [];
-        const cached=stories.findIndex(story=>editionImage(story)&&storyImageMarkup(story).includes('<img'));
+        const cached=stories.findIndex(story=>(editionImage(story)||generatedRoboticsIllustration(story))&&storyImageMarkup(story).includes('<img'));
         const illustrated=cached>=0?cached:stories.findIndex(story=>story.image_match_status==='article_image'&&storyImageMarkup(story).includes('<img'));
         return {index:Math.max(0,illustrated),eligible:illustrated>=0};
       });
@@ -387,11 +387,15 @@ function check(ok, name, detail = '') {
         const illustrated=selected.querySelector('h2').textContent===second.title_zh&&new URL(selected.href).searchParams.get('id')==='1'&&!!selected.querySelector('img');
         renderFeatured([first,{...second,image_match_status:'image_unavailable'}]);
         const textOnly=document.querySelector('#leadStory').classList.contains('text-only')&&!document.querySelector('#leadStory img');
+        const legacy={title_zh:'Gemini Robotics 2.5',image_match_status:'thematic_fallback',source_url:'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66'};
+        renderFeatured([legacy,second]);
+        const archivedArtwork=new URL(document.querySelector('#leadStory a').href).searchParams.get('id')==='0'&&document.querySelector('#leadStory img')?.getAttribute('src')==='../assets/radar-robotics-dexterity-illustration.jpg'&&document.querySelector('#leadStory .editorial-illustration-tag')?.textContent.includes('AI-GENERATED ILLUSTRATION');
         renderFeatured(original);
-        return {illustrated,textOnly,rankingUnchanged:document.querySelector('#top5List').innerHTML===rankingBefore};
+        return {illustrated,textOnly,archivedArtwork,rankingUnchanged:document.querySelector('#top5List').innerHTML===rankingBefore};
       });
       check(leadFallbackAudit.illustrated&&leadFallbackAudit.textOnly&&leadFallbackAudit.rankingUnchanged,
         viewport.name + ': missing first-story artwork retains an illustrated lead, correct link and original Top5 ranking; no fabricated fallback',JSON.stringify(leadFallbackAudit));
+      check(leadFallbackAudit.archivedArtwork,viewport.name + ': approved archive illustration retains its existing story index and explicit AI label');
       check(editorialLayoutAudit.top5Background === 'rgba(0, 0, 0, 0)' && editorialLayoutAudit.top5Title === 'rgb(32, 35, 32)',
         viewport.name + ': Top5 is a transparent editorial list with ink titles', JSON.stringify(editorialLayoutAudit));
       check(await page.locator('#leadStory a[href*="type=top5"]').count() === 1, viewport.name + ': lead story opens the matching deep-read route');
