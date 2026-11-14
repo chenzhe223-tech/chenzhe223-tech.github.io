@@ -201,6 +201,12 @@ async function test(){
     },KEY);
     await page.goto(base+'#/dashboard');
     await page.reload();
+    const dashboardDebug=await page.evaluate(()=>({hash:location.hash,route:typeof ui!=='undefined'?ui.route:null,
+      entryCount:document.querySelectorAll('[data-wt4-entry]').length,
+      mainText:(document.querySelector('main')?.innerText||document.body.innerText||'').slice(0,500),
+      projectCount:JSON.parse(localStorage.getItem('davylab-comic-press-v1'))?.projects?.length,
+      styleCount:document.querySelectorAll('style,link[rel="stylesheet"]').length}));
+    console.log('Dashboard reload diagnostics:',JSON.stringify({...dashboardDebug,pageErrors:errors}));
     await page.locator('[data-wt4-entry="hotspot"]').click();
     await page.locator('[data-wt4-topic="e2e-topic-20261113"]').click();
     const news=await page.evaluate(key=>JSON.parse(localStorage.getItem(key)).projects.find(p=>p.topicId==='e2e-topic-20261113'),KEY);
