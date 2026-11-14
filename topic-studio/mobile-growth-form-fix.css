@@ -1,0 +1,129 @@
+/* DAVYLAB Topic Studio · Mobile Form Geometry Hotfix (2026-11-14)
+ * iOS Safari date controls have a large intrinsic width; a 2-column grid can
+ * overflow into its adjacent cell despite width:100% on the input itself.
+ * Keep count fields compact; give date pickers a full row and an explicit
+ * min-width:0 chain. Applies only to the Growth Lab and its nested form grids.
+ */
+#section-growth .growth-target-form {
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ min-width:0;
+ width:100%;
+}
+#section-growth .growth-target-form>div {
+ min-width:0;
+ max-width:100%;
+}
+#section-growth .growth-target-form label {
+ display:block;
+ max-width:100%;
+ overflow-wrap:anywhere;
+ font-size:11px;
+ line-height:1.5;
+ margin-bottom:6px;
+}
+#section-growth .growth-target-form input {
+ display:block;
+ box-sizing:border-box!important;
+ width:100%!important;
+ min-width:0!important;
+ max-width:100%!important;
+ min-height:43px;
+ padding:10px 12px!important;
+ margin:0!important;
+ line-height:1.35;
+ border:1px solid rgba(255,255,255,.35)!important;
+ border-radius:9px!important;
+ background:rgba(255,255,255,.09)!important;
+ color:#fff!important;
+ font-size:14px!important;
+ -webkit-text-fill-color:currentColor;
+}
+#section-growth .growth-target-form input::placeholder{
+ color:#BED0E0!important;
+ -webkit-text-fill-color:#BED0E0;
+ opacity:1;
+}
+#section-growth .growth-target-form input[type="date"] {
+ color-scheme:dark;
+ min-inline-size:0!important;
+ -webkit-min-logical-width:0;
+ appearance:auto;
+ -webkit-appearance:auto;
+}
+#section-growth .growth-target-form input[type="date"]::-webkit-date-and-time-value{
+ min-width:0;
+ text-align:left;
+}
+#section-growth .growth-target-form input[type="date"]::-webkit-calendar-picker-indicator{
+ opacity:.85;
+ cursor:pointer;
+}
+#section-growth .growth-target-form input:focus-visible{
+ outline:2px solid #8CC8FF;
+ outline-offset:2px;
+ border-color:#C0E1FF!important;
+}
+/* The rest of the Growth Lab should obey the same intrinsic sizing limits. */
+#section-growth .growth-grid,
+#section-growth .growth-form,
+#section-growth .growth-form .field {
+ min-width:0;
+}
+#section-growth .growth-form input[type="date"],
+#section-growth .growth-form input[type="month"],
+#section-growth .growth-form select {
+ display:block;
+ box-sizing:border-box;
+ min-width:0!important;
+ max-width:100%!important;
+ width:100%!important;
+}
+@media (max-width:620px){
+ #section-growth .growth-target-form{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  column-gap:11px!important;
+  row-gap:15px!important;
+  align-items:start;
+ }
+ /* Two independent date rows: no shared narrow column for Safari controls. */
+ #section-growth .growth-target-form>div:has(input[type="date"]) {
+  grid-column:1/-1!important;
+ }
+ #section-growth .growth-target-form>div:has(#growthMedianViews) {
+  grid-column:1/-1!important;
+ }
+ #section-growth .growth-target-form input[type="date"] {
+  min-height:46px!important;
+  padding:10px 13px!important;
+ }
+ #section-growth .growth-target-form input[type="number"] {
+  min-height:44px!important;
+ }
+ #section-growth .growth-target{
+  min-width:0!important;
+  max-width:100%;
+ }
+ #section-growth .growth-item-actions{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center;
+  gap:9px!important;
+ }
+ #section-growth .growth-item-actions>span{
+  min-width:0;
+  max-width:100%;
+  overflow-wrap:anywhere;
+ }
+ /* Other Growth Lab date fields must not inherit a narrow two-column cell. */
+ #section-growth .growth-form .field:has(input[type="date"]) {
+  grid-column:1/-1!important;
+ }
+}
+@media (max-width:360px){
+ #section-growth .growth-target-form{
+  grid-template-columns:minmax(0,1fr)!important;
+ }
+ #section-growth .growth-target-form>div{
+  grid-column:1/-1!important;
+ }
+}
