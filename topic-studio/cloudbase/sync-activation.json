@@ -1,0 +1,10 @@
+{
+  "schema": 1,
+  "environmentId": "excess-tiglon-d6gjc77qr6fa193f2",
+  "enabled": false,
+  "permissionsVerified": false,
+  "productionApproved": false,
+  "pollSeconds": 45,
+  "reason": "Enable ONLY after live CloudBase owner authentication, RLS cross-account denial, CAS, rollback, Windows/iPhone bidirectional tests",
+  "verifiedAt": null
+}
