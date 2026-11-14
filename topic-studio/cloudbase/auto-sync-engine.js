@@ -89,6 +89,10 @@
   }
   async function sync(reason="auto"){
    if(stopped)return{skipped:"stopped"};
+   if(reason==="poll"&&win?.document?.visibilityState==="hidden"){
+    schedule(Math.max(180000,pollMs*4));
+    return{skipped:"background"};
+   }
    if(busy){again=true;return{skipped:"busy"}}
    if(win?.navigator?.onLine===false){status({phase:"offline",pending:1});schedule(Math.min(120000,pollMs*2));return{skipped:"offline"}}
    busy=true;again=false;
@@ -101,6 +105,7 @@
     if(local.warnings.length)throw Error("SYNC_UNSUPPORTED_OR_CORRUPT_RECORDS: "+local.warnings.map(x=>x.code).join(","));
     const base=loadBaseline(storage,uid);
     const remote=await adapter.list();
+    if(stopped)return{skipped:"stopped-during-read"};
     if(!Array.isArray(remote))throw Error("SYNC_REMOTE_INVALID_RESULT");
     if(remote.some(x=>x.deleted_at))throw Error("SYNC_REMOTE_TOMBSTONE_REQUIRES_REVIEW");
     const localDocs=local.documents;
@@ -114,7 +119,7 @@
     }
     // Apply remote-only or remote-changed records, preserving unrelated local
     // records. Recheck live storage before applying to reject in-flight edits.
-    if(plan.download.length){
+    if(!stopped&&plan.download.length){
      const candidate=plan.download.map(x=>x.document);
      const localAtRead=new Map(localDocs.map(x=>[k(x),x.payload]));
      const patch=model.planLocalPatch(storage,candidate,{expected:localAtRead});
@@ -127,6 +132,7 @@
     // Stale server revision causes a hard stop for that one record. No retry
     // with revised expectedRevision or silent overwrite.
     for(const candidate of plan.upload){
+     if(stopped)break;
      const document=candidate.document;
      const token=k(document);
      const current=model.capture(storage).documents.find(x=>k(x)===token);
@@ -152,6 +158,7 @@
     }
     // Each successfully merged/confirmed document forms the new baseline.
     // Conflicting records keep their previous baseline for manual resolution.
+    if(stopped)return{skipped:"stopped-before-baseline"};
     saveBaseline([...index.values()]);
     summary.conflicts=conflicts.length;
     failures=0;pendingLocal=conflicts.length>0;lastSync=epoch();
