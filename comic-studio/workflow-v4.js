@@ -340,9 +340,15 @@
    if(!Array.isArray(p.characterRefs))p.characterRefs=[];
    const snapshot=characterSnapshot(c);
    if(!snapshot.characterId||p.characterRefs.some(x=>String(x.characterId)===snapshot.characterId))return false;
+   const priorUpdate=p.updatedAt,priorActivity=[...(p.activity||[])];
    p.characterRefs.push({characterId:snapshot.characterId,version:snapshot.version,
      role:'supporting',comicName:snapshot.originalName,snapshot});
-   setChange(p,'作品关联角色 '+snapshot.originalName+' v'+snapshot.version);
+   if(setChange(p,'作品关联角色 '+snapshot.originalName+' v'+snapshot.version)===false){
+     // A failed browser write cannot silently create a reusable character link.
+     p.characterRefs=p.characterRefs.filter(r=>String(r.characterId)!==snapshot.characterId);
+     p.updatedAt=priorUpdate;p.activity=priorActivity;
+     return false;
+   }
    return true;
  }
  function newCharacter(p,values){
@@ -354,7 +360,13 @@
      profession:String(values.profession||'').trim(),description:look,
      costume:String(values.costume||'').trim(),personality:String(values.personality||'').trim(),
      traits:String(values.traits||'').trim(),colors:String(values.colors||'').trim(),portrait:'',origin:'author_confirmed',originProjectId:p.id,comicNames:[]};
-   data.characters.push(c);linkCharacter(p,c);notify('角色资产已建档并与作品版本锁定');
+   data.characters.push(c);
+   if(!linkCharacter(p,c)){
+     data.characters=data.characters.filter(x=>x!==c);
+     notify('角色建档未完成，未写入本机存储；请检查空间后重试');
+     return;
+   }
+   notify('角色资产已建档并与作品版本锁定');
    nav('workspace/'+p.id+'/1');
  }
  function workspace(){
