@@ -1,5 +1,10 @@
 name: Topic Studio smoke tests
 on:
+  pull_request:
+    paths:
+      - "topic-studio/**"
+      - "radar/data/latest.json"
+      - ".github/workflows/topic-studio-smoke.yml"
   push:
     branches: [main]
     paths:
