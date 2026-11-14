@@ -780,7 +780,9 @@
      ' · '+html(s.agent)+' 制作 · '+(p.panels?.length||9)+' 格</p></div>'+
      '<span class="wt4-label">'+html(s.label)+'</span></div>'+
      '<div class="wt4-project-bar"><label for="wt4-project">切换作品</label><select id="wt4-project">'+options+'</select>'+
-     '<button class="button" data-action="new">＋ 新作</button><button class="button" data-visual-open>视觉素材</button><a class="button" href="#/archive">生产调度</a></div></header>'+
+     '<button class="button" data-action="new">＋ 新作</button>'+
+     '<button type="button" class="button" data-action="duplicate" data-id="'+html(p.id)+'">复制为新作</button>'+
+     '<button class="button" data-visual-open>视觉素材</button><a class="button" href="#/archive">生产调度</a></div></header>'+
      '<section class="wt4-progress" aria-label="作品进度"><div class="wt4-progress-head"><strong>制作路线</strong>'+
      '<span>当前：'+html(stageNames[s.next])+' · 已确认 '+done+'/7 项</span></div>'+
      '<div class="wt4-steps">'+steps+'</div><p class="wt4-stage-status">'+html(s.statusText)+
