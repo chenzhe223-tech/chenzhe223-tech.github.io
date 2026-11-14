@@ -1,0 +1,14 @@
+{
+  "status": "pass",
+  "method": "Two independent Chromium contexts, QA-only mock CloudBase SDK and in-memory RLS/CAS server",
+  "production_routing": "NOT USED",
+  "live_cloudbase_verified": false,
+  "date": "2026-11-14T19:24:52.959995+00:00",
+  "results": [
+    "Windows viewport: login session restored, initial topic automatically uploaded",
+    "iPhone viewport: same account loaded topic without clicking Sync",
+    "Phone update automatically uploaded; desktop focus refreshed the changed card",
+    "Desktop to iPhone automatic return-trip worked",
+    "No uncaught JavaScript exception on either viewport"
+  ]
+}
