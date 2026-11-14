@@ -3,9 +3,42 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-13T10:51:46+00:00",
-  "count": 31,
+  "synced_at": "2026-11-14T07:39:27+00:00",
+  "count": 33,
   "articles": [
+    {
+      "id": "deepmind-pardig-satweave",
+      "date": "2026-11-13",
+      "title": "对小到中雨，PARDIG的小时降水检出技能比IMERG-Final高出30%以上",
+      "summary": "DeepMind公开SatWeave和PARDIG。前者按小时拼接地球同步卫星云图，后者给出约10公里、15分钟一帧的全球降水图，对小到中雨的小时检出技能比IMERG-Final高出30%以上。",
+      "original_url": "https://deepmind.google/blog/opening-the-datasets-behind-our-ai-weather-models/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepmind-pardig-satweave",
+      "tags": [
+        "Google DeepMind",
+        "WeatherNext",
+        "PARDIG",
+        "SatWeave",
+        "weather"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-safety-evaluations",
+      "date": "2026-11-13",
+      "title": "Fable 5.1在多轮安全评估上，API和claude.ai最多差了34个百分点",
+      "summary": "Anthropic用系统卡里的经验，讨论如何设计、运行和报告安全评估。单轮无害回答率已经到了94%到98%，他们改看整段对话的适当回答率，并强调配置不同就不能直接比分。",
+      "original_url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-safety-evaluations",
+      "tags": [
+        "Anthropic",
+        "safety evaluations",
+        "system cards",
+        "Claude"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-fuzzy-robustness",
       "date": "2026-11-12",
