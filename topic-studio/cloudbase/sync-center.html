@@ -75,7 +75,7 @@ footer{margin-top:30px;border-top:1px solid #DFE8EE;padding-top:20px;display:fle
 <div class="eyebrow">DAVYLAB / LOCAL-FIRST DATA</div>
 <h1>多端同步中心</h1>
 <p class="intro">在启动云端同步之前，先安全接管电脑和手机里已有的选题与增长数据。当前页面只检查这个浏览器的数据；不会上传稿件、登录腾讯云或修改原始记录。</p>
-<div class="status" role="status" aria-live="polite"><i aria-hidden="true"></i><div><strong>CloudBase 尚未连接 · 本机安全准备阶段</strong><p>未确认数据库类型、身份认证及访问权限前，正式同步保持关闭。你可以先导出私有备份，并在另一台设备预览两份数据的差异。</p></div></div>
+<div class="status" role="status" aria-live="polite"><i aria-hidden="true"></i><div><strong>目标：excess-tiglon · PostgreSQL 已确认 · P1 权限待验证</strong><p>本平台仅使用 excess-tiglon-d6gjc77qr6fa193f2。数据库已确认是 PostgreSQL；账号身份、RLS 和原子版本写入仍未完成真实验收，因此正式同步关闭。你可以先导出私有备份并比较设备差异。</p></div></div>
 <div class="metrics">
 <div><span>本机业务记录</span><strong id="allCount">—</strong><small>六类数据源统计</small></div>
 <div><span>可逐条识别的记录</span><strong id="readyCount">—</strong><small>适用于无损合并预检</small></div>
@@ -102,11 +102,11 @@ footer{margin-top:30px;border-top:1px solid #DFE8EE;padding-top:20px;display:fle
 <h2 id="cloudTitle">03 / 云端安全接入前置条件</h2>
 <p>下方步骤必须逐项通过，才会开启正式同步。目前不能把“SDK 初始化成功”视为数据库已经可写。</p>
 <div class="steps">
-<div class="step"><span>P0 · 尚未核实</span><strong>确认 CloudBase 数据库类型</strong><p>先确定上海环境究竟是文档数据库还是 PostgreSQL，不能混用安全规则。</p></div>
-<div class="step"><span>P0 · 尚未核实</span><strong>单人登录和权限隔离</strong><p>只允许已登录的本人访问记录，必须测试游客和其他账号都无法读取。</p></div>
+<div class="step"><span>P0 · 已确认</span><strong>excess-tiglon · PostgreSQL</strong><p>目标环境已锁定，原有 cron_locks、dashboard_metrics、mail_board_snapshots 保持不变。</p></div>
+<div class="step"><span>P1 · 待云端验证</span><strong>单人登录与 RLS / CAS</strong><p>独立表与本人白名单脚本已准备；需测试游客、其他账号拒绝和并发修改冲突。</p></div>
 <div class="step"><span>P1 · 尚未启用</span><strong>同步试运行与冲突回滚</strong><p>先只同步测试记录，最后用电脑、iPhone 双向改写与断网恢复验收。</p></div>
 </div>
-<div class="actions" style="margin-top:19px"><a class="action-link" href="./p0.html">打开 SDK 只读诊断</a><a class="action-link" href="./README.md" target="_blank" rel="noopener noreferrer">查看技术实施说明</a></div>
+<div class="actions" style="margin-top:19px"><a class="action-link" href="./p0.html">打开 SDK 只读诊断</a><a class="action-link" href="./P1_EXCESS_TIGLON.md" target="_blank" rel="noopener noreferrer">查看 excess-tiglon P1 实施清单</a></div>
 </section>
 <footer><span>By DAVYLAB · 把想法，做成能用的工具</span><span>不会自动批准、群发或发表任何文章</span></footer>
 </main>
