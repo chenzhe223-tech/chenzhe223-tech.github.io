@@ -1306,8 +1306,8 @@ function renderFeatured(items){
  const root=$("leadStory");
  if(!root)return;
  const shortlist=items||[];
- // Keep Top5 ranking intact; the illustrated lead must have its own publisher image.
- const cached=shortlist.findIndex(story=>editionImage(story)&&storyImageMarkup(story).includes("<img"));
+ // Preserve existing, explicitly labeled archive artwork and cached publisher images.
+ const cached=shortlist.findIndex(story=>(editionImage(story)||generatedRoboticsIllustration(story))&&storyImageMarkup(story).includes("<img"));
  const illustrated=cached>=0?cached:shortlist.findIndex(story=>story.image_match_status==="article_image"&&storyImageMarkup(story).includes("<img"));
  const leadIndex=illustrated<0?0:illustrated;
  const story=shortlist[leadIndex]||(reportData?.news||[])[0];
