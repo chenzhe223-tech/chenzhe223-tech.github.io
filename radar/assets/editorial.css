@@ -176,10 +176,10 @@ header .hero-panel {
 .image-toolbar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
 .image-toolbar strong { flex: 1 1 160px; font-size: 14px; }
 .image-toolbar button { min-height: 44px; border: 1px solid var(--rule); border-radius: 6px; padding: 8px 12px; background: var(--surface); color: var(--ink); cursor: pointer; }
-.image-stage { max-height: min(70dvh,800px); display: flex; align-items: center; justify-content: center; overflow: auto; background: #fff; }
-.image-stage img { display: block; width: auto; height: auto; max-width: 100%; max-height: min(70dvh,800px); object-fit: contain; }
+.image-stage { max-height: min(70dvh,800px); display: block; overflow: auto; background: #fff; }
+.image-stage img { display: block; width: 100%; height: auto; max-width: 100%; max-height: min(70dvh,800px); object-fit: contain; }
 .image-stage.original { height: min(70dvh,800px); display: block; }
-.image-stage.original img { max-width: none; max-height: none; }
+.image-stage.original img { width: auto; max-width: none; max-height: none; }
 .reading-image-dialog .image-caption { margin: 10px 0 0; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
 .media-open { overflow: hidden; }
 .story .cover { cursor: zoom-in; }
