@@ -113,6 +113,17 @@ async function test(){
     await page.locator('[data-wt4-character-create] [name="description"]').fill('短黑发与棕色眼睛，右手有星星纹章');
     await page.locator('[data-wt4-character-create] [name="costume"]').fill('米黄色工装外套');
     await page.locator('[data-wt4-character-create] [type="submit"]').click();
+    const roleDebug=await page.evaluate(({key,id})=>{
+      const store=JSON.parse(localStorage.getItem(key));
+      const p=store.projects.find(x=>x.id===id);
+      return {formValid:document.querySelector('[data-wt4-character-create]')?.checkValidity(),
+        formMissing:[...(document.querySelector('[data-wt4-character-create]')?.elements||[])].filter(x=>!x.validity.valid).map(x=>x.name),
+        currentRoute:location.hash,selectedProject:typeof selected==='function'?selected()?.id:null,
+        savedProjectId:id,storedName:p?.title,storedRefs:p?.characterRefs?.length||0,
+        catalogSize:store.characters?.length||0,toast:document.querySelector('#toast')?.textContent};
+    },{key:KEY,id:idea.id});
+    console.log('Role creation browser diagnostics:',JSON.stringify(roleDebug));
+    assert.ok(roleDebug.storedRefs>0,'submitted author-confirmed character must attach to selected comic: '+JSON.stringify(roleDebug));
     const character=await page.evaluate(({key,id})=>{
       const store=JSON.parse(localStorage.getItem(key)),p=store.projects.find(p=>p.id===id);
       return {role:p.characterRefs[0],original:store.characters.find(x=>x.characterId===p.characterRefs[0].characterId)};
