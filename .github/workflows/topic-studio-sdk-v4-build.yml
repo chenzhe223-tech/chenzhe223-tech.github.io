@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "topic-studio/cloudbase/sdk-entry-v4.mjs"
+      - "topic-studio/cloudbase/auto-sync-ui.js"
       - ".github/workflows/topic-studio-sdk-v4-build.yml"
   workflow_dispatch:
 
