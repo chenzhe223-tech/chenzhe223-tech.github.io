@@ -170,7 +170,7 @@ async function main() {
     await page.locator("#closeVisualSettings").click();
     await page.locator("#visualNavRecovery").click();
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, "hidden navigation opens from its recovery trigger");
-    await page.locator("#ideaInput").click();
+    await page.locator("#crumbTitle").click();
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "hidden navigation closes after clicking outside");
 
     await page.locator("#openVisualSettings").click();
