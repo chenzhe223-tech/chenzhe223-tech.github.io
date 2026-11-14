@@ -84,26 +84,36 @@ def growth_date_geometry(page):
     return page.evaluate("""() => {
       const parent=document.querySelector('#section-growth .growth-target');
       const grid=document.querySelector('#section-growth .growth-target-form');
-      const dateInputs=[document.querySelector('#growthStartDate'),document.querySelector('#growthDeadline')];
+      const ids=['growthStartDate','growthDeadline'];
       const card=parent.getBoundingClientRect();
       const parentRect=grid.getBoundingClientRect();
-      const dates=dateInputs.map(input=>{
-        const box=input.getBoundingClientRect();
-        const cell=input.parentElement.getBoundingClientRect();
-        return {x:box.left,y:box.top,right:box.right,bottom:box.bottom,width:box.width,
-                cellLeft:cell.left,cellRight:cell.right,cellTop:cell.top,
-                cellBottom:cell.bottom,cellWidth:cell.width};
+      const dates=ids.map(id=>{
+        const input=document.getElementById(id),rect=input.getBoundingClientRect();
+        const shell=input.parentElement,shellRect=shell.getBoundingClientRect();
+        const cell=shell.parentElement.getBoundingClientRect();
+        const style=getComputedStyle(input);
+        return {x:rect.left,y:rect.top,right:rect.right,bottom:rect.bottom,width:rect.width,
+                shellLeft:shellRect.left,shellRight:shellRect.right,shellWidth:shellRect.width,
+                cellLeft:cell.left,cellRight:cell.right,cellTop:cell.top,cellWidth:cell.width,
+                nativePicker:input.type==='date'&&style.pointerEvents!=='none',
+                visibleText:document.getElementById(id+'Display')?.textContent||''};
       });
       const a=dates[0],b=dates[1];
+      const numberWidths=['growthBaseline','growthLatest'].map(id=>document.getElementById(id).getBoundingClientRect().width);
       const overlapX=Math.min(a.right,b.right)-Math.max(a.x,b.x);
       const overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y);
       return {viewport:innerWidth,gridWidth:parentRect.width,cardWidth:card.width,
               inputWithinCells:dates.every(d=>d.x>=d.cellLeft-2&&d.right<=d.cellRight+2),
+              inputWithinShells:dates.every(d=>d.x>=d.shellLeft-2&&d.right<=d.shellRight+2),
               inputWithinCard:dates.every(d=>d.x>=card.left-2&&d.right<=card.right+2),
               collision:overlapX>2&&overlapY>2,
-              dateStacked:Math.abs(a.cellTop-b.cellTop)>10,
-              dates,scrollOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)};
+              dateSameRow:Math.abs(a.cellTop-b.cellTop)<3,
+              widthMatchesNumbers:dates.every((d,i)=>Math.abs(d.shellWidth-numberWidths[i])<=3),
+              dateEqualWidth:Math.abs(a.shellWidth-b.shellWidth)<=2,
+              pickerActive:dates.every(d=>d.nativePicker),
+              dates,numberWidths,scrollOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)};
     }""")
+
 
 def scenario(page, label):
     page.goto(URL+"?qa=all-pages-v1", wait_until="domcontentloaded", timeout=30000)
@@ -149,8 +159,10 @@ def scenario(page, label):
             check(date_layout["inputWithinCells"],label+": Safari growth date controls overflow their grid cells")
             check(date_layout["inputWithinCard"],label+": Growth date controls escape target panel")
             check(not date_layout["collision"],label+": growth date controls visually collide")
-            if page.viewport_size["width"]<=620:
-                check(date_layout["dateStacked"],label+": growth date controls should stack into full-width rows")
+            check(date_layout["inputWithinShells"],label+": date picker escapes its visible shell")
+            check(date_layout["dateSameRow"] and date_layout["dateEqualWidth"],label+": two date fields must share one equal-width row")
+            check(date_layout["widthMatchesNumbers"],label+": dates must match the widths of subscriber number inputs")
+            check(date_layout["pickerActive"],label+": native date pickers must remain interactive")
         if label in ("desktop","mobile"):
             page.screenshot(path=str(BASE/"qa"/("page-"+label+"-"+section+".png")), full_page=False)
     # Additional narrow iPhone width specifically reproduces the reported overlap.
@@ -160,8 +172,10 @@ def scenario(page, label):
             page.set_viewport_size({"width":narrow,"height":844})
             visit_section(page,"growth")
             rect=growth_date_geometry(page)
-            check(rect["inputWithinCells"] and rect["inputWithinCard"] and not rect["collision"] and rect["dateStacked"],
-                  "iPhone "+str(narrow)+"px: growth dates overlap or overflow "+str(rect))
+            check(rect["inputWithinCells"] and rect["inputWithinShells"] and rect["inputWithinCard"] and
+                  not rect["collision"] and rect["dateSameRow"] and rect["dateEqualWidth"] and
+                  rect["widthMatchesNumbers"] and rect["pickerActive"] and rect["scrollOverflow"]<=3,
+                  "iPhone "+str(narrow)+"px: date pair overflowed or failed equal-column geometry "+str(rect))
         page.set_viewport_size(original_view)
     # Regression: global layout presets must NOT turn entire modules into narrow grid cells.
     preset_checks=0
@@ -188,6 +202,20 @@ def scenario(page, label):
     visual_layout=shell.evaluate("(el)=>({grid:getComputedStyle(el).gridTemplateColumns,width:el.getBoundingClientRect().width,columns:el.children.length})")
     check(visual_layout["width"]>220,label+": visual editor collapsed")
     check(page.locator("#vdChoiceCards .vd-choice").count()>=3,label+": visual options missing")
+    # Growth: native date pickers remain editable; visual text updates and values persist.
+    visit_section(page,"growth")
+    page.locator("#growthStartDate").fill("2026-11-15")
+    page.locator("#growthDeadline").fill("2027-05-15")
+    check(page.locator("#growthStartDateDisplay").inner_text()=="2026/11/15",
+          label+": selected start date not reflected in visible field")
+    check(page.locator("#growthDeadlineDisplay").inner_text()=="2027/05/15",
+          label+": selected deadline not reflected in visible field")
+    page.locator("#saveGrowthTarget").click()
+    latest_growth=get_local(page,"davylab-growth-lab-v1")
+    check(latest_growth["target"]["start"]=="2026-11-15" and latest_growth["target"]["deadline"]=="2027-05-15",
+          label+": growth date values did not persist after Save Target")
+    check(page.locator("#growthStartDateDisplay").inner_text()=="2026/11/15",
+          label+": displayed date did not synchronize after rendering")
     # Growth: create an experiment only from the synthetic QA topic.
     visit_section(page,"growth")
     check(page.locator("#growthSprintDesk").count()==1,label+": growth desk absent")
