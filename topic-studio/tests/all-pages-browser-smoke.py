@@ -127,7 +127,9 @@ def scenario(page, label):
         const name=document.querySelector('#appNavigation .brand b');
         return {
           logoLoaded:logo.complete&&logo.naturalWidth>0,
-          logoSize:Math.round(logo.getBoundingClientRect().width),
+          logoSize:innerWidth<=760
+            ? Math.round(parseFloat(getComputedStyle(document.querySelector('.mobile-cover-head'),'::before').width))
+            : Math.round(logo.getBoundingClientRect().width),
           crumbLoaded:crumb.complete&&crumb.naturalWidth>0,
           wordmark:name.textContent.trim(),
           brandColor:getComputedStyle(document.documentElement).getPropertyValue('--dl-brand-navy').trim(),
