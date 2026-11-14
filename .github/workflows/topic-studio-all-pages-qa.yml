@@ -19,6 +19,9 @@ on:
       - "topic-studio/tests/brand-identity.test.cjs"
       - "topic-studio/data/hotspot-signals.json"
       - "topic-studio/tests/hotspot-recommender.test.cjs"
+      - "topic-studio/cloudbase/auto-sync-*.js"
+      - "topic-studio/tests/auto-sync-browser-smoke.py"
+      - "topic-studio/cloudbase/sync-activation.json"
       - "topic-studio/tests/all-pages-browser-smoke.py"
       - ".github/workflows/topic-studio-all-pages-qa.yml"
   workflow_dispatch:
@@ -62,6 +65,7 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           sleep 2
           python topic-studio/tests/all-pages-browser-smoke.py
+          python topic-studio/tests/auto-sync-browser-smoke.py
       - name: Upload synthetic QA screenshots and result
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,6 +73,7 @@ jobs:
           name: topic-studio-all-pages-qa
           path: |
             topic-studio/qa/all-pages-ui-latest.json
+            topic-studio/qa/auto-sync-browser-latest.json
             topic-studio/qa/page-desktop-*.png
             topic-studio/qa/page-mobile-*.png
           if-no-files-found: ignore
@@ -81,7 +86,7 @@ jobs:
           test -f topic-studio/qa/all-pages-ui-latest.json || exit 0
           git config user.name "DAVYLAB Topic Studio QA"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add topic-studio/qa/all-pages-ui-latest.json
+          git add topic-studio/qa/all-pages-ui-latest.json topic-studio/qa/auto-sync-browser-latest.json
           if ! git diff --cached --quiet; then
             git commit -m "test(topic-studio): all-page browser QA result [skip ci]"
             git pull --rebase origin "$GITHUB_REF_NAME"
