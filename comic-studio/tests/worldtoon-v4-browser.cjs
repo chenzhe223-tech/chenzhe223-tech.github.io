@@ -107,11 +107,21 @@ async function test(){
     assert.equal(await page.locator('#wt3-expand-consent').isVisible(),false,'cancel model request before fees');
     await page.locator('.wt4-steps [data-wt4-step="1"]').click();
     await page.locator('[data-wt4-character-create] [name="characterName"]').fill('阿月');
+    // Reproduce a background-sync / route re-render between field edits. Old UI
+    // silently replaced the form and lost the name, blocking real submission.
+    await page.evaluate(()=>render());
+    assert.equal(await page.locator('[data-wt4-character-create] [name="characterName"]').inputValue(),'阿月',
+      'unsaved name must survive a background render before filling remaining actor fields');
     await page.locator('[data-wt4-character-create] [name="gender"]').fill('自定义身份');
     await page.locator('[data-wt4-character-create] [name="age"]').fill('成年');
     await page.locator('[data-wt4-character-create] [name="profession"]').fill('邮差');
     await page.locator('[data-wt4-character-create] [name="description"]').fill('短黑发与棕色眼睛，右手有星星纹章');
     await page.locator('[data-wt4-character-create] [name="costume"]').fill('米黄色工装外套');
+    await page.evaluate(()=>render());
+    assert.equal(await page.locator('[data-wt4-character-create] [name="description"]').inputValue(),
+      '短黑发与棕色眼睛，右手有星星纹章','unsaved appearance must survive repeated rendering');
+    assert.equal(await page.locator('[data-wt4-character-create] [name="gender"]').inputValue(),
+      '自定义身份','unsaved character metadata must survive repeated rendering');
     assert.equal(await page.locator('[data-wt4-character-create] [name="characterName"]').inputValue(),'阿月',
       'character name must not be erased while other role fields are being completed');
     await page.locator('[data-wt4-character-create] [type="submit"]').click();
