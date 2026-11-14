@@ -405,6 +405,7 @@ async function test(){
         return {id:p.id,title:p.title,entryType:p.entryType,description:p.description,count:d.projects.length};
       });
       await hp.goto(base+'#/dashboard');
+      await hp.reload(); // Test fixture was inserted into localStorage, so rehydrate app memory.
       await hp.locator('[data-wt4-entry="hotspot"]').click();
       await hp.locator('[data-wt4-topic="test-hotspot-quota"]').waitFor();
       await hp.evaluate(()=>{
