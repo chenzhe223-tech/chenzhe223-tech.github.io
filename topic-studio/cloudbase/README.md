@@ -1,18 +1,18 @@
-# DAVYLAB Topic Studio — CloudBase 上海环境 P0 接入资料
+# DAVYLAB Topic Studio — excess-tiglon 上海 PostgreSQL 接入资料
 
 **阶段：P0 文件和安全边界已准备；尚未获得云环境写入权限，尚未部署数据表，尚未打开生产同步。**
 
 ## 已确认的信息
 
 - 地域：`ap-shanghai`
-- 主环境 ID：在腾讯云控制台确认；暂不写入公开仓库，P0 诊断时由用户在浏览器输入。
-- 第二环境：仅视为独立环境，不擅自部署或切换
+- 唯一批准环境 ID：`excess-tiglon-d6gjc77qr6fa193f2`，已由用户明确指定。环境 ID 不是密码，可以出现在客户端。
+- 禁止使用另一个受限制环境 `cloud1-d3guyfuxtfeef189a`；所有 P1 部署文件仅针对 excess-tiglon。
 - 已购买：CloudBase 个人版，成交价由用户提供为 ¥19.9。该价格不代表 CloudBase 之外的任何服务都已免费。
 - 主账号 UIN、APPID 不用于前端 SDK 初始化，因此这里不记录；**任何 SecretId / SecretKey / AppSecret / Publishable Key / 数据库密码都不得写入此公开仓库**。
 
-## 关键前置检查：必须确认数据库类型
+## 数据库类型已确认：PostgreSQL
 
-上海地域云开发支持不同数据库环境，**创建后无法直接切换类型**：
+2026-11-15 用户提供的 excess-tiglon 控制台截图已证明 PostgreSQL 运行中，现有表为 `cron_locks`、`dashboard_metrics`、`mail_board_snapshots`，不得修改。下述文档型数据库说明仅供历史参考，**本环境不使用文档型方案**：
 
 - **传统云数据库环境**：文档型数据库 / 集合安全规则；适合当前非程序员作者的选题 JSON 记录。请先从控制台确认是否拥有“文档型数据库”栏目。
 - **PostgreSQL 环境**：SQL 表 + 行级安全策略 RLS。只有确认是 PG 环境，才使用 `schema-postgres.sql`。不要在传统环境执行 SQL，也不要把 PostgreSQL 的 RLS 当作文档型数据库的权限。
@@ -25,7 +25,7 @@
 3. 用户仅本人使用：开启有密码或验证码的个人登录，不开启匿名写入或公开注册；云端数据访问必须以已认证的用户身份绑定所有权。
 4. 已有选题从浏览器平台点击“导出选题”生成 JSON，原文件留在本地。运行 `node topic-studio/cloudbase/validate-export.cjs <本地JSON文件>` 做离线数据检查；文件不上传，不打印文章正文。
 5. 传统云数据库：先创建测试集合，默认拒绝访问；测试认证、写入所属权字段、跨账号读取被拒绝，再由管理员手工应用 `document-rules-owner.example.json`。该模板不是已应用的安全规则；特别要验证“创建记录”时的归属字段。
-6. PG 环境：审核并在 SQL 控制台执行 `schema-postgres.sql`，针对未登录、非本人、本人、旧 revision 冲突分别测试。服务器端使用 `auth.uid()`（返回 text）。
+6. PG 环境：审核 `schema-postgres-p1-excess-tiglon.sql`，在真实目标环境核验账号身份及白名单后再由账户持有人执行；必须通过未登录、非本人、本人、旧 revision CAS 冲突测试。不要直接使用旧 `schema-postgres.sql` 模板。
 7. 只有安全审计通过后，才启用 P1 自动同步。首次导入为**追加 / 按 ID 合并 / 冲突单独处理**，不删除现有云端或本地记录。用户发文状态保持原样，不能因同步改变 draft/approved/published。
 
 ## 多端同步数据模型（待部署）
@@ -106,7 +106,14 @@
 5. 同步采用服务端版本号与所有权校验，任何 draft、approved、published 状态都不能由云同步自动改变。
 6. 仅在权限、费用限额和跨设备测试全部通过后开启正式数据上云。不得在公开 GitHub 存储私有备份。
 
-**实际阻塞：当前聊天未连接 CloudBase 控制台，没有真实环境数据库类型、登录权限和跨设备写入证据；因此云端同步仍关闭。**
+**实际阻塞：excess-tiglon PostgreSQL 数据库类型已由用户截图确认，但当前聊天没有 CloudBase 控制台操作连接，尚未获取真实登录权限、RLS 验收与跨设备写入证据；云端同步仍关闭。**
 
 CloudBase SDK/认证参考：https://docs.cloudbase.net/authentication-v2/method/sdk-init
 CloudBase 文档权限参考：https://docs.cloudbase.net/database/security-rules
+
+
+## P1 安全连接方案（2026-11-15）
+
+**唯一允许的目标：** `excess-tiglon-d6gjc77qr6fa193f2`。详细步骤、只读 SQL 预检、本人 allowlist、RLS、事务 CAS 与验收清单请查阅 [P1_EXCESS_TIGLON.md](./P1_EXCESS_TIGLON.md)。文件均为部署准备稿，**尚未在云端执行**。
+
+新建文件：`schema-postgres-p1-excess-tiglon.sql`、`read-only-preflight-excess-tiglon.sql`、`pg-sync-adapter.js`、`test-p1-pg.cjs`；CI 执行静态安全测试和模拟 SDK 测试。不得把此完成状态表述成真实多设备已同步。
