@@ -80,6 +80,31 @@ def visit_section(page, section):
     return stats(page, section)
 
 
+def growth_date_geometry(page):
+    return page.evaluate("""() => {
+      const parent=document.querySelector('#section-growth .growth-target');
+      const grid=document.querySelector('#section-growth .growth-target-form');
+      const dateInputs=[document.querySelector('#growthStartDate'),document.querySelector('#growthDeadline')];
+      const card=parent.getBoundingClientRect();
+      const parentRect=grid.getBoundingClientRect();
+      const dates=dateInputs.map(input=>{
+        const box=input.getBoundingClientRect();
+        const cell=input.parentElement.getBoundingClientRect();
+        return {x:box.left,y:box.top,right:box.right,bottom:box.bottom,width:box.width,
+                cellLeft:cell.left,cellRight:cell.right,cellTop:cell.top,
+                cellBottom:cell.bottom,cellWidth:cell.width};
+      });
+      const a=dates[0],b=dates[1];
+      const overlapX=Math.min(a.right,b.right)-Math.max(a.x,b.x);
+      const overlapY=Math.min(a.bottom,b.bottom)-Math.max(a.y,b.y);
+      return {viewport:innerWidth,gridWidth:parentRect.width,cardWidth:card.width,
+              inputWithinCells:dates.every(d=>d.x>=d.cellLeft-2&&d.right<=d.cellRight+2),
+              inputWithinCard:dates.every(d=>d.x>=card.left-2&&d.right<=card.right+2),
+              collision:overlapX>2&&overlapY>2,
+              dateStacked:Math.abs(a.cellTop-b.cellTop)>10,
+              dates,scrollOverflow:Math.max(0,document.documentElement.scrollWidth-innerWidth)};
+    }""")
+
 def scenario(page, label):
     page.goto(URL+"?qa=all-pages-v1", wait_until="domcontentloaded", timeout=30000)
     page.wait_for_function("() => Boolean(window.DAVYLABXNews?.status().loaded && window.DAVYLABTopicPool && window.DAVYLABProductivity)", timeout=30000)
@@ -119,8 +144,25 @@ def scenario(page, label):
         if section!="discover":
             check(measurement["display"]=="block",label+"/"+section+": section root improperly treated as grid="+measurement["display"])
         measurements.append({"page":section,**measurement})
+        if section=="growth":
+            date_layout=growth_date_geometry(page)
+            check(date_layout["inputWithinCells"],label+": Safari growth date controls overflow their grid cells")
+            check(date_layout["inputWithinCard"],label+": Growth date controls escape target panel")
+            check(not date_layout["collision"],label+": growth date controls visually collide")
+            if page.viewport_size["width"]<=620:
+                check(date_layout["dateStacked"],label+": growth date controls should stack into full-width rows")
         if label in ("desktop","mobile"):
             page.screenshot(path=str(BASE/"qa"/("page-"+label+"-"+section+".png")), full_page=False)
+    # Additional narrow iPhone width specifically reproduces the reported overlap.
+    if label=="mobile":
+        original_view=page.viewport_size
+        for narrow in [320,360,414]:
+            page.set_viewport_size({"width":narrow,"height":844})
+            visit_section(page,"growth")
+            rect=growth_date_geometry(page)
+            check(rect["inputWithinCells"] and rect["inputWithinCard"] and not rect["collision"] and rect["dateStacked"],
+                  "iPhone "+str(narrow)+"px: growth dates overlap or overflow "+str(rect))
+        page.set_viewport_size(original_view)
     # Regression: global layout presets must NOT turn entire modules into narrow grid cells.
     preset_checks=0
     if label in ("desktop","mobile"):
