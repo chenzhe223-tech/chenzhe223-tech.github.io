@@ -87,8 +87,22 @@ ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'draft_upl
 assert.equal(state(p).next,5,'verified remote upload may enter QA, but cannot skip it');
 ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'ready_for_workbuddy'}];
 assert.equal(state(p).next,6,'remote independent QA can advance to export/publish');
-ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'published',receipt:{status:'published',url:'https://mp.weixin.qq.com/s/RealArticle'}}];
+const verifiedRow={task_id:p.handoff.taskId,status:'published',delivery_sha256:'a'.repeat(64),issues:[],
+  receipt:{status:'published',url:'https://mp.weixin.qq.com/s/RealArticle',
+    verification_source:'wechat_official_backend',
+    published_at:'2026-11-12T12:00:00Z',verified_at:'2026-11-12T12:02:00Z'}};
+ctx.wtArchiveSnapshot.library.items=[verifiedRow];
+assert.equal(verifiedPublished(verifiedRow),true,'official catalog entry includes delivery hash, independent verification and timestamps');
 assert.equal(state(p).next,6,'published is terminal');
+assert.equal(verifiedPublished({...verifiedRow,delivery_sha256:''}),false,'no delivery checksum means not published');
+assert.equal(verifiedPublished({...verifiedRow,issues:['QA blocked']}),false,'unresolved QA issue prevents publication');
+assert.equal(verifiedPublished({...verifiedRow,receipt:{...verifiedRow.receipt,verification_source:'manual'}}),false,'manually supplied article link is not official backend proof');
+assert.equal(verifiedPublished({...verifiedRow,receipt:{...verifiedRow.receipt,published_at:''}}),false,'missing publication date is blocked');
+assert.equal(verifiedPublished({...verifiedRow,receipt:{...verifiedRow.receipt,verified_at:''}}),false,'missing verification date is blocked');
+ctx.wtArchiveSnapshot.library.items=[{task_id:p.handoff.taskId,status:'published',receipt:{status:'published',url:'https://mp.weixin.qq.com/s/RealArticle'}}];
+assert.equal(state(p).published,false,'unverified publisher row is never shown as published');
+assert.equal(state(p).label,'发表回执待核验','user sees explicit receipt block');
+ctx.wtArchiveSnapshot.library.items=[verifiedRow];
 assert.equal(verifiedPublished({status:'published',receipt:{status:'draft_uploaded',url:'https://mp.weixin.qq.com/s/RealArticle'}}),false);
 assert.equal(verifiedPublished({status:'published',receipt:{status:'published',url:'https://example.invalid/fake'}}),false);
 ctx.ui.wt4Step=2;
