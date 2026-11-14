@@ -58,9 +58,12 @@ function check(value, name, detail) {
         await dialog.locator('img').evaluate(img => img.decode());
         const box = await dialog.boundingBox();
         check(await dialog.isVisible() && box.width <= width && box.height <= (width < 500 ? 844 : 1000), `${width}: image viewer fits the device`);
+        const imageSpace=await dialog.evaluate(d=>({stage:d.querySelector('.image-stage').getBoundingClientRect().height,image:d.querySelector('img').getBoundingClientRect().height}));
+        check(imageSpace.stage<=imageSpace.image+4,`${width}: fitted image viewer has no artificial vertical blank area`,imageSpace);
         await page.screenshot({ path: path.join(out,`${width}-image-viewer.png`) });
         await dialog.locator('.image-size').click();
         check(await dialog.locator('.image-size').getAttribute('aria-pressed') === 'true', `${width}: image can be inspected at original size`);
+        check(await dialog.locator('.image-stage').evaluate(e=>e.scrollWidth>e.clientWidth),`${width}: original-size diagram supports horizontal inspection`);
         await page.keyboard.press('Escape');
         check(!await dialog.isVisible() && await page.locator('#xnewsVoices .voice-cover').first().evaluate(e => e === document.activeElement), `${width}: Escape restores focus and reading position`);
       }
