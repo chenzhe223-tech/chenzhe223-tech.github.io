@@ -90,7 +90,7 @@
  transform:rotate(-15deg);
 }
 .mobile-app-cover .mobile-cover-head:before{
- content:"";display:inline-block;width:23px;height:23px;
+ content:"";display:inline-block;width:32px;height:32px;
  background:url("./davylab-studio-mark.svg") center/contain no-repeat;
  vertical-align:middle;margin-right:8px;border-radius:6px;
 }
