@@ -71,7 +71,7 @@
    }else if(src.kind==="published"&&Array.isArray(data)){
     for(const item of data)put("published_record",item?.id,item,src.key);
    }else if(src.kind==="briefs"&&Array.isArray(data)){
-    for(const item of data)put("research","brief:"+String(item?.id||""),item,src.key);
+    for(const item of data){if(validId(item?.id))put("research","brief:"+item.id,item,src.key);else warnings.push(bad("RECORD_MISSING_STABLE_ID",src.key));}
    }else if(src.kind==="benchmarks"&&Array.isArray(data)){
     // Historical benchmark entries lack IDs; do not mistake content-derived hashes
     // for durable identities or silently turn edits into duplicate entries.
@@ -87,7 +87,8 @@
     for(const group of ["experiments","posters","metrics","reviews"]){
      for(const item of Array.isArray(data[group])?data[group]:[]){
       const key=group==="reviews"?item?.key:item?.id;
-      put("growth",group+":"+String(key||""),item,src.key);
+      if(validId(key))put("growth",group+":"+key,item,src.key);
+      else warnings.push(bad("RECORD_MISSING_STABLE_ID",src.key));
      }
     }
    }
