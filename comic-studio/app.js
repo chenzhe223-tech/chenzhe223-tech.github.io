@@ -343,6 +343,10 @@ async function action(act,id){let p=selected();switch(act){case 'new':newProject
   v.createdAt=at;v.updatedAt=at;v.reviewedAt=null;v.publishedAt=null;
   // A new comic may reuse story and pinned characters, NEVER its remote job,
   // author approvals, pilot receipts, verified delivery or publisher identity.
+  // Cover and panel pixels belong to the old published edition. Keep its text,
+  // but require fresh image review/generation before a new publication.
+  v.cover='';
+  if(Array.isArray(v.panels))v.panels=v.panels.map(panel=>({...panel,image:''}));
   v.handoff={mode:orig.handoff?.mode||(orig.entryType==='hotspot'?'hotspot':'original')};
   delete v.task_id;delete v.taskId;delete v.dedupe_key;delete v.delivery;
   delete v.receipt;delete v.publishReceipt;delete v.author_approved;
