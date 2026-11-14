@@ -82,3 +82,31 @@
 
 官方文档：https://docs.cloudbase.net/ai/cloudbase-ai-toolkit/connection-modes
 官方 WorkBuddy 接入：https://docs.cloudbase.net/ai/cloudbase-ai-toolkit/ide-setup/workbuddy
+
+## P0 无损备份与两端差异预检（2026-11-15）
+
+**已完成安全准备代码，不代表云端多端同步已启用。**
+
+正式入口：https://chenzhe223-tech.github.io/topic-studio/cloudbase/sync-center.html
+
+- 新增 sync-core.js：纯本地、逐条记录的合并规划核心；无网络请求、无数据写回。
+- 新增 sync-center.html：读取同源六组 localStorage 数据、仅显示数量、导出原样私有备份、比较另一设备的备份。比较不会上传、导入或覆盖数据。
+- 备份只包含六个业务源：选题池、已发表记录、研究对标、研究简报、增长数据和智能排期设置；不包含个人令牌或新闻缓存。
+- 相同 ID 的两端不同数据标为冲突；有可比基线的单端改动才给出上传/下载候选计划，但计划禁止自动执行。
+- 已有对标记录没有稳定 ID 的保留完整备份，单独标记，不把内容哈希伪装成稳定 ID。增长实验、贴图、指标、7/30日复盘分条规划，杜绝整份覆盖。
+- 旧记录缺失不等于得到删除授权；现阶段禁止云端自动删除，防止多端数据丢失。
+- GitHub Actions P0 测试已加入 test-sync-core.cjs；测试脚本覆盖冲突、备份不可变、授权状态保留、跨端差异和非法字段拒绝。
+
+### 安全准入
+
+1. 在腾讯云控制台确认上海主环境的数据库类型（文档数据库或 PostgreSQL），不能混用建表模板。
+2. 统一 CloudBase SDK 与认证版本。旧 p0.html 使用静态 SDK 3.0.1，不能据此宣称已通过当前身份认证 v2 验收。
+3. 开启本人账号登录，配置安全来源 chenzhe223-tech.github.io；验证游客、第二测试账号都不能读取本人草稿。
+4. 首次启用云端前，两台设备分别导出私有备份。先使用合成测试选题进行双向增量同步、断网重试、冲突与回滚验收。
+5. 同步采用服务端版本号与所有权校验，任何 draft、approved、published 状态都不能由云同步自动改变。
+6. 仅在权限、费用限额和跨设备测试全部通过后开启正式数据上云。不得在公开 GitHub 存储私有备份。
+
+**实际阻塞：当前聊天未连接 CloudBase 控制台，没有真实环境数据库类型、登录权限和跨设备写入证据；因此云端同步仍关闭。**
+
+CloudBase SDK/认证参考：https://docs.cloudbase.net/authentication-v2/method/sdk-init
+CloudBase 文档权限参考：https://docs.cloudbase.net/database/security-rules
