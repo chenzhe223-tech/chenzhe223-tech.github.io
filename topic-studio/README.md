@@ -238,3 +238,15 @@
 - 自动化：`tests/all-pages-browser-smoke.py` 新增日期输入 rect 内外边界、互相碰撞、320/360/390/414px 窄屏断言；CI 已将此 CSS 加入改动触发。
 - 已在独立构造的表单复现环境中用真实 Chromium 检查 320/360/375/390/414/620/621/768/1440px，日期字段无碰撞、全部在卡片内、页面无横向溢出（注意：这是隔离表单渲染测试，不是整站 iOS Safari 实机验收）。
 - GitHub Pages 已检查新样式 URL 成功引用；真正 iPhone Safari 仍建议刷新后由用户确认。不能用过时的跨页面 QA 报告替代本次变更后的回归结果。
+
+
+## 增长目标日期双列等宽修正 · m2（2026-11-15）
+
+**该版本替代上方 m1 单列日期方案。** 用户在实际 iPhone Safari 截图中反馈：即使日期独占整行，原生日期输入仍超出深蓝目标卡片右侧。最终要求为日期与两个人数输入框一样，在一行内严格等宽并排。
+
+- 页面结构：原 `#growthStartDate`、`#growthDeadline` 仍然是真正的 `input[type=date]`，数据 ID 与事件保持不变。每个日期输入外增加 `growth-date-shell`（可见固定宽度边框）、`growth-date-value`（YYYY/MM/DD）、日历标识。
+- Safari 兼容：不可见但可点击的原生日期输入以 `position:absolute;inset:0;width:100%;max-width:100%;opacity:0` 覆盖在壳内，保留系统日期选择器和键盘可访问性，不再让 iOS 的内部日期子控件撑大可见边框。JS `mobile-growth-date-ui.js` 监听 input/change 并在原有 `renderGrowthTarget` 运行后同步显示。
+- 移动端 `growth-target-form` 始终 `repeat(2,minmax(0,1fr))`；起始/截止日期与起始/最新订阅人数四框分别匹配两列宽度（320px 时也不强制单列）。阅读中位数按原设计跨整行。
+- 原有保存按钮、订阅数和日期数据、其他业务模块不变，无云端操作、无自动审核或微信发布。
+- 测试：`tests/all-pages-browser-smoke.py` 改为检查两个日期是否同一行、是否与人数框等宽、输入框可交互、日期 `fill` 后显示与 localStorage 保存一致。用 Chromium 隔离表单在 320、360、375、390、414、620、621、768、1440px 9 个宽度下实际测量：日期栏宽度与人数框一致、互不重叠、在卡片内且页面无横向溢出；这是 **Chromium 隔离表单测试**，不是 iPhone Safari 设备实测。
+- 交付资源版本号：`mobile-growth-form-fix.css?v=20261115-m2`、`mobile-growth-date-ui.js?v=20261115-m2`，避免旧 CSS 浏览器缓存。正式网站在线加载和 iOS Safari 真实触屏 picker 仍需单独验收；旧版跨页面 QA 报告不用于本版完成判断。
