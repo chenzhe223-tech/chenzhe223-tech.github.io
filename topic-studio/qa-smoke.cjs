@@ -58,7 +58,7 @@ async function main() {
     page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text()); });
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
-    assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
+    assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
 
 
     // Editorial research: prompt generation, benchmark local persistence, series parsing and topic-pool integration.
