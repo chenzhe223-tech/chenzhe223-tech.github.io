@@ -34,7 +34,7 @@ a,.nav a,.crumb a,.category,.eyebrow{color:var(--copper-ink)!important}
 }
 body[data-reader-size="large"] .dek,body[data-reader-size="large"] .section p{font-size:calc(1em * 1.12)!important}
 body[data-reader-size="larger"] .dek,body[data-reader-size="larger"] .section p{font-size:calc(1em * 1.24)!important}
-</style><link rel="stylesheet" href="../assets/editorial.css"><script src="../assets/edition-media.js"></script></head>
+</style><link rel="stylesheet" href="../assets/editorial.css?v=90a00447b817"><script src="../assets/edition-media.js"></script></head>
 <body>
 <div class="wrap">
 <header class="masthead"><a id="mobileBack" class="reader-back" aria-label="返回本期简报" href="../daily/">‹</a><a class="brand" href="../daily/">AI RADAR <small style="font:9px Inter,sans-serif;letter-spacing:.12em;color:#686C66"> BY DAVYLAB</small></a><nav class="nav" id="readerSections" aria-label="栏目导航"><a id="navToday" href="../daily/" data-nav="today">今日</a><a id="navChina" href="../daily/#news" data-nav="china">发现</a><a id="navDeep" href="../daily/#ai" aria-current="page" data-nav="deep">深读</a><a id="navTools" href="../daily/#skills" data-nav="tools">知识库</a><a id="navArchive" href="/niantou-box-app/#/" data-nav="archive">我的</a></nav><div class="lang" role="group" aria-label="语言"><button class="active" id="zh">中文</button><button id="en">EN</button></div><button id="readerMenu" aria-expanded="false" aria-controls="readerSections" aria-label="栏目导航" type="button">☰</button></header>
@@ -143,4 +143,4 @@ document.querySelectorAll("[data-nav=deep]").forEach(n=>n.href=location.href);
 fetch(dataUrl+"?ts="+Date.now(),{cache:"no-store"}).then(r=>{if(!r.ok)throw Error("Briefing unavailable");return r.json()}).then(d=>{window.briefData=d;const key={top5:"top5",xnews:"xnews_voices",china:"china_ai_news",news:"news"}[type]||"top5";window.storyList=d[key]||[];render(d,window.storyList)}).catch(()=>{$("content").innerHTML='<div class="eyebrow">DAVYLAB AI RADAR · DEEP READ</div><div class="empty">'+text("无法读取这期日报。请回到首页并重新选择。","Could not load this briefing. Return to the homepage and choose a story again.")+'</div>'});
 })();
 </script>
-</body></html>
+<script src="../assets/reading-media.js?v=a024a55d3cee"></script></body></html>

@@ -384,7 +384,7 @@ function check(ok, name, detail = '') {
         const second={title_zh:'原文配图第二条',image_match_status:'article_image',image_url:'https://example.com/publisher.jpg'};
         renderFeatured([first,second]);
         const selected=document.querySelector('#leadStory a');
-        const illustrated=selected.querySelector('h2').textContent===second.title_zh&&new URL(selected.href).searchParams.get('id')==='1'&&!!selected.querySelector('img');
+        const illustrated=selected.querySelector('h2').textContent===second.title_zh&&new URL(selected.href).searchParams.get('id')==='1'&&!!document.querySelector('#leadStory img');
         renderFeatured([first,{...second,image_match_status:'image_unavailable'}]);
         const textOnly=document.querySelector('#leadStory').classList.contains('text-only')&&!document.querySelector('#leadStory img');
         const legacy={title_zh:'Gemini Robotics 2.5',image_match_status:'thematic_fallback',source_url:'https://chenqiyuan.cn/article/intel-81f8f3420e53b13ac744eb66'};
@@ -528,7 +528,7 @@ function check(ok, name, detail = '') {
       check(bodyColor !== 'rgba(0, 0, 0, 0)', viewport.name + ': page has computed background', bodyColor);
       await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
-      await page.getByRole('button', { name: 'EN' }).click();
+      await page.getByRole('button', { name: 'EN', exact: true }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': language switch works');
       check((await page.locator('#chinaAI h2').innerText()).includes('China AI'), viewport.name + ': China AI module localizes to English');
       await page.getByRole('button', { name: '中文' }).click();
@@ -630,7 +630,7 @@ function check(ok, name, detail = '') {
       check(overflow.document <= overflow.viewport + 2, viewport.name + ': deep reader has no horizontal overflow', JSON.stringify(overflow));
       await page.screenshot({ path: path.join(out, viewport.name + '-viewport.png') });
       await page.screenshot({ path: path.join(out, viewport.name + '.png'), fullPage: true });
-      await page.getByRole('button', { name: 'EN' }).click();
+      await page.getByRole('button', { name: 'EN', exact: true }).click();
       check(await page.locator('html').getAttribute('lang') === 'en', viewport.name + ': deep reader language switch works');
       check((await page.locator('#content').innerText()).includes('Five dimensions'), viewport.name + ': assessment is localized in English');
       check(errors.length === 0, viewport.name + ': deep reader has no JavaScript errors', errors.join('; '));
@@ -733,7 +733,7 @@ function check(ok, name, detail = '') {
       }
       const returnHref = await page.locator('.rail-links a[href^="../daily/"]').getAttribute('href');
       check(titleCount === 1 && returnHref === '../daily/?date=' + viewport.date, viewport.name + ': X News deep reader returns to the matching issue', returnHref || '');
-      await page.getByRole('button', { name: 'EN' }).click();
+      await page.getByRole('button', { name: 'EN', exact: true }).click();
       check(titleCount === 1 && (await titleLocator.innerText()).trim() === fixture.title_en, viewport.name + ': X News deep reader switches to English');
       check(titleCount === 1 && (await page.locator('#content').innerText()).includes(fixture.summary_en), viewport.name + ': X News deep reader localizes the supplied summary');
       await page.getByRole('button', { name: '中文' }).click();
