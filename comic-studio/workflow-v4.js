@@ -162,7 +162,7 @@
  function characterDraft(p){
    if(!ui.wt4CharacterDrafts)ui.wt4CharacterDrafts={};
    const pid=String(p.id);
-   const form=document.querySelector('[data-wt4-character-create]');
+   const form=typeof document.querySelector==='function'?document.querySelector('[data-wt4-character-create]'):null;
    if(form?.dataset.wt4CharacterProject===pid){
      const values=Object.fromEntries(new FormData(form).entries());
      const draft=ui.wt4CharacterDrafts[pid]||{};
