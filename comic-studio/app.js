@@ -191,7 +191,7 @@ function persist(){
   }
   return true;
 }
-function setChange(p,desc){p.updatedAt=now();if(desc){p.activity=p.activity||[];p.activity.unshift({at:now(),detail:desc});p.activity=p.activity.slice(0,60)}persist()}
+function setChange(p,desc){p.updatedAt=now();if(desc){p.activity=p.activity||[];p.activity.unshift({at:now(),detail:desc});p.activity=p.activity.slice(0,60)}return persist()}
 function markDirty(p){if(p.status==='已审核'||p.status==='已发布'){p.status='草稿';p.checks=Array(6).fill(false);p.reviewedAt=null;p.publishedAt=null;}setChange(p)}
 const activeProjects=()=>data.projects.filter(p=>!p.deleted&&!p.archived);
 function findProject(id){return data.projects.find(p=>p.id===id)}
