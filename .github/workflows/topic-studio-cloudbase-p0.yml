@@ -1,6 +1,10 @@
 name: Topic Studio - CloudBase Shanghai P0 safety checks
 
 on:
+  pull_request:
+    paths:
+      - "topic-studio/cloudbase/**"
+      - ".github/workflows/topic-studio-cloudbase-p0.yml"
   push:
     paths:
       - "topic-studio/cloudbase/**"
