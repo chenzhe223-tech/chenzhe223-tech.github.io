@@ -81,7 +81,7 @@
      colors:String(candidate.colors||'').slice(0,220),traits:String(candidate.symbol||candidate.traits||'').slice(0,950),
      personality:String(candidate.nature||candidate.personality||'').slice(0,1200),portrait:'',
      origin:'ai-draft',originProjectId:projectId,originRole:role,aiModel:String(candidate.aiModel||''),
-     comicNames:[]};
+     comicNames:[],bibleVersion:1,reviewStatus:'pending_approval'};
     data.characters.push(character);
     setComicName(data,character.characterId,projectId,candidate.comicName||candidate.name);
     added++;
@@ -91,5 +91,83 @@
   }
   return {added,linked,unresolved};
  }
- return {normalizeWorkspace,upsertGenerated,setComicName,displayName};
+ function linkExisting(data,project,characterId,options={}){
+  normalizeWorkspace(data);
+  if(!project?.id)return {ok:false,reason:'missing_project'};
+  if(project.handoff?.repoQueuedAt||project.creativeDirection?.approval?.lock_hash)
+   return {ok:false,reason:'approved_work_requires_new_revision'};
+  const character=data.characters.find(c=>c?.characterId===String(characterId));
+  if(!character)return {ok:false,reason:'character_not_found'};
+  if(character.reviewStatus==='pending_approval')
+   return {ok:false,reason:'character_awaits_author_review'};
+  if(!Array.isArray(project.characterRefs))project.characterRefs=[];
+  const existing=project.characterRefs.find(x=>x.characterId===character.characterId);
+  if(existing)return {ok:true,linked:false,characterId:character.characterId};
+  const comicName=String(options.comicName||character.originalName||character.name||'').trim();
+  const ref={characterId:character.characterId,role:String(options.role||'support'),
+   comicName,characterVersion:String(character.bibleVersion||character.version||1),
+   overrides:JSON.parse(JSON.stringify(options.overrides||{}))};
+  project.characterRefs.push(ref);
+  project.characterBibleNeedsReview=true;
+  return {ok:true,linked:true,characterId:character.characterId};
+ }
+ function lockProjectBible(data,project){
+  normalizeWorkspace(data);
+  if(!project?.id)throw Error('角色锁定要求有效漫画项目');
+  if(project.handoff?.repoQueuedAt||project.creativeDirection?.approval?.lock_hash)
+   throw Error('已派单或创意锁定项目不得静默改写角色版本');
+  const refs=Array.isArray(project.characterRefs)?project.characterRefs:[];
+  if(!refs.length)throw Error('请先选择至少一个角色档案');
+  const seen=new Set();
+  const characters=refs.map(ref=>{
+   const c=data.characters.find(x=>x?.characterId===String(ref.characterId));
+   if(!c)throw Error('角色档案不存在：'+ref.characterId);
+   if(c.reviewStatus==='pending_approval')throw Error('角色草稿尚未获作者确认：'+(c.originalName||c.name));
+   if(seen.has(c.characterId))throw Error('角色身份重复：'+c.characterId);
+   seen.add(c.characterId);
+   const o=ref.overrides&&typeof ref.overrides==='object'?ref.overrides:{};
+   return {characterId:c.characterId,version:String(c.bibleVersion||c.version||1),
+    originalName:String(c.originalName||c.name||''),
+    comicName:String(ref.comicName||c.originalName||c.name||''),
+    gender:String(o.gender??c.gender??'未指定'),
+    age:String(o.age??c.age??'未指定'),
+    occupation:String(o.occupation??c.occupation??''),
+    role:String(ref.role||'support'),
+    appearance:String(o.appearance??c.description??c.appearance??''),
+    costume:String(o.costume??c.costume??''),
+    personality:String(o.personality??c.personality??''),
+    traits:String(o.traits??c.traits??''),
+    portrait:String(c.portrait||''),
+    referenceLicense:String(c.referenceLicense||'未核验')};
+  });
+  const revision=Math.max(0,Number(project.characterBible?.revision)||0)+1;
+  const snapshot={schema:'worldtoon.character-bible.v1',projectId:String(project.id),
+   revision,lockedAt:new Date().toISOString(),characters};
+  project.characterBible=snapshot;
+  project.characterBibleNeedsReview=false;
+  return snapshot;
+ }
+ function getLockedCharacter(project,characterId){
+  const found=project?.characterBible?.characters?.find(x=>x.characterId===String(characterId));
+  return found?JSON.parse(JSON.stringify(found)):null;
+ }
+ function validateProjectBible(project){
+  const bible=project?.characterBible;
+  const refs=Array.isArray(project?.characterRefs)?project.characterRefs:[];
+  if(!bible||bible.schema!=='worldtoon.character-bible.v1')
+   return {ok:false,issues:['character_bible_not_locked']};
+  const issues=[];
+  if(project.characterBibleNeedsReview)issues.push('character_bible_needs_review');
+  for(const ref of refs){
+   if(!bible.characters.some(x=>x.characterId===ref.characterId))
+    issues.push('character_ref_not_locked:'+ref.characterId);
+  }
+  for(const panel of project.panels||[]){
+   for(const id of Array.isArray(panel.characterIds)?panel.characterIds:[]){
+    if(!bible.characters.some(x=>x.characterId===id))issues.push('panel_character_not_locked:'+id);
+   }
+  }
+  return {ok:issues.length===0,issues};
+ }
+ return {normalizeWorkspace,upsertGenerated,setComicName,displayName,linkExisting,lockProjectBible,getLockedCharacter,validateProjectBible};
 });

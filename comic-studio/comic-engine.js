@@ -24,9 +24,20 @@ const STEPS=[
  {name:'agent-comic-kit',role:'角色圣经与画格复核',ready:'角色一致性模板已接入',repo:'https://github.com/Saeyeon-developer/agent-comic-kit'},
  {name:'TT_AutoManga',role:'逐格素材与文字排版',ready:'浏览器本地合成已接入',repo:'https://github.com/TTDiang2/TT_AutoManga'}
 ];
-const isV3=p=>!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
+const isV3=p=>['hotspot','one_line','original'].includes(p?.creationPath)||!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
 const clean=s=>String(s||'').replace(/[\u0000-\u001f]/g,' ').trim();
 function cast(p){
+ const bible=p?.characterBible;
+ if(bible?.schema==='worldtoon.character-bible.v1'&&bible.characters?.length){
+  const result=window.WTCharacterContinuity?.validateProjectBible?.(p);
+  if(result&&!result.ok)throw Error('角色锁定不完整：'+result.issues.join(','));
+  return bible.characters.map((x,i)=>[
+   '角色 '+(i+1)+' '+clean(x.comicName||x.originalName)+' [ID '+clean(x.characterId)+' · V'+clean(x.version)+']',
+   '身份:'+clean(x.role)+' / '+clean(x.gender)+' / '+clean(x.age)+' / '+clean(x.occupation),
+   '固定容貌:'+clean(x.appearance),'固定服装:'+clean(x.costume),
+   '识别特征:'+clean(x.traits),'性格:'+clean(x.personality)
+  ].join(' / ')).join('\n');
+ }
  const locked=p?.creativeDirection?.cast;
  if(Array.isArray(locked)&&locked.length)return locked.map((x,i)=>[
   '角色 '+(i+1)+' '+clean(x.name)+' ('+clean(x.role)+')',
@@ -100,7 +111,7 @@ function bundleEntries(p){
  }
  const parts=storyboard(p);const title=clean(p.title);
  const files=[
-  {name:'production/brief.json',bytes:JSON.stringify({schema:'davylab.worldtoon.comic-engine.v1',title,source:clean(p.sourceURLs),research_required:true,verified:false,author_approved:false,style:p.tone,format:p.format,adapters:STEPS,disclosure:p.disclosure},null,2)},
+  {name:'production/brief.json',bytes:JSON.stringify({schema:'davylab.worldtoon.comic-engine.v1',title,source:clean(p.sourceURLs),research_required:!['original','one_line'].includes(p?.creationPath),verified:false,author_approved:false,character_bible:p.characterBible||null,style:p.tone,format:p.format,adapters:STEPS,disclosure:p.disclosure},null,2)},
   {name:'production/storyboard.json',bytes:JSON.stringify({title,panels:parts},null,2)},
   {name:'production/visual-references.json',bytes:JSON.stringify(refsForBundle(p),null,2)},
   {name:'production/characters.md',bytes:'# 固定角色圣经\n\n'+cast(p)+'\n\n保持衣着、发型、面部和相对身高一致；未批准角色不要加入画格。\n'},
