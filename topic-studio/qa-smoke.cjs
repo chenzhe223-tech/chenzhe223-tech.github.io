@@ -284,7 +284,8 @@ async function main() {
     // Responsive navigation smoke: each navigation mode must fit a narrow phone viewport.
     await page.setViewportSize({ width: 390, height: 850 });
     for (const mode of ["right", "top", "bottom", "floating", "hidden", "left"]) {
-      await page.locator("#openVisualSettings").click();
+      await page.locator("#mobileMoreToggle").click();
+      await page.locator("#mobileVisualSettings").click();
       await page.locator('[data-visual-tab="layout"]').click();
       await page.locator("#visualNavMode").selectOption(mode);
       await page.locator("#saveVisualLayout").click();
@@ -299,7 +300,8 @@ async function main() {
         assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes on mobile`);
       }
     }
-    await page.locator("#openVisualSettings").click();
+    await page.locator("#mobileMoreToggle").click();
+      await page.locator("#mobileVisualSettings").click();
     await page.locator('[data-visual-tab="layout"]').click();
     await page.locator("#visualNavMode").selectOption("left");
     await page.locator("#saveVisualLayout").click();
