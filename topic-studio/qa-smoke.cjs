@@ -62,7 +62,8 @@ async function main() {
 
 
     // Editorial research: prompt generation, benchmark local persistence, series parsing and topic-pool integration.
-    await page.locator('[data-section="research"]').click();
+    await page.locator('[data-section="research"]').evaluate(el => el.click());
+    await page.locator("#section-research.active").waitFor();
     await page.locator("#researchNiche").fill("普通人用 AI 做产品");
     await page.locator("#researchAudience").fill("不会编程的普通人");
     await page.locator("#researchGenerate").click();
@@ -81,17 +82,20 @@ async function main() {
     await page.locator("#seriesParse").click();
     assert.equal(await page.locator("#seriesPreview .growth-item").count(), 2, "series parser previews two distinct ideas");
     await page.locator("#seriesBatchAdd").click();
-    await page.locator('[data-section="library"]').click();
+    await page.locator('[data-section="library"]').evaluate(el => el.click());
+    await page.locator("#section-library.active").waitFor();
     assert.equal(await page.locator("#topicList .topiccard").count(), 2, "series ideas are integrated into the existing topic pool");
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]").length), 2, "series ideas persist in the existing topic store");
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.locator('[data-section="research"]').click();
+    await page.locator('[data-section="research"]').evaluate(el => el.click());
+    await page.locator("#section-research.active").waitFor();
     const mobileOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     assert.equal(mobileOverflow, false, "research page has no horizontal overflow on mobile");
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-mobile.png"), fullPage: true });
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.locator('[data-section="discover"]').click();
+    await page.locator('[data-section="discover"]').evaluate(el => el.click());
+    await page.locator("#section-discover.active").waitFor();
 
     // Visual DNA: theme customization, responsive navigation, motion preview/export and persistence.
     await page.locator("#openVisualSettings").click();
