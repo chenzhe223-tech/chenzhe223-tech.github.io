@@ -113,6 +113,10 @@ async function test(){
     await page.locator('[data-wt4-character-create] [name="description"]').fill('短黑发与棕色眼睛，右手有星星纹章');
     await page.locator('[data-wt4-character-create] [name="costume"]').fill('米黄色工装外套');
     await page.locator('[data-wt4-character-create] [type="submit"]').click();
+    await page.waitForFunction(({key,id})=>{
+      const p=JSON.parse(localStorage.getItem(key))?.projects?.find(x=>x.id===id);
+      return (p?.characterRefs||[]).length>0;
+    },{key:KEY,id:idea.id},{timeout:10000});
     const roleDebug=await page.evaluate(({key,id})=>{
       const store=JSON.parse(localStorage.getItem(key));
       const p=store.projects.find(x=>x.id===id);
@@ -201,6 +205,7 @@ async function test(){
     },KEY);
     await page.goto(base+'#/dashboard');
     await page.reload();
+    await page.locator('[data-wt4-entry="hotspot"]').waitFor({timeout:15000});
     const dashboardDebug=await page.evaluate(()=>({hash:location.hash,route:typeof ui!=='undefined'?ui.route:null,
       entryCount:document.querySelectorAll('[data-wt4-entry]').length,
       mainText:(document.querySelector('main')?.innerText||document.body.innerText||'').slice(0,500),
