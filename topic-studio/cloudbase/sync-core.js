@@ -10,14 +10,17 @@
  if(root)root.DAVYLABSyncCore=api;
 })(typeof window!=="undefined"?window:null,function(){
  "use strict";
- const VERSION="0.1.0-p0";
+ const VERSION="0.2.0-auto-sync-model";
  const SOURCES=Object.freeze([
   {key:"davylab-topic-studio-v1",label:"选题池与配图方案",kind:"topics"},
   {key:"davylab-published-articles-v1",label:"已发表内容记录",kind:"published"},
   {key:"davylab-topic-research-v1",label:"赛道研究对标记录",kind:"benchmarks"},
   {key:"davylab-topic-research-briefs-v1",label:"赛道研究简报",kind:"briefs"},
   {key:"davylab-growth-lab-v1",label:"增长实验与复盘",kind:"growth"},
-  {key:"davylab-smart-editorial-schedule-v1",label:"智能排期设置",kind:"schedule"}
+  {key:"davylab-smart-editorial-schedule-v1",label:"智能排期设置",kind:"schedule"},
+  {key:"davylab-topic-visual-dna-v1",label:"视觉主题与布局",kind:"settings",docId:"visual-dna"},
+  {key:"davylab-visual-direction-v1",label:"文章配图策划",kind:"settings",docId:"visual-direction"},
+  {key:"davylab-discover-preferences-v1",label:"选题发现筛选偏好",kind:"settings",docId:"discover-preferences"}
  ]);
  const MAX_BACKUP_BYTES=10*1024*1024;
  const isObject=v=>v!==null&&typeof v==="object"&&!Array.isArray(v);
@@ -37,7 +40,7 @@
    raw[src.key]=str;
    try{
     const data=JSON.parse(str);
-    const valid=src.kind==="schedule"?isObject(data):src.kind==="growth"?isObject(data):Array.isArray(data);
+    const valid=["schedule","growth","settings"].includes(src.kind)?isObject(data):Array.isArray(data);
     if(!valid){warnings.push(bad("UNEXPECTED_LOCAL_SHAPE",src.key));sources.push({...src,present:true,count:0,invalid:true});continue}
     const count=Array.isArray(data)?data.length:src.kind==="growth"?
       (Array.isArray(data.experiments)?data.experiments.length:0)+
@@ -79,6 +82,8 @@
      if(item&&validId(item.id))put("research","benchmark:"+item.id,item,src.key);
      else warnings.push(bad("BENCHMARK_NEEDS_STABLE_ID",src.key));
     }
+   }else if(src.kind==="settings"&&isObject(data)){
+    put("settings",src.docId,data,src.key);
    }else if(src.kind==="schedule"&&isObject(data)){
     put("settings","editorial-schedule",data,src.key);
    }else if(src.kind==="growth"&&isObject(data)){
