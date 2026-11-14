@@ -21,6 +21,8 @@ jobs:
         run: node topic-studio/cloudbase/test-p0.cjs
       - name: Verify offline-first backup, deterministic comparison and conflict blocking
         run: node topic-studio/cloudbase/test-sync-core.cjs
+      - name: Verify P2 automatic two-device sync, offline and collision protection
+        run: node topic-studio/cloudbase/test-auto-sync.cjs
       - name: Verify P1 excess-tiglon PostgreSQL RLS and CAS RPC contracts
         run: node topic-studio/cloudbase/test-p1-pg.cjs
       - name: Confirm the sync center does not invoke network writes or user-data uploads
