@@ -218,3 +218,14 @@
 - Node 规则与来源归因测试 topic-studio/tests/hotspot-recommender.test.cjs。
 - Chromium 构建版测试 topic-studio/tests/all-pages-browser-smoke.py：覆盖 8 个主页面与 2560/1440/1024/390px 视口，包含 Top10 卡片、重新排序、试水系列、真实原文入池。
 - 2026-11-13 独立线上浏览器检查：GitHub Pages 页面已有 10 个候选赛道，三个操作按钮均可见；选择后表单正确填写，生成 5 篇试水内容并切换讨论优先后仍有 10 个结果。该检查未验证微信后台或真正手机实机。
+
+
+## DAVYLAB Content Studio 品牌标志与 UI 体系（2026-11-14）
+
+- 将原侧边栏的蓝色渐变字母 D 替换为原创「三条编辑线索 → 蓝色判断节点 → 向前推进」标志，表达公开来源、作者判断、内容创作的完整过程。
+- 原创 SVG 文件在 topic-studio/brand/：davylab-studio-mark.svg、davylab-studio-symbol.svg、davylab-studio-lockup.svg；同时提供 CSS 品牌样式、tokens.json 和静态品牌规范预览 index.html。
+- 主色 Navy #142B40、Editorial Blue #2D78D7；底色 #F7F9FB；辅助背景 #EAF3FC。图标与 UI 均采用纯色矢量，不使用渐变版通用字母 D。
+- 已集成 SVG 网站 Favicon、桌面/手机侧栏 Logo、顶栏路径、移动端应用封面、选中导航、关键按钮、研究推荐选中卡和平台页脚。
+- 品牌样式只增量覆盖相关识别元素；已有选题、排期、研究和增长数据不迁移、不删除，文章独立配图遵循每篇视觉方案，不自动统一为产品 UI 配色。
+- 测试：topic-studio/tests/brand-identity.test.cjs 检查 SVG 与 DOM 引用；topic-studio/tests/all-pages-browser-smoke.py 新增四种屏幕真实加载断言；.github/workflows/topic-studio-all-pages-qa.yml 已配置测试与变更触发。**本轮须用更新后的测试报告验收，不能使用旧版报告冒充新品牌通过。**
+- 此次未调用腾讯云 CloudBase，未触发微信后台发布或更改文章审批状态。
