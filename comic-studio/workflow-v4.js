@@ -31,8 +31,16 @@
    return tid?rows.find(x=>x.task_id===tid)||null:null;
  }
  function verifiedPublished(r){
-   return r?.status==='published'&&r.receipt?.status==='published'&&
-     /^https:\/\/mp\.weixin\.qq\.com\/s\//.test(r.receipt?.url||'');
+   // Mirror the PRIVATE repository's fail-closed verified catalog contract.
+   // A row title, link, or local flag alone is never evidence of publication.
+   const receipt=r?.receipt;
+   const when=v=>typeof v==='string'&&!Number.isNaN(Date.parse(v))&&/[TZ+-]/.test(v);
+   return r?.status==='published'&&receipt?.status==='published'&&
+     receipt?.verification_source==='wechat_official_backend'&&
+     /^[a-f0-9]{64}$/i.test(String(r?.delivery_sha256||''))&&
+     /^https:\/\/mp\.weixin\.qq\.com\/s\//.test(receipt?.url||'')&&
+     when(receipt?.published_at)&&when(receipt?.verified_at)&&
+     Array.isArray(r?.issues)&&r.issues.length===0;
  }
  function state(p){
    const row=remote(p),h=p?.handoff||{},panels=p?.panels||[];
@@ -56,8 +64,9 @@
    const next=missing===-1?6:missing;
    const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
    const pending=!!p&&!!h.taskId&&!row;
-   const label=published?'已发表':row?.status==='blocked'?'QA 待修复':qa?'交付已验收':h.repoQueuedAt?'生产中':'创作中';
+   const label=published?'已发表':row?.status==='published'?'发表回执待核验':row?.status==='blocked'?'QA 待修复':qa?'交付已验收':h.repoQueuedAt?'生产中':'创作中';
    const statusText=published?'已核验发表回执，作品可归档':
+     row?.status==='published'?'发表索引回执缺少后端核验来源、时间或交付哈希，不能认定正式发表':
      qa?'GitHub 成品已验收；正式发表仍需独立授权和回执':
      row?.status==='blocked'?'GitHub QA 未通过，请按具体问题修复':
      remoteUploaded?'GitHub 已识别远端成品，待独立质量验收':
