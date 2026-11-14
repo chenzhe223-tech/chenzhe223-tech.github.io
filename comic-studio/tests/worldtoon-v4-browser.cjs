@@ -464,7 +464,9 @@ async function test(){
         localStorage.setItem(key,JSON.stringify(d));
         return JSON.stringify(p);
       },{key:KEY,id:originalId});
-      await cp.goto(base+'#/library');
+      // V4 has an approved-publication shelf on /library; edit/copy controls
+      // belong in the unified project workspace and must be reachable there.
+      await cp.goto(base+'#/workspace/'+originalId+'/1');
       await cp.reload();
       const copyBefore=await cp.evaluate(({key,id})=>({
         hash:location.hash,route:typeof ui!=='undefined'?ui.route:null,
@@ -473,7 +475,7 @@ async function test(){
         copyButtons:[...document.querySelectorAll('[data-action="duplicate"]')].map(e=>e.dataset.id),
         pageText:(document.querySelector('#content')?.innerText||document.body.innerText).slice(0,300)
       }),{key:KEY,id:originalId});
-      console.log('Duplicate acceptance diagnostics:',JSON.stringify(copyBefore));
+      console.log('Duplicate workspace acceptance diagnostics:',JSON.stringify(copyBefore));
       const duplicateButton=cp.locator('[data-action="duplicate"][data-id="'+originalId+'"]');
       await duplicateButton.waitFor({state:'visible',timeout:15000}).catch(async err=>{
         const current=await cp.evaluate(()=>({
