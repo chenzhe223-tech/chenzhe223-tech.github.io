@@ -203,8 +203,8 @@
       '<div class="wt4-char-filter-grid">'+selectFacets+'</div>'+ 
       '<select id="wt4-char-asset">'+(options||'<option value="">暂无其他可复用角色</option>')+'</select>'+
       '<button class="button" data-wt4-character-link'+(!options?' disabled':'')+'>关联并锁定当前版本</button></div>'+
-      '<form class="wt4-char-create" data-wt4-character-create><h3>确认原创角色并建档</h3>'+
-      '<div class="wt4-char-fields"><label>角色名称<input name="name" maxlength="80" required placeholder="例如：黎舟"></label>'+
+      '<form class="wt4-char-create" data-wt4-character-create autocomplete="off"><h3>确认原创角色并建档</h3>'+
+      '<div class="wt4-char-fields"><label>角色名称<input name="characterName" autocomplete="off" maxlength="80" required placeholder="例如：黎舟"></label>'+
       '<label>性别 / 性别认同（可自定义）<input name="gender" maxlength="80" placeholder="可留空"></label>'+
       '<label>年龄设定<input name="age" maxlength="80" placeholder="例如：青年"></label>'+
       '<label>职业 / 身份<input name="profession" maxlength="120"></label>'+
@@ -352,7 +352,7 @@
    return true;
  }
  function newCharacter(p,values){
-   const name=String(values.name||'').trim(),look=String(values.description||'').trim();
+   const name=String(values.characterName||values.name||'').trim(),look=String(values.description||'').trim();
    if(!name||!look)return notify('请完整填写角色名称和外观');
    if(!Array.isArray(data.characters))data.characters=[];
    const id=uid(),c={id,characterId:id,version:1,name,originalName:name,
