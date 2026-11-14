@@ -294,10 +294,10 @@ async function main() {
       const navViewport = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       assert.ok(navViewport.document <= navViewport.viewport + 1, `no horizontal overflow for ${mode} navigation on mobile: ${JSON.stringify(navViewport)}`);
       if (mode === "floating" || mode === "hidden") {
-        await page.locator("#visualNavRecovery").click();
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, `${mode} navigation opens on mobile`);
-        await page.keyboard.press("Escape");
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes on mobile`);
+        await page.locator("#mobileMoreToggle").click();
+        assert.equal(await page.locator("#mobileMoreToggle").getAttribute("aria-expanded"), "true", `${mode} mobile More navigation opens`);
+        await page.locator("#mobileMoreToggle").click();
+        assert.equal(await page.locator("#mobileMoreToggle").getAttribute("aria-expanded"), "false", `${mode} mobile More navigation closes`);
       }
     }
     await page.locator("#mobileMoreToggle").click();
