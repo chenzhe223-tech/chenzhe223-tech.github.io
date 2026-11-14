@@ -65,6 +65,15 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           sleep 2
           python topic-studio/tests/all-pages-browser-smoke.py
+      - name: Independent two-device automatic-sync browser QA
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m http.server 8765 --bind 127.0.0.1 >/tmp/topic-studio-sync-qa.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          sleep 2
           python topic-studio/tests/auto-sync-browser-smoke.py
       - name: Upload synthetic QA screenshots and result
         if: always()
