@@ -1,0 +1,64 @@
+/* DAVYLAB Content Studio · account sync interface */
+#davylabSyncButton{
+ display:inline-flex!important;align-items:center;justify-content:center;
+ gap:6px;white-space:nowrap;min-height:33px;border-radius:9px!important;
+ border-color:#C5D9E7!important;background:#F8FCFF!important;color:#315E7F!important;
+ font-weight:760!important;font-size:11px!important;
+}
+#davylabSyncButton[data-sync="synced"]{border-color:#B4DACD!important;color:#2D7264!important;background:#F0FAF6!important}
+#davylabSyncButton[data-sync="warning"]{border-color:#E8D3A9!important;color:#88642F!important;background:#FFFBF1!important}
+#davylabSyncButton[data-sync="syncing"]{border-color:#AECDE7!important;color:#276FA5!important;background:#EFF7FC!important}
+#davylabSyncButton:focus-visible{outline:2px solid #2D78D7;outline-offset:2px}
+.davylab-sync-dialog{
+ box-sizing:border-box;width:min(92vw,460px);max-height:min(88vh,830px);
+ border:1px solid #DCE6ED;border-radius:19px;padding:26px;
+ box-shadow:0 18px 70px rgba(20,43,64,.18);
+ background:white;color:#18344C;overflow-y:auto;
+ font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+}
+.davylab-sync-dialog::backdrop{background:rgba(14,34,52,.54);backdrop-filter:blur(2px)}
+.davylab-sync-dialog .sync-header{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.davylab-sync-dialog .sync-header h2{font-size:24px;font-weight:810;line-height:1.3;color:#142B40;margin:7px 0 0}
+.davylab-sync-dialog .sync-header small{font-size:10px;letter-spacing:1.7px;color:#467C9E;font-weight:770}
+.davylab-sync-dialog .sync-header button{font-size:24px;line-height:1;border:1px solid #DFE8EF;background:#F4F8FB;color:#668097;padding:6px 10px;border-radius:10px;cursor:pointer}
+.davylab-sync-dialog .sync-intro{font-size:12px;color:#667E91;line-height:1.8;margin:13px 0}
+.davylab-sync-dialog .sync-message{font-size:12px;line-height:1.7;border-radius:9px;background:#F2F7FB;border:1px solid #E2ECF2;color:#4D6B82;padding:12px;margin:16px 0}
+.davylab-sync-dialog .sync-message[data-state="success"]{background:#F0F9F5;border-color:#CAE7DA;color:#2A725A}
+.davylab-sync-dialog .sync-message[data-state="warning"]{background:#FFF9EF;border-color:#EEDCBC;color:#835D2E}
+.davylab-sync-dialog #syncLoginSection,.davylab-sync-dialog #syncAccountSection{margin:8px 0 15px}
+.davylab-sync-dialog [hidden]{display:none!important}
+.davylab-sync-dialog label{font-size:12px;color:#45647B;display:block;font-weight:720;margin:13px 0 7px}
+.davylab-sync-dialog input{
+ display:block;box-sizing:border-box;width:100%;min-width:0;
+ border:1px solid #D1E0EA;background:white;border-radius:9px;
+ min-height:44px;padding:10px 12px;font-size:14px;color:#18344C;
+}
+.davylab-sync-dialog input:focus-visible,.davylab-sync-dialog button:focus-visible{
+ outline:2px solid #2D78D7;outline-offset:2px;
+}
+.davylab-sync-dialog .sync-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:17px}
+.davylab-sync-dialog button{
+ font-family:inherit;cursor:pointer;border-radius:9px;border:1px solid #D1E0EA;
+ font-size:12px;font-weight:750;padding:10px 12px;min-height:40px;
+ background:#F8FBFE;color:#2B658C;
+}
+.davylab-sync-dialog button[aria-pressed="true"]{background:#EAF3FC;border-color:#94BCD9;color:#155F94}
+.davylab-sync-dialog button.sync-primary{
+ display:block;width:100%;margin-top:16px;min-height:45px;
+ color:white;background:#2D78D7;border-color:#2D78D7;
+}
+.davylab-sync-dialog button.sync-primary:hover{background:#195FAF}
+.davylab-sync-dialog button:disabled{opacity:.6;cursor:wait}
+.davylab-sync-dialog #syncSendOtp{margin-top:14px;width:100%}
+.davylab-sync-dialog #syncVerifyOtp{margin-top:14px}
+.davylab-sync-dialog #syncAccountInfo{color:#274963;font-size:12px;word-break:break-word;line-height:1.6}
+.davylab-sync-dialog .sync-notice{font-size:11px;line-height:1.8;color:#7B8F9E;border-top:1px solid #E4ECF2;padding-top:14px}
+.davylab-sync-dialog>a{display:inline-block;font-size:12px;font-weight:730;color:#276C9E;text-decoration:none;padding:7px 0}
+#mobileSyncOpen{display:flex;align-items:center;gap:10px;text-align:left}
+@media(max-width:760px){
+ #davylabSyncButton{width:33px!important;min-width:33px!important;max-width:33px!important;padding:6px!important;flex:0 0 33px}
+ #davylabSyncButtonLabel{display:none!important}
+ .davylab-sync-dialog{width:calc(100vw - 28px);max-height:85dvh;padding:19px;border-radius:14px}
+ .davylab-sync-dialog .sync-header h2{font-size:21px}
+}
+@media(prefers-reduced-motion:reduce){.davylab-sync-dialog::backdrop{backdrop-filter:none}}
