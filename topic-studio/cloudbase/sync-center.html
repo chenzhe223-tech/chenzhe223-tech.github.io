@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F7F9FB">
+<link rel="icon" type="image/svg+xml" href="../brand/davylab-studio-mark.svg">
+<title>多端同步中心 · DAVYLAB Content Studio</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;color:#18344C;background:#F7F9FB}
+*{box-sizing:border-box}body{margin:0}
+button,a{font-family:inherit}a{color:#226AA5}
+.wrapper{width:min(100% - 32px,1020px);margin:0 auto}
+.top{height:66px;border-bottom:1px solid #DCE6ED;background:white;display:flex;align-items:center}
+.top .wrapper{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.brand{display:flex;gap:10px;align-items:center;text-decoration:none;color:#142B40;font-weight:830;letter-spacing:.4px;font-size:14px}
+.brand img{width:33px;height:33px}.brand small{display:block;font-weight:650;color:#7790A1;letter-spacing:1px;font-size:9px;margin-top:2px}
+.back{font-size:12px;font-weight:740;text-decoration:none}
+main{padding:38px 0 55px}
+.eyebrow{font-size:11px;letter-spacing:1.8px;color:#4F7B9B;font-weight:850}
+h1{font-size:clamp(29px,4vw,43px);letter-spacing:-1px;line-height:1.2;margin:11px 0 14px}
+.intro{font-size:14px;line-height:1.8;color:#688093;max-width:780px;margin:0}
+.status{margin:23px 0 19px;padding:16px 19px;display:flex;align-items:flex-start;gap:13px;border:1px solid #D7E4EE;background:#EEF5FB;border-radius:13px}
+.status i{width:9px;height:9px;flex:0 0 9px;border-radius:50%;background:#D68D33;margin-top:5px}
+.status strong{font-size:13px}.status p{font-size:12px;line-height:1.7;color:#607B90;margin:4px 0 0}
+.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 21px}
+.metrics>div{padding:21px 22px;background:white;border:1px solid #DCE6ED;border-radius:13px;display:grid;gap:4px}
+.metrics span{font-size:11px;color:#71899D;font-weight:700}
+.metrics strong{font-size:27px;color:#1D4C73;font-weight:840}
+.metrics small{font-size:10px;color:#8699A8;line-height:1.5}
+.panel{background:white;border:1px solid #DCE6ED;border-radius:14px;padding:24px;margin-bottom:17px}
+.panel h2{font-size:19px;color:#1B3952;margin:0 0 7px}
+.panel>p{font-size:12px;line-height:1.75;color:#647C90;margin:0 0 19px}
+.bar{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.tag{color:#537B95;font-size:11px;border-radius:7px;padding:7px 9px;background:#EFF5F9}
+.sources{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.source{min-width:0;background:#F7FAFC;border:1px solid #E3ECF2;border-radius:10px;padding:14px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.source strong{display:block;color:#2A465A;font-size:12px;font-weight:750}
+.source small{font-size:10px;color:#8B9EAB;display:block;line-height:1.5;margin-top:4px}
+.source b{color:#26658E;font-size:21px;font-variant-numeric:tabular-nums}
+.actions{display:flex;flex-wrap:wrap;gap:9px}
+button,.action-link{border:1px solid #CFDEE9;border-radius:9px;padding:11px 16px;background:white;min-height:43px;font-size:12px;font-weight:760;color:#2E6589;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button.primary{background:#2D78D7;border-color:#2D78D7;color:white}
+button:hover,.action-link:hover{background:#EEF6FC}
+button.primary:hover{background:#1B65B7;color:#fff}
+button:focus-visible,.action-link:focus-visible{outline:2px solid #2D78D7;outline-offset:2px}
+.notice{font-size:11px;line-height:1.8;color:#71889B;margin-top:13px}
+.warning{border:1px solid #EDDCC1;background:#FFFAF0;color:#82613A;padding:13px 14px;border-radius:9px;font-size:12px;line-height:1.65;margin:13px 0 0}
+.compare{font-size:12px;background:#F4F9FC;border:1px solid #E0E9F0;border-radius:9px;padding:15px;margin:16px 0 0;line-height:1.8;color:#345D79;white-space:pre-line}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:11px}
+.step{padding:17px;border:1px solid #E1EAF1;border-radius:11px;background:#F9FBFD}
+.step span{font-size:10px;letter-spacing:1px;color:#6287A1;font-weight:800}
+.step strong{font-size:13px;display:block;margin:7px 0;color:#274A66}
+.step p{font-size:11px;line-height:1.7;color:#778C9D;margin:0}
+footer{margin-top:30px;border-top:1px solid #DFE8EE;padding-top:20px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:11px;color:#7890A2}
+@media(max-width:720px){
+ main{padding:22px 0 40px}
+ .panel{padding:16px}
+ .metrics{gap:7px}
+ .metrics>div{padding:13px 10px}
+ .metrics strong{font-size:22px}
+ .sources{grid-template-columns:1fr}
+ .steps{grid-template-columns:1fr}
+ .actions button,.action-link{flex:1 1 auto}
+ .brand{font-size:12px}
+}
+@media(max-width:360px){.wrapper{width:min(100% - 22px,1020px)}.metrics strong{font-size:19px}.metrics span{font-size:10px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrapper">
+<a class="brand" href="../"><img src="../brand/davylab-studio-mark.svg" alt="" width="33" height="33"><span>DAVYLAB<small>CONTENT STUDIO</small></span></a>
+<a class="back" href="../">返回选题工作台</a>
+</div></header>
+<main class="wrapper">
+<div class="eyebrow">DAVYLAB / LOCAL-FIRST DATA</div>
+<h1>多端同步中心</h1>
+<p class="intro">在启动云端同步之前，先安全接管电脑和手机里已有的选题与增长数据。当前页面只检查这个浏览器的数据；不会上传稿件、登录腾讯云或修改原始记录。</p>
+<div class="status" role="status" aria-live="polite"><i aria-hidden="true"></i><div><strong>CloudBase 尚未连接 · 本机安全准备阶段</strong><p>未确认数据库类型、身份认证及访问权限前，正式同步保持关闭。你可以先导出私有备份，并在另一台设备预览两份数据的差异。</p></div></div>
+<div class="metrics">
+<div><span>本机业务记录</span><strong id="allCount">—</strong><small>六类数据源统计</small></div>
+<div><span>可逐条识别的记录</span><strong id="readyCount">—</strong><small>适用于无损合并预检</small></div>
+<div><span>需处理的兼容问题</span><strong id="issueCount">—</strong><small>仅提示，不自动修复旧数据</small></div>
+</div>
+<section class="panel" aria-labelledby="sourceTitle">
+<div class="bar"><h2 id="sourceTitle">01 / 本机数据检查</h2><span class="tag">只读</span></div>
+<p>读取选题池、已发记录、赛道研究、研究简报、增长实验和智能排期的数据结构。只显示数量，不展示未发布稿件内容。</p>
+<div id="sources" class="sources" aria-live="polite"></div>
+<p class="notice" id="issues" role="status">正在检查这个浏览器的本地数据…</p>
+</section>
+<section class="panel" aria-labelledby="backupTitle">
+<div class="bar"><h2 id="backupTitle">02 / 无损备份与两端比较</h2><span class="tag">仅本地文件</span></div>
+<p>导出完整的原始数据副本，再把另一台设备导出的备份文件带到本机进行只读比较。相同 ID 两端内容不同会被判定为冲突，禁止自动覆盖。</p>
+<div class="actions">
+<button id="downloadBackup" type="button" class="primary">导出当前设备完整备份</button>
+<button id="compareBackup" type="button">比较另一台设备的备份</button>
+<input type="file" id="importBackup" accept=".json,application/json" hidden>
+</div>
+<div class="warning">备份包含未发布文章、研究笔记和真实增长数据。请仅保存在你的私有设备或加密存储中，不要上传到公开 GitHub 仓库或共享网盘。</div>
+<div id="compareResult" class="compare" role="status" aria-live="polite">尚未选择对比文件。比较不会导入、合并或覆盖任何一端的数据。</div>
+</section>
+<section class="panel" aria-labelledby="cloudTitle">
+<h2 id="cloudTitle">03 / 云端安全接入前置条件</h2>
+<p>下方步骤必须逐项通过，才会开启正式同步。目前不能把“SDK 初始化成功”视为数据库已经可写。</p>
+<div class="steps">
+<div class="step"><span>P0 · 尚未核实</span><strong>确认 CloudBase 数据库类型</strong><p>先确定上海环境究竟是文档数据库还是 PostgreSQL，不能混用安全规则。</p></div>
+<div class="step"><span>P0 · 尚未核实</span><strong>单人登录和权限隔离</strong><p>只允许已登录的本人访问记录，必须测试游客和其他账号都无法读取。</p></div>
+<div class="step"><span>P1 · 尚未启用</span><strong>同步试运行与冲突回滚</strong><p>先只同步测试记录，最后用电脑、iPhone 双向改写与断网恢复验收。</p></div>
+</div>
+<div class="actions" style="margin-top:19px"><a class="action-link" href="./p0.html">打开 SDK 只读诊断</a><a class="action-link" href="./README.md" target="_blank" rel="noopener noreferrer">查看技术实施说明</a></div>
+</section>
+<footer><span>By DAVYLAB · 把想法，做成能用的工具</span><span>不会自动批准、群发或发表任何文章</span></footer>
+</main>
+<script src="./sync-core.js"></script>
+<script>
+(function(){
+"use strict";
+const api=window.DAVYLABSyncCore,by=id=>document.getElementById(id);
+function print(text){by("compareResult").textContent=text}
+function render(){
+ if(!api){print("同步检查组件未加载，请刷新重试。本机数据没有变化。");return}
+ const snap=api.read(localStorage),manifest=api.toDocuments(snap);
+ by("sources").replaceChildren();
+ for(const source of snap.sources){
+  const node=document.createElement("div");node.className="source";
+  const names=document.createElement("div"),title=document.createElement("strong"),detail=document.createElement("small"),num=document.createElement("b");
+  title.textContent=source.label;
+  detail.textContent=source.present?(source.invalid?"需要检查格式":"已读取结构"):"当前设备暂无记录";
+  num.textContent=String(source.count);
+  names.append(title,detail);node.append(names,num);by("sources").appendChild(node);
+ }
+ const issues=manifest.warnings||[];
+ const total=snap.sources.reduce((n,s)=>n+s.count,0);
+ by("allCount").textContent=String(total);
+ by("readyCount").textContent=String(manifest.counts.total);
+ by("issueCount").textContent=String(issues.length);
+ by("issues").textContent=issues.length?
+   "发现 "+issues.length+" 项待处理：其中无稳定 ID 的旧对标记录不会自动上传，但完整原始备份会保留。":
+   "本机数据结构检查通过。正式云端同步仍需独立验证登录与权限。";
+}
+function save(){
+ try{
+  const snap=api.backup(localStorage);
+  const data=JSON.stringify(snap,null,2);
+  if(data.length>api.MAX_BACKUP_BYTES)throw Error("备份超过 10MB，请分批处理");
+  const blob=new Blob([data],{type:"application/json;charset=utf-8"});
+  const link=document.createElement("a"),url=URL.createObjectURL(blob);
+  link.href=url;link.download="DAVYLAB_ContentStudio_本机私有备份_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(link);link.click();link.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+  print("已生成当前浏览器的本地私有备份。请确认文件保存成功后，再到另一台设备重复操作。未进行任何云端写入。");
+ }catch(e){print("备份未完成："+String(e.message||e).slice(0,160))}
+}
+async function compare(file){
+ if(!file)return;
+ if(file.size>api.MAX_BACKUP_BYTES){print("文件超过 10MB，请不要导入。");return}
+ try{
+  const other=api.fromBackup(await file.text());
+  const local=api.toDocuments(api.read(localStorage));
+  const result=api.compare(local.documents,other.documents,[]);
+  const bothWarnings=local.warnings.length+other.warnings.length;
+  print("只读比较已完成\n\n本机独有记录："+result.summary.upload+
+    "\n另一设备独有记录："+result.summary.download+
+    "\n两端完全一致："+result.summary.identical+
+    "\n需要人工审查的冲突："+result.summary.conflicts+
+    "\n结构兼容提示："+bothWarnings+
+    "\n\n没有导入或修改任何数据。若存在冲突，必须先人工确认取舍；正式云端同步仍保持关闭。");
+ }catch(e){print("无法读取对比文件："+String(e.message||e).slice(0,170))}
+ finally{by("importBackup").value=""}
+}
+by("downloadBackup").addEventListener("click",save);
+by("compareBackup").addEventListener("click",()=>by("importBackup").click());
+by("importBackup").addEventListener("change",e=>compare(e.target.files?.[0]));
+render();
+})();
+</script>
+</body></html>
