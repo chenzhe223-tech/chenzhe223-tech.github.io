@@ -60,7 +60,7 @@ header .hero-panel {
 #xnewsVoices .item { border-radius: var(--card-edge); }
 #xnewsVoices .explain { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .material-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-.story .cover { border-radius: var(--card-edge); }
+.story .cover { border-radius: var(--card-edge); object-fit: contain; background: #fff; }
 .story .title { font-size: clamp(34px,3.5vw,52px) !important; }
 .story .provenance { margin: 14px 0; }
 .story .caption { color: #555a53; }
