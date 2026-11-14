@@ -45,6 +45,11 @@ header .hero-panel {
 #top5List { padding: 14px 20px !important; border: 1px solid var(--rule); background: var(--surface); align-self: start; }
 #top5List .top5-card .story-label { background: none !important; border: 0 !important; padding: 0 !important; }
 #top5List .top5-card h3, .lead-story h2, .section-head h2, #top5List::before, .title { font-family: var(--headline) !important; }
+#leadStory.has-image .story-image::after { z-index: 2; }
+#leadStory.has-image .lead-story-copy {
+  z-index: 3;
+  background: linear-gradient(0deg,rgba(18,19,17,.94),rgba(18,19,17,.82) calc(100% - 28px),transparent);
+}
 #chinaAI { padding: 16px; border: 1px solid var(--rule); }
 #chinaAINewsList .china-ai-card { border: 0 !important; border-bottom: 1px solid var(--rule) !important; background: transparent !important; }
 #chinaAINewsList .china-ai-card:not(:first-child) .story-image, #chinaAINewsList .china-ai-card p, #chinaAINewsList .top5-card::after { display: none !important; }
@@ -55,7 +60,7 @@ header .hero-panel {
 #xnewsVoices .item { border-radius: var(--card-edge); }
 #xnewsVoices .explain { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .material-meta { display: flex; gap: 8px; flex-wrap: wrap; }
-.story .cover { border-radius: var(--card-edge); }
+.story .cover { border-radius: var(--card-edge); object-fit: contain; background: #fff; }
 .story .title { font-size: clamp(34px,3.5vw,52px) !important; }
 .story .provenance { margin: 14px 0; }
 .story .caption { color: #555a53; }
