@@ -27,7 +27,7 @@ jobs:
         run: node topic-studio/cloudbase/test-p1-pg.cjs
       - name: Confirm the sync center does not invoke network writes or user-data uploads
         run: |
-          node -e "const fs=require('fs');const html=fs.readFileSync('topic-studio/cloudbase/sync-center.html','utf8');if(!html.includes('sync-core.js')||!html.includes('CloudBase 尚未连接'))process.exit(1)"
+          node -e "const fs=require('fs');const html=fs.readFileSync('topic-studio/cloudbase/sync-center.html','utf8');if(!html.includes('sync-core.js')||!html.includes('excess-tiglon')||!html.includes('正式同步关闭'))process.exit(1)"
       - name: Confirm no CloudBase deploy was attempted
         run: |
           echo "P0 source validation only."
