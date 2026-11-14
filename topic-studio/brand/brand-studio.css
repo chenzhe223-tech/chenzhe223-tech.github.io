@@ -1,0 +1,170 @@
+/* DAVYLAB CONTENT STUDIO · Brand Identity System 1.0
+   Editorial lines → decision spark → published direction.
+   Product-specific, vector-led. Respect existing user-selectable layout and content.
+*/
+:root{
+ --dl-brand-navy:#142B40;
+ --dl-brand-ink:#18344C;
+ --dl-brand-blue:#2D78D7;
+ --dl-brand-blue-dark:#195FAF;
+ --dl-brand-sky:#EAF3FC;
+ --dl-brand-paper:#F7F9FB;
+ --dl-brand-line:#DCE6ED;
+ --dl-brand-muted:#657E92;
+ --dl-brand-radius:12px;
+}
+#appNavigation .brand{
+ display:flex!important;gap:11px!important;align-items:center!important;
+ min-height:56px;padding:5px 7px 17px!important;
+ margin-bottom:5px;border-bottom:1px solid #E7EDF2;
+}
+#appNavigation .brand-symbol{
+ display:block;width:44px;height:44px;flex:0 0 44px;
+ border-radius:11px;
+ box-shadow:0 4px 12px #142B4010;
+}
+#appNavigation .brand-lockup{display:flex;flex-direction:column;gap:1px;min-width:0}
+#appNavigation .brand b{
+ color:var(--dl-brand-ink)!important;
+ font-size:17px!important;line-height:1.16!important;
+ font-weight:830!important;letter-spacing:.25px!important;
+}
+#appNavigation .brand small{
+ display:block!important;
+ color:#6D8496!important;font-size:9px!important;line-height:1.45!important;
+ font-weight:730!important;letter-spacing:1.65px!important;
+ white-space:nowrap;
+}
+#appNavigation .navlabel{
+ color:#8B9CAC!important;font-size:10px!important;
+ letter-spacing:1.55px!important;font-weight:760!important;
+}
+#appNavigation .nav{
+ position:relative;
+ border:1px solid transparent!important;
+ border-radius:10px!important;
+ transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+#appNavigation .nav.active{
+ border-color:#DCE9F7!important;background:#EFF5FD!important;
+ color:#1C5F9F!important;box-shadow:none!important;
+}
+#appNavigation .nav.active:before{
+ content:"";position:absolute;left:0;top:25%;height:50%;width:3px;
+ border-radius:0 3px 3px 0;background:var(--dl-brand-blue);
+}
+#appNavigation .nav.active .ico{color:var(--dl-brand-blue)!important}
+#appNavigation .nav:focus-visible{outline:2px solid var(--dl-brand-blue);outline-offset:2px}
+#appNavigation .desktop-more-toggle{font-size:12px!important}
+.topbar .crumb{
+ display:flex;align-items:center;gap:10px;min-width:0;
+ color:#708498!important;font-size:12px!important;font-weight:650;
+}
+.topbar .crumb .crumb-brand-mark{width:21px;height:21px;flex:0 0 21px;display:block}
+.topbar .crumb .crumb-brand-name{
+ font-size:11px;font-weight:840;letter-spacing:1px;color:#18364F;white-space:nowrap;
+}
+.topbar .crumb .crumb-separator{
+ width:1px;height:18px;background:#D8E3EB;display:inline-block;flex:0 0 1px;
+}
+.topbar .crumb strong{color:#48697F!important;font-size:12px!important;font-weight:720!important}
+.topbar .actions .btn.primary,
+#newTop{
+ background:var(--dl-brand-blue)!important;border-color:var(--dl-brand-blue)!important;
+ color:#fff!important;border-radius:9px!important;
+ box-shadow:none!important;
+}
+.topbar .actions .btn.primary:hover,#newTop:hover{
+ background:var(--dl-brand-blue-dark)!important;border-color:var(--dl-brand-blue-dark)!important;
+}
+.topbar .actions .btn:not(.primary){
+ border-radius:9px!important;box-shadow:none!important;
+}
+.mobile-app-cover{
+ position:relative;overflow:hidden;
+}
+.mobile-app-cover:before{
+ content:"";pointer-events:none;position:absolute;
+ right:-25px;top:-20px;width:180px;height:180px;opacity:.12;
+ background:url("./brand/davylab-studio-symbol.svg") center/contain no-repeat;
+ transform:rotate(-15deg);
+}
+.mobile-app-cover .mobile-cover-head:before{
+ content:"";display:inline-block;width:23px;height:23px;
+ background:url("./brand/davylab-studio-mark.svg") center/contain no-repeat;
+ vertical-align:middle;margin-right:8px;border-radius:6px;
+}
+.content>.hero .eyebrow,
+.section>.hero .eyebrow,
+#section-discover .discover-index-kicker,
+#section-research .hotspot-eyebrow,
+#section-visual .vd-heading .vd-kicker{
+ color:#3F79A3!important;font-weight:820!important;letter-spacing:1.55px!important;
+}
+.section>.hero .eyebrow:before,
+.content>.hero .eyebrow:before{
+ content:"";display:inline-block;width:19px;height:5px;margin-right:9px;
+ border-radius:2px;background:var(--dl-brand-blue);vertical-align:middle;
+}
+#section-discover .discover-index-kicker:before{
+ content:"";display:inline-block;width:17px;height:5px;border-radius:2px;
+ background:var(--dl-brand-blue);margin-right:8px;vertical-align:middle;
+}
+.section.active .btn.primary,
+.section.active button.btn.primary{
+ background:var(--dl-brand-blue)!important;border-color:var(--dl-brand-blue)!important;
+ color:white!important;box-shadow:none!important;
+}
+.section.active .btn.primary:hover{background:var(--dl-brand-blue-dark)!important}
+.section.active .panelhead h2,
+.section.active .discover-toolbox h2,
+.section.active .hotspot-heading h2{
+ color:var(--dl-brand-ink)!important;
+}
+.section.active .panel{
+ box-shadow:none!important;border-color:var(--dl-brand-line)!important;
+}
+#section-discover .opportunity-card:hover,
+#section-discover .xnews-card:hover,
+#section-research .hotspot-card:hover{
+ border-color:#A4C4DE!important;
+}
+#section-discover .discover-quicknav a[aria-current="page"]{
+ border-color:#DCE9F7!important;box-shadow:none!important;
+}
+#section-discover .discover-quicknav a[aria-current="page"] .discover-nav-no{
+ background:var(--dl-brand-blue)!important;color:white!important;
+}
+#section-research .hotspot-card.is-selected{
+ border-color:var(--dl-brand-blue)!important;
+ box-shadow:0 0 0 2px #2D78D713!important;
+}
+#section-research .hotspot-rank{
+ background:var(--dl-brand-navy)!important;
+}
+#section-research .hotspot-score b{color:#1E68A5!important}
+#section-research .hotspot-bar i{background:var(--dl-brand-blue)!important}
+#section-research .hotspot-selected{border-color:#BED5E7!important;background:#F3F9FD!important}
+.content>footer .footer-brand{
+ display:inline-flex;align-items:center;gap:9px;font-weight:760;
+ color:var(--dl-brand-ink);
+}
+.content>footer .footer-brand img{width:22px;height:22px;display:block;border-radius:6px}
+.content>footer{border-color:var(--dl-brand-line)!important}
+@media(max-width:760px){
+ #appNavigation .brand{height:50px!important;min-height:50px!important;
+  border-bottom:0!important;padding:1px 2px 3px!important;margin-bottom:0!important}
+ #appNavigation .brand-symbol{width:34px;height:34px;flex-basis:34px;border-radius:8px}
+ #appNavigation .brand b{font-size:15px!important}
+ #appNavigation .brand small{display:block!important;font-size:8px!important;letter-spacing:1.1px!important}
+ #appNavigation .nav.active:before{display:none}
+ .topbar .crumb{gap:7px!important}
+ .topbar .crumb .crumb-brand-mark{display:none}
+ .topbar .crumb .crumb-brand-name{font-size:10px!important}
+ .topbar .crumb strong{font-size:11px!important}
+ .topbar .actions .btn.primary{min-height:33px}
+ .content>footer .footer-brand{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+ #appNavigation .nav{transition:none!important}
+}
