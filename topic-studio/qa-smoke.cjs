@@ -7,7 +7,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_PATH || "playwright");
 const root = path.resolve(__dirname, "..");
 const screenshotDir = path.join(__dirname, "test-results");
 fs.mkdirSync(screenshotDir, { recursive: true });
-const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
+const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
 
 async function main() {
   const htmlPath = path.join(root, "topic-studio", "index.html");
@@ -55,7 +55,8 @@ async function main() {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on("pageerror", error => errors.push(error.message));
-    page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text()); });
+    page.on("response", response => { if (response.status() === 404) errors.push("HTTP 404 @ " + response.url()); });
+    page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text() + " @ " + (message.location()?.url || "unknown")); });
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
     assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
