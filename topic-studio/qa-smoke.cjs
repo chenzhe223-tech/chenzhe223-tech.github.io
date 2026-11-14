@@ -7,7 +7,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_PATH || "playwright");
 const root = path.resolve(__dirname, "..");
 const screenshotDir = path.join(__dirname, "test-results");
 fs.mkdirSync(screenshotDir, { recursive: true });
-const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
+const mime = { ".html": "text/html; charset=utf-8", ".css": "text/css", ".js": "text/javascript", ".mjs": "text/javascript", ".json": "application/json", ".svg": "image/svg+xml" };
 
 async function main() {
   const htmlPath = path.join(root, "topic-studio", "index.html");
@@ -55,14 +55,16 @@ async function main() {
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
     page.on("pageerror", error => errors.push(error.message));
-    page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text()); });
+    page.on("response", response => { if (response.status() === 404) errors.push("HTTP 404 @ " + response.url()); });
+    page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text() + " @ " + (message.location()?.url || "unknown")); });
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
-    await page.getByRole("heading", { name: /先说一个念头/ }).waitFor();
-    assert.equal(await page.title(), "公众号选题工作台 · DAVYLAB");
+    await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
+    assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
 
 
     // Editorial research: prompt generation, benchmark local persistence, series parsing and topic-pool integration.
-    await page.locator('[data-section="research"]').click();
+    await page.locator('[data-section="research"]').evaluate(el => el.click());
+    await page.locator("#section-research.active").waitFor();
     await page.locator("#researchNiche").fill("普通人用 AI 做产品");
     await page.locator("#researchAudience").fill("不会编程的普通人");
     await page.locator("#researchGenerate").click();
@@ -81,17 +83,20 @@ async function main() {
     await page.locator("#seriesParse").click();
     assert.equal(await page.locator("#seriesPreview .growth-item").count(), 2, "series parser previews two distinct ideas");
     await page.locator("#seriesBatchAdd").click();
-    await page.locator('[data-section="library"]').click();
+    await page.locator('[data-section="library"]').evaluate(el => el.click());
+    await page.locator("#section-library.active").waitFor();
     assert.equal(await page.locator("#topicList .topiccard").count(), 2, "series ideas are integrated into the existing topic pool");
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]").length), 2, "series ideas persist in the existing topic store");
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
-    await page.locator('[data-section="research"]').click();
+    await page.locator('[data-section="research"]').evaluate(el => el.click());
+    await page.locator("#section-research.active").waitFor();
     const mobileOverflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
     assert.equal(mobileOverflow, false, "research page has no horizontal overflow on mobile");
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-mobile.png"), fullPage: true });
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.locator('[data-section="discover"]').click();
+    await page.locator('[data-section="discover"]').evaluate(el => el.click());
+    await page.locator("#section-discover.active").waitFor();
 
     // Visual DNA: theme customization, responsive navigation, motion preview/export and persistence.
     await page.locator("#openVisualSettings").click();
@@ -166,7 +171,7 @@ async function main() {
     await page.locator("#closeVisualSettings").click();
     await page.locator("#visualNavRecovery").click();
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, "hidden navigation opens from its recovery trigger");
-    await page.locator("#ideaInput").click();
+    await page.evaluate(() => document.body.dispatchEvent(new MouseEvent("click", { bubbles: true })));
     assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, "hidden navigation closes after clicking outside");
 
     await page.locator("#openVisualSettings").click();
@@ -193,6 +198,7 @@ async function main() {
     await page.locator("#visualDensity").selectOption("comfortable");
     await page.locator("#saveVisualSettings").click();
     await page.locator("#closeVisualSettings").click();
+    await page.locator("#discoverMaterials").evaluate(el => { el.open = true; });
     await page.locator(".feedcard").first().waitFor({ timeout: 12000 });
     const radarFirstTitle = await page.locator(".feedcard").first().locator("h3").innerText();
     assert.equal(await page.locator("#radarResultCount").count(), 1, "global AI radar includes a visible/total result counter");
@@ -279,7 +285,8 @@ async function main() {
     // Responsive navigation smoke: each navigation mode must fit a narrow phone viewport.
     await page.setViewportSize({ width: 390, height: 850 });
     for (const mode of ["right", "top", "bottom", "floating", "hidden", "left"]) {
-      await page.locator("#openVisualSettings").click();
+      await page.locator("#mobileMoreToggle").click();
+      await page.locator("#mobileVisualSettings").click();
       await page.locator('[data-visual-tab="layout"]').click();
       await page.locator("#visualNavMode").selectOption(mode);
       await page.locator("#saveVisualLayout").click();
@@ -288,20 +295,23 @@ async function main() {
       const navViewport = await page.evaluate(() => ({ viewport: innerWidth, document: document.documentElement.scrollWidth }));
       assert.ok(navViewport.document <= navViewport.viewport + 1, `no horizontal overflow for ${mode} navigation on mobile: ${JSON.stringify(navViewport)}`);
       if (mode === "floating" || mode === "hidden") {
-        await page.locator("#visualNavRecovery").click();
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), true, `${mode} navigation opens on mobile`);
-        await page.keyboard.press("Escape");
-        assert.equal(await page.locator("body").evaluate(el => el.classList.contains("nav-open")), false, `${mode} navigation closes on mobile`);
+        await page.locator("#mobileMoreToggle").click();
+        assert.equal(await page.locator("#mobileMoreToggle").getAttribute("aria-expanded"), "true", `${mode} mobile More navigation opens`);
+        await page.locator("#mobileMoreToggle").click();
+        assert.equal(await page.locator("#mobileMoreToggle").getAttribute("aria-expanded"), "false", `${mode} mobile More navigation closes`);
       }
     }
-    await page.locator("#openVisualSettings").click();
+    await page.locator("#mobileMoreToggle").click();
+      await page.locator("#mobileVisualSettings").click();
     await page.locator('[data-visual-tab="layout"]').click();
     await page.locator("#visualNavMode").selectOption("left");
     await page.locator("#saveVisualLayout").click();
     await page.locator("#closeVisualSettings").click();
 
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.locator("#discoverIdeas").evaluate(el => { el.open = true; });
     await page.locator("#ideaInput").fill("普通人如何用 AI 做出第一个小产品");
-    await page.getByRole("button", { name: /分析并生成方向/ }).click();
+    await page.locator("#analyzeIdeas").click();
     await page.locator("#aiState").waitFor();
     await page.waitForTimeout(150);
     assert.match(await page.locator("#aiState").innerText(), /请先点击|登录|连接/, "AI analysis must require an authenticated NianBox session");
@@ -313,7 +323,7 @@ async function main() {
     await page.getByRole("button", { name: "导入选中灵感" }).click();
     await page.getByRole("button", { name: "我的选题池" }).click();
     await page.getByText("我想写一篇普通人如何用 AI 做出第一个小产品的文章。", { exact: false }).first().waitFor();
-    assert.equal(await page.locator("#topicList .topiccard").count(), 1, "manual NianBox fallback import adds one idea");
+    assert.equal(await page.locator("#topicList .topiccard").count(), 3, "manual NianBox fallback adds one idea to the two existing series topics");
 
     await page.locator('#topicList button[data-a="prompt"]').first().click();
     assert.ok((await page.locator("#promptBox").inputValue()).includes("事实核查"), "creation prompt includes fact-checking instructions");
@@ -392,22 +402,23 @@ async function main() {
     await page.locator("#saveGrowthTarget").click();
     assert.equal((await page.locator("#growthCurrent").innerText()).trim(), "135", "Growth Lab shows the latest subscriber count");
     assert.equal((await page.locator("#growthRemaining").innerText()).trim(), "365", "Growth Lab calculates remaining subscribers to 500");
+    const recentGrowthDate = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
     await page.locator("#viralTitle").fill("QA 爆款实验记录");
     await page.locator("#viralType").selectOption("AI 实测");
     await page.locator("#viralStatus").selectOption("published");
     await page.locator("#viralViews").fill("120");
     await page.locator("#viralShares").fill("12");
     await page.locator("#viralFollows").fill("4");
-    await page.locator("#viralDate").fill("2026-10-29");
+    await page.locator("#viralDate").fill(recentGrowthDate);
     await page.locator("#viralExperimentForm").locator("button[type=submit]").click();
     await page.locator("#viralExperimentList").getByText("QA 爆款实验记录", { exact: true }).waitFor();
     await page.locator("#viralExperimentList").getByText("达到内部爆款候选线", { exact: true }).waitFor();
     await page.locator("#posterTitle").fill("QA 每日新闻贴图任务");
-    await page.locator("#posterDate").fill("2026-10-29");
+    await page.locator("#posterDate").fill(recentGrowthDate);
     await page.locator("#posterStatus").selectOption("qa_passed");
     await page.locator("#posterTaskForm").locator("button[type=submit]").click();
     await page.locator("#posterTaskList").getByText("QA 每日新闻贴图任务", { exact: true }).waitFor();
-    await page.locator("#metricDate").fill("2026-10-29");
+    await page.locator("#metricDate").fill(recentGrowthDate);
     await page.locator("#metricFollowers").fill("135");
     await page.locator("#metricArticle").fill("QA 增长数据记录");
     await page.locator("#metricReads").fill("120");

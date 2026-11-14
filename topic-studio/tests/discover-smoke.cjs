@@ -24,7 +24,7 @@ for (const name of ["discover","research","library","calendar","published","work
   assert(ids.has("section-"+name),"Missing section "+name);
 }
 assert(html.includes('class="section active" id="section-discover"'), "Discover section is not initially active");
-assert(html.includes('src="./opportunity-engine.js"'), "Engine is not loaded");
+assert(/<script\b[^>]*\bsrc=["']\.\/opportunity-engine\.js(?:\?[^"']*)?["']/.test(html), "Opportunity engine script is not loaded");
 assert(Array.isArray(radar.news) && radar.news.length > 0, "Radar has no genuine news");
 assert(Array.isArray(radar.china_ai_news), "Missing China news list");
 assert(Array.isArray(radar.skills), "Missing skill list");

@@ -22,7 +22,8 @@ function loadScript(){
     const tag=document.createElement("script");
     tag.src=SDK_URL;
     tag.async=true;
-    tag.crossOrigin="anonymous";
+    // CDN serves a classic browser script without CORS response headers.
+    // Do not force crossorigin=anonymous or browser loading will fail.
     tag.referrerPolicy="no-referrer";
     tag.onload=()=>{
       const loaded=sdkReady();
