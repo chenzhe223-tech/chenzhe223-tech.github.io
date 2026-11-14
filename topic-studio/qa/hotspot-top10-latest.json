@@ -1,57 +1,90 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-13T11:00:57+00:00",
-  "generated_at": "2026-11-13T11:01:10.183Z",
+  "source_synced_at": "2026-11-14T08:05:53+00:00",
+  "generated_at": "2026-11-14T08:06:00.739Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
-  "available_sources": 192,
+  "available_sources": 211,
   "recommendations": [
     {
       "rank": 1,
-      "id": "skills",
-      "name": "Skill 与 AI 工具技能化",
-      "score": 93,
+      "id": "coding",
+      "name": "AI 编程与真实应用交付",
+      "score": 100,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 13,
+        "observableDiscussion": 20,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 17,
+      "evidenceCount": 51,
       "channels": [
-        "AI Radar",
-        "GitHub Search",
-        "Hacker News"
+        "Hacker News",
+        "XNews",
+        "AI Radar"
       ],
       "exampleSources": [
         {
-          "title": "kesslernity/awesome-copilot-cowork-skills",
-          "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills",
-          "source": "GitHub Skills",
-          "published": "2026-11-12T19:53:46.000Z"
+          "title": "Show HN: Memro – Persistent Memory for Claude Code, Cursor and Codex",
+          "url": "https://github.com/memrohq/memro",
+          "source": "Hacker News",
+          "published": "2026-11-14T00:20:15.000Z"
         },
         {
-          "title": "mrhlaingbwardev/agentic-hacking-skills",
-          "url": "https://github.com/mrhlaingbwardev/agentic-hacking-skills",
-          "source": "GitHub public repositories",
-          "published": "2026-11-01T04:00:04.000Z"
+          "title": "Cursor：用 Agent 构建线上 App，并通过链接分享",
+          "url": "https://x.com/cursor_ai/status/2118458629091426304",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
         }
       ]
     },
     {
       "rank": 2,
+      "id": "content",
+      "name": "AI 创作、内容和视觉表达",
+      "score": 99,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 20,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 17,
+      "channels": [
+        "AI Radar",
+        "Hacker News",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "RealTask/MAX-DESIGN",
+          "url": "https://github.com/RealTask/MAX-DESIGN",
+          "source": "GitHub Skills",
+          "published": "2026-11-10T21:40:15.000Z"
+        },
+        {
+          "title": "ChipAgents – The agentic foundation for semiconductor design (AI for IC design)",
+          "url": "https://chipagents.ai",
+          "source": "Hacker News",
+          "published": "2026-11-14T00:42:10.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 3,
       "id": "memory",
       "name": "Agent 记忆、检索和知识管理",
-      "score": 93,
+      "score": 95,
       "editorial_breakdown": {
-        "freshness": 28,
+        "freshness": 30,
         "channelCoverage": 24,
         "observableDiscussion": 12,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 8,
+      "evidenceCount": 10,
       "channels": [
         "XNews",
         "GitHub Search",
@@ -74,51 +107,84 @@
       ]
     },
     {
-      "rank": 3,
-      "id": "open-source",
-      "name": "开源 AI 项目深度实测",
-      "score": 88,
+      "rank": 4,
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 93,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 8,
+        "observableDiscussion": 13,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 31,
+      "evidenceCount": 22,
       "channels": [
         "AI Radar",
-        "Hacker News",
-        "XNews"
+        "GitHub Search",
+        "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "Hugging Face CEO誓言在黄仁勋离职后继续为开源AI而战",
-          "url": "https://techcrunch.com/2026/11/12/hugging-face-ceo-vows-to-keep-fighting-for-open-source-ai-after-jensen-huangs-exit",
-          "source": "TechCrunch AI",
-          "published": "2026-11-12T17:36:40.000Z"
+          "title": "soumyaRauth/skills-hub",
+          "url": "https://github.com/soumyaRauth/skills-hub",
+          "source": "GitHub Skills",
+          "published": "2026-11-04T10:43:53.000Z"
         },
         {
-          "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
-          "url": "https://x.com/sardorml/status/2118616954085024133",
-          "source": "XNews",
-          "published": "2026-11-06T00:00:00.000Z"
+          "title": "mrhlaingbwardev/agentic-hacking-skills",
+          "url": "https://github.com/mrhlaingbwardev/agentic-hacking-skills",
+          "source": "GitHub public repositories",
+          "published": "2026-11-01T04:00:04.000Z"
         }
       ]
     },
     {
-      "rank": 4,
-      "id": "coding",
-      "name": "AI 编程与真实应用交付",
-      "score": 84,
+      "rank": 5,
+      "id": "research",
+      "name": "AI 科研与可验证发现",
+      "score": 91,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 4,
+        "observableDiscussion": 15,
+        "readerFit": 15,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 7,
+      "channels": [
+        "XNews",
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "霍奇金和赫胥黎用手摇计算器算了三周，AI 要交出的是哪些模型被排除了",
+          "url": "https://x.com/AnthropicAI/status/2118792930211107115",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        },
+        {
+          "title": "K-Dense-AI/scientific-agent-skills",
+          "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+          "source": "GitHub Skills",
+          "published": "2026-11-13T18:26:26.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "enterprise",
+      "name": "AI 进入传统企业与专业行业",
+      "score": 90,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 19,
+        "observableDiscussion": 12,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 45,
+      "evidenceCount": 5,
       "channels": [
         "Hacker News",
         "XNews",
@@ -126,43 +192,10 @@
       ],
       "exampleSources": [
         {
-          "title": "JetBrains Air: Run and review coding agents inside the IDE",
-          "url": "https://blog.jetbrains.com/ai/2026/11/air-in-jetbrains-ides-ga",
+          "title": "Open-source ChatGPT Enterprise alternative, built on the Codex runtime",
+          "url": "https://github.com/LingX-AI/LinkSense",
           "source": "Hacker News",
-          "published": "2026-11-11T13:25:27.000Z"
-        },
-        {
-          "title": "AI Coding CLI Tools to Try Beyond Claude Code and Codex",
-          "url": "https://medium.com/@ajseven/7-ai-coding-cli-tools-to-try-beyond-claude-code-and-codex-e95155e153bd7AICodingCLIToolstoTryBeyondClaudeCodeandCodex",
-          "source": "Hacker News",
-          "published": "2026-11-11T04:55:23.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 5,
-      "id": "enterprise",
-      "name": "AI 进入传统企业与专业行业",
-      "score": 84,
-      "editorial_breakdown": {
-        "freshness": 26,
-        "channelCoverage": 18,
-        "observableDiscussion": 11,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 4,
-      "channels": [
-        "AI Radar",
-        "Hacker News",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "AI chatbots are recommending fake retail websites, study finds",
-          "url": "https://www.theverge.com/ai-artificial-intelligence/1032020/gemini-chatgpt-perplexity-shopping-test-risky-fake-websites-citations",
-          "source": "The Verge AI",
-          "published": "2026-11-12T17:00:00.000Z"
+          "published": "2026-11-14T01:25:10.000Z"
         },
         {
           "title": "Show HN: Kapso – Iterative learning from enterprise data",
@@ -173,18 +206,18 @@
       ]
     },
     {
-      "rank": 6,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
-      "score": 83,
+      "rank": 7,
+      "id": "open-source",
+      "name": "开源 AI 项目深度实测",
+      "score": 88,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 3,
+        "observableDiscussion": 8,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 64,
+      "evidenceCount": 28,
       "channels": [
         "AI Radar",
         "XNews",
@@ -192,49 +225,16 @@
       ],
       "exampleSources": [
         {
-          "title": "Nectar推出AI智能体，为品牌自动化达人发现与联络",
-          "url": "https://techcrunch.com/2026/11/12/nectar-launches-an-ai-agent-to-automate-creator-discovery-and-outreach-for-brands",
-          "source": "TechCrunch AI",
-          "published": "2026-11-12T19:11:00.000Z"
+          "title": "CopilotKit Releases OpenBot 1.0: An MIT-Licensed, Self-Hostable AI Coworker With Built-In Governance",
+          "url": "https://www.marktechpost.com/2026/11/12/copilotkit-openbot-1-0-open-source-ai-coworker",
+          "source": "MarkTechPost",
+          "published": "2026-11-12T21:45:36.000Z"
         },
         {
-          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
-          "url": "https://alignment.anthropic.com/2026/worse-together",
+          "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
+          "url": "https://x.com/sardorml/status/2118616954085024133",
           "source": "XNews",
-          "published": "2026-11-11T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 7,
-      "id": "safety",
-      "name": "AI 安全、隐私与可靠性",
-      "score": 83,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 4,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 17,
-      "channels": [
-        "XNews",
-        "Hacker News",
-        "AI Radar"
-      ],
-      "exampleSources": [
-        {
-          "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
-          "url": "https://alignment.openai.com/fuzzy-robustness",
-          "source": "XNews",
-          "published": "2026-11-12T18:13:02.000Z"
-        },
-        {
-          "title": "CyberGate – vLLM plugin to unlock cybersecurity without weight edits",
-          "url": "https://github.com/kncshw/cybergate",
-          "source": "Hacker News",
-          "published": "2026-11-13T00:52:32.000Z"
+          "published": "2026-11-06T00:00:00.000Z"
         }
       ]
     },
@@ -242,15 +242,15 @@
       "rank": 8,
       "id": "infrastructure",
       "name": "AI 算力、芯片与使用成本",
-      "score": 83,
+      "score": 84,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 4,
+        "observableDiscussion": 5,
         "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 15,
+      "evidenceCount": 10,
       "channels": [
         "AI Radar",
         "XNews",
@@ -258,49 +258,49 @@
       ],
       "exampleSources": [
         {
-          "title": "黄仁勋离职令英伟达对开源的支持存疑",
-          "url": "https://techcrunch.com/2026/11/12/jensen-huangs-exit-puts-nvidias-support-for-open-source-in-question",
-          "source": "TechCrunch AI",
-          "published": "2026-11-12T18:39:23.000Z"
+          "title": "黄仁勋丑闻时间线：婚外情、疑似中国间谍与辞任英伟达CEO",
+          "url": "https://chenqiyuan.cn/article/intel-e56e4be10ccb6ff04c78f63d",
+          "source": "AI圈报",
+          "published": "2026-11-13T15:58:00.000Z"
         },
         {
-          "title": "Five ways Jensen Huang’s ouster from Nvidia could damage the AI industry",
-          "url": "https://techcrunch.com/2026/11/12/five-ways-jensen-huangs-ouster-from-nvidia-could-damage-the-ai-industry",
-          "source": "TechCrunch AI",
-          "published": "2026-11-12T16:32:33.000Z"
+          "title": "前OpenAI研究员称在六个中国AI模型中发现英伟达Blackwell指纹",
+          "url": "https://chenqiyuan.cn/article/intel-6fdb5ea6e5257e03b64674d4",
+          "source": "AI圈报",
+          "published": "2026-11-13T15:21:04.000Z"
         }
       ]
     },
     {
       "rank": 9,
-      "id": "content",
-      "name": "AI 创作、内容和视觉表达",
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
       "score": 82,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 3,
-        "readerFit": 18,
+        "observableDiscussion": 2,
+        "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 14,
+      "evidenceCount": 90,
       "channels": [
-        "AI Radar",
         "XNews",
+        "AI Radar",
         "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "Vincentwei1021/video-shotcraft",
-          "url": "https://github.com/Vincentwei1021/video-shotcraft",
-          "source": "GitHub Skills",
-          "published": "2026-11-12T19:57:18.000Z"
+          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
+          "url": "https://alignment.anthropic.com/2026/worse-together",
+          "source": "XNews",
+          "published": "2026-11-11T00:00:00.000Z"
         },
         {
-          "title": "多模态“源神”！MiniMax开源SOTA生图模型，原生4K，一张两毛",
-          "url": "https://www.qbitai.com/2026/11/509440.html",
-          "source": "量子位",
-          "published": "2026-11-12T11:36:20.000Z"
+          "title": "1000 个 Fable 5.2 智能体用 28.7 小时重做了费马大定理的形式化证明",
+          "url": "https://claude.dev/blog/safely-scaling-multi-agent-teams-with-fable-5-2",
+          "source": "XNews",
+          "published": "2026-11-09T00:00:00.000Z"
         }
       ]
     },
@@ -308,18 +308,19 @@
       "rank": 10,
       "id": "verification",
       "name": "AI 可验证工程与质量验收",
-      "score": 80,
+      "score": 82,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 3,
+        "channelCoverage": 21,
+        "observableDiscussion": 2,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 10,
+      "evidenceCount": 9,
       "channels": [
         "XNews",
-        "Hacker News"
+        "Hacker News",
+        "AI Radar"
       ],
       "exampleSources": [
         {
