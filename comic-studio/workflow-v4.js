@@ -546,12 +546,24 @@
    const p=selected();if(!p||p.handoff?.repoQueuedAt||p.creativeDirection?.approval?.lock_hash)return notify('已锁定创意方案的作品不能直接变更角色');
    const ref=(p.characterRefs||[]).find(x=>String(x.characterId)===String(id));
    if(!ref)return;
+   // Treat a project-local character edit as an atomic write. A quota error
+   // must not leave unsaved overrides in memory and leak them into a later save.
+   const priorName=ref.comicName,hadOverrides=Object.prototype.hasOwnProperty.call(p,'characterOverrides');
+   const priorOverrides=hadOverrides?structuredClone(p.characterOverrides):null;
+   const priorUpdatedAt=p.updatedAt,priorActivity=p.activity;
    if(field==='comicName'){ref.comicName=ev.target.value;}
    else if(['look','costume'].includes(field)){
      if(!p.characterOverrides)p.characterOverrides={};
      p.characterOverrides[id]={...(p.characterOverrides[id]||{}),[field]:ev.target.value};
+   }else return;
+   if(setChange(p,'更新角色作品内版本覆盖，不修改角色资产库')===false){
+     ref.comicName=priorName;
+     if(hadOverrides)p.characterOverrides=priorOverrides;
+     else delete p.characterOverrides;
+     p.updatedAt=priorUpdatedAt;p.activity=priorActivity;
+     notify('角色修改未保存，已恢复上一次成功保存的内容；请检查存储空间');
+     render();
    }
-   setChange(p,'更新角色作品内版本覆盖，不修改角色资产库');
  },true);
  window.wt4Workspace=workspace;
  window.WT4Workflow={stageNames,state,verifiedPublished,remote,characterSnapshot,linkCharacter,entryHub,characterStage,saveEntry,confirmAIDraft,syncCharacterBible};
