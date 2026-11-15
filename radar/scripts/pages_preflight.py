@@ -11,6 +11,8 @@ EXPLICIT_XNEWS_STATUSES = frozenset({
     "incompatible_schema",
     "incompatible_feed",
     "invalid_xml",
+    "oversized_feed",
+    "doctype_rejected",
     "unavailable",
     "disabled",
 })
