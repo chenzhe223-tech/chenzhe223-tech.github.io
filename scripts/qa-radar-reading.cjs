@@ -22,6 +22,20 @@ function check(value, name, detail) {
       if (!hasXnews) {
         const status = await page.evaluate(() => reportData.xnews_status);
         check(['unavailable','invalid_xml','oversized_feed','doctype_rejected','no_recent','incompatible_feed','incompatible_schema','disabled'].includes(status), `${width}: optional X News failure is explicit and does not block reading QA`, status);
+        const core = await page.evaluate(() => ({
+          title: document.title,
+          overflow: document.documentElement.scrollWidth > innerWidth + 1,
+          news: reportData.news?.length || 0,
+          china: reportData.china_ai_news?.length || 0,
+          featured: reportData.top5?.length || 0,
+          skill: reportData.skills?.length || 0,
+          visibleNews: document.querySelectorAll('#newsList .item').length,
+          visibleSkills: document.querySelectorAll('#skillList .item').length
+        }));
+        check(response.status() === 200 && core.title.includes('AI 前沿简报'), `${width}: daily report loads without X News`);
+        check(!core.overflow, `${width}: daily page has no horizontal overflow`);
+        check(core.news >= 5 && core.china >= 6 && core.featured === 5 && core.skill > 0, `${width}: core news and skill sections remain complete`, core);
+        check(core.visibleNews > 0 && core.visibleSkills > 0, `${width}: core news and skill cards render`, core);
         console.log(`[SKIP] ${width}: X News-specific visual checks: no verified X News stories (${status})`);
         await page.close();
         continue;
