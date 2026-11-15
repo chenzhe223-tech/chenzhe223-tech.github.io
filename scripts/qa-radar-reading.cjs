@@ -17,6 +17,15 @@ function check(value, name, detail) {
       const page = await browser.newPage({ viewport: { width, height: width < 500 ? 844 : 1000 }, hasTouch: width < 500 });
       const errors = []; page.on('pageerror', e => errors.push(e.message));
       const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
+      await page.waitForFunction(() => typeof reportData !== 'undefined' && reportData && Array.isArray(reportData.xnews_voices));
+      const hasXnews = await page.evaluate(() => reportData.xnews_voices.length > 0);
+      if (!hasXnews) {
+        const status = await page.evaluate(() => reportData.xnews_status);
+        check(['unavailable','invalid_xml','oversized_feed','doctype_rejected','no_recent','incompatible_feed','incompatible_schema','disabled'].includes(status), `${width}: optional X News failure is explicit and does not block reading QA`, status);
+        console.log(`[SKIP] ${width}: X News-specific visual checks: no verified X News stories (${status})`);
+        await page.close();
+        continue;
+      }
       await page.locator('#xnewsVoices .item').first().waitFor();
       check(response.status() === 200 && (await page.title()).includes('AI 前沿简报'), `${width}: actual briefing loads`);
       const audit = await page.evaluate(() => {
