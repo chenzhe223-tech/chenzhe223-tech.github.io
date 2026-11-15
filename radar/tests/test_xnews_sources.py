@@ -119,7 +119,7 @@ class XNewsFeedTests(unittest.TestCase):
     def test_rejects_doctype(self):
         stories, status = parse_xnews_feed(b"<!DOCTYPE foo><rss></rss>", now=NOW)
         self.assertEqual(stories, [])
-        self.assertEqual(status, "invalid_xml")
+        self.assertEqual(status, "doctype_rejected")
 
 
 if __name__ == "__main__":
