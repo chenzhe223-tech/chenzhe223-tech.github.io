@@ -129,3 +129,28 @@
 - Private production draft PR #7: HEAD `0f29614075453a4597699c0ab98a76e4aa3ad2f8`; Actions run `43410394525` completed/success. https://github.com/chenzhe223-tech/worldtoon/pull/7
 - Compared prior ledger: the frontend HEAD advanced beyond documented `ba3593d01880f36cd94478b505a66b7335e60838`; latest green CI is engineering evidence only. No new commercial-art, authenticated two-device, author approval, publisher receipt or V4 deployment evidence was observed. G1-G5 remain BLOCKED.
 - This pass did not safely identify an unimplemented code change with reproducible failing test from the reviewed evidence; no application source was modified and no claim of new browser execution is made. Next engineering pass should inspect HEAD diff and browser regression source before selecting a code fix, then execute fresh CI. No merge, deploy, paid inference, task mutation or publication authorized.
+
+## 12. 2026-11-15 11:24 SGT · 角色作品内修改的持久化失败原子回滚
+
+### 本轮发现和修复
+- 昨日已对新角色建档做失败回滚，但 V4 角色工作区的 `comicName`（本作品称呼）和 `characterOverrides.look/costume`（作品专用外观与服装）仍先修改内存，再调用 `setChange`。浏览器磁盘配额失败时，未持久化值可能混入后续成功保存，属于实际数据正确性缺陷。
+- 在 `comic-studio/workflow-v4.js` 的角色编辑 change handler，变更前独立备份原名称、角色覆盖、`updatedAt` 和活动日志；`setChange(...)===false` 时回滚内存及 UI 并通知用户，不修改原型角色资产。同步 `comic-studio/worldtoon-v3.js` Worker allowlist 内嵌代码。
+- 首轮新增真实 Chrome 存储异常测试 **确实失败**（run `43672038872`）：虽然别名和服装已恢复，但 `activity` 直接保存旧数组引用；`setChange` 的 `unshift` 会原地修改旧数组，导致幽灵活动日志仍留在内存。不是假绿或误报。
+- 修复为对 `activity` **浅拷贝数组快照**后再修改，失败时恢复真实原数组内容，防止后续异步成功保存混入失败记录。
+- 浏览器实际建立作品与确认角色，注入 `QuotaExceededError`，逐一修改称呼、服装，验证本机持久化项目全文不变、内存项目全文不变、UI 恢复原值、失败通知可见。旧版/三入口/移动端等测试保持运行。
+
+### 精确验收证据
+- 最新测试对应代码 commit：`2c596a1cf24b8132478f5bb01dee70f0842c6eef`。
+- 该 SHA 的 GitHub Actions **4/4 completed/success**：
+  - V3/V4 regression run `43672146417`
+  - static quality run `43672146449`
+  - mobile layout run `43672146295`
+  - real Chrome E2E run `43672146285`，13 条路径全通过，含新增存储失败原子回滚。
+- 此次只读查询 Cloudflare Worker `worldtoon` 的部署：最新仍是 `2026-11-12T06:45:53.226983Z`，旧 version `be6759cc-5ca8-44a4-9e71-c236c6156fc4`；**V4 仍未线上部署**。
+- 真正 9 张可发表 PNG/独立封面视觉 QA、真实 Supabase 认证双设备同步、收费推理、独立作者审批、GitHub 真实交付/WorkBuddy 微信回执依然没有本轮证据，G1-G5 仍 BLOCKED。测试 ZIP 只有合成技术图，不能冒充成品。
+
+### 下轮恢复指令
+1. 首先读取 PR #139 当前 HEAD，不拿上面历史 SHA 作为后来修改的 QA；查四项 CI。
+2. 优先检查其他 `setChange` 失败的界面和本地数据一致性，以及离线恢复/RLS 的可测安全合同；如改动，添加故障注入浏览器测试和重新跑四项 CI。
+3. 有作者明确的测试登录身份才做双设备真实 UAT；有收费生图授权/作者确认后才尝试真实角色样稿/9 格画面；WorkBuddy 发表绝不擅自操作。
+4. PR 继续保留 Draft，不合并、不部署、不代签；完成 P2/P3 才能转最终验收。
