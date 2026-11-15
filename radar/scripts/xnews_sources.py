@@ -83,11 +83,14 @@ def parse_xnews_feed(payload: bytes, *, now: dt.datetime | None = None) -> tuple
     now = now or dt.datetime.now(dt.timezone.utc)
     if now.tzinfo is None:
         raise ValueError("now must be timezone-aware")
-    if len(payload) > MAX_FEED_BYTES or b"<!DOCTYPE" in payload.upper():
-        return [], "invalid_xml"
+    if len(payload) > MAX_FEED_BYTES:
+        return [], "oversized_feed"
+    if b"<!DOCTYPE" in payload.upper():
+        return [], "doctype_rejected"
     try:
         root = ET.fromstring(payload)
-    except ET.ParseError:
+    except ET.ParseError as exc:
+        print(f"[xnews-warning] XML parse failed: {exc}; bytes={len(payload)}")
         return [], "invalid_xml"
     if root.tag != "rss":
         return [], "incompatible_feed"
@@ -162,13 +165,21 @@ def parse_xnews_feed(payload: bytes, *, now: dt.datetime | None = None) -> tuple
 
 def collect_xnews_articles(http_get, *, now: dt.datetime) -> tuple[list[dict], str]:
     """Fail open: an external RSS outage must never block the core daily briefing."""
-    try:
-        payload = http_get(
-            FEED_URL,
-            "application/rss+xml, application/xml, text/xml",
-            timeout=10,
-        )
-        return parse_xnews_feed(payload, now=now)
-    except Exception as exc:
-        print(f"[xnews-warning] feed unavailable: {type(exc).__name__}")
-        return [], "unavailable"
+    last_status = "unavailable"
+    for attempt in range(2):
+        try:
+            # Retry transient upstream corruption once; never treat malformed XML as news.
+            payload = http_get(
+                FEED_URL,
+                "application/rss+xml, application/xml, text/xml",
+                timeout=10,
+            )
+            articles, status = parse_xnews_feed(payload, now=now)
+            if status == "ok" or status in {"no_recent", "incompatible_schema", "incompatible_feed", "doctype_rejected"}:
+                return articles, status
+            last_status = status
+            print(f"[xnews-warning] attempt={attempt + 1} status={status} bytes={len(payload)}")
+        except Exception as exc:
+            print(f"[xnews-warning] attempt={attempt + 1} feed unavailable: {type(exc).__name__}")
+            last_status = "unavailable"
+    return [], last_status
