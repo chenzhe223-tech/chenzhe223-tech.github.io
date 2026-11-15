@@ -3,9 +3,41 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-14T18:13:19+00:00",
-  "count": 33,
+  "synced_at": "2026-11-15T07:55:43+00:00",
+  "count": 35,
   "articles": [
+    {
+      "id": "emollick-satbench",
+      "date": "2026-11-14",
+      "title": "只算独立跑分，SatBench里做到85分的基准是24%，含实验室自报则是63%",
+      "summary": "沃顿的Ethan Mollick用Brian Zhou的Benchmark Almanac，把实验室发布会最常引用的基准当成一套大考。数据截至2026年11月14日。按默认口径，173项里有109项已经到了85分；只算独立跑分则是24%。",
+      "original_url": "https://github.com/emollick/satbench/tree/1ccb73eb36fe5204c6fbbf1e154f258c3de99bfe",
+      "xnews_url": "https://xnews.qiaomu.ai/a/emollick-satbench",
+      "tags": [
+        "benchmarks",
+        "Ethan Mollick",
+        "SatBench",
+        "evaluations"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-chatgpt-wallet",
+      "date": "2026-11-13",
+      "title": "ChatGPT Wallet先向美国Pro用户开放，智能体付钱时拿不到真实卡号",
+      "summary": "OpenAI与美国运通、万事达和Visa合作推出ChatGPT Wallet。每笔购买都要用户做安全验证，支付网络会生成支付令牌，商户和智能体都拿不到真实卡信息。目前只在dots里，面向年满18岁、持有合格美国发卡的ChatGPT Pro用户。",
+      "original_url": "https://openai.com/index/introducing-chatgpt-wallet/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-chatgpt-wallet",
+      "tags": [
+        "OpenAI",
+        "ChatGPT Wallet",
+        "payments",
+        "agents"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "deepmind-pardig-satweave",
       "date": "2026-11-13",
