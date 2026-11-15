@@ -73,7 +73,7 @@ def parse(payload, source, now):
             continue
         normalized = urllib.parse.urlsplit(url)
         canonical = urllib.parse.urlunsplit((normalized.scheme, normalized.netloc.lower(), normalized.path.rstrip("/") or "/", normalized.query, ""))
-        results.append({"id": hashlib.sha256(canonical.encode()).hexdigest()[:20], "title": re.sub(r"\\s+", " ", title).strip()[:240], "url": url, "source": source, "published_at": published.isoformat(), "verification_status": "source_not_independently_verified", "editorial_status": "discovered"})
+        results.append({"id": hashlib.sha256(canonical.encode()).hexdigest()[:20], "title": re.sub(r"\s+", " ", title).strip()[:240], "url": url, "source": source, "published_at": published.isoformat(), "verification_status": "source_not_independently_verified", "editorial_status": "discovered"})
     return results
 
 def collect(sources=SOURCES, http_get=fetch, now=None):
