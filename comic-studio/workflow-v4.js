@@ -550,7 +550,7 @@
    // must not leave unsaved overrides in memory and leak them into a later save.
    const priorName=ref.comicName,hadOverrides=Object.prototype.hasOwnProperty.call(p,'characterOverrides');
    const priorOverrides=hadOverrides?structuredClone(p.characterOverrides):null;
-   const priorUpdatedAt=p.updatedAt,priorActivity=p.activity;
+   const priorUpdatedAt=p.updatedAt,priorActivity=Array.isArray(p.activity)?[...p.activity]:p.activity;
    if(field==='comicName'){ref.comicName=ev.target.value;}
    else if(['look','costume'].includes(field)){
      if(!p.characterOverrides)p.characterOverrides={};
