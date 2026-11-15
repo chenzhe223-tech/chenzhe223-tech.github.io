@@ -543,6 +543,53 @@ async function test(){
       reports.push({test:'real Chrome character-asset quota failure rolls back and reports accurately',result:'passed'});
     }finally{await roleQuota.close()}
 
+    // Character alias and per-work appearance are editable only after a durable save.
+    // A failed write must roll back both memory and the UI, not leak changes on
+    // the next successful save or silently change the pinned character identity.
+    const overrideQuota=await browser.newContext({viewport:{width:1280,height:800}});
+    try{
+      const qp=await overrideQuota.newPage();
+      qp.on('pageerror',e=>errors.push('role-override-quota: '+e.message));
+      await qp.goto(base,{waitUntil:'domcontentloaded'});
+      await qp.locator('[data-wt4-entry="idea"]').click();
+      await qp.locator('#wt4-seed').fill('角色作品内覆盖异常回滚');
+      await qp.locator('[data-wt4-create="idea"] [type="submit"]').click();
+      await qp.locator('.wt4-steps [data-wt4-step="1"]').click();
+      await qp.locator('[data-wt4-character-create] [name="characterName"]').fill('原角色');
+      await qp.locator('[data-wt4-character-create] [name="description"]').fill('原始外观，灰眼睛，深色短发');
+      await qp.locator('[data-wt4-character-create] [type="submit"]').click();
+      const alias=qp.locator('[data-wt4-char-field="comicName"]');
+      await alias.waitFor();
+      const before=await qp.evaluate(()=>{
+        const id=location.hash.split('/')[2],key='davylab-comic-press-v1';
+        const stored=JSON.parse(localStorage.getItem(key)).projects.find(p=>p.id===id);
+        return {id,persisted:JSON.stringify(stored)};
+      });
+      await qp.evaluate(()=>{
+        const original=Storage.prototype.setItem;
+        Storage.prototype.setItem=function(key,value){
+          if(key==='davylab-comic-press-v1')throw new DOMException('Synthetic quota failure','QuotaExceededError');
+          return original.call(this,key,value);
+        };
+      });
+      await alias.fill('未保存的危险别名');
+      await qp.locator('[data-wt4-char-field="costume"]').fill('未保存的危险服装');
+      const after=await qp.evaluate(({id})=>{
+        const saved=JSON.parse(localStorage.getItem('davylab-comic-press-v1')).projects.find(p=>p.id===id);
+        const live=data.projects.find(p=>p.id===id);
+        return {persisted:JSON.stringify(saved),live:JSON.stringify(live),
+          uiAlias:document.querySelector('[data-wt4-char-field="comicName"]')?.value,
+          uiCostume:document.querySelector('[data-wt4-char-field="costume"]')?.value,
+          notification:document.querySelector('#toast')?.textContent};
+      },{id:before.id});
+      assert.equal(after.persisted,before.persisted,'failed role edits must never modify the stored comic');
+      assert.equal(after.live,before.persisted,'failed role edits must not survive in memory and leak into future edits');
+      assert.equal(after.uiAlias,'原角色','failed role alias edit must reset the UI');
+      assert.equal(after.uiCostume,'','failed role override must reset the UI');
+      assert.match(after.notification,/角色修改未保存/,'failed writes must be visible to the author');
+      reports.push({test:'real Chrome failed per-work character alias/outfit edits roll back memory, UI and persisted comic',result:'passed'});
+    }finally{await overrideQuota.close()}
+
     // A broken cloud-sync scheduling callback must not turn a successful local write into a false failure.
     const syncContext=await browser.newContext({viewport:{width:1280,height:800}});
     try{
