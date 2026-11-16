@@ -3,6 +3,7 @@ import datetime as dt
 import importlib.util
 import pathlib
 import unittest
+import tempfile
 
 spec = importlib.util.spec_from_file_location("news_engine_collector", pathlib.Path(__file__).with_name("collector.py"))
 collector = importlib.util.module_from_spec(spec)
@@ -27,12 +28,35 @@ class CollectorTests(unittest.TestCase):
             if "bad" in url:
                 raise TimeoutError()
             return RSS
-        result = collector.collect(sources, get, NOW)
+        result, _ = collector.collect(sources, get, NOW)
         self.assertEqual(len(result["stories"]), 1)
         self.assertEqual([x["status"] for x in result["diagnostics"]], ["error", "ok"])
     def test_dedupe(self):
         sources = [{"name": "a", "url": "https://a.example/feed"}, {"name": "b", "url": "https://b.example/feed"}]
-        self.assertEqual(len(collector.collect(sources, lambda _: RSS, NOW)["stories"]), 1)
+        self.assertEqual(len(collector.collect(sources, lambda _: RSS, NOW)[0]["stories"]), 1)
+    def test_persistent_history(self):
+        sources=[{"name":"a","url":"https://a.example"}]
+        first,history=collector.collect(sources,lambda _:RSS,NOW)
+        second,_=collector.collect(sources,lambda _:RSS,NOW+dt.timedelta(days=1),history)
+        self.assertEqual((len(first["stories"]),len(second["stories"])),(1,0))
+        with tempfile.TemporaryDirectory() as directory:
+            path=pathlib.Path(directory)/"history.json"
+            collector.save_json(path,history)
+            self.assertEqual(collector.load_history(path),history["seen"])
+    def test_expired_history(self):
+        old={"url:https://example.org/post":(NOW-dt.timedelta(days=91)).isoformat()}
+        result,_=collector.collect([{"name":"a","url":"https://a.example"}],lambda _:RSS,NOW,old)
+        self.assertEqual(len(result["stories"]),1)
+    def test_title_dedupe(self):
+        other=RSS.replace(b"https://example.org/post",b"https://other.example/story")
+        sources=[{"name":"a","url":"https://a.example"},{"name":"b","url":"https://b.example"}]
+        result,_=collector.collect(sources,lambda url: RSS if "a.example" in url else other,NOW)
+        self.assertEqual(len(result["stories"]),1)
+    def test_invalid_history(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=pathlib.Path(directory)/"history.json"
+            path.write_text("{}")
+            with self.assertRaises(ValueError): collector.load_history(path)
     def test_reject_insecure(self):
         self.assertEqual(collector.safe_url("http://example.org"), "")
         self.assertEqual(collector.safe_url("https://user:pass@example.org"), "")
