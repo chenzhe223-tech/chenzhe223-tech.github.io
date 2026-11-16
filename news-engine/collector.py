@@ -33,7 +33,7 @@ def canonical_url(value):
         if not k.lower().startswith("utm_") and k.lower() not in {"fbclid","gclid"}])
     return urllib.parse.urlunsplit(("https",u.netloc.lower(),u.path.rstrip("/") or "/",query,""))
 def normalized_title(value):
-    return re.sub(r"[^\\w\\u4e00-\\u9fff]+","",html.unescape(value).casefold())
+    return re.sub(r"[^\w\u4e00-\u9fff]+","",html.unescape(value).casefold())
 def load_history(path):
     if not path.exists(): return {}
     data = json.loads(path.read_text(encoding="utf-8"))
