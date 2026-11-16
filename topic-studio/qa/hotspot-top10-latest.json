@@ -1,157 +1,121 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-15T08:28:40+00:00",
-  "generated_at": "2026-11-15T08:28:47.274Z",
+  "source_synced_at": "2026-11-16T08:37:27+00:00",
+  "generated_at": "2026-11-16T08:37:31.611Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
-  "available_sources": 226,
+  "available_sources": 218,
   "recommendations": [
     {
       "rank": 1,
-      "id": "coding",
-      "name": "AI 编程与真实应用交付",
-      "score": 100,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 20,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 49,
-      "channels": [
-        "AI Radar",
-        "Hacker News",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "Mac上部署Qwen Coder：AI编程助手的本地化实战",
-          "url": "https://news.google.com/rss/articles/CBMiX0FVX3lxTFA2dGV5dG5EcHYwanQxSFU2ejZFaU5sTzNxNGsxYjZidE5sU19QTFZRTjVrMEV6SjBYUVJkU181Wkk3UVYyQ0VhTVR5VF9YZGpUVDAtWDIyOEhLemt4amhn?oc=5",
-          "source": "Google News China AI",
-          "published": "2026-11-14T06:30:26.000Z"
-        },
-        {
-          "title": "Show HN: Memro – Persistent Memory for Claude Code, Cursor and Codex",
-          "url": "https://github.com/memrohq/memro",
-          "source": "Hacker News",
-          "published": "2026-11-14T00:20:15.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 2,
       "id": "content",
       "name": "AI 创作、内容和视觉表达",
-      "score": 100,
+      "score": 96,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 24,
+        "channelCoverage": 18,
         "observableDiscussion": 20,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 17,
-      "channels": [
-        "Hacker News",
-        "AI Radar",
-        "XNews",
-        "GitHub Search"
-      ],
-      "exampleSources": [
-        {
-          "title": "ChipAgents – The agentic foundation for semiconductor design (AI for IC design)",
-          "url": "https://chipagents.ai",
-          "source": "Hacker News",
-          "published": "2026-11-14T00:42:10.000Z"
-        },
-        {
-          "title": "Moddingflow/better-design",
-          "url": "https://github.com/Moddingflow/better-design",
-          "source": "GitHub Skills",
-          "published": "2026-11-10T00:18:53.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 3,
-      "id": "skills",
-      "name": "Skill 与 AI 工具技能化",
-      "score": 95,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 15,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 22,
-      "channels": [
-        "GitHub Search",
-        "AI Radar",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "mrhlaingbwardev/agentic-hacking-skills",
-          "url": "https://github.com/mrhlaingbwardev/agentic-hacking-skills",
-          "source": "GitHub public repositories",
-          "published": "2026-11-01T04:00:04.000Z"
-        },
-        {
-          "title": "coreyhaines31/marketingskills",
-          "url": "https://github.com/coreyhaines31/marketingskills",
-          "source": "GitHub Skills",
-          "published": "2026-11-14T17:13:06.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 4,
-      "id": "infrastructure",
-      "name": "AI 算力、芯片与使用成本",
-      "score": 95,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 16,
         "readerFit": 18,
         "sourceTrace": 10
       },
       "evidenceCount": 15,
       "channels": [
-        "AI Radar",
         "XNews",
         "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "被出口禁令限制的英伟达芯片支撑中国最强AI模型",
-          "url": "https://techcrunch.com/2026/11/13/export-banned-nvidia-chips-are-behind-chinas-most-powerful-ai-models-uh-oh-jensen",
-          "source": "TechCrunch AI",
-          "published": "2026-11-13T18:40:30.000Z"
+          "title": "Tibo：Dropbox 一段屏录，让候补名单从 5000 人增至 75000 人",
+          "url": "https://x.com/tibo_maker/status/2118289869428380138",
+          "source": "XNews",
+          "published": "2026-11-05T00:00:00.000Z"
         },
         {
-          "title": "X.PIN转发WSJ关于黄仁勋辞任英伟达的社论并附新加坡政府澄清声明",
-          "url": "https://chenqiyuan.cn/article/intel-925015bb031e4b07c5009561",
-          "source": "AI圈报",
-          "published": "2026-11-14T14:49:22.000Z"
+          "title": "Agentic AI Designs an Analog Synthesizer",
+          "url": "https://cpldcpu.github.io/2026/11/14/touchsynth",
+          "source": "Hacker News",
+          "published": "2026-11-16T01:28:10.000Z"
         }
       ]
     },
     {
-      "rank": 5,
-      "id": "open-source",
-      "name": "开源 AI 项目深度实测",
-      "score": 92,
+      "rank": 2,
+      "id": "coding",
+      "name": "AI 编程与真实应用交付",
+      "score": 95,
       "editorial_breakdown": {
-        "freshness": 30,
+        "freshness": 28,
         "channelCoverage": 18,
-        "observableDiscussion": 15,
+        "observableDiscussion": 20,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 47,
+      "evidenceCount": 45,
+      "channels": [
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "Cursor：用 Agent 构建线上 App，并通过链接分享",
+          "url": "https://x.com/cursor_ai/status/2118458629091426304",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        },
+        {
+          "title": "checkwash 用 Git diff 检查测试弱化，Alpha 版仍有漏检和误报",
+          "url": "https://x.com/kartg123451/status/2118550260104769565",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "research",
+      "name": "AI 科研与可验证发现",
+      "score": 92,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 16,
+        "readerFit": 15,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 8,
+      "channels": [
+        "XNews",
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "霍奇金和赫胥黎用手摇计算器算了三周，AI 要交出的是哪些模型被排除了",
+          "url": "https://x.com/AnthropicAI/status/2118792930211107115",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        },
+        {
+          "title": "在格点上定义标准模型的探索进展",
+          "url": "https://openai.com/index/step-toward-defining-the-standard-model",
+          "source": "OpenAI",
+          "published": "2026-11-15T22:00:01.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "open-source",
+      "name": "开源 AI 项目深度实测",
+      "score": 91,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
+        "observableDiscussion": 14,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 37,
       "channels": [
         "XNews",
         "GitHub Search"
@@ -164,56 +128,23 @@
           "published": "2026-11-06T00:00:00.000Z"
         },
         {
-          "title": "WebBookkeeper/GitHub-Copilot-app",
-          "url": "https://github.com/WebBookkeeper/GitHub-Copilot-app",
+          "title": "TurquoiseConsultant/GitHub-Copilot-app",
+          "url": "https://github.com/TurquoiseConsultant/GitHub-Copilot-app",
           "source": "GitHub public repositories",
-          "published": "2026-11-14T19:25:26.000Z"
+          "published": "2026-11-14T19:25:20.000Z"
         }
       ]
     },
     {
-      "rank": 6,
-      "id": "enterprise",
-      "name": "AI 进入传统企业与专业行业",
-      "score": 89,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 20,
-        "observableDiscussion": 12,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 6,
-      "channels": [
-        "AI Radar",
-        "Hacker News",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "Cogent and OpenAI build cyber defense factories for enterprises",
-          "url": "https://openai.com/index/cogent-security",
-          "source": "OpenAI",
-          "published": "2026-11-10T00:00:00.000Z"
-        },
-        {
-          "title": "Open-source ChatGPT Enterprise alternative, built on the Codex runtime",
-          "url": "https://github.com/LingX-AI/LinkSense",
-          "source": "Hacker News",
-          "published": "2026-11-14T01:25:10.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 7,
-      "id": "research",
-      "name": "AI 科研与可验证发现",
+      "rank": 5,
+      "id": "memory",
+      "name": "Agent 记忆、检索和知识管理",
       "score": 88,
       "editorial_breakdown": {
-        "freshness": 26,
+        "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 16,
-        "readerFit": 15,
+        "observableDiscussion": 8,
+        "readerFit": 19,
         "sourceTrace": 10
       },
       "evidenceCount": 7,
@@ -224,16 +155,82 @@
       ],
       "exampleSources": [
         {
-          "title": "霍奇金和赫胥黎用手摇计算器算了三周，AI 要交出的是哪些模型被排除了",
-          "url": "https://x.com/AnthropicAI/status/2118792930211107115",
+          "title": "Claude 写了 413 份笔记，只拿到 1 枚徽章：智能体记忆该怎么整理",
+          "url": "https://x.com/AnthropicAI/status/2118814753154064501",
           "source": "XNews",
           "published": "2026-11-06T00:00:00.000Z"
         },
         {
-          "title": "Multi-agent AI (LangGraph) to audit AI papers for reproducibility",
-          "url": "https://github.com/owenpatience2010-cmyk/paperpulse",
+          "title": "The Hofmann Wobble: Wikipedia and the problem of historical memory",
+          "url": "https://harpers.org/archive/2023/12/the-hofmann-wobble-wikipedia-and-the-problem-of-historical-memory",
           "source": "Hacker News",
-          "published": "2026-11-15T02:35:18.000Z"
+          "published": "2026-11-15T22:26:33.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "enterprise",
+      "name": "AI 进入传统企业与专业行业",
+      "score": 88,
+      "editorial_breakdown": {
+        "freshness": 28,
+        "channelCoverage": 19,
+        "observableDiscussion": 12,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 5,
+      "channels": [
+        "Hacker News",
+        "XNews",
+        "AI Radar"
+      ],
+      "exampleSources": [
+        {
+          "title": "Open-source ChatGPT Enterprise alternative, built on the Codex runtime",
+          "url": "https://github.com/LingX-AI/LinkSense",
+          "source": "Hacker News",
+          "published": "2026-11-14T01:25:10.000Z"
+        },
+        {
+          "title": "Show HN: Kapso – Iterative learning from enterprise data",
+          "url": "https://news.ycombinator.com/item?id=50471281",
+          "source": "Hacker News",
+          "published": "2026-11-12T17:51:23.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "infrastructure",
+      "name": "AI 算力、芯片与使用成本",
+      "score": 87,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 8,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 13,
+      "channels": [
+        "AI Radar",
+        "Hacker News",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "英伟达间谍丑闻后，美国国会拟收紧AI芯片出口规则",
+          "url": "https://www.theverge.com/ai-artificial-intelligence/1033984/congress-export-rules-ai-chips-china",
+          "source": "The Verge AI",
+          "published": "2026-11-15T19:15:43.000Z"
+        },
+        {
+          "title": "Perplexity partners with Nvidia to launch Portable Computer",
+          "url": "https://venturebeat.com/infrastructure/perplexity-partners-with-nvidia-to-launch-portable-computer-a-fully-local-ai-agent-with-zero-token-costs",
+          "source": "Hacker News",
+          "published": "2026-11-16T00:19:26.000Z"
         }
       ]
     },
@@ -249,11 +246,11 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 11,
+      "evidenceCount": 7,
       "channels": [
         "XNews",
-        "AI Radar",
-        "Hacker News"
+        "Hacker News",
+        "AI Radar"
       ],
       "exampleSources": [
         {
@@ -272,66 +269,66 @@
     },
     {
       "rank": 9,
-      "id": "memory",
-      "name": "Agent 记忆、检索和知识管理",
-      "score": 81,
+      "id": "multi-agent",
+      "name": "多智能体协作与任务分工",
+      "score": 83,
       "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 20,
+        "freshness": 30,
+        "channelCoverage": 21,
         "observableDiscussion": 4,
-        "readerFit": 19,
+        "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 6,
+      "evidenceCount": 7,
       "channels": [
-        "XNews",
         "Hacker News",
+        "XNews",
         "AI Radar"
       ],
       "exampleSources": [
         {
-          "title": "Claude 写了 413 份笔记，只拿到 1 枚徽章：智能体记忆该怎么整理",
-          "url": "https://x.com/AnthropicAI/status/2118814753154064501",
-          "source": "XNews",
-          "published": "2026-11-06T00:00:00.000Z"
+          "title": "Cloudflare Has Hard Spend Limits for Workers",
+          "url": "https://blog.cloudflare.com/spend-management",
+          "source": "Hacker News",
+          "published": "2026-11-15T19:26:46.000Z"
         },
         {
-          "title": "Show HN: Memro – Persistent Memory for Claude Code, Cursor and Codex",
-          "url": "https://github.com/memrohq/memro",
+          "title": "Multi-agent AI (LangGraph) to audit AI papers for reproducibility",
+          "url": "https://github.com/owenpatience2010-cmyk/paperpulse",
           "source": "Hacker News",
-          "published": "2026-11-14T00:20:15.000Z"
+          "published": "2026-11-15T02:35:18.000Z"
         }
       ]
     },
     {
       "rank": 10,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
-      "score": 78,
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 81,
       "editorial_breakdown": {
-        "freshness": 28,
+        "freshness": 30,
         "channelCoverage": 18,
-        "observableDiscussion": 3,
+        "observableDiscussion": 4,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 94,
+      "evidenceCount": 16,
       "channels": [
-        "XNews",
-        "Hacker News"
+        "Hacker News",
+        "AI Radar"
       ],
       "exampleSources": [
         {
-          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
-          "url": "https://alignment.anthropic.com/2026/worse-together",
-          "source": "XNews",
-          "published": "2026-11-11T00:00:00.000Z"
+          "title": "Show HN: Skillroll – pure Markdown evals for any skill using a Dungeon Master",
+          "url": "https://github.com/hagaiw/skillroll",
+          "source": "Hacker News",
+          "published": "2026-11-15T17:01:21.000Z"
         },
         {
-          "title": "ChatGPT Wallet先向美国Pro用户开放，智能体付钱时拿不到真实卡号",
-          "url": "https://openai.com/index/introducing-chatgpt-wallet",
-          "source": "XNews",
-          "published": "2026-11-13T00:00:00.000Z"
+          "title": "Leonxlnx/taste-skill",
+          "url": "https://github.com/Leonxlnx/taste-skill",
+          "source": "GitHub Skills",
+          "published": "2026-11-16T06:53:40.000Z"
         }
       ]
     }
