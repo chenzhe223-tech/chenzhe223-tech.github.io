@@ -445,6 +445,19 @@ const mark = (status, name, detail = '') => {
       mark(skillImportPassed ? 'PASS' : 'FAIL', 'KeyPocket GitHub Skill 搜索结果一键加密收录',
         'mock GitHub 搜索 → 收录按钮 → 项目卡片显示；不触碰真实用户数据');
 
+      const externalSkill = kp.locator('.kp-box-external .kp-resource-row').filter({ hasText: 'geo-sleuth' }).first();
+      await externalSkill.locator('[data-project-action="prompt"]').click();
+      await kp.locator('#promptGoal').fill('制作地理资料检索应用');
+      for (const platform of ['ChatGPT', 'WorkBuddy', 'Claude']) {
+        await kp.locator('#promptAgent').selectOption(platform);
+        const prompt = await kp.locator('#promptOutput').inputValue();
+        mark(prompt.includes(platform) && prompt.includes('geo-sleuth') && prompt.includes('制作地理资料检索应用') ? 'PASS' : 'FAIL',
+          '外部 Skill 开发指令 · ' + platform);
+      }
+      await kp.locator('#copySkillPrompt').click();
+      await kp.waitForFunction(() => /已复制|已选中/.test(document.querySelector('#promptStatus')?.textContent));
+      await kp.locator('#modalRoot [data-action="close"]').first().click();
+
       // Main project CTA must open the project editor without requiring search input.
       await kp.locator('#addProjectBtn').click();
       const projectCtaPassed = await kp.locator('#projectEditForm').count().then(n => n === 1);

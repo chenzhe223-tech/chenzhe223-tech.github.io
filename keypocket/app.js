@@ -1,5 +1,5 @@
 'use strict';
-window.__kpBuildVersion='kp-v2-recovery-20261106-01';
+window.__kpBuildVersion='kp-v2-skill-prompts-20261116-01';
 window.__kpInitDiagnostic='script-loaded';
 const DB_NAME='keypocket-local-v1', DB_VERSION=1, STORE='vault';
 const KEYPOCKET_PENDING_SKILL_KEY='kp.radar.pending-skills.v1';
@@ -183,7 +183,7 @@ function kpProjectRow(p,kind){
  const profile=(kind==='skill')?skillProfile(p):null,meta=skillMetaLines(p);
  const desc=profile?profile.summary:(p.notes||p.category||p.stack||'暂无说明');
  const tags=profile?profile.domain+' · '+profile.subcategory:[p.category,p.stack].filter(Boolean).join(' · ');
- return '<article class="kp-resource-row" data-project-id="'+esc(p.id)+'"><div class="kp-resource-main"><span class="kp-resource-mark">'+(p.repoUrl?'GH':'APP')+'</span><div class="kp-resource-copy"><strong>'+esc(p.name)+(p.favorite?' ★':'')+'</strong><small>'+esc(tags||'项目资源')+'</small><p>'+esc(desc.length>180?desc.slice(0,180)+'…':desc)+'</p></div></div><div class="kp-resource-actions">'+(p.repoUrl?'<a class="btn" href="'+esc(p.repoUrl)+'" target="_blank" rel="noopener noreferrer">GitHub ↗</a>':'')+(p.appUrl?'<a class="btn" href="'+esc(p.appUrl)+'" target="_blank" rel="noopener noreferrer">打开应用 ↗</a>':'')+'<button class="btn" data-project-action="edit">编辑</button><button class="btn" data-project-action="favorite">'+(p.favorite?'取消收藏':'收藏')+'</button><button class="btn danger" data-project-action="delete">删除</button></div></article>';
+ return '<article class="kp-resource-row" data-project-id="'+esc(p.id)+'"><div class="kp-resource-main"><span class="kp-resource-mark">'+(p.repoUrl?'GH':'APP')+'</span><div class="kp-resource-copy"><strong>'+esc(p.name)+(p.favorite?' ★':'')+'</strong><small>'+esc(tags||'项目资源')+'</small><p>'+esc(desc.length>180?desc.slice(0,180)+'…':desc)+'</p></div></div><div class="kp-resource-actions">'+(kind==='skill'?'<button class="btn primary" data-project-action="prompt">生成指令</button>':'')+(p.repoUrl?'<a class="btn" href="'+esc(p.repoUrl)+'" target="_blank" rel="noopener noreferrer">GitHub ↗</a>':'')+(p.appUrl?'<a class="btn" href="'+esc(p.appUrl)+'" target="_blank" rel="noopener noreferrer">打开应用 ↗</a>':'')+'<button class="btn" data-project-action="edit">编辑</button><button class="btn" data-project-action="favorite">'+(p.favorite?'取消收藏':'收藏')+'</button><button class="btn danger" data-project-action="delete">删除</button></div></article>';
 }
 function renderProjects(){
  const q=($('#projectSearch')?.value||'').trim().toLowerCase(),sourceFilter=$('#projectSourceFilter')?.value||'all',categoryFilter=$('#projectCategoryFilter')?.value||'all',sceneFilter=$('#projectSceneFilter')?.value||'all';
@@ -223,6 +223,7 @@ $('#projectCards')?.addEventListener('click',async e=>{
  const action=b.dataset.projectAction,card=b.closest('[data-project-id]'),id=card?.dataset.projectId;
  if(action==='add'){openProjectEditor();return;}
  const p=projects.find(x=>x.id===id);if(!p)return;
+ if(action==='prompt'){openSkillPrompt(p);return;}
  if(action==='favorite'){
   p.favorite=!p.favorite;
   try{await persistProject(p);window.renderProjects();showToast(p.favorite?'已收藏项目':'已取消收藏');}

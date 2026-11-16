@@ -284,3 +284,7 @@ P2：
 ### 本轮最终发布证据
 - 功能提交 c0ea3c8a5d6a81de4465cf213a7d31004f198c82。Pages run 42225658297 完成构建和部署；KeyPocket Handoff QA 42225659078 SUCCESS。正式首页、app.js 与隐私页重新下载后均与本次提交逐字节一致；用下载的发布资源再跑换机模拟回归 PASS。
 - 整站 Browser QA 42225658964 唯一 FAIL 是其他产品「公众号选题工作台」超时。KeyPocket 新用户扫描授权、旧功能回归及手机端无 pageerror 均 PASS。五级状态：本批网页代码、构建、运行、模拟功能测试、正式网页部署均有证据。真实账号/真机与 App Store 验收保持待办。
+
+## 2026-11-16 外部 Skill 开发指令
+- 资源版本 kp-v2-skill-prompts-20261116-01。「外部收录 → 生成指令」支持 ChatGPT、WorkBuddy、Claude，默认立即生成，可选填应用目标，切换平台后复制。优先使用人工摘要或 Radar 仓库描述，补充已知入口、分类及技术栈。生成在本机完成。
+- 修改 app.js、index.html、新增 skill-prompt.js，并在 scripts/qa-smoke.cjs 加入三平台与复制交互断言。静态检查通过；线上浏览器验收查看本次提交的 Actions。iPhone Safari/微信复制行为待真机验证。
