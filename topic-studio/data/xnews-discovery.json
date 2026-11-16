@@ -3,9 +3,27 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-15T07:55:43+00:00",
-  "count": 35,
+  "synced_at": "2026-11-16T08:03:53+00:00",
+  "count": 36,
   "articles": [
+    {
+      "id": "openai-standard-model-lattice",
+      "date": "2026-11-15",
+      "title": "标准模型和实验能对上十八个数量级，格子上却一直缺非微扰定义",
+      "summary": "圣塔芭芭拉分校的Nathaniel Craig以OpenAI访问科学家身份，在2026年11月15日的科学博客首篇客座文章里，讲述他如何借助GPT-6 Astra，为标准模型补上一个候选的非微扰格子定义。文章把这套方法明确说成原则上的答案，还不是可直接做真实模拟的方案。",
+      "original_url": "https://openai.com/index/step-toward-defining-the-standard-model/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-standard-model-lattice",
+      "tags": [
+        "Standard Model",
+        "lattice field theory",
+        "OpenAI",
+        "GPT-6 Astra",
+        "Nathaniel Craig",
+        "physics"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "emollick-satbench",
       "date": "2026-11-14",
