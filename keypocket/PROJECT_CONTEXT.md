@@ -288,3 +288,5 @@ P2：
 ## 2026-11-16 外部 Skill 开发指令
 - 资源版本 kp-v2-skill-prompts-20261116-01。「外部收录 → 生成指令」支持 ChatGPT、WorkBuddy、Claude，默认立即生成，可选填应用目标，切换平台后复制。优先使用人工摘要或 Radar 仓库描述，补充已知入口、分类及技术栈。生成在本机完成。
 - 修改 app.js、index.html、新增 skill-prompt.js，并在 scripts/qa-smoke.cjs 加入三平台与复制交互断言。静态检查通过；线上浏览器验收查看本次提交的 Actions。iPhone Safari/微信复制行为待真机验证。
+
+- 实际验收：功能提交 `566fb30`，Pages `43788873631` 和 Handoff `43788874852` 成功，正式 HTML 和两个 JS 与提交逐字节相符。Browser QA `43788874847` 三个平台指令断言均 PASS，复制操作完成；整站唯一失败为公众号选题工作台超时。iPhone 真机待测。
