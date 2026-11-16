@@ -43,7 +43,7 @@ def load_history(path):
 def save_json(path,value):
     path.parent.mkdir(parents=True,exist_ok=True)
     temp=path.with_suffix(path.suffix+".tmp")
-    temp.write_text(json.dumps(value,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    temp.write_text(json.dumps(value,ensure_ascii=False,indent=2)+"\n",encoding="utf-8")
     temp.replace(path)
 def recent_history(value,cutoff):
     try:
