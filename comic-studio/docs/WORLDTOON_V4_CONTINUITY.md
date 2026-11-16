@@ -164,3 +164,14 @@
 - 本轮未发现有独立可复现失败证据的新 P0/P1 源码缺陷；因此没有未经测试的应用改动。无付费推理、无账号登录、无合并、无部署、无发表。
 - G1–G5 **全部 BLOCKED**。Code Completed=PARTIAL（既有 P0/P1 代码），Build Passed=YES（上述 HEAD 既有四项 CI），Runtime Verified=NO（V4 未验），Functional Tested=PARTIAL（离线浏览器已验，跨设备未验），Production Deployed=NO。
 - **下一步**：优先获取隔离测试账号授权以执行 G2 的真实两设备 UAT；同时在不触碰真实账号前提下审查同步代码及可复现故障注入测试，只有发现并修复具体缺陷后才提交应用源码并重新运行四项 CI。11/17 的收费生图仍须独立费用授权和作者样稿确认。
+
+
+## 14. 2026-11-17 · 每日冲刺：生图门禁与最新 CI 只读复核
+
+- 本轮重新读取本交接文档及验收台账、前端 PR #139 和私有 PR #7；比较 11/16 交接 commit `959d11587f56815c0902c9222968aedcd8703ff3` 到当前功能分支，结果 `identical`（ahead=0，behind=0），没有新的应用源码差异。
+- 对该前端 HEAD 实际查询四项 GitHub Actions，均 `completed/success`：mobile `43778266528`、static `43778266891`、V3/V4 regression `43778266469`、Chrome E2E `43778266478`。这是 Actions 已执行的测试证据，本轮未另行启动浏览器或付费推理。私有 PR #7 已知协议 SHA `0f29614075453a4597699c0ab98a76e4aa3ad2f8` 对应 CI `43410394525` success；私有仓默认分支有其他 discovery/规范提交，不得当作 PR #7 的新协议验收。
+- 只读核查 `comic-studio/workflow-v4.js` 和嵌入 `worldtoon-v3.js` 中的正式生成页面：真实样稿状态由 `creativeDirection.pilotApproval.repo_commit` 决定，GitHub 成品 QA 和 WorkBuddy 队列分离；未发现已授权、可安全直接执行的真实图像模型调用配置或样稿作者批准。未调用模型、未生成虚构 pilot、未创建商业图像。11/17 角色定妆/真实生图目标 **BLOCKED (G1)**，须独立明确模型及费用额度授权，并由作者审定样稿。
+- 用户已口头允许使用隔离测试账号进行 G2；该许可**不等于已经取得测试账号/会话或远端环境配置**。尚无可验证的两套独立认证环境、跨设备真实读写/RLS/冲突恢复记录；G2 仍 BLOCKED。不得把离线 /api/503 浏览器模拟算作通过。
+- 没有确认可复现的新 P0/P1 失败或安全无偿的应用代码修复，因此未改应用源码；仅更新本轮审计记录。没有合并、部署、付费、真实工单、作者代签或发表。
+- 门禁：G1–G5 仍 BLOCKED。五级状态：Code Completed=PARTIAL；Build Passed=YES（当前已核验 HEAD 的既有四项 CI）；Runtime Verified=NO（V4）；Functional Tested=PARTIAL（真实生图/认证双端未验）；Production Deployed=NO。
+- 下一步：取得隔离测试身份及 Supabase 测试配置后执行真实 G2 UAT；取得模型费用明确授权后再进行 G1 两张真实 pilot 与作者审核；之后才能进入 11/18 的九格+独立封面逐图 QA。11/20 仍是目标日期，非保证上线。
