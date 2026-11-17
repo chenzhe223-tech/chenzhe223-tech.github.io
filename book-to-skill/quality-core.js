@@ -14,7 +14,7 @@
   const normCode=(a,b,c)=>[Number(a),Number(b),Number(c)].join('.');
   function segment(text) {
     const rows=String(text||'').split(/\n/);let page=0, pages=[],clause=null,clauses=[],section='',headings=new Map(),seenClause=false;
-    let inAppendix=false;
+    let inAppendix=false; const seenIds=new Set();
     function flush(){if(!clause)return;
       const body=clause.lines.reduce((s,l)=>join(s,l),'').replace(/\s+/g,' ').trim();
       if(body){clause.text=body;clause.charCount=body.length;clause.hasEnd=/[。；;.!?）)]$/.test(body);delete clause.lines;clauses.push(clause);}clause=null;
@@ -36,6 +36,9 @@
       let m=line.match(reClause);
       if(m){let major=Number(m[1]);if(major<1||major>13){addLine(line);continue;}
         if(major===13){flush();inAppendix=true;continue;}
+        const id=normCode(m[1],m[2],m[3]);
+        if(seenIds.has(id)){addLine(line);continue;}
+        seenIds.add(id);
         flush();seenClause=true;
         clause={id:normCode(m[1],m[2],m[3]),chapter:major,section, page:page||null,endPage:page||null,lines:[m[4]],startLine:n+1};
         continue;
