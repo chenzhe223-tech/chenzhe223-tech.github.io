@@ -23,3 +23,19 @@ Collected stories are unverified discovery leads, never publishable facts. No au
 - Live 5-feed sampling: pending network-enabled execution and evidence.
 - Cross-run 90-day persistence: blocked on durable store integration.
 - Production deployment: not authorized by P0.
+
+
+## P1 research triage (2026-11-17)
+
+Run after a separately verified collector output:
+
+```bash
+python news-engine/research.py --input news-engine/data/latest.json --out news-engine/data/research.json
+python -m unittest discover -s news-engine -p 'test_*.py' -v
+```
+
+`research.py` computes a deterministic 0–100 **editorial triage priority**, groups potentially related titles across domains, retains source URLs, and drafts a four-part evidence-checking outline. Two different domains are **not proof of independent confirmation**; all candidates remain `requires_primary_source_and_fact_check`. `gateway_request` only prepares a payload for an existing authorized AI Gateway; it makes no paid/network call and cannot mark an item verified. The P1 output must never be used to publish automatically.
+
+**Production isolation:** No existing `radar/` files, production workflows, poster rules, or publication gates are modified by this branch. The News Engine workflow is independent and has no production deploy job. Integration must remain off by default and require regression checks plus rollback before activation.
+
+**Outstanding acceptance:** Real five-source collection (runner DNS/network), durable cross-run 90-day history, semantic event verification, actual authorized AI Gateway invocation, GitHub CI evidence, and end-to-end runtime QA are pending. Local/offline tests do not establish production readiness.
