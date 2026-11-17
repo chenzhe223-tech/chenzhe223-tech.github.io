@@ -52,6 +52,8 @@ function analyze(ch){
 }
 function splitValue(v){let m=v.split(/\s+[–—-]\s+|\s*[:：]\s*/,2);return m.length===1?[v,'']:[m[0],v.slice(m[0].length).replace(/^\s*[–—:\-]\s*/, '')];}
 function buildFiles(text, title, slug, pdfName, hash, pages){
+ const reliable=window.BookSkillQuality&&window.BookSkillQuality.build(text,title,slug,pdfName,hash,pages);
+ if(reliable)return reliable;
  const chapters=chaptersOf(text).map((c,i)=>Object.assign({},c,{no:i+1,data:analyze(c)}));const root=slug+'/';const out={};
  const chapterKeys=[];let glossary=[],patterns=[], allrules=[];
  for(const ch of chapters){
@@ -120,7 +122,7 @@ async function extractPdf(file,onProgress=()=>{},shouldCancel=()=>false){
     if(part.trim())lines.push(part.trim());
     const pageText=lines.join('\n');chars+=pageText.length;visibleChars+=pageText.replace(/\s/g,'').length;
     if(chars>MAX_EXTRACT_CHARS)throw new Error('提取文字量超过安全上限（500 万字符），请按章节拆分 PDF 后处理。');
-    result.push(pageText);
+    result.push('<<<PDF_PAGE:'+p+'>>>\n'+pageText);
    }finally{if(typeof page.cleanup==='function')page.cleanup();}
    if(p%4===0||p===total){onProgress(p,total);await new Promise(resolve=>setTimeout(resolve,0));}
    if(p===80&&visibleChars<20)throw new Error('前 80 页未检测到可提取文字，可能是扫描 PDF，请先使用 OCR 转成文字型 PDF。');
@@ -165,7 +167,7 @@ async function go(){
   const built=buildFiles(text,title,slug,source,hash,pages);
   if(cancelRequested)throw new Error('转换已取消，未生成文件。');
   generated={...built,slug};render();
-  $('success').textContent='已生成 '+Object.keys(generated.files).length+' 个文件 · '+pages+' 页 · 本地规则模式';
+  $('success').textContent='已生成 '+Object.keys(generated.files).length+' 个文件 · '+pages+' 页 · '+(built.quality?'完整条文索引：'+built.quality.parsed_clauses+' 条（'+built.quality.flagged_clauses.length+' 条待复核），表格未结构化':'本地显式规则提取（非 AI 语义提炼）');
  }catch(e){showError(e.message||String(e));}
  finally{processing=false;cancelRequested=false;setBusy(false);}
 }
