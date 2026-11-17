@@ -12,7 +12,7 @@ assert(html.includes('ai-production-prompt.js?v='),"Production module must be lo
 const topic={
  id:"vibe-coding-case",title:"Vibe Coding 爆火",angle:"普通人如何借助 AI 将创意变成实际可用的小工具",
  summary:"解释概念、优势、边界和真实工作方式，不编造未经验证的个人案例",
- sourceName:"参考信息待核实",sourceUrl:"https://example.com/source-for-testing-only",
+ updatedAt:"2026-11-17T12:00:00Z",sourceName:"参考信息待核实",sourceUrl:"https://example.com/source-for-testing-only",
  column:"DAVYLAB 的 AI 实验室",format:"文章",wordCount:"2200字",
  targetAudience:"没有编程基础的 AI 学习者",
  writingStyle:"第一人称学习者，讲清楚技术边界",
