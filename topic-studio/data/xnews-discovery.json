@@ -3,9 +3,47 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-16T08:03:53+00:00",
-  "count": 36,
+  "synced_at": "2026-11-17T06:54:24+00:00",
+  "count": 38,
   "articles": [
+    {
+      "id": "openai-science-at-the-frontier",
+      "date": "2026-11-16",
+      "title": "受访科学家估计，同样质量的工作，没有AI要花1.9倍时间",
+      "summary": "OpenAI经济研究团队分析了1,819名科学家的580,186条科学消息，并调查了251人。98%的答卷者预期AI会加快发现，官方同时写明：生产力是自我报告，发现速度是预期，并不能证明因果关系。",
+      "original_url": "https://openai.com/index/science-at-the-frontier/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-science-at-the-frontier",
+      "tags": [
+        "OpenAI",
+        "science",
+        "ChatGPT",
+        "Economic Research",
+        "productivity",
+        "academic researchers"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-embedded-assessments",
+      "date": "2026-11-16",
+      "title": "四家独立机构将进入OpenAI内部，查看检查点、代码、训练数据和监控系统",
+      "summary": "OpenAI在2026年11月16日宣布，已与Apollo Research、METR、Transluce和Goodfire签约，启动第一阶段嵌入式评估。目前公开的是访问范围和合作规程，评估结论还没有发布。",
+      "original_url": "https://openai.com/index/our-first-phase-of-embedded-assessments/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-embedded-assessments",
+      "tags": [
+        "OpenAI",
+        "alignment",
+        "safety",
+        "third-party evaluation",
+        "Apollo Research",
+        "METR",
+        "Transluce",
+        "Goodfire"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-standard-model-lattice",
       "date": "2026-11-15",

@@ -25,3 +25,6 @@ jobs:
           node-version: "22"
       - name: Validate Topic Studio discovery
         run: node topic-studio/tests/discover-smoke.cjs
+
+      - name: Verify saved visual plan flows into article AI prompt
+        run: node topic-studio/tests/visual-prompt.test.cjs
