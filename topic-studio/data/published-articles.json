@@ -4,9 +4,42 @@
   "account_ghid": "",
   "sync_method": "workbuddy-browser",
   "sync_status": "synced_via_browser",
-  "last_synced_at": "2026-11-16T09:42:10.000+08:00",
+  "last_synced_at": "2026-11-17T09:24:45.000+08:00",
   "notes": "Auto-synced from DAVYLAB WeChat Official Account backend 发表记录 via logged-in browser session. Drafts and previews excluded.",
   "articles": [
+    {
+      "id": "mTzM04b1XN5Z68q21A7Lbw",
+      "title": "算力铁幕：中美AI竞争进入“五层战场”",
+      "url": "https://mp.weixin.qq.com/s/mTzM04b1XN5Z68q21A7Lbw",
+      "publishedAt": "2026-11-16",
+      "column": "用漫画观察这个世界",
+      "format": "贴图",
+      "summary": "当AI竞争走到今天，胜负早已不再只取决于一颗芯片。芯片、制造、算力、电力、算法、政策与全球供应链，正在共同决定下一阶段AI世界格局。\n\n这一组漫画专题，不再用单一企业或单一事件去解释AI竞争，而是把视角拉到更大的世界版图里。\n\n第一层，是芯片本身。高性能GPU、AI加速器，仍然是当前算力竞赛的核心入口。\n\n第二层，是制造工艺与先进设备。再好的设计，也离不开高端制程、精密设备与稳定产能。\n\n第三层，是高带宽存储与先进封装。AI芯片真正跑起来，越来越依赖HBM与先进封装，很多看不见的配套，正在成为关键瓶颈。\n\n第四层，是服务器互联与电力。AI不是只放在纸面上的模型参数，它需要庞大的机房、稳定的供电、散热与网络基础设施来支撑。\n\n第五层，则是模型、算法、产业政策与应用生态。谁能把芯片、算法、人才、供应链与应用场景组合成完整系统，谁就更可能建立长期优势。\n\n从这个角度看，中美AI竞争不是一场短跑，而是一场关于系统组织力、产业韧性与全球协同能力的长期竞赛。\n\n比拼到最后，不只是芯片之争，而是完整体系之争。\n\nBy DAVYLAB｜新闻连连看 · 味道不一样",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5KaGDtPbyRnLL2ic9by6r0aKeWDiaxH6CODbKoX2IJIuIia7w3JEqLWaLhTv9z4ANrCUkx7W2TYsxjBfcW7X2VoWj1JicA4nicKpPKQ/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "bZn3WlgxmpOoSIks_4gqDA",
+      "title": "当 AI 开始替你付款",
+      "url": "https://mp.weixin.qq.com/s/bZn3WlgxmpOoSIks_4gqDA",
+      "publishedAt": "2026-11-16",
+      "column": "DAVYLAB的AI简报",
+      "format": "贴图",
+      "summary": "当 AI 开始替你付款，真正的考验才刚刚开始。\n\n过去一周，AI 的边界继续向外扩张：ChatGPT Wallet 将智能体带到真实支付场景；Google 把 Gemini 4 Hydrogen 带入搜索，并开放更可编排的决策能力；llama.cpp v1.0 则提醒我们，本地模型仍是重要的技术路线。\n\n另一边，Claude Meetings 把会议讨论连接到行动任务，AWS Emulator 探索让智能体构建开发工具，DeepSeek API 的扩展也引发开发者关注。\n\n本期还挑选了五项实用开源资源：Cloudflare 安全审计、NVIDIA SkillSpector、Addy Osmani Agent Skills、GSAP Skills 与 Obsidian Skills。\n\nDAVY’S NOTE：从“模型有多聪明”到“工具能否真正可靠地交付”，技术竞争的重点正在变化。一个好产品不仅要能生成，更要可验证、可修订、可追溯。\n\n九张图，换一个角度观察这一周。\n\nAI Explorations · By DAVYLAB",
+      "coverUrl": "https://mmbiz.qpic.cn/mmbiz_jpg/jDeq7J8kb5IAb8YbGE7KdjhKGibSlJXOaXVDT4TaD654zXGosCkvRR8kWlWvk3oB3JQHTvaib6C83iaEcRr9pApnQDsqYHSdckN5dNDrN4oSB0/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
+    {
+      "id": "58YTPexflSykE6kNaD64jQ",
+      "title": "不会后端，也能做出真正能用的 App：我的 Supabase 实战",
+      "url": "https://mp.weixin.qq.com/s/58YTPexflSykE6kNaD64jQ",
+      "publishedAt": "2026-11-16",
+      "column": "DAVYLAB 的 AI 实验室",
+      "format": "文章",
+      "summary": "刷新一下，数据就没了；换台设备，什么都看不到。Supabase 怎么解决？用我自己的几个应用，讲清数据库、登录、RLS 和多设备同步，也说明免费方案的价值与限制。",
+      "coverUrl": "https://mmbiz.qpic.cn/sz_mmbiz_jpg/jDeq7J8kb5KY4ibTfQWV4HnjY2iclxsibrwDeT0J1gpRa9JPELpQ3PSUuaBW8kzqdDibLn3jxYTibwqxgU5RR2zlWaURRP4bdJ9XB2mNHtHmZ4lY/0?wx_fmt=jpeg",
+      "source": "WeChat Official Account backend"
+    },
     {
       "id": "HEhE9_vn8K2NgKWNtXuRhQ",
       "title": "BLG：翻过那座山",
