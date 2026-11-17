@@ -4,6 +4,16 @@
 <meta name="theme-color" content="#F7F9FB"><link rel="icon" type="image/svg+xml" href="./brand/davylab-studio-mark.svg"><meta name="description" content="DAVYLAB 公众号选题工作台：把 AI 热点、产品实践和灵感，变成值得写的内容。">
 <title>DAVYLAB Content Studio · 公众号选题工作台</title>
 <style>
+.prompt-mode-cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:10px 0 12px}
+.prompt-mode-card{min-width:0;border:1px solid #dce4ec;border-radius:12px;background:#fff;text-align:left;padding:13px 15px;display:flex;flex-direction:column;gap:5px;color:#17283e;box-shadow:none}
+.prompt-mode-card strong{font-size:14px}.prompt-mode-card span{font-size:12px;line-height:1.5;color:#60738a}
+.prompt-mode-card.selected{background:#eef5ff;border-color:#3769df;box-shadow:inset 0 0 0 1px #3769df}
+.prompt-mode-card:focus-visible{outline:2px solid #3769df;outline-offset:2px}
+.prompt-status{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px}
+.prompt-status span{padding:5px 9px;border:1px solid #dce4ec;border-radius:7px;background:#f7f9fc;color:#4b5e71;font-size:12px}
+.prompt-status #promptInstructionStatus[data-status=generated]{border-color:#a9d6c8;background:#ecf9f3;color:#23604a}
+.prompt-state-note{font-size:12px;line-height:1.6;color:#687a8d;margin:5px 0 10px}
+@media(max-width:650px){.prompt-mode-cards{grid-template-columns:1fr}.prompt-mode-card{padding:12px}.prompt-status span{font-size:11px}}
 .prompt-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:12px}
 .prompt-controls .field{min-width:0}.prompt-controls .field label{display:block;font-size:12px;font-weight:700;margin-bottom:5px}
 .prompt-controls select{width:100%;padding:9px;border-radius:9px;border:1px solid #dce4ec;background:#fff;color:#17283e}
@@ -945,7 +955,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="filters" id="libraryFilters"><button class="chip active" data-status="all">全部</button><button class="chip" data-status="inbox">灵感收集</button><button class="chip" data-status="shortlist">值得写</button><button class="chip" data-status="writing">正在创作</button><button class="chip" data-status="ready">待交稿</button><button class="chip" data-status="published">已发布</button></div>
  <div class="library-quickbar"><span id="libraryVisibleCount" role="status">选题池正在载入…</span><button type="button" class="btn small" id="libraryShowAll">显示全部 / 清除筛选</button></div><div class="formrow" style="margin-bottom:12px"><div class="field" style="flex:1;min-width:160px"><input id="searchTopics" placeholder="搜索标题、栏目、备注或来源…"></div><div class="field" style="width:170px"><select id="formatFilter"><option value="all">全部形式</option><option>文章</option><option>贴图</option><option>视频</option><option>播客</option></select></div></div>
  <div class="topiclist" id="topicList"><div class="empty"><strong>选题池还空着</strong>从“选题发现”收下一条素材，或直接新建灵感。</div></div>
- </div><div class="panel"><div class="panelhead"><div><h2>AI 内容生产指令</h2><p>选择选题，按目标 AI 的实际工具能力执行；完整模式要求最终交付真实图片、HTML 和 ZIP 文件。</p></div></div><div class="prompt-controls" aria-label="AI 指令生成设置"><div class="field"><label for="promptMode">生产模式</label><select id="promptMode"><option value="production" selected>完整素材生产模式（默认）</option><option value="planning">仅策划模式</option></select></div><div class="field"><label for="promptPlatform">目标 AI 平台</label><select id="promptPlatform"><option value="chatgpt" selected>ChatGPT</option><option value="claude">Claude</option><option value="gemini">Gemini</option><option value="other">其他 AI</option></select></div></div><div id="promptCapabilityNote" class="prompt-capability" role="status">能力需由目标 AI 在实际会话中核验；选择模型不等于工具已可用。</div><details class="prompt-deliverables" id="promptDeliverables" open><summary>交付清单预览（指令要求，非已生成文件）</summary><div id="promptManifestPreview">选择选题后显示实际交付目标。</div></details><textarea id="promptBox" style="width:100%;min-height:145px;border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--ink);background:#fbfcfd" placeholder="从选题卡片点击“AI 指令”，这里会出现提示词。"></textarea><div class="actions" style="justify-content:flex-start;margin-top:9px"><button class="btn primary" id="copyPrompt">一键复制完整生产指令</button><button class="btn" id="openChatGPT">打开 ChatGPT ↗</button><button class="btn" id="clearPrompt">清空</button></div></div>
+ </div><div class="panel"><div class="panelhead"><div><h2>AI 内容生产指令</h2><p>选择选题，按目标 AI 的实际工具能力执行；完整模式要求最终交付真实图片、HTML 和 ZIP 文件。</p></div></div><div class="prompt-mode-cards" role="group" aria-label="选择独立生产模式"><button type="button" class="prompt-mode-card selected" data-prompt-mode="production" aria-pressed="true"><strong>A｜完整素材生产</strong><span>完整文章＋真实配图＋HTML＋ZIP（默认）</span></button><button type="button" class="prompt-mode-card" data-prompt-mode="planning" aria-pressed="false"><strong>B｜内容策划</strong><span>事实研究＋标题大纲＋配图方案＋编辑建议</span></button></div><div class="prompt-controls" aria-label="AI 指令生成设置"><div class="field"><label for="promptMode">当前模式</label><select id="promptMode"><option value="production" selected>完整素材生产（默认）</option><option value="planning">内容策划</option></select></div><div class="field"><label for="promptPlatform">目标 AI 平台</label><select id="promptPlatform"><option value="chatgpt" selected>ChatGPT</option><option value="claude">Claude</option><option value="gemini">Gemini</option><option value="other">其他 AI</option></select></div></div><div id="promptCapabilityNote" class="prompt-capability" role="status">能力需由目标 AI 在实际会话中核验；选择模型不等于工具已可用。</div><details class="prompt-deliverables" id="promptDeliverables" open><summary id="promptManifestTitle">完整生产交付清单（要求，非已生成文件）</summary><div id="promptManifestPreview">选择选题后显示对应模式交付目标。</div></details><div class="prompt-status" role="status" aria-live="polite"><span id="promptInstructionStatus" data-status="idle">指令未生成</span><span id="promptAssetStatus" data-status="pending">素材生产未确认</span><span id="promptQaStatus" data-status="pending">素材验收未通过</span></div><p class="prompt-state-note" id="promptStateNote">指令生成≠素材生产完成≠素材验收通过。外部文件需要实际回传并验证，本页面不会自动改写选题审批状态。</p><textarea id="promptBox" style="width:100%;min-height:145px;border:1px solid var(--line);border-radius:10px;padding:11px;color:var(--ink);background:#fbfcfd" placeholder="从选题卡片点击“AI 指令”，这里会出现提示词。"></textarea><div class="actions" style="justify-content:flex-start;margin-top:9px"><button class="btn primary" id="generatePrompt" type="button">生成完整生产指令</button><button class="btn" id="copyPrompt" type="button">复制当前指令</button><button class="btn" id="openChatGPT" type="button">打开 ChatGPT ↗</button><button class="btn" id="clearPrompt">清空</button></div></div>
 </section>
 
 <section class="section" id="section-visual" aria-labelledby="vdPageHeading">
@@ -1390,43 +1400,98 @@ function visualPlanPromptLines(t){
  return [...rows,""];
 }
 let promptTopicId="";
+let activePromptKey="";
+const promptDrafts=new Map(); // Session-only; never overwrites saved topics or author records.
+const promptSourceVersions=new Map();
+function promptKey(t){return [t.id||"", $("promptMode").value, $("promptPlatform").value].join("::")}
+function saveCurrentPrompt(){
+ if(activePromptKey)promptDrafts.set(activePromptKey,$("promptBox").value);
+}
+function updatePromptStatus(hasText){
+ $("promptInstructionStatus").textContent=hasText?"指令已生成":"指令未生成";
+ $("promptInstructionStatus").dataset.status=hasText?"generated":"idle";
+ // Statuses for an external AI's delivered files are deliberately NOT inferred from instructions.
+ $("promptAssetStatus").textContent="素材生产未确认";
+ $("promptQaStatus").textContent="素材验收未通过";
+ $("promptAssetStatus").dataset.status="pending";
+ $("promptQaStatus").dataset.status="pending";
+}
 function renderPromptPreview(){
  const mode=$("promptMode").value,platform=$("promptPlatform").value;
  const engine=window.DAVYLABProductionPrompt;
  const manifest=$("promptManifestPreview"),info=$("promptCapabilityNote");
- if(!engine){manifest.textContent="生产指令模块加载失败，请刷新后重试。";info.textContent="生产指令模块未就绪，不得把当前输入当作完整交付要求。";return}
- const target=engine.PLATFORMS[platform]||engine.PLATFORMS.chatgpt;
- info.textContent="目标："+target.label+"。能力未由本站实时检测；"+target.note+" 实际工具缺失时须标记 BLOCKED，不得伪称交付。";
- if(mode==="planning"){
-  manifest.textContent="仅策划模式：输出研究、文章草稿与图片设计说明，不生成图片及 ZIP；不得标记为已交付。";
- }else{
-  const ul=document.createElement("ul");
-  engine.manifest.forEach(path=>{const li=document.createElement("li");li.textContent=path;ul.appendChild(li)});
-  manifest.replaceChildren(ul);
+ document.querySelectorAll("[data-prompt-mode]").forEach(button=>{
+  const isSelected=button.dataset.promptMode===mode;
+  button.classList.toggle("selected",isSelected);
+  button.setAttribute("aria-pressed",String(isSelected));
+ });
+ $("generatePrompt").textContent=mode==="production"?"生成完整生产指令":"生成策划指令";
+ $("promptManifestTitle").textContent=mode==="production"?"完整生产交付清单（要求，非已生成文件）":"内容策划交付清单（不生成实际图片或 ZIP）";
+ if(!engine){
+  manifest.textContent="指令模块加载失败，请刷新后重试。";
+  info.textContent="生产指令模块未就绪，不能标记素材交付。";
+  return;
  }
- $("copyPrompt").textContent=mode==="production"?"一键复制完整生产指令":"复制策划指令";
+ const target=engine.PLATFORMS[platform]||engine.PLATFORMS.chatgpt;
+ const required=mode==="production"?engine.required:engine.planningRequired;
+ info.textContent="目标："+target.label+"。本模式所需能力："+required.join("、")+"。平台未检测外部 AI 的实际工具；"+target.note+" 缺少工具时须如实说明，不得伪称完成。";
+ const entries=mode==="production"?engine.manifest:engine.planningDeliverables;
+ const ul=document.createElement("ul");
+ entries.forEach(item=>{const li=document.createElement("li");li.textContent=item;ul.appendChild(li)});
+ manifest.replaceChildren(ul);
 }
-function showPrompt(t){
+function showPrompt(t,force=false){
  if(!t)return;
+ const key=promptKey(t);
+ if(activePromptKey!==key)saveCurrentPrompt();
  promptTopicId=t.id||"";
+ activePromptKey=key;
  renderPromptPreview();
  if(!window.DAVYLABProductionPrompt){
   $("promptBox").value="";
-  toast("AI 生产指令模块尚未加载，不能生成完整指令");
+  updatePromptStatus(false);
+  toast("AI 生产指令模块尚未加载");
   return;
  }
- const result=window.DAVYLABProductionPrompt.build(t,{mode:$("promptMode").value,platform:$("promptPlatform").value});
+ const sourceVersion=JSON.stringify(t);
+ const draft=!force&&promptSourceVersions.get(key)===sourceVersion?promptDrafts.get(key):undefined;
+ const result=typeof draft==="string"?{text:draft}:window.DAVYLABProductionPrompt.build(t,{mode:$("promptMode").value,platform:$("promptPlatform").value});
  $("promptBox").value=result.text;
+ promptDrafts.set(key,result.text);
+ promptSourceVersions.set(key,sourceVersion);
+ updatePromptStatus(Boolean(result.text.trim()));
 }
+function regeneratePrompt(){
+ const selected=topics.find(t=>t.id===promptTopicId);
+ const engine=window.DAVYLABProductionPrompt;
+ if(!selected||!engine){toast("请先选择选题并确认指令模块已加载");return}
+ const mode=$("promptMode").value,platform=$("promptPlatform").value;
+ const result=engine.build(selected,{mode,platform});
+ const key=promptKey(selected);
+ activePromptKey=key;
+ promptDrafts.set(key,result.text);
+ promptSourceVersions.set(key,JSON.stringify(selected));
+ $("promptBox").value=result.text;
+ updatePromptStatus(Boolean(result.text.trim()));
+ renderPromptPreview();
+ toast("指令已生成；此操作没有生成文章素材或 ZIP");
+}
+$("promptMode").value="production"; // Always enter with A selected; do not persist user mode.
+document.querySelectorAll("[data-prompt-mode]").forEach(button=>button.addEventListener("click",()=>{
+ $("promptMode").value=button.dataset.promptMode;
+ $("promptMode").dispatchEvent(new Event("change",{bubbles:true}));
+}));
 ["promptMode","promptPlatform"].forEach(id=>$(id).addEventListener("change",()=>{
  const selected=topics.find(t=>t.id===promptTopicId);
  if(selected)showPrompt(selected);
- else renderPromptPreview();
+ else{renderPromptPreview();updatePromptStatus(false)}
 }));
-renderPromptPreview();
+$("generatePrompt").addEventListener("click",regeneratePrompt);
+$("promptBox").addEventListener("input",()=>{saveCurrentPrompt();updatePromptStatus(Boolean($("promptBox").value.trim()))});
+renderPromptPreview();updatePromptStatus(false);
 function copyText(v,ok){if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(v).then(()=>toast(ok)).catch(()=>fallback(v,ok));else fallback(v,ok)}
 function fallback(v,ok){const t=document.createElement("textarea");t.value=v;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");toast(ok)}catch{toast("复制失败，请手动复制文本框内容")}t.remove()}
-$("copyPrompt").addEventListener("click",()=>{const v=$("promptBox").value;if(!v){toast("先从选题卡片生成指令");return}copyText(v,"选题指令已复制")});$("clearPrompt").addEventListener("click",()=>$("promptBox").value="");$("openChatGPT").addEventListener("click",()=>{if(!$("promptBox").value.trim()){toast("先生成一份创作指令");return}window.open("https://chatgpt.com/","_blank","noopener,noreferrer");toast("已打开 ChatGPT；请粘贴创作指令")});
+$("copyPrompt").addEventListener("click",()=>{const v=$("promptBox").value;if(!v){toast("先从选题卡片生成指令");return}copyText(v,"选题指令已复制")});$("clearPrompt").addEventListener("click",()=>{$("promptBox").value="";saveCurrentPrompt();updatePromptStatus(false)});$("openChatGPT").addEventListener("click",()=>{if(!$("promptBox").value.trim()){toast("先生成一份创作指令");return}window.open("https://chatgpt.com/","_blank","noopener,noreferrer");toast("已打开 ChatGPT；请粘贴创作指令")});
 function downloadBlob(blob,name){const u=URL.createObjectURL(blob),a=document.createElement("a");a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
 function exportJson(){downloadBlob(new Blob([JSON.stringify({product:"DAVYLAB Topic Studio",version:1,exported_at:new Date().toISOString(),topics},null,2)],{type:"application/json"}),"davylab-topics-"+new Date().toISOString().slice(0,10)+".json");toast("选题已导出")}
 function importJson(file){const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result),a=Array.isArray(d)?d:d.topics;if(!Array.isArray(a))throw Error("JSON 中找不到 topics 数组");if(!confirm("即将导入 "+a.length+" 条选题；相同 ID 的记录将被覆盖。继续？"))return;const m=new Map(topics.map(t=>[t.id,t]));a.forEach(t=>{if(t&&typeof t.title==="string"&&t.title.trim()){const id=t.id||uid();m.set(id,{...t,id})}});topics=[...m.values()];saveTopics();toast("导入完成")}catch(e){toast("导入失败："+e.message)}};r.readAsText(file)}

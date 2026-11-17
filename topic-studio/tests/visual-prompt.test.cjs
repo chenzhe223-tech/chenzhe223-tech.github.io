@@ -51,6 +51,19 @@ assert.equal(defaultResult.platform,"chatgpt");
 const plan=engine.build(topic,{mode:"planning",platform:"gemini"});
 assert.equal(plan.mode,"planning");
 assert.equal(plan.manifest.length,0);
+assert.equal(plan.requiresFullCapability,false);
+assert.deepEqual(plan.capabilityRequirements,engine.planningRequired);
+assert.equal(plan.deliverables.length,5);
+for(const text of ["【B｜内容策划模式｜独立交付标准】","事实研究及选题分析","备选标题","文章大纲","配图策划","编辑建议","风险","生图提示词","极简产品风","#264769","作者修改记录"]){
+ assert(plan.text.includes(text),"Planning mode must preserve "+text);
+}
+for(const forbidden of ["【交付目标｜必须实际执行】","实际压缩上述根目录为","images/00_封面.jpg","只有所有核心项 PASS"]){
+ assert(!plan.text.includes(forbidden),"Planning mode must exclude production requirement "+forbidden);
+}
+assert(!plan.capabilityRequirements.includes("ZIP 创建、解压验证、下载链接"));
+assert(engine.build(topic,{mode:"production"}).text.includes("ZIP 真正存在"));
+assert(engine.build(topic,{mode:"planning"}).text.includes("不要声称已生成图片"));
+
 assert(plan.text.includes("PLAN_ONLY")&&plan.text.includes("不要声称已生成图片"));
 assert(!plan.text.includes("【交付目标｜必须实际执行】"));
 const unstyled=engine.build({...topic,visualPlan:undefined});
@@ -60,3 +73,13 @@ const unknownVersion=engine.build({...topic,visualPlan:{version:999,name:"不应
 assert(!unknownVersion.text.includes("不应该出现"));
 assert.throws(()=>engine.build(null),/有效选题/);
 console.log("PASS: Vibe Coding production prompt, 4 target AI gates, style inheritance, real ZIP contract, planning fallback");
+
+// Dual-mode UI acceptance contract: generator must be isolated from delivery statuses.
+for(const id of ["generatePrompt","promptInstructionStatus","promptAssetStatus","promptQaStatus","promptMode","promptPlatform"]){
+ assert(html.includes('id="'+id+'"'),"Missing independent UI control: "+id);
+}
+assert(html.includes('data-prompt-mode="production"')&&html.includes('data-prompt-mode="planning"'),"Visible A/B mode choices required");
+assert(html.includes('let promptTopicId=')&&html.includes('promptDrafts=new Map()'),"Prompt drafts must remain session-scoped");
+assert(html.includes('promptSourceVersions'),"Saved topic visual changes must invalidate stale prompts");
+assert(html.includes('promptAssetStatus").textContent="素材生产未确认"'),"Generation must not claim external assets complete");
+assert(html.includes('promptQaStatus").textContent="素材验收未通过"'),"Generation must not claim external QA success");

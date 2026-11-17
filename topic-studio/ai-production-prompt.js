@@ -16,6 +16,21 @@ const PLATFORMS=Object.freeze({
  other:{label:"其他 AI",note:"先列出本次会话可调用的真实工具，逐项验证；仅凭模型名称不得推断工具可用。",link:""}
 });
 const required=["来源研究与网页访问","真实图片生成/编辑","写入 Markdown、HTML、JPG 文件","本地执行或等效文件检查","ZIP 创建、解压验证、下载链接"];
+const planningRequired=["来源研究与网页访问","文本撰写与结构化编辑"];
+const planningDeliverables=["事实研究与选题分析","备选标题与推荐理由","文章大纲及核心观点结构","封面与正文配图方案、生图提示词","编辑建议、风险提示与待核实清单"];
+function buildPlanningContent(){
+ return [
+  "","【B｜内容策划模式｜独立交付标准】",
+  "这是 PLAN_ONLY 策划任务，不要求实际生图、HTML 成品、JPG 文件、ZIP 文件或下载链接；不要声称已生成图片，不能将策划标记为生产完成。",
+  "1. 事实研究及选题分析：汇总可查证的原始来源、发布时间、事实结论和争议点；区分事实、作者判断、待核实事项。无法访问外部来源时说明研究限制。",
+  "2. 标题：给出三个具有不同切入角度的候选标题（每个不超过30字）、推荐理由与目标读者匹配说明。",
+  "3. 文章大纲：提供开头钩子、分级结构、每节核心观点、证据需求、生活类比及边界、可执行行动清单和结尾互动问题；此模式交付的是大纲，不得冒充完整正式成稿。",
+  "4. 配图策划：拟定一张封面和至少三张正文图的主题、构图、准确文字、比例、配色及逐张可复用的生图提示词，严格继承已保存的视觉方案；写明图片尚未生成。",
+  "5. 编辑建议：指出风险、事实核查缺口、作者需确认的真实经历、版权与平台发布约束；附下阶段生产的执行建议。",
+  "【策划交付清单】"+planningDeliverables.join("；")+"。",
+  "【状态】仅在策划文本确实完成时可标记 PLAN_ONLY；不得报告素材生产完成、素材验收通过或可下载 ZIP。"
+ ];
+}
 const manifest=[
  "DAVYLAB_文章主题_公众号素材包/01_公众号完整成稿.md",
  "DAVYLAB_文章主题_公众号素材包/02_公众号排版预览.html",
@@ -41,6 +56,7 @@ function visual(t){
 function build(topic,options={}){
  if(!topic||typeof topic!=="object")throw Error("必须先选择有效选题");
  const mode=options.mode==="planning"?"planning":"production";
+ const needs=mode==="planning"?planningRequired:required;
  const id=Object.hasOwn(PLATFORMS,options.platform)?options.platform:"chatgpt";
  const p=PLATFORMS[id];
  const title=v(topic.title||topic.angle||"未命名选题");
@@ -66,16 +82,17 @@ function build(topic,options={}){
  "你是 DAVYLAB 的公众号生产编辑、事实核查员、视觉制作人与交付 QA。品牌主张：把想法，做成能用的工具。",
  "这是交给外部 AI 的【执行指令】，不是已完成的文件或图片。不得假装自己具备当前会话不存在的工具。",
  "【目标执行平台】"+p.label,
- "【执行前能力门禁】先根据当前实际可调用工具逐项确认："+required.join("；")+"。",
+ "【执行前能力门禁】先根据当前实际可调用工具逐项确认："+needs.join("；")+"。",
  "平台能力提示（非实时检测）："+p.note,
- "不能仅凭所属平台声称已具备以上能力。工具实际不可用时必须逐项列出缺口、明确标记 BLOCKED，不得生成假的下载链接、假 JPG、假 ZIP、占位图片或将规划当成果。",
+ "不能仅凭所属平台声称已具备以上能力。工具缺失时说明缺口并明确标记 BLOCKED；不得虚报研究完成、已产图片、HTML、ZIP、下载链接或素材验收。",
  "【任务输入】",...metadata,...visual(topic),
  "【品牌与审批边界】署名统一 DAVYLAB；只写经证实的事实，作者未提供的经历标为待确认；使用 AI 辅助说明；未经作者批准不得视为 approved 或向公众号发表；图片来源和版权需核验。",
  "如内容涉及协助写作 AI 的开发商，披露相关关系；财经内容标注不构成投资建议。"
  ];
  if(mode==="planning")return{
-  mode,platform:id,platformLabel:p.label,manifest:[],requiresFullCapability:false,
-  text:[...intro,"","【仅策划模式｜明确不交付实物】","完成来源调查、文章结构与完整文章草稿、封面和正文图逐张视觉说明及制作提示词。不要声称已生成图片、HTML 或 ZIP。","输出事实核查清单、待核实项目、完整草稿和图片制作说明。状态统一标识为 PLAN_ONLY，不得标记成套素材包已交付。"].join("\n")
+  mode,platform:id,platformLabel:p.label,manifest:[],deliverables:planningDeliverables.slice(),
+  capabilityRequirements:planningRequired.slice(),requiresFullCapability:false,
+  text:[...intro,...buildPlanningContent()].join("\n")
  };
  const production=[
  "","【交付目标｜必须实际执行】",
@@ -92,7 +109,7 @@ function build(topic,options={}){
  "【验收状态】只有所有核心项 PASS 且 ZIP 已验证可下载，才能标注 COMPLETE；缺工具或某环节失败标记 BLOCKED / INCOMPLETE，准确列出缺口和已产生的文件，不能将任务转为仅策划并冒称完成。",
  "【执行顺序】优先直接制作和验收；按当前会话实际能力选择合法工具。若研究、生图、创建文件或压缩能力缺失，应说明缺哪一项、不能交付完整素材包，并仅交付真实已经完成的部分。"
  ];
- return{mode,platform:id,platformLabel:p.label,manifest,requiresFullCapability:true,text:[...intro,...production].join("\n")};
+ return{mode,platform:id,platformLabel:p.label,manifest,deliverables:manifest.slice(),capabilityRequirements:required.slice(),requiresFullCapability:true,text:[...intro,...production].join("\n")};
 }
-return Object.freeze({VERSION,PLATFORMS,required,manifest,build});
+return Object.freeze({VERSION,PLATFORMS,required,planningRequired,planningDeliverables,manifest,build});
 });

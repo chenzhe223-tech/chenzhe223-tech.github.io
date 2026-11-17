@@ -348,6 +348,53 @@ async function main() {
     const vibePrompt=await page.locator("#promptBox").inputValue();
     assert.ok(vibePrompt.includes("Vibe Coding 爆火")&&vibePrompt.includes("极简产品风")&&vibePrompt.includes("#264769"),"real Vibe Coding test topic inherits saved style");
     assert.ok(vibePrompt.includes("02_公众号排版预览.html")&&vibePrompt.includes("images/03_正文配图.jpg"),"full material package contract survives topic/style switching");
+    const topicDataBeforeModeSwitch=await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1"));
+    assert.equal(await page.locator("#generatePrompt").innerText(),"生成完整生产指令");
+    assert.equal(await page.locator("#promptInstructionStatus").innerText(),"指令已生成");
+    assert.equal(await page.locator("#promptAssetStatus").innerText(),"素材生产未确认");
+    assert.equal(await page.locator("#promptQaStatus").innerText(),"素材验收未通过");
+    await page.locator("#promptBox").fill("A 独立手动修订的生产指令");
+    await page.locator('[data-prompt-mode="planning"]').click();
+    assert.equal(await page.locator("#promptMode").inputValue(),"planning","B mode is selected");
+    assert.equal(await page.locator("#generatePrompt").innerText(),"生成策划指令");
+    const planningInstruction=await page.locator("#promptBox").inputValue();
+    assert.ok(planningInstruction.includes("Vibe Coding 爆火")&&planningInstruction.includes("极简产品风")&&planningInstruction.includes("#264769"),"B includes current saved topic and visual style");
+    assert.ok(planningInstruction.includes("文章大纲")&&planningInstruction.includes("编辑建议")&&!planningInstruction.includes("images/00_封面.jpg"),"B produces independent planning contract without real JPG requirements");
+    assert.ok((await page.locator("#promptManifestPreview").innerText()).includes("风险提示"),"B switches deliverable preview");
+    await page.locator("#promptBox").fill("B 独立手动修订的策划指令");
+    await page.locator('[data-prompt-mode="production"]').click();
+    assert.equal(await page.locator("#promptBox").inputValue(),"A 独立手动修订的生产指令","A draft survives mode switch");
+    await page.locator('[data-prompt-mode="planning"]').click();
+    assert.equal(await page.locator("#promptBox").inputValue(),"B 独立手动修订的策划指令","B draft survives mode switch");
+    assert.equal(await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1")),topicDataBeforeModeSwitch,"mode changes must not modify saved topics");
+    await page.locator("#generatePrompt").click();
+    const refreshedPlanning=await page.locator("#promptBox").inputValue();
+    const promptState=await page.evaluate(()=>({
+      id:promptTopicId,
+      exists:topics.some(t=>t.id===promptTopicId),
+      mode:document.getElementById("promptMode").value,
+      buttonType:document.getElementById("generatePrompt").type,
+      buttonText:document.getElementById("generatePrompt").textContent,
+      cached:promptDrafts.get(activePromptKey),
+      expected:window.DAVYLABProductionPrompt.build(topics.find(t=>t.id===promptTopicId),{mode:"planning"}).text.slice(-150)
+    }));
+    assert.ok(refreshedPlanning.includes("【B｜内容策划模式｜独立交付标准】"),"generate button refreshes B template; diag="+JSON.stringify(promptState)+"; prompt="+refreshedPlanning.slice(-250));
+    await page.locator('[data-prompt-mode="production"]').click();
+    await page.locator("#generatePrompt").click();
+    assert.ok((await page.locator("#promptBox").inputValue()).includes("ZIP 真正存在"),"regeneration retains full P0 production contract");
+    assert.equal(await page.locator("#promptAssetStatus").innerText(),"素材生产未确认","generation must not claim external images/ZIP exist");
+    assert.equal(await page.locator("#promptQaStatus").innerText(),"素材验收未通过","generation must not claim validated ZIP");
+    for(const width of [1440,768,390]){
+      await page.setViewportSize({width,height:900});
+      const dims=await page.evaluate(()=>({
+        viewport:innerWidth,
+        overflow:document.documentElement.scrollWidth-innerWidth,
+        modeCards:[...document.querySelectorAll(".prompt-mode-card")].map(el=>({width:el.getBoundingClientRect().width,left:el.getBoundingClientRect().left,right:el.getBoundingClientRect().right}))
+      }));
+      assert.ok(dims.overflow<=2,`dual-mode UI horizontal overflow at ${width}: ${JSON.stringify(dims)}`);
+      assert.ok(dims.modeCards.every(x=>x.width>=100 && x.left>=-1 && x.right<=width+2),`dual-mode choices clipped at ${width}: ${JSON.stringify(dims)}`);
+    }
+    await page.setViewportSize({width:1440,height:900});
     
     // Published content library: shared archive loading, create/preview/local persistence and cleanup.
     await page.locator('button[data-section="published"]').click();
