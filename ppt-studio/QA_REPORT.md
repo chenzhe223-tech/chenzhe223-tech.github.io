@@ -8,3 +8,5 @@
 - **Export QA:** PPTX generation implementation calls verified PptxGenJS browser API, but CDN loading and actual PPTX package opening in PowerPoint remain **unverified**. Do not report full end-to-end pass.
 - **External AI:** Not connected. No fake AI content generation.
 - **Upstream:** PptxGenJS MIT. PPTist AGPL-3.0 not incorporated. PPT Master/PPTAgent/MarkItDown only design candidates, not integrated.
+
+- **Native PPTX package smoke (2026-11-18):** PASS under local Node PptxGenJS 4.0.0 using `tests/export-smoke.cjs`. A 2-slide .pptx was generated and inspected with python-pptx; both slides contain 6 PowerPoint-native editable text objects. Browser CDN/runtime and final PowerPoint visual fidelity remain unverified.
