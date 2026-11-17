@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#f6f9ff" />
+  <meta name="description" content="DAVYLAB PPT Studio — 真实可编辑演示文稿工作台" />
+  <title>DAVYLAB PPT Studio · 把想法，做成能用的工具</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script defer src="https://cdn.jsdelivr.net/gh/gitbrent/pptxgenjs@v4.0.1/dist/pptxgen.bundle.js"></script>
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><div class="brand-mark">D<span>.</span></div><div><b>DAVYLAB</b><small>PPT STUDIO</small></div></div>
+    <button class="nav new-btn" id="newDeck"><span>＋</span> 新建演示文稿</button>
+    <div class="nav-caption">工作空间</div>
+    <button class="nav active" id="navEdit"><span>▦</span> 演示编辑器</button>
+    <button class="nav" id="importBtn"><span>⇧</span> 导入大纲 / 项目</button>
+    <button class="nav" id="exampleBtn"><span>◈</span> 打开示例作品</button>
+    <div class="nav-caption">生产能力</div>
+    <div class="capability"><span class="dot good"></span> 原生 PPTX 导出 <small>可用</small></div>
+    <div class="capability"><span class="dot good"></span> 大纲与本地编辑 <small>可用</small></div>
+    <div class="capability"><span class="dot pending"></span> AI 自动生成 <small>待接入</small></div>
+    <div class="capability"><span class="dot pending"></span> PDF / DOCX 解析 <small>待接入</small></div>
+    <div class="sidefoot">把想法，做成能用的工具<br><span>By DAVYLAB · P0</span></div>
+  </aside>
+  <main class="workspace">
+    <header class="topbar">
+      <div class="bread">工作空间 <span>/</span> <b>演示编辑器</b> <em> P0 BETA</em></div>
+      <div class="header-actions"><span id="saveStatus">本地自动保存</span><button class="light" id="previewBtn">▶ 演示</button><button class="primary" id="exportBtn">↓ 导出 PPTX</button></div>
+    </header>
+    <section class="hero" id="hero">
+      <div class="hero-text"><div class="eyebrow">DAVYLAB PRESENTATION WORKSPACE</div><h1>从一份想法，到专业演示。</h1><p>保留每页的编辑权。用真实结构化内容创作，导出可以继续修改的 PowerPoint。</p><div class="hero-actions"><button class="primary" id="createFromOutline">从大纲开始 <span>↗</span></button><button class="light" id="createBlank">创建空白演示</button></div></div>
+      <div class="hero-visual" aria-hidden="true"><div class="float-card card-back"></div><div class="float-card card-front"><span>DAVYLAB / DESIGN PRINCIPLES</span><strong>MAKE IDEAS<br/>PRESENTABLE.</strong><div class="visual-bars"><i></i><i></i><i></i></div></div><div class="orb"></div></div>
+    </section>
+    <div class="stats"><div><span>作品</span><strong id="deckTitleLabel">未命名演示</strong></div><div><span>页面数量</span><strong id="slideCount">01 页</strong></div><div><span>质量检查</span><strong id="qualitySummary">待检查</strong></div><div><span>存储方式</span><strong>此设备本地保存</strong></div></div>
+    <section class="studio">
+      <div class="studio-head"><div><span class="section-kicker">EDITOR</span><h2>设计工作台</h2></div><div class="studio-tools"><button id="renameDeck" class="text-btn">✎ 重命名</button><button id="downloadJson" class="text-btn">↧ 备份项目</button><button id="qualityBtn" class="text-btn">◇ 检查质量</button></div></div>
+      <div class="editor-layout">
+        <div class="thumb-pane"><div class="pane-title">幻灯片 <span id="thumbCount">01</span></div><div id="thumbList" class="thumb-list"></div><button class="add-slide" id="addSlide">＋ 添加幻灯片</button></div>
+        <div class="canvas-pane"><div class="canvas-head"><span id="slidePosition">01 / 01</span><span>16:9 · 可编辑画布</span><div><button id="moveUp" title="上移">↑</button><button id="moveDown" title="下移">↓</button><button id="duplicateSlide" title="复制页面">⧉</button><button id="deleteSlide" title="删除页面">⌫</button></div></div><div id="slideCanvas" class="slide-canvas"><div class="canvas-inner" id="canvasInner"><div class="slide-flag">DAVYLAB PRESENTATION</div><div id="editableTitle" role="textbox" contenteditable="true" aria-label="幻灯片标题" data-placeholder="输入标题"></div><div id="editableBody" role="textbox" contenteditable="true" aria-label="幻灯片内容" data-placeholder="点击输入正文，换行分段"></div><div class="slide-watermark">By DAVYLAB <span id="slideNumber">01</span></div></div></div><div class="editor-tip">提示：直接点击画布中的文字编辑。内容会自动保存到当前设备。</div></div>
+        <div class="inspector"><div class="pane-title">设计与内容</div><label>页面类型<select id="slideType"><option value="cover">封面</option><option value="content">内容</option><option value="section">章节过渡</option><option value="closing">结束页</option></select></label><label>视觉主题<select id="themeSelect"><option value="ocean">深海蓝 · Ocean</option><option value="midnight">深空黑 · Midnight</option><option value="violet">极光紫 · Aurora</option><option value="emerald">雨后青 · Emerald</option></select></label><div class="mini-caption">演讲备注</div><textarea id="slideNotes" placeholder="写下演讲时的提示…" rows="4"></textarea><div class="mini-caption">本页资料来源（可选）</div><textarea id="slideSource" placeholder="记录资料链接或出处，便于核查" rows="3"></textarea><div class="inspect-notice"><b>真实生产模式</b><p>当前支持人工编辑与原生导出；尚未接通的 AI 能力不会伪装为生成成功。</p></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="modal-overlay hidden" id="modal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="close" id="closeModal" aria-label="关闭">×</button><span class="section-kicker">CREATE & IMPORT</span><h2 id="modalTitle">从大纲创建演示</h2><p class="modal-intro">每个 Markdown 标题（#）将创建一页，标题下的文字作为正文。也可直接导入 .md/.txt 或工作台 .json 备份。</p><label>演示文稿名称<input id="outlineTitle" placeholder="例如：2026 年度业务复盘" maxlength="100"/></label><label>大纲内容<textarea id="outlineText" rows="10" placeholder="# 核心结论&#10;- 关键结果一&#10;- 关键结果二&#10;# 工作进展&#10;- 项目进展和风险"></textarea></label><div class="file-row"><label class="file-label">⇧ 选择 TXT / MD / JSON<input id="importFile" type="file" accept=".txt,.md,.json,text/plain,application/json" hidden /></label><span id="fileLabel">文件仅在当前设备处理</span></div><div class="modal-actions"><button class="light" id="cancelModal">取消</button><button class="primary" id="confirmImport">生成可编辑页面</button></div></div></div>
+<div class="modal-overlay hidden" id="reportModal"><div class="modal report" role="dialog" aria-modal="true" aria-labelledby="reportTitle"><button class="close" id="closeReport">×</button><span class="section-kicker">QA CHECKLIST</span><h2 id="reportTitle">质量检查</h2><p>检查空标题、长内容与行数；最终版仍需要在 PowerPoint 中进行字体、布局和事实人工复核。</p><div id="reportBody"></div><div class="modal-actions"><button class="primary" id="closeReportBtn">返回编辑器</button></div></div></div>
+<div class="presentation hidden" id="presentation"><div class="presentation-slide" id="presentationSlide"></div><div class="presentation-controls"><button id="prevPresentation">← 上一页</button><span id="presentationIndex"></span><button id="nextPresentation">下一页 →</button><button id="closePresentation">退出 Esc</button></div></div>
+<div class="toast hidden" id="toast" role="status"></div>
+</body>
+</html>
