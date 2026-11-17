@@ -1,50 +1,28 @@
 {
-  "report_date": "2026-11-17",
-  "poster": "radar/posters/2026-11-17.png",
+  "report_date": "2026-11-18",
+  "poster": "radar/posters/2026-11-18.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.theverge.com/ai-artificial-intelligence/1034815/california-openai-hugging-face-lawsuit",
-    "https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours/",
-    "https://techcrunch.com/2026/11/16/openai-will-embed-apollo-researchers-to-investigate-ai-subversion/",
-    "https://chenqiyuan.cn/article/intel-1fdd86f0c7123dc9ca8eacf2",
-    "https://www.oschina.net/news/503602"
+    "https://openai.com/index/introducing-gpt-6-2-astra-sol",
+    "https://techcrunch.com/2026/11/17/google-expands-access-to-gemini-tasks-which-can-help-with-calls-purchases/",
+    "https://github.blog/open-source/maintainers/maintainers-dont-need-more-ai-bug-reports-they-need-fixes/",
+    "https://www.ithome.com/1/028/534.htm",
+    "https://techcrunch.com/2026/11/17/google-to-keep-gemini-chats-for-two-months-up-from-72-hours-even-with-history-off/"
   ],
   "news_titles": [
-    "加州就AI智能体越界事件起诉OpenAI",
-    "FBI称开源黑客工具Artex AI不到三小时攻破网络",
-    "OpenAI将嵌入安全研究员调查AI颠覆行为",
-    "美国拟收紧规则，限制中国远程租用数据中心AI芯片",
-    "华为云发布并开源昇腾原生具身世界模型CloudRobo-WM1.2"
+    "OpenAI 发布 GPT-6.2 Astra 和 Sol",
+    "Google 扩大 Gemini Tasks 访问权限，可协助通话与购物",
+    "维护者不需要更多 AI 漏洞报告，他们需要修复",
+    "商汤发布 SenseNova Loop-9B 模型：部署显存需求低至 10 GB 内",
+    "Google 将 Gemini 聊天记录保留期从 72 小时延长至两个月，即使关闭历史记录"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.theverge.com/ai-artificial-intelligence/1034815/california-openai-hugging-face-lawsuit",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "84252305163315470cc72b7877a9f9534626694c8f912c3f918dd703ea07e429",
-      "rendered_image_sha256": "84252305163315470cc72b7877a9f9534626694c8f912c3f918dd703ea07e429",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://techcrunch.com/2026/11/16/fbi-says-artex-ai-open-source-hacking-tool-used-to-breach-networks-in-under-three-hours/",
-      "image_source": "TechCrunch AI",
-      "image_match_status": "article_image",
-      "image_sha256": "492939ed7c30a88e07cb7fb52258ee40efc2c8bcdf2d212ec2d05b64dd50554d",
-      "rendered_image_sha256": "492939ed7c30a88e07cb7fb52258ee40efc2c8bcdf2d212ec2d05b64dd50554d",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://techcrunch.com/2026/11/16/openai-will-embed-apollo-researchers-to-investigate-ai-subversion/",
+      "story_url": "https://openai.com/index/introducing-gpt-6-2-astra-sol",
       "image_source": "Unsplash topic illustration",
       "image_match_status": "thematic_fallback",
-      "image_sha256": "75911aac5ca554021db23e3529005a2e7b12c83bb4c167e949b475735f86da08",
+      "image_sha256": "218a7387aa7107f0d996838b5377ae6e3ffce2a324d6b55f25b994037510ddd4",
       "rendered_image_sha256": "bee6e5f4a7c956beba95bd30ef26b3ef6be7e799cff8753ea34d0821de3ae921",
       "rendered_visual_type": "info_card",
       "label_required": true,
@@ -52,29 +30,51 @@
       "label": "主题配图 · 非新闻现场"
     },
     {
-      "story_url": "https://chenqiyuan.cn/article/intel-1fdd86f0c7123dc9ca8eacf2",
+      "story_url": "https://techcrunch.com/2026/11/17/google-expands-access-to-gemini-tasks-which-can-help-with-calls-purchases/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "73a74c5bb863dd564c19a4e3c5aad98a612d72752635988e804738c10a03137b",
+      "rendered_image_sha256": "73a74c5bb863dd564c19a4e3c5aad98a612d72752635988e804738c10a03137b",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://github.blog/open-source/maintainers/maintainers-dont-need-more-ai-bug-reports-they-need-fixes/",
       "image_source": "Unsplash topic illustration",
       "image_match_status": "thematic_fallback",
-      "image_sha256": "9f7507aed7620ec46a63a2d9121b5c64b2c5377b58a7e523f255bd0dd352a832",
-      "rendered_image_sha256": "afaeef6abc69aa526de7f5fd252b1dffb6eefa30f628c43e34c0d3ebca334ae1",
+      "image_sha256": "3f2b67e032b7bbfd8ac6103c2de7744fd17fc81a42ee2eab17098cb545fd942e",
+      "rendered_image_sha256": "bee6e5f4a7c956beba95bd30ef26b3ef6be7e799cff8753ea34d0821de3ae921",
       "rendered_visual_type": "info_card",
       "label_required": true,
       "label_applied": true,
       "label": "主题配图 · 非新闻现场"
     },
     {
-      "story_url": "https://www.oschina.net/news/503602",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "272b61ad5eb44c2a72206d5af60c2694cb63af585c3e1cf1f78a97ee64d7d589",
-      "rendered_image_sha256": "835bf585b0af6321b79dc03b1371d8a8a850a1243c0d8f4957ad2639c685ccbc",
-      "rendered_visual_type": "info_card",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
+      "story_url": "https://www.ithome.com/1/028/534.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "e19d29d60cbf8f95ca2fe741c1740012db61df1ec6e43c2823437b291a158806",
+      "rendered_image_sha256": "e19d29d60cbf8f95ca2fe741c1740012db61df1ec6e43c2823437b291a158806",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/17/google-to-keep-gemini-chats-for-two-months-up-from-72-hours-even-with-history-off/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "5f1ebe2888c3350978456b4753aa9032d58d122ff4cc3cdbe11641e1ade48f2c",
+      "rendered_image_sha256": "5f1ebe2888c3350978456b4753aa9032d58d122ff4cc3cdbe11641e1ade48f2c",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
     }
   ],
-  "skill": "sickn33/agentic-awesome-skills",
+  "skill": "OpenMontageInc/OpenMontage",
   "design": "geometric-navy",
   "format": "PNG",
   "canvas": [
@@ -138,7 +138,7 @@
       "y": 329,
       "width": 1070,
       "height": 25,
-      "actual_width": 924.0,
+      "actual_width": 858.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -148,9 +148,9 @@
       "x": 250,
       "y": 469,
       "width": 850,
-      "height": 56,
-      "actual_width": 838.7,
-      "line_count": 2,
+      "height": 28,
+      "actual_width": 693.0,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -159,74 +159,74 @@
       "x": 66,
       "y": 823,
       "width": 318,
-      "height": 50,
-      "actual_width": 310.8,
-      "line_count": 2,
+      "height": 25,
+      "actual_width": 311.8,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
       "x": 66,
-      "y": 881,
-      "width": 318,
-      "height": 105,
-      "actual_width": 316.6,
-      "line_count": 5,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 823,
-      "width": 318,
-      "height": 50,
-      "actual_width": 315.6,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 441,
-      "y": 881,
-      "width": 318,
-      "height": 63,
-      "actual_width": 313.8,
-      "line_count": 3,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 816,
-      "y": 823,
-      "width": 318,
-      "height": 50,
-      "actual_width": 300.8,
-      "line_count": 2,
-      "truncated": false,
-      "overflow": false
-    },
-    {
-      "block": "paragraph",
-      "x": 816,
-      "y": 881,
+      "y": 856,
       "width": 318,
       "height": 84,
-      "actual_width": 315.2,
+      "actual_width": 317.4,
       "line_count": 4,
       "truncated": false,
       "overflow": false
     },
     {
       "block": "paragraph",
+      "x": 441,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 312.3,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 881,
+      "width": 318,
+      "height": 42,
+      "actual_width": 304.1,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 303.6,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 881,
+      "width": 318,
+      "height": 105,
+      "actual_width": 317.1,
+      "line_count": 5,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
       "x": 195,
       "y": 1176,
       "width": 372,
       "height": 42,
-      "actual_width": 370.9,
+      "actual_width": 368.1,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -237,7 +237,7 @@
       "y": 1222,
       "width": 372,
       "height": 17,
-      "actual_width": 182.0,
+      "actual_width": 325.2,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -248,7 +248,7 @@
       "y": 1176,
       "width": 372,
       "height": 42,
-      "actual_width": 371.0,
+      "actual_width": 356.1,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -258,9 +258,9 @@
       "x": 758,
       "y": 1222,
       "width": 372,
-      "height": 17,
-      "actual_width": 182.0,
-      "line_count": 1,
+      "height": 51,
+      "actual_width": 364.0,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -270,7 +270,7 @@
       "y": 1380,
       "width": 550,
       "height": 27,
-      "actual_width": 337.4,
+      "actual_width": 350.2,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -281,7 +281,7 @@
       "y": 1434,
       "width": 565,
       "height": 45,
-      "actual_width": 564.6,
+      "actual_width": 564.8,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -292,7 +292,7 @@
       "y": 1500,
       "width": 550,
       "height": 14,
-      "actual_width": 342.8,
+      "actual_width": 218.9,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -301,9 +301,9 @@
   "design_variant": "geometric-navy",
   "iso_year": 2026,
   "iso_week": 47,
-  "iso_weekday": 2,
+  "iso_weekday": 3,
   "style_cycle_index": 46,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-17T06:22:51.533122+08:00"
+  "generated_at": "2026-11-18T05:09:49.788446+08:00"
 }
