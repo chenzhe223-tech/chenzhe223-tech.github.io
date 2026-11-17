@@ -327,6 +327,27 @@ async function main() {
 
     await page.locator('#topicList button[data-a="prompt"]').first().click();
     assert.ok((await page.locator("#promptBox").inputValue()).includes("事实核查"), "creation prompt includes fact-checking instructions");
+    assert.equal(await page.locator("#promptMode").inputValue(),"production","full production is the default mode");
+    const fullPrompt=await page.locator("#promptBox").inputValue();
+    assert.ok(fullPrompt.includes("实际生图")&&fullPrompt.includes("images/00_封面.jpg")&&fullPrompt.includes("ZIP 真正存在"),"default prompt demands actual generated images and verified ZIP");
+    assert.ok((await page.locator("#promptManifestPreview").innerText()).includes("04_事实核查与来源.md"),"deliverable preview lists the source audit");
+    await page.locator("#promptPlatform").selectOption("claude");
+    assert.ok((await page.locator("#promptBox").inputValue()).includes("【目标执行平台】Claude"),"switching target AI rebuilds prompt");
+    await page.locator("#promptMode").selectOption("planning");
+    assert.ok((await page.locator("#promptBox").inputValue()).includes("PLAN_ONLY"),"optional planning mode is clearly marked");
+    assert.ok(!(await page.locator("#promptBox").inputValue()).includes("【交付目标｜必须实际执行】"),"planning mode does not claim production");
+    await page.locator("#promptMode").selectOption("production");
+    await page.locator("#promptPlatform").selectOption("chatgpt");
+    await page.evaluate(()=>{
+      const t=topics.find(x=>x.id===promptTopicId);
+      t.title="Vibe Coding 爆火";
+      t.visualPlan={version:1,name:"极简产品风",background:"#F6F8FB",primary:"#264769",accent:"#55A7C4",text:"#17212C",composition:"一个产品核心界面为主",avoid:"假截图",reviewStatus:"draft",assetStatus:"not_generated"};
+      saveTopics();
+      showPrompt(t);
+    });
+    const vibePrompt=await page.locator("#promptBox").inputValue();
+    assert.ok(vibePrompt.includes("Vibe Coding 爆火")&&vibePrompt.includes("极简产品风")&&vibePrompt.includes("#264769"),"real Vibe Coding test topic inherits saved style");
+    assert.ok(vibePrompt.includes("02_公众号排版预览.html")&&vibePrompt.includes("images/03_正文配图.jpg"),"full material package contract survives topic/style switching");
     
     // Published content library: shared archive loading, create/preview/local persistence and cleanup.
     await page.locator('button[data-section="published"]').click();
