@@ -368,7 +368,8 @@ async function main() {
     assert.equal(await page.locator("#promptBox").inputValue(),"B 独立手动修订的策划指令","B draft survives mode switch");
     assert.equal(await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1")),topicDataBeforeModeSwitch,"mode changes must not modify saved topics");
     await page.locator("#generatePrompt").click();
-    assert.ok((await page.locator("#promptBox").inputValue()).includes("【B｜内容策划模式｜独立交付标准】"),"generate button refreshes B template");
+    const refreshedPlanning=await page.locator("#promptBox").inputValue();
+    assert.ok(refreshedPlanning.includes("【B｜内容策划模式｜独立交付标准】"),"generate button refreshes B template; mode="+(await page.locator("#promptMode").inputValue())+"; prompt="+refreshedPlanning.slice(-500));
     await page.locator('[data-prompt-mode="production"]').click();
     await page.locator("#generatePrompt").click();
     assert.ok((await page.locator("#promptBox").inputValue()).includes("ZIP 真正存在"),"regeneration retains full P0 production contract");
