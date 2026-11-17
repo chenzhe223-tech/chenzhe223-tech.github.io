@@ -396,6 +396,46 @@ async function main() {
     }
     await page.setViewportSize({width:1440,height:900});
     
+    // Library and AI production must share a symmetric editorial workspace.
+    await page.evaluate(() => {
+      for(let i=0;i<6;i++)topics.push({id:"qa_layout_"+i,title:"排版测试选题 "+i,angle:"只用于列表折叠回归",format:"文章",status:"inbox",column:"测试",createdAt:new Date().toISOString()});
+      saveTopics();
+    });
+    assert.equal(await page.locator("#topicList .topiccard").count(),4,"library defaults to four visible cards");
+    assert.equal(await page.locator("#libraryExpand").getAttribute("aria-expanded"),"false");
+    await page.locator("#libraryExpand").click();
+    assert.equal(await page.locator("#topicList .topiccard").count(),9,"expand reveals all nine filtered topics");
+    await page.locator("#libraryExpand").click();
+    assert.equal(await page.locator("#topicList .topiccard").count(),4,"collapse restores four cards");
+    for(const width of [1600,1440,1180,1024,768,390]){
+      await page.setViewportSize({width,height:900});
+      const layout=await page.evaluate(()=>{
+        const library=document.querySelector("#section-library .library-topics-panel").getBoundingClientRect();
+        const prompt=document.querySelector("#section-library .library-prompt-panel").getBoundingClientRect();
+        const isTwoColumn=matchMedia("(min-width:1081px)").matches;
+        return {
+          library:{left:library.left,right:library.right,top:library.top,width:library.width},
+          prompt:{left:prompt.left,right:prompt.right,top:prompt.top,width:prompt.width},
+          two:isTwoColumn,overflow:document.documentElement.scrollWidth-innerWidth,
+          navOrder:[...document.querySelectorAll("#appNavigation .nav[data-section]")].map(e=>e.dataset.section),
+          mobileOrder:[...document.querySelectorAll("#mobileBottomNav > button[data-go]")].map(e=>e.dataset.go)
+        }
+      });
+      assert.ok(layout.overflow<=3,`no horizontal overflow at ${width}: ${JSON.stringify(layout)}`);
+      if(layout.two){
+        assert.ok(Math.abs(layout.library.top-layout.prompt.top)<=2,`two panels top aligned ${width}`);
+        assert.ok(Math.abs(layout.library.width-layout.prompt.width)<=3,`two panels equal width ${width}`);
+        assert.ok(layout.library.right<=layout.prompt.left,`two panels side-by-side ${width}`);
+      }else{
+        assert.ok(layout.prompt.top>=layout.library.top,`stacked panels remain ordered ${width}`);
+      }
+      assert.ok(layout.navOrder.indexOf("visual")<layout.navOrder.indexOf("library"),"visual plan before library in sidebar");
+      assert.ok(layout.mobileOrder.indexOf("visual")<layout.mobileOrder.indexOf("library"),"visual plan before library in mobile navigation");
+    }
+    await page.setViewportSize({width:1440,height:900});
+    await page.evaluate(()=>{topics=topics.filter(t=>!String(t.id).startsWith("qa_layout_"));saveTopics()});
+    assert.equal(await page.locator("#topicList .topiccard").count(),3,"test-only topic records cleaned up");
+
     // Published content library: shared archive loading, create/preview/local persistence and cleanup.
     await page.locator('button[data-section="published"]').click();
     await page.locator("#publishedCount").waitFor();
