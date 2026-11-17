@@ -1463,8 +1463,17 @@ function showPrompt(t,force=false){
 }
 function regeneratePrompt(){
  const selected=topics.find(t=>t.id===promptTopicId);
- if(!selected){toast("请先从选题池选择一个选题");return}
- showPrompt(selected,true);
+ const engine=window.DAVYLABProductionPrompt;
+ if(!selected||!engine){toast("请先选择选题并确认指令模块已加载");return}
+ const mode=$("promptMode").value,platform=$("promptPlatform").value;
+ const result=engine.build(selected,{mode,platform});
+ const key=promptKey(selected);
+ activePromptKey=key;
+ promptDrafts.set(key,result.text);
+ promptSourceVersions.set(key,JSON.stringify(selected));
+ $("promptBox").value=result.text;
+ updatePromptStatus(Boolean(result.text.trim()));
+ renderPromptPreview();
  toast("指令已生成；此操作没有生成文章素材或 ZIP");
 }
 $("promptMode").value="production"; // Always enter with A selected; do not persist user mode.
