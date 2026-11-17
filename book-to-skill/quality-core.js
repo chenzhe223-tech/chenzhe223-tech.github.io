@@ -3,7 +3,7 @@
 // Never presents inferred commentary as a verbatim authoritative quotation.
 (function (root) {
   const pmark=/^<<<PDF_PAGE:(\d+)>>>$/;
-  const reClause=/^(\d{1,2})\s*\.\s*(\d{1,2})\s*\.\s*(\d{1,3})\s+(.+)$/;
+  const reClause=/^(\d{1,2})\s*\.\s*(\d{1,2})\s*\.\s*(\d{1,3})\s*(?=[\u3400-\u9fff])(.+)$/;
   const reSection=/^(\d{1,2})\s*\.\s*(\d{1,2})\s+([^\d.].{1,45})$/;
   const reChapter=/^(\d{1,2})\s+([^\d\s.].{1,42})$/;
   const reFooter=/^[-–—]?\s*\d{1,3}\s*[-–—]$/;
@@ -62,7 +62,10 @@
   function format(c){return '**'+c.id+'**（PDF 第 '+c.page+(c.endPage&&c.endPage!==c.page?'–'+c.endPage:'')+' 页，'+classify(c).join('／')+'）\n\n'+c.text+'\n';}
   function build(text,title,slug,pdfName,hash,totalPages){
     const parsed=segment(text);const clauses=parsed.clauses.sort(codeSort);
-    if(clauses.length<6 || !clauses.some(x=>x.chapter===1))return null;
+    if(clauses.length<6 || !clauses.some(x=>x.chapter===1)){
+      if(/^\s*\d{1,2}\s*\.\s*\d{1,2}\s*\.\s*\d{1,3}\s*/m.test(text))throw new Error('识别到编号条文但无法可靠构建完整章节，请检查 PDF 文字层或改用高保真提取器，已阻止低质量 Skill 导出。');
+      return null;
+    }
     const top=slug+'/';const files={};const grouped=new Map();for(const c of clauses){if(!grouped.has(c.chapter))grouped.set(c.chapter,[]);grouped.get(c.chapter).push(c);}
     const chapterIndex=[];
     for(const [chapter,arr] of [...grouped.entries()].sort((a,b)=>a[0]-b[0])){
@@ -94,7 +97,7 @@
     files[top+'quality-report.json']=JSON.stringify(quality,null,2)+'\n';
     files[top+'clause-index.json']=JSON.stringify(clauses.map(c=>({id:c.id,chapter:c.chapter,section:c.section,page:c.page,end_page:c.endPage,text:c.text,types:classify(c)})),null,2)+'\n';
     const summary=chapterIndex.map(c=>'- ['+c.title+']('+c.file+')：'+c.count+' 条').join('\n');
-    files[top+'SKILL.md']='---\nname: '+JSON.stringify(slug)+'\ndescription: '+JSON.stringify('上海市工程量清单计价应用规则的来源可追溯条文索引。按业务章节检索条款并回到原 PDF 复核；不擅自补足表格。')+'\n---\n\n# '+title+'\n\n'+
+    files[top+'SKILL.md']='---\nname: '+JSON.stringify(slug)+'\ndescription: '+JSON.stringify('由'+pdfName+'形成的来源可追溯条文索引；按章节检索条款并回到原 PDF 复核，表格未经完整结构恢复。')+'\n---\n\n# '+title+'\n\n'+
       '> **版本说明：资料型 Skill（规则与术语索引），不是已经完成 AI 深度语义提炼的专家代理。**\n\n'+
       '## 使用规则\n- 优先读取本 Skill 的对应章节全文；不要使用截断片段。\n- 回答时引用精确条款编号和 PDF 物理页。\n- 区分“规范原文”“执行建议”“模型推断”，禁止把推断表述为原文规定。\n- 对第 13 章补充计量标准及附录中的表格：本版尚未验证表格列结构，**不得据此自动算量或下权威结论**。\n- 若发生缺页、表格未提取、条文边界异常，提示用户检查原 PDF。\n\n## 正文章节\n'+summary+'\n\n'+
       '## 辅助索引\n- [术语与定义](glossary.md)\n- [执行检查清单](checks.md)\n- [禁止与限制](constraints.md)\n- [计价方法与公式](methods.md)\n- [业务索引](workflows.md)\n- [条文 JSON](clause-index.json)\n- [质量报告](quality-report.json)\n\n'+
