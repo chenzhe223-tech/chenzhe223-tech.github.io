@@ -1402,6 +1402,7 @@ function visualPlanPromptLines(t){
 let promptTopicId="";
 let activePromptKey="";
 const promptDrafts=new Map(); // Session-only; never overwrites saved topics or author records.
+const promptSourceVersions=new Map();
 function promptKey(t){return [t.id||"", $("promptMode").value, $("promptPlatform").value].join("::")}
 function saveCurrentPrompt(){
  if(activePromptKey)promptDrafts.set(activePromptKey,$("promptBox").value);
@@ -1452,10 +1453,12 @@ function showPrompt(t,force=false){
   toast("AI 生产指令模块尚未加载");
   return;
  }
- const draft=!force?promptDrafts.get(key):undefined;
+ const sourceVersion=JSON.stringify(t);
+ const draft=!force&&promptSourceVersions.get(key)===sourceVersion?promptDrafts.get(key):undefined;
  const result=typeof draft==="string"?{text:draft}:window.DAVYLABProductionPrompt.build(t,{mode:$("promptMode").value,platform:$("promptPlatform").value});
  $("promptBox").value=result.text;
  promptDrafts.set(key,result.text);
+ promptSourceVersions.set(key,sourceVersion);
  updatePromptStatus(Boolean(result.text.trim()));
 }
 function regeneratePrompt(){
