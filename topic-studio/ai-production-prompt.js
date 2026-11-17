@@ -92,7 +92,7 @@ function build(topic,options={}){
  if(mode==="planning")return{
   mode,platform:id,platformLabel:p.label,manifest:[],deliverables:planningDeliverables.slice(),
   capabilityRequirements:planningRequired.slice(),requiresFullCapability:false,
-  text:[...intro,...buildPlanningContent()].join("\\n")
+  text:[...intro,...buildPlanningContent()].join("\n")
  };
  const production=[
  "","【交付目标｜必须实际执行】",
