@@ -32,7 +32,7 @@
       if(chm){const i=Number(chm[1]);if(i>=1&&i<=13&&CHT[i]&&line.replace(/\s/g,'').includes(CHT[i])&&line.length<48){
         flush();section=line;headings.set(i,line);continue;
       }}
-      if(reSection.test(line)){section=line;continue;}
+      if(reSection.test(line)&&(!clause||/[。；;]$/.test(clause.lines[clause.lines.length-1]||''))){section=line;continue;}
       let m=line.match(reClause);
       if(m){let major=Number(m[1]);if(major<1||major>13){addLine(line);continue;}
         if(major===13){flush();inAppendix=true;continue;}
