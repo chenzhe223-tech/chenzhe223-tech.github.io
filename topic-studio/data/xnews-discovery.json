@@ -3,9 +3,26 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-17T09:40:23+00:00",
-  "count": 38,
+  "synced_at": "2026-11-18T01:41:32+00:00",
+  "count": 40,
   "articles": [
+    {
+      "id": "openai-gpt-6-2-astra-sol",
+      "date": "2026-11-17",
+      "title": "GPT-6.2 Astra在Agents’ Last Exam上比上一代高5.2分，成本不到三分之一",
+      "summary": "OpenAI在2026年11月17日发布GPT-6.2 Astra和Sol。Astra的输入和输出价格比GPT-6 Astra低20%，也是官方对外发布的首个达到AI自我改进高门槛的模型。",
+      "original_url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-gpt-6-2-astra-sol",
+      "tags": [
+        "OpenAI",
+        "GPT-6.2",
+        "Astra",
+        "Sol",
+        "system card"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-science-at-the-frontier",
       "date": "2026-11-16",
@@ -601,6 +618,23 @@
         "agents",
         "Claude Code",
         "judgment"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-fold-subagents",
+      "date": "2026-10-22",
+      "title": "多家企业对比里，单一智能体加技能常常比子智能体拆分质量更好、也更便宜",
+      "summary": "Anthropic Applied AI团队在2026年10月22日的说明里建议，先做端到端评测，再把子智能体一次折进一个到主循环。Ethan Mollick在11月17日推荐了这篇文章。",
+      "original_url": "https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-fold-subagents",
+      "tags": [
+        "Anthropic",
+        "agents",
+        "subagents",
+        "skills",
+        "Claude"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"
