@@ -31,6 +31,19 @@ const a=O.makeAsset({topicId:$("topicId").value.trim(),kind:$("kind").value,titl
 if(state.assets.some(x=>x.id===a.id))throw Error("同一选题及类型已经登记，禁止重复");
 state.assets.unshift(a);save();message("assetMessage","草稿登记完成；尚未批准或发布");
 }catch(err){message("assetMessage",err.message)}});
+$("importTopics").addEventListener("click",()=>{try{
+const topics=JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]");
+if(!Array.isArray(topics))throw Error("原选题池格式无效");
+let added=0,skipped=0;
+for(const t of topics.slice(0,1000)){
+if(!t||typeof t.id!=="string"||!t.title){skipped++;continue}
+const kind=String(t.format||"").includes("贴图")?"post":"article";
+let a;try{a=O.makeAsset({topicId:t.id,kind,title:t.title,sourceUrl:typeof t.sourceUrl==="string"?t.sourceUrl:"",visualPlan:t.visualPlan||null})}catch{skipped++;continue}
+if(state.assets.some(x=>x.id===a.id)){skipped++;continue}
+state.assets.push(a);added++;
+}
+save();message("assetMessage","只读导入 "+added+" 条；跳过 "+skipped+" 条。全部以 draft 登记，原选题池完全未修改。");
+}catch(err){message("assetMessage",err.message)}});
 $("demo").addEventListener("click",()=>{$("topicId").value="demo-"+Date.now();$("title").value="虚构示例：AI 学习实践";message("assetMessage","已填入虚构示例，点击登记草稿才会保存")});
 $("taskForm").addEventListener("submit",e=>{e.preventDefault();try{state.tasks=O.upsertTask(state.tasks,{assetId:$("taskAsset").value,platform:$("platform").value,status:$("taskState").value});save();message("taskMessage","状态已保存（仅本机模拟，无发布动作）")}catch(err){message("taskMessage",err.message)}});
 $("metricForm").addEventListener("submit",e=>{e.preventDefault();try{
