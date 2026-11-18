@@ -1,5 +1,5 @@
 const assert=require("node:assert/strict");
-const O=require("../operations/core.js");
+const O=require("../core.js");
 const a=O.makeAsset({topicId:"topic-1",title:"sample"});
 assert.equal(a.phase,"draft");
 assert.equal(O.stableId("topic-1"),"article_topic-1");
