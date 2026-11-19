@@ -3,9 +3,43 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-18T08:38:16+00:00",
-  "count": 40,
+  "synced_at": "2026-11-19T08:53:15+00:00",
+  "count": 43,
   "articles": [
+    {
+      "id": "openai-research-acceleration",
+      "date": "2026-11-18",
+      "title": "从3月到10月，两到四小时的研究任务，智能体独立完成率从23%升到46%",
+      "summary": "OpenAI用内部测量更新研究加速报告。用量和并发都在上升，但按任务类型拆开并不均匀；安全和对齐的记录工作周增加了77%。官方提醒不要把这些趋势直接外推。",
+      "original_url": "https://openai.com/index/research-acceleration-jagged-frontier/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-research-acceleration",
+      "tags": [
+        "OpenAI",
+        "research acceleration",
+        "coding agents",
+        "RSI",
+        "safety"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "gemini-4-neon",
+      "date": "2026-11-18",
+      "title": "在xhigh思考档上，Gemini 4 Neon的智能指数是61，排第3",
+      "summary": "Google把Neon放在Carbon和Hydrogen之间。每百万输入3美元、输出15美元，上下文100万token。默认高思考档完成任务的成本比Carbon低32%。",
+      "original_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-neon/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/gemini-4-neon",
+      "tags": [
+        "Google",
+        "Gemini",
+        "Gemini 4 Neon",
+        "Antigravity",
+        "Artificial Analysis"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-gpt-6-2-astra-sol",
       "date": "2026-11-17",
@@ -19,6 +53,23 @@
         "Astra",
         "Sol",
         "system card"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-black-hole-physics",
+      "date": "2026-11-17",
+      "title": "2003年搁下的三圈计算做完后，弱耦合下的黑洞相变仍是突然的",
+      "summary": "Claude Fable 5.2完成了Aharony等人在2003年列出、此后一直没算完的计算。官方还给出最简模块自洽的精确上限，大约是c/9.1266，并且到不了c/12。",
+      "original_url": "https://www.anthropic.com/research/claude-black-hole-physics",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-black-hole-physics",
+      "tags": [
+        "Anthropic",
+        "Claude Fable 5.2",
+        "quantum gravity",
+        "Hawking-Page",
+        "bootstrap"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"
