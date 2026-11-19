@@ -246,7 +246,7 @@ export default {
   async fetch(request,env={}) {
     const url=new URL(request.url);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.4.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.5.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }
