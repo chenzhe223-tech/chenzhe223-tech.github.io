@@ -121,3 +121,29 @@ jobs:
           path: test-results/news-engine/browser/
           if-no-files-found: ignore
           retention-days: 7
+
+  production-isolation-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reject any Radar production, poster or workflow changes in News Engine PR
+        run: |
+          git fetch origin main
+          python - <<'PY'
+          import subprocess
+          changed = subprocess.check_output(
+              ["git", "diff", "--name-only", "origin/main...HEAD"],
+              text=True
+          ).splitlines()
+          forbidden = [p for p in changed if not (
+              p.startswith("news-engine/") or p == ".github/workflows/news-engine-p0.yml"
+          )]
+          print("News Engine changed paths:", changed)
+          assert not forbidden, "P0 production isolation violated: " + repr(forbidden)
+          assert changed, "PR has no new Engine changes to validate"
+          PY
