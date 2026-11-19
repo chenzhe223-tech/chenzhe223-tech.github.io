@@ -41,3 +41,5 @@ jobs:
           path: news-engine/data/latest-shadow.json
           if-no-files-found: ignore
           retention-days: 7
+
+# Validation pass 2: fresh GitHub runner must read previous 104 history keys.
