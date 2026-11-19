@@ -45,7 +45,7 @@ test('Wikimedia requests identify KNOWA with a compliant User-Agent', async () =
     assert.equal(d.verified,'search-results-only');
     assert.equal(seen.length,2);
     for(const hit of seen){
-      assert.match(hit.headers.get('user-agent'),/DAVYLAB-KNOWA\/0\.4\.0/);
+      assert.match(hit.headers.get('user-agent'),/DAVYLAB-KNOWA\/0\.7\.0/);
       assert.match(hit.headers.get('api-user-agent'),/github.com/);
       assert.equal(new URL(hit.url).searchParams.has('origin'),false);
     }
