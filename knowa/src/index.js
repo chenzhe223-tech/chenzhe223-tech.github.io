@@ -1,12 +1,12 @@
 import { html } from './page.js';
-import { fetchJapanBornNobel, isJapanNobelQuestion } from './nobel.js';
+import { fetchJapanBornNobel, isJapanNobelQuestion, isJapanBirthplaceNobelQuestion } from './nobel.js';
 import { curatedAnswer } from './curated.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
 const strip = value => String(value || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-const timeoutFetch = async (url, init = {}) => {
-  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(6500), headers: { 'Accept': 'application/json', ...init.headers } });
+const timeoutFetch = async (url, init = {}, timeoutMs = 6500) => {
+  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs), headers: { 'Accept': 'application/json', ...init.headers } });
   if (!response.ok) throw new Error(`upstream ${response.status}`);
   return response.json();
 };
@@ -51,9 +51,10 @@ export async function handleAsk(request, env = {}) {
   const question = payload.question.trim();
   const checkedAt = new Date().toISOString();
   if (isJapanNobelQuestion(question)) {
+    if (!isJapanBirthplaceNobelQuestion(question)) return json({ question, answer:'日本诺贝尔奖获得者的“人数”必须先明确统计口径。诺贝尔奖官方公开 API 没有统一的国籍字段，无法直接核算日本国籍获奖者人数。可以选择按“出生于现今日本境内”统计并逐项查看年份及获奖原因。', verified:'definition-required', suggestedQuestion:'出生于现今日本境内的诺贝尔奖获得者有多少位？', sources:[{title:'诺贝尔奖官方数据',provider:'NobelPrize.org',url:'https://www.nobelprize.org/laureates/'}], ai:false,checkedAt, note:'出生地、国籍、获奖时机构所属国家是不同统计口径，禁止互相替代。' });
     try {
-      const data = await fetchJapanBornNobel(timeoutFetch);
-      return json({ question, answer: `依据诺贝尔奖官方 API 的现今出生国家口径，出生于日本的获奖者共有 ${data.count} 位。\n\n注意：这不是“日本国籍诺贝尔奖得主”的人数；国籍和出生地不能等同。下方可查看年份、类别、获奖理由和获奖者。`, details: data.details, sources:[{ title:'诺贝尔奖官方获奖者数据库', provider:'NobelPrize.org',url:data.sourceUrl }, {title:'Nobel Prize API v2.1',provider:'NobelPrize.org',url:data.apiUrl}], definition:data.definition, verified:'official-paginated-birthplace', ai:false,checkedAt, note:'完整翻页、按获奖者 ID 去重；数据由官方实时提供，但人名/英文理由可能尚未翻译。' });
+      const data = await fetchJapanBornNobel(url=>timeoutFetch(url,{},12000));
+      return json({ question, answer: `依据诺贝尔奖官方完整数据，出生地属于现今日本境内的获奖者共有 ${data.count} 位。\n\n注意：这不是“日本国籍诺贝尔奖得主”的人数；国籍和出生地不能等同。下方可查看年份、类别、获奖理由和获奖者。`, details: data.details, sources:[{ title:'诺贝尔奖官方获奖者数据库', provider:'NobelPrize.org',url:data.sourceUrl }, {title:'Nobel Prize API v2.1',provider:'NobelPrize.org',url:data.apiUrl}], definition:data.definition, verified:'official-paginated-birthplace', ai:false,checkedAt, note:`扫描官方全部 ${data.scanned} 条获奖者记录并按 ID 去重；统计是出生地而非国籍，人名或获奖理由可能尚未翻译。` });
     } catch {
       return json({ error:'诺贝尔奖官方数据获取不完整，暂不能给出准确人数。请稍后重试。', checkedAt, verified:'unavailable' },503);
     }
