@@ -1,0 +1,10 @@
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+const read = path => readFileSync(new URL(`../${path}`, import.meta.url), 'utf8');
+const withoutExport = s => s.replace(/^export (const|async function|function) /gm, '$1 ');
+const page = withoutExport(read('src/page.js'));
+const nobel = withoutExport(read('src/nobel.js'));
+const curated = withoutExport(read('src/curated.js'));
+const main = read('src/index.js').replace(/^import .*;\s*$/gm, '');
+mkdirSync(new URL('../dist/', import.meta.url), { recursive: true });
+writeFileSync(new URL('../dist/worker.js', import.meta.url), `${page}\n${nobel}\n${curated}\n${main}`);
+console.log('Generated dist/worker.js from tested source modules');
