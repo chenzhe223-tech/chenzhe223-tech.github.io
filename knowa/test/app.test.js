@@ -30,3 +30,45 @@ test('ambiguous Nobel nationality does not return birthplace count',async()=>{co
 test('Nobel fully fetched dataset is filtered locally by current birthplace',async()=>{const d=await fetchJapanBornNobel(mockNobel(6,i=>prize(i,2020,i%2===0)));assert.equal(d.count,3);assert.equal(d.scanned,6);assert.equal(d.details.length,3);});
 test('Nobel missing live pagination refuses a count',async()=>{await assert.rejects(fetchJapanBornNobel(async()=>({meta:{count:600,offset:0},laureates:[prize(1)]})),/不完整/);});
 test('curated NOAA NASA and British Library facts have source attribution',async()=>{for(const [q,keyword] of [['世界最深的海沟在哪里？','挑战者深渊'],['世界上最大的热带雨林在哪里？','亚马孙'],['第一部印刷书籍是什么？','金刚经'],['地球上最长的山脉是哪座？','大洋中脊']]){const d=await(await handleAsk(request(q))).json();assert.equal(d.verified,'editorial-curated');assert.match(d.answer,new RegExp(keyword));assert.equal(d.sources[0].url.startsWith('https://'),true);}});
+
+
+test('Wikimedia requests identify KNOWA with a compliant User-Agent', async () => {
+  const seen=[]; const old=globalThis.fetch;
+  globalThis.fetch=async (url,init) => {
+    seen.push({url:String(url),headers:new Headers(init?.headers)});
+    const body=String(url).includes('wikipedia.org')?{query:{search:[{title:'霍尔木兹海峡',snippet:'波斯湾出口'}]}}:{search:[{id:'Q1921',label:'霍尔木兹海峡',description:'海峡'}]};
+    return new Response(JSON.stringify(body),{status:200});
+  };
+  try {
+    const d=await (await handleAsk(request('霍尔木兹海峡位于哪里？'))).json();
+    assert.equal(d.sources.length,2);
+    assert.equal(d.verified,'search-results-only');
+    assert.equal(seen.length,2);
+    for(const hit of seen){
+      assert.match(hit.headers.get('user-agent'),/DAVYLAB-KNOWA\/0\.4\.0/);
+      assert.match(hit.headers.get('api-user-agent'),/github.com/);
+      assert.equal(new URL(hit.url).searchParams.has('origin'),false);
+    }
+  } finally { globalThis.fetch=old; }
+});
+test('source outage returns 503 with per-provider status but no sensitive details', async () => {
+  const old=globalThis.fetch; globalThis.fetch=async()=>new Response('forbidden',{status:403});
+  try {
+    const r=await handleAsk(request('霍尔木兹海峡位于哪里？'));
+    assert.equal(r.status,503);
+    const d=await r.json();
+    assert.equal(d.providerFailures.length,2);
+    assert.ok(d.providerFailures.every(e=>e.reason.includes('403')));
+    assert.equal(d.verified,'unavailable');
+  } finally { globalThis.fetch=old; }
+});
+test('successful empty search reports no results, not a service outage', async () => {
+  const old=globalThis.fetch; globalThis.fetch=async()=>new Response(JSON.stringify({query:{search:[]},search:[]}),{status:200});
+  try {
+    const r=await handleAsk(request('罕见问题测试xyz'));
+    assert.equal(r.status,200);
+    const d=await r.json();
+    assert.equal(d.verified,'no-results');
+    assert.match(d.answer,/未找到/);
+  } finally { globalThis.fetch=old; }
+});

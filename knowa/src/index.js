@@ -5,26 +5,40 @@ import { curatedAnswer } from './curated.js';
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
 const strip = value => String(value || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+// Wikimedia requires a descriptive application identity for server-side API calls.
+export const WIKIMEDIA_USER_AGENT = 'DAVYLAB-KNOWA/0.4.0 (https://github.com/chenzhe223-tech/chenzhe223-tech.github.io; public knowledge lookup)';
 const timeoutFetch = async (url, init = {}, timeoutMs = 6500) => {
-  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs), headers: { 'Accept': 'application/json', ...init.headers } });
-  if (!response.ok) throw new Error(`upstream ${response.status}`);
-  return response.json();
+  const headers = new Headers(init.headers || {});
+  headers.set('Accept', 'application/json');
+  const host = new URL(url).hostname;
+  if (host === 'www.wikidata.org' || host.endsWith('.wikipedia.org')) {
+    headers.set('User-Agent', WIKIMEDIA_USER_AGENT);
+    headers.set('Api-User-Agent', WIKIMEDIA_USER_AGENT);
+  }
+  const response = await fetch(url, { ...init, signal: AbortSignal.timeout(timeoutMs), headers });
+  if (!response.ok) throw new Error(`upstream HTTP ${response.status}`);
+  const data = await response.json();
+  if (!data || typeof data !== 'object') throw new Error('upstream invalid JSON');
+  if (data.error) throw new Error('upstream API error');
+  return data;
 };
 const wikipedia = async q => {
   const url = new URL('https://zh.wikipedia.org/w/api.php');
-  url.search = new URLSearchParams({ action: 'query', list: 'search', srsearch: q, srlimit: '4', format: 'json', origin: '*' }).toString();
+  url.search = new URLSearchParams({ action: 'query', list: 'search', srsearch: q, srlimit: '4', format: 'json' }).toString();
   const data = await timeoutFetch(url.toString());
   return (data.query?.search || []).map(x => ({ title: x.title, provider: 'Wikipedia', url: `https://zh.wikipedia.org/wiki/${encodeURIComponent(x.title.replaceAll(' ', '_'))}`, excerpt: strip(x.snippet).slice(0, 350) }));
 };
 const wikidata = async q => {
   const url = new URL('https://www.wikidata.org/w/api.php');
-  url.search = new URLSearchParams({ action: 'wbsearchentities', search: q, language: 'zh', uselang: 'zh', type: 'item', limit: '4', format: 'json', origin: '*' }).toString();
+  url.search = new URLSearchParams({ action: 'wbsearchentities', search: q, language: 'zh', uselang: 'zh', type: 'item', limit: '4', format: 'json' }).toString();
   const data = await timeoutFetch(url.toString());
   return (data.search || []).map(x => ({ title: x.label || x.id, provider: 'Wikidata', url: `https://www.wikidata.org/wiki/${encodeURIComponent(x.id)}`, excerpt: strip(x.description).slice(0, 350) }));
 };
 export async function collect(question) {
   const results = await Promise.allSettled([wikipedia(question), wikidata(question)]);
-  return { sources: results.filter(x=>x.status==='fulfilled').flatMap(x=>x.value).slice(0, 8), errors: results.filter(x=>x.status==='rejected').length };
+  const providers = ['Wikipedia', 'Wikidata'];
+  const failures = results.flatMap((r,i) => r.status === 'rejected' ? [{provider:providers[i],reason:String(r.reason?.message || 'request failed').slice(0,80)}] : []);
+  return { sources: results.filter(x=>x.status==='fulfilled').flatMap(x=>x.value).slice(0,8), failures };
 }
 export function boundedQuestion(q) { return typeof q === 'string' && q.trim().length >= 2 && q.trim().length <= 260; }
 async function aiAnswer(question, sources, env) {
@@ -61,8 +75,11 @@ export async function handleAsk(request, env = {}) {
   }
   const curated = curatedAnswer(question);
   if (curated) return json({ question, ...curated, ai:false, checkedAt });
-  const { sources, errors } = await collect(question);
-  if (!sources.length) return json({ error: '当前知识源不可用，无法核验。请稍后重试' }, 503);
+  const { sources, failures } = await collect(question);
+  if (!sources.length) {
+    if (failures.length === 2) return json({error:'当前知识源暂不可用',providerFailures:failures,verified:'unavailable',checkedAt},503);
+    return json({question,answer:'未找到足够相关的公开资料，请尝试更具体的关键词。',sources:[],providerFailures:failures,verified:'no-results',ai:false,checkedAt});
+  }
   let answer = `已找到 ${sources.length} 条相关公开资料。\n\n${sources.slice(0,5).map((s,i)=>`${i+1}. ${s.title}${s.excerpt?'：'+s.excerpt:''}`).join('\n\n')}\n\n目前为检索结果，尚未得到经逐条事实核对的确定答案。`;
   let ai = false;
   const configured = env.AI_ENABLED === 'true' && !!env.DEEPSEEK_API_KEY;
@@ -72,13 +89,13 @@ export async function handleAsk(request, env = {}) {
     const reserve = await env.QUOTA_STRICT.reserve(new Date().toISOString().slice(0,10), Math.min(Number(env.DAILY_AI_LIMIT)||0,100));
     if (reserve === true) { try { answer = await aiAnswer(question,sources,env); ai=true; } catch { /* degrade to raw sources */ } }
   }
-  return json({ question,answer,sources:sources.map(({title,provider,url})=>({title,provider,url})),ai,verified:'search-results-only',checkedAt,note:ai?'AI 整理的检索摘要不等于事实核验；请核对原始资料。':`未启用 AI 整理；展示相关检索摘要，不代表已核验。${errors?`其中 ${errors} 个知识源暂不可用。`:''}` });
+  return json({ question,answer,sources:sources.map(({title,provider,url})=>({title,provider,url})),ai,verified:'search-results-only',checkedAt,note:ai?'AI 整理的检索摘要不等于事实核验；请核对原始资料。':`未启用 AI 整理；展示相关检索摘要，不代表已核验。${failures.length?`其中 ${failures.length} 个知识源暂不可用。`:''}` });
 }
 export default {
   async fetch(request,env={}) {
     const url=new URL(request.url);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,aiConfigured:env.AI_ENABLED==='true'&&!!env.DEEPSEEK_API_KEY&&!!env.QUOTA_STRICT});
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.4.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:env.AI_ENABLED==='true'&&!!env.DEEPSEEK_API_KEY&&!!env.QUOTA_STRICT});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }

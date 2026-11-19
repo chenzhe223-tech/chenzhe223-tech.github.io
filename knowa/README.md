@@ -51,3 +51,11 @@ npm run deploy
 - **交付保证：** 可重复构建的 `npm run build`，仓库根目录隔离 `.github/workflows/knowa-p0.yml`，GitHub Actions **19/19 测试通过**（run `44475060643`）。
 - **部署状态：** Cloudflare Worker `davylab-knowa-p0` 上传成功，新部署 `7b6562a8-ec25-4214-a466-bdcbb7b0d895` 的版本 `4ff806b3-0b64-4cd4-9636-8917e785b3a8` 已获 Cloudflare API 确认为 100% 流量，workers.dev 子域名已开启。
 - **验收未通过项目：** 执行环境无法直接访问公网 Worker 和 Nobel API，因此真实 HTTP/第三方数据全链路功能验收仍待独立验证；不把此项算作已通过。DeepSeek 计费功能始终关闭（`AI_ENABLED=false` 且每日额度 0）。
+
+## 2026-11-19 P0 v0.4.0 实际联网问题修复
+
+- 线上真实 /api/health 和 Nobel 日本出生地专题已得到 HTTP 200，按官方记录返回31位（此时点，非日本国籍）。
+- 排查 Wikipedia/Wikidata 上游503：按 Wikimedia User-Agent 政策添加可识别服务身份及联系项目地址，并移除服务器调用无须设置的 origin=*。
+- 保留真实错误状态（如 HTTP 403/429）供排查，返回无结果与上游故障不同的状态；新增回归测试。
+- DeepSeek 密钥、原子配额未配置，AI_ENABLED=false、DAILY_AI_LIMIT=0，严禁静默开启收费调用。
+- 只有实际发起公开 API POST 回归并收到响应后，才能宣称知识接口打通；本代码修复不等于已验收。
