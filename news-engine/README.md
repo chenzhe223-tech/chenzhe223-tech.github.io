@@ -1,61 +1,39 @@
-# DAVYLAB News Engine · P0
+# DAVYLAB News Engine · P0–P2 independent preview
 
-Independent RSS/Atom discovery module. It does **not** modify AI Radar production publishing or X News.
+**Status (2026-11-19): source collector, persisted history, review-only drafting and local desktop/mobile editor have verified independent tests; no production deployment.** Release evidence and exceptions: [QA_2026-11-19.md](QA_2026-11-19.md).
 
-## Run locally
+## Scope and source-of-truth
 
-```bash
+News Engine is a separate, free-first collector + curation + fact-check preparation + review system. It never replaces the existing DAVYLAB AI Radar production news pipeline while disabled. The official Radar website, daily poster, 08:30 target and visual lock remain untouched. All discovered news is unverified until an editor checks its original sources, published date, numbers and reuse rights.
+
+## Run locally (Python 3.11+)
+
+~~~bash
 python -m unittest discover -s news-engine -p 'test_*.py' -v
-python news-engine/collector.py --out news-engine/data/latest.json --history news-engine/data/history.json
-```
+python news-engine/collector.py --out news-engine/data/latest-shadow.json --history news-engine/data/history-local.json
+python news-engine/research.py --input news-engine/data/latest-shadow.json --out news-engine/data/research-shadow.json
+~~~
 
-Five configured feeds: GitHub Blog, Google AI Blog, Hugging Face, Simon Willison, TechCrunch AI. All sources must be verified with a real network run before claiming P0 runtime acceptance.
+Open news-engine/editor.html in Chrome/Edge. Import a review-only JSON draft to edit title, body, attached image/video/document provenance, preview responsive content and export a new revision JSON file. It works locally without accounts or production writes. Browser E2E runs on Ubuntu 24.04 via open-source Playwright.
 
-Features: HTTPS source restriction, bounded XML payload, DOCTYPE/ENTITY rejection, RSS/Atom dates, bounded retries with timeout, source failure isolation, 7-day news freshness, canonical URL and normalized-title deduplication, and a **local JSON history file retaining 90 days of discovery keys**. History is written atomically; malformed history fails closed.
+### Actual story processing
 
-**Important deployment limitation:** history.json is persistent only when the caller provides persistent storage. A fresh GitHub Actions runner will not retain this file automatically. Before production automation, add durable storage or artifact restore with integrity checks. Same-event semantic dedupe and independent fact verification are not implemented yet.
+1. collector.py: five HTTPS sources, bounded retries/response size, safe RSS/Atom, 7-day source freshness, canonical URLs and exact normalized titles; fail-isolated diagnostic results.
+2. history_backend.py: independent news-engine-state branch, weekly persisted 90-day keys via GitHub Contents API, conditional SHA writes with merge retry, first-observed timestamps preserved. No state is stored in radar/.
+3. backfill_radar.py: read-only import of exact URL/title keys from Radar's existing historical archive manifest (not a substitute for independent factual verification). As of 11/19, archives cover 10/21–11/19 (30 days), 1,767 stored keys; previous 61 days of the 90-day lookback are not backed by available Radar archives.
+4. research.py: source-preserving ranking, cross-source cluster candidates and a deterministic four-part research outline, expressly unverified.
+5. gateway_client.py: optional OpenAI-compatible research draft adapter. **Needs an approved HTTPS endpoint, exact hostname, secret, model and NEWS_ENGINE_GATEWAY_AUTHORIZED=1.** It does not auto-spend tokens or auto-publish.
+6. article.py + studio.py + editor.html: evidence-first human-review drafts, checksums, revision exports, rights-tracked assets and XSS-safe preview. The "verified" input is editorial metadata, not independent automated verification.
+7. integration.py: **DAVYLAB_NEWS_ENGINE_ENABLED defaults to 0**. A second approval gate is also mandatory. If an enabled shadow candidate is invalid or the new engine fails, the legacy provider is used. Never returns an automatically publishable draft.
 
-Collected stories are unverified discovery leads, never publishable facts. No automatic publication, paid API, or changes to existing Radar workflows. Do not commit source content without verification and copyright review.
+### Independent CI
 
-## Acceptance status
+.github/workflows/news-engine-p0.yml uses separate jobs: offline unit tests, five real-feed smoke, Chromium desktop/mobile editor browser E2E, and PR changed-path production isolation guard. It cannot write Radar production files. The optional durable-history-shadow job runs only on workflow_dispatch and the state branch owns its separate backfill workflow.
 
-- Offline tests: must pass in PR CI.
-- Live 5-feed sampling: pending network-enabled execution and evidence.
-- Cross-run 90-day persistence: blocked on durable store integration.
-- Production deployment: not authorized by P0.
+**Verified:** [Actions run 44477426540](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44477426540) — 67 offline Python tests, five live RSS sources (54 unverified leads), editor E2E and production scope isolation all PASS. After the QA-document-only update, [run 44477985715](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44477985715) was also successful.
 
+**Not accepted:** paid/free AI Gateway live contract is not verified because no approved, demonstrably non-chargeable endpoint/model is accessible for this project. Historical archive coverage before 2026-10-21 is missing, so the prior full 90 days are not backfilled. Production release, external ecosystem integration and rollback on the real site have not been verified.
 
-## P1 research triage (2026-11-17)
+## Production release rule
 
-Run after a separately verified collector output:
-
-```bash
-python news-engine/research.py --input news-engine/data/latest.json --out news-engine/data/research.json
-python -m unittest discover -s news-engine -p 'test_*.py' -v
-```
-
-`research.py` computes a deterministic 0–100 **editorial triage priority**, groups potentially related titles across domains, retains source URLs, and drafts a four-part evidence-checking outline. Two different domains are **not proof of independent confirmation**; all candidates remain `requires_primary_source_and_fact_check`. `gateway_request` only prepares a payload for an existing authorized AI Gateway; it makes no paid/network call and cannot mark an item verified. The P1 output must never be used to publish automatically.
-
-**Production isolation:** No existing `radar/` files, production workflows, poster rules, or publication gates are modified by this branch. The News Engine workflow is independent and has no production deploy job. Integration must remain off by default and require regression checks plus rollback before activation.
-
-**Outstanding acceptance:** Real five-source collection (runner DNS/network), durable cross-run 90-day history, semantic event verification, actual authorized AI Gateway invocation, GitHub CI evidence, and end-to-end runtime QA are pending. Local/offline tests do not establish production readiness.
-
-
-## 2026-11-19 blocker repair (isolated; not deployed)
-
-### Real five-source validation
-The independent read-only live-feed-sample CI job downloads five configured HTTPS RSS/Atom feeds on GitHub Actions, checks each response, and saves diagnostic artifacts. A failed source keeps the new engine QA red. Discovered stories are never treated as independently verified.
-
-### Durable 90-day dedupe
-An independent branch named news-engine-state has been initialized. history_backend.py writes bounded weekly shards under news-engine/state/weeks/, reads every ISO week overlapping the prior 90 days, and uses GitHub conditional blob-SHA updates. On concurrent conflicts it reloads history and recomputes candidates. Any failed source or state write blocks successful completion. This never changes main, radar/, or the existing publishing workflow.
-
-The separate workflow_dispatch-only durable-history-shadow job has job-scoped contents:write, uses the built-in GitHub token, and must execute only from trusted reviewed code. It never deploys. Live state persistence verified on 2026-11-19 by two independent GitHub Actions runs on the isolated news-engine-state branch: the first persisted 104 URL/title keys, and the second retained all 104 plus 2 new keys (106 total). Historical keys older than the first run have not been backfilled, so complete historical coverage is not claimed.
-
-### Explicitly authorized AI Gateway
-gateway_client.py is a strict opt-in OpenAI-compatible chat completion adapter, returning only unverified_ai_draft with publishable=false. It requires explicit NEWS_ENGINE_GATEWAY_AUTHORIZED=1, NEWS_ENGINE_GATEWAY_URL (HTTPS), NEWS_ENGINE_GATEWAY_ALLOWED_HOST (same hostname), NEWS_ENGINE_GATEWAY_MODEL and NEWS_ENGINE_GATEWAY_API_KEY secret. No provider or model is inferred, and no paid fallback is allowed. An actual authorized live call is still pending. Unit tests only use fake responses.
-
-### Editorial workbench
-Open news-engine/editor.html locally in a modern browser. Import review-only JSON, edit title/body, maintain asset URLs and rights provenance, preview and export an amended JSON revision. All edited output explicitly requires renewed evidence review and is never publishable. No server-side sync or publishing controls are supplied. Python contract tests and JavaScript syntax checks are automated; real multi-browser UI acceptance remains pending.
-
-### Release gate
-Five real RSS sources and two independent state writes have passed. Do not merge or deploy this branch as a production replacement until a permitted live Gateway call succeeds, prior 90-day backfill policy is reviewed, the editor is functionally tested, and Radar isolation/rollback is independently verified. Code completion is not production readiness.
+Do not merge or deploy this preview as a replacement for Radar until the AI contract is verified without unauthorized spending, all data provenance and copyright quality gates pass, feature-flag/fallback integration receives real end-to-end QA, and the existing website/primary poster publish pipeline remains green. Failed or incomplete runs must preserve the last valid Radar edition.
