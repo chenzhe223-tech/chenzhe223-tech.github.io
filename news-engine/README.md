@@ -39,3 +39,23 @@ python -m unittest discover -s news-engine -p 'test_*.py' -v
 **Production isolation:** No existing `radar/` files, production workflows, poster rules, or publication gates are modified by this branch. The News Engine workflow is independent and has no production deploy job. Integration must remain off by default and require regression checks plus rollback before activation.
 
 **Outstanding acceptance:** Real five-source collection (runner DNS/network), durable cross-run 90-day history, semantic event verification, actual authorized AI Gateway invocation, GitHub CI evidence, and end-to-end runtime QA are pending. Local/offline tests do not establish production readiness.
+
+
+## 2026-11-19 blocker repair (isolated; not deployed)
+
+### Real five-source validation
+The independent read-only live-feed-sample CI job downloads five configured HTTPS RSS/Atom feeds on GitHub Actions, checks each response, and saves diagnostic artifacts. A failed source keeps the new engine QA red. Discovered stories are never treated as independently verified.
+
+### Durable 90-day dedupe
+An independent branch named news-engine-state has been initialized. history_backend.py writes bounded weekly shards under news-engine/state/weeks/, reads every ISO week overlapping the prior 90 days, and uses GitHub conditional blob-SHA updates. On concurrent conflicts it reloads history and recomputes candidates. Any failed source or state write blocks successful completion. This never changes main, radar/, or the existing publishing workflow.
+
+The separate workflow_dispatch-only durable-history-shadow job has job-scoped contents:write, uses the built-in GitHub token, and must execute only from trusted reviewed code. It never deploys. The initial state branch exists but a live write/read check across separate runners is STILL PENDING.
+
+### Explicitly authorized AI Gateway
+gateway_client.py is a strict opt-in OpenAI-compatible chat completion adapter, returning only unverified_ai_draft with publishable=false. It requires explicit NEWS_ENGINE_GATEWAY_AUTHORIZED=1, NEWS_ENGINE_GATEWAY_URL (HTTPS), NEWS_ENGINE_GATEWAY_ALLOWED_HOST (same hostname), NEWS_ENGINE_GATEWAY_MODEL and NEWS_ENGINE_GATEWAY_API_KEY secret. No provider or model is inferred, and no paid fallback is allowed. An actual authorized live call is still pending. Unit tests only use fake responses.
+
+### Editorial workbench
+Open news-engine/editor.html locally in a modern browser. Import review-only JSON, edit title/body, maintain asset URLs and rights provenance, preview and export an amended JSON revision. All edited output explicitly requires renewed evidence review and is never publishable. No server-side sync or publishing controls are supplied. Python contract tests and JavaScript syntax checks are automated; real multi-browser UI acceptance remains pending.
+
+### Release gate
+Do not merge or deploy this branch as a production replacement until five real feeds work, cross-run persistence is observed, a permitted live Gateway call succeeds, the editor is functionally tested, and Radar isolation/rollback is independently verified. Code completion is not production readiness.
