@@ -59,3 +59,11 @@ npm run deploy
 - 保留真实错误状态（如 HTTP 403/429）供排查，返回无结果与上游故障不同的状态；新增回归测试。
 - DeepSeek 密钥、原子配额未配置，AI_ENABLED=false、DAILY_AI_LIMIT=0，严禁静默开启收费调用。
 - 只有实际发起公开 API POST 回归并收到响应后，才能宣称知识接口打通；本代码修复不等于已验收。
+
+## 2026-11-19 P0 v0.5.0 · DeepSeek 配置与费用门禁
+
+- DeepSeek 官方模型 `deepseek-flash`，强制 `thinking.disabled`，单次最多450输出 token；只整理已有来源摘要，标记为未经事实核验。
+- 新增 Cloudflare 原生 SQLite Durable Object `KnowaAiQuota`，对全体调用全局原子预留；单日最多 10 次硬上限，任何配额后端失败都禁止发起付费调用。
+- `AI_ENABLED=false`、`DAILY_AI_LIMIT=0` 为默认值。没有密钥/配额/正式授权时仅提供免费来源检索。
+- Cloudflare D1 账号达10库上限（错误7406），不动其他项目数据库；Durable Object 是独立替代方案。
+- `DEEPSEEK_API_KEY` 必须从 Cloudflare Worker 的 Secrets 面板设置，绝不提交仓库。线上真实付费联调必须在用户授权日限额后才启用。

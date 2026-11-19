@@ -1,11 +1,11 @@
 {
   "name": "davylab-knowa",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "private": true,
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/index.js && node --check src/page.js && node --check src/nobel.js && node --check src/curated.js && node --check dist/worker.js",
+    "check": "node --check src/quota.js && node --check src/quota-do.js && node --check src/index.js && node --check src/page.js && node --check src/nobel.js && node --check src/curated.js && node --check dist/worker.js",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "build": "node scripts/build.mjs"

@@ -4,7 +4,9 @@ const withoutExport = s => s.replace(/^export (const|async function|function) /g
 const page = withoutExport(read('src/page.js'));
 const nobel = withoutExport(read('src/nobel.js'));
 const curated = withoutExport(read('src/curated.js'));
+const quota = withoutExport(read('src/quota.js'));
+const quotaDO = read('src/quota-do.js');
 const main = read('src/index.js').replace(/^import .*;\s*$/gm, '');
 mkdirSync(new URL('../dist/', import.meta.url), { recursive: true });
-writeFileSync(new URL('../dist/worker.js', import.meta.url), `${page}\n${nobel}\n${curated}\n${main}`);
+writeFileSync(new URL('../dist/worker.js', import.meta.url), `${page}\n${nobel}\n${curated}\n${quota}\n${quotaDO}\n${main}`);
 console.log('Generated dist/worker.js from tested source modules');
