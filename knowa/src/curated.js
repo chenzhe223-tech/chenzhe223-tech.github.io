@@ -1,6 +1,9 @@
 // Manually reviewed fixed facts. Each has an accountable, directly linked source.
 // This is NOT a general-purpose AI/real-time verification mechanism.
 const facts = [
+  {pattern:/最大.{0,8}(?:海洋|大洋)|(?:海洋|大洋).{0,8}最大/,answer:'太平洋是世界上最大的海洋盆地。NOAA 给出的海盆面积约为 1.62 亿平方公里。',sources:[{provider:'NOAA',title:'What is the largest ocean basin on Earth?',url:'https://oceanservice.noaa.gov/facts/biggestocean.html'}]},
+  {pattern:/(?:最大|体型最大|体形最大).{0,10}(?:动物|生物)|(?:动物|生物).{0,10}(?:最大|体型最大|体形最大)/,answer:'蓝鲸是现存体形最大的动物。NOAA Fisheries 列出了蓝鲸的物种特征及保护现状。',sources:[{provider:'NOAA Fisheries',title:'Blue Whale',url:'https://www.fisheries.noaa.gov/species/blue-whale'}]},
+  {pattern:/(?:地球|世界).{0,12}(?:表面|面积).{0,12}(?:海洋|海水)|(?:海洋|海水).{0,12}(?:覆盖|表面).{0,12}(?:地球|世界)/,answer:'NOAA 资料指出，全球海洋覆盖地球表面约 71%。',sources:[{provider:'NOAA',title:'How many oceans are there?',url:'https://oceanservice.noaa.gov/facts/howmanyoceans.html'}]},
   {
     pattern: /(?:最深|深度最大).{0,12}(?:海沟|海洋)|(?:海沟|海洋).{0,12}(?:最深|深度最大)/,
     answer: '目前已知海洋最深处是太平洋马里亚纳海沟南端的挑战者深渊（Challenger Deep）。NOAA 给出的深度测量约为 10,935 米；不同测量方法和年份会产生小幅差异。',
