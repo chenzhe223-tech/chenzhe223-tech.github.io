@@ -22,6 +22,11 @@ class GatewayNotConfigured(RuntimeError):
     pass
 
 
+class _NoRedirect(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, request, fp, code, msg, headers, newurl):
+        return None
+
+
 def _host(endpoint, allowed_host):
     parsed = urllib.parse.urlsplit(endpoint)
     if (parsed.scheme != "https" or not parsed.hostname or parsed.username or
@@ -49,7 +54,9 @@ def gateway_outline(candidate, *, endpoint, allowed_host, api_key, model,
         raise ValueError("invalid candidate")
     urls = candidate.get("source_urls")
     if (not isinstance(urls, list) or not urls or len(urls) > 12 or
-            any(not isinstance(u, str) or urllib.parse.urlsplit(u).scheme != "https"
+            any(not isinstance(u, str) or any(c.isspace() for c in u) or
+                urllib.parse.urlsplit(u).scheme != "https" or
+                urllib.parse.urlsplit(u).username or urllib.parse.urlsplit(u).password
                 for u in urls)):
         raise ValueError("missing or invalid source URLs")
     prompt = {
@@ -74,7 +81,7 @@ def gateway_outline(candidate, *, endpoint, allowed_host, api_key, model,
                  "User-Agent": "DAVYLAB-NewsEngine/0.1"},
         method="POST",
     )
-    op = transport or urllib.request.urlopen
+    op = transport or urllib.request.build_opener(_NoRedirect()).open
     try:
         with op(request, timeout=20) as response:
             if response.status != 200:
