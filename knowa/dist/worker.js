@@ -129,15 +129,20 @@ const timeoutFetch = async (url, init = {}, timeoutMs = 6500) => {
   if (data.error) throw new Error('upstream API error');
   return data;
 };
+export const searchTerm = q => {
+  const s=String(q).trim().replace(/[？?。！!]+$/g,'');
+  const m=s.match(/^(.{2,32}?)(?:出生于|出生在|发源于|位于|在哪里|在哪个城市|在哪个国家|是什么|是谁|有多少)/);
+  return m?.[1]?.trim() || s;
+};
 const wikipedia = async q => {
   const url = new URL('https://zh.wikipedia.org/w/api.php');
-  url.search = new URLSearchParams({ action: 'query', list: 'search', srsearch: q, srlimit: '4', format: 'json' }).toString();
+  url.search = new URLSearchParams({ action: 'query', list: 'search', srsearch: searchTerm(q), srlimit: '4', format: 'json' }).toString();
   const data = await timeoutFetch(url.toString());
   return (data.query?.search || []).map(x => ({ title: x.title, provider: 'Wikipedia', url: `https://zh.wikipedia.org/wiki/${encodeURIComponent(x.title.replaceAll(' ', '_'))}`, excerpt: strip(x.snippet).slice(0, 350) }));
 };
 const wikidata = async q => {
   const url = new URL('https://www.wikidata.org/w/api.php');
-  url.search = new URLSearchParams({ action: 'wbsearchentities', search: q, language: 'zh', uselang: 'zh', type: 'item', limit: '4', format: 'json' }).toString();
+  url.search = new URLSearchParams({ action: 'wbsearchentities', search: searchTerm(q), language: 'zh', uselang: 'zh', type: 'item', limit: '4', format: 'json' }).toString();
   const data = await timeoutFetch(url.toString());
   return (data.search || []).map(x => ({ title: x.label || x.id, provider: 'Wikidata', url: `https://www.wikidata.org/wiki/${encodeURIComponent(x.id)}`, excerpt: strip(x.description).slice(0, 350) }));
 };
@@ -196,7 +201,7 @@ export async function handleAsk(request, env = {}) {
     const reserve = await env.QUOTA_STRICT.reserve(new Date().toISOString().slice(0,10), Math.min(Number(env.DAILY_AI_LIMIT)||0,100));
     if (reserve === true) { try { answer = await aiAnswer(question,sources,env); ai=true; } catch { /* degrade to raw sources */ } }
   }
-  return json({ question,answer,sources:sources.map(({title,provider,url})=>({title,provider,url})),ai,verified:'search-results-only',checkedAt,note:ai?'AI 整理的检索摘要不等于事实核验；请核对原始资料。':`未启用 AI 整理；展示相关检索摘要，不代表已核验。${failures.length?`其中 ${failures.length} 个知识源暂不可用。`:''}` });
+  return json({ question,answer,sources:sources.map(({title,provider,url})=>({title,provider,url})),sourceDiagnostics:{available:[...new Set(sources.map(s=>s.provider))],failed:failures},ai,verified:'search-results-only',checkedAt,note:ai?'AI 整理的检索摘要不等于事实核验；请核对原始资料。':`未启用 AI 整理；展示相关检索摘要，不代表已核验。${failures.length?`其中 ${failures.length} 个知识源暂不可用。`:''}` });
 }
 export default {
   async fetch(request,env={}) {

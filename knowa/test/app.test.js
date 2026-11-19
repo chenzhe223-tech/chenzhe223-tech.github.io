@@ -72,3 +72,9 @@ test('successful empty search reports no results, not a service outage', async (
     assert.match(d.answer,/未找到/);
   } finally { globalThis.fetch=old; }
 });
+
+test('narrow natural-language questions to entity subject for better source retrieval',async()=>{
+  const {searchTerm}=await import('../src/index.js');
+  assert.equal(searchTerm('爱因斯坦出生于哪个城市？'),'爱因斯坦');
+  assert.equal(searchTerm('霍尔木兹海峡位于哪里？'),'霍尔木兹海峡');
+});

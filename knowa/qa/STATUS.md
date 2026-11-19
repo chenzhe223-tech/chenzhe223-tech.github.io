@@ -7,3 +7,5 @@
 - New code: Wikimedia User-Agent/Api-User-Agent, removed origin=* from server-to-server API requests, detailed safe upstream failure classification, no-results semantics.
 - Paid DeepSeek: disabled; no key, strict quota backend or authorized spend. No paid inference performed.
 - QA: local mocked tests pass on patched source; CI and live post-deploy acceptance must be verified separately.
+
+- 0.4.1: Normalize entity-focused queries, expose safe sourceDiagnostics to show which provider fails, preserve no-fabrication policy. Real two-source query still needs confirmation.
