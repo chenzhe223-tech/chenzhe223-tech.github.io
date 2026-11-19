@@ -1,0 +1,23 @@
+name: KNOWA P0 checks
+on:
+  push:
+    branches: [feat/knowa-p0-20261119]
+    paths:
+      - 'knowa/**'
+      - '.github/workflows/knowa-p0.yml'
+  pull_request:
+    paths:
+      - 'knowa/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: knowa
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - run: npm run check
