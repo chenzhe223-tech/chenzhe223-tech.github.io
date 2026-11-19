@@ -1,7 +1,7 @@
 {
-  "name": "davylab-knowa",
+  "name": "davylab-knowa-p0",
   "main": "src/index.js",
   "compatibility_date": "2026-11-01",
   "observability": {"enabled": false},
-  "vars": {"AI_ENABLED": "false", "DAILY_AI_LIMIT": "30"}
+  "vars": {"AI_ENABLED": "false", "DAILY_AI_LIMIT": "0"}
 }
