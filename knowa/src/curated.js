@@ -2,6 +2,26 @@
 // This is NOT a general-purpose AI/real-time verification mechanism.
 const facts = [
   {
+    pattern: /(?:最深|深度最大).{0,12}(?:海沟|海洋)|(?:海沟|海洋).{0,12}(?:最深|深度最大)/,
+    answer: '目前已知海洋最深处是太平洋马里亚纳海沟南端的挑战者深渊（Challenger Deep）。NOAA 给出的深度测量约为 10,935 米；不同测量方法和年份会产生小幅差异。',
+    sources:[{provider:'NOAA',title:'How deep is the ocean?',url:'https://oceanexplorer.noaa.gov/ocean-fact/ocean-depth/'}]
+  },
+  {
+    pattern: /(?:最大|面积最大).{0,12}(?:热带雨林|雨林)|(?:热带雨林|雨林).{0,12}(?:最大|面积最大)/,
+    answer: '世界上最大的热带雨林是亚马孙雨林（Amazon rainforest），主要分布在南美洲的亚马孙流域，横跨多个国家；其中巴西占据最大部分。',
+    sources:[{provider:'NASA',title:'Mapping the Amazon',url:'https://science.nasa.gov/earth/earth-observatory/mapping-the-amazon-145649/'}]
+  },
+  {
+    pattern: /(?:第一部|最早|年代最早).{0,12}(?:印刷书|印刷品|印本)|(?:印刷书|印本).{0,12}(?:第一部|最早)/,
+    answer: '“世界第一部印刷书籍”需要限定定义。现存最早有明确印刷日期的完整印刷书籍是公元 868 年的敦煌《金刚经》，现藏英国图书馆。印刷技术与更早的零散印刷品并不是从这本书才开始。',
+    sources:[{provider:'英国图书馆 · 国际敦煌项目',title:'The Diamond Sutra',url:'https://idp.bl.uk/discover/learning/buddhism-on-the-silk-roads/articles/buddhism-on-the-ground/buddhist-texts-the-diamond-sutra/'}]
+  },
+  {
+    pattern: /(?:最长|最大).{0,12}(?:山脉|山系)|(?:山脉|山系).{0,12}(?:最长|最大)/,
+    answer: '若包括海底，地球上最长的山脉系统是全球大洋中脊，绵延约 65,000 公里，其中超过 90% 位于海底。若仅讨论陆地山脉，通常指安第斯山脉；两者口径不能混用。',
+    sources:[{provider:'NOAA',title:'What is a mid-ocean ridge?',url:'https://oceanexplorer.noaa.gov/ocean-fact/mid-ocean-ridge/'}]
+  },
+  {
     pattern: /长江.{0,16}(?:发源|源头|起源)|(?:发源|源头).{0,16}长江/,
     answer: '长江发源于青藏高原唐古拉山脉主峰各拉丹冬雪山西南侧，通常以沱沱河作为长江正源。长江源区还包括当曲、楚玛尔河等重要水系。',
     sources: [
