@@ -80,3 +80,8 @@ npm run deploy
 - `/api/discover?batch=0..3` 提供只含标题和类别的轻量推荐数据。点击推荐题目在 `/api/ask` 获得附原始来源的固定答案，不触发 DeepSeek 及配额消耗。列表轮换不代表每天实时抓取新事实。
 - 通过 sessionStorage 保存当天的下一个批次序号，支持页面再次打开继续看新题；不可用时保留上批并允许重试。
 - 既有 DeepSeek 每日最多 5 次及密钥、Durable Object 绑定保持不变，禁止覆盖 Secret 或改变主分支。
+
+## KNOWA v0.7.1 品牌 Logo 入站（2026-11-19）
+- 原 Logo 仅为展示图，未写入网页；本版本将设计图中的蓝色书页、星芒、轨道图标提取为网站专属 WebP，加入页眉，替代旧的“知”占位标识。
+- 新增浏览器 favicon（SVG）及旧 /favicon.ico 兼容跳转，版本化资源 URL 避免浏览器图标缓存不更新。
+- 通过同一 Worker 提供图标，不依赖外部图片服务；保留现有 DeepSeek Secret 和每日 5 次配额。
