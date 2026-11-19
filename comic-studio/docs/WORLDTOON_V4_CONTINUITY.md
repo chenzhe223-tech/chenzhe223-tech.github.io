@@ -185,3 +185,14 @@
 - **11/18 目标未完成：** 尚无可验证的两张真实 pilot、作者定妆批准、九张独立高清正式 PNG、独立封面或逐图视觉验收；G1/G3 仍 BLOCKED。未找到可用的隔离登录身份与两套真实认证环境，G2 仍 BLOCKED；G4/G5 同样 BLOCKED。未合并、未部署、未发表、未虚构 GitHub/WorkBuddy 回执。
 - 五级状态：Code Completed=PARTIAL；Build Passed=YES（上述**文档提交**关联既有 CI）；Runtime Verified=NO（V4）；Functional Tested=PARTIAL（仅既有离线/合成图测试）；Production Deployed=NO。
 - **下一步恢复：** 在具备已配置且可控计费的生图模型入口后，先产出两张真实角色样稿并记录实际费用和 SHA，提交作者独立批准；通过后才制作 9 PNG+封面并逐图 QA。G2 需实际隔离测试账号/认证配置，执行真实双端读写、RLS、刷新与冲突恢复。11/19 继续双仓真实工单与回归，但不得用技术绿灯解除 G1-G5。
+
+
+## 16. 2026-11-19 08:01 SGT · 双仓协议 / 成本生图接入门禁核查
+
+- 已重新读取本 CONTINUITY 与 `WORLDTOON_V4_20261113_ACCEPTANCE.md`，检查前端 draft PR #139、私有 draft PR #7。前端分支相对上轮 `c2f6336ac6586371d33335266acb0644b2f799b4` compare 为 **identical**（ahead=0/behind=0），无新源码差异；没有重复改动既有三入口、七步、角色资产及合成图 ZIP 校验。
+- 前端 SHA `c2f6336ac6586371d33335266acb0644b2f799b4` 关联四项实际 GitHub Actions 均 completed/success：static [44204554333](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44204554333)、V3/V4 regression [44204554288](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44204554288)、mobile [44204554310](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44204554310)、Chrome E2E [44204554300](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44204554300)。这些是既有自动测试记录，本轮未声称新执行 Chrome/实机测试。
+- 私有 PR #7 的已知协议 SHA `0f29614075453a4597699c0ab98a76e4aa3ad2f8` 对应 [43410394525](https://github.com/chenzhe223-tech/worldtoon/actions/runs/43410394525) completed/success。只读核对其变更文件为 `contracts/task.schema.json`、`scripts/rebuild_index.py`、`tests/test_v4_character_contract.py` 和 CI 工作流；没有新的真实工单/WorkBuddy 回执证据。未猜测私有 PR 未公开的最新 HEAD。
+- 用户确认经济型双生图选型：现有 DeepSeek 负责文本创作；Qwen-Image 2.1 Turbo 用于低成本试画；FLUX.2 Pro 用于高清定妆与正式画面；中文对白由平台独立排版。**选型不等于供应商模型 ID/API 已核实可用。** 本轮尝试读取现有 Cloudflare 账号连接，但连接要求交互式授权，当前非交互执行不能完成；因此无法核验已有图像模型绑定、密钥、硬计费上限或实际价格。未创建服务、未调用收费模型、实际费用为 0（仅本轮），未生成真实 pilot。
+- 11/19 双仓协议技术 CI 有历史通过证据，但真实 WorkBuddy 授权范围内工单生产、远端上传/审核回执、桌面平板手机**本轮**实机回归及双设备 Supabase 认证 UAT 均无新增真实证据。G1-G5 **全部 BLOCKED**；没有作者确认的两张真实定妆、9 PNG+独立封面及逐图美术验收。不可把技术合成图或 CI 绿灯当作商业艺术/生产上线验收。
+- 五级状态：Code Completed=PARTIAL（既有 P0/P1 及协议代码）；Build Passed=YES（上述 HEAD 的既有 4/4 CI）；Runtime Verified=NO（V4 线上未验）；Functional Tested=PARTIAL（仅历史技术回归）；Production Deployed=NO。未合并、未部署、未发表、未操作私人账号。
+- **恢复动作：** (1) 通过可非交互授权的 Cloudflare/阿里云模型连接只读确认真实 endpoint、可用模型 ID、API key 是否已配置及 S$5 可执行硬限额；缺任一条件不得试画。(2) 获得隔离 Supabase 认证会话与两套浏览器上下文后执行 G2 真正跨端/RLS UAT。(3) 生成两张真实 pilot、记录真实调用/费用/哈希并提交作者独立确认，获批准后才生产 9 张高清 PNG+封面。(4) 再核实私有工单、WorkBuddy 真实回执与全端回归；G1-G5 全通过且另获部署/发表明确授权后才允许上线。11/20 是目标，不是验收承诺。
