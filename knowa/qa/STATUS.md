@@ -1,24 +1,24 @@
-# KNOWA P0 · QA Status · 2026-11-19
+# KNOWA P0 QA · 2026-11-19 · v0.3.0
 
 ## Five delivery gates
 
-- **Code Completed: YES.** Retrieved 2026-11-17 P0 source and incrementally implemented verified curated answers, paginated Nobel official API processing, defensive validation, and responsive UI.
-- **Build Passed: YES.** Local `npm test` 15/15; `npm run check` passed. GitHub Actions workflow **KNOWA P0 checks** completed successfully (run 44472099383, commit `18dfd9178c041096d25cc54ca0823e1c24508d79`).
-- **Runtime Verified: PARTIAL.** Chromium desktop 1440px and mobile 390px layouts passed (9 topic cards, 6 sample chips, no horizontal overflow); direct HTTP `/api/health` from external tools unavailable, therefore real Cloudflare HTTP behavior **not** independently verified.
-- **Functional Tested: PARTIAL.** Mock integration 15/15 includes Nobel pagination, ID duplicates, inconsistent source metadata, incomplete pages, connection failures and curated sources. Real Nobel API and third-party general query require real-feed tests.
-- **Production Deployed: DEPLOYMENT CONFIRMED; production acceptance PENDING.** Cloudflare accepted Worker `davylab-knowa-p0`, deployment `bffe06d3-5cfc-443e-9209-6bed47cab4c7` is at 100% on version `097ef349-9f8a-45ff-845f-50a2df2c8bbb`, with workers.dev subdomain enabled. URL `https://davylab-knowa-p0.chenzhe223.workers.dev/`. No live HTTP response has been confirmed by this environment.
+1. **Code Completed — YES**: Incremental fix on original `knowa/`, no reimplementation, no changes to main.
+2. **Build Passed — YES**: GitHub Actions run 44475060643 passed all 19 tests, Node syntax validation, reproducible build and bundled-file parity.
+3. **Runtime Verified — PARTIAL**: Cloudflare deployment and workers.dev subdomain enabled, but this environment could not independently retrieve a real HTTP response from public URL.
+4. **Functional Tested — PARTIAL**: Mock integration passed 19 tests (Nobel complete pagination, 601 records across pages, duplicates, inconsistent totals, nationality/birthplace split, sourced curated facts). Live Nobel/Wikipedia/Wikidata feed and browser functionality are NOT verified.
+5. **Production Deployed — CONFIRMED, acceptance still PENDING**: Isolated Cloudflare Worker `davylab-knowa-p0` deployment `7b6562a8-ec25-4214-a466-bdcbb7b0d895`, version `4ff806b3-0b64-4cd4-9636-8917e785b3a8` has 100% traffic at 2026-11-19 06:51:18Z.
 
-## GitHub
+## Security and cost controls
 
-Code is committed in **existing** repo `chenzhe223-tech/chenzhe223-tech.github.io`, feature branch `feat/knowa-p0-20261119`, folder `knowa/` (source commit `931dba5150bafefd1b42cbe5e05630385dd9fde8`). Standalone repo `chenzhe223-tech/davylab-knowa` does not exist or is not accessible. Production `main` branch not modified.
+- Cloudflare deployment explicitly sets `AI_ENABLED=false` and `DAILY_AI_LIMIT=0`. No DeepSeek model billing enabled or API key uploaded.
+- Nobel official data is read in full (up to 3000 laureates) and filtered by `birth.place.countryNow`. The result is NOT a measure of citizenship.
+- Incomplete official page, missing ID or duplicate awardee IDs fail closed rather than returning a false count.
+- Main GitHub branch and all other Cloudflare Workers untouched.
 
-## Cost and security
+## Outstanding live acceptance (P0)
 
-Cloudflare production Worker verified settings: `AI_ENABLED=false`, `DAILY_AI_LIMIT=0`. No paid AI calls; no API key or secrets bundled.
-
-## Remaining P0 acceptance work
-
-1. Browser visit and GET `/api/health` on new URL; confirm actual response and no 5xx.
-2. Real Nobel API full pagination and count against official source; test Wikipedia/Wikidata real queries and errors.
-3. Verify provenance rendered and escaped safely on Windows/mobile Safari/Chrome.
-4. Decide on a standalone GitHub repo if preferred, and confirm final target domain. No API spend or production branch changes without approval.
+- External GET `/api/health` HTTP 200 (unavailable in current tool environment).
+- External POST `/api/ask` with real Nobel results; match official live records, verify all pages.
+- Verify Wikipedia / Wikidata source degradation and original links.
+- Windows Edge and iPhone Safari live browser review for homepage and references.
+- Paid DeepSeek only after explicit user approval and atomic spending/quota gate.
