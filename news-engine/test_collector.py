@@ -22,6 +22,12 @@ class CollectorTests(unittest.TestCase):
     def test_unsafe_xml(self):
         with self.assertRaises(ValueError):
             collector.parse(b'<!DOCTYPE foo><rss/>', "test", NOW)
+    def test_cdata_html_does_not_trigger_false_dtd_alarm(self):
+        feed = RSS.replace(b"</item>", b"<description><![CDATA[<!DOCTYPE html><p>example</p>]]></description></item>")
+        self.assertEqual(len(collector.parse(feed, "test", NOW)), 1)
+    def test_real_entity_declaration_still_blocked(self):
+        with self.assertRaises(ValueError):
+            collector.parse(b'<!DOCTYPE rss [<!ENTITY attack "test">]><rss/>', "test", NOW)
     def test_source_isolation(self):
         sources = [{"name": "bad", "url": "https://bad.example/feed"}, {"name": "good", "url": "https://good.example/feed"}]
         def get(url):
