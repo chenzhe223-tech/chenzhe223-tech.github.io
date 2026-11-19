@@ -43,3 +43,47 @@ jobs:
           retention-days: 7
 
 # Repeatable trusted-state probe: immutable, CI-verified collector SHA only.
+
+
+  radar-archive-backfill:
+    # Read only historical Radar archives; writes may target only news-engine-state.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: news-engine-isolated-history-state
+      cancel-in-progress: false
+    steps:
+      - name: Checkout immutable, unit-tested importer (not a PR head)
+        uses: actions/checkout@v4
+        with:
+          ref: eecdefaebabc6751c14914993f2f86c7990cba0e
+          path: engine-readonly
+          persist-credentials: false
+      - name: Checkout today's Radar main archive as read-only evidence
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: radar-readonly
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run importer and collector safety tests
+        run: python -m unittest discover -s engine-readonly/news-engine -p 'test_*.py' -v
+      - name: Backfill only observed 90-day-window archive keys to isolated branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          python engine-readonly/news-engine/backfill_radar.py \
+            --radar-data radar-readonly/radar/data \
+            --out engine-readonly/news-engine/data/backfill-audit.json \
+            --commit
+      - name: Upload exact coverage audit and missing historic dates
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-radar-archive-backfill-audit
+          path: engine-readonly/news-engine/data/backfill-audit.json
+          if-no-files-found: ignore
+          retention-days: 14
