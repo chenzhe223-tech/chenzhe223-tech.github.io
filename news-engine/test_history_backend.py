@@ -12,6 +12,15 @@ SRC = [{"name": str(i), "url": f"https://source{i}.example/feed"} for i in range
 
 
 class HistoryBackendTests(unittest.TestCase):
+    def test_backfilled_first_seen_is_not_rejuvenated_by_live_duplicate(self):
+        key = "url:https://example.org/model"
+        older = "2026-10-21T12:00:00+00:00"
+        newer = "2026-11-19T12:00:00+00:00"
+        merged = backend.merge_oldest({}, {key: newer})
+        backend.merge_oldest(merged, {key: older})
+        backend.merge_oldest(merged, {key: newer})
+        self.assertEqual(merged[key], older)
+
     def test_separate_week_files_cover_full_90_days(self):
         keys = backend.history_weeks(NOW)
         self.assertIn(backend.week_key((NOW - dt.timedelta(days=90)).date()), keys)
