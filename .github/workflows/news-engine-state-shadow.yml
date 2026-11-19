@@ -1,0 +1,43 @@
+name: DAVYLAB News Engine isolated state verification
+on:
+  push:
+    branches:
+      - news-engine-state
+    paths:
+      - '.github/workflows/news-engine-state-shadow.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  trusted-state-probe:
+    # Trigger only when this trusted workflow is explicitly updated on state branch.
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: news-engine-isolated-history-state
+      cancel-in-progress: false
+    steps:
+      - name: Checkout isolated, user-owned development branch (never main)
+        uses: actions/checkout@v4
+        with:
+          ref: feat/davylab-news-engine-p0-20261115
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify offline contracts before state transaction
+        run: python -m unittest discover -s news-engine -p 'test_*.py' -v
+      - name: Verify five real feeds and commit dedupe keys to state branch only
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python news-engine/history_backend.py --out news-engine/data/latest-shadow.json
+      - name: Upload diagnostics (never publish or commit headlines to main)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: isolated-durable-news-history
+          path: news-engine/data/latest-shadow.json
+          if-no-files-found: ignore
+          retention-days: 7
