@@ -1,13 +1,13 @@
 {
   "name": "davylab-knowa-p0",
-  "main": "src/index.js",
+  "main": "dist/worker.js",
   "compatibility_date": "2026-11-01",
   "observability": {
     "enabled": false
   },
   "vars": {
-    "AI_ENABLED": "false",
-    "DAILY_AI_LIMIT": "0"
+    "AI_ENABLED": "true",
+    "DAILY_AI_LIMIT": "5"
   },
   "durable_objects": {
     "bindings": [
