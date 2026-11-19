@@ -22,7 +22,7 @@ jobs:
       - name: Checkout isolated, user-owned development branch (never main)
         uses: actions/checkout@v4
         with:
-          ref: b1872643a8367c18fa4d5c39d536fee6dd989488
+          ref: 04ed9e439dc37e9dc0d8cc857fb5912ea3130a4f
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -57,7 +57,7 @@ jobs:
       - name: Checkout immutable, unit-tested importer (not a PR head)
         uses: actions/checkout@v4
         with:
-          ref: eecdefaebabc6751c14914993f2f86c7990cba0e
+          ref: 04ed9e439dc37e9dc0d8cc857fb5912ea3130a4f
           path: engine-readonly
           persist-credentials: false
       - name: Checkout today's Radar main archive as read-only evidence
