@@ -22,7 +22,7 @@ jobs:
       - name: Checkout isolated, user-owned development branch (never main)
         uses: actions/checkout@v4
         with:
-          ref: feat/davylab-news-engine-p0-20261115
+          ref: b1872643a8367c18fa4d5c39d536fee6dd989488
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -42,4 +42,4 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-# Validation pass 2: fresh GitHub runner must read previous 104 history keys.
+# Repeatable trusted-state probe: immutable, CI-verified collector SHA only.
