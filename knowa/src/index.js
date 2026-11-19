@@ -2,13 +2,14 @@ import { html } from './page.js';
 import { fetchJapanBornNobel, isJapanNobelQuestion, isJapanBirthplaceNobelQuestion } from './nobel.js';
 import { curatedAnswer } from './curated.js';
 import { exploreCollection } from './explore.js';
+import { discoveryBatch, discoveryAnswer } from './discover.js';
 import { aiGateReady, reserveAiQuota } from './quota.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
 const strip = value => String(value || '').replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
 // Wikimedia requires a descriptive application identity for server-side API calls.
-export const WIKIMEDIA_USER_AGENT = 'DAVYLAB-KNOWA/0.4.0 (https://github.com/chenzhe223-tech/chenzhe223-tech.github.io; public knowledge lookup)';
+export const WIKIMEDIA_USER_AGENT = 'DAVYLAB-KNOWA/0.7.0 (https://github.com/chenzhe223-tech/chenzhe223-tech.github.io; public knowledge lookup)';
 const timeoutFetch = async (url, init = {}, timeoutMs = 6500) => {
   const headers = new Headers(init.headers || {});
   headers.set('Accept', 'application/json');
@@ -84,6 +85,8 @@ export async function handleAsk(request, env = {}) {
   if(collection)return json({question,...collection,aiStatus:'not-needed',checkedAt});
   const curated = curatedAnswer(question);
   if (curated) return json({ question, ...curated, ai:false, checkedAt });
+  const featured = discoveryAnswer(question);
+  if (featured) return json({question,...featured,checkedAt});
   const { sources, failures } = await collect(question);
   if (!sources.length) {
     if (failures.length === 2) return json({error:'当前知识源暂不可用',providerFailures:failures,verified:'unavailable',checkedAt},503);
@@ -109,7 +112,12 @@ export default {
   async fetch(request,env={}) {
     const url=new URL(request.url);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.6.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
+    if (url.pathname==='/api/discover'&&request.method==='GET') {
+      const raw=url.searchParams.get('batch')||'0';
+      const batch=/^\d{1,3}$/.test(raw)?Number(raw):0;
+      return json(discoveryBatch(batch));
+    }
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.7.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }
