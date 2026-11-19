@@ -22,9 +22,11 @@ npm run dev
 
 已覆盖 15 项 Node.js 自动化测试、静态语法检查和桌面/手机 Chromium 排版检查（见 `qa/`）。自动化测试主要使用 Mock 接口，不等于真实 Nobel/DeepSeek 联调。
 
-## 部署（不得配置收费 AI）
+## 云端部署（2026-11-19 已通过 Cloudflare API 上传）
 
-已准备 `wrangler.jsonc`，在账户授权、审核项目名称与生产环境后执行：
+已在独立 Worker `davylab-knowa-p0` 部署 100%，并启用访问地址：`https://davylab-knowa-p0.chenzhe223.workers.dev/`。Cloudflare 上传/版本/绑定已验证，**站点实际 HTTP 回应尚未实测**，因此仍不得标为完整线上验收通过。源代码已提交至 `chenzhe223-tech/chenzhe223-tech.github.io` 的 `feat/knowa-p0-20261119` 分支之 `knowa/`，且 GitHub Actions 成功。
+
+后续如需使用本地 CLI 手动更新部署，可在认证后执行:
 
 ```bash
 npm run deploy
@@ -39,4 +41,4 @@ npm run deploy
 - 中国科学院等静态精选答案附权威出处，但未建立持续内容同步机制。
 - 通用问题还没有可稳定返回“完整事实答案”的免费推理/结构化检索引擎。
 - 未配置真实 DeepSeek API key；AI 真实联调和原子用量闸门未完成。
-- 代码可以本地交付运行；GitHub 仓库与 Cloudflare Worker 是否已创建，必须由独立远端验证确认。
+- 代码已提交至现有 GitHub 仓库的隔离开发分支；独立的 `davylab-knowa` 仓库未创建。Cloudflare 已确认上线部署版本，但真实 HTTP/API 功能验收仍待人工/外部网络复核。
