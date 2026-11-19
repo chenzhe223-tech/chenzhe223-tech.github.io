@@ -120,6 +120,14 @@ def write_week(repo, token, week, seen, sha, *, transport=None):
     _api(repo, token, "PUT", week, body=body, transport=transport)
 
 
+def merge_oldest(target, incoming):
+    """Keep oldest observed date for repeated keys, never rejuvenate old news."""
+    for key, stamp in incoming.items():
+        if key not in target or stamp < target[key]:
+            target[key] = stamp
+    return target
+
+
 def collect_persistently(*, repo, token, sources=None, http_get=None, now=None,
                          read=read_week, write=write_week, retries=3):
     """Optimistic transaction: recompute candidates if another run wins."""
@@ -134,9 +142,7 @@ def collect_persistently(*, repo, token, sources=None, http_get=None, now=None,
             seen, sha = read(repo, token, week)
             # Preserve the earliest observed timestamp when the same URL/title
             # appears in multiple weeks (including imported Radar archives).
-            for key, stamp in seen.items():
-                if key not in merged or stamp < merged[key]:
-                    merged[key] = stamp
+            merge_oldest(merged, seen)
             if week == current:
                 current_seen, current_sha = seen, sha
         result, updated = collector.collect(
