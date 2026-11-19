@@ -132,7 +132,11 @@ def collect_persistently(*, repo, token, sources=None, http_get=None, now=None,
         merged, current_seen, current_sha = {}, {}, None
         for week in weeks:
             seen, sha = read(repo, token, week)
-            merged.update(seen)
+            # Preserve the earliest observed timestamp when the same URL/title
+            # appears in multiple weeks (including imported Radar archives).
+            for key, stamp in seen.items():
+                if key not in merged or stamp < merged[key]:
+                    merged[key] = stamp
             if week == current:
                 current_seen, current_sha = seen, sha
         result, updated = collector.collect(
