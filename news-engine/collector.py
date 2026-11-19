@@ -82,8 +82,13 @@ def fetch(url, retries=2, sleep=time.sleep):
     raise last_error
 
 def parse(payload, source, now):
-    if len(payload) > MAX_BYTES or (b"<!DOCTYPE" in payload.upper() or b"<!ENTITY" in payload.upper()):
-        raise ValueError("unsafe or oversized XML")
+    if len(payload) > MAX_BYTES:
+        raise ValueError("oversized XML")
+    # HTML snippets such as <!DOCTYPE html> are often embedded in safe RSS CDATA.
+    # Check declarations only outside CDATA and XML comments; never relax the DTD ban.
+    declarations = re.sub(rb"<!\\[CDATA\\[.*?\\]\\]>|<!--.*?-->", b"", payload, flags=re.DOTALL).upper()
+    if b"<!DOCTYPE" in declarations or b"<!ENTITY" in declarations:
+        raise ValueError("DTD or entity declaration prohibited")
     root = ET.fromstring(payload)
     if root.tag == "rss":
         rows = [(n.findtext("title"), n.findtext("link"), n.findtext("pubDate")) for n in root.findall("./channel/item")]
