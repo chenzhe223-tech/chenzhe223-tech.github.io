@@ -92,3 +92,31 @@ jobs:
           path: news-engine/data/latest-shadow.json
           if-no-files-found: ignore
           retention-days: 7
+
+  browser-editor-e2e:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install open-source headless browser test tools
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Test actual desktop and mobile review workflow in Chromium (offline)
+        env:
+          NEWS_ENGINE_SCREENSHOT_DIR: test-results/news-engine/browser
+        run: node news-engine/test_editor_browser.cjs
+      - name: Upload evidence screenshots and review-only exports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-editor-browser-qa
+          path: test-results/news-engine/browser/
+          if-no-files-found: ignore
+          retention-days: 7
