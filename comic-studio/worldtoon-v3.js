@@ -430,19 +430,18 @@
    if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
    if(i===3){
      const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
-     const route=s.agent==='WorkBuddy'?
-       'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档':
-       'SOP A · ChatGPT 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档';
-     const action=queued?
-       (s.agent==='ChatGPT'?'<button class="button dark" data-wf="copy">复制当前制作指令</button>':
-         '<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>'):
-       '<button class="button dark" data-wf="task">生成工单并正式派单 →</button>';
+     const direct=s.agent==='ChatGPT',localExported=!!p.handoff?.directTaskExportedAt;
+     const route=direct?'SOP A · 平台锁定角色与分镜 → ChatGPT 本地定妆确认 → 连续生产完整漫画 ZIP → 独立出版审核':
+       'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档';
+     const action=direct?'<button class="button dark" data-wf="task">下载 ChatGPT 直达任务 ZIP</button><button class="button" data-wf="copy">复制制作指令</button>':
+       queued?'<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>':
+       '<button class="button dark" data-wf="task">生成 WorkBuddy 正式工单 →</button>';
      return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
        '<p>'+route+'</p><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
-       '<p>GitHub 工单：'+(queued?'已确认入仓':'尚未确认')+'</p>'+
-       '<p>当前状态：'+html(s.row?.status||p.handoff?.repoError||s.statusText)+'</p></div>'+
+       '<p>生产同步：'+(direct?'本地直达模式，GitHub 暂停':'GitHub 工单 '+(queued?'已确认入仓':'尚未确认'))+'</p>'+
+       '<p>当前状态：'+html(direct?(localExported?'任务包已导出，等待 ChatGPT 完整素材':'导演台定稿后即可下载任务 ZIP'):(s.row?.status||p.handoff?.repoError||s.statusText))+'</p></div>'+
        '<div class="buttons">'+action+
-       (queued?'<button class="button" data-wt4-step="4">进入成品验收 →</button>':'')+
+       ((queued||localExported)?'<button class="button" data-wt4-step="4">进入成品回传 →</button>':'')+
        '<button class="button" data-wt4-step="1">修改制作 Agent / 剧本</button></div>'+
        '<details class="wt4-advanced"><summary>高级：查看完整任务派单、来源编辑和交接记录</summary>'+
        wtWorkflow()+'</details></section>';
@@ -450,16 +449,17 @@
    if(i===4){
      const pack=typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'';
      const h=p.handoff||{},pilot=p.creativeDirection?.pilotApproval;
-     const notice=s.agent==='WorkBuddy'?
+     const direct=s.agent==='ChatGPT';
+     const notice=!direct?
        '<p>WorkBuddy 生产任务通过 GitHub 独立队列领取，平台只显示可核验结果。可在生产调度查看执行情况。</p>':
-       '<p>ChatGPT 成品 ZIP 将在本地校验，并自动尝试上传到 GitHub；失败可原位续传，无须重新建单。</p>';
+       '<p>ChatGPT 成品 ZIP 只做本地文件完整性校验与视觉 QA，GitHub 上传已暂停；不阻碍全套素材下载。</p>';
      return '<section class="box wt4-stage-card"><h2>成品回传与 QA</h2>'+notice+
-       '<div class="wt4-status-lines"><p>真实样稿审批：'+(pilot?.repo_commit?'已保存 GitHub 审批记录':'待作者核对角色定妆和首格试画')+'</p>'+
+       '<div class="wt4-status-lines"><p>真实样稿审批：'+((pilot?.local_approved||pilot?.repo_commit)?'已由作者批准定妆':'待作者核对真实定妆和首格试画')+'</p>'+
        '<p>文件上传：'+(h.stageUploaded?.length||0)+' / '+(h.stagedFiles?.length||0)+'</p>'+
-       '<p>GitHub 成品 QA：'+html(s.row?.status||'尚未核验')+'</p></div>'+
+       '<p>验收状态：'+(direct?'本地文件与人工视觉 QA；未申请正式发表':html(s.row?.status||'尚未核验'))+'</p></div>'+
        (s.agent==='ChatGPT'?pack:'')+
        '<a class="button" href="#/director/'+encodeURIComponent(p.id)+'">查看试制样稿审批</a> '+
-       '<button class="button" data-archive="refresh">同步 GitHub 验收状态</button></section>';
+       (direct?'':'<button class="button" data-archive="refresh">同步 GitHub 验收状态</button>')+'</section>';
    }
    if(i===5)return publish();
    const chapters=p.seriesId?activeProjects().filter(x=>x.seriesId===p.seriesId)
@@ -515,7 +515,7 @@
      '<h2>'+html(stageNames[i])+'</h2></div><div class="buttons">'+next+
      '<a class="button" href="#/reader/'+encodeURIComponent(p.id)+'">阅读预览</a></div></div>'+
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
-     '<footer class="wt4-footer">自动保存本地草稿；GitHub 只认可实际入仓的工单和成品。创意定稿、样稿审批及出版授权必须由作者独立确认。</footer></div>';
+     '<footer class="wt4-footer">自动保存本地草稿；ChatGPT 直达制作无需 GitHub 同步；正式入仓与公众号发表需独立 QA 和作者授权。</footer></div>';
  }
  function overview(){
    const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001')
