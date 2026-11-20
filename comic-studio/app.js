@@ -220,6 +220,35 @@ function wfDirectPrompt(p,o){
  '【以下是文本导演分镜，禁止整体传给生图工具】\n'+shots
  ].join('\n\n');
 }
+function wfStartupCommand(p,task){
+ const o=task||wfTaskObject(p),review=wfLiteraryReview(p);
+ return [
+  '【WORLD/TOON · By DAVYLAB｜正式开工命令｜请立即执行】',
+  '我现在正式下达这部漫画的制作任务。此消息同时附有 WORLD_TOON 任务 ZIP，请直接读取并执行，不需要再询问“想如何处理 ZIP”“要脚本还是漫画”等已明确的问题。',
+  '任务编号：'+(o.task_id||'【任务号缺失，请核对 task.json】'),
+  '作品：《'+(o.title||p.title)+'》；创作类型：'+(review?'三维文学导读（独立评论，不是原著剧情重绘）':o.mode==='original'?'原创漫画':'新闻／主题漫画')+'；预计交付：'+o.panel_count+' 张独立竖版漫画 PNG＋1 张独立封面 PNG＋文案、事实及版权说明、QA 与完整可下载 ZIP。',
+  '首先解压附件并按顺序阅读：00_START_HERE.md → task.json → ChatGPT_制作指令.md → production-bible.json → render_jobs.json → production_state.json。以 task_id 与作者已锁定的分镜和视觉圣经为准，禁止自行更换人物、画风和具体镜头。',
+  review?'本作须先核实书名、作者、出版背景、作家获诺奖与本书的关系及可信评论；按01–03“作品讲了什么”、04–06“人生哲学”、07–09“对普通人的意义”制作原创编辑漫画。不得逐幕复刻原著情节、经典对白或原著插画，不得把编辑解读伪装为作者原话。':'新闻事实先核实可信来源；现实争议、具体人物或版权材料须按照任务内规则保护，虚构内容应明确标注。',
+  '请直接开始研究与创意核对，并实际推进角色定妆图和第01格样稿。只有在必须由作者确认真实定妆／首格时请请求一次批准；确认后继续逐张独立生成、排版和验收。不得用一张九宫格拼图代替9张独立图片，也不得仅提供分镜、文字提示词或计划作为完成交付。',
+  '每次生图严格只执行 render_jobs.json 中一个 job 的 prompt；不要将整个故事和九张分镜一次送给生图模型。真实原图不低于1080×1440（竖版3:4），中文另行准确排版。保留已有通过QA的画格，失败只重绘当前格。',
+  '本任务的制作交付临时不依赖 GitHub 入仓。不得要求我重新解释附件任务，亦不得擅自代替作者同意发表。若附件读取失败或工具能力确实受限，请指出具体文件／阻碍和已实际完成成果，不虚构图片、SHA或下载链接。',
+  '现在立即按 ZIP 执行。首个回复应给出实际读取到的任务编号、作品名、研究和制作动作；仅在遇到具体缺失或真实审批点时提问。'
+ ].join('\n\n');
+}
+function wfStartHere(p,task,launch){
+ return '# WORLD/TOON · By DAVYLAB｜ChatGPT 直达任务启动说明\n\n'+
+  '本 ZIP 是正式创作任务数据包，而不是漫画成品。仅上传 ZIP 文件不保证对话模型将其识别为“立即执行”；请同时发送明确的开工命令。\n\n'+
+  '## 正确的启动操作\n\n'+
+  '1. 打开 ChatGPT 对话，在同一条用户消息中上传整个 ZIP。\n'+
+  '2. 在文本输入框粘贴下面【正式开工命令】，再点击发送；或使用 WORLD/TOON 交接中心的“复制开工指令”按钮。\n'+
+  '3. 不需要再手动粘贴全部导演分镜；ZIP 内的 ChatGPT_制作指令.md 和 render_jobs.json 已包含全量制作细节。\n'+
+  '4. 如 ChatGPT 只问“你希望如何处理压缩包”，请补发该开工命令，不必重新制作平台任务。\n\n'+
+  '## 正式开工命令（复制以下全文，并与 ZIP 一起发送）\n\n'+launch+'\n\n'+
+  '## 身份与交付说明\n\n'+
+  '- 任务 ID：'+task.task_id+'\n- 题名：《'+task.title+'》\n'+
+  '- 当前状态：任务指令包已生成；真正的漫画图片、封面和出版批准尚未完成。\n'+
+  '- 事实和版权待核查时不应伪造已核验状态；作品及视觉使用权仍须单独审查。\n';
+}
 function wfPrompt(p){const o=wfTaskObject(p);if(o.producer==='ChatGPT')return wfDirectPrompt(p,o);return (wfLiteraryReview(p)?wfLiteraryReviewGuide(p)+'\n\n':'')+'【独立图像生产强制协议 SINGLE_IMAGE_PER_CALL_V2】任务最终要产出完整漫画，但绝不能单次生图整个故事。任务 ZIP 内 render_jobs.json 含每张图唯一提示词与目标文件，每次仅传一个 jobs[i].prompt 到生图模型。严格一调用一张原图一镜头；不得画九宫格、拼版、故事总览或画中画；首格经批准后沿用原图，后续画格依次单独生成，封面最后独立生成；每格检查 single_scene_verified/no_contact_sheet；失败只重绘本帧。\n\n'+`你是 WORLD/TOON · By DAVYLAB 的专属漫画编剧、美术总监、质量审校。\n本任务由我的漫画平台正式下发，创作者为${o.producer}，WorkBuddy 负责微信公众号发布。\n\n任务编号：${o.task_id}\n标题：《${p.title}》\n题材：${p.category} · ${wfLiteraryReview(p)?'三维文学导读（原创评论，不是原著剧情改编）':wfMode(p)==='original'?'完全虚构':'全球热点虚构改编'}\n创作风格：${p.tone||'高级杂志感、黑色幽默'}。严格遵循已锁定的 creative_direction 创意制作圣经，不可用默认风格、默认人物或任意更改故事节奏。
 原著／短剧剧情选择：${JSON.stringify(p.storySourceSelection||null)}。公版判定仅依据来源标记与具体司法辖区；非公版的忠实改编必须有有效授权，且作者和 GitHub 独立核验后才可出版。仅受主题启发的原创创作不得沿用原著人物、独特桥段与对白。\n剧情类型：${p.plotGenre==='viral-melodrama'?'狗血网红爽剧 / '+(p.dramaSubtype||'rebirth-bank-rich')+' / 反转强度'+(p.dramaIntensity||4)+'/5':'通用创作'}。人物必须是原创虚构成年人，不得编造可识别真人的关系或指控。
 肖像角色：如本任务 ZIP 包含 references/portrait-XX 文件，仅可在本人授权范围内用作人物骨相、面部比例、发型特征的 3D 拟人化参考；不得公开原照，输出高质量 3D 角色定妆图供作者审阅，禁止把文字提示词冒充真实生成图片。\n现实事件候选链接：${validSources(p).join('；')||(wfMode(p)==='original'?'原创故事，无现实来源':'尚无来源，必须先检索核验')}\n当前核验状态：${wfResearchPolicy(p).verification_status}（pending_research 表示尚未核验）\n线索与核验笔记：${p.factNotes||'待 ChatGPT 核验'}\n虚构改编原则：${p.fiction}\n角色设定：${p.characters||'请创作原创虚构角色'}\n剧情：${p.description||'请基于选题完善'}\n系列连续性：${JSON.stringify(o.series_bible||null)} · 上一章任务：${p.previousTaskId||'无'}\n说明：${p.disclosure}\n\n【导演台已锁定的完整制作圣经】\\n${JSON.stringify(o.creative_direction,null,2)}\n\n【V3 真实首图身份锁】选择的风格、品质目标、角色、模型和绘图流程必须与首图正式生产一致。先制作正式 1080×1440 PNG 角色定妆 character-sheet.png 和首格原图 pilot-01.png，记录模型名及实际版本、参数、生成管线版本和两个 SHA-256。禁止 CSS、SVG、简笔占位图以及上采样成图。首图作者批准后，deliveries/<task_id>/panels/01.png 必须逐字节复制已批准的 pilot-01.png；SHA-256 完全一致，禁止重生图、二次压缩或替换。其余${p.panels.length-1}张及独立封面沿用同一画风与角色；提供 deliveries/<task_id>/style-lock.json（含 style_id、quality_target、preview_sha256、model_id、model_version）、manifest.image_provenance、V3 六项额外 QA 与原图来源。未有真实模型或美术 QA 不通过时，标记 blocked，不能用文字或 SVG 代替。
@@ -231,7 +260,7 @@ return heroHeader('THE PRODUCTION DESK / THREE-HANDOFFS','制作交接中心','�
 '<div class="wf-path"><span>01 平台：选题与制作任务</span><span>→</span><span>02 ChatGPT / WorkBuddy：漫画生产</span><span>→</span><span>03 GitHub QA → 作者授权 → WorkBuddy 发表</span></div>'+
 `<div class="box"><div class="wf-form"><div class="field"><label>选择项目</label><select id="wfProject">${ps.map(x=>`<option value="${e(x.id)}" ${p?.id===x.id?'selected':''}>${e(x.title)}</option>`).join('')}</select></div><div class="field"><label>内容类别</label><select id="wfMode" ${wfLiteraryReview(p)?'disabled aria-label="文学导读模式已锁定"':''}>${wfLiteraryReview(p)?'<option selected value="literary_review">三维文学导读（作品／哲学／人生）</option>':`<option value="hotspot" ${wfMode(p)==='hotspot'?'selected':''}>全球热点虚构改编</option><option value="original" ${wfMode(p)==='original'?'selected':''}>完全原创虚构</option>`}</select></div><div>${wfStatus(p)}</div></div><p class="wf-meta">资料编辑请到 <a href="#/studio/${e(p?.id||'')}">创作工作台</a> · 素材来源请到 <a href="#/radar">选题池</a> · 图片回传只保存在当前作品，不会替换其他项目</p></div>`+
 (p?`<div class="wf-layout"><section class="wf-step ${wfPhase(p)==='not_started'?'active':''}"><div class="wf-stephead"><span class="wf-num">01</span><span class="chip">平台</span></div><h3>生成制作任务</h3><p>${wfLiteraryReview(p)?'核对作品与作者资料，按“讲了什么／人生哲学／普通人意义”三维构建九格原创文学导读。':'整理新闻来源、事实与虚构边界、角色设定、九格分镜，产生可追溯的任务编号和标准任务包。'}</p><p class="wf-meta">${wfPhase(p)==='not_started'?'尚未生成有效制作任务包':h.taskId?'任务编号：'+e(h.taskId):'尚未建立任务'}</p><p class="wf-meta" style="margin:12px 0">${e(wfTaskReadiness(p))}</p><div class="wf-director-gate"><strong>先确认画风、人物与剧情</strong><p>先在导演台锁定角色、画风和分镜，ChatGPT 直达模式无需 Github 派单。</p><a class="button dark" href="#/director/${e(p.id)}">进入创意导演台 →</a><span>${previewGate?(previewGate.ready?'创意已定稿 · 生产预检通过':'创意已定稿 · 生产预检待修正'):'待作者确认 · 不允许盲派单'}</span></div>
-${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务暂不可导出：'+previewGate.reasons.map(x=>e(x)).join('；')+'</p>':''}${wfInlineEditor(p)}<button class="button dark" data-wf="task">生成 ChatGPT 直达任务 ZIP</button><button class="button" data-wf="copy">复制制作指令</button><a class="button" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">打开 ChatGPT ↗</a></section>
+${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务暂不可导出：'+previewGate.reasons.map(x=>e(x)).join('；')+'</p>':''}${wfInlineEditor(p)}<div class="wf-launch-guide"><strong>交给 ChatGPT：两样必须一起发送</strong><p>① 下载任务 ZIP → ② 复制开工指令 → ③ 在 ChatGPT <b>同一条消息</b>上传 ZIP 并粘贴开工指令后发送。<b>仅上传 ZIP 文件，ChatGPT 可能不知道要立即制作。</b>ZIP 内亦附有 00_START_HERE.md 和同一份开工指令。</p></div><button class="button dark" data-wf="task">① 下载完整制作任务 ZIP</button><button class="button" data-wf="copy">② 复制 ChatGPT 开工指令</button><a class="button" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">打开 ChatGPT ↗</a></section>
 <section class="wf-step ${wfPhase(p)==='task_ready'?'active':''}"><div class="wf-stephead"><span class="wf-num">02</span><span class="chip">ChatGPT</span></div><h3>接收完整漫画</h3><p>ChatGPT 制作九张独立画格和封面，打包后由此导入。支持 ZIP（含常见压缩格式）或逐张图片导入。</p><p class="wf-meta">已导入画格：${p.panels.filter(x=>x.image).length}/9　|　独立封面：${p.cover?'已具备':'缺失'}</p><label class="button dark">导入 ChatGPT 交付包<input type="file" id="wfUpload" accept=".zip,application/zip,.png,.jpg,.jpeg,.webp,.pdf,.json" multiple hidden></label><a href="#/reader/${e(p.id)}" class="button">漫画预览 ↗</a><p class="wf-meta">导入前校验任务编号、图片签名、数量与大小；旧图片不会在校验失败时被覆盖。</p></section>
 <section class="wf-step ${['delivered','workbuddy_ready','workbuddy_processing'].includes(wfPhase(p))?'active':''}"><div class="wf-stephead"><span class="wf-num">03</span><span class="chip">WorkBuddy</span></div><h3>交给公众号执行</h3><p>必须完成作者审核。生成包含九张漫画、封面、来源台账、文案和执行说明的 WorkBuddy 专用 ZIP。</p><p class="wf-meta">作者审核：${p.status==='已审核'||p.status==='已发布'?'已通过':'未通过'}　·　${p.checks.filter(Boolean).length}/6 项复核</p><button class="button dark" data-wf="publishpack">生成 WorkBuddy 发表包</button><button class="button" data-wf="mark-sent">记录已移交</button><a class="button" href="#/studio/${e(p.id)}/4">完成审核 ↗</a></section></div>`:'<div class="empty">请先建立一部作品。</div>')+
 (typeof wtSharedHandoffPanel==='function'?wtSharedHandoffPanel(p):'<div class="box"><h2>公众号发表档案</h2><p>共享档案读取组件尚未载入。请稍后刷新。</p></div>')+
@@ -276,19 +305,36 @@ async function wfMakeTask(p){
  }
  if(portraitFiles.length&&task.producer==='WorkBuddy')
   throw Error('WorkBuddy 自动派单目前没有私有肖像照片传输接口。请选 ChatGPT 创作，并将带照片的授权 ZIP 交给 ChatGPT；或先移除照片。');
- const files=[{name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
+ const launch=wfStartupCommand(p,task);
+ task.startup_command_file='ChatGPT_复制粘贴开工指令.txt';
+ task.entrypoint_file='00_START_HERE.md';
+ task.requires_explicit_user_message=true;
+ task.attachment_alone_starts_production=false;
+ const files=[{name:'00_START_HERE.md',bytes:enc.encode(wfStartHere(p,task,launch))},
+ {name:'ChatGPT_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
+ {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务；注意必须在上传 ZIP 的同一条消息中同时发送“ChatGPT_复制粘贴开工指令.txt”内的开工命令，否则 ChatGPT 可能只询问如何处理附件。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
  saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
   setChange(p,'ChatGPT 直达完整素材生产（无需 GitHub）');render();
-  notify('ChatGPT 任务 ZIP 已下载，定妆后直接生成全量漫画，无需 GitHub 派单');
+  notify('任务 ZIP 已下载。下一步点击“复制开工指令”，与 ZIP 一起发送给 ChatGPT；只上传文件不足以明确开工。');
   return;
  }
  if(typeof wtArchivePushTask!=='function'){p.handoff.repoError='仓库派单接口未加载';setChange(p,'仅生成本地备份，尚未入仓');render();notify('任务 ZIP 已生成，但尚未派单入仓');return}
  try{const result=await wtArchivePushTask(p,task,prompt);p.handoff.repoError=null;setChange(p,'GitHub 工单写入已确认');render();notify(result.existing?'GitHub 仓库已存在同一任务（已去重）':'GitHub 漫画仓库正式派单成功');if(typeof wtArchiveRefresh==='function')void wtArchiveRefresh({silent:true}).catch(()=>{})}
  catch(err){p.handoff.repoQueuedAt=null;p.handoff.repoError=String(err?.message||err);setChange(p,'GitHub 派单未成功，本地 ZIP 已保留');render();notify('尚未派单到 GitHub：'+p.handoff.repoError)}
 }
-async function wfCopyPrompt(p){wfPrepareTask(p);const missing=wfCanTask(p);if(missing.length)throw Error('请先补齐：'+missing.join('、'));if(!wfGet(p).taskId)wfInitTask(p);if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}await copyText(wfPrompt(p));render()}
+async function wfCopyPrompt(p){
+ const h=wfGet(p);
+ if(!h.taskId||!h.directTaskExportedAt||wfPhase(p)==='not_started')
+  throw Error('请先点击“生成 ChatGPT 直达任务 ZIP”，然后复制同一任务的开工命令。');
+ if(!wtDirector?.approved?.(p))
+  throw Error('导演台创意方案已改变，旧任务与当前作品可能不一致，请重新锁定并导出 ZIP');
+ const preflight=wfProductionPreflight(p);
+ if(!preflight.ready)throw Error('当前制作预检未通过，请先修复：'+preflight.reasons.join('；'));
+ const task=wfTaskObject(p);
+ await copyText(wfStartupCommand(p,task));
+}
 const wfImgExt=f=>/\.(png|jpg|jpeg|webp)$/i.test(f),wfImageMime=n=>/\.png$/i.test(n)?'image/png':/\.webp$/i.test(n)?'image/webp':'image/jpeg';
 function wfImageFile(name,bytes){let type=wfImageMime(name);if(bytes.length<16||bytes.length>12*1024*1024)throw Error('单张图片超出 12MB 或为空：'+name);let png=bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71;let jpg=bytes[0]===255&&bytes[1]===216&&bytes[2]===255;let webp=bytes[0]===82&&bytes[1]===73&&bytes[2]===70&&bytes[3]===70&&String.fromCharCode(...bytes.slice(8,12))==='WEBP';if(!(png&&type==='image/png'||jpg&&type==='image/jpeg'||webp&&type==='image/webp'))throw Error('图片格式与文件名不一致：'+name);return new Blob([bytes],{type})}
 async function wfUnzip(file){const raw=new Uint8Array(await file.arrayBuffer());if(raw.length>180*1024*1024)throw Error('ZIP 超过 180MB 限制');let cd=-1;for(let i=raw.length-22;i>=Math.max(0,raw.length-65557);i--){if(raw[i]===80&&raw[i+1]===75&&raw[i+2]===5&&raw[i+3]===6){cd=i;break}}if(cd<0)throw Error('找不到 ZIP 中央目录');const view=new DataView(raw.buffer);let count=view.getUint16(cd+10,true),pos=view.getUint32(cd+16,true),seen=new Map(),total=0;if(count>90)throw Error('交付包文件数量超过 90');for(let i=0;i<count;i++){if(view.getUint32(pos,true)!==0x02014b50)throw Error('ZIP 索引无效');const flags=view.getUint16(pos+8,true),method=view.getUint16(pos+10,true),csize=view.getUint32(pos+20,true),usize=view.getUint32(pos+24,true),nlen=view.getUint16(pos+28,true),extra=view.getUint16(pos+30,true),comment=view.getUint16(pos+32,true),local=view.getUint32(pos+42,true),name=dec.decode(raw.slice(pos+46,pos+46+nlen));pos+=46+nlen+extra+comment;if(!name||name.endsWith('/'))continue;if(name.includes('..')||name.startsWith('/')||/^[A-Za-z]:/.test(name))throw Error('ZIP 包含非法路径');if(flags&1)throw Error('不支持加密 ZIP');if(![0,8].includes(method))throw Error('ZIP 使用了不支持的压缩方法');if(usize>22*1024*1024||csize>180*1024*1024)throw Error('ZIP 中包含超大文件');total+=usize;if(total>240*1024*1024)throw Error('ZIP 解压总量超过 240MB，请适当压缩原图');if(view.getUint32(local,true)!==0x04034b50)throw Error('ZIP 条目损坏');const at=local+30+view.getUint16(local+26,true)+view.getUint16(local+28,true);if(at+csize>raw.length)throw Error('ZIP 内容越界');let bytes=raw.slice(at,at+csize);if(method===8){if(!('DecompressionStream'in window))throw Error('浏览器不支持 ZIP 解压；可改为逐张上传图片');try{const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('deflate-raw'));bytes=new Uint8Array(await new Response(stream).arrayBuffer())}catch{throw Error('压缩 ZIP 解压失败；可改为逐张上传 PNG/JPG 文件')}}if(bytes.length!==usize)throw Error('ZIP 条目大小不符：'+name);if(seen.has(name))throw Error('ZIP 文件重名：'+name);seen.set(name,bytes)}return seen}
