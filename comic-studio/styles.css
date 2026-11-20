@@ -612,3 +612,14 @@
   .director-page,.director-section,.director-styles.wt-v3-grid,
   .wt-v3-intro,.wt-v3-toolrow,.wt-v3-detail { min-width:0;max-width:100%; }
 }
+
+/* WORLD/TOON — safe local-only unproduced draft cleanup */
+.wt-cleanup-list{display:grid;gap:7px;max-height:min(46vh,380px);overflow:auto;margin:14px 0;padding:3px 5px 3px 0}
+.wt-cleanup-item{display:flex;align-items:center;gap:12px;padding:11px 12px;background:#fbfaf7;border:1px solid #e2ded5;border-radius:9px;cursor:pointer}
+.wt-cleanup-item input{width:17px;height:17px;flex:none;accent-color:#435c4b}
+.wt-cleanup-item span{display:flex;flex-direction:column;min-width:0;gap:3px}
+.wt-cleanup-item strong{font-size:13px;overflow-wrap:anywhere;color:#2b3930}
+.wt-cleanup-item small{font-size:11px;color:#6d766f}
+.wt-cleanup-option{display:flex;align-items:start;gap:9px;font-size:12px;margin:11px 0;line-height:1.5;color:#595d55}
+.wt-cleanup-option input{margin-top:3px;accent-color:#435c4b}
+@media(max-width:520px){.wt-cleanup-list{max-height:38vh}.wt-cleanup-item{padding:10px}.wt-cleanup-item strong{font-size:12px}}
