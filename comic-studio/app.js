@@ -65,6 +65,25 @@ function wfInlineEditor(p){
 }
 function wfCanTask(p){const missing=[];if(!p?.title?.trim())missing.push('作品名称');const ss=p?.storySourceSelection;if(ss?.adaptation==='faithful'&&ss?.rights!=='public_domain_us'&&(!ss.license_attested||!/^https:\/\/[\w.-]+\//.test(String(ss.license_url||''))))missing.push('受保护作品的有效改编授权依据 URL 与作者授权确认');if(typeof wtDirector!=='undefined')missing.push(...wtDirector.readiness(p));else missing.push('创意导演台尚未加载，请刷新页面');return missing}
 function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {schema:WF_SCHEMA,research_required:policy.research_required,verification_status:policy.verification_status,task_id:h.taskId,created_at:h.taskAt,producer:p.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT',publisher:'WorkBuddy',panel_count:p.panels.length,series:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,series_bible:p.seriesBible||null,brand:'WORLD/TOON · By DAVYLAB',title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+'格原创漫画',source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:p.storySourceSelection||null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
+// Production image requests are one-shot, one-file, one-scene jobs. No whole-book prompt is ever sent to an image tool.
+function wfSingleImageJobs(p,task){
+ const cd=task.creative_direction||{};
+ const style=JSON.stringify({style_id:cd.style_id||'',visual_rules:cd.visual_rules||{},characters:cd.characters||[]});
+ const constraint='ONE IMAGE ONLY. One uninterrupted 3:4 vertical canvas at native 1080x1440 or higher, ONE scene, ONE camera, ONE moment. NO contact sheet, NO storyboard page, NO nine-grid, NO comic strip, NO split screen, NO inset, NO collage, NO multiple scenes, NO panel frames, gutters, tiles or dividing lines. Render only this target frame, not the whole story. Use approved character-sheet and first-frame references for consistent identities and style. Do not draw readable lettering; reserve safe blank text space. ';
+ const jobs=p.panels.map((a,i)=>({
+  job_id:'P'+String(i+1).padStart(2,'0'),target:'panels/'+String(i+1).padStart(2,'0')+'.png',
+  target_type:'panel',panel_index:i+1,image_calls:1,expected_image_count:1,expected_scene_count:1,
+  prompt:constraint+'TARGET: panel '+(i+1)+' of '+p.panels.length+' (index is metadata, NOT a multi-panel layout). Fixed visual bible: '+style+'. CURRENT SHOT ONLY: '+String(a.scene||'').slice(0,1700)+'. Current visual notes: '+String(a.prompt||'').slice(0,900)+'. Reserve room for separate caption: '+String(a.caption||'').slice(0,280)+'.'
+ }));
+ jobs.push({
+  job_id:'COVER',target:'cover.png',target_type:'cover',panel_index:null,image_calls:1,expected_image_count:1,expected_scene_count:1,
+  prompt:constraint+'TARGET: independent COVER ONLY. One unified editorial illustration, not a plot overview or interior pages. Cover concept: '+String(cd.cover_brief||p.title).slice(0,900)+'. Fixed visual bible: '+style+'. Leave title-safe space for separate typography.'
+ });
+ return {schema:'davylab.worldtoon.single-image-jobs.v2',task_id:task.task_id,
+  panel_count:p.panels.length,expected_files:p.panels.length+1,reference_images:['character-sheet.png','pilot-01.png'],
+  protocol:'Execute exactly ONE jobs[i].prompt in each separate image-generation call. NEVER send this full JSON, task.json, the complete storyboard or all prompts in one image tool request. Reuse approved pilot-01.png as panels/01.png without rerendering. Draw remaining panels in order; draw cover in its own last call. Reject contact sheets and rerender only the faulty target. Never crop a mosaic into panels.',
+  jobs};
+}
 function wfDirectPrompt(p,o){
  const shots=p.panels.map((a,i)=>'#'+String(i+1).padStart(2,'0')+' '+(a.title||'第'+(i+1)+'格')+'\n场景与构图：'+(a.scene||'待完善')+'\n旁白：'+(a.caption||'')+'\n对白：'+(a.dialogue||'')+'\n视觉要求：'+(a.prompt||'')).join('\n\n');
  return [
