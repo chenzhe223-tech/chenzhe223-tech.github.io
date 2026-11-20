@@ -27,10 +27,10 @@ SOURCES = [
     ("美国经济分析局 · BEA", "https://apps.bea.gov/rss/rss.xml", "经济数据"),
     ("CNBC · 全球财经报道", "https://www.cnbc.com/id/10000664/device/rss/rss.html", "企业与市场", "media_report"),
     ("CNBC · 全球新闻分析", "https://www.cnbc.com/id/100727362/device/rss/rss.html", "全球市场", "media_report"),
-    ("36氪 · 中国商业快讯", "https://36kr.com/feed-newsflash", "中国商业", "media_report", "中国"),
-    ("36氪 · 中国商业报道", "https://36kr.com/feed-article", "中国商业", "media_report", "中国"),
+    ("中国新闻网 · 财经新闻", "https://www.chinanews.com.cn/rss/finance.xml", "中国财经", "media_report", "中国"),
     ("南华早报 · 中国经济", "https://www.scmp.com/rss/318421/feed", "中国经济", "media_report", "中国"),
-    ("中国日报 · 中国商业", "https://www.chinadaily.com.cn/rss/bizchina_rss.xml", "中国商业", "media_report", "中国"),
+    ("FT中文网 · 财经焦点", "https://www.ftchinese.com/rss/news", "中国财经", "media_report"),
+    ("英为财情 · 中文经济新闻", "https://cn.investing.com/rss/news_14.rss", "全球市场", "media_report"),
 ]
 ATOM = "{http://www.w3.org/2005/Atom}"
 MAX_BYTES, MAX_AGE = 2_000_000, 30
