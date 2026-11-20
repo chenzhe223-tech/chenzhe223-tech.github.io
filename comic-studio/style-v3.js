@@ -898,7 +898,7 @@ function pilotFor(c){
  if(!/^[a-f0-9]{64}$/.test(pilot.panelSha256||''))return null;
  if(pilot.panelDimensions?.width!==1080||pilot.panelDimensions?.height!==1440)return null;
  const approved=p.creativeDirection.pilotApproval;
- return {src:pilot.panelImage,sha256:pilot.panelSha256,approved:!!(approved?.repo_commit&&approved.pilot_frame_sha256===pilot.panelSha256)};
+ return {src:pilot.panelImage,sha256:pilot.panelSha256,approved:!!((approved?.repo_commit||approved?.local_approved)&&approved.pilot_frame_sha256===pilot.panelSha256)};
 }
 function cardImage(x,c){
  const proof=pilotFor(c);
