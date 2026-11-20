@@ -136,7 +136,7 @@ async function generateMissing(p){
  for(const i of missing){
   const panel=p.panels[i];if(!panel.scene?.trim())throw Error('第 '+(i+1)+' 格缺少画面描述；请先完成分镜');
   try{
-   const out=await wtCallAI('/api/ai/image',{title:p.title,scene:panel.scene,visualNotes:storyboard(p)[i].prompt,characters:cast(p),references:[]});
+   const out=await wtCallAI('/api/ai/image',{title:p.title,target_type:'single_panel',target_index:i+1,expected_image_count:1,scene:panel.scene,visualNotes:storyboard(p)[i].prompt,characters:cast(p),references:[]});
    if(!out.image)throw Error('图片接口未返回结果');
    const bin=atob(out.image),bytes=new Uint8Array(bin.length);
    for(let j=0;j<bin.length;j++)bytes[j]=bin.charCodeAt(j);
