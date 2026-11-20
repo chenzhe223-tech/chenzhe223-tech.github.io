@@ -68,7 +68,7 @@ function storyboard(p){
    'No realistic likeness of real people, defamatory accusations, unlicensed logos or copied artwork.',
    'Portrait canvas 1080x1440.'
   ].join('\n');
-  const prompt=promptBase+'\nWorldToon museum references: '+visualNote;
+  const prompt='SINGLE IMAGE PER CALL / SINGLE SCENE / SINGLE CAMERA. Render exactly one 3:4 independent image for panels/'+String(i+1).padStart(2,'0')+'.png. Never make a comic page, nine-grid, split screen, multi-frame collage, panel-in-panel, storyboard overview or montage. Do NOT include other story beats in this image. '+promptBase+'\nWorldToon museum references: '+visualNote+'\nOne continuous composition, no gutters or dividing lines; current frame only.';
   return {title:clean(existing.title)&&!/^第 \d+ 格$/.test(existing.title)?existing.title:beat[0],
    scene,caption,dialogue,prompt,shot,bubble_space:i%2?'top-right':'top-left',image:existing.image||'',id:existing.id};
  });
@@ -102,11 +102,13 @@ function bundleEntries(p){
  const files=[
   {name:'production/brief.json',bytes:JSON.stringify({schema:'davylab.worldtoon.comic-engine.v1',title,source:clean(p.sourceURLs),research_required:true,verified:false,author_approved:false,style:p.tone,format:p.format,adapters:STEPS,disclosure:p.disclosure},null,2)},
   {name:'production/storyboard.json',bytes:JSON.stringify({title,panels:parts},null,2)},
+  {name:'production/render_jobs.json',bytes:JSON.stringify({schema:'davylab.worldtoon.single-image-jobs.v2',task_id:p.handoff?.taskId||p.id,panel_count:parts.length,instruction:'ONE invocation per picture, never send all job prompts in one image-generation request. Character reference image and approved pilot are reused between calls; one panel, one camera. Cover rendered in its own final call.',jobs:[...parts.map((v,i)=>({job_id:'P'+String(i+1).padStart(2,'0'),file:'panels/'+String(i+1).padStart(2,'0')+'.png',one_image_per_call:true,prompt:v.prompt})),{job_id:'COVER',file:'cover.png',one_image_per_call:true,prompt:'ONE IMAGE ONLY. Independent 3:4 magazine cover illustration; one coherent scene, no storyboard, no interior panels, no contact sheet, no grid, no montage. Story title: '+title+'. Visual identity: '+cast(p)+'. Cover theme: '+String(p.creativeDirection?.cover||p.description||title)+'. Leave title area blank for separate lettering.'}]},null,2)},
   {name:'production/visual-references.json',bytes:JSON.stringify(refsForBundle(p),null,2)},
   {name:'production/characters.md',bytes:'# 固定角色圣经\n\n'+cast(p)+'\n\n保持衣着、发型、面部和相对身高一致；未批准角色不要加入画格。\n'},
-  {name:'production/README.md',bytes:'# WORLD/TOON · 四 Skill 制作包\n\n本包包含可执行的分镜数据、逐格图像提示和角色锁定规则。\n四个上游项目未作为 Python/MCP 服务安装，平台执行的是经改编的创作规则与本地画格合成功能。\n严禁把此包视作已出图、来源已核验、已通过人工审批或公众号已发表。\n外部绘图模型调用需要另行授权与配置。\n'}
+  {name:'production/README.md',bytes:'# WORLD/TOON · 四 Skill 制作包\n\n本包包含可执行的分镜数据、逐格图像提示和角色锁定规则。\n四个上游项目未作为 Python/MCP 服务安装，平台执行的是经改编的创作规则与本地画格合成功能。\n每次只能向图像工具提交一条 production/render_jobs.json 中的 job.prompt；封面最后独立生图，禁止把整份九格 storyboard.json 交给一次图像调用。严禁拼版、九宫格、分屏、画中画和多场景总览；检测失败只重绘对应画格。\n严禁把此包视作已出图、来源已核验、已通过人工审批或公众号已发表。\n外部绘图模型调用需要另行授权与配置。\n'}
  ];
  parts.forEach((x,i)=>files.push({name:'production/prompts/'+String(i+1).padStart(2,'0')+'.md',bytes:x.prompt+'\n\nCaption: '+x.caption+'\nDialogue (overlay separately): '+x.dialogue+'\n'}));
+ files.push({name:'production/prompts/cover.md',bytes:'SINGLE IMAGE / COVER ONLY / NO comic panels, no montage, no storyboard and no split screen. ONE focal illustration on a portrait 3:4 canvas. '+String(p.creativeDirection?.cover||title)});
  return files;
 }
 function exportProduction(p){
