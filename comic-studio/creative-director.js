@@ -261,7 +261,7 @@ function payload(p){
 }
 function digest(p){
  // FNV-1a change indicator; not a signature. GitHub commit provides the immutable official task record.
- let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),data:payload(p)}),h=2166136261;
+ let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),...(p.novelSkill?{novel_source_sha256:p.novelSkill.provenance?.sha256||null,novel_rights_mode:p.novelSkill.rights?.mode||null}:{}),data:payload(p)}),h=2166136261;
  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
  return (h>>>0).toString(16).padStart(8,'0');
 }
