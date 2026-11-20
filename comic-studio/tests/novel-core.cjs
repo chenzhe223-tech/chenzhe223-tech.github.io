@@ -3,6 +3,21 @@ const assert=require('node:assert/strict');
 const crypto=require('node:crypto');
 if(!globalThis.crypto)globalThis.crypto=crypto.webcrypto;
 const core=require('../novel-core.js');
+const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
+const source=fs.readFileSync(path.resolve(__dirname,'../creative-director.js'),'utf8');
+const start=source.indexOf('function digest('),end=source.indexOf('function checks(',start);
+assert.ok(start>0&&end>start,'creative director lock must remain auditable');
+const cx={clean:x=>String(x||'').trim(),payload:p=>p.payload||{}};
+vm.runInNewContext(source.slice(start,end)+'\nthis.hashNovel=digest;',cx);
+const before={title:'原创故事',sourceTitle:'文字来源',payload:{chapters:2}};
+const base=cx.hashNovel(before);
+assert.equal(base,cx.hashNovel({...before,novelSkill:null}),'non-novel approval locks must preserve their historical identity');
+const withNovel={...before,novelSkill:{provenance:{sha256:'a'.repeat(64)},rights:{mode:'literary_review'}}};
+const yes=cx.hashNovel(withNovel);
+assert.notEqual(base,yes,'source-index identity must be included in creator approval');
+assert.notEqual(yes,cx.hashNovel({...withNovel,novelSkill:{...withNovel.novelSkill,provenance:{sha256:'b'.repeat(64)}}}),'different novel file invalidates approval');
+assert.notEqual(yes,cx.hashNovel({...withNovel,novelSkill:{...withNovel.novelSkill,rights:{mode:'faithful'}}}),'rights changes invalidate approval');
+
 (async()=>{
  const chapters=[1,2,3,4].map(i=>'第'+i+'章 '+['开始','冲突','抉择','终局'][i-1]+'\n'+('母亲和孩子在森林里的故事，孤独与希望交织。后来，人物面对自由与家庭的选择。\n').repeat(15)).join('\n\n');
  assert.ok(chapters.length>450);
