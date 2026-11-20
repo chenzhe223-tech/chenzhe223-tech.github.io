@@ -75,7 +75,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
  assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
- await assert.rejects(()=>simulate({characters:'单亲妈妈林晓、AI小算'}),/预检未通过.*正式锁定角色名册/,'conflicting original names must not produce an ambiguous task');
+ await assert.rejects(()=>simulate({characters:'单亲妈妈林晓、AI小算'}),/预检未通过.*正式角色名单为/,'conflicting original names must not produce an ambiguous task');
  const withSource=await simulate({topicSource:'https://example.org/news'});
  assert.equal(withSource.task.source.urls[0],'https://example.org/news','Topic source must be inherited');
  assert.equal(withSource.task.research_required,true,'Unverified link is still research pending');
