@@ -1,6 +1,13 @@
 name: Topic Studio · Daily global finance discovery (isolated)
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - "topic-studio/scripts/sync_finance.py"
+      - "topic-studio/finance-discovery.js"
+      - "topic-studio/index.html"
+      - ".github/workflows/topic-studio-finance-sync.yml"
   pull_request:
     paths:
       - 'topic-studio/scripts/sync_finance.py'
@@ -106,7 +113,7 @@ jobs:
           path: /tmp/finance-preview.json
           if-no-files-found: ignore
   sync-finance-on-default:
-    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
