@@ -62,6 +62,13 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.equal(noSource.task.verification_status,'pending_research');
  assert.equal(noSource.task.source.verified_facts,'');
  assert.equal(noSource.task.source.urls.length,0);
+ assert.equal(noSource.task.production_mode,'direct_chatgpt_local_v1','ChatGPT task is explicitly direct');
+ assert.equal(noSource.task.github_sync_required,false,'GitHub sync disabled in direct mode');
+ assert.equal(noSource.task.delivery_target,'local_zip');
+ assert.ok(noSource.prompt.includes('DIRECT_CHATGPT_LOCAL_V1'));
+ assert.ok(noSource.prompt.includes('定妆'));
+ assert.ok(noSource.project.handoff.directDeliveryMode,'Local ZIP export must be recorded');
+ assert.ok(noSource.captures.messages.some(x=>x.includes('无需 GitHub')),'Remote sync is not attempted for direct tasks');
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
  assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
