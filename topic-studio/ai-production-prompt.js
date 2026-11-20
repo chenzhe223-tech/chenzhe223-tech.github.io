@@ -83,6 +83,7 @@ function buildFinance(topic,options,p,metadata){
  "一手资料链接："+src,
  "辅助导读："+String(topic.summary||"无").slice(0,1200),
  "来源："+String(topic.sourceName||"未记录")+"；素材发布时间："+String(topic.sourcePublishedAt||topic.published||"待核实"),
+ "信源性质："+(topic.sourceKind==="media_report"?"二手财经媒体报道（不得称为官方披露）":topic.sourceKind==="official_primary"?"官方一手资讯元数据（仍需核验原文）":"待核实；不可直接认定为官方或媒体"),
  "作者署名：By DAVYLAB；目标 AI："+p.label,
  ...metadata,
  "【真实性门槛】先打开并核查权威/一手来源；必须区分财报原文、监管公告、新闻报道、分析观点。每项指标标注绝对单位、币种、财季/日期、同比/环比口径、时区。未核实数字、虚构股价/涨跌幅和由生图模型凭空写出的金融图表一律禁止。存在矛盾时标记待核实，宁可删掉数据也不捏造。",
