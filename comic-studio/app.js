@@ -298,6 +298,25 @@ async function wfMakeTask(p){
  if(!preflight.ready)throw Error('生产母版预检未通过：'+preflight.reasons.join('；'));
  if(p.productionAgent==='WorkBuddy'&&(p.creativeDirection?.cast||[]).some(ch=>ch.portraitMedia&&ch.portraitConsent))
   throw Error('WorkBuddy 自动派单目前不能安全传输真人肖像参考。请改用 ChatGPT 制作并导出授权照片 ZIP，或移除肖像照片。');
+ // Validate any user-consented copyrighted source BEFORE assigning a task ID or phase.
+ // Failed source reads / digest mismatches must never create phantom task_ready records.
+ let confirmedNovelSource=null;
+ if(p.novelSkill?.export_source_approved){
+  const original=p.novelSkill;
+  if((p.productionAgent||'ChatGPT')==='WorkBuddy')
+   throw Error('不得把私人小说原稿自动派给 WorkBuddy；请选择 ChatGPT 私密直达模式');
+  if(original.schema!=='davylab.worldtoon.novel-skill.v1'||!/^[a-f0-9]{64}$/.test(String(original.provenance?.sha256||'')))
+   throw Error('小说蒸馏来源 SHA256 不完整，请重新导入原著');
+  if(!original.private_source_ref?.startsWith('media:'))throw Error('原著只在首台设备保存，请重新导入，不能虚构原文附件');
+  const blob=await getMedia(original.private_source_ref.slice(6));
+  if(!blob||blob.size>40*1024*1024||blob.size<30)throw Error('本机小说原文文件缺失或大小异常，请重新导入');
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),
+   x=>x.toString(16).padStart(2,'0')).join('');
+  if(digest!==original.provenance.sha256)throw Error('本机原文 SHA256 与蒸馏索引不符，禁止把错误来源打包或登记为已生成任务');
+  const ext=/^(txt|md|pdf|epub)$/.test(original.provenance.file_type)?original.provenance.file_type:'txt';
+  confirmedNovelSource={name:'source/private-novel-original.'+ext,bytes};
+ }
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p),prompt=wfPrompt(p);
@@ -341,19 +360,10 @@ async function wfMakeTask(p){
    rights_mode:portable.rights.mode,includes_private_source:false,private_source_file:null
   };
   if(input.export_source_approved){
-   if(task.producer!=='ChatGPT')throw Error('本地小说原文不可自动交给 WorkBuddy；请改为 ChatGPT 私密直达模式');
-   if(!input.private_source_ref?.startsWith('media:'))throw Error('原著文件仅在首次导入设备保存，请回到原设备重新导入，不能虚构有原文附件');
-   const file=await getMedia(input.private_source_ref.slice(6));
-   if(!file||file.size>40*1024*1024||file.size<30)throw Error('本机小说原文文件缺失或大小异常，请重新导入');
-   const bytes=new Uint8Array(await file.arrayBuffer());
-   const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),
-    x=>x.toString(16).padStart(2,'0')).join('');
-   if(digest!==input.provenance.sha256)throw Error('本机原文 SHA256 与蒸馏索引不一致，禁止打包来源不明的文件');
-   const ext=/^(txt|md|pdf|epub)$/.test(input.provenance.file_type)?input.provenance.file_type:'txt';
-   const fileName='source/private-novel-original.'+ext;
-   novelFiles.push({name:fileName,bytes});
+   if(!confirmedNovelSource)throw Error('小说原稿的预检结果丢失，禁止导出不完整任务');
+   novelFiles.push(confirmedNovelSource);
    task.novel_source_skill.includes_private_source=true;
-   task.novel_source_skill.private_source_file=fileName;
+   task.novel_source_skill.private_source_file=confirmedNovelSource.name;
   }
   novelFiles.push({name:'novel-skill.json',bytes:enc.encode(JSON.stringify(portable,null,2))});
   novelFiles.push({name:'NOVEL_DISTILLATION.md',bytes:enc.encode(
