@@ -5,6 +5,8 @@ let query='',busy=false,items=[],warning='',searched=false,counts=[],lastAutoPro
 const presets=[['interior','空间布置'],['clothing','人物着装'],['accessory','装饰配饰'],['architecture','建筑场景'],['ancient ship','交通工具'],['color palette','色彩与纹样']];
 const assetTypes=[['interior','空间布置'],['clothing','人物着装'],['accessory','装饰品与配饰'],['architecture','建筑结构'],['prop','手持道具'],['palette','色彩与纹样'],['portrait-style','人物造型灵感']];
 let pendingPin=-1;
+// Default is collapsed; retain the user's expansion during same-session rerenders.
+const libraryExpanded=new Map();
 function suggestedQuery(p){
  const x=String([p?.title,p?.sourceTitle,p?.description,p?.category].filter(Boolean).join(' ')).slice(0,1500);
  if(/郑和|船|海洋|航海|ship|ocean|sea/i.test(x))return 'ship';
@@ -18,8 +20,8 @@ function suggestedQuery(p){
  return 'portrait';
 }
 function refList(p){return Array.isArray(p.visualReferences)?p.visualReferences:[]}
-function panel(p){
- const refs=refList(p);
+function panel(p,forceOpen=false){
+ const refs=refList(p),expanded=forceOpen||libraryExpanded.get(String(p?.id||''))===true;
  const pins=refs.map(r=>'<article class="heritage-pin"><span class="heritage-pin-title">'+e(r.title)+'</span><span class="minor">'+e(r.assetTypeLabel||r.assetType||'素材类别待标')+' · '+e(r.appliesTo?.scope==='panel'?'第 '+r.appliesTo.targetId+' 格':r.appliesTo?.scope==='character'?'角色 '+(r.appliesTo.characterName||r.appliesTo.targetId):'本作品通用参考')+' · '+e(r.source)+' · '+e(r.license||'授权需复核')+'</span><button type="button" class="button" data-visual="unpin" data-id="'+e(r.id)+'">移除</button></article>').join('');
  const gallery=items.map((r,i)=>'<article class="heritage-art">'+
  '<div class="heritage-art-thumb"><img loading="lazy" referrerpolicy="no-referrer" src="'+e(r.image)+'" alt="'+e(r.title)+'视觉参考"></div>'+
@@ -28,16 +30,17 @@ function panel(p){
  '<div class="buttons"><a class="button" rel="noopener noreferrer" target="_blank" href="'+e(r.source_url)+'">馆藏记录</a>'+
   '<button type="button" class="button dark" data-visual="pin" data-index="'+i+'">选择应用对象</button></div></div></article>').join('');
  const helper=searched?(items.length?'找到 '+items.length+' 项 CC0 图片 · '+counts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join('、'):'无可用图片，请尝试其他英文关键词。'):'进入作品后自动按主题匹配 CC0 馆藏；也可以手动修改关键词。仅作为创作参考，不直接复制为漫画画格。';
- return '<section class="box heritage-visual-panel" aria-label="视觉素材库"><div class="kicker">VISUAL REFERENCES / OPEN CULTURE</div>'+
-  '<div class="heritage-header"><div><h2>创作视觉素材库</h2><p class="minor">按空间布置、人物着装、配饰道具、建筑和色彩选材；每项素材都要指定作用位置，避免所有参考套用到每一格。</p></div><span class="wt-chip">本作已选 '+refs.length+' 项</span></div>'+
- '<form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
+ return '<details class="box heritage-visual-panel" aria-label="创作视觉素材库" data-visual-collapse="'+e(p?.id||'')+'"'+(expanded?' open':'')+'>'+
+  '<summary class="heritage-summary"><div class="kicker">VISUAL REFERENCES / OPEN CULTURE</div>'+
+  '<div class="heritage-header"><div><h2>创作视觉素材库</h2><p class="minor">按空间布置、人物着装、配饰道具、建筑和色彩选材；每项素材都要指定作用位置，避免所有参考套用到每一格。</p></div><span class="wt-chip">本作已选 '+refs.length+' 项</span><span class="heritage-toggle-label" aria-hidden="true"></span></div></summary>'+
+ '<div class="heritage-content"><form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
  '<div class="buttons"><button type="button" class="button" data-visual="own">＋ 登记自有 / 授权素材</button></div>'+
  '<div class="heritage-presets">'+presets.map(([q,l])=>'<button type="button" data-visual="preset" data-query="'+e(q)+'">'+e(l)+'</button>').join('')+'</div>'+
  (refs.length?'<div class="heritage-pins">'+pins+'</div>':'')+
  '<p class="minor">'+e(helper)+'</p>'+
  (warning?'<p class="wt-error">'+e(warning)+'</p>':'')+
  (gallery?'<div class="heritage-grid">'+gallery+'</div>':'')+
- '<p class="heritage-footnote">图片用于原创设计参考，不代表真实历史场景。选入参考不会直接写入成品画格；公众人物和受版权保护的现代作品须单独核查。</p></section>';
+ '<p class="heritage-footnote">图片用于原创设计参考，不代表真实历史场景。选入参考不会直接写入成品画格；公众人物和受版权保护的现代作品须单独核查。</p></div></details>';
 }
 async function search(q){
  if(busy)return;
@@ -81,7 +84,7 @@ function addReference(p,item,policy={}){
  render();notify('已加入视觉参考库；素材将按所选角色或画格应用');
 }
 function ownDialog(){modal('<div class="kicker">PRIVATE ASSET / OWNER OR LICENSED</div><h2>登记自有或已授权素材</h2><form id="wtVisualOwnForm"><div class="fields"><div class="field"><label>素材名称</label><input name="title" required maxlength="180"></div><div class="field"><label>图片 URL</label><input name="imageUrl" type="url" required placeholder="https://…"></div><div class="field"><label>来源/作者</label><input name="source" required maxlength="180" placeholder="自摄、原创、馆藏或授权方"></div><div class="field"><label>权利状态</label><select name="rights"><option value="self">我拥有该素材的使用权</option><option value="authorized">我已取得可用于本作品的授权</option></select></div><div class="field wide"><label>授权凭证链接（授权素材必填）</label><input name="licenseEvidenceUrl" type="url" maxlength="500" placeholder="https://…"></div><div class="field"><label>素材用途</label><select name="assetType">'+assetTypes.map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('')+'</select></div><div class="field"><label>应用范围</label><select name="scope"><option value="panel">指定画格</option><option value="character">角色造型参考</option><option value="project">本作品通用空间/色彩</option></select></div><div class="field"><label>目标 ID（画格序号或角色名）</label><input name="targetId" required value="'+Math.max(1,Number(ui.panel||0)+1)+'"></div></div><label class="wt-visual-attest"><input name="attest" type="checkbox" required>我确认自己拥有该素材使用权或持有适用授权，且该素材不侵犯他人肖像和隐私权。</label><p class="wt-note">素材仅存于本机/本账号私有空间；授权素材需提供凭证链接。登记不等于平台替你核验授权。</p><div class="stepactions"><button type="button" class="button" data-action="modal-close">取消</button><button class="button dark" type="submit">登记并绑定用途</button></div></form>')}
-function openForWorkspace(){const p=selected();if(p)modal('<div class="kicker">VISUAL REFERENCES / WORKSPACE</div><h2>本作品视觉素材与应用</h2>'+panel(p))}
+function openForWorkspace(){const p=selected();if(p)modal('<div class="kicker">VISUAL REFERENCES / WORKSPACE</div><h2>本作品视觉素材与应用</h2>'+panel(p,true))}
 function pinDialog(p,index){const item=items[index];if(!item)return;pendingPin=index;const chars=p.creativeDirection?.cast||[];const options=chars.map((c,i)=>'<option value="'+e(c.characterId||c.id||c.name)+'" data-name="'+e(c.name)+'">'+e(c.name||'角色 '+(i+1))+'</option>').join('');
  modal('<div class="kicker">VISUAL ASSET / APPLICATION</div><h2>'+e(item.title)+'</h2><p>'+e(item.source)+' · '+e(item.license)+' · '+e(item.date||'年代待核')+'</p><form id="wtVisualApplyForm"><div class="fields"><div class="field"><label>素材用途</label><select name="assetType">'+assetTypes.map(x=>'<option value="'+x[0]+'">'+x[1]+'</option>').join('')+'</select></div><div class="field"><label>应用范围</label><select name="scope"><option value="panel">指定画格</option><option value="character">角色造型参考</option><option value="project">本作品通用空间/色彩</option></select></div><div class="field" data-visual-panel><label>画格（1–'+(p.panels?.length||9)+'）</label><input type="number" name="targetId" min="1" max="'+(p.panels?.length||9)+'" value="'+Math.max(1,Number(ui.panel||0)+1)+'"></div><div class="field" data-visual-character hidden><label>目标角色</label><select name="characterId">'+(options||'<option value="">请先在创意导演台设定角色</option>')+'</select></div></div><p class="wt-note">素材只能用于创作参考；入选不会复制馆藏图片到漫画画格。</p><div class="stepactions"><button type="button" class="button" data-action="modal-close">取消</button><button class="button dark" type="submit">加入并绑定用途</button></div></form>');
 }
@@ -95,6 +98,12 @@ studio=function(){
  }
  return previousStudio()+(p?panel(p):'');
 };
+document.addEventListener('toggle',ev=>{
+ const details=ev.target;
+ if(!details?.matches?.('details.heritage-visual-panel[data-visual-collapse]'))return;
+ if(!details.isConnected)return;
+ libraryExpanded.set(String(details.dataset.visualCollapse||''),details.open===true);
+},true);
 document.addEventListener('click',ev=>{
  const open=ev.target.closest('[data-visual-open]');if(open){ev.preventDefault();ev.stopImmediatePropagation();openForWorkspace();return}
  const btn=ev.target.closest('[data-visual]');if(!btn)return;ev.preventDefault();ev.stopImmediatePropagation();
