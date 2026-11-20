@@ -32,7 +32,8 @@ assert.ok(boards.every(x=>x.prompt.includes('fictional allegory')),'Disclose fic
 assert.ok(boards.every(x=>x.prompt.includes('bubble space')),'Lettering space');
 assert.ok(boards.every(x=>!x.image),'Do not invent final image assets');
 const exported=engine.bundleEntries(p);
-assert.equal(exported.filter(x=>x.name.startsWith('production/prompts/')).length,9);
+assert.equal(exported.filter(x=>x.name.startsWith('production/prompts/')).length,10,'Nine independent panel prompts plus cover prompt');
+assert.ok(exported.some(x=>x.name==='production/render_jobs.json'),'All frame calls must be isolated');
 assert.ok(exported.some(x=>x.name==='production/characters.md'));
 assert.ok(exported.some(x=>x.name==='production/storyboard.json'));
 const changed={...p,panels:p.panels.map(x=>({...x}))};
