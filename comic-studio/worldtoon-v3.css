@@ -135,6 +135,11 @@
 }
 
 /* WORKFLOW_V4_EMBED — generated from workflow-v4.css for the Worker static allowlist. */
+
+.wt3-book-actions{display:flex;justify-content:flex-end;margin-top:11px}
+.wt3-book-actions .button{font-size:11px;min-height:33px;padding:7px 11px;border:1px solid #d8c8bc;background:#fffdf9;color:#844632}
+.wt3-book-actions .button:hover{background:#fff0e9;border-color:#be9077}
+
 /* WORLD/TOON 4.0 — a project-first creative journey.
    Scoped layout; legacy routes, authored content and GitHub permissions remain intact. */
 .wt4-workspace,.wt4-home{--wt4-ink:#32291f;--wt4-muted:#736b62;--wt4-line:#e5ddd1;--wt4-cream:#fdfaf5;max-width:1530px;margin:0 auto;min-width:0;color:var(--wt4-ink)}
