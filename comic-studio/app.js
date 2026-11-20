@@ -77,6 +77,9 @@ function wfProductionBible(p,task){
  const threeD=/3d|三维|cinematic-3d/i.test(cd.style_id);
  const panels=board.map((v,i)=>{
   if(!String(v.scene||'').trim())throw Error('锁定分镜第'+(i+1)+'格缺少镜头场景');
+  const unsafeText=String(v.scene||'')+' '+String(v.dialogue||'');
+  if(/(?:提高|升高|调高).{0,3}水温/.test(unsafeText)&&/婴儿|宝宝|幼儿|浴盆|洗澡/.test(unsafeText))
+   conflicts.push({code:'SAFETY_SCENE_REVISION_REQUIRED',panel:i+1,message:'第'+(i+1)+'格涉及婴幼儿洗浴与主动提高水温，须由作者确认安全修订并重新锁定剧情'});
   const raw=String(v.custom_prompt||p.panels[i]?.prompt||'');
   if(threeD&&forbiddenStyle.test(raw))conflicts.push({code:'LOCAL_STYLE_CONFLICT',panel:i+1,message:'第'+(i+1)+'格旧提示词存在与锁定3D画风冲突的风格描述；生图时已隔离，不作为视觉指令'});
   return {panel_id:'P'+String(i+1).padStart(2,'0'),index:i+1,title:String(v.title||''),
@@ -172,7 +175,13 @@ async function wfMakeTask(p){
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p),prompt=wfPrompt(p);
  const bible=wfProductionBible(p,task);
+ const blockers=bible.conflicts.filter(x=>/REVIEW_REQUIRED|REVISION_REQUIRED/.test(x.code));
+ if(blockers.length)throw Error('生产母版预检未通过，请先修订并重新锁定创意：'+blockers.map(x=>x.message).join('；'));
  const renderJobs=wfSingleImageJobs(p,task,bible);
+ const productionState={schema:'davylab.worldtoon.production-state.v1',task_id:task.task_id,
+  current_working_version:'task-created',creative_lock_hash:bible.creative_lock_hash,
+  job_states:Object.fromEntries(renderJobs.jobs.map(j=>[j.job_id,{status:'missing',attempts:0,accepted_sha256:null}])),
+  accepted:{},rejected:{},package_ready:false,github_delivered:false,publication_approved:false,workbuddy_ready:false};
  task.image_render_protocol='single_image_per_call.v2';task.render_jobs_file='render_jobs.json';task.production_bible_file='production-bible.json';task.preflight_conflicts=bible.conflicts;task.expected_image_count=task.panel_count+1;
  if(task.producer==='ChatGPT'){task.production_mode='direct_chatgpt_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
  const portraitCharacters=p.creativeDirection?.cast||[];
@@ -192,7 +201,7 @@ async function wfMakeTask(p){
  }
  if(portraitFiles.length&&task.producer==='WorkBuddy')
   throw Error('WorkBuddy 自动派单目前没有私有肖像照片传输接口。请选 ChatGPT 创作，并将带照片的授权 ZIP 交给 ChatGPT；或先移除照片。');
- const files=[{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
+ const files=[{name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
  saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
