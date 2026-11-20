@@ -79,5 +79,14 @@ assert.ok(ctx.window.wtCreativeDirector().includes('真实')||ctx.window.wtCreat
  assert.ok(cloneRoute.startsWith('director/'));
  assert.ok(p.creativeDirection.pilotApproval.repo_commit,'Previous GitHub approval is retained untouched');
 
+ p.productionAgent='ChatGPT';
+ p.handoff.repoQueuedAt=undefined;
+ c.pilotReviewed=true;c.pilotApproval=null;
+ await pilot.approve(p);
+ assert.equal(writes,1,'Direct ChatGPT pilot must not call GitHub API');
+ assert.equal(c.pilotApproval.local_approved,true,'Owner local consent recorded');
+ assert.equal(c.pilotApproval.publication_approved,false,'Local pilot is not publication approval');
+ await pilot.copy(p);
+ assert.ok(copied.includes('DIRECT_CHATGPT_LOCAL_V1'),'Continuation command is local/direct');
  console.log('WORLD/TOON visual pilot QA: real image SHA256, owner review, signed GitHub receipt and continuation instruction PASS');
 })().catch(e=>{console.error(e);process.exitCode=1});
