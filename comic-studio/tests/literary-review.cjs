@@ -31,6 +31,17 @@ for(const [i,x] of panels.entries()){
  assert.ok(x.prompt.includes(i<3?'第一维度':i<6?'第二维度':'第三维度'),'correct three-axis section '+i);
  assert.ok(!x.scene.includes('再现书中第'),'no invented chapter summaries');
 }
+const projectsCtx={now:()=>new Date('2026-11-20T00:00:00Z').toISOString(),
+ uid:()=> 'stable-fixture',makePanel:i=>({index:i+1,scene:'',image:''})};
+vm.runInNewContext(region(app,'function emptyProject(topic)','const sampleTopic=')+'\nthis.empty=emptyProject;',projectsCtx);
+const nobelTopic=projectsCtx.empty({id:'nobel-item',title:'待核验的诺奖文学作品',category:'诺奖文学',source:'https://example.org/verified-lead',sourceId:'nobel_literature',rightsStatus:'copyright_permission_required'});
+assert.equal(nobelTopic.storySourceSelection.adaptation,'literary_review','saved Nobel topic defaults to commentary instead of plot adaptation');
+assert.equal(nobelTopic.panels.length,9);
+assert.equal(nobelTopic.handoff.mode,'hotspot');
+assert.equal(nobelTopic.storySourceSelection.license_attested,false);
+assert.match(nobelTopic.disclosure,/非原著漫画改编/);
+const ordinary=projectsCtx.empty({id:'general-item',title:'普通新闻',category:'AI 科技',source:'https://example.org/news'});
+assert.equal(ordinary.storySourceSelection,undefined,'other source categories unaffected');
 const appCtx={};
 vm.runInNewContext(region(app,'function wfLiteraryReview(p)','function wfCanTask(')+
  region(app,'function wfProductionBible(','function wfDirectPrompt(')+
