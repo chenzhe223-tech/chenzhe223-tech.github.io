@@ -22,7 +22,7 @@
     return '<label class="wt3-single-scene-item" style="display:flex;gap:10px;align-items:center;margin:8px 0">'+
      (source?'<img data-source="'+safe(source)+'" src="'+safe(mediaSrc(source))+'" alt="'+safe(x.path)+'画面核查" style="width:74px;height:99px;object-fit:cover;border-radius:8px">':'')+
      '<input type="checkbox" data-wt3-frame-qa="'+safe(x.path)+'" '+(ok?'checked':'')+'>'+
-     '<span>'+safe(x.path)+'：已亲自确认是一张独立连续场景、非拼版、无画中画，且与对应分镜一致</span></label>';
+     '<span>'+safe(x.path)+'：我已逐张对照锁定分镜检查：单场景无拼版、角色面貌及服饰、道具/时间/机位与关键动作、无AI嵌字/气泡、统一材质光影、手机中文留白、安全与授权。未亲自核对不得勾选。</span></label>';
    }).join('');
   return '<div class="wt3-import"><h3>ChatGPT 成品一键导入</h3>'+
    '<p class="minor">支持一份完整 ZIP：cover.png、panels/01.png…、caption.md、sources.md、manifest.json（如有）。自动校验画格、分辨率和 SHA256；上传成功并不代表 QA 或发表批准。</p>'+
