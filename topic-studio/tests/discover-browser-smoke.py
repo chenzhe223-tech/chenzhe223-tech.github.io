@@ -57,7 +57,8 @@ def measure(page):
                   contentWidth:Math.round(content.width),
                   currentSource:pageEl.dataset.activeSource,
                   visibleRadar:getComputedStyle(pageEl.querySelector('.opportunity-hub')).display!=='none',
-                  visibleXnews:getComputedStyle(pageEl.querySelector('.xnews-hub')).display!=='none'};
+                  visibleXnews:getComputedStyle(pageEl.querySelector('.xnews-hub')).display!=='none',
+                  visibleFinance:getComputedStyle(pageEl.querySelector('.finance-hub')).display!=='none'};
         }"""
     )
 
@@ -99,7 +100,7 @@ def run():
                             f"{name}: page horizontal overflow: {measured['viewportOverflow']}")
                 assert_true(measured["cardTitlePx"] >= 14,
                             f"{name}: opportunity card title is too small")
-                assert_true(measured["visibleRadar"] and not measured["visibleXnews"],
+                assert_true(measured["visibleRadar"] and not measured["visibleXnews"] and not measured["visibleFinance"],
                             f"{name}: expected only Radar on initial V4 tab")
                 assert_true(measured["currentSource"] == "radar",
                             f"{name}: Radar tab should be active by default")
@@ -116,7 +117,19 @@ def run():
                             f"{name}: tab panels have different left alignment")
                 assert_true(abs(measured["sources"][0]["width"]-xnews_measure["sources"][1]["width"]) <= 2,
                             f"{name}: tab panels have different content width")
-                page.locator(".discover-quicknav [data-discover-target='opportunityTitle']").click()
+                page.locator(".discover-quicknav [data-discover-target='financeTitle']").click()
+                finance_measure = measure(page)
+                assert_true(finance_measure["currentSource"] == "finance",
+                            f"{name}: finance tab not activated")
+                assert_true(finance_measure["visibleFinance"] and not finance_measure["visibleRadar"] and not finance_measure["visibleXnews"],
+                            f"{name}: finance panel did not replace Radar / XNews")
+                assert_true(page.locator("#financeList .finance-card").count() > 0,
+                            f"{name}: finance panel has no cards")
+                assert_true(page.locator(".discover-quicknav [data-discover-target='financeTitle']").get_attribute("aria-current") == "page",
+                            f"{name}: finance active state is not accessible")
+                assert_true(finance_measure["viewportOverflow"] <= 3,
+                            f"{name}: finance tab caused horizontal overflow")
+                                page.locator(".discover-quicknav [data-discover-target='opportunityTitle']").click()
                 assert_true(measure(page)["visibleRadar"],f"{name}: Radar not restored")
                 page.locator(".discover-quicknav [data-discover-target='discoverIdeas']").click()
                 assert_true(page.locator("#discoverIdeas").evaluate("(el) => el.open"),
@@ -126,7 +139,7 @@ def run():
                 assert_true(measure(page)["viewportOverflow"] <= 3,
                             f"{name}: toolbox causes horizontal overflow when opened")
                 page.screenshot(path=str(ROOT / "qa" / ("discover-" + name + ".png")), full_page=False)
-                output["results"].append({"viewport": name, **measured, "ideaToolboxOpened": True, "xnewsTabWorked": True})
+                output["results"].append({"viewport": name, **measured, "ideaToolboxOpened": True, "xnewsTabWorked": True, "financeTabWorked": True})
                 page.close()
         finally:
             browser.close()
