@@ -9,7 +9,7 @@ const core=require('../novel-core.js');
  const all=core.chapterize([{text:chapters,location:'UTF-8 原稿'}]);
  assert.equal(all.length,4,'explicit chapter boundaries preserved');
  assert.ok(all.every(x=>x.synthetic===false),'recognized headings are genuine chapter boundaries');
- assert.equal(all.reduce((n,x)=>n+x.text.length,0)>chapters.length-100,'full novel not silently truncated');
+ assert.ok(all.reduce((n,x)=>n+x.text.length,0)>chapters.length-100,'full novel not silently truncated');
  const sha='a'.repeat(64),skill=core.buildSkill(all,{fileName:'原创故事.txt',fileType:'txt',sha256:sha});
  assert.equal(skill.schema,'davylab.worldtoon.novel-skill.v1');
  assert.equal(skill.provenance.sha256,sha);
