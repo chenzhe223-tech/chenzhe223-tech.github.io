@@ -22,6 +22,7 @@ SOURCES = [
     ("美国证券交易委员会 · SEC", "https://www.sec.gov/news/pressreleases.rss", "资本市场"),
     ("欧洲央行 · ECB", "https://www.ecb.europa.eu/rss/press.html", "宏观政策"),
     ("美国劳工统计局 · BLS", "https://www.bls.gov/feed/bls_latest.rss", "经济数据"),
+    ("美国经济分析局 · BEA", "https://apps.bea.gov/rss/rss.xml", "经济数据"),
     ("CNBC · 全球财经报道", "https://www.cnbc.com/id/10000664/device/rss/rss.html", "企业与市场", "media_report"),
     ("CNBC · 全球新闻分析", "https://www.cnbc.com/id/100727362/device/rss/rss.html", "全球市场", "media_report"),
 ]
