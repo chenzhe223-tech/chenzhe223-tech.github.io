@@ -14,6 +14,10 @@ on:
       - 'comic-studio/style-v3.css'
       - 'comic-studio/tests/style-gallery-browser.cjs'
       - 'comic-studio/tests/literary-handoff-browser.cjs'
+      - 'comic-studio/novel-core.js'
+      - 'comic-studio/novel-studio.js'
+      - 'comic-studio/novel-studio.css'
+      - 'comic-studio/tests/novel-integration-browser.cjs'
       - '.github/workflows/worldtoon-style-browser.yml'
 permissions:
   contents: read
@@ -32,6 +36,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Verify real Satantango literary commentary task ZIP production in an isolated browser
         run: node comic-studio/tests/literary-handoff-browser.cjs
+      - name: Verify local novel distillation, privacy-gated source transfer and actual ChatGPT ZIP in browser
+        run: node comic-studio/tests/novel-integration-browser.cjs
       - name: Verify 25 original preview images and compact selector at phone, tablet and desktop
         run: node comic-studio/tests/style-gallery-browser.cjs
       - name: Verify Handoff navigation hierarchy, routing and mobile sidebar
