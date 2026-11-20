@@ -149,7 +149,10 @@ async function generateMissing(p){
 async function inspectNine(p){
  const errors=[],warnings=[],panels=[];
  const strict=isV3(p);
- if(strict&&!p.creativeDirection?.pilotApproval?.repo_commit)errors.push('V3 尚无作者确认的私有仓真实首图审核回执');
+ const approvedPilot=p.creativeDirection?.pilotApproval||{};
+ if(strict&&!(approvedPilot.local_approved===true||approvedPilot.repo_commit))errors.push('V3 尚无作者本地或私有仓的真实 Pilot 审核回执');
+ const sha=async bytes=>Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+ const actualHashes=new Map();
  const all=Array.isArray(p.panels)?p.panels:[];
  if(all.length!==9)errors.push('漫画应恰好九格');
  for(let i=0;i<9;i++){
@@ -158,12 +161,33 @@ async function inspectNine(p){
   try{
    const blob=await getImageBlob(panel.image),bitmap=await createImageBitmap(blob);
    const width=bitmap.width,height=bitmap.height;bitmap.close?.();
+   if(strict&&blob.type!=='image/png')errors.push('V3 第 '+(i+1)+' 格不是正式 PNG');
+   actualHashes.set('panels/'+String(i+1).padStart(2,'0')+'.png',await sha(await blob.arrayBuffer()));
    if(strict&&(width<1080||height<1440||Math.abs(width/height-0.75)>0.002))errors.push('V3 第 '+(i+1)+' 格不符合正式 3:4、1080×1440 起的尺寸要求：'+width+'×'+height);
    else if(!strict&&(width<720||height<900))warnings.push('第 '+(i+1)+' 格尺寸偏低：'+width+'×'+height);
    if(!panel.scene?.trim())warnings.push('第 '+(i+1)+' 格未记录完整场景');
    if(!panel.dialogue?.trim()&&!panel.caption?.trim())warnings.push('第 '+(i+1)+' 格缺少可读对白或旁白');
    panels.push({index:i+1,ok:true,width,height,bytes:blob.size,format:blob.type});
   }catch(err){errors.push('第 '+(i+1)+' 格文件无法解码：'+String(err.message||err).slice(0,80));panels.push({index:i+1,ok:false})}
+ }
+ if(strict&&approvedPilot.pilot_frame_sha256&&actualHashes.has('panels/01.png')&&
+    actualHashes.get('panels/01.png')!==approvedPilot.pilot_frame_sha256)
+  errors.push('正式 01 与获批 Pilot 原图 SHA256 不一致；不可重绘或重新编码');
+ if(!p.cover)errors.push('缺少真正独立的封面 PNG');
+ else try{
+  const coverBlob=await getImageBlob(p.cover),coverBitmap=await createImageBitmap(coverBlob);
+  const cw=coverBitmap.width,ch=coverBitmap.height;coverBitmap.close?.();
+  const coverHash=await sha(await coverBlob.arrayBuffer());
+  if(strict&&(coverBlob.type!=='image/png'||cw<1080||ch<1440||Math.abs(cw/ch-0.75)>0.002))
+   errors.push('独立封面必须是原生至少 1080×1440 的竖版 PNG');
+  if(Array.from(actualHashes.values()).includes(coverHash))errors.push('独立封面与正文画格字节相同，不得复用');
+  if(strict&&!p.handoff?.frameScopeQA?.['cover.png']&&p.handoff?.importedAt)
+   warnings.push('封面尚未完成人工独立构图与非拼版审核');
+ }catch(err){errors.push('正式封面无法解码：'+String(err.message||err).slice(0,80))}
+ if(strict&&p.handoff?.importedAt){
+  const staged=(p.handoff.stagedFiles||[]).filter(x=>/^(cover\.png|panels\/\d{2}\.png)$/.test(x.path));
+  if(staged.some(x=>p.handoff?.frameScopeQA?.[x.path]!==x.sha256))
+   errors.push('导入素材有未完成 SHA256 绑定单场景逐张人工审校的图片');
  }
  const sources=String(p.sourceURLs||'').split(/[\n,，]+/).map(x=>x.trim()).filter(Boolean);
  if(sources.length&&!p.factNotes?.trim())warnings.push('尚未记录独立事实核验资料');
