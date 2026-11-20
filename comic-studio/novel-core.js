@@ -81,7 +81,7 @@
     }else candidates=chunkText(normalized.map(x=>x.text).join('\n'),'原文片段',normalized[0].location);
    }
   }
-  const filled=candidates.filter(c=>c.text.trim().length>20);
+  const filled=candidates.filter(c=>c.text.trim().length>0);
   if(!filled.length)throw Error('解析后不存在有效的小说正文');
   if(filled.length>MAX_CHAPTERS)throw Error('提取章节超过500个，请按卷分批处理；不截断章节');
   return filled.map((c,i)=>({id:'CH'+String(i+1).padStart(3,'0'),title:c.title||'章节 '+(i+1),
@@ -208,7 +208,7 @@
    const body=doc.querySelector('body'),h=body?.querySelector('h1,h2,h3');
    const bodyText=body?.textContent||'';
    const title=clean(h?.textContent||'').slice(0,85)||'EPUB 正文段 '+(units.length+1);
-   if(bodyText.trim().length>20)units.push({text:bodyText,title,location:'EPUB '+pathname});
+   if(bodyText.trim())units.push({text:bodyText,title,location:'EPUB '+pathname});
   }
   if(!units.length)throw Error('EPUB 的 spine 中未找到可用正文');
   return units;
