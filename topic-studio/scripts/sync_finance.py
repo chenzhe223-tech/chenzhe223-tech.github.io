@@ -12,6 +12,8 @@ import pathlib
 import re
 import sys
 import xml.etree.ElementTree as ET
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent))
+from finance_rank import WEIGHTS, VERSION, region_for, sort_and_rank
 from urllib.parse import urlsplit
 from urllib.request import Request, urlopen
 
@@ -25,6 +27,10 @@ SOURCES = [
     ("美国经济分析局 · BEA", "https://apps.bea.gov/rss/rss.xml", "经济数据"),
     ("CNBC · 全球财经报道", "https://www.cnbc.com/id/10000664/device/rss/rss.html", "企业与市场", "media_report"),
     ("CNBC · 全球新闻分析", "https://www.cnbc.com/id/100727362/device/rss/rss.html", "全球市场", "media_report"),
+    ("中国新闻网 · 财经新闻", "https://www.chinanews.com.cn/rss/finance.xml", "中国财经", "media_report", "中国"),
+    ("南华早报 · 中国经济", "https://www.scmp.com/rss/318421/feed", "中国经济", "media_report", "中国"),
+    ("FT中文网 · 财经焦点", "https://www.ftchinese.com/rss/news", "中国财经", "media_report"),
+    ("英为财情 · 中文经济新闻", "https://cn.investing.com/rss/news_14.rss", "全球市场", "media_report"),
 ]
 ATOM = "{http://www.w3.org/2005/Atom}"
 MAX_BYTES, MAX_AGE = 2_000_000, 30
@@ -73,6 +79,7 @@ def parse_feed(raw, source, now=None):
         raise ValueError("Not RSS/Atom")
     label, _, default_category = source[:3]
     source_type = source[3] if len(source) > 3 else "official_primary"
+    source_region = source[4] if len(source) > 4 else None
     if root.tag == ATOM + "feed":
         nodes = root.findall(ATOM + "entry")
     else:
@@ -94,12 +101,13 @@ def parse_feed(raw, source, now=None):
         if not title or not url or not published: continue
         if published < now-timedelta(days=MAX_AGE) or published > now+timedelta(hours=6): continue
         key = hashlib.sha256(url.split("#",1)[0].encode("utf8")).hexdigest()[:18]
+        region,region_basis=region_for(title,summary,source_region)
         data.append({
             "id":"fin-"+key, "title":title, "summary":clean(summary, 210),
             "url":url, "source":label, "category":default_category,
             "published_at":published.isoformat(timespec="seconds"),
             "verification":"media_report_metadata_not_independently_verified" if source_type=="media_report" else "official_source_metadata_not_independently_fact_checked",
-            "source_type":source_type,
+            "source_type":source_type, "region":region, "region_basis":region_basis,
             "language":"source_original", "content_type":"finance",
         })
     return data
@@ -132,17 +140,31 @@ def compile_snapshot(fetch=download, now=None, existing=None):
         day=iso_date(item.get("published_at"))
         if day and day >= now-timedelta(days=MAX_AGE):
             unique.setdefault(item["url"].split("#",1)[0].lower(),item)
-    articles=sorted(unique.values(),key=lambda x:x["published_at"],reverse=True)[:100]
-    if not articles and existing and existing.get("articles"):
-        # Nothing recent: do not claim the old stories are new.
-        articles=existing["articles"][:100]
+    recent=list(unique.values())
+    if not recent and existing and existing.get("articles"):
+        # No current verified dates: preserve cache but explicitly label stale.
+        recent=[a for a in existing["articles"][:150] if isinstance(a,dict) and a.get("published_at") and a.get("id")]
+    for item in recent:
+        if item.get("region") not in ("中国","全球"):
+            item["region"],item["region_basis"]=region_for(item.get("title"),item.get("summary"))
+    ranked=sort_and_rank(recent,now)
+    # Prevent high-volume international feeds from drowning out China coverage.
+    china=[a for a in ranked if a.get("region")=="中国"][:45]
+    chosen={a["id"]:a for a in china}
+    for item in ranked:
+        if len(chosen)>=150:break
+        chosen.setdefault(item["id"],item)
+    articles=sort_and_rank(list(chosen.values()),now)
     return {
-        "schema_version":1, "source":"DAVYLAB official public feeds and openly available media RSS",
+        "schema_version":2, "source":"DAVYLAB official public feeds and openly available media RSS",
         "checked_at":now.isoformat(timespec="seconds"),"count":len(articles),
-        "latest_published_at":articles[0]["published_at"] if articles else None,
+        "latest_published_at":max((a["published_at"] for a in articles),default=None),
+        "china_count":sum(a.get("region")=="中国" for a in articles),
+        "rank_method":VERSION,"rank_weights":WEIGHTS,
+        "rank_disclaimer":"Five editorial relevance scores are heuristic estimates. Heat is topic relevance, NOT real traffic, views, shares, or verified popularity.",
         "fresh_within_72h":sum(iso_date(a.get("published_at")) is not None and iso_date(a["published_at"]) >= now-timedelta(hours=72) for a in articles),
         "status":"ok" if articles else "empty","sources":diag,"articles":articles,
-        "disclaimer":"Official primary statements and secondary media reporting are distinguished. Public RSS metadata is not independently verified; no market prices or investment advice."
+        "disclaimer":"Original RSS metadata only. China vs global is source-scoped or keyword-derived. Editorial ranking is a heuristic, not popularity analytics. No fabricated traffic, market data or investment advice."
     }
 
 def main():

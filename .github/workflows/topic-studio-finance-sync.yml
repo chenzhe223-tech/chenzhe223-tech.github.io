@@ -5,12 +5,15 @@ on:
     branches: [main]
     paths:
       - "topic-studio/scripts/sync_finance.py"
+      - "topic-studio/scripts/finance_rank.py"
       - "topic-studio/finance-discovery.js"
       - "topic-studio/index.html"
       - ".github/workflows/topic-studio-finance-sync.yml"
   pull_request:
     paths:
       - 'topic-studio/scripts/sync_finance.py'
+      - 'topic-studio/scripts/finance_rank.py'
+      - 'topic-studio/tests/test_finance_ranking.py'
       - 'topic-studio/tests/test_finance_sync.py'
       - 'topic-studio/tests/finance-prompt.test.cjs'
       - 'topic-studio/tests/finance-browser-smoke.cjs'
@@ -46,6 +49,7 @@ jobs:
       - name: Source and style QA, no live data dependencies
         run: |
           python -m unittest discover -s topic-studio/tests -p 'test_finance_sync.py' -v
+          python -m unittest discover -s topic-studio/tests -p 'test_finance_ranking.py' -v
           python -m unittest discover -s topic-studio/tests -p 'test_overseas_sync.py' -v
           node topic-studio/tests/finance-prompt.test.cjs
           node topic-studio/tests/xnews-integration.test.cjs
@@ -105,6 +109,9 @@ jobs:
           s=json.load(open('/tmp/finance-preview.json'))
           print(json.dumps({'count':s['count'],'fresh_within_72h':s['fresh_within_72h'],'sources':s['sources']},ensure_ascii=False))
           assert s['count'] > 0
+          assert s['schema_version'] == 2
+          print('China feeds:',s['china_count'],'ranking:',s['rank_method'])
+          assert s['china_count'] > 0, 'China news source coverage required'
           PY
       - uses: actions/upload-artifact@v4
         if: always()
@@ -127,7 +134,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Source parser tests
-        run: python -m unittest discover -s topic-studio/tests -p 'test_finance_sync.py' -v
+        run: |
+          python -m unittest discover -s topic-studio/tests -p 'test_finance_sync.py' -v
+          python -m unittest discover -s topic-studio/tests -p 'test_finance_ranking.py' -v
       - name: Fetch official news; preserve last good on total failure
         run: python topic-studio/scripts/sync_finance.py
       - name: Commit only finance data; never unpublished drafts
