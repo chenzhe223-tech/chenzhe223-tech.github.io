@@ -91,7 +91,8 @@
    const qa={...(original.qa||{}),
      nine_images:count===9,panel_count_checked:true,size_checked:true,visual_reviewed:true,
      chinese_text_reviewed:true,fiction_disclosed:true,sources_checked:true,
-     rights_checked:true,phone_previewed:true};
+     rights_checked:true,phone_previewed:true,
+     single_scene_verified:true,no_contact_sheet:true,target_story_match:true};
    const sources=(document.querySelector('#wt3-sources')?.value||h.verifiedSources||'')
       .split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
    if(sources.some(s=>!/^https?:\/\//.test(s)))throw Error('核验来源必须为完整的 HTTPS/HTTP URL');
@@ -101,7 +102,8 @@
        reviewed_checks:h.finalChecklist,
        manifest:{assets:{cover:'cover.png',panels,caption:'caption.md',sources:'sources.md'},
          sha256:sha,qa,verified_sources:sources.length?sources:(original.verified_sources||[]),
-         image_provenance:original.image_provenance||null}})});
+         image_provenance:original.image_provenance||null,
+         image_scope_evidence:Object.fromEntries(images.map(x=>[x.path,x.sha256]))}})});
    if(!response.commit||response.status!=='submitted_for_independent_github_actions_qa')throw Error('GitHub 作者终审回执无效');
    h.finalApprovalCommit=response.commit;h.importStatus='最终作者已签署 · 等待 GitHub Actions 独立验收';
    setChange(p,'作者终审已真实入仓，GitHub QA 尚待复核：'+response.commit.slice(0,12));render();
