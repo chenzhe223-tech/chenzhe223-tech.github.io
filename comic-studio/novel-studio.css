@@ -1,0 +1,36 @@
+/* WORLD/TOON | Book-to-Comic evidence lab — quiet editorial UI */
+.wt-novel-studio{margin:12px 0 22px;border:1px solid #cbd9d3;background:linear-gradient(140deg,#ffffff 20%,#f2f8f6);border-radius:14px;overflow:hidden;color:#203b35}
+.wt-novel-studio>summary{list-style:none;display:flex;align-items:center;gap:12px;padding:15px 18px;cursor:pointer}
+.wt-novel-studio>summary::-webkit-details-marker{display:none}
+.wt-novel-studio>summary::marker{content:''}
+.wt-novel-icon{font-family:Georgia,serif;font-size:25px;color:#49766b;line-height:1;flex:none}
+.wt-novel-studio>summary span:nth-child(2){display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.wt-novel-studio>summary strong{font-size:15px;letter-spacing:-.015em}
+.wt-novel-studio>summary small{font-size:11px;color:#607b74;font-weight:400;line-height:1.5}
+.wt-novel-badge{font-size:10px;font-weight:750;white-space:nowrap;border:1px solid #d5e2db;background:#ecf4f0;border-radius:50px;color:#34594d;padding:6px 9px}
+.wt-novel-body{border-top:1px solid #dbe8e0;padding:17px 19px}
+.wt-novel-note{font-size:12px;color:#526e64;margin:0 0 14px;line-height:1.7}
+.wt-novel-note a{color:#225b65;text-decoration:underline;text-underline-offset:2px}
+.wt-novel-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.wt-novel-grid label,.wt-novel-source{font-size:12px;color:#405d50;font-weight:650;display:flex;flex-direction:column;gap:7px}
+.wt-novel-grid input[type=file],.wt-novel-grid select,.wt-novel-source input{background:#fff;color:#243e35;font:inherit;font-weight:400;border:1px solid #c9d9d0;border-radius:9px;padding:10px;max-width:100%;min-width:0}
+.wt-novel-grid input[type=file]{font-size:11px}
+.wt-novel-source{margin-top:12px}
+.wt-novel-option{font-size:12px;display:flex;gap:10px;align-items:start;margin:12px 0;line-height:1.65;color:#486459}
+.wt-novel-option input{accent-color:#2e6b58;flex:0 0 auto;margin-top:3px}
+.wt-novel-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:13px 0 9px}
+.wt-novel-actions .button{font-size:12px;padding:9px 12px}
+.wt-novel-status{font-size:11px;color:#53786e;line-height:1.6}
+.wt-novel-evidence{background:#fff;border:1px solid #dbe5df;border-radius:11px;padding:13px 14px;margin:12px 0 2px;max-width:100%}
+.wt-novel-evidence>p{margin:8px 0;line-height:1.65;font-size:12px;overflow-wrap:anywhere}
+.wt-novel-metrics{display:flex;gap:12px;flex-wrap:wrap;border-bottom:1px solid #e3eee7;padding:0 0 11px}
+.wt-novel-metrics span{font-size:11px;color:#6d8178}.wt-novel-metrics strong{font-size:17px;color:#2b5646;margin-right:4px}
+.wt-novel-evidence .wt-novel-safeguard{color:#91633d;background:#fbf6ee;border-radius:7px;padding:9px}
+.wt-novel-chapters{font-size:12px;margin-top:10px}.wt-novel-chapters>summary{cursor:pointer;font-weight:700;color:#335a49;padding:7px 0}
+.wt-novel-chapter{border-top:1px solid #ecf1ed;padding:8px 3px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px}
+.wt-novel-chapter strong{min-width:170px;flex:1;font-size:11px;color:#2e4d3f}
+.wt-novel-chapter span{font-size:11px;color:#7c8b84}
+.wt-novel-chapter small{font-size:10px;color:#648176;flex-basis:100%}
+.wt-novel-digest{overflow-wrap:anywhere;font-size:10px!important;color:#667c73}
+.wt-novel-digest code{font-size:10px;word-break:break-all}
+@media(max-width:680px){.wt-novel-studio>summary{padding:12px}.wt-novel-body{padding:14px 11px}.wt-novel-grid{grid-template-columns:1fr}.wt-novel-badge{font-size:9px}.wt-novel-studio>summary strong{font-size:13px}.wt-novel-metrics{gap:8px}.wt-novel-chapter strong{min-width:0;flex-basis:100%}}
