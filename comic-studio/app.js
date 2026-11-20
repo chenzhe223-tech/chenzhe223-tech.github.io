@@ -124,7 +124,7 @@ async function wfMakeTask(p){
  }
  if(portraitFiles.length&&task.producer==='WorkBuddy')
   throw Error('WorkBuddy 自动派单目前没有私有肖像照片传输接口。请选 ChatGPT 创作，并将带照片的授权 ZIP 交给 ChatGPT；或先移除照片。');
- const files=[{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode('本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
+ const files=[{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
  saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
