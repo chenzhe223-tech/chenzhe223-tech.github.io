@@ -568,8 +568,6 @@ function discoveryAnswer(question) {
     note:'精选常识题库中的来源核对答案，非实时抓取。具体数据和定义以原始来源为准。'};
 }
 
-// Spend safety: a positive, small numeric quota and an atomic backend are required.
-// A missing key, binding, opt-in, or quota fails CLOSED.
 
 // Read-only seed assets: preserve original source URLs and do not invent editorial approval.
 const KNOWLEDGE_VERSION='2.0-p0-20261120';
@@ -617,6 +615,8 @@ function renderKnowledgeEntry(id){
  return frame(x.title,body);
 }
 
+// Spend safety: a positive, small numeric quota and an atomic backend are required.
+// A missing key, binding, opt-in, or quota fails CLOSED.
 const dailyAiCap = env => {
   const n = Number(env?.DAILY_AI_LIMIT);
   return Number.isInteger(n) && n >= 1 && n <= 10 ? n : 0;
