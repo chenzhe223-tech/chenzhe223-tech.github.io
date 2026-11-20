@@ -13,6 +13,7 @@ on:
       - 'comic-studio/style-v3.js'
       - 'comic-studio/style-v3.css'
       - 'comic-studio/tests/style-gallery-browser.cjs'
+      - 'comic-studio/tests/literary-handoff-browser.cjs'
       - '.github/workflows/worldtoon-style-browser.yml'
 permissions:
   contents: read
@@ -29,6 +30,8 @@ jobs:
         run: |
           npm install --no-save --no-audit playwright@1.56.1
           npx playwright install --with-deps chromium
+      - name: Verify real Satantango literary commentary task ZIP production in an isolated browser
+        run: node comic-studio/tests/literary-handoff-browser.cjs
       - name: Verify 25 original preview images and compact selector at phone, tablet and desktop
         run: node comic-studio/tests/style-gallery-browser.cjs
       - name: Verify Handoff navigation hierarchy, routing and mobile sidebar
