@@ -110,6 +110,33 @@ function unzipStored(bytes){
   assert.match(zip.get('NOVEL_DISTILLATION.md').toString('utf8'),/AI 深度语义蒸馏/);
   assert.match(zip.get('ChatGPT_复制粘贴开工指令.txt').toString('utf8'),/novel-skill\.json/);
   assert.equal(task.expected_image_count,10);
-  console.log('WORLD/TOON BOOK-TO-COMIC PASS: local TXT parsing, 6/6 original chapters, 9 anchored director frames, opt-in source sha, real ZIP and research-required task');
+  // Second task verifies the default privacy boundary: index can travel, manuscript cannot.
+  const separate=await page.evaluate(id=>{
+   const original=data.projects.find(p=>p.id===id),copy=emptyProject();
+   copy.id='qa-no-novel-share';copy.title='原创导读·不共享原文';copy.sourceTitle=original.sourceTitle;
+   copy.category=original.category;copy.panels=structuredClone(original.panels);
+   copy.novelSkill=structuredClone(original.novelSkill);copy.novelSkill.export_source_approved=false;
+   copy.novelSkill.rights.external_file_transfer_approved=false;
+   copy.storySourceSelection=structuredClone(original.storySourceSelection);
+   copy.creativeDirection=structuredClone(original.creativeDirection);
+   copy.creativeDirection.approval=null;copy.creativeDirection.reviewed=true;
+   copy.ideaSeed=original.ideaSeed;copy.description=original.description;copy.fiction=original.fiction;
+   copy.sourceURLs=original.sourceURLs;copy.disclosure=original.disclosure;
+   const errors=wtDirector.checks(copy);
+   if(errors.length)return {errors};
+   copy.creativeDirection.approval={lock_hash:wtDirector.digest(copy),author_approved:true,approved_at:new Date().toISOString()};
+   data.projects.unshift(copy);ui.selected=copy.id;persist();nav('handoff');
+   return {ready:true,preflight:wfProductionPreflight(copy)};
+  },initial);
+  assert.equal(separate.ready,true,JSON.stringify(separate.errors));
+  assert.equal(separate.preflight.ready,true);
+  const wait2=page.waitForEvent('download',{timeout:40000});
+  await page.locator('[data-wf="task"]').click();
+  const dl2=await wait2,path2=path.join(output,'novel-without-consent.zip');await dl2.saveAs(path2);
+  const zip2=unzipStored(fs.readFileSync(path2));
+  assert.ok(zip2.has('novel-skill.json'),'local index is still available without private manuscript transfer');
+  assert.ok(![...zip2.keys()].some(x=>x.startsWith('source/')),'private original cannot be packed without explicit consent');
+  assert.equal(JSON.parse(zip2.get('task.json').toString('utf8')).novel_source_skill.includes_private_source,false);
+  console.log('WORLD/TOON BOOK-TO-COMIC PASS: local TXT parsing, 6/6 original chapters, 9 anchored director frames, opt-in/opt-out source privacy and real ZIP and research-required task');
  }finally{await browser.close();fs.rmSync(output,{recursive:true,force:true})}
 })().catch(e=>{console.error(e);process.exitCode=1});
