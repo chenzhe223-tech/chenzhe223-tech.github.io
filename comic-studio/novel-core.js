@@ -166,7 +166,10 @@
      const val=String(item.str||'');if(!val)continue;
      const y=Number(item.transform?.[5]??0),last=ys[ys.length-1];
      if(last!=null&&Math.abs(last-y)>5){texts.push(line);line=''}
-     line+=(line?' ':'')+val;ys.push(y);
+     const a=line.slice(-1),b=val.slice(0,1);
+     const addSpace=line&&!(/[\u3400-\u9fff\uff00-\uffef]/.test(a+b)||/[\s.,:;()\[\]{}%\/\-]/.test(a+b))?' ':'';
+     line+=addSpace+val;ys.push(y);
+     if(item.hasEOL){texts.push(line);line=''};
     }
     if(line)texts.push(line);
     units.push({location:'PDF 第 '+i+' 页',text:texts.join('\n')});
