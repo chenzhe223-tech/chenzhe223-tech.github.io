@@ -6,6 +6,7 @@ on:
       - 'topic-studio/scripts/sync_finance.py'
       - 'topic-studio/tests/test_finance_sync.py'
       - 'topic-studio/tests/finance-prompt.test.cjs'
+      - 'topic-studio/tests/finance-browser-smoke.cjs'
       - 'topic-studio/finance-discovery.js'
       - 'topic-studio/finance-discovery.css'
       - 'topic-studio/ai-production-prompt.js'
@@ -44,6 +45,42 @@ jobs:
           node --check topic-studio/finance-discovery.js
           node --check topic-studio/xnews-discovery.js
           node --check topic-studio/ai-production-prompt.js
+  finance-browser-e2e:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright with Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Verify real desktop and mobile selection, style and 1-3 image prompt
+        run: node topic-studio/tests/finance-browser-smoke.cjs
+  live-overseas-readonly-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect true overseas original feeds without publishing
+        run: |
+          python topic-studio/scripts/sync_overseas.py --output /tmp/overseas-preview.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/overseas-preview.json'))
+          print(json.dumps({'count':x['count'],'sources':x['sources']},ensure_ascii=False))
+          assert x['count'] > 0
+          assert all(row.get('source_kind')=='independent_original' for row in x['articles'])
+          PY
   live-finance-readonly-preview:
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
