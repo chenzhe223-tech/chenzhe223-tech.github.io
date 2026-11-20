@@ -40,7 +40,7 @@ assert.ok(app.includes("name:'production-bible.json'"),'ZIP includes canonical p
 assert.ok(app.includes('package_ready:false')&&app.includes('actual_published:false'),'candidate ZIP cannot claim publish success');
 const pilot=read('creative-pilot.js');
 assert.ok(pilot.includes('exportApprovedBundle(')&&pilot.includes("name:'pilot-01.png'")&&pilot.includes("name:'panels/01.png'"),'post-approval handoff includes real image bytes');
-assert.ok(pilot.includes("data-pilot-action=\\\"bundle\\\""),'approved reference bundle accessible from UI');
+assert.ok(pilot.includes('data-pilot-action="bundle"'),'approved reference bundle accessible from UI');
 assert.ok(app.includes('SINGLE_IMAGE_PER_CALL_V2')&&app.includes('INVALID_COMPOSITE'),'direct-mode prompt forbids multi-panel images');
 assert.ok(app.includes("task.image_render_protocol='single_image_per_call.v2'"),'machine-readable task contract');
 const engine=read('comic-engine.js'),extension=read('extension.js'),worker=read('worker.js'),importer=read('worldtoon-v3-import.js'),review=read('worldtoon-v3-review.js');
