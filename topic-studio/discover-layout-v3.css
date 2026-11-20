@@ -17,6 +17,7 @@ body[data-layout-columns] #section-discover.section.active,
 #section-discover.section.active>.discover-index,
 #section-discover.section.active>.opportunity-hub,
 #section-discover.section.active>.xnews-hub,
+#section-discover.section.active>.finance-hub,
 #section-discover.section.active>.discover-toolbox{grid-column:1/-1!important;min-width:0;width:100%;margin:0;max-width:none;align-self:start!important}
 #section-discover .discover-index{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:12px 28px;padding:20px 25px 19px;border:1px solid var(--discover-line);background:var(--discover-sheet);border-radius:18px}
 .discover-index .discover-index-kicker{font-size:11px;font-weight:850;letter-spacing:1.8px;color:#507AA1;line-height:1.45;margin-bottom:5px}

@@ -7,26 +7,27 @@
 const page=document.getElementById("section-discover");
 const nav=page?.querySelector(".discover-quicknav");
 if(!page||!nav)return;
-const sourceNodes={radar:page.querySelector(".opportunity-hub"),xnews:page.querySelector(".xnews-hub")};
+const sourceNodes={radar:page.querySelector(".opportunity-hub"),xnews:page.querySelector(".xnews-hub"),finance:page.querySelector(".finance-hub")};
 const links=[...nav.querySelectorAll("[data-discover-target]")];
-const sourceFor=id=>id==="opportunityTitle"?"radar":id==="xnewsTitle"?"xnews":null;
+const sourceFor=id=>id==="opportunityTitle"?"radar":id==="xnewsTitle"?"xnews":id==="financeTitle"||id==="financeDiscovery"?"finance":null;
 const initialHash=window.location.hash;
 let saved="";
 try{saved=window.sessionStorage.getItem("davylab-discovery-active-source")||""}catch{}
 function markActive(type){
- const next=type==="xnews"?"xnews":"radar";
+ const next=type==="xnews"?"xnews":type==="finance"?"finance":"radar";
  page.dataset.activeSource=next;
  for(const link of links){
   const isActive=sourceFor(link.dataset.discoverTarget)===next;
-  if(isActive){link.setAttribute("aria-current","page");link.setAttribute("aria-label",(next==="xnews"?"海外观点":"编辑精选")+"：当前查看的来源")}
+  if(isActive){link.setAttribute("aria-current","page");link.setAttribute("aria-label",({radar:"编辑精选",xnews:"海外观点",finance:"财经资讯"}[next])+"：当前查看的来源")}
   else {link.removeAttribute("aria-current");link.removeAttribute("aria-label")}
  }
  try{window.sessionStorage.setItem("davylab-discovery-active-source",next)}catch{}
 }
+function nextScrollTarget(type){return type==="finance"?sourceNodes.finance:page.querySelector(".discover-index")}
 function setSource(type,scroll=true){
  markActive(type);
  if(scroll){
-  const header=page.querySelector(".discover-index");
+  const header=nextScrollTarget(type);
   if(header?.scrollIntoView){
    const reduced=!!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
    header.scrollIntoView({behavior:reduced?"instant":"smooth",block:"start"});

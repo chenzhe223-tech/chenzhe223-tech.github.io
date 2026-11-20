@@ -16,6 +16,7 @@ const count=fragment=>html.split(fragment).length-1;
 for(const id of [
  "section-discover","opportunityTitle","opportunityList","opportunityLens",
  "xnewsDiscovery","xnewsTitle","xnewsList","xnewsSearch","xnewsRefresh",
+ "financeDiscovery","financeTitle","financeList","financeSearch",
  "discoverSources","discoverMaterials","discoverIdeas","discoverToolbox",
  "feedList","radarSearch","ideaInput","analyzeIdeas","sourceStatus",
  "opportunityUpdated","topicList","topicForm"
@@ -26,7 +27,7 @@ const start=html.indexOf('id="section-discover"');
 const end=html.indexOf('id="section-research"');
 assert.ok(start>=0&&end>start,"Discovery section is before research section");
 const section=html.slice(start,end);
-const ordered=["discover-index","opportunity-hub","xnews-hub","discover-toolbox"];
+const ordered=["discover-index","opportunity-hub","xnews-hub","finance-hub","discover-toolbox"];
 let prev=-1;
 for(const name of ordered){
  const pos=section.indexOf('class="'+name);
@@ -35,9 +36,18 @@ for(const name of ordered){
 }
 assert.ok(section.indexOf("discover-tools-grid")<section.indexOf('id="discoverMaterials"'));
 assert.ok(section.indexOf('id="discoverMaterials"')<section.indexOf('id="discoverIdeas"'));
-for(const id of ["opportunityTitle","xnewsTitle","discoverMaterials","discoverIdeas"]){
+for(const id of ["opportunityTitle","xnewsTitle","discoverMaterials","discoverIdeas","financeTitle"]){
  assert.ok(html.includes('data-discover-target="'+id+'"'));
 }
+assert.ok(html.includes('data-discover-target="financeTitle"'));
+const financialNav=html.match(/data-discover-target="financeTitle"/g)||[];
+assert.equal(financialNav.length,1,"Finance quick navigation link is unique");
+const v4=fs.readFileSync(path.join(root,"editorial-workspace-v4.js"),"utf8");
+const v4css=fs.readFileSync(path.join(root,"editorial-workspace-v4.css"),"utf8");
+assert.match(v4,/financeTitle/);
+assert.match(v4css,/data-active-source="finance"/);
+assert.match(v4css,/\.finance-hub/);
+new vm.Script(v4,{filename:"editorial-workspace-v4.js"});
 assert.ok(html.includes('href="./discover-layout-v3.css?v=20261113-a"'));
 assert.ok(html.includes('src="./discover-layout-v3.js?v=20261113-a"'));
 assert.match(css,/#section-discover\.section\.active/);
