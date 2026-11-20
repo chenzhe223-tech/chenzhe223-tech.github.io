@@ -1,10 +1,10 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-19T09:32:00+00:00",
-  "generated_at": "2026-11-19T09:32:04.956Z",
+  "source_synced_at": "2026-11-20T09:13:41+00:00",
+  "generated_at": "2026-11-20T09:13:45.917Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
-  "available_sources": 188,
+  "available_sources": 224,
   "recommendations": [
     {
       "rank": 1,
@@ -18,22 +18,22 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 50,
+      "evidenceCount": 47,
       "channels": [
-        "XNews",
         "AI Radar",
+        "XNews",
         "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "Cursor：用 Agent 构建线上 App，并通过链接分享",
-          "url": "https://x.com/cursor_ai/status/2118458629091426304",
-          "source": "XNews",
-          "published": "2026-11-06T00:00:00.000Z"
+          "title": "Not If, But How: Responding to Security Incidents in the Age of AI Attackers",
+          "url": "https://www.marktechpost.com/2026/11/19/ai-security-incident-response-playbook-2026",
+          "source": "MarkTechPost",
+          "published": "2026-11-19T10:45:57.000Z"
         },
         {
-          "title": "checkwash 用 Git diff 检查测试弱化，Alpha 版仍有漏检和误报",
-          "url": "https://x.com/kartg123451/status/2118550260104769565",
+          "title": "Cursor：用 Agent 构建线上 App，并通过链接分享",
+          "url": "https://x.com/cursor_ai/status/2118458629091426304",
           "source": "XNews",
           "published": "2026-11-06T00:00:00.000Z"
         }
@@ -41,34 +41,34 @@
     },
     {
       "rank": 2,
-      "id": "open-source",
-      "name": "开源 AI 项目深度实测",
-      "score": 94,
+      "id": "content",
+      "name": "AI 创作、内容和视觉表达",
+      "score": 95,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 14,
-        "readerFit": 19,
+        "observableDiscussion": 16,
+        "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 34,
+      "evidenceCount": 15,
       "channels": [
-        "XNews",
         "Hacker News",
-        "AI Radar"
+        "AI Radar",
+        "XNews"
       ],
       "exampleSources": [
         {
-          "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
-          "url": "https://x.com/sardorml/status/2118616954085024133",
-          "source": "XNews",
-          "published": "2026-11-06T00:00:00.000Z"
+          "title": "Show HN: Klistra – A complete studio for spec-driven AI motion design and video",
+          "url": "https://klistra.ai",
+          "source": "Hacker News",
+          "published": "2026-11-18T16:58:53.000Z"
         },
         {
-          "title": "Lumi, from learning RAG to an open-source, self-hosted chatbot for agencies",
-          "url": "https://github.com/nieve-consulting/lumi",
-          "source": "Hacker News",
-          "published": "2026-11-18T17:33:30.000Z"
+          "title": "alchaincyf/huashu-design",
+          "url": "https://github.com/alchaincyf/huashu-design",
+          "source": "GitHub Skills",
+          "published": "2026-11-19T20:36:33.000Z"
         }
       ]
     },
@@ -84,7 +84,7 @@
         "readerFit": 15,
         "sourceTrace": 10
       },
-      "evidenceCount": 10,
+      "evidenceCount": 11,
       "channels": [
         "XNews",
         "Hacker News"
@@ -106,34 +106,34 @@
     },
     {
       "rank": 4,
-      "id": "skills",
-      "name": "Skill 与 AI 工具技能化",
-      "score": 92,
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
+      "score": 87,
       "editorial_breakdown": {
-        "freshness": 30,
+        "freshness": 28,
         "channelCoverage": 21,
-        "observableDiscussion": 12,
+        "observableDiscussion": 9,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 13,
+      "evidenceCount": 89,
       "channels": [
         "AI Radar",
-        "Hacker News",
-        "XNews"
+        "XNews",
+        "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "greensock/gsap-skills",
-          "url": "https://github.com/greensock/gsap-skills",
-          "source": "GitHub Skills",
-          "published": "2026-11-18T19:35:42.000Z"
+          "title": "2026 年 13 款最佳智能体网关：Kong、Bifrost、AgentCore、Arcade",
+          "url": "https://www.marktechpost.com/2026/11/19/best-agent-gateways-2026",
+          "source": "MarkTechPost",
+          "published": "2026-11-19T18:13:21.000Z"
         },
         {
-          "title": "a-khalid/arabic-writing-skill",
-          "url": "https://github.com/a-khalid/arabic-writing-skill",
-          "source": "GitHub Skills",
-          "published": "2026-11-18T07:36:19.000Z"
+          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
+          "url": "https://alignment.anthropic.com/2026/worse-together",
+          "source": "XNews",
+          "published": "2026-11-11T00:00:00.000Z"
         }
       ]
     },
@@ -141,17 +141,18 @@
       "rank": 5,
       "id": "verification",
       "name": "AI 可验证工程与质量验收",
-      "score": 87,
+      "score": 83,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 10,
+        "channelCoverage": 21,
+        "observableDiscussion": 3,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 14,
+      "evidenceCount": 15,
       "channels": [
         "XNews",
+        "AI Radar",
         "Hacker News"
       ],
       "exampleSources": [
@@ -171,72 +172,6 @@
     },
     {
       "rank": 6,
-      "id": "robotics",
-      "name": "具身智能与机器人走向现实",
-      "score": 85,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 20,
-        "observableDiscussion": 10,
-        "readerFit": 15,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 6,
-      "channels": [
-        "XNews",
-        "AI Radar",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "目标机器人没练过的50个任务，5条演示后GR00T 2的成功率从40%到95%",
-          "url": "https://research.nvidia.com/labs/gear/gr00t-2",
-          "source": "XNews",
-          "published": "2026-11-09T00:00:00.000Z"
-        },
-        {
-          "title": "India’s Humyn Labs raises $47M to feed US robotics companies the data they need",
-          "url": "https://techcrunch.com/2026/11/18/accel-backs-indias-humyn-labs-to-supply-training-data-needed-by-u-s-robotics-ai-developers",
-          "source": "TechCrunch AI",
-          "published": "2026-11-18T11:30:00.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 7,
-      "id": "content",
-      "name": "AI 创作、内容和视觉表达",
-      "score": 84,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 5,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 13,
-      "channels": [
-        "AI Radar",
-        "Hacker News",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "Suno now lets you make AI videos for your AI music",
-          "url": "https://www.theverge.com/ai-artificial-intelligence/1036415/suno-visuals-ai-generated-video-images-feature",
-          "source": "The Verge AI",
-          "published": "2026-11-18T11:16:53.000Z"
-        },
-        {
-          "title": "Show HN: Klistra – A complete studio for spec-driven AI motion design and video",
-          "url": "https://klistra.ai",
-          "source": "Hacker News",
-          "published": "2026-11-18T16:58:53.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 8,
       "id": "memory",
       "name": "Agent 记忆、检索和知识管理",
       "score": 83,
@@ -247,7 +182,7 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 10,
+      "evidenceCount": 9,
       "channels": [
         "XNews",
         "Hacker News",
@@ -261,75 +196,140 @@
           "published": "2026-11-06T00:00:00.000Z"
         },
         {
-          "title": "Show HN: Waku.One is a shared memory and a board for your team's AI agents",
-          "url": "https://www.waku.one",
+          "title": "How should we evaluate image memory in AI agents?",
+          "url": "https://twitter.com/AgentMemoryL/status/2123418533950591252",
           "source": "Hacker News",
-          "published": "2026-11-18T17:56:15.000Z"
+          "published": "2026-11-20T06:24:56.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "infrastructure",
+      "name": "AI 算力、芯片与使用成本",
+      "score": 82,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 3,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 14,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "阿里巴巴 CEO 吴泳铭：2027、2028 年将是中国算力最紧缺的两年",
+          "url": "https://www.ithome.com/1/029/682.htm",
+          "source": "IT之家",
+          "published": "2026-11-19T13:22:49.000Z"
+        },
+        {
+          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
+          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
+          "source": "XNews",
+          "published": "2026-11-18T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 8,
+      "id": "open-source",
+      "name": "开源 AI 项目深度实测",
+      "score": 81,
+      "editorial_breakdown": {
+        "freshness": 20,
+        "channelCoverage": 18,
+        "observableDiscussion": 14,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 36,
+      "channels": [
+        "XNews",
+        "GitHub Search"
+      ],
+      "exampleSources": [
+        {
+          "title": "CaptureFlow：边录屏边上传，支持 Docker 自托管",
+          "url": "https://x.com/sardorml/status/2118616954085024133",
+          "source": "XNews",
+          "published": "2026-11-06T00:00:00.000Z"
+        },
+        {
+          "title": "TurquoiseConsultant/GitHub-Copilot-app",
+          "url": "https://github.com/TurquoiseConsultant/GitHub-Copilot-app",
+          "source": "GitHub public repositories",
+          "published": "2026-11-14T19:25:20.000Z"
         }
       ]
     },
     {
       "rank": 9,
-      "id": "multi-agent",
-      "name": "多智能体协作与任务分工",
-      "score": 83,
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 79,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 17,
-        "observableDiscussion": 8,
-        "readerFit": 18,
+        "channelCoverage": 18,
+        "observableDiscussion": 2,
+        "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 6,
+      "evidenceCount": 13,
       "channels": [
-        "Hacker News",
-        "XNews"
+        "AI Radar",
+        "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "Multi Agent Coordination Benchmark",
-          "url": "https://benchmarks.bespokelabs.ai/multi-agent-coordination-bench",
-          "source": "Hacker News",
-          "published": "2026-11-18T18:28:05.000Z"
+          "title": "NVIDIA/SkillSpector",
+          "url": "https://github.com/NVIDIA/SkillSpector",
+          "source": "GitHub Skills",
+          "published": "2026-11-19T20:47:01.000Z"
         },
         {
-          "title": "Show HN: KradleBench – Multi-agent AI evals in Minecraft",
-          "url": "https://www.kradle.ai/?1",
-          "source": "Hacker News",
-          "published": "2026-11-18T19:14:28.000Z"
+          "title": "obsidianmd/obsidian-skills",
+          "url": "https://github.com/obsidianmd/obsidian-skills",
+          "source": "GitHub Skills",
+          "published": "2026-11-19T20:39:44.000Z"
         }
       ]
     },
     {
       "rank": 10,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
-      "score": 81,
+      "id": "enterprise",
+      "name": "AI 进入传统企业与专业行业",
+      "score": 79,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 1,
+        "channelCoverage": 18,
+        "observableDiscussion": 2,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 68,
+      "evidenceCount": 4,
       "channels": [
         "Hacker News",
-        "XNews",
-        "AI Radar"
+        "AI Radar",
+        "XNews"
       ],
       "exampleSources": [
         {
-          "title": "Build a Basic AI Agent from Scratch: Agents and Sub-Agents",
-          "url": "https://www.ruxu.dev/articles/ai/build-an-ai-agent-agents-subagents",
+          "title": "Show HN: ClearOffice Hub – Build Enterprise Apps with Natural Language",
+          "url": "https://www.clearofficehub.com",
           "source": "Hacker News",
-          "published": "2026-11-18T17:12:54.000Z"
+          "published": "2026-11-18T14:26:04.000Z"
         },
         {
-          "title": "四人共享额度时，点对点智能体团队只拿到协调者三到四成的成绩",
-          "url": "https://alignment.anthropic.com/2026/worse-together",
-          "source": "XNews",
-          "published": "2026-11-11T00:00:00.000Z"
+          "title": "阿里巴巴 CEO 吴泳铭：2027、2028 年将是中国算力最紧缺的两年",
+          "url": "https://www.ithome.com/1/029/682.htm",
+          "source": "IT之家",
+          "published": "2026-11-19T13:22:49.000Z"
         }
       ]
     }
