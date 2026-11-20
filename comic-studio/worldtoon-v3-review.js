@@ -4,7 +4,7 @@
 'use strict';
 (function(){
  const labels=[
-  '漫画画格、独立封面与原图尺寸完整；不含九宫格拼图',
+  '逐张检查单幅连续场景：封面及所有画格均非九宫格、非拼版、非画中画',
   '已逐张确认原创画面质量与人物造型一致',
   '中文对白、排版、错别字及文字可读性复核',
   '事实与虚构故事的边界及免责声明清楚',
@@ -77,6 +77,8 @@
    const h=p.handoff,files=h.stagedFiles||[],count=p.panels?.length||9;
    if(files.length<7||files.length!==h.stageUploaded?.length)throw Error('请先完整上传全部原始素材');
    if(h.finalChecklist?.length!==8||h.finalChecklist.some(x=>x!==true))throw Error('请先逐项完成全部8项终审');
+   const images=files.filter(x=>x.path?.endsWith('.png')&&x.sha256);
+   if(images.length!==count+1||images.some(x=>h.frameScopeQA?.[x.path]!==x.sha256))throw Error('尚未逐张确认独立单场景、非拼版及本格分镜一致性；请返回成品回传完成单张 QA');
    if(!document.querySelector('#wt3-author-consent')?.checked)throw Error('需要作者主动确认最终出版授权');
    if(!confirm('你确认拥有此漫画的最终出版权，并已完成全部事实、版权、中文和画风审校？确认后将写入正式 GitHub 作者授权清单；不能由创作者或 WorkBuddy 代签。'))return;
    const sha={};
