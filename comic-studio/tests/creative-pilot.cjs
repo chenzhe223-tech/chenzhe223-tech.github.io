@@ -11,7 +11,7 @@ const html=fs.readFileSync(path.join(__dirname,'..','index.html'),'utf8');
 let writes=0,copied='',stored=[],updated=0;
 const c={approval:{lock_hash:'a1b2c3d4',approved_at:new Date().toISOString(),author_approved:true},
  styleId:'editorial',cast:[{name:'黎舟'},{name:'星点'}]};
-const p={id:'p1',title:'海底漫画',handoff:{taskId:'WT-1234567890abcdef1234',repoQueuedAt:new Date().toISOString()},creativeDirection:c};
+const p={id:'p1',title:'海底漫画',productionAgent:'WorkBuddy',handoff:{taskId:'WT-1234567890abcdef1234',repoQueuedAt:new Date().toISOString()},creativeDirection:c};
 const listeners={};
 const ctx={
  window:{wtCreativeDirector:()=>'<main>director core</main>'},
