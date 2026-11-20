@@ -115,7 +115,7 @@
   const existingCount=p.panels?.length||0;
   try{
    if(keep)await putMedia(fileKey,state.file);
-   if(rightsMode==='literary_review'&&existingCount!==9)
+   if(existingCount!==9)
     p.panels=Array.from({length:9},(_,i)=>makePanel(i));
    p.novelSkill=skill;
    p.storySourceSelection={...(p.storySourceSelection||{}),
