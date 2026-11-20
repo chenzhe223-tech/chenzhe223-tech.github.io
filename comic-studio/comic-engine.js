@@ -27,6 +27,15 @@ const STEPS=[
 const isV3=p=>!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId);
 const clean=s=>String(s||'').replace(/[\u0000-\u001f]/g,' ').trim();
 function cast(p){
+ // A project-pinned Character Bible takes precedence over evolving library records.
+ const refs=Array.isArray(p?.characterRefs)?p.characterRefs.filter(x=>x?.snapshot):[];
+ if(refs.length)return refs.map((ref,i)=>{
+   const snap=ref.snapshot,over=p.characterOverrides?.[ref.characterId]||{};
+   return ['角色 '+(i+1)+' '+clean(ref.comicName||snap.originalName)+' (Character ID '+clean(ref.characterId)+'; locked v'+Math.max(1,Number(ref.version)||1)+')',
+    '固定容貌:'+clean(snap.description)+(clean(over.look)?' / 本作补充:'+clean(over.look):''),
+    '固定服装:'+clean(snap.costume)+(clean(over.costume)?' / 本作补充:'+clean(over.costume):''),
+    '固定识别道具:'+clean(snap.traits),'性格:'+clean(snap.personality)].join(' / ');
+ }).join('\n');
  const locked=p?.creativeDirection?.cast;
  if(Array.isArray(locked)&&locked.length)return locked.map((x,i)=>[
   '角色 '+(i+1)+' '+clean(x.name)+' ('+clean(x.role)+')',

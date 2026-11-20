@@ -1,0 +1,40 @@
+name: WorldToon V4 browser E2E and original-PNG package verification
+
+on:
+  pull_request:
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-v4-browser.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/**'
+      - '.github/workflows/worldtoon-v4-browser.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check installed Chromium browser
+        run: google-chrome --version
+      - name: Install isolated browser automation driver (no paid service)
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.56.1
+      - name: Real browser creation, versioned character, phone and ZIP tests
+        run: node comic-studio/tests/worldtoon-v4-browser.cjs
+      - name: Upload screenshots and technical ZIP evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: worldtoon-v4-browser-evidence
+          path: comic-studio/browser-evidence/
+          if-no-files-found: warn
+          retention-days: 7

@@ -51,4 +51,23 @@ function workspace(){return {characters:[
  assert.equal(WTCharacterContinuity.displayName(data,first.characterId,'project-c'),'沈知夏');
 }
 
+
+{
+ const data={characters:[],projects:[]},project={id:'v4-multi',characterEnrollmentMode:'all'};
+ const cast=[
+  {role:'female_lead',name:'林晚',gender:'女',look:'左眼绿色',clothes:'蓝外套'},
+  {role:'female_lead',name:'许晴',gender:'女',look:'双马尾',clothes:'红外套'},
+  {role:'supporting',name:'机械猫',gender:'自定义',age:'成年',profession:'机械工程师',look:'银色机体',clothes:'白马甲'}
+ ];
+ const result=WTCharacterContinuity.upsertGenerated(data,project,cast);
+ assert.equal(result.added,3,'V4 registers full cast, including supporting roles');
+ assert.equal(project.characterRefs.length,3);
+ assert.equal(new Set(project.characterRefs.map(x=>x.characterId)).size,3,'different people of same role never collapse');
+ assert.equal(data.characters.find(x=>x.name==='机械猫').gender,'自定义');
+ assert.equal(data.characters.find(x=>x.name==='机械猫').profession,'机械工程师');
+ assert.ok(project.characterRefs.every(r=>r.pending_author_review===true),'AI draft characters still require author approval');
+ const twice=WTCharacterContinuity.upsertGenerated(data,project,cast);
+ assert.equal(twice.added,0,'retry is idempotent for all cast members');
+ assert.equal(data.characters.length,3);
+}
 console.log('PASS: legacy profiles, same-name separation, project aliases, and idempotent lead enrollment');

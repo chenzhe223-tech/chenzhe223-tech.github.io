@@ -173,8 +173,25 @@ let data;try{let raw=JSON.parse(localStorage.getItem(APP_KEY)||'null');if(raw&&A
 
 data.characters=data.characters||[];
 let ui={route:'dashboard',selected:data.projects[0]?.id||'sample-ba-zong-001',stage:0,panel:0,filter:'全部',topicFilter:'全部',search:'',reader:0,rev:0};
-function persist(){try{localStorage.setItem(APP_KEY,JSON.stringify(data));if(typeof wtScheduleSync==='function')wtScheduleSync();return true}catch(err){notify('保存失败：本机存储空间可能不足，请先导出备份');return false}}
-function setChange(p,desc){p.updatedAt=now();if(desc){p.activity=p.activity||[];p.activity.unshift({at:now(),detail:desc});p.activity=p.activity.slice(0,60)}persist()}
+function persist(){
+  // Local persistence and optional cloud sync are independent outcomes.
+  try{localStorage.setItem(APP_KEY,JSON.stringify(data))}
+  catch(err){
+    ui.wt4PersistError=true;
+    const status=document.querySelector('[data-wt4-save-status]');
+    if(status){status.textContent='保存失败 · 当前修改可能在刷新后丢失，请导出备份';status.dataset.state='error'}
+    notify('保存失败：本机存储空间可能不足，请先导出备份');return false;
+  }
+  ui.wt4PersistError=false;
+  const status=document.querySelector('[data-wt4-save-status]');
+  if(status){status.textContent='本机已保存 · '+new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});status.dataset.state='saved'}
+  if(typeof wtScheduleSync==='function'){
+    try{wtScheduleSync()}
+    catch(err){console.warn('WORLD/TOON cloud sync scheduling failed; local draft remains saved',err)}
+  }
+  return true;
+}
+function setChange(p,desc){p.updatedAt=now();if(desc){p.activity=p.activity||[];p.activity.unshift({at:now(),detail:desc});p.activity=p.activity.slice(0,60)}return persist()}
 function markDirty(p){if(p.status==='已审核'||p.status==='已发布'){p.status='草稿';p.checks=Array(6).fill(false);p.reviewedAt=null;p.publishedAt=null;}setChange(p)}
 const activeProjects=()=>data.projects.filter(p=>!p.deleted&&!p.archived);
 function findProject(id){return data.projects.find(p=>p.id===id)}
@@ -206,7 +223,7 @@ function settings(){return `${heroHeader('06 / YOUR WORKSPACE','数据与偏好'
 function render(){document.querySelectorAll('[data-route]').forEach(a=>{const active=a.dataset.route===ui.route;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});document.querySelectorAll('[data-nav-group="handoff"]').forEach(el=>el.querySelector('.nav-parent')?.classList.toggle('is-group-active',['handoff','director','archive'].includes(ui.route)));const title={'production':'生产与出版','workspace':'作品工作空间','ai-briefing':'AI 前沿简报',live:'素材发现',characters:'角色档案',account:'云端账户',dashboard:'总览',radar:'选题池',library:'漫画书架',studio:'创作工作台',director:'创意导演台',publish:'素材导出',settings:'数据管理',reader:'漫画阅读',handoff:'制作交接',archive:'生产调度中心'};document.querySelector('#crumb').textContent=title[ui.route];let fn={dashboard,workspace:typeof wt4Workspace==='function'?wt4Workspace:studio,production:typeof wt4Production==='function'?wt4Production:wtWorkflow,radar,'ai-briefing':typeof wtBriefing==='function'?wtBriefing:dashboard,live:typeof wtLive==='function'?wtLive:dashboard,characters:typeof wtCharacters==='function'?wtCharacters:dashboard,account:typeof wtAccount==='function'?wtAccount:settings,library,studio,director:typeof wtCreativeDirector==='function'?wtCreativeDirector:studio,publish,settings,reader,handoff:typeof wtWorkflow==='function'?wtWorkflow:dashboard,archive:typeof wtArchiveDesk==='function'?wtArchiveDesk:dashboard}[ui.route];document.querySelector('#view').innerHTML=fn();document.title=`${title[ui.route]} — WORLD/TOON · By DAVYLAB`;document.querySelector('.rail').classList.remove('is-open')}
 function modal(body){let root=document.querySelector('#modalRoot');root.innerHTML=`<div class="modal-card"><button class="iconbtn modal-close" data-action="modal-close" aria-label="关闭">×</button>${body}</div>`;root.hidden=false}
 function closeModal(){let x=document.querySelector('#modalRoot');x.hidden=true;x.innerHTML=''}
-function newProject(topic){let p=emptyProject(topic);data.projects.unshift(p);ui.selected=p.id;ui.stage=0;persist();closeModal();nav('workspace/'+p.id);notify(topic?'已从选题建立作品，继续编剧与创意定稿':'作品已建立，继续输入创意并完善剧本')}
+function newProject(topic,prepare){let p=emptyProject(topic),previous=ui.selected;p.characterEnrollmentMode='all';if(topic){p.entryType='hotspot';p.handoff={...(p.handoff||{}),mode:'hotspot'}}if(typeof prepare==='function')prepare(p);data.projects.unshift(p);ui.selected=p.id;ui.stage=0;if(!persist()){data.projects=data.projects.filter(x=>x!==p);ui.selected=previous;notify('创建未保存，已保留原作品，请先导出备份并检查本机存储空间');return null}closeModal();nav('workspace/'+p.id);notify(topic?'热点已导入作品，请核验来源再进行改编':'作品草稿已保存，请完善角色与剧情');return p}
 function topicModal(t){modal(`<div class="kicker">NEW EDITORIAL LEAD</div><h2>${t?'编辑热点':'添加一个热点'}</h2><p class="minor">手工记录可信来源。评分是个人策划评分，不代表真实平台流量。</p><form id="topicForm" data-id="${e(t?.id||'')}"><div class="fields"><div class="field wide"><label>事件标题 *</label><input name="title" required maxlength="180" value="${e(t?.title||'')}"></div><div class="field"><label>类别</label><select name="category">${CATS.map(x=>`<option ${x===t?.category?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>核验状态</label><select name="stage">${['待核验','已核验','已转漫画'].map(x=>`<option ${x===t?.stage?'selected':''}>${x}</option>`).join('')}</select></div><div class="field wide"><label>新闻摘要</label><textarea name="summary">${e(t?.summary||'')}</textarea></div><div class="field wide"><label>原始来源链接</label><input type="url" name="source" placeholder="https://..." value="${e(t?.source||'')}"></div><div class="field"><label>现实事件发生日期</label><input type="date" name="eventDate" value="${e(t?.eventDate||'')}"><small>${t?.eventDateBasis==='published_candidate'?'根据新闻发布日期自动填入的候选日期，待核验':t?.eventDateBasis==='source_event'?'新闻数据给出的事件日，仍须核实':'未取得可靠事件日时，请对照原文核验'}</small></div><input type="hidden" name="eventDateBasis" value="${e(t?.eventDateBasis||'')}">${['heat','impact','story'].map((k,i)=>`<div class="field"><label>${['热度','影响力','漫画价值'][i]}（1—5）</label><input name="${k}" type="number" min="1" max="5" value="${e(t?.[k]||3)}"></div>`).join('')}</div><div class="stepactions"><button type="button" class="button" data-action="modal-close">取消</button><button class="button dark" type="submit">保存选题</button></div></form>`)}
 function saveTopic(form){let values=Object.fromEntries(new FormData(form).entries());let title=(values.title||'').trim();if(!title){notify('请填写热点标题');return}if(values.source&&!safeURL(values.source)){notify('来源链接必须为完整 HTTP(S) 地址');return}let t=data.topics.find(t=>t.id===form.dataset.id);if(!t){t={id:uid(),createdAt:now()};data.topics.unshift(t)}if((t.eventDate||'')!==String(values.eventDate||''))values.eventDateBasis=values.eventDate?'manual_unverified':'';Object.assign(t,{...values,title,heat:Math.max(1,Math.min(5,Number(values.heat)||1)),impact:Math.max(1,Math.min(5,Number(values.impact)||1)),story:Math.max(1,Math.min(5,Number(values.story)||1)),isSample:false});persist();closeModal();render();notify('选题已保存')}
 function makePrompt(p,index){const lead=`你是 DAVYLAB WORLD/TOON 的原创漫画编剧与视觉导演。请基于以下内容创作，但必须将新闻可验证事实与虚构情节清晰区分，绝不编造针对现实人物的违法、私人关系或交易事实。风格：高级杂志审美、克制黑色幽默、清晰分镜、角色服饰和面貌连续一致；任何原始新闻报道不应被照搬。\n\n漫画标题：${p.title}\n故事摘要：${p.description}\n现实选题：${p.sourceTitle}\n可信来源：${p.sourceURLs||'未提供，必须先核验'}\n已核查事实：${p.factNotes||'待核验'}\n虚构改编策略：${p.fiction||'待补全'}\n角色圣经：${p.characters||'待补全'}\n公开声明：${p.disclosure}\n\n`;
@@ -240,6 +257,73 @@ async function collectImages(p,filenames='pages'){let entries=[],images=[];for(l
 function escapeScript(s){return JSON.stringify(s).replace(/</g,'\\u003c')}
 function generateReaderHTML(p,imgs){let payload={title:p.title,subtitle:p.subtitle,description:p.description,disclosure:p.disclosure,panels:p.panels.map((a,i)=>({title:a.title,caption:a.caption,dialogue:a.dialogue,image:imgs[i]}))};let json=escapeScript(payload);return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e(p.title)} · By DAVYLAB</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f0e8;color:#1d2520;font-family:system-ui,'Noto Sans SC',sans-serif}header{text-align:center;padding:36px 14px 25px}small{letter-spacing:2px;color:#d3634e}h1{font-family:Georgia,serif;font-size:clamp(35px,7vw,64px);margin:12px 0}main{max-width:850px;margin:auto;padding:15px}figure{margin:0 0 40px;background:#fff;padding:14px;border:1px solid #ded9d0;break-inside:avoid;page-break-inside:avoid}img{max-width:100%;display:block;margin:auto;max-height:85vh;object-fit:contain}figcaption{padding:15px 8px;line-height:1.7}b{font-size:13px}.muted{color:#6f766d;font-size:13px}footer{padding:30px;text-align:center;color:#747b72;font-size:12px;border-top:1px solid #ddd}button{background:#1d2520;color:white;border:0;padding:12px 20px;cursor:pointer;border-radius:5px}@media print{button{display:none}figure{break-after:page;page-break-after:always;margin:0}header{padding:10px}footer{display:none}}</style></head><body><header><small>DAVYLAB / WORLD/TOON · ORIGINAL FICTION</small><h1>${e(p.title)}</h1><p>${e(p.subtitle||p.description)}</p><button onclick="window.print()">打印 / 保存为 PDF</button></header><main id="pages"></main><footer>${e(p.disclosure)}<p>By DAVYLAB · 独立原创漫画</p></footer><script>let d=${json};const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));document.getElementById('pages').innerHTML=d.panels.map((p,i)=>'<figure><img src="'+p.image+'" alt="画格'+(i+1)+'"><figcaption><b>FRAME '+String(i+1).padStart(2,'0')+' · '+esc(p.title)+'</b><p>'+esc(p.caption)+'</p><p class="muted">'+esc(p.dialogue)+'</p></figcaption></figure>').join('');<\/script></body></html>`}
 async function exportZip(p,mode){notify('正在整理漫画文件…');try{let {entries,images}=await collectImages(p);if(mode==='site'){entries.push({name:'index.html',bytes:enc.encode(generateReaderHTML(p,images))});entries.push({name:'README.txt',bytes:enc.encode('DAVYLAB WORLD/TOON\n解压 ZIP 后打开 index.html 即可离线阅读。\n在浏览器中选择“打印”可保存为 PDF。\n本包未自动发布到任何在线网站。')})}else{entries.push({name:'作品说明.txt',bytes:enc.encode(`${p.title}\n${p.subtitle}\n\n${p.description}\n\n${p.disclosure}\n\nBy DAVYLAB`)})}saveFile(packZip(entries),safeName(p.title)+(mode==='site'?'_离线漫画网站.zip':'_九张漫画图片.zip'));setChange(p,`导出${mode==='site'?'离线网站':'九格漫画'}素材`);notify('打包完成，已触发浏览器下载')}catch(err){notify('导出未完成：'+err.message)}}
+
+/* WORLD/TOON V4.0 · strict, local-only, original-byte comic publication package.
+ * Does not produce artwork, grant rights/approval, submit to GitHub or publish.
+ */
+async function exportFormalPackage(p){
+ try{
+  if(!p||!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)throw Error('请选择包含4至60格的正式漫画作品');
+  if(!p.cover)throw Error('缺少独立正式封面。请先上传原创封面图片，不能用示意图替代');
+  if(!globalThis.crypto?.subtle)throw Error('浏览器不支持安全 SHA256 校验，请通过 HTTPS 环境操作');
+  const signature=[137,80,78,71,13,10,26,10];
+  async function checkPng(ref,label){
+   if(!ref)throw Error(label+'尚未上传');
+   const blob=await getImageBlob(ref);
+   if(!blob)throw Error(label+'无法读取原图');
+   const raw=new Uint8Array(await blob.arrayBuffer());
+   if(raw.length<33||!signature.every((x,i)=>raw[i]===x))throw Error(label+'必须是原始 PNG，不能是 JPEG、WebP 或假图片');
+   const v=new DataView(raw.buffer,raw.byteOffset,raw.byteLength);
+   if(v.getUint32(12)!==0x49484452)throw Error(label+'缺少 PNG IHDR 结构');
+   const width=v.getUint32(16),height=v.getUint32(20);
+   if(width<1080||height<1440)throw Error(label+'仅有 '+width+'×'+height+'，低于1080×1440验收线');
+   if(width*4!==height*3)throw Error(label+'不是3:4竖版比例，请使用原生合规画幅，禁止低清拉伸');
+   const tail=[0,0,0,0,73,69,78,68,174,66,96,130];
+   if(!tail.every((x,i)=>raw[raw.length-12+i]===x))throw Error(label+'缺少合法 PNG 结束结构，图像可能截断');
+   if(typeof createImageBitmap==='function'){
+    let decoded;try{decoded=await createImageBitmap(blob)}catch{throw Error(label+'像素解码失败，PNG 已损坏')}
+    try{if(decoded.width!==width||decoded.height!==height)throw Error(label+'图片实际解码尺寸与头部信息不一致')}finally{decoded.close?.()}
+   }
+   const digest=new Uint8Array(await crypto.subtle.digest('SHA-256',raw));
+   const sha256=Array.from(digest,b=>b.toString(16).padStart(2,'0')).join('');
+   return {raw,sha256,width,height};
+  }
+  const entries=[],assets=[],seen=new Set();
+  for(let i=0;i<p.panels.length;i++){
+   const name='panels/'+String(i+1).padStart(2,'0')+'.png',file=await checkPng(p.panels[i].image,'第'+(i+1)+'格');
+   if(seen.has(file.sha256))throw Error('第'+(i+1)+'格与其他画格内容完全相同，请核对是否重复导入');
+   seen.add(file.sha256);entries.push({name,bytes:file.raw});
+   assets.push({path:name,sha256:file.sha256,width:file.width,height:file.height,format:'PNG'});
+  }
+  const cover=await checkPng(p.cover,'正式封面');
+  if(seen.has(cover.sha256))throw Error('封面不能直接复制正文画格');
+  entries.push({name:'cover.png',bytes:cover.raw});
+  assets.push({path:'cover.png',sha256:cover.sha256,width:cover.width,height:cover.height,format:'PNG'});
+  const original=(!p.sourceURLs||!validSources(p).length)&&wfMode(p)==='original';
+  const sourceText=original?'本作品为原创虚构故事，不对应特定新闻事件。':
+   validSources(p).map((u,i)=>(i+1)+'. '+u).join('\n')||'来源链接待核验；严禁未经核验发表';
+  const caption=['# '+p.title,p.subtitle||'',p.description||'',
+   '## 漫画正文',...(p.panels||[]).map((x,i)=>'### 第'+(i+1)+'格｜'+(x.title||'')+'\n'+(x.caption||'')+'\n'+(x.dialogue||'')),
+   '## 创作声明',p.disclosure||'本漫画是原创虚构作品，请核查事实与授权。','WORLD/TOON · By DAVYLAB'].join('\n\n');
+  const manifest={
+   schema:'davylab.worldtoon.local-original-png-package.v1',
+   title:p.title,project_id:p.id,task_id:p.handoff?.taskId||null,
+   panel_count:p.panels.length,assets,character_versions:(p.characterRefs||[]).map(x=>({id:x.characterId,version:x.version||1})),
+   style_id:p.creativeDirection?.styleId||null,
+   artwork_origin:'browser_uploaded_native_png_unverified_rights',generated_by_model:null,rights_status:'not_verified',
+   verified_png_dimensions:true,ready_for_qa:false,author_approved:false,
+   github_delivered:false,workbuddy_ready:false,published:false,
+   warning:'图像尺寸、格式和SHA256检查不是视觉一致性、事实核验、肖像许可、作者审核或正式发表的证明'
+  };
+  entries.push({name:'caption.md',bytes:enc.encode(caption)});
+  entries.push({name:'sources.md',bytes:enc.encode('# 作品来源与核验备注\n\n'+sourceText+'\n\n## 事实核验备注\n'+(p.factNotes||'待人工核验')+'\n\n## 虚构改编方案\n'+(p.fiction||'请人工确认'))});
+  entries.push({name:'manifest.json',bytes:enc.encode(JSON.stringify(manifest,null,2))});
+  const archive=packZip(entries);if(archive.size<=0)throw Error('ZIP 文件无法生成');
+  saveFile(archive,safeName(p.title)+'_完整高清PNG素材_待QA.zip');
+  setChange(p,'导出原创PNG完整素材包（待人工与GitHub独立质量验收）');
+  notify('原创PNG素材包已触发下载：'+p.panels.length+'格+封面；正式QA和发表授权仍待完成');
+ }catch(err){notify('正式素材包尚未导出：'+err.message)}
+}
 function canvasRound(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
 async function exportCover(p){
  if(window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId)){
@@ -251,12 +335,44 @@ ctx.fillStyle='#202622';ctx.fillRect(62,1080,956,288);ctx.fillStyle='#f6f0e7';ct
 function exportProject(p){saveFile(new Blob([JSON.stringify({schema:'comicpress-project-v2',project:p},null,2)],{type:'application/json'}),safeName(p.title)+'_项目数据.json');notify('项目 JSON 已导出，不含上传图片')}
 async function backupAll(){notify('正在创建完整备份，请勿关闭此页');try{let items=[{name:'workspace.json',bytes:enc.encode(JSON.stringify({schema:'comicpress-backup-v2',exportedAt:now(),data}))}],seen=new Set();for(let p of [...data.projects,{panels:(data.characters||[]).map(ch=>({image:ch.portrait})),cover:''}]){let imgs=[...(p.panels||[]).map(a=>a.image),p.cover,p.creativeDirection?.pilot?.characterImage,p.creativeDirection?.pilot?.panelImage,...(p.creativeDirection?.cast||[]).filter(ch=>ch.portraitConsent).map(ch=>ch.portraitMedia)];for(let im of imgs){if(!im||seen.has(im))continue;seen.add(im);let b=await getImageBlob(im);let name=im.startsWith('media:')?`media/${im.slice(6)}.${contentExt(b)}`:`seed/${im.replace('assets/','')}`;items.push({name,bytes:await blobBytes(b)})}}saveFile(packZip(items),'DAVYLAB_Comic_Press_完整备份_'+new Date().toISOString().slice(0,10)+'.zip');notify('完整 ZIP 备份已生成')}catch(err){notify('备份失败：'+err.message)}}
 async function importWorkspace(file){if(!confirm('导入将覆盖本机全部漫画资料。建议先导出当前备份。继续吗？'))return;notify('正在验证并恢复备份…');try{let files=readZip(new Uint8Array(await file.arrayBuffer())),raw=files.get('workspace.json');if(!raw)throw Error('不是本平台的完整备份');let obj=JSON.parse(dec.decode(raw));if(obj.schema!=='comicpress-backup-v2'||!Array.isArray(obj.data?.projects)||!Array.isArray(obj.data?.topics))throw Error('工作区数据格式不符合要求');let fresh=obj.data;for(let p of fresh.projects){if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)throw Error('备份中存在损坏的漫画分镜（需4–60格）');for(let a of [...p.panels,{image:p.cover},{image:p.creativeDirection?.pilot?.characterImage},{image:p.creativeDirection?.pilot?.panelImage},...(p.creativeDirection?.cast||[]).filter(ch=>ch.portraitConsent).map(ch=>({image:ch.portraitMedia}))]){let im=a.image;if(!im)continue;if(im.startsWith('media:')){let k=im.slice(6),name=[...files.keys()].find(n=>n.startsWith(`media/${k}.`));if(!name)throw Error('备份缺失图片 '+k);let mime=name.endsWith('.webp')?'image/webp':name.endsWith('.jpg')?'image/jpeg':'image/png';await putMedia(k,new Blob([files.get(name)],{type:mime}))}else if(im.startsWith('assets/')){if(!files.has('seed/'+im.slice(7)))throw Error('备份缺失示例素材 '+im)}}}for(const ch of fresh.characters||[]){const im=ch.portrait;if(!im)continue;if(im.startsWith('media:')){const k=im.slice(6),name=[...files.keys()].find(n=>n.startsWith('media/'+k+'.'));if(!name)throw Error('备份缺失角色定妆照 '+k);const mime=name.endsWith('.webp')?'image/webp':name.endsWith('.jpg')?'image/jpeg':'image/png';await putMedia(k,new Blob([files.get(name)],{type:mime}));}}data=fresh;persist();ui.selected=data.projects[0]?.id||'';closeModal();nav('library');notify('完整工作区已恢复，请核对作品')}catch(err){notify('导入失败：'+err.message)}}
-async function action(act,id){let p=selected();switch(act){case 'new':newProject();break;case 'topic-new':topicModal();break;case 'topic-edit':topicModal(data.topics.find(t=>t.id===id));break;case 'topic-filter':ui.topicFilter=id;render();break;case 'topic-delete':if(confirm('确定移除此选题吗？')){data.topics=data.topics.filter(t=>t.id!==id);persist();render()}break;case 'topic-to-project':{let t=data.topics.find(t=>t.id===id);if(!t)break;t.stage='已转漫画';persist();newProject(t);break}case 'library-filter':ui.filter=id;render();break;case 'edit':ui.selected=id;ui.stage=0;nav(`studio/${id}/0`);break;case 'duplicate':{let orig=findProject(id);if(!orig)break;let v=structuredClone(orig);v.id=uid();v.title+=' · 副本';v.status='草稿';v.checks=Array(6).fill(false);v.deleted=false;v.archived=false;v.createdAt=now();v.updatedAt=now();v.activity=[{at:now(),detail:'复制自「'+orig.title+'」'}];data.projects.unshift(v);persist();render();notify('已复制作品')}break;case 'archive':{let v=findProject(id);v.archived=!v.archived;setChange(v,v.archived?'归档作品':'解除归档');render();break}case 'trash':if(confirm('将此作品移入回收站？可从回收站恢复。')){let v=findProject(id);v.deleted=true;setChange(v,'移入回收站');render()}break;case 'restore':{let v=findProject(id);v.deleted=false;v.archived=false;setChange(v,'恢复作品');render();break}case 'purge':if(confirm('彻底删除此作品？不能从回收站恢复，请先备份。')){data.projects=data.projects.filter(v=>v.id!==id);persist();render()}break;case 'studio-stage':ui.stage=Number(id);render();break;case 'stage-prev':ui.stage=Math.max(0,ui.stage-1);render();break;case 'stage-next':ui.stage=Math.min(4,ui.stage+1);render();break;case 'select-panel':ui.panel=Number(id);render();break;case 'panel-prev':ui.panel=(ui.panel+p.panels.length-1)%p.panels.length;render();break;case 'panel-next':ui.panel=(ui.panel+1)%p.panels.length;render();break;case 'reader-prev':ui.reader=(ui.reader+p.panels.length-1)%p.panels.length;render();break;case 'reader-next':ui.reader=(ui.reader+1)%p.panels.length;render();break;case 'reader-jump':ui.reader=Number(id);render();break;case 'story-template':fillStoryTemplate(findProject(id)||p);break;case 'prompt':copyText(makePrompt(findProject(id)||p));break;case 'panel-prompt':copyText(makePrompt(p,Number(id)));break;case 'remove-image':if(confirm('移除这一格的图片？上传素材会从浏览器媒体库删除。')){let a=p.panels[Number(id)],old=a.image;a.image='';if(old.startsWith('media:'))await delMedia(old.slice(6));markDirty(p);setChange(p,'移除图片');render()}break;case 'request-review':p.status='待审核';setChange(p,'提交待审核');render();break;case 'approve':{let missing=canApprove(p);if(missing.length){notify('无法审核通过：缺少 '+missing.join('、'));return}p.status='已审核';p.reviewedAt=now();setChange(p,'作者人工审核通过');render();notify('已审核通过（本地记录）');break}case 'mark-published':notify('正式发表状态只从 GitHub 的 WorkBuddy 核验回执同步，不能在本机直接标记');nav('archive');break;case 'publish-go':ui.selected=id;nav('publish');break;case 'export-project':exportProject(findProject(id));break;case 'zip-pages':await exportZip(findProject(id),'pages');break;case 'zip-site':await exportZip(findProject(id),'site');break;case 'cover-png':await exportCover(findProject(id));break;case 'copy-social':{let v=findProject(id);copyText(`《${v.title}》\n${v.subtitle||v.description}\n\n九格看世界，幽默不失锋芒。\n${v.disclosure}\n\nWORLD/TOON · By DAVYLAB`);break}case 'backup-all':await backupAll();break;case 'reset-all':{if(!confirm('彻底清空本机全部漫画作品和选题？操作不可撤销。'))return;if(!confirm('请确认已下载完整备份。仍然清空？'))return;data=initial();persist();ui.selected=data.projects[0].id;nav('dashboard');notify('已重置工作区（图片可能仍占用媒体缓存）');break}case 'modal-close':closeModal();break;default:console.warn('unknown action',act)}}
+async function action(act,id){let p=selected();switch(act){case 'new':newProject();break;case 'topic-new':topicModal();break;case 'topic-edit':topicModal(data.topics.find(t=>t.id===id));break;case 'topic-filter':ui.topicFilter=id;render();break;case 'topic-delete':if(confirm('确定移除此选题吗？')){data.topics=data.topics.filter(t=>t.id!==id);persist();render()}break;case 'topic-to-project':{let t=data.topics.find(t=>t.id===id);if(!t)break;const oldStage=t.stage;t.stage='已转漫画';if(!newProject(t))t.stage=oldStage;break}case 'library-filter':ui.filter=id;render();break;case 'edit':ui.selected=id;ui.stage=0;nav(`studio/${id}/0`);break;case 'duplicate':{
+  const orig=findProject(id);if(!orig)break;
+  const v=structuredClone(orig),previous=ui.selected,at=now();
+  v.id=uid();v.title+=' · 副本';v.status='草稿';
+  v.checks=Array(6).fill(false);v.deleted=false;v.archived=false;
+  v.createdAt=at;v.updatedAt=at;v.reviewedAt=null;v.publishedAt=null;
+  // A new comic may reuse story and pinned characters, NEVER its remote job,
+  // author approvals, pilot receipts, verified delivery or publisher identity.
+  // Cover and panel pixels belong to the old published edition. Keep its text,
+  // but require fresh image review/generation before a new publication.
+  v.cover='';
+  if(Array.isArray(v.panels))v.panels=v.panels.map(panel=>({...panel,image:''}));
+  v.handoff={mode:orig.handoff?.mode||(orig.entryType==='hotspot'?'hotspot':'original')};
+  delete v.task_id;delete v.taskId;delete v.dedupe_key;delete v.delivery;
+  delete v.receipt;delete v.publishReceipt;delete v.author_approved;
+  delete v.authorApproved;delete v.approvedAt;delete v.approvedBy;
+  delete v.finalApproval;delete v.pilotApproval;delete v.repoTaskId;
+  if(v.creativeDirection){
+    v.creativeDirection.approval=null;v.creativeDirection.reviewed=false;
+    delete v.creativeDirection.pilotApproval;delete v.creativeDirection.pilot;
+    delete v.creativeDirection.lock_status;delete v.creativeDirection.styleLock;
+  }
+  v.activity=[{at,detail:'从「'+orig.title+'」复制新草稿：角色快照保留，工单、样稿审批和发表授权均未继承'}];
+  data.projects.unshift(v);ui.selected=v.id;
+  if(!persist()){
+    data.projects=data.projects.filter(x=>x!==v);
+    ui.selected=previous;
+    notify('副本未保存；原作品保留完整，检查本机空间后重试');
+    break;
+  }
+  nav('workspace/'+v.id+'/0');
+  notify('已创建独立草稿；如需正式生产，请重新核验角色、画风和作者审批');
+ }break;case 'archive':{let v=findProject(id);v.archived=!v.archived;setChange(v,v.archived?'归档作品':'解除归档');render();break}case 'trash':if(confirm('将此作品移入回收站？可从回收站恢复。')){let v=findProject(id);v.deleted=true;setChange(v,'移入回收站');render()}break;case 'restore':{let v=findProject(id);v.deleted=false;v.archived=false;setChange(v,'恢复作品');render();break}case 'purge':if(confirm('彻底删除此作品？不能从回收站恢复，请先备份。')){data.projects=data.projects.filter(v=>v.id!==id);persist();render()}break;case 'studio-stage':ui.stage=Number(id);render();break;case 'stage-prev':ui.stage=Math.max(0,ui.stage-1);render();break;case 'stage-next':ui.stage=Math.min(4,ui.stage+1);render();break;case 'select-panel':ui.panel=Number(id);render();break;case 'panel-prev':ui.panel=(ui.panel+p.panels.length-1)%p.panels.length;render();break;case 'panel-next':ui.panel=(ui.panel+1)%p.panels.length;render();break;case 'reader-prev':ui.reader=(ui.reader+p.panels.length-1)%p.panels.length;render();break;case 'reader-next':ui.reader=(ui.reader+1)%p.panels.length;render();break;case 'reader-jump':ui.reader=Number(id);render();break;case 'story-template':fillStoryTemplate(findProject(id)||p);break;case 'prompt':copyText(makePrompt(findProject(id)||p));break;case 'panel-prompt':copyText(makePrompt(p,Number(id)));break;case 'remove-image':if(confirm('移除这一格的图片？上传素材会从浏览器媒体库删除。')){let a=p.panels[Number(id)],old=a.image;a.image='';if(old.startsWith('media:'))await delMedia(old.slice(6));markDirty(p);setChange(p,'移除图片');render()}break;case 'request-review':p.status='待审核';setChange(p,'提交待审核');render();break;case 'approve':{let missing=canApprove(p);if(missing.length){notify('无法审核通过：缺少 '+missing.join('、'));return}p.status='已审核';p.reviewedAt=now();setChange(p,'作者人工审核通过');render();notify('已审核通过（本地记录）');break}case 'mark-published':notify('正式发表状态只从 GitHub 的 WorkBuddy 核验回执同步，不能在本机直接标记');nav('archive');break;case 'publish-go':ui.selected=id;nav('publish');break;case 'export-project':exportProject(findProject(id));break;case 'zip-formal':await exportFormalPackage(findProject(id));break;case 'zip-pages':await exportZip(findProject(id),'pages');break;case 'zip-site':await exportZip(findProject(id),'site');break;case 'cover-png':await exportCover(findProject(id));break;case 'copy-social':{let v=findProject(id);copyText(`《${v.title}》\n${v.subtitle||v.description}\n\n九格看世界，幽默不失锋芒。\n${v.disclosure}\n\nWORLD/TOON · By DAVYLAB`);break}case 'backup-all':await backupAll();break;case 'reset-all':{if(!confirm('彻底清空本机全部漫画作品和选题？操作不可撤销。'))return;if(!confirm('请确认已下载完整备份。仍然清空？'))return;data=initial();persist();ui.selected=data.projects[0].id;nav('dashboard');notify('已重置工作区（图片可能仍占用媒体缓存）');break}case 'modal-close':closeModal();break;default:console.warn('unknown action',act)}}
 document.addEventListener('click',ev=>{const anchor=ev.target.closest('a[href^="#/"]');if(anchor){ev.preventDefault();nav(anchor.getAttribute('href').slice(2));return}let t=ev.target.closest('[data-action]');if(t){ev.preventDefault();action(t.dataset.action,t.dataset.id||'').catch(err=>notify('操作未完成：'+err.message))}});
 document.addEventListener('submit',ev=>{if(ev.target.id==='topicForm'){ev.preventDefault();saveTopic(ev.target)}});
 document.addEventListener('input',ev=>{let el=ev.target,p=selected();if(el.matches('[data-project-field]')&&p){p[el.dataset.projectField]=el.value;if(el.dataset.projectField==='eventDate')p.eventDateBasis=el.value?'manual_unverified':'';markDirty(p);return}if(el.matches('[data-panel-field]')&&p){let idx=Number(el.dataset.panelIndex);p.panels[idx][el.dataset.panelField]=el.value;markDirty(p);return}if(el.id==='librarySearch'){ui.search=el.value;let caret=el.selectionStart;render();let next=document.querySelector('#librarySearch');next?.focus();next?.setSelectionRange(caret,caret)}});
 document.addEventListener('change',ev=>{let el=ev.target,p=selected();if(el.matches('[data-check-index]')&&p){p.checks[Number(el.dataset.checkIndex)]=el.checked;if(!el.checked&&p.status==='已审核')p.status='草稿';setChange(p);render()}if(el.matches('[data-upload-panel]'))uploadPanel(el).then(()=>{if(typeof wtScheduleSync==='function')wtScheduleSync()});if(el.matches('[data-import-workspace]')&&el.files[0])importWorkspace(el.files[0]);if(el.id==='publishProject'){ui.selected=el.value;render()}if(el.matches('[data-project-field]')&&p){setChange(p,'更新作品设定')}});
-document.getElementById('topNew').addEventListener('click',()=>newProject());document.getElementById('menuToggle').addEventListener('click',()=>document.querySelector('.rail').classList.toggle('is-open'));
+document.getElementById('topNew').addEventListener('click',()=>{ui.wt4Entry='';nav('dashboard')});document.getElementById('menuToggle').addEventListener('click',()=>document.querySelector('.rail').classList.toggle('is-open'));
 window.addEventListener('hashchange',parseRoute);document.addEventListener('keydown',ev=>{if(document.querySelector('#modalRoot:not([hidden])')){if(ev.key==='Escape')closeModal();return}if(ui.route==='reader'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){if(ev.key==='ArrowRight'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+1)%n;render()}if(ev.key==='ArrowLeft'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+n-1)%n;render()}}});
 async function finishLegacyImport(){
  let moved=0,failed=0;

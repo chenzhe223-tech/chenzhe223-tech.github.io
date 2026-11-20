@@ -58,15 +58,43 @@
    if(current.handoff?.repoQueuedAt&&current.handoff.taskId!==taskId)throw Error('交付包任务编号与当前已派单作品不一致，拒绝覆盖');
    if(manifest?.assets?.panels&&manifest.assets.panels.length!==n)throw Error('素材文件与交付清单中的画格数量不一致');
    if(manifest?.producer&&current.productionAgent&&manifest.producer!==current.productionAgent)throw Error('素材包制作 Agent 与工单不一致');
+   // V4 locally exported ZIPs carry per-file hashes in assets[] rather than the
+   // GitHub delivery.v2 sha256 object. Both formats must be verified; never discard
+   // a creator's original integrity evidence when importing into a new session.
+   const v4Local=manifest?.schema==='davylab.worldtoon.local-original-png-package.v1';
+   const v4Hashes=new Map();
+   if(v4Local){
+    if(manifest.project_id!==current.id)throw Error('本地素材包项目 ID 与当前作品不匹配，禁止错误覆盖');
+    if(manifest.panel_count!==n)throw Error('本地素材包画格数与图片文件数量不一致');
+    if(!Array.isArray(manifest.assets)||manifest.assets.length!==n+1)throw Error('V4 素材清单缺少完整的独立图片 SHA256');
+    for(const item of manifest.assets){
+      if(!item||typeof item.path!=='string'||!/^([a-f0-9]{64})$/.test(item.sha256||'')||v4Hashes.has(item.path))
+       throw Error('V4 素材清单存在无效或重复的 SHA256');
+      v4Hashes.set(item.path,item.sha256);
+    }
+    if(!v4Hashes.has('cover.png'))throw Error('V4 素材清单缺少封面 SHA256');
+    for(let i=1;i<=n;i++)if(!v4Hashes.has('panels/'+String(i).padStart(2,'0')+'.png'))
+      throw Error('V4 素材清单缺少第'+i+'格 SHA256');
+    if(manifest.character_versions?.length){
+      for(const v of manifest.character_versions){
+        const pinned=(current.characterRefs||[]).find(r=>String(r.characterId)===String(v.id));
+        if(!pinned||Number(pinned.version)!==Number(v.version))throw Error('漫画角色 ID / 版本与本地素材包不匹配');
+      }
+    }
+    if(manifest.style_id&&current.creativeDirection?.styleId&&manifest.style_id!==current.creativeDirection.styleId)
+      throw Error('V4 素材包与作品锁定画风不一致');
+   }
    const pieces=[],localImages=[];
    for(let i=1;i<=n;i++){
      const file=found.get(i),check=await validatePNG(file.bytes,'第'+i+'格');
      const rel='panels/'+String(i).padStart(2,'0')+'.png';
      if(manifest?.sha256?.[rel]&&manifest.sha256[rel]!==check.sha256)throw Error('画格 SHA256 不匹配：'+rel);
+     if(v4Local&&v4Hashes.get(rel)!==check.sha256)throw Error('V4 画格原图 SHA256 不匹配：'+rel);
      pieces.push({path:rel,...check});
    }
    const check=await validatePNG(cover[1],'独立封面');
    if(manifest?.sha256?.['cover.png']&&manifest.sha256['cover.png']!==check.sha256)throw Error('封面 SHA256 与清单不匹配');
+   if(v4Local&&v4Hashes.get('cover.png')!==check.sha256)throw Error('V4 封面原图 SHA256 不匹配');
    pieces.unshift({path:'cover.png',...check});
    if(new Set(pieces.map(x=>x.sha256)).size!==pieces.length)throw Error('发现内容相同的图片，不能用重复图充数');
    if(manifest?.assets?.cover&&manifest.assets.cover!=='cover.png')throw Error('封面文件必须为 cover.png');

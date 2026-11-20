@@ -65,10 +65,16 @@
    if(role==='unresolved'){
     unresolved.push({...candidate,reviewStatus:'needs_role_confirmation'});continue;
    }
-   if(!role)continue;
+   const enrollAll=project.characterEnrollmentMode==='all';
+   const identityRole=role||(enrollAll?'supporting':'');
+   if(!identityRole)continue;
+   const candidateName=String(candidate.originalName||candidate.name).trim();
+   // Two distinct cast members may share the same role; match project+role+name,
+   // not role alone. An explicit character ID always wins.
    let character=candidate.characterId
     ?data.characters.find(x=>x.characterId===String(candidate.characterId))
-    :data.characters.find(x=>x.originProjectId===projectId&&x.originRole===role);
+    :data.characters.find(x=>x.originProjectId===projectId&&x.originRole===identityRole&&
+       String(x.originalName||x.name||'').trim()===candidateName);
    if(character){
     setComicName(data,character.characterId,projectId,candidate.comicName||candidate.name);
     linked++;
@@ -78,16 +84,27 @@
      type:['虚构角色','拟人化角色','抽象象征'].includes(candidate.type)?candidate.type:'虚构角色',
      description:String(candidate.look||candidate.description||'').slice(0,1800),
      costume:String(candidate.clothes||candidate.costume||'').slice(0,400),
+     gender:String(candidate.gender||'').slice(0,80),age:String(candidate.age||'').slice(0,80),profession:String(candidate.profession||'').slice(0,160),
      colors:String(candidate.colors||'').slice(0,220),traits:String(candidate.symbol||candidate.traits||'').slice(0,950),
      personality:String(candidate.nature||candidate.personality||'').slice(0,1200),portrait:'',
-     origin:'ai-draft',originProjectId:projectId,originRole:role,aiModel:String(candidate.aiModel||''),
+     origin:'ai-draft',reviewStatus:'pending_author_confirmation',version:1,originProjectId:projectId,originRole:identityRole,aiModel:String(candidate.aiModel||''),
      comicNames:[]};
     data.characters.push(character);
     setComicName(data,character.characterId,projectId,candidate.comicName||candidate.name);
     added++;
    }
-   if(!project.characterRefs.some(x=>x.characterId===character.characterId))
-    project.characterRefs.push({characterId:character.characterId,role,comicName:String(candidate.comicName||candidate.name).trim()});
+   if(!project.characterRefs.some(x=>x.characterId===character.characterId)){
+    const pending=character.origin==='ai-draft'||character.reviewStatus==='pending_author_confirmation';
+    const snapshot=pending?null:{characterId:character.characterId,version:Math.max(1,Number(character.version)||1),
+      originalName:String(character.originalName||character.name||''),gender:String(character.gender||''),
+      age:String(character.age||''),profession:String(character.profession||''),
+      description:String(character.description||''),costume:String(character.costume||''),
+      traits:String(character.traits||''),personality:String(character.personality||''),
+      colors:String(character.colors||''),portrait:String(character.portrait||'')};
+    project.characterRefs.push({characterId:character.characterId,role:identityRole,
+      comicName:String(candidate.comicName||candidate.name).trim(),
+      ...(pending?{pending_author_review:true}:{version:snapshot.version,snapshot})});
+   }
   }
   return {added,linked,unresolved};
  }
