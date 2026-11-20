@@ -314,6 +314,20 @@
 
 /* WORLD/TOON evergreen books, history and CC0 art reference library */
 .heritage-visual-panel{margin-top:16px;border:1px solid #d9d3c7}
+.heritage-visual-panel .heritage-summary{list-style:none;cursor:pointer;display:block;outline-offset:4px}
+.heritage-visual-panel .heritage-summary::-webkit-details-marker{display:none}
+.heritage-visual-panel .heritage-summary::marker{content:''}
+.heritage-summary .kicker{margin:0 0 4px}
+.heritage-summary .heritage-header{align-items:center}
+.heritage-summary .heritage-header h2{font-size:18px;margin:3px 0}
+.heritage-summary .heritage-header>.wt-chip{margin-left:auto}
+.heritage-toggle-label{flex:none;white-space:nowrap;color:#40594a;font-size:12px;font-weight:700}
+.heritage-toggle-label::before{content:'展开 ▾'}
+.heritage-visual-panel[open] .heritage-toggle-label::before{content:'收起 ▴'}
+.heritage-visual-panel[open] .heritage-content{border-top:1px solid #e6e1d7;margin-top:12px;padding-top:11px}
+.heritage-visual-panel .heritage-content>.minor{margin:0 0 12px;color:#727a72;line-height:1.6}
+@media(max-width:520px){.heritage-summary .heritage-header{gap:6px}.heritage-summary .heritage-header h2{font-size:16px}.heritage-summary .heritage-header>.wt-chip{font-size:10px}.heritage-toggle-label{font-size:11px}}
+
 .heritage-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 .heritage-header h2{font-size:24px;margin:4px 0 8px}
 .heritage-header p{max-width:650px;line-height:1.6}
