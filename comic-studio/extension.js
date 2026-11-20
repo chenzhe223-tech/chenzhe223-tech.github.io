@@ -357,7 +357,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   const abstract=beats.map(b=>(Array.isArray(b.tags)&&b.tags.length?b.tags.join('、'):b.title)).join('；').slice(0,650);
   const p=emptyProject();
   p.title=review?'读懂《'+srcTitle+'》｜故事·哲学·人生':faithful?'《'+srcTitle+'》：'+beats[0].title+'（漫画改编）':'原创漫画 · '+(x.genre||'成长与关系')+'新篇';
-  p.category=review?'诺奖文学导读':x.type==='drama'?'娱乐':'文化';
+  p.category=review?(isNobel(x)?'诺奖文学导读':'世界文学导读'):x.type==='drama'?'娱乐':'文化';
   p.sourceTitle=srcTitle;p.sourceURLs=limitedSource(x);
   p.storySourceSelection={
    source_id:x.id||'',title:srcTitle,type:x.type,source:x.source,source_name:x.source_name,
