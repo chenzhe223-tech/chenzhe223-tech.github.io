@@ -74,7 +74,7 @@ function wfDirectPrompt(p,o){
  '【交付目标】真正绘制 1 张独立封面及 '+p.panels.length+' 张独立正式漫画 PNG，全部采用适合手机的竖版 3:4、原生至少 1080×1440；附 caption.md、sources.md、manifest.json、QA_STATUS.md、production_state.json，并形成一个可下载 ZIP。严禁仅输出提示词、脚本、九宫格拼图裁切、SVG/CSS 线框或占位图片。',
  '【唯一定妆关口】开始时建立角色圣经、视觉圣经及首格正式样稿。若附件已有真实定妆图及首格样稿且作者已明确批准，则直接沿用，无需再次确认；否则只针对实际定妆图和首格请作者确认一次。作者明确确认后，直接连续绘制剩余画格、独立封面、排版、文案与完整 ZIP；不要另设 GitHub、Pilot 云端审批或例行阶段确认节点。',
  '【角色一致性】每个 character_id 锁定脸型、五官、发型、体态、服饰、主色、道具与参考图；每张画格参考同一角色母版及首格，锁定笔触、光影、材质与色板，不允许变脸、换装、改故事、错置道具。',
- '【新闻与版权】现实新闻先核实可信原始来源、事件日期、真实身份、事实与观点边界；无证据的指控不得变成纪实画面。原创故事不伪造新闻链接。忠实改编受保护作品必须有授权；不得以改名规避版权或影射未经证实的指控。',
+ '【verified_sources 与新闻版权】研究型新闻必须在 manifest.json 提供 verified_sources 数组及 sources.md 的可追溯原始报道与发生日期。现实新闻先核实可信原始来源、事件日期、真实身份、事实与观点边界；无证据的指控不得变成纪实画面。原创故事不伪造新闻链接。忠实改编受保护作品必须有授权；不得以改名规避版权或影射未经证实的指控。',
  '【严格 QA】逐格检查原生分辨率、画面完整度、中文文字、手机阅读安全区、人物识别、画风连续、事实准确、来源与使用权。失败图只返工有问题的画格并复核整套。实际保存并计算全部文件 SHA256；未实际核验事项记为 pending，禁止假报 QA 通过。确认封面不复制任何画格，正式第一格保持与批准样稿相同的图像内容。',
  '【交付目录】cover.png；panels/01.png … panels/'+String(p.panels.length).padStart(2,'0')+'.png；caption.md；sources.md；manifest.json；QA_STATUS.md；production_state.json；character-lock.json 与 pilot 样稿可作附加参考。ZIP 要一键下载，真实文件应先存在且经过本地检查。',
  '【断点续作】不能保证后台异步工作；当单次会话或生图工具受限时，先保存已成功的真实 PNG 及 production_state.json（含 task_id、已完成画格、待办和锁定母版校验值），准确报告缺失项。用户发“继续”后接续同一任务的未完成画格，禁止清空或从头重做。只有全部文件和 QA 达标才宣称完整交付。WorkBuddy 正式发表仍须作者单独授权。',
@@ -98,7 +98,7 @@ function wtWorkflow(){const ps=activeProjects(),p=selected();const h=wfGet(p);re
 `<section class="box" style="margin-top:20px"><h3>三方责任界面</h3><p class="wf-instructions"><strong>WORLD/TOON：</strong>发出明确且可复查的任务工单，不生图、不代替 ChatGPT。<br><strong>ChatGPT：</strong>完成漫画生产及完整的可下载交付包，不能以空文件或生成说明冒充成品。<br><strong>WorkBuddy：</strong>核验成品、进入公众号后台上传贴图，按授权的计划发表，并回传文章链接或后台结果。不依赖平台猜测发表结果。</p></section>`}
 function wfInitTask(p){let h=p.handoff||{};if(!h.taskId||h.phase==='not_started'){h.taskId='WT-'+new Date().toISOString().replace(/\D/g,'').slice(0,14)+'-'+uid().slice(0,8);h.taskAt=now()}h.mode=wfMode(p);h.phase='task_ready';p.handoff=h;setChange(p,'生成 ChatGPT 制作任务');return h}
 async function wfMakeTask(p){
- if(p?.handoff?.repoQueuedAt)throw Error('本创意版本已经正式派单。不可覆盖旧任务；请复制作品并生成新的创作版本');
+ if(p?.handoff?.repoQueuedAt&&p.productionAgent==='WorkBuddy')throw Error('已派单的 WorkBuddy 任务不可覆盖，请复制作品并创建修订版');
  wfPrepareTask(p);
  const missing=wfCanTask(p);if(missing.length)throw Error('请先补齐：'+missing.join('、'));
  if(p.productionAgent==='WorkBuddy'&&(p.creativeDirection?.cast||[]).some(ch=>ch.portraitMedia&&ch.portraitConsent))
@@ -106,6 +106,7 @@ async function wfMakeTask(p){
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p),prompt=wfPrompt(p);
+ if(task.producer==='ChatGPT'){task.production_mode='direct_chatgpt_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
  const portraitCharacters=p.creativeDirection?.cast||[];
  const portraitFiles=[];
  for(let i=0;i<portraitCharacters.length;i++){
