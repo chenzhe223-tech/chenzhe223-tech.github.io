@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-20T07:44:53+00:00",
-  "count": 61,
+  "checked_at": "2026-11-20T07:48:22+00:00",
+  "count": 63,
   "articles": [
     {
       "id": "ext-478ea25aeed3c99796",
@@ -395,6 +395,19 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
+      "id": "ext-8bc9138e516754eb54",
+      "title": "Build once, run on any agent: A practical guide to agent skills",
+      "summary": "Agent skills capture repeatable engineering work in files teams can review and reuse, while tools, project context, and permissions remain specific to the host that runs them. The post Build once, run on any ag",
+      "date": "2026-11-12",
+      "original_url": "https://github.blog/ai-and-ml/github-copilot/build-once-run-on-any-agent-a-practical-guide-to-agent-skills/",
+      "source": "GitHub AI 官方博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
       "id": "ext-84ec87286cb35a64f4",
       "title": "LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B",
       "summary": "",
@@ -596,6 +609,19 @@
       "date": "2026-11-09",
       "original_url": "https://huggingface.co/blog/amazon/higher-order-pruning-experts",
       "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-aff32afb63af01e7ea",
+      "title": "Beyond code generation: A developer’s guide to agentic engineering",
+      "summary": "Writing code got faster. The work around it didn't. See how you can plan, write code, review changes, and investigate production issues with GitHub Copilot, and what work still needs your judgment. The post Bey",
+      "date": "2026-11-06",
+      "original_url": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/",
+      "source": "GitHub AI 官方博客",
       "source_kind": "independent_original",
       "tags": [
         "海外AI观点"
@@ -806,9 +832,8 @@
     },
     {
       "source": "GitHub AI 官方博客",
-      "status": "error",
-      "count": 0,
-      "detail": "DTD and entities prohibited"
+      "status": "ok",
+      "count": 2
     },
     {
       "source": "Hugging Face 博客",
