@@ -58,7 +58,8 @@
    const skill=root.WTNovelCore.buildSkill(extracted.chapters,{fileName:file.name,fileType:extracted.ext,
     sha256:extracted.sha256,rightsMode:mode});
    const preview=local.get(projectId)||{};
-   local.set(projectId,{...preview,file,rightsMode:mode,skill,sourceURL:preview.sourceURL||'',licensed:false,shareAllowed:false});
+   const rootEl=el.closest('[data-novel-panel]');
+   local.set(projectId,{...preview,file,rightsMode:mode,skill,sourceURL:rootEl?.querySelector('[data-novel-source]')?.value?.trim()||preview.sourceURL||'',licensed:!!rootEl?.querySelector('[data-novel-license]')?.checked,shareAllowed:!!rootEl?.querySelector('[data-novel-share]')?.checked});
    if(typeof render==='function')render();
    if(typeof notify==='function')notify('已本地索引 '+skill.provenance.chapter_count+' 段正文，主题和人名仅为未经核验的候选');
   }catch(err){if(label)label.textContent='解析失败：'+(err?.message||err);if(typeof notify==='function')notify('小说解析失败：'+(err?.message||err))}
@@ -97,7 +98,7 @@
    throw Error('原著剧情改编必须单独确认改编权限并提供有效的 HTTPS 授权依据链接；仅有书稿文件不能视为授权');
   if(sharing&&!keep)throw Error('请先勾选“本机保留原文副本”，才能在后续 ZIP 附带经允许的原稿');
   if(!confirm('将把小说的本地结构索引写入当前漫画创作依据，并使已有导演台定稿失效（不会删除图片；本操作只适用于未制作项目）。确定继续？'))return;
-  const fileKey='novel-source-'+state.skill.provenance.sha256;
+  const fileKey='novel-source-'+id(p)+'-'+state.skill.provenance.sha256;
   const skill=JSON.parse(JSON.stringify(state.skill));
   skill.rights.mode=rightsMode;
   skill.rights.source_license_status=rightsMode==='faithful'?'creator_attested_pending_independent_verification':'not_claiming_adaptation_rights';
@@ -156,13 +157,13 @@
   delete p.novelSkill;
   if(p.creativeDirection){p.creativeDirection.approval=null;p.creativeDirection.reviewed=false}
   setChange(p,'移除小说蒸馏索引，需重新核对创意');
-  if(key?.startsWith('media:'))try{await delMedia(key.slice(6))}catch{}
+  if(key?.startsWith('media:')&&!data.projects.some(x=>x!==p&&x.novelSkill?.private_source_ref===key))try{await delMedia(key.slice(6))}catch{}
   render();notify('小说蒸馏索引已移除');
  }
  document.addEventListener('change',ev=>{
   if(ev.target?.matches?.('[data-novel-file]')){analyze(ev.target);return}
   if(ev.target?.matches?.('[data-novel-rights]')){
-   const key=liveSource(ev.target),a=local.get(key);if(a){a.rightsMode=ev.target.value;local.set(key,a)} 
+   const key=liveSource(ev.target),a=local.get(key);if(a){const form=ev.target.closest('[data-novel-panel]');a.rightsMode=ev.target.value;a.sourceURL=form?.querySelector('[data-novel-source]')?.value?.trim()||'';a.shareAllowed=!!form?.querySelector('[data-novel-share]')?.checked;a.licensed=!!form?.querySelector('[data-novel-license]')?.checked;local.set(key,a)} 
    if(typeof render==='function')render();
    return;
   }
