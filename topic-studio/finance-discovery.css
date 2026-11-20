@@ -29,3 +29,32 @@
 .finance-style-settings select{display:block;width:100%;padding:9px;margin-top:5px;border:1px solid #cdd8e7;border-radius:8px;background:white}
 .finance-style-swatch{height:24px;border-radius:5px;margin-top:6px;border:1px solid #cdd8e7}
 @media(max-width:760px){.finance-hub{padding:16px;margin:14px 0}.finance-grid{grid-template-columns:1fr}.finance-toolbar{grid-template-columns:1fr}.finance-head{align-items:start}.finance-card-footer{align-items:start;flex-direction:column}.finance-card-footer div{width:100%;justify-content:flex-start}.finance-style-settings{grid-template-columns:1fr 100px}}
+
+
+/* Five-dimensional editorial priority, international and China coverage */
+#section-discover .finance-toolbar{display:grid;grid-template-columns:minmax(160px,1fr) 138px 145px 170px;gap:9px;align-items:center}
+.finance-ranking-note{font-size:11px;line-height:1.55;color:#62738a;margin:-2px 0 16px;padding:9px 12px;border-left:3px solid #4774a1;background:#edf3f9;border-radius:0 6px 6px 0}
+.finance-card-meta{display:flex;flex-wrap:wrap;justify-content:flex-start;gap:8px;align-items:center}
+.finance-card-meta time{margin-left:auto}
+.finance-region{font-size:11px;font-weight:750;border-radius:5px;background:#ecf2fa;color:#1d4a75;padding:4px 7px}
+.finance-region.is-china{background:#eef2f8;color:#254e80;border:1px solid #b9cadf}
+.finance-priority{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px;color:#54677e;padding-bottom:8px;border-bottom:1px solid #ebeff5}
+.finance-priority>span>b{font-size:18px;color:#173b63;font-variant-numeric:tabular-nums}
+.finance-priority small{margin-left:auto;color:#8794a4;font-size:10px}
+.finance-rank{font-size:17px;letter-spacing:-.02em;color:#154a80;font-variant-numeric:tabular-nums}
+.finance-scores{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin-top:2px}
+.finance-score-item{border:1px solid #e4ebf3;background:#f6f9fc;border-radius:6px;text-align:center;padding:5px 2px;font-size:10px;line-height:1.3;color:#617187;min-width:0;white-space:nowrap}
+.finance-score-item b{display:block;color:#1f496e;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums;margin-top:3px}
+.finance-why{font-size:11px;color:#5d7087;background:#f4f7fa;border-radius:6px;padding:7px 9px;line-height:1.5}
+@media(max-width:1020px){
+ #section-discover .finance-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ #section-discover .finance-toolbar input{grid-column:1/-1}
+}
+@media(max-width:760px){
+ #section-discover .finance-toolbar{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+ #section-discover .finance-toolbar input{grid-column:1/-1}
+ #section-discover .finance-toolbar select:last-child{grid-column:1/-1}
+ .finance-priority small{font-size:9px}
+ .finance-ranking-note{font-size:10px}
+ .finance-card-meta time{margin-left:0}
+}
