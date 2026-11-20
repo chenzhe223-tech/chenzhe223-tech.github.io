@@ -13,6 +13,7 @@ function span(start,end){
 const region=[
   span('function wfMode(', 'function wfTaskObject('),
   span('function wfTaskObject(', 'function wfHint('),
+  span('function wfStartupCommand(', 'function wfPrompt('),
   span('function wfInitTask(', 'const wfImgExt=')
 ].join('\n');
 async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',characters='',title='国际科技趋势：漫画研究',approved=true,literary=false,expectRejected=false}={}){
@@ -66,6 +67,15 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.equal(noSource.task.github_sync_required,false,'GitHub sync disabled in direct mode');
  assert.equal(noSource.task.delivery_target,'local_zip');
  assert.ok(noSource.captures.files.some(x=>x.name==='production-bible.json'),'canonical bible included');
+ const guide=Object.fromEntries(noSource.captures.files.map(f=>[f.name,new TextDecoder().decode(f.bytes)]));
+ assert.ok(guide['00_START_HERE.md']?.includes('同一条用户消息中上传整个 ZIP'),'ZIP explains that attachment-only does not initiate work');
+ assert.ok(guide['ChatGPT_复制粘贴开工指令.txt']?.includes('请立即执行'),'ZIP contains a direct command the user can paste with the attachment');
+ assert.ok(guide['ChatGPT_复制粘贴开工指令.txt']?.includes(noSource.task.task_id),'startup text and task.json use the same task ID');
+ assert.ok(guide['ChatGPT_复制粘贴开工指令.txt']?.includes('立即按 ZIP 执行'),'startup command is explicitly actionable, not just a description');
+ assert.equal(noSource.task.startup_command_file,'ChatGPT_复制粘贴开工指令.txt');
+ assert.equal(noSource.task.entrypoint_file,'00_START_HERE.md');
+ assert.equal(noSource.task.requires_explicit_user_message,true);
+ assert.equal(noSource.task.attachment_alone_starts_production,false);
  assert.ok(noSource.captures.files.some(x=>x.name==='production_state.json'),'checkpoint state included');
  assert.ok(JSON.parse(new TextDecoder().decode(noSource.captures.files.find(x=>x.name==='production_state.json').bytes)).package_ready===false,'new task cannot claim completion');
  assert.ok(noSource.prompt.includes('DIRECT_CHATGPT_LOCAL_V1'));
@@ -81,6 +91,12 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.equal(conflicting.project.handoff.phase,undefined,'failed preflight must not mark task as ready');
  const literary=await simulate({literary:true,mode:'hotspot',topicSource:'https://example.org/book'});
  assert.equal(literary.task.mode,'literary_review','legacy hotspot flag cannot override literary review');
+ const literaryStartup=new TextDecoder().decode(literary.captures.files.find(x=>x.name==='ChatGPT_复制粘贴开工指令.txt').bytes);
+ assert.match(literaryStartup,/撒旦探戈/);
+ assert.match(literaryStartup,/三维文学导读/);
+ assert.match(literaryStartup,/01–03/);
+ assert.match(literaryStartup,/不得逐幕复刻原著情节/);
+ assert.ok(!literaryStartup.includes('全球热点虚构改编'));
  assert.equal(literary.task.adaptation.source_selection.adaptation,'literary_review');
  assert.equal(literary.task.research_required,true,'literary review requires verifiable sources');
  assert.equal(literary.task.adaptation.literary_review.mode,'editorial_criticism_not_plot_adaptation');
