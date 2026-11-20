@@ -321,7 +321,7 @@ async function wfMakeTask(p){
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
   setChange(p,'ChatGPT 直达完整素材生产（无需 GitHub）');render();
-  notify('任务 ZIP 已下载。下一步点击“复制开工指令”，与 ZIP 一起发送给 ChatGPT；只上传文件不足以明确开工。');
+  notify('任务 ZIP 已下载。下一步点击“复制开工指令”，与 ZIP 一起发送给 ChatGPT；只上传文件不足以明确开工。生产无需 GitHub 派单。');
   return;
  }
  if(typeof wtArchivePushTask!=='function'){p.handoff.repoError='仓库派单接口未加载';setChange(p,'仅生成本地备份，尚未入仓');render();notify('任务 ZIP 已生成，但尚未派单入仓');return}
