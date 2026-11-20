@@ -26,6 +26,7 @@ function pilot(p){
   '<label class="director-consent"><input type="checkbox" data-pilot-review="1" '+(c.pilotReviewed?'checked':'')+
   (approved?' disabled':'')+'> 我已亲自检查两张实际图片，与锁定的创意圣经一致。</label>'+
   '<div class="buttons"><button type="button" class="button dark" data-pilot-action="approve" '+(busy||!queued||approved?'disabled':'')+'>'+(direct?'本地批准定妆 · 继续全套制作':'批准试画并记录私有仓回执')+'</button>'+
+  '<button type="button" class="button" data-pilot-action="bundle" '+(approved?'':'disabled')+'>下载真实样稿续作 ZIP</button>'+
   '<button type="button" class="button" data-pilot-action="copy" '+(approved?'':'disabled')+'>复制继续制作指令</button>'+ 
   '<button type="button" class="button" data-pilot-action="revision" '+(!queued?'disabled':'')+'>试画不满意 · 创建新版本</button></div>'+
   '<p class="minor">'+(!queued?'先导出 ChatGPT 任务包；交回两张真实定妆样稿即可在本地批准。':
@@ -74,7 +75,7 @@ async function approve(p){
   if(direct){
    c.pilotApproval={...receipt,local_approved:true,approval_mode:'owner_local_production_only',publication_approved:false};
    setChange(p,'作者本地批准定妆与首格，ChatGPT 可直接继续全量制作');
-   notify('本地定妆已批准；复制继续制作指令，直接交给 ChatGPT 生成全部素材');
+   notify('本地定妆已批准；下载带真实图片的续作 ZIP，再交给 ChatGPT');
    return;
   }
   if(!wtSession?.access_token||typeof wtArchiveApi!=='function')throw Error('请先登录平台云端账户');
@@ -107,6 +108,56 @@ function revise(p){
  nav('director/'+clone.id);notify('已创建独立修订版 V'+edition+'；旧任务保留不覆盖。重新确认后可生成新的 ChatGPT 工单。');
 }
 
+// Approved-local pilot delivery contains actual PNG bytes, not merely filenames and hashes.
+async function exportApprovedBundle(p){
+ const c=p.creativeDirection||{},a=c.pilotApproval||{},pilot=c.pilot||{};
+ if(!a.author_approved||!(a.local_approved===true||a.repo_commit))throw Error('作者尚未确认真实 Pilot，不能导出续作包');
+ if(!wtDirector.approved(p)||a.lock_hash!==c.approval?.lock_hash||a.task_id!==p.handoff?.taskId)
+  throw Error('样稿审批与当前任务锁码或 task_id 不一致；请重新完成批准');
+ const read=async (source,expected,label)=>{
+  if(!source||!validHash(expected))throw Error(label+'缺少实际文件或 SHA256');
+  const blob=await getImageBlob(source);
+  if(blob.type!=='image/png')throw Error(label+'不是原生 PNG');
+  const bytes=new Uint8Array(await blob.arrayBuffer());
+  const digest=shaHex(await crypto.subtle.digest('SHA-256',bytes));
+  if(digest!==expected)throw Error(label+'内容已被替换；拒绝输出错误的参考图');
+  return bytes;
+ };
+ const character=await read(pilot.characterImage,a.character_sheet_sha256,'角色定妆'),first=await read(pilot.panelImage,a.pilot_frame_sha256,'首格正式样稿');
+ const task=wfTaskObject(p),bible=wfProductionBible(p,task),jobs=wfSingleImageJobs(p,task,bible);
+ bible.evidence_state={character_sheet_sha256:a.character_sheet_sha256,
+  pilot_frame_sha256:a.pilot_frame_sha256,pilot_approved:true,
+  approved_at:a.approved_at,approval_mode:a.local_approved?'local_only':'repository_confirmed',
+  image_generation_model:'unknown',image_generation_version:'unknown',publication_approved:false};
+ const files=[
+  {name:'character-sheet.png',bytes:character},
+  {name:'pilot-01.png',bytes:first},
+  {name:'panels/01.png',bytes:first},
+  {name:'pilot-approval.json',bytes:enc.encode(JSON.stringify(a,null,2))},
+  {name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},
+  {name:'render_jobs.json',bytes:enc.encode(JSON.stringify(jobs,null,2))},
+  {name:'production_state.json',bytes:enc.encode(JSON.stringify({
+   schema:'davylab.worldtoon.production-state.v1',task_id:a.task_id,current_working_version:'pilot-approved',
+   accepted:{'panels/01.png':a.pilot_frame_sha256},remaining:jobs.jobs.filter(x=>x.job_id!=='P01').map(x=>x.target),
+   package_ready:false,github_delivered:false,publication_approved:false,workbuddy_ready:false
+  },null,2))},
+  {name:'CONTINUE.md',bytes:enc.encode('WORLD/TOON · 作者已批准的实际图像参考续作包\n\n'+
+   '此 ZIP 已包含角色定妆 character-sheet.png、首格 pilot-01.png，且 panels/01.png 与 Pilot 字节完全一致。'+
+   '真实生图时每次都附上 character-sheet.png 与获批首格，并核对二者 SHA256；不能仅发送参考文件名。'+
+   '依次独立生成 02—09 和 cover.png，每次只提交对应 render_jobs.jobs[i].prompt；禁止整体发送 storyboard、任务 ZIP 全文或其他格。'+
+   '渲染结果不得内嵌文字或气泡，中文必须由已锁定分镜独立排版。两次同类拼版错误即停止同路径重试，报告工具限制。'+
+   '每个图像保留单独的候选/接受记录，不可替换已经批准的 01 原图。完成全量 QA 后另行生成正式 FINAL ZIP；'+
+   '本 ZIP 不是最终成品，也不代表 GitHub 已入仓、WorkBuddy 授权或实际发表。\n')}
+ ];
+ for(let i=0;i<(c.cast||[]).length;i++){
+  const ch=c.cast[i];if(!ch.portraitMedia)continue;
+  if(ch.portraitConsent!==true)throw Error('第'+(i+1)+'位角色肖像授权未确认');
+  const b=await read(ch.portraitMedia,ch.portraitSha256,'第'+(i+1)+'位角色肖像');
+  files.push({name:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(ch.portraitExt||'png'),bytes:b});
+ }
+ saveFile(packZip(files),'WORLD_TOON_已批准真实样稿_续作_'+a.task_id+'.zip');
+ notify('已导出真实角色图＋Pilot 原图及 SHA256 续作 ZIP；不是最终交付或发表批准');
+}
 async function copy(p){
  const a=p.creativeDirection?.pilotApproval;
  if(!(a?.local_approved===true||a?.repo_commit))throw Error('请先由作者确认两张真实定妆样稿');
@@ -118,7 +169,7 @@ async function copy(p){
   '角色定妆 SHA256: '+a.character_sheet_sha256+'\n'+
   '正式首格 SHA256: '+a.pilot_frame_sha256+'\n'+
   '定妆凭据: '+evidence+'\n'+
-  '严格沿用已批准两张样稿的人物面部、服装、色板与镜头；逐张生成全部正式 PNG 并做中文/事实/人物一致性/手机端与权利 QA。保存真实文件并计算本地 SHA256；不合格图返工。若会话中断，保存 production_state.json，在同一任务断点续作。最终提供一键下载 ZIP，公众号发表仍需作者最终独立批准。';
+  '请先下载“真实样稿续作 ZIP”并将其中两张 PNG 实际附给生图工具；只有文字及 SHA256 无法约束人物造型。严格沿用已批准两张样稿的人物面部、服装、色板与镜头；逐张生成全部正式 PNG 并做中文/事实/人物一致性/手机端与权利 QA。保存真实文件并计算本地 SHA256；不合格图返工。若会话中断，保存 production_state.json，在同一任务断点续作。最终提供一键下载 ZIP，公众号发表仍需作者最终独立批准。';
  await copyText(text);
 }
 const previous=window.wtCreativeDirector;
@@ -135,7 +186,7 @@ document.addEventListener('click',ev=>{
  const el=ev.target.closest('[data-pilot-action]');if(!el)return;
  ev.preventDefault();ev.stopImmediatePropagation();
  const p=selected();if(!p)return;
- Promise.resolve(el.dataset.pilotAction==='approve'?approve(p):el.dataset.pilotAction==='revision'?revise(p):copy(p)).catch(err=>notify('样稿验收：'+String(err.message||err)));
+ Promise.resolve(el.dataset.pilotAction==='approve'?approve(p):el.dataset.pilotAction==='revision'?revise(p):el.dataset.pilotAction==='bundle'?exportApprovedBundle(p):copy(p)).catch(err=>notify('样稿验收：'+String(err.message||err)));
 },true);
 document.addEventListener('change',ev=>{
  const el=ev.target,p=selected();if(!p||!el)return;
