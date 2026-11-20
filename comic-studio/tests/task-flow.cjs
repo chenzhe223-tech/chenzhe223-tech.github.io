@@ -20,7 +20,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
    category:'AI 科技',subtitle:'',description:'一个新闻线索，不是已核实事实',
    sourceURLs:source,factNotes:facts,fiction,characters:'',disclosure:'虚构漫画，不构成事实报道',
    tone:'黑色幽默',eventDate:'',handoff:{mode},panels:Array.from({length:9},(_,i)=>({
-     title:'panel '+i,scene:'',caption:'',dialogue:'',prompt:''}))};
+     title:'panel '+i,scene:'第'+(i+1)+'格：角色在科幻城市中观察变化、交换信息并推进眼前情节，确定同一镜头的动作和时间。',caption:'真实分镜候选文字',dialogue:'先核实再决定',prompt:''}))};
  const captures={saved:[],messages:[],files:[],writes:0};
  const topics=[{id:'topic-1',title:project.sourceTitle,summary:project.description,source:topicSource}];
  const ctx={
