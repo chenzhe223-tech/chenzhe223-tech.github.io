@@ -14,12 +14,23 @@
  function uiFor(p){
   const h=p?.handoff||{},st=h.importStatus||'尚未导入',n=h.stagedFiles?.length||0;
    const direct=(p?.productionAgent||'ChatGPT')==='ChatGPT';
+  const images=(h.stagedFiles||[]).filter(x=>x.path?.endsWith('.png')&&x.sha256);
+  const verified=images.filter(x=>h.frameScopeQA?.[x.path]===x.sha256).length;
+  const frames=images.map(x=>{
+    const ok=h.frameScopeQA?.[x.path]===x.sha256;
+    const source=x.imageKey?'media:'+x.imageKey:'';
+    return '<label class="wt3-single-scene-item" style="display:flex;gap:10px;align-items:center;margin:8px 0">'+
+     (source?'<img data-source="'+safe(source)+'" src="'+safe(mediaSrc(source))+'" alt="'+safe(x.path)+'画面核查" style="width:74px;height:99px;object-fit:cover;border-radius:8px">':'')+
+     '<input type="checkbox" data-wt3-frame-qa="'+safe(x.path)+'" '+(ok?'checked':'')+'>'+
+     '<span>'+safe(x.path)+'：已亲自确认是一张独立连续场景、非拼版、无画中画，且与对应分镜一致</span></label>';
+   }).join('');
   return '<div class="wt3-import"><h3>ChatGPT 成品一键导入</h3>'+
    '<p class="minor">支持一份完整 ZIP：cover.png、panels/01.png…、caption.md、sources.md、manifest.json（如有）。自动校验画格、分辨率和 SHA256；上传成功并不代表 QA 或发表批准。</p>'+
    '<label class="button dark">↑ 导入完整素材 ZIP<input type="file" id="wt3-zip" accept=".zip,application/zip" hidden></label>'+
    '<p class="minor">阶段：'+safe(st)+' · 已核对文件 '+n+' 个 · '+safe(h.importDetail||'')+'</p>'+
    '<div class="buttons">'+(direct?'':('<button class="button" type="button" data-wt3-import="resume"'+(!h.stagedFiles?.length?' disabled':'')+'>同步到私有 GitHub / 重试失败项</button>'))+
    '<a class="button" href="#/publish">前往出版审核 →</a></div>'+
+   '<details class="wt3-frame-qa" style="margin-top:14px"><summary>逐张单场景拼版检测 · '+verified+'/'+images.length+' 张通过</summary><p class="minor">必须打开每张图实际查看。像素尺寸和 SHA256 无法证明没有九宫格或拼接。只勾选真实单镜头且匹配本格剧情的图；重新导入会清空验收。未完成不可标记最终 QA 通过。</p>'+frames+'</details>'+ 
    '<p class="minor">'+(direct?'ChatGPT 直达：本地校验与预览 → 人工画质 QA → 本地全量素材 ZIP；GitHub 暂停同步，正式发表需另行授权。':'本地预览 → 仓库暂存 → 实际 QA → 作者最终批准 → WorkBuddy 发表 → 真实回执入书架。')+'</p></div>';
  }
  window.WT3ImportPanel=uiFor;
@@ -85,6 +96,7 @@
    p.cover=localImages[0];p.status='待审核';p.checks=Array(6).fill(false);p.reviewedAt=null;
    p.handoff={...p.handoff,taskId:taskId||p.handoff?.taskId||'',importStatus:(current.productionAgent||'ChatGPT')==='ChatGPT'?'本地文件校验完成 · 待视觉 QA':'本地校验完成，待远端暂存',
       importedAt:now(),importManifest:manifest||null,importDetail:n+'张漫画 + 独立封面',
+      frameScopeQA:{},
       stagedFiles:pieces.map(x=>({path:x.path,sha256:x.sha256||null,text:x.text||null,
        imageKey:x.blob?created[pieces.filter(y=>y.blob).findIndex(y=>y.path===x.path)]:null})),stageUploaded:[]};
    staged=true;
@@ -138,6 +150,14 @@
    render();throw error;
   }
  }
+ document.addEventListener('change',ev=>{
+  const x=ev.target,p=selected();if(!x?.dataset?.wt3FrameQa||!p)return;
+  const path=x.dataset.wt3FrameQa,asset=(p.handoff?.stagedFiles||[]).find(t=>t.path===path&&t.sha256&&t.imageKey);
+  if(!asset){notify('请先导入真实独立 PNG 画格');x.checked=false;return}
+  p.handoff.frameScopeQA={...(p.handoff.frameScopeQA||{})};
+  if(x.checked)p.handoff.frameScopeQA[path]=asset.sha256;else delete p.handoff.frameScopeQA[path];
+  setChange(p,'逐张单场景与拼版审查：'+path+' '+(x.checked?'通过':'撤销'));render();
+ },true);
  document.addEventListener('change',ev=>{
   if(ev.target?.id==='wt3-zip'&&ev.target.files?.[0]){ev.stopImmediatePropagation();
     importZip(ev.target.files[0]).catch(err=>notify('素材包处理失败：'+String(err.message||err).slice(0,130)));}
