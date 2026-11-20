@@ -46,3 +46,13 @@
 3. 将本地中控的数据模型绑定既有选题池和私有内容包，不迁移未获授权数据；新增 WorkBuddy 草稿只读回执导入。
 4. 逐步开放真实数据的文章级复盘与合规自有产品匿名归因。
 5. 完成 UI 手机/电脑真实验收、CI、回滚清单后才合并部署。
+
+## 2026-11-20 新增：已发内容与增长数据只读桥接
+- 新增 `operations/bridge.js`：对 `../data/published-articles.json` 的 DAVYLAB 账号名、`synced_via_browser` 同步状态、来源标记、永久链接与日期进行逐条校验；校验失败的记录不会展示为核验内容。
+- 新增独立页面按钮「读取已核验发表档案与复盘」：需要用户主动点击；通过同源静态 JSON 读取历史已发记录，只读读取同浏览器 Growth Lab 的 `davylab-growth-lab-v1` 下 `reviews`。
+- 仅将匹配到已核验永久链接的第 7 / 30 日人工 `reads` 记录转为预览数据，保留 `source=growth-lab-manual`；`null`、缺失值和未知 URL 一律跳过；禁止伪造第 1 / 3 日指标。
+- 导入采用稳定 URL 资产标识和指标主键，重复执行不会产生重复条目；已手动输入的本机预览指标不被覆盖。
+- 只更新隔离的 `davylab-operations-preview-v1`，不修改正式选题池、增长实验室、CloudBase、微信后台与私有仓库。
+- 新增 `operations/tests/bridge.test.cjs`，覆盖未核验档案拒绝、重复文章过滤、7/30 日转化、空值拒绝及二次导入幂等；接入隔离 CI。
+- 最新 CI 检查 URL：https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44683586130 （success）。
+- **生产阻断仍存在**：微信后台实时统计、WorkBuddy 回执接入、CloudBase 真实同步、Windows/iPhone 双端验收均未完成；不得将只读档案镜像视作生产同步已启用。
