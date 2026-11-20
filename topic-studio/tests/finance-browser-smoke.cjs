@@ -39,6 +39,8 @@ async function run(){
   await page.route("**/data/overseas-discovery.json?**",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({schema_version:1,articles:[],sources:[]})}));
   await page.goto(base+"/topic-studio/index.html",{waitUntil:"domcontentloaded"});
   await page.waitForFunction(()=>document.querySelector("#financeCount")?.textContent.includes("已收录 2 条"),null,{timeout:12000});
+  await page.locator(".discover-quicknav [data-discover-target='financeTitle']").click();
+  assert.equal(await page.locator("#financeRegion").isVisible(),true,"finance tab must reveal region and ranking controls");
   assert.equal(await page.locator("#financeList .finance-card").count(),2,"two fixture finance cards must render");
   assert.match(await page.locator("#financeCount").textContent(),/中国 1 条/);
   assert.match(await page.locator("#financeList .finance-card").first().textContent(),/综合优先级/);
