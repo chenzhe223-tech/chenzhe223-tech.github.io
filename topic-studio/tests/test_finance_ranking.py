@@ -9,15 +9,15 @@ import finance_rank as rank
 spec=importlib.util.spec_from_file_location("finance_sync_extended",SCRIPTS/"sync_finance.py")
 source=importlib.util.module_from_spec(spec);spec.loader.exec_module(source)
 NOW=datetime(2026,11,20,6,tzinfo=timezone.utc)
-CN_RSS=b'<rss><channel><item><title>\xe4\xb8\xad\xe5\x9b\xbd\xe5\x85\xac\xe5\x8f\xb8\xe5\x8f\x91\xe5\xb8\x832026\xe5\xb9\xb4\xe4\xb8\x89\xe5\xad\xa3\xe5\xba\xa6\xe8\xb4\xa2\xe6\x8a\xa5</title><link>https://36kr.com/p/1234</link><pubDate>Fri, 20 Nov 2026 04:00:00 GMT</pubDate><description>Companies reported more news.</description></item></channel></rss>'
+CN_RSS=b'<rss><channel><item><title>\xe4\xb8\xad\xe5\x9b\xbd\xe5\x85\xac\xe5\x8f\xb8\xe5\x8f\x91\xe5\xb8\x832026\xe5\xb9\xb4\xe4\xb8\x89\xe5\xad\xa3\xe5\xba\xa6\xe8\xb4\xa2\xe6\x8a\xa5</title><link>https://www.chinanews.com.cn/cj/2026/11-20/1234.shtml</link><pubDate>Fri, 20 Nov 2026 04:00:00 GMT</pubDate><description>Companies reported more news.</description></item></channel></rss>'
 GLOBAL_RSS=b'<rss><channel><item><title>Federal report on household finances</title><link>https://example.com/report</link><pubDate>Fri, 20 Nov 2026 05:00:00 GMT</pubDate><description>Financial disclosures show changing policy.</description></item></channel></rss>'
 class ChinaFinanceTests(unittest.TestCase):
  def test_source_coverage_and_scope(self):
   names=[s[0] for s in source.SOURCES]
-  self.assertTrue(any("36氪" in n for n in names))
-  self.assertTrue(any("中国日报" in n for n in names))
+  self.assertTrue(any("中国新闻网" in n for n in names))
+  self.assertTrue(any("FT中文网" in n for n in names))
   self.assertTrue(any("南华早报" in n for n in names))
-  rows=source.parse_feed(CN_RSS,("36氪","https://36kr.com/feed-newsflash","中国商业","media_report","中国"),NOW)
+  rows=source.parse_feed(CN_RSS,("中国新闻网","https://www.chinanews.com.cn/rss/finance.xml","中国财经","media_report","中国"),NOW)
   self.assertEqual(len(rows),1)
   self.assertEqual(rows[0]["region"],"中国")
   self.assertEqual(rows[0]["source_type"],"media_report")
@@ -42,8 +42,8 @@ class ChinaFinanceTests(unittest.TestCase):
   self.assertEqual([v["priority_rank"] for v in out],[1,2])
  def test_merge_preserves_china_and_is_source_attributed(self):
   def fetch(url):
-   if "36kr.com" in url:return CN_RSS
-   if "chinadaily" in url or "scmp" in url:raise RuntimeError("simulated source outage")
+   if "chinanews.com.cn" in url:return CN_RSS
+   if "ftchinese" in url or "scmp" in url:raise RuntimeError("simulated source outage")
    return GLOBAL_RSS
   snap=source.compile_snapshot(fetch,now=NOW)
   self.assertEqual(snap["schema_version"],2)
