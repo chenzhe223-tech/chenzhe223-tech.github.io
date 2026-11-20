@@ -9,33 +9,35 @@ const validHash=v=>/^[a-f0-9]{64}$/.test(String(v||''));
 function pilot(p){
  const c=p?.creativeDirection||{},images=c.pilot||{},receipt=c.pilotApproval;
  if(!c.approval?.lock_hash)return '';
- const queued=!!p.handoff?.repoQueuedAt;
+ const direct=(p.productionAgent||'ChatGPT')==='ChatGPT';
+ const queued=direct?!!p.handoff?.taskId:!!p.handoff?.repoQueuedAt;
+ const approved=!!(receipt?.local_approved||approved);
  const thumb=(key,label)=>images[key]?'<img data-source="'+e(images[key])+'" src="'+e(mediaSrc(images[key]))+'" alt="'+e(label)+'">':
   '<div class="director-pilot-missing">'+label+' · 尚未上传实际图片</div>';
  return '<section class="box director-pilot"><div class="director-pilot-heading"><div><div class="kicker">VISUAL PILOT / FIRST PROOF</div>'+
   '<h2>先看两张真样稿，再批量生成</h2>'+
   '<p class="minor">ChatGPT 先交角色定妆及正式尺寸的第一格原图。审核通过后第一格原图不允许再生成或替换；CSS 示意不等于画质。</p></div>'+
-  '<span class="director-status '+(receipt?.repo_commit?'ready':'')+'">'+(receipt?.repo_commit?'已批准样稿':'待样稿确认')+'</span></div>'+
+  '<span class="director-status '+(approved?'ready':'')+'">'+(approved?'已批准样稿':'待样稿确认')+'</span></div>'+
   '<div class="director-pilot-grid">'+
   [['character','角色定妆图','characterImage'],['panel','首格试画','panelImage']].map(([type,title,key])=>
    '<article><strong>'+title+'</strong><div class="director-pilot-image">'+thumb(key,title)+'</div>'+
    '<label class="button">上传真实'+title+'<input type="file" data-pilot-upload="'+type+'" accept="image/png" hidden></label></article>').join('')+
   '</div><p class="minor">核对人物的脸、体型、服装、标志道具、背景配色、镜头和中文文字留白。换图后必须重新批准。</p>'+
   '<label class="director-consent"><input type="checkbox" data-pilot-review="1" '+(c.pilotReviewed?'checked':'')+
-  (receipt?.repo_commit?' disabled':'')+'> 我已亲自检查两张实际图片，与锁定的创意圣经一致。</label>'+
-  '<div class="buttons"><button type="button" class="button dark" data-pilot-action="approve" '+(busy||!queued||receipt?.repo_commit?'disabled':'')+'>批准试画并记录私有仓回执</button>'+
-  '<button type="button" class="button" data-pilot-action="copy" '+(receipt?.repo_commit?'':'disabled')+'>复制继续制作指令</button>'+ 
+  (approved?' disabled':'')+'> 我已亲自检查两张实际图片，与锁定的创意圣经一致。</label>'+
+  '<div class="buttons"><button type="button" class="button dark" data-pilot-action="approve" '+(busy||!queued||approved?'disabled':'')+'>'+(direct?'本地批准定妆 · 继续全套制作':'批准试画并记录私有仓回执')+'</button>'+
+  '<button type="button" class="button" data-pilot-action="copy" '+(approved?'':'disabled')+'>复制继续制作指令</button>'+ 
   '<button type="button" class="button" data-pilot-action="revision" '+(!queued?'disabled':'')+'>试画不满意 · 创建新版本</button></div>'+
-  '<p class="minor">'+(!queued?'先正式派单；ChatGPT 提交两张试画后，在这里进行作者审核。':
-   receipt?.repo_commit?'创作样稿已获得 GitHub 私有仓确认，可按回执继续剩余画格。':
-   '两张样稿上传后，点击批准会把锁码和图片 SHA256 写入私有 GitHub，不会自动发表。')+'</p></section>';
+  '<p class="minor">'+(!queued?'先导出 ChatGPT 任务包；交回两张真实定妆样稿即可在本地批准。':
+   approved?'定妆已获作者批准，可继续制作余下漫画，发表授权另行审核。':
+   ''+(direct?'确认后在本机保存锁码及 SHA256，不依赖 GitHub，也不自动发表。':'确认后将锁码与 SHA256 写入私有 GitHub，不自动发表。')+'')+'</p></section>';
 }
 function shaHex(data){return Array.from(new Uint8Array(data),x=>x.toString(16).padStart(2,'0')).join('')}
 async function upload(p,type,file){
  if(!TYPES[type]||!file)throw Error('请选择真实样稿');
  const c=p.creativeDirection;
  if(!c?.approval?.lock_hash)throw Error('必须先确认创意方向');
- if(file.type!=='image/png'||!file.name.toLowerCase().endsWith('.png')||file.size>12*1024*1024||file.size<40000)throw Error('样稿必须是与私有 GitHub 文件完全一致的真实 PNG（40KB～12MB）');
+ if(file.type!=='image/png'||!file.name.toLowerCase().endsWith('.png')||file.size>12*1024*1024||file.size<40000)throw Error('样稿必须是真实且可验证的 PNG（40KB～12MB）');
  const bytes=new Uint8Array(await file.arrayBuffer()),blob=wfImageFile(file.name,bytes);
  const image=await createImageBitmap(blob),width=image.width,height=image.height;image.close?.();
  const strictV3=!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===c.styleId);
@@ -52,15 +54,16 @@ async function upload(p,type,file){
  c.pilotReviewed=false;c.pilotApproval=null;
  setChange(p,'接收并保存真实制作样稿：'+type);
  if(old?.startsWith('media:')){try{await delMedia(old.slice(6))}catch{}}
- render();notify('样稿已保存。确认实际视觉效果后，再同步私有仓审核回执。');
+ render();notify('样稿已保存。核对真实人物与画风后，由作者在此进行定妆确认。');
 }
 async function approve(p){
  if(busy)return;
  const c=p.creativeDirection,pilot=c?.pilot||{};
- if(!p.handoff?.taskId||!p.handoff?.repoQueuedAt)throw Error('请先正式派单，获得 task_id');
+ if(!p.handoff?.taskId)throw Error('请先导出任务 ZIP，以生成稳定的 task_id');
+ const direct=(p.productionAgent||'ChatGPT')==='ChatGPT';
+ if(!direct&&!p.handoff?.repoQueuedAt)throw Error('WorkBuddy 模式需先完成正式派单');
  if(!wtDirector.approved(p))throw Error('导演台创意锁码已变化，请先重新定稿');
  if(!c.pilotReviewed||!validHash(pilot.characterSha256)||!validHash(pilot.panelSha256))throw Error('需要两张真实图片且作者亲自勾选审核');
- if(!wtSession?.access_token||typeof wtArchiveApi!=='function')throw Error('请先登录平台云端账户，签署 GitHub 私有仓审核回执');
  if(!confirm('确认角色造型、画风、构图符合锁定的导演方案，并签发本次样稿批准吗？'))return;
  busy=true;render();
  try{
@@ -68,6 +71,13 @@ async function approve(p){
    author_approved:true,approved_at:new Date().toISOString(),character_sheet_sha256:pilot.characterSha256,
    pilot_frame_sha256:pilot.panelSha256,character_sheet_dimensions:pilot.characterDimensions,
    pilot_frame_dimensions:pilot.panelDimensions};
+  if(direct){
+   c.pilotApproval={...receipt,local_approved:true,approval_mode:'owner_local_production_only',publication_approved:false};
+   setChange(p,'作者本地批准定妆与首格，ChatGPT 可直接继续全量制作');
+   notify('本地定妆已批准；复制继续制作指令，直接交给 ChatGPT 生成全部素材');
+   return;
+  }
+  if(!wtSession?.access_token||typeof wtArchiveApi!=='function')throw Error('请先登录平台云端账户');
   const result=await wtArchiveApi('pilot-approval',{method:'POST',body:JSON.stringify(receipt)});
   if(!result?.commit||!result?.path)throw Error('GitHub 未返回有效回执，不能标记样稿已批准');
   c.pilotApproval={...receipt,repo_commit:result.commit,repo_path:result.path};
@@ -76,7 +86,7 @@ async function approve(p){
  }finally{busy=false;render()}
 }
 function revise(p){
- if(!p.handoff?.repoQueuedAt)throw Error('未正式派单的作品可以直接返回前面步骤修改，无需新建修订版');
+ if(p.productionAgent==='WorkBuddy'&&!p.handoff?.repoQueuedAt)throw Error('WorkBuddy 模式仍需正式派单后才能创建修订版本');
  if(!confirm('试画或剧情不满意？建立独立的新版本会保留旧任务和审批记录，复制现有创作设定供你修改。继续吗？'))return;
  const edition=Math.max(2,Number(p.creativeRevisionNumber||1)+1);
  const token=uid().replace(/[^a-z0-9]/gi,'').toLowerCase().slice(-8).padStart(8,'0');
@@ -98,15 +108,17 @@ function revise(p){
 }
 
 async function copy(p){
- const c=p.creativeDirection,a=c?.pilotApproval;
- if(!a?.repo_commit)throw Error('尚无已确认的 GitHub 样稿审核回执');
- const text='WORLD/TOON · 样稿已由作者正式批准。请继续当前任务的余下画格制作。\n'+
+ const a=p.creativeDirection?.pilotApproval;
+ if(!(a?.local_approved===true||a?.repo_commit))throw Error('请先由作者确认两张真实定妆样稿');
+ const evidence=a.local_approved===true?'作者本地定妆确认（production only，不等于入仓或出版授权）':
+  'GitHub 回执：'+a.repo_path+' · '+a.repo_commit;
+ const text='WORLD/TOON DIRECT_CHATGPT_LOCAL_V1｜角色定妆已批准，立即继续制作本任务的剩余画格、独立封面、文字和完整可下载 ZIP。无需 GitHub 同步、远端审批或其他阶段确认。\n'+
   'task_id: '+p.handoff.taskId+'\n'+
-  '批准创意锁码: '+a.lock_hash+'\n'+
-  '已批准角色定妆图 SHA256: '+a.character_sheet_sha256+'\n'+
-  '已批准首格试画 SHA256: '+a.pilot_frame_sha256+'\n'+
-  '审核凭据：'+a.repo_path+' · commit '+a.repo_commit+'\n'+
-  '请先自行读取并验证 GitHub 审核回执与 tasks/<task_id>/task.json 的创意锁码一致。继续时必须沿用两张已批准的样稿、固定人物外观和服装、色板、镜头、九格剧情；生成九张独立画格及封面，做角色一致性/手机阅读/权利 QA。未经作者最终出版审核不能发表。';
+  '锁定创意码: '+a.lock_hash+'\n'+
+  '角色定妆 SHA256: '+a.character_sheet_sha256+'\n'+
+  '正式首格 SHA256: '+a.pilot_frame_sha256+'\n'+
+  '定妆凭据: '+evidence+'\n'+
+  '严格沿用已批准两张样稿的人物面部、服装、色板与镜头；逐张生成全部正式 PNG 并做中文/事实/人物一致性/手机端与权利 QA。保存真实文件并计算本地 SHA256；不合格图返工。若会话中断，保存 production_state.json，在同一任务断点续作。最终提供一键下载 ZIP，公众号发表仍需作者最终独立批准。';
  await copyText(text);
 }
 const previous=window.wtCreativeDirector;
