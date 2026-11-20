@@ -1,5 +1,6 @@
 import { html } from './page.js';
 import { KNOWA_ICON_WEBP_BASE64, KNOWA_FAVICON_SVG } from './brand.js';
+import { KNOWA_BLUE_MARBLE_WEBP_BASE64 } from './globe.js';
 import { fetchJapanBornNobel, isJapanNobelQuestion, isJapanBirthplaceNobelQuestion } from './nobel.js';
 import { curatedAnswer } from './curated.js';
 import { exploreCollection } from './explore.js';
@@ -112,6 +113,10 @@ export async function handleAsk(request, env = {}) {
 export default {
   async fetch(request,env={}) {
     const url=new URL(request.url);
+    if (request.method==='GET'&&url.pathname==='/assets/knowa-blue-marble.webp') {
+      const bytes=Uint8Array.from(atob(KNOWA_BLUE_MARBLE_WEBP_BASE64),ch=>ch.charCodeAt(0));
+      return new Response(bytes,{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=604800, immutable','X-Content-Type-Options':'nosniff'}});
+    }
     if (request.method==='GET'&&url.pathname==='/assets/knowa-icon.webp') {
       const bytes=Uint8Array.from(atob(KNOWA_ICON_WEBP_BASE64),ch=>ch.charCodeAt(0));
       return new Response(bytes,{headers:{'Content-Type':'image/webp','Cache-Control':'public, max-age=604800, immutable','X-Content-Type-Options':'nosniff'}});
@@ -126,7 +131,7 @@ export default {
       const batch=/^\d{1,3}$/.test(raw)?Number(raw):0;
       return json(discoveryBatch(batch));
     }
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.7.1',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.8.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }
