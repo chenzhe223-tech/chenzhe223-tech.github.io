@@ -140,7 +140,7 @@ const find=async(type,q)=>{
  assert.equal(review.handoff.mode,'hotspot','research required for factual book introduction');
  assert.ok(!review.storySourceSelection.selected_beats.length,'commentary should not adapt plot beats');
  assert.match(review.disclosure,/不是原著漫画改编/);
- const a=read('app.js'),from=a.indexOf('function wfCanTask('),to=a.indexOf('function wfTaskObject(');
+ const a=read('app.js'),from=a.indexOf('function wfLiteraryReview('),to=a.indexOf('function wfTaskObject(');
  const rightsContext={wtDirector:{readiness:()=>[]},validSources:p=>p.sourceURLs?String(p.sourceURLs).split(/[\r\n]+/).filter(Boolean):[]};vm.createContext(rightsContext);
  vm.runInContext(a.slice(from,to)+'this.__gate=wfCanTask;',rightsContext);
  const mock={title:'待授权作品',storySourceSelection:{rights:'copyrighted',adaptation:'faithful',license_url:'',license_attested:false}};
