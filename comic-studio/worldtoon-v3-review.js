@@ -24,9 +24,9 @@
    '<p><strong>GitHub 暂存进度：'+uploaded+'/'+staged+' 文件</strong> · '+(canSign?'可以进行最终复核':'尚未完成正式素材暂存，终审提交不可用')+'</p>'+
    '<section class="wt3-qa-panel" aria-label="八项作品质量复核">'+
      '<div class="wt3-qa-toolbar"><div class="wt3-qa-toolbar-title"><strong>作品质量复核</strong><span>已确认 <b data-wt3-qa-count>'+checkedCount+'</b> / '+labels.length+'</span></div>'+
-     '<div class="wt3-qa-actions"><button type="button" class="button" data-wt3-qa-action="select-all" '+(checkedCount===labels.length?'disabled':'')+'>一键全选</button>'+
+     '<div class="wt3-qa-actions">'+
      '<button type="button" class="button" data-wt3-qa-action="clear" '+(checkedCount===0?'disabled':'')+'>清空</button></div></div>'+
-     '<p class="wt3-qa-hint">确认前请先实际检查画面、事实、版权与手机阅读效果。批量勾选仅节省操作，不替代独立审核或最终出版授权。</p>'+
+     '<p class="wt3-qa-hint">确认前请先实际检查画面、事实、版权与手机阅读效果。逐项确认必须对应真实完成的检查，不能用一键全选代替视觉复核。</p>'+
      '<div class="wt3-qa-list" role="group" aria-label="八项终审项目">'+labels.map((label,i)=>
        '<label class="wt3-qa-item'+(checked[i]===true?' is-checked':'')+'"><input type="checkbox" data-wt3-qa="'+i+'" '+(checked[i]===true?'checked':'')+'><span>'+label+'</span></label>').join('')+'</div></section>'+
    '<div class="field"><label>已核验来源 URL（研究型任务必填，一行一条）</label>'+
@@ -64,8 +64,8 @@
   if(bulk){
     ev.preventDefault();ev.stopImmediatePropagation();
     const p=selected();if(!p)return;
-    const selectAll=bulk.dataset.wt3QaAction==='select-all';
-    if(!selectAll&&bulk.dataset.wt3QaAction!=='clear')return;
+    const selectAll=false;
+    if(bulk.dataset.wt3QaAction!=='clear')return;
     p.handoff={...p.handoff,finalChecklist:Array(labels.length).fill(selectAll)};
     setChange(p,selectAll?'作者批量确认终审检查项':'作者清空终审检查项');
     reflectChecklist(p);return;
@@ -79,6 +79,9 @@
    if(h.finalChecklist?.length!==8||h.finalChecklist.some(x=>x!==true))throw Error('请先逐项完成全部8项终审');
    const images=files.filter(x=>x.path?.endsWith('.png')&&x.sha256);
    if(images.length!==count+1||images.some(x=>h.frameScopeQA?.[x.path]!==x.sha256))throw Error('尚未逐张确认独立单场景、非拼版及本格分镜一致性；请返回成品回传完成单张 QA');
+   const pilotSHA=p.creativeDirection?.pilotApproval?.pilot_frame_sha256;
+   if(p.creativeDirection?.approval?.author_approved&&!pilotSHA)throw Error('缺少真实首格 Pilot 的作者批准哈希；先到导演台确认样稿');
+   if(pilotSHA&&images.find(x=>x.path==='panels/01.png')?.sha256!==pilotSHA)throw Error('正式 01.png 与作者批准的 Pilot SHA256 不同；不能重绘或重新编码首格');
    if(!document.querySelector('#wt3-author-consent')?.checked)throw Error('需要作者主动确认最终出版授权');
    if(!confirm('你确认拥有此漫画的最终出版权，并已完成全部事实、版权、中文和画风审校？确认后将写入正式 GitHub 作者授权清单；不能由创作者或 WorkBuddy 代签。'))return;
    const sha={};
