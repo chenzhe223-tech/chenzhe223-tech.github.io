@@ -163,7 +163,9 @@
      ' · '+html(s.agent)+' 制作 · '+(p.panels?.length||9)+' 格</p></div>'+
      '<span class="wt4-label">'+html(s.label)+'</span></div>'+
      '<div class="wt4-project-bar"><label for="wt4-project">切换作品</label><select id="wt4-project">'+options+'</select>'+
-     '<button class="button" data-action="new">＋ 新作</button><button class="button" data-visual-open>视觉素材</button><a class="button" href="#/archive">生产调度</a></div></header>'+
+     '<button class="button" data-action="new">＋ 新作</button>'+
+     (wtCanDeleteUnmade(p)?'<button type="button" class="button" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
+     '<button class="button" data-visual-open>视觉素材</button><a class="button" href="#/archive">生产调度</a></div></header>'+
      '<section class="wt4-progress" aria-label="作品进度"><div class="wt4-progress-head"><strong>制作路线</strong>'+
      '<span>当前：'+html(stageNames[s.next])+' · 已确认 '+done+'/7 项</span></div>'+
      '<div class="wt4-steps">'+steps+'</div><p class="wt4-stage-status">'+html(s.statusText)+
@@ -184,12 +186,16 @@
    const remoteOnly=((typeof wtArchiveSnapshot==='undefined'?null:wtArchiveSnapshot)?.library?.items||[])
      .filter(r=>r?.task_id&&!localIds.has(r.task_id));
    const cards=rows.slice(0,6).map(p=>{const s=state(p);
-     return '<a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
+     return '<div class="wt4-home-entry"><a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
        '<div><strong>'+html(p.title)+'</strong><small>'+html(s.agent)+' · '+html(s.label)+'</small></div>'+
-       '<span>'+html(stageNames[s.next])+' →</span></a>';}).join('');
+       '<span>'+html(stageNames[s.next])+' →</span></a>'+
+       (wtCanDeleteUnmade(p)?'<button type="button" class="button wt4-delete-unmade" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
+       '</div>';}).join('');
    return '<section class="wt4-home"><div class="wt4-home-head"><div><div class="kicker">YOUR PRODUCTION</div>'+
-     '<h2>继续制作</h2><p>所有作品都有一个当前位置和下一步，不必逐个寻找功能模块。</p></div>'+
-     '<a class="button dark" href="#/workspace">进入作品工作空间 →</a></div>'+
+     '<h2>继续制作</h2><p>未制作草稿可直接删除，已交付作品与发布记录受到保护。</p></div>'+
+     '<div class="buttons"><a class="button dark" href="#/workspace">进入作品工作空间 →</a>'+
+     (rows.some(wtCanDeleteUnmade)?'<button type="button" class="button" data-action="clean-unmade">批量清理草稿</button>':'')+
+     '</div></div>'+
      (cards?'<div class="wt4-home-list">'+cards+'</div>':
        '<p class="wt4-home-empty">暂无本地创作，创建作品后将显示进度和下一步。</p>')+
      (remoteOnly.length?'<div class="wt4-remote-hint"><strong>GitHub 中另有 '+remoteOnly.length+' 条工单</strong>'+
