@@ -6,6 +6,8 @@ import { curatedAnswer } from './curated.js';
 import { exploreCollection } from './explore.js';
 import { discoveryBatch, discoveryAnswer } from './discover.js';
 import { aiGateReady, reserveAiQuota } from './quota.js';
+import { findKnowledge, searchKnowledge, knowledgeCategories, knowledgeEntries } from './knowledge.js';
+import { renderKnowledgeCatalog, renderKnowledgeEntry } from './knowledge-page.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
@@ -126,12 +128,25 @@ export default {
     }
     if (request.method==='GET'&&url.pathname==='/favicon.ico') return Response.redirect(new URL('/favicon.svg?v=20261119',url),302);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
+    if (request.method==='GET'&&url.pathname==='/knowledge') {
+      return new Response(renderKnowledgeCatalog(),{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
+    }
+    if (request.method==='GET'&&/^\/knowledge\/k\d{2}$/.test(url.pathname)) {
+      const page=renderKnowledgeEntry(url.pathname.split('/').pop());
+      return page?new Response(page,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}}):json({error:'词条不存在'},404);
+    }
+    if (request.method==='GET'&&url.pathname==='/api/knowledge') return json(searchKnowledge({q:url.searchParams.get('q')||'',category:url.searchParams.get('category')||'',limit:url.searchParams.get('limit')||36}));
+    if (request.method==='GET'&&url.pathname==='/api/knowledge/categories') return json({total:knowledgeEntries.length,categories:knowledgeCategories()});
+    if (request.method==='GET'&&/^\/api\/knowledge\/k\d{2}$/.test(url.pathname)) {
+      const entry=findKnowledge(url.pathname.split('/').pop());
+      return entry?json(entry):json({error:'词条不存在'},404);
+    }
     if (url.pathname==='/api/discover'&&request.method==='GET') {
       const raw=url.searchParams.get('batch')||'0';
       const batch=/^\d{1,3}$/.test(raw)?Number(raw):0;
       return json(discoveryBatch(batch));
     }
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'0.8.0',publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'2.0.0-p0',knowledgeAssets:knowledgeEntries.length,publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }
