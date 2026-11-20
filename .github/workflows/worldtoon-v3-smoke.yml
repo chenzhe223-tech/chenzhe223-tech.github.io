@@ -25,6 +25,8 @@ jobs:
         run: node comic-studio/tests/single-image-protocol.cjs
       - name: Check Nobel literary-review three dimensions and adaptation-rights boundaries
         run: node comic-studio/tests/literary-review.cjs
+      - name: Verify Book-to-Comic novel indexing provenance, text coverage and privacy claims
+        run: node comic-studio/tests/novel-core.cjs
       - name: Verify deletion of only unproduced drafts and reclamation of orphan media
         run: node comic-studio/tests/delete-unmade.cjs
       - name: Validate existing 3.0 functional contracts
