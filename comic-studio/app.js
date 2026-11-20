@@ -332,7 +332,58 @@ const blobBytes=async b=>new Uint8Array(await b.arrayBuffer());
 async function collectImages(p,filenames='pages'){let entries=[],images=[];for(let i=0;i<p.panels.length;i++){let img=p.panels[i].image;if(!img)throw Error(`第 ${i+1} 格尚未上传画面`);let b=await getImageBlob(img);let filename=`${filenames}/page-${String(i+1).padStart(2,'0')}.${contentExt(b)}`;entries.push({name:filename,bytes:await blobBytes(b)});images.push(filename)}return {entries,images}}
 function escapeScript(s){return JSON.stringify(s).replace(/</g,'\\u003c')}
 function generateReaderHTML(p,imgs){let payload={title:p.title,subtitle:p.subtitle,description:p.description,disclosure:p.disclosure,panels:p.panels.map((a,i)=>({title:a.title,caption:a.caption,dialogue:a.dialogue,image:imgs[i]}))};let json=escapeScript(payload);return `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${e(p.title)} · By DAVYLAB</title><style>*{box-sizing:border-box}body{margin:0;background:#f3f0e8;color:#1d2520;font-family:system-ui,'Noto Sans SC',sans-serif}header{text-align:center;padding:36px 14px 25px}small{letter-spacing:2px;color:#d3634e}h1{font-family:Georgia,serif;font-size:clamp(35px,7vw,64px);margin:12px 0}main{max-width:850px;margin:auto;padding:15px}figure{margin:0 0 40px;background:#fff;padding:14px;border:1px solid #ded9d0;break-inside:avoid;page-break-inside:avoid}img{max-width:100%;display:block;margin:auto;max-height:85vh;object-fit:contain}figcaption{padding:15px 8px;line-height:1.7}b{font-size:13px}.muted{color:#6f766d;font-size:13px}footer{padding:30px;text-align:center;color:#747b72;font-size:12px;border-top:1px solid #ddd}button{background:#1d2520;color:white;border:0;padding:12px 20px;cursor:pointer;border-radius:5px}@media print{button{display:none}figure{break-after:page;page-break-after:always;margin:0}header{padding:10px}footer{display:none}}</style></head><body><header><small>DAVYLAB / WORLD/TOON · ORIGINAL FICTION</small><h1>${e(p.title)}</h1><p>${e(p.subtitle||p.description)}</p><button onclick="window.print()">打印 / 保存为 PDF</button></header><main id="pages"></main><footer>${e(p.disclosure)}<p>By DAVYLAB · 独立原创漫画</p></footer><script>let d=${json};const esc=s=>String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));document.getElementById('pages').innerHTML=d.panels.map((p,i)=>'<figure><img src="'+p.image+'" alt="画格'+(i+1)+'"><figcaption><b>FRAME '+String(i+1).padStart(2,'0')+' · '+esc(p.title)+'</b><p>'+esc(p.caption)+'</p><p class="muted">'+esc(p.dialogue)+'</p></figcaption></figure>').join('');<\/script></body></html>`}
-async function exportZip(p,mode){notify('正在整理漫画文件…');try{let {entries,images}=await collectImages(p);if(mode==='site'){entries.push({name:'index.html',bytes:enc.encode(generateReaderHTML(p,images))});entries.push({name:'README.txt',bytes:enc.encode('DAVYLAB WORLD/TOON\n解压 ZIP 后打开 index.html 即可离线阅读。\n在浏览器中选择“打印”可保存为 PDF。\n本包未自动发布到任何在线网站。')})}else{entries.push({name:'作品说明.txt',bytes:enc.encode(`${p.title}\n${p.subtitle}\n\n${p.description}\n\n${p.disclosure}\n\nBy DAVYLAB`)})}saveFile(packZip(entries),safeName(p.title)+(mode==='site'?'_离线漫画网站.zip':'_九张漫画图片.zip'));setChange(p,`导出${mode==='site'?'离线网站':'九格漫画'}素材`);notify('打包完成，已触发浏览器下载')}catch(err){notify('导出未完成：'+err.message)}}
+async function exportZip(p,mode){
+ notify('正在核查漫画文件并建立素材包…');
+ try{
+  let entries=[],images=[];
+  if(mode==='site'){
+   ({entries,images}=await collectImages(p));
+   entries.push({name:'index.html',bytes:enc.encode(generateReaderHTML(p,images))});
+   entries.push({name:'README.txt',bytes:enc.encode('DAVYLAB WORLD/TOON\n解压 ZIP 后打开 index.html 即可离线阅读。本包仅供预览，不代表 QA、发表或版权审核。')});
+   saveFile(packZip(entries),safeName(p.title)+'_离线漫画预览.zip');
+  }else{
+   if(!Array.isArray(p.panels)||p.panels.length!==9||p.panels.some(x=>!x.image)||!p.cover)
+    throw Error('完整素材包必须包含全部 01—09 格及独立封面，不能输出碎片包');
+   const checks=[],hashes={},seen=new Set();
+   const addPNG=async (path,source)=>{
+    const blob=await getImageBlob(source);
+    if(blob.type!=='image/png')throw Error(path+' 不是 PNG，正式素材不接受 JPG/WebP 占位');
+    const bmp=await createImageBitmap(blob),w=bmp.width,h=bmp.height;bmp.close?.();
+    if(w<1080||h<1440||Math.abs(w/h-0.75)>0.002)
+     throw Error(path+' 不符合原生至少1080×1440的3:4画布（'+w+'×'+h+'）');
+    const bytes=await blobBytes(blob);
+    const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),x=>x.toString(16).padStart(2,'0')).join('');
+    if(seen.has(digest))throw Error(path+' 与另一画格内容完全相同，不能重复使用图像');
+    seen.add(digest);hashes[path]=digest;entries.push({name:path,bytes});
+    checks.push({path,width:w,height:h,sha256:digest,source:'actual_uploaded_png'});
+   };
+   for(let i=0;i<9;i++)await addPNG('panels/'+String(i+1).padStart(2,'0')+'.png',p.panels[i].image);
+   await addPNG('cover.png',p.cover);
+   const firstSha=p.creativeDirection?.pilotApproval?.pilot_frame_sha256;
+   if(firstSha&&hashes['panels/01.png']!==firstSha)
+    throw Error('01.png 不是获作者批准的 Pilot 原始字节，不允许正式打包');
+   const staged=(p.handoff?.stagedFiles||[]).filter(x=>x.sha256&&/^(cover\.png|panels\/\d{2}\.png)$/.test(x.path));
+   const sceneQa=staged.length===10&&staged.every(x=>p.handoff?.frameScopeQA?.[x.path]===x.sha256);
+   // File integrity is checked here; editorial/rights/mobile/visual approval must not be inferred.
+   const manifest={schema:'davylab.worldtoon.export-candidate.v2',task_id:p.handoff?.taskId||null,
+    title:p.title,panel_count:9,assets:{cover:'cover.png',panels:checks.filter(x=>x.path.startsWith('panels/')).map(x=>x.path)},
+    sha256:hashes,files_verified:true,scene_human_reviewed:sceneQa,
+    qa:{native_png:true,complete_files:true,pilot_byte_identical:firstSha?true:null,
+     single_scene_verified:sceneQa,character_continuity:'pending',chinese_text_reviewed:'pending',
+     safety_rights:'pending',phone_previewed:'pending',sources_checked:'pending',cover_independent_concept:'pending'},
+    package_ready:false,publication_approved:false,github_delivered:false,actual_published:false,
+    note:'Candidate-only archive. PNG bytes and hash integrity passed. Semantic/editorial/publishing QA not automatically asserted.'};
+   entries.push({name:'manifest.json',bytes:enc.encode(JSON.stringify(manifest,null,2))});
+   entries.push({name:'caption.md',bytes:enc.encode('# '+p.title+'\n\n'+p.panels.map((x,i)=>'## '+String(i+1).padStart(2,'0')+' · '+x.title+'\n'+(x.caption||'')+'\n'+(x.dialogue||'')).join('\n\n')+'\n\n'+(p.disclosure||''))});
+   entries.push({name:'sources.md',bytes:enc.encode('# 资料与核验\n\n'+validSources(p).join('\n')+'\n\n'+(p.factNotes||'尚未核验')+'\n\n声明：'+(p.disclosure||''))});
+   entries.push({name:'QA_STATUS.md',bytes:enc.encode('# WORLD/TOON 导出 QA\n\n文件尺寸、PNG 格式、内容唯一性及 SHA256：已由平台核实。\n人物跨格一致性、镜头/文字/肖像版权/手机端：待真实人工核对。\n本 ZIP 是完整素材候选包，不是正式 FINAL 或 WorkBuddy 可发包。\n')});
+   saveFile(packZip(entries),safeName(p.title)+'_十图完整候选素材_待QA.zip');
+  }
+  setChange(p,'导出实际文件验收通过的'+(mode==='site'?'预览':'10图候选素材')+'（不代表正式出版）');
+  notify('文件已校验并触发下载；版权、镜头和中文视觉 QA 仍须人工完成');
+ }catch(err){notify('导出已阻断：'+String(err.message||err))}
+}
+
 function canvasRound(ctx,x,y,w,h,r){ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
 async function exportCover(p){
  if(window.WTStyleV3?.CATALOG?.some(x=>x.style_id===p?.creativeDirection?.styleId)){
