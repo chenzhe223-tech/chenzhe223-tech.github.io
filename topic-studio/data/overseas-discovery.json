@@ -1,0 +1,845 @@
+{
+  "schema_version": 1,
+  "source": "independent_public_overseas_original_sources",
+  "checked_at": "2026-11-20T07:48:22+00:00",
+  "count": 63,
+  "articles": [
+    {
+      "id": "ext-478ea25aeed3c99796",
+      "title": "Token fraud is here and it’s BAD (YouTube)",
+      "summary": "Token fraud is here and it’s BAD (YouTube) Claire Vo runs ChatPRD , an AI platform that helps product managers \"turn an idea into a spec\". The product has been live since the GPT-4 era, and Claire has been buil",
+      "date": "2026-11-20",
+      "original_url": "https://simonwillison.net/2026/Nov/20/token-fraud-is-here-and-its-bad/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-a457925fbd609abe8f",
+      "title": "PostgreSQL 19 Released",
+      "summary": "PostgreSQL 19 Released Most years PostgreSQL ships a new release in September, but this year's release came two months later thanks mainly to the flurry of issues that the PostgreSQL team needed to address as p",
+      "date": "2026-11-19",
+      "original_url": "https://simonwillison.net/2026/Nov/19/postgresql-19/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-02f125d9c6cc44016c",
+      "title": "llm-gemini 0.38",
+      "summary": "Release: llm-gemini 0.38 Today Google introduced Gemini 4 Neon . I wrote recently about how confusing the pricing for the Gemini 4 series was - Neon has somehow made this even worse. Previously the Gemini 4 lin",
+      "date": "2026-11-18",
+      "original_url": "https://simonwillison.net/2026/Nov/18/llm-gemini/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-5f73b59a3fca2b791e",
+      "title": "datasette-arrows 0.1a0",
+      "summary": "Release: datasette-arrows 0.1a0 Datasette 1.0a43 added the ability for plugins to implement streaming export formats. Datasette core supports streaming CSV and TSV - you can export millions of lines of data fro",
+      "date": "2026-11-18",
+      "original_url": "https://simonwillison.net/2026/Nov/18/datasette-arrows/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-27f7b51e3bf8f5a874",
+      "title": "Quoting Daniel Stenberg",
+      "summary": "During the time these agents converted 185,000 lines of C code into 340,000 lines of Rust code (I counted), we merged over 300 commits in the actual curl project. We actually improved curl during these a little",
+      "date": "2026-11-18",
+      "original_url": "https://simonwillison.net/2026/Nov/18/daniel-stenberg/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-d6b88907cbdaa3084d",
+      "title": "The PSF end-of-year fundraiser",
+      "summary": "The PSF end-of-year fundraiser With my Python Software Foundation board director hat on: we've launched our end-of-year fundraiser for the non-profit that supports Python development and the Python community. I",
+      "date": "2026-11-18",
+      "original_url": "https://simonwillison.net/2026/Nov/18/psf-end-of-year-fundraiser/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-f0b81ce3c146128806",
+      "title": "DaisyRose-27B: Pushing the Frontier of Post-Training Efficiency",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/RadixArk/daisyrose-27b-pushing-the-frontier-of-post-trainin",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e55c8f2df06c07ffc9",
+      "title": "Why your fine-tuning job takes longer than the FLOPs say",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/Dharma-AI/predicting-fine-tuning-time",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-aef632472a5e3af7f9",
+      "title": "Time-Series Models in the Streamhouse: A New Frontier and Use Cases",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/ibm-research/time-series-powered-streamhouse",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-ec56b5eff9affb1c33",
+      "title": "180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/moe-expert-streaming",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-5b89a2db7f60ae9099",
+      "title": "Rumble-2-Flash: an open 0.5B speech model for 40+ languages",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/rumble-2-flash",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-b4439a7527ca175b45",
+      "title": "External sandboxes for coding agents",
+      "summary": "External sandboxes for coding agents I've been exploring new ways to sandbox code that is executed by agents, with a focus on making it safer to try out local models without worrying that a mistake or prompt in",
+      "date": "2026-11-17",
+      "original_url": "https://simonwillison.net/2026/Nov/17/external-sandboxes-for-coding-agents/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-0b5f35342ecc69a52f",
+      "title": "GPT‑6.2 Astra and GPT‑6.2 Sol",
+      "summary": "GPT‑6.2 Astra and GPT‑6.2 Sol OpenAI: We’re introducing GPT‑6.2 Astra, our new frontier model for your hardest projects, and GPT‑6.2 Sol, our efficient, versatile model for everyday work. They're available in t",
+      "date": "2026-11-17",
+      "original_url": "https://simonwillison.net/2026/Nov/17/gpt62-astra-and-sol/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-9e24bec0316d82cc33",
+      "title": "Running the full server-side Datasette Python app in the browser with service workers and Pyodide",
+      "summary": "Datasette Lite is my port of the Datasette Python application to run directly in the browser using WebAssembly and Pyodide . I've released a complete rewrite of Datasette Lite using service workers, and it's no",
+      "date": "2026-11-17",
+      "original_url": "https://simonwillison.net/2026/Nov/17/datasette-lite/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-38f599c774ee5c8eb2",
+      "title": "Quoting Go Proverbs",
+      "summary": "A little copying is better than a little dependency. — Go Proverbs , via Tags: go , programming",
+      "date": "2026-11-17",
+      "original_url": "https://simonwillison.net/2026/Nov/17/go-proverbs/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-a50437ccc021c62371",
+      "title": "llm 0.37.3",
+      "summary": "Release: llm 0.37.3 A bug fix release for LLM , mainly to cover a problem with the most recent Homebrew package of the software. Homebrew now ships the latest SQLite, 3.54.1 , which includes a fix that broke LL",
+      "date": "2026-11-16",
+      "original_url": "https://simonwillison.net/2026/Nov/16/llm/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-8ec21efa2c62273428",
+      "title": "Hugging Face and OpenRouter join forces to make open-weight models easy to run",
+      "summary": "",
+      "date": "2026-11-16",
+      "original_url": "https://huggingface.co/blog/openrouter",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-3c506afcbc50208331",
+      "title": "datasette-maplibre 0.1a0",
+      "summary": "Release: datasette-maplibre 0.1a0 The first new Datasette geospatial plugin in quite a while! This one combines the excellent MapLibre GL library with OpenFreeMap , the free vector map server operated by Zsolt ",
+      "date": "2026-11-15",
+      "original_url": "https://simonwillison.net/2026/Nov/15/datasette-maplibre/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-0139ca5c534e35bb8a",
+      "title": "datasette 1.0a43",
+      "summary": "Release: datasette 1.0a43 I've been leaning hard into Claude Fable 5.2 to help knock things off the 1.0 milestone , which is now 53% complete. The biggest 1.0 item in this release is streaming support for outpu",
+      "date": "2026-11-15",
+      "original_url": "https://simonwillison.net/2026/Nov/15/datasette/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-9f458effb436880f96",
+      "title": "datasette 0.65.6",
+      "summary": "Release: datasette 0.65.6 I backported a minor security fix from 1.0a43: Fixed a security issue where a database registered using add_database(db, name=..., route=...) with a route that differs from its name co",
+      "date": "2026-11-15",
+      "original_url": "https://simonwillison.net/2026/Nov/15/datasette-2/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-81dba6fe40f7c0eb3a",
+      "title": "datasette-apps 0.4a0",
+      "summary": "Release: datasette-apps 0.4a0 Datasette Apps are sandboxed HTML and JavaScript applications that live inside Datasette - think Claude Artifacts, but these ones can run SQL queries against your data. 0.4a0 adds ",
+      "date": "2026-11-15",
+      "original_url": "https://simonwillison.net/2026/Nov/15/datasette-apps/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-d47427f5a2b9c3b358",
+      "title": "datasette-agent 0.6a0",
+      "summary": "Release: datasette-agent 0.6a0 Accumulated small fixes for Datasette Agent, my agent plugin for Datasette that lets you ask questions about your data. Most notably, it now adds an agent prompt directly to the D",
+      "date": "2026-11-15",
+      "original_url": "https://simonwillison.net/2026/Nov/15/datasette-agent/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e9477865501b021526",
+      "title": "datasette-llm 0.1a11",
+      "summary": "Release: datasette-llm 0.1a11 datasette-llm is the intermediate plugin for Datasette that supports configuring LLMs for use with other Datasette plugins. This release adds support for OpenAI-compatible endpoint",
+      "date": "2026-11-14",
+      "original_url": "https://simonwillison.net/2026/Nov/14/datasette-llm/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-4f7f1f7fcbbee0ff75",
+      "title": "datasette-vega 0.7",
+      "summary": "Release: datasette-vega 0.7 A new release of Datasette's longest untouched plugin, for rendering charts (using Vega-Lite ) against data in a table or custom query. The last release was in July 2018! I finally b",
+      "date": "2026-11-14",
+      "original_url": "https://simonwillison.net/2026/Nov/14/datasette-vega/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-4cb58a6ed2a63999ae",
+      "title": "datasette-cluster-map 0.19",
+      "summary": "Release: datasette-cluster-map 0.19 One of the oldest Datasette plugins, and still one of my favorites. It now works with Datasette 1.0a42, and depends on the new datasette-leaflet to ensure OpenStreetMap tiles",
+      "date": "2026-11-13",
+      "original_url": "https://simonwillison.net/2026/Nov/13/datasette-cluster-map/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e1058067669e2b5f7f",
+      "title": "datasette-leaflet 0.3",
+      "summary": "Release: datasette-leaflet 0.3 OpenStreetMap have a very reasonable policy that hits to their hosted tile server should send a referrer header . Datasette table pages used the Referrer-Policy: no-referrer HTTP ",
+      "date": "2026-11-13",
+      "original_url": "https://simonwillison.net/2026/Nov/13/datasette-leaflet/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-cdc8eef67bc55a0d0f",
+      "title": "Build a Robot Pick-and-Place Simulation with SimReady Assets",
+      "summary": "",
+      "date": "2026-11-13",
+      "original_url": "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-96c7f67bef86f83160",
+      "title": "XYBench: Helping with the problem behind the question",
+      "summary": "",
+      "date": "2026-11-13",
+      "original_url": "https://huggingface.co/blog/allenai/xybench",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-6841e619fcd7e8d937",
+      "title": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+      "summary": "",
+      "date": "2026-11-13",
+      "original_url": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-5b86eed0286e0e3b83",
+      "title": "llm-gemini 0.37",
+      "summary": "Release: llm-gemini 0.37 Google launched Gemini 4 Hydrogen today - the lowest cost member of the Gemini 4 family. It's actually not too far off the price of its much bigger siblings, Carbon and Argon. I'm findi",
+      "date": "2026-11-12",
+      "original_url": "https://simonwillison.net/2026/Nov/12/llm-gemini/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-8bc9138e516754eb54",
+      "title": "Build once, run on any agent: A practical guide to agent skills",
+      "summary": "Agent skills capture repeatable engineering work in files teams can review and reuse, while tools, project context, and permissions remain specific to the host that runs them. The post Build once, run on any ag",
+      "date": "2026-11-12",
+      "original_url": "https://github.blog/ai-and-ml/github-copilot/build-once-run-on-any-agent-a-practical-guide-to-agent-skills/",
+      "source": "GitHub AI 官方博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-84ec87286cb35a64f4",
+      "title": "LLMON: An LLM-Native Markup Language, now in Granite 4.1 3B and 8B",
+      "summary": "",
+      "date": "2026-11-12",
+      "original_url": "https://huggingface.co/blog/ibm-granite/llmon-an-llm-native-markup-language-now-in-granite",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-cbda9238a3684b28e4",
+      "title": "The Definitive Fine-Tuning Guide for 3D Generation Models",
+      "summary": "",
+      "date": "2026-11-12",
+      "original_url": "https://huggingface.co/blog/3d-lora-finetuning",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-485ec329c8b74027b3",
+      "title": "Gemini Decisions API",
+      "summary": "Gemini Decisions API Google join Jev and OpenAI in the decision model category with \"Gemini Decision 1\". This new model API is almost identical to Jev: it supports the same three types of questions (yes/no, cho",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/gemini-decisions-api/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-967141e571a3a88a0b",
+      "title": "aws-emulator",
+      "summary": "aws-emulator Finally, an official emulator from AWS to run tests against a local clone of their many different services without having to provision a paid API key to do so. It's written in Rust by a huge swarm ",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/aws-emulator/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-8ba32157965a133a88",
+      "title": "Browse tools.simonwillison.net by tag",
+      "summary": "Browse tools.simonwillison.net by tag I've been wanting a better way to browse my collection of vibe-coded tools (244 and counting) for a while. I had a few Fable 5.2 credits left over before my weekly reset so",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/tools-tags/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-460872e68e9eeabbb2",
+      "title": "llm 0.37.2",
+      "summary": "Release: llm 0.37.2 Fixes a security issue reported by Daniel de Araujo in GHSA-v9h7-jj4g-f862 and GHSA-r639-rr7r-x72w . LLM has a mechanism called extra-openai-models.yaml - now managed by the new-in-0.37 llm ",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/llm/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-6e96a802abbc1d38b4",
+      "title": "Anthropic's IPO roadshow video",
+      "summary": "Anthropic's IPO roadshow video Anthropic kicked off their IPO roadshow yesterday, and their roadshow video has some previously unreleased information about how their business works. The section on \"Approach to ",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/anthropic-ipo-roadshow/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-19b4fcb1faac9c9bdb",
+      "title": "BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
+      "summary": "",
+      "date": "2026-11-11",
+      "original_url": "https://huggingface.co/blog/qvac/botpsy",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-11568aa8dfcf9a3c07",
+      "title": "Token Pooling-Aware Training for Multi-Vector Embedding Models",
+      "summary": "",
+      "date": "2026-11-11",
+      "original_url": "https://huggingface.co/blog/token-pooling",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e5607ea9b345667894",
+      "title": "llm-gemini 0.36",
+      "summary": "Release: llm-gemini 0.36 Gemini 4 Carbon was announced two weeks ago for \"a subset of cyber defenders\", but today it's available to everyone else . This is Google's best ever Gemini, priced at $2/million input ",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/llm-gemini/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-c80838f46e535c12a5",
+      "title": "Introducing Our Smallest, Most Efficient Model: Muse Ember",
+      "summary": "Introducing Our Smallest, Most Efficient Model: Muse Ember Meta AI just launched their entry in the Claude Haiku/GPT Luna category: Muse Ember, which they describe as: [...] our smallest and most efficient mode",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/muse-ember/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-f932ce86887297f16c",
+      "title": "Quoting Prompting Claude Fable 5.2",
+      "summary": "Claude Fable 5.2 pays close attention to who owns the code it works on. In Anthropic’s testing on small coding tasks, the model tended to add to the existing structure when the prompt said nothing about ownersh",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/prompting-claude-fable-52/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-c4312adb767125dc51",
+      "title": "Yonkers Rises",
+      "summary": "Tool: Yonkers Rises I realized I didn't know where Yonkers was, so I looked it up on Google Maps and then, to help embed its location and shape in my head (and to try out Claude Fable 5.2's 3D modeling and anim",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/yonkers-rises/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-cb93d68b445c05b0e3",
+      "title": "Pay for Hugging Face Hub with your Google Cloud Account",
+      "summary": "",
+      "date": "2026-11-10",
+      "original_url": "https://huggingface.co/blog/hub-gcp-marketplace",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-5f3963726dbe36e6cc",
+      "title": "Decision Models in Hugging Face",
+      "summary": "",
+      "date": "2026-11-10",
+      "original_url": "https://huggingface.co/blog/decision",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-55d059b88c6c576a2f",
+      "title": "Your Experts Have Partners. There's HOPE for Keeping Them Together",
+      "summary": "",
+      "date": "2026-11-09",
+      "original_url": "https://huggingface.co/blog/amazon/higher-order-pruning-experts",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-aff32afb63af01e7ea",
+      "title": "Beyond code generation: A developer’s guide to agentic engineering",
+      "summary": "Writing code got faster. The work around it didn't. See how you can plan, write code, review changes, and investigate production issues with GitHub Copilot, and what work still needs your judgment. The post Bey",
+      "date": "2026-11-06",
+      "original_url": "https://github.blog/ai-and-ml/github-copilot/beyond-code-generation-a-developers-guide-to-agentic-engineering/",
+      "source": "GitHub AI 官方博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-13e4c95dcbaa6d3409",
+      "title": "Egyptian and Nigerian English join the Open ASR Leaderboard",
+      "summary": "",
+      "date": "2026-11-06",
+      "original_url": "https://huggingface.co/blog/open-asr-leaderboard-liva",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-c65c7708e93995ca45",
+      "title": "A Closer Look at Phonon TTS. Launching High-Quality On-Device Speech That Tops the Benchmarks.",
+      "summary": "",
+      "date": "2026-11-05",
+      "original_url": "https://huggingface.co/blog/phonon-tts",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-32d4e91d243ef07f07",
+      "title": "Dharma Field Extractor: Any Document In, Structured Fields in JSON Out",
+      "summary": "",
+      "date": "2026-11-04",
+      "original_url": "https://huggingface.co/blog/Dharma-AI/dharma-field-extractor",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-4d3938441f216409a8",
+      "title": "Palette: teaching a small model to build decks in your design language",
+      "summary": "",
+      "date": "2026-11-03",
+      "original_url": "https://huggingface.co/blog/ibm-research/palette-deck-building",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-63945bc79480974982",
+      "title": "CWE-bench v2: More coverage, quality, and transparency",
+      "summary": "",
+      "date": "2026-11-03",
+      "original_url": "https://huggingface.co/blog/cwe-bench",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-a6f54d325d31634f89",
+      "title": "Transformers Model Integration Contracts",
+      "summary": "",
+      "date": "2026-11-03",
+      "original_url": "https://huggingface.co/blog/transformers-mic",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e508e29ae812fe586e",
+      "title": "Granite Switch 4.1.1 — Update models like you update software",
+      "summary": "",
+      "date": "2026-10-29",
+      "original_url": "https://huggingface.co/blog/ibm-granite/granite-switch-4-1-1",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-718617961cab3abcc8",
+      "title": "Announcing Project ProtoStar: Making Publicly Funded Science AI-Ready",
+      "summary": "",
+      "date": "2026-10-29",
+      "original_url": "https://huggingface.co/blog/announcing-project-protostar",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-b6b30743068c26272d",
+      "title": "Welcome Le Chonk: Mistral Large 4 on Hugging Face",
+      "summary": "",
+      "date": "2026-10-29",
+      "original_url": "https://huggingface.co/blog/mistral-large4",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-6394645bd5105adc54",
+      "title": "Introducing AnySpeechRecognizer and AnyDecisionModel: Open Models for Speech and Decisions on Apple Platforms",
+      "summary": "",
+      "date": "2026-10-29",
+      "original_url": "https://huggingface.co/blog/anydecisionmodel",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-1c5b51464767c2ad29",
+      "title": "Build specialized multimodal models with LFM3",
+      "summary": "",
+      "date": "2026-10-27",
+      "original_url": "https://huggingface.co/blog/LiquidAI/lfm3",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-2b3f616d26d343fed7",
+      "title": "Does Your Model Run on AWS Trainium? Look It Up",
+      "summary": "",
+      "date": "2026-10-23",
+      "original_url": "https://huggingface.co/blog/torch-neuronx-model-support",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-51888f116f5b083740",
+      "title": "Turning Database Grading into RL Rewards: Post-Training Agents with ThinkingBox",
+      "summary": "",
+      "date": "2026-10-22",
+      "original_url": "https://huggingface.co/blog/microsoft/thinkingbox-training",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-40a01666d562060bfd",
+      "title": "How Specializing the Vocabulary of SLMs Can Cut Inference Cost by 77% in Real Applications",
+      "summary": "",
+      "date": "2026-10-21",
+      "original_url": "https://huggingface.co/blog/Dharma-AI/vocabx-vocabulary-specialization",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-5b4e08461387ba3b44",
+      "title": "Profiling TorchNeuron (Part 1): System-level profiling on AWS Trainium.",
+      "summary": "",
+      "date": "2026-10-21",
+      "original_url": "https://huggingface.co/blog/amazon/profiling-torchneuron-part-1",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    }
+  ],
+  "sources": [
+    {
+      "source": "Simon Willison 技术观点",
+      "status": "ok",
+      "count": 30
+    },
+    {
+      "source": "GitHub AI 官方博客",
+      "status": "ok",
+      "count": 2
+    },
+    {
+      "source": "Hugging Face 博客",
+      "status": "ok",
+      "count": 31
+    }
+  ],
+  "note": "Original public metadata only; NOT XNews translated articles."
+}

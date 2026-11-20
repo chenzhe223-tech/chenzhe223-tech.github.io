@@ -3,9 +3,43 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-19T08:53:15+00:00",
-  "count": 43,
+  "synced_at": "2026-11-20T07:48:22+00:00",
+  "count": 46,
   "articles": [
+    {
+      "id": "openai-performance-factory",
+      "date": "2026-11-19",
+      "title": "三个多月里，回归工作流跟了1700多起调查，定位了600多起根因",
+      "summary": "OpenAI的Performance Factory用云端Codex调查性能回退并起草修复，合并与否仍由工程师决定。人工抽查100条根因建议，70%被评为准确。",
+      "original_url": "https://openai.com/index/how-openai-performance-factory-keeps-chatgpt-fast/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-performance-factory",
+      "tags": [
+        "OpenAI",
+        "Codex",
+        "Performance Factory",
+        "agents",
+        "engineering"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "google-quantum-contextuality",
+      "date": "2026-11-19",
+      "title": "在Willow上，魔方游戏赢了98.30%，经典上限是88.89%",
+      "summary": "Google Quantum AI把语境性测到了105个量子比特。105个比特那一项对照的是推测的经典上限，成功概率从大约1降到0.6。",
+      "original_url": "https://research.google/blog/a-game-you-cannot-win-unless-you-have-a-quantum-computer/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/google-quantum-contextuality",
+      "tags": [
+        "Google Quantum AI",
+        "Willow",
+        "contextuality",
+        "Science",
+        "quantum computing"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-research-acceleration",
       "date": "2026-11-18",
@@ -19,6 +53,23 @@
         "coding agents",
         "RSI",
         "safety"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-chip-design",
+      "date": "2026-11-18",
+      "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
+      "summary": "官方称，部分改动已进入AMD送去制造的设计。从规格书重新设计时分数更高，其中一部分原因是模型可以省掉性能计数器这类功能。",
+      "original_url": "https://openai.com/index/advancing-chip-design-with-our-models/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-chip-design",
+      "tags": [
+        "OpenAI",
+        "AMD",
+        "Jalapeño",
+        "chip design",
+        "RISC-V"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"

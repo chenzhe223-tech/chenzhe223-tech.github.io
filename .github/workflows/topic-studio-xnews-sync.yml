@@ -11,6 +11,10 @@ on:
       - "topic-studio/tests/discover-layout.test.cjs"
       - "topic-studio/xnews-discovery.js"
       - "topic-studio/scripts/sync_xnews.py"
+      - "topic-studio/scripts/sync_overseas.py"
+      - "topic-studio/scripts/sync_finance.py"
+      - "topic-studio/data/overseas-discovery.json"
+      - "topic-studio/tests/test_overseas_sync.py"
       - "topic-studio/tests/test_xnews_sync.py"
       - "topic-studio/tests/xnews-integration.test.cjs"
       - ".github/workflows/topic-studio-xnews-sync.yml"
@@ -45,8 +49,16 @@ jobs:
         run: node topic-studio/tests/xnews-integration.test.cjs
       - name: Test metadata contracts before sync
         run: python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v
+      - name: Test independent overseas original-source parser
+        run: python -m unittest discover -s topic-studio/tests -p 'test_overseas_sync.py' -v
       - name: Fetch public XNews article-index metadata
+        id: xnews
+        continue-on-error: true
         run: python topic-studio/scripts/sync_xnews.py
+      - name: Fetch independently attributed overseas original-source headlines
+        id: overseas
+        continue-on-error: true
+        run: python topic-studio/scripts/sync_overseas.py
       - name: Validate new snapshot
         run: python -m unittest discover -s topic-studio/tests -p 'test_xnews_sync.py' -v
       - name: Commit index only if changed
@@ -55,10 +67,15 @@ jobs:
           set -euo pipefail
           git config user.name "DAVYLAB Topic Studio Bot"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add topic-studio/data/xnews-discovery.json
+          git add topic-studio/data/xnews-discovery.json topic-studio/data/overseas-discovery.json
           if ! git diff --cached --quiet; then
             git commit -m "data(topic-studio): refresh public XNews discovery metadata [skip ci]"
             git push origin HEAD:"$GITHUB_REF_NAME"
           else
-            echo "No public XNews metadata changes."
+            echo "No new upstream metadata (no synthetic articles)."
           fi
+      - name: Fail visibly if both source pipelines failed after preserving snapshots
+        if: steps.xnews.outcome == 'failure' && steps.overseas.outcome == 'failure'
+        run: |
+          echo "::error::Both overseas source refreshes failed. Last known good snapshots preserved."
+          exit 1

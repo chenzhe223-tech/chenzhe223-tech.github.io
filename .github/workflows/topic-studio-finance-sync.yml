@@ -1,0 +1,145 @@
+name: Topic Studio · Daily global finance discovery (isolated)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "topic-studio/scripts/sync_finance.py"
+      - "topic-studio/finance-discovery.js"
+      - "topic-studio/index.html"
+      - ".github/workflows/topic-studio-finance-sync.yml"
+  pull_request:
+    paths:
+      - 'topic-studio/scripts/sync_finance.py'
+      - 'topic-studio/tests/test_finance_sync.py'
+      - 'topic-studio/tests/finance-prompt.test.cjs'
+      - 'topic-studio/tests/finance-browser-smoke.cjs'
+      - 'topic-studio/finance-discovery.js'
+      - 'topic-studio/finance-discovery.css'
+      - 'topic-studio/ai-production-prompt.js'
+      - 'topic-studio/index.html'
+      - '.github/workflows/topic-studio-finance-sync.yml'
+  schedule:
+    # 10:15 Asia/Singapore; scheduled GitHub Actions only run on default branch.
+    - cron: '15 2 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: topic-studio-finance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  offline-contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source and style QA, no live data dependencies
+        run: |
+          python -m unittest discover -s topic-studio/tests -p 'test_finance_sync.py' -v
+          python -m unittest discover -s topic-studio/tests -p 'test_overseas_sync.py' -v
+          node topic-studio/tests/finance-prompt.test.cjs
+          node topic-studio/tests/xnews-integration.test.cjs
+          node --check topic-studio/finance-discovery.js
+          node --check topic-studio/xnews-discovery.js
+          node --check topic-studio/ai-production-prompt.js
+  finance-browser-e2e:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright with Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Verify real desktop and mobile selection, style and 1-3 image prompt
+        run: node topic-studio/tests/finance-browser-smoke.cjs
+  live-overseas-readonly-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inspect true overseas original feeds without publishing
+        run: |
+          python topic-studio/scripts/sync_overseas.py --output /tmp/overseas-preview.json
+          python - <<'PY'
+          import json
+          x=json.load(open('/tmp/overseas-preview.json'))
+          print(json.dumps({'count':x['count'],'sources':x['sources']},ensure_ascii=False))
+          assert x['count'] > 0
+          assert all(row.get('source_kind')=='independent_original' for row in x['articles'])
+          PY
+  live-finance-readonly-preview:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Network sample, isolated from production
+        run: |
+          python topic-studio/scripts/sync_finance.py --output /tmp/finance-preview.json
+          python - <<'PY'
+          import json
+          s=json.load(open('/tmp/finance-preview.json'))
+          print(json.dumps({'count':s['count'],'fresh_within_72h':s['fresh_within_72h'],'sources':s['sources']},ensure_ascii=False))
+          assert s['count'] > 0
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: finance-official-feed-readonly-sample
+          path: /tmp/finance-preview.json
+          if-no-files-found: ignore
+  sync-finance-on-default:
+    if: github.event_name == 'schedule' || (github.event_name == 'push' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Source parser tests
+        run: python -m unittest discover -s topic-studio/tests -p 'test_finance_sync.py' -v
+      - name: Fetch official news; preserve last good on total failure
+        run: python topic-studio/scripts/sync_finance.py
+      - name: Commit only finance data; never unpublished drafts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'DAVYLAB Finance Bot'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add topic-studio/data/finance-discovery.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data(topic-studio): daily official finance snapshot [skip ci]'
+            git push origin HEAD:main
+          else
+            echo 'Official finance snapshot unchanged.'
+          fi
