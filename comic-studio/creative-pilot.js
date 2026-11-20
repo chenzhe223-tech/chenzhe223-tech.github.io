@@ -114,10 +114,11 @@ async function exportApprovedBundle(p){
  if(!a.author_approved||!(a.local_approved===true||a.repo_commit))throw Error('作者尚未确认真实 Pilot，不能导出续作包');
  if(!wtDirector.approved(p)||a.lock_hash!==c.approval?.lock_hash||a.task_id!==p.handoff?.taskId)
   throw Error('样稿审批与当前任务锁码或 task_id 不一致；请重新完成批准');
- const read=async (source,expected,label)=>{
+ const read=async (source,expected,label,mime='image/png')=>{
   if(!source||!validHash(expected))throw Error(label+'缺少实际文件或 SHA256');
   const blob=await getImageBlob(source);
-  if(blob.type!=='image/png')throw Error(label+'不是原生 PNG');
+  if(mime==='image/png'&&blob.type!=='image/png')throw Error(label+'不是原生 PNG');
+  if(mime==='portrait'&&!['image/png','image/jpeg','image/webp'].includes(blob.type))throw Error(label+'格式不支持');
   const bytes=new Uint8Array(await blob.arrayBuffer());
   const digest=shaHex(await crypto.subtle.digest('SHA-256',bytes));
   if(digest!==expected)throw Error(label+'内容已被替换；拒绝输出错误的参考图');
@@ -152,7 +153,7 @@ async function exportApprovedBundle(p){
  for(let i=0;i<(c.cast||[]).length;i++){
   const ch=c.cast[i];if(!ch.portraitMedia)continue;
   if(ch.portraitConsent!==true)throw Error('第'+(i+1)+'位角色肖像授权未确认');
-  const b=await read(ch.portraitMedia,ch.portraitSha256,'第'+(i+1)+'位角色肖像');
+  const b=await read(ch.portraitMedia,ch.portraitSha256,'第'+(i+1)+'位角色肖像','portrait');
   files.push({name:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(ch.portraitExt||'png'),bytes:b});
  }
  saveFile(packZip(files),'WORLD_TOON_已批准真实样稿_续作_'+a.task_id+'.zip');
