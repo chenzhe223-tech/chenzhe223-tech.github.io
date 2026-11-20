@@ -42,7 +42,7 @@ async function upload(p,type,file){
  const bytes=new Uint8Array(await file.arrayBuffer()),blob=wfImageFile(file.name,bytes);
  const image=await createImageBitmap(blob),width=image.width,height=image.height;image.close?.();
  const strictV3=!!window.WTStyleV3?.CATALOG?.some(x=>x.style_id===c.styleId);
- if(type==='panel'&&strictV3&&(width!==1080||height!==1440))throw Error('V3 首格真实预览必须是正式模型原生 1080×1440 PNG；不得将低分辨率图放大、裁切或重新渲染代替');
+ if(type==='panel'&&strictV3&&(width<1080||height<1440||Math.abs(width/height-0.75)>0.002))throw Error('V3 首格须为至少 1080×1440 且比例 3:4 的原始 PNG；仅凭尺寸不能证明未经上采样，还需记录实际生成来源');
  if(type==='character'&&strictV3&&(width<1080||height<1440))throw Error('V3 角色定妆图至少 1080×1440');
  if(!strictV3&&(width<640||height<640))throw Error('真实样稿宽高须至少640像素');
  const sha=shaHex(await crypto.subtle.digest('SHA-256',bytes)),key=uid();
