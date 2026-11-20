@@ -51,19 +51,18 @@ const qaContext={
 vm.runInNewContext(review,qaContext,{filename:'worldtoon-v3-review.js'});
 const qaHtml=qaContext.publish();
 assert.equal((qaHtml.match(/class="wt3-qa-item/g)||[]).length,8,'8 separate review cards');
-assert.equal((qaHtml.match(/data-wt3-qa-action=/g)||[]).length,2,'bulk actions');
+assert.equal((qaHtml.match(/data-wt3-qa-action=/g)||[]).length,1,'only clearing is bulk; no one-click quality approval');
 assert.match(qaHtml,/id="wt3-author-consent"/,'author authorization checkbox remains independent');
 const qaClick=operation=>qaEvents.click({
  target:{closest:selector=>selector==='[data-wt3-qa-action]'?{dataset:{wt3QaAction:operation}}:null},
  preventDefault(){},stopImmediatePropagation(){}
 });
-qaClick('select-all');
-assert.equal(qaProject.handoff.finalChecklist.filter(Boolean).length,8,'bulk select all');
+for(const input of qaItemInputs){input.checked=true;qaEvents.change({target:input})}
+assert.equal(qaProject.handoff.finalChecklist.filter(Boolean).length,8,'eight independent human reviews');
 assert.equal(qaCounts[0].textContent,'8','top live count');
 assert.equal(qaCounts[1].textContent,'8','footer live count');
-assert.equal(qaSelect.disabled,true,'cannot select all twice');
 qaItemInputs[2].checked=false;qaEvents.change({target:qaItemInputs[2]});
-assert.equal(qaProject.handoff.finalChecklist.filter(Boolean).length,7,'individual uncheck after bulk select');
+assert.equal(qaProject.handoff.finalChecklist.filter(Boolean).length,7,'individual uncheck after review');
 qaClick('clear');
 assert.equal(qaProject.handoff.finalChecklist.filter(Boolean).length,0,'bulk clear');
 assert.equal(qaCounts[0].textContent,'0','counter clears');
