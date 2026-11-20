@@ -1171,6 +1171,23 @@ export default {async fetch(request,env,ctx){const url=new URL(request.url);if(u
  if(url.pathname==='/api/ai/storyboard'){if(request.method!=='POST')return failure('Method not allowed',405);return wtStoryboardAI(request,env)}
  if(url.pathname==='/api/ai/series-plan'){if(request.method!=='POST')return failure('Method not allowed',405);return wtSeriesPlanAI(request,env)}
  if(url.pathname.startsWith('/api/ai/')){if(request.method!=='POST')return failure('Method not allowed',405);if(!['/api/ai/script','/api/ai/image','/api/ai/characters'].includes(url.pathname))return failure('Not found',404);return ai(request,env,url)}
- const path=url.pathname==='/'?'index.html':url.pathname.slice(1);if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|ranking\.js|extension\.js|discovery-flow\.js|series-planner\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
+ const path=url.pathname==='/'?'index.html':url.pathname.slice(1);
+ // Pinned parser resources are proxied under this Worker origin, preserving 'self' CSP.
+ const vendor={
+  'vendor/pdf.min.js':'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',
+  'vendor/pdf.worker.min.js':'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js',
+  'vendor/jszip.min.js':'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js'
+ };
+ if(Object.prototype.hasOwnProperty.call(vendor,path)){
+  try{
+   const up=await fetch(vendor[path],{cf:{cacheTtl:86400,cacheEverything:true}});
+   if(!up.ok)return new Response('Pinned parser unavailable',{status:503});
+   return new Response(up.body,{status:200,headers:{
+    'content-type':'text/javascript; charset=utf-8','cache-control':'public,max-age=86400',
+    'x-content-type-options':'nosniff','cross-origin-resource-policy':'same-origin'
+   }});
+  }catch{return new Response('Pinned parser unavailable',{status:503})}
+ }
+ if(path.includes('..')||!(/^(index\.html|app\.js|creative-director\.js|creative-pilot\.js|style-v3\.js|style-v3\.css|worldtoon-v3\.js|worldtoon-v3-import\.js|worldtoon-v3-review\.js|worldtoon-v3\.css|comic-engine\.js|comic-visuals\.js|novel-core\.js|novel-studio\.js|novel-studio\.css|ranking\.js|extension\.js|discovery-flow\.js|series-planner\.js|briefing\.js|archive\.js|personalize\.js|styles\.css|personalize\.css|creative-director\.css|sw\.js|manifest\.webmanifest|favicon\.svg|assets\/[A-Za-z0-9_.%\-]+\.(?:png|webp))$/.test(path)))return new Response('Not found',{status:404});
  try{const isAsset=path.startsWith('assets/'),ttl=isAsset?3600:30;let up=await fetch(ORIGIN+path,{cf:{cacheTtl:ttl,cacheEverything:true}});if(!up.ok)return new Response('Asset unavailable',{status:up.status===404?404:503});const ext=path.split('.').pop();let h=new Headers({'content-type':CONTENT[ext]||'application/octet-stream','cache-control':isAsset?'public,max-age=3600':'public,max-age=30','x-worldtoon-version':'4.6.0','x-content-type-options':'nosniff','referrer-policy':'strict-origin-when-cross-origin','permissions-policy':'camera=(),microphone=(),geolocation=()'});if(!isAsset)h.set('content-security-policy',"default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' blob: data: https:; connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co; base-uri 'self'; object-src 'none'; frame-ancestors 'none'");return new Response(up.body,{status:200,headers:h})}catch{return new Response('Temporary origin error',{status:503})}},async scheduled(controller,env,ctx){await wtDiscoveryScheduled(controller,env)}
 };
