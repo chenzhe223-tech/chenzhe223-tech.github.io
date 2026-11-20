@@ -89,8 +89,8 @@
        imageKey:x.blob?created[pieces.filter(y=>y.blob).findIndex(y=>y.path===x.path)]:null})),stageUploaded:[]};
    staged=true;
    setChange(p,'正式 PNG 素材包导入并校验：'+n+'张画格 + 封面');
-   render();notify('素材包导入成功；开始尝试安全暂存到 GitHub');
-   if(taskId&&p.handoff.repoQueuedAt)await resume(p);
+   render();notify((p.productionAgent||'ChatGPT')==='ChatGPT'?'完整素材包已本地校验；无需 GitHub 同步，请继续人工视觉 QA':'素材包导入成功；开始尝试安全暂存到 GitHub');
+   if((p.productionAgent||'ChatGPT')!=='ChatGPT'&&taskId&&p.handoff.repoQueuedAt)await resume(p);
   }catch(error){
     // Never destroy locally staged image blobs after a partial GitHub upload:
     // resume() needs them for idempotent retry of only missing files.
@@ -103,6 +103,7 @@
   }finally{pending.delete(current.id)}
  }
  async function resume(p){
+  if((p.productionAgent||'ChatGPT')==='ChatGPT')throw Error('ChatGPT 直达模式已暂停 GitHub 文件同步');
   const rows=p.handoff?.stagedFiles||[],tid=p.handoff?.taskId||'';
   if(!/^WT-[0-9a-f]{20}$/.test(tid)||!p.handoff?.repoQueuedAt)throw Error('任务尚未正式 GitHub 派单：保留本地素材，不允许伪称已入仓');
   if(!wtArchiveAuth())throw Error('请先登录仓库管理员账户');
