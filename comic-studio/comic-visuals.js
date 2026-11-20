@@ -32,8 +32,8 @@ function panel(p,forceOpen=false){
  const helper=searched?(items.length?'找到 '+items.length+' 项 CC0 图片 · '+counts.map(x=>x.id+' '+x.count+(x.ok?'':'（不可用）')).join('、'):'无可用图片，请尝试其他英文关键词。'):'进入作品后自动按主题匹配 CC0 馆藏；也可以手动修改关键词。仅作为创作参考，不直接复制为漫画画格。';
  return '<details class="box heritage-visual-panel" aria-label="创作视觉素材库" data-visual-collapse="'+e(p?.id||'')+'"'+(expanded?' open':'')+'>'+
   '<summary class="heritage-summary"><div class="kicker">VISUAL REFERENCES / OPEN CULTURE</div>'+
-  '<div class="heritage-header"><div><h2>创作视觉素材库</h2><p class="minor">按空间布置、人物着装、配饰道具、建筑和色彩选材；每项素材都要指定作用位置，避免所有参考套用到每一格。</p></div><span class="wt-chip">本作已选 '+refs.length+' 项</span><span class="heritage-toggle-label" aria-hidden="true"></span></div></summary>'+
- '<div class="heritage-content"><form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
+  '<div class="heritage-header"><div><h2>创作视觉素材库</h2></div><span class="wt-chip">本作已选 '+refs.length+' 项</span><span class="heritage-toggle-label" aria-hidden="true"></span></div></summary>'+
+ '<div class="heritage-content"><p class="minor">按空间布置、人物着装、配饰道具、建筑和色彩选材；每项素材都要指定作用位置，避免所有参考套用到每一格。</p><form id="wtVisualSearch" class="heritage-search"><input id="wtVisualInput" name="q" type="search" required minlength="2" maxlength="100" placeholder="建议英文：ancient ship, portrait, architecture…" value="'+e(query)+'"><button class="button dark" type="submit"'+(busy?' disabled':'')+'>'+(busy?'检索中…':'搜索馆藏')+'</button></form>'+
  '<div class="buttons"><button type="button" class="button" data-visual="own">＋ 登记自有 / 授权素材</button></div>'+
  '<div class="heritage-presets">'+presets.map(([q,l])=>'<button type="button" data-visual="preset" data-query="'+e(q)+'">'+e(l)+'</button>').join('')+'</div>'+
  (refs.length?'<div class="heritage-pins">'+pins+'</div>':'')+
