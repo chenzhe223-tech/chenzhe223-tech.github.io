@@ -13,13 +13,14 @@
  }
  function uiFor(p){
   const h=p?.handoff||{},st=h.importStatus||'尚未导入',n=h.stagedFiles?.length||0;
+   const direct=(p?.productionAgent||'ChatGPT')==='ChatGPT';
   return '<div class="wt3-import"><h3>ChatGPT 成品一键导入</h3>'+
    '<p class="minor">支持一份完整 ZIP：cover.png、panels/01.png…、caption.md、sources.md、manifest.json（如有）。自动校验画格、分辨率和 SHA256；上传成功并不代表 QA 或发表批准。</p>'+
    '<label class="button dark">↑ 导入完整素材 ZIP<input type="file" id="wt3-zip" accept=".zip,application/zip" hidden></label>'+
    '<p class="minor">阶段：'+safe(st)+' · 已核对文件 '+n+' 个 · '+safe(h.importDetail||'')+'</p>'+
-   '<div class="buttons"><button class="button" type="button" data-wt3-import="resume"'+(!h.stagedFiles?.length?' disabled':'')+'>同步到私有 GitHub / 重试失败项</button>'+
+   '<div class="buttons">'+(direct?'':('<button class="button" type="button" data-wt3-import="resume"'+(!h.stagedFiles?.length?' disabled':'')+'>同步到私有 GitHub / 重试失败项</button>'))+
    '<a class="button" href="#/publish">前往出版审核 →</a></div>'+
-   '<p class="minor">本地预览 → 仓库暂存 → 实际 QA → 作者最终批准 → WorkBuddy 发表 → 真实回执入书架。</p></div>';
+   '<p class="minor">'+(direct?'ChatGPT 直达：本地校验与预览 → 人工画质 QA → 本地全量素材 ZIP；GitHub 暂停同步，正式发表需另行授权。':'本地预览 → 仓库暂存 → 实际 QA → 作者最终批准 → WorkBuddy 发表 → 真实回执入书架。')+'</p></div>';
  }
  window.WT3ImportPanel=uiFor;
  function findByName(files,pred){for(const [name,b] of files){if(pred(name))return [name,b]}return null}
@@ -82,7 +83,7 @@
    if(p.creativeDirection&&p.creativeDirection.approval?.author_approved&&p.panels.length!==n)throw Error('导演台已经锁定篇幅，请先建立新的审批版本');
    p.panels=Array.from({length:n},(_,i)=>({...p.panels[i]||makePanel(i),image:localImages[i+1]}));
    p.cover=localImages[0];p.status='待审核';p.checks=Array(6).fill(false);p.reviewedAt=null;
-   p.handoff={...p.handoff,taskId:taskId||p.handoff?.taskId||'',importStatus:'本地校验完成，待远端暂存',
+   p.handoff={...p.handoff,taskId:taskId||p.handoff?.taskId||'',importStatus:(current.productionAgent||'ChatGPT')==='ChatGPT'?'本地文件校验完成 · 待视觉 QA':'本地校验完成，待远端暂存',
       importedAt:now(),importManifest:manifest||null,importDetail:n+'张漫画 + 独立封面',
       stagedFiles:pieces.map(x=>({path:x.path,sha256:x.sha256||null,text:x.text||null,
        imageKey:x.blob?created[pieces.filter(y=>y.blob).findIndex(y=>y.path===x.path)]:null})),stageUploaded:[]};
@@ -95,9 +96,9 @@
     // resume() needs them for idempotent retry of only missing files.
     if(!staged)for(const key of created)await delMedia(key).catch(()=>{});
     current.handoff={...current.handoff,
-      importStatus:staged?'GitHub 暂存部分完成 · 可重试':'导入失败',
+      importStatus:staged?((current.productionAgent||'ChatGPT')==='ChatGPT'?'本地导入成功 · 其他步骤待复核':'GitHub 暂存部分完成 · 可重试'):'导入失败',
       importDetail:String(error.message||error).slice(0,180)};
-    setChange(current,staged?'GitHub 暂存中断，保留本地图片及重试状态':'素材包导入失败（未批准发表）');
+    setChange(current,staged?'已保留本地图片及导入状态，未批准发表':'素材包导入失败（未批准发表）');
     render();throw error;
   }finally{pending.delete(current.id)}
  }
