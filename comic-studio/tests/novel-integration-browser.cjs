@@ -18,8 +18,19 @@ function unzipStored(bytes){
  const page=await browser.newPage({acceptDownloads:true,viewport:{width:1130,height:820}});
  page.on('dialog',x=>x.accept());
  try{
+  page.on('pageerror',err=>console.warn('NOVEL_BROWSER_JS_ERROR',String(err.message||err).slice(0,250)));
+  page.on('response',resp=>{if(/novel-(?:core|studio)\./.test(resp.url()))console.log('NOVEL_ASSET',resp.status(),resp.url())});
   await page.goto('https://worldtoon.chenzhe223.workers.dev/',{waitUntil:'domcontentloaded',timeout:60000});
-  await page.waitForFunction(()=>!!window.WTNovelCore&&!!window.WTNovelStudio&&!!window.wtDirector,{timeout:45000});
+  let loaded=false,diagnostics={};
+  for(let attempt=0;attempt<8;attempt++){
+   await page.waitForTimeout(2500);
+   diagnostics=await page.evaluate(()=>({core:!!window.WTNovelCore,studio:!!window.WTNovelStudio,director:!!window.wtDirector,
+    scripts:[...document.scripts].filter(x=>x.src.includes('novel-')).map(x=>x.src)}));
+   if(diagnostics.core&&diagnostics.studio&&diagnostics.director){loaded=true;break}
+   if(attempt===0||attempt===4)console.warn('NOVEL_ASSET_WAIT',JSON.stringify(diagnostics));
+   await page.reload({waitUntil:'domcontentloaded',timeout:30000});
+  }
+  assert.equal(loaded,true,'novel parser and studio must load from deployed Worker: '+JSON.stringify(diagnostics));
   const initial=await page.evaluate(()=>{
    const p=emptyProject();p.id='qa-book-to-comic-local-20261121';
    p.title='世界文学·章节研究测试';p.sourceTitle='编辑原创测试小说';
