@@ -90,16 +90,18 @@ function wfDirectPrompt(p,o){
  'WORLD/TOON · By DAVYLAB | DIRECT_CHATGPT_LOCAL_V1 | 完整漫画制作指令',
  '任务编号：'+o.task_id+'；标题：《'+p.title+'》；生产者：ChatGPT；篇幅：'+p.panels.length+' 格。',
  '【生产方式】作者通过平台手动下载任务 ZIP 并交给 ChatGPT，绝不宣称该任务已入 GitHub。生产环节暂停 GitHub 同步、远端领单、远端样稿审批、GitHub Token、WorkBuddy 轮询及远端 SHA 验证；不得以未入仓为由停止创作。此豁免仅限本地全量素材制作，不等于正式发表授权。',
+ '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、九格分镜全文、所有 jobs、封面加九格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
+ '【单图验收与失败恢复】每次生图后核对目标路径、原生分辨率、单场景连续画布、无分割/无嵌套小图、人物脸型服装与母版一致、中文排版预留区；明确在 QA 中记录 single_scene_verified、no_contact_sheet、target_story_match。检测失败不得登记为已完成帧，必须同一个 job 单独重绘；如当轮上限触发，保存已通过的实际文件和断点，禁止反复重画已合格画格。',
  '【交付目标】真正绘制 1 张独立封面及 '+p.panels.length+' 张独立正式漫画 PNG，全部采用适合手机的竖版 3:4、原生至少 1080×1440；附 caption.md、sources.md、manifest.json、QA_STATUS.md、production_state.json，并形成一个可下载 ZIP。严禁仅输出提示词、脚本、九宫格拼图裁切、SVG/CSS 线框或占位图片。',
  '【唯一定妆关口】开始时建立角色圣经、视觉圣经及首格正式样稿。若附件已有真实定妆图及首格样稿且作者已明确批准，则直接沿用，无需再次确认；否则只针对实际定妆图和首格请作者确认一次。作者明确确认后，直接连续绘制剩余画格、独立封面、排版、文案与完整 ZIP；不要另设 GitHub、Pilot 云端审批或例行阶段确认节点。',
  '【角色一致性】每个 character_id 锁定脸型、五官、发型、体态、服饰、主色、道具与参考图；每张画格参考同一角色母版及首格，锁定笔触、光影、材质与色板，不允许变脸、换装、改故事、错置道具。',
  '【verified_sources 与新闻版权】研究型新闻必须在 manifest.json 提供 verified_sources 数组及 sources.md 的可追溯原始报道与发生日期。现实新闻先核实可信原始来源、事件日期、真实身份、事实与观点边界；无证据的指控不得变成纪实画面。原创故事不伪造新闻链接。忠实改编受保护作品必须有授权；不得以改名规避版权或影射未经证实的指控。',
  '【严格 QA】逐格检查原生分辨率、画面完整度、中文文字、手机阅读安全区、人物识别、画风连续、事实准确、来源与使用权。失败图只返工有问题的画格并复核整套。实际保存并计算全部文件 SHA256；未实际核验事项记为 pending，禁止假报 QA 通过。确认封面不复制任何画格，正式第一格保持与批准样稿相同的图像内容。',
- '【交付目录】cover.png；panels/01.png … panels/'+String(p.panels.length).padStart(2,'0')+'.png；caption.md；sources.md；manifest.json；QA_STATUS.md；production_state.json；character-lock.json 与 pilot 样稿可作附加参考。ZIP 要一键下载，真实文件应先存在且经过本地检查。',
+ '【交付目录】任务 ZIP 内必须附 render_jobs.json 和 render_jobs.md（逐张提示词，不是生图成品）；最终交付 ZIP 含 cover.png；panels/01.png … panels/'+String(p.panels.length).padStart(2,'0')+'.png；caption.md；sources.md；manifest.json；QA_STATUS.md；production_state.json；character-lock.json 与 pilot 样稿可作附加参考。ZIP 要一键下载，真实文件应先存在且经过本地检查。',
  '【断点续作】不能保证后台异步工作；当单次会话或生图工具受限时，先保存已成功的真实 PNG 及 production_state.json（含 task_id、已完成画格、待办和锁定母版校验值），准确报告缺失项。用户发“继续”后接续同一任务的未完成画格，禁止清空或从头重做。只有全部文件和 QA 达标才宣称完整交付。WorkBuddy 正式发表仍须作者单独授权。',
  '【来源与创作方向】类型：'+p.category+'；故事模式：'+o.mode+'；剧情：'+(p.description||'以分镜为准')+'；风格：'+(p.tone||'高级编辑漫画')+'；核验状态：'+o.verification_status+'；候选来源：'+(validSources(p).join('；')||'暂无')+'；事实笔记：'+(p.factNotes||'待核验')+'；虚构声明：'+(p.disclosure||'原创艺术改编')+'；原著许可：'+JSON.stringify(p.storySourceSelection||null),
  '【已锁定角色与视觉创作圣经】\n'+JSON.stringify(o.creative_direction,null,2),
- '【已锁定逐格分镜】\n'+shots
+ '【以下是文本导演分镜，禁止整体传给生图工具】\n'+shots
  ].join('\n\n');
 }
 function wfPrompt(p){const o=wfTaskObject(p);if(o.producer==='ChatGPT')return wfDirectPrompt(p,o);return `你是 WORLD/TOON · By DAVYLAB 的专属漫画编剧、美术总监、质量审校。\n本任务由我的漫画平台正式下发，创作者为${o.producer}，WorkBuddy 负责微信公众号发布。\n\n任务编号：${o.task_id}\n标题：《${p.title}》\n题材：${p.category} · ${wfMode(p)==='original'?'完全虚构':'全球热点虚构改编'}\n创作风格：${p.tone||'高级杂志感、黑色幽默'}。严格遵循已锁定的 creative_direction 创意制作圣经，不可用默认风格、默认人物或任意更改故事节奏。
@@ -125,6 +127,8 @@ async function wfMakeTask(p){
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p),prompt=wfPrompt(p);
+ const renderJobs=wfSingleImageJobs(p,task);
+ task.image_render_protocol='single_image_per_call.v2';task.render_jobs_file='render_jobs.json';task.expected_image_count=task.panel_count+1;
  if(task.producer==='ChatGPT'){task.production_mode='direct_chatgpt_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
  const portraitCharacters=p.creativeDirection?.cast||[];
  const portraitFiles=[];
@@ -143,7 +147,7 @@ async function wfMakeTask(p){
  }
  if(portraitFiles.length&&task.producer==='WorkBuddy')
   throw Error('WorkBuddy 自动派单目前没有私有肖像照片传输接口。请选 ChatGPT 创作，并将带照片的授权 ZIP 交给 ChatGPT；或先移除照片。');
- const files=[{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
+ const files=[{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
  saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
