@@ -1,0 +1,31 @@
+/* Professional institutional finance brief; independent from AI Lab sticker visuals */
+.finance-hub{margin:20px 0;padding:25px;background:#f7f9fc;border:1px solid #d9e0ea;border-radius:18px;color:#142844}
+.finance-head{display:flex;align-items:start;justify-content:space-between;gap:14px}
+.finance-head h2{font:700 clamp(22px,2.1vw,30px)/1.2 Georgia,"Noto Serif SC",serif;margin:7px 0}
+.finance-head p{font-size:13px;color:#53647a;max-width:690px;line-height:1.7}
+.finance-kicker{font:700 11px/1.5 sans-serif;letter-spacing:.15em;color:#a17d48}
+.finance-status{margin:14px 0;display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;font-size:12px;color:#53647a;border-top:1px solid #d9e0ea;padding-top:10px}
+.finance-toolbar{display:grid;grid-template-columns:minmax(0,1fr) 170px;gap:9px;margin-bottom:14px}
+.finance-toolbar input,.finance-toolbar select{padding:10px 11px;border:1px solid #d5deea;border-radius:9px;background:white;color:#172d48;min-width:0}
+.finance-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.finance-card{min-width:0;border:1px solid #dce2ec;border-radius:12px;padding:16px;background:white;display:flex;flex-direction:column;gap:10px}
+.finance-card-meta,.finance-card-footer{display:flex;align-items:center;justify-content:space-between;gap:9px}
+.finance-card-meta{font-size:11px;color:#53647a}
+.finance-card-meta span{font-weight:700;color:#255080}
+.finance-card h3{font:700 17px/1.45 Georgia,"Noto Serif SC",serif;color:#132845;margin:0}
+.finance-card p{font-size:12px;line-height:1.65;color:#47576b;margin:0;flex:1}
+.finance-card-footer{border-top:1px solid #e4e9f0;padding-top:9px;align-items:end}
+.finance-card-footer small{color:#728097;font-size:11px;flex:1;min-width:0}
+.finance-card-footer div{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.finance-card-footer a,.finance-card-footer button{font-size:11px;white-space:nowrap;border:1px solid #d7e0ea;background:white;color:#183c66;border-radius:7px;padding:7px 9px;text-decoration:none;cursor:pointer}
+.finance-card-footer button{background:#16395e;color:#fff;border-color:#16395e}
+.finance-empty{padding:22px;background:white;border-radius:10px;grid-column:1/-1;color:#53647a}
+.finance-empty strong{color:#1c3455;display:block;margin-bottom:5px}
+.finance-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;flex-wrap:wrap}
+.finance-bottom p{color:#68778a;font-size:11px;line-height:1.6;max-width:760px}
+#financeMore{border:1px solid #cbd5e2;border-radius:9px;background:white;color:#1e3b5c;padding:8px 12px;cursor:pointer}
+.finance-style-settings{display:none;grid-template-columns:1fr 100px;gap:12px;padding:12px;border:1px solid #dce4ec;border-radius:10px;background:#f8fbff;margin:10px 0}
+.finance-style-settings.show{display:grid}.finance-style-settings label{font-size:12px;font-weight:700;color:#34435b}
+.finance-style-settings select{display:block;width:100%;padding:9px;margin-top:5px;border:1px solid #cdd8e7;border-radius:8px;background:white}
+.finance-style-swatch{height:24px;border-radius:5px;margin-top:6px;border:1px solid #cdd8e7}
+@media(max-width:760px){.finance-hub{padding:16px;margin:14px 0}.finance-grid{grid-template-columns:1fr}.finance-toolbar{grid-template-columns:1fr}.finance-head{align-items:start}.finance-card-footer{align-items:start;flex-direction:column}.finance-card-footer div{width:100%;justify-content:flex-start}.finance-style-settings{grid-template-columns:1fr 100px}}
