@@ -23,6 +23,8 @@ jobs:
           node-version: '22'
       - name: Verify one-image-per-call prompts, distinct frame targets and anti-collage QA
         run: node comic-studio/tests/single-image-protocol.cjs
+      - name: Check Nobel literary-review three dimensions and adaptation-rights boundaries
+        run: node comic-studio/tests/literary-review.cjs
       - name: Validate existing 3.0 functional contracts
         run: node comic-studio/tests/worldtoon-v3-smoke.cjs
       - name: Verify 4.0 unified production journey and author gates
