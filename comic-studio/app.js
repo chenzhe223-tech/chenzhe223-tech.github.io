@@ -275,7 +275,26 @@ const prompts=[
 ];
 function makePanel(i,seed=false){let p=prompts[i];return {id:uid(),title:seed?p[0]:`第 ${i+1} 格`,scene:seed?p[1]:'',caption:seed?p[2]:'',dialogue:seed?p[3]:'',prompt:'',image:seed?`assets/${assetNames[i]}`:''}}
 function sampleProject(){let t=now();return {id:'sample-ba-zong-001',title:'霸总的小爱情',subtitle:'爱情与权力的九格寓言',description:'虚构的芯片霸总与神秘女友，卷入由舆论、政治与商业交织而成的风暴。',category:'商业财经',tone:'黑色幽默',format:'九格短篇',status:'示例',archived:false,deleted:false,createdAt:t,updatedAt:t,sourceTitle:'跨国科技与政治风波（虚构主题）',sourceURLs:'',eventDate:'',factNotes:'这是原创虚构演示故事，不代表对某一真实案件的核验或报道。',fiction:'人物、国家符号、人物间交易、关系及情节均为虚构；避免推断到真实个人。',characters:'芯片霸总／神秘女友／虚构政客／虚构执法人员／鹰兔象征',disclosure:'本故事纯属虚构，不应据此推断任何现实人物违法、私人关系或政治交易。',panels:prompts.map((_,i)=>makePanel(i,true)),checks:Array(6).fill(false),activity:[{at:t,detail:'内置示例作品已建立'}],reviewedAt:null,publishedAt:null,cover:'assets/cover.png'};}
-function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',title:topic?.title?`${topic.title}：漫画改编`:'未命名新作',subtitle:'',description:topic?.summary||'',category:topic?.category||'AI 科技',tone:'黑色幽默',format:'九格短篇',status:'草稿',archived:false,deleted:false,createdAt:t,updatedAt:t,sourceTitle:topic?.title||'',sourceURLs:topic?.source||'',eventDate:topic?.eventDate||'',eventDateBasis:topic?.eventDateBasis||'',newsPublishedAt:topic?.publishedAt||'',factNotes:'',fiction:'',characters:'',disclosure:'本作品是基于公共议题创作的虚构漫画，不构成对真实人物的指控。',panels:Array.from({length:9},(_,i)=>makePanel(i)),checks:Array(6).fill(false),activity:[{at:t,detail:'创建草稿'}],reviewedAt:null,publishedAt:null,cover:''};return p}
+function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',title:topic?.title?`${topic.title}：漫画改编`:'未命名新作',subtitle:'',description:topic?.summary||'',category:topic?.category||'AI 科技',tone:'黑色幽默',format:'九格短篇',status:'草稿',archived:false,deleted:false,createdAt:t,updatedAt:t,sourceTitle:topic?.title||'',sourceURLs:topic?.source||'',eventDate:topic?.eventDate||'',eventDateBasis:topic?.eventDateBasis||'',newsPublishedAt:topic?.publishedAt||'',factNotes:'',fiction:'',characters:'',disclosure:'本作品是基于公共议题创作的虚构漫画，不构成对真实人物的指控。',panels:Array.from({length:9},(_,i)=>makePanel(i)),checks:Array(6).fill(false),activity:[{at:t,detail:'创建草稿'}],reviewedAt:null,publishedAt:null,cover:''};
+ if(topic?.category==='诺奖文学'||topic?.sourceId==='nobel_literature'){
+  if(!['licensed_adaptation','public_domain_verified_region'].includes(topic?.rightsStatus)){
+   p.category='诺奖文学导读';
+   p.title='读懂｜'+String(topic.title||'待核验文学作品')+'：故事·哲学·人生';
+   p.handoff={mode:'hotspot'};
+   p.storySourceSelection={source_id:topic.sourceId||'nobel_literature',title:topic.title||'',source:topic.source||'',type:'nobel_literature',
+    rights:topic.rightsStatus||'unknown',adaptation:'literary_review',license_attested:false,selected_beats:[],
+    requires_independent_author_review:true,bibliography_verified:false,
+    review_dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers']};
+   p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
+    source_title:topic.title||'',source_url:topic.source||'',source_status:'pending_research',
+    dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
+    panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
+   p.description='针对已核实的作品进行原创文学导读：01–03格简要介绍作品讲了什么；04–06格独立解释其人生哲学；07–09格通过原创当代生活场景解释对普通人的意义。不得逐幕复刻原著情节、照搬人物形象或对白；先核实作者与诺奖关系。';
+   p.fiction='文学评论和原创读者视角，不是小说剧情改编；文学事实须有可靠来源，哲学观点属于编辑解读。';
+   p.disclosure='原创文学导读与评论漫画，非原著漫画改编；未取得授权不复刻原著具体场景、插画、台词或大量文字。';
+  }
+ }
+ return p}
 const sampleTopic={id:'sample-topic-001',title:'科技产业与国际政治的戏剧性碰撞',category:'商业财经',summary:'仅用于展示选题结构；不是实时新闻，也未完成事实核验。',source:'',heat:3,impact:4,story:5,stage:'待核验',isSample:true,createdAt:now()};
 const initial=()=>({version:3,projects:[sampleProject()],topics:[sampleTopic],characters:[],settings:{brand:'By DAVYLAB',color:'#df624a'},logs:[]});
 let legacyImport=false;
