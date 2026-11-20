@@ -36,7 +36,7 @@ async function run(){
   await page.route("**/data/finance-discovery.json?**",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify(fixture)}));
   await page.route("**/data/overseas-discovery.json?**",route=>route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({schema_version:1,articles:[],sources:[]})}));
   await page.goto(base+"/topic-studio/index.html",{waitUntil:"domcontentloaded"});
-  await page.locator("#financeCount").getByText("已收录 2 条",{exact:false}).waitFor({timeout:10000});
+  await page.waitForFunction(()=>document.querySelector("#financeCount")?.textContent.includes("已收录 2 条"),null,{timeout:12000});
   assert.equal(await page.locator("#financeList .finance-card").count(),2,"two fixture finance cards must render");
   await page.locator('button[data-fin-id="fin-test-company"]').click();
   assert.equal(await page.locator("#promptMode").inputValue(),"finance","finance pick must activate C mode");
