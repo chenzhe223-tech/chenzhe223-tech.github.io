@@ -69,7 +69,7 @@ assert.equal(qaCounts[0].textContent,'0','counter clears');
 assert.equal(qaClear.disabled,true,'cannot clear twice');
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-list\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/,'two aligned desktop columns');
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-list\{grid-template-columns:minmax\(0,1fr\)/,'one mobile column');
-assert.match(index,/worldtoon-v3-review\.js\?v=4\.6\.3-single-frame/,'new QA script cache revision');
+assert.match(index,/worldtoon-v3-review\.js\?v=4\.6\.6-visual-qa/,'new QA script cache revision');
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-item\{[^}]*min-height:48px/,'compact checklist items should remain 48px high');
 assert.match(shelfCss,/\.wt3-final-review \.wt3-qa-list\{[^}]*gap:8px 12px/,'QA grid spacing should remain compact and aligned');
 assert.match(shelfCss,/\.wt3-final-review #wt3-sources\{[^}]*min-height:68px/,'sources input should not consume excessive vertical space');
