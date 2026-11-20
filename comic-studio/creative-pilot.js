@@ -11,7 +11,7 @@ function pilot(p){
  if(!c.approval?.lock_hash)return '';
  const direct=(p.productionAgent||'ChatGPT')==='ChatGPT';
  const queued=direct?!!p.handoff?.taskId:!!p.handoff?.repoQueuedAt;
- const approved=!!(receipt?.local_approved||approved);
+ const approved=!!(receipt?.local_approved||receipt?.repo_commit);
  const thumb=(key,label)=>images[key]?'<img data-source="'+e(images[key])+'" src="'+e(mediaSrc(images[key]))+'" alt="'+e(label)+'">':
   '<div class="director-pilot-missing">'+label+' · 尚未上传实际图片</div>';
  return '<section class="box director-pilot"><div class="director-pilot-heading"><div><div class="kicker">VISUAL PILOT / FIRST PROOF</div>'+
