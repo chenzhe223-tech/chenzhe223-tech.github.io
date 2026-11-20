@@ -34,13 +34,13 @@ test('new Studio does not expose anonymous write API and previous pages survive'
  const home=await(await worker.fetch(new Request('https://knowa.test/'),{})).text();
  assert.match(home,/href="\/studio"/);
 });
-test('inline Studio browser controller parses as valid JavaScript and preserves download logic',async()=>{
- const res=await worker.fetch(new Request('https://knowa.test/studio'),{});
- const html=await res.text();
- const blocks=[...html.matchAll(/<script>([\\s\\S]*?)<\\/script>/g)].map(x=>x[1]);
- assert.equal(blocks.length,1);
- for(const script of blocks)assert.doesNotThrow(()=>new vm.Script(script,{filename:'knowa-studio-client.js'}));
- assert.match(blocks[0],/URL\\.createObjectURL/);
- assert.match(blocks[0],/navigator\\.clipboard|toBlob/);
- assert.match(blocks[0],/source-review-pending/);
+test('inline Studio browser controller parses and retains download code',async()=>{
+ const html=await(await worker.fetch(new Request('https://knowa.test/studio'),{})).text();
+ const start=html.indexOf('<script>'),end=html.lastIndexOf('</script>');
+ assert.ok(start>=0&&end>start,'single inline script expected');
+ const script=html.slice(start+8,end);
+ assert.doesNotThrow(()=>new vm.Script(script,{filename:'knowa-studio-client.js'}));
+ assert.match(script,/URL\.createObjectURL/);
+ assert.match(script,/canvas\.toBlob/);
+ assert.match(script,/source-review-pending/);
 });
