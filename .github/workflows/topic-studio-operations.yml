@@ -22,5 +22,8 @@ jobs:
         run: |
           node --check topic-studio/operations/core.js
           node --check topic-studio/operations/ui.js
+          node --check topic-studio/operations/bridge.js
       - name: Guarded core regression
-        run: node topic-studio/operations/tests/core.test.cjs
+        run: |
+          node topic-studio/operations/tests/core.test.cjs
+          node topic-studio/operations/tests/bridge.test.cjs
