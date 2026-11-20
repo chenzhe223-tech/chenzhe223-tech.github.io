@@ -69,14 +69,16 @@ function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {sch
 function wfSingleImageJobs(p,task){
  const cd=task.creative_direction||{};
  const style=JSON.stringify({style_id:cd.style_id||'',visual_rules:cd.visual_rules||{},characters:cd.characters||[]});
- const constraint='ONE IMAGE ONLY. One uninterrupted 3:4 vertical canvas at native 1080x1440 or higher, ONE scene, ONE camera, ONE moment. NO contact sheet, NO storyboard page, NO nine-grid, NO comic strip, NO split screen, NO inset, NO collage, NO multiple scenes, NO panel frames, gutters, tiles or dividing lines. Render only this target frame, not the whole story. Use approved character-sheet and first-frame references for consistent identities and style. Do not draw readable lettering; reserve safe blank text space. ';
+ const constraint='ONE IMAGE ONLY. One uninterrupted 3:4 vertical canvas at native 1080x1440 or higher, ONE scene, ONE camera, ONE moment. NO contact sheet, NO storyboard page, NO nine-grid, NO comic strip, NO split screen, NO inset, NO collage, NO multiple scenes, NO panel frames, gutters, tiles or dividing lines. Render only this target frame, not the whole story. Use the approved character-sheet for identities; use the approved first-frame as an additional style reference ONLY when generating later panels or the cover. The first-frame pilot must not depend on itself. Do not draw readable lettering; reserve safe blank text space. ';
  const jobs=p.panels.map((a,i)=>({
   job_id:'P'+String(i+1).padStart(2,'0'),target:'panels/'+String(i+1).padStart(2,'0')+'.png',
   target_type:'panel',panel_index:i+1,image_calls:1,expected_image_count:1,expected_scene_count:1,
+  reference_assets:i===0?['character-sheet.png']:['character-sheet.png','pilot-01.png'],
   prompt:constraint+'TARGET: panel '+(i+1)+' of '+p.panels.length+' (index is metadata, NOT a multi-panel layout). Fixed visual bible: '+style+'. CURRENT SHOT ONLY: '+String(a.scene||'').slice(0,1700)+'. Current visual notes: '+String(a.prompt||'').slice(0,900)+'. Reserve room for separate caption: '+String(a.caption||'').slice(0,280)+'.'
  }));
  jobs.push({
   job_id:'COVER',target:'cover.png',target_type:'cover',panel_index:null,image_calls:1,expected_image_count:1,expected_scene_count:1,
+  reference_assets:['character-sheet.png','pilot-01.png'],
   prompt:constraint+'TARGET: independent COVER ONLY. One unified editorial illustration, not a plot overview or interior pages. Cover concept: '+String(cd.cover_brief||p.title).slice(0,900)+'. Fixed visual bible: '+style+'. Leave title-safe space for separate typography.'
  });
  return {schema:'davylab.worldtoon.single-image-jobs.v2',task_id:task.task_id,
