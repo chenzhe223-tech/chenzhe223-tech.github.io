@@ -86,7 +86,8 @@
        deepseek.loading?'正在核验 DeepSeek 服务端状态':'模型状态将在登录后核验';
      const prev=ui.stage;ui.stage=2;const body=studio();ui.stage=prev;
      return '<div class="wt4-model-status" role="status">'+html(model)+
-       ' · 生成内容前仍需作者主动确认可能产生的模型费用</div>'+body;
+       ' · 生成内容前仍需作者主动确认可能产生的模型费用</div>'+
+       (typeof window.WTNovelStudio?.panel==='function'?window.WTNovelStudio.panel(p):'')+body;
    }
    if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
    if(i===3){
