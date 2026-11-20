@@ -147,6 +147,26 @@ body[data-layout-columns] #section-discover.section.active,
 }
 #section-discover.discover-tabs-ready[data-active-source="radar"]>.xnews-hub,
 #section-discover.discover-tabs-ready[data-active-source="xnews"]>.opportunity-hub{display:none!important;}
+/* Three true content-source tabs: finance is immediately below the quicknav when selected. */
+#section-discover .finance-hub{
+  grid-column:1/-1!important;
+  margin:0!important;
+  padding:28px 30px 30px!important;
+  border:1px solid var(--ed-line)!important;
+  border-radius:0 0 18px 18px!important;
+  background:var(--ed-white)!important;
+  box-shadow:0 12px 30px #1a365008!important;
+  scroll-margin-top:78px;
+}
+#section-discover.discover-tabs-ready[data-active-source="radar"]>.finance-hub,
+#section-discover.discover-tabs-ready[data-active-source="xnews"]>.finance-hub,
+#section-discover.discover-tabs-ready[data-active-source="finance"]>.opportunity-hub,
+#section-discover.discover-tabs-ready[data-active-source="finance"]>.xnews-hub{display:none!important;}
+@media(max-width:1180px){#section-discover .finance-hub{padding:24px!important}}
+@media(max-width:760px){
+ #section-discover .discover-quicknav a:last-child{grid-column:1/-1!important}
+ #section-discover .finance-hub{padding:18px 14px 19px!important;border-radius:0 0 13px 13px!important;scroll-margin-top:12px}
+}
 #section-discover .opportunity-heading,
 #section-discover .xnews-head{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:22px!important;}
 #section-discover .opportunity-heading h2,
