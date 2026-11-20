@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import worker from '../src/index.js';
+import vm from 'node:vm';
 import {validateStudioDraft,makeStudioExport,STUDIO_SCHEMA} from '../src/studio-schema.js';
 const valid={id:'d-test',title:'为什么海水是咸的？',category:'自然地理',body:'海水中存在盐分与陆地岩石风化和海底热液活动等过程有关，这些盐分长期在海洋中积累并参与物质循环。',provider:'NOAA',sourceUrl:'https://oceanservice.noaa.gov/facts/whysalty.html',scope:'解释原因',revision:1};
 test('schema rejects unsafe and incomplete knowledge drafts',()=>{
@@ -32,4 +33,14 @@ test('new Studio does not expose anonymous write API and previous pages survive'
  assert.match(article,/studio\?seed=k01/);
  const home=await(await worker.fetch(new Request('https://knowa.test/'),{})).text();
  assert.match(home,/href="\/studio"/);
+});
+test('inline Studio browser controller parses as valid JavaScript and preserves download logic',async()=>{
+ const res=await worker.fetch(new Request('https://knowa.test/studio'),{});
+ const html=await res.text();
+ const blocks=[...html.matchAll(/<script>([\\s\\S]*?)<\\/script>/g)].map(x=>x[1]);
+ assert.equal(blocks.length,1);
+ for(const script of blocks)assert.doesNotThrow(()=>new vm.Script(script,{filename:'knowa-studio-client.js'}));
+ assert.match(blocks[0],/URL\\.createObjectURL/);
+ assert.match(blocks[0],/navigator\\.clipboard|toBlob/);
+ assert.match(blocks[0],/source-review-pending/);
 });
