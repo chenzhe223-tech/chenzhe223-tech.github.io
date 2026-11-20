@@ -1,4 +1,5 @@
 /* DAVYLAB · 全球财经资讯发现（公开元数据，未经独立核验） */
+/* Production bootstrap: activate first verified feed sync after new workflow registration. */
 (function(){
 "use strict";
 const root=document.getElementById("financeDiscovery");
