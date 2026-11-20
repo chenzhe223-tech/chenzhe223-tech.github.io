@@ -22,6 +22,8 @@ SOURCES = [
     ("美国证券交易委员会 · SEC", "https://www.sec.gov/news/pressreleases.rss", "资本市场"),
     ("欧洲央行 · ECB", "https://www.ecb.europa.eu/rss/press.html", "宏观政策"),
     ("美国劳工统计局 · BLS", "https://www.bls.gov/feed/bls_latest.rss", "经济数据"),
+    ("CNBC · 全球财经报道", "https://www.cnbc.com/id/10000664/device/rss/rss.html", "企业与市场", "media_report"),
+    ("CNBC · 全球新闻分析", "https://www.cnbc.com/id/100727362/device/rss/rss.html", "全球市场", "media_report"),
 ]
 ATOM = "{http://www.w3.org/2005/Atom}"
 MAX_BYTES, MAX_AGE = 2_000_000, 30
@@ -65,7 +67,8 @@ def parse_feed(raw, source, now=None):
     root = ET.fromstring(raw)
     if root.tag not in ("rss", ATOM + "feed", "{http://purl.org/rss/1.0/}RDF", "RDF"):
         raise ValueError("Not RSS/Atom")
-    label, _, default_category = source
+    label, _, default_category = source[:3]
+    source_type = source[3] if len(source) > 3 else "official_primary"
     if root.tag == ATOM + "feed":
         nodes = root.findall(ATOM + "entry")
     else:
@@ -91,7 +94,8 @@ def parse_feed(raw, source, now=None):
             "id":"fin-"+key, "title":title, "summary":clean(summary, 210),
             "url":url, "source":label, "category":default_category,
             "published_at":published.isoformat(timespec="seconds"),
-            "verification":"official_source_metadata_not_independently_fact_checked",
+            "verification":"media_report_metadata_not_independently_verified" if source_type=="media_report" else "official_source_metadata_not_independently_fact_checked",
+            "source_type":source_type,
             "language":"source_original", "content_type":"finance",
         })
     return data
@@ -129,12 +133,12 @@ def compile_snapshot(fetch=download, now=None, existing=None):
         # Nothing recent: do not claim the old stories are new.
         articles=existing["articles"][:100]
     return {
-        "schema_version":1, "source":"DAVYLAB official public feeds",
+        "schema_version":1, "source":"DAVYLAB official public feeds and openly available media RSS",
         "checked_at":now.isoformat(timespec="seconds"),"count":len(articles),
         "latest_published_at":articles[0]["published_at"] if articles else None,
         "fresh_within_72h":sum(iso_date(a.get("published_at")) is not None and iso_date(a["published_at"]) >= now-timedelta(hours=72) for a in articles),
         "status":"ok" if articles else "empty","sources":diag,"articles":articles,
-        "disclaimer":"Public source metadata, not independent fact verification; no market prices or investment advice."
+        "disclaimer":"Official primary statements and secondary media reporting are distinguished. Public RSS metadata is not independently verified; no market prices or investment advice."
     }
 
 def main():
