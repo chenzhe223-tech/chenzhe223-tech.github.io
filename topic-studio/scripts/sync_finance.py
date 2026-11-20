@@ -63,7 +63,10 @@ def iso_date(value):
 def parse_feed(raw, source, now=None):
     now = now or datetime.now(timezone.utc)
     if len(raw) > MAX_BYTES: raise ValueError("Feed exceeds size limit")
-    if re.search(rb"<!\s*(DOCTYPE|ENTITY)", raw, re.I):
+    # RSS may embed literal HTML <!DOCTYPE ...> safely inside CDATA. Mask only
+    # well-formed CDATA spans before rejecting active XML declarations.
+    xml_outside_cdata = re.sub(rb"<!\[CDATA\[[\s\S]*?\]\]>", b"", raw)
+    if re.search(rb"<!\s*(DOCTYPE|ENTITY)", xml_outside_cdata, re.I):
         raise ValueError("DTD and entities prohibited")
     root = ET.fromstring(raw)
     if root.tag not in ("rss", ATOM + "feed", "{http://purl.org/rss/1.0/}RDF", "RDF"):
