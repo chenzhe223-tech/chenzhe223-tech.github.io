@@ -457,7 +457,13 @@ function wtUnmadeCleanupDialog(){
 }
 function findProject(id){return data.projects.find(p=>p.id===id)}
 function selected(){return findProject(ui.selected)||activeProjects()[0]||null}
-function nav(route){location.hash='#/'+route;parseRoute()}
+const wtNavigationHandledHashes=new Set();
+function nav(route){
+ const target='#/'+route;
+ if(location.hash!==target)wtNavigationHandledHashes.add(target);
+ location.hash=target;
+ parseRoute(); // Navigation updates immediately; matching hashchange must not rerender/close the freshly reopened mobile sidebar.
+}
 function parseRoute(){let bits=(location.hash||'#/dashboard').replace(/^#\/?/,'').split('/').filter(Boolean);ui.route=['dashboard','workspace','production','radar','live','ai-briefing','characters','account','library','studio','publish','settings','reader','handoff','archive','director'].includes(bits[0])?bits[0]:'dashboard';if(bits[1]&&findProject(bits[1]))ui.selected=bits[1];if(ui.route==='workspace')ui.wt4Step=bits.length>2&&/^[0-6]$/.test(bits[2])?Number(bits[2]):-1;if(ui.route==='reader'&&bits[2])ui.reader=Math.max(0,Math.min((selected()?.panels?.length||9)-1,Number(bits[2])-1||0));if(ui.route==='studio'&&bits[2])ui.stage=Math.max(0,Math.min(4,Number(bits[2])||0));render();document.querySelector('.rail')?.classList.remove('is-open')}
 function link(route,id){return '#/'+route+(id?'/'+encodeURIComponent(id):'')}
 function notify(msg){const x=document.querySelector('#toast');x.textContent=msg;x.classList.add('visible');clearTimeout(notify.timer);notify.timer=setTimeout(()=>x.classList.remove('visible'),3200)}
@@ -596,7 +602,12 @@ document.addEventListener('submit',ev=>{
 document.addEventListener('input',ev=>{let el=ev.target,p=selected();if(el.matches('[data-project-field]')&&p){p[el.dataset.projectField]=el.value;if(el.dataset.projectField==='eventDate')p.eventDateBasis=el.value?'manual_unverified':'';markDirty(p);return}if(el.matches('[data-panel-field]')&&p){let idx=Number(el.dataset.panelIndex);p.panels[idx][el.dataset.panelField]=el.value;markDirty(p);return}if(el.id==='librarySearch'){ui.search=el.value;let caret=el.selectionStart;render();let next=document.querySelector('#librarySearch');next?.focus();next?.setSelectionRange(caret,caret)}});
 document.addEventListener('change',ev=>{let el=ev.target,p=selected();if(el.matches('[data-check-index]')&&p){p.checks[Number(el.dataset.checkIndex)]=el.checked;if(!el.checked&&p.status==='已审核')p.status='草稿';setChange(p);render()}if(el.matches('[data-upload-panel]'))uploadPanel(el).then(()=>{if(typeof wtScheduleSync==='function')wtScheduleSync()});if(el.matches('[data-import-workspace]')&&el.files[0])importWorkspace(el.files[0]);if(el.id==='publishProject'){ui.selected=el.value;render()}if(el.matches('[data-project-field]')&&p){setChange(p,'更新作品设定')}});
 document.getElementById('topNew').addEventListener('click',()=>newProject());document.getElementById('menuToggle').addEventListener('click',()=>document.querySelector('.rail').classList.toggle('is-open'));
-window.addEventListener('hashchange',parseRoute);document.addEventListener('keydown',ev=>{if(document.querySelector('#modalRoot:not([hidden])')){if(ev.key==='Escape')closeModal();return}if(ui.route==='reader'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){if(ev.key==='ArrowRight'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+1)%n;render()}if(ev.key==='ArrowLeft'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+n-1)%n;render()}}});
+window.addEventListener('hashchange',ev=>{
+ const target=ev?.newURL?new URL(ev.newURL).hash:location.hash;
+ if(wtNavigationHandledHashes.delete(target))return;
+ wtNavigationHandledHashes.clear();
+ parseRoute();
+});document.addEventListener('keydown',ev=>{if(document.querySelector('#modalRoot:not([hidden])')){if(ev.key==='Escape')closeModal();return}if(ui.route==='reader'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)){if(ev.key==='ArrowRight'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+1)%n;render()}if(ev.key==='ArrowLeft'){const n=selected()?.panels?.length||9;ui.reader=(ui.reader+n-1)%n;render()}}});
 async function finishLegacyImport(){
  let moved=0,failed=0;
  for(let p of data.projects){for(let im of p.panels){if(im.image?.startsWith('data:image/')){
