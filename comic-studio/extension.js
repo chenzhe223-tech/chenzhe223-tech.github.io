@@ -71,7 +71,7 @@ function wtLive(){
   (n.rights_status==='copyright_permission_required'?'<p class="wt-rights-warning">著作权提醒：需要取得原作改编授权；可先做书评或原创主题解读。</p>':'')+
   '<div class="wt-catalog-score">综合预评分 <strong>'+n._rating.overall+'</strong><span>/100 · '+e(n._rating.method==='evergreen_rule_estimate'?'长期故事价值':n._rating.method==='event_rule_estimate'?'学术活动策划价值':'新闻选题价值')+'</span></div>'+
   '<div class="buttons"><a href="'+e(safeURL(n.url))+'" target="_blank" rel="noopener noreferrer" class="button">核对原始来源</a>'+
-  '<button type="button" class="button dark" data-wt="create-news" data-index="'+n._sourceIndex+'">创作漫画</button>'+
+  '<button type="button" class="button dark" data-wt="create-news" data-index="'+n._sourceIndex+'">'+(n.category==='诺奖文学'||n.source_id==='nobel_literature'?'三维文学导读':'创作漫画')+'</button>'+
   '<button type="button" class="button" data-wt="save-news" data-index="'+n._sourceIndex+'">收藏选题</button></div></div></article>').join('');
  const isEmpty=!wtNews.length;
  const message=wtFetching&&isEmpty?'正在读取后台素材缓存…':isEmpty?'后台素材库尚未初始化。请查看最近更新时间，稍后重新读取；不会因点击分类而现场采集。':
@@ -149,10 +149,32 @@ async function wtDraftFromNews(i){
  if(existing){ui.selected=existing.id;nav('studio/'+existing.id+'/0');notify('已打开这条选题的现有漫画草稿');return}
  const p=emptyProject(t);
  p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻、文学或研究线索；请先核对原文、活动日期、史实及版权。'+(Array.isArray(x.series_episodes)&&x.series_episodes.length?' 原创连载建议：'+x.series_episodes.join(' / '):'');
- p.fiction='原创架空角色及情节，不复现或指控现实人物。';
+ const nobel=x.category==='诺奖文学'||x.source_id==='nobel_literature';
+ if(nobel){
+  p.category='诺奖文学导读';
+  p.title='读懂｜'+x.title+'：故事、哲学与人生';
+  p.storySourceSelection={source_id:x.source_id||'nobel_literature',title:x.title,
+   type:'nobel_literature',source:x.url,source_name:x.source||'待核验来源',
+   rights:x.rights_status||'unknown',adaptation:'literary_review',license_attested:false,
+   selected_beats:[],requires_independent_author_review:true,
+   review_dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
+   bibliography_verified:false};
+  p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
+   source_title:x.title,source_url:x.url,source_status:'source_lead_pending_research',
+   dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
+   panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
+  p.description='围绕《'+x.title+'》进行独立文学导读（先核实作品名、作者、诺奖关系及具体内容）：第1–3格介绍作品讲了什么（只提供经证实的简要背景、人物关系与主题，不重演原作情节）；第4–6格独立评析作品蕴含的人生哲学；第7–9格用全新原创当代普通人故事讨论现实意义。';
+  p.ideaSeed='诺奖文学三维导读；以作品准确介绍、编辑性文学评论、原创生活比喻为原则，绝不直接重绘原著具体场景，不复制原著独特角色形象、对白、插画或大量原文。查证不足则保持待研究，不编造哲学论述为作者原话。';
+  p.fiction='版权未知或未经授权时只制作原创文学导读和评论。03格概述应精炼，04–06格观点是编辑解读，07–09格人物和场景均须原创；具体引用及使用权须按地区审核。';
+  p.disclosure='本作品为独立文学导读和评论漫画，不是原著剧情漫画化；文学观点属于编辑分析，未获授权不使用原作插画、人物形象或受保护的长篇文本。';
+  p.factNotes='【待核验：诺奖文学资料】来源：'+(x.source||'待核实')+'\n原始网址：'+x.url+
+   '\n必须核对：书名/作家/获奖年度/作品主题与内容（不能将作家获诺奖误说成此书单独获奖）。\n'+
+   '未取得文学改编授权，只允许独立导读和评论；版权风险仍需人工核验。';
+  p.handoff={...p.handoff,mode:'hotspot'};
+ }else p.fiction='原创架空角色及情节，不复现或指控现实人物。';
  p.sourceURLs=x.url;p.sourceTitle=x.title;p.status='草稿';p.evergreen=x.evergreen===true;p.sourceId=x.source_id||'';p.rightsStatus=x.rights_status||'unknown';
  data.projects.unshift(p);ui.selected=p.id;persist();
- nav('director/'+p.id);notify('已建立漫画草稿，进入创意导演台选择画风、角色与九格剧情');
+ nav('director/'+p.id);notify(nobel?'已建九格诺奖文学三维导读草稿，先核对书目和观点，再由 AI 编剧':'已建立漫画草稿，进入创意导演台选择画风、角色与九格剧情');
 }
 
 async function wtLoadConfig(){try{wtConfig=await wtJson(await fetch('/api/config',{cache:'no-store'}));return wtConfig}catch(err){wtCloudError=err.message;return null}}
@@ -191,6 +213,13 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const scrub=v=>String(v||'').trim().slice(0,1800);
  const isProtected=x=>x?.rights!=='public_domain_us';
+ const isLiterary=x=>x?.type!=='drama';
+ const isNobel=x=>isLiterary(x)&&(/诺贝尔|诺奖|nobel/i.test([x?.category,x?.source_id,x?.author_award,x?.genre,x?.award].filter(Boolean).join(' '))||x?.nobel_literature===true);
+ const reviewDimensions=[
+  {id:'overview',title:'01–03 · 这部作品讲了什么',description:'核实作者、出版背景、故事核心问题与主题，只做简短原创概述，不逐章或逐场景重演'},
+  {id:'philosophy',title:'04–06 · 它揭示什么人生哲学',description:'从可信书评与原作可核对信息出发，提出独立的关于人性、选择、孤独、自由或尊严的分析，不把观点冒充作者原话'},
+  {id:'reader',title:'07–09 · 对普通人意味着什么',description:'使用完全原创的当代生活人物和具体选择，让读者带走可思考的问题；不冒用原著人物或复制经典情节'}
+ ];
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
  const flowCard=x=>window.WTDiscoveryFlow?.card(x)||{identityLabel:'作品身份待核对',heatLabel:'未核实热度',heatEvidenceDate:'',publishedDate:String(x?.published||'').slice(0,10),sourceName:x?.source_name||'公开资料',rightsLabel:x?.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实'};
  function originalTopicChoices(x){
@@ -237,7 +266,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  }
  function selection(){
   const x=story.selected;if(!x)return '';
-  const beats=beatOptions(x);
+  const review=story.mode==='literary_review',beats=review?[]:beatOptions(x);
   return '<section class="story-selected"><div class="story-selected-head"><div><div class="kicker">STORY SELECTION / 分段选取</div><h3>'+html(x.title)+'</h3>'+
   '<p>'+html(x.summary||'已找到题名，暂缺足够原著剧情，请手动输入有权使用的剧情摘要。')+'</p></div>'+
   '<button class="button" data-story-back="1">返回结果</button></div>'+
@@ -245,17 +274,19 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   (x.source_kind==='web_search_lead'?'<p class="story-note">此结果仅为公开报道线索，不代表剧名已核实。进入漫画制作前请查看实际作品资料。</p>':'')+
   (!Array.isArray(x.beats)||!x.beats.length?'<label class="story-paste">可补充更准确、你有权使用的剧情简介（每段一行）<textarea id="story-synopsis" rows="4" placeholder="请粘贴你有权使用的剧情概要；不可直接粘贴受保护作品的大段原文。">'+html(story.synopsis)+'</textarea></label>'+
    '<button type="button" class="button" data-story-parse="1">从概要提取可选片段</button><p class="story-note">仅按你输入的段落拆分，不伪造原著章节。未核实剧情时，原创模式仅提供独立主题方向，不声称是原剧内容。</p>':'')+
+  (review?'<div class="story-beats">'+reviewDimensions.map(d=>'<article class="story-beat"><span><strong>'+html(d.title)+'</strong><small>'+html(d.description)+'</small></span></article>').join('')+'</div><p class="story-note">导读不是原著重绘：查证后的简短作品介绍＋独立文学评论＋原创现实隐喻；来源不充分时须停留在研究阶段。</p>':
   '<div class="story-beats">'+(beats.length?beats.map((b,i)=>
    '<label class="story-beat"><input type="checkbox" data-story-beat="'+html(b.id)+'" '+(story.chosen.has(String(b.id))?'checked':'')+'>'+
    '<span><strong>'+String(i+1).padStart(2,'0')+' · '+html(b.title)+'</strong><small>'+html(b.summary)+'</small><em>'+html(b.basis||'资料概要 · 非具体集数')+'</em></span></label>').join(''):
-   '<div class="story-none">暂缺可核实的原作剧情。忠实改编请补充有权使用的剧情概要；原创模式可选择独立主题方向。</div>')+'</div>'+
+   '<div class="story-none">暂缺可核实的原作剧情。忠实改编请补充有权使用的剧情概要；原创模式可选择独立主题方向。</div>')+'</div>')+
   '<div class="story-production-choices"><div><label for="story-adaptation">改编方式</label><select id="story-adaptation">'+
   '<option value="original"'+(story.mode==='original'?' selected':'')+'>全新原创故事（仅取抽象主题，不复刻人物）</option>'+
-  '<option value="faithful"'+(story.mode==='faithful'?' selected':'')+'>忠实改编（须确认公版或有效授权）</option></select></div>'+
+  '<option value="faithful"'+(story.mode==='faithful'?' selected':'')+'>忠实改编（须确认公版或有效授权）</option>'+
+  (isLiterary(x)?'<option value="literary_review"'+(story.mode==='literary_review'?' selected':'')+'>文学导读漫画 · 内容／哲学／现实意义（无需改编原著情节）</option>':'')+'</select></div>'+
   (isProtected(x)&&story.mode==='faithful'?'<div class="story-proof"><label for="story-rights-url">改编授权依据 URL（必填）</label>'+
    '<input id="story-rights-url" type="url" placeholder="https://... 已获得的有效授权证明" value="'+html(story.rightsURL)+'">'+
    '<label><input type="checkbox" id="story-rights-consent" '+(story.rightsConsent?'checked':'')+'>我有此作品的改编权，且会在终审上传有效授权证据。</label></div>':'')+
-  '</div><div class="story-selection-foot"><span id="story-selected-count">已选择 '+story.chosen.size+' 段</span>'+
+  '</div><div class="story-selection-foot"><span id="story-selected-count">'+(review?'三大维度 · 九格导读':('已选择 '+story.chosen.size+' 段'))+'</span>'+
   '<button type="button" class="button dark" data-story-create="1">建立漫画草稿，进入 AI 编剧 →</button></div>'+
   '<p class="story-note">建稿不会自动购买模型服务或发起出版。你可以在导演台编辑剧情，最终生产仍经过样稿、GitHub QA 与作者终审。</p></section>';
  }
@@ -308,46 +339,64 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  }
  function choose(i){
   const x=story.items[Number(i)];if(!x)return;
-  story.selected=x;story.mode=x.rights==='public_domain_us'?'faithful':'original';
+  story.selected=x;story.mode=isNobel(x)?'literary_review':x.rights==='public_domain_us'?'faithful':'original';
   story.chosen.clear();story.synopsis='';story.rightsURL='';story.rightsConsent=false;render();
  }
  function createProjectFromStory(){
   const x=story.selected;if(!x)throw Error('请先选择作品');
-  const beats=beatOptions(x).filter(b=>story.chosen.has(String(b.id)));
-  if(!beats.length)throw Error('请至少勾选一段已核对的剧情或自行提供概要');
+  const review=story.mode==='literary_review';
+  if(review&&!isLiterary(x))throw Error('文学导读只适用于小说与文学作品，不能将短剧冒充诺奖文学');
+  const beats=review?[]:beatOptions(x).filter(b=>story.chosen.has(String(b.id)));
+  if(!review&&!beats.length)throw Error('请至少勾选一段已核对的剧情或自行提供概要');
   const faithful=story.mode==='faithful',protectedWork=isProtected(x);
   const rightsURL=story.rightsURL.trim();
   if(protectedWork&&faithful&&(!story.rightsConsent||!/^https:\/\/[\w.-]+\//.test(rightsURL)))
    throw Error('忠实改编受保护作品，须由作者确认权限并填写可核对的授权依据链接');
+  if(review&&!limitedSource(x))throw Error('文学导读必须有可追溯的作品书目或介绍来源，不能编造原著内容');
   const srcTitle=x.title,summary=beats.map(b=>b.summary).join('；').slice(0,1000);
   const abstract=beats.map(b=>(Array.isArray(b.tags)&&b.tags.length?b.tags.join('、'):b.title)).join('；').slice(0,650);
   const p=emptyProject();
-  p.title=faithful?'《'+srcTitle+'》：'+beats[0].title+'（漫画改编）':'原创漫画 · '+(x.genre||'成长与关系')+'新篇';
-  p.category=x.type==='drama'?'娱乐':'文化';
+  p.title=review?'读懂《'+srcTitle+'》｜故事·哲学·人生':faithful?'《'+srcTitle+'》：'+beats[0].title+'（漫画改编）':'原创漫画 · '+(x.genre||'成长与关系')+'新篇';
+  p.category=review?'诺奖文学导读':x.type==='drama'?'娱乐':'文化';
   p.sourceTitle=srcTitle;p.sourceURLs=limitedSource(x);
   p.storySourceSelection={
    source_id:x.id||'',title:srcTitle,type:x.type,source:x.source,source_name:x.source_name,
    source_kind:x.source_kind,rights:x.rights||'unknown',rights_note:x.rights_note||'',
-   adaptation:faithful?'faithful':'original',selected_beats:beats.map(b=>({id:b.id,title:b.title,
-    summary:faithful?b.summary:'',basis:b.basis})),license_url:faithful?rightsURL:'',
-   license_attested:faithful&&story.rightsConsent,source_checked_at:now(),
-   search_date:x.verified_on||x.snapshot_date||'',requires_independent_author_review:true
+   adaptation:review?'literary_review':faithful?'faithful':'original',
+   selected_beats:review?[]:beats.map(b=>({id:b.id,title:b.title,summary:faithful?b.summary:'',basis:b.basis})),
+   review_dimensions:review?reviewDimensions.map(d=>({id:d.id,title:d.title,description:d.description})):undefined,
+   license_url:faithful?rightsURL:'',license_attested:faithful&&story.rightsConsent,
+   source_checked_at:now(),search_date:x.verified_on||x.snapshot_date||'',
+   requires_independent_author_review:true,work_identity_verified:x.identity_status==='book_title_match'
   };
-  p.handoff={mode:faithful?'hotspot':'original'};
-  p.description=faithful?summary:'本作仅借鉴公开题材的抽象主题（'+abstract+'），请创造不同人物、地点、关系、关键事件和结局，不照搬《'+srcTitle+'》的原剧情及对白。';
-  p.ideaSeed=faithful?('根据已核对的原著剧情片段创作分镜：'+summary):
-   ('请创作完全独立原创漫画，抽象主题为：'+abstract+'。角色姓名、独特世界设定、事件因果、关键转折和对白均必须新创，不得重现《'+srcTitle+'》的具体桥段。');
-  p.fiction=faithful?'依据列出的公开资料进行分镜改编，保留所选原著事件线；所有补充情节须显著标注原创，尊重原作与合法改编权。':
-   '只提炼普遍主题进行独立原创创作，禁止仅替换人物名字、背景仍复制受保护作品的独特表达。';
+  p.handoff={mode:review?'hotspot':faithful?'hotspot':'original'};
+  if(review){
+   p.description='文学作品《'+srcTitle+'》的原创导读。第一维度：作品讲了什么——简明准确介绍主题、背景及核心问题，不复刻完整情节；第二维度：揭示了什么人生哲学——独立分析人性、价值与选择；第三维度：普通人的意义——用原创当代生活场景呈现阅读启发。先核对原著书目信息与可信评论，不得杜撰具体事件或作者原话。';
+   p.ideaSeed='以文学评论而非故事重演制作九格：01–03事实准确的作品概述，04–06原创哲学评论，07–09普通人的现代生活启发。先完成来源核验，原文无授权不得长段引用、逐幕复现、复制人物独特形象、经典对白或原著插画。';
+   p.fiction='文学导读为评论与教育性原创表达：可简要介绍已核实的作品主题，不复刻故事场景；哲理部分标注为编辑分析，现实生活图采用完全原创人物、道具、空间与视觉隐喻。版权风险仍须按出版地区独立评估。';
+   p.disclosure='本作品为原创文学导读与评论漫画，不是原著漫画改编；关于人生哲学的解释属于编辑观点。未获许可不使用原著正文、插画或大段对白。';
+   p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
+    source_title:srcTitle,source_url:limitedSource(x),source_status:'bibliographic_lead_pending_research',
+    dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
+    panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
+  }else{
+   p.description=faithful?summary:'本作仅借鉴公开题材的抽象主题（'+abstract+'），请创造不同人物、地点、关系、关键事件和结局，不照搬《'+srcTitle+'》的原剧情及对白。';
+   p.ideaSeed=faithful?('根据已核对的原著剧情片段创作分镜：'+summary):
+    ('请创作完全独立原创漫画，抽象主题为：'+abstract+'。角色姓名、独特世界设定、事件因果、关键转折和对白均必须新创，不得重现《'+srcTitle+'》的具体桥段。');
+   p.fiction=faithful?'依据列出的公开资料进行分镜改编，保留所选原著事件线；所有补充情节须显著标注原创，尊重原作与合法改编权。':
+    '只提炼普遍主题进行独立原创创作，禁止仅替换人物名字、背景仍复制受保护作品的独特表达。';
+   p.disclosure=faithful?'本漫画为所选作品的改编草稿；出版前须核实各发行地区原著及版本的版权与改编许可。':'本漫画为独立原创虚构作品，与所参考短剧／小说原有角色、具体情节及对白无关联。';
+  }
   p.factNotes='选题来源：'+(x.source_name||'公开资料')+'\n网址：'+x.source+'\n'+
    '资料类型：'+(x.source_kind||'unknown')+'\n'+
-   '本次选择：'+beats.map(b=>b.title+'（'+b.basis+'）').join('；')+'\n'+
-   '版权：'+(x.rights_note||'待核查')+'\n未自动获取原著全文，剧情仍须由作者核对。';
-  p.disclosure=faithful?'本漫画为所选作品的改编草稿；出版前须核实各发行地区原著及版本的版权与改编许可。':'本漫画为独立原创虚构作品，与所参考短剧／小说原有角色、具体情节及对白无关联。';
-  p.panels=Array.from({length:Math.max(4,Math.min(60,beats.length*3))},(_,i)=>makePanel(i));
+   (review?'待核验：作者、书目、作品实际内容与哲学主题，不凭猜测填补剧情。':
+   '本次选择：'+beats.map(b=>b.title+'（'+b.basis+'）').join('；'))+'\n'+
+   '版权：'+(x.rights_note||'待核查')+'\n未自动获取原著全文，内容及权益仍须由作者核对。';
+  p.panels=Array.from({length:review?9:Math.max(4,Math.min(60,beats.length*3))},(_,i)=>makePanel(i));
   p.status='草稿';p.plotGenre=x.type==='drama'?'viral-melodrama':'general';
   data.projects.unshift(p);ui.selected=p.id;ui.wt4LastId=p.id;persist();
-  nav('workspace/'+p.id+'/1');notify('剧情已选，创建 '+p.panels.length+' 格建议篇幅的漫画草稿；请在 AI 编剧中继续扩写');
+  nav('workspace/'+p.id+'/1');
+  notify(review?'九格文学导读草稿已建立；请先核实书目及主题，再进入 AI 编剧':'剧情已选，创建 '+p.panels.length+' 格建议篇幅的漫画草稿；请在 AI 编剧中继续扩写');
  }
  const baseLive=wtLive;
  wtLive=function(){
@@ -395,7 +444,7 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   if(x?.dataset?.storyBeat!==undefined){if(x.checked)story.chosen.add(x.dataset.storyBeat);
    else story.chosen.delete(x.dataset.storyBeat);
    const n=document.querySelector('#story-selected-count');if(n)n.textContent='已选择 '+story.chosen.size+' 段';return}
-  if(x?.id==='story-adaptation'){story.mode=x.value==='faithful'?'faithful':'original';render();return}
+  if(x?.id==='story-adaptation'){story.mode=x.value==='faithful'?'faithful':x.value==='literary_review'?'literary_review':'original';story.chosen.clear();render();return}
   if(x?.id==='story-type')story.type=x.value;
  },true);
  window.WTStoryDiscovery={state:()=>({items:story.items,selected:story.selected,mode:story.mode,chosen:[...story.chosen],
