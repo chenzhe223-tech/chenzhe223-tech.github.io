@@ -1,0 +1,3717 @@
+{
+  "snapshot_date": "2026-11-21",
+  "checked_at": "2026-11-20T20:31:13.998281+00:00",
+  "source": "GitHub repository search API",
+  "metrics_policy": "Stars are direct observed cumulative counts; deltas are calculated only against dated prior snapshots of the same canonical repository.",
+  "candidate_count": 206,
+  "candidates": [
+    {
+      "canonical_id": "github.com/shubhamsaboo/awesome-llm-apps",
+      "name": "Shubhamsaboo/awesome-llm-apps",
+      "url": "https://github.com/Shubhamsaboo/awesome-llm-apps",
+      "stars_total": 145204,
+      "repository_updated_at": "2026-11-20T20:06:34Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580135+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998303+00:00"
+    },
+    {
+      "canonical_id": "github.com/addyosmani/agent-skills",
+      "name": "addyosmani/agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "stars_total": 119374,
+      "repository_updated_at": "2026-11-20T19:56:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580151+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998316+00:00"
+    },
+    {
+      "canonical_id": "github.com/leonxlnx/taste-skill",
+      "name": "Leonxlnx/taste-skill",
+      "url": "https://github.com/Leonxlnx/taste-skill",
+      "stars_total": 119269,
+      "repository_updated_at": "2026-11-20T20:20:35Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580154+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998325+00:00"
+    },
+    {
+      "canonical_id": "github.com/openmontageinc/openmontage",
+      "name": "OpenMontageInc/OpenMontage",
+      "url": "https://github.com/OpenMontageInc/OpenMontage",
+      "stars_total": 81922,
+      "repository_updated_at": "2026-11-20T20:24:40Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580155+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998333+00:00"
+    },
+    {
+      "canonical_id": "github.com/blader/humanizer",
+      "name": "blader/humanizer",
+      "url": "https://github.com/blader/humanizer",
+      "stars_total": 71621,
+      "repository_updated_at": "2026-11-20T19:57:24Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580157+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998340+00:00"
+    },
+    {
+      "canonical_id": "github.com/mvanhorn/last30days-skill",
+      "name": "mvanhorn/last30days-skill",
+      "url": "https://github.com/mvanhorn/last30days-skill",
+      "stars_total": 71369,
+      "repository_updated_at": "2026-11-20T20:26:59Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580159+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998348+00:00"
+    },
+    {
+      "canonical_id": "github.com/coreyhaines31/marketingskills",
+      "name": "coreyhaines31/marketingskills",
+      "url": "https://github.com/coreyhaines31/marketingskills",
+      "stars_total": 61703,
+      "repository_updated_at": "2026-11-20T20:25:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580161+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998355+00:00"
+    },
+    {
+      "canonical_id": "github.com/k-dense-ai/scientific-agent-skills",
+      "name": "K-Dense-AI/scientific-agent-skills",
+      "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+      "stars_total": 57933,
+      "repository_updated_at": "2026-11-20T20:27:48Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580162+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998365+00:00"
+    },
+    {
+      "canonical_id": "github.com/sickn33/agentic-awesome-skills",
+      "name": "sickn33/agentic-awesome-skills",
+      "url": "https://github.com/sickn33/agentic-awesome-skills",
+      "stars_total": 50046,
+      "repository_updated_at": "2026-11-20T19:55:13Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580164+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998372+00:00"
+    },
+    {
+      "canonical_id": "github.com/zhayujie/cowagent",
+      "name": "zhayujie/CowAgent",
+      "url": "https://github.com/zhayujie/CowAgent",
+      "stars_total": 48023,
+      "repository_updated_at": "2026-11-20T19:12:50Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580166+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998380+00:00"
+    },
+    {
+      "canonical_id": "github.com/librechat-ai/librechat",
+      "name": "LibreChat-AI/LibreChat",
+      "url": "https://github.com/LibreChat-AI/LibreChat",
+      "stars_total": 47369,
+      "repository_updated_at": "2026-11-20T20:27:26Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580168+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998387+00:00"
+    },
+    {
+      "canonical_id": "github.com/volcengine/openviking",
+      "name": "volcengine/OpenViking",
+      "url": "https://github.com/volcengine/OpenViking",
+      "stars_total": 42533,
+      "repository_updated_at": "2026-11-20T19:56:56Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580170+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998394+00:00"
+    },
+    {
+      "canonical_id": "github.com/donchitos/claude-code-game-studios",
+      "name": "Donchitos/Claude-Code-Game-Studios",
+      "url": "https://github.com/Donchitos/Claude-Code-Game-Studios",
+      "stars_total": 40377,
+      "repository_updated_at": "2026-11-20T20:20:57Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580172+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998402+00:00"
+    },
+    {
+      "canonical_id": "github.com/langfuse/langfuse",
+      "name": "langfuse/langfuse",
+      "url": "https://github.com/langfuse/langfuse",
+      "stars_total": 37676,
+      "repository_updated_at": "2026-11-20T19:41:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580174+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998409+00:00"
+    },
+    {
+      "canonical_id": "github.com/mukul975/anthropic-cybersecurity-skills",
+      "name": "mukul975/Anthropic-Cybersecurity-Skills",
+      "url": "https://github.com/mukul975/Anthropic-Cybersecurity-Skills",
+      "stars_total": 36463,
+      "repository_updated_at": "2026-11-20T20:22:38Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580176+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998417+00:00"
+    },
+    {
+      "canonical_id": "github.com/googleworkspace/cli",
+      "name": "googleworkspace/cli",
+      "url": "https://github.com/googleworkspace/cli",
+      "stars_total": 32414,
+      "repository_updated_at": "2026-11-20T20:21:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580178+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998424+00:00"
+    },
+    {
+      "canonical_id": "github.com/tencentcloud/tencentdb-agent-memory",
+      "name": "TencentCloud/TencentDB-Agent-Memory",
+      "url": "https://github.com/TencentCloud/TencentDB-Agent-Memory",
+      "stars_total": 31075,
+      "repository_updated_at": "2026-11-20T19:26:52Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580180+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998432+00:00"
+    },
+    {
+      "canonical_id": "github.com/op7418/guizang-ppt-skill",
+      "name": "op7418/guizang-ppt-skill",
+      "url": "https://github.com/op7418/guizang-ppt-skill",
+      "stars_total": 30189,
+      "repository_updated_at": "2026-11-20T17:17:52Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580182+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998439+00:00"
+    },
+    {
+      "canonical_id": "github.com/othmanadi/planning-with-files",
+      "name": "OthmanAdi/planning-with-files",
+      "url": "https://github.com/OthmanAdi/planning-with-files",
+      "stars_total": 28160,
+      "repository_updated_at": "2026-11-20T18:31:27Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580184+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998447+00:00"
+    },
+    {
+      "canonical_id": "github.com/nvidia/skillspector",
+      "name": "NVIDIA/SkillSpector",
+      "url": "https://github.com/NVIDIA/SkillSpector",
+      "stars_total": 27051,
+      "repository_updated_at": "2026-11-20T20:09:17Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580185+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998454+00:00"
+    },
+    {
+      "canonical_id": "github.com/kkkkhazix/khazix-skills",
+      "name": "KKKKhazix/khazix-skills",
+      "url": "https://github.com/KKKKhazix/khazix-skills",
+      "stars_total": 22429,
+      "repository_updated_at": "2026-11-20T17:39:33Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580187+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998462+00:00"
+    },
+    {
+      "canonical_id": "github.com/liyupi/ai-guide",
+      "name": "liyupi/ai-guide",
+      "url": "https://github.com/liyupi/ai-guide",
+      "stars_total": 22264,
+      "repository_updated_at": "2026-11-20T18:21:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580189+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998469+00:00"
+    },
+    {
+      "canonical_id": "github.com/teng-lin/notebooklm-py",
+      "name": "teng-lin/notebooklm-py",
+      "url": "https://github.com/teng-lin/notebooklm-py",
+      "stars_total": 20313,
+      "repository_updated_at": "2026-11-20T20:09:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580191+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998476+00:00"
+    },
+    {
+      "canonical_id": "github.com/tanweai/pua",
+      "name": "tanweai/pua",
+      "url": "https://github.com/tanweai/pua",
+      "stars_total": 19875,
+      "repository_updated_at": "2026-11-20T16:46:13Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580193+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998483+00:00"
+    },
+    {
+      "canonical_id": "github.com/greensock/gsap-skills",
+      "name": "greensock/gsap-skills",
+      "url": "https://github.com/greensock/gsap-skills",
+      "stars_total": 18822,
+      "repository_updated_at": "2026-11-20T19:51:58Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580195+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998491+00:00"
+    },
+    {
+      "canonical_id": "github.com/larksuite/cli",
+      "name": "larksuite/cli",
+      "url": "https://github.com/larksuite/cli",
+      "stars_total": 18171,
+      "repository_updated_at": "2026-11-20T17:41:50Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580197+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998498+00:00"
+    },
+    {
+      "canonical_id": "github.com/nanmicoder/cc-haha",
+      "name": "NanmiCoder/cc-haha",
+      "url": "https://github.com/NanmiCoder/cc-haha",
+      "stars_total": 15503,
+      "repository_updated_at": "2026-11-20T17:06:18Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580199+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998506+00:00"
+    },
+    {
+      "canonical_id": "github.com/orchestra-research/ai-research-skills",
+      "name": "Orchestra-Research/AI-Research-SKILLs",
+      "url": "https://github.com/Orchestra-Research/AI-Research-SKILLs",
+      "stars_total": 14705,
+      "repository_updated_at": "2026-11-20T19:43:45Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580201+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998516+00:00"
+    },
+    {
+      "canonical_id": "github.com/genspark-ai/genoffice",
+      "name": "genspark-ai/genoffice",
+      "url": "https://github.com/genspark-ai/genoffice",
+      "stars_total": 12693,
+      "repository_updated_at": "2026-11-20T20:27:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580203+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998524+00:00"
+    },
+    {
+      "canonical_id": "github.com/memtensor/memos",
+      "name": "MemTensor/MemOS",
+      "url": "https://github.com/MemTensor/MemOS",
+      "stars_total": 12465,
+      "repository_updated_at": "2026-11-20T15:03:19Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580205+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998531+00:00"
+    },
+    {
+      "canonical_id": "github.com/affaan-m/ecc",
+      "name": "affaan-m/ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "stars_total": 307768,
+      "repository_updated_at": "2026-11-20T20:29:18Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580207+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998538+00:00"
+    },
+    {
+      "canonical_id": "github.com/multica-ai/andrej-karpathy-skills",
+      "name": "multica-ai/andrej-karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "stars_total": 234731,
+      "repository_updated_at": "2026-11-20T20:29:54Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580209+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998546+00:00"
+    },
+    {
+      "canonical_id": "github.com/graphify-labs/graphify",
+      "name": "Graphify-Labs/graphify",
+      "url": "https://github.com/Graphify-Labs/graphify",
+      "stars_total": 151118,
+      "repository_updated_at": "2026-11-20T20:29:01Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580211+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998554+00:00"
+    },
+    {
+      "canonical_id": "github.com/tt-a1i/archify",
+      "name": "tt-a1i/archify",
+      "url": "https://github.com/tt-a1i/archify",
+      "stars_total": 98292,
+      "repository_updated_at": "2026-11-20T20:25:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580213+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998561+00:00"
+    },
+    {
+      "canonical_id": "github.com/composiohq/awesome-claude-skills",
+      "name": "ComposioHQ/awesome-claude-skills",
+      "url": "https://github.com/ComposioHQ/awesome-claude-skills",
+      "stars_total": 79943,
+      "repository_updated_at": "2026-11-20T20:25:46Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580216+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998569+00:00"
+    },
+    {
+      "canonical_id": "github.com/nutlope/hallmark",
+      "name": "Nutlope/hallmark",
+      "url": "https://github.com/Nutlope/hallmark",
+      "stars_total": 58518,
+      "repository_updated_at": "2026-11-20T20:28:19Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580217+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998576+00:00"
+    },
+    {
+      "canonical_id": "github.com/hesreallyhim/awesome-claude-code",
+      "name": "hesreallyhim/awesome-claude-code",
+      "url": "https://github.com/hesreallyhim/awesome-claude-code",
+      "stars_total": 58442,
+      "repository_updated_at": "2026-11-20T20:30:45Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580219+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998583+00:00"
+    },
+    {
+      "canonical_id": "github.com/imbad0202/academic-research-skills",
+      "name": "Imbad0202/academic-research-skills",
+      "url": "https://github.com/Imbad0202/academic-research-skills",
+      "stars_total": 57878,
+      "repository_updated_at": "2026-11-20T20:21:21Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580221+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998590+00:00"
+    },
+    {
+      "canonical_id": "github.com/zhaoxuya520/reverse-skill",
+      "name": "zhaoxuya520/reverse-skill",
+      "url": "https://github.com/zhaoxuya520/reverse-skill",
+      "stars_total": 44985,
+      "repository_updated_at": "2026-11-20T20:27:35Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580223+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998598+00:00"
+    },
+    {
+      "canonical_id": "github.com/wshobson/agents",
+      "name": "wshobson/agents",
+      "url": "https://github.com/wshobson/agents",
+      "stars_total": 42736,
+      "repository_updated_at": "2026-11-20T20:30:50Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580225+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998605+00:00"
+    },
+    {
+      "canonical_id": "github.com/virgiliojr94/book-to-skill",
+      "name": "virgiliojr94/book-to-skill",
+      "url": "https://github.com/virgiliojr94/book-to-skill",
+      "stars_total": 38568,
+      "repository_updated_at": "2026-11-20T20:00:18Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580227+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998612+00:00"
+    },
+    {
+      "canonical_id": "github.com/voltagent/awesome-agent-skills",
+      "name": "VoltAgent/awesome-agent-skills",
+      "url": "https://github.com/VoltAgent/awesome-agent-skills",
+      "stars_total": 37385,
+      "repository_updated_at": "2026-11-20T20:19:55Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580229+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998620+00:00"
+    },
+    {
+      "canonical_id": "github.com/davila7/claude-code-templates",
+      "name": "davila7/claude-code-templates",
+      "url": "https://github.com/davila7/claude-code-templates",
+      "stars_total": 34031,
+      "repository_updated_at": "2026-11-20T19:33:03Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580231+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998627+00:00"
+    },
+    {
+      "canonical_id": "github.com/agricidaniel/claude-seo",
+      "name": "AgriciDaniel/claude-seo",
+      "url": "https://github.com/AgriciDaniel/claude-seo",
+      "stars_total": 31125,
+      "repository_updated_at": "2026-11-20T20:27:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580234+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998634+00:00"
+    },
+    {
+      "canonical_id": "github.com/alirezarezvani/claude-skills",
+      "name": "alirezarezvani/claude-skills",
+      "url": "https://github.com/alirezarezvani/claude-skills",
+      "stars_total": 30190,
+      "repository_updated_at": "2026-11-20T19:17:23Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580235+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998643+00:00"
+    },
+    {
+      "canonical_id": "github.com/alchaincyf/huashu-design",
+      "name": "alchaincyf/huashu-design",
+      "url": "https://github.com/alchaincyf/huashu-design",
+      "stars_total": 29958,
+      "repository_updated_at": "2026-11-20T20:08:35Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580237+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998650+00:00"
+    },
+    {
+      "canonical_id": "github.com/op7418/humanizer-zh",
+      "name": "op7418/Humanizer-zh",
+      "url": "https://github.com/op7418/Humanizer-zh",
+      "stars_total": 23427,
+      "repository_updated_at": "2026-11-20T19:57:45Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580240+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998658+00:00"
+    },
+    {
+      "canonical_id": "github.com/vincentwei1021/video-shotcraft",
+      "name": "Vincentwei1021/video-shotcraft",
+      "url": "https://github.com/Vincentwei1021/video-shotcraft",
+      "stars_total": 21803,
+      "repository_updated_at": "2026-11-20T19:57:41Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580241+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998665+00:00"
+    },
+    {
+      "canonical_id": "github.com/wanshuiyin/auto-claude-code-research-in-sleep",
+      "name": "wanshuiyin/Auto-claude-code-research-in-sleep",
+      "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
+      "stars_total": 19527,
+      "repository_updated_at": "2026-11-20T19:38:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580244+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998675+00:00"
+    },
+    {
+      "canonical_id": "github.com/heydamir/unslop",
+      "name": "heydamir/unslop",
+      "url": "https://github.com/heydamir/unslop",
+      "stars_total": 19172,
+      "repository_updated_at": "2026-11-20T20:26:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580245+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998729+00:00"
+    },
+    {
+      "canonical_id": "github.com/mattpocock/skills",
+      "name": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills",
+      "stars_total": 328786,
+      "repository_updated_at": "2026-11-20T20:29:24Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580247+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998738+00:00"
+    },
+    {
+      "canonical_id": "github.com/obra/superpowers",
+      "name": "obra/superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "stars_total": 322752,
+      "repository_updated_at": "2026-11-20T20:30:06Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580249+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998745+00:00"
+    },
+    {
+      "canonical_id": "github.com/anthropics/skills",
+      "name": "anthropics/skills",
+      "url": "https://github.com/anthropics/skills",
+      "stars_total": 198012,
+      "repository_updated_at": "2026-11-20T20:30:07Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580251+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998753+00:00"
+    },
+    {
+      "canonical_id": "github.com/juliusbrussee/caveman",
+      "name": "JuliusBrussee/caveman",
+      "url": "https://github.com/JuliusBrussee/caveman",
+      "stars_total": 121771,
+      "repository_updated_at": "2026-11-20T20:29:42Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580252+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998761+00:00"
+    },
+    {
+      "canonical_id": "github.com/cloudflare/security-audit-skill",
+      "name": "cloudflare/security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "stars_total": 76231,
+      "repository_updated_at": "2026-11-20T20:29:04Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580254+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998768+00:00"
+    },
+    {
+      "canonical_id": "github.com/ayghri/i-have-adhd",
+      "name": "ayghri/i-have-adhd",
+      "url": "https://github.com/ayghri/i-have-adhd",
+      "stars_total": 61797,
+      "repository_updated_at": "2026-11-20T19:48:45Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580256+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998775+00:00"
+    },
+    {
+      "canonical_id": "github.com/github/awesome-copilot",
+      "name": "github/awesome-copilot",
+      "url": "https://github.com/github/awesome-copilot",
+      "stars_total": 41393,
+      "repository_updated_at": "2026-11-20T20:03:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580258+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998782+00:00"
+    },
+    {
+      "canonical_id": "github.com/vercel-labs/skills",
+      "name": "vercel-labs/skills",
+      "url": "https://github.com/vercel-labs/skills",
+      "stars_total": 40211,
+      "repository_updated_at": "2026-11-20T20:22:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580260+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998790+00:00"
+    },
+    {
+      "canonical_id": "github.com/vercel-labs/agent-skills",
+      "name": "vercel-labs/agent-skills",
+      "url": "https://github.com/vercel-labs/agent-skills",
+      "stars_total": 34607,
+      "repository_updated_at": "2026-11-20T20:13:25Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580262+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998797+00:00"
+    },
+    {
+      "canonical_id": "github.com/code-and-sorts/awesome-copilot-agents",
+      "name": "Code-and-Sorts/awesome-copilot-agents",
+      "url": "https://github.com/Code-and-Sorts/awesome-copilot-agents",
+      "stars_total": 597,
+      "repository_updated_at": "2026-11-17T23:29:33Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580264+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998804+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-microsoft-copilot-prompts",
+      "name": "kesslernity/awesome-microsoft-copilot-prompts",
+      "url": "https://github.com/kesslernity/awesome-microsoft-copilot-prompts",
+      "stars_total": 588,
+      "repository_updated_at": "2026-11-20T16:57:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580266+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998812+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-studio-agents",
+      "name": "kesslernity/awesome-copilot-studio-agents",
+      "url": "https://github.com/kesslernity/awesome-copilot-studio-agents",
+      "stars_total": 556,
+      "repository_updated_at": "2026-11-20T20:22:33Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580268+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998820+00:00"
+    },
+    {
+      "canonical_id": "github.com/dfinke/awesome-copilot-chatmodes",
+      "name": "dfinke/awesome-copilot-chatmodes",
+      "url": "https://github.com/dfinke/awesome-copilot-chatmodes",
+      "stars_total": 318,
+      "repository_updated_at": "2026-11-20T13:56:29Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580270+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998827+00:00"
+    },
+    {
+      "canonical_id": "github.com/vishavjeet6/awesome-copilot-instructions",
+      "name": "Vishavjeet6/awesome-copilot-instructions",
+      "url": "https://github.com/Vishavjeet6/awesome-copilot-instructions",
+      "stars_total": 281,
+      "repository_updated_at": "2026-11-14T15:45:49Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580272+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998834+00:00"
+    },
+    {
+      "canonical_id": "github.com/ifokeev/awesome-copilots",
+      "name": "ifokeev/awesome-copilots",
+      "url": "https://github.com/ifokeev/awesome-copilots",
+      "stars_total": 211,
+      "repository_updated_at": "2026-10-28T12:33:34Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580274+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998841+00:00"
+    },
+    {
+      "canonical_id": "github.com/goekelab/awesome-genomic-skills",
+      "name": "GoekeLab/awesome-genomic-skills",
+      "url": "https://github.com/GoekeLab/awesome-genomic-skills",
+      "stars_total": 136,
+      "repository_updated_at": "2026-11-19T05:29:54Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580276+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998850+00:00"
+    },
+    {
+      "canonical_id": "github.com/jaktestowac/awesome-copilot-for-testers",
+      "name": "jaktestowac/awesome-copilot-for-testers",
+      "url": "https://github.com/jaktestowac/awesome-copilot-for-testers",
+      "stars_total": 123,
+      "repository_updated_at": "2026-11-20T14:49:23Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580277+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998857+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-chat-agents",
+      "name": "kesslernity/awesome-copilot-chat-agents",
+      "url": "https://github.com/kesslernity/awesome-copilot-chat-agents",
+      "stars_total": 120,
+      "repository_updated_at": "2026-11-19T06:26:59Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580279+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998864+00:00"
+    },
+    {
+      "canonical_id": "github.com/gulajavaministudio/awesome-copilot-id",
+      "name": "GulajavaMinistudio/awesome-copilot-id",
+      "url": "https://github.com/GulajavaMinistudio/awesome-copilot-id",
+      "stars_total": 95,
+      "repository_updated_at": "2026-11-17T09:25:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580281+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998871+00:00"
+    },
+    {
+      "canonical_id": "github.com/benben-miao/awesome-ai",
+      "name": "benben-miao/Awesome-AI",
+      "url": "https://github.com/benben-miao/Awesome-AI",
+      "stars_total": 66,
+      "repository_updated_at": "2026-10-20T02:38:35Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580283+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998878+00:00"
+    },
+    {
+      "canonical_id": "github.com/slashml/awesome-coding-copilot",
+      "name": "slashml/awesome-coding-copilot",
+      "url": "https://github.com/slashml/awesome-coding-copilot",
+      "stars_total": 60,
+      "repository_updated_at": "2026-10-20T02:38:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580284+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998886+00:00"
+    },
+    {
+      "canonical_id": "github.com/kodustech/awesome-ai-code-review",
+      "name": "kodustech/awesome-ai-code-review",
+      "url": "https://github.com/kodustech/awesome-ai-code-review",
+      "stars_total": 54,
+      "repository_updated_at": "2026-11-04T04:08:32Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580286+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998892+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-cowork-skills",
+      "name": "kesslernity/awesome-copilot-cowork-skills",
+      "url": "https://github.com/kesslernity/awesome-copilot-cowork-skills",
+      "stars_total": 49,
+      "repository_updated_at": "2026-11-20T17:02:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580288+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998899+00:00"
+    },
+    {
+      "canonical_id": "github.com/program247365/awesome-github-copilot",
+      "name": "program247365/awesome-github-copilot",
+      "url": "https://github.com/program247365/awesome-github-copilot",
+      "stars_total": 44,
+      "repository_updated_at": "2026-11-19T22:54:24Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580290+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998906+00:00"
+    },
+    {
+      "canonical_id": "github.com/codemillmatt/awesome-copilot-example",
+      "name": "codemillmatt/awesome-copilot-example",
+      "url": "https://github.com/codemillmatt/awesome-copilot-example",
+      "stars_total": 41,
+      "repository_updated_at": "2026-07-16T13:05:21Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580292+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998913+00:00"
+    },
+    {
+      "canonical_id": "github.com/timheuer/vscode-awesome-copilot",
+      "name": "timheuer/vscode-awesome-copilot",
+      "url": "https://github.com/timheuer/vscode-awesome-copilot",
+      "stars_total": 31,
+      "repository_updated_at": "2026-11-10T07:13:42Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580293+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998920+00:00"
+    },
+    {
+      "canonical_id": "github.com/alexclowe/awesome-copilot-cowork-plugins",
+      "name": "alexclowe/awesome-copilot-cowork-plugins",
+      "url": "https://github.com/alexclowe/awesome-copilot-cowork-plugins",
+      "stars_total": 23,
+      "repository_updated_at": "2026-11-05T22:14:47Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580295+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998928+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-agent-skills",
+      "name": "kesslernity/awesome-copilot-agent-skills",
+      "url": "https://github.com/kesslernity/awesome-copilot-agent-skills",
+      "stars_total": 21,
+      "repository_updated_at": "2026-11-20T17:30:03Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580297+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998936+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-cowork-bots",
+      "name": "kesslernity/awesome-copilot-cowork-bots",
+      "url": "https://github.com/kesslernity/awesome-copilot-cowork-bots",
+      "stars_total": 20,
+      "repository_updated_at": "2026-11-11T01:18:28Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580299+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998943+00:00"
+    },
+    {
+      "canonical_id": "github.com/mcleodchris/awesome-copilot",
+      "name": "mcleodchris/awesome-copilot",
+      "url": "https://github.com/mcleodchris/awesome-copilot",
+      "stars_total": 11,
+      "repository_updated_at": "2025-10-06T09:44:08Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580301+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998950+00:00"
+    },
+    {
+      "canonical_id": "github.com/kimtth/awesome-azure-openai-copilot",
+      "name": "kimtth/awesome-azure-openai-copilot",
+      "url": "https://github.com/kimtth/awesome-azure-openai-copilot",
+      "stars_total": 10,
+      "repository_updated_at": "2026-11-05T01:22:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580303+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998958+00:00"
+    },
+    {
+      "canonical_id": "github.com/kesslernity/awesome-copilot-office-skills",
+      "name": "kesslernity/awesome-copilot-office-skills",
+      "url": "https://github.com/kesslernity/awesome-copilot-office-skills",
+      "stars_total": 9,
+      "repository_updated_at": "2026-11-18T22:41:36Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580305+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998965+00:00"
+    },
+    {
+      "canonical_id": "github.com/timheuer/ghcp-instructions",
+      "name": "timheuer/ghcp-instructions",
+      "url": "https://github.com/timheuer/ghcp-instructions",
+      "stars_total": 9,
+      "repository_updated_at": "2026-03-02T20:36:16Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580307+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998973+00:00"
+    },
+    {
+      "canonical_id": "github.com/najielkotob/awesome-copilot",
+      "name": "NajiElKotob/Awesome-Copilot",
+      "url": "https://github.com/NajiElKotob/Awesome-Copilot",
+      "stars_total": 7,
+      "repository_updated_at": "2025-11-18T15:59:28Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580308+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998981+00:00"
+    },
+    {
+      "canonical_id": "github.com/fkucukkara/awesome-copilot-csharp",
+      "name": "fkucukkara/awesome-copilot-csharp",
+      "url": "https://github.com/fkucukkara/awesome-copilot-csharp",
+      "stars_total": 7,
+      "repository_updated_at": "2026-09-16T07:29:26Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580310+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998988+00:00"
+    },
+    {
+      "canonical_id": "github.com/dann1y/awesome-copilot",
+      "name": "Dann1y/awesome-copilot",
+      "url": "https://github.com/Dann1y/awesome-copilot",
+      "stars_total": 6,
+      "repository_updated_at": "2024-01-20T15:24:18Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580312+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.998995+00:00"
+    },
+    {
+      "canonical_id": "github.com/sebas12312nft/awesome-copilot",
+      "name": "sEbas12312nft/awesome-copilot",
+      "url": "https://github.com/sEbas12312nft/awesome-copilot",
+      "stars_total": 6,
+      "repository_updated_at": "2026-10-12T04:25:38Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580315+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999002+00:00"
+    },
+    {
+      "canonical_id": "github.com/vcgtz/claude-toolkit",
+      "name": "vcgtz/claude-toolkit",
+      "url": "https://github.com/vcgtz/claude-toolkit",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T17:38:30Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580317+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999009+00:00"
+    },
+    {
+      "canonical_id": "github.com/nishadherath/codingplans",
+      "name": "nishadherath/CodingPlans",
+      "url": "https://github.com/nishadherath/CodingPlans",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:30:12Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580319+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999016+00:00"
+    },
+    {
+      "canonical_id": "github.com/henny-ai/ghostbox-skills",
+      "name": "henny-ai/ghostbox-skills",
+      "url": "https://github.com/henny-ai/ghostbox-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-19T03:21:25Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580321+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999024+00:00"
+    },
+    {
+      "canonical_id": "github.com/amyduquette/docs-as-code-portfolio",
+      "name": "amyduquette/docs-as-code-portfolio",
+      "url": "https://github.com/amyduquette/docs-as-code-portfolio",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:16:29Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580322+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999031+00:00"
+    },
+    {
+      "canonical_id": "github.com/mayanthacreates/web-security-skill",
+      "name": "mayanthacreates/web-security-skill",
+      "url": "https://github.com/mayanthacreates/web-security-skill",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:24:06Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580324+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999038+00:00"
+    },
+    {
+      "canonical_id": "github.com/sergiojuniorreis/metodo-engenharia-software",
+      "name": "sergiojuniorreis/metodo-engenharia-software",
+      "url": "https://github.com/sergiojuniorreis/metodo-engenharia-software",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T16:52:21Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580326+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999045+00:00"
+    },
+    {
+      "canonical_id": "github.com/jcklpe/agent-hands",
+      "name": "jcklpe/agent-hands",
+      "url": "https://github.com/jcklpe/agent-hands",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-03T06:51:07Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580328+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999053+00:00"
+    },
+    {
+      "canonical_id": "github.com/adityatummuri/qedcode-agentskill",
+      "name": "AdityaTummuri/QEDCode-AgentSkill",
+      "url": "https://github.com/AdityaTummuri/QEDCode-AgentSkill",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:28:02Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580330+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999060+00:00"
+    },
+    {
+      "canonical_id": "github.com/louis8408/skill-check",
+      "name": "louis8408/skill-check",
+      "url": "https://github.com/louis8408/skill-check",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-17T21:18:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580332+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999067+00:00"
+    },
+    {
+      "canonical_id": "github.com/nishadherath/sessiondispatch",
+      "name": "nishadherath/SessionDispatch",
+      "url": "https://github.com/nishadherath/SessionDispatch",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-12T02:00:12Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580333+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999074+00:00"
+    },
+    {
+      "canonical_id": "github.com/pigeonai-yang/yangmao-skill",
+      "name": "PigeonAI-Yang/yangmao-skill",
+      "url": "https://github.com/PigeonAI-Yang/yangmao-skill",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:27:18Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580335+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999081+00:00"
+    },
+    {
+      "canonical_id": "github.com/subnetangel/jp-skills",
+      "name": "subnetangel/jp-skills",
+      "url": "https://github.com/subnetangel/jp-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-19T14:11:43Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580337+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999088+00:00"
+    },
+    {
+      "canonical_id": "github.com/knocklabs/marketing-skills",
+      "name": "knocklabs/marketing-skills",
+      "url": "https://github.com/knocklabs/marketing-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:27:00Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580338+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999095+00:00"
+    },
+    {
+      "canonical_id": "github.com/dna-codes/skills",
+      "name": "dna-codes/skills",
+      "url": "https://github.com/dna-codes/skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-19T15:53:13Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580340+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999102+00:00"
+    },
+    {
+      "canonical_id": "github.com/kshaham/3d-print-modeling-skill",
+      "name": "kshaham/3d-print-modeling-skill",
+      "url": "https://github.com/kshaham/3d-print-modeling-skill",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:26:10Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580342+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999109+00:00"
+    },
+    {
+      "canonical_id": "github.com/jcklpe/project-workflows",
+      "name": "jcklpe/project-workflows",
+      "url": "https://github.com/jcklpe/project-workflows",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-13T22:13:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580344+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999116+00:00"
+    },
+    {
+      "canonical_id": "github.com/cybercoretech/cybercore-agent-skills",
+      "name": "cybercoretech/cybercore-agent-skills",
+      "url": "https://github.com/cybercoretech/cybercore-agent-skills",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-20T08:10:20Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580346+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999123+00:00"
+    },
+    {
+      "canonical_id": "github.com/btcelectrician/agent-copy-sort",
+      "name": "BTCElectrician/agent-copy-sort",
+      "url": "https://github.com/BTCElectrician/agent-copy-sort",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T19:26:47Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580348+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999130+00:00"
+    },
+    {
+      "canonical_id": "github.com/agentready-tools/skills",
+      "name": "agentready-tools/skills",
+      "url": "https://github.com/agentready-tools/skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:23:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580349+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999137+00:00"
+    },
+    {
+      "canonical_id": "github.com/atlas-builder-skills/atlasbuilder",
+      "name": "atlas-builder-skills/atlasbuilder",
+      "url": "https://github.com/atlas-builder-skills/atlasbuilder",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:20:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580351+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999144+00:00"
+    },
+    {
+      "canonical_id": "github.com/flowarchitect895/boons",
+      "name": "FlowArchitect895/Boons",
+      "url": "https://github.com/FlowArchitect895/Boons",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-18T22:24:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580353+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999152+00:00"
+    },
+    {
+      "canonical_id": "github.com/patelkev/sankey-financials",
+      "name": "patelkev/sankey-financials",
+      "url": "https://github.com/patelkev/sankey-financials",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:20:25Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580354+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999159+00:00"
+    },
+    {
+      "canonical_id": "github.com/2389-research/artifact-host-skill",
+      "name": "2389-research/artifact-host-skill",
+      "url": "https://github.com/2389-research/artifact-host-skill",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-20T15:55:38Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580356+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999167+00:00"
+    },
+    {
+      "canonical_id": "github.com/antialias/sprite-profiles",
+      "name": "antialias/sprite-profiles",
+      "url": "https://github.com/antialias/sprite-profiles",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-18T19:53:14Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580357+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999174+00:00"
+    },
+    {
+      "canonical_id": "github.com/acb75/ecc",
+      "name": "ACB75/ecc",
+      "url": "https://github.com/ACB75/ecc",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-07T23:04:32Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580359+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999182+00:00"
+    },
+    {
+      "canonical_id": "github.com/bastien-gallay/truepath",
+      "name": "bastien-gallay/truepath",
+      "url": "https://github.com/bastien-gallay/truepath",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-16T21:09:30Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580361+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999189+00:00"
+    },
+    {
+      "canonical_id": "github.com/iliyasone/t3-code-voice-skill",
+      "name": "iliyasone/t3-code-voice-skill",
+      "url": "https://github.com/iliyasone/t3-code-voice-skill",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-06T14:28:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580363+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999196+00:00"
+    },
+    {
+      "canonical_id": "github.com/appmost/appmost-skills",
+      "name": "appmost/appmost-skills",
+      "url": "https://github.com/appmost/appmost-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-16T10:37:43Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580365+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999203+00:00"
+    },
+    {
+      "canonical_id": "github.com/andreyreformpress-ux/hermes-skill-yandex360",
+      "name": "andreyreformpress-ux/hermes-skill-yandex360",
+      "url": "https://github.com/andreyreformpress-ux/hermes-skill-yandex360",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T19:55:48Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580367+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999211+00:00"
+    },
+    {
+      "canonical_id": "github.com/igor-holt/genesis-conductor-skills",
+      "name": "igor-holt/genesis-conductor-skills",
+      "url": "https://github.com/igor-holt/genesis-conductor-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T17:40:16Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580368+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999218+00:00"
+    },
+    {
+      "canonical_id": "github.com/xiaosheng-01/manju-storyboard",
+      "name": "xiaosheng-01/manju-storyboard",
+      "url": "https://github.com/xiaosheng-01/manju-storyboard",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-12T16:05:43Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580370+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999225+00:00"
+    },
+    {
+      "canonical_id": "github.com/carolinedanslesnuages/emilie",
+      "name": "Carolinedanslesnuages/emilie",
+      "url": "https://github.com/Carolinedanslesnuages/emilie",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T20:06:36Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580372+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999232+00:00"
+    },
+    {
+      "canonical_id": "github.com/horizonchapter/claude-second-brain",
+      "name": "horizonchapter/claude-second-brain",
+      "url": "https://github.com/horizonchapter/claude-second-brain",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-03T13:36:21Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580374+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999239+00:00"
+    },
+    {
+      "canonical_id": "github.com/prime-agentai/skillcourier",
+      "name": "Prime-agentai/skillcourier",
+      "url": "https://github.com/Prime-agentai/skillcourier",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T19:17:08Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580376+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999246+00:00"
+    },
+    {
+      "canonical_id": "github.com/tinh2/skills-hub-claude-plugin",
+      "name": "tinh2/skills-hub-claude-plugin",
+      "url": "https://github.com/tinh2/skills-hub-claude-plugin",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-18T22:34:08Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580377+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999253+00:00"
+    },
+    {
+      "canonical_id": "github.com/angelodiaz2001/finanzia",
+      "name": "angelodiaz2001/finanzIA",
+      "url": "https://github.com/angelodiaz2001/finanzIA",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-07T00:54:14Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580379+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999260+00:00"
+    },
+    {
+      "canonical_id": "github.com/musicalbee/design-ontology",
+      "name": "musicalbee/design-ontology",
+      "url": "https://github.com/musicalbee/design-ontology",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-20T17:50:30Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580381+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999267+00:00"
+    },
+    {
+      "canonical_id": "github.com/2016judea/brick-mortar-skills",
+      "name": "2016judea/brick-mortar-skills",
+      "url": "https://github.com/2016judea/brick-mortar-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-03T23:16:27Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580383+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999274+00:00"
+    },
+    {
+      "canonical_id": "github.com/gabrandalisse/skills",
+      "name": "gabrandalisse/skills",
+      "url": "https://github.com/gabrandalisse/skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T18:04:59Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580384+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999281+00:00"
+    },
+    {
+      "canonical_id": "github.com/corvus-dsh/dsh-memory",
+      "name": "corvus-dsh/dsh-memory",
+      "url": "https://github.com/corvus-dsh/dsh-memory",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-10T12:30:09Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580386+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999288+00:00"
+    },
+    {
+      "canonical_id": "github.com/deusbr/ai-photo-studio",
+      "name": "deusbr/ai-photo-studio",
+      "url": "https://github.com/deusbr/ai-photo-studio",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T15:51:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580387+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999295+00:00"
+    },
+    {
+      "canonical_id": "github.com/siberhan/atlasian",
+      "name": "siberhan/atlasian",
+      "url": "https://github.com/siberhan/atlasian",
+      "stars_total": 6,
+      "repository_updated_at": "2026-11-20T18:45:28Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580389+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999302+00:00"
+    },
+    {
+      "canonical_id": "github.com/rucksack-hq/rucksack",
+      "name": "rucksack-hq/rucksack",
+      "url": "https://github.com/rucksack-hq/rucksack",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T14:42:27Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580391+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999309+00:00"
+    },
+    {
+      "canonical_id": "github.com/yigitefeoktar/ystack",
+      "name": "yigitefeoktar/Ystack",
+      "url": "https://github.com/yigitefeoktar/Ystack",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T15:31:42Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580392+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999316+00:00"
+    },
+    {
+      "canonical_id": "github.com/spaul571/dashboard-builder-skill",
+      "name": "spaul571/dashboard-builder-skill",
+      "url": "https://github.com/spaul571/dashboard-builder-skill",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T17:47:55Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580394+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999323+00:00"
+    },
+    {
+      "canonical_id": "github.com/raphaelbalbinot/aegis-harness",
+      "name": "raphaelbalbinot/aegis-harness",
+      "url": "https://github.com/raphaelbalbinot/aegis-harness",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-19T19:42:17Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580396+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999330+00:00"
+    },
+    {
+      "canonical_id": "github.com/kuailexiaozixin/dsh-skill-mcp-market",
+      "name": "kuailexiaozixin/dsh-skill-mcp-market",
+      "url": "https://github.com/kuailexiaozixin/dsh-skill-mcp-market",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-12T13:00:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580397+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999337+00:00"
+    },
+    {
+      "canonical_id": "github.com/mihirmodi27/keyline",
+      "name": "Mihirmodi27/keyline",
+      "url": "https://github.com/Mihirmodi27/keyline",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-11T21:29:13Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580399+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999344+00:00"
+    },
+    {
+      "canonical_id": "github.com/luisenilton/agm-miner",
+      "name": "LuisEnilton/agm-miner",
+      "url": "https://github.com/LuisEnilton/agm-miner",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T15:25:23Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580401+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999350+00:00"
+    },
+    {
+      "canonical_id": "github.com/gettsw/kv-cartridge",
+      "name": "gettsw/kv-cartridge",
+      "url": "https://github.com/gettsw/kv-cartridge",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T17:03:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580403+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999357+00:00"
+    },
+    {
+      "canonical_id": "github.com/yukienjoyer7/osu-coach",
+      "name": "yukienjoyer7/osu-coach",
+      "url": "https://github.com/yukienjoyer7/osu-coach",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T16:28:27Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580404+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999364+00:00"
+    },
+    {
+      "canonical_id": "github.com/alex-w0731/tumor-immunology-skills",
+      "name": "Alex-w0731/tumor-immunology-skills",
+      "url": "https://github.com/Alex-w0731/tumor-immunology-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T16:57:45Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580406+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999371+00:00"
+    },
+    {
+      "canonical_id": "github.com/rubikdesign-marketing/video-studio",
+      "name": "rubikdesign-marketing/video-studio",
+      "url": "https://github.com/rubikdesign-marketing/video-studio",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-12T16:04:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580408+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999379+00:00"
+    },
+    {
+      "canonical_id": "github.com/remi-leconte/dramatoons-workspace",
+      "name": "remi-leconte/dramatoons-workspace",
+      "url": "https://github.com/remi-leconte/dramatoons-workspace",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-19T15:01:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580410+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999385+00:00"
+    },
+    {
+      "canonical_id": "github.com/hth4nh/ai-tutor",
+      "name": "Hth4nh/ai-tutor",
+      "url": "https://github.com/Hth4nh/ai-tutor",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-19T06:42:29Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580412+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999393+00:00"
+    },
+    {
+      "canonical_id": "github.com/jinshuo7/agent-skills",
+      "name": "Jinshuo7/agent-skills",
+      "url": "https://github.com/Jinshuo7/agent-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-12T14:33:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580414+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999400+00:00"
+    },
+    {
+      "canonical_id": "github.com/anas912847/skillcheck",
+      "name": "Anas912847/skillcheck",
+      "url": "https://github.com/Anas912847/skillcheck",
+      "stars_total": 4,
+      "repository_updated_at": "2026-11-20T13:26:48Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580416+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999407+00:00"
+    },
+    {
+      "canonical_id": "github.com/skillsforbots/grok-bot-skills",
+      "name": "skillsforbots/grok-bot-skills",
+      "url": "https://github.com/skillsforbots/grok-bot-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T16:13:32Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580418+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999414+00:00"
+    },
+    {
+      "canonical_id": "github.com/allmonty/better-code-agent",
+      "name": "allmonty/better-code-agent",
+      "url": "https://github.com/allmonty/better-code-agent",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-20T16:48:10Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580420+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999421+00:00"
+    },
+    {
+      "canonical_id": "github.com/shimo4228/contemplative-agent-data",
+      "name": "shimo4228/contemplative-agent-data",
+      "url": "https://github.com/shimo4228/contemplative-agent-data",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-11T20:30:21Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580422+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999428+00:00"
+    },
+    {
+      "canonical_id": "github.com/kununu/agent-bridge",
+      "name": "kununu/agent-bridge",
+      "url": "https://github.com/kununu/agent-bridge",
+      "stars_total": 18,
+      "repository_updated_at": "2026-11-12T09:42:57Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580424+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999436+00:00"
+    },
+    {
+      "canonical_id": "github.com/nampham2/agents",
+      "name": "nampham2/agents",
+      "url": "https://github.com/nampham2/agents",
+      "stars_total": 1,
+      "repository_updated_at": "2026-11-12T07:42:13Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580426+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999443+00:00"
+    },
+    {
+      "canonical_id": "github.com/accessvr/agentplugin",
+      "name": "AccessVR/AgentPlugin",
+      "url": "https://github.com/AccessVR/AgentPlugin",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-12T11:44:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580428+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999451+00:00"
+    },
+    {
+      "canonical_id": "github.com/spotsccc/error-as-value",
+      "name": "spotsccc/error-as-value",
+      "url": "https://github.com/spotsccc/error-as-value",
+      "stars_total": 0,
+      "repository_updated_at": "2026-07-13T22:07:14Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580429+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999458+00:00"
+    },
+    {
+      "canonical_id": "github.com/s1ddhants1/lsposed-libxposed",
+      "name": "s1ddhants1/lsposed-libxposed",
+      "url": "https://github.com/s1ddhants1/lsposed-libxposed",
+      "stars_total": 1,
+      "repository_updated_at": "2026-09-24T14:59:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580431+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999466+00:00"
+    },
+    {
+      "canonical_id": "github.com/enzodevs/pi-core",
+      "name": "enzodevs/pi-core",
+      "url": "https://github.com/enzodevs/pi-core",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-11T15:27:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580433+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999473+00:00"
+    },
+    {
+      "canonical_id": "github.com/edgegap/llm-agent-skills",
+      "name": "edgegap/llm-agent-skills",
+      "url": "https://github.com/edgegap/llm-agent-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-16T16:14:38Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580434+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999480+00:00"
+    },
+    {
+      "canonical_id": "github.com/wisechef-ai/loopskill-api",
+      "name": "wisechef-ai/loopskill-api",
+      "url": "https://github.com/wisechef-ai/loopskill-api",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-12T07:29:33Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580436+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999487+00:00"
+    },
+    {
+      "canonical_id": "github.com/jiangnangenius/floe-agent",
+      "name": "JiangNanGenius/floe-agent",
+      "url": "https://github.com/JiangNanGenius/floe-agent",
+      "stars_total": 457,
+      "repository_updated_at": "2026-11-17T00:04:54Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580438+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999494+00:00"
+    },
+    {
+      "canonical_id": "github.com/comet-ml/opik-skills",
+      "name": "comet-ml/opik-skills",
+      "url": "https://github.com/comet-ml/opik-skills",
+      "stars_total": 8,
+      "repository_updated_at": "2026-09-24T14:45:16Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580439+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999501+00:00"
+    },
+    {
+      "canonical_id": "github.com/agent-everywhere/ae-external-skills",
+      "name": "Agent-Everywhere/AE-external-skills",
+      "url": "https://github.com/Agent-Everywhere/AE-external-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-11-09T22:22:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580441+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999509+00:00"
+    },
+    {
+      "canonical_id": "github.com/patkusch/skillgate",
+      "name": "patkusch/skillgate",
+      "url": "https://github.com/patkusch/skillgate",
+      "stars_total": 0,
+      "repository_updated_at": "2026-10-25T10:49:36Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580443+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999516+00:00"
+    },
+    {
+      "canonical_id": "github.com/borghei/claude-skills",
+      "name": "borghei/Claude-Skills",
+      "url": "https://github.com/borghei/Claude-Skills",
+      "stars_total": 1173,
+      "repository_updated_at": "2026-11-20T20:30:54Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580445+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999523+00:00"
+    },
+    {
+      "canonical_id": "github.com/touchine-ojo/ojo-design-skills",
+      "name": "touchine-ojo/OJO-Design-Skills",
+      "url": "https://github.com/touchine-ojo/OJO-Design-Skills",
+      "stars_total": 195,
+      "repository_updated_at": "2026-11-20T17:35:50Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580447+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999530+00:00"
+    },
+    {
+      "canonical_id": "github.com/ludi-herry/b-end-design-system-skill",
+      "name": "Ludi-Herry/b-end-design-system-skill",
+      "url": "https://github.com/Ludi-Herry/b-end-design-system-skill",
+      "stars_total": 118,
+      "repository_updated_at": "2026-11-20T17:25:19Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580448+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999538+00:00"
+    },
+    {
+      "canonical_id": "github.com/moddingflow/better-design",
+      "name": "Moddingflow/better-design",
+      "url": "https://github.com/Moddingflow/better-design",
+      "stars_total": 53,
+      "repository_updated_at": "2026-11-20T01:50:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580450+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999545+00:00"
+    },
+    {
+      "canonical_id": "github.com/naderelewa/product-to-prod",
+      "name": "naderelewa/Product-to-Prod",
+      "url": "https://github.com/naderelewa/Product-to-Prod",
+      "stars_total": 47,
+      "repository_updated_at": "2026-11-19T14:49:30Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580452+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999552+00:00"
+    },
+    {
+      "canonical_id": "github.com/arvindand/agent-skills",
+      "name": "arvindand/agent-skills",
+      "url": "https://github.com/arvindand/agent-skills",
+      "stars_total": 18,
+      "repository_updated_at": "2026-11-19T02:12:12Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580453+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999559+00:00"
+    },
+    {
+      "canonical_id": "github.com/devanshudesai/agent-skills",
+      "name": "devanshuDesai/agent-skills",
+      "url": "https://github.com/devanshuDesai/agent-skills",
+      "stars_total": 14,
+      "repository_updated_at": "2026-11-20T14:12:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580455+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999566+00:00"
+    },
+    {
+      "canonical_id": "github.com/ccwbb78/design-skills",
+      "name": "ccwbb78/design-skills",
+      "url": "https://github.com/ccwbb78/design-skills",
+      "stars_total": 13,
+      "repository_updated_at": "2026-11-17T02:32:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580457+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999573+00:00"
+    },
+    {
+      "canonical_id": "github.com/payoss/uiux-high-taste-skill",
+      "name": "Payoss/UIUX-high-taste-skill",
+      "url": "https://github.com/Payoss/UIUX-high-taste-skill",
+      "stars_total": 12,
+      "repository_updated_at": "2026-09-26T04:13:00Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580459+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999581+00:00"
+    },
+    {
+      "canonical_id": "github.com/mae616/design-skills",
+      "name": "mae616/design-skills",
+      "url": "https://github.com/mae616/design-skills",
+      "stars_total": 11,
+      "repository_updated_at": "2026-10-10T05:11:53Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580461+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999588+00:00"
+    },
+    {
+      "canonical_id": "github.com/codewithasnari/nongeneric",
+      "name": "codewithasnari/nongeneric",
+      "url": "https://github.com/codewithasnari/nongeneric",
+      "stars_total": 10,
+      "repository_updated_at": "2026-10-28T10:13:48Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580462+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999594+00:00"
+    },
+    {
+      "canonical_id": "github.com/prangishviliabe/agent-skills",
+      "name": "prangishviliAbe/agent-skills",
+      "url": "https://github.com/prangishviliAbe/agent-skills",
+      "stars_total": 9,
+      "repository_updated_at": "2026-11-18T12:10:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580464+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999602+00:00"
+    },
+    {
+      "canonical_id": "github.com/cumabozkurt/god-of-design",
+      "name": "cumabozkurt/god-of-design",
+      "url": "https://github.com/cumabozkurt/god-of-design",
+      "stars_total": 8,
+      "repository_updated_at": "2026-11-04T10:42:26Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580468+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999609+00:00"
+    },
+    {
+      "canonical_id": "github.com/huzaifaa-dev-vibe/ultimate-ui-ux-pro-max-2.o",
+      "name": "huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+      "url": "https://github.com/huzaifaa-dev-vibe/Ultimate-Ui-Ux-pro-max-2.O",
+      "stars_total": 8,
+      "repository_updated_at": "2026-11-10T10:57:10Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580469+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999617+00:00"
+    },
+    {
+      "canonical_id": "github.com/wensity/skills",
+      "name": "wensity/skills",
+      "url": "https://github.com/wensity/skills",
+      "stars_total": 8,
+      "repository_updated_at": "2026-11-20T09:04:38Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580471+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999625+00:00"
+    },
+    {
+      "canonical_id": "github.com/light0305/light-ui-ux",
+      "name": "Light0305/Light-UI-UX",
+      "url": "https://github.com/Light0305/Light-UI-UX",
+      "stars_total": 7,
+      "repository_updated_at": "2026-11-16T09:46:44Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580473+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999632+00:00"
+    },
+    {
+      "canonical_id": "github.com/opacedigitalagency/ai-ui-ux-motion-engine",
+      "name": "OpaceDigitalAgency/ai-ui-ux-motion-engine",
+      "url": "https://github.com/OpaceDigitalAgency/ai-ui-ux-motion-engine",
+      "stars_total": 7,
+      "repository_updated_at": "2026-11-12T02:16:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580474+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999639+00:00"
+    },
+    {
+      "canonical_id": "github.com/opacedigitalagency/skills",
+      "name": "OpaceDigitalAgency/skills",
+      "url": "https://github.com/OpaceDigitalAgency/skills",
+      "stars_total": 7,
+      "repository_updated_at": "2026-11-06T14:09:12Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580476+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999646+00:00"
+    },
+    {
+      "canonical_id": "github.com/ca-who-codes/ultimate.uiux.design.skills",
+      "name": "ca-who-codes/ultimate.UIUX.design.skills",
+      "url": "https://github.com/ca-who-codes/ultimate.UIUX.design.skills",
+      "stars_total": 6,
+      "repository_updated_at": "2026-11-04T08:36:05Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580477+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999654+00:00"
+    },
+    {
+      "canonical_id": "github.com/umutc6230/ui-design-skills-pack",
+      "name": "umutc6230/ui-design-skills-pack",
+      "url": "https://github.com/umutc6230/ui-design-skills-pack",
+      "stars_total": 5,
+      "repository_updated_at": "2026-11-10T00:19:58Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580479+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999661+00:00"
+    },
+    {
+      "canonical_id": "github.com/wwewtech/anti-slop-design",
+      "name": "wwewtech/anti-slop-design",
+      "url": "https://github.com/wwewtech/anti-slop-design",
+      "stars_total": 5,
+      "repository_updated_at": "2026-11-16T15:58:40Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580481+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999668+00:00"
+    },
+    {
+      "canonical_id": "github.com/realtask/max-design",
+      "name": "RealTask/MAX-DESIGN",
+      "url": "https://github.com/RealTask/MAX-DESIGN",
+      "stars_total": 4,
+      "repository_updated_at": "2026-11-10T21:40:15Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580482+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999675+00:00"
+    },
+    {
+      "canonical_id": "github.com/amanjozf/agent-arsenal",
+      "name": "AmanJozf/agent-arsenal",
+      "url": "https://github.com/AmanJozf/agent-arsenal",
+      "stars_total": 4,
+      "repository_updated_at": "2026-11-12T10:59:39Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580484+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999682+00:00"
+    },
+    {
+      "canonical_id": "github.com/ezra-y/awesome-claude-ui-armory",
+      "name": "ezra-y/awesome-claude-ui-armory",
+      "url": "https://github.com/ezra-y/awesome-claude-ui-armory",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-12T12:27:24Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580486+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999699+00:00"
+    },
+    {
+      "canonical_id": "github.com/taylorwinfield/ux-ui-skills",
+      "name": "taylorwinfield/ux-ui-skills",
+      "url": "https://github.com/taylorwinfield/ux-ui-skills",
+      "stars_total": 2,
+      "repository_updated_at": "2026-10-30T09:16:17Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580487+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999709+00:00"
+    },
+    {
+      "canonical_id": "github.com/sillytoolvalley/game-ux-ui-skill",
+      "name": "SillyToolValley/game-ux-ui-skill",
+      "url": "https://github.com/SillyToolValley/game-ux-ui-skill",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-19T15:18:55Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580489+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999716+00:00"
+    },
+    {
+      "canonical_id": "github.com/drnhsproject/reka-rupa",
+      "name": "drnhsproject/reka-rupa",
+      "url": "https://github.com/drnhsproject/reka-rupa",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-13T08:35:43Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580490+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999724+00:00"
+    },
+    {
+      "canonical_id": "github.com/rs4t/ui-remix",
+      "name": "rs4t/ui-remix",
+      "url": "https://github.com/rs4t/ui-remix",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-18T23:44:28Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580492+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999731+00:00"
+    },
+    {
+      "canonical_id": "github.com/juancoloradov/pd-design-team",
+      "name": "JuanColoradoV/pd-design-team",
+      "url": "https://github.com/JuanColoradoV/pd-design-team",
+      "stars_total": 2,
+      "repository_updated_at": "2026-11-04T22:40:51Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580494+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999738+00:00"
+    },
+    {
+      "canonical_id": "github.com/vstlmkh/building-design",
+      "name": "vstlmkh/building-design",
+      "url": "https://github.com/vstlmkh/building-design",
+      "stars_total": 2,
+      "repository_updated_at": "2026-10-23T04:19:52Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580495+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999746+00:00"
+    },
+    {
+      "canonical_id": "github.com/sanyamshukla09/ai-data-analyst-agent",
+      "name": "sanyamshukla09/ai-data-analyst-agent",
+      "url": "https://github.com/sanyamshukla09/ai-data-analyst-agent",
+      "stars_total": 2,
+      "repository_updated_at": "2026-09-17T09:02:46Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580497+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999753+00:00"
+    },
+    {
+      "canonical_id": "github.com/lucifereuben/platform-intelligence-agent",
+      "name": "LUCIFEREUBEN/platform-intelligence-agent",
+      "url": "https://github.com/LUCIFEREUBEN/platform-intelligence-agent",
+      "stars_total": 1,
+      "repository_updated_at": "2026-06-24T12:40:58Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580499+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999760+00:00"
+    },
+    {
+      "canonical_id": "github.com/ianho7/ai-friendly-web-design-skill",
+      "name": "ianho7/ai-friendly-web-design-skill",
+      "url": "https://github.com/ianho7/ai-friendly-web-design-skill",
+      "stars_total": 77,
+      "repository_updated_at": "2026-11-16T18:14:20Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580500+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999767+00:00"
+    },
+    {
+      "canonical_id": "github.com/juanmarchetto/agent-skills",
+      "name": "JuanMarchetto/agent-skills",
+      "url": "https://github.com/JuanMarchetto/agent-skills",
+      "stars_total": 5,
+      "repository_updated_at": "2026-03-26T01:32:57Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580502+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999774+00:00"
+    },
+    {
+      "canonical_id": "github.com/mexin/qa-agent-skill",
+      "name": "mexin/qa-agent-skill",
+      "url": "https://github.com/mexin/qa-agent-skill",
+      "stars_total": 2,
+      "repository_updated_at": "2026-09-03T04:40:50Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580504+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999781+00:00"
+    },
+    {
+      "canonical_id": "github.com/magallon/testing-toolkit",
+      "name": "magallon/testing-toolkit",
+      "url": "https://github.com/magallon/testing-toolkit",
+      "stars_total": 1,
+      "repository_updated_at": "2026-03-15T15:30:19Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580505+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999788+00:00"
+    },
+    {
+      "canonical_id": "github.com/justhandledlabs/agent-skills",
+      "name": "justhandledlabs/agent-skills",
+      "url": "https://github.com/justhandledlabs/agent-skills",
+      "stars_total": 1,
+      "repository_updated_at": "2026-08-19T17:14:40Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580507+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999796+00:00"
+    },
+    {
+      "canonical_id": "github.com/delight0628/ai-browser-mastery",
+      "name": "Delight0628/ai-browser-mastery",
+      "url": "https://github.com/Delight0628/ai-browser-mastery",
+      "stars_total": 0,
+      "repository_updated_at": "2026-08-02T15:19:40Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580509+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999803+00:00"
+    },
+    {
+      "canonical_id": "github.com/yuniorglez/agent-skills",
+      "name": "YuniorGlez/agent-skills",
+      "url": "https://github.com/YuniorGlez/agent-skills",
+      "stars_total": 0,
+      "repository_updated_at": "2026-10-31T14:04:56Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580511+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999811+00:00"
+    },
+    {
+      "canonical_id": "github.com/mateimiron/ai-playwright-automation",
+      "name": "MateiMiron/ai-playwright-automation",
+      "url": "https://github.com/MateiMiron/ai-playwright-automation",
+      "stars_total": 0,
+      "repository_updated_at": "2026-02-15T11:20:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580512+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999818+00:00"
+    },
+    {
+      "canonical_id": "github.com/cesar-plyed/ai-assistant",
+      "name": "Cesar-Plyed/ai-assistant",
+      "url": "https://github.com/Cesar-Plyed/ai-assistant",
+      "stars_total": 0,
+      "repository_updated_at": "2026-10-26T00:14:03Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580514+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999825+00:00"
+    },
+    {
+      "canonical_id": "github.com/stevenleon30/playwright-agents-droplinx",
+      "name": "stevenleon30/playwright-agents-droplinx",
+      "url": "https://github.com/stevenleon30/playwright-agents-droplinx",
+      "stars_total": 0,
+      "repository_updated_at": "2026-04-07T06:07:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580515+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999832+00:00"
+    },
+    {
+      "canonical_id": "github.com/astudio-team/astudio-dev-browser",
+      "name": "AStudio-Team/astudio-dev-browser",
+      "url": "https://github.com/AStudio-Team/astudio-dev-browser",
+      "stars_total": 0,
+      "repository_updated_at": "2026-03-26T23:11:37Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580517+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999840+00:00"
+    },
+    {
+      "canonical_id": "github.com/aditya-13115/opencode",
+      "name": "aditya-13115/openCODE",
+      "url": "https://github.com/aditya-13115/openCODE",
+      "stars_total": 0,
+      "repository_updated_at": "2026-10-26T07:00:22Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580518+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999847+00:00"
+    },
+    {
+      "canonical_id": "github.com/bolaoshi-cn/cnki-scholar-search",
+      "name": "bolaoshi-cn/cnki-scholar-search",
+      "url": "https://github.com/bolaoshi-cn/cnki-scholar-search",
+      "stars_total": 0,
+      "repository_updated_at": "2026-08-25T03:09:46Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580520+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999854+00:00"
+    },
+    {
+      "canonical_id": "github.com/pablodiegoo/data-pro-skill",
+      "name": "pablodiegoo/Data-Pro-Skill",
+      "url": "https://github.com/pablodiegoo/Data-Pro-Skill",
+      "stars_total": 8,
+      "repository_updated_at": "2026-11-01T13:27:16Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580522+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999862+00:00"
+    },
+    {
+      "canonical_id": "github.com/qinghonglin/data2story-skill",
+      "name": "QinghongLin/data2story-skill",
+      "url": "https://github.com/QinghongLin/data2story-skill",
+      "stars_total": 161,
+      "repository_updated_at": "2026-07-05T13:40:54Z",
+      "created_at": null,
+      "pushed_at": null,
+      "community_signals": {
+        "source": "Hacker News Algolia",
+        "count_7d": 0,
+        "evidence_urls": [],
+        "checked_at": "2026-11-21T04:31:12.580524+08:00",
+        "status": "no_exact_match"
+      },
+      "source": "GitHub repository search API",
+      "observed_at": "2026-11-20T20:31:13.999869+00:00"
+    }
+  ]
+}
