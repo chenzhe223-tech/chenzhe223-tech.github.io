@@ -11,15 +11,15 @@ function span(start,end){
  return code.slice(a,b);
 }
 const region=[
-  span('function wfResearchPolicy(', 'function wfTaskObject('),
+  span('function wfMode(', 'function wfTaskObject('),
   span('function wfTaskObject(', 'function wfHint('),
   span('function wfInitTask(', 'const wfImgExt=')
 ].join('\n');
-async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',characters='',title='国际科技趋势：漫画研究',approved=true}={}){
- const project={id:'test-01',topicId:'topic-1',title,sourceTitle:'科技新闻的全球影响',
-   category:'AI 科技',subtitle:'',description:'一个新闻线索，不是已核实事实',
-   sourceURLs:source,factNotes:facts,fiction,characters,disclosure:'虚构漫画，不构成事实报道',
-   tone:'黑色幽默',eventDate:'',handoff:{mode},panels:Array.from({length:9},(_,i)=>({
+async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',characters='',title='国际科技趋势：漫画研究',approved=true,literary=false,expectRejected=false}={}){
+ const project={id:'test-01',topicId:'topic-1',title:literary?'读懂｜撒旦探戈｜Satantango：故事、哲学与人生':title,sourceTitle:literary?'撒旦探戈 | Satantango':'科技新闻的全球影响',
+   category:literary?'诺奖文学导读':'AI 科技',subtitle:'',description:literary?'主人公罗恩、主角艾琳在旧剧情摘要出现，但编辑评论使用全新原创读者。':'一个新闻线索，不是已核实事实',
+   sourceURLs:source,factNotes:facts,fiction,characters:literary?'主人公罗恩、主角艾琳':characters,disclosure:'虚构漫画，不构成事实报道',
+   tone:'黑色幽默',eventDate:'',handoff:{mode},storySourceSelection:literary?{adaptation:'literary_review',source:'https://example.org/book'}:null,literaryReviewGuide:literary?{schema:'davylab.worldtoon.literary-review.v1'}:null,panels:Array.from({length:9},(_,i)=>({
      title:'panel '+i,scene:'第'+(i+1)+'格：角色在科幻城市中观察变化、交换信息并推进眼前情节，确定同一镜头的动作和时间。',caption:'真实分镜候选文字',dialogue:'先核实再决定',prompt:''}))};
  const captures={saved:[],messages:[],files:[],writes:0};
  const topics=[{id:'topic-1',title:project.sourceTitle,summary:project.description,source:topicSource}];
@@ -28,7 +28,6 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
    wtDirector:{readiness:()=>approved?[]:['需要先确认画风与九格剧情'],exportBrief:()=>({version:1,style_id:'editorial',lock_status:'approved',characters:[{name:'阿一'},{name:'阿二'}],storyboard:project.panels,approval:{lock_hash:'a1b2c3d4',author_approved:true},production_gates:{pilot_required:true}})},
    now:()=>new Date('2026-11-09T00:00:00Z').toISOString(),
    uid:()=> 'testid',
-   wfMode:p=>p.handoff?.mode||'hotspot',
    wfGet:p=>p.handoff||{},
    validSources:p=>String(p.sourceURLs||'').split(/[\r\n,，]+/).map(x=>x.trim()).filter(x=>/^https?:\/\/[^ ]+/.test(x)),
    safeURL:x=>/^https?:\/\/[^ ]+$/.test(x)?x:'',
@@ -46,6 +45,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  };
  vm.runInNewContext(region+"\nthis.functions={wfMakeTask,wfPrepareTask,wfCanTask,wfTaskReadiness};",ctx);
  if(!approved){await assert.rejects(()=>ctx.functions.wfMakeTask(project),/请先补齐：.*确认画风/);assert.equal(captures.saved.length,0);return {blocked:true,captures}}
+ if(expectRejected){await assert.rejects(()=>ctx.functions.wfMakeTask(project),/预检未通过/);return {blocked:true,project,captures}}
  await ctx.functions.wfMakeTask(project);
  return {project,captures,task:JSON.parse(new TextDecoder().decode(captures.files.find(x=>x.name==='task.json').bytes)),
          prompt:new TextDecoder().decode(captures.files.find(x=>x.name==='ChatGPT_制作指令.md').bytes)};
@@ -75,7 +75,18 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
  assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
- await assert.rejects(()=>simulate({characters:'单亲妈妈林晓、AI小算'}),/预检未通过.*正式角色名单为/,'conflicting original names must not produce an ambiguous task');
+ const conflicting=await simulate({characters:'单亲妈妈林晓、AI小算',expectRejected:true});
+ assert.equal(conflicting.captures.saved.length,0,'preflight failure must not create a ZIP');
+ assert.equal(conflicting.project.handoff.taskId,undefined,'failed preflight must not leave a fake task ID');
+ assert.equal(conflicting.project.handoff.phase,undefined,'failed preflight must not mark task as ready');
+ const literary=await simulate({literary:true,mode:'hotspot',topicSource:'https://example.org/book'});
+ assert.equal(literary.task.mode,'literary_review','legacy hotspot flag cannot override literary review');
+ assert.equal(literary.task.adaptation.source_selection.adaptation,'literary_review');
+ assert.equal(literary.task.research_required,true,'literary review requires verifiable sources');
+ assert.equal(literary.task.adaptation.literary_review.mode,'editorial_criticism_not_plot_adaptation');
+ assert.equal(literary.captures.saved.length,1,'false-positive novel names must not block reviewed literature ZIP');
+ assert.ok(literary.prompt.includes('三维文学导读'),'ChatGPT instructions must describe the actual review');
+ assert.equal(literary.task.source.urls[0],'https://example.org/book');
  const withSource=await simulate({topicSource:'https://example.org/news'});
  assert.equal(withSource.task.source.urls[0],'https://example.org/news','Topic source must be inherited');
  assert.equal(withSource.task.research_required,true,'Unverified link is still research pending');
