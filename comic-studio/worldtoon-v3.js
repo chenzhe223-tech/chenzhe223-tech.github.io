@@ -110,7 +110,9 @@
     return '<article class="wt3-book"><a href="'+href+'"'+(published||publication||(!p&&tid)?' target="_blank" rel="noopener noreferrer"':'')+' class="wt3-cover" aria-label="'+name+'">'+src+'</a>'+
      '<div class="wt3-book-info"><small class="wt3-book-category">'+meta+(series?' · '+series:'')+(episode?' · 第'+episode+'章':'')+'</small><h3>'+name+'</h3>'+
      '<p class="wt3-book-description">'+desc+'</p>'+
-     '<span class="wt3-book-state">'+h(state)+(publication?'':r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span></div></article>';
+     '<span class="wt3-book-state">'+h(state)+(publication?'':r?.panel_count?' · '+r.panel_count+'格':p?.panels?.length?' · '+p.panels.length+'格':'')+'</span>'+
+     (p&&typeof wtCanDeleteUnmade==='function'&&wtCanDeleteUnmade(p)?'<div class="wt3-book-actions"><button type="button" class="button" data-action="delete-unmade" data-id="'+h(p.id)+'">删除未制作</button></div>':'')+
+     '</div></article>';
    }).join('');
    queueMicrotask(()=>{if(ui.route!=='library')return;
      document.querySelectorAll('.wt3-shelf .wt3-cover img').forEach(img=>{
@@ -135,7 +137,8 @@
          if(url&&img.isConnected)img.src=url;
        }catch{img.alt='本地封面暂不可用'}});
    });
-   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','只展示公众号贴图与已核验漫画，正式漫画仍经 GitHub 验收与 WorkBuddy 回执核对。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>')+
+   return '<div class="wt3-shelf">'+heroHeader('WORLD/TOON / COMIC LIBRARY','漫画书架','只展示公众号贴图与已核验漫画，正式漫画仍经 GitHub 验收与 WorkBuddy 回执核对。','<button type="button" class="button dark" data-action="new">＋ 新作</button><button type="button" class="button" data-archive="refresh">⟳ 同步书架</button>'+
+    (typeof wtCanDeleteUnmade==='function'&&data.projects.some(wtCanDeleteUnmade)?'<button type="button" class="button" data-action="clean-unmade">批量清理未制作</button>':'') )+
     '<div class="wt3-shelf-meta">GitHub 真实归档：'+(wtArchiveSnapshot?rows.length+' 部':'尚未同步')+
     ' · 公众号已发表贴图：'+(sharedArchive()?.status==='synced'?sharedRows().length+' 篇':'尚未同步')+
     ' · 仅核验漫画才标记为漫画成品'+(wtArchiveError?'<p class="wt3-error">私有仓库同步：'+h(wtArchiveError)+'</p>':'')+'</div>'+
