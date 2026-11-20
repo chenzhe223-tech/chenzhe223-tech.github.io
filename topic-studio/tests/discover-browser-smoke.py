@@ -129,7 +129,7 @@ def run():
                             f"{name}: finance active state is not accessible")
                 assert_true(finance_measure["viewportOverflow"] <= 3,
                             f"{name}: finance tab caused horizontal overflow")
-                                page.locator(".discover-quicknav [data-discover-target='opportunityTitle']").click()
+                page.locator(".discover-quicknav [data-discover-target='opportunityTitle']").click()
                 assert_true(measure(page)["visibleRadar"],f"{name}: Radar not restored")
                 page.locator(".discover-quicknav [data-discover-target='discoverIdeas']").click()
                 assert_true(page.locator("#discoverIdeas").evaluate("(el) => el.open"),
