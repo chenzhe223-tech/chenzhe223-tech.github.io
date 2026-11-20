@@ -865,9 +865,9 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
   </div>
  </section>
  <section class="finance-hub" id="financeDiscovery" aria-labelledby="financeTitle">
- <div class="finance-head"><div><div class="finance-kicker">03 / GLOBAL FINANCIAL INTELLIGENCE</div><h2 id="financeTitle">全球财经资讯 · DAVYLAB</h2><p>每日采集美联储、SEC、欧洲央行和美国劳工统计局官方公开信息。保留原始标题、时间和链接；不捏造行情，选题进入制作前须再次核实。</p></div><button type="button" class="btn small" id="financeRefresh">刷新资讯</button></div>
+ <div class="finance-head"><div><div class="finance-kicker">03 / GLOBAL FINANCIAL INTELLIGENCE</div><h2 id="financeTitle">全球财经资讯 · DAVYLAB</h2><p>每日采集美联储、SEC、欧洲央行、美国劳工统计局等官方公告，以及 CNBC 全球财经公开媒体线索；分别标明出处性质，不捏造行情。</p></div><button type="button" class="btn small" id="financeRefresh">刷新资讯</button></div>
  <div class="finance-status"><span id="financeStatus" role="status">等待首次有效采集…</span><strong id="financeCount">已收录 0 条</strong></div>
- <div class="finance-toolbar"><input type="search" id="financeSearch" aria-label="搜索全球财经资讯" placeholder="搜索公司、利率、就业或监管…"><select id="financeCategory" aria-label="财经类别"><option value="all">全部财经主题</option><option value="宏观政策">宏观政策</option><option value="资本市场">资本市场</option><option value="经济数据">经济数据</option></select></div>
+ <div class="finance-toolbar"><input type="search" id="financeSearch" aria-label="搜索全球财经资讯" placeholder="搜索公司、利率、就业或监管…"><select id="financeCategory" aria-label="财经类别"><option value="all">全部财经主题</option><option value="宏观政策">宏观政策</option><option value="资本市场">资本市场</option><option value="经济数据">经济数据</option><option value="企业与市场">企业与市场</option><option value="全球市场">全球市场</option></select></div>
  <div id="financeList" class="finance-grid" aria-live="polite"></div>
  <div class="finance-bottom"><button id="financeMore" type="button" hidden>查看更多</button><p>仅展示公开来源元数据，不复制付费新闻内容。信息仅供参考，不构成投资建议。<span id="financeUpdated"></span></p></div>
  </section>
@@ -1520,6 +1520,8 @@ document.querySelectorAll("[data-prompt-mode]").forEach(button=>button.addEventL
 $("generatePrompt").addEventListener("click",regeneratePrompt);
 $("promptBox").addEventListener("input",()=>{saveCurrentPrompt();updatePromptStatus(Boolean($("promptBox").value.trim()))});
 renderPromptPreview();updatePromptStatus(false);
+// The external prompt builder loads after this inline script; reconcile once loaded.
+window.addEventListener("load",()=>renderPromptPreview(),{once:true});
 function copyText(v,ok){if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(v).then(()=>toast(ok)).catch(()=>fallback(v,ok));else fallback(v,ok)}
 function fallback(v,ok){const t=document.createElement("textarea");t.value=v;t.style.position="fixed";t.style.opacity="0";document.body.appendChild(t);t.select();try{document.execCommand("copy");toast(ok)}catch{toast("复制失败，请手动复制文本框内容")}t.remove()}
 $("copyPrompt").addEventListener("click",()=>{const v=$("promptBox").value;if(!v){toast("先从选题卡片生成指令");return}copyText(v,"选题指令已复制")});$("clearPrompt").addEventListener("click",()=>{$("promptBox").value="";saveCurrentPrompt();updatePromptStatus(false)});$("openChatGPT").addEventListener("click",()=>{if(!$("promptBox").value.trim()){toast("先生成一份创作指令");return}window.open("https://chatgpt.com/","_blank","noopener,noreferrer");toast("已打开 ChatGPT；请粘贴创作指令")});
