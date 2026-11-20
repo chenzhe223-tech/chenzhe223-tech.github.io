@@ -27,6 +27,10 @@ function wfStyle(){let s=document.createElement('style');s.id='wf-style';s.textC
 .wf-form{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap}.wf-form .field{min-width:170px;flex:1}
 .wf-form input,.wf-form select{max-width:100%}.wf-code{font:12px/1.7 ui-monospace,monospace;color:#575a55}
 .wf-instructions{line-height:1.8;font-size:13px}.wf-instructions strong{color:#28312b}
+.wf-launch-guide{margin:13px 0 9px;border:1px solid #b7c7b7;background:#f3f7f0;border-radius:9px;padding:12px 14px;color:#243b2d}
+.wf-launch-guide strong{font-size:13px;display:block;margin-bottom:4px}
+.wf-launch-guide p{font-size:12px;line-height:1.7;margin:0;color:#415447}
+.wf-launch-guide b{font-weight:750;color:#25452f}
 @media(max-width:850px){.wf-layout{grid-template-columns:1fr}.wf-step{padding:19px}.wf-path{gap:5px}.wf-path span{font-size:11px}}
 `;document.head.appendChild(s)}
 function wfMode(p){return wfLiteraryReview(p)?'literary_review':wfGet(p).mode||'hotspot'}
