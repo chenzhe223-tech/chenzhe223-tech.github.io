@@ -351,6 +351,7 @@
  const stageNames=['创意立项','AI 编剧','创意定稿','漫画生产','成品验收','出版交付','作品入架'];
  const html=v=>typeof e==='function'?e(v):String(v??'').replace(/[&<>"']/g,'');
  const states=['queued','claimed','workbuddy_received','draft_uploaded','blocked','ready_for_workbuddy','publishing','published'];
+ const deletable=p=>typeof wtCanDeleteUnmade==='function'&&wtCanDeleteUnmade(p);
  const deepseek={checked:false,loading:false,configured:null};
  function checkDeepSeek(){
    if(deepseek.checked||deepseek.loading||typeof wtArchiveApi!=='function')return;
@@ -508,7 +509,7 @@
      '<span class="wt4-label">'+html(s.label)+'</span></div>'+
      '<div class="wt4-project-bar"><label for="wt4-project">切换作品</label><select id="wt4-project">'+options+'</select>'+
      '<button class="button" data-action="new">＋ 新作</button>'+
-     (wtCanDeleteUnmade(p)?'<button type="button" class="button" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
+     (deletable(p)?'<button type="button" class="button" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
      '<button class="button" data-visual-open>视觉素材</button><a class="button" href="#/archive">生产调度</a></div></header>'+
      '<section class="wt4-progress" aria-label="作品进度"><div class="wt4-progress-head"><strong>制作路线</strong>'+
      '<span>当前：'+html(stageNames[s.next])+' · 已确认 '+done+'/7 项</span></div>'+
@@ -533,12 +534,12 @@
      return '<div class="wt4-home-entry"><a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
        '<div><strong>'+html(p.title)+'</strong><small>'+html(s.agent)+' · '+html(s.label)+'</small></div>'+
        '<span>'+html(stageNames[s.next])+' →</span></a>'+
-       (wtCanDeleteUnmade(p)?'<button type="button" class="button wt4-delete-unmade" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
+       (deletable(p)?'<button type="button" class="button wt4-delete-unmade" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
        '</div>';}).join('');
    return '<section class="wt4-home"><div class="wt4-home-head"><div><div class="kicker">YOUR PRODUCTION</div>'+
      '<h2>继续制作</h2><p>未制作草稿可直接删除，已交付作品与发布记录受到保护。</p></div>'+
      '<div class="buttons"><a class="button dark" href="#/workspace">进入作品工作空间 →</a>'+
-     (rows.some(wtCanDeleteUnmade)?'<button type="button" class="button" data-action="clean-unmade">批量清理草稿</button>':'')+
+     (rows.some(deletable)?'<button type="button" class="button" data-action="clean-unmade">批量清理草稿</button>':'')+
      '</div></div>'+
      (cards?'<div class="wt4-home-list">'+cards+'</div>':
        '<p class="wt4-home-empty">暂无本地创作，创建作品后将显示进度和下一步。</p>')+
