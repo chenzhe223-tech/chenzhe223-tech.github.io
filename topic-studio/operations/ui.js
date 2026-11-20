@@ -44,6 +44,26 @@ state.assets.push(a);added++;
 }
 save();message("assetMessage","只读导入 "+added+" 条；跳过 "+skipped+" 条。全部以 draft 登记，原选题池完全未修改。");
 }catch(err){message("assetMessage",err.message)}});
+$("importPublished").addEventListener("click",async()=>{
+const b=window.DAVYLABOperationsBridge;
+const button=$("importPublished");button.disabled=true;message("assetMessage","正在读取公开已核验文章档案…");
+try{
+if(!b)throw Error("数据适配模块未加载");
+const response=await fetch("../data/published-articles.json",{cache:"no-store"});
+if(!response.ok)throw Error("公开发表档案获取失败（HTTP "+response.status+"）");
+const snapshot=await response.json();
+const verified=b.publishedArchive(snapshot);
+if(verified.reason)throw Error("共享档案缺少后台核验状态，拒绝导入");
+let source={reviews:[]};
+const raw=localStorage.getItem("davylab-growth-lab-v1");
+if(raw){try{source=JSON.parse(raw)||source}catch{message("metricMessage","本机 Growth Lab JSON 无法解析，已跳过增长指标")}}
+const legacy=b.legacyReviews(source.reviews,verified.items);
+const merged=b.mergePreview(state,verified,legacy);
+state=merged.next;save();
+message("assetMessage","读取已核验发表 "+verified.items.length+" 篇；新增 "+merged.added+"、更新 "+merged.updated+"；忽略不完整 "+verified.rejected+" 篇。仅本机镜像，不改变微信后台或主工作台。");
+message("metricMessage","从本机增长实验室引入 "+merged.metricsAdded+" 条第7/30天记录；跳过 "+legacy.ignored+" 条无法对应或无完整数值的记录。数据源：人工录入。");
+}catch(err){message("assetMessage",err.message)}finally{button.disabled=false}
+});
 $("demo").addEventListener("click",()=>{$("topicId").value="demo-"+Date.now();$("title").value="虚构示例：AI 学习实践";message("assetMessage","已填入虚构示例，点击登记草稿才会保存")});
 $("taskForm").addEventListener("submit",e=>{e.preventDefault();try{state.tasks=O.upsertTask(state.tasks,{assetId:$("taskAsset").value,platform:$("platform").value,status:$("taskState").value});save();message("taskMessage","状态已保存（仅本机模拟，无发布动作）")}catch(err){message("taskMessage",err.message)}});
 $("metricForm").addEventListener("submit",e=>{e.preventDefault();try{
