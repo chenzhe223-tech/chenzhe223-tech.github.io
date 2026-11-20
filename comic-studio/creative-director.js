@@ -417,6 +417,7 @@ function draw(){
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
  (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，生成可修改的分镜草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
  storyControls(p,c)+
+ (typeof window.WTNovelStudio?.panel==='function'?window.WTNovelStudio.panel(p):'')+
  '<div class="director-actions"><button type="button" class="button" data-director-action="adopt">保留已编辑九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
  framePreview(p,c)+'</section>':'')+
  (step===3?review(p,c):'')+
