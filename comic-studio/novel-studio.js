@@ -135,13 +135,38 @@
     '以有权使用的小说为创作来源。依据原著全文章节索引与后续AI语义核验选择九格分镜。人物关系、具体桥段、时间线须按原文核实，未经核实不得假装为原书事实。';
    p.fiction=rightsMode==='literary_review'?'只做原创导读与独立评论，不逐幕复刻原著独特剧情、角色外观、长篇对白或插画。':(p.fiction||'严格依据授权作品的实际内容进行分镜改编。');
    p.disclosure=rightsMode==='literary_review'?'本漫画为原创文学导读与评论，不是原著剧情漫画化；文学解释属于编辑观点。':'依据有权使用作品改编；授权和出处仍需独立审核。';
-   p.handoff={...(p.handoff||{}),mode:rightsMode==='literary_review'?'hotspot':'hotspot'};
-   if(p.creativeDirection){p.creativeDirection={...p.creativeDirection,approval:null,reviewed:false}}
+   p.handoff={...(p.handoff||{}),mode:'hotspot'};
+   // Build a genuine editable nine-slot research storyboard from source anchors.
+   // These slots are editorial scaffolding, NOT a semantic model interpretation.
+   if(typeof wtDirector?.ensure==='function'){
+    const c=wtDirector.ensure(p);
+    const entries=skill.chapter_index,theme=skill.themes;
+    const proposed=rightsMode==='literary_review'?wtDirector.localStoryboard(p):
+     Array.from({length:9},(_,i)=>{
+      const ch=entries[Math.min(entries.length-1,Math.floor((i+.5)*entries.length/9))];
+      return {title:'第'+String(i+1).padStart(2,'0')+'格 · '+ch.chapter_id+'资料核对',
+       scene:'【授权改编资料卡｜语义尚未核验】先阅读并验证原著 '+ch.chapter_id+'（'+ch.title+'）的实际事件、人物和时间关系，再决定该镜头的真实画面。未审定前只绘原创编辑的书桌与章节证据卡，不冒充原著情节；不得自动编造人物动作和对白。',
+       caption:'本格剧情需完成原著 '+ch.chapter_id+' 的内容核验后由编剧确认。',
+       dialogue:'',prompt:'独立竖版3:4单镜头，先核对真实文本和版权授权；本格参考锚点 '+ch.locator+'；未经核验不准描绘具体书中事件。'};
+     });
+    for(let i=0;i<9;i++){
+     const ch=entries[Math.min(entries.length-1,Math.floor((i+.5)*entries.length/9))];
+     const cue=theme[i%Math.max(1,theme.length)]?.name||'主题待核验';
+     const item=proposed[i];
+     item.scene+='【原著索引锚点 '+ch.chapter_id+' · '+ch.locator+'；主题词统计候选 '+cue+'（非作品事实）】';
+     item.prompt+=' 参考全书结构索引 '+ch.chapter_id+'，不能把关键词直接画成未经核实的剧情。';
+     Object.assign(p.panels[i],item);
+    }
+    c.drafted=true;c.reviewed=false;c.approval=null;
+    c.storyboardProvenance={method:'book_to_skill_local_structure',provider:'local',model:null,
+     at:new Date().toISOString(),authorEdited:false,analysis:'依据全本章节来源索引填充九格可编辑创作脚手架；深度语义/情节尚未由AI核验。'};
+    p.creativeDirection=c;
+   }else if(p.creativeDirection){p.creativeDirection={...p.creativeDirection,approval:null,reviewed:false}}
    if(!persist())throw Error('项目存储失败，尚未安全应用本次蒸馏索引');
    setChange(p,'应用本地小说结构蒸馏索引（语义与版权仍待审核）');
    local.delete(id(p));
    if(typeof render==='function')render();
-   notify('结构蒸馏已写入当前项目；下一步在导演台创建可编辑九格，再通过 ChatGPT 做真实语义深读');
+   notify('已生成带源文锚点的九格可编辑资料分镜；请先用 ChatGPT 深读原文并审核内容，不能直接把资料卡当成正式漫画');
   }catch(err){
    Object.assign(p,previous);
    if(keep)try{await delMedia(fileKey)}catch{}
