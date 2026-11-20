@@ -1430,7 +1430,7 @@ let promptTopicId="";
 let activePromptKey="";
 const promptDrafts=new Map(); // Session-only; never overwrites saved topics or author records.
 const promptSourceVersions=new Map();
-function promptKey(t){return [t.id||"", $("promptMode").value, $("promptPlatform").value].join("::")}
+function promptKey(t){return [t.id||"", $("promptMode").value, $("promptPlatform").value, $("promptMode").value==="finance"?$("financePosterStyle").value:"", $("promptMode").value==="finance"?$("financePosterCount").value:""].join("::")}
 function saveCurrentPrompt(){
  if(activePromptKey)promptDrafts.set(activePromptKey,$("promptBox").value);
 }
@@ -1452,23 +1452,27 @@ function renderPromptPreview(){
   button.classList.toggle("selected",isSelected);
   button.setAttribute("aria-pressed",String(isSelected));
  });
- $("generatePrompt").textContent=mode==="production"?"生成完整生产指令":"生成策划指令";
- $("promptManifestTitle").textContent=mode==="production"?"完整生产交付清单（要求，非已生成文件）":"内容策划交付清单（不生成实际图片或 ZIP）";
+ $("financePromptSettings").classList.toggle("show",mode==="finance");
+ const style=engine?.financeStyles?.find(x=>x.id===$("financePosterStyle").value);
+ $("financeStyleSwatch").style.background=style?`linear-gradient(110deg,${style.background} 0 50%,${style.primary} 50% 84%,${style.accent} 84%)`:"#d8e4f3";
+ $("generatePrompt").textContent=mode==="finance"?"生成财经快报＋海报指令":mode==="production"?"生成完整生产指令":"生成策划指令";
+ $("promptManifestTitle").textContent=mode==="finance"?"财经快报＋海报交付清单（要求，非已生成文件）":mode==="production"?"完整生产交付清单（要求，非已生成文件）":"内容策划交付清单（不生成实际图片或 ZIP）";
  if(!engine){
   manifest.textContent="指令模块加载失败，请刷新后重试。";
   info.textContent="生产指令模块未就绪，不能标记素材交付。";
   return;
  }
  const target=engine.PLATFORMS[platform]||engine.PLATFORMS.chatgpt;
- const required=mode==="production"?engine.required:engine.planningRequired;
+ const required=mode==="finance"?engine.financeRequired:mode==="production"?engine.required:engine.planningRequired;
  info.textContent="目标："+target.label+"。本模式所需能力："+required.join("、")+"。平台未检测外部 AI 的实际工具；"+target.note+" 缺少工具时须如实说明，不得伪称完成。";
- const entries=mode==="production"?engine.manifest:engine.planningDeliverables;
+ const entries=mode==="finance"?engine.financeManifest:mode==="production"?engine.manifest:engine.planningDeliverables;
  const ul=document.createElement("ul");
  entries.forEach(item=>{const li=document.createElement("li");li.textContent=item;ul.appendChild(li)});
  manifest.replaceChildren(ul);
 }
 function showPrompt(t,force=false){
  if(!t)return;
+ if(t.productionMode==="finance"&&promptTopicId!==(t.id||""))$("promptMode").value="finance";
  const key=promptKey(t);
  if(activePromptKey!==key)saveCurrentPrompt();
  promptTopicId=t.id||"";
@@ -1482,7 +1486,7 @@ function showPrompt(t,force=false){
  }
  const sourceVersion=JSON.stringify(t);
  const draft=!force&&promptSourceVersions.get(key)===sourceVersion?promptDrafts.get(key):undefined;
- const result=typeof draft==="string"?{text:draft}:window.DAVYLABProductionPrompt.build(t,{mode:$("promptMode").value,platform:$("promptPlatform").value});
+ const result=typeof draft==="string"?{text:draft}:window.DAVYLABProductionPrompt.build(t,{mode:$("promptMode").value,platform:$("promptPlatform").value,style:$("financePosterStyle").value,posterCount:Number($("financePosterCount").value)});
  $("promptBox").value=result.text;
  promptDrafts.set(key,result.text);
  promptSourceVersions.set(key,sourceVersion);
@@ -1493,7 +1497,7 @@ function regeneratePrompt(){
  const engine=window.DAVYLABProductionPrompt;
  if(!selected||!engine){toast("请先选择选题并确认指令模块已加载");return}
  const mode=$("promptMode").value,platform=$("promptPlatform").value;
- const result=engine.build(selected,{mode,platform});
+ const result=engine.build(selected,{mode,platform,style:$("financePosterStyle").value,posterCount:Number($("financePosterCount").value)});
  const key=promptKey(selected);
  activePromptKey=key;
  promptDrafts.set(key,result.text);
@@ -1508,7 +1512,7 @@ document.querySelectorAll("[data-prompt-mode]").forEach(button=>button.addEventL
  $("promptMode").value=button.dataset.promptMode;
  $("promptMode").dispatchEvent(new Event("change",{bubbles:true}));
 }));
-["promptMode","promptPlatform"].forEach(id=>$(id).addEventListener("change",()=>{
+["promptMode","promptPlatform","financePosterStyle","financePosterCount"].forEach(id=>$(id).addEventListener("change",()=>{
  const selected=topics.find(t=>t.id===promptTopicId);
  if(selected)showPrompt(selected);
  else{renderPromptPreview();updatePromptStatus(false)}
