@@ -56,6 +56,14 @@ const visualScript=fs.readFileSync(path.join(root,'comic-visuals.js'),'utf8');
 vm.runInNewContext(visualScript,ctx);
 const visual=ctx.window.wtVisualStudio;
 assert.ok(visual);
+const collapsedVisual=visual.panel({id:'asset-default-collapsed',visualReferences:[]});
+assert.match(collapsedVisual,/^<details class="box heritage-visual-panel"/,'visual library is a native expandable section');
+assert.doesNotMatch(collapsedVisual,/^<details[^>]+ open>/,'library defaults closed');
+assert.match(collapsedVisual,/<summary class="heritage-summary">/,'summary remains clickable and keyboard accessible');
+assert.match(collapsedVisual,/<div class="heritage-content">/,'search and existing assets remain present in hidden content');
+const expandedVisual=visual.panel({id:'asset-default-collapsed',visualReferences:[]},true);
+assert.match(expandedVisual,/^<details[^>]+ open>/,'explicit workspace modal opens full visual reference panel');
+
 assert.equal(visual.suggestedQuery({title:'郑和下西洋'}),'ship');
 assert.equal(visual.suggestedQuery({title:'唐朝城墙'}),'Chinese art');
 const cc0={id:'met-1',title:'Historical Ship',source:'The Met Open Access',
