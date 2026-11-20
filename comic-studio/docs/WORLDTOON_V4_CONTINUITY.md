@@ -196,3 +196,13 @@
 - 11/19 双仓协议技术 CI 有历史通过证据，但真实 WorkBuddy 授权范围内工单生产、远端上传/审核回执、桌面平板手机**本轮**实机回归及双设备 Supabase 认证 UAT 均无新增真实证据。G1-G5 **全部 BLOCKED**；没有作者确认的两张真实定妆、9 PNG+独立封面及逐图美术验收。不可把技术合成图或 CI 绿灯当作商业艺术/生产上线验收。
 - 五级状态：Code Completed=PARTIAL（既有 P0/P1 及协议代码）；Build Passed=YES（上述 HEAD 的既有 4/4 CI）；Runtime Verified=NO（V4 线上未验）；Functional Tested=PARTIAL（仅历史技术回归）；Production Deployed=NO。未合并、未部署、未发表、未操作私人账号。
 - **恢复动作：** (1) 通过可非交互授权的 Cloudflare/阿里云模型连接只读确认真实 endpoint、可用模型 ID、API key 是否已配置及 S$5 可执行硬限额；缺任一条件不得试画。(2) 获得隔离 Supabase 认证会话与两套浏览器上下文后执行 G2 真正跨端/RLS UAT。(3) 生成两张真实 pilot、记录真实调用/费用/哈希并提交作者独立确认，获批准后才生产 9 张高清 PNG+封面。(4) 再核实私有工单、WorkBuddy 真实回执与全端回归；G1-G5 全通过且另获部署/发表明确授权后才允许上线。11/20 是目标，不是验收承诺。
+
+
+## 17. 2026-11-20 08:01 SGT · 上线日真实门禁复核 / Cloudflare 模型目录检查
+
+- 实际读取本交接文档和验收台账、前端 draft PR #139 与私有 draft PR #7。前端分支与上一轮 SHA `28614df1efaa3ec1b8064905c8d6b5bc546fb3b2` 比较 identical（ahead=0/behind=0），本轮没有新应用源码变更。私有 PR #7 已知协议 SHA `0f29614075453a4597699c0ab98a76e4aa3ad2f8`，对猜测分支名的 compare 返回 404，因此**不声称**私有 HEAD 已更新或已核实该分支名称。
+- 实际查询上述前端 SHA 的四项 GitHub Actions，全部 completed/success：mobile [44425701973](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44425701973)、Chrome E2E [44425702248](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44425702248)、static [44425701983](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44425701983)、V3/V4 regression [44425701943](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/44425701943)。这是既有 CI 证据，本轮未独立启动 Chrome。私有已知 SHA 的协议 Actions [43410394525](https://github.com/chenzhe223-tech/worldtoon/actions/runs/43410394525) completed/success。
+- **新核实 Cloudflare**：已授权账户只读 API 成功；Worker `worldtoon` 修改时间仍为 `2026-11-12T06:45:53.226983Z`，V4 未部署。Workers AI 模型目录搜索 `flux` 返回 `@cf/black-forest-labs/flux-2-klein-4b`、`flux-2-klein-9b`、`flux-2-dev`、`flux-1-schnell`；**没有在这次目录结果中看到 FLUX.2 Pro**。目录列出不证明账户有可用额度、已配置模型绑定、真实推理权限或调用价格硬限额。未发起推理请求、未收费、未改 Worker；阿里云 qwen-image-2.1-turbo API key/endpoint/计费硬限额尚未验证。
+- G1 **BLOCKED**：无两张真实定妆样稿、可验证费用记录和作者批准。G2 **BLOCKED**：无两套隔离认证会话的真实跨端/RLS/冲突恢复测试。G3 **BLOCKED**：无真实九张高清独立 PNG 和封面及逐图艺术验收。G4 **BLOCKED**：无可核验的完整私有工单→WorkBuddy 交付闭环。G5 **BLOCKED**：未取得正式部署/发表授权，V4 未部署。故 **11/20 不满足上线条件，不得自行合并/部署/发表**。
+- 五级状态：Code Completed=PARTIAL；Build Passed=YES（上述 SHA 既有四项 CI）；Runtime Verified=NO（V4）；Functional Tested=PARTIAL（合成/离线技术回归，不是商业艺术或认证 UAT）；Production Deployed=NO。
+- 恢复路径：先验证现有阿里云与 Cloudflare 生图 API 的账号权限、商业许可、可计费模型 ID、实际价格和可执行 S$5 硬上限；无完整条件不调用。之后两张真实 pilot+SHA/成本记录供作者独立批准；再九格+封面；再隔离双端/RLS、双仓工单/WorkBuddy、全端回归，全部通过并获明确授权后再部署。此次仅更新交接记录，未更改应用源码、真实工单或生产环境。
