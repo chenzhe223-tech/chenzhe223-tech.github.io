@@ -15,7 +15,7 @@ function normalize(a){
  if(!Number.isFinite(parsed))return null;
  return {id:String(a.id).slice(0,64),title:String(a.title).slice(0,170),summary:String(a.summary||"").slice(0,210),
   url:safeLink(a.url),source:String(a.source||"原始来源").slice(0,90),category:category(a.category),
-  published_at:new Date(parsed).toISOString(),verification:"待核实"};
+  published_at:new Date(parsed).toISOString(),source_type:a.source_type==="media_report"?"media_report":"official_primary",verification:"待核实"};
 }
 function ageLabel(iso){let d=(Date.now()-Date.parse(iso))/86400000;return d<=3&&d>=0?"近72小时":d<=14?"近14天":"历史线索"}
 function render(){
@@ -35,7 +35,7 @@ function render(){
  }
  wrap.innerHTML=items.slice(0,state.visible).map(a=>'<article class="finance-card"><div class="finance-card-meta"><span>'+esc(a.category)+'</span><time>'+esc(a.published_at.slice(0,10))+' · '+esc(ageLabel(a.published_at))+'</time></div>'+
   '<h3>'+esc(a.title)+'</h3><p>'+esc(a.summary||"请打开官方来源阅读详情；自动抓取仅保存公开元数据。")+'</p>'+
-  '<div class="finance-card-footer"><small>'+esc(a.source)+' · 来源元数据待核实</small><div><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">查看原文</a><button type="button" data-fin-id="'+esc(a.id)+'">加入财经选题</button></div></div></article>').join("");
+  '<div class="finance-card-footer"><small>'+esc(a.source)+' · '+(a.source_type==="media_report"?"财经媒体报道，待核实":"官方原始公告，待核实")+'</small><div><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">查看原文</a><button type="button" data-fin-id="'+esc(a.id)+'">加入财经选题</button></div></div></article>').join("");
  $("financeMore").hidden=items.length<=state.visible;
  $("financeMore").textContent="加载更多（剩余 "+Math.max(0,items.length-state.visible)+" 条）";
 }
@@ -64,7 +64,7 @@ function add(a){
  let found=topics.find(t=>canonical(t.sourceUrl)===canonical(a.url));
  if(found){toast("这条来源已经在选题池中");return found}
  const item={id:uid(),title:a.title,angle:"请核对官方原始公告，提取关键事实与准确口径，输出简短财经快报及独立海报。",summary:a.summary,
-   sourceUrl:a.url,sourceName:a.source,sourceTitle:a.title,sourcePublishedAt:a.published_at,origin:"finance",
+   sourceUrl:a.url,sourceName:a.source,sourceTitle:a.title,sourcePublishedAt:a.published_at,sourceKind:a.source_type,origin:"finance",
    column:"全球财经资讯",format:"贴图",productionMode:"finance",factCheckStatus:"待核实",status:"inbox",plannedDate:"",
    createdAt:new Date().toISOString(),scores:{reader:3,timely:4,practical:3,distinct:3,brand:4}};
  topics.unshift(item);saveTopics();renderTopics();toast("已加入财经选题池，等待原始资料核验");return item;
