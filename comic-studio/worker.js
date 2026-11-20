@@ -592,6 +592,16 @@ async function wt3ArchiveV3(request,env,url){
                    'sources_checked','rights_checked','phone_previewed'];
   if(required.some(x=>qa[x]!==true)||(count===9?qa.nine_images!==true:qa.panel_count_checked!==true))
      return wtJson({error:'8项质量审核尚未逐项通过'},422);
+  if(task.image_render_protocol==='single_image_per_call.v2'){
+   const jobs=task.render_jobs?.jobs||[];
+   if(jobs.length!==count+1||jobs.some((j,i)=>j.target!==(i===count?'cover.png':panels[i])||j.image_calls!==1||j.expected_image_count!==1))
+     return wtJson({error:'本次工单缺少逐张独立绘制任务，或生图目标不一致'},422);
+   if(['single_scene_verified','no_contact_sheet','target_story_match'].some(k=>qa[k]!==true))
+     return wtJson({error:'尚未完成单场景、无拼版及分镜匹配验收'},422);
+   const evidence=original.image_scope_evidence||{};
+   if(names.filter(x=>x.endsWith('.png')).some(path=>evidence[path]!==sha[path]))
+     return wtJson({error:'各画格的非拼版人工核验缺少与真实 PNG 一致的 SHA256 凭据'},422);
+  }
   // GitHub Actions will independently hash every actual asset, validate PNG and pilot,
   // and build the publication queue only after the manifest is accepted.
   const existing=await wtGithub(env,'deliveries/'+t+'/manifest.json');
@@ -605,7 +615,8 @@ async function wt3ArchiveV3(request,env,url){
     assets:{cover:'cover.png',panels,caption:'caption.md',sources:'sources.md'},
     sha256:Object.fromEntries(names.map(x=>[x,sha[x]])),qa,
     verified_sources:Array.isArray(original.verified_sources)?original.verified_sources:[],
-    image_provenance:original.image_provenance||undefined};
+    image_provenance:original.image_provenance||undefined,
+    image_scope_evidence:task.image_render_protocol==='single_image_per_call.v2'?original.image_scope_evidence||{}:undefined};
   const written=await wtGithub(env,'deliveries/'+t+'/manifest.json','PUT',{message:'feat(worldtoon): owner final QA approval '+t,
     content:wtB64(JSON.stringify(sanitized,null,2)+'\n')});
   if(!written.ok)return wtJson({error:'最终验收记录 GitHub 提交失败 '+written.status},503);
