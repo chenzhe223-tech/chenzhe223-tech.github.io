@@ -15,10 +15,10 @@ const region=[
   span('function wfTaskObject(', 'function wfHint('),
   span('function wfInitTask(', 'const wfImgExt=')
 ].join('\n');
-async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',title='国际科技趋势：漫画研究',approved=true}={}){
+async function simulate({mode='hotspot',source='',topicSource='',facts='',fiction='',characters='',title='国际科技趋势：漫画研究',approved=true}={}){
  const project={id:'test-01',topicId:'topic-1',title,sourceTitle:'科技新闻的全球影响',
    category:'AI 科技',subtitle:'',description:'一个新闻线索，不是已核实事实',
-   sourceURLs:source,factNotes:facts,fiction,characters:'',disclosure:'虚构漫画，不构成事实报道',
+   sourceURLs:source,factNotes:facts,fiction,characters,disclosure:'虚构漫画，不构成事实报道',
    tone:'黑色幽默',eventDate:'',handoff:{mode},panels:Array.from({length:9},(_,i)=>({
      title:'panel '+i,scene:'第'+(i+1)+'格：角色在科幻城市中观察变化、交换信息并推进眼前情节，确定同一镜头的动作和时间。',caption:'真实分镜候选文字',dialogue:'先核实再决定',prompt:''}))};
  const captures={saved:[],messages:[],files:[],writes:0};
@@ -65,6 +65,9 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.equal(noSource.task.production_mode,'direct_chatgpt_local_v1','ChatGPT task is explicitly direct');
  assert.equal(noSource.task.github_sync_required,false,'GitHub sync disabled in direct mode');
  assert.equal(noSource.task.delivery_target,'local_zip');
+ assert.ok(noSource.captures.files.some(x=>x.name==='production-bible.json'),'canonical bible included');
+ assert.ok(noSource.captures.files.some(x=>x.name==='production_state.json'),'checkpoint state included');
+ assert.ok(JSON.parse(new TextDecoder().decode(noSource.captures.files.find(x=>x.name==='production_state.json').bytes)).package_ready===false,'new task cannot claim completion');
  assert.ok(noSource.prompt.includes('DIRECT_CHATGPT_LOCAL_V1'));
  assert.ok(noSource.prompt.includes('定妆'));
  assert.ok(noSource.project.handoff.directDeliveryMode,'Local ZIP export must be recorded');
@@ -72,6 +75,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
  assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
+ await assert.rejects(()=>simulate({characters:'单亲妈妈林晓、AI小算'}),/预检未通过.*正式锁定角色名册/,'conflicting original names must not produce an ambiguous task');
  const withSource=await simulate({topicSource:'https://example.org/news'});
  assert.equal(withSource.task.source.urls[0],'https://example.org/news','Topic source must be inherited');
  assert.equal(withSource.task.research_required,true,'Unverified link is still research pending');
