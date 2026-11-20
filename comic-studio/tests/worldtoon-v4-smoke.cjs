@@ -13,13 +13,13 @@ const app=read('app.js'),html=read('index.html'),engine=read('worldtoon-v3.js'),
 assert.match(app,/'workspace'[,']/, 'workspace exists in legacy router');
 assert.match(app,/nav\('workspace\/'\+p\.id\)/,'new project opens integrated workspace');
 assert.match(app,/APP_KEY='davylab-comic-press-v1'/,'existing local storage key preserved');
-assert.match(html,/worldtoon-v3\.js\?v=4\.6\.2-direct-v1/,'new workspace is bundled into the Worker-allowlisted script');
-assert.match(html,/worldtoon-v3\.css\?v=4\.6\.0/,'new workspace CSS is bundled into the Worker-allowlisted stylesheet');
+assert.match(html,/worldtoon-v3\.js\?v=4\.7\.0-unmade-cleanup/,'new workspace is bundled into the Worker-allowlisted script');
+assert.match(html,/worldtoon-v3\.css\?v=4\.7\.0-unmade-cleanup/,'new workspace CSS is bundled into the Worker-allowlisted stylesheet');
 assert.match(engine,/WORKFLOW_V4_EMBED/,'built script includes v4 module');
 assert.ok(engine.trimEnd().endsWith(read('workflow-v4.js').trim()),'deployed script matches canonical v4 code');
 assert.ok(read('worldtoon-v3.css').trimEnd().endsWith(css.trim()),'deployed stylesheet matches canonical v4 code');
 assert.ok(read('styles.css').trimEnd().endsWith(read('mobile-refine.css').trim()),'existing mobile layout is included in Worker-allowed stylesheet');
-assert.match(html,/styles\.css\?v=4\.6\.9-collapse/,'mobile stylesheet uses a fresh allowed asset');
+assert.match(html,/styles\.css\?v=4\.7\.0-unmade-cleanup/,'mobile stylesheet uses a fresh allowed asset');
 assert.doesNotMatch(html,/href="mobile-refine\.css/,'mobile stylesheet must not 404 on Worker');
 
 assert.match(html,/经典创作编辑器/,'old editor remains reachable');
