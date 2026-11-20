@@ -153,8 +153,8 @@
   });
  }
  async function unpackPdf(bytes){
-  await script('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js',()=>!!root.pdfjsLib);
-  root.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  await script('/vendor/pdf.min.js',()=>!!root.pdfjsLib);
+  root.pdfjsLib.GlobalWorkerOptions.workerSrc='/vendor/pdf.worker.min.js';
   const d=await root.pdfjsLib.getDocument({data:new Uint8Array(bytes)}).promise,units=[];
   try{
    if(d.numPages>2500)throw Error('超过2500页，请按卷处理；不截断');
@@ -177,7 +177,7 @@
   return units;
  }
  async function unpackEpub(bytes){
-  await script('https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js',()=>!!root.JSZip);
+  await script('/vendor/jszip.min.js',()=>!!root.JSZip);
   const zip=await root.JSZip.loadAsync(bytes),container=zip.file('META-INF/container.xml');
   if(!container)throw Error('EPUB 不包含 META-INF/container.xml');
   const dom=new DOMParser(),cx=dom.parseFromString(await container.async('string'),'application/xml');
