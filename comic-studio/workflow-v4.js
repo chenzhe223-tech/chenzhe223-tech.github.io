@@ -45,31 +45,35 @@
        ?wtDirector.approved(p)
        :p.creativeDirection?.approval?.author_approved===true);
    const queued=!!h.repoQueuedAt&&!!h.taskId;
+   const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
+   const direct=agent==='ChatGPT';
+   const localExported=direct&&!!h.directTaskExportedAt;
    const uploaded=Array.isArray(h.stagedFiles)&&h.stagedFiles.length>0&&
       h.stagedFiles.length===(h.stageUploaded||[]).length;
    const qa=!!row&&['ready_for_workbuddy','publishing','published'].includes(row.status);
    const published=verifiedPublished(row);
-   const completed=[named,story,director,queued,qa,published,published];
+   const completed=[named,story,director,queued||localExported,qa,published,published];
    // An existing remote task can precede local state after an account/device switch.
    // Show it as a remotely evidenced state, but do not invent missing approvals.
    let next=0;
    if(published)next=6;
    else if(qa)next=5;
-   else if(uploaded||['blocked','draft_uploaded'].includes(row?.status))next=4;
+   else if(uploaded||localExported||['blocked','draft_uploaded'].includes(row?.status))next=4;
    else if(queued||states.includes(row?.status))next=3;
    else if(director)next=3;
    else if(story)next=2;
    else if(named)next=1;
-   const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
-   const pending=!!p&&h.taskId&&!row;
+   const pending=!!p&&h.taskId&&!row&&!direct;
    const label=published?'已发表':(row?.status==='blocked'?'质量复核待修复':
-      queued?'制作中':named?'创作中':'待制作');
+      (queued||localExported)?'制作中':named?'创作中':'待制作');
    const statusText=published?'已取得真实公众号发表回执':
+     direct&&h.importedAt?'完整素材包已本地导入，等待人工视觉 QA 和独立出版审核':
+     localExported?'ChatGPT 任务 ZIP 已导出，等待全量漫画回传；无需 GitHub 同步':
      qa?'GitHub 已验收，等待实际发表回执':
      row?.status==='blocked'?'GitHub QA 未通过，请按具体原因修复':
      uploaded?'正式文件已上传，等待作者终审与 GitHub QA':
      queued?(agent==='WorkBuddy'?'WorkBuddy 创作流程已派单':'ChatGPT 创作任务已派单'):
-     director?'创意已锁定，可以正式派单':story?'剧本草稿待审阅并锁定':'完善立项和剧本';
+     director?'创意已锁定，ChatGPT 可直接导出任务 ZIP':story?'剧本草稿待审阅并锁定':'完善立项和剧本';
    return {row,completed,next,agent,pending,label,statusText,uploaded,published};
  }
  function stageBody(p,i,s){
