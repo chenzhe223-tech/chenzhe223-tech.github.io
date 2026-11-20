@@ -65,25 +65,67 @@ function wfInlineEditor(p){
 }
 function wfCanTask(p){const missing=[];if(!p?.title?.trim())missing.push('作品名称');const ss=p?.storySourceSelection;if(ss?.adaptation==='faithful'&&ss?.rights!=='public_domain_us'&&(!ss.license_attested||!/^https:\/\/[\w.-]+\//.test(String(ss.license_url||''))))missing.push('受保护作品的有效改编授权依据 URL 与作者授权确认');if(typeof wtDirector!=='undefined')missing.push(...wtDirector.readiness(p));else missing.push('创意导演台尚未加载，请刷新页面');return missing}
 function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {schema:WF_SCHEMA,research_required:policy.research_required,verification_status:policy.verification_status,task_id:h.taskId,created_at:h.taskAt,producer:p.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT',publisher:'WorkBuddy',panel_count:p.panels.length,series:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,series_bible:p.seriesBible||null,brand:'WORLD/TOON · By DAVYLAB',title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+'格原创漫画',source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:p.storySourceSelection||null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
-// Production image requests are one-shot, one-file, one-scene jobs. No whole-book prompt is ever sent to an image tool.
-function wfSingleImageJobs(p,task){
- const cd=task.creative_direction||{};
- const style=JSON.stringify({style_id:cd.style_id||'',visual_rules:cd.visual_rules||{},characters:cd.characters||[]});
- const constraint='ONE IMAGE ONLY. One uninterrupted 3:4 vertical canvas at native 1080x1440 or higher, ONE scene, ONE camera, ONE moment. NO contact sheet, NO storyboard page, NO nine-grid, NO comic strip, NO split screen, NO inset, NO collage, NO multiple scenes, NO panel frames, gutters, tiles or dividing lines. Render only this target frame, not the whole story. Use the approved character-sheet for identities; use the approved first-frame as an additional style reference ONLY when generating later panels or the cover. The first-frame pilot must not depend on itself. Do not draw readable lettering; reserve safe blank text space. ';
- const jobs=p.panels.map((a,i)=>({
-  job_id:'P'+String(i+1).padStart(2,'0'),target:'panels/'+String(i+1).padStart(2,'0')+'.png',
-  target_type:'panel',panel_index:i+1,image_calls:1,expected_image_count:1,expected_scene_count:1,
-  reference_assets:i===0?['character-sheet.png']:['character-sheet.png','pilot-01.png'],
-  prompt:constraint+'TARGET: panel '+(i+1)+' of '+p.panels.length+' (index is metadata, NOT a multi-panel layout). Fixed visual bible: '+style+'. CURRENT SHOT ONLY: '+String(a.scene||'').slice(0,1700)+'. Current visual notes: '+String(a.prompt||'').slice(0,900)+'. Reserve room for separate caption: '+String(a.caption||'').slice(0,280)+'.'
- }));
- jobs.push({
-  job_id:'COVER',target:'cover.png',target_type:'cover',panel_index:null,image_calls:1,expected_image_count:1,expected_scene_count:1,
-  reference_assets:['character-sheet.png','pilot-01.png'],
-  prompt:constraint+'TARGET: independent COVER ONLY. One unified editorial illustration, not a plot overview or interior pages. Cover concept: '+String(cd.cover_brief||p.title).slice(0,900)+'. Fixed visual bible: '+style+'. Leave title-safe space for separate typography.'
+// The approved director storyboard is the only image-generation source of truth.
+// Summary, legacy characters and per-panel custom prompts remain audit input only.
+function wfProductionBible(p,task){
+ const cd=task.creative_direction||{},board=Array.isArray(cd.storyboard)?cd.storyboard:[],cast=Array.isArray(cd.characters)?cd.characters:[];
+ if(!cd.approval?.author_approved||!cd.approval.lock_hash)throw Error('缺少作者已锁定的导演圣经');
+ if(board.length!==p.panels.length)throw Error('批准的分镜数量和实际画格不同，须重新定稿');
+ if(!cast.length||!cd.style_id)throw Error('缺少正式锁定角色或画风');
+ const conflicts=[];
+ const forbiddenStyle=/水彩|水墨|简笔|圆润线稿|手绘线稿|铅笔线稿|速写|扁平卡通/i;
+ const threeD=/3d|三维|cinematic-3d/i.test(cd.style_id);
+ const panels=board.map((v,i)=>{
+  if(!String(v.scene||'').trim())throw Error('锁定分镜第'+(i+1)+'格缺少镜头场景');
+  const raw=String(v.custom_prompt||p.panels[i]?.prompt||'');
+  if(threeD&&forbiddenStyle.test(raw))conflicts.push({code:'LOCAL_STYLE_CONFLICT',panel:i+1,message:'第'+(i+1)+'格旧提示词存在与锁定3D画风冲突的风格描述；生图时已隔离，不作为视觉指令'});
+  return {panel_id:'P'+String(i+1).padStart(2,'0'),index:i+1,title:String(v.title||''),
+   camera:String(v.shot||''),scene:String(v.scene||''),required_actions:String(v.scene||''),
+   dialogue:String(v.dialogue||''),caption:String(v.caption||''),no_text:true,
+   exact_storyboard_source:'creative_direction.storyboard['+i+']'};
  });
+ const originalText=String(task.adaptation?.characters||'')+'\n'+String(task.source?.candidate_summary||'');
+ // Flag explicit "role + name" references inconsistent with the approved cast.
+ const known=new Set(cast.map(x=>String(x.name||'').trim()));
+ const roleName=/(?:单亲妈妈|妈妈|女主角|男主角|主人公|主角|AI助手|AI机器人|AI)\s*[：:\-]?\s*([\u4e00-\u9fa5]{2,3})(?=[、，,。；;\s]|$)/g;
+ for(const hit of originalText.matchAll(roleName)){
+  const name=hit[1];if(!known.has(name)&&!/(?:角色|模型|助手|手机|机器|孩子|宝宝|功能|系统|时代)/.test(name))
+   conflicts.push({code:'NAME_CONFLICT_REVIEW_REQUIRED',name,message:'候选摘要或旧角色文本出现“'+name+'”，不在正式锁定角色名册；请确认是否为另一人物或旧稿残留'});
+ }
+ return {schema:'davylab.worldtoon.production-bible.v1',task_id:task.task_id,
+  authority:['author_approved_creative_direction','locked_storyboard','summary_for_research_only','legacy_custom_prompt_ignored_for_generation'],
+  story_title:task.title,style_id:cd.style_id,visual_lock:cd.visual_rules||{},style_lock:cd.style_lock||{},
+  creative_lock_hash:cd.approval.lock_hash,characters:cast.map((x,i)=>({character_id:'C'+String(i+1).padStart(2,'0'),
+   name:x.name,role:x.role,look:x.look,clothes:x.clothes,symbol:x.symbol,nature:x.nature,
+   portrait_reference:x.portrait_reference||null})),
+  panels,cover_brief:cd.cover_brief||task.title,conflicts,
+  evidence_state:{character_sheet_sha256:null,pilot_frame_sha256:null,pilot_approved:false,
+   image_generation_model:'unknown',image_generation_version:'unknown',publication_approved:false}};
+}
+function wfSingleImageJobs(p,task,bible){
+ const fixed=bible||wfProductionBible(p,task),cd=task.creative_direction||{};
+ const style=JSON.stringify({style_id:fixed.style_id,visual_lock:fixed.visual_lock,
+  characters:fixed.characters.map(x=>({id:x.character_id,name:x.name,role:x.role,look:x.look,clothes:x.clothes,symbol:x.symbol}))});
+ const constraint='ONE IMAGE ONLY. One uninterrupted 3:4 vertical canvas at native 1080x1440 or higher, ONE scene, ONE camera, ONE moment. NO contact sheet, NO storyboard page, NO nine-grid, NO comic strip, NO split screen, NO inset, NO collage, NO multiple scenes, NO panel frames, gutters, tiles or dividing lines. Render only this target frame, not the whole story. Absolutely NO lettering, glyphs, captions, UI text or speech bubbles inside the image; approved Chinese dialogue must be typeset in a separate layer. Use actual approved character-sheet for identities and approved pilot for style ONLY when physically supplied, never treat filename as proof. ';
+ const jobs=fixed.panels.map((a,i)=>({
+  job_id:a.panel_id,target:'panels/'+String(i+1).padStart(2,'0')+'.png',
+  target_type:'panel',panel_index:i+1,image_calls:1,expected_image_count:1,expected_scene_count:1,
+  no_text:true,max_retries:2,requires_physical_reference_images:true,
+  reference_assets:i===0?['character-sheet.png']:['character-sheet.png','pilot-01.png'],
+  scene_only:a.scene,camera:a.camera,required_actions:a.required_actions,
+  required_props:[],visible_characters:fixed.characters.map(x=>x.character_id),
+  approved_caption_for_separate_typesetting:a.caption,approved_dialogue_for_separate_typesetting:a.dialogue,
+  prompt:constraint+'TARGET: panel '+(i+1)+' (NOT a multi-panel layout). Camera: '+a.camera+'. Fixed approved visual bible: '+style+'. CURRENT APPROVED SCENE ONLY: '+a.scene+'. No neighboring story beats. No textual content.'
+ }));
+ jobs.push({job_id:'COVER',target:'cover.png',target_type:'cover',panel_index:null,
+  image_calls:1,expected_image_count:1,expected_scene_count:1,no_text:true,max_retries:2,
+  requires_physical_reference_images:true,reference_assets:['character-sheet.png','pilot-01.png'],
+  prompt:constraint+'TARGET: independent COVER ONLY. One original editorial illustration, NOT a reused panel background or plot overview. Approved visual bible: '+style+'. Cover art concept ONLY: '+String(fixed.cover_brief||task.title).slice(0,900)+'. Leave separate title-safe space.'});
  return {schema:'davylab.worldtoon.single-image-jobs.v2',task_id:task.task_id,
   panel_count:p.panels.length,expected_files:p.panels.length+1,reference_images:['character-sheet.png','pilot-01.png'],
-  protocol:'Execute exactly ONE jobs[i].prompt in each separate image-generation call. NEVER send this full JSON, task.json, the complete storyboard or all prompts in one image tool request. Reuse approved pilot-01.png as panels/01.png without rerendering. Draw remaining panels in order; draw cover in its own last call. Reject contact sheets and rerender only the faulty target. Never crop a mosaic into panels.',
+  production_bible:'production-bible.json',
+  retry_policy:{max_retries_per_job:2,on_repeat_failure:'model_unreliable_for_panel; stop identical retries and report backend/reference issue',preserve_accepted_sha256:true},
+  protocol:'Execute exactly ONE jobs[i].prompt in each separate image-generation call. NEVER send this full JSON, task.json, the complete storyboard or all prompts in one image tool request. Physically attach approved character-sheet and pilot reference files and log their SHA256. Reuse approved pilot-01.png as panels/01.png byte-for-byte without rerendering. Draw remaining panels in order; draw cover in its own last call. Reject contact sheets and rerender only the faulty target. Never crop a mosaic into panels. No model-generated Chinese text.',
   jobs};
 }
 function wfDirectPrompt(p,o){
@@ -129,8 +171,9 @@ async function wfMakeTask(p){
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p),prompt=wfPrompt(p);
- const renderJobs=wfSingleImageJobs(p,task);
- task.image_render_protocol='single_image_per_call.v2';task.render_jobs_file='render_jobs.json';task.expected_image_count=task.panel_count+1;
+ const bible=wfProductionBible(p,task);
+ const renderJobs=wfSingleImageJobs(p,task,bible);
+ task.image_render_protocol='single_image_per_call.v2';task.render_jobs_file='render_jobs.json';task.production_bible_file='production-bible.json';task.preflight_conflicts=bible.conflicts;task.expected_image_count=task.panel_count+1;
  if(task.producer==='ChatGPT'){task.production_mode='direct_chatgpt_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
  const portraitCharacters=p.creativeDirection?.cast||[];
  const portraitFiles=[];
@@ -149,7 +192,7 @@ async function wfMakeTask(p){
  }
  if(portraitFiles.length&&task.producer==='WorkBuddy')
   throw Error('WorkBuddy 自动派单目前没有私有肖像照片传输接口。请选 ChatGPT 创作，并将带照片的授权 ZIP 交给 ChatGPT；或先移除照片。');
- const files=[{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
+ const files=[{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务，不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接完成全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles];
  saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
  if(task.producer==='ChatGPT'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
