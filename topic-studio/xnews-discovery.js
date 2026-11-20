@@ -6,13 +6,13 @@
 "use strict";
 const root=document.getElementById("xnewsDiscovery");
 if(!root || typeof getFeed!=="function" || typeof addFeed!=="function")return;
-const SNAPSHOT="./data/xnews-discovery.json",CACHE="davylab-xnews-last-good-v1";
+const SNAPSHOT="./data/xnews-discovery.json",CACHE="davylab-xnews-last-good-v1",ORIGINAL_SNAPSHOT="./data/overseas-discovery.json",ORIGINAL_CACHE="davylab-overseas-original-v1";
 const $x=id=>document.getElementById(id);
 const lenses={
  all:"全部主题",agents:"Agent / 自动化",models:"模型与研究",products:"工具与产品",
  business:"商业与市场",creative:"创作与设计",safety:"安全与治理"
 };
-const state={all:[],filter:"all",query:"",sort:"relevance",visible:6,loaded:false,error:"",meta:null,cached:false};
+const state={all:[],filter:"all",query:"",sort:"relevance",visible:6,loaded:false,error:"",meta:null,cached:false,originalCount:0,originalChecked:""};
 const html=v=>typeof safe==="function"?safe(v):String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const url=v=>{try{const parsed=new URL(String(v||""));if(!["https:","http:"].includes(parsed.protocol))return"#";if(!parsed.hostname||parsed.username||parsed.password)return"#";return parsed.href}catch{return"#"}};
 const canonical=v=>url(v).split("#")[0].replace(/\/$/,"").toLowerCase();
@@ -56,12 +56,13 @@ function normalize(item){
  const id=String(item.id||"").trim(),title=String(item.title||"").trim();
  if(!/^[a-z0-9][a-z0-9-]{0,100}$/.test(id)||title.length<3)return null;
  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||"")))return null;
- const sourceUrl=url(item.original_url),chineseUrl=url(item.xnews_url);
- if(sourceUrl==="#"||chineseUrl==="#"||!chineseUrl.startsWith("https://xnews.qiaomu.ai/a/"))return null;
+ const sourceUrl=url(item.original_url),isOriginal=item.source_kind==="independent_original",chineseUrl=isOriginal?"":url(item.xnews_url);
+ if(sourceUrl==="#"||(!isOriginal&&(chineseUrl==="#"||!chineseUrl.startsWith("https://xnews.qiaomu.ai/a/"))))return null;
  const out={
  id,title:title.slice(0,150),summary:String(item.summary||"").slice(0,240),
  date:String(item.date),original_url:sourceUrl,xnews_url:chineseUrl,
- tags:Array.isArray(item.tags)?item.tags.map(t=>String(t).slice(0,32)).slice(0,8):[]
+ tags:Array.isArray(item.tags)?item.tags.map(t=>String(t).slice(0,32)).slice(0,8):[],
+ source_kind:isOriginal?"independent_original":"xnews_curated",sourceLabel:isOriginal?String(item.source||"海外独立原始来源").slice(0,75):"XNews · 向阳乔木"
  };
  out.lens=lensOf(out);out.priority=internalScore(out);out.angle=editorialAngle(out);
  return out;
@@ -76,7 +77,7 @@ function ingest(data,cached){
 }
 function toFeed(x){
  return {
-   type:"news",origin:"xnews",title:x.title,summary:x.summary,source:"XNews · 向阳乔木（海外精选）",
+   type:"news",origin:"xnews",title:x.title,summary:x.summary,source:x.source_kind==="independent_original"?x.sourceLabel:"XNews · 向阳乔木（海外精选）",originSource:x.source_kind,
    url:x.original_url,sourcePageUrl:x.xnews_url,published:x.date,
    category:categoryOf(x),angle:x.angle,why:"编辑辅助线索；以原文核验为准。",
    xnewsUrl:x.xnews_url,imageUrl:"",imageFallbackUrl:"",imageCredit:"",imageAlt:""
@@ -103,7 +104,7 @@ addFeed=function(item){
      angle:"以 XNews 发现的公开观点为线索，一图解释关键概念和现实意义；所有数字、人物与原始观点须回到原文核验。",
      summary:item.summary||"",sourceTitle:item.title||"",sourceUrl:item.url,
      sourcePageUrl:item.xnewsUrl||item.sourcePageUrl||"",
-     sourceName:"XNews · 向阳乔木",sourcePublishedAt:item.published||"",
+     sourceName:item.source||"海外独立来源",sourcePublishedAt:item.published||"",
      factCheckStatus:"待核实",origin:"xnews",format:"贴图",
      status:"inbox",plannedDate:"",createdAt:new Date().toISOString(),
      scores:{reader:3,timely:3,practical:3,distinct:3,brand:4}
@@ -116,7 +117,7 @@ addFeed=function(item){
  baseAddFeed(item);
  if(topics.length>before){
    const t=topics[0];
-   t.origin="xnews";t.sourceName="XNews · 向阳乔木";t.sourcePageUrl=item.xnewsUrl||item.sourcePageUrl||"";
+   t.origin="xnews";t.sourceName=item.source||"海外独立来源";t.sourcePageUrl=item.xnewsUrl||item.sourcePageUrl||"";
    t.factCheckStatus="待核实";t.sourcePublishedAt=item.published||"";
    saveTopics();
  }
@@ -138,7 +139,7 @@ function render(){
  let items=state.all.filter(a=>(state.filter==="all"||a.lens===state.filter)&&(!q||[a.title,a.summary,(a.tags||[]).join(" ")].join(" ").toLowerCase().includes(q)));
  if(state.sort==="newest")items.sort((a,b)=>b.date.localeCompare(a.date)||b.priority-a.priority);
  else items.sort((a,b)=>b.priority-a.priority||b.date.localeCompare(a.date));
- count.textContent=state.loaded?"匹配 "+items.length+" / "+state.all.length+" 条":"等待数据";
+ count.textContent=state.loaded?"匹配 "+items.length+" / "+state.all.length+" 条 · 独立来源 "+state.originalCount+" 条":"等待数据";
  if(!state.loaded){list.innerHTML='<div class="xnews-empty"><strong>海外精选暂未连接</strong><p>'+html(state.error||"正在读取本地内容镜像…")+'</p><a href="https://xnews.qiaomu.ai/" target="_blank" rel="noopener noreferrer">打开 XNews 阅读站</a></div>';more.hidden=true;return}
  if(!items.length){list.innerHTML='<div class="xnews-empty"><strong>没有找到相关线索</strong><p>可以切换主题或搜索词；AI Radar 的素材不会受到影响。</p></div>';more.hidden=true;return}
  const visible=items.slice(0,state.visible);
@@ -148,7 +149,7 @@ function render(){
  '<p class="xnews-angle"><span>建议切入</span>'+html(a.angle)+'</p>'+
  '<div class="xnews-card-footer"><span class="xnews-editorial" title="只根据时效、可读性、原始出处、主题等计算，不是真实流量或热度">编辑优先级 '+a.priority+'/100</span>'+
  '<div class="xnews-actions">'+
- '<a href="'+html(a.xnews_url)+'" target="_blank" rel="noopener noreferrer">中文阅读</a>'+
+ (a.xnews_url?'<a href="'+html(a.xnews_url)+'" target="_blank" rel="noopener noreferrer">中文阅读</a>':'')+
  '<a href="'+html(a.original_url)+'" target="_blank" rel="noopener noreferrer">原文</a>'+
  '<button type="button" data-x-prompt="'+html(a.id)+'">创作指令</button>'+
  '<button type="button" class="xnews-add" '+(inPool(a)?'data-x-view="'+html(a.id)+'"':'data-x-add="'+html(a.id)+'"')+'>'+(inPool(a)?"查看选题":"加入文章选题")+'</button>'+
@@ -157,8 +158,9 @@ function render(){
  more.textContent="查看剩余 "+Math.max(0,items.length-state.visible)+" 条";
  const synced=state.meta?.synced_at;
  date.textContent="数据镜像 "+(synced?new Date(synced).toLocaleString("zh-CN",{timeZone:"Asia/Shanghai",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"时间未知")+
- (state.cached?" · 本机历史缓存":" · 同源静态快照");
- status.textContent=state.cached?"XNews 同源快照读取失败，展示本机上一次有效数据":"XNews · 海外创始人观点 / 长帖 / AI 视频";
+ (state.cached?" · 本机历史缓存":" · 同源静态快照")+"；独立海外来源 "+(state.originalChecked||"未同步");
+ const newest=state.all.map(a=>a.date).sort().reverse()[0]||"";
+ status.textContent=(state.cached?"XNews 已回退本机缓存；":"XNews 主索引已读取；")+(newest&&daysFrom(newest)<=3?"最近3天有新线索":"最近3天无新线索")+"，独立来源 "+state.originalCount+" 条；抓取时间不等于文章发布时间";
 }
 function refreshMerged(){
  if(typeof radarData!=="undefined" && radarData)feedCache=getFeed();
@@ -168,15 +170,39 @@ function refreshMerged(){
  render();
 }
 async function load(noCache=false){
- state.error="";$x("xnewsStatus").textContent="正在读取 XNews 索引…";
+ state.error="";state.originalCount=0;state.originalChecked="";
+ $x("xnewsStatus").textContent="正在检查 XNews 及独立海外原始来源…";
  try{
-  const res=await fetch(SNAPSHOT+"?t="+(noCache?Date.now():"v1"),{cache:noCache?"no-store":"default"});
+  // Fixed ?t=v1 was cached by browsers even when the GitHub snapshot changed.
+  const res=await fetch(SNAPSHOT+"?checked="+Date.now(),{cache:"no-store"});
   if(!res.ok)throw Error("HTTP "+res.status);
   const data=await res.json();ingest(data,false);
   try{localStorage.setItem(CACHE,JSON.stringify(data))}catch{}
  }catch(err){
-  state.error="XNews 数据暂时不可用（"+String(err.message||err)+"）。";
-  try{const last=JSON.parse(localStorage.getItem(CACHE)||"null");ingest(last,true)}catch{state.loaded=false;state.all=[]}
+  state.error="XNews 镜像暂不可用（"+String(err.message||err)+"）。";
+  try{const last=JSON.parse(localStorage.getItem(CACHE)||"null");ingest(last,true)}
+  catch{state.loaded=false;state.all=[];state.meta=null}
+ }
+ try{
+  const res=await fetch(ORIGINAL_SNAPSHOT+"?checked="+Date.now(),{cache:"no-store"});
+  if(!res.ok)throw Error("HTTP "+res.status);
+  const data=await res.json();
+  if(!data||data.schema_version!==1||!Array.isArray(data.articles))throw Error("独立来源数据格式异常");
+  const extra=data.articles.map(normalize).filter(a=>a&&a.source_kind==="independent_original");
+  const seen=new Set(state.all.map(a=>canonical(a.original_url)));
+  for(const a of extra){const k=canonical(a.original_url);if(!seen.has(k)){state.all.push(a);seen.add(k)}}
+  state.originalCount=extra.length;
+  state.originalChecked=data.checked_at?new Date(data.checked_at).toLocaleDateString("zh-CN",{timeZone:"Asia/Shanghai"}):"等待首次同步";
+  if(extra.length)try{localStorage.setItem(ORIGINAL_CACHE,JSON.stringify(data))}catch{}
+  state.loaded=state.all.length>0;
+ }catch(e){
+  try{
+   const saved=JSON.parse(localStorage.getItem(ORIGINAL_CACHE)||"null");
+   const extra=(saved?.articles||[]).map(normalize).filter(a=>a&&a.source_kind==="independent_original");
+   const seen=new Set(state.all.map(a=>canonical(a.original_url)));
+   for(const a of extra){const k=canonical(a.original_url);if(!seen.has(k)){state.all.push(a);seen.add(k)}}
+   state.originalCount=extra.length;state.originalChecked="本机历史缓存";state.loaded=state.all.length>0;
+  }catch{state.originalChecked="尚未成功采集"}
  }
  refreshMerged();
 }
@@ -203,6 +229,6 @@ $x("xnewsMore")?.addEventListener("click",()=>{state.visible+=6;render()});
 $x("xnewsRefresh")?.addEventListener("click",()=>load(true));
 const baseSaveTopics=saveTopics;
 saveTopics=function(){baseSaveTopics();if(state.loaded)render()};
-window.DAVYLABXNews={source:SNAPSHOT,load,rank:internalScore,lensOf,normalize,getItems:()=>state.all.slice(),status:()=>({count:state.all.length,cached:state.cached,loaded:state.loaded})};
+window.DAVYLABXNews={source:SNAPSHOT,load,rank:internalScore,lensOf,normalize,getItems:()=>state.all.slice(),status:()=>({count:state.all.length,cached:state.cached,loaded:state.loaded,originalCount:state.originalCount})};
 load();
 })();
