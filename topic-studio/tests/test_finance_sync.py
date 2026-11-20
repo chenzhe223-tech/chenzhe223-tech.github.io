@@ -21,6 +21,12 @@ class FinanceTests(unittest.TestCase):
             self.assertEqual(len(rows),1)
             self.assertEqual(rows[0]["verification"],"official_source_metadata_not_independently_fact_checked")
             self.assertTrue(rows[0]["url"].startswith("https://example.org/"))
+    def test_safe_cdata_with_embedded_html_doctype(self):
+        rss = b'<rss><channel><item><title>HTML in RSS CDATA</title><link>https://example.org/real</link><pubDate>Thu, 19 Nov 2026 14:00:00 GMT</pubDate><description><![CDATA[<p>Code sample: <!DOCTYPE html></p>]]></description></item></channel></rss>'
+        rows = m.parse_feed(rss, m.SOURCES[0], NOW)
+        self.assertEqual(len(rows), 1)
+        self.assertIn("Code sample", rows[0]["summary"])
+
     def test_reject_xml_entities_and_unsafe_url(self):
         with self.assertRaises(ValueError): m.parse_feed(b'<!DOCTYPE foo [<!ENTITY x "bad">]><rss/>',m.SOURCES[0],NOW)
         self.assertEqual(m.safe_url("http://127.0.0.1/private"),"")
