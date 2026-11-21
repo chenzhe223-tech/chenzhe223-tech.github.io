@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Writing Quality Engine · DAVYLAB P0</title>
+<style>
+:root{font-family:Inter,-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif;color:#18263d;background:#f4f7fc}*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:28px 18px}header{margin-bottom:24px}h1{font-size:clamp(24px,4vw,34px);margin:8px 0}p{color:#5c6b80}small{color:#68788e}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}button{border:0;border-radius:10px;padding:11px 16px;background:#214fba;color:#fff;cursor:pointer;font-weight:650}button.secondary{background:#e2eaf9;color:#203c73}.layout{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}.panel{background:white;border:1px solid #dbe3ef;border-radius:16px;padding:18px;min-width:0}h2{font-size:17px;margin:0 0 12px}textarea{width:100%;min-height:320px;resize:vertical;padding:12px;border:1px solid #cdd8e8;border-radius:10px;font:inherit;line-height:1.8;color:#24344e}.issue{border-bottom:1px solid #edf0f5;padding:12px 0;font-size:14px;line-height:1.65}.issue:last-child{border:0}.issue strong{color:#b04d22}.issue button{font-size:12px;padding:6px 10px;margin:5px 6px 0 0}.summary{font-weight:700;color:#214fba}#status{min-height:22px}#suggestions{max-height:440px;overflow:auto}@media(max-width:850px){.layout{grid-template-columns:1fr}.panel{padding:15px}textarea{min-height:220px}}
+</style></head><body><main><header><small>DAVYLAB · EDITORIAL TOOLS / LOCAL PILOT</small><h1>Writing Quality Engine</h1><p>中文写作质量辅助 · P0 规则试点。仅本地处理，不调用外部模型，不判断文本是否由 AI 创作。</p></header>
+<div class="toolbar"><button id="analyze">检测文风</button><button id="copy" class="secondary">复制优化稿</button><button id="reset" class="secondary">恢复原文</button></div>
+<p id="status" role="status" aria-live="polite">输入文章后点击检测。每条建议需手动接受。</p>
+<div class="layout"><section class="panel"><h2>01 · 原文</h2><textarea id="original" placeholder="粘贴待编辑的文章。原文不会被自动覆盖。"></textarea></section>
+<section class="panel"><h2>02 · 修改建议</h2><div id="summary" class="summary">尚未检测</div><div id="suggestions"></div></section>
+<section class="panel"><h2>03 · 优化稿</h2><textarea id="revised" aria-label="可编辑优化稿"></textarea><small>建议应用到优化稿，不修改左侧原文；请自行复核事实、数字、专有名词和引用。</small></section></div>
+</main><script>
+'use strict';
+const rules=[
+{pattern:/众所周知/g,reason:'套话通常不增加信息量',replacement:''},
+{pattern:/值得注意的是[，,：:]?/g,reason:'模板化提示，可直接进入事实',replacement:''},
+{pattern:/不难发现[，,：:]?/g,reason:'主观引导，可让证据自行说明',replacement:''},
+{pattern:/在当今(?:快速发展|日新月异)的(?:时代|社会)[，,]?/g,reason:'泛化背景，缺乏具体信息',replacement:''},
+{pattern:/赋能/g,reason:'抽象动词，建议改为具体行动',replacement:null},
+{pattern:/闭环/g,reason:'行业术语，检查是否可以说清具体流程',replacement:null},
+{pattern:/全方位(?:地)?/g,reason:'绝对化表述，建议明确范围',replacement:null},
+{pattern:/首先[，,]/g,reason:'可能存在机械化序列',replacement:null},
+{pattern:/其次[，,]/g,reason:'可能存在机械化序列',replacement:null},
+{pattern:/最后[，,]/g,reason:'可能存在机械化序列',replacement:null}
+];
+const $=id=>document.getElementById(id);let findings=[];
+function scan(){const text=$('original').value;$('revised').value=text;findings=[];for(const rule of rules){for(const match of text.matchAll(rule.pattern)){findings.push({start:match.index,end:match.index+match[0].length,matched:match[0],reason:rule.reason,replacement:rule.replacement});}}findings.sort((a,b)=>a.start-b.start);render();$('status').textContent='检测完成。所有建议均需手动确认。';}
+function render(){const host=$('suggestions');host.replaceChildren();$('summary').textContent='发现 '+findings.length+' 处可能需要编辑的表达';findings.forEach((f,i)=>{const div=document.createElement('div');div.className='issue';const title=document.createElement('strong');title.textContent='「'+f.matched+'」';const desc=document.createElement('div');desc.textContent=f.reason;div.append(title,desc);if(f.replacement!==null){const b=document.createElement('button');b.textContent='接受：删除此表达';b.onclick=()=>apply(i,b);div.append(b);}else{const note=document.createElement('small');note.textContent='请根据上下文手动改写';div.append(note);}host.append(div);});}
+function apply(i,button){const f=findings[i],current=$('revised').value;const count=current.split(f.matched).length-1;if(!count){$('status').textContent='优化稿中已找不到该表达，请重新检测。';return;}const pos=current.indexOf(f.matched);$('revised').value=current.slice(0,pos)+f.replacement+current.slice(pos+f.matched.length);button.disabled=true;button.textContent='已应用一次';$('status').textContent='已应用一处修改；请检查语句是否通顺。';}
+$('analyze').onclick=scan;$('reset').onclick=()=>{$('revised').value=$('original').value;$('status').textContent='优化稿已恢复为原文。';};$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('revised').value);$('status').textContent='已复制优化稿。';}catch(e){$('revised').focus();$('revised').select();$('status').textContent='浏览器未授权剪贴板，请手动复制选中文本。';}};
+</script></body></html>
