@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import ipaddress
 from pathlib import Path
 from urllib.parse import urlsplit
 
@@ -16,7 +17,15 @@ def _https(value):
         return False
     try:
         u = urlsplit(value)
-        return u.scheme == "https" and bool(u.hostname) and not u.username and not u.password and not u.fragment
+        if u.scheme != "https" or not u.hostname or u.username or u.password or u.fragment:
+            return False
+        host = u.hostname.rstrip(".").lower()
+        if host == "localhost" or host.endswith(".localhost") or host.endswith(".local"):
+            return False
+        try:
+            return ipaddress.ip_address(host).is_global
+        except ValueError:
+            return True
     except ValueError:
         return False
 
