@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>DAVYLAB News Engine · 审稿工作台（本地）</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"PingFang SC","Microsoft Yahei",sans-serif;background:#f5f7fb;color:#172235}
+*{box-sizing:border-box}body{margin:0}header{background:#fff;border-bottom:1px solid #e5e9f0;padding:18px clamp(16px,4vw,46px);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+header b{font-size:18px;letter-spacing:-.02em}header small{display:block;color:#627086;margin-top:4px}
+main{max-width:1260px;margin:24px auto;padding:0 20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.85fr);gap:20px}
+section{background:#fff;border:1px solid #e7ebf2;border-radius:18px;padding:24px;min-width:0;box-shadow:0 4px 22px #243b5909}
+h1{font-size:23px;line-height:1.35;margin:0 0 16px}h2{font-size:17px;margin:0 0 14px}
+label{font-size:13px;font-weight:650;display:block;margin:16px 0 7px}
+input,textarea,select{font:inherit;max-width:100%;width:100%;border:1px solid #ccd5e2;border-radius:10px;background:#fff;color:#172235;padding:10px 11px;outline-offset:2px}
+textarea{min-height:240px;resize:vertical;line-height:1.7}
+button,.file-button{font:inherit;cursor:pointer;border:1px solid #cad5e6;background:#fff;color:#173a67;border-radius:10px;padding:10px 14px;font-weight:650}
+button.primary{background:#2563eb;color:white;border-color:#2563eb}button:disabled{opacity:.45;cursor:not-allowed}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.note{color:#627086;font-size:13px;line-height:1.65}
+.notice{background:#f0f5ff;border-radius:12px;padding:12px 14px;color:#234270;font-size:13px}
+#status{min-height:24px;margin:16px 0;color:#234270}#preview{word-break:break-word;white-space:pre-wrap;line-height:1.75;min-height:180px}
+#previewTitle{font-size:21px;word-break:break-word}#mediaList{display:grid;gap:14px}
+.media-row{border:1px solid #e5e9f1;border-radius:12px;padding:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.media-row label{margin:3px 0}.media-row label.wide{grid-column:1/-1}
+.media-row .remove{grid-column:1/-1;justify-self:start}#previewMedia{margin-top:20px}
+#previewMedia a{display:block;overflow-wrap:anywhere;font-size:13px}#previewMedia img{width:100%;max-height:340px;object-fit:contain;border-radius:12px}
+#previewMedia video{width:100%;max-height:340px}#previewMedia figure{margin:16px 0;padding-top:16px;border-top:1px solid #ebedf3}
+@media(max-width:850px){main{grid-template-columns:1fr}section{padding:18px}}@media(max-width:420px){main{padding:0 12px}.media-row{grid-template-columns:1fr}header{padding:14px}}
+</style>
+</head>
+<body>
+<header>
+<div><b>DAVYLAB News Engine</b><small>本地审稿工作台 · By DAVYLAB</small></div>
+<div class="actions"><input id="upload" type="file" accept=".json,application/json" aria-label="加载草稿 JSON"></div>
+</header>
+<main>
+<section>
+<h1>编辑文章与素材</h1>
+<p class="notice">仅限本地审稿。所有内容默认未核验，禁止自动发布。不会上传文件或调用外部 AI 服务。</p>
+<form id="editorForm">
+<label for="title">文章标题</label><input id="title" required maxlength="240" placeholder="先导入草稿 JSON">
+<label for="body">文章正文 · 修改后须重新人工核对事实</label><textarea id="body" required placeholder="请导入带来源的文章草稿"></textarea>
+<div class="actions" style="margin-top:20px;justify-content:space-between">
+<h2>媒体素材与版权</h2><button id="addAsset" type="button">添加素材</button>
+</div>
+<div id="mediaList"></div>
+<p class="note">图片、视频、文档均要求 HTTPS 素材地址、来源地址、版权许可和替代文本。</p>
+<div class="actions" style="margin-top:20px">
+<button type="submit" class="primary" id="save" disabled>导出新修订版 JSON</button>
+<button id="refresh" type="button" disabled>更新预览</button>
+</div>
+</form>
+<div id="status" role="status" aria-live="polite">请先加载 JSON 草稿。</div>
+</section>
+<section>
+<h2>实时预览 · 未审核</h2>
+<p class="note">移动端会自动适配。预览不是事实核验，也不是发布页面。</p>
+<h3 id="previewTitle">尚无文章</h3>
+<div id="preview"></div>
+<div id="previewMedia"></div>
+</section>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+let original=null, assets=[];
+const fields=["id","kind","url","source_url","rights_status","alt"];
+const safeUrl=value=>{
+ try{const u=new URL(value);return u.protocol==="https:"&&!u.username&&!u.password&&!/\s/.test(value)}
+ catch{return false}
+};
+function rowControls(asset){
+ const wrapper=document.createElement("div");wrapper.className="media-row";
+ const specs=[
+  ["id","素材ID","text"],["kind","类型","kind"],["url","素材HTTPS地址","url"],
+  ["source_url","来源HTTPS地址","url"],["rights_status","版权状态","rights"],["alt","替代文本","text"]
+ ];
+ for(const [key,label,type] of specs){
+  const field=document.createElement("label");field.textContent=label;
+  if(key==="url"||key==="source_url")field.className="wide";
+  let input;
+  if(type==="kind"||type==="rights"){
+   input=document.createElement("select");
+   const values=type==="kind"?["image","video","document"]:["owned","licensed","permission_granted"];
+   for(const value of values){const opt=document.createElement("option");opt.value=value;opt.textContent=value;input.append(opt)}
+  }else{
+   input=document.createElement("input");input.type=type;input.required=true;
+  }
+  input.dataset.field=key;input.value=asset[key]||"";field.append(input);wrapper.append(field);
+ }
+ const remove=document.createElement("button");remove.type="button";remove.className="remove";remove.textContent="移除素材";
+ remove.addEventListener("click",()=>{wrapper.remove();refreshPreview()});wrapper.append(remove);
+ return wrapper;
+}
+function getAssets(){
+ const rows=Array.from($("mediaList").querySelectorAll(".media-row"));
+ if(rows.length>30)throw Error("最多30个素材");
+ const ids=new Set();
+ return rows.map(row=>{
+  const entry={};
+  for(const field of fields)entry[field]=row.querySelector('[data-field="'+field+'"]').value.trim();
+  if(!entry.id||ids.has(entry.id))throw Error("素材ID不能为空或重复");
+  if(!safeUrl(entry.url)||!safeUrl(entry.source_url))throw Error("素材和来源必须是有效HTTPS地址");
+  if(!entry.alt)throw Error("素材替代文本不能为空");
+  ids.add(entry.id);return entry;
+ });
+}
+function refreshPreview(){
+ $("previewTitle").textContent=$("title").value;
+ $("preview").textContent=$("body").value;
+ $("previewMedia").replaceChildren();
+ for(const a of getAssets()){
+  const figure=document.createElement("figure"),caption=document.createElement("figcaption");
+  if(a.kind==="image"){const img=document.createElement("img");img.src=a.url;img.alt=a.alt;img.loading="lazy";figure.append(img)}
+  else if(a.kind==="video"){const video=document.createElement("video");video.src=a.url;video.controls=true;video.preload="none";figure.append(video)}
+  const source=document.createElement("a");source.href=a.source_url;source.target="_blank";source.rel="noopener noreferrer";source.textContent="来源与版权记录：" + a.alt;
+  caption.append(source);figure.append(caption);$("previewMedia").append(figure);
+ }
+ $("status").textContent="本地预览已更新；仍需人工核验。";
+}
+$("upload").addEventListener("change",async function(){
+ try{
+  const file=this.files[0];if(!file)return;
+  if(file.size>2_000_000)throw Error("草稿文件超过2 MB");
+  const obj=JSON.parse(await file.text());
+  if(!obj||typeof obj!=="object"||obj.publishable!==false||
+     !["requires_human_review","requires_human_fact_check"].includes(obj.editorial_status)||
+     typeof obj.title!=="string"||typeof obj.body!=="string")throw Error("只接受未发布、待审核草稿");
+  original=obj;assets=Array.isArray(obj.assets)?obj.assets:[];
+  $("title").value=obj.title;$("body").value=obj.body;
+  $("mediaList").replaceChildren(...assets.map(rowControls));
+  $("save").disabled=false;$("refresh").disabled=false;
+  refreshPreview();
+ }catch(error){original=null;$("save").disabled=true;$("refresh").disabled=true;$("status").textContent="加载失败："+error.message}
+});
+$("addAsset").addEventListener("click",()=>{if(!original)return;$("mediaList").append(rowControls({kind:"image",rights_status:"owned"}))});
+$("refresh").addEventListener("click",()=>{try{refreshPreview()}catch(e){$("status").textContent=e.message}});
+$("editorForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ try{
+  if(!original)throw Error("请先导入草稿");
+  const title=$("title").value.trim(),body=$("body").value.trim();
+  if(!title||!body)throw Error("标题和正文不能为空");
+  const updated={...original,title,body,assets:getAssets(),publishable:false,
+     editorial_status:"requires_human_review",evidence_review_required:true,
+     revision:(Number.isInteger(original.revision)?original.revision:0)+1,
+     editor:"DAVYLAB local editor",last_edited_at:new Date().toISOString()};
+  updated.layout=[{type:"headline"},{type:"body"},...updated.assets.map(a=>({type:"asset",asset_id:a.id}))];
+  delete updated.sha256;delete updated.content_sha256;
+  if(globalThis.crypto&&crypto.subtle){
+   const data=new TextEncoder().encode(JSON.stringify(updated));
+   const hash=await crypto.subtle.digest("SHA-256",data);
+   updated.editor_content_sha256=Array.from(new Uint8Array(hash)).map(x=>x.toString(16).padStart(2,"0")).join("");
+  }
+  const blob=new Blob([JSON.stringify(updated,null,2)+"\n"],{type:"application/json"});
+  const url=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=url;a.download="davylab-news-review-r"+updated.revision+".json";a.click();
+  setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $("status").textContent="已导出修订版 r"+updated.revision+"；所有事实需再次人工核对，禁止直接发布。";
+ }catch(error){$("status").textContent="无法导出："+error.message}
+});
+</script>
+</body>
+</html>

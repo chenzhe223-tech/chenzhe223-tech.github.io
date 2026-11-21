@@ -1,0 +1,149 @@
+name: DAVYLAB News Engine isolated CI
+on:
+  pull_request:
+    paths:
+      - 'news-engine/**'
+      - '.github/workflows/news-engine-p0.yml'
+  workflow_dispatch:
+
+# Strictly separate from radar/daily/ production publish and poster gates.
+permissions:
+  contents: read
+
+jobs:
+  offline-tests:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Contract tests (offline and without credentials)
+        run: python -m unittest discover -s news-engine -p 'test_*.py' -v
+      - name: Validate editor JavaScript syntax (no browser dependencies)
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          html=Path('news-engine/editor.html').read_text(encoding='utf-8')
+          script=html.split('<script>',1)[1].split('</script>',1)[0]
+          Path('/tmp/news-engine-editor.js').write_text(script,encoding='utf-8')
+          PY
+          node --check /tmp/news-engine-editor.js
+
+  live-feed-sample:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Collect real RSS sources into isolated ephemeral output
+        run: |
+          mkdir -p news-engine/data
+          python news-engine/collector.py --out news-engine/data/latest-shadow.json --history news-engine/data/temporary-history.json
+      - name: Verify all five source responses, never mark leads as verified
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          x=json.loads(Path("news-engine/data/latest-shadow.json").read_text())
+          diagnostics=x["diagnostics"]
+          print(json.dumps(diagnostics,ensure_ascii=False,indent=2))
+          assert len(diagnostics)==5, "expected five feed checks"
+          assert all(d["status"]=="ok" for d in diagnostics), "one or more feeds failed"
+          assert all(s.get("verification_status")=="source_not_independently_verified" for s in x["stories"])
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-live-feed-sample
+          path: news-engine/data/latest-shadow.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+  durable-history-shadow:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    concurrency:
+      group: news-engine-isolated-history-state
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Contract tests before isolated state write
+        run: python -m unittest discover -s news-engine -p 'test_*.py' -v
+      - name: Verify five real sources and persist 90-day keys on news-engine-state only
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python news-engine/history_backend.py --out news-engine/data/latest-shadow.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-durable-shadow
+          path: news-engine/data/latest-shadow.json
+          if-no-files-found: ignore
+          retention-days: 7
+
+  browser-editor-e2e:
+    if: github.event_name == 'pull_request'
+    # Playwright 1.55 supports Ubuntu 24.04, not the current ubuntu-latest 26.04.
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install open-source headless browser test tools
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Test actual desktop and mobile review workflow in Chromium (offline)
+        env:
+          NEWS_ENGINE_SCREENSHOT_DIR: test-results/news-engine/browser
+        run: node news-engine/test_editor_browser.cjs
+      - name: Upload evidence screenshots and review-only exports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-editor-browser-qa
+          path: test-results/news-engine/browser/
+          if-no-files-found: ignore
+          retention-days: 7
+
+  production-isolation-guard:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Reject any Radar production, poster or workflow changes in News Engine PR
+        run: |
+          git fetch origin main
+          python - <<'PY'
+          import subprocess
+          changed = subprocess.check_output(
+              ["git", "diff", "--name-only", "origin/main...HEAD"],
+              text=True
+          ).splitlines()
+          forbidden = [p for p in changed if not (
+              p.startswith("news-engine/") or p == ".github/workflows/news-engine-p0.yml"
+          )]
+          print("News Engine changed paths:", changed)
+          assert not forbidden, "P0 production isolation violated: " + repr(forbidden)
+          assert changed, "PR has no new Engine changes to validate"
+          PY
