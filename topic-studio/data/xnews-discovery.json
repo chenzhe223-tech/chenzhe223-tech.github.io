@@ -3,9 +3,43 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-20T09:56:40+00:00",
-  "count": 46,
+  "synced_at": "2026-11-21T08:21:57+00:00",
+  "count": 48,
   "articles": [
+    {
+      "id": "openai-medchembench",
+      "date": "2026-11-20",
+      "title": "在xhigh档上，GPT-6.2 Astra的MedChemBench得分是84.5%，GPT-5.6 Sol是58.2%",
+      "summary": "这份基准有99道题，来自117篇论文和专利，包含761个分子结构。GPT-6 Astra在结构重建上拿到95.4%，选择化合物和预测数值大约只拿到一半。官方写，这不能证明模型能发现新药或改进实验室决策。",
+      "original_url": "https://openai.com/index/introducing-medchembench/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-medchembench",
+      "tags": [
+        "OpenAI",
+        "MedChemBench",
+        "medicinal chemistry",
+        "benchmark",
+        "drug discovery"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-adversarial-distillation",
+      "date": "2026-11-20",
+      "title": "提取受保护推理的成功率，从54.0%降到了0.2%",
+      "summary": "OpenAI用自适应黑盒红队测试GPT-6.2 Astra的更新防护，并报告完整推理轨迹比摘要更容易把网络安全能力传给学生模型。评测是内部进行的。",
+      "original_url": "https://openai.com/index/combatting-adversarial-distillation/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-adversarial-distillation",
+      "tags": [
+        "OpenAI",
+        "distillation",
+        "safety",
+        "cybersecurity",
+        "chain-of-thought"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-performance-factory",
       "date": "2026-11-19",
