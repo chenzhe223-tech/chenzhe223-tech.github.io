@@ -16,6 +16,7 @@ const SAMPLE = [
 'Rule: Stop rather than retry on 401 or 403 responses.',
 'Avoid: Infinite retry loops that hide faults and increase bills.'
 ].join('\n');
+let distillTask=null;
 let currentFile=null, selectedPDF=null, generated=null, filename='', processing=false, cancelRequested=false;
 const MAX_PDF_BYTES=40*1024*1024, MAX_EXTRACT_CHARS=5_000_000;
 const $=id=>document.getElementById(id);
@@ -148,7 +149,7 @@ function renderCode(){for(const b of $('fileList').children)b.classList.toggle('
 function sample(){selectedPDF=null;filename='reliable-agent-workflows-example.txt';$('fileName').textContent='内置原创示例 · 3 个章节（文本）';$('sourceType').textContent='当前：结构化文本示例，非 PDF 提取测试';$('title').value='Reliable Agent Workflows';$('slug').value='reliable-agent-workflows';clearError();}
 async function go(){
  if(processing){cancelRequested=true;updateProgress(0,0,'正在取消，请完成当前页面后停止…');return;}
- processing=true;cancelRequested=false;clearError();generated=null;
+ processing=true;cancelRequested=false;clearError();generated=null;distillTask=null;$('distillReport').textContent='';$('distillReport').hidden=true;$('distillResult').value='';
  $('results').hidden=true;$('placeholder').hidden=false;$('success').textContent='';setBusy(true);
  try{
   let text,pages=0,hash,source;
@@ -166,13 +167,33 @@ async function go(){
   const title=($('title').value||source.replace(/\.[a-z]+$/i,'')).trim().slice(0,90);
   const built=buildFiles(text,title,slug,source,hash,pages);
   if(cancelRequested)throw new Error('转换已取消，未生成文件。');
-  generated={...built,slug};render();
+  generated={...built,slug};distillTask=window.BookSkillDistill.prepare(text,{filename:source,title,sha256:hash,pages});render();
   $('success').textContent='已生成 '+Object.keys(generated.files).length+' 个文件 · '+pages+' 页 · '+(built.quality?'完整条文索引：'+built.quality.parsed_clauses+' 条（'+built.quality.flagged_clauses.length+' 条待复核），表格未结构化':'本地显式规则提取（非 AI 语义提炼）');
  }catch(e){showError(e.message||String(e));}
  finally{processing=false;cancelRequested=false;setBusy(false);}
 }
 function download(){if(!generated)return;const url=URL.createObjectURL(makeZip(generated.files));const a=document.createElement('a');a.href=url;a.download=generated.slug+'-agent-skill.zip';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);}
+function saveDistillTask(){
+ if(!distillTask||!generated)return;
+ const url=URL.createObjectURL(new Blob([JSON.stringify(distillTask,null,2)],{type:'application/json'}));
+ const a=document.createElement('a');a.href=url;a.download=generated.slug+'-distillation-task.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);
+}
+async function auditDistillResult(file){
+ const task=distillTask;if(!task||!file)return;
+ const reportBox=$('distillReport');
+ try{
+  if(file.size>20*1024*1024)throw new Error('结果 JSON 超过 20 MB。');
+  const result=JSON.parse(await file.text());if(task!==distillTask||!generated)return;
+  const report=window.BookSkillDistill.validate(task,result);
+  generated.files[generated.slug+'/distillation-audit.json']=JSON.stringify(report,null,2);
+  generated.files[generated.slug+'/candidate-cards-unverified.json']=JSON.stringify(result,null,2);
+  render();reportBox.textContent=(report.issues.length?'待复核：'+report.issues.slice(0,20).join('；'):'结构与引文匹配已检查')+'。仅为候选草稿，来源语义、实际任务评测及公式仍未验证。';reportBox.hidden=false;
+ }catch(e){reportBox.textContent='校验失败：'+(e.message||String(e));reportBox.hidden=false;}
+}
 function init(){
+ $('distillTask').onclick=saveDistillTask;
+ $('distillImport').onclick=()=>$('distillResult').click();
+ $('distillResult').onchange=e=>auditDistillResult(e.target.files[0]);
  $('choose').addEventListener('click',()=>$('pdfInput').click());$('pdfInput').addEventListener('change',e=>{if(processing)return;const f=e.target.files[0];if(!f)return;selectedPDF=f;filename=f.name;$('fileName').textContent=f.name+' · '+Math.ceil(f.size/1024)+' KB';$('sourceType').textContent='本地 PDF 文本提取 · 不会上传至服务器';$('title').value=f.name.replace(/\.pdf$/i,'');$('slug').value=escapeSlug(f.name.replace(/\.pdf$/i,''));clearError();});
  $('sample').onclick=sample;$('run').onclick=go;$('download').onclick=download;$('copy').onclick=async()=>{if(currentFile&&generated){try{await navigator.clipboard.writeText(generated.files[currentFile]);$('success').textContent='已复制 '+currentFile;}catch(e){showError('复制失败，请手动选择文本。');}}};
  const zone=$('drop');zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});zone.addEventListener('dragleave',()=>zone.classList.remove('over'));zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');let f=e.dataTransfer.files[0];if(f&&!processing){selectedPDF=f;filename=f.name;$('fileName').textContent=f.name+' · '+Math.ceil(f.size/1024)+' KB';$('title').value=f.name.replace(/\.pdf$/i,'');$('slug').value=escapeSlug(f.name.replace(/\.pdf$/i,''));$('sourceType').textContent='本地 PDF 文本提取 · 不会上传至服务器';}});
