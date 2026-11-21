@@ -10,7 +10,8 @@
 </style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script defer src="./quality-core.js?v=quality-20261117c"></script>
-<script defer src="./app.js?v=quality-20261117c"></script>
+<script defer src="./distill-core.js?v=cangjie-p0-20261121"></script>
+<script defer src="./app.js?v=cangjie-p0-20261121"></script>
 </head>
 <body>
 <header class="top"><div class="brand"><span class="brandMark">B</span><span>Book to Skill <span style="font-weight:500;color:#8090a6">Studio</span></span></div><span class="topRight">By DAVYLAB · Browser Edition</span></header>
@@ -30,9 +31,9 @@
   </div>
   <div class="card right"><div style="display:flex;justify-content:space-between;align-items:center;gap:9px;flex-wrap:wrap"><div><h2>02 · 转换结果</h2><p class="sub" style="margin:0">查看完整条文、来源页码及质量报告</p></div><span class="tag">Agent Skills 格式</span></div>
    <div class="empty" id="placeholder"><div class="big">▤</div><strong>准备好转换你的第一份文档</strong><p>左侧上传 PDF 或选择示例，生成的文件目录与内容将在这里出现。</p></div>
-   <div id="results" hidden><div class="metrics"><div class="metric"><strong id="stat-chapters">0</strong><span>章节</span></div><div class="metric"><strong id="stat-frameworks">0</strong><span>条款／框架</span></div><div class="metric"><strong id="stat-files">0</strong><span>输出文件</span></div></div><div class="fileBox"><div class="files" id="fileList" role="group" aria-label="输出文件"></div><pre class="code" id="fileCode"></pre></div><div class="resultActions"><button type="button" class="btn primary" id="download">下载完整 ZIP</button><button type="button" class="btn" id="copy">复制当前文件</button></div><p class="success" id="success" role="status"></p></div>
+   <div id="results" hidden><div class="metrics"><div class="metric"><strong id="stat-chapters">0</strong><span>章节</span></div><div class="metric"><strong id="stat-frameworks">0</strong><span>条款／框架</span></div><div class="metric"><strong id="stat-files">0</strong><span>输出文件</span></div></div><div class="fileBox"><div class="files" id="fileList" role="group" aria-label="输出文件"></div><pre class="code" id="fileCode"></pre></div><div class="resultActions"><button type="button" class="btn primary" id="download">下载完整 ZIP</button><button type="button" class="btn" id="copy">复制当前文件</button></div><p class="success" id="success" role="status"></p><div class="note"><strong>知识蒸馏实验 · P0</strong><p>可选：导出含原文的任务 JSON，按授权交给 AI 助手处理，再导入结果进行本地结构和引文匹配检查。不会自动上传或调用模型；通过匹配检查不代表语义和实际能力评测通过。</p><div class="resultActions"><button type="button" class="btn" id="distillTask">导出蒸馏任务</button><button type="button" class="btn" id="distillImport">导入候选结果校验</button><input type="file" id="distillResult" accept=".json,application/json" hidden></div><p id="distillReport" role="status" hidden style="overflow-wrap:anywhere"></p></div></div>
   </div>
  </section>
- <div class="footer"><span>Book to Skill Studio · By DAVYLAB · 把想法，做成能用的工具</span><span>基于 <a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noreferrer">book-to-skill</a> 方法论 · 本网页为独立浏览器适配版</span></div>
+ <div class="footer"><span>Book to Skill Studio · By DAVYLAB · 把想法，做成能用的工具</span><span>基于 <a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noreferrer">book-to-skill</a> 方法论 · 本网页为独立浏览器适配版 · P0 知识蒸馏参考 <a href="https://github.com/kangarooking/cangjie-skill" target="_blank" rel="noreferrer">Cangjie Skill</a></span></div>
 </main>
 </body></html>
