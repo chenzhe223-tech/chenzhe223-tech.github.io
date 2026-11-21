@@ -34,6 +34,17 @@ class EcosystemExportTests(unittest.TestCase):
             row = {**self.package, **change}
             with self.assertRaises(ValueError):
                 export_contract(row, "wechat")
+    def test_rejects_local_or_private_provenance_urls(self):
+        unsafe = ("https://localhost/a", "https://sub.localhost/a", "https://127.0.0.1/a",
+                  "https://10.0.0.1/a", "https://192.168.1.1/a",
+                  "https://169.254.169.254/latest/meta-data", "https://[::1]/a")
+        for url in unsafe:
+            with self.subTest(url=url):
+                row = copy.deepcopy(self.package)
+                row["source_urls"] = [url]
+                with self.assertRaises(ValueError):
+                    export_contract(row, "worldtoon")
+
     def test_rejects_unknown_target_and_rights(self):
         with self.assertRaises(ValueError):
             export_contract(self.package, "production")
