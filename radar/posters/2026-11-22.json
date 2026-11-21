@@ -1,0 +1,309 @@
+{
+  "report_date": "2026-11-22",
+  "poster": "radar/posters/2026-11-22.png",
+  "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "news_count": 5,
+  "news_urls": [
+    "https://www.marktechpost.com/2026/11/21/openai-gpt-live-1-1-api-standby-mode/",
+    "https://www.marktechpost.com/2026/11/18/google-gemini-4-neon-release/",
+    "https://www.marktechpost.com/2026/11/20/baseten-bison-1-groundhog-1-gemma-4-decision-models/",
+    "https://www.ithome.com/1/030/423.htm",
+    "https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/"
+  ],
+  "news_titles": [
+    "OpenAI 为语音智能体推出 GPT-Live-1.1，空闲成本降至每分钟0.02美元",
+    "Google DeepMind 发布 Gemini 4 Neon：100万上下文，登顶 AA 编程智能体指数",
+    "Baseten 发布 Bison-1 与 Groundhog-1，登顶决策模型指数",
+    "华中科技大学与阿里巴巴联合成立 AI 前沿安全研究中心，课题覆盖大模型安全攻防等",
+    "把AI版的脸卖给这家微短剧初创公司，会是好莱坞的未来吗？"
+  ],
+  "news_image_evidence": [
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/21/openai-gpt-live-1-1-api-standby-mode/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "4db434971de4d638b9af3f63327656faff89fd63c71a0237c23de968df72e10b",
+      "rendered_image_sha256": "4db434971de4d638b9af3f63327656faff89fd63c71a0237c23de968df72e10b",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/18/google-gemini-4-neon-release/",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "3871575f9f9bc955fba17016a286e173671bb8606d8dc20663191e2bc0dbef1a",
+      "rendered_image_sha256": "bee6e5f4a7c956beba95bd30ef26b3ef6be7e799cff8753ea34d0821de3ae921",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/20/baseten-bison-1-groundhog-1-gemma-4-decision-models/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "e0aedf64a402144470eb951c6f759a6ecfa341cc863191e979804662ca101947",
+      "rendered_image_sha256": "e0aedf64a402144470eb951c6f759a6ecfa341cc863191e979804662ca101947",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.ithome.com/1/030/423.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "a6e6b4e87fb0e7257470b632e962f2adbc373e501ae6cf3ad48a72e5eb752540",
+      "rendered_image_sha256": "a6e6b4e87fb0e7257470b632e962f2adbc373e501ae6cf3ad48a72e5eb752540",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/21/is-selling-an-ai-version-of-your-face-to-this-microdrama-startup-the-future-of-hollywood/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "7a88a9841e9571cf9c874eaa21f21e6c2c41ffc6f22d7c88b2a2f2500c5feb00",
+      "rendered_image_sha256": "7a88a9841e9571cf9c874eaa21f21e6c2c41ffc6f22d7c88b2a2f2500c5feb00",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    }
+  ],
+  "skill": "affaan-m/ECC",
+  "design": "geometric-navy",
+  "format": "PNG",
+  "canvas": [
+    1200,
+    1800
+  ],
+  "layout_regions": {
+    "masthead": [
+      58,
+      42,
+      1152,
+      110
+    ],
+    "geometric-hero": [
+      0,
+      0,
+      1200,
+      425
+    ],
+    "editorial-observation": [
+      48,
+      450,
+      1152,
+      575
+    ],
+    "three-column-news-grid": [
+      50,
+      608,
+      1150,
+      1122
+    ],
+    "two-news-summary-row": [
+      50,
+      1136,
+      1150,
+      1280
+    ],
+    "skill-recommendation": [
+      48,
+      1324,
+      868,
+      1538
+    ],
+    "right-qr-panel": [
+      900,
+      1290,
+      1164,
+      1664
+    ],
+    "brand-footer": [
+      0,
+      1700,
+      1200,
+      1800
+    ]
+  },
+  "text_bounds": [
+    {
+      "block": "paragraph",
+      "x": 64,
+      "y": 329,
+      "width": 1070,
+      "height": 50,
+      "actual_width": 1056.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 250,
+      "y": 469,
+      "width": 850,
+      "height": 56,
+      "actual_width": 840.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 823,
+      "width": 318,
+      "height": 75,
+      "actual_width": 310.1,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 906,
+      "width": 318,
+      "height": 105,
+      "actual_width": 317.2,
+      "line_count": 5,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 823,
+      "width": 318,
+      "height": 75,
+      "actual_width": 312.4,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 441,
+      "y": 906,
+      "width": 318,
+      "height": 147,
+      "actual_width": 315.4,
+      "line_count": 7,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 823,
+      "width": 318,
+      "height": 50,
+      "actual_width": 315.5,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 816,
+      "y": 881,
+      "width": 318,
+      "height": 105,
+      "actual_width": 316.5,
+      "line_count": 5,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 195,
+      "y": 1176,
+      "width": 372,
+      "height": 42,
+      "actual_width": 368.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 195,
+      "y": 1222,
+      "width": 372,
+      "height": 17,
+      "actual_width": 182.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 758,
+      "y": 1176,
+      "width": 372,
+      "height": 42,
+      "actual_width": 358.9,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 758,
+      "y": 1222,
+      "width": 372,
+      "height": 17,
+      "actual_width": 68.6,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1380,
+      "width": 550,
+      "height": 27,
+      "actual_width": 147.9,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1434,
+      "width": 565,
+      "height": 30,
+      "actual_width": 554.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 82,
+      "y": 1500,
+      "width": 550,
+      "height": 14,
+      "actual_width": 293.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    }
+  ],
+  "design_variant": "geometric-navy",
+  "iso_year": 2026,
+  "iso_week": 47,
+  "iso_weekday": 7,
+  "style_cycle_index": 46,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.4.0",
+  "generated_at": "2026-11-22T03:33:44.019665+08:00"
+}
