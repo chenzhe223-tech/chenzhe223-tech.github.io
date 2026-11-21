@@ -48,7 +48,8 @@ def export_contract(package, target):
     sources = package.get("source_urls", [])
     if not isinstance(sources, list) or len(sources) > 30 or any(not _https(u) for u in sources):
         raise ValueError("invalid source URLs")
-    sources = list(sources)\n    # Sources can also be obtained from source-bearing editorial evidence.
+    sources = list(sources)
+    # Sources can also be obtained from source-bearing editorial evidence.
     evidence = package.get("evidence", [])
     if not isinstance(evidence, list) or len(evidence) > 100:
         raise ValueError("invalid evidence")
