@@ -164,10 +164,14 @@ async function go(){
   const slug=escapeSlug($('slug').value)||('book-'+hash.slice(0,8));
   if(!/^[a-z][a-z0-9-]{0,62}$/.test(slug))throw new Error('Skill 标识必须以字母开头，只能包含小写字母、数字、连字符。');
   const title=($('title').value||source.replace(/\.[a-z]+$/i,'')).trim().slice(0,90);
-  const built=buildFiles(text,title,slug,source,hash,pages);
+  let built=buildFiles(text,title,slug,source,hash,pages);
+  if($('cangjieMode')?.checked){
+    if(!window.CangjieP0)throw new Error('仓颉候选模块加载失败，请刷新后重试。');
+    built=window.CangjieP0.extend(built,{title,slug,pdfName:source,hash,pages});
+  }
   if(cancelRequested)throw new Error('转换已取消，未生成文件。');
   generated={...built,slug};render();
-  $('success').textContent='已生成 '+Object.keys(generated.files).length+' 个文件 · '+pages+' 页 · '+(built.quality?'完整条文索引：'+built.quality.parsed_clauses+' 条（'+built.quality.flagged_clauses.length+' 条待复核），表格未结构化':'本地显式规则提取（非 AI 语义提炼）');
+  $('success').textContent='已生成 '+Object.keys(generated.files).length+' 个文件 · '+pages+' 页 · '+(built.quality?'完整条文索引：'+built.quality.parsed_clauses+' 条（'+built.quality.flagged_clauses.length+' 条待复核），表格未结构化':'本地显式规则提取（非 AI 语义提炼）')+(built.cangjie?'；仓颉候选：'+built.cangjie.candidates+' 条（均待审核，未运行 AI）':'');
  }catch(e){showError(e.message||String(e));}
  finally{processing=false;cancelRequested=false;setBusy(false);}
 }

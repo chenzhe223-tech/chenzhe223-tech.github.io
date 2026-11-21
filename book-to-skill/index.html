@@ -10,7 +10,8 @@
 </style>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script defer src="./quality-core.js?v=quality-20261117c"></script>
-<script defer src="./app.js?v=quality-20261117c"></script>
+<script defer src="./cangjie-bridge.js?v=p0-20261121"></script>
+<script defer src="./app.js?v=cangjie-p0-20261121"></script>
 </head>
 <body>
 <header class="top"><div class="brand"><span class="brandMark">B</span><span>Book to Skill <span style="font-weight:500;color:#8090a6">Studio</span></span></div><span class="topRight">By DAVYLAB · Browser Edition</span></header>
@@ -24,6 +25,7 @@
     <div class="field"><label for="title">Skill 标题</label><input id="title" placeholder="例如：Reliable Agent Workflows" maxlength="90"></div>
     <div class="field"><label for="slug">Skill 名称（英文）</label><input id="slug" placeholder="例如：reliable-agent-workflows" maxlength="62"><small class="description">将作为 ZIP 内的顶层文件夹名，留空则自动生成。</small></div>
     <div class="note">规范类 PDF 优先提取<strong>完整编号条款和物理页码</strong>，形成术语、限制性规定、计价方法及质量报告。表格仅保留页级文字，未恢复列结构，不能直接据此计算工程量。AI 深度语义生成尚未接入。</div>
+    <label class="note" style="display:flex;align-items:flex-start;gap:10px;cursor:pointer"><input type="checkbox" id="cangjieMode" style="margin-top:4px;accent-color:#2364d8"><span><strong>仓颉 · RIA-TV++ 候选能力包（P0 试验）</strong><br>可选附加来源覆盖审计、候选卡和复核清单。仅限已解析完整编号条文的 PDF。<strong>不是 AI 语义蒸馏或已验证 Skill</strong>，不上传原文。</span></label>
     <div id="progress" class="note" role="status" aria-live="polite" hidden><div id="progressText">正在读取 PDF…</div><progress id="progressBar" max="100" value="0" style="width:100%;height:11px;accent-color:#2364d8"></progress><div class="description">长文档逐页处理，可随时取消；暂不支持纯扫描件。</div></div>
     <div class="error" id="error" role="alert" hidden></div><button type="button" class="btn primary run" id="run">生成 Agent Skill</button>
     <div class="privacy">隐私优先：无账户、无文档上传、无外部模型调用</div>
