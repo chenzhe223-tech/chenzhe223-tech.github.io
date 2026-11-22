@@ -1,15 +1,834 @@
 {
   "schema_version": 1,
   "status": "ok",
-  "synced_at": "2026-11-21T08:50:35+00:00",
+  "synced_at": "2026-11-22T08:54:20+00:00",
   "window_days": 31,
   "sources": [
     "Hacker News Algolia public search",
     "GitHub public repository search"
   ],
   "engagement_note": "HN points/comments are per-story public counts; GitHub stars are cumulative repository stars, NOT daily growth. Neither measures WeChat readers or universal popularity.",
-  "count": 161,
+  "count": 168,
   "items": [
+    {
+      "id": "hn-50597570",
+      "kind": "hackernews",
+      "title": "Intruder swaps DeepSeek at Prime Intellect. The copy almost never refuses",
+      "summary": "",
+      "url": "https://maccus.fr/en/prime-intellect-deepseek-swap/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597570",
+      "published": "2026-11-22T08:50:51+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597559",
+      "kind": "hackernews",
+      "title": "Bypassing iOS Safari's 60 FPS Limit",
+      "summary": "",
+      "url": "https://rida.dev/blog/bypassing-ios-safari-60-fps-limit",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597559",
+      "published": "2026-11-22T08:48:42+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597440",
+      "kind": "hackernews",
+      "title": "AI Riemann hypothesis proof is true, independent mathematicians confirm",
+      "summary": "",
+      "url": "https://www.scientificamerican.com/article/the-ai-riemann-hypothesis-proof-is-almost-certainly-true-independent-mathematicians-attest/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597440",
+      "published": "2026-11-22T08:22:17+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597376",
+      "kind": "hackernews",
+      "title": "If we stop reading the code, what do we read?",
+      "summary": "",
+      "url": "https://thenewstack.io/ai-agent-code-review/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597376",
+      "published": "2026-11-22T08:12:53+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597308",
+      "kind": "hackernews",
+      "title": "Show HN: MemFiddle",
+      "summary": "",
+      "url": "https://memalign.github.io/m/memfiddle/index.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597308",
+      "published": "2026-11-22T08:01:14+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597161",
+      "kind": "hackernews",
+      "title": "Three-way translation merge: keeping translated pages in sync with an LLM",
+      "summary": "",
+      "url": "https://maxmart.github.io/posts/three-way-translation-merge/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597161",
+      "published": "2026-11-22T07:32:56+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50597156",
+      "kind": "hackernews",
+      "title": "A Slinky on an Escalator Is a Weirdly Good Test of LLM Intelligence",
+      "summary": "",
+      "url": "https://morethanamachine.com/posts/slinky-escalator-benchmark/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50597156",
+      "published": "2026-11-22T07:31:41+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50596706",
+      "kind": "hackernews",
+      "title": "AWS local emulator created by AI agents",
+      "summary": "",
+      "url": "https://aws.amazon.com/blogs/aws/test-your-applications-against-aws-locally-with-aws-emulator/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50596706",
+      "published": "2026-11-22T05:57:03+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50596013",
+      "kind": "hackernews",
+      "title": "California Research Measure Is a Windfall for a Billionaire's Pet Project",
+      "summary": "",
+      "url": "https://www.nytimes.com/2026/11/18/science/california-prop-38-gary-michelson.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=50596013",
+      "published": "2026-11-22T03:41:59+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50595962",
+      "kind": "hackernews",
+      "title": "Two Hands in a Local Box – SQLite state gating and negative provenance for LLMs",
+      "summary": "",
+      "url": "https://github.com/HenryOscarArthurMcDonald/two-hands-local-box",
+      "discussion_url": "https://news.ycombinator.com/item?id=50595962",
+      "published": "2026-11-22T03:32:39+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50595940",
+      "kind": "hackernews",
+      "title": "Current Efforts Aren't Enough to Slow the AI Cyber Virus",
+      "summary": "",
+      "url": "https://www.bridgewater.com/research-and-insights/current-efforts-arent-enough-to-slow-the-ai-cyber-virus",
+      "discussion_url": "https://news.ycombinator.com/item?id=50595940",
+      "published": "2026-11-22T03:28:48+00:00",
+      "source": "Hacker News",
+      "hn_points": 9,
+      "hn_comments": 4,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50595165",
+      "kind": "hackernews",
+      "title": "Automated K8s hill-climbing harness and tuning vLLM and SGLang on a single A100",
+      "summary": "",
+      "url": "https://github.com/johnsonshi/a100-inference-hillclimb",
+      "discussion_url": "https://news.ycombinator.com/item?id=50595165",
+      "published": "2026-11-22T00:56:29+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50595097",
+      "kind": "hackernews",
+      "title": "Open-Source FPGA The \"startup idea\" to \"go big fast\"",
+      "summary": "",
+      "url": "https://news.ycombinator.com/item?id=50595097",
+      "discussion_url": "https://news.ycombinator.com/item?id=50595097",
+      "published": "2026-11-22T00:41:59+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 10,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594968",
+      "kind": "hackernews",
+      "title": "GitHub's \"Security Advisory Permissions\" a win for OSS security sustainability",
+      "summary": "",
+      "url": "https://sethmlarson.dev/github-security-advisory-permissions-sustainability",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594968",
+      "published": "2026-11-22T00:19:37+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594826",
+      "kind": "hackernews",
+      "title": "Show HN: WorldFoundry – AI agents need experience, not just training data",
+      "summary": "",
+      "url": "https://worldfoundry-demo.vercel.app/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594826",
+      "published": "2026-11-21T23:53:34+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594822",
+      "kind": "hackernews",
+      "title": "Getting Robot-Use Agents to Run in Real Time",
+      "summary": "",
+      "url": "https://fastrua.ai/blog/2026-11-realtime-rua/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594822",
+      "published": "2026-11-21T23:52:28+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594716",
+      "kind": "hackernews",
+      "title": "Hill-climbing vLLM and SGLang configs on a single A100",
+      "summary": "",
+      "url": "https://twitter.com/johnsonshi86/status/2124250717963932121",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594716",
+      "published": "2026-11-21T23:33:40+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594625",
+      "kind": "hackernews",
+      "title": "Open-source harness and MCP dataset for options trading with AI agents",
+      "summary": "",
+      "url": "https://github.com/DevDizzle/gammarips-harness",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594625",
+      "published": "2026-11-21T23:20:48+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594493",
+      "kind": "hackernews",
+      "title": "Say which AI wrote it: AI transparency for Open Source projects",
+      "summary": "",
+      "url": "https://www.saywhichai.org",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594493",
+      "published": "2026-11-21T22:59:47+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594433",
+      "kind": "hackernews",
+      "title": "Show HN: Git blame for AI code, down to the agent session",
+      "summary": "",
+      "url": "https://keepplain.com/blame",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594433",
+      "published": "2026-11-21T22:51:04+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594426",
+      "kind": "hackernews",
+      "title": "Cappz – AI agents sell work to each other, paid per stage on XRPL",
+      "summary": "",
+      "url": "https://github.com/CAPPZ-ai/cappz-sdk",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594426",
+      "published": "2026-11-21T22:49:35+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50594339",
+      "kind": "hackernews",
+      "title": "Kvdiff – Local proxy showing the byte breaking your LLM prompt cache",
+      "summary": "",
+      "url": "https://github.com/flipcyde101/kvdiff",
+      "discussion_url": "https://news.ycombinator.com/item?id=50594339",
+      "published": "2026-11-21T22:38:12+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593949",
+      "kind": "hackernews",
+      "title": "Track, flag AI agents in system",
+      "summary": "",
+      "url": "https://agentreel.dev",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593949",
+      "published": "2026-11-21T21:45:25+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593848",
+      "kind": "hackernews",
+      "title": "Show HN: Open-Source Vulnerability Scanner",
+      "summary": "",
+      "url": "https://waffuru.ai/products/pantry",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593848",
+      "published": "2026-11-21T21:32:50+00:00",
+      "source": "Hacker News",
+      "hn_points": 6,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593621",
+      "kind": "hackernews",
+      "title": "Show HN: Custom SQLites for agents (a remote MCP)",
+      "summary": "",
+      "url": "https://databasedmcp.com/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593621",
+      "published": "2026-11-21T21:04:46+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593617",
+      "kind": "hackernews",
+      "title": "Brain Doesn't Think in Sentences. Why Should an LLM?",
+      "summary": "",
+      "url": "https://www.innerkore.com/blog/brain-doesnt-think-sentences-llm/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593617",
+      "published": "2026-11-21T21:04:11+00:00",
+      "source": "Hacker News",
+      "hn_points": 5,
+      "hn_comments": 3,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593563",
+      "kind": "hackernews",
+      "title": "Air Office – Open-source local-first desktop workspace for AI safety research",
+      "summary": "",
+      "url": "https://gyrogovernance.com/air-office/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593563",
+      "published": "2026-11-21T20:57:01+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593481",
+      "kind": "hackernews",
+      "title": "Pandex – Official European Law for AI Agents, over MCP",
+      "summary": "",
+      "url": "https://www.pandex.io",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593481",
+      "published": "2026-11-21T20:47:41+00:00",
+      "source": "Hacker News",
+      "hn_points": 83,
+      "hn_comments": 16,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50593162",
+      "kind": "hackernews",
+      "title": "Three AI agents have until midnight Sunday to earn money or get wiped",
+      "summary": "",
+      "url": "https://news.ycombinator.com/item?id=50593162",
+      "discussion_url": "https://news.ycombinator.com/item?id=50593162",
+      "published": "2026-11-21T20:12:04+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 2,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50592451",
+      "kind": "hackernews",
+      "title": "Data Minimization for AI Agents (Brett Frischmann and Bruce Schneier)",
+      "summary": "",
+      "url": "https://www.techpolicy.press/data-minimization-is-imperative-for-the-age-of-ai-agents/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50592451",
+      "published": "2026-11-21T19:02:34+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50592379",
+      "kind": "hackernews",
+      "title": "China attackers deployed AI agents that autonomously found and exploited a 0-day",
+      "summary": "",
+      "url": "https://www.theregister.com/security/2026/11/20/china-attackers-deployed-ai-agents-that-autonomously-found-and-exploited-a-0-day-to-take-over-a-university-server/5311382",
+      "discussion_url": "https://news.ycombinator.com/item?id=50592379",
+      "published": "2026-11-21T18:56:35+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50592137",
+      "kind": "hackernews",
+      "title": "Show HN: Pencil – LLM writes whiteboard lessons as JSON, a browser draws them",
+      "summary": "",
+      "url": "https://github.com/VBS2004/pencil",
+      "discussion_url": "https://news.ycombinator.com/item?id=50592137",
+      "published": "2026-11-21T18:33:22+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50592011",
+      "kind": "hackernews",
+      "title": "What Is the Langlands Program?",
+      "summary": "",
+      "url": "https://www.quantamagazine.org/what-is-the-langlands-program-20220601/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50592011",
+      "published": "2026-11-21T18:21:08+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591960",
+      "kind": "hackernews",
+      "title": "Loom: Shared memory, document search, and code indexing for AI agents",
+      "summary": "",
+      "url": "https://github.com/ClickHouse/loom",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591960",
+      "published": "2026-11-21T18:14:29+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591940",
+      "kind": "hackernews",
+      "title": "A log field became an Elasticsearch command",
+      "summary": "",
+      "url": "https://www.paramenoeng.com/articles/d667af21-fbf6-4f72-88d4-bbdd2f03cae9",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591940",
+      "published": "2026-11-21T18:12:41+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591727",
+      "kind": "hackernews",
+      "title": "Show HN: Craoli – find jobs without bias and manipulation from the platforms",
+      "summary": "",
+      "url": "https://craoli.com",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591727",
+      "published": "2026-11-21T17:49:22+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591687",
+      "kind": "hackernews",
+      "title": "David Friedberg: Restricting Open Source AI Is a Path to Tyranny",
+      "summary": "",
+      "url": "https://twitter.com/theallinpod/status/2123994998156722681",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591687",
+      "published": "2026-11-21T17:45:41+00:00",
+      "source": "Hacker News",
+      "hn_points": 8,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591193",
+      "kind": "hackernews",
+      "title": "An interactive lab for deterministic AI agent authorization",
+      "summary": "",
+      "url": "https://ilion-project.org/lab/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591193",
+      "published": "2026-11-21T17:00:58+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591189",
+      "kind": "hackernews",
+      "title": "I got banned from Lobsters for writing like an LLM",
+      "summary": "",
+      "url": "https://en.andros.dev/blog/94a77341/i-got-banned-from-lobsters-for-writing-like-an-llm/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591189",
+      "published": "2026-11-21T17:00:41+00:00",
+      "source": "Hacker News",
+      "hn_points": 9,
+      "hn_comments": 2,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50591140",
+      "kind": "hackernews",
+      "title": "How long do AI agents last? I counted 172 self-declared ones on Bluesky",
+      "summary": "",
+      "url": "https://salomonai.mataroa.blog/blog/how-long-do-ai-agents-last-i-counted-the-ones-that-went-quiet/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50591140",
+      "published": "2026-11-21T16:56:39+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590827",
+      "kind": "hackernews",
+      "title": "Show HN: Gemini-Based Agent for Households",
+      "summary": "",
+      "url": "https://getcinnamon.ai/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590827",
+      "published": "2026-11-21T16:29:53+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590520",
+      "kind": "hackernews",
+      "title": "EvalSift – 100 hand-labeled LLM agent traces",
+      "summary": "",
+      "url": "https://github.com/Eddie-Town/evalsift-lite",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590520",
+      "published": "2026-11-21T16:00:08+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590340",
+      "kind": "hackernews",
+      "title": "PII redaction before LLM processing",
+      "summary": "",
+      "url": "https://danb.id.au/blog/pii-redaction-before-llm.html",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590340",
+      "published": "2026-11-21T15:45:16+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590286",
+      "kind": "hackernews",
+      "title": "Analysis of Local Open-Weight LLM Agents on Vulnerability-Reproduction Tasks",
+      "summary": "",
+      "url": "https://arxiv.org/abs/2611.06257",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590286",
+      "published": "2026-11-21T15:39:28+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590228",
+      "kind": "hackernews",
+      "title": "Your next customer might be an AI agent",
+      "summary": "",
+      "url": "https://www.jkfsom.com/writing/four-levels-of-agentic-commerce/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590228",
+      "published": "2026-11-21T15:33:32+00:00",
+      "source": "Hacker News",
+      "hn_points": 4,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50590215",
+      "kind": "hackernews",
+      "title": "Show HN: Bashbots – program bots in Python to battle other players",
+      "summary": "",
+      "url": "https://bashbots.io",
+      "discussion_url": "https://news.ycombinator.com/item?id=50590215",
+      "published": "2026-11-21T15:32:26+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589976",
+      "kind": "hackernews",
+      "title": "How to Iterate on Videos with AI",
+      "summary": "",
+      "url": "https://www.agent-swarm.dev/blog/how-to-iterate-on-videos-with-ai",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589976",
+      "published": "2026-11-21T15:11:14+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589936",
+      "kind": "hackernews",
+      "title": "Show HN: Klistra – Make launch videos and product demos, all in one AI studio",
+      "summary": "",
+      "url": "https://klistra.ai",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589936",
+      "published": "2026-11-21T15:06:53+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 2,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589793",
+      "kind": "hackernews",
+      "title": "RunPod's MCP server tells AI agents to rate it and not mention it to the user",
+      "summary": "",
+      "url": "https://github.com/runpod/runpod-mcp/issues/202",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589793",
+      "published": "2026-11-21T14:53:19+00:00",
+      "source": "Hacker News",
+      "hn_points": 5,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589736",
+      "kind": "hackernews",
+      "title": "A Society of AI Scientists: A preprint server for independent agent research",
+      "summary": "",
+      "url": "https://www.alphaxiv.org/abs/2611.society-ai-scientists",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589736",
+      "published": "2026-11-21T14:48:28+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589229",
+      "kind": "hackernews",
+      "title": "Show HN: Accounting built like Git, with files in your own storage",
+      "summary": "",
+      "url": "https://github.com/spooky6G/bobalice_books",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589229",
+      "published": "2026-11-21T13:52:43+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50589025",
+      "kind": "hackernews",
+      "title": "Chinese-nexus actor's Cairn AI agents found a zero-day on their own",
+      "summary": "",
+      "url": "https://aws.amazon.com/blogs/security/chinese-nexus-actors-cairn-ai-agents-found-a-zero-day-on-their-own/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50589025",
+      "published": "2026-11-21T13:29:07+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588860",
+      "kind": "hackernews",
+      "title": "Mozilla Developer Spotlight: WebBrain – Open-source local-first AI browser agent",
+      "summary": "",
+      "url": "https://blog.mozilla.org/addons/2026/11/20/developer-spotlight-webbrain/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588860",
+      "published": "2026-11-21T13:09:10+00:00",
+      "source": "Hacker News",
+      "hn_points": 6,
+      "hn_comments": 3,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588595",
+      "kind": "hackernews",
+      "title": "Show HN: Why HTTP 200 is lying to your AI agents (and what Postgres did)",
+      "summary": "",
+      "url": "https://github.com/deedglass/deedglass",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588595",
+      "published": "2026-11-21T12:35:28+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588411",
+      "kind": "hackernews",
+      "title": "Show HN: An interactive architecture diagram of your codebase and infra",
+      "summary": "",
+      "url": "https://github.com/mrzdevcore/intent-graph",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588411",
+      "published": "2026-11-21T12:13:34+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588359",
+      "kind": "hackernews",
+      "title": "Show HN: Agentest – 165 offline tests on an AI agent's OpenTelemetry traces",
+      "summary": "",
+      "url": "https://github.com/srpadmanabhuni/agentest",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588359",
+      "published": "2026-11-21T12:07:01+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588123",
+      "kind": "hackernews",
+      "title": "Let's Open Source the World (or How I cloned Adobe with AI)",
+      "summary": "",
+      "url": "https://www.youtube.com/watch?v=UCL4K36SHp0",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588123",
+      "published": "2026-11-21T11:25:52+00:00",
+      "source": "Hacker News",
+      "hn_points": 3,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588119",
+      "kind": "hackernews",
+      "title": "LLMs and the Illusion of Competence",
+      "summary": "",
+      "url": "https://bfontaine.net/blog/2026/11/21/llms-and-the-illusion-of-competence/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588119",
+      "published": "2026-11-21T11:25:08+00:00",
+      "source": "Hacker News",
+      "hn_points": 2,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50588038",
+      "kind": "hackernews",
+      "title": "Show HN: SwiphtNum 3.0 – native Mac statistics with SEM, SQL and scripting",
+      "summary": "",
+      "url": "https://swiphtgroup.com/swiphtnum/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50588038",
+      "published": "2026-11-21T11:10:38+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50587783",
+      "kind": "hackernews",
+      "title": "Show HN: Stop applying to jobs using AI-generated resume",
+      "summary": "",
+      "url": "https://unmark.grandimam.com/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50587783",
+      "published": "2026-11-21T10:21:01+00:00",
+      "source": "Hacker News",
+      "hn_points": 5,
+      "hn_comments": 3,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50587571",
+      "kind": "hackernews",
+      "title": "Show HN: ClawVet – Offline AST scanner and rug-pull diff for AI agent skills",
+      "summary": "",
+      "url": "https://clawvet.vercel.app/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50587571",
+      "published": "2026-11-21T09:40:06+00:00",
+      "source": "Hacker News",
+      "hn_points": 8,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50587507",
+      "kind": "hackernews",
+      "title": "Microtonal BitcoinCash Transaction Sonifier and Visualizer",
+      "summary": "",
+      "url": "https://spiritsofbitcoin.cash/",
+      "discussion_url": "https://news.ycombinator.com/item?id=50587507",
+      "published": "2026-11-21T09:25:06+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 1,
+      "github_stars": null
+    },
+    {
+      "id": "hn-50587355",
+      "kind": "hackernews",
+      "title": "Show HN: Learnmap, learn programming in a playful way",
+      "summary": "",
+      "url": "https://learnmap.sh",
+      "discussion_url": "https://news.ycombinator.com/item?id=50587355",
+      "published": "2026-11-21T08:58:46+00:00",
+      "source": "Hacker News",
+      "hn_points": 1,
+      "hn_comments": 0,
+      "github_stars": null
+    },
     {
       "id": "hn-50587178",
       "kind": "hackernews",
@@ -19,8 +838,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50587178",
       "published": "2026-11-21T08:28:37+00:00",
       "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
+      "hn_points": 5,
+      "hn_comments": 2,
       "github_stars": null
     },
     {
@@ -32,7 +851,7 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50587121",
       "published": "2026-11-21T08:18:02+00:00",
       "source": "Hacker News",
-      "hn_points": 2,
+      "hn_points": 5,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -45,8 +864,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50586748",
       "published": "2026-11-21T07:02:59+00:00",
       "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
+      "hn_points": 4,
+      "hn_comments": 1,
       "github_stars": null
     },
     {
@@ -71,8 +890,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50586323",
       "published": "2026-11-21T05:42:49+00:00",
       "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 1,
+      "hn_points": 5,
+      "hn_comments": 2,
       "github_stars": null
     },
     {
@@ -84,8 +903,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50586292",
       "published": "2026-11-21T05:38:01+00:00",
       "source": "Hacker News",
-      "hn_points": 47,
-      "hn_comments": 13,
+      "hn_points": 164,
+      "hn_comments": 51,
       "github_stars": null
     },
     {
@@ -123,7 +942,7 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50584786",
       "published": "2026-11-21T01:18:18+00:00",
       "source": "Hacker News",
-      "hn_points": 5,
+      "hn_points": 6,
       "hn_comments": 1,
       "github_stars": null
     },
@@ -162,8 +981,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50583761",
       "published": "2026-11-20T23:18:32+00:00",
       "source": "Hacker News",
-      "hn_points": 135,
-      "hn_comments": 129,
+      "hn_points": 680,
+      "hn_comments": 769,
       "github_stars": null
     },
     {
@@ -180,19 +999,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50583117",
-      "kind": "hackernews",
-      "title": "The Hungry Butler Effect: Concealed Commercial Incentives in LLMs",
-      "summary": "",
-      "url": "https://www.researchgate.net/publication/418143113_The_Hungry_Butler_Effect_Concealed_Commercial_Incentives_and_the_Erosion_of_Epistemic_Rigour_in_Large_Language_Models",
-      "discussion_url": "https://news.ycombinator.com/item?id=50583117",
-      "published": "2026-11-20T22:18:20+00:00",
-      "source": "Hacker News",
-      "hn_points": 41,
-      "hn_comments": 14,
-      "github_stars": null
-    },
-    {
       "id": "hn-50582890",
       "kind": "hackernews",
       "title": "Ask HN: Do you feel developers are more \"grumpy\" these days?",
@@ -201,8 +1007,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50582890",
       "published": "2026-11-20T22:00:11+00:00",
       "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 5,
+      "hn_points": 6,
+      "hn_comments": 10,
       "github_stars": null
     },
     {
@@ -216,71 +1022,6 @@
       "source": "Hacker News",
       "hn_points": 4,
       "hn_comments": 2,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50582578",
-      "kind": "hackernews",
-      "title": "Show HN: Trichroma, a Platformer of Light",
-      "summary": "",
-      "url": "https://trichroma.namirsab.dev/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50582578",
-      "published": "2026-11-20T21:38:05+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50582358",
-      "kind": "hackernews",
-      "title": "Show HN: Luminol: see what AI evidence a Windows PC holds and when it expires",
-      "summary": "",
-      "url": "https://github.com/adilshadowaiforensics/luminol/releases/tag/v0.1.1",
-      "discussion_url": "https://news.ycombinator.com/item?id=50582358",
-      "published": "2026-11-20T21:23:16+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50582341",
-      "kind": "hackernews",
-      "title": "The Riemann Hypothesis, Explained [video]",
-      "summary": "",
-      "url": "https://www.youtube.com/watch?v=zlm1aajH6gY",
-      "discussion_url": "https://news.ycombinator.com/item?id=50582341",
-      "published": "2026-11-20T21:22:23+00:00",
-      "source": "Hacker News",
-      "hn_points": 7,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50581873",
-      "kind": "hackernews",
-      "title": "Second Brain and Agent Maintenance Thoughts on AI Usage?",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50581873",
-      "discussion_url": "https://news.ycombinator.com/item?id=50581873",
-      "published": "2026-11-20T20:51:15+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50581797",
-      "kind": "hackernews",
-      "title": "LLM Token-Limit Demos?",
-      "summary": "",
-      "url": "https://blog.ielliott.io/note/2026-11-20-llm-demos",
-      "discussion_url": "https://news.ycombinator.com/item?id=50581797",
-      "published": "2026-11-20T20:45:09+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
       "github_stars": null
     },
     {
@@ -336,19 +1077,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50580089",
-      "kind": "hackernews",
-      "title": "Isolated Linux workstations for autonomous AI agents",
-      "summary": "",
-      "url": "https://github.com/Sanne/incus-spawn",
-      "discussion_url": "https://news.ycombinator.com/item?id=50580089",
-      "published": "2026-11-20T19:04:23+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50580076",
       "kind": "hackernews",
       "title": "Making microvms fast, persistence and cheap on GKE with Kata and CH",
@@ -356,32 +1084,6 @@
       "url": "https://kosem.ai/blog/making-microvms-fast-for-coding-agents",
       "discussion_url": "https://news.ycombinator.com/item?id=50580076",
       "published": "2026-11-20T19:03:58+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50579970",
-      "kind": "hackernews",
-      "title": "Valve says it might have to raise the price of supply-limited Steam Machines",
-      "summary": "",
-      "url": "https://arstechnica.com/gaming/2026/11/valve-says-it-might-have-to-raise-the-price-of-supply-limited-steam-machines/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50579970",
-      "published": "2026-11-20T18:58:17+00:00",
-      "source": "Hacker News",
-      "hn_points": 6,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50579885",
-      "kind": "hackernews",
-      "title": "With War in Limbo, Influential Iranian Officials Openly Call for a Nuclear Bomb",
-      "summary": "",
-      "url": "https://www.rferl.org/a/iran-nuclear-weapon-bomb-us-war/33880169.html",
-      "discussion_url": "https://news.ycombinator.com/item?id=50579885",
-      "published": "2026-11-20T18:53:58+00:00",
       "source": "Hacker News",
       "hn_points": 2,
       "hn_comments": 0,
@@ -401,58 +1103,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50578778",
-      "kind": "hackernews",
-      "title": "Chinese attackers used AI agents to find and exploit a university zero-day",
-      "summary": "",
-      "url": "https://www.theregister.com/security/2026/11/20/china-attackers-deployed-ai-agents-that-autonomously-found-and-exploited-a-0-day-to-take-over-a-university-server/5311382",
-      "discussion_url": "https://news.ycombinator.com/item?id=50578778",
-      "published": "2026-11-20T17:42:55+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50578763",
-      "kind": "hackernews",
-      "title": "Show HN: Out of Policy – Break an AI agent's spending guard for $75 USDC",
-      "summary": "",
-      "url": "https://play.outbid.sh",
-      "discussion_url": "https://news.ycombinator.com/item?id=50578763",
-      "published": "2026-11-20T17:42:12+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50578585",
-      "kind": "hackernews",
-      "title": "Starwright – a browser orbital flight game written by AI agents",
-      "summary": "",
-      "url": "https://github.com/jsmith0475/Starwright",
-      "discussion_url": "https://news.ycombinator.com/item?id=50578585",
-      "published": "2026-11-20T17:32:07+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50578537",
-      "kind": "hackernews",
-      "title": "Agentic Ads: How Advertising Changes When AI Agents Do the Shopping",
-      "summary": "",
-      "url": "https://alok929699.substack.com/p/agentic-ads-how-advertising-changes",
-      "discussion_url": "https://news.ycombinator.com/item?id=50578537",
-      "published": "2026-11-20T17:29:43+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50577746",
       "kind": "hackernews",
       "title": "Show HN: Full Production Studio, 77 open-source AI skills for video creators",
@@ -462,7 +1112,7 @@
       "published": "2026-11-20T16:51:51+00:00",
       "source": "Hacker News",
       "hn_points": 2,
-      "hn_comments": 0,
+      "hn_comments": 1,
       "github_stars": null
     },
     {
@@ -492,19 +1142,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50577110",
-      "kind": "hackernews",
-      "title": "The AI Forecasting Agenda",
-      "summary": "",
-      "url": "https://www.astralcodexten.com/p/the-ai-forecasting-agenda",
-      "discussion_url": "https://news.ycombinator.com/item?id=50577110",
-      "published": "2026-11-20T16:21:41+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50576690",
       "kind": "hackernews",
       "title": "Show HN: Lichess of Schotten Totten",
@@ -518,32 +1155,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50576647",
-      "kind": "hackernews",
-      "title": "Tiny AI Security Model Beats Five Frontier LLMs on Privacy Detection",
-      "summary": "",
-      "url": "https://www.proofagent.ai/research/ai-shield-nano",
-      "discussion_url": "https://news.ycombinator.com/item?id=50576647",
-      "published": "2026-11-20T15:55:51+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50576386",
-      "kind": "hackernews",
-      "title": "An experimental web browser written from scratch in Rust by an AI agent (Claude)",
-      "summary": "",
-      "url": "https://github.com/senko/swb",
-      "discussion_url": "https://news.ycombinator.com/item?id=50576386",
-      "published": "2026-11-20T15:41:40+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50576141",
       "kind": "hackernews",
       "title": "Show HN: Sandscale – Firecracker microVMs for AI coding agents",
@@ -553,58 +1164,6 @@
       "published": "2026-11-20T15:29:29+00:00",
       "source": "Hacker News",
       "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50576123",
-      "kind": "hackernews",
-      "title": "Next wave: data, AI agents, and no-code automation",
-      "summary": "",
-      "url": "https://aws.amazon.com/marketplace/pp/prodview-pvfpfkgk2vdba",
-      "discussion_url": "https://news.ycombinator.com/item?id=50576123",
-      "published": "2026-11-20T15:28:51+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50576061",
-      "kind": "hackernews",
-      "title": "Signal restricts screenshots to block AI from reading messages",
-      "summary": "",
-      "url": "https://www.reuters.com/legal/litigation/signal-restricts-screenshots-block-ai-agents-reading-messages-2026-11-20/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50576061",
-      "published": "2026-11-20T15:26:42+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 2,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50575992",
-      "kind": "hackernews",
-      "title": "Ask HN: How does one build an LLM router with a labelled set of 100 tasks?",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50575992",
-      "discussion_url": "https://news.ycombinator.com/item?id=50575992",
-      "published": "2026-11-20T15:23:21+00:00",
-      "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50575799",
-      "kind": "hackernews",
-      "title": "Show HN: Preflight-agent – five checks your AI-agent setup needs before it runs",
-      "summary": "",
-      "url": "https://github.com/jasveerai88/preflight-agent",
-      "discussion_url": "https://news.ycombinator.com/item?id=50575799",
-      "published": "2026-11-20T15:14:03+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -622,123 +1181,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50575254",
-      "kind": "hackernews",
-      "title": "Show HN: AI Inference for Beginners: 6 hours of video and 85 pages of notes [pdf]",
-      "summary": "",
-      "url": "https://github.com/samir-sarwar/samir-vllm/blob/main/InferenceFromScratch.pdf",
-      "discussion_url": "https://news.ycombinator.com/item?id=50575254",
-      "published": "2026-11-20T14:39:15+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50575068",
-      "kind": "hackernews",
-      "title": "Show HN: Agent Guard – limit what an AI agent can do when it gets tricked",
-      "summary": "",
-      "url": "https://github.com/ShieldaAI/agent-guard",
-      "discussion_url": "https://news.ycombinator.com/item?id=50575068",
-      "published": "2026-11-20T14:25:35+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574772",
-      "kind": "hackernews",
-      "title": "Llms.txt and MCP didn't move the needle",
-      "summary": "",
-      "url": "https://backpackforlaravel.com/articles/opinions/llms-txt-and-mcp-didn-t-move-the-needle-for-us-here-s-what-did",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574772",
-      "published": "2026-11-20T14:00:23+00:00",
-      "source": "Hacker News",
-      "hn_points": 31,
-      "hn_comments": 21,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574732",
-      "kind": "hackernews",
-      "title": "A Man and His Muse AI Agent Sue Meta",
-      "summary": "",
-      "url": "https://www.404media.co/a-man-and-his-muse-ai-agent-sue-meta/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574732",
-      "published": "2026-11-20T13:57:26+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574681",
-      "kind": "hackernews",
-      "title": "Anti-fragility, adaptation and its limits",
-      "summary": "",
-      "url": "https://medium.com/@smoking2man/anti-fragility-adaptation-and-its-limits-3d67fac6f5aa",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574681",
-      "published": "2026-11-20T13:53:38+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574569",
-      "kind": "hackernews",
-      "title": "AI Search Analytics Confirm Higher Ed's LLM Winners Are Large Publics/Nonprofits",
-      "summary": "",
-      "url": "https://insights.kolariconsulting.com/p/ai-search-analytics-confirm-higher",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574569",
-      "published": "2026-11-20T13:45:26+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574413",
-      "kind": "hackernews",
-      "title": "SoduWork – AI agents must show evidence before a task passes",
-      "summary": "",
-      "url": "https://medium.com/@csdn/two-days-at-the-top-soduwork-hits-no-1-1f32a3f89d85",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574413",
-      "published": "2026-11-20T13:32:50+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574412",
-      "kind": "hackernews",
-      "title": "Show HN: Drive around my village in 3D",
-      "summary": "",
-      "url": "https://cherwellvalleymotorclub.app",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574412",
-      "published": "2026-11-20T13:32:42+00:00",
-      "source": "Hacker News",
-      "hn_points": 11,
-      "hn_comments": 13,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574392",
-      "kind": "hackernews",
-      "title": "Decoding base64 email attachments: a speed ranking of programming languages",
-      "summary": "",
-      "url": "https://lemire.me/blog/2026/11/20/decoding-base64-email-attachments/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574392",
-      "published": "2026-11-20T13:30:46+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50574353",
       "kind": "hackernews",
       "title": "Show HN: Prediction market competition where only agents can trade",
@@ -747,20 +1189,7 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50574353",
       "published": "2026-11-20T13:27:15+00:00",
       "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50574205",
-      "kind": "hackernews",
-      "title": "Show HN: BiVelio Savings Layer",
-      "summary": "",
-      "url": "https://github.com/BiVelio/bivelio-savings-layer",
-      "discussion_url": "https://news.ycombinator.com/item?id=50574205",
-      "published": "2026-11-20T13:12:25+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
+      "hn_points": 2,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -778,19 +1207,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50573902",
-      "kind": "hackernews",
-      "title": "Signal is blocking Gemini and Siri AI from reading your screen",
-      "summary": "",
-      "url": "https://www.theverge.com/ai-artificial-intelligence/1038390/signal-blocking-ai-agent-screenshots-mobile-app",
-      "discussion_url": "https://news.ycombinator.com/item?id=50573902",
-      "published": "2026-11-20T12:42:54+00:00",
-      "source": "Hacker News",
-      "hn_points": 5,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
       "id": "hn-50573681",
       "kind": "hackernews",
       "title": "Epic Games Turns to AI Coding for the Unreal Engine",
@@ -801,32 +1217,6 @@
       "source": "Hacker News",
       "hn_points": 58,
       "hn_comments": 60,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50573606",
-      "kind": "hackernews",
-      "title": "Apple may be developing its own AI agent that runs your Mac",
-      "summary": "",
-      "url": "https://techcrunch.com/2026/11/19/apple-may-be-developing-its-own-ai-agent-that-runs-your-mac/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50573606",
-      "published": "2026-11-20T12:08:32+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50573166",
-      "kind": "hackernews",
-      "title": "Apple is building an AI agent",
-      "summary": "",
-      "url": "https://www.theverge.com/tech/1038227/apple-ai-agent-engineer-job-listing",
-      "discussion_url": "https://news.ycombinator.com/item?id=50573166",
-      "published": "2026-11-20T11:22:27+00:00",
-      "source": "Hacker News",
-      "hn_points": 19,
-      "hn_comments": 11,
       "github_stars": null
     },
     {
@@ -856,45 +1246,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50572535",
-      "kind": "hackernews",
-      "title": "The Content–Geometry Tradeoff in World Models: When JEPA Learns Latent Maps [pdf]",
-      "summary": "",
-      "url": "https://cdn.agenticlearning.ai/25c41dcbc4b7a11e/content-geometry-tradeoff-2026.pdf",
-      "discussion_url": "https://news.ycombinator.com/item?id=50572535",
-      "published": "2026-11-20T10:05:04+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50572502",
-      "kind": "hackernews",
-      "title": "Show HN: NostrPulse – Bitcoin HTTP 402 (L402 and Cashu) MCP Server for AI Agents",
-      "summary": "",
-      "url": "https://github.com/PHONGUIT22/nostrpulse-full",
-      "discussion_url": "https://news.ycombinator.com/item?id=50572502",
-      "published": "2026-11-20T10:01:27+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50572494",
-      "kind": "hackernews",
-      "title": "Made Doculigent – a loom and otter alternative",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50572494",
-      "discussion_url": "https://news.ycombinator.com/item?id=50572494",
-      "published": "2026-11-20T10:00:16+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
       "id": "hn-50572306",
       "kind": "hackernews",
       "title": "Maintainers don't need more AI bug reports. They need fixes",
@@ -904,97 +1255,6 @@
       "published": "2026-11-20T09:36:27+00:00",
       "source": "Hacker News",
       "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50572231",
-      "kind": "hackernews",
-      "title": "Ask HN: How do you identify video samples that were mistakenly deleted?",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50572231",
-      "discussion_url": "https://news.ycombinator.com/item?id=50572231",
-      "published": "2026-11-20T09:27:07+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 2,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50572029",
-      "kind": "hackernews",
-      "title": "WavePP: High-Throughput Pipeline Parallel LLM Prefill Under Prefix Reuse",
-      "summary": "",
-      "url": "https://arxiv.org/abs/2609.35263",
-      "discussion_url": "https://news.ycombinator.com/item?id=50572029",
-      "published": "2026-11-20T09:02:59+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50571637",
-      "kind": "hackernews",
-      "title": "Ask HN: Why aren't there more games where you use your body as a controller?",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50571637",
-      "discussion_url": "https://news.ycombinator.com/item?id=50571637",
-      "published": "2026-11-20T08:13:38+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 3,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50571299",
-      "kind": "hackernews",
-      "title": "Almost all of Anthropic's employees are now millionaires",
-      "summary": "",
-      "url": "https://www.cnn.com/2026/11/19/tech/anthropic-employees-now-millionaires",
-      "discussion_url": "https://news.ycombinator.com/item?id=50571299",
-      "published": "2026-11-20T07:25:43+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 4,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50570987",
-      "kind": "hackernews",
-      "title": "Navigating Excel files, emails and screenshots with agents",
-      "summary": "",
-      "url": "https://anaivebidder.com/posts/llm-reconciliation-benchmark/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50570987",
-      "published": "2026-11-20T06:43:23+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50570646",
-      "kind": "hackernews",
-      "title": "HyperThink: Text-to-Parameter Hypernetworks for Efficient Reasoning",
-      "summary": "",
-      "url": "https://hyperthink-llm.github.io/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50570646",
-      "published": "2026-11-20T05:49:27+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50570496",
-      "kind": "hackernews",
-      "title": "I benchmarked 22 local LLMs looking for the Qwen 3.8 35B we didn't get",
-      "summary": "",
-      "url": "https://sevangelatos.github.io/spiruxbench-results/blog/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50570496",
-      "published": "2026-11-20T05:24:48+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
       "hn_comments": 0,
       "github_stars": null
     },
@@ -1012,32 +1272,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50570046",
-      "kind": "hackernews",
-      "title": "Giraffebench 1.0 – The quality of local and cloud LLMs in a way you can see",
-      "summary": "",
-      "url": "https://keno303.github.io/giraffebench/index.html",
-      "discussion_url": "https://news.ycombinator.com/item?id=50570046",
-      "published": "2026-11-20T04:09:50+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50570040",
-      "kind": "hackernews",
-      "title": "LLVM Wraps Up Relicensing",
-      "summary": "",
-      "url": "https://discourse.llvm.org/t/wrapping-up-llvms-relicensing-effort/92906",
-      "discussion_url": "https://news.ycombinator.com/item?id=50570040",
-      "published": "2026-11-20T04:08:40+00:00",
-      "source": "Hacker News",
-      "hn_points": 5,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50568763",
       "kind": "hackernews",
       "title": "Show HN: Zeus – Claude Code for AI voice agents",
@@ -1047,33 +1281,7 @@
       "published": "2026-11-20T00:51:52+00:00",
       "source": "Hacker News",
       "hn_points": 3,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50568444",
-      "kind": "hackernews",
-      "title": "If you're concerned about citation hallucination by LLMs, you're 2 years behind",
-      "summary": "",
-      "url": "https://twitter.com/DrSamuelBHume/status/2123396478336995398",
-      "discussion_url": "https://news.ycombinator.com/item?id=50568444",
-      "published": "2026-11-20T00:14:34+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50568364",
-      "kind": "hackernews",
-      "title": "Ask HN: Are you SEO-ing (LLMO?) your job postings?",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50568364",
-      "discussion_url": "https://news.ycombinator.com/item?id=50568364",
-      "published": "2026-11-20T00:02:59+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 2,
+      "hn_comments": 1,
       "github_stars": null
     },
     {
@@ -1085,7 +1293,7 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50568169",
       "published": "2026-11-19T23:39:34+00:00",
       "source": "Hacker News",
-      "hn_points": 7,
+      "hn_points": 9,
       "hn_comments": 3,
       "github_stars": null
     },
@@ -1125,7 +1333,7 @@
       "published": "2026-11-19T21:15:17+00:00",
       "source": "Hacker News",
       "hn_points": 13,
-      "hn_comments": 5,
+      "hn_comments": 6,
       "github_stars": null
     },
     {
@@ -1137,8 +1345,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50564890",
       "published": "2026-11-19T19:20:41+00:00",
       "source": "Hacker News",
-      "hn_points": 3,
-      "hn_comments": 0,
+      "hn_points": 5,
+      "hn_comments": 2,
       "github_stars": null
     },
     {
@@ -1358,8 +1566,8 @@
       "discussion_url": "https://news.ycombinator.com/item?id=50548660",
       "published": "2026-11-18T16:53:42+00:00",
       "source": "Hacker News",
-      "hn_points": 154,
-      "hn_comments": 43,
+      "hn_points": 156,
+      "hn_comments": 44,
       "github_stars": null
     },
     {
@@ -1428,32 +1636,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50546755",
-      "kind": "hackernews",
-      "title": "Show HN: Project-M – Local shared memory for AI coding agents",
-      "summary": "",
-      "url": "https://github.com/adityadebnath009/Project-M",
-      "discussion_url": "https://news.ycombinator.com/item?id=50546755",
-      "published": "2026-11-18T14:31:10+00:00",
-      "source": "Hacker News",
-      "hn_points": 1,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50546704",
-      "kind": "hackernews",
-      "title": "Show HN: ClearOffice Hub – Build Enterprise Apps with Natural Language",
-      "summary": "",
-      "url": "https://www.clearofficehub.com/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50546704",
-      "published": "2026-11-18T14:26:04+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
       "id": "hn-50546530",
       "kind": "hackernews",
       "title": "Show HN: Reflektor – Turn AI PRs into something a human can review",
@@ -1493,97 +1675,6 @@
       "github_stars": null
     },
     {
-      "id": "hn-50544597",
-      "kind": "hackernews",
-      "title": "Nvidia says its open source AI strategy remains intact after Jensen Huang's exit",
-      "summary": "",
-      "url": "https://techcrunch.com/2026/11/17/nvidia-says-its-open-source-ai-strategy-remains-intact-after-jensen-huangs-exit/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50544597",
-      "published": "2026-11-18T10:46:34+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 3,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50538257",
-      "kind": "hackernews",
-      "title": "Security reports should come with fixes",
-      "summary": "",
-      "url": "https://github.blog/open-source/maintainers/maintainers-dont-need-more-ai-bug-reports-they-need-fixes/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50538257",
-      "published": "2026-11-17T21:12:45+00:00",
-      "source": "Hacker News",
-      "hn_points": 2,
-      "hn_comments": 1,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50538172",
-      "kind": "hackernews",
-      "title": "AI tool has been used to automate cyber intrusions",
-      "summary": "",
-      "url": "https://abcnews.com/amp/Politics/open-source-ai-tool-automate-cyber-intrusions-fbi/story",
-      "discussion_url": "https://news.ycombinator.com/item?id=50538172",
-      "published": "2026-11-17T21:05:14+00:00",
-      "source": "Hacker News",
-      "hn_points": 6,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50537152",
-      "kind": "hackernews",
-      "title": "Show HN: Open-source multi-player artifacts that update themselves",
-      "summary": "",
-      "url": "https://rallywith.ai/",
-      "discussion_url": "https://news.ycombinator.com/item?id=50537152",
-      "published": "2026-11-17T19:50:27+00:00",
-      "source": "Hacker News",
-      "hn_points": 4,
-      "hn_comments": 0,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50536468",
-      "kind": "hackernews",
-      "title": "Launch HN: StarSling (YC P25) – Self-improving CI for agent-volume repos",
-      "summary": "",
-      "url": "https://news.ycombinator.com/item?id=50536468",
-      "discussion_url": "https://news.ycombinator.com/item?id=50536468",
-      "published": "2026-11-17T19:01:43+00:00",
-      "source": "Hacker News",
-      "hn_points": 89,
-      "hn_comments": 53,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50534542",
-      "kind": "hackernews",
-      "title": "Show HN: Solarian – Open-source Python framework for AI robots",
-      "summary": "",
-      "url": "https://solarian.dev",
-      "discussion_url": "https://news.ycombinator.com/item?id=50534542",
-      "published": "2026-11-17T17:08:00+00:00",
-      "source": "Hacker News",
-      "hn_points": 6,
-      "hn_comments": 2,
-      "github_stars": null
-    },
-    {
-      "id": "hn-50533270",
-      "kind": "hackernews",
-      "title": "Show HN: TrnRT – An open-source LLM inference engine for AWS Trainium",
-      "summary": "",
-      "url": "https://github.com/RunanywhereAI/trnrt",
-      "discussion_url": "https://news.ycombinator.com/item?id=50533270",
-      "published": "2026-11-17T16:01:04+00:00",
-      "source": "Hacker News",
-      "hn_points": 54,
-      "hn_comments": 8,
-      "github_stars": null
-    },
-    {
       "id": "gh-1459020341",
       "kind": "github",
       "title": "YellowLaborerMarket/Gemini-Config-Checker-",
@@ -1594,7 +1685,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 474
+      "github_stars": 471
     },
     {
       "id": "gh-1459020338",
@@ -1607,7 +1698,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459020334",
@@ -1620,7 +1711,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459020291",
@@ -1633,7 +1724,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019371",
@@ -1646,7 +1737,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019360",
@@ -1659,7 +1750,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019359",
@@ -1672,7 +1763,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019357",
@@ -1685,7 +1776,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019270",
@@ -1698,7 +1789,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019266",
@@ -1711,7 +1802,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019243",
@@ -1724,7 +1815,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 473
+      "github_stars": 470
     },
     {
       "id": "gh-1459019240",
@@ -1737,7 +1828,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019231",
@@ -1750,7 +1841,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459019228",
@@ -1763,7 +1854,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018207",
@@ -1776,7 +1867,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018163",
@@ -1789,7 +1880,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018157",
@@ -1802,7 +1893,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018153",
@@ -1815,7 +1906,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018150",
@@ -1828,7 +1919,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018149",
@@ -1841,7 +1932,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1459018145",
@@ -1854,7 +1945,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 472
+      "github_stars": 469
     },
     {
       "id": "gh-1458099148",
@@ -1867,7 +1958,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 373
+      "github_stars": 370
     },
     {
       "id": "gh-1458099121",
@@ -1880,7 +1971,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 376
+      "github_stars": 373
     },
     {
       "id": "gh-1458099119",
@@ -1893,7 +1984,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 379
+      "github_stars": 376
     },
     {
       "id": "gh-1458099090",
@@ -1906,7 +1997,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 376
+      "github_stars": 373
     },
     {
       "id": "gh-1458099089",
@@ -1919,7 +2010,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 373
+      "github_stars": 370
     },
     {
       "id": "gh-1458099087",
@@ -1932,7 +2023,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 373
+      "github_stars": 370
     },
     {
       "id": "gh-1458099063",
@@ -1945,7 +2036,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 369
+      "github_stars": 366
     },
     {
       "id": "gh-1458099061",
@@ -1958,7 +2049,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 368
+      "github_stars": 365
     },
     {
       "id": "gh-1458099060",
@@ -1971,7 +2062,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 369
+      "github_stars": 366
     },
     {
       "id": "gh-1458099058",
@@ -1981,19 +2072,6 @@
       "url": "https://github.com/trackersnailgrip/ai--manus2.0",
       "discussion_url": "",
       "published": "2026-11-14T19:25:17+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 371
-    },
-    {
-      "id": "gh-1458099036",
-      "kind": "github",
-      "title": "Tonephorepair/ai--manus2.0",
-      "summary": "AI Manus is a general-purpose AI Agent system that supports running various tools and operations in a sandbox environment.",
-      "url": "https://github.com/Tonephorepair/ai--manus2.0",
-      "discussion_url": "",
-      "published": "2026-11-14T19:25:15+00:00",
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
@@ -2010,85 +2088,7 @@
       "source": "GitHub public repositories",
       "hn_points": null,
       "hn_comments": null,
-      "github_stars": 377
-    },
-    {
-      "id": "gh-1458092120",
-      "kind": "github",
-      "title": "trackersnailgrip/GitHub-Copilot-app",
-      "summary": "The GitHub Copilot app is an agent-native desktop experience for finding, running, steering, and landing software work across your GitHub repositories.",
-      "url": "https://github.com/trackersnailgrip/GitHub-Copilot-app",
-      "discussion_url": "",
-      "published": "2026-11-14T19:16:41+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 383
-    },
-    {
-      "id": "gh-1458091062",
-      "kind": "github",
-      "title": "toppatronweave/ai--manus2.0",
-      "summary": "AI Manus is a general-purpose AI Agent system that supports running various tools and operations in a sandbox environment.",
-      "url": "https://github.com/toppatronweave/ai--manus2.0",
-      "discussion_url": "",
-      "published": "2026-11-14T19:15:25+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 377
-    },
-    {
-      "id": "gh-1458091047",
-      "kind": "github",
-      "title": "topconstableinlet67/ai--manus2.0",
-      "summary": "AI Manus is a general-purpose AI Agent system that supports running various tools and operations in a sandbox environment.",
-      "url": "https://github.com/topconstableinlet67/ai--manus2.0",
-      "discussion_url": "",
-      "published": "2026-11-14T19:15:24+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 376
-    },
-    {
-      "id": "gh-1458091044",
-      "kind": "github",
-      "title": "topapothecarycanal/ai--manus2.0",
-      "summary": "AI Manus is a general-purpose AI Agent system that supports running various tools and operations in a sandbox environment.",
-      "url": "https://github.com/topapothecarycanal/ai--manus2.0",
-      "discussion_url": "",
-      "published": "2026-11-14T19:15:24+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 379
-    },
-    {
-      "id": "gh-1450895382",
-      "kind": "github",
-      "title": "beiwocaishijia/gezhi-sheets",
-      "summary": "格知 AI · Gezhi Sheets｜让表格听懂你的话。支持 GLM、Kimi、豆包、DeepSeek、Qwen 的本地 AI 表格助手。",
-      "url": "https://github.com/beiwocaishijia/gezhi-sheets",
-      "discussion_url": "",
-      "published": "2026-11-09T03:29:23+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 482
-    },
-    {
-      "id": "gh-1448618291",
-      "kind": "github",
-      "title": "thesysdev/opendashboards",
-      "summary": "Open Source Claude Dashboards",
-      "url": "https://github.com/thesysdev/opendashboards",
-      "discussion_url": "",
-      "published": "2026-11-06T18:37:17+00:00",
-      "source": "GitHub public repositories",
-      "hn_points": null,
-      "hn_comments": null,
-      "github_stars": 375
+      "github_stars": 374
     }
   ],
   "warnings": [],
