@@ -1,9 +1,22 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-21T08:21:57+00:00",
-  "count": 67,
+  "checked_at": "2026-11-22T08:08:29+00:00",
+  "count": 69,
   "articles": [
+    {
+      "id": "ext-dc9b4a0c426ddc42fd",
+      "title": "Muru",
+      "summary": "Muru Graham Dumpleton started mod_wsgi 20 years ago, and has been thinking about the ideal way to serve Python web applications in production ever since. Muru is his new, AI-assisted Rust server that aims to pr",
+      "date": "2026-11-21",
+      "original_url": "https://simonwillison.net/2026/Nov/21/muru/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
     {
       "id": "ext-cf3b0c6c1cbc2369e5",
       "title": "Quoting Ravi Vakil",
@@ -23,6 +36,19 @@
       "summary": "I believe I have, working with Claude, discovered a proof of the Riemann Hypothesis. In fact, the method easily extends much further, resolving the so-called Generalized Riemann Hypothesis, and I expect, with m",
       "date": "2026-11-20",
       "original_url": "https://simonwillison.net/2026/Nov/20/levent-alpoge/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-8b57b72566ad3c58d8",
+      "title": "llm-gemini 0.38.1",
+      "summary": "Release: llm-gemini 0.38.1 Gemini 4 Carbon only supports low , medium and high reasoning levels - but Gemini 4 Hydrogen and Gemini 4 Neon both have an extra xhigh level. I missed that when I added those models ",
+      "date": "2026-11-20",
+      "original_url": "https://simonwillison.net/2026/Nov/20/llm-gemini/",
       "source": "Simon Willison 技术观点",
       "source_kind": "independent_original",
       "tags": [
@@ -577,32 +603,6 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
-      "id": "ext-e5607ea9b345667894",
-      "title": "llm-gemini 0.36",
-      "summary": "Release: llm-gemini 0.36 Gemini 4 Carbon was announced two weeks ago for \"a subset of cyber defenders\", but today it's available to everyone else . This is Google's best ever Gemini, priced at $2/million input ",
-      "date": "2026-11-10",
-      "original_url": "https://simonwillison.net/2026/Nov/10/llm-gemini/",
-      "source": "Simon Willison 技术观点",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外技术观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
-      "id": "ext-c80838f46e535c12a5",
-      "title": "Introducing Our Smallest, Most Efficient Model: Muse Ember",
-      "summary": "Introducing Our Smallest, Most Efficient Model: Muse Ember Meta AI just launched their entry in the Claude Haiku/GPT Luna category: Muse Ember, which they describe as: [...] our smallest and most efficient mode",
-      "date": "2026-11-10",
-      "original_url": "https://simonwillison.net/2026/Nov/10/muse-ember/",
-      "source": "Simon Willison 技术观点",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外技术观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
       "id": "ext-cb93d68b445c05b0e3",
       "title": "Pay for Hugging Face Hub with your Google Cloud Account",
       "summary": "",
@@ -625,6 +625,32 @@
       "source_kind": "independent_original",
       "tags": [
         "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e5607ea9b345667894",
+      "title": "llm-gemini 0.36",
+      "summary": "Release: llm-gemini 0.36 Gemini 4 Carbon was announced two weeks ago for \"a subset of cyber defenders\", but today it's available to everyone else . This is Google's best ever Gemini, priced at $2/million input ",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/llm-gemini/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-c80838f46e535c12a5",
+      "title": "Introducing Our Smallest, Most Efficient Model: Muse Ember",
+      "summary": "Introducing Our Smallest, Most Efficient Model: Muse Ember Meta AI just launched their entry in the Claude Haiku/GPT Luna category: Muse Ember, which they describe as: [...] our smallest and most efficient mode",
+      "date": "2026-11-10",
+      "original_url": "https://simonwillison.net/2026/Nov/10/muse-ember/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
       ],
       "verification": "original_source_metadata_not_independently_verified"
     },
@@ -890,7 +916,7 @@
     {
       "source": "Hugging Face 博客",
       "status": "ok",
-      "count": 31
+      "count": 29
     }
   ],
   "note": "Original public metadata only; NOT XNews translated articles."

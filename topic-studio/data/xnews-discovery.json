@@ -3,8 +3,8 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-21T08:21:57+00:00",
-  "count": 48,
+  "synced_at": "2026-11-22T08:08:29+00:00",
+  "count": 50,
   "articles": [
     {
       "id": "openai-medchembench",
@@ -36,6 +36,41 @@
         "safety",
         "cybersecurity",
         "chain-of-thought"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "metr-q4-2026-capability-update",
+      "date": "2026-11-20",
+      "title": "TH1.1 和 TH2 合在一起，50% 时间范围大约每 3.61 个月翻一倍",
+      "summary": "METR 11月20日更新：公开模型在容易验证的编程和优化任务上已经很强，在更贵、反馈更慢的任务上判断力较弱。他们仍认为，现有公开证据还不足以排除未来两三年出现剧烈的 AI 研发加速。",
+      "original_url": "https://metr.org/blog/2026-11-20-q4-2026-capability-update/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/metr-q4-2026-capability-update",
+      "tags": [
+        "METR",
+        "evaluations",
+        "time horizon",
+        "AI R&D",
+        "benchmarks"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "alpoge-riemann-hypothesis",
+      "date": "2026-11-20",
+      "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
+      "summary": "Alpöge 与 Claude 发现黎曼猜想证明后，只公开了一份 1700 万行的 Lean 库。Lean 与 Mathlib 社区在次日发表联合声明，认为命题、编译、比对和内核检查均已通过。",
+      "original_url": "https://alpo.ge/remark.pdf",
+      "xnews_url": "https://xnews.qiaomu.ai/a/alpoge-riemann-hypothesis",
+      "tags": [
+        "Riemann Hypothesis",
+        "Lean",
+        "formal verification",
+        "mathematics",
+        "Claude",
+        "Anthropic"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"
