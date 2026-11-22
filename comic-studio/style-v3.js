@@ -867,6 +867,21 @@ for(const x of THREE_D_STYLES){
   CATALOG.push(x);
 }
 
+// WT-S21: standalone selectable 2D urban animation style; not tied to any cast or scene.
+CATALOG.push({
+ style_id:'modern-life-anime',version:'1.2.0',number:26,
+ name:'都市轻动画',name_en:'Modern Life Anime',category:'日本漫画与动画',
+ subtitle:'现代都市 · 细腻表情 · 温暖二维动画',
+ subjects:'都市日常·情感故事·生活喜剧·人物关系',
+ palette:['#F4E8DC','#25385B','#A66D50','#63806A'],
+ material:'原创欧美人物设计与日系二维动画融合，修长自然比例，干净深棕细线，精致赛璐璐上色，现代生活空间',
+ lighting:'自然柔光、温暖日光、克制的阴影与明暗层次',
+ layout:'电影式中景、半身特写与人物互动，单画格单场景，连续镜头保持人物五官和服饰一致',
+ negative:'3D塑料质感、Q版大头、写实照片、粗糙线稿、霓虹光效、九宫格拼版、角色变脸、字幕水印',
+ reference:{status:'not_licensed',url:null},sample:{status:'not_generated',url:null},
+ guide:{status:'pending_asset',url:null},quality_capability:{standard:false,premium:false,cinematic:false},
+ production_mode:'ChatGPT_pilot_required'
+});
 const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松','3D 与数字角色'];
 let filter='全部';
 const esc=v=>String(v??'').replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
