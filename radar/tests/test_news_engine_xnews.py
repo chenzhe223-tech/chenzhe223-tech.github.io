@@ -16,7 +16,7 @@ def fake_feed(publisher_id: int, stories: int = 3):
     stamp = format_datetime(NOW - dt.timedelta(hours=5))
     items = []
     for n in range(stories):
-        title = f"Original AI Research Update {publisher_id} Project {n} launches open evaluation pipeline"
+        title = f"Project{publisher_id}Lab{n} launches ResearchTrack{publisher_id}d{n} on Ecosystem{publisher_id}v{n} assessment"
         items.append(
             f"<item><title>{title}</title>"
             f"<link>https://example{publisher_id}.org/ai/announcement-{n}</link>"
