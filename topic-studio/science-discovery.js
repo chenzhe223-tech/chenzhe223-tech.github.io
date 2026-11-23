@@ -50,7 +50,12 @@ function normalize(rec,source){
  if(!validDoi(doi)||!title||!published)return null;
  // A journal-record match establishes metadata provenance, NOT peer review or health effects.
  if(journal && journal.toLowerCase()!==SOURCE[source].name.toLowerCase())return null;
+ // Journal article metadata can also describe news, editorials and corrections.
+ // Keep likely original research only; precise publication type still requires manual verification.
  const summary=clean(rec.abstract||rec.summary||"").slice(0,380);
+ if(/^(?:author correction|publisher correction|correction|retraction|editorial|in science journals)\b/i.test(title))return null;
+ if(source==="nature"&&!doi.startsWith("10.1038/s41586-"))return null;
+ if(source==="science"&&(!doi.startsWith("10.1126/science.")||summary.length<280))return null;
  const domain=classify(title+" "+summary);
  const authors=Array.isArray(rec.author)?rec.author.slice(0,3).map(a=>clean((a.given||"")+" "+(a.family||""))).filter(Boolean).join("、"):clean(rec.authors||"").slice(0,160);
  return {id:doi,doi,title,source,journal:SOURCE[source].name,published,summary,authors,
