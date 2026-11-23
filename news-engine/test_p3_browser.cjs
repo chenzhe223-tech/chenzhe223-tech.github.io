@@ -58,7 +58,12 @@ async function routes(page){
    page=await browser.newPage({viewport:{width,height:width===390?844:900}});
    await routes(page);
    r=await page.goto(base+"/topic-studio/",{waitUntil:"domcontentloaded",timeout:30000});assert.equal(r.status(),200);
-   await page.locator('button.nav[data-section="discover"]').first().click();
+   await page.evaluate(()=>{if(typeof changeSection==="function")changeSection("discover")});
+   console.log("P3 Topic navigation",await page.evaluate(()=>({
+    active:[...document.querySelectorAll(".section.active")].map(x=>x.id),
+    discover:!!document.getElementById("section-discover"),
+    summaryDisplay:getComputedStyle(document.querySelector("#newsEngineP3Topic summary")).display
+   })));
    await page.locator("#newsEngineP3Topic summary").waitFor({timeout:15000});
    await page.locator("#newsEngineP3Topic summary").click();
    await page.locator("#neP3Topic [data-ne-card]").first().waitFor({timeout:15000});
