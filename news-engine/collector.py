@@ -19,7 +19,7 @@ MAX_ITEMS_PER_SOURCE = 80
 HISTORY_DAYS = 90
 USER_AGENT = "DAVYLAB-NewsEngine/0.1 (+https://chenzhe223-tech.github.io/radar/daily/)"
 SOURCES = [
-    {"name": "GitHub Blog", "url": "https://github.blog/ai-and-ml/feed/"},
+    {"name": "OpenAI News", "url": "https://openai.com/news/rss.xml"},
     {"name": "Google AI Blog", "url": "https://blog.google/technology/ai/rss/"},
     {"name": "Hugging Face", "url": "https://huggingface.co/blog/feed.xml"},
     {"name": "Simon Willison", "url": "https://simonwillison.net/atom/everything/"},
@@ -137,7 +137,8 @@ def collect(sources=SOURCES, http_get=fetch, now=None, history=None):
                 for k in keys: history[k]=now.isoformat()
                 stories.append(item)
                 accepted+=1
-            diagnostics.append({"source":name,"status":"ok","parsed":len(items),"accepted":accepted})
+            diagnostics.append({"source":name,"status":"ok","parsed":len(items),"accepted":accepted,
+                                "coverage":"active" if items else "no_recent_entries"})
         except (ValueError, ET.ParseError, OSError, TimeoutError) as exc:
             diagnostics.append({"source": name, "status": "error", "error_type": type(exc).__name__, "detail": str(exc)[:140] if isinstance(exc, ValueError) else ""})
     stories.sort(key=lambda x: x["published_at"], reverse=True)
