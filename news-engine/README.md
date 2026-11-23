@@ -1,6 +1,18 @@
-# DAVYLAB News Engine · P0–P2 independent preview
+# DAVYLAB News Engine · isolated collector, research and online review preview
 
 **Status (2026-11-19): source collector, persisted history, review-only drafting and local desktop/mobile editor have verified independent tests; no production deployment.** Release evidence and exceptions: [QA_2026-11-19.md](QA_2026-11-19.md).
+
+
+## 2026-11-23 staging release and real QA
+
+**New:** [QA_2026-11-23.md](QA_2026-11-23.md) records the successful [isolated CI #45109745950](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45109745950) and real online smoke.
+
+- [Online read-only preview](https://davylab-news-engine-preview.chenzhe223.workers.dev/) · [online review editor](https://davylab-news-engine-preview.chenzhe223.workers.dev/editor) (no user account, no production writes, no AI inference).
+- 73 offline Python tests and 9 preview Worker route contracts PASS; Chromium desktop/mobile E2E PASS; real HTTPS preview smoke PASS.
+- 5/5 live sources had fresh items, 77 **unverified** candidates in the 2026-11-23 sample (OpenAI News, Google AI Blog, Hugging Face, Simon Willison and TechCrunch AI).
+- Preview bundles the same audited `editor.html` via `python3 news-engine/build_preview_worker.py --out /tmp/davylab-news-preview.js`, so editor loads even when GitHub is unavailable. `preview-worker.js` is a template, not a complete Worker upload on its own.
+- Cloudflare AI Gateway `davylab-news-engine` is configured authentication ON, BYOK-only ON, logging OFF, but no approved free inference has occurred. **Gateway creation is not AI integration completion.**
+- The existing Radar `main/radar/data/latest.json` reported **2026-11-22** when checked on 2026-11-23; production freshness repair is a separate P0 issue. Do not merge or cut over until today's Radar has passed its original publishing gates.
 
 ## Scope and source-of-truth
 
