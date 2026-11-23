@@ -1,0 +1,91 @@
+name: Radar News Engine XNews replacement isolated verification
+on:
+  pull_request:
+    paths:
+      - 'radar/scripts/news_engine_xnews.py'
+      - 'radar/scripts/build_daily.py'
+      - 'radar/daily/index.html'
+      - 'radar/read/index.html'
+      - 'radar/tests/test_news_engine_xnews.py'
+      - 'scripts/qa-radar-reading.cjs'
+      - 'scripts/test-news-engine-radar-browser.cjs'
+      - '.github/workflows/news-engine-radar-cutover.yml'
+  workflow_dispatch:
+
+# Never connected to the existing Pages deploy job. It cannot publish anything.
+permissions:
+  contents: read
+
+jobs:
+  offline-contract:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: News Engine -> Radar integration contracts and existing release preflight
+        run: |
+          python -m unittest radar.tests.test_news_engine_xnews radar.scripts.test_daily_brief radar.scripts.test_pages_preflight radar.scripts.test_xnews_recovery -v
+          python -m unittest discover -s news-engine -p 'test_*.py' -q
+      - name: Validate website script syntax without changing production
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          for path in ('radar/daily/index.html','radar/read/index.html'):
+              html=Path(path).read_text(encoding='utf-8')
+              script=html.split('<script>',1)[1].split('</script>',1)[0]
+              output=Path('/tmp')/(path.split('/')[1]+'.js')
+              output.write_text(script,encoding='utf-8')
+              print(output)
+          PY
+          node --check /tmp/daily.js
+          node --check /tmp/read.js
+          node --check scripts/qa-radar-reading.cjs
+
+  five-source-live-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Real original-source discovery, no article publication
+        run: |
+          python - <<'PY'
+          import datetime as dt, json
+          from radar.scripts.build_daily import http_get
+          from radar.scripts.news_engine_xnews import collect_news_engine_articles
+          rows,status=collect_news_engine_articles(http_get,now=dt.datetime.now(dt.timezone.utc))
+          print(json.dumps({'status':status,'count':len(rows),'sources':sorted({r.get('source') for r in rows}),'sample':[{'title':r['title'],'url':r['url'],'published':r['published']} for r in rows[:2]]},ensure_ascii=False))
+          assert status=='ok' and len(rows)>=4, 'New Engine read-only overseas feed did not meet the cutover contract'
+          assert all(r.get('source_kind')=='news_engine_rss_discovery' and r.get('publishable') is False for r in rows)
+          assert all(r['url'].startswith('https://') for r in rows)
+          PY
+
+  browser-reading:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Run desktop and mobile reading workflow against local fixture
+        run: |
+          python3 -m http.server 8877 --bind 127.0.0.1 >/tmp/news-engine-radar-http.log 2>&1 &
+          node scripts/test-news-engine-radar-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-radar-browser-screenshots
+          path: test-results/news-engine-radar/
+          if-no-files-found: ignore
+          retention-days: 7
