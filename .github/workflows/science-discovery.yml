@@ -1,0 +1,73 @@
+name: DAVYLAB Science Discovery — Nature & Science
+
+on:
+  pull_request:
+    paths:
+      - 'topic-studio/science-discovery.js'
+      - 'topic-studio/science-discovery.css'
+      - 'topic-studio/editorial-workspace-v4.js'
+      - 'topic-studio/scripts/**'
+      - '.github/workflows/science-discovery.yml'
+  schedule:
+    # 08:15 Asia/Shanghai (UTC+8). GitHub schedules may be delayed or skipped.
+    - cron: '15 0 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: science-discovery-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout existing content studio
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate Python discovery logic
+        run: python3 -m unittest discover -s topic-studio/scripts -p 'test_fetch_science.py' -v
+      - name: Validate browser source syntax
+        run: |
+          node --check topic-studio/science-discovery.js
+          node --check topic-studio/editorial-workspace-v4.js
+      - name: Validate metadata snapshot
+        run: python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
+
+  refresh:
+    if: github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout existing content studio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Update public metadata snapshot
+        run: python3 topic-studio/scripts/fetch_science.py
+      - name: Validate updated snapshot JSON
+        run: python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
+      - name: Commit metadata-only snapshot if changed
+        run: |
+          if git diff --quiet -- topic-studio/data/science-discovery.json; then
+            echo "No new snapshot changes."
+            exit 0
+          fi
+          git config user.name "davylab-science-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add topic-studio/data/science-discovery.json
+          git commit -m "data(science): refresh Nature/Science DOI metadata [skip ci]"
+          git push
