@@ -688,7 +688,10 @@ async function wtHubDispatch(request,env){
   if(existing.status!==404)throw Error('查询任务状态失败 HTTP '+existing.status);
   const priorZip=await wtHubRequest(env,packPath);
   if(priorZip.ok){
-   const prior=Uint8Array.from(atob(String(priorZip.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
+   if(!/^[a-f0-9]{40}$/.test(String(priorZip.body.sha||'')))throw Error('已存在 ZIP blob 标识异常');
+   const priorBlob=await wtHubRequest(env,'/git/blobs/'+priorZip.body.sha);
+   if(!priorBlob.ok||priorBlob.body.encoding!=='base64')throw Error('读取既有 ZIP blob 失败');
+   const prior=Uint8Array.from(atob(String(priorBlob.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
    if(await wtHubSha256(prior)!==digest)return wtJson({error:'任务编号下已有不同的 ZIP，拒绝覆盖'},409);
   }else if(priorZip.status===404){
    const upload=await wtHubRequest(env,packPath,'PUT',{
@@ -697,8 +700,10 @@ async function wtHubDispatch(request,env){
    if(!upload.ok)throw Error('上传 ZIP 失败 HTTP '+upload.status);
   }else throw Error('查询 ZIP 失败 HTTP '+priorZip.status);
   const verifiedZip=await wtHubRequest(env,packPath);
-  if(!verifiedZip.ok)throw Error('无法回读已上传的 ZIP');
-  const remoteBytes=Uint8Array.from(atob(String(verifiedZip.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
+  if(!verifiedZip.ok||!/^[a-f0-9]{40}$/.test(String(verifiedZip.body.sha||'')))throw Error('无法回读已上传的 ZIP');
+  const verifiedBlob=await wtHubRequest(env,'/git/blobs/'+verifiedZip.body.sha);
+  if(!verifiedBlob.ok||verifiedBlob.body.encoding!=='base64')throw Error('远端 ZIP Blob 不可读取');
+  const remoteBytes=Uint8Array.from(atob(String(verifiedBlob.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
   if(await wtHubSha256(remoteBytes)!==digest)throw Error('远端 ZIP SHA256 核验失败');
   const record={schema_version:2,id:tid,project:'worldtoon',source:'worldtoon',
    target:task.target,producer:task.producer,status:'queued',
