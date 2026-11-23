@@ -1,6 +1,6 @@
 {
   "schema": "davylab.worldtoon.story-discovery.v1",
-  "verified_on": "2026-11-11",
+  "verified_on": "2026-11-23",
   "note": "人工核对的题名与公开剧情摘要示例；热点快照统一采用同一第三方发布的当日榜单，名次/热播指数不视为红果官方数据，也不代表有改编权。",
   "items": [
     {
@@ -83,6 +83,28 @@
           ]
         }
       ]
+    },
+    {
+      "id": "novel-pride-prejudice-1813",
+      "title": "傲慢与偏见",
+      "aliases": [
+        "Pride and Prejudice",
+        "傲慢和偏见",
+        "傲慢與偏見"
+      ],
+      "type": "classic",
+      "author": "Jane Austen（简·奥斯汀）",
+      "year": 1813,
+      "source": "https://www.gutenberg.org/ebooks/1342",
+      "source_name": "Project Gutenberg · 原著目录及正文",
+      "source_kind": "original_text",
+      "rights": "public_domain_us",
+      "rights_note": "英文原著收录于 Project Gutenberg；改编仍需核对发布地区与具体译本、插画版权。",
+      "summary": "简·奥斯汀的经典小说；具体情节应依据原著核实，不能仅凭题名编造。",
+      "genre": "经典文学",
+      "beats": [],
+      "verified_on": "2026-11-23",
+      "verification_status": "source_metadata_reviewed"
     },
     {
       "id": "drama-ta-guo-fen-ye-2025",

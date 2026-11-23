@@ -1057,6 +1057,11 @@ const wtStoryClean=v=>String(v??'').replace(/<[^>]{0,500}>/g,' ').replace(/&(?:a
 const wtStoryUrl=v=>{try{const u=new URL(String(v||''));return u.protocol==='https:'&&!u.username&&!u.password?u.href:''}catch{return ''}};
 const wtStoryKey=v=>String(v||'').normalize('NFKC').toLowerCase().replace(/[《》“”"'〈〉\s·・]/g,'').replace(/^(?:红果热剧|红果短剧|网络小说|世界名著|名著)/,'');
 const wtStoryTitleMatches=(title,q)=>{const needle=wtStoryKey(q),hay=wtStoryKey(title);return needle.length>=2&&hay.includes(needle)};
+const WT_STORY_ALIASES=[['傲慢与偏见','傲慢和偏见','傲慢與偏見','pride and prejudice'],['简爱','简·爱','jane eyre']];
+const wtStoryAliasGroup=q=>WT_STORY_ALIASES.find(g=>g.some(n=>wtStoryKey(n)===wtStoryKey(q)))||null;
+const wtStoryEquivalent=(title,q)=>wtStoryTitleMatches(title,q)||Boolean(wtStoryAliasGroup(q)?.some(n=>wtStoryTitleMatches(title,n)));
+const wtStoryEnglishQuery=q=>wtStoryAliasGroup(q)?.find(n=>/^[a-z ]+$/i.test(n))||q;
+
 async function wtStoryCurated(){
  const r=await fetch(ORIGIN+'story-discovery.json',{signal:AbortSignal.timeout(8500)});
  if(!r.ok)throw Error('剧情资源索引不可用 HTTP '+r.status);
@@ -1066,7 +1071,7 @@ async function wtStoryCurated(){
  return {at:x.verified_on,items:x.items.filter(v=>v?.title&&wtStoryUrl(v.source)).slice(0,50)};
 }
 async function wtStoryBooks(q){
- const url='https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('intitle:'+q)+'&maxResults=8&printType=books';
+ const url='https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('intitle:'+wtStoryEnglishQuery(q))+'&maxResults=8&printType=books';
  const r=await fetch(url,{signal:AbortSignal.timeout(9000)});
  if(!r.ok)throw Error('Google Books HTTP '+r.status);
  const j=await r.json();
@@ -1080,10 +1085,10 @@ async function wtStoryBooks(q){
    rights:'unknown',rights_note:'检索到书目不等于获得改编许可，请核对原著版权和发行地区。',
    beats:[],published:v.publishedDate||'',verified_on:new Date().toISOString().slice(0,10),
    identity_status:'book_title_match',verification_status:'metadata_only'};
- }).filter(x=>x&&wtStoryTitleMatches(x.title,q));
+ }).filter(x=>x&&wtStoryEquivalent(x.title,q));
 }
 async function wtStoryPublicBooks(q){
- const u='https://gutendex.com/books/?search='+encodeURIComponent(q);
+ const u='https://gutendex.com/books/?search='+encodeURIComponent(wtStoryEnglishQuery(q));
  const r=await fetch(u,{signal:AbortSignal.timeout(8000)});
  if(!r.ok)throw Error('Gutendex HTTP '+r.status);
  const j=await r.json();
@@ -1095,7 +1100,18 @@ async function wtStoryPublicBooks(q){
   rights:'public_domain_us',rights_note:'仅为美国公版目录候选，需另行核对实际使用地区及具体版本的权利。',
   beats:[],verified_on:new Date().toISOString().slice(0,10),
   identity_status:'book_title_match',verification_status:'catalog_metadata_only'
- })).filter(x=>wtStoryTitleMatches(x.title,q));
+ })).filter(x=>wtStoryEquivalent(x.title,q));
+}
+async function wtStoryOpenLibrary(q){
+ const u='https://openlibrary.org/search.json?title='+encodeURIComponent(wtStoryEnglishQuery(q))+'&limit=8&fields=key,title,author_name,first_publish_year';
+ const r=await fetch(u,{signal:AbortSignal.timeout(7200),headers:{accept:'application/json'}});
+ if(!r.ok)throw Error('Open Library HTTP '+r.status);
+ const j=await r.json();
+ return (j.docs||[]).slice(0,8).map(v=>{
+  const key=String(v.key||''),title=wtStoryClean(v.title||'').slice(0,150);
+  if(!key.startsWith('/works/OL')||!key.endsWith('W')||!title||!wtStoryEquivalent(title,q))return null;
+  return {id:'openlibrary-'+key.slice(7),title,type:'novel',author:wtStoryClean((v.author_name||[]).slice(0,3).join('、')).slice(0,180),source:'https://openlibrary.org'+key,source_name:'Open Library · 公开书目',source_kind:'book_metadata',summary:'书目候选，尚未取得完整原著内容或改编许可。',rights:'unknown',rights_note:'书目检索不代表可自由改编。',beats:[],published:String(v.first_publish_year||''),verified_on:new Date().toISOString().slice(0,10),identity_status:'book_title_match',verification_status:'metadata_only'};
+ }).filter(Boolean);
 }
 async function wtStoryDramaSearch(q){
  // Search live Google News RSS for independently attributable title leads.
@@ -1109,7 +1125,7 @@ async function wtStoryDramaSearch(q){
  if(!r.ok)throw Error('Google News RSS HTTP '+r.status);
  const rss=await r.text();
  if(rss.length>1700000||!rss.includes('<rss'))throw Error('新闻检索格式异常');
- return parseRSS(rss,'娱乐').slice(0,30).filter(x=>wtStoryTitleMatches(x.title,q)).slice(0,12).map((x,i)=>({
+ return parseRSS(rss,'娱乐').slice(0,30).filter(x=>wtStoryEquivalent(x.title,q)).slice(0,12).map((x,i)=>({
    id:'news-'+i+'-'+(x.published||'').slice(0,20),title:wtStoryClean(x.title).slice(0,165),
    type:'drama',source:wtStoryUrl(x.url),source_name:wtStoryClean(x.source||'Google News 来源').slice(0,100),
    source_kind:'web_search_lead',rights:'unknown',rights_note:'网络检索线索不是剧集本身，未验证其红果上架身份、完整剧情或改编权。',
@@ -1127,7 +1143,7 @@ async function wtStorySearch(request,env,url){
   for(const v of curated.items){
    if(type==='drama'&&v.type!=='drama')continue;
    if(type==='novel'&&v.type==='drama')continue;
-   if(q&&!([v.title,...(v.aliases||[])].some(s=>wtStoryKey(s).includes(key))))continue;
+   if(q&&!([v.title,...(v.aliases||[])].some(s=>(wtStoryKey(s).includes(key)||wtStoryEquivalent(s,q)))))continue;
    merged.push({...v,source_status:'editorial_reviewed',snapshot_date:curated.at,
     identity_status:'curated_title_match',verification_status:'source_metadata_reviewed'});
   }
@@ -1136,6 +1152,7 @@ async function wtStorySearch(request,env,url){
  if(q&&type!=='drama'){
   jobs.push({name:'Google Books',fn:()=>wtStoryBooks(q)});
   jobs.push({name:'Gutendex',fn:()=>wtStoryPublicBooks(q)});
+  jobs.push({name:'Open Library',fn:()=>wtStoryOpenLibrary(q)});
  }
  if(type!=='novel'&&q)jobs.push({name:'Google News RSS',fn:()=>wtStoryDramaSearch(q)});
  const results=await Promise.allSettled(jobs.map(x=>x.fn()));
@@ -1147,18 +1164,19 @@ async function wtStorySearch(request,env,url){
  for(const item of merged){
   const title=wtStoryClean(item.title).slice(0,160),source=wtStoryUrl(item.source);
   if(!title||!source)continue;
-  const key=title.toLowerCase().replace(/[^\p{L}\p{N}]/gu,'').slice(0,120);
+  const key=(wtStoryAliasGroup(title)?.[0]||title).toLowerCase().replace(/[^\p{L}\p{N}]/gu,'').slice(0,120);
   if(seen.has(key))continue;
   seen.add(key);clean.push({...item,title,source});
  }
  // Curated snapshot ranking is dated and source-backed; do not treat it as today's realtime platform metrics.
  if(!q)clean.sort((a,b)=>Number(a.rank_snapshot||999)-Number(b.rank_snapshot||999));
  // No fake fallback plot or rankings. Fail honestly on total outages, but keep curated matches.
- if(!clean.length&&notes.length)return Response.json({items:[],warnings:notes,error:'暂未找到匹配来源；可更换关键词或稍后重试',searched_at:new Date().toISOString()},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=120'}});
+ if(!clean.length&&notes.length)return Response.json({schema:'davylab.worldtoon.story-search.v1',items:[],query:q,type,warnings:notes,error:'暂未找到匹配来源；可更换关键词或稍后重试',searched_at:new Date().toISOString()},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=120'}});
  return Response.json({schema:'davylab.worldtoon.story-search.v1',items:clean.slice(0,35),query:q,type,warnings:notes,
   searched_at:new Date().toISOString(),source_policy:'题名与来源链接逐项展示；新闻命中只证明来源提及该名称，不证明作品上架身份；非原著全文、非红果官方榜单、不代表改编授权',
   model_generated:false},{headers:{...RESULT_HEADERS,'cache-control':'public,max-age=180,stale-while-revalidate=300'}});
 }
+
 export default {async fetch(request,env,ctx){const url=new URL(request.url);if(url.pathname==='/health')return Response.json({ok:true,app:'WORLD/TOON',version:'4.6.0',features:{news:true,auth:true,sync:true,characterReferences:true,script:env.AI_ENABLED==='true',characters:!!env.AI,image:env.AI_ENABLED==='true',appearance:true,eventDate:true,storySearch:true,titleIdentityChecks:true,seriesPlanning:true,storyboardProviders:['native','deepseek','openai','claude','gemini','kimi','qwen']},at:new Date().toISOString()},{headers:RESULT_HEADERS});
  if(url.pathname.startsWith('/api/archive/'))return wtArchiveApi(request,env,url);
  if(url.pathname==='/api/config')return Response.json({supabaseUrl:SUPABASE_URL,supabaseKey:SUPABASE_PUBLISHABLE_KEY,aiEnabled:env.AI_ENABLED==='true',characterAiEnabled:!!env.AI,storyboardAiEnabled:!!env.AI,storyboardAiRequiresLogin:true,characterAiFree:true,characterModel:Date.now()<Date.parse('2026-11-20T00:00:00Z')?'DeepSeek R1 Distill':'Gemma 4 (DeepSeek 免费模型已下线)'},{headers:RESULT_HEADERS});
