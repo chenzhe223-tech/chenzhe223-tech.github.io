@@ -42,7 +42,9 @@ const assert=require("node:assert/strict");
     assert.equal(r.status,404);
     globalThis.fetch=async()=>{throw Error("origin down")};
     r=await request("/editor");
-    assert.equal(r.status,503);
+    assert.equal(r.status,200,"bundled editor must work when GitHub origin is offline");
+    r=await request("/api/radar-status");
+    assert.equal(r.status,503,"Radar status should fail closed without affecting editor");
     assert.equal((await r.json()).error,"upstream_unavailable");
     console.log("Preview Worker offline QA: 9 contracts PASS; no network or production mutations");
   }finally{globalThis.fetch=realFetch;}
