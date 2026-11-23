@@ -2,7 +2,8 @@
 const fs=require("node:fs");
 const assert=require("node:assert/strict");
 (async()=>{
-  const source=fs.readFileSync("news-engine/preview-worker.js","utf8");
+  const template=fs.readFileSync("news-engine/preview-worker.js","utf8");
+  const source=template.replace('"__DAVYLAB_EDITOR_HTML__"',JSON.stringify(fs.readFileSync("news-engine/editor.html","utf8")));
   const worker=(await import("data:text/javascript;base64,"+Buffer.from(source).toString("base64"))).default;
   const realFetch=globalThis.fetch;
   try{
