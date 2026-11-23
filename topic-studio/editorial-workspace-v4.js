@@ -81,6 +81,6 @@ window.addEventListener("hashchange",()=>{
 });
 window.DAVYLABEditorialWorkspace={version:"4.1.0-science",setSource,getActiveSource:()=>page.dataset.activeSource};
 if(sourceNodes.science){
- const module=document.createElement("script");module.src="./science-discovery.js?v=20261123-p0";module.defer=true;document.body.append(module);
+ const module=document.createElement("script");module.src="./science-discovery.js?v=20261123-research-filter-v2";module.defer=true;document.body.append(module);
 }
 })();
