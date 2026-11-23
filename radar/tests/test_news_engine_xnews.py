@@ -76,6 +76,23 @@ class NewsEngineSlotTests(unittest.TestCase):
         with patch.dict(os.environ, {"RADAR_XNEWS_PROVIDER": "disabled"}):
             self.assertEqual(adapter.collect_news_engine_articles(lambda *args, **kwargs: None, now=NOW), ([], "disabled"))
 
+    def test_final_six_are_selected_after_global_news_dedupe(self):
+        from radar.scripts import build_daily
+        rows = [
+            {"url": f"https://example.org/{i}", "title": f"Research event {i}",
+             "source": f"Source {i%4}", "published": "2026-11-22T01:00:00+00:00",
+             "source_kind": "news_engine_rss_discovery"}
+            for i in range(17)
+        ]
+        with patch.object(build_daily, "collect_xnews_articles", return_value=(rows, "ok")):
+            with patch.object(build_daily, "filter_historical_duplicates", side_effect=lambda items, *_: items):
+                with patch.object(build_daily, "_duplicate_match", side_effect=lambda item, *_: int(item["url"].split("/")[-1]) < 8):
+                    result = build_daily.collect_xnews_report_fields(lambda *args, **kwargs: b"", now=NOW, recent=[], enabled=True)
+        self.assertEqual(result["xnews_status"], "ok")
+        self.assertEqual(len(result["xnews_voices"]), 6)
+        self.assertTrue(all(int(x["url"].split("/")[-1]) >= 8 for x in result["xnews_voices"]))
+        self.assertGreaterEqual(len({x["source"] for x in result["xnews_voices"]}), 3)
+
     def test_private_or_malformed_links_are_rejected(self):
         for url in ["https://127.0.0.1/data", "https://localhost/data", "https://10.0.1.1/data",
                     "https://user:pass@example.org/x", "http://example.org/x", "https://[::1]/",
