@@ -35,7 +35,7 @@ jobs:
           assert 'id="radar-analysis-design"' in html
           assert '五源发现 · 原文可追溯 · 人工待核验</p>' not in html
           assert '来自 OpenAI、Google AI、Hugging Face、Simon Willison 与 TechCrunch 的公开 RSS/Atom 新闻线索。' not in html
-          assert '聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接' not in html
+          assert '<p class="section-intro" data-i18n="chinaIntro">' not in html, 'Only the obsolete translation dictionary may retain the old phrase'
           assert 'function editorialPhotoFor(data)' in html
           assert 'source_not_independently_verified' in html, 'News Engine source QA must remain'
           assert '#editorialCore' in Path('radar/assets/analysis-editorial.css').read_text(encoding='utf-8')
