@@ -1,6 +1,6 @@
 # DAVYLAB News Engine · Public API P0
 
-**Status:** implementation branch, read-only public published-data API. Live deployment and real HTTPS smoke must pass before using this as a production dependency.
+**Status (2026-11-23): P0 production deployed and real HTTPS verified.** Independent Worker `davylab-news-api` is active at `https://davylab-news-api.chenzhe223.workers.dev`. PR [#166](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/166) merged to main as `e3b8b821e98c06e926865b46d8d81b0e27a147c5`.
 
 ## Design boundaries
 
@@ -58,3 +58,13 @@ No persistent cache/database, API key, recurring crawler, billing activation or 
 ## Rollback
 
 Since this Worker does **not** replace any existing Radar endpoint, failure requires no production Radar rollback. Consumers may fail open to their previous news source; do not represent it as real-time News Engine data. Disable the new Worker's `workers.dev` route (or revert its last deployment) if necessary; existing Radar and existing preview Worker remain untouched.
+
+## Release acceptance, 2026-11-23
+
+- **Code Completed**: yes, independent P0 Worker, docs and HTTP tests landed on main via PR #166.
+- **Build Passed**: yes, [Public API isolated CI #45132772151](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45132772151) succeeded with offline contract, real published upstream and remote Worker HTTP checks. Existing [News Engine CI #45132772165](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45132772165) succeeded, including original publishing isolation, live RSS feed collection, Chromium editor and independent preview.
+- **Runtime Verified**: GitHub Runner fetched the independent Worker over real HTTPS. Source issue `2026-11-23`, `32` eligible unique normalized public records; Cloudflare Worker deployment `7e1253b4-f8b3-48b2-a8d2-6e7f63639f7a`, version `78a71c3b-9282-482c-a0e1-9ea4a119ad1b`, 100% active, `workers.dev` enabled.
+- **Functional Tested**: real HTTP checked health/news/search/topics/OpenAPI, source provenance, indexed records, HEAD, illegal method/queries and required read-only flags. Offline tests also cover cross-origin CORS, bounded limits, fallback between two allowlisted origins, quality-failure close, original URL safety, no image/full-text distribution.
+- **Production Deployed**: yes **for the standalone shared read-only P0 API only**. Existing Radar and the preview editor remain separately deployed, unchanged. No end-to-end consumer rollout yet to WorldToon, KNOWA or WeChat, and no paid AI model or full-web crawling is implemented.
+
+The P0 service intentionally serves the latest published issue only. `/api/v1/search` must not be represented as real-time global search. Feed freshness can lag while Radar's daily publisher is updating; inspect `is_today` and `issue_date` in every response.
