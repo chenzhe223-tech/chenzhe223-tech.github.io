@@ -29,6 +29,7 @@ async function run(){
   for(const width of [390,1440]){
    const page=await browser.newPage({viewport:{width,height:width===390?844:900}});
    await page.route("**/radar/data/latest.json*",r=>r.fulfill({status:200,contentType:"application/json",body:JSON.stringify(original)}));
+   await page.route("**/radar/data/archive/*.json*",r=>r.fulfill({status:200,contentType:"application/json",body:JSON.stringify(original)}));
    const response=await page.goto(origin+"/radar/daily/",{waitUntil:"domcontentloaded",timeout:25000});
    assert.equal(response.status(),200);
    await page.waitForFunction(()=>typeof reportData!=="undefined" && reportData && reportData.xnews_voices?.length===6,null,{timeout:20000});
