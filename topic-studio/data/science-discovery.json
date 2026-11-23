@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "checked_at": null,
+  "sources": [
+    {
+      "name": "nature",
+      "status": "not_run",
+      "count": 0
+    },
+    {
+      "name": "science",
+      "status": "not_run",
+      "count": 0
+    }
+  ],
+  "articles": [],
+  "notes": "Initial state: no research papers pre-populated. First successful Crossref refresh creates verified DOI metadata; empty cards must never be filled with invented titles."
+}
