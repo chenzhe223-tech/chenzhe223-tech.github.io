@@ -95,7 +95,8 @@ def normalize(item: dict[str, Any], source: str, now: datetime | None = None) ->
         "journal": JOURNALS[source]["name"],
         "published_at": published,
         "authors": authors,
-        "summary": abstract,
+        "summary": "",  # abstracts may carry publisher copyright; keep metadata only
+        "research_candidate": True,  # abstract length checked upstream; not peer-review confirmation
         "domain": d,
         "url": "https://doi.org/" + urllib.parse.quote(doi, safe="/"),
         "verification": "crossref_metadata_only",
