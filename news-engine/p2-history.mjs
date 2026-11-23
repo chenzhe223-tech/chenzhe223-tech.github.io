@@ -106,7 +106,12 @@ function officialArchive(report,date){
  Array.isArray(report.top5)&&report.top5.length<=50&&
  Array.isArray(report.news)&&report.news.length<=250&&
  Array.isArray(report.china_ai_news)&&report.china_ai_news.length<=250&&
- Array.isArray(report.xnews_voices)&&report.xnews_voices.length<=100;
+ // Historical Radar editions before the overseas News Engine integration did
+ // not have xnews_voices. A missing OPTIONAL stream means zero overseas
+ // records, NOT a failed quality-approved historical issue. Malformed values
+ // when present remain disallowed.
+ (report.xnews_voices===undefined||
+  (Array.isArray(report.xnews_voices)&&report.xnews_voices.length<=100));
 }
 function canonical(original){
  try{
@@ -163,7 +168,8 @@ async function loadScope(url,latest,normalizeRecords){
  const all=new Map();
  for(let i=0;i<reports.length;i++){
   const d=reports[i];if(!d)continue;
-  for(const row of normalizeRecords(d)){
+  const compatible=d.xnews_voices===undefined?{...d,xnews_voices:[]}:d;
+  for(const row of normalizeRecords(compatible)){
    if(!row||row.publishable!==false||!row.source_url.startsWith("https://"))continue;
    const key=canonical(row.source_url);
    if(!key)continue;
