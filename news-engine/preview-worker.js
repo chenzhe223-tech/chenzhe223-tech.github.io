@@ -1,6 +1,9 @@
 /* Isolated, read-only online preview. Never connects to the Radar publisher. */
 const EDITOR_HTML = "__DAVYLAB_EDITOR_HTML__";
-const RADAR_URL = "https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/radar/data/latest.json";
+const RADAR_URLS = [
+  "https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/radar/data/latest.json",
+  "https://chenzhe223-tech.github.io/radar/data/latest.json"
+];
 const BASE_HEADERS = {
   "x-content-type-options": "nosniff",
   "x-frame-options": "DENY",
@@ -29,7 +32,7 @@ function json(body, code=200) {
   return new Response(JSON.stringify(body),{status:code,headers:{...BASE_HEADERS,"content-type":"application/json; charset=utf-8"}});
 }
 async function trustedRead(url, maxBytes) {
-  const response=await fetch(url,{redirect:"error",headers:{"accept":"text/plain,application/json,text/html"}});
+  const response=await fetch(url,{redirect:"follow",headers:{"accept":"text/plain,application/json,text/html"}});
   if(!response.ok) throw new Error("upstream unavailable");
   const len=Number(response.headers.get("content-length")||0);
   if(len>maxBytes) throw new Error("oversized upstream");
@@ -51,7 +54,12 @@ export default {
       if(url.pathname==="/api/health") return json({service:"DAVYLAB News Engine",environment:"isolated_preview",
         production_publishing:false,ai_inference:"disabled",ecosystem_writes:false,editor:"available_via_editor"});
       if(url.pathname==="/api/radar-status"){
-        const data=JSON.parse(await trustedRead(RADAR_URL,800000));
+        let raw=null;
+        for(const source of RADAR_URLS){
+          try { raw=await trustedRead(source,800000); break; } catch (_) { /* try known public fallback */ }
+        }
+        if(!raw) throw new Error("Radar public sources unavailable");
+        const data=JSON.parse(raw);
         if(typeof data.report_date!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(data.report_date))
           throw new Error("invalid Radar state");
         const today=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
