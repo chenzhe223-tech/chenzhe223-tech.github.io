@@ -171,8 +171,8 @@
        ?wtDirector.approved(p)
        :p.creativeDirection?.approval?.author_approved===true);
    const queued=!!h.repoQueuedAt&&!!h.taskId;
-   const agent=p?.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT';
-   const direct=agent==='ChatGPT';
+   const agent=typeof wfProducer==='function'?wfProducer(p):'ChatGPT';
+   const direct=agent!=='WorkBuddy';
    const localExported=direct&&!!h.directTaskExportedAt;
    const uploaded=Array.isArray(h.stagedFiles)&&h.stagedFiles.length>0&&
       h.stagedFiles.length===(h.stageUploaded||[]).length;
@@ -194,12 +194,12 @@
       (queued||localExported)?'制作中':named?'创作中':'待制作');
    const statusText=published?'已取得真实公众号发表回执':
      direct&&h.importedAt?'完整素材包已本地导入，等待人工视觉 QA 和独立出版审核':
-     localExported?'ChatGPT 任务 ZIP 已导出，等待全量漫画回传；无需 GitHub 同步':
+     localExported?'AI 任务 ZIP 已导出，等待全量漫画回传；无需 GitHub 同步':
      qa?'GitHub 已验收，等待实际发表回执':
      row?.status==='blocked'?'GitHub QA 未通过，请按具体原因修复':
      uploaded?'正式文件已上传，等待作者终审与 GitHub QA':
      queued?(agent==='WorkBuddy'?'WorkBuddy 创作流程已派单':'ChatGPT 创作任务已派单'):
-     director?'创意已锁定，ChatGPT 可直接导出任务 ZIP':story?'剧本草稿待审阅并锁定':'完善立项和剧本';
+     director?'创意已锁定，可直接导出制作任务 ZIP':story?'剧本草稿待审阅并锁定':'完善立项和剧本';
    return {row,completed,next,agent,pending,label,statusText,uploaded,published};
  }
  function stageBody(p,i,s){
@@ -217,16 +217,16 @@
    if(i===2)return (typeof wtCreativeDirector==='function'?wtCreativeDirector():studio());
    if(i===3){
      const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
-     const direct=s.agent==='ChatGPT',localExported=!!p.handoff?.directTaskExportedAt;
-     const route=direct?'SOP A · 平台锁定角色与分镜 → ChatGPT 本地定妆确认 → 连续生产完整漫画 ZIP → 独立出版审核':
+     const direct=s.agent!=='WorkBuddy',localExported=!!p.handoff?.directTaskExportedAt;
+     const route=direct?'SOP A · 锁定角色分镜 → '+html(s.agent)+' 手动接收 ZIP → 制作完整漫画 → 独立审核':
        'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档';
-     const action=direct?'<button class="button dark" data-wf="task">下载 ChatGPT 直达任务 ZIP</button><button class="button" data-wf="copy">复制制作指令</button>':
+     const action=direct?'<button class="button dark" data-wf="task">下载 '+html(s.agent)+' 制作任务 ZIP</button><button class="button" data-wf="copy">复制制作指令</button>':
        queued?'<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>':
        '<button class="button dark" data-wf="task">生成 WorkBuddy 正式工单 →</button>';
      return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
        '<p>'+route+'</p><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
        '<p>生产同步：'+(direct?'本地直达模式，GitHub 暂停':'GitHub 工单 '+(queued?'已确认入仓':'尚未确认'))+'</p>'+
-       '<p>当前状态：'+html(direct?(localExported?'任务包已导出，等待 ChatGPT 完整素材':'导演台定稿后即可下载任务 ZIP'):(s.row?.status||p.handoff?.repoError||s.statusText))+'</p></div>'+
+       '<p>当前状态：'+html(direct?(localExported?'任务包已导出，等待所选 AI 平台完整素材':'导演台定稿后即可下载任务 ZIP'):(s.row?.status||p.handoff?.repoError||s.statusText))+'</p></div>'+
        '<div class="buttons">'+action+
        ((queued||localExported)?'<button class="button" data-wt4-step="4">进入成品回传 →</button>':'')+
        '<button class="button" data-wt4-step="1">修改制作 Agent / 剧本</button></div>'+

@@ -202,7 +202,7 @@
    '<p>4. 回到平台并登录同一个账号，刷新后使用“DeepSeek 扩写”；不需要其他设备再输入密钥。</p>'+
    '<p class="minor">密钥不要保存在 GitHub、前端 localStorage、聊天或普通明文变量。每次模型调用可能产生费用，仍需人工确认。</p></div></details>'+
    '<div class="wt3-controls"><div class="field wt3-seed"><label>一句话构思</label><textarea id="wt3-seed" rows="2" placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+h(p.ideaSeed||'')+'</textarea></div>'+
-   '<div class="field"><label>制作 Agent</label><select id="wt3-agent" '+(locked?'disabled':'')+'><option value="ChatGPT"'+(agent==='ChatGPT'?' selected':'')+'>ChatGPT 创作 · WorkBuddy 发表</option><option value="WorkBuddy"'+(agent==='WorkBuddy'?' selected':'')+'>WorkBuddy 创作与发表</option></select></div>'+
+   '<div class="field"><label>制作 Agent</label><select id="wt3-agent" '+(locked?'disabled':'')+'><option value="ChatGPT"'+(agent==='ChatGPT'?' selected':'')+'>ChatGPT 创作 · WorkBuddy 发表</option><option value="WorkBuddy"'+(agent==='WorkBuddy'?' selected':'')+' >WorkBuddy 创作与发表</option>'+['Gemini','Claude','千问','Kimi','GLM'].map(name=>'<option value="'+name+'"'+(agent===name?' selected':'')+'>'+name+' 创作 · 手动交接</option>').join('')+'</select></div>'+
    '<div class="field"><label>漫画篇幅 · 4–60 格</label><input id="wt3-count" type="number" min="4" max="60" value="'+count+'" '+(locked?'disabled':'')+'></div></div>'+
    '<div class="wt3-drama-controls"><div class="field"><label>剧情类型 · DeepSeek 按此扩写</label><select id="wt3-plot-genre" '+(locked?'disabled':'')+'>'+plotGenres.map(x=>
      '<option value="'+h(x.id)+'"'+((p.plotGenre||'general')===x.id?' selected':'')+'>'+h(x.name)+'</option>').join('')+'</select></div>'+
@@ -335,7 +335,7 @@
     if(expandUI.projectId===p.id)showExpandStatus('info','剧情设定已更新。请重新点击 DeepSeek 扩写并确认本次调用。',p.id);
     setChange(p,'保存 DeepSeek 剧情选项：'+p.plotGenre);render();return;
   }
-  if(ev.target?.id==='wt3-agent'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.productionAgent=ev.target.value==='WorkBuddy'?'WorkBuddy':'ChatGPT';setChange(p,'切换 SOP 生产者：'+p.productionAgent);render()}}
+  if(ev.target?.id==='wt3-agent'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.productionAgent=['ChatGPT','WorkBuddy','Gemini','Claude','千问','Kimi','GLM'].includes(ev.target.value)?ev.target.value:'ChatGPT';setChange(p,'切换 SOP 生产者：'+p.productionAgent);render()}}
   if(ev.target?.id==='wt3-seed'){const p=selected();if(p&&!p.handoff?.repoQueuedAt){p.ideaSeed=ev.target.value.slice(0,1800);setChange(p,'保存漫画一句话构思')}}
  },true);
  window.WT3={kind,resize,shelf,seriesNew,seriesContinue};

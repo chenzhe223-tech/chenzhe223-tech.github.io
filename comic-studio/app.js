@@ -117,7 +117,11 @@ function wfCanTask(p){const missing=[];if(!p?.title?.trim())missing.push('作品
   missing.push('文学导读要求可核查的书目链接或本机小说全文SHA256索引，以及九格三维结构');
  if(p?.novelSkill&&p.novelSkill.distillation?.semantic_status!=='not_performed')
   missing.push('小说蒸馏状态来源不可信，请重新执行本地索引并独立审核AI输出');if(ss?.adaptation==='faithful'&&ss?.rights!=='public_domain_us'&&(!ss.license_attested||!/^https:\/\/[\w.-]+\//.test(String(ss.license_url||''))))missing.push('受保护作品的有效改编授权依据 URL 与作者授权确认');if(typeof wtDirector!=='undefined')missing.push(...wtDirector.readiness(p));else missing.push('创意导演台尚未加载，请刷新页面');return missing}
-function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {schema:WF_SCHEMA,research_required:policy.research_required,verification_status:policy.verification_status,task_id:h.taskId,created_at:h.taskAt,producer:p.productionAgent==='WorkBuddy'?'WorkBuddy':'ChatGPT',publisher:'WorkBuddy',panel_count:p.panels.length,series:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,series_bible:p.seriesBible||null,brand:'WORLD/TOON · By DAVYLAB',novel_source_skill:p.novelSkill?{
+const WF_PRODUCERS=['ChatGPT','WorkBuddy','Gemini','Claude','千问','Kimi','GLM'];
+const WF_URLS={ChatGPT:'https://chatgpt.com/',Gemini:'https://gemini.google.com/',Claude:'https://claude.ai/',千问:'https://www.qianwen.com/',Kimi:'https://www.kimi.com/',GLM:'https://chatglm.cn/'};
+function wfProducer(p){const a=String(p?.productionAgent||'ChatGPT');return WF_PRODUCERS.includes(a)?a:'ChatGPT'}
+function wfProducerOptions(p){return WF_PRODUCERS.map(name=>'<option value="'+e(name)+'"'+(name===wfProducer(p)?' selected':'')+'>'+e(name)+(name==='WorkBuddy'?' · 仓库派单':' · 手动任务包')+'</option>').join('')}
+function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {schema:WF_SCHEMA,research_required:policy.research_required,verification_status:policy.verification_status,task_id:h.taskId,created_at:h.taskAt,producer:wfProducer(p),publisher:'WorkBuddy',panel_count:p.panels.length,series:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,series_bible:p.seriesBible||null,brand:'WORLD/TOON · By DAVYLAB',novel_source_skill:p.novelSkill?{
  schema:'davylab.worldtoon.novel-skill.v1',
  file:'novel-skill.json',
  source_sha256:p.novelSkill.provenance?.sha256||null,
@@ -222,9 +226,9 @@ function wfSingleImageJobs(p,task,bible){
 function wfDirectPrompt(p,o){
  const shots=p.panels.map((a,i)=>'#'+String(i+1).padStart(2,'0')+' '+(a.title||'第'+(i+1)+'格')+'\n场景与构图：'+(a.scene||'待完善')+'\n旁白：'+(a.caption||'')+'\n对白：'+(a.dialogue||'')+'\n视觉要求：'+(a.prompt||'')).join('\n\n');
  return [
- 'WORLD/TOON · By DAVYLAB | DIRECT_CHATGPT_LOCAL_V1 | 完整漫画制作指令',
- '任务编号：'+o.task_id+'；标题：《'+p.title+'》；生产者：ChatGPT；篇幅：'+p.panels.length+' 格。',
- '【生产方式】作者通过平台手动下载任务 ZIP 并交给 ChatGPT，绝不宣称该任务已入 GitHub。生产环节暂停 GitHub 同步、远端领单、远端样稿审批、GitHub Token、WorkBuddy 轮询及远端 SHA 验证；不得以未入仓为由停止创作。此豁免仅限本地全量素材制作，不等于正式发表授权。',
+ 'WORLD/TOON · By DAVYLAB | DIRECT_MULTI_AI_LOCAL_V1 | 完整漫画制作指令',
+ '任务编号：'+o.task_id+'；标题：《'+p.title+'》；生产者：'+o.producer+'；篇幅：'+p.panels.length+' 格。',
+ '【生产方式】作者通过平台手动下载任务 ZIP 并交给 '+o.producer+'，绝不宣称该任务已入 GitHub。生产环节暂停 GitHub 同步、远端领单、远端样稿审批、GitHub Token、WorkBuddy 轮询及远端 SHA 验证；不得以未入仓为由停止创作。此豁免仅限本地全量素材制作，不等于正式发表授权。',
  '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、九格分镜全文、所有 jobs、封面加九格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
  '【单图验收与失败恢复】每次生图后核对目标路径、原生分辨率、单场景连续画布、无分割/无嵌套小图、人物脸型服装与母版一致、中文排版预留区；明确在 QA 中记录 single_scene_verified、no_contact_sheet、target_story_match。检测失败不得登记为已完成帧，必须同一个 job 单独重绘；如当轮上限触发，保存已通过的实际文件和断点，禁止反复重画已合格画格。',
  '【交付目标】真正绘制 1 张独立封面及 '+p.panels.length+' 张独立正式漫画 PNG，全部采用适合手机的竖版 3:4、原生至少 1080×1440；附 caption.md、sources.md、manifest.json、QA_STATUS.md、production_state.json，并形成一个可下载 ZIP。严禁仅输出提示词、脚本、九宫格拼图裁切、SVG/CSS 线框或占位图片。',
@@ -245,11 +249,11 @@ function wfDirectPrompt(p,o){
 function wfStartupCommand(p,task){
  const o=task||wfTaskObject(p),review=wfLiteraryReview(p);
  return [
-  '【WORLD/TOON · By DAVYLAB｜正式开工命令｜请立即执行】',
+  '【WORLD/TOON · By DAVYLAB｜'+o.producer+' 正式开工命令｜请立即执行】',
   '我现在正式下达这部漫画的制作任务。此消息同时附有 WORLD_TOON 任务 ZIP，请直接读取并执行，不需要再询问“想如何处理 ZIP”“要脚本还是漫画”等已明确的问题。',
   '任务编号：'+(o.task_id||'【任务号缺失，请核对 task.json】'),
   '作品：《'+(o.title||p.title)+'》；创作类型：'+(review?'三维文学导读（独立评论，不是原著剧情重绘）':o.mode==='original'?'原创漫画':'新闻／主题漫画')+'；预计交付：'+o.panel_count+' 张独立竖版漫画 PNG＋1 张独立封面 PNG＋文案、事实及版权说明、QA 与完整可下载 ZIP。',
-  '首先解压附件并按顺序阅读：00_START_HERE.md → task.json → ChatGPT_制作指令.md → production-bible.json → render_jobs.json → production_state.json。以 task_id 与作者已锁定的分镜和视觉圣经为准，禁止自行更换人物、画风和具体镜头。',
+  '首先解压附件并按顺序阅读：00_START_HERE.md → task.json → '+o.producer+'_制作指令.md → production-bible.json → render_jobs.json → production_state.json。以 task_id 与作者已锁定的分镜和视觉圣经为准，禁止自行更换人物、画风和具体镜头。',
   ...(p.novelSkill?['本任务另含 novel-skill.json 与 NOVEL_DISTILLATION.md。必须先完成真实语义深读和版权核查：'+(p.novelSkill.export_source_approved?'原文由用户显式授权作为 ZIP 附件，须按文件摘要检验并逐章核对。':'未提供可转发原文，只有本地章节索引；不得编造完整故事或作者观点，必要时从可信公开资料核实，无法核实时标 blocked。')]:[]),
   review?'本作须先核实书名、作者、出版背景、作家获诺奖与本书的关系及可信评论；按01–03“作品讲了什么”、04–06“人生哲学”、07–09“对普通人的意义”制作原创编辑漫画。不得逐幕复刻原著情节、经典对白或原著插画，不得把编辑解读伪装为作者原话。':'新闻事实先核实可信来源；现实争议、具体人物或版权材料须按照任务内规则保护，虚构内容应明确标注。',
   '请直接开始研究与创意核对，并实际推进角色定妆图和第01格样稿。只有在必须由作者确认真实定妆／首格时请请求一次批准；确认后继续逐张独立生成、排版和验收。不得用一张九宫格拼图代替9张独立图片，也不得仅提供分镜、文字提示词或计划作为完成交付。',
@@ -259,12 +263,12 @@ function wfStartupCommand(p,task){
  ].join('\n\n');
 }
 function wfStartHere(p,task,launch){
- return '# WORLD/TOON · By DAVYLAB｜ChatGPT 直达任务启动说明\n\n'+
+ return '# WORLD/TOON · By DAVYLAB｜'+task.producer+' 直达任务启动说明\n\n'+
   '本 ZIP 是正式创作任务数据包，而不是漫画成品。仅上传 ZIP 文件不保证对话模型将其识别为“立即执行”；请同时发送明确的开工命令。\n\n'+
   '## 正确的启动操作\n\n'+
-  '1. 打开 ChatGPT 对话，在同一条用户消息中上传整个 ZIP。\n'+
+  '1. 打开 '+task.producer+' 对话，在同一条用户消息中上传整个 ZIP（须确认对应平台支持 ZIP 附件）。\n'+
   '2. 在文本输入框粘贴下面【正式开工命令】，再点击发送；或使用 WORLD/TOON 交接中心的“复制开工指令”按钮。\n'+
-  '3. 不需要再手动粘贴全部导演分镜；ZIP 内的 ChatGPT_制作指令.md 和 render_jobs.json 已包含全量制作细节。\n'+
+  '3. 不需要再手动粘贴全部导演分镜；ZIP 内的 '+task.producer+'_制作指令.md 和 render_jobs.json 已包含全量制作细节。\n'+
   '4. 如 ChatGPT 只问“你希望如何处理压缩包”，请补发该开工命令，不必重新制作平台任务。\n\n'+
   '## 正式开工命令（复制以下全文，并与 ZIP 一起发送）\n\n'+launch+'\n\n'+
   '## 身份与交付说明\n\n'+
@@ -272,7 +276,7 @@ function wfStartHere(p,task,launch){
   '- 当前状态：任务指令包已生成；真正的漫画图片、封面和出版批准尚未完成。\n'+
   '- 事实和版权待核查时不应伪造已核验状态；作品及视觉使用权仍须单独审查。\n';
 }
-function wfPrompt(p){const o=wfTaskObject(p);if(o.producer==='ChatGPT')return wfDirectPrompt(p,o);return (wfLiteraryReview(p)?wfLiteraryReviewGuide(p)+'\n\n':'')+'【独立图像生产强制协议 SINGLE_IMAGE_PER_CALL_V2】任务最终要产出完整漫画，但绝不能单次生图整个故事。任务 ZIP 内 render_jobs.json 含每张图唯一提示词与目标文件，每次仅传一个 jobs[i].prompt 到生图模型。严格一调用一张原图一镜头；不得画九宫格、拼版、故事总览或画中画；首格经批准后沿用原图，后续画格依次单独生成，封面最后独立生成；每格检查 single_scene_verified/no_contact_sheet；失败只重绘本帧。\n\n'+`你是 WORLD/TOON · By DAVYLAB 的专属漫画编剧、美术总监、质量审校。\n本任务由我的漫画平台正式下发，创作者为${o.producer}，WorkBuddy 负责微信公众号发布。\n\n任务编号：${o.task_id}\n标题：《${p.title}》\n题材：${p.category} · ${wfLiteraryReview(p)?'三维文学导读（原创评论，不是原著剧情改编）':wfMode(p)==='original'?'完全虚构':'全球热点虚构改编'}\n创作风格：${p.tone||'高级杂志感、黑色幽默'}。严格遵循已锁定的 creative_direction 创意制作圣经，不可用默认风格、默认人物或任意更改故事节奏。
+function wfPrompt(p){const o=wfTaskObject(p);if(o.producer!=='WorkBuddy')return wfDirectPrompt(p,o);return (wfLiteraryReview(p)?wfLiteraryReviewGuide(p)+'\n\n':'')+'【独立图像生产强制协议 SINGLE_IMAGE_PER_CALL_V2】任务最终要产出完整漫画，但绝不能单次生图整个故事。任务 ZIP 内 render_jobs.json 含每张图唯一提示词与目标文件，每次仅传一个 jobs[i].prompt 到生图模型。严格一调用一张原图一镜头；不得画九宫格、拼版、故事总览或画中画；首格经批准后沿用原图，后续画格依次单独生成，封面最后独立生成；每格检查 single_scene_verified/no_contact_sheet；失败只重绘本帧。\n\n'+`你是 WORLD/TOON · By DAVYLAB 的专属漫画编剧、美术总监、质量审校。\n本任务由我的漫画平台正式下发，创作者为${o.producer}，WorkBuddy 负责微信公众号发布。\n\n任务编号：${o.task_id}\n标题：《${p.title}》\n题材：${p.category} · ${wfLiteraryReview(p)?'三维文学导读（原创评论，不是原著剧情改编）':wfMode(p)==='original'?'完全虚构':'全球热点虚构改编'}\n创作风格：${p.tone||'高级杂志感、黑色幽默'}。严格遵循已锁定的 creative_direction 创意制作圣经，不可用默认风格、默认人物或任意更改故事节奏。
 原著／短剧剧情选择：${JSON.stringify(p.storySourceSelection||null)}。公版判定仅依据来源标记与具体司法辖区；非公版的忠实改编必须有有效授权，且作者和 GitHub 独立核验后才可出版。仅受主题启发的原创创作不得沿用原著人物、独特桥段与对白。\n剧情类型：${p.plotGenre==='viral-melodrama'?'狗血网红爽剧 / '+(p.dramaSubtype||'rebirth-bank-rich')+' / 反转强度'+(p.dramaIntensity||4)+'/5':'通用创作'}。人物必须是原创虚构成年人，不得编造可识别真人的关系或指控。
 肖像角色：如本任务 ZIP 包含 references/portrait-XX 文件，仅可在本人授权范围内用作人物骨相、面部比例、发型特征的 3D 拟人化参考；不得公开原照，输出高质量 3D 角色定妆图供作者审阅，禁止把文字提示词冒充真实生成图片。\n现实事件候选链接：${validSources(p).join('；')||(wfMode(p)==='original'?'原创故事，无现实来源':'尚无来源，必须先检索核验')}\n当前核验状态：${wfResearchPolicy(p).verification_status}（pending_research 表示尚未核验）\n线索与核验笔记：${p.factNotes||'待 ChatGPT 核验'}\n虚构改编原则：${p.fiction}\n角色设定：${p.characters||'请创作原创虚构角色'}\n剧情：${p.description||'请基于选题完善'}\n系列连续性：${JSON.stringify(o.series_bible||null)} · 上一章任务：${p.previousTaskId||'无'}\n说明：${p.disclosure}\n\n【导演台已锁定的完整制作圣经】\\n${JSON.stringify(o.creative_direction,null,2)}\n\n【V3 真实首图身份锁】选择的风格、品质目标、角色、模型和绘图流程必须与首图正式生产一致。先制作正式 1080×1440 PNG 角色定妆 character-sheet.png 和首格原图 pilot-01.png，记录模型名及实际版本、参数、生成管线版本和两个 SHA-256。禁止 CSS、SVG、简笔占位图以及上采样成图。首图作者批准后，deliveries/<task_id>/panels/01.png 必须逐字节复制已批准的 pilot-01.png；SHA-256 完全一致，禁止重生图、二次压缩或替换。其余${p.panels.length-1}张及独立封面沿用同一画风与角色；提供 deliveries/<task_id>/style-lock.json（含 style_id、quality_target、preview_sha256、model_id、model_version）、manifest.image_provenance、V3 六项额外 QA 与原图来源。未有真实模型或美术 QA 不通过时，标记 blocked，不能用文字或 SVG 代替。
 【两阶段生产强约束】必须先输出定妆图 character-sheet.png 与首格试画 pilot-01.png 供作者复核。未获得作者对于样稿的独立确认，不允许批量生成其余画格，也不能冒充整部已完成。即使在研究阶段需要修正事实，也不能未经授权随意更换画风、角色、服装和整体故事结构；若必须改变，请标注 blocked 并请求新创意定稿。\n\n请按以下要求完成。若这是研究型任务，先调查资料与整理证据，再决定是否能够继续创作；来源不可靠时不得把虚构说成真实新闻：\n1. 研究阶段：对于热点改编，必须首先检索并核对至少一条可信的一手来源及真实日期，在来源清单记录核验结果、证据、未确认点；若没有有效证据，停止现实事件改编并在交付状态标注 blocked。不能把候选摘要、未经证实的指控或仅换名影射当作事实。原创故事不需要伪造新闻证据。\n2. 完成 ${p.panels.length} 格分镜台词，并生成 ${p.panels.length} 张彼此独立的漫画图片，画幅适合手机贴图阅读（建议 3:4）；角色、服装、视觉系统贯穿全书；不要只提供一张九宫格拼图。\n3. 同时生成独立封面、准确的中文台词、故事导语和微信贴图文案；如有可用的 PDF 漫画册也一并生成。\n4. 按 WORLD/TOON 仓库协议输出正式交付：cover.png、panels/01.png 至 ${String(p.panels.length).padStart(2,'0')}.png（${p.panels.length}张真实独立 PNG，至少1080×1440）、caption.md、sources.md、manifest.json；可另附 comic.pdf。禁止占位图或九宫格拼图替代。\n5. manifest.json 必须遵循 contracts/delivery.example.json 的 davylab.worldtoon.delivery.v2 协议，列出 assets、sha256、八项 QA。若属于研究型任务（research_required=true），附 verified_sources 数组（至少一条完成核验的真实网址），在 sources.md 写明来源/日期及待确认点；来源核验失败必须标记 blocked，不能进入 WorkBuddy 发表队列。\n6. 制作 Agent 先完成真实图片和文案并上传 GitHub，核实远端文件与 SHA256 后才可将 ready_for_qa=true；author_approved 必须由作者独立审核，制作 Agent 不得代签，任何待审资料不得宣称已交付或发表。\n\n已审核锁定的分镜（禁止擅自改写剧情、人物、固定造型；只允许纠正错误并向作者提出修订建议）：\n${p.panels.map((a,i)=>`#${String(i+1).padStart(2,'0')} ${a.title||'第'+(i+1)+'格'}\n画面：${a.scene||'待设计'}\n旁白：${a.caption||'待撰写'}\n对白：${a.dialogue||'待撰写'}\n美术备注：${a.prompt||'无'}`).join('\n\n')}\n\n完成后请直接交付下载文件。正式交付要求：将${p.panels.length}张真实独立图片、封面、来源和文案以二进制提交到私有 GitHub 仓库 chenzhe223-tech/worldtoon 的 deliveries/<task_id>/；最后才设置 ready_for_qa=true。不得以 sandbox 链接或 ZIP 文件名称冒充 GitHub 交付。GitHub Actions 严格验收后形成 queue/workbuddy.json；WorkBuddy 定时扫描并发表，最后写入 receipts/<task_id>.json。`}
@@ -282,13 +286,13 @@ const previewGate=p&&typeof wtDirector!=='undefined'&&wtDirector.approved(p)?wfP
 return heroHeader('THE PRODUCTION DESK / THREE-HANDOFFS','制作交接中心','平台定稿 → ChatGPT 直达制作 → 全量漫画 ZIP；GitHub 生产同步暂时关闭，正式发表仍需独立 QA、作者授权及真实发表回执。')+
 '<div class="wf-path"><span>01 平台：选题与制作任务</span><span>→</span><span>02 ChatGPT / WorkBuddy：漫画生产</span><span>→</span><span>03 GitHub QA → 作者授权 → WorkBuddy 发表</span></div>'+
 `<div class="box"><div class="wf-form"><div class="field"><label>选择项目</label><select id="wfProject">${ps.map(x=>`<option value="${e(x.id)}" ${p?.id===x.id?'selected':''}>${e(x.title)}</option>`).join('')}</select></div><div class="field"><label>内容类别</label><select id="wfMode" ${wfLiteraryReview(p)?'disabled aria-label="文学导读模式已锁定"':''}>${wfLiteraryReview(p)?'<option selected value="literary_review">三维文学导读（作品／哲学／人生）</option>':`<option value="hotspot" ${wfMode(p)==='hotspot'?'selected':''}>全球热点虚构改编</option><option value="original" ${wfMode(p)==='original'?'selected':''}>完全原创虚构</option>`}</select></div><div>${wfStatus(p)}</div></div><p class="wf-meta">资料编辑请到 <a href="#/studio/${e(p?.id||'')}">创作工作台</a> · 素材来源请到 <a href="#/radar">选题池</a> · 图片回传只保存在当前作品，不会替换其他项目</p></div>`+
-(p?`<div class="wf-layout"><section class="wf-step ${wfPhase(p)==='not_started'?'active':''}"><div class="wf-stephead"><span class="wf-num">01</span><span class="chip">平台</span></div><h3>生成制作任务</h3><p>${wfLiteraryReview(p)?'核对作品与作者资料，按“讲了什么／人生哲学／普通人意义”三维构建九格原创文学导读。':'整理新闻来源、事实与虚构边界、角色设定、九格分镜，产生可追溯的任务编号和标准任务包。'}</p><p class="wf-meta">${wfPhase(p)==='not_started'?'尚未生成有效制作任务包':h.taskId?'任务编号：'+e(h.taskId):'尚未建立任务'}</p><p class="wf-meta" style="margin:12px 0">${e(wfTaskReadiness(p))}</p><div class="wf-director-gate"><strong>先确认画风、人物与剧情</strong><p>先在导演台锁定角色、画风和分镜，ChatGPT 直达模式无需 Github 派单。</p><a class="button dark" href="#/director/${e(p.id)}">进入创意导演台 →</a><span>${previewGate?(previewGate.ready?'创意已定稿 · 生产预检通过':'创意已定稿 · 生产预检待修正'):'待作者确认 · 不允许盲派单'}</span></div>
-${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务暂不可导出：'+previewGate.reasons.map(x=>e(x)).join('；')+'</p>':''}${wfInlineEditor(p)}<div class="wf-launch-guide"><strong>交给 ChatGPT：两样必须一起发送</strong><p>① 下载任务 ZIP → ② 复制开工指令 → ③ 在 ChatGPT <b>同一条消息</b>上传 ZIP 并粘贴开工指令后发送。<b>仅上传 ZIP 文件，ChatGPT 可能不知道要立即制作。</b>ZIP 内亦附有 00_START_HERE.md 和同一份开工指令。</p></div><button class="button dark" data-wf="task">① 下载完整制作任务 ZIP</button><button class="button" data-wf="copy">② 复制 ChatGPT 开工指令</button><a class="button" href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer">打开 ChatGPT ↗</a></section>
-<section class="wf-step ${wfPhase(p)==='task_ready'?'active':''}"><div class="wf-stephead"><span class="wf-num">02</span><span class="chip">ChatGPT</span></div><h3>接收完整漫画</h3><p>ChatGPT 制作九张独立画格和封面，打包后由此导入。支持 ZIP（含常见压缩格式）或逐张图片导入。</p><p class="wf-meta">已导入画格：${p.panels.filter(x=>x.image).length}/9　|　独立封面：${p.cover?'已具备':'缺失'}</p><label class="button dark">导入 ChatGPT 交付包<input type="file" id="wfUpload" accept=".zip,application/zip,.png,.jpg,.jpeg,.webp,.pdf,.json" multiple hidden></label><a href="#/reader/${e(p.id)}" class="button">漫画预览 ↗</a><p class="wf-meta">导入前校验任务编号、图片签名、数量与大小；旧图片不会在校验失败时被覆盖。</p></section>
+(p?`<div class="wf-layout"><section class="wf-step ${wfPhase(p)==='not_started'?'active':''}"><div class="wf-stephead"><span class="wf-num">01</span><span class="chip">平台</span></div><h3>生成制作任务</h3><label class="wf-producer-label">AI 制作平台 <select id="wf-producer">${wfProducerOptions(p)}</select></label><p>${wfLiteraryReview(p)?'核对作品与作者资料，按“讲了什么／人生哲学／普通人意义”三维构建九格原创文学导读。':'整理新闻来源、事实与虚构边界、角色设定、九格分镜，产生可追溯的任务编号和标准任务包。'}</p><p class="wf-meta">${wfPhase(p)==='not_started'?'尚未生成有效制作任务包':h.taskId?'任务编号：'+e(h.taskId):'尚未建立任务'}</p><p class="wf-meta" style="margin:12px 0">${e(wfTaskReadiness(p))}</p><div class="wf-director-gate"><strong>先确认画风、人物与剧情</strong><p>先在导演台锁定角色、画风和分镜，ChatGPT 直达模式无需 Github 派单。</p><a class="button dark" href="#/director/${e(p.id)}">进入创意导演台 →</a><span>${previewGate?(previewGate.ready?'创意已定稿 · 生产预检通过':'创意已定稿 · 生产预检待修正'):'待作者确认 · 不允许盲派单'}</span></div>
+${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务暂不可导出：'+previewGate.reasons.map(x=>e(x)).join('；')+'</p>':''}${wfInlineEditor(p)}<div class="wf-launch-guide"><strong>交给所选 AI 平台：任务包＋开工指令</strong><p>① 下载任务 ZIP → ② 复制开工指令 → ③ 在 <b>${e(wfProducer(p))}</b> 发送 ZIP 和开工指令（须由对应平台支持文件附件）。仅上传 ZIP 不等于开工。ZIP 内亦附有 00_START_HERE.md 和同一份开工指令。</p></div><button class="button dark" data-wf="task">① 下载完整制作任务 ZIP</button><button class="button" data-wf="copy">② 复制开工指令</button>${wfProducer(p)!=='WorkBuddy'?'<a class="button" href="'+e(WF_URLS[wfProducer(p)])+'" target="_blank" rel="noopener noreferrer">打开 '+e(wfProducer(p))+' ↗</a>':''}</section>
+<section class="wf-step ${wfPhase(p)==='task_ready'?'active':''}"><div class="wf-stephead"><span class="wf-num">02</span><span class="chip">${e(wfProducer(p))}</span></div><h3>接收完整漫画</h3><p>所选 AI 制作方制作九张独立画格和封面，打包后由此导入。支持 ZIP（含常见压缩格式）或逐张图片导入。</p><p class="wf-meta">已导入画格：${p.panels.filter(x=>x.image).length}/9　|　独立封面：${p.cover?'已具备':'缺失'}</p><label class="button dark">导入 AI 成品包<input type="file" id="wfUpload" accept=".zip,application/zip,.png,.jpg,.jpeg,.webp,.pdf,.json" multiple hidden></label><a href="#/reader/${e(p.id)}" class="button">漫画预览 ↗</a><p class="wf-meta">导入前校验任务编号、图片签名、数量与大小；旧图片不会在校验失败时被覆盖。</p></section>
 <section class="wf-step ${['delivered','workbuddy_ready','workbuddy_processing'].includes(wfPhase(p))?'active':''}"><div class="wf-stephead"><span class="wf-num">03</span><span class="chip">WorkBuddy</span></div><h3>交给公众号执行</h3><p>必须完成作者审核。生成包含九张漫画、封面、来源台账、文案和执行说明的 WorkBuddy 专用 ZIP。</p><p class="wf-meta">作者审核：${p.status==='已审核'||p.status==='已发布'?'已通过':'未通过'}　·　${p.checks.filter(Boolean).length}/6 项复核</p><button class="button dark" data-wf="publishpack">生成 WorkBuddy 发表包</button><button class="button" data-wf="mark-sent">记录已移交</button><a class="button" href="#/studio/${e(p.id)}/4">完成审核 ↗</a></section></div>`:'<div class="empty">请先建立一部作品。</div>')+
 (typeof wtSharedHandoffPanel==='function'?wtSharedHandoffPanel(p):'<div class="box"><h2>公众号发表档案</h2><p>共享档案读取组件尚未载入。请稍后刷新。</p></div>')+
 `<section class="box" style="margin-top:20px"><h3>三方责任界面</h3><p class="wf-instructions"><strong>WORLD/TOON：</strong>发出明确且可复查的任务工单，不生图、不代替 ChatGPT。<br><strong>ChatGPT：</strong>完成漫画生产及完整的可下载交付包，不能以空文件或生成说明冒充成品。<br><strong>WorkBuddy：</strong>核验成品、进入公众号后台上传贴图，按授权的计划发表，并回传文章链接或后台结果。不依赖平台猜测发表结果。</p></section>`}
-function wfInitTask(p){let h=p.handoff||{};if(!h.taskId||wfPhase(p)==='not_started'){h.taskId='WT-'+new Date().toISOString().replace(/\D/g,'').slice(0,14)+'-'+uid().slice(0,8);h.taskAt=now()}h.mode=wfMode(p);h.phase='task_ready';p.handoff=h;setChange(p,'生成 ChatGPT 制作任务');return h}
+function wfInitTask(p){let h=p.handoff||{};if(!h.taskId||wfPhase(p)==='not_started'){h.taskId='WT-'+new Date().toISOString().replace(/\D/g,'').slice(0,14)+'-'+uid().slice(0,8);h.taskAt=now()}h.mode=wfMode(p);h.phase='task_ready';p.handoff=h;setChange(p,'生成 '+wfProducer(p)+' 制作任务');return h}
 async function wfMakeTask(p){
  if(p?.handoff?.repoQueuedAt&&p.productionAgent==='WorkBuddy')throw Error('已派单的 WorkBuddy 任务不可覆盖，请复制作品并创建修订版');
  wfPrepareTask(p);
@@ -329,7 +333,7 @@ async function wfMakeTask(p){
   job_states:Object.fromEntries(renderJobs.jobs.map(j=>[j.job_id,{status:'missing',attempts:0,accepted_sha256:null}])),
   accepted:{},rejected:{},package_ready:false,github_delivered:false,publication_approved:false,workbuddy_ready:false};
  task.image_render_protocol='single_image_per_call.v2';task.render_jobs_file='render_jobs.json';task.production_bible_file='production-bible.json';task.preflight_conflicts=bible.conflicts;task.expected_image_count=task.panel_count+1;
- if(task.producer==='ChatGPT'){task.production_mode='direct_chatgpt_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
+ if(task.producer!=='WorkBuddy'){task.production_mode='direct_multi_ai_local_v1';task.github_sync_required=false;task.delivery_target='local_zip';task.publication_approved=false;}
  const portraitCharacters=p.creativeDirection?.cast||[];
  const portraitFiles=[];
  for(let i=0;i<portraitCharacters.length;i++){
@@ -371,18 +375,18 @@ async function wfMakeTask(p){
    '请从小说原文或可靠来源逐章核实人物、事件、主题与叙事方法。此索引只有本地结构提取，非AI语义蒸馏；版权与发布仍待作者独立核查。')});
  }
  const launch=wfStartupCommand(p,task);
- task.startup_command_file='ChatGPT_复制粘贴开工指令.txt';
+ task.startup_command_file=task.producer+'_复制粘贴开工指令.txt';
  task.entrypoint_file='00_START_HERE.md';
  task.requires_explicit_user_message=true;
  task.attachment_alone_starts_production=false;
  const files=[{name:'00_START_HERE.md',bytes:enc.encode(wfStartHere(p,task,launch))},
- {name:'ChatGPT_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
- {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer==='ChatGPT'?'本 ZIP 是直接交给 ChatGPT 的独立制作任务；注意必须在上传 ZIP 的同一条消息中同时发送“ChatGPT_复制粘贴开工指令.txt”内的开工命令，否则 ChatGPT 可能只询问如何处理附件。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
- saveFile(packZip(files),'WORLD_TOON_'+(task.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT')+'任务_'+safeName(p.title)+'.zip');
- if(task.producer==='ChatGPT'){
+ {name:task.producer+'_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
+ {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
+ saveFile(packZip(files),'WORLD_TOON_'+task.producer+'任务_'+safeName(p.title)+'.zip');
+ if(task.producer!=='WorkBuddy'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
-  setChange(p,'ChatGPT 直达完整素材生产（无需 GitHub）');render();
-  notify('任务 ZIP 已下载。下一步点击“复制开工指令”，与 ZIP 一起发送给 ChatGPT；只上传文件不足以明确开工。生产无需 GitHub 派单。');
+  setChange(p,task.producer+' 直达完整素材生产（无需 GitHub）');render();
+  notify('任务 ZIP 已下载。下一步点击“复制开工指令”，与 ZIP 一起发送给 '+task.producer+'；只上传文件不足以明确开工。生产无需 GitHub 派单。');
   return;
  }
  if(typeof wtArchivePushTask!=='function'){p.handoff.repoError='仓库派单接口未加载';setChange(p,'仅生成本地备份，尚未入仓');render();notify('任务 ZIP 已生成，但尚未派单入仓');return}
@@ -392,7 +396,7 @@ async function wfMakeTask(p){
 async function wfCopyPrompt(p){
  const h=wfGet(p);
  if(!h.taskId||!h.directTaskExportedAt||wfPhase(p)==='not_started')
-  throw Error('请先点击“生成 ChatGPT 直达任务 ZIP”，然后复制同一任务的开工命令。');
+  throw Error('请先生成 '+wfProducer(p)+' 制作任务 ZIP，然后复制同一任务的开工命令。');
  if(!wtDirector?.approved?.(p))
   throw Error('导演台创意方案已改变，旧任务与当前作品可能不一致，请重新锁定并导出 ZIP');
  const preflight=wfProductionPreflight(p);
@@ -713,7 +717,7 @@ document.addEventListener('submit',ev=>{
  if(ev.target.id==='topicForm'){ev.preventDefault();saveTopic(ev.target)}
 });
 document.addEventListener('input',ev=>{let el=ev.target,p=selected();if(el.matches('[data-project-field]')&&p){p[el.dataset.projectField]=el.value;if(el.dataset.projectField==='eventDate')p.eventDateBasis=el.value?'manual_unverified':'';markDirty(p);return}if(el.matches('[data-panel-field]')&&p){let idx=Number(el.dataset.panelIndex);p.panels[idx][el.dataset.panelField]=el.value;markDirty(p);return}if(el.id==='librarySearch'){ui.search=el.value;let caret=el.selectionStart;render();let next=document.querySelector('#librarySearch');next?.focus();next?.setSelectionRange(caret,caret)}});
-document.addEventListener('change',ev=>{let el=ev.target,p=selected();if(el.matches('[data-check-index]')&&p){p.checks[Number(el.dataset.checkIndex)]=el.checked;if(!el.checked&&p.status==='已审核')p.status='草稿';setChange(p);render()}if(el.matches('[data-upload-panel]'))uploadPanel(el).then(()=>{if(typeof wtScheduleSync==='function')wtScheduleSync()});if(el.matches('[data-import-workspace]')&&el.files[0])importWorkspace(el.files[0]);if(el.id==='publishProject'){ui.selected=el.value;render()}if(el.matches('[data-project-field]')&&p){setChange(p,'更新作品设定')}});
+document.addEventListener('change',ev=>{let el=ev.target,p=selected();if(el?.id==='wf-producer'&&p){if(p.handoff?.repoQueuedAt||p.handoff?.directTaskExportedAt){notify('已生成任务不得更改制作方，请复制作品新建任务');render();return}if(WF_PRODUCERS.includes(el.value)){p.productionAgent=el.value;setChange(p,'选择制作平台：'+el.value);render()}return}if(el.matches('[data-check-index]')&&p){p.checks[Number(el.dataset.checkIndex)]=el.checked;if(!el.checked&&p.status==='已审核')p.status='草稿';setChange(p);render()}if(el.matches('[data-upload-panel]'))uploadPanel(el).then(()=>{if(typeof wtScheduleSync==='function')wtScheduleSync()});if(el.matches('[data-import-workspace]')&&el.files[0])importWorkspace(el.files[0]);if(el.id==='publishProject'){ui.selected=el.value;render()}if(el.matches('[data-project-field]')&&p){setChange(p,'更新作品设定')}});
 document.getElementById('topNew').addEventListener('click',()=>newProject());document.getElementById('menuToggle').addEventListener('click',()=>document.querySelector('.rail').classList.toggle('is-open'));
 window.addEventListener('hashchange',ev=>{
  const target=ev?.newURL?new URL(ev.newURL).hash:location.hash;
