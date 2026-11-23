@@ -58,11 +58,11 @@ async function routes(page){
    page=await browser.newPage({viewport:{width,height:width===390?844:900}});
    await routes(page);
    r=await page.goto(base+"/topic-studio/",{waitUntil:"domcontentloaded",timeout:30000});assert.equal(r.status(),200);
-   await page.evaluate(()=>{if(typeof changeSection==="function")changeSection("discover")});
+   await page.evaluate(()=>{if(typeof changeSection==="function")changeSection("discover");window.DAVYLABEditorialWorkspace?.setSource("xnews",false)});
    console.log("P3 Topic navigation",await page.evaluate(()=>({
     active:[...document.querySelectorAll(".section.active")].map(x=>x.id),
     discover:!!document.getElementById("section-discover"),
-    summaryDisplay:getComputedStyle(document.querySelector("#newsEngineP3Topic summary")).display
+    summaryDisplay:getComputedStyle(document.querySelector("#newsEngineP3Topic summary")).display, activeSource:document.querySelector("#section-discover")?.dataset.activeSource
    })));
    await page.locator("#newsEngineP3Topic summary").waitFor({timeout:15000});
    await page.locator("#newsEngineP3Topic summary").click();
