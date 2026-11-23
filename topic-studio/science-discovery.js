@@ -242,6 +242,15 @@ $("scienceMore").addEventListener("click",()=>{st.visible+=8;render()});
 $("scienceRefresh").addEventListener("click",refresh);
 root.addEventListener("click",e=>{const button=e.target.closest?.("button[data-science-doi]");if(button)addToPool(button.dataset.scienceDoi)});
 window.DAVYLABScience={refresh,searchOnline,getItems:()=>st.items.slice(),getOnlineItems:()=>st.onlineItems.slice(),getStatus:()=>({count:st.items.length,online:st.onlineItems.length,scope:st.scope,origin:st.origin,checked:st.checked})};
+// Shareable deep-link QA: ?scienceQuery=微塑料&scienceOnline=1#scienceTitle
+const params=new URLSearchParams(window.location.search);
+const initialQuery=String(params.get("scienceQuery")||"").slice(0,180).trim();
+if(initialQuery){
+ st.query=initialQuery;$("scienceSearch").value=initialQuery;
+ window.DAVYLABEditorialWorkspace?.setSource?.("science",false);
+ render();
+}
 const hadCache=fromCache();
-snapshot().catch(()=>{if(!hadCache)refresh();else status("目前使用本机缓存，快照暂不可用；可点击刷新")});
+const initialized=snapshot().catch(()=>{if(!hadCache)return refresh();status("目前使用本机缓存，快照暂不可用；可点击刷新")});
+if(initialQuery&&params.get("scienceOnline")==="1")initialized.finally(()=>searchOnline());
 })();
