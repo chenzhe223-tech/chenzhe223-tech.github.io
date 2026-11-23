@@ -68,7 +68,7 @@ jobs:
           JS
 
   deployed-online-smoke:
-    if: github.event_name == 'workflow_dispatch'
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
     needs: [api-offline-contract,live-published-origin]
     name: Real deployed Cloudflare Worker HTTPS test
     runs-on: ubuntu-24.04
