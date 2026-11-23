@@ -90,7 +90,7 @@
    if(styleFile)pieces.push({path:'style-lock.json',text:readText(styleFile[1])});
    for(const piece of pieces.filter(x=>x.blob)){const key=uid();await putMedia(key,piece.blob);created.push(key);localImages.push('media:'+key)}
    const p=current;
-   if(p.panels.length!==n&&p.handoff?.repoQueuedAt)throw Error('已入仓工单的篇幅不可变动，请按已批准数量重新交付');
+   if(p.panels.length!==n)throw Error('交付包为'+n+'格，但作者所选篇幅为'+p.panels.length+'格。不能自动改动作品篇幅，请按既定数量重新交付');
    if(p.creativeDirection&&p.creativeDirection.approval?.author_approved&&p.panels.length!==n)throw Error('导演台已经锁定篇幅，请先建立新的审批版本');
    p.panels=Array.from({length:n},(_,i)=>({...p.panels[i]||makePanel(i),image:localImages[i+1]}));
    p.cover=localImages[0];p.status='待审核';p.checks=Array(6).fill(false);p.reviewedAt=null;

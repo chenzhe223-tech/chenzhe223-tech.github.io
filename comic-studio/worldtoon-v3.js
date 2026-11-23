@@ -212,7 +212,7 @@
        '<option value="'+n+'"'+(Number(p.dramaIntensity||4)===n?' selected':'')+'>'+n+' / 5'+(n===4?' · 推荐':'')+'</option>').join('')+'</select></div>':'')+'</div>'+
    (p.plotGenre==='viral-melodrama'?'<p class="wt3-drama-tip">已启用：重生 / 网红 / 银行富婆 / 娱乐圈剧情要求。AI 扩写将把剧种、强度、反转节奏写入真实请求，同时保留用户输入的原创构思。</p>':'')+
    '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand" '+(expandUI.busy?'disabled':'')+'>DeepSeek 扩写并推荐篇幅</button>'+
-   '<button type="button" class="button" data-wt3-action="resize" '+(locked?'disabled':'')+'>应用篇幅</button>'+
+   '<span class="wt3-count-auto">更改篇幅后自动应用</span>'+
    '<button type="button" class="button" data-wt3-action="director">进入创意导演台</button></div>'+
    '<div class="wt3-expand-consent" id="wt3-expand-consent" '+(expandUI.pending?.projectId===p.id?'':'hidden')+'>'+
    '<p><strong>确认本次 AI 扩写</strong> · 将调用真实 DeepSeek API，可能按 Token 产生费用。确认后才开始请求，不会自动重复计费。</p>'+
@@ -316,6 +316,9 @@
   }
  },true);
  document.addEventListener('change',ev=>{
+  if(ev.target?.id==='wt3-count'&&!location.hash.startsWith('#/idea')){
+    const p=selected();if(p&&!p.handoff?.repoQueuedAt)resize(p,ev.target.value);return;
+  }
   if(['wt3-plot-genre','wt3-drama-subtype','wt3-drama-intensity'].includes(ev.target?.id)){
     const p=selected();if(!p||p.handoff?.repoQueuedAt){notify('已派单任务不可改写本版剧情设定');return}
     const seed=document.querySelector('#wt3-seed');if(seed)p.ideaSeed=seed.value.slice(0,1800);

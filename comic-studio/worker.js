@@ -162,7 +162,7 @@ async function wtStoryboardAI(request,env){
   await quota(env,'__worldtoon_storyboard_global__',provider==='native'?'native':'external',provider==='native'?12:80);
   await quota(env,auth.id,'storyboard_'+provider,provider==='native'?3:10);
  }catch{return failure('今日分镜AI生成额度已用完；可以使用本地故事草稿并逐格编辑。',429)}
- const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作'+count+'格原创中文漫画剧本。九格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须恰好'+count+'个，不要Markdown或其他说明。';
+ const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作'+count+'格原创中文漫画剧本。全部'+count+'格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须恰好'+count+'个，不要Markdown或其他说明。';
  let answer='',actualModel=model;
  try{
   const messages=[{role:'system',content:system},{role:'user',content:JSON.stringify(story)}];
@@ -308,10 +308,11 @@ try{
   return Response.json({characters:chars,model,provider:model.startsWith('deepseek')?'Cloudflare Workers AI · DeepSeek':'Cloudflare Workers AI · free fallback',modelFallback:!!fallbackReason,fallbackReason,draft:true,requiresHumanReview:true,freeTier:true},{headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
  }
  if(type==='script'){
-  const sys='你是专业中文编辑与原创漫画编剧。只把公共事件作为主题灵感，不能把待证实的新闻断言、犯罪、私人关系、政治交易或隐私编成可识别现实人物的指控。必须使用原创虚构人物，避免精确指向真实个人。创作有幽默感、高级杂志质感、戏剧节奏。仅输出合法JSON对象，格式 {"fiction":"...","panels":[{"title":"...","scene":"...","caption":"...","dialogue":"...","prompt":"..."}]}，panels必须恰好九个。禁止Markdown。';
-  const msg=JSON.stringify({title:body.title,description:body.description,sourceTitle:body.sourceTitle,sourceURLs:body.sourceURLs,factNotes:body.factNotes,fiction:body.fiction,tone:body.tone,characters:body.characters}).slice(0,11000);
+  const n=Number(body.panel_count||9);if(!Number.isInteger(n)||n<4||n>60)return failure('画格数必须为4–60格',400);
+  const sys='你是专业中文编辑与原创漫画编剧。只把公共事件作为主题灵感，不能把待证实的新闻断言、犯罪、私人关系、政治交易或隐私编成可识别现实人物的指控。必须使用原创虚构人物，避免精确指向真实个人。创作有幽默感、高级杂志质感、戏剧节奏。仅输出合法JSON对象，格式 {"fiction":"...","panels":[{"title":"...","scene":"...","caption":"...","dialogue":"...","prompt":"..."}]}，panels必须恰好'+n+'个。禁止Markdown。';
+  const msg=JSON.stringify({panel_count:n,title:body.title,description:body.description,sourceTitle:body.sourceTitle,sourceURLs:body.sourceURLs,factNotes:body.factNotes,fiction:body.fiction,tone:body.tone,characters:body.characters}).slice(0,11000);
   const response=await env.AI.run('@cf/google/gemma-4-26b-a4b-it',{messages:[{role:'system',content:sys},{role:'user',content:msg}],max_tokens:3000,temperature:.6});
-  const parsed=parseJSON(response.response||response.choices?.[0]?.message?.content||'');if(!Array.isArray(parsed.panels)||parsed.panels.length!==9)return failure('生成文本不完整，请修改素材后重试',502);return Response.json({panels:parsed.panels,fiction:parsed.fiction||'',model:'gemma-4-26b-a4b-it',draft:true},{headers:RESULT_HEADERS});
+  const parsed=parseJSON(response.response||response.choices?.[0]?.message?.content||'');if(!Array.isArray(parsed.panels)||parsed.panels.length!==n)return failure('生成文本不完整，请修改素材后重试',502);return Response.json({panels:parsed.panels,fiction:parsed.fiction||'',model:'gemma-4-26b-a4b-it',draft:true},{headers:RESULT_HEADERS});
  }
  const frameIndex=Number(body.target_index),frameLabel=Number.isInteger(frameIndex)&&frameIndex>0&&frameIndex<=60?'PANEL '+frameIndex:'SINGLE PANEL';
  const onlyOne='IMAGE GENERATION SCOPE LOCK: ONE tool call MUST yield ONE continuous portrait illustration for exactly '+frameLabel+'. One camera, one location, one moment. NO nine-grid, NO storyboard sheet, NO comic page, NO multi-panel collage, NO split-screen, NO inset, NO montage, NO frame dividers, NO gutters, NO overview of an entire series. NEVER visually combine cover and panels. This frame ONLY. ';
