@@ -1,72 +1,76 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-22T08:54:20+00:00",
-  "generated_at": "2026-11-22T08:54:24.654Z",
+  "source_synced_at": "2026-11-23T09:51:16+00:00",
+  "generated_at": "2026-11-23T09:51:20.785Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
-  "available_sources": 217,
+  "available_sources": 210,
   "recommendations": [
     {
       "rank": 1,
-      "id": "skills",
-      "name": "Skill 与 AI 工具技能化",
-      "score": 90,
+      "id": "coding",
+      "name": "AI 编程与真实应用交付",
+      "score": 97,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 13,
+        "channelCoverage": 24,
+        "observableDiscussion": 14,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 16,
+      "evidenceCount": 49,
       "channels": [
+        "Hacker News",
         "AI Radar",
-        "Hacker News"
+        "GitHub Search",
+        "XNews"
       ],
       "exampleSources": [
         {
-          "title": "mvanhorn/last30days-skill",
-          "url": "https://github.com/mvanhorn/last30days-skill",
-          "source": "GitHub Skills",
-          "published": "2026-11-21T19:28:43.000Z"
+          "title": "Keeping AI Coding Agent Memory Relevant as Code Changes",
+          "url": "https://enola.tech/blog/agent-memory-needs-a-code-reference",
+          "source": "Hacker News",
+          "published": "2026-11-20T18:18:13.000Z"
         },
         {
-          "title": "K-Dense-AI/scientific-agent-skills",
-          "url": "https://github.com/K-Dense-AI/scientific-agent-skills",
+          "title": "wanshuiyin/Auto-claude-code-research-in-sleep",
+          "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
           "source": "GitHub Skills",
-          "published": "2026-11-21T19:15:48.000Z"
+          "published": "2026-11-23T05:42:23.000Z"
         }
       ]
     },
     {
       "rank": 2,
-      "id": "verification",
-      "name": "AI 可验证工程与质量验收",
-      "score": 88,
+      "id": "content",
+      "name": "AI 创作、内容和视觉表达",
+      "score": 96,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 11,
-        "readerFit": 19,
+        "channelCoverage": 24,
+        "observableDiscussion": 14,
+        "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 15,
+      "evidenceCount": 17,
       "channels": [
+        "AI Radar",
+        "GitHub Search",
         "XNews",
         "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
-          "url": "https://alpo.ge/remark.pdf",
-          "source": "XNews",
-          "published": "2026-11-20T00:00:00.000Z"
+          "title": "Moddingflow/better-design",
+          "url": "https://github.com/Moddingflow/better-design",
+          "source": "GitHub Skills",
+          "published": "2026-11-20T01:50:37.000Z"
         },
         {
-          "title": "四周里写出超过600万行Lean，DeepMind把验证做到了Signal的设备代码",
-          "url": "https://deepmind.google/blog/introducing-alphaproof-code",
-          "source": "XNews",
-          "published": "2026-11-10T00:00:00.000Z"
+          "title": "Cloudcode04/runway-ml-pro-win",
+          "url": "https://github.com/Cloudcode04/runway-ml-pro-win",
+          "source": "GitHub public repositories",
+          "published": "2026-11-21T15:17:17.000Z"
         }
       ]
     },
@@ -74,25 +78,25 @@
       "rank": 3,
       "id": "open-source",
       "name": "开源 AI 项目深度实测",
-      "score": 87,
+      "score": 91,
       "editorial_breakdown": {
-        "freshness": 26,
+        "freshness": 30,
         "channelCoverage": 18,
         "observableDiscussion": 14,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 34,
+      "evidenceCount": 31,
       "channels": [
-        "AI Radar",
+        "Hacker News",
         "GitHub Search"
       ],
       "exampleSources": [
         {
-          "title": "Hugging Face CEO 呼吁美国多做开源AI",
-          "url": "https://chenqiyuan.cn/article/intel-405aaf1ccd7f32236966dc36",
-          "source": "AI圈报",
-          "published": "2026-11-21T16:22:58.000Z"
+          "title": "OpenAgentCore: The OpenAI Agents API, open source and self-hosted",
+          "url": "https://github.com/MiniMax-AI/OpenAgentCore",
+          "source": "Hacker News",
+          "published": "2026-11-22T21:18:43.000Z"
         },
         {
           "title": "TurquoiseConsultant/GitHub-Copilot-app",
@@ -104,52 +108,20 @@
     },
     {
       "rank": 4,
-      "id": "content",
-      "name": "AI 创作、内容和视觉表达",
-      "score": 83,
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
+      "score": 86,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 4,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 12,
-      "channels": [
-        "AI Radar",
-        "XNews",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "用 OpenAI 模型推进芯片设计",
-          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
-          "source": "OpenAI",
-          "published": "2026-11-18T00:00:00.000Z"
-        },
-        {
-          "title": "How to Iterate on Videos with AI",
-          "url": "https://www.agent-swarm.dev/blog/how-to-iterate-on-videos-with-ai",
-          "source": "Hacker News",
-          "published": "2026-11-21T15:11:14.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 5,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
-      "score": 82,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 5,
+        "observableDiscussion": 6,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 76,
+      "evidenceCount": 66,
       "channels": [
         "XNews",
+        "AI Radar",
         "Hacker News"
       ],
       "exampleSources": [
@@ -160,48 +132,47 @@
           "published": "2026-11-11T00:00:00.000Z"
         },
         {
-          "title": "ChatGPT Wallet先向美国Pro用户开放，智能体付钱时拿不到真实卡号",
-          "url": "https://openai.com/index/introducing-chatgpt-wallet",
-          "source": "XNews",
-          "published": "2026-11-13T00:00:00.000Z"
+          "title": "2026 年最佳个人 AI 智能体对比：OpenClaw、Hermes Agent、Gemini Spark 等",
+          "url": "https://www.marktechpost.com/2026/11/22/best-personal-ai-agents-2026",
+          "source": "MarkTechPost",
+          "published": "2026-11-22T10:36:17.000Z"
         }
       ]
     },
     {
-      "rank": 6,
-      "id": "coding",
-      "name": "AI 编程与真实应用交付",
-      "score": 82,
+      "rank": 5,
+      "id": "verification",
+      "name": "AI 可验证工程与质量验收",
+      "score": 86,
       "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 2,
+        "freshness": 28,
+        "channelCoverage": 18,
+        "observableDiscussion": 11,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 47,
+      "evidenceCount": 8,
       "channels": [
-        "AI Radar",
         "Hacker News",
         "XNews"
       ],
       "exampleSources": [
         {
-          "title": "Mingle（MIT）：无需服务器，把本地编程智能体接入 Slack、Discord、Telegram 等",
-          "url": "https://chenqiyuan.cn/article/intel-fb57a3da807b05a1177814bb",
-          "source": "AI圈报",
-          "published": "2026-11-21T16:09:02.000Z"
+          "title": "Limitations of formal verification and the LEAN proof of RH",
+          "url": "https://tagide.com/blog/research/formal-verification-is-not-the-silver-bullet",
+          "source": "Hacker News",
+          "published": "2026-11-22T23:29:51.000Z"
         },
         {
-          "title": "Keeping AI Coding Agent Memory Relevant as Code Changes",
-          "url": "https://enola.tech/blog/agent-memory-needs-a-code-reference",
-          "source": "Hacker News",
-          "published": "2026-11-20T18:18:13.000Z"
+          "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
+          "url": "https://alpo.ge/remark.pdf",
+          "source": "XNews",
+          "published": "2026-11-20T00:00:00.000Z"
         }
       ]
     },
     {
-      "rank": 7,
+      "rank": 6,
       "id": "memory",
       "name": "Agent 记忆、检索和知识管理",
       "score": 82,
@@ -212,62 +183,62 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 9,
+      "evidenceCount": 7,
       "channels": [
-        "AI Radar",
         "Hacker News",
+        "AI Radar",
         "XNews"
       ],
       "exampleSources": [
         {
-          "title": "Google DeepMind 发布 Gemini 4 Neon：100万上下文，登顶 AA 编程智能体指数",
-          "url": "https://www.marktechpost.com/2026/11/18/google-gemini-4-neon-release",
-          "source": "MarkTechPost",
-          "published": "2026-11-19T06:52:26.000Z"
+          "title": "How do you shortlist an agent memory system?",
+          "url": "https://agentmemories.ai",
+          "source": "Hacker News",
+          "published": "2026-11-23T03:35:32.000Z"
         },
         {
-          "title": "Loom: Shared memory, document search, and code indexing for AI agents",
-          "url": "https://github.com/ClickHouse/loom",
+          "title": "Show HN: I made a multiplayer mushroom forage game",
+          "url": "https://mantar.duobook.co",
           "source": "Hacker News",
-          "published": "2026-11-21T18:14:29.000Z"
+          "published": "2026-11-22T18:33:17.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "safety",
+      "name": "AI 安全、隐私与可靠性",
+      "score": 81,
+      "editorial_breakdown": {
+        "freshness": 28,
+        "channelCoverage": 21,
+        "observableDiscussion": 4,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 16,
+      "channels": [
+        "XNews",
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "提取受保护推理的成功率，从54.0%降到了0.2%",
+          "url": "https://openai.com/index/combatting-adversarial-distillation",
+          "source": "XNews",
+          "published": "2026-11-20T00:00:00.000Z"
+        },
+        {
+          "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
+          "url": "https://alignment.openai.com/fuzzy-robustness",
+          "source": "XNews",
+          "published": "2026-11-12T00:00:00.000Z"
         }
       ]
     },
     {
       "rank": 8,
-      "id": "robotics",
-      "name": "具身智能与机器人走向现实",
-      "score": 82,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 18,
-        "observableDiscussion": 11,
-        "readerFit": 15,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 4,
-      "channels": [
-        "AI Radar",
-        "XNews",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "具身智创·生态共融，2026人形机器人开发者大会将于11月25日举办",
-          "url": "https://www.oschina.net/news/503716",
-          "source": "开源中国",
-          "published": "2026-11-21T07:03:13.000Z"
-        },
-        {
-          "title": "目标机器人没练过的50个任务，5条演示后GR00T 2的成功率从40%到95%",
-          "url": "https://research.nvidia.com/labs/gear/gr00t-2",
-          "source": "XNews",
-          "published": "2026-11-09T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 9,
       "id": "infrastructure",
       "name": "AI 算力、芯片与使用成本",
       "score": 81,
@@ -278,24 +249,56 @@
         "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 9,
+      "evidenceCount": 13,
       "channels": [
-        "AI Radar",
         "XNews",
+        "AI Radar",
         "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "用 OpenAI 模型推进芯片设计",
+          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
           "url": "https://openai.com/index/advancing-chip-design-with-our-models",
-          "source": "OpenAI",
+          "source": "XNews",
           "published": "2026-11-18T00:00:00.000Z"
         },
         {
-          "title": "消息称华为 Mate 90 Air 手机搭载麒麟 9020 芯片，厚 6.58mm",
-          "url": "https://www.ithome.com/1/030/439.htm",
-          "source": "IT之家",
-          "published": "2026-11-21T10:10:00.000Z"
+          "title": "NVIDIA 发布 Alpamayo 2 Edge：面向 DRIVE Thor 的 2B 推理 VLA 模型",
+          "url": "https://www.marktechpost.com/2026/11/22/nvidia-alpamayo-2-edge-2b-reasoning-vla-drive-thor",
+          "source": "MarkTechPost",
+          "published": "2026-11-22T18:37:57.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 80,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
+        "observableDiscussion": 3,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 10,
+      "channels": [
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "Ludi-Herry/b-end-design-system-skill",
+          "url": "https://github.com/Ludi-Herry/b-end-design-system-skill",
+          "source": "GitHub Skills",
+          "published": "2026-11-22T05:52:32.000Z"
+        },
+        {
+          "title": "Ask HN: How are tech recruiters assessed on their recruiting skills?",
+          "url": "https://news.ycombinator.com/item?id=50609394",
+          "source": "Hacker News",
+          "published": "2026-11-23T09:34:05.000Z"
         }
       ]
     },
@@ -303,15 +306,15 @@
       "rank": 10,
       "id": "research",
       "name": "AI 科研与可验证发现",
-      "score": 79,
+      "score": 77,
       "editorial_breakdown": {
-        "freshness": 30,
+        "freshness": 28,
         "channelCoverage": 21,
         "observableDiscussion": 3,
         "readerFit": 15,
         "sourceTrace": 10
       },
-      "evidenceCount": 15,
+      "evidenceCount": 11,
       "channels": [
         "XNews",
         "AI Radar",
@@ -325,10 +328,10 @@
           "published": "2026-11-16T00:00:00.000Z"
         },
         {
-          "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
-          "url": "https://alpo.ge/remark.pdf",
-          "source": "XNews",
-          "published": "2026-11-20T00:00:00.000Z"
+          "title": "wanshuiyin/Auto-claude-code-research-in-sleep",
+          "url": "https://github.com/wanshuiyin/Auto-claude-code-research-in-sleep",
+          "source": "GitHub Skills",
+          "published": "2026-11-23T05:42:23.000Z"
         }
       ]
     }
