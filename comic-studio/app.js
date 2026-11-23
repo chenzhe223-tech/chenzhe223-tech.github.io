@@ -165,13 +165,19 @@ function wfProductionBible(p,task){
  if(!review){
  const known=new Set(cast.map(x=>String(x.name||'').trim()));
  const roster=[...known].filter(Boolean).join('、')||'（未命名）';
- const roleName=/(?:单亲妈妈|妈妈|女主角|男主角|主人公|主角|AI助手|AI机器人|AI)\s*[：:\-]?\s*([\u4e00-\u9fa5]{2,3})(?=[、，,。；;\s]|$)/g;
+ // A role followed by a relationship noun is NOT a named character:
+ // “单亲妈妈好友” means the mother's friend, not a character named “好友”.
+ // Only explicit, labeled name declarations trigger mandatory cast reconciliation.
+ const explicitName=/(?:^|[，,。；;\n（(])\s*(?:单亲妈妈|妈妈|女主角|男主角|主人公|主角|AI助手|AI机器人|AI)\s*(?:[：:]|名叫|名为|叫)\s*([\u4e00-\u9fa5]{2,4}|[A-Za-z][A-Za-z0-9_-]{1,30})(?=[、，,。；;）)\s]|$)/g;
+ const quotedName=/(?:单亲妈妈|妈妈|女主角|男主角|主人公|主角|AI助手|AI机器人|AI)\s*[「“]([^」”]{2,30})[」”]/g;
+ const genericRoles=new Set(['好友','朋友','伙伴','闺蜜','同事','同学','亲友','邻居','爸爸','妈妈','孩子','宝宝','角色','模型','助手','手机','机器','功能','系统','时代']);
  const inputs=[{field:'项目人物设定（旧角色文本）',text:String(task.adaptation?.characters||'')},
   {field:'项目剧情描述（候选摘要）',text:String(task.source?.candidate_summary||'')}];
  const seen=new Set();
- for(const input of inputs)for(const hit of input.text.matchAll(roleName)){
-  const name=hit[1],key=input.field+'|'+name;
-  if(seen.has(key)||known.has(name)||/(?:角色|模型|助手|手机|机器|孩子|宝宝|功能|系统|时代)/.test(name))continue;
+ for(const input of inputs)for(const hit of [
+  ...input.text.matchAll(explicitName),...input.text.matchAll(quotedName)]){
+  const name=String(hit[1]||'').trim(),key=input.field+'|'+name;
+  if(!name||seen.has(key)||known.has(name)||genericRoles.has(name))continue;
   seen.add(key);
   conflicts.push({code:'NAME_CONFLICT_REVIEW_REQUIRED',name,field:input.field,approved_cast:[...known],
    message:input.field+'出现“'+name+'”，正式角色名单为「'+roster+'」。请在项目编辑中核对该人名是否为旧稿残留；如确为正式人物，请在创意导演台统一角色后重新锁定。'});

@@ -16,9 +16,28 @@ const bible=ctx.bible(project,task);
 assert.equal(bible.schema,'davylab.worldtoon.production-bible.v1');
 assert.ok(bible.conflicts.length===9,'3D-vs-watercolor conflicts audited');
 assert.equal(bible.panels[6].scene,scenes[6]);
-const conflicting={...task,adaptation:{characters:'单亲妈妈林晓、AI小算'},source:{candidate_summary:'单亲妈妈林晓、AI小算'}};
+const conflicting={...task,adaptation:{characters:'单亲妈妈：林晓、AI：小算'},source:{candidate_summary:'单亲妈妈：林晓、AI：小算'}};
 assert.ok(ctx.bible(project,conflicting).conflicts.some(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED'),'legacy names require reconciliation');
 const nameConflict=ctx.bible(project,conflicting).conflicts.find(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED');
+// Regression: generic relationship words must NOT become "character names".
+const falsePositive={...task,adaptation:{characters:'单亲妈妈好友、AI助手伙伴，双方彼此信任。'},
+ source:{candidate_summary:'女主角好友、AI助手伙伴守护城市。'}};
+assert.equal(ctx.bible(project,falsePositive).conflicts.filter(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED').length,0,
+ 'role descriptors such as 好友/伙伴 are not named characters');
+const fauxProject={...project,testTask:falsePositive};
+assert.equal(ctx.preflight(fauxProject).ready,true,'fresh project with relationship nouns must be exportable');
+const explicitlyNamed={...task,adaptation:{characters:'女主角：林晓，AI助手：小算'},
+ source:{candidate_summary:'主人公「赵明」带来新消息。'}};
+const realMismatches=ctx.bible(project,explicitlyNamed).conflicts.filter(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED');
+assert.ok(realMismatches.some(x=>x.name==='林晓'),'explicit Chinese role labels remain protected');
+assert.ok(realMismatches.some(x=>x.name==='小算'),'explicit AI character labels remain protected');
+assert.ok(realMismatches.some(x=>x.name==='赵明'),'explicit quoted names remain protected');
+const approvedNames={...task,creative_direction:{...task.creative_direction,
+ characters:[{...task.creative_direction.characters[0],name:'林晓'},{name:'小算'}]},
+ adaptation:{characters:'女主角：林晓，AI助手：小算'}};
+assert.equal(ctx.bible(project,approvedNames).conflicts.filter(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED').length,0,
+ 'exact approved roster names pass the identity gate');
+
 assert.ok(['项目人物设定（旧角色文本）','项目剧情描述（候选摘要）'].includes(nameConflict.field),'message points to actual input field');
 assert.equal(nameConflict.approved_cast[0],'虚构主角','error displays actual approved character roster');
 ctx.wfTaskObject=p=>p.testTask;
