@@ -306,6 +306,7 @@
      '<div class="wt4-work-area">'+stageBody(p,i,s)+'</div></section>'+
      '<footer class="wt4-footer">自动保存本地草稿；ChatGPT 直达制作无需 GitHub 同步；正式入仓与公众号发表需独立 QA 和作者授权。</footer></div>';
  }
+ let overviewExpanded=false;
  function overview(){
    const rows=activeProjects().filter(p=>p.id!=='sample-ba-zong-001')
      .sort((a,b)=>String(b.updatedAt||b.createdAt||'').localeCompare(String(a.updatedAt||a.createdAt||'')));
@@ -316,18 +317,19 @@
      return '<div class="wt4-home-entry"><a href="#/workspace/'+encodeURIComponent(p.id)+'" class="wt4-home-item">'+
        '<div><strong>'+html(p.title)+'</strong><small>'+html(s.agent)+' · '+html(s.label)+'</small></div>'+
        '<span>'+html(stageNames[s.next])+' →</span></a>'+
-       (deletable(p)?'<button type="button" class="button wt4-delete-unmade" data-action="delete-unmade" data-id="'+html(p.id)+'">删除未制作</button>':'')+
+       (deletable(p)?'<button type="button" class="button wt4-delete-unmade" data-action="delete-unmade" data-id="'+html(p.id)+'">删除</button>':'')+
        '</div>';}).join('');
-   return '<section class="wt4-home"><div class="wt4-home-head"><div><div class="kicker">YOUR PRODUCTION</div>'+
-     '<h2>继续制作</h2><p>未制作草稿可直接删除，已交付作品与发布记录受到保护。</p></div>'+
-     '<div class="buttons"><a class="button dark" href="#/workspace">进入作品工作空间 →</a>'+
-     (rows.some(deletable)?'<button type="button" class="button" data-action="clean-unmade">批量清理草稿</button>':'')+
-     '</div></div>'+
+   return '<details class="wt4-home wt4-home-collapsed" data-wt4-overview '+(overviewExpanded?'open':'')+'>'+
+     '<summary class="wt4-home-summary"><span class="wt4-home-summary-text"><strong>继续制作</strong>'+
+     '<small>'+rows.length+' 部作品 · 点击展开管理草稿</small></span>'+
+     '<span class="wt4-home-chevron" aria-hidden="true">⌄</span></summary>'+
+     '<div class="wt4-home-content"><div class="wt4-home-head"><p>仅未制作草稿可删除；已交付和已发表作品受保护。</p>'+
+     '<a class="button" href="#/workspace">进入作品工作空间 →</a></div>'+
      (cards?'<div class="wt4-home-list">'+cards+'</div>':
        '<p class="wt4-home-empty">暂无本地创作，创建作品后将显示进度和下一步。</p>')+
      (remoteOnly.length?'<div class="wt4-remote-hint"><strong>GitHub 中另有 '+remoteOnly.length+' 条工单</strong>'+
        '<p>这些任务已在云端归档，但尚未与当前设备的本地作品关联。请在生产调度中心查看，不会自动创建或覆盖本地草稿。</p>'+
-       '<a class="button" href="#/archive">查看云端工单</a></div>':'')+'</section>';
+       '<a class="button" href="#/archive">查看云端工单</a></div>':'')+'</div></details>';
  }
  function production(){
    const prev=ui.wt4Step;
@@ -337,6 +339,9 @@
  window.wt4Production=production;
  const originalDashboard=dashboard;
  dashboard=function(){return overview()+originalDashboard()};
+ document.addEventListener('toggle',ev=>{
+   if(ev.target?.matches?.('[data-wt4-overview]'))overviewExpanded=ev.target.open;
+ },true);
  document.addEventListener('click',ev=>{
    const b=ev.target.closest('[data-wt4-step]');if(!b)return;
    ev.preventDefault();ev.stopImmediatePropagation();

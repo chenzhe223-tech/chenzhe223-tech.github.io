@@ -547,7 +547,9 @@ async function wtDeleteUnmadeProjects(ids,{deleteLinkedTopics=false}={}){
    freed++;
   }catch{failed++}
  }
- closeModal();nav('library');
+ closeModal();
+ // Stay in the current dashboard after deleting its inline draft card.
+ if(ui.route==='dashboard')render();else nav('library');
  notify('已删除 '+targets.length+' 部未制作草稿'+
   (freed?'，释放 '+freed+' 份不再使用的本地素材':'')+
   (failed?'；'+failed+' 份本地媒体缓存清理失败，稍后可重试':'')+
