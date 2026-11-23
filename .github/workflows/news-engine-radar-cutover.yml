@@ -64,6 +64,18 @@ jobs:
           assert status=='ok' and len(rows)>=4, 'New Engine read-only overseas feed did not meet the cutover contract'
           assert all(r.get('source_kind')=='news_engine_rss_discovery' and r.get('publishable') is False for r in rows)
           assert all(r['url'].startswith('https://') for r in rows)
+          # Real end-to-end daily-slot selection: score -> archive dedupe -> same-day dedupe -> six.
+          from unittest.mock import patch
+          from pathlib import Path
+          from radar.scripts import build_daily
+          existing=json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          with patch.object(build_daily,'collect_xnews_articles',return_value=(rows,status)):
+              result=build_daily.collect_xnews_report_fields(http_get,now=dt.datetime.now(dt.timezone.utc),
+                                                            recent=existing.get('news',[]),enabled=True)
+          print(json.dumps({'final_status':result['xnews_status'],'final_count':len(result['xnews_voices']),
+                            'source_diversity':len({r.get('source') for r in result['xnews_voices']})},ensure_ascii=False))
+          assert result['xnews_status']=='ok' and len(result['xnews_voices'])>=3, 'Archived and same-day dedupe left the overseas slot empty'
+          assert all(r['publishable'] is False for r in result['xnews_voices'])
           PY
 
   browser-reading:
