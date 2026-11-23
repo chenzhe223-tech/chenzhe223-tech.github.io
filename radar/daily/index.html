@@ -1068,13 +1068,14 @@ a,.nav-right>a,.archive-button,.top5-card .meta a,.footer a{color:var(--copper-i
 .story-image--generated img{object-position:72% center!important}
 .editorial-illustration-tag{position:absolute;top:12px;right:12px;z-index:4;padding:5px 8px;border:1px solid rgba(32,35,32,.18);border-radius:2px;background:rgba(247,245,240,.96);color:var(--ink);font:600 9px/1.2 var(--sans);letter-spacing:.045em}
 </style><link rel="stylesheet" href="../assets/editorial.css?v=827f69a61106"><script src="../assets/edition-media.js"></script><link rel="icon" type="image/svg+xml" href="../assets/radar-icon.svg"><link rel="stylesheet" href="../assets/geometry-grid.css?v=20261123" id="radar-geometry-contract">
+<link rel="stylesheet" href="../assets/analysis-editorial.css?v=20261123" id="radar-analysis-design">
 </head>
 <body><div class="wrap">
 <nav class="nav"><a class="brand" href="../daily/" aria-label="AI Radar by DAVYLAB">AI RADAR <small>BY DAVYLAB</small></a><div class="primary-nav" aria-label="主导航"><a aria-current="page" href="#ai" data-i18n="navToday">今日</a><a href="#news" data-i18n="navDiscover">发现</a><a id="deepReadNav" href="#top5List" data-i18n="navDeep">深读</a><a href="#skills" data-i18n="navKnowledge">知识库</a><a href="https://chenzhe223-tech.github.io/niantou-box-app/#/" target="_blank" rel="noopener noreferrer" data-i18n="navMine">我的</a></div><div class="nav-right"><button class="edition-search" aria-label="搜索本期简报 / Search this issue" type="button" id="openSearch"><span class="glass" aria-hidden="true"></span></button><a class="subscribe" href="../data/brief.xml" data-i18n="subscribe">订阅</a><div class="lang-switch" role="group" aria-label="语言 / Language"><button class="lang-btn active" id="langZh" type="button" aria-pressed="true" onclick="setLang('zh')">中文</button><button class="lang-btn" id="langEn" type="button" aria-pressed="false" onclick="setLang('en')">EN</button></div><a href="../" data-i18n="back">← 返回 Davy Radar</a></div></nav>
 <header><div class="hero-panel"><div class="hero-kicker"><i></i><span data-i18n="kicker">GLOBAL AI INTELLIGENCE</span></div><div class="brief-date-bar" aria-label="简报日期与历史简报"><div class="brief-date-copy"><span class="brief-eyebrow">DAILY BRIEFING</span><div class="brief-date-line"><span data-i18n="todayBrief">今日简报</span><strong id="reportDate">正在读取日报…</strong></div><span id="reportDateFull" class="date-full"></span></div><div class="brief-date-actions"><label for="archiveDate" class="archive-button"><span aria-hidden="true">▦</span><span data-i18n="archiveLabel">历史简报</span><span aria-hidden="true">⌄</span></label><select id="archiveDate" aria-label="选择历史简报日期"><option value="">加载历史记录…</option></select></div></div><div class="hero"><div class="hero-copy"><h1 id="featureTitle" data-i18n="heroTitle">理解 AI 世界的每一天。</h1><p class="sub" id="featureSub" data-i18n="heroSub">全球 AI 新闻、技术突破与深度观点，一站阅读。</p><div class="hero-actions"><a href="#news" data-i18n="exploreNews">✦ 看看今天发生了什么</a><a class="secondary" href="#skills" data-i18n="exploreSkills">⌘ 发现可用工具</a></div></div></div></div>
 <nav class="tabs" aria-label="简报栏目"><a class="tab active" href="#ai" data-i18n="navToday">今日</a><a class="tab" href="#news" data-i18n="navDiscover">发现</a><a class="tab" id="deepReadTab" href="#xnewsVoicesSection" data-i18n="navDeep">深读</a><a class="tab" href="#chinaAI" data-i18n="navChina">中国 AI</a><a class="tab" href="#skills" data-i18n="navResearch">研究</a></nav></header>
 <section id="ai" aria-label="今日头条与五大热点"><div class="section-head"><h2><span class="section-icon">✨</span><span data-i18n="aiHeading">今日观察 · AI 机会研判</span></h2><p data-i18n="aiSub">编辑精选 · 事实、影响与行动</p></div><div id="aiList" class="list"><div class="empty">今日五大热点正在生成…</div></div><article id="leadStory" class="lead-story" aria-label="今日头条"><div class="empty">正在读取今日头条…</div></article><div id="top5List" class="top5-grid"><div class="empty">正在读取五大热点…</div></div></section>
-<div class="secondary-editorial-grid"><section id="xnewsVoicesSection" style="display:none"><div class="section-head"><h2><span class="section-icon">🌍</span><span>海外精选 · DAVYLAB News Engine</span></h2><p>五源发现 · 原文可追溯 · 人工待核验</p></div><p class="section-intro">来自 OpenAI、Google AI、Hugging Face、Simon Willison 与 TechCrunch 的公开 RSS/Atom 新闻线索。优先保留原始报道、发布日期及来源；入选不代表已独立核验。</p><div id="xnewsVoices" class="list"></div></section><section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><p class="section-intro" data-i18n="chinaIntro">聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接和可核验发布时间的近期消息。</p><div id="chinaAINewsList" class="top5-grid china-news-grid"><div class="empty">正在读取中国 AI 动态…</div></div><a class="rail-poster" href="../posters/latest.png" target="_blank" rel="noopener noreferrer"><img src="../posters/latest.png" alt="AI Radar daily poster"><span><strong>今日简报海报</strong><small>AI Daily · 下载高清海报 ↗</small></span></a></section></div>
+<div class="secondary-editorial-grid"><section id="xnewsVoicesSection" style="display:none"><div class="section-head"><h2><span class="section-icon">🌍</span><span>海外精选 · DAVYLAB News Engine</span></h2></div><div id="xnewsVoices" class="list"></div></section><section id="chinaAI"><div class="section-head"><h2><span class="section-icon">🇨🇳</span><span data-i18n="chinaHeading">中国 AI 发展动态</span></h2><p data-i18n="chinaSub">国产模型 · 产品应用 · 芯片算力 · 具身智能</p></div><div id="chinaAINewsList" class="top5-grid china-news-grid"><div class="empty">正在读取中国 AI 动态…</div></div><a class="rail-poster" href="../posters/latest.png" target="_blank" rel="noopener noreferrer"><img src="../posters/latest.png" alt="AI Radar daily poster"><span><strong>今日简报海报</strong><small>AI Daily · 下载高清海报 ↗</small></span></a></section></div>
 <div id="editorialCore" class="editorial-core" hidden></div>
 <section id="dailySkill"><div class="section-head"><h2><span class="section-icon">✦</span><span>今日推荐 · 值得尝试的 Skill</span></h2><p>功能 · 推荐理由 · 应用范围</p></div><div id="featuredSkill" class="featured-skill"><div class="empty">正在读取今日推荐…</div></div></section>
 <section id="news"><div class="section-head"><h2><span class="section-icon">📰</span><span data-i18n="newsHeading">AI 新鲜事</span></h2><p data-i18n="newsSub">完整来源列表 · 按需展开</p></div><p class="section-intro" data-i18n="newsIntro">以下为采集到的其他新闻线索，作为补充核查，不与每日五大热点争夺注意力。</p><div id="newsList" class="list"><div class="empty">正在读取最新情报…</div></div></section>
@@ -1125,20 +1126,54 @@ function applyDailyHeroTheme(date,story){
 function dateFmt(s){if(!s)return t("dateUnknown");const d=new Date(s);return isNaN(d)?t("dateUnknown"):d.toLocaleString(currentLang==="zh"?"zh-CN":"en-US",{timeZone:"Asia/Shanghai",month:"short",day:"numeric",hour:"2-digit",minute:"2-digit",hour12:currentLang==="en"})}
 function setLang(lang){currentLang=lang==="en"?"en":"zh";document.documentElement.lang=currentLang==="zh"?"zh-CN":"en";$("langZh").classList.toggle("active",currentLang==="zh");$("langEn").classList.toggle("active",currentLang==="en");$("langZh").setAttribute("aria-pressed",String(currentLang==="zh"));$("langEn").setAttribute("aria-pressed",String(currentLang==="en"));document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=t(el.dataset.i18n)});if(reportData)renderAll(reportData)}
 function renderAI(ai){const root=$("aiList");if(root)root.innerHTML="";}
+function editorialPhotoFor(data){
+ // Allow-listed real web photos under the free Unsplash License, never publisher
+ // images with unknown reuse rights. These are topic illustrations, not event evidence.
+ const e=data?.editorial||{};
+ const topic=[e.core_zh,e.core_en,e.trend_zh,e.trend_en].filter(Boolean).join(" ");
+ const base="https://images.unsplash.com/";
+ if(/数据中心|机房|云计算|data.center|cloud.infrastructure/i.test(topic))
+  return {url:base+"photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=82",alt:"服务器机柜与网络连接的技术主题摄影",altEn:"Data center server rack and network cabling, thematic photograph"};
+ if(/芯片|算力|边缘|硬件|VLA|NVIDIA|GPU|机器人|推理|semiconductor|edge|hardware|robot/i.test(topic))
+  return {url:base+"photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=82",alt:"电子电路与芯片近景技术摄影",altEn:"Circuit board and integrated chips, thematic photograph"};
+ return {url:base+"photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=82",alt:"电脑屏幕中的程序代码技术主题摄影",altEn:"Programming source code on a computer display, thematic photograph"};
+}
 function renderEditorial(data){
  const root=$("editorialCore");if(!root)return;
  const e=data?.editorial;
- // Missing AI synthesis is an operational status, not reader-facing editorial content.
+ // An unavailable AI analysis is not presented as an editorial opinion.
  if(!e){root.hidden=true;root.innerHTML="";return}
- const core=currentLang==="en"?(e.core_en||""):(e.core_zh||"");
- const trend=currentLang==="en"?(e.trend_en||""):(e.trend_zh||"");
- const next=currentLang==="en"?(e.next_question_en||""):(e.next_question_zh||"");
- const scope=currentLang==="en"?(e.analysis_scope_en||""):(e.analysis_scope_zh||"");
- const basis=Array.isArray(e.source_basis)?e.source_basis.slice(0,5):[];
- const basisMarkup=basis.length?'<div class="editorial-sources"><small>'+esc(currentLang==="en"?"Source basis: ":"依据来源：")+basis.map(item=>'<a href="'+esc(item.url||"#")+'" target="_blank" rel="noopener noreferrer" title="'+esc(currentLang==="en"?(item.title_en||item.title_zh||""):(item.title_zh||item.title_en||""))+'">'+esc(item.source||item.title_zh||item.title_en||"Source")+'</a>').join(" · ")+'</small></div>':"";
+ const english=currentLang==="en";
+ const core=english?(e.core_en||""):(e.core_zh||"");
+ const trend=english?(e.trend_en||""):(e.trend_zh||"");
+ const next=english?(e.next_question_en||""):(e.next_question_zh||"");
+ const scope=english?(e.analysis_scope_en||""):(e.analysis_scope_zh||"");
  if(!core&&!trend&&!next){root.hidden=true;root.innerHTML="";return}
+ const sourceBasis=(Array.isArray(e.source_basis)?e.source_basis:[]).filter(item=>{
+  try{const u=new URL(item?.url||"");return u.protocol==="https:"&&!u.username&&!u.password&&!u.hash}
+  catch(_){return false}
+ }).slice(0,8);
+ const featuredSources=[];
+ const seen=new Set();
+ for(const item of sourceBasis){
+  const name=String(item.source||"").trim();
+  if(!name||seen.has(name))continue;
+  seen.add(name);featuredSources.push(item);
+ }
+ const sourceLink=item=>'<a href="'+esc(item.url)+'" target="_blank" rel="noopener noreferrer" title="'+esc(english?(item.title_en||item.title_zh||""):(item.title_zh||item.title_en||""))+'">'+esc(item.source||item.title_zh||item.title_en||"Source")+'</a>';
+ const sourceRow=featuredSources.length?'<div class="editorial-analysis-sources"><span class="editorial-analysis-source-label">'+esc(english?"Evidence from":"依据来源")+'</span><div class="editorial-analysis-source-links">'+featuredSources.map(sourceLink).join('<span class="editorial-source-dot" aria-hidden="true">·</span>')+'</div></div>':"";
+ const sourceDetails=sourceBasis.length?'<ul class="editorial-analysis-evidence-list">'+sourceBasis.map(item=>'<li>'+sourceLink(item)+'<span>'+esc(english?(item.title_en||item.title_zh||""):(item.title_zh||item.title_en||""))+'</span></li>').join("")+'</ul>':"";
+ const details=(next||scope||sourceDetails)?'<details class="editorial-analysis-details"><summary>'+esc(english?"Explore evidence & next questions":"查看判断依据与后续观察")+'</summary><div class="editorial-analysis-more">'+(next?'<p class="editorial-analysis-next"><b>'+esc(english?"Next to watch":"接下来观察")+'</b> '+esc(next)+'</p>':"")+(scope?'<p class="editorial-analysis-scope">'+esc(scope)+'</p>':"")+sourceDetails+'</div></details>':"";
+ const photo=editorialPhotoFor(data);
+ const caption=english?"Thematic photo · Unsplash · Not event footage":"技术主题配图 · Unsplash · 非新闻现场";
  root.hidden=false;
- root.innerHTML='<strong>'+esc(currentLang==="en"?"DAVYLAB ANALYSIS · EDITORIAL TAKE":"DAVYLAB 分析｜今日核心判断")+'</strong><p>'+esc(core)+'</p>'+(trend?'<small>'+esc(currentLang==="en"?"Trend to watch: ":"共同趋势：")+esc(trend)+'</small>':'')+(scope?'<small class="editorial-scope">'+esc(scope)+'</small>':'')+(basisMarkup)+(next?'<small>'+esc(currentLang==="en"?"Next question: ":"接下来观察：")+esc(next)+'</small>':'');
+ root.classList.add("editorial-analysis");
+ root.innerHTML='<div class="editorial-analysis-heading"><span class="editorial-analysis-monogram" aria-hidden="true">DAVYLAB</span><strong>'+esc(english?"ANALYSIS · TODAY'S EDITORIAL TAKE":"分析｜今日核心判断")+'</strong></div>'+
+  '<div class="editorial-analysis-grid"><div class="editorial-analysis-content"><h2 class="editorial-analysis-title">'+esc(core)+'</h2>'+
+  (trend?'<div class="editorial-analysis-takeaway"><b>'+esc(english?"KEY TREND":"核心趋势")+'</b><p>'+esc(trend)+'</p></div>':"")+
+  sourceRow+details+'</div>'+
+  '<figure class="editorial-analysis-media"><img loading="lazy" decoding="async" referrerpolicy="no-referrer" src="'+esc(photo.url)+'" alt="'+esc(english?photo.altEn:photo.alt)+'" onerror="this.closest('+"'figure'"+').hidden=true">'+
+  '<figcaption>'+esc(caption)+' · <a href="https://unsplash.com/license" target="_blank" rel="noopener noreferrer">'+esc(english?"Image license":"图片授权")+'</a></figcaption></figure></div>';
 }
 /* When no lawful topic-relevant photo was found, the news card is text-first.
    Do NOT generate or reuse synthetic blue icon/illustration placeholders. */
