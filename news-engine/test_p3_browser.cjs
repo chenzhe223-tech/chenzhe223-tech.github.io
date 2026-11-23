@@ -33,7 +33,7 @@ async function routes(page){
  await page.route("**/api/v2/search?*",r=>r.fulfill({status:200,contentType:"application/json",headers:{"access-control-allow-origin":"*"},body:JSON.stringify(payload)}));
 }
 (async()=>{
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,channel:process.env.P3_BROWSER_CHANNEL==="chrome"?"chrome":undefined});
  try{
   for(const width of [390,1440]){
    let page=await browser.newPage({viewport:{width,height:width===390?844:900}});
