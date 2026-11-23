@@ -1,0 +1,68 @@
+name: News Engine P1 Consumer Integration CI
+on:
+  pull_request:
+    paths:
+      - 'comic-studio/briefing.js'
+      - 'topic-studio/xnews-discovery.js'
+      - 'news-engine/p1-knowa-topic-adapter.js'
+      - 'news-engine/test_p1_consumers.cjs'
+      - 'news-engine/test_p1_browser.cjs'
+      - '.github/workflows/news-engine-p1-consumers.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  consumer-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JS syntax and source provenance / fallback tests
+        run: |
+          node --check comic-studio/briefing.js
+          node --check topic-studio/xnews-discovery.js
+          node --check news-engine/p1-knowa-topic-adapter.js
+          node --check news-engine/test_p1_consumers.cjs
+          node news-engine/test_p1_consumers.cjs
+      - name: Validate read-only news API real HTTPS response
+        run: |
+          node --input-type=module - <<'JS'
+          const u="https://davylab-news-api.chenzhe223.workers.dev/api/v1/news?stream=overseas&limit=6";
+          const r=await fetch(u,{signal:AbortSignal.timeout(20000)});
+          if(!r.ok)throw Error('News API unreachable '+r.status);
+          const d=await r.json();
+          if(!Array.isArray(d.data)||d.data.length<3||d.publishable!==false)throw Error('News API unsupported');
+          if(!d.data.every(x=>x.publishable===false&&x.source_url?.startsWith('https://')))throw Error('unsafe news record');
+          console.log(JSON.stringify({PASS:true,issue:d.issue_date,records:d.data.length,readOnly:true}));
+          JS
+
+  consumer-chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install real Chromium, CJK and test dependency
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+      - name: P1 browser UI and recovery
+        run: |
+          python3 -m http.server 8877 --bind 127.0.0.1 >/tmp/news-p1.log 2>&1 &
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8877/topic-studio/ >/dev/null && break; sleep 1; done
+          node news-engine/test_p1_browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: davylab-news-engine-p1-consumer-browser
+          path: test-results/news-engine-p1/
+          if-no-files-found: ignore
+          retention-days: 7
