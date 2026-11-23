@@ -39,8 +39,8 @@ class NewsEngineSlotTests(unittest.TestCase):
         leads, status = adapter.collect_news_engine_articles(get, now=NOW)
         self.assertEqual(status, "ok")
         self.assertEqual(len(calls), 5)
-        self.assertEqual(len(leads), 6)
-        self.assertGreaterEqual(len({x["source"] for x in leads}), 3)
+        self.assertEqual(len(leads), 15)
+        self.assertGreaterEqual(len({x["source"] for x in leads}), 5)
         for story in leads:
             self.assertTrue(story["source_kind"] == "news_engine_rss_discovery")
             self.assertTrue(story["source_url"].startswith("https://"))
