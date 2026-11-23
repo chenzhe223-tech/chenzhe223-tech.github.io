@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'topic-studio/science-discovery.js'
+      - 'topic-studio/science-search-utils.js'
       - 'topic-studio/science-discovery.css'
       - 'topic-studio/editorial-workspace-v4.js'
       - 'topic-studio/scripts/**'
@@ -36,6 +37,8 @@ jobs:
       - name: Validate browser source syntax
         run: |
           node --check topic-studio/science-discovery.js
+          node --check topic-studio/science-search-utils.js
+          node topic-studio/scripts/test_science_search.cjs
           node --check topic-studio/editorial-workspace-v4.js
       - name: Validate metadata snapshot
         run: python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
