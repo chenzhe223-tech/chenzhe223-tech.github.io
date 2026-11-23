@@ -16,7 +16,7 @@
   const mode=staged?.rightsMode||p.storySourceSelection?.adaptation||'literary_review';
   const hasFile=!!p.novelSkill?.private_source_ref,hasShare=!!p.novelSkill?.export_source_approved;
   return '<details class="wt-novel-studio" data-novel-panel="'+escape(p.id)+'"'+(staged?' open':'')+'>'+
-   '<summary><span class="wt-novel-icon">▤</span><span><strong>小说蒸馏 · Book to Skill</strong><small>本地全文索引 → 人物与主题线索 → 九格创作依据</small></span><span class="wt-novel-badge">'+(skill?'已有结构索引':'上传小说')+'</span></summary>'+
+   '<summary><span class="wt-novel-icon">▤</span><span><strong>文学漫绘 · 作品资料整理</strong><small>本地全文索引 → 人物与主题线索 → 九格创作依据</small></span><span class="wt-novel-badge">'+(skill?'已有结构索引':'上传小说')+'</span></summary>'+
    '<div class="wt-novel-body">'+
    '<p class="wt-novel-note">TXT、MD、文字层 PDF、EPUB；本机处理，不自动上传原著。继承 book-to-skill 的分章、溯源和按需引用方式，当前“结构蒸馏”不冒充 AI 深层理解。<a href="https://github.com/virgiliojr94/book-to-skill" target="_blank" rel="noopener noreferrer">开源来源</a></p>'+
    '<div class="wt-novel-grid"><label>小说文件（≤40MB）<input type="file" data-novel-file accept=".txt,.md,.pdf,.epub,text/plain,application/pdf,application/epub+zip" '+(locked?'disabled':'')+'></label>'+
@@ -177,13 +177,13 @@
  async function clear(p){
   if(!p.novelSkill)return;
   if(p.handoff?.repoQueuedAt||p.handoff?.directTaskExportedAt)throw Error('已导出或入仓的任务不可删除来源索引');
-  if(!confirm('移除当前作品的小说蒸馏索引？已有分镜和其他创作内容会保留。'))return;
+  if(!confirm('移除当前作品的文学资料索引？已有分镜和其他创作内容会保留。'))return;
   const key=p.novelSkill.private_source_ref;
   delete p.novelSkill;
   if(p.creativeDirection){p.creativeDirection.approval=null;p.creativeDirection.reviewed=false}
   setChange(p,'移除小说蒸馏索引，需重新核对创意');
   if(key?.startsWith('media:')&&!data.projects.some(x=>x!==p&&x.novelSkill?.private_source_ref===key))try{await delMedia(key.slice(6))}catch{}
-  render();notify('小说蒸馏索引已移除');
+  render();notify('文学资料索引已移除');
  }
  document.addEventListener('change',ev=>{
   if(ev.target?.matches?.('[data-novel-file]')){analyze(ev.target);return}
@@ -200,7 +200,7 @@
   if(!p||!rootEl||id(p)!==rootEl.dataset.novelPanel)return;
   const action=el.dataset.novelAction;
   (action==='apply'?apply(p,rootEl):action==='clear'?clear(p):action==='copy'?copy(p):Promise.reject(Error('未知蒸馏操作')))
-   ?.catch?.(err=>notify('小说蒸馏：'+(err.message||err)));
+   ?.catch?.(err=>notify('文学漫绘：'+(err.message||err)));
  },true);
  root.WTNovelStudio={panel,semanticPrompt,_drafts:local};
 })(typeof window!=='undefined'?window:globalThis);
