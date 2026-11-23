@@ -73,7 +73,10 @@ def _public_https(value: str) -> bool:
 
 def _legacy(http_get, now):
     """Only the pre-existing failure path; never a normal publication dependency."""
-    from radar.scripts.xnews_sources import collect_xnews_articles
+    try:
+        from radar.scripts.xnews_sources import collect_xnews_articles
+    except ModuleNotFoundError:
+        from xnews_sources import collect_xnews_articles
     fallback = os.environ.get("RADAR_NEWS_ENGINE_LEGACY_FALLBACK")
     if fallback is None:
         fallback = "1" if _config().get("legacy_fallback_on_failure", True) else "0"
