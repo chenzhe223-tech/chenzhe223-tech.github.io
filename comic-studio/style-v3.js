@@ -920,7 +920,7 @@ function cardImage(x,c){
  if(c.styleId===x.style_id&&proof&&typeof mediaSrc==='function')
   return '<span class="wt-v3-photo"><img alt="'+esc(x.name)+'当前作品实绘首图" loading="lazy" src="'+esc(mediaSrc(proof.src))+'" data-source="'+esc(proof.src)+'"><em>'+(proof.approved?'本作品已批准原图':'本作品待审核首图')+'</em></span>';
  const asset=isGuide(x.guide)?x.guide:isReference(x.reference)?x.reference:isSample(x.sample)?x.sample:null;
- if(asset)return '<span class="wt-v3-photo '+(x.number>=22?'wt-v3-photo-3d':'')+'"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'原创 3D 风格效果示意，非正式制作成果"><em>'+(isGuide(asset)?'原创效果示意 · 非正式成品':'已核验模型样张')+'</em></span>';
+ if(asset)return '<span class="wt-v3-photo '+(x.category==='3D 与数字角色'?'wt-v3-photo-3d':'')+'"><img loading="lazy" referrerpolicy="no-referrer" src="'+esc(asset.url)+'" alt="'+esc(x.name)+'原创 3D 风格效果示意，非正式制作成果"><em>'+(isGuide(asset)?'原创效果示意 · 非正式成品':'已核验模型样张')+'</em></span>';
  return '<span class="wt-v3-card-visual" style="--v3-paper:'+esc(x.palette[0])+';--v3-ink:'+esc(x.palette[1])+';--v3-accent:'+esc(x.palette[2])+'"><small>STYLE / '+String(x.number).padStart(2,'0')+'</small><strong>'+esc(x.name_en)+'</strong><em>视觉档案 · 暂无可核验图片<br>此处不是生成效果预览</em></span>';
 }
 function cards(c){
