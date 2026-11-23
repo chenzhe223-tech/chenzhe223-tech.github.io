@@ -1,0 +1,380 @@
+{
+  "report_date": "2026-11-23",
+  "poster": "radar/posters/2026-11-23.png",
+  "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
+  "news_count": 5,
+  "news_urls": [
+    "https://www.ithome.com/1/030/809.htm",
+    "https://www.marktechpost.com/2026/11/22/nvidia-alpamayo-2-edge-2b-reasoning-vla-drive-thor/",
+    "https://www.marktechpost.com/2026/11/22/google-gemini-api-tool-retrieval/",
+    "https://chenqiyuan.cn/article/intel-8fa4884ca3461e144724bcc4",
+    "https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/"
+  ],
+  "news_titles": [
+    "智谱 GLM-5.4 模型发布，已上线 Coding Plan",
+    "NVIDIA 发布 Alpamayo 2 Edge：面向 DRIVE Thor 的 2B 推理 VLA 模型",
+    "Google 在 Gemini API 中预览工具检索功能，面向大型工具库",
+    "蚂蚁开源医疗多模态模型 LingSante-3.1-air-VL，总参数 124B、激活 5.5B",
+    "Signal 限制手机截图，应对 AI 监控的“生存威胁”"
+  ],
+  "news_image_evidence": [
+    {
+      "story_url": "https://www.ithome.com/1/030/809.htm",
+      "image_source": "IT之家",
+      "image_match_status": "feed_image",
+      "image_sha256": "bf2c8f5a4a94441ea74d28f76acc44ce6ed45f0ec006a9d64e01d605dd206dbf",
+      "rendered_image_sha256": "bf2c8f5a4a94441ea74d28f76acc44ce6ed45f0ec006a9d64e01d605dd206dbf",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/22/nvidia-alpamayo-2-edge-2b-reasoning-vla-drive-thor/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "a22ca93f937389bf2d9345f402d8924b7dfccecfaa81e0e753932db53d97c1ad",
+      "rendered_image_sha256": "a22ca93f937389bf2d9345f402d8924b7dfccecfaa81e0e753932db53d97c1ad",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/22/google-gemini-api-tool-retrieval/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "e290853a3c8f89bbda413a06f72accd59b64ffa3abd4930d1e152aad2f8cf518",
+      "rendered_image_sha256": "e290853a3c8f89bbda413a06f72accd59b64ffa3abd4930d1e152aad2f8cf518",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://chenqiyuan.cn/article/intel-8fa4884ca3461e144724bcc4",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "9859189b6bf222d2b7ee7495b009cadfc69e3a7e90cdc776fd4d2f0c0e9207d7",
+      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/21/signal-restricts-mobile-screenshots-as-it-confronts-existential-threat-of-ai-surveillance/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "a80c5b90f132b367805de537f4c94638914286ba4597a8b288a3bc744d3752e4",
+      "rendered_image_sha256": "a80c5b90f132b367805de537f4c94638914286ba4597a8b288a3bc744d3752e4",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    }
+  ],
+  "skill": "wanshuiyin/Auto-claude-code-research-in-sleep",
+  "design": "mountain-editorial",
+  "format": "PNG",
+  "canvas": [
+    1200,
+    1800
+  ],
+  "layout_regions": {
+    "masthead": [
+      48,
+      24,
+      1152,
+      104
+    ],
+    "hero-title-date": [
+      48,
+      145,
+      1152,
+      520
+    ],
+    "five-column-news-grid": [
+      48,
+      750,
+      1152,
+      1278
+    ],
+    "today-insight-banner": [
+      48,
+      1290,
+      868,
+      1425
+    ],
+    "skill-recommendation": [
+      48,
+      1440,
+      868,
+      1688
+    ],
+    "right-qr-panel": [
+      900,
+      1290,
+      1164,
+      1664
+    ],
+    "brand-footer": [
+      48,
+      1720,
+      1152,
+      1800
+    ]
+  },
+  "text_bounds": [
+    {
+      "block": "hero_headline",
+      "x": 48,
+      "y": 557,
+      "width": 1100,
+      "height": 92,
+      "actual_width": 1095.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 50,
+      "y": 651,
+      "width": 1090,
+      "height": 22,
+      "actual_width": 792.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_title",
+      "x": 48,
+      "y": 817,
+      "width": 206,
+      "height": 44,
+      "actual_width": 202.7,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_summary",
+      "x": 48,
+      "y": 889,
+      "width": 206,
+      "height": 36,
+      "actual_width": 197.7,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_1_why",
+      "x": 48,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_title",
+      "x": 271,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 203.6,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_summary",
+      "x": 271,
+      "y": 889,
+      "width": 206,
+      "height": 36,
+      "actual_width": 201.2,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_2_why",
+      "x": 271,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 197.4,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_title",
+      "x": 494,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 198.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_summary",
+      "x": 494,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 203.9,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_3_why",
+      "x": 494,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_title",
+      "x": 717,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 202.7,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_summary",
+      "x": 717,
+      "y": 889,
+      "width": 206,
+      "height": 54,
+      "actual_width": 198.8,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_4_why",
+      "x": 717,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 195.0,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_title",
+      "x": 940,
+      "y": 817,
+      "width": 206,
+      "height": 66,
+      "actual_width": 196.8,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_summary",
+      "x": 940,
+      "y": 889,
+      "width": 206,
+      "height": 72,
+      "actual_width": 202.6,
+      "line_count": 4,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "story_5_why",
+      "x": 940,
+      "y": 968,
+      "width": 206,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 190,
+      "y": 1305,
+      "width": 650,
+      "height": 46,
+      "actual_width": 646.0,
+      "line_count": 2,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 66,
+      "y": 1362,
+      "width": 780,
+      "height": 17,
+      "actual_width": 476.0,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "skill_name",
+      "x": 80,
+      "y": 1490,
+      "width": 555,
+      "height": 30,
+      "actual_width": 535.3,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1554,
+      "width": 565,
+      "height": 57,
+      "actual_width": 562.9,
+      "line_count": 3,
+      "truncated": false,
+      "overflow": false
+    },
+    {
+      "block": "paragraph",
+      "x": 80,
+      "y": 1628,
+      "width": 565,
+      "height": 14,
+      "actual_width": 310.4,
+      "line_count": 1,
+      "truncated": false,
+      "overflow": false
+    }
+  ],
+  "design_variant": "mountain-editorial",
+  "iso_year": 2026,
+  "iso_week": 48,
+  "iso_weekday": 1,
+  "style_cycle_index": 47,
+  "style_cycle": "ISO-WEEK-ALTERNATING-V1",
+  "template_version": "2.4.0",
+  "generated_at": "2026-11-23T13:56:16.114973+08:00"
+}
