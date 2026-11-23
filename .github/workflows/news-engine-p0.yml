@@ -109,6 +109,10 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.55.1
           npx playwright install --with-deps chromium
+      - name: Validate and contract-test isolated online Worker (offline)
+        run: |
+          node --check news-engine/preview-worker.js
+          node news-engine/test_preview_worker.cjs
       - name: Test actual desktop and mobile review workflow in Chromium (offline)
         env:
           NEWS_ENGINE_SCREENSHOT_DIR: test-results/news-engine/browser
