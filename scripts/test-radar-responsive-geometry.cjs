@@ -23,6 +23,7 @@ async function testWidth(browser,width){
     wrap:rect(".wrap"),lead:rect("#leadStory"),hot:rect("#top5List"),last:rect("#top5List>.top5-card:last-child"),
     overseas:rect("#xnewsVoicesSection"),china:rect("#chinaAI"),overseasList:rect("#xnewsVoices"),chinaList:rect("#chinaAINewsList"),
     style:{alignment:css(".secondary-editorial-grid").alignItems,overseasDisplay:css("#xnewsVoicesSection").display,
+      primaryNav:css(".primary-nav").display,editorialTabs:css(".tabs").display,
       overseasCols:css("#xnewsVoices").gridTemplateColumns,chinaCols:css("#chinaAINewsList").gridTemplateColumns},
     overflow:[...document.querySelectorAll("#xnewsVoices .item,#top5List>.top5-card")].filter(e=>e.scrollHeight>e.clientHeight+3||e.scrollWidth>e.clientWidth+3).map(e=>({text:e.textContent.slice(0,35),scrollHeight:e.scrollHeight,height:e.clientHeight,scrollWidth:e.scrollWidth,width:e.clientWidth}))
    };
@@ -47,6 +48,10 @@ async function testWidth(browser,width){
   }else assert.ok(g.china.top>=g.overseas.bottom+12,width+" secondary modules overlap");
   const overseasCols=g.style.overseasCols.trim().split(/\s+/).length;
   const chinaCols=g.style.chinaCols.trim().split(/\s+/).length;
+  if(width>760&&width<=1024){
+   assert.equal(g.style.primaryNav,"none",width+" tablet desktop nav should not collide");
+   assert.equal(g.style.editorialTabs,"flex",width+" tablet needs visible editorial navigation");
+  }
   if(width<=760){
    assert.equal(overseasCols,1,width+" overseas phone columns");
    assert.equal(chinaCols,1,width+" china phone columns");
