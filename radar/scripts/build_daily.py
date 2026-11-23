@@ -927,7 +927,25 @@ def collect_xnews_report_fields(http_get_fn, *, now: dt.datetime, recent: list[d
         today_key = now.astimezone(TZ).date().isoformat()
         voices = filter_historical_duplicates(voices, "xnews_voices", today_key)
         same_day = [{**item, "_current_date": today_key} for item in recent]
-        voices = [item for item in voices if not _duplicate_match(item, same_day, today_key)][:6]
+        eligible = [item for item in voices if not _duplicate_match(item, same_day, today_key)]
+        # Filter history and same-day global news BEFORE the final source-balanced six.
+        # Otherwise the most recent News Engine discoveries also appear in "news",
+        # leaving overseas reading empty despite a healthy five-source collector.
+        voices, per_source = [], {}
+        for item in eligible:
+            source = str(item.get("source") or "")
+            if per_source.get(source, 0) >= 2:
+                continue
+            voices.append(item)
+            per_source[source] = per_source.get(source, 0) + 1
+            if len(voices) == 6:
+                break
+        if len(voices) < 6:
+            chosen = {str(item.get("url")) for item in voices}
+            voices.extend(item for item in eligible if str(item.get("url")) not in chosen) 
+            voices = voices[:6]
+        if not voices and status == "ok":
+            status = "no_recent"
     return {"xnews_voices": voices, "xnews_status": status}
 
 
