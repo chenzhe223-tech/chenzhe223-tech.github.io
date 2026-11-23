@@ -5,6 +5,7 @@
 - **不创建另一个平台，也不改 Radar 自动日报、生产海报、公众号文章或 WorldToon 漫画。** 同一个独立 Worker `davylab-news-api`，新增 `/api/v2/` 接口，`/api/v1/` 保持协议及行为不变。
 - 取数只来自 `radar/data/latest.json`、`radar/data/history.json` 和按日期限定的 `radar/data/archive/YYYY-MM-DD.json`，仅允许现有 GitHub Pages 与同仓 GitHub raw 两个明确源。
 - 每一份归档必须通过 **quality_gate.status=PASS**，日期、字段及体积校验后才入索引；不会请求新闻第三方正文、RSS 之外的网页、用户输入的网址或图片。
+- **历史结构兼容：** 2026-11-12 及更早期部分正式期刊尚无可选 `xnews_voices` 海外栏目。只有字段**缺失**且该期核心内容与 PASS 质量门禁均有效时，才将该栏目视为空；字段存在但类型非法仍拒绝索引。不得因为新栏目缺失而抹去早期历史新闻。
 - 最多查看官方历史目录最近 **30期**（不是无界全网实时搜索）。默认查询7期；每个请求同时抓取最多5份历史归档，GitHub/Cloudflare HTTP 缓存300秒，不新增 D1、KV、R2、付费模型、定时任务或新的 Cloudflare Worker。
 - 如果历史归档某日无法访问或质量不通过，返回 `partial:true` 和 `missing_issues`，不把未查日期冒充“无相关报道”。全部不可用时 HTTP 503，原 V1 最新日报接口仍可用。
 
