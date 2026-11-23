@@ -177,7 +177,7 @@ def choose_mountain_skill_description(draw, skill: dict, width: int = 565):
     for text in options:
         if not text:
             continue
-        match = re.search(r"[。！？；;]|[.!?](?=\\s|$)", text)
+        match = re.search(r"[。！？；;]|[.!?](?=\s|$)", text)
         first_sentence = text[:match.end()].strip() if match else ""
         if len(first_sentence) >= 12 and len(wrap(draw, first_sentence, fnt, width)) <= 3:
             return first_sentence
