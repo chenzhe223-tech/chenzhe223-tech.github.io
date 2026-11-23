@@ -373,30 +373,120 @@
       '</div></section>';
   }
   dashboard=function(){return creationCards()+priorDashboard()};
-  function showNovelPanel(){
-    const detail=document.querySelector('[data-novel-panel]');
-    if(!detail){notify('已创建小说项目，请在 AI 编剧阶段打开小说蒸馏面板');return}
-    detail.open=true;
-    detail.scrollIntoView({block:'start',behavior:'smooth'});
-    const source=detail.querySelector('[data-novel-file]');
-    if(source)source.setAttribute('aria-label','选择小说文件以建立本地结构索引');
-  }
+
+  // The visible entry creates a draft only on an explicit Start action.
   document.addEventListener('click',event=>{
     const button=event.target.closest('[data-wt-novel-start]');
     if(!button)return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    // A novel is a new work by default, never overwrite or unlock a previous project.
     newProject();
     const p=selected();
-    if(p){
-      p.creationSource='novel';
-      p.title='未命名小说导读';
-      ui.wt4Step=1;
-      persist();
-      nav('workspace/'+p.id+'/1');
-      requestAnimationFrame(showNovelPanel);
-    }
+    if(!p)return;
+    p.creationSource='novel';
+    p.title='未命名小说导读';
+    persist();
+    nav('novel');
   },true);
   if(location.hash==='#/dashboard')queueMicrotask(()=>render());
+})();
+
+
+/* Dedicated Novel Studio · preserves original text parser, provenance and permissions. */
+(function(){
+ 'use strict';
+ let step=0;
+ const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const project=()=>typeof selected==='function'?selected():null;
+ function page(){
+   const projects=activeProjects().filter(p=>p.creationSource==='novel'||p.novelSkill).filter(p=>!p.deleted);
+   let p=project();
+   if(!p||p.id==='sample-ba-zong-001'||!(p.creationSource==='novel'||p.novelSkill)){
+      p=projects[0]||null;
+   }
+   if(p&&p.id!==ui.selected)ui.selected=p.id;
+   const available=!!p?.novelSkill;
+   const current=available?Math.min(2,Math.max(0,step)):0;
+   return '<div class="wt-novel-page">'+
+    '<div class="wt-novel-page-top"><div><div class="kicker">WORLD/TOON / NOVEL STUDIO</div>'+
+    '<h1>把一本小说，变成一部漫画。</h1>'+
+    '<p>先导入作品，再理解内容，最后选择适合的漫画表达。</p></div>'+
+    '<a href="#/dashboard" class="button">返回首页</a></div>'+
+    '<div class="wt-novel-progress">'+
+     ['01 导入作品','02 理解小说','03 改编漫画'].map((n,i)=>
+       '<button type="button" data-novel-step="'+i+'" class="'+(i===current?'active':'')+'" '+(i>0&&!available?'disabled':'')+'>'+n+'</button>').join('')+
+    '</div>'+
+    (!p?'<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 01 · BEGIN</div><h2>从你想解读的小说开始</h2>'+
+     '<p>创建一个本地草稿，再上传 TXT、MD、EPUB 或文字层 PDF。</p>'+
+     '<button class="button dark" type="button" data-wt-novel-start>＋ 开始小说项目</button>'+
+     (projects.length?'<p>已有 '+projects.length+' 个小说项目</p>':'')+'</section>':
+     '<div class="wt-novel-project-control"><label>当前作品 <select data-novel-project>'+projects.map(v=>
+       '<option value="'+esc(v.id)+'"'+(v.id===p.id?' selected':'')+'>'+esc(v.title)+'</option>').join('')+'</select></label>'+
+       '<button type="button" class="button" data-wt-novel-start>＋ 新建小说项目</button></div>'+
+       (current===0?importStep(p):current===1?understandStep(p):adaptStep(p)))+
+    '</div>';
+ }
+ function importStep(p){
+   const title=p.title==='未命名小说导读'?'':p.title;
+   const panel=window.WTNovelStudio?.panel?.(p)||'<p>解析模块尚未加载，请刷新页面。</p>';
+   return '<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 01 · IMPORT</div>'+
+    '<h2>导入你要改编的小说</h2><p>可以先填写作品名，再上传本机书稿。当前深度解析以真实文件为依据，不会仅凭书名编造剧情。</p>'+
+    '<label class="wt-novel-title-label">小说名称<input data-novel-title maxlength="180" placeholder="例如：简爱、素食者、百年孤独" value="'+esc(title)+'"></label>'+
+    '<div class="wt-novel-import-panel">'+panel.replace('<details class="wt-novel-studio"','<details open class="wt-novel-studio"')+'</div>'+
+    '<div class="wt-novel-hint">🔒 本地处理原稿。是否附带原稿交给外部 AI，由你另行明确授权。</div>'+
+    (p.novelSkill?'<div class="wt-novel-main-action"><button class="button dark" data-novel-step="1">查看作品结构 →</button></div>':'')+
+    '</section>';
+ }
+ function understandStep(p){
+   const skill=p.novelSkill;
+   if(!skill)return importStep(p);
+   const chapters=skill.chapter_index||[],themes=skill.themes||[],cast=skill.cast_candidates||[];
+   const count=skill.provenance?.chapter_count||chapters.length;
+   return '<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 02 · UNDERSTAND</div>'+
+     '<h2>从结构线索，走向故事理解</h2>'+
+     '<p>已索引 '+count+' 章／段。以下是本地算法得到的统计候选，不是 AI 已核验的情节与人物关系。</p>'+
+     '<div class="wt-novel-summary-grid"><article><span>章节索引</span><strong>'+count+'</strong></article>'+
+     '<article><span>主题候选</span><strong>'+themes.length+'</strong></article>'+
+     '<article><span>人物候选</span><strong>'+cast.length+'</strong></article></div>'+
+     '<h3>主题线索</h3><div class="wt-novel-tags">'+(themes.length?themes.slice(0,12).map(x=>'<span>'+esc(x.name)+'</span>').join(''):'<span>尚无可靠主题线索</span>')+'</div>'+
+     '<h3>人物线索（待核实）</h3><p>'+esc(cast.slice(0,10).map(x=>x.name).join('、')||'没有可靠候选，需阅读原文核对')+'</p>'+
+     '<details class="wt-novel-chapter-list"><summary>展开章节索引 · '+count+' 段</summary>'+
+      chapters.map(x=>'<div><b>'+esc(x.chapter_id)+' · '+esc(x.title)+'</b><small>'+esc(x.locator)+'</small></div>').join('')+'</details>'+
+     '<div class="wt-novel-caution">目前仅完成结构蒸馏。真正的剧情梳理、人物关系和文学解读，需要 AI 阅读原文或可靠资料后独立核验。</div>'+
+     '<div class="wt-novel-actions-bottom"><button class="button" data-novel-step="0">← 修改来源</button>'+
+     '<button class="button dark" data-novel-step="2">选择漫画表达 →</button></div></section>';
+ }
+ function adaptStep(p){
+   const mode=p.storySourceSelection?.adaptation||'literary_review';
+   return '<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 03 · ADAPT</div>'+
+      '<h2>选择这本书的漫画表达方式</h2>'+
+      '<p>已建立可追溯的章节资料索引。先核查具体故事与版权，再进入人物和分镜制作。</p>'+
+      '<div class="wt-novel-choice"><article><strong>文学导读与主题解读</strong><p>适合没有剧情改编许可的作品，以原创评论、读者体验和主题探索为主。</p>'+
+      '<small>不直接复刻受版权保护的原著独特桥段</small></article>'+
+      '<article><strong>授权剧情改编</strong><p>使用原书人物与剧情；仅适用于公版作品或已取得有效授权的情况。</p>'+
+      '<small>需要作者核实授权来源和实际原文内容</small></article></div>'+
+      '<p class="wt-novel-mode">当前创作边界：'+(mode==='faithful'?'已声明有改编许可，独立核验仍未完成':'文学导读，不声称拥有剧情改编权')+'</p>'+
+      '<div class="wt-novel-actions-bottom"><button class="button" data-novel-step="1">← 返回作品理解</button>'+
+      '<a class="button dark" href="#/workspace/'+encodeURIComponent(p.id)+'/1">进入漫画编剧向导 →</a></div>'+
+      '<div class="wt-novel-caution">进入向导不代表事实、语义或版权核验已通过；正式绘图前仍须完成角色、场景和授权审核。</div></section>';
+ }
+ window.WTNovelPage=page;
+ document.addEventListener('click',ev=>{
+   const node=ev.target.closest('[data-novel-step]');if(!node)return;
+   ev.preventDefault();ev.stopImmediatePropagation();
+   const next=Number(node.dataset.novelStep);
+   if(next>0&&!project()?.novelSkill)return;
+   step=next;render();
+ },true);
+ document.addEventListener('change',ev=>{
+   const node=ev.target;
+   if(node.matches('[data-novel-project]')){
+     if(findProject(node.value)){ui.selected=node.value;step=0;render();}
+   }
+   if(node.matches('[data-novel-title]')){
+     const p=project();if(!p)return;
+     p.title=node.value.trim()||'未命名小说导读';p.sourceTitle=p.title;
+     setChange(p,'更新小说作品名称');render();
+   }
+ },true);
 })();
