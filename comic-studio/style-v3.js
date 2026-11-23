@@ -879,7 +879,7 @@ CATALOG.push({
  layout:'电影式中景、半身特写与人物互动，单画格单场景，连续镜头保持人物五官和服饰一致',
  negative:'3D塑料质感、Q版大头、写实照片、粗糙线稿、霓虹光效、九宫格拼版、角色变脸、字幕水印',
  reference:{status:'not_licensed',url:null},sample:{status:'not_generated',url:null},
- guide:{status:'pending_asset',url:null},quality_capability:{standard:false,premium:false,cinematic:false},
+ guide:{status:'original_guide',url:'/assets/wt-s21-modern-life-anime.svg',source:'WORLD/TOON原创二维风格示意',author:'WORLD/TOON · By DAVYLAB',license:'原创SVG画风参考图，仅用于本站风格展示',usage_scope:'visual_style_reference_only',asset_path:'comic-studio/assets/wt-s21-modern-life-anime.svg',git_commit:'dacb316cdd8d9c75d3add5cd4aeb685aec69b09a'},quality_capability:{standard:false,premium:false,cinematic:false},
  production_mode:'ChatGPT_pilot_required'
 });
 const CATEGORIES=['全部','东方与历史','日本漫画与动画','欧美漫画','艺术绘本','科幻与现代','儿童与轻松','3D 与数字角色'];
@@ -897,7 +897,7 @@ function isSample(x){
   x.placeholder_or_vector_rasterized===false&&x.asset_path?.startsWith('visual/style-atlas/')&&
   /^[a-f0-9]{64}$/.test(x.sha256||'')&&x.sha256===x.asset_sha256&&/^https:\/\//.test(x.url||''));
 }
-function isGuide(x){return !!(x?.status==='original_guide'&&x.url?.startsWith('/assets/style-')&&
+function isGuide(x){if(x?.url==='/assets/wt-s21-modern-life-anime.svg')return x.status==='original_guide'&&x.asset_path==='comic-studio/assets/wt-s21-modern-life-anime.svg'&&x.git_commit==='dacb316cdd8d9c75d3add5cd4aeb685aec69b09a';return !!(x?.status==='original_guide'&&x.url?.startsWith('/assets/style-')&&
  /^[a-f0-9]{64}$/.test(x.sha256||'')&&x.usage_scope==='visual_style_reference_only')}
 function art(asset,kind){
  if(kind==='guide'&&isGuide(asset))return '<a class="wt-v3-zoom wt-v3-guide-zoom" href="'+esc(asset.url)+'" target="_blank" rel="noopener noreferrer" aria-label="放大查看原创画风参考图"><img loading="lazy" src="'+esc(asset.url)+'" alt="原创漫画风格参考图，不代表已接入生成模型的最终效果"></a>';
