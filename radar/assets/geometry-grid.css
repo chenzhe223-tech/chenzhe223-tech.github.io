@@ -219,6 +219,24 @@
   #ai > #top5List > .top5-card:last-child { grid-column: 1 / -1 !important; }
 }
 
+/* On iPad the five-link desktop nav is hidden to avoid collisions:
+   show the existing editorial tabs instead of leaving users without navigation. */
+@media (min-width: 761px) and (max-width: 1024px) {
+  .tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: clamp(14px,2.8vw,26px) !important;
+    overflow-x: auto !important;
+    padding: 0 0 7px !important;
+    margin: 13px 0 18px !important;
+    border-bottom: 1px solid var(--rule) !important;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs > .tab { display: inline-flex !important; flex: 0 0 auto; min-height: 40px !important; }
+}
+
 /* Phones: no empty tracks, horizontal scroll or tiny multi-column cards. */
 @media (max-width: 760px) {
   #ai {
