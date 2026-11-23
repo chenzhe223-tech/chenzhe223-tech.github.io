@@ -87,6 +87,7 @@ jobs:
           const d=await r.json();
           if(!d.ok||!Array.isArray(d.items)||!d.items.length)throw Error("KNOWA existing topics broken");
           const news=d.items.filter(x=>x.sourceName?.startsWith("DAVYLAB News Engine"));
+          console.log("KNOWA P1 safe diagnostics",JSON.stringify({newsEngine:d.newsEngine,sources:(d.sources||[]).map(x=>({name:x.name,status:x.status,count:x.count})),originalItems:d.items.length}));
           if(!news.length)throw Error("P1 News Engine topic candidates not visible in existing KNOWA pool");
           if(news.some(x=>x.publishable!==false||x.verificationStatus!=="source_not_independently_verified"||
               !x.sourceUrl?.startsWith("https://")))throw Error("P1 evidence/rights guard violation");
