@@ -158,6 +158,35 @@ def choose_mini_card_summary(draw, story: dict, width: int):
     return "完整信息与来源详见正式简报", font(14)
 
 
+def choose_mountain_skill_description(draw, skill: dict, width: int = 565):
+    """Use a complete, readable Skill description in the fixed mountain card.
+
+    The approved layout reserves exactly three 15px text lines at (80, 1554).
+    Never truncate an arbitrary fourth line; source details remain available in
+    the online report. This only selects displayed copy, not the visual style.
+    """
+    options = [
+        str(skill.get("poster_description_zh") or "").strip(),
+        str(skill.get("description_zh") or "").strip(),
+        str(skill.get("description") or "").strip(),
+    ]
+    fnt = font(15)
+    for text in options:
+        if text and len(wrap(draw, text, fnt, width)) <= 3:
+            return text
+    for text in options:
+        if not text:
+            continue
+        match = re.search(r"[。！？；;]|[.!?](?=\s|$)", text)
+        first_sentence = text[:match.end()].strip() if match else ""
+        if len(first_sentence) >= 12 and len(wrap(draw, first_sentence, fnt, width)) <= 3:
+            return first_sentence
+    fallback = "完整功能和使用说明请查看原始项目及本期简报。"
+    if len(wrap(draw, fallback, fnt, width)) > 3:
+        raise RuntimeError("P0: mountain Skill card cannot display a complete description")
+    return fallback
+
+
 def layout_regions_for(style):
     if style == "geometric-navy":
         return {
@@ -557,7 +586,7 @@ def render_mountain_editorial(report: dict, date: str, top: list[dict], skill: d
     for line_text in name_lines:
         draw.text((80, ny), line_text, font=skill_name_font, fill=ink)
         ny += 30
-    desc = str(skill.get("description_zh") or skill.get("description") or "一个可用于日常研发的开源 AI 工作流技能。")
+    desc = choose_mountain_skill_description(draw, skill, 565)
     paragraph(draw, desc, (80, 1554), font(15), muted, 565, 3, 4)
     topics = "适用方向：" + " · ".join((skill.get("topics") or [])[:4])
     paragraph(draw, topics, (80, 1628), font(12, True), muted, 565, 2, 2)

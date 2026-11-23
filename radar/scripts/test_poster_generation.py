@@ -93,6 +93,32 @@ class PosterGenerationTests(unittest.TestCase):
         self.assertEqual(len(poster.layout_regions_for("geometric-navy")), 8)
         self.assertEqual(len(poster.layout_regions_for("mountain-editorial")), 7)
 
+    def test_mountain_skill_description_uses_complete_text_without_truncation(self):
+        image = Image.new("RGB", (poster.W, poster.H), "white")
+        draw = ImageDraw.Draw(image)
+        cases = [
+            {"poster_description_zh": "展示可核实的技能用途和项目来源。",
+             "description_zh": "极长的产品描述内容" * 50},
+            {"description_zh": "帮助开发者使用开源工具并验证结果。" + "这段新闻编辑说明会继续解释细节。" * 12},
+            {"description": "A very long unpunctuated technical description " * 45},
+        ]
+        prior = list(poster.TEXT_BOUNDS)
+        try:
+            for skill in cases:
+                with self.subTest(skill=repr(skill)[:48]):
+                    selected = poster.choose_mountain_skill_description(draw, skill, 565)
+                    self.assertLessEqual(len(poster.wrap(draw, selected, poster.font(15), 565)), 3)
+                    poster.paragraph(draw, selected, (80, 1554), poster.font(15), "black", 565, 3, 4)
+                    self.assertFalse(poster.TEXT_BOUNDS[-1]["truncated"])
+                    self.assertEqual(poster.TEXT_BOUNDS[-1]["x"], 80)
+                    self.assertEqual(poster.TEXT_BOUNDS[-1]["y"], 1554)
+                    self.assertLessEqual(poster.TEXT_BOUNDS[-1]["height"], 57)
+                    poster.TEXT_BOUNDS[:] = prior
+            self.assertEqual(poster.choose_mountain_skill_description(draw, cases[0]),
+                             cases[0]["poster_description_zh"])
+        finally:
+            poster.TEXT_BOUNDS[:] = prior
+
     def test_manifest_layout_rejects_truncated_text(self):
         manifest = {
             "design": "geometric-navy",
