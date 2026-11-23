@@ -69,7 +69,7 @@ function shotOf(i){return SHOTS[i]||'中景人物'}
 function localStoryboard(p){
  const c=ensure(p),subject=clean(p.sourceTitle||p.title).replace(/：漫画改编$/,'').slice(0,95);
  if(p.storySourceSelection?.adaptation==='literary_review'){
-  if(p.panels.length!==9)throw Error('文学导读模板必须为九格：每一维度三格');
+  if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
   const readers=c.cast?.map(x=>clean(x.name)).filter(Boolean);
   const lead=readers[0]||'原创读者',other=readers[1]||'原创编辑';
   const notes=[
@@ -83,13 +83,13 @@ function localStoryboard(p){
    ['与亲近的人重新对话',other+'在当代家中与家人交流，桌边的书只用素面道具呈现，人物衣服发型与前格一致，没有原作经典桥段。','阅读也许不能直接解决问题，却能帮助理解他人。','我可以先认真听你说。'],
    ['读完仍有一个问题',lead+'与'+other+'在清晨城市书店外合上一本素面书，远处一条宽阔人行道通向新的一天，留出标题及结尾提问的独立排版区。','故事会结束，思考仍在继续。','这部作品让你想起了谁？']
   ];
-  return notes.map((row,i)=>({
+  return Array.from({length:p.panels.length},(_,i)=>{const row=notes[Math.min(8,Math.floor(i*9/p.panels.length))];const dimension=i<Math.ceil(p.panels.length/3)?0:i<Math.ceil(p.panels.length*2/3)?1:2;return ({
    title:row[0],scene:'【'+shotOf(i)+'】'+row[1]+' 本图是三维文学导读的原创编辑插画，不得重绘《'+subject+'》的受保护具体情节或独特人物，人物脸型、服饰、材质与上格连续。',
    caption:row[2],dialogue:row[3],
    prompt:'高品质国际文化杂志导读插画，原创现实隐喻，单画面无文字无对白气泡；'+
-    (i<3?'第一维度：作品讲了什么（事实待研究核验）':i<6?'第二维度：揭示什么人生哲学（独立评论）':'第三维度：对普通人的意义（原创当代人物）')+
+    (dimension===0?'第一维度：作品讲了什么（事实待研究核验）':dimension===1?'第二维度：揭示什么人生哲学（独立评论）':'第三维度：对普通人的意义（原创当代人物）')+
     '；'+shotOf(i)+'；'+style(c.styleId).material+'；'+style(c.styleId).lighting
-  }));
+  })});
  }
 
  const a=clean(c.cast?.[0]?.name)||'主人公',b=clean(c.cast?.[1]?.name)||'搭档';
@@ -137,7 +137,7 @@ function applyStoryboard(p,panels,meta,replace=false){
  if(p.handoff?.repoQueuedAt)throw Error('该版本已正式派单，不能修改既有故事');
  if(!Array.isArray(panels)||!Array.isArray(p.panels)||panels.length!==p.panels.length||p.panels.length<4||p.panels.length>60)throw Error('分镜数量必须与作品篇幅一致（4–60格）');
  const existing=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));
- if(replace===true&&existing&&!confirm('这会替换你当前九格中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
+ if(replace===true&&existing&&!confirm('这会替换你当前作品中的文字与分镜，但保留已上传图片。确认覆盖？'))return false;
  const fields=['title','scene','caption','dialogue','prompt'];
  let updated=0;
  for(let i=0;i<p.panels.length;i++){
@@ -160,13 +160,13 @@ function applyStoryboard(p,panels,meta,replace=false){
   if(enrolled.unresolved.length)p.characterProfileReview={status:'needs_author_role_confirmation',candidates:enrolled.unresolved};
   else if(p.characterProfileReview?.status==='needs_author_role_confirmation')delete p.characterProfileReview;
  }
- markDirty(p);setChange(p,meta.method==='verified_model_response'?'AI生成九格可编辑脚本（仍需人工复审）':'本地剧情规则生成九格草稿（非大模型输出）');
+ markDirty(p);setChange(p,meta.method==='verified_model_response'?'AI生成'+p.panels.length+'格可编辑脚本（仍需人工复审）':'本地剧情规则生成'+p.panels.length+'格草稿（非大模型输出）');
  step=2;render();
  return true;
 }
 function draft(p,replace=true){
  const ok=applyStoryboard(p,localStoryboard(p),{method:'local_structure_rules',provider:'local',analysis:'本地结构化分镜建议，尚未经大模型分析'},replace);
- if(ok)notify('已填写九格本地规则草稿；这不是 AI 模型输出，可继续逐格编辑');
+ if(ok)notify('已填写'+p.panels.length+'格本地规则草稿；这不是 AI 模型输出，可继续逐格编辑');
  return ok;
 }
 function aiStoryPayload(p,provider){
@@ -227,12 +227,9 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
      throw Error('模型未返回可用的4–60格完整分镜');
   if(selected()?.id!==p.id||p.handoff?.repoQueuedAt)throw Error('当前作品已切换或已派单，原始草稿未被覆盖');
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
-  if(result.panels.length!==p.panels.length){
-    if(p.panels.some(x=>x.image)||p.cover)throw Error('AI 推荐的新篇幅与已上传图片不匹配，请先建立修订作品');
-    p.panels=Array.from({length:result.panels.length},(_,i)=>p.panels[i]||makePanel(i));
-  }
+  if(result.panels.length!==p.panels.length)throw Error('AI 返回'+result.panels.length+'格，与作者选择的'+p.panels.length+'格不一致；拒绝覆盖，请按所选篇幅重新生成');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
-  if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑九格草稿，请人工确认');
+  if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
    draft(p,false);notify('内置模型暂不可用，已退回本地规则草稿（非AI模型输出）');
@@ -319,7 +316,7 @@ function approve(p){
  const errors=checks(p);
  if(errors.length)throw Error('暂无法定稿：'+errors.slice(0,3).join('；')+(errors.length>3?' 等'+errors.length+'项':''));
  if(p.handoff?.repoQueuedAt)throw Error('本版本已经正式派单，不可再次锁定覆盖');
- if(!confirm('确认画风、两名角色、故事主旨和九格分镜都是最终制作依据？锁定后任何修改都需要重新确认。'))return;
+ if(!confirm('确认画风、两名角色、故事主旨和'+p.panels.length+'格分镜都是最终制作依据？锁定后任何修改都需要重新确认。'))return;
  const c=ensure(p);if(p.seriesId&&p.seriesEpisode===1){p.seriesBible={...(p.seriesBible||{}),title:p.seriesTitle||p.title,world:c.world,style_id:c.styleId,characters:structuredClone(c.cast),continuity:'固定角色容貌、比例、服饰、标记与视觉风格；续章可以改编剧情，但不可无故改造定妆'};}
  c.approval={lock_hash:digest(p),approved_at:new Date().toISOString(),author_approved:true};
  setChange(p,'作者锁定创作导演方案（不代表对事实和出版的审核）');render();notify('创意定稿已锁定；可以创建 ChatGPT 制作任务');
@@ -395,7 +392,7 @@ function review(p,c){
  '<p>后续 ChatGPT 必须先交一张角色定妆图和首格试画，作者确认后才能继续制作其余画格；实际图片和风格一致性仍需验收。</p>'+
  (locked?'<p class="director-approved">制作方案已锁定 · '+e(c.approval.approved_at)+' · 锁码 '+e(c.approval.lock_hash)+'</p>':
  '<div class="director-review-gaps">'+(errs.length?'<b>派单前待处理 '+errs.length+' 项</b><p>'+errs.map(e).map(x=>e(x)).join(' · ')+'</p>':'<b>所有字段已经准备好，请确认最终方案</b>')+'</div>')+
- '<label class="director-consent"><input type="checkbox" data-director-reviewed="1" '+(c.reviewed?'checked':'')+(p.handoff?.repoQueuedAt?' disabled':'')+'> 我已检查剧情、人物、画风与九格分镜，并理解当前预览非真实成品。</label>'+
+ '<label class="director-consent"><input type="checkbox" data-director-reviewed="1" '+(c.reviewed?'checked':'')+(p.handoff?.repoQueuedAt?' disabled':'')+'> 我已检查剧情、人物、画风与'+p.panels.length+'格分镜，并理解当前预览非真实成品。</label>'+
  '<div class="buttons"><button type="button" class="button dark" data-director-action="approve" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认并锁定制作方案</button>'+
  '<a href="#/handoff/'+e(p.id)+'" class="button">前往制作交接 →</a></div></section></div>';
 }
