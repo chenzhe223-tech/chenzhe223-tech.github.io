@@ -43,8 +43,32 @@ class DiscoveryTest(unittest.TestCase):
         self.assertIsNone(science.normalize(item(published={"date-parts": [[2027, 1, 10]]}), "nature", NOW))
 
     def test_science_issn_source(self):
-        x = science.normalize(item(**{"container-title": ["Science"]}), "science", NOW)
+        x = science.normalize(item(**{
+            "DOI": "10.1126/science.aeg4265",
+            "container-title": ["Science"],
+            "abstract": "<jats:p>" + "Controlled original research results. " * 20 + "</jats:p>",
+        }), "science", NOW)
         self.assertEqual(x["journal"], "Science")
+
+    def test_science_news_is_not_research(self):
+        x = science.normalize(item(**{
+            "DOI": "10.1126/science.aeo2673",
+            "container-title": ["Science"],
+            "title": ["News story about a scientific event"],
+            "abstract": "Short news summary",
+        }), "science", NOW)
+        self.assertIsNone(x)
+
+    def test_nature_news_is_not_research(self):
+        x = science.normalize(item(**{
+            "DOI": "10.1038/d41586-026-03787-5",
+            "title": ["Nature News story"],
+        }), "nature", NOW)
+        self.assertIsNone(x)
+
+    def test_author_correction_is_not_research(self):
+        x = science.normalize(item(title=["Author Correction: Previous study"]), "nature", NOW)
+        self.assertIsNone(x)
 
     def test_deduplicate_do_is_without_losing_summary(self):
         first = {"doi": "10.1126/science.abc123", "source": "science", "published_at": "2026-11-20", "summary": ""}
