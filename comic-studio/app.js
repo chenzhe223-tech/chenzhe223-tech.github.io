@@ -314,6 +314,30 @@ ${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务�
 function wfInitTask(p){let h=p.handoff||{};if(!h.taskId||wfPhase(p)==='not_started'){h.taskId='WT-'+new Date().toISOString().replace(/\D/g,'').slice(0,14)+'-'+uid().slice(0,8);h.taskAt=now()}h.mode=wfMode(p);h.phase='task_ready';p.handoff=h;setChange(p,'生成 '+wfProducer(p)+' 制作任务');return h}
 
 function wfIsHub(p){return wfProducer(p)==='ChatGPT'||wfProducer(p)==='WorkBuddy'}
+function wfHubProductionPrompt(p,task){
+ const n=p.panels.length;
+ if(!['ChatGPT','WorkBuddy'].includes(task.producer)||!Number.isInteger(n)||n<4||n>60||n!==task.panel_count)
+  throw Error('Hub 制作方或作者锁定篇幅不一致');
+ const end=String(n).padStart(2,'0'),target=task.producer==='ChatGPT'?'chatgpt':'workbuddy';
+ return [
+ '# WORLD/TOON · By DAVYLAB｜AI Task Hub 自动领单完整制作指令',
+ '任务编号：'+task.task_id+'；制作方：'+task.producer+'；目标：'+n+'张独立漫画 PNG ＋ 1 张独立封面 PNG（共'+(n+1)+'张图片）。',
+ '【唯一来源】作者已锁定的 creative_direction、production-bible.json、render_jobs.json 和本文件共同构成正式制作依据。必须遵守已批准的角色造型、场景、剧情、对白和视觉风格，任何不一致应中止并标记 blocked，不可私自扩写格数。',
+ '【领取方式】仅从私有仓库 chenzhe223-tech/ai-task-sync 的 tasks/'+task.task_id+'/ 读取任务。检查 target='+target+'、状态 queued 和 package.zip SHA256，先成功写回 claimed 才开始。禁止使用其他任务的 ZIP 或凭空声称已经扫描或领取。',
+ '【镜头数量门禁】只制作序号 01–'+end+' 共'+n+'张独立分镜，另外制作封面 cover.png。禁止额外生成第'+(n+1)+'格，禁止强行补到九格，不得将封面计入分镜数量。每格的场景、人物动作、台词与 render_jobs 对应，一格一镜头。',
+ '【单张生图协议】严格遵守 SINGLE_IMAGE_PER_CALL_V2。每次仅把 render_jobs.json 的当前 jobs[i].prompt 输入模型，单次只生成1张原生3:4、至少1080×1440的 PNG，禁止九宫格拼图、多个场景、条漫、拼版、裁切放大充数。台词通过独立文字层排版并逐字校核。',
+ '【定妆与首格】先形成真实 character-sheet.png 和 pilot-01.png，在作品要求的有效作者审批完成后才继续批量生成。作者审核不是由制作平台自行签发；未经批准不能把样稿标记为已完成全套。',
+ '【文件与验收】必须真实生成 cover.png、panels/01.png 至 panels/'+end+'.png、caption.md、sources.md、QA_STATUS.md、manifest.json、production_state.json，并形成单个可下载正式 ZIP。按该任务实际 panel_count 检验文件数量、图像尺寸、哈希、视觉一致性、中文、来源和版权；任何缺失均记为 blocked 或 pending，不能虚报完成。',
+ '【事实与版权】研究型题材先核验来源及日期；未经证实的真人指控不得作为新闻事实绘制。无授权不得复制受保护的文学作品独特桥段、对白或人物形象。原创故事不得伪造原始资料。',
+ task.producer==='ChatGPT'
+ ?'【交付终点】ChatGPT 只需制作并交付真实完整 ZIP 给作者，由作者决定是否交给 WorkBuddy 上传公众号；不得自动发表。'
+ :'【交付终点】WorkBuddy 需完成真实全套漫画和 QA，只有得到作者另行确认的最终出版授权后才可进入公众号后台上传及正式发表，必须回写文章链接、后台证据和实际发布时间。',
+ '【连续执行与状态】只恢复本任务尚未完成的画格，已通过 QA 的真实 PNG 不重复制作。执行器无权限、无图像工具、配额不足、尚未授权时如实回写 blocked/needs_input；GitHub queued 不等于 AI 自动开工。',
+ '【作者批准的分镜】',
+ ...p.panels.map((row,i)=>'第'+String(i+1).padStart(2,'0')+'格：'+(row.title||'')+'\n场景：'+(row.scene||'')+'\n旁白：'+(row.caption||'')+'\n对白：'+(row.dialogue||'')),
+ ].join('\n\n');
+}
+
 function wfHubStartup(p,task){
  return [
  'WORLD/TOON · AI TASK HUB · V2｜唯一任务 '+task.task_id,
@@ -373,7 +397,7 @@ async function wfMakeTask(p){
  }
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
- const task=wfTaskObject(p),prompt=wfPrompt(p);
+ const task=wfTaskObject(p),prompt=wfIsHub(p)?wfHubProductionPrompt(p,task):wfPrompt(p);
  const bible=wfProductionBible(p,task);
  const blockers=bible.conflicts.filter(x=>/REVIEW_REQUIRED|REVISION_REQUIRED/.test(x.code));
  if(blockers.length)throw Error('生产母版预检未通过，请先修订并重新锁定创意：'+blockers.map(x=>x.message).join('；'));
