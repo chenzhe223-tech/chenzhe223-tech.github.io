@@ -648,6 +648,42 @@ async function wtHubSha256(bytes){
  const d=await crypto.subtle.digest('SHA-256',bytes);
  return Array.from(new Uint8Array(d),b=>b.toString(16).padStart(2,'0')).join('');
 }
+// Owner-only, non-production connection smoke test. No comic task or publication writes.
+async function wtHubSmoke(request,env){
+ const auth=await wtArchiveAuth(request,env);
+ if(auth.error)return wtJson({error:auth.error},auth.status);
+ if(!env.AI_TASK_HUB_GITHUB_TOKEN)return wtJson({configured:false,read:false,write:false,error:'专用 Secret 不存在'},503);
+ const path='/contents/healthchecks/worldtoon-hub-connection.json';
+ try{
+  const repo=await wtHubRequest(env,'');
+  if(!repo.ok||repo.body.private!==true)return wtJson({configured:true,read:false,write:false,error:'GitHub 私有仓读取失败或目标非 Private'},502);
+  const schema=await wtHubRequest(env,'/contents/contracts/worldtoon-task.v2.schema.json');
+  if(!schema.ok)return wtJson({configured:true,read:false,write:false,error:'无法读取 WorldToon V2 协议'},502);
+  const checked={schema:'davylab.worldtoon.hub-connection-check.v1',project:'worldtoon',
+   purpose:'write-read smoke test only; not a comic production task',status:'test_only'};
+  const raw=JSON.stringify(checked,null,2)+'\n',hash=await wtHubSha256(new TextEncoder().encode(raw));
+  const existing=await wtHubRequest(env,path);
+  if(existing.ok){
+   let text='';
+   if(existing.body.encoding==='base64')text=wtUnb64(existing.body.content);
+   if(text!==raw)return wtJson({configured:true,read:true,write:false,error:'健康检查文件已存在且内容不同，拒绝覆盖'},409);
+   return wtJson({configured:true,read:true,write:true,verified:true,existing:true,
+    repo:WT_HUB_REPO,path:'healthchecks/worldtoon-hub-connection.json',sha256:hash});
+  }
+  if(existing.status!==404)throw Error('健康检查文件查询失败 HTTP '+existing.status);
+  const created=await wtHubRequest(env,path,'PUT',{message:'test(worldtoon): verify private Hub write and read-back',
+   content:wtB64(raw)});
+  if(!created.ok)throw Error('Hub 测试文件写入失败 HTTP '+created.status);
+  const back=await wtHubRequest(env,path);
+  if(!back.ok||back.body.encoding!=='base64'||wtUnb64(back.body.content)!==raw)
+   throw Error('测试文件远端回读内容不一致');
+  return wtJson({configured:true,read:true,write:true,verified:true,existing:false,
+   repo:WT_HUB_REPO,path:'healthchecks/worldtoon-hub-connection.json',
+   commit:created.body.commit?.sha||null,sha256:hash});
+ }catch(err){
+  return wtJson({configured:true,read:true,write:false,verified:false,error:'连接验收失败：'+String(err.message||err).slice(0,150)},503);
+ }
+}
 async function wtHubDispatch(request,env){
  const auth=await wtArchiveAuth(request,env);
  if(auth.error)return wtJson({error:auth.error},auth.status);
@@ -734,6 +770,7 @@ async function wtHubDispatch(request,env){
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
  if(p==='/api/archive/hub-dispatch'&&method==='POST')return wtHubDispatch(request,env);
+ if(p==='/api/archive/hub-smoke'&&method==='POST')return wtHubSmoke(request,env);
   const v3=await wt3ArchiveV3(request,env,url);if(v3)return v3;
  if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
  if(p==='/api/archive/status'&&method==='GET'){
