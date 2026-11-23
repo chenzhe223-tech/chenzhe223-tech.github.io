@@ -150,6 +150,7 @@ jobs:
               ".github/workflows/news-engine-public-api.yml",
               ".github/workflows/news-engine-p1-consumers.yml",
               ".github/workflows/news-engine-p2.yml",
+              ".github/workflows/news-engine-p3.yml",
           }
           # P1 is limited to the existing read-only WorldToon/WeChat discovery
           # entrypoints. Never allow edits to Radar publication, poster or auth.
@@ -157,6 +158,9 @@ jobs:
               "comic-studio/briefing.js",
               "comic-studio/worker.js",
               "comic-studio/index.html",
+              "comic-studio/news-history-p3.js",
+              "comic-studio/news-history-p3.css",
+              "topic-studio/news-history-p3.js",
               "topic-studio/xnews-discovery.js",
               "topic-studio/index.html",
           }
@@ -182,20 +186,40 @@ jobs:
                   "\n  schedule:", "contents: write", "id-token: write",
                   "wrangler deploy", "cloudflare.request", "git push"
               )), "P1 QA workflow must be read-only and deploy-isolated"
+          if ".github/workflows/news-engine-p3.yml" in changed:
+              from pathlib import Path
+              wf=Path(".github/workflows/news-engine-p3.yml").read_text()
+              assert "contents: read" in wf and "branches: [main]" in wf
+              assert "node news-engine/test_p3_browser.cjs" in wf
+              assert "node news-engine/test_p3_online.cjs" in wf
+              assert not any(term in wf for term in (
+                  "\n  schedule:", "contents: write", "id-token: write",
+                  "wrangler deploy", "cloudflare.request", "git push",
+                  "secrets.GITHUB_TOKEN"
+              )), "P3 integration CI must be read-only"
+          p3=Path("news-engine/p3-widget.js")
+          if any(p in changed for p in ("comic-studio/news-history-p3.js","topic-studio/news-history-p3.js")):
+              assert p3.exists(), "Canonical P3 widget missing"
+              for peer in ("comic-studio/news-history-p3.js","topic-studio/news-history-p3.js"):
+                  assert Path(peer).read_bytes()==p3.read_bytes(), "P3 shared widget drift"
           if "comic-studio/worker.js" in changed:
-              # Security-only exception: exactly one CSP connect-src allowlist entry,
-              # preserving every other Worker byte and old Supabase permissions.
+              # Strict Worker exception: one-line CSP origin addition (P1) OR
+              # exactly two explicit P3 first-party static filenames. The
+              # whole old page CSP, origin, bindings and route code stay intact.
               patch = subprocess.check_output(
                   ["git","diff","--unified=0","origin/main...HEAD","--","comic-studio/worker.js"],
                   text=True
               )
               gone = [x[1:] for x in patch.splitlines() if x.startswith("-") and not x.startswith("---")]
               added = [x[1:] for x in patch.splitlines() if x.startswith("+") and not x.startswith("+++")]
-              old_origin = "connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co;"
-              new_origin = "connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co https://davylab-news-api.chenzhe223.workers.dev;"
-              assert len(gone) == len(added) == 1, "Worker CSP change must be single-line"
-              assert old_origin in gone[0], "Existing CSP source was changed"
-              assert gone[0].replace(old_origin, new_origin) == added[0], "Only exact approved News API CSP change allowed"
+              assert len(gone)==len(added)==1, "WorldToon Worker change must be exactly one line"
+              old_csp = "connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co;"
+              new_csp = "connect-src 'self' https://qjyqaydfezbpeimpvlcb.supabase.co https://davylab-news-api.chenzhe223.workers.dev;"
+              old_static = "briefing\\.js|archive\\.js"
+              new_static = "briefing\\.js|news-history-p3\\.js|news-history-p3\\.css|archive\\.js"
+              allowed = (old_csp in gone[0] and gone[0].replace(old_csp,new_csp)==added[0]) or (
+                  old_static in gone[0] and gone[0].replace(old_static,new_static)==added[0])
+              assert allowed, "Only approved source allowlist or CSP changes permitted"
           if ".github/workflows/news-engine-p2.yml" in changed:
               from pathlib import Path
               workflow = Path(".github/workflows/news-engine-p2.yml").read_text()

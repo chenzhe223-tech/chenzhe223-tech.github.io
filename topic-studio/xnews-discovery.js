@@ -257,6 +257,30 @@ $x("xnewsSearch")?.addEventListener("input",e=>{state.query=e.target.value;state
 $x("xnewsSort")?.addEventListener("change",e=>{state.sort=e.target.value;render()});
 $x("xnewsMore")?.addEventListener("click",()=>{state.visible+=6;render()});
 $x("xnewsRefresh")?.addEventListener("click",()=>load(true));
+// Shared P3 search is opt-in under the existing Overseas discovery module.
+const p3Details=$x("newsEngineP3Topic");
+if(p3Details)p3Details.addEventListener("toggle",function(){
+ if(!p3Details.open)return;
+ const mount=$x("neP3Topic");
+ if(!window.DAVYLABNewsP3){mount.textContent="历史搜索组件暂不可用，原有海外选题池仍正常。";return}
+ window.DAVYLABNewsP3.mount(mount,{name:"公众号",onSelect:function(x){
+  if(x.publishable!==false||!x.source_url?.startsWith("https://"))return;
+  const candidate=normalize({id:newsApiId(x.source_url),title:x.title,summary:x.summary||"",
+   date:String(x.latest_seen||x.issue_date||"").slice(0,10),source:x.source||"新闻来源",
+   original_url:x.source_url,tags:["DAVYLAB News Engine",x.topic_category||"AI"],
+   source_kind:"news_engine_public_api"});
+  if(!candidate)return;
+  // The platform's own toFeed/addFeed path retains existing edit, prompt and
+  // poster/long-form approval. P2 scores are editorial rules, not true traffic.
+  candidate.priority=Math.max(0,Math.min(100,Number(x.editorial_score?.total)||0));
+  candidate.scoreType="deterministic_rule_v2_not_social_heat";
+  if(!state.all.some(v=>canonical(v.original_url)===canonical(candidate.original_url)))
+   state.all.unshift(candidate);
+  addFeed(toFeed(candidate));
+  refreshMerged();
+  window.DAVYLABTopicPool?.reveal?.(candidate.original_url);
+ }});
+});
 const baseSaveTopics=saveTopics;
 saveTopics=function(){baseSaveTopics();if(state.loaded)render()};
 window.DAVYLABXNews={source:NEWS_API,fallbackSource:SNAPSHOT,load,rank:internalScore,lensOf,normalize,getItems:()=>state.all.slice(),status:()=>({count:state.all.length,cached:state.cached,loaded:state.loaded,originalCount:state.originalCount,newsEngineOk:state.newsEngineOk,newsEngineDate:state.newsEngineDate})};
