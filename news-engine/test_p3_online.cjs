@@ -18,7 +18,7 @@ async function one(browser,width,which){
    await page.locator('button[data-brief="view"][data-value="history"]').waitFor({timeout:25000});
    await page.locator('button[data-brief="view"][data-value="history"]').click();
   }else if(which==="topic"){
-   await page.evaluate(()=>{if(typeof changeSection==="function")changeSection("discover")});
+   await page.evaluate(()=>{if(typeof changeSection==="function")changeSection("discover");window.DAVYLABEditorialWorkspace?.setSource("xnews",false)});
    await page.locator("#newsEngineP3Topic summary").waitFor({timeout:25000});
    await page.locator("#newsEngineP3Topic summary").click();
   }else{
