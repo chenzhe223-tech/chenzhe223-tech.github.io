@@ -293,8 +293,39 @@ ${previewGate&&!previewGate.ready?'<p class="wf-meta" role="alert">生产任务�
 (typeof wtSharedHandoffPanel==='function'?wtSharedHandoffPanel(p):'<div class="box"><h2>公众号发表档案</h2><p>共享档案读取组件尚未载入。请稍后刷新。</p></div>')+
 `<section class="box" style="margin-top:20px"><h3>三方责任界面</h3><p class="wf-instructions"><strong>WORLD/TOON：</strong>发出明确且可复查的任务工单，不生图、不代替 ChatGPT。<br><strong>ChatGPT：</strong>完成漫画生产及完整的可下载交付包，不能以空文件或生成说明冒充成品。<br><strong>WorkBuddy：</strong>核验成品、进入公众号后台上传贴图，按授权的计划发表，并回传文章链接或后台结果。不依赖平台猜测发表结果。</p></section>`}
 function wfInitTask(p){let h=p.handoff||{};if(!h.taskId||wfPhase(p)==='not_started'){h.taskId='WT-'+new Date().toISOString().replace(/\D/g,'').slice(0,14)+'-'+uid().slice(0,8);h.taskAt=now()}h.mode=wfMode(p);h.phase='task_ready';p.handoff=h;setChange(p,'生成 '+wfProducer(p)+' 制作任务');return h}
+
+function wfIsHub(p){return wfProducer(p)==='ChatGPT'||wfProducer(p)==='WorkBuddy'}
+function wfHubStartup(p,task){
+ return [
+ 'WORLD/TOON · AI TASK HUB · V2｜唯一任务 '+task.task_id,
+ '在私有仓 chenzhe223-tech/ai-task-sync 中查找 tasks/'+task.task_id+'/task.json，严格匹配 target='+(task.producer==='ChatGPT'?'chatgpt':'workbuddy')+'、schema_version=2、project=worldtoon、status=queued。',
+ '下载同目录 package.zip；计算 SHA256 并与 task.json.package_sha256 核对一致。必须原子写入 claimed 并回读确认后开工，不可擅自领取别人的任务。',
+ '打开附件里的 task.json、制作指令、render_jobs.json、production-bible.json。角色定妆和首格经作者批准后，逐张独立生图（3:4，原生至少 1080×1440），完成封面、九张画格、文案与 QA，形成完整 ZIP。',
+ task.producer==='ChatGPT'?'ChatGPT 的交付为完整可下载 ZIP；交给作者，再由作者交给 WorkBuddy 上传公众号。严禁自动发表。':'WorkBuddy 可负责制作和公众号上传，但实际发表必须经过作者独立授权、版权核验与图片 QA，回写真实发表回执。',
+ '如果没有实际的扫描器、GitHub 访问权限或模型工具，明确报告 blocked；任务入仓不代表已经自动领取或开始制作。'
+ ].join('\n\n');
+}
+async function wfHubPush(p,task,blob){
+ if(typeof wtArchiveApi!=='function')throw Error('Hub 上传服务未加载');
+ const bytes=new Uint8Array(await blob.arrayBuffer());
+ if(bytes.length>8*1024*1024)throw Error('任务包超过 8 MiB；已阻止上传，请删去大附件');
+ const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),b=>b.toString(16).padStart(2,'0')).join('');
+ let raw='';for(let i=0;i<bytes.length;i+=8192)raw+=String.fromCharCode(...bytes.subarray(i,i+8192));
+ const digest=await wtArchiveKey(p);
+ if(task.task_id!=='WT-'+digest.slice(0,20))throw Error('任务编号与去重指纹不一致');
+ const record={schema_version:2,id:task.task_id,project:'worldtoon',source:'worldtoon',
+  target:task.producer==='ChatGPT'?'chatgpt':'workbuddy',producer:task.producer,
+  title:p.title,status:'queued',publisher:'WorkBuddy',created_at:task.created_at||new Date().toISOString(),
+  dedupe_key:digest,package_path:'package.zip',package_sha256:sha,rights_review_required:true};
+ const result=await wtArchiveApi('hub-dispatch',{method:'POST',body:JSON.stringify({task:record,package_base64:btoa(raw)})});
+ if(!result.verified||result.task_id!==task.task_id||result.sha256!==sha||result.repo!=='chenzhe223-tech/ai-task-sync')throw Error('未得到 Hub 远端校验确认');
+ return result;
+}
+
 async function wfMakeTask(p){
- if(p?.handoff?.repoQueuedAt&&p.productionAgent==='WorkBuddy')throw Error('已派单的 WorkBuddy 任务不可覆盖，请复制作品并创建修订版');
+ if(p?.handoff?.repoQueuedAt)throw Error('该任务已派单，不能覆盖；请复制作品建立修订版');
+ if(wfIsHub(p)&&p.novelSkill?.export_source_approved)throw Error('私人小说原稿不能自动入仓，请关闭原文导出或改用手动任务包');
+ if(wfIsHub(p)&&(p.creativeDirection?.cast||[]).some(x=>x.portraitMedia))throw Error('真实肖像原图不可未经独立授权自动入 Hub，请使用不含真人原照的方案');
  wfPrepareTask(p);
  const missing=wfCanTask(p);if(missing.length)throw Error('请先补齐：'+missing.join('、'));
  // Run the same preflight displayed in the UI before creating any task ID or persisting a task_ready state.
@@ -374,15 +405,33 @@ async function wfMakeTask(p){
    typeof window.WTNovelStudio?.semanticPrompt==='function'?window.WTNovelStudio.semanticPrompt(p):
    '请从小说原文或可靠来源逐章核实人物、事件、主题与叙事方法。此索引只有本地结构提取，非AI语义蒸馏；版权与发布仍待作者独立核查。')});
  }
- const launch=wfStartupCommand(p,task);
+ const launch=wfIsHub(p)?wfHubStartup(p,task):wfStartupCommand(p,task);
+ if(wfIsHub(p)){task.production_mode='ai_task_hub_v2';task.github_sync_required=true;task.delivery_target=task.producer==='ChatGPT'?'creator_complete_zip':'workbuddy_pending_author_publication_approval';}
  task.startup_command_file=task.producer+'_复制粘贴开工指令.txt';
  task.entrypoint_file='00_START_HERE.md';
  task.requires_explicit_user_message=true;
  task.attachment_alone_starts_production=false;
  const files=[{name:'00_START_HERE.md',bytes:enc.encode(wfStartHere(p,task,launch))},
  {name:task.producer+'_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
- {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
- saveFile(packZip(files),'WORLD_TOON_'+task.producer+'任务_'+safeName(p.title)+'.zip');
+ {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(wfIsHub(p)?launch+'\n\n'+prompt:prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
+ const taskZip=packZip(files);
+ if(wfIsHub(p)){
+  try{
+   const ack=await wfHubPush(p,task,taskZip);
+   p.handoff={...p.handoff,repository:'chenzhe223-tech/ai-task-sync',repoTaskPath:ack.path,
+    repoCommit:ack.commit||null,repoQueuedAt:now(),hubVerified:true,hubPackageSha256:ack.sha256,
+    hubTarget:ack.target,repoError:null,directDeliveryMode:false,repoDedupeKey:await wtArchiveKey(p)};
+   setChange(p,'AI Task Hub 工单已入仓：'+ack.task_id);render();
+   notify('已校验入 Hub：'+ack.task_id+'；等待执行端真正领取');
+  }catch(err){
+   saveFile(taskZip,'WORLD_TOON_'+task.producer+'_Hub未入仓_本地任务_'+safeName(p.title)+'.zip');
+   p.handoff={...p.handoff,repoQueuedAt:null,hubVerified:false,repoError:String(err?.message||err)};
+   setChange(p,'Hub 派单失败，已导出本地备用任务');render();
+   notify('尚未派单：'+p.handoff.repoError+'。本地 ZIP 并不代表已开始制作');
+  }
+  return;
+ }
+ saveFile(taskZip,'WORLD_TOON_'+task.producer+'任务_'+safeName(p.title)+'.zip');
  if(task.producer!=='WorkBuddy'){
   p.handoff={...p.handoff,directDeliveryMode:true,directTaskExportedAt:now(),repoError:null};
   setChange(p,task.producer+' 直达完整素材生产（无需 GitHub）');render();
@@ -395,14 +444,14 @@ async function wfMakeTask(p){
 }
 async function wfCopyPrompt(p){
  const h=wfGet(p);
- if(!h.taskId||!h.directTaskExportedAt||wfPhase(p)==='not_started')
+ if(!h.taskId||(!(h.hubVerified&&h.repoQueuedAt)&&!h.directTaskExportedAt)||wfPhase(p)==='not_started')
   throw Error('请先生成 '+wfProducer(p)+' 制作任务 ZIP，然后复制同一任务的开工命令。');
  if(!wtDirector?.approved?.(p))
   throw Error('导演台创意方案已改变，旧任务与当前作品可能不一致，请重新锁定并导出 ZIP');
  const preflight=wfProductionPreflight(p);
  if(!preflight.ready)throw Error('当前制作预检未通过，请先修复：'+preflight.reasons.join('；'));
  const task=wfTaskObject(p);
- await copyText(wfStartupCommand(p,task));
+ await copyText(wfIsHub(p)?wfHubStartup(p,task):wfStartupCommand(p,task));
 }
 const wfImgExt=f=>/\.(png|jpg|jpeg|webp)$/i.test(f),wfImageMime=n=>/\.png$/i.test(n)?'image/png':/\.webp$/i.test(n)?'image/webp':'image/jpeg';
 function wfImageFile(name,bytes){let type=wfImageMime(name);if(bytes.length<16||bytes.length>12*1024*1024)throw Error('单张图片超出 12MB 或为空：'+name);let png=bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71;let jpg=bytes[0]===255&&bytes[1]===216&&bytes[2]===255;let webp=bytes[0]===82&&bytes[1]===73&&bytes[2]===70&&bytes[3]===70&&String.fromCharCode(...bytes.slice(8,12))==='WEBP';if(!(png&&type==='image/png'||jpg&&type==='image/jpeg'||webp&&type==='image/webp'))throw Error('图片格式与文件名不一致：'+name);return new Blob([bytes],{type})}

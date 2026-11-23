@@ -225,7 +225,7 @@
        '<button class="button dark" data-wf="task">生成 WorkBuddy 正式工单 →</button>';
      return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
        '<p>'+route+'</p><label class="wf-producer-label">选择 AI 制作平台 <select id="wf-producer" '+(p.handoff?.repoQueuedAt||p.handoff?.directTaskExportedAt?'disabled':'')+'>'+wfProducerOptions(p)+'</select></label><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
-       '<p>生产同步：'+(direct?'本地直达模式，GitHub 暂停':'GitHub 工单 '+(queued?'已确认入仓':'尚未确认'))+'</p>'+
+       '<p>生产同步：'+(['ChatGPT','WorkBuddy'].includes(s.agent)?'AI Task Hub · '+(p.handoff?.hubVerified?'已核验入仓':'尚未核验入仓'):'手动任务包，不入 Hub')+'</p>'+
        '<p>当前状态：'+html(direct?(localExported?'任务包已导出，等待所选 AI 平台完整素材':'导演台定稿后即可下载任务 ZIP'):(s.row?.status||p.handoff?.repoError||s.statusText))+'</p></div>'+
        '<div class="buttons">'+action+
        ((queued||localExported)?'<button class="button" data-wt4-step="4">进入成品回传 →</button>':'')+
