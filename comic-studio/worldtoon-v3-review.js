@@ -224,7 +224,7 @@
        queued?'<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>':
        '<button class="button dark" data-wf="task">生成 WorkBuddy 正式工单 →</button>';
      return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
-       '<p>'+route+'</p><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
+       '<p>'+route+'</p><label class="wf-producer-label">选择 AI 制作平台 <select id="wf-producer" '+(p.handoff?.repoQueuedAt||p.handoff?.directTaskExportedAt?'disabled':'')+'>'+wfProducerOptions(p)+'</select></label><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
        '<p>生产同步：'+(direct?'本地直达模式，GitHub 暂停':'GitHub 工单 '+(queued?'已确认入仓':'尚未确认'))+'</p>'+
        '<p>当前状态：'+html(direct?(localExported?'任务包已导出，等待所选 AI 平台完整素材':'导演台定稿后即可下载任务 ZIP'):(s.row?.status||p.handoff?.repoError||s.statusText))+'</p></div>'+
        '<div class="buttons">'+action+
@@ -236,10 +236,10 @@
    if(i===4){
      const pack=typeof window.WT3ImportPanel==='function'?window.WT3ImportPanel(p):'';
      const h=p.handoff||{},pilot=p.creativeDirection?.pilotApproval;
-     const direct=s.agent==='ChatGPT';
+     const direct=s.agent!=='WorkBuddy';
      const notice=!direct?
        '<p>WorkBuddy 生产任务通过 GitHub 独立队列领取，平台只显示可核验结果。可在生产调度查看执行情况。</p>':
-       '<p>ChatGPT 成品 ZIP 只做本地文件完整性校验与视觉 QA，GitHub 上传已暂停；不阻碍全套素材下载。</p>';
+       '<p>'+html(s.agent)+' 成品 ZIP 经本地文件检查与人工视觉 QA 后再确认完成；目前 GitHub 自动上传暂停。</p>';
      return '<section class="box wt4-stage-card"><h2>成品回传与 QA</h2>'+notice+
        '<div class="wt4-status-lines"><p>真实样稿审批：'+((pilot?.local_approved||pilot?.repo_commit)?'已由作者批准定妆':'待作者核对真实定妆和首格试画')+'</p>'+
        '<p>文件上传：'+(h.stageUploaded?.length||0)+' / '+(h.stagedFiles?.length||0)+'</p>'+
