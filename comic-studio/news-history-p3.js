@@ -28,7 +28,7 @@
  "@media(max-width:760px){.ne-p3{padding:12px;margin:12px 0}.ne-p3-grid{grid-template-columns:minmax(0,1fr)}.ne-p3-form{grid-template-columns:repeat(2,minmax(0,1fr))}.ne-p3-form label:first-child{grid-column:1/-1}}"
  ].join("");
  function ensureStyle(){
-  if(document.getElementById("davylab-news-p3-style"))return;
+  if(document.getElementById("davylab-news-p3-style")||document.querySelector("link[data-ne-p3-css]"))return;
   const tag=document.createElement("style");tag.id="davylab-news-p3-style";tag.textContent=css;document.head.append(tag);
  }
  function mount(target,options={}){
