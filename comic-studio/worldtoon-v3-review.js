@@ -411,7 +411,7 @@
     '<div class="wt-novel-page-top"><div><div class="kicker">WORLD/TOON / NOVEL STUDIO</div>'+
     '<h1>让好文学，拥有新的画面。</h1>'+
     '<p>先导入作品，再理解内容，最后选择适合的漫画表达。</p></div>'+
-    '</div>+'
+    '</div>'+
     '<div class="wt-novel-progress">'+
      ['01 导入作品','02 理解小说','03 改编漫画'].map((n,i)=>
        '<button type="button" data-novel-step="'+i+'" class="'+(i===current?'active':'')+'" '+(i>0&&!available?'disabled':'')+'>'+n+'</button>').join('')+
@@ -507,7 +507,7 @@
   return '<div class="wt-idea-page">'+
    '<header class="wt-idea-head"><div><div class="kicker">WORLD/TOON / IDEA STUDIO</div><h1>一句灵感，开启一部漫画。</h1>'+
    '<p>先输入创意，AI 扩写剧情与分镜；审阅后再进入漫画制作。</p></div>'+
-   '</header>+'
+   '</header>'+
    '<div class="wt-idea-steps"><span class="current">01 写下灵感</span><span class="'+(done?'current':'')+'">02 AI 编剧</span><span>03 审阅与制作</span></div>'+
    (!p?'<section class="wt-idea-editor"><h2>把故事的第一句话写下来</h2><p>新建草稿后，即可调用已接入的 DeepSeek 编剧能力。</p><button class="button dark" data-wt-idea-start>＋ 开始创作</button></section>':
      '<div class="wt-idea-projects"><label>当前创作 <select data-wt-idea-project>'+all.map(x=>
