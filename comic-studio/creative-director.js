@@ -234,7 +234,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
  if(p.storySourceSelection?.adaptation==='literary_review'){
   const updated=draft(p,replace);
-  if(updated)notify('文学导读采用三维九格原创评论分镜；请通过 ChatGPT 研究和核实作品内容，未核实的介绍不得直接发表');
+  if(updated)notify('文学导读采用动态篇幅的三维原创评论分镜；请通过 ChatGPT 研究和核实作品内容，未核实的介绍不得直接发表');
   return;
  }
  const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));

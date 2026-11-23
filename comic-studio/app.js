@@ -79,7 +79,7 @@ function wfTaskReadiness(p){
  if(wfMode(p)==='original')return '原创故事 · 无须引用现实新闻；生成时自动补全虚构规则';
  if(wfLiteraryReview(p))return p.novelSkill?
   '文学导读 · 已载入 '+p.novelSkill.provenance.chapter_count+' 个本地全文结构索引；仍需 AI 深度阅读及人工核查':sources.length?
-  '文学导读 · 已继承 '+sources.length+' 条作品资料链接；ChatGPT 先核实书目和主题，再制作三维九格评论漫画':
+  '文学导读 · 已继承 '+sources.length+' 条作品资料链接；先核实书目和主题，再制作'+p.panels.length+'格三维评论漫画':
   '文学导读 · 尚无可追溯书目来源，需先在选题资料中补充可信链接，才能生成任务';
  return sources.length?'已继承 '+sources.length+' 条新闻候选链接 · ChatGPT 先核验再创作':'暂无可靠事件链接 · 自动生成“先检索再创作”任务，ChatGPT 必须补充证据';
 }
@@ -141,7 +141,7 @@ function wfProductionBible(p,task){
  if(!cast.length||!cd.style_id)throw Error('缺少正式锁定角色或画风');
  const conflicts=[];
  const review=task.adaptation?.source_selection?.adaptation==='literary_review';
- if(review&&board.length!==9)conflicts.push({code:'LITERARY_REVIEW_STRUCTURE_REQUIRED',message:'文学导读必须按01–03、04–06、07–09三维九格结构锁定'});
+ if(review&&(board.length<4||board.length>60))conflicts.push({code:'LITERARY_REVIEW_STRUCTURE_REQUIRED',message:'文学导读采用作者选定的4–60格分镜，分为作品、哲学和现实意义三个部分'});
  const forbiddenStyle=/水彩|水墨|简笔|圆润线稿|手绘线稿|铅笔线稿|速写|扁平卡通/i;
  const threeD=/3d|三维|cinematic-3d/i.test(cd.style_id);
  const panels=board.map((v,i)=>{
@@ -235,7 +235,7 @@ function wfDirectPrompt(p,o){
  'WORLD/TOON · By DAVYLAB | DIRECT_MULTI_AI_LOCAL_V1 | 完整漫画制作指令',
  '任务编号：'+o.task_id+'；标题：《'+p.title+'》；生产者：'+o.producer+'；篇幅：'+p.panels.length+' 格。',
  '【生产方式】作者通过平台手动下载任务 ZIP 并交给 '+o.producer+'，绝不宣称该任务已入 GitHub。生产环节暂停 GitHub 同步、远端领单、远端样稿审批、GitHub Token、WorkBuddy 轮询及远端 SHA 验证；不得以未入仓为由停止创作。此豁免仅限本地全量素材制作，不等于正式发表授权。',
- '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、九格分镜全文、所有 jobs、封面加九格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
+ '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、全部分镜全文、所有 jobs、封面加九格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
  '【单图验收与失败恢复】每次生图后核对目标路径、原生分辨率、单场景连续画布、无分割/无嵌套小图、人物脸型服装与母版一致、中文排版预留区；明确在 QA 中记录 single_scene_verified、no_contact_sheet、target_story_match。检测失败不得登记为已完成帧，必须同一个 job 单独重绘；如当轮上限触发，保存已通过的实际文件和断点，禁止反复重画已合格画格。',
  '【交付目标】真正绘制 1 张独立封面及 '+p.panels.length+' 张独立正式漫画 PNG，全部采用适合手机的竖版 3:4、原生至少 1080×1440；附 caption.md、sources.md、manifest.json、QA_STATUS.md、production_state.json，并形成一个可下载 ZIP。严禁仅输出提示词、脚本、九宫格拼图裁切、SVG/CSS 线框或占位图片。',
  '【唯一定妆关口】开始时建立角色圣经、视觉圣经及首格正式样稿。若附件已有真实定妆图及首格样稿且作者已明确批准，则直接沿用，无需再次确认；否则只针对实际定妆图和首格请作者确认一次。作者明确确认后，直接连续绘制剩余画格、独立封面、排版、文案与完整 ZIP；不要另设 GitHub、Pilot 云端审批或例行阶段确认节点。',

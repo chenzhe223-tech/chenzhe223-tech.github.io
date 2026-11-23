@@ -540,7 +540,7 @@
       '<p class="wt3-expand-feedback" id="wt3-expand-feedback" role="status" aria-live="polite" hidden></p>'+
       (done?'<div class="wt-idea-results"><div class="wt-idea-result-head"><div><span class="wt-idea-eyebrow">AI STORY DRAFT · 待作者审核</span><h2>'+esc(p.title)+'</h2></div><span>'+p.panels.length+' 格分镜草稿</span></div>'+
        '<p>'+esc(p.description||'模型已返回结构化剧本，可在导演台逐格检查。')+'</p>'+
-       '<div class="wt-idea-panel-grid">'+p.panels.slice(0,9).map((v,i)=>'<article><b>'+String(i+1).padStart(2,'0')+' · '+esc(v.title)+'</b><small>'+esc(v.scene||'待补全')+'</small></article>').join('')+'</div>'+
+       '<div class="wt-idea-panel-grid">'+p.panels.map((v,i)=>'<article><b>'+String(i+1).padStart(2,'0')+' · '+esc(v.title)+'</b><small>'+esc(v.scene||'待补全')+'</small></article>').join('')+'</div>'+
        '<a class="button dark" href="#/director/'+encodeURIComponent(p.id)+'">审核人物与完整分镜 →</a>'+
        '<p class="wt-idea-review-note">模型草稿不代表已批准、已生图或已完成版权核查。</p></div>':'')+
       '</section>')+
@@ -562,6 +562,8 @@
    const p=ideap();if(!isIdea(p)||p.panels?.some(x=>x.image)||p.handoff?.repoQueuedAt)return;
    const n=Number(ev.target.value);if(![6,9,12,18].includes(n))return;
    p.panels=Array.from({length:n},(_,i)=>p.panels[i]||makePanel(i));
+   p.format=n+'格漫画';
+   if(p.creativeDirection){p.creativeDirection.reviewed=false;p.creativeDirection.approval=null;p.creativeDirection.drafted=false;p.creativeDirection.storyboardProvenance=null}
    setChange(p,'设置灵感漫画篇幅 '+n+' 格');render();
   }
  },true);
