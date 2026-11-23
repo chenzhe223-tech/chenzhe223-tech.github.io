@@ -132,6 +132,8 @@ async function wtStoryboardAI(request,env){
  const provider=String(body.provider||'native');
  if(!['native','deepseek','openai','claude','gemini','kimi','qwen'].includes(provider))return failure('不支持该模型服务商',400);
  const title=String(body.title||'').trim().slice(0,220),summary=String(body.summary||'').slice(0,1700);
+ const count=Number(body.panel_count);
+ if(!Number.isInteger(count)||count<4||count>60)return failure('分镜数量必须与作品篇幅一致（4–60格）',400);
  if(title.length<2||summary.length<8)return failure('请先补充作品标题与故事背景',400);
  if(provider==='native'&&!env.AI)return failure('当前未接入可用的内置文字模型，请使用本地故事草稿或自行接入API。',503);
  const key=String(body.apiKey||'').trim();
@@ -159,8 +161,8 @@ async function wtStoryboardAI(request,env){
  try{
   await quota(env,'__worldtoon_storyboard_global__',provider==='native'?'native':'external',provider==='native'?12:80);
   await quota(env,auth.id,'storyboard_'+provider,provider==='native'?3:10);
- }catch{return failure('今日九格AI生成额度已用完；可以使用本地故事草稿并逐格编辑。',429)}
- const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作9格原创中文漫画剧本。九格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须9个，不要Markdown或其他说明。';
+ }catch{return failure('今日分镜AI生成额度已用完；可以使用本地故事草稿并逐格编辑。',429)}
+ const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作'+count+'格原创中文漫画剧本。九格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须恰好'+count+'个，不要Markdown或其他说明。';
  let answer='',actualModel=model;
  try{
   const messages=[{role:'system',content:system},{role:'user',content:JSON.stringify(story)}];
@@ -192,7 +194,7 @@ async function wtStoryboardAI(request,env){
    actualModel=String(parsed?.model||model).slice(0,100);
   }
   const raw=parseJSON(answer);
-  if(!Array.isArray(raw.panels)||raw.panels.length!==9)return failure('模型未完整生成九格，请重试或使用本地草稿。',502);
+  if(!Array.isArray(raw.panels)||raw.panels.length!==count)return failure('模型未完整生成'+count+'格，请重试或使用本地草稿。',502);
   const panels=raw.panels.map((x,i)=>{
    const title=String(x?.title||'').trim().slice(0,100);
    const scene=String(x?.scene||'').trim().slice(0,1700);
@@ -202,11 +204,11 @@ async function wtStoryboardAI(request,env){
    if(title.length<2||scene.length<32||!caption&&!dialogue)throw Error('模型第'+(i+1)+'格内容不完整');
    return {title,scene,caption,dialogue,prompt};
   });
-  return Response.json({panels,analysis:String(raw.analysis||'').slice(0,600),
+  return Response.json({panels,panel_count:count,analysis:String(raw.analysis||'').slice(0,600),
    provider,model:actualModel,method:'verified_model_response',generated_at:new Date().toISOString(),draft:true,
    requiresHumanReview:true,rightsCleared:false,factChecked:false},
    {headers:{...RESULT_HEADERS,'cache-control':'no-store'}});
- }catch(err){return failure('模型没有返回符合要求的九格草稿，请重试或使用本地规则建议。',502)}
+ }catch(err){return failure('模型没有返回符合要求的'+count+'格草稿，请重试或使用本地规则建议。',502)}
 }
 /* Season-level planning is a draft-only route: creator confirms the whole plan in-browser before any project writes. */
 async function wtSeriesPlanAI(request,env){
