@@ -1,22 +1,9 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-23T06:03:05+00:00",
-  "count": 70,
+  "checked_at": "2026-11-22T08:08:29+00:00",
+  "count": 69,
   "articles": [
-    {
-      "id": "ext-b0c1b6250591975f9e",
-      "title": "Select Styling Specimens",
-      "summary": "Tool: Select Styling Specimens I got frustrated at how HTML <select> boxes default to looking different in different browsers, and are (I think) quite ugly in Chrome: So I had Claude Fable 5.2 build me this pag",
-      "date": "2026-11-22",
-      "original_url": "https://simonwillison.net/2026/Nov/22/select-styling/",
-      "source": "Simon Willison 技术观点",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外技术观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
     {
       "id": "ext-dc9b4a0c426ddc42fd",
       "title": "Muru",
@@ -577,6 +564,19 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
+      "id": "ext-6e96a802abbc1d38b4",
+      "title": "Anthropic's IPO roadshow video",
+      "summary": "Anthropic's IPO roadshow video Anthropic kicked off their IPO roadshow yesterday, and their roadshow video has some previously unreleased information about how their business works. The section on \"Approach to ",
+      "date": "2026-11-11",
+      "original_url": "https://simonwillison.net/2026/Nov/11/anthropic-ipo-roadshow/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
       "id": "ext-19b4fcb1faac9c9bdb",
       "title": "BotPsy: On-Device Personal Assistant with a Sub-Billion-Parameter Agentic Language Model",
       "summary": "",
@@ -599,19 +599,6 @@
       "source_kind": "independent_original",
       "tags": [
         "海外AI观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
-      "id": "ext-6e96a802abbc1d38b4",
-      "title": "Anthropic's IPO roadshow video",
-      "summary": "Anthropic's IPO roadshow video Anthropic kicked off their IPO roadshow yesterday, and their roadshow video has some previously unreleased information about how their business works. The section on \"Approach to ",
-      "date": "2026-11-11",
-      "original_url": "https://simonwillison.net/2026/Nov/11/anthropic-ipo-roadshow/",
-      "source": "Simon Willison 技术观点",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外技术观点"
       ],
       "verification": "original_source_metadata_not_independently_verified"
     },
