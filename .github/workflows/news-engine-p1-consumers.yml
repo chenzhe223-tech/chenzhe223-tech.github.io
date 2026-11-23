@@ -1,9 +1,20 @@
 name: News Engine P1 Consumer Integration CI
 on:
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/briefing.js'
+      - 'comic-studio/index.html'
+      - 'topic-studio/xnews-discovery.js'
+      - 'topic-studio/index.html'
+      - 'news-engine/p1-knowa-topic-adapter.js'
+      - 'news-engine/test_p1_online.cjs'
   pull_request:
     paths:
       - 'comic-studio/briefing.js'
+      - 'comic-studio/index.html'
       - 'topic-studio/xnews-discovery.js'
+      - 'topic-studio/index.html'
       - 'news-engine/p1-knowa-topic-adapter.js'
       - 'news-engine/test_p1_consumers.cjs'
       - 'news-engine/test_p1_browser.cjs'
@@ -96,3 +107,23 @@ jobs:
             newsEngineAdded:news.length,newsEngineStatus:d.newsEngine?.status,
             keysPreserved:["AI_QUOTA","TOPIC_STORE","DEEPSEEK_API_KEY"].length,autoPublish:false}));
           JS
+
+  deployed-production-qa:
+    if: github.event_name == 'push'
+    needs: [consumer-contract,knowa-production-readonly-smoke]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install real Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+      - name: Verify live production WordToon + WeChat platform after Pages propagation
+        run: |
+          node --check news-engine/test_p1_online.cjs
+          node news-engine/test_p1_online.cjs
