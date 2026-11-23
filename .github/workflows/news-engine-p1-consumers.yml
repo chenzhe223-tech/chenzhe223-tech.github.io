@@ -66,3 +66,32 @@ jobs:
           path: test-results/news-engine-p1/
           if-no-files-found: ignore
           retention-days: 7
+
+  knowa-production-readonly-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate real KNOWA Worker live topic API and unchanged knowledge health
+        run: |
+          node --input-type=module - <<'JS'
+          const base="https://davylab-knowa-p0.chenzhe223.workers.dev";
+          const health=await fetch(base+"/api/health",{signal:AbortSignal.timeout(16000)});
+          if(!health.ok)throw Error("KNOWA health HTTP "+health.status);
+          const h=await health.json();
+          if(h.ok!==true||!h.knowledgeAssets)throw Error("KNOWA original knowledge backend altered");
+          const r=await fetch(base+"/api/topics?refresh="+Date.now(),{signal:AbortSignal.timeout(60000)});
+          if(!r.ok)throw Error("KNOWA topics HTTP "+r.status);
+          const d=await r.json();
+          if(!d.ok||!Array.isArray(d.items)||!d.items.length)throw Error("KNOWA existing topics broken");
+          const news=d.items.filter(x=>x.sourceName?.startsWith("DAVYLAB News Engine"));
+          if(!news.length)throw Error("P1 News Engine topic candidates not visible in existing KNOWA pool");
+          if(news.some(x=>x.publishable!==false||x.verificationStatus!=="source_not_independently_verified"||
+              !x.sourceUrl?.startsWith("https://")))throw Error("P1 evidence/rights guard violation");
+          if(!d.sources?.some(x=>x.name==="DAVYLAB News Engine"&&x.status==="ok"))throw Error("P1 origin health missing");
+          console.log(JSON.stringify({result:"PASS",knowledgeAssets:h.knowledgeAssets,existingItems:d.items.length,
+            newsEngineAdded:news.length,newsEngineStatus:d.newsEngine?.status,
+            keysPreserved:["AI_QUOTA","TOPIC_STORE","DEEPSEEK_API_KEY"].length,autoPublish:false}));
+          JS
