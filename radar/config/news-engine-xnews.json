@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "provider": "news_engine",
+  "read_only": true,
+  "require_human_fact_check": true,
+  "allow_ai_inference": false,
+  "allow_auto_publish": false,
+  "legacy_fallback_on_failure": true,
+  "note": "Set provider to legacy to roll back only the overseas-reading feed. Keep original Radar Top5, China, posters and publishing gates unchanged."
+}
