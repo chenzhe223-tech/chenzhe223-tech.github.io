@@ -28,3 +28,16 @@
 3. Runtime Verified — **YES** for 5-source collection and the standalone review preview; full-day production newsletter has not been reverified.
 4. Functional Tested — **YES** for XNews field compatibility, real dedupe, rollback, browser source reading; NO for real model / WorldToon/Vibe integration.
 5. Production Deployed — **Merged into main**, but current-day report and poster actual release **NOT VERIFIED**. The old daily publishing system remains authoritative and has not been replaced.
+
+## Final production acceptance — 2026-11-23, 13:58 Asia/Shanghai
+
+**This section supersedes the earlier snapshot's unresolved current-day publishing status; the earlier failure record is retained for audit.**
+
+- Production PR #161: https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/161 ; fix merged to main as `bc8b820bb6f24517fd755d768bc5043e3fbe3df0` after the 3-line mountain Skill caption overflow was identified in failed Pages run #45112717241.
+- Original 1200×1800 poster and QR gates were **not weakened**; code now selects complete short Skill summary, first complete sentence, or a truthful reference fallback that fits the locked template. Isolated CJK layout QA #45120086036 and original Radar browser QA #45120085954 both **success**.
+- Production GitHub Actions https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45120262963 — **completed/success**. The original mandatory final-image QR and destination gate **PASS**, original browser QA **PASS**, refreshed report committed, and the separate **Verify automatic GitHub Pages deployment** job **success**.
+- The actual online HTTPS verification initially detected stale CDN assets, retried, then returned `PASS: automatic Pages deployment verified; date=2026-11-23; global_news=16; china_ai_news=8; generated_at=2026-11-23T13:51:59.775241+08:00`. It checked live bytes against committed latest JSON, poster and historical assets.
+- `main/radar/data/latest.json`: `report_date=2026-11-23`, `top5_status=ai_curated`, `top5_count=5`, `china_ai_news_count=8`, `xnews_status=ok`, `xnews_voices_count=6`; **all 6 overseas leads** have `source_kind=news_engine_rss_discovery`. Three publisher sources are present; `quality_gate.status=PASS`.
+- `main/radar/posters/latest.json`: 2026-11-23, 1200×1800 PNG, fixed QR target. `main/radar/posters/latest.qr-verification.json`: status **PASS**, `truncated_text_blocks=0` and twelve checks PASS.
+- The production scope of **News Engine ↔ AI Radar, replacing XNews overseas reading** is therefore **five-level delivered**: Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed. The optional advanced paid-model AI Gateway and WorldToon/Vibe consumer integrations are explicitly *out of this integration scope* and **not claimed complete**.
+- Official live URL: https://chenzhe223-tech.github.io/radar/daily/ . Rollback remains available in `radar/config/news-engine-xnews.json` by changing `provider` to `legacy`.
