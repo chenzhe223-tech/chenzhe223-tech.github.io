@@ -1,0 +1,40 @@
+name: Radar poster fixed-layout text fit QA
+
+on:
+  pull_request:
+    paths:
+      - "radar/scripts/generate_poster.py"
+      - "radar/scripts/test_poster_generation.py"
+      - ".github/workflows/radar-poster-text-fit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  mountain-text:
+    name: Mountain poster Skill description bounds (no clip)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install approved poster QA dependencies and CJK font
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends fonts-wqy-microhei
+          python -m pip install --disable-pip-version-check pillow 'qrcode[pil]' opencv-python-headless numpy
+      - name: Verify complete mountain Skill description without changing visual style
+        run: |
+          python -m py_compile radar/scripts/generate_poster.py radar/scripts/verify_poster.py
+          python -m unittest radar.scripts.test_poster_generation radar.scripts.test_poster_style radar.scripts.test_visual_lock -v
+          python - <<'PY'
+          from PIL import Image,ImageDraw
+          from radar.scripts import generate_poster as p
+          d=ImageDraw.Draw(Image.new('RGB',(p.W,p.H)))
+          skill={'description_zh':'这是一个开源AI技能，完整描述过长会导致海报末尾出现未完成的短句。'*30}
+          selected=p.choose_mountain_skill_description(d,skill)
+          assert len(p.wrap(d,selected,p.font(15),565))<=3
+          print('P0 PASS: 3-line mountain Skill paragraph will not truncate')
+          PY
