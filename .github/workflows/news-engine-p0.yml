@@ -148,9 +148,18 @@ jobs:
           allowed_workflows = {
               ".github/workflows/news-engine-p0.yml",
               ".github/workflows/news-engine-public-api.yml",
+              ".github/workflows/news-engine-p1-consumers.yml",
+          }
+          # P1 is limited to the existing read-only WorldToon/WeChat discovery
+          # entrypoints. Never allow edits to Radar publication, poster or auth.
+          allowed_consumer_files = {
+              "comic-studio/briefing.js",
+              "comic-studio/index.html",
+              "topic-studio/xnews-discovery.js",
+              "topic-studio/index.html",
           }
           forbidden = [p for p in changed if not (
-              p.startswith("news-engine/") or p in allowed_workflows
+              p.startswith("news-engine/") or p in allowed_workflows or p in allowed_consumer_files
           )]
           if ".github/workflows/news-engine-public-api.yml" in changed:
               from pathlib import Path
@@ -162,6 +171,15 @@ jobs:
                       "contents: write", "id-token: write"
                   )
               ), "Public API QA workflow must be PR-scoped, read-only, without deployment"
+          if ".github/workflows/news-engine-p1-consumers.yml" in changed:
+              from pathlib import Path
+              workflow = Path(".github/workflows/news-engine-p1-consumers.yml").read_text()
+              assert "contents: read" in workflow
+              assert "branches: [main]" in workflow
+              assert not any(term in workflow for term in (
+                  "\n  schedule:", "contents: write", "id-token: write",
+                  "wrangler deploy", "cloudflare.request", "git push"
+              )), "P1 QA workflow must be read-only and deploy-isolated"
           print("News Engine changed paths:", changed)
           assert not forbidden, "P0 production isolation violated: " + repr(forbidden)
           assert changed, "PR has no new Engine changes to validate"

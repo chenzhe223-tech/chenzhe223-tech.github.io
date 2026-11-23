@@ -6,13 +6,14 @@
 "use strict";
 const root=document.getElementById("xnewsDiscovery");
 if(!root || typeof getFeed!=="function" || typeof addFeed!=="function")return;
+const NEWS_API="https://davylab-news-api.chenzhe223.workers.dev/api/v1/news?stream=overseas&limit=50";
 const SNAPSHOT="./data/xnews-discovery.json",CACHE="davylab-xnews-last-good-v1",ORIGINAL_SNAPSHOT="./data/overseas-discovery.json",ORIGINAL_CACHE="davylab-overseas-original-v1";
 const $x=id=>document.getElementById(id);
 const lenses={
  all:"全部主题",agents:"Agent / 自动化",models:"模型与研究",products:"工具与产品",
  business:"商业与市场",creative:"创作与设计",safety:"安全与治理"
 };
-const state={all:[],filter:"all",query:"",sort:"relevance",visible:6,loaded:false,error:"",meta:null,cached:false,originalCount:0,originalChecked:""};
+const state={all:[],filter:"all",query:"",sort:"relevance",visible:6,loaded:false,error:"",meta:null,cached:false,originalCount:0,originalChecked:"",newsEngineOk:false,newsEngineDate:""};
 const html=v=>typeof safe==="function"?safe(v):String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const url=v=>{try{const parsed=new URL(String(v||""));if(!["https:","http:"].includes(parsed.protocol))return"#";if(!parsed.hostname||parsed.username||parsed.password)return"#";return parsed.href}catch{return"#"}};
 const canonical=v=>url(v).split("#")[0].replace(/\/$/,"").toLowerCase();
@@ -56,13 +57,13 @@ function normalize(item){
  const id=String(item.id||"").trim(),title=String(item.title||"").trim();
  if(!/^[a-z0-9][a-z0-9-]{0,100}$/.test(id)||title.length<3)return null;
  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(item.date||"")))return null;
- const sourceUrl=url(item.original_url),isOriginal=item.source_kind==="independent_original",chineseUrl=isOriginal?"":url(item.xnews_url);
+ const sourceUrl=url(item.original_url),isEngine=item.source_kind==="news_engine_public_api",isOriginal=item.source_kind==="independent_original"||isEngine,chineseUrl=isOriginal?"":url(item.xnews_url);
  if(sourceUrl==="#"||(!isOriginal&&(chineseUrl==="#"||!chineseUrl.startsWith("https://xnews.qiaomu.ai/a/"))))return null;
  const out={
  id,title:title.slice(0,150),summary:String(item.summary||"").slice(0,240),
  date:String(item.date),original_url:sourceUrl,xnews_url:chineseUrl,
  tags:Array.isArray(item.tags)?item.tags.map(t=>String(t).slice(0,32)).slice(0,8):[],
- source_kind:isOriginal?"independent_original":"xnews_curated",sourceLabel:isOriginal?String(item.source||"海外独立原始来源").slice(0,75):"XNews · 向阳乔木"
+ source_kind:isEngine?"news_engine_public_api":isOriginal?"independent_original":"xnews_curated",sourceLabel:isOriginal?String(item.source||"海外独立原始来源").slice(0,75):"XNews · 向阳乔木"
  };
  out.lens=lensOf(out);out.priority=internalScore(out);out.angle=editorialAngle(out);
  return out;
@@ -77,7 +78,7 @@ function ingest(data,cached){
 }
 function toFeed(x){
  return {
-   type:"news",origin:"xnews",title:x.title,summary:x.summary,source:x.source_kind==="independent_original"?x.sourceLabel:"XNews · 向阳乔木（海外精选）",originSource:x.source_kind,
+   type:"news",origin:x.source_kind==="news_engine_public_api"?"news_engine":"xnews",title:x.title,summary:x.summary,source:x.source_kind==="independent_original"||x.source_kind==="news_engine_public_api"?x.sourceLabel:"XNews · 向阳乔木（海外精选）",originSource:x.source_kind,
    url:x.original_url,sourcePageUrl:x.xnews_url,published:x.date,
    category:categoryOf(x),angle:x.angle,why:"编辑辅助线索；以原文核验为准。",
    xnewsUrl:x.xnews_url,imageUrl:"",imageFallbackUrl:"",imageCredit:"",imageAlt:""
@@ -93,7 +94,7 @@ const baseGetFeed=getFeed;
 getFeed=combinedFeed;
 const baseAddFeed=addFeed;
 addFeed=function(item){
- if(!item || item.origin!=="xnews")return baseAddFeed(item);
+ if(!item || !["xnews","news_engine"].includes(item.origin))return baseAddFeed(item);
  const sourceUrl=item.url;
  if(topics.some(t=>canonical(t.sourceUrl)===canonical(sourceUrl)||keyTitle(t.sourceTitle)===keyTitle(item.title))){
    toast("这条来源或同题选题已在选题池中");return;
@@ -105,7 +106,7 @@ addFeed=function(item){
      summary:item.summary||"",sourceTitle:item.title||"",sourceUrl:item.url,
      sourcePageUrl:item.xnewsUrl||item.sourcePageUrl||"",
      sourceName:item.source||"海外独立来源",sourcePublishedAt:item.published||"",
-     factCheckStatus:"待核实",origin:"xnews",format:"贴图",
+     factCheckStatus:"待核实",origin:item.origin,format:"贴图",
      status:"inbox",plannedDate:"",createdAt:new Date().toISOString(),
      scores:{reader:3,timely:3,practical:3,distinct:3,brand:4}
    });
@@ -117,7 +118,7 @@ addFeed=function(item){
  baseAddFeed(item);
  if(topics.length>before){
    const t=topics[0];
-   t.origin="xnews";t.sourceName=item.source||"海外独立来源";t.sourcePageUrl=item.xnewsUrl||item.sourcePageUrl||"";
+   t.origin=item.origin;t.sourceName=item.source||"海外独立来源";t.sourcePageUrl=item.xnewsUrl||item.sourcePageUrl||"";
    t.factCheckStatus="待核实";t.sourcePublishedAt=item.published||"";
    saveTopics();
  }
@@ -126,6 +127,7 @@ const baseShowPrompt=showPrompt;
 showPrompt=function(t){
  baseShowPrompt(t);
  const bilingual=t?.sourcePageUrl||t?.xnewsUrl;
+ if(t?.origin==="news_engine" && $x("promptBox"))$x("promptBox").value+="\n\n【DAVYLAB News Engine】此选题来自已发布日报的新闻线索，必须查阅原文、独立核验事实、日期、授权及可画性；禁止自动发表。";
  if(bilingual && $x("promptBox")){
   $x("promptBox").value+="\n\n【XNews 中文阅读】"+bilingual+
    "\n【来源核验约束】XNews 仅作为发现线索和中文阅读参考；全文创作必须重新查阅原始出处并区分原作者事实、译写和 DAVYLAB 自己的分析。不得复制他人长段落或将未核实数字写成定论。";
@@ -160,7 +162,34 @@ function render(){
  date.textContent="数据镜像 "+(synced?new Date(synced).toLocaleString("zh-CN",{timeZone:"Asia/Shanghai",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"时间未知")+
  (state.cached?" · 本机历史缓存":" · 同源静态快照")+"；独立海外来源 "+(state.originalChecked||"未同步");
  const newest=state.all.map(a=>a.date).sort().reverse()[0]||"";
- status.textContent=(state.cached?"XNews 已回退本机缓存；":"XNews 主索引已读取；")+(newest&&daysFrom(newest)<=3?"最近3天有新线索":"最近3天无新线索")+"，独立来源 "+state.originalCount+" 条；抓取时间不等于文章发布时间";
+ status.textContent=(state.newsEngineOk?"News Engine 已连接 · 最新已发布期 "+state.newsEngineDate+"；":state.cached?"News API 不可用 · 使用 XNews 本机历史缓存；":"News API 不可用 · 已使用原有海外来源；")+(newest&&daysFrom(newest)<=3?"最近3天有新线索":"最近3天无新线索")+"；线索未独立核验，禁止自动发表";
+}
+function newsApiId(u){
+ let hash=2166136261;
+ for(const ch of String(u))hash=Math.imul(hash^ch.charCodeAt(0),16777619)>>>0;
+ return "ne-"+hash.toString(36);
+}
+async function loadNewsEngine(){
+ const res=await fetch(NEWS_API,{cache:"no-store",signal:AbortSignal.timeout(9000)});
+ if(!res.ok)throw Error("News API HTTP "+res.status);
+ const payload=await res.json();
+ if(!payload||!Array.isArray(payload.data)||!/^\d{4}-\d{2}-\d{2}$/.test(payload.issue_date||""))
+   throw Error("News API schema incompatible");
+ const fresh=payload.data.filter(x=>x&&x.stream==="overseas"&&x.publishable===false&&x.source_url&&x.title).map(x=>normalize({
+   id:newsApiId(x.source_url),title:x.title,summary:x.summary,
+   date:String(x.published_at||payload.issue_date).slice(0,10),
+   original_url:x.source_url,source:x.source,
+   tags:["AI","DAVYLAB News Engine"],source_kind:"news_engine_public_api"
+ })).filter(Boolean);
+ if(!fresh.length)throw Error("No valid overseas leads");
+ const seen=new Set(),merged=[];
+ for(const a of [...fresh,...state.all]){
+  const k=canonical(a.original_url);
+  if(k==="#"||seen.has(k))continue;
+  seen.add(k);merged.push(a);
+ }
+ state.all=merged;state.loaded=true;state.newsEngineOk=true;state.newsEngineDate=payload.issue_date;
+ return fresh.length;
 }
 function refreshMerged(){
  if(typeof radarData!=="undefined" && radarData)feedCache=getFeed();
@@ -170,7 +199,7 @@ function refreshMerged(){
  render();
 }
 async function load(noCache=false){
- state.error="";state.originalCount=0;state.originalChecked="";
+ state.error="";state.originalCount=0;state.originalChecked="";state.newsEngineOk=false;state.newsEngineDate="";
  $x("xnewsStatus").textContent="正在检查 XNews 及独立海外原始来源…";
  try{
   // Fixed ?t=v1 was cached by browsers even when the GitHub snapshot changed.
@@ -204,6 +233,7 @@ async function load(noCache=false){
    state.originalCount=extra.length;state.originalChecked="本机历史缓存";state.loaded=state.all.length>0;
   }catch{state.originalChecked="尚未成功采集"}
  }
+ try{await loadNewsEngine()}catch(err){state.newsEngineOk=false;state.error="News API 不可用，已保留原有海外来源："+String(err.message||err).slice(0,130)}
  refreshMerged();
 }
 root.addEventListener("click",e=>{
@@ -229,6 +259,6 @@ $x("xnewsMore")?.addEventListener("click",()=>{state.visible+=6;render()});
 $x("xnewsRefresh")?.addEventListener("click",()=>load(true));
 const baseSaveTopics=saveTopics;
 saveTopics=function(){baseSaveTopics();if(state.loaded)render()};
-window.DAVYLABXNews={source:SNAPSHOT,load,rank:internalScore,lensOf,normalize,getItems:()=>state.all.slice(),status:()=>({count:state.all.length,cached:state.cached,loaded:state.loaded,originalCount:state.originalCount})};
+window.DAVYLABXNews={source:NEWS_API,fallbackSource:SNAPSHOT,load,rank:internalScore,lensOf,normalize,getItems:()=>state.all.slice(),status:()=>({count:state.all.length,cached:state.cached,loaded:state.loaded,originalCount:state.originalCount,newsEngineOk:state.newsEngineOk,newsEngineDate:state.newsEngineDate})};
 load();
 })();
