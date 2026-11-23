@@ -1,5 +1,5 @@
 /* Isolated, read-only online preview. Never connects to the Radar publisher. */
-const EDITOR_URL = "https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/2d1ebc57127dabf5ba27b25fde3f591636c4f2a7/news-engine/editor.html";
+const EDITOR_HTML = "__DAVYLAB_EDITOR_HTML__";
 const RADAR_URL = "https://raw.githubusercontent.com/chenzhe223-tech/chenzhe223-tech.github.io/main/radar/data/latest.json";
 const BASE_HEADERS = {
   "x-content-type-options": "nosniff",
@@ -45,9 +45,8 @@ export default {
       if(url.pathname==="/"||url.pathname==="/index.html") return html(SITE);
       if(url.pathname==="/favicon.ico") return new Response(null,{status:204,headers:BASE_HEADERS});
       if(url.pathname==="/editor"){
-        const editor=await trustedRead(EDITOR_URL,160000);
-        if(!editor.includes("DAVYLAB News Engine")||!editor.includes("editorForm")) throw new Error("unrecognized editor");
-        return html(editor);
+        if(!EDITOR_HTML.includes("DAVYLAB News Engine")||!EDITOR_HTML.includes("editorForm")) throw new Error("editor bundle missing");
+        return html(EDITOR_HTML);
       }
       if(url.pathname==="/api/health") return json({service:"DAVYLAB News Engine",environment:"isolated_preview",
         production_publishing:false,ai_inference:"disabled",ecosystem_writes:false,editor:"available_via_editor"});
