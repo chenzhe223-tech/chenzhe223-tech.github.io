@@ -11,6 +11,7 @@ import { renderKnowledgeCatalog, renderKnowledgeEntry } from './knowledge-page.j
 import { studioHtml } from './studio.js';
 import { factoryHtml } from './factory.js';
 import { externalTaskHtml } from './external-page.js';
+import { generateExternalTask } from './external-task.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
@@ -131,6 +132,14 @@ export default {
     }
     if (request.method==='GET'&&url.pathname==='/favicon.ico') return Response.redirect(new URL('/favicon.svg?v=20261119',url),302);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
+    if (request.method==='POST'&&url.pathname==='/api/external-task') {
+      if(!(request.headers.get('content-type')||'').includes('application/json'))return json({ok:false,errors:['仅接受 JSON 格式']},415);
+      const raw=await request.text();
+      if(raw.length>12000)return json({ok:false,errors:['输入内容超过12KB上限']},413);
+      let brief;try{brief=JSON.parse(raw)}catch{return json({ok:false,errors:['JSON 格式无效']},400)}
+      const result=generateExternalTask(brief);
+      return json(result,result.ok?200:400);
+    }
     if (request.method==='GET'&&url.pathname==='/studio/external') return new Response(externalTaskHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
     if (request.method==='GET'&&url.pathname==='/studio/production') return new Response(factoryHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; media-src blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'}});
     if (request.method==='GET'&&url.pathname==='/studio') return new Response(studioHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'}});

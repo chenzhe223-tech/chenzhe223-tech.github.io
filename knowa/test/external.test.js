@@ -85,3 +85,21 @@ test('legacy internal maker and encyclopedia pages remain, no anonymous publish 
  assert.equal((await worker.fetch(new Request('https://knowa.test/api/knowledge/k01'),{})).status,200);
  assert.equal((await worker.fetch(new Request('https://knowa.test/api/external-dispatch',{method:'POST',body:'{}'}),{})).status,404);
 });
+
+test('stateless external task endpoint generates an executable brief and rejects malformed uploads',async()=>{
+ const valid={topic:'为什么土星的密度比水低？',target:'ChatGPT',kind:'full',imageCount:9,duration:30};
+ const r=await worker.fetch(new Request('https://knowa.test/api/external-task',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(valid)}),{AI_ENABLED:'false',DAILY_AI_LIMIT:'0'});
+ assert.equal(r.status,200);
+ const d=await r.json();
+ assert.equal(d.ok,true);
+ assert.match(d.prompt,/video_final\.mp4/);
+ assert.match(d.prompt,/poster_09\.png/);
+ assert.equal(d.storyboard.length,6);
+ assert.equal(d.source.url,null);
+ const bad=await worker.fetch(new Request('https://knowa.test/api/external-task',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:'短'})}),{});
+ assert.equal(bad.status,400);
+ const big=await worker.fetch(new Request('https://knowa.test/api/external-task',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({topic:'土星密度',facts:'x'.repeat(15000)})}),{});
+ assert.equal(big.status,413);
+ const unauthorized=await worker.fetch(new Request('https://knowa.test/api/external-dispatch',{method:'POST',body:'{}'}),{});
+ assert.equal(unauthorized.status,404);
+});
