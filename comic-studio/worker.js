@@ -162,7 +162,16 @@ async function wtStoryboardAI(request,env){
   await quota(env,'__worldtoon_storyboard_global__',provider==='native'?'native':'external',provider==='native'?12:80);
   await quota(env,auth.id,'storyboard_'+provider,provider==='native'?3:10);
  }catch{return failure('今日分镜AI生成额度已用完；可以使用本地故事草稿并逐格编辑。',429)}
- const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作'+count+'格原创中文漫画剧本。全部'+count+'格都要有不同且连贯的动作、空间和叙事进展；必须有开局、伏笔、升级、关键抉择、出人意料但有因果的反转、意味深长的结束。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须恰好'+count+'个，不要Markdown或其他说明。';
+ const arcGuides={
+ '反转寓言':'重点：信息误判、冲突升级、证据翻转与带有余味的结局；对白突出角色立场变化。',
+ '人物成长':'重点：主人公愿望、尝试、受挫、关系变化、抉择与成长；避免强行制造悬疑揭秘。',
+ '悬疑探寻':'重点：可见线索、证据冲突、调查行动、重新推理和谨慎揭晓；不凭空给出未经核实的现实指控。',
+ '知识解说':'重点：提出准确问题、解释核心概念、展示可观察机制、误区、验证及实际应用；对白应是互相追问与澄清，而非霸总冲突。',
+ '历史纪事':'重点：史料、时代背景、因果时间线、不同立场、转折及史实局限；不虚构历史结论。',
+ '狗血网红爽剧':'重点：原创虚构成年角色、地位落差、身份反转、合约误会、社交传播与反击；对白有戏剧冲突与反转钩子。'
+ };
+ const arcRule=arcGuides[story.arc]||'遵守用户选择的故事主旨和人物冲突，不强制使用相同反转模板。';
+ const system='你是 WORLD/TOON · By DAVYLAB 的资深漫画编剧兼电影分镜导演。当前唯一叙事类型：'+story.arc+'。'+arcRule+'。根据提供的故事标题、角色、画风和叙事结构，真正分析主题中的具体冲突和独特情节，创作'+count+'格原创中文漫画剧本。全部'+count+'格都要有不同且连贯的动作、空间和叙事进展；根据当前叙事类型设计具有因果联系的开头、发展、关键变化与结局，不得让六种类型共用同一剧情和对白。每格：title 4-18字，scene 60-220字，包含明确的镜头构图/人物动作/环境道具/连续关系，caption 0-48字，dialogue 0-75字，prompt 0-160字。分镜需要完整人物与场景，不要简单火柴人；保持人物的固定五官、服装、道具。请不要臆造可识别真实人物的罪行、隐私或政治交易；新闻未核验时只写明确的虚构寓言。文学作品未清权时仅可构思原创主题讨论，不复制受版权保护角色、对白和独特情节。只输出JSON对象，严格格式：{"analysis":"用一句话说明冲突与反转","panels":[{"title":"","scene":"","caption":"","dialogue":"","prompt":""}]}，panels必须恰好'+count+'个，不要Markdown或其他说明。';
  let answer='',actualModel=model;
  try{
   const messages=[{role:'system',content:system},{role:'user',content:JSON.stringify(story)}];
@@ -472,7 +481,7 @@ async function wt3ArchiveV3(request,env,url){
   const bible=a?.series_bible&&typeof a.series_bible==='object'?JSON.stringify(a.series_bible).slice(0,8000):'无';
   const prompt='请将下列构思改编为原创中文连续漫画剧本。仅输出一个完整 JSON 对象，不要 markdown。字段：title,subtitle,summary,world,theme,fictionalization,reasoning,characters数组(至少2位，含role,name,look,clothes,symbol,nature),panels数组(每格title,scene至少30汉字,caption,dialogue,visual_prompt)。必须严格按用户指定漫画篇幅生成恰好'+n+'格，不得自行改变格数；不能为凑字数重复镜头。保持章节角色与画风圣经一致。不要无证据造谣真实人物。作者将逐格修改、审阅与签署；此响应不是生图也不是新闻事实核验。' +
     '\n用户已确定且锁定篇幅:'+n+'格\n故事构思:'+idea+
-    '\n题材:'+String(a.category||'原创').slice(0,80)+
+    '\n用户选定剧情结构:'+String(a.arc||a.genre||'自由原创').slice(0,80)+'\n剧情子类型:'+String(a.drama_subtype||'').slice(0,80)+'\n反转强度:'+String(a.drama_intensity||'')+'\n题材:'+String(a.category||'原创').slice(0,80)+
     '\n系列设定:'+bible+'\n前情摘要:'+String(a.previous_summary||'').slice(0,2000);
   let upstream;
   try{upstream=await fetch('https://api.deepseek.com/chat/completions',{method:'POST',

@@ -279,7 +279,7 @@
      showExpandStatus('loading','正在连接 DeepSeek 并生成分镜，请不要重复提交。模型响应可能需要约一分钟。',p.id);
      p.ideaSeed=idea;setChange(p,'作者确认真实 DeepSeek 剧本扩写请求');
      const response=await wtArchiveApi('deepseek-expand',{method:'POST',body:JSON.stringify({idea:modelIdea,title:p.title,category:p.plotGenre==='viral-melodrama'?'原创网红短剧 / '+findSubtype(p.dramaSubtype).name:p.category,
-       genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||4),
+       genre:p.plotGenre||'general',arc:p.creativeDirection?.arcId?(window.wtDirector?.ARCS?.find(x=>x.id===p.creativeDirection.arcId)?.name||p.creativeDirection.arcId):(p.plotGenre==='viral-melodrama'?'狗血网红爽剧':'自由原创'),drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||4),
        panel_count:p.panels.length,series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
      if(response.method!=='verified_model_response')throw Error('没有收到可验证的真实模型响应，拒绝用模板内容冒充结果');
      const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length!==p.panels.length)throw Error('DeepSeek 未返回完整的分镜结构');

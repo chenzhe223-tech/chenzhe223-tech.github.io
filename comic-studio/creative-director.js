@@ -286,7 +286,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
       (genre==='狗血网红爽剧'?'\\n【作者创作要求】原创成年人的都市重生逆袭、富婆/金融职场、网红热搜与合约男明星的情感纠葛。狗血反转强度 '+intensity+'/5；具体题材'+theme+'；每2–3格有反转，开场强悬念，结尾强钩子。全为架空虚构人物，不捏造真人丑闻。':'');
     if(idea.trim().length<8||idea.length>1800)throw Error('请先完善8–1800字的故事核心构思');
     const response=await wtArchiveApi('deepseek-expand',{method:'POST',
-      body:JSON.stringify({idea,title:p.title,category:genre,panel_count:p.panels.length,
+      body:JSON.stringify({idea,title:p.title,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
         genre:p.plotGenre||'general',drama_subtype:theme,drama_intensity:intensity,
         series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
     if(response?.method!=='verified_model_response'||!response.story?.panels)
