@@ -150,6 +150,7 @@ jobs:
               ".github/workflows/news-engine-public-api.yml",
               ".github/workflows/news-engine-p1-consumers.yml",
               ".github/workflows/news-engine-p2.yml",
+              ".github/workflows/news-engine-p3.yml",
           }
           # P1 is limited to the existing read-only WorldToon/WeChat discovery
           # entrypoints. Never allow edits to Radar publication, poster or auth.
@@ -157,6 +158,8 @@ jobs:
               "comic-studio/briefing.js",
               "comic-studio/worker.js",
               "comic-studio/index.html",
+              "comic-studio/news-history-p3.js",
+              "topic-studio/news-history-p3.js",
               "topic-studio/xnews-discovery.js",
               "topic-studio/index.html",
           }
@@ -182,6 +185,22 @@ jobs:
                   "\n  schedule:", "contents: write", "id-token: write",
                   "wrangler deploy", "cloudflare.request", "git push"
               )), "P1 QA workflow must be read-only and deploy-isolated"
+          if ".github/workflows/news-engine-p3.yml" in changed:
+              from pathlib import Path
+              wf=Path(".github/workflows/news-engine-p3.yml").read_text()
+              assert "contents: read" in wf and "branches: [main]" in wf
+              assert "node news-engine/test_p3_browser.cjs" in wf
+              assert "node news-engine/test_p3_online.cjs" in wf
+              assert not any(term in wf for term in (
+                  "\n  schedule:", "contents: write", "id-token: write",
+                  "wrangler deploy", "cloudflare.request", "git push",
+                  "secrets.GITHUB_TOKEN"
+              )), "P3 integration CI must be read-only"
+          p3=Path("news-engine/p3-widget.js")
+          if any(p in changed for p in ("comic-studio/news-history-p3.js","topic-studio/news-history-p3.js")):
+              assert p3.exists(), "Canonical P3 widget missing"
+              for peer in ("comic-studio/news-history-p3.js","topic-studio/news-history-p3.js"):
+                  assert Path(peer).read_bytes()==p3.read_bytes(), "P3 shared widget drift"
           if "comic-studio/worker.js" in changed:
               # Security-only exception: exactly one CSP connect-src allowlist entry,
               # preserving every other Worker byte and old Supabase permissions.
