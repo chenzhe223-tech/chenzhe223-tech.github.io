@@ -55,8 +55,8 @@ function normalize(rec,source){
  const summary=clean(rec.abstract||rec.summary||"").slice(0,380);
  if(/^(?:author correction|publisher correction|correction|retraction|editorial|in science journals)\b/i.test(title))return null;
  if(source==="nature"&&!doi.startsWith("10.1038/s41586-"))return null;
- if(source==="science"&&(!doi.startsWith("10.1126/science.")||summary.length<280))return null;
- const domain=classify(title+" "+summary);
+ if(source==="science"&&(!doi.startsWith("10.1126/science.")||(summary.length<280&&rec.research_candidate!==true)))return null;
+ const domain=fields.some(([key])=>key===rec.domain)?rec.domain:classify(title+" "+summary);
  const authors=Array.isArray(rec.author)?rec.author.slice(0,3).map(a=>clean((a.given||"")+" "+(a.family||""))).filter(Boolean).join("、"):clean(rec.authors||"").slice(0,160);
  return {id:doi,doi,title,source,journal:SOURCE[source].name,published,summary,authors,
   domain,priority:heuristic(title,summary,published),
@@ -66,7 +66,7 @@ function normalizeSnapshot(raw){
  if(!raw||raw.schema_version!==1||!Array.isArray(raw.articles))throw Error("数据结构不兼容");
  return raw.articles.map(x=>normalize({
   DOI:x.doi,title:x.title,published_at:x.published_at,journal:x.journal,
-  abstract:x.abstract||x.summary,authors:x.authors
+  abstract:x.abstract||x.summary,authors:x.authors,domain:x.domain,research_candidate:x.research_candidate
  },x.source)).filter(Boolean);
 }
 function unique(items){
@@ -89,7 +89,7 @@ function render(){
   cards.innerHTML=arr.slice(0,st.visible).map(a=>
    '<article class="science-card"><div class="science-meta"><span>'+esc(sourceLabel(a))+'</span><time>'+esc(a.published)+'</time><span>DOI 元数据匹配</span></div>'+
    '<h3>'+esc(a.title)+'</h3>'+
-   '<p>'+esc(a.summary||"Crossref 未提供公开摘要：需打开论文核对研究目的、实验方法与局限。")+'</p>'+
+   '<p>'+esc(a.summary||"当前未收录可转载摘要：请打开原论文核对研究方法、样本与局限。")+'</p>'+
    '<div class="science-footnote">研究设计 / 人体证据：待原文核验 · 编辑优先级：'+a.priority+'/100（规则估分，非论文质量评分）</div>'+
    '<div class="science-bottom"><code>'+esc(a.doi)+'</code><div><a href="'+esc(a.url)+'" target="_blank" rel="noopener noreferrer">查看论文</a><button type="button" data-science-doi="'+esc(a.doi)+'">加入选题池</button></div></div></article>'
   ).join("");
