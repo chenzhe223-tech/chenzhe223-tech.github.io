@@ -32,6 +32,7 @@ async function testWidth(browser,width){
   assert.equal(g.style.overseasDisplay,"flex",width+" overseas not visible");
   assert.equal(g.style.alignment,"stretch",width+" wrong secondary alignment");
   assert.equal(g.overflow.length,0,width+" clipped items: "+JSON.stringify(g.overflow));
+  if(width===1180 || width===1024 || width===390) console.log("LAYOUT-DIAGNOSTIC "+width+" "+JSON.stringify({lead:g.lead,hot:g.hot,last:g.last,overseas:g.overseas,china:g.china,cols:g.style}));
   if(width>1024){
    assert.ok(g.lead.right<g.hot.left,width+" primary columns not separated");
    assert.ok(near(g.lead.top,g.hot.top),width+" primary top misalignment");
