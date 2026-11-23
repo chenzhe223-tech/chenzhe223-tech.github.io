@@ -25,7 +25,6 @@ const falsePositive={...task,adaptation:{characters:'单亲妈妈好友、AI助�
 assert.equal(ctx.bible(project,falsePositive).conflicts.filter(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED').length,0,
  'role descriptors such as 好友/伙伴 are not named characters');
 const fauxProject={...project,testTask:falsePositive};
-assert.equal(ctx.preflight(fauxProject).ready,true,'fresh project with relationship nouns must be exportable');
 const explicitlyNamed={...task,adaptation:{characters:'女主角：林晓，AI助手：小算'},
  source:{candidate_summary:'主人公「赵明」带来新消息。'}};
 const realMismatches=ctx.bible(project,explicitlyNamed).conflicts.filter(x=>x.code==='NAME_CONFLICT_REVIEW_REQUIRED');
@@ -41,6 +40,7 @@ assert.equal(ctx.bible(project,approvedNames).conflicts.filter(x=>x.code==='NAME
 assert.ok(['项目人物设定（旧角色文本）','项目剧情描述（候选摘要）'].includes(nameConflict.field),'message points to actual input field');
 assert.equal(nameConflict.approved_cast[0],'虚构主角','error displays actual approved character roster');
 ctx.wfTaskObject=p=>p.testTask;
+assert.equal(ctx.preflight(fauxProject).ready,true,'fresh project with relationship nouns must be exportable');
 assert.equal(ctx.preflight({...project,testTask:task}).ready,true,'approved cast and source pass preflight');
 const stopped=ctx.preflight({...project,testTask:conflicting});
 assert.equal(stopped.ready,false,'legacy character mismatch blocks before ZIP export');
