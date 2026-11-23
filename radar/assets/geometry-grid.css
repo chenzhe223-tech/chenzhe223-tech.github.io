@@ -50,6 +50,7 @@
   align-self: stretch !important;
   height: 100% !important;
   min-height: 0;
+  padding-bottom: 0 !important; /* remove legacy empty 14px tail after item 05 */
   margin: 0 !important;
   gap: 0 !important;
   border: 0 !important;
@@ -182,6 +183,9 @@
 
 /* Pad with narrow view: lead first, then five clearly separated headlines. */
 @media (max-width: 1024px) {
+  /* The desktop five-link nav collides with search and language at iPad width. */
+  .primary-nav { display: none !important; }
+  .nav-right { margin-left: auto !important; gap: 8px !important; }
   #ai {
     display: flex !important;
     flex-direction: column !important;
