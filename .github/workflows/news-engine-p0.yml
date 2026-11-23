@@ -151,3 +151,17 @@ jobs:
           assert not forbidden, "P0 production isolation violated: " + repr(forbidden)
           assert changed, "PR has no new Engine changes to validate"
           PY
+
+  staging-online-smoke:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify deployed independent Worker over HTTPS (read-only)
+        run: node news-engine/test_preview_online.cjs
