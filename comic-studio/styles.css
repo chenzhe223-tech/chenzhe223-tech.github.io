@@ -623,3 +623,9 @@
   .director-page,.director-section,.director-styles.wt-v3-grid,
   .wt-v3-intro,.wt-v3-toolrow,.wt-v3-detail { min-width:0;max-width:100%; }
 }
+
+/* Universal exit path from every creative module (including mobile). */
+.wt-home-return{display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;min-height:38px;padding:8px 13px;border:1px solid var(--line,#d5d1c7);border-radius:9px;background:transparent;color:var(--ink,#19211f);font-size:12px;font-weight:700;letter-spacing:0;text-decoration:none;transition:background .15s,border-color .15s}
+.wt-home-return:hover{background:var(--soft,#e5e0d6);border-color:#a8aaa3}
+.wt-home-return:focus-visible{outline:2px solid #355f46;outline-offset:3px}
+@media(max-width:650px){.topbar{gap:7px}.right-tools{gap:7px}.wt-home-return{font-size:12px;min-height:38px;padding:8px 10px}.breadcrumb{font-size:10px;letter-spacing:0}.data-chip{display:none}}
