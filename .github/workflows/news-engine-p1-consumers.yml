@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - 'comic-studio/briefing.js'
+      - 'comic-studio/worker.js'
+      - 'news-engine/test_p1_worldtoon_csp.cjs'
       - 'comic-studio/index.html'
       - 'topic-studio/xnews-discovery.js'
       - 'topic-studio/index.html'
@@ -12,6 +14,8 @@ on:
   pull_request:
     paths:
       - 'comic-studio/briefing.js'
+      - 'comic-studio/worker.js'
+      - 'news-engine/test_p1_worldtoon_csp.cjs'
       - 'comic-studio/index.html'
       - 'topic-studio/xnews-discovery.js'
       - 'topic-studio/index.html'
@@ -40,6 +44,7 @@ jobs:
           node --check news-engine/p1-knowa-topic-adapter.js
           node --check news-engine/test_p1_consumers.cjs
           node news-engine/test_p1_consumers.cjs
+          node news-engine/test_p1_worldtoon_csp.cjs
       - name: Validate read-only news API real HTTPS response
         run: |
           node --input-type=module - <<'JS'
