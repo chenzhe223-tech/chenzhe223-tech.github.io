@@ -263,6 +263,18 @@ function wfStartupCommand(p,task){
  ].join('\n\n');
 }
 function wfStartHere(p,task,launch){
+ if(task.production_mode==='ai_task_hub_v2')return [
+  '# WORLD/TOON · By DAVYLAB｜AI Task Hub 自动中转工单',
+  '本 ZIP 已由 WorldToon 上传到私有 AI Task Hub（只有服务端 SHA256 回读确认并写入 queued 后才算正式入仓）。',
+  '任务编号：'+task.task_id+'；目标制作方：'+task.producer,
+  '领取目录：chenzhe223-tech/ai-task-sync/tasks/'+task.task_id+'/',
+  '生产执行者必须按 task_id 和 target 查找、下载本 ZIP、验证 SHA256、在 GitHub 原子写入 claimed 并确认后制作。GitHub 存储并不自动触发 ChatGPT 或 WorkBuddy；没有运行中的执行器要如实报告未开工。',
+  '本包可读取：task.json、production-bible.json、render_jobs.json、render_jobs.md、'+task.producer+'_制作指令.md、production_state.json。',
+  '所有图片独立生成，角色定妆和首格经作者确认后完成全部漫画与独立封面；不可拼图充数；最终需真实 PNG、QA、文案、来源与完整 ZIP。',
+  task.producer==='ChatGPT'?'ChatGPT 输出真实完整 ZIP 交给作者，之后由作者交给 WorkBuddy 执行公众号上传；本制作任务不自动发表。':'WorkBuddy 可制作与上传公众号，但实际发表前必须取得作者独立出版授权、版权和视觉 QA 通过，发表后回写真实公众号后台回执。',
+  '不得编造领取回执、文件、SHA256、公众号发表结果。'
+ ].join('\\n\\n')+'\\n';
+
  return '# WORLD/TOON · By DAVYLAB｜'+task.producer+' 直达任务启动说明\n\n'+
   '本 ZIP 是正式创作任务数据包，而不是漫画成品。仅上传 ZIP 文件不保证对话模型将其识别为“立即执行”；请同时发送明确的开工命令。\n\n'+
   '## 正确的启动操作\n\n'+
