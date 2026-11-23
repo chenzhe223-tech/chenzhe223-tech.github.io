@@ -20,7 +20,7 @@ test('production client JavaScript is syntactically valid and exports actual med
  assert.ok(start>=0&&end>start);
  const code=factoryHtml.slice(start+8,end);
  assert.doesNotThrow(()=>new vm.Script(code,{filename:'knowa-content-factory-client.js'}));
- for(const marker of ['canvas.captureStream','MediaRecorder','toBlob','JSON.parse','createObjectURL','decodeAudioData','articleMd','articleHtml','drawPoster','drawVideo','source-review-pending'])assert.ok(code.includes(marker),marker);
+ for(const marker of ['canvas.captureStream','MediaRecorder','toBlob','JSON.parse','createObjectURL','decodeAudioData','articleMd','articleHtml','drawPoster','drawVideo','来源待复核'])assert.ok(code.includes(marker),marker);
  for(const style of ['深海蓝','科学白','矿物绿','石墨黑','海洋蓝','赭石红'])assert.ok(code.includes(style),style);
  assert.match(code,/canvas\.width|width="1080"/);
 });

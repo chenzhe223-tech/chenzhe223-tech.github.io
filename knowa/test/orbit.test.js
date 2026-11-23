@@ -37,6 +37,6 @@ test('free knowledge discovery API and source retained',async()=>{
 test('AI quota still fails closed when disabled',async()=>{
  const response=await worker.fetch(new Request('https://knowa.test/api/health'),{AI_ENABLED:'false',DAILY_AI_LIMIT:'0'});
  const data=await response.json();
- assert.equal(data.version,'2.0.0-p1');
+ assert.equal(data.version,'2.0.0-p2');
  assert.equal(data.aiConfigured,false);
 });
