@@ -16,8 +16,8 @@ from urllib.parse import urlsplit
 
 ROOT = Path(__file__).resolve().parents[2]
 MIN_HEALTHY_SOURCES = 3
-MAX_STORIES = 6
-MAX_PER_SOURCE = 2
+MAX_STORIES = 48
+MAX_PER_SOURCE = 12
 ACCEPT = "application/rss+xml,application/atom+xml,application/xml"
 
 
@@ -60,7 +60,7 @@ def _legacy(http_get, now):
 
 
 def collect_news_engine_articles(http_get, *, now: dt.datetime):
-    """Collect and rank original-source leads while preserving legacy output shape.
+    """Collect a diverse original-source candidate pool for Radar to dedupe before picking six.
 
     HTTP calls use the existing Radar read-only transport, with bounded timeouts.
     No full text, external image, model call, or unverified claim is copied.
