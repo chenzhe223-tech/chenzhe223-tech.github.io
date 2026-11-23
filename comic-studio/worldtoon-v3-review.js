@@ -474,6 +474,8 @@
       '<article><strong>授权剧情改编</strong><p>使用原书人物与剧情；仅适用于公版作品或已取得有效授权的情况。</p>'+
       '<small>需要作者核实授权来源和实际原文内容</small></article></div>'+
       '<p class="wt-novel-mode">当前创作边界：'+(mode==='faithful'?'已声明有改编许可，独立核验仍未完成':'文学导读，不声称拥有剧情改编权')+'</p>'+
+      '<label class="wt-novel-count-label">漫画篇幅（不含独立封面） <input type="number" data-wt-novel-count min="4" max="60" step="1" value="'+p.panels.length+'" '+(p.handoff?.repoQueuedAt?'disabled':'')+'></label>'+
+      '<p class="minor">篇幅选择直接同步到后续创意导演台、分镜脚本和制作指令；已入仓工单保持锁定。</p>'+
       '<div class="wt-novel-actions-bottom"><button class="button" data-novel-step="1">← 返回作品理解</button>'+
       '<a class="button dark" href="#/workspace/'+encodeURIComponent(p.id)+'/1">进入漫画编剧向导 →</a></div>'+
       '<div class="wt-novel-caution">进入向导不代表事实、语义或版权核验已通过；正式绘图前仍须完成角色、场景和授权审核。</div></section>';
@@ -491,6 +493,7 @@
    if(node.matches('[data-novel-project]')){
      if(findProject(node.value)){ui.selected=node.value;step=0;render();}
    }
+   if(node.matches('[data-wt-novel-count]')){const p=project();if(!p||p.handoff?.repoQueuedAt)return;const n=Number(node.value);if(!Number.isInteger(n)||n<4||n>60){render();return}if(window.WT3?.resize)window.WT3.resize(p,n);return;}
    if(node.matches('[data-novel-title]')){
      const p=project();if(!p)return;
      p.title=node.value.trim()||'未命名小说导读';p.sourceTitle=p.title;
