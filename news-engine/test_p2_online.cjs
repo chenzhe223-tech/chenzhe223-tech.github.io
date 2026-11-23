@@ -30,6 +30,7 @@ async function get(path,method="GET"){
  assert.ok(r.body.total>=1,"Search should find recent published AI articles");
  r=await get("/api/v2/news?days=30&limit=50&sort=score");
  assert.equal(r.status,200,"30-issue history query must remain available over HTTPS");
+ console.log("P2 30-issue diagnostics",JSON.stringify({requested:30,scanned:r.body.scanned_issues,missing:r.body.missing_issues,partial:r.body.partial,records:r.body.deduplicated_records}));
  assert.equal(r.body.attempted_issues,30,"Full published history inventory should be inspected");
  assert.ok(r.body.scanned_issues>=20,"At least 20 published quality-approved issues should be readable");
  assert.equal(r.body.scanned_issues+r.body.missing_issues.length,30,"No silent skipped issues");
