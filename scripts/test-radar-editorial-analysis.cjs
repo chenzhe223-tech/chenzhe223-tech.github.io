@@ -56,6 +56,7 @@ async function one(browser,width){
   if(width<=760) assert.ok(state.mediaBox.bottom<state.contentBox.top,width+" phone photo appears before long analysis body");
   if(captures.has(width)){
     // Network photo is licensed; accept only when it can actually decode in browser.
+    await page.locator("#editorialCore .editorial-analysis-media img").scrollIntoViewIfNeeded();
     await page.locator("#editorialCore .editorial-analysis-media img").evaluate(img=>img.decode());
     await page.locator("#editorialCore").screenshot({path:path.join(out,"analysis-"+width+".png"),timeout:30000,animations:"disabled"});
     await page.locator("#xnewsVoicesSection").screenshot({path:path.join(out,"overseas-"+width+".png"),timeout:30000,animations:"disabled"});
