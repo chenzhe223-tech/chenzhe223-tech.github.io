@@ -326,6 +326,8 @@ function wfHubProductionPrompt(p,task){
  '【领取方式】仅从私有仓库 chenzhe223-tech/ai-task-sync 的 tasks/'+task.task_id+'/ 读取任务。检查 target='+target+'、状态 queued 和 package.zip SHA256，先成功写回 claimed 才开始。禁止使用其他任务的 ZIP 或凭空声称已经扫描或领取。',
  '【镜头数量门禁】只制作序号 01–'+end+' 共'+n+'张独立分镜，另外制作封面 cover.png。禁止额外生成第'+(n+1)+'格，禁止强行补到九格，不得将封面计入分镜数量。每格的场景、人物动作、台词与 render_jobs 对应，一格一镜头。',
  '【单张生图协议】严格遵守 SINGLE_IMAGE_PER_CALL_V2。每次仅把 render_jobs.json 的当前 jobs[i].prompt 输入模型，单次只生成1张原生3:4、至少1080×1440的 PNG，禁止九宫格拼图、多个场景、条漫、拼版、裁切放大充数。台词通过独立文字层排版并逐字校核。',
+ '【Prompt Guard P0 强制执行】从私有仓 chenzhe223-tech/worldtoon 的 scripts/prompt_guard_p0.py、scripts/bind_render_references.py、scripts/guarded_image_request.py 使用受控请求入口。在真实角色定妆与 Pilot 图片获得作者批准、参考图片 SHA256 物理锁定前，不得发出正式生图请求。每次执行 prepare_locked，核对 task_id、panel_id、creative_direction.approval.lock_hash、bible.characters SHA256 和当前参考图的 SHA256；actual outbound HTTP body 必须从唯一 jobs[i].prompt 构成，不得添加历史对话。执行环境无法运行 Guard 或未接入受控图像后端时，报告 blocked，不得把未受控的聊天生图假称正式验收通过。',
+ '【失败与复核】图像必须经过原生尺寸检查和与图片 SHA256 绑定的独立单场景、角色一致性、画面内容审查。两次失败停止相同后端，只有已批准的独立备用后端可继续；否则回写 blocked。单次生图与作者许可不得自动扩展成收费 API 额度或公众号发表授权。',
  '【定妆与首格】先形成真实 character-sheet.png 和 pilot-01.png，在作品要求的有效作者审批完成后才继续批量生成。作者审核不是由制作平台自行签发；未经批准不能把样稿标记为已完成全套。',
  '【文件与验收】必须真实生成 cover.png、panels/01.png 至 panels/'+end+'.png、caption.md、sources.md、QA_STATUS.md、manifest.json、production_state.json，并形成单个可下载正式 ZIP。按该任务实际 panel_count 检验文件数量、图像尺寸、哈希、视觉一致性、中文、来源和版权；任何缺失均记为 blocked 或 pending，不能虚报完成。',
  '【事实与版权】研究型题材先核验来源及日期；未经证实的真人指控不得作为新闻事实绘制。无授权不得复制受保护的文学作品独特桥段、对白或人物形象。原创故事不得伪造原始资料。',
