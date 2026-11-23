@@ -10,6 +10,7 @@ import { findKnowledge, searchKnowledge, knowledgeCategories, knowledgeEntries }
 import { renderKnowledgeCatalog, renderKnowledgeEntry } from './knowledge-page.js';
 import { studioHtml } from './studio.js';
 import { factoryHtml } from './factory.js';
+import { externalTaskHtml } from './external-page.js';
 
 const JSON_HEADERS = { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff' };
 const json = (data, status = 200) => new Response(JSON.stringify(data), { status, headers: JSON_HEADERS });
@@ -130,6 +131,7 @@ export default {
     }
     if (request.method==='GET'&&url.pathname==='/favicon.ico') return Response.redirect(new URL('/favicon.svg?v=20261119',url),302);
     if (url.pathname==='/'&&request.method==='GET') return new Response(html,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff'}});
+    if (request.method==='GET'&&url.pathname==='/studio/external') return new Response(externalTaskHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'Cache-Control':'no-store','X-Content-Type-Options':'nosniff'}});
     if (request.method==='GET'&&url.pathname==='/studio/production') return new Response(factoryHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; media-src blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'}});
     if (request.method==='GET'&&url.pathname==='/studio') return new Response(studioHtml,{headers:{'Content-Type':'text/html; charset=utf-8','Content-Security-Policy':"default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src 'self'; img-src 'self' blob:; base-uri 'none'; form-action 'self'; frame-ancestors 'none'",'X-Content-Type-Options':'nosniff','Cache-Control':'no-store'}});
     if (request.method==='GET'&&url.pathname==='/knowledge') {
@@ -150,7 +152,7 @@ export default {
       const batch=/^\d{1,3}$/.test(raw)?Number(raw):0;
       return json(discoveryBatch(batch));
     }
-    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'2.0.0-p2',studioMode:'local-drafts+content-factory',knowledgeAssets:knowledgeEntries.length,publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
+    if (url.pathname==='/api/health'&&request.method==='GET') return json({ok:true,version:'2.0.0-p3',studioMode:'dual-track-production',knowledgeAssets:knowledgeEntries.length,publicSources:['NobelPrize.org','Wikipedia','Wikidata'],aiConfigured:aiGateReady(env),quotaBackendBound:!!env.AI_QUOTA});
     if (url.pathname==='/api/ask'&&request.method==='POST') return handleAsk(request,env);
     return json({error:'Not found'},404);
   }

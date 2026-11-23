@@ -15,9 +15,11 @@ const knowledgePage = withoutExport(read('src/knowledge-page.js').replace(/^impo
 const studioSchema = withoutExport(read('src/studio-schema.js'));
 const studio = withoutExport(read('src/studio.js').replace(/^import .*;\s*$/gm, ''));
 const factory = withoutExport(read('src/factory.js'));
+const externalTask = withoutExport(read('src/external-task.js'));
+const externalPage = withoutExport(read('src/external-page.js').replace(/^import .*;\s*$/gm, ''));
 const quota = withoutExport(read('src/quota.js'));
 const quotaDO = read('src/quota-do.js');
 const main = read('src/index.js').replace(/^import .*;\s*$/gm, '');
 mkdirSync(new URL('../dist/', import.meta.url), { recursive: true });
-writeFileSync(new URL('../dist/worker.js', import.meta.url), `${globe}\n${orbit}\n${brand}\n${page}\n${nobel}\n${curated}\n${explore}\n${discover}\n${knowledge}\n${knowledgeUI}\n${knowledgePage}\n${studioSchema}\n${studio}\n${factory}\n${quota}\n${quotaDO}\n${main}`);
+writeFileSync(new URL('../dist/worker.js', import.meta.url), `${globe}\n${orbit}\n${brand}\n${page}\n${nobel}\n${curated}\n${explore}\n${discover}\n${knowledge}\n${knowledgeUI}\n${knowledgePage}\n${studioSchema}\n${studio}\n${factory}\n${externalTask}\n${externalPage}\n${quota}\n${quotaDO}\n${main}`);
 console.log('Generated dist/worker.js from tested source modules');
