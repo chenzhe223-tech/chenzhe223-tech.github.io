@@ -1,0 +1,82 @@
+name: DAVYLAB News Engine Public API P0 isolated CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'news-engine/public-api-worker.mjs'
+      - 'news-engine/test_public_api.cjs'
+      - 'news-engine/test_public_api_online.cjs'
+      - 'news-engine/NEWS_API.md'
+      - '.github/workflows/news-engine-public-api.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  api-offline-contract:
+    name: Read-only public API contracts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax and execute real source data fixture contracts
+        run: |
+          node --check news-engine/public-api-worker.mjs
+          node --check news-engine/test_public_api.cjs
+          node --check news-engine/test_public_api_online.cjs
+          node news-engine/test_public_api.cjs
+      - name: Check public API has zero writes, secrets, publishing, inference or schedule
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          source=Path('news-engine/public-api-worker.mjs').read_text(encoding='utf-8')
+          for term in ('new URL(url)', 'method!=="GET"', 'publishable:false', 'https://chenzhe223-tech.github.io/radar/data/latest.json'):
+              assert term in source, f'P0 safety contract missing: {term}'
+          assert not any(term in source for term in ('env.AI.run(', 'env.DB.prepare(', 'env.KV.put(', 'fetch(request.url)', 'process.env.API_KEY'))
+          paths=('radar/data/latest.json','radar/daily/index.html')
+          assert all(Path(p).exists() for p in paths)
+          print('P0 read-only and original-Radar isolation PASS')
+          PY
+
+  live-published-origin:
+    name: Live already-published issue provenance (no writes)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prove official HTTPS data is reachable and approved
+        run: |
+          node --input-type=module - <<'JS'
+          const response=await fetch('https://chenzhe223-tech.github.io/radar/data/latest.json',
+             {signal:AbortSignal.timeout(20000)});
+          if(!response.ok)throw Error('Official published source HTTP '+response.status);
+          const d=await response.json();
+          const actual=(d.xnews_voices||[]).filter(x=>x.source_kind==='news_engine_rss_discovery');
+          if(d.quality_gate?.status!=='PASS'||actual.length<3||
+             !/^\d{4}-\d{2}-\d{2}$/.test(d.report_date))
+            throw Error('Published issue failed read-only API provenance preflight');
+          console.log(JSON.stringify({date:d.report_date, quality_gate:d.quality_gate.status,
+            news_engine_leads:actual.length, mode:'published_read_only', result:'PASS'}));
+          JS
+
+  deployed-online-smoke:
+    if: github.event_name == 'pull_request' || github.event_name == 'workflow_dispatch'
+    needs: [api-offline-contract,live-published-origin]
+    name: Real deployed Cloudflare Worker HTTPS test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify live independent Worker, pagination, search, CORS and denied writes
+        run: node news-engine/test_public_api_online.cjs
