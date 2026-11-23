@@ -1,11 +1,11 @@
 {
   "name": "davylab-knowa",
-  "version": "2.0.0-p1",
+  "version": "2.0.0-p2",
   "private": true,
   "type": "module",
   "scripts": {
     "test": "node --test",
-    "check": "node --check src/quota.js && node --check src/quota-do.js && node --check src/index.js && node --check src/page.js && node --check src/brand.js && node --check src/orbit.js && node --check src/globe.js && node --check src/nobel.js && node --check src/curated.js && node --check src/explore.js && node --check src/discover.js && node --check src/knowledge.js && node --check src/knowledge-ui.js && node --check src/knowledge-page.js && node --check src/studio-schema.js && node --check src/studio.js && node --check dist/worker.js",
+    "check": "node --check src/quota.js && node --check src/quota-do.js && node --check src/index.js && node --check src/page.js && node --check src/brand.js && node --check src/orbit.js && node --check src/globe.js && node --check src/nobel.js && node --check src/curated.js && node --check src/explore.js && node --check src/discover.js && node --check src/knowledge.js && node --check src/knowledge-ui.js && node --check src/knowledge-page.js && node --check src/studio-schema.js && node --check src/studio.js && node --check src/factory.js && node --check dist/worker.js",
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "build": "node scripts/build.mjs"
