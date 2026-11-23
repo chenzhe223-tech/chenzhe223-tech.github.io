@@ -86,6 +86,8 @@ function matchScore(record,input){
   if(found.filter(Boolean).length>=2&&found.length>=3)return 35;
   if(found.length===1&&found[0])return 70;
  }
+ // Do not let one translated synonym satisfy a multi-topic (AND) query.
+ if(info.tokens.length>1)return 0;
  if(info.aliases.some(t=>t.length>3&&hay.includes(t)))return 25;
  return 0;
 }
