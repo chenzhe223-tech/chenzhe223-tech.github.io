@@ -629,8 +629,106 @@ async function wt3ArchiveV3(request,env,url){
  return null;
 }
 
+// WORLD/TOON → AI Task Hub (private): explicit, owner-authenticated task-package dispatch.
+const WT_HUB_REPO='chenzhe223-tech/ai-task-sync';
+const WT_HUB_API='https://api.github.com/repos/'+WT_HUB_REPO;
+async function wtHubRequest(env,endpoint,method='GET',payload){
+ const token=env.AI_TASK_HUB_GITHUB_TOKEN;
+ if(!token)throw Error('AI Task Hub 专用 GitHub Secret 尚未配置');
+ const r=await fetch(WT_HUB_API+endpoint,{
+  method,headers:{authorization:'Bearer '+token,accept:'application/vnd.github+json',
+   'x-github-api-version':'2022-11-28','user-agent':'WorldToon-Hub/2',
+   ...(payload?{'content-type':'application/json'}:{})},
+  body:payload?JSON.stringify(payload):undefined,signal:AbortSignal.timeout(20000)
+ });
+ const body=await r.json().catch(()=>({}));
+ return {ok:r.ok,status:r.status,body};
+}
+async function wtHubSha256(bytes){
+ const d=await crypto.subtle.digest('SHA-256',bytes);
+ return Array.from(new Uint8Array(d),b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function wtHubDispatch(request,env){
+ const auth=await wtArchiveAuth(request,env);
+ if(auth.error)return wtJson({error:auth.error},auth.status);
+ if(!env.AI_TASK_HUB_GITHUB_TOKEN)return wtJson({error:'AI Task Hub 写入凭据未配置：尚未入仓'},503);
+ let payload;try{payload=await request.json()}catch{return wtJson({error:'任务提交 JSON 无效'},400)}
+ const task=payload?.task,b64=payload?.package_base64;
+ if(!task||task.schema_version!==2||task.project!=='worldtoon'||task.source!=='worldtoon'||
+  !['ChatGPT','WorkBuddy'].includes(task.producer)||
+  task.target!==(task.producer==='ChatGPT'?'chatgpt':'workbuddy')||
+  task.status!=='queued'||task.publisher!=='WorkBuddy'||task.rights_review_required!==true||
+  !/^WT-[a-f0-9]{20}$/.test(String(task.id||''))||
+  !/^[a-f0-9]{64}$/.test(String(task.dedupe_key||''))||
+  !/^[a-f0-9]{64}$/.test(String(task.package_sha256||''))||
+  task.package_path!=='package.zip'||typeof task.title!=='string'||task.title.length<2||task.title.length>200||
+  typeof b64!=='string'||b64.length<100||b64.length>11*1024*1024||
+  !/^[A-Za-z0-9+/]+={0,2}$/.test(b64))
+  return wtJson({error:'双执行器任务协议或任务包格式不合法'},400);
+ let bytes;
+ try{bytes=Uint8Array.from(atob(b64),c=>c.charCodeAt(0))}catch{return wtJson({error:'ZIP base64 无法解析'},400)}
+ if(bytes.length<100||bytes.length>8*1024*1024||
+  bytes[0]!==80||bytes[1]!==75||bytes[2]!==3||bytes[3]!==4)
+  return wtJson({error:'仅允许有效的 ZIP 文件，最大 8 MiB'},413);
+ const digest=await wtHubSha256(bytes);
+ if(digest!==task.package_sha256)return wtJson({error:'任务包 SHA256 与提交记录不一致'},409);
+ const tid=task.id,folder='/contents/tasks/'+tid+'/',metaPath=folder+'task.json',packPath=folder+'package.zip';
+ try{
+  const info=await wtHubRequest(env,'');
+  if(!info.ok||info.body.private!==true)return wtJson({error:'AI Task Hub 未验证为 Private，禁止派单'},409);
+  const existing=await wtHubRequest(env,metaPath);
+  if(existing.ok){
+   const record=JSON.parse(wtUnb64(existing.body.content));
+   if(record.package_sha256===digest&&record.dedupe_key===task.dedupe_key&&
+      record.target===task.target)
+    return wtJson({existing:true,queued:record.status==='queued',task_id:tid,
+     target:record.target,repo:WT_HUB_REPO,path:'tasks/'+tid+'/task.json',sha256:digest,verified:true});
+   return wtJson({error:'任务编号已存在但内容或执行方不同，禁止覆盖'},409);
+  }
+  if(existing.status!==404)throw Error('查询任务状态失败 HTTP '+existing.status);
+  const priorZip=await wtHubRequest(env,packPath);
+  if(priorZip.ok){
+   const prior=Uint8Array.from(atob(String(priorZip.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
+   if(await wtHubSha256(prior)!==digest)return wtJson({error:'任务编号下已有不同的 ZIP，拒绝覆盖'},409);
+  }else if(priorZip.status===404){
+   const upload=await wtHubRequest(env,packPath,'PUT',{
+    message:'feat(worldtoon): stage task package '+tid,content:b64
+   });
+   if(!upload.ok)throw Error('上传 ZIP 失败 HTTP '+upload.status);
+  }else throw Error('查询 ZIP 失败 HTTP '+priorZip.status);
+  const verifiedZip=await wtHubRequest(env,packPath);
+  if(!verifiedZip.ok)throw Error('无法回读已上传的 ZIP');
+  const remoteBytes=Uint8Array.from(atob(String(verifiedZip.body.content||'').replace(/\s+/g,'')),c=>c.charCodeAt(0));
+  if(await wtHubSha256(remoteBytes)!==digest)throw Error('远端 ZIP SHA256 核验失败');
+  const record={schema_version:2,id:tid,project:'worldtoon',source:'worldtoon',
+   target:task.target,producer:task.producer,status:'queued',
+   title:task.title,created_at:task.created_at,dedupe_key:task.dedupe_key,
+   package_path:'package.zip',package_sha256:digest,publisher:'WorkBuddy',
+   rights_review_required:true};
+  const put=await wtHubRequest(env,metaPath,'PUT',{
+   message:'feat(worldtoon): queue verified task '+tid,content:wtB64(JSON.stringify(record,null,2)+'\n')
+  });
+  if(!put.ok){
+   if(put.status!==422)throw Error('任务激活失败 HTTP '+put.status);
+   const conflicted=await wtHubRequest(env,metaPath);
+   if(!conflicted.ok)throw Error('并发任务冲突，未取得远端记录');
+   const rec=JSON.parse(wtUnb64(conflicted.body.content));
+   if(rec.package_sha256!==digest||rec.target!==task.target)throw Error('并发任务内容不同，拒绝认领');
+  }
+  const final=await wtHubRequest(env,metaPath);
+  if(!final.ok)throw Error('无法回读远端任务状态');
+  const confirmed=JSON.parse(wtUnb64(final.body.content));
+  if(confirmed.id!==tid||confirmed.package_sha256!==digest||
+     confirmed.target!==task.target)throw Error('任务回读校验失败');
+  return wtJson({queued:confirmed.status==='queued',verified:true,existing:false,
+    task_id:tid,target:confirmed.target,repo:WT_HUB_REPO,
+    path:'tasks/'+tid+'/task.json',sha256:digest,commit:put.body.commit?.sha||null},201);
+ }catch(err){return wtJson({error:'AI Task Hub 派单未确认：'+String(err.message||err).slice(0,160)},503)}
+}
+
 async function wtArchiveApi(request,env,url){
  const p=url.pathname,method=request.method;
+ if(p==='/api/archive/hub-dispatch'&&method==='POST')return wtHubDispatch(request,env);
   const v3=await wt3ArchiveV3(request,env,url);if(v3)return v3;
  if(p==='/api/archive/publications'&&method==='GET')return wtJson(await wtSharedPublications());
  if(p==='/api/archive/status'&&method==='GET'){
