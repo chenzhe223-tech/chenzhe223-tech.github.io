@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'radar/scripts/news_engine_xnews.py'
+      - 'radar/config/news-engine-xnews.json'
       - 'radar/scripts/build_daily.py'
       - 'radar/daily/index.html'
       - 'radar/read/index.html'
