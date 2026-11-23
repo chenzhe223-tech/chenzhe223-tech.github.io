@@ -526,3 +526,39 @@
 .wt-novel-choice small{font-size:11px;color:#6c8490}
 .wt-novel-mode{font-weight:650}
 @media(max-width:650px){.wt-novel-page-top{flex-direction:column}.wt-novel-progress button{font-size:11px;padding:12px 3px}.wt-novel-choice{grid-template-columns:1fr}.wt-novel-focus{padding:17px}.wt-novel-summary-grid{gap:7px}.wt-novel-summary-grid article{padding:12px}.wt-novel-chapter-list>div{flex-direction:column}.wt-novel-actions-bottom>.button{flex:1}}
+
+/* Keep all four homepage creation cards visually equal; no highlighted module. */
+.wt-entry-grid .wt-entry-card.wt-entry-novel{background:transparent!important;border-color:var(--line,#d8dfe5)!important;color:inherit!important}
+.wt-entry-grid .wt-entry-card.wt-entry-novel:hover,.wt-entry-grid .wt-entry-card.wt-entry-novel:focus-visible{border-color:#53697a!important}
+
+/* Idea Studio: calm, single-task writing composition */
+.wt-idea-page{max-width:1000px;margin:0 auto;padding-bottom:48px}
+.wt-idea-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin:8px 0 26px}
+.wt-idea-head h1{font-size:clamp(26px,3vw,38px);line-height:1.2;letter-spacing:-.035em;margin:10px 0}
+.wt-idea-head p,.wt-idea-editor>p{font-size:14px;color:#718087;line-height:1.7}
+.wt-idea-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}
+.wt-idea-steps span{text-align:center;padding:13px 5px;border:1px solid #e3e6e7;background:transparent;border-radius:10px;font-size:13px;color:#7a8790}
+.wt-idea-steps span.current{border-color:#a8bcc5;background:#f2f5f5;color:#284450;font-weight:650}
+.wt-idea-projects{display:flex;align-items:end;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.wt-idea-projects label{flex:1;min-width:180px;font-size:12px;font-weight:700;display:flex;flex-direction:column;gap:7px}
+.wt-idea-projects select,.wt-idea-config select,.wt-idea-extras select{width:100%;font:inherit;border:1px solid #cbd5d9;background:#fff;color:#253c48;border-radius:10px;padding:12px}
+.wt-idea-editor{background:#fff;border:1px solid #dfe5e8;border-radius:18px;padding:clamp(19px,3vw,35px)}
+.wt-idea-editor h2{font-size:24px;margin:10px 0 23px}
+.wt-idea-eyebrow{font-size:11px;font-weight:750;letter-spacing:.12em;color:#58737d}
+.wt-idea-label{display:block;font-size:13px;font-weight:700;margin-bottom:10px}
+.wt-idea-editor #wt3-seed{display:block;width:100%;font:inherit;box-sizing:border-box;min-height:160px;padding:20px;border:1px solid #cad5da;border-radius:12px;resize:vertical;background:#fcfdfd;color:#223845;line-height:1.8}
+.wt-idea-editor #wt3-seed:focus{outline:2px solid #aac6d0;outline-offset:1px}
+.wt-idea-guide{font-size:12px;color:#77868d}
+.wt-idea-config{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.wt-idea-config label,.wt-idea-extras label{display:flex;flex-direction:column;gap:8px;font-size:12px;font-weight:700}
+.wt-idea-actions{margin-top:24px;display:flex;gap:12px;flex-wrap:wrap}
+.wt-idea-results{margin-top:28px;padding-top:26px;border-top:1px solid #e4e9eb}
+.wt-idea-result-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.wt-idea-result-head h2{margin:8px 0}
+.wt-idea-result-head>span{font-size:12px;color:#657780}
+.wt-idea-panel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:21px 0}
+.wt-idea-panel-grid article{min-height:94px;background:#f8fafb;border:1px solid #e5eaed;border-radius:11px;padding:12px}
+.wt-idea-panel-grid b{display:block;font-size:12px;margin-bottom:8px}
+.wt-idea-panel-grid small{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:11px;line-height:1.65;color:#71808b}
+.wt-idea-review-note{font-size:11px;color:#7b8790;margin-top:15px}
+@media(max-width:600px){.wt-idea-head{flex-direction:column}.wt-idea-steps span{font-size:11px}.wt-idea-config{grid-template-columns:1fr}.wt-idea-panel-grid{grid-template-columns:repeat(2,1fr)}}

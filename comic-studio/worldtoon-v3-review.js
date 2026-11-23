@@ -367,8 +367,8 @@
       '<p>选择一种创作方式，随后进入统一的作品制作流程。</p>'+
       '<div class="wt-entry-grid">'+
         '<a class="wt-entry-card" href="#/live"><span class="wt-entry-symbol">◉</span><strong>热点改编</strong><small>从新闻和全球热点选题</small><span class="wt-entry-arrow">→</span></a>'+
-        '<button type="button" class="wt-entry-card" data-action="new"><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>快速新建，AI 辅助扩写</small><span class="wt-entry-arrow">→</span></button>'+
-        '<button type="button" class="wt-entry-card wt-entry-novel" data-wt-novel-start><span class="wt-entry-symbol">▤</span><strong>小说蒸馏</strong><small>上传小说，提炼章节与人物线索</small><span class="wt-entry-arrow">→</span></button>'+
+        '<button type="button" class="wt-entry-card" data-wt-idea-start><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>输入灵感，AI 扩写完整剧情</small><span class="wt-entry-arrow">→</span></button>'+
+        '<button type="button" class="wt-entry-card wt-entry-novel" data-wt-novel-start><span class="wt-entry-symbol">▤</span><strong>文学漫绘</strong><small>世界文学导读与原创漫画表达</small><span class="wt-entry-arrow">→</span></button>'+
         '<a class="wt-entry-card" href="#/workspace"><span class="wt-entry-symbol">▧</span><strong>自主创作</strong><small>自行定义故事与人物</small><span class="wt-entry-arrow">→</span></a>'+
       '</div></section>';
   }
@@ -409,7 +409,7 @@
    const current=available?Math.min(2,Math.max(0,step)):0;
    return '<div class="wt-novel-page">'+
     '<div class="wt-novel-page-top"><div><div class="kicker">WORLD/TOON / NOVEL STUDIO</div>'+
-    '<h1>把一本小说，变成一部漫画。</h1>'+
+    '<h1>让好文学，拥有新的画面。</h1>'+
     '<p>先导入作品，再理解内容，最后选择适合的漫画表达。</p></div>'+
     '<a href="#/dashboard" class="button">返回首页</a></div>'+
     '<div class="wt-novel-progress">'+
@@ -430,7 +430,7 @@
    const title=p.title==='未命名小说导读'?'':p.title;
    const panel=window.WTNovelStudio?.panel?.(p)||'<p>解析模块尚未加载，请刷新页面。</p>';
    return '<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 01 · IMPORT</div>'+
-    '<h2>导入你要改编的小说</h2><p>可以先填写作品名，再上传本机书稿。当前深度解析以真实文件为依据，不会仅凭书名编造剧情。</p>'+
+    '<h2>选择一本想要解读的作品</h2><p>填写书名并上传合法持有的文本。平台不会仅凭书名生成未经核实的小说剧情。</p>'+
     '<label class="wt-novel-title-label">小说名称<input data-novel-title maxlength="180" placeholder="例如：简爱、素食者、百年孤独" value="'+esc(title)+'"></label>'+
     '<div class="wt-novel-import-panel">'+panel.replace('<details class="wt-novel-studio"','<details open class="wt-novel-studio"')+'</div>'+
     '<div class="wt-novel-hint">🔒 本地处理原稿。是否附带原稿交给外部 AI，由你另行明确授权。</div>'+
@@ -489,4 +489,73 @@
      setChange(p,'更新小说作品名称');render();
    }
  },true);
+})();
+
+
+/* WORLD/TOON · By DAVYLAB — editorial one-line AI creative flow */
+(function(){
+ 'use strict';
+ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const ideap=()=>typeof selected==='function'?selected():null;
+ const isIdea=p=>!!p&&p.creationSource==='one-line'&&!p.deleted;
+ const hasResult=p=>!!p?.creativeDirection?.storyboardProvenance?.method&&p.creativeDirection.storyboardProvenance.method==='verified_model_response'&&Array.isArray(p.panels)&&p.panels.some(x=>String(x.scene||'').length>30);
+ function page(){
+  const all=activeProjects().filter(isIdea).sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+  let p=ideap();if(!isIdea(p))p=all[0]||null;
+  if(p)ui.selected=p.id;
+  const done=hasResult(p),locked=!!p?.handoff?.repoQueuedAt||!!p?.handoff?.directTaskExportedAt||!!p?.panels?.some(x=>x.image);
+  return '<div class="wt-idea-page">'+
+   '<header class="wt-idea-head"><div><div class="kicker">WORLD/TOON / IDEA STUDIO</div><h1>一句灵感，开启一部漫画。</h1>'+
+   '<p>先输入创意，AI 扩写剧情与分镜；审阅后再进入漫画制作。</p></div>'+
+   '<a class="button" href="#/dashboard">返回首页</a></header>'+
+   '<div class="wt-idea-steps"><span class="current">01 写下灵感</span><span class="'+(done?'current':'')+'">02 AI 编剧</span><span>03 审阅与制作</span></div>'+
+   (!p?'<section class="wt-idea-editor"><h2>把故事的第一句话写下来</h2><p>新建草稿后，即可调用已接入的 DeepSeek 编剧能力。</p><button class="button dark" data-wt-idea-start>＋ 开始创作</button></section>':
+     '<div class="wt-idea-projects"><label>当前创作 <select data-wt-idea-project>'+all.map(x=>
+      '<option value="'+esc(x.id)+'"'+(p.id===x.id?' selected':'')+'>'+esc(x.title)+'</option>').join('')+'</select></label>'+
+      '<button class="button" data-wt-idea-start>＋ 新建灵感</button></div>'+
+     '<section class="wt-idea-editor">'+
+      '<div class="wt-idea-eyebrow">YOUR IDEA / 灵感输入</div>'+
+      '<h2>你想讲一个什么故事？</h2>'+
+      '<label for="wt3-seed" class="wt-idea-label">一句话创意</label>'+
+      '<textarea id="wt3-seed" rows="4" maxlength="1800" '+(locked?'disabled':'')+' placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+esc(p.ideaSeed||'')+'</textarea>'+
+      '<p class="wt-idea-guide">建议包含一个主人公、一个冲突或一个意外转折。至少输入 8 个字。</p>'+
+      '<div class="wt-idea-config"><label>剧情类型<select id="wt3-plot-genre" '+(locked?'disabled':'')+'>'+
+      '<option value="general"'+(p.plotGenre!=='viral-melodrama'?' selected':'')+'>自由原创</option>'+
+      '<option value="viral-melodrama"'+(p.plotGenre==='viral-melodrama'?' selected':'')+'>都市反转短剧</option></select></label>'+
+      '<label>漫画篇幅<select id="wt3-count" '+(locked?'disabled':'')+'>'+
+       [6,9,12,18].map(x=>'<option value="'+x+'"'+(p.panels?.length===x?' selected':'')+'>'+x+' 格</option>').join('')+'</select></label></div>'+
+      (p.plotGenre==='viral-melodrama'?'<div class="wt-idea-extras"><label>故事方向<select id="wt3-drama-subtype"><option value="rebirth-bank-rich">重生逆袭</option><option value="celebrity-romance">娱乐圈</option></select></label><input type="hidden" id="wt3-drama-intensity" value="'+(p.dramaIntensity||4)+'"></div>':'')+
+      '<div class="wt-idea-actions"><button type="button" class="button dark" data-wt3-action="expand" '+(locked?'disabled':'')+'>✦ AI 扩写故事与分镜</button>'+
+      (done?'<a class="button" href="#/director/'+encodeURIComponent(p.id)+'">进入创意导演台 →</a>':'')+'</div>'+
+      '<div class="wt3-expand-consent" id="wt3-expand-consent" hidden><p><strong>确认调用 DeepSeek</strong> · 将真实发送本次原创构思给模型，可能按 Token 产生费用；只有明确确认后才调用。</p>'+
+      '<div class="buttons"><button type="button" class="button dark" data-wt3-action="expand-confirm">确认生成</button><button type="button" class="button" data-wt3-action="expand-cancel">取消</button></div></div>'+
+      '<p class="wt3-expand-feedback" id="wt3-expand-feedback" role="status" aria-live="polite" hidden></p>'+
+      (done?'<div class="wt-idea-results"><div class="wt-idea-result-head"><div><span class="wt-idea-eyebrow">AI STORY DRAFT · 待作者审核</span><h2>'+esc(p.title)+'</h2></div><span>'+p.panels.length+' 格分镜草稿</span></div>'+
+       '<p>'+esc(p.description||'模型已返回结构化剧本，可在导演台逐格检查。')+'</p>'+
+       '<div class="wt-idea-panel-grid">'+p.panels.slice(0,9).map((v,i)=>'<article><b>'+String(i+1).padStart(2,'0')+' · '+esc(v.title)+'</b><small>'+esc(v.scene||'待补全')+'</small></article>').join('')+'</div>'+
+       '<a class="button dark" href="#/director/'+encodeURIComponent(p.id)+'">审核人物与完整分镜 →</a>'+
+       '<p class="wt-idea-review-note">模型草稿不代表已批准、已生图或已完成版权核查。</p></div>':'')+
+      '</section>')+
+   '</div>';
+ }
+ window.WTIdeaPage=page;
+ document.addEventListener('click',ev=>{
+  const b=ev.target.closest('[data-wt-idea-start]');if(!b)return;
+  ev.preventDefault();ev.stopImmediatePropagation();
+  newProject();const p=ideap();if(!p)return;
+  p.creationSource='one-line';p.title='未命名灵感作品';p.handoff={...p.handoff,mode:'original'};
+  p.plotGenre='general';persist();nav('idea');
+ },true);
+ document.addEventListener('change',ev=>{
+  if(ev.target.matches('[data-wt-idea-project]')){
+   const p=findProject(ev.target.value);if(p&&isIdea(p)){ui.selected=p.id;render();}
+  }
+  if(ev.target?.id==='wt3-count'){
+   const p=ideap();if(!isIdea(p)||p.panels?.some(x=>x.image)||p.handoff?.repoQueuedAt)return;
+   const n=Number(ev.target.value);if(![6,9,12,18].includes(n))return;
+   p.panels=Array.from({length:n},(_,i)=>p.panels[i]||makePanel(i));
+   setChange(p,'设置灵感漫画篇幅 '+n+' 格');render();
+  }
+ },true);
+ if(location.hash.startsWith('#/idea'))queueMicrotask(()=>parseRoute());
 })();
