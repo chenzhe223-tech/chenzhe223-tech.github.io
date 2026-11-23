@@ -1,3 +1,4 @@
+import {P2_ROUTES,handleP2,P2_OPENAPI} from "./p2-history.mjs";
 /**
  * DAVYLAB News Engine Public API P0
  *
@@ -190,11 +191,13 @@ export default {
     if(method==="OPTIONS")return new Response(null,{status:204,headers:HEADERS});
     if(method!=="GET"&&method!=="HEAD")return error("method_not_allowed","Read-only GET/HEAD/OPTIONS API",method);
     const url=new URL(request.url);
+    if(P2_ROUTES.includes(url.pathname))return handleP2(request,{loadLatest:loadReport,normalizeRecords:records});
     if(url.pathname==="/api/v1/openapi.json")return reply(OPENAPI,200,method);
     if(url.pathname==="/"||url.pathname==="/api/v1")
       return reply({name:ENGINE,version:VERSION,mode:"published_read_only",
         description:"Indexes the latest already published AI Radar edition. No live web search or AI inference.",
-        endpoints:Object.keys(OPENAPI.paths).concat("/api/v1/openapi.json"),
+        endpoints:Object.keys(OPENAPI.paths).concat("/api/v1/openapi.json",...P2_ROUTES),
+        historical_mode:"published_approved_archive_30_issue_max",historical_openapi:"/api/v2/openapi.json",
         docs:"https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/news-engine/NEWS_API.md"},200,method);
     if(!["/api/v1/health","/api/v1/news","/api/v1/search","/api/v1/topics"].includes(url.pathname))
       return error("not_found","Unknown API endpoint",method);

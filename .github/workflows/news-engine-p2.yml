@@ -1,0 +1,103 @@
+name: DAVYLAB News Engine P2 historical API CI
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'news-engine/public-api-worker.mjs'
+      - 'news-engine/p2-history.mjs'
+      - 'news-engine/test_p2_history.cjs'
+      - 'news-engine/test_p2_online.cjs'
+      - 'news-engine/NEWS_API.md'
+      - 'news-engine/P2_HISTORY.md'
+      - '.github/workflows/news-engine-p2.yml'
+      - '.github/workflows/news-engine-p0.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'news-engine/public-api-worker.mjs'
+      - 'news-engine/p2-history.mjs'
+      - 'news-engine/test_p2_history.cjs'
+      - 'news-engine/test_p2_online.cjs'
+      - 'news-engine/P2_HISTORY.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p2-offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Source and isolated v2 tests plus v1 compatibility
+        run: |
+          node --check news-engine/public-api-worker.mjs
+          node --check news-engine/p2-history.mjs
+          node --check news-engine/test_p2_history.cjs
+          node --check news-engine/test_p2_online.cjs
+          node news-engine/test_public_api.cjs
+          node news-engine/test_p2_history.cjs
+      - name: Fail if API adds data writes, paid model calls, unsafe endpoints or local dev credentials
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          v1=Path('news-engine/public-api-worker.mjs').read_text()
+          v2=Path('news-engine/p2-history.mjs').read_text()
+          assert 'handleP2' in v1 and 'loadLatest:loadReport' in v1
+          assert '/api/v1/news' in v1 and 'published_read_only' in v1
+          assert 'MAX_DAYS=30' in v2
+          assert 'quality_gate?.status==="PASS"' in v2
+          assert 'publishable:false' in v2
+          assert 'new URL(original)' in v2
+          for forbidden in ('env.AI.run(', 'env.DB.prepare(', 'env.KV.put(',
+                            'process.env.API_KEY', 'fetch(request.url)', 'setTimeout(()=>publish'):
+             assert forbidden not in v1 and forbidden not in v2, forbidden
+          assert all(Path(p).exists() for p in ('radar/data/latest.json','radar/data/history.json'))
+          print('P2 read-only + production Radar isolation PASS')
+          PY
+
+  real-archive-provenance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Real HTTPS archive, quality-gate and history inventory
+        run: |
+          node --input-type=module - <<'JS'
+          const base='https://chenzhe223-tech.github.io/radar/data/';
+          async function read(path){
+            const r=await fetch(base+path,{signal:AbortSignal.timeout(25000)});
+            if(!r.ok)throw Error(path+' status='+r.status);
+            return r.json();
+          }
+          const [h,latest]=await Promise.all([read('history.json'),read('latest.json')]);
+          if(!Array.isArray(h.days)||h.days.length<2||latest.quality_gate?.status!=='PASS')
+           throw Error('History/latest not official and approved');
+          const prior=h.days.map(x=>String(x).replace('.json','')).find(x=>x!==latest.report_date);
+          if(!prior)throw Error('No older published issue');
+          const a=await read('archive/'+prior+'.json');
+          if(a.report_date!==prior||a.quality_gate?.status!=='PASS'||!Array.isArray(a.news))
+           throw Error('Previous issue lacks verified quality gate');
+          console.log(JSON.stringify({PASS:true,latest:latest.report_date,prior,available_history:h.days.length,
+            index:'official published AI Radar dates',writes:false}));
+          JS
+
+  deployed-p2-online:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: [p2-offline,real-archive-provenance]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Live Cloudflare v2 historical and backward-compatible v1 acceptance
+        run: node news-engine/test_p2_online.cjs

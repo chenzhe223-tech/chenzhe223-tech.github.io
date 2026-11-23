@@ -1,6 +1,18 @@
-# DAVYLAB News Engine · Public API P0
+# DAVYLAB News Engine · Shared Read-only API (P0–P2)
 
 **Status (2026-11-23): P0 production deployed and real HTTPS verified.** Independent Worker `davylab-news-api` is active at `https://davylab-news-api.chenzhe223.workers.dev`. PR [#166](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/166) merged to main as `e3b8b821e98c06e926865b46d8d81b0e27a147c5`.
+
+## P2：历史期刊查询与规则选题评分（2026-11-23）
+
+P2 在原有 `/api/v1/*` **完全兼容**的前提下，新增 `/api/v2/*`：最多 30 期已发布、质量门禁 PASS 的 AI Radar 归档；默认检索最近 7 期。它不是实时全网搜索、研究成果核验或 AI 生成新闻。
+
+- [历史期刊目录](https://davylab-news-api.chenzhe223.workers.dev/api/v2/history?days=30)：`/api/v2/history?days=30`
+- [跨期新闻](https://davylab-news-api.chenzhe223.workers.dev/api/v2/news?days=7&category=agents)：`/api/v2/news?days=7&category=agents`
+- [跨期搜索](https://davylab-news-api.chenzhe223.workers.dev/api/v2/search?q=OpenAI&days=30)：`/api/v2/search?q=OpenAI&days=30`
+- [规则选题](https://davylab-news-api.chenzhe223.workers.dev/api/v2/topics?days=7&sort=score)：`/api/v2/topics?days=7&sort=score`
+- `/api/v2/openapi.json`：P2 机器可读接口摘要。具体字段、权重及回退见 [P2_HISTORY.md](./P2_HISTORY.md)。
+
+保留全部旧 P0/P1 地址及字段，三个下游平台无需改版即可继续使用。跨期检索从已发布的期刊原文链接中筛选，不传播第三方图片/全文，也不将编辑评分冒充阅读量。
 
 ## Design boundaries
 

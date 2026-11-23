@@ -149,6 +149,7 @@ jobs:
               ".github/workflows/news-engine-p0.yml",
               ".github/workflows/news-engine-public-api.yml",
               ".github/workflows/news-engine-p1-consumers.yml",
+              ".github/workflows/news-engine-p2.yml",
           }
           # P1 is limited to the existing read-only WorldToon/WeChat discovery
           # entrypoints. Never allow edits to Radar publication, poster or auth.
@@ -195,6 +196,17 @@ jobs:
               assert len(gone) == len(added) == 1, "Worker CSP change must be single-line"
               assert old_origin in gone[0], "Existing CSP source was changed"
               assert gone[0].replace(old_origin, new_origin) == added[0], "Only exact approved News API CSP change allowed"
+          if ".github/workflows/news-engine-p2.yml" in changed:
+              from pathlib import Path
+              workflow = Path(".github/workflows/news-engine-p2.yml").read_text()
+              assert "contents: read" in workflow and "branches: [main]" in workflow
+              assert "news-engine/test_p2_history.cjs" in workflow
+              assert "news-engine/test_p2_online.cjs" in workflow
+              assert not any(term in workflow for term in (
+                  "\n  schedule:", "contents: write", "id-token: write",
+                  "wrangler deploy", "cloudflare.request", "git push",
+                  "secrets.GITHUB_TOKEN"
+              )), "P2 QA workflow must be read-only and cannot deploy or modify Radar"
           print("News Engine changed paths:", changed)
           assert not forbidden, "P0 production isolation violated: " + repr(forbidden)
           assert changed, "PR has no new Engine changes to validate"
