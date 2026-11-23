@@ -456,7 +456,7 @@
      '<div class="wt-novel-summary-grid"><article><span>章节索引</span><strong>'+count+'</strong></article>'+
      '<article><span>主题候选</span><strong>'+themes.length+'</strong></article>'+
      '<article><span>人物候选</span><strong>'+cast.length+'</strong></article></div>'+
-     '<h3>主题线索</h3><div class="wt-novel-tags">'+(themes.length?themes.slice(0,12).map(x=>'<span>'+esc(x.name)+'</span>').join(''):'<span>尚无可靠主题线索</span>')+'</div>'+
+     (p.literaryWorkflowVersion===2&&WTLiterature.active(p)?WTLiterature.editor(p):'')+'<h3>主题线索</h3><div class="wt-novel-tags">'+(themes.length?themes.slice(0,12).map(x=>'<span>'+esc(x.name)+'</span>').join(''):'<span>尚无可靠主题线索</span>')+'</div>'+
      '<h3>人物线索（待核实）</h3><p>'+esc(cast.slice(0,10).map(x=>x.name).join('、')||'没有可靠候选，需阅读原文核对')+'</p>'+
      '<details class="wt-novel-chapter-list"><summary>展开章节索引 · '+count+' 段</summary>'+
       chapters.map(x=>'<div><b>'+esc(x.chapter_id)+' · '+esc(x.title)+'</b><small>'+esc(x.locator)+'</small></div>').join('')+'</details>'+

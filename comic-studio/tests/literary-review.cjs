@@ -16,7 +16,7 @@ function region(source,start,end){
 const directorCtx={ensure:p=>p.creativeDirection,clean:x=>String(x||'').trim(),
  shotOf:i=>['wide','close','medium','high','low','medium','detail','two-shot','wide'][i],
  style:()=>({material:'原创新材料',lighting:'柔和电影光'})};
-vm.runInNewContext(region(director,'function localStoryboard(','function applyStoryboard(')+'\nthis.storyboard=localStoryboard;',directorCtx);
+vm.runInNewContext(region(director,'function localStoryboardCore(','function applyStoryboard(')+'\nthis.storyboard=localStoryboard;',directorCtx);
 const project={id:'fixture-review',title:'读懂某部文学作品',sourceTitle:'未核验的作品',
  storySourceSelection:{adaptation:'literary_review',rights:'copyrighted'},panels:Array.from({length:9},(_,i)=>({id:i})),
  creativeDirection:{cast:[{name:'虚构读者'},{name:'虚构编辑'}],styleId:'western-cinematic',arcId:'explain'},

@@ -187,6 +187,7 @@ function localStoryboardCore(p){
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
 }
 function localStoryboard(p){
+ if(p?.literaryWorkflowVersion===2 && WTLiterature.active(p)){WTLiterature.validate(p,p.literaryDraft);return p.literaryDraft.panels.map(WTLiterature.row)}
  const rows=localStoryboardCore(p),seen=new Map(),followups=[
  ['重新核查前一格提出的证据','先把这件事确认清楚'],
  ['注意到行动中尚未解释的细节','这个细节还没有答案'],
@@ -254,6 +255,7 @@ function aiStoryPayload(p,provider){
 }
 async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
+ if(p?.literaryWorkflowVersion===2 && WTLiterature.active(p)){notify('请在文学编辑稿中完成研究并应用分镜');return}
  if(p.storySourceSelection?.adaptation==='literary_review'){
   const updated=draft(p,replace);
   if(updated)notify('文学导读采用动态篇幅的三维原创评论分镜；请通过 ChatGPT 研究和核实作品内容，未核实的介绍不得直接发表');
@@ -321,7 +323,7 @@ function castText(c){return c.cast.map((x,i)=>[i+1+'. '+x.role+'：'+x.name,'外
 function payload(p){
  const c=ensure(p),s=style(c.styleId);
  return {
-  version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
+  ...(p?.literaryWorkflowVersion===2 && WTLiterature.active(p)?{literary_editorial:p.literaryDraft||null}:{}),version:3,style_catalog_version:'3.0.0',quality_target:c.quality||'Premium',model_capability:'unverified',style_id:s.id,style_name:s.name,visual_rules:{palette:s.palette,material:s.material,lighting:s.lighting,layout:s.layout,negative:s.negative,ratio:'3:4',size:'1080x1440',lettering:'先生成无文字画面，准确中文另行排版'},
   series_bible:p.seriesBible||null,series_identity:p.seriesId?{id:p.seriesId,episode:p.seriesEpisode||1,previous_task_id:p.previousTaskId||null}:null,
    narrative:{arc_id:c.arcId,arc_name:arc(c.arcId).name,genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||3),story_thesis:clean(c.thesis),world:clean(c.world),emotion:clean(c.emotion),summary:clean(p.description),fictionalization:clean(p.fiction)},
   characters:c.cast.map((x,i)=>({role:clean(x.role),name:clean(x.name),look:clean(x.look),clothes:clean(x.clothes),symbol:clean(x.symbol),nature:clean(x.nature),portrait_reference:x.portraitConsent&&x.portraitMedia?{file:'references/portrait-'+String(i+1).padStart(2,'0')+'.'+(x.portraitExt||'png'),sha256:x.portraitSha256||null,usage:'authorized_visual_likeness_reference_only',source:'user_supplied_private',description:clean(x.portraitNotes||''),requires_actual_photo_for_generation:true}:null})),
@@ -340,6 +342,7 @@ function digest(p){
 function checks(p){
  if(!p)return ['未选择作品'];
  const c=ensure(p),errs=[];
+ if(p?.literaryWorkflowVersion===2 && WTLiterature.active(p)){errs.push(...WTLiterature.checks(p));if(!WTLiterature.passed(p,'脚本'))errs.push('请完成五项脚本审读并记录格号')}
  if(clean(c.thesis).length<12)errs.push('故事主旨至少12字');
  if(clean(c.world).length<8)errs.push('故事发生的世界和地点至少8字');
  if(clean(c.cover).length<12)errs.push('封面视觉方案至少12字');
@@ -350,7 +353,7 @@ function checks(p){
  if(new Set((c.cast||[]).map(x=>clean(x.name))).size!==(c.cast||[]).length)errs.push('角色姓名不能重复');
  if(p.seriesEpisode>1&&p.seriesBible){if(p.seriesBible.style_id&&p.seriesBible.style_id!==c.styleId)errs.push('续章画风必须与系列创作圣经一致');if(Array.isArray(p.seriesBible.characters)&&p.seriesBible.characters.length&&JSON.stringify(p.seriesBible.characters)!==JSON.stringify(c.cast))errs.push('系列续章角色外貌服饰需保持锁定，修改应建立新系列版本')}
  if(!Array.isArray(p.panels)||p.panels.length<4||p.panels.length>60)errs.push('分镜数量必须为4–60格');
- else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
+ else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if((p?.literaryWorkflowVersion===2 && WTLiterature.active(p))?!clean(x.scene):(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue))))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
@@ -482,7 +485,7 @@ function draw(){
   '<a class="button" href="#/handoff/'+e(p.id)+'">制作交接 →</a>')+
  '<div class="director-head"><div><span class="director-kicker">正在制作</span><h2>'+e(p.title)+'</h2><p>'+e(p.category)+' · '+e(c.thesis)+'</p></div>'+
  '<span class="director-status '+(locked?'ready':'')+'">'+(locked?'已锁定 · 可派单':'创作设定待确认')+'</span></div>'+
- '<div class="director-tabs">'+tabs.map((t,i)=>'<button type="button" data-director-step="'+i+'" class="'+(step===i?'active':'')+'"><span>0'+(i+1)+'</span>'+t+'</button>').join('')+'</div>'+
+ (p?.literaryWorkflowVersion===2 && WTLiterature.active(p)?WTLiterature.editor(p):'')+'<div class="director-tabs">'+tabs.map((t,i)=>'<button type="button" data-director-step="'+i+'" class="'+(step===i?'active':'')+'"><span>0'+(i+1)+'</span>'+t+'</button>').join('')+'</div>'+
  (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">先从当前推荐中快速选择；需要更多选项时展开完整图鉴。画风描述与参考图不是正式生图结果。</p>'+styleCards(c)+'<details class="wt-v3-selected-detail"><summary>查看当前画风的材质、光影、构图与样张状态</summary>'+stylePreview(c)+'</details>'+ 
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 人物设定 →</button></div></section>':'')+
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+

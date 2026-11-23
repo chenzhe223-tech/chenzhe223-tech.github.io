@@ -205,6 +205,7 @@
    '版权：'+(x.rights_note||'待核查')+'\n未自动获取原著全文，内容及权益仍须由作者核对。';
   p.panels=Array.from({length:review?9:Math.max(4,Math.min(60,beats.length*3))},(_,i)=>makePanel(i));
   p.status='草稿';p.plotGenre=x.type==='drama'?'viral-melodrama':'general';
+  if(p.literaryWorkflowVersion===2)WTLiterature.initialize(p);
   data.projects.unshift(p);ui.selected=p.id;ui.wt4LastId=p.id;persist();
   nav('workspace/'+p.id+'/1');
   notify(review?'九格文学导读草稿已建立；请先核实书目及主题，再进入 AI 编剧':'剧情已选，创建 '+p.panels.length+' 格建议篇幅的漫画草稿；请在 AI 编剧中继续扩写');

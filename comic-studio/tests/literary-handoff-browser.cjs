@@ -24,6 +24,7 @@ function zipStoreEntries(buffer){
   await page.waitForFunction(()=>typeof window.wtDirector==='object'&&typeof wfMode==='function'&&typeof wfProductionPreflight==='function',{timeout:45000});
   const setup=await page.evaluate(()=>{
    const p=emptyProject();
+   delete p.literaryWorkflowVersion; // Existing v1 project.
    p.id='qa-literary-review-satantango';
    p.title='读懂｜撒旦探戈｜Satantango：故事、哲学与人生';
    p.sourceTitle='撒旦探戈 | Satantango';
