@@ -22,9 +22,9 @@ except ModuleNotFoundError:
     from skill_radar import ENGINE_VERSION, actual_skill_files, build_radar, canonical_project_id, classify_skill_type, identify_duplicate, infer_skill_category, load_recommendation_history, enrich_growth_metrics, score_candidate
 
 try:
-    from radar.scripts.xnews_sources import collect_xnews_articles
+    from radar.scripts.news_engine_xnews import collect_news_engine_articles as collect_xnews_articles
 except ModuleNotFoundError:
-    from xnews_sources import collect_xnews_articles
+    from news_engine_xnews import collect_news_engine_articles as collect_xnews_articles
 
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "radar" / "data"
@@ -906,9 +906,9 @@ def collect_skills() -> list[dict]:
     return selected
 
 def collect_xnews_report_fields(http_get_fn, *, now: dt.datetime, recent: list[dict], enabled: bool | None = None) -> dict[str, object]:
-    """Return explicit X News status and voices fields for the daily report.
+    """Return compatible overseas-reading fields powered by DAVYLAB News Engine.
 
-    X News is optional: collector failures remain an explicit empty state and do
+    This supplementary News Engine feed is optional: collector failures remain an explicit empty state and do
     not suppress the verified core briefing.
     """
     if enabled is None:
@@ -927,7 +927,25 @@ def collect_xnews_report_fields(http_get_fn, *, now: dt.datetime, recent: list[d
         today_key = now.astimezone(TZ).date().isoformat()
         voices = filter_historical_duplicates(voices, "xnews_voices", today_key)
         same_day = [{**item, "_current_date": today_key} for item in recent]
-        voices = [item for item in voices if not _duplicate_match(item, same_day, today_key)][:6]
+        eligible = [item for item in voices if not _duplicate_match(item, same_day, today_key)]
+        # Filter history and same-day global news BEFORE the final source-balanced six.
+        # Otherwise the most recent News Engine discoveries also appear in "news",
+        # leaving overseas reading empty despite a healthy five-source collector.
+        voices, per_source = [], {}
+        for item in eligible:
+            source = str(item.get("source") or "")
+            if per_source.get(source, 0) >= 2:
+                continue
+            voices.append(item)
+            per_source[source] = per_source.get(source, 0) + 1
+            if len(voices) == 6:
+                break
+        if len(voices) < 6:
+            chosen = {str(item.get("url")) for item in voices}
+            voices.extend(item for item in eligible if str(item.get("url")) not in chosen) 
+            voices = voices[:6]
+        if not voices and status == "ok":
+            status = "no_recent"
     return {"xnews_voices": voices, "xnews_status": status}
 
 
@@ -983,7 +1001,7 @@ def main() -> None:
         "skill_radar": SKILL_RADAR_DIAGNOSTICS,
         "method": {
             "news_sources": "public RSS feeds; links and published timestamps preserved",
-            "xnews_sources": "optional X News RSS v1: original author/source URL and source pubDate; short attributed editorial excerpt only; not independent fact verification",
+            "xnews_sources": "DAVYLAB News Engine: five independent public RSS/Atom publishers; ranked original-source leads, no unauthorized AI calls; not independent fact verification; optional legacy emergency fallback",
             "china_ai_news_sources": "QbitAI, Machine Heart, GeekPark, 36Kr, Leiphone AI/robotics/chips, iFanr, AIquanbao, TechNode, TechCrunch AI, Google News China-AI, IT Home, InfoQ China and OSChina RSS; filtered for China-related AI entities and timestamps within seven days",
             "china_ai_news_minimum": CHINA_NEWS_MIN,
             "china_ai_news_target": CHINA_NEWS_TARGET,
