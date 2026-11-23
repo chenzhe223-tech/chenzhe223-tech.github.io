@@ -63,6 +63,15 @@ class CollectorTests(unittest.TestCase):
             path=pathlib.Path(directory)/"history.json"
             path.write_text("{}")
             with self.assertRaises(ValueError): collector.load_history(path)
+    def test_empty_feed_is_reported_not_misrepresented_as_active(self):
+        sources=[{"name":"quiet","url":"https://quiet.example/feed"}]
+        result,_=collector.collect(sources,lambda _:b"<rss><channel/></rss>",NOW)
+        self.assertEqual(len(result["stories"]),0)
+        self.assertEqual(result["diagnostics"][0]["status"],"ok")
+        self.assertEqual(result["diagnostics"][0]["coverage"],"no_recent_entries")
+    def test_active_feed_is_covered(self):
+        result,_=collector.collect([{"name":"active","url":"https://active.example/feed"}],lambda _:RSS,NOW)
+        self.assertEqual(result["diagnostics"][0]["coverage"],"active")
     def test_reject_insecure(self):
         self.assertEqual(collector.safe_url("http://example.org"), "")
         self.assertEqual(collector.safe_url("https://user:pass@example.org"), "")
