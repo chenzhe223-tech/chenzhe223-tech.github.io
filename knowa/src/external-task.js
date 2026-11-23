@@ -17,10 +17,8 @@ export function generateExternalTask(raw={}){
  const articleLength=[600,900,1200,1800].includes(Number(b.articleLength))?Number(b.articleLength):900;
  const errors=[];
  if(topic.length<4)errors.push('请填写至少4字的知识主题');
- if(facts.length<12)errors.push('请提供至少12字的可信知识说明');
- if(sourceName.length<2)errors.push('请填写来源机构');
  let url='';
- try{const u=new URL(sourceUrl);if(u.protocol!=='https:')throw Error('Only HTTPS');url=u.href}catch{errors.push('请输入有效的 HTTPS 来源链接')}
+ if(sourceUrl){try{const u=new URL(sourceUrl);if(u.protocol!=='https:')throw Error('Only HTTPS');url=u.href}catch{errors.push('来源链接必须是有效的 HTTPS 地址；也可以留空由第三方先研究')}}
  if(errors.length)return {ok:false,errors};
  const desired=['video','full'].includes(kind),wantImages=['poster','full'].includes(kind),wantArticle=['article','full'].includes(kind);
  const shotCount=duration===12?4:duration===30?6:duration===45?9:10;
@@ -53,9 +51,9 @@ export function generateExternalTask(raw={}){
  '【交付对象】'+audience,
  '【目标平台】'+target+'（仅作为任务接收端。先确认自身工具与执行权限，不得假称具有生图、生视频、上传或压缩能力）',
  '【视觉规范】'+style+'；高端科学出版物气质；版面克制、信息层级清晰、拒绝炫光、伪3D、无意义emoji与密集装饰。',
- '【事实基线】\n'+facts,
- '【原始资料】'+sourceName+'｜'+url,
- '【来源状态】source-review-pending：这些内容是待独立核验的工作材料，不得声称已核实。先访问并核对原始来源；如无法访问，明确指出且只基于已提供资料工作，不可补造机构、统计、引文或实验结果。',
+ '【事实基线】\n'+(facts||'尚未提供已核验事实材料。执行时先对主题完成原始文献研究和事实核对，不得擅自补充未核实的结论。'),
+ '【原始资料】'+(sourceName||'待检索权威来源')+'｜'+(url||'暂无链接，必须先找到至少2条高质量原始来源并核验'),
+ '【来源状态】source-review-pending：这些内容是待独立核验的工作材料，不得声称已核实。先访问并核对原始来源；如无来源则优先查找权威机构原文及可信出版资料，如无法访问，明确指出不能核验的结论；不可补造机构、统计、引文或实验结果。',
  '【额外需求】'+(notes||'无；优先准确、清晰、易读，保留自然中文与正确引用。'),
  '【参考视觉/参考约束】'+(reference||'以 KNOWA 现有深海蓝、冷白、科学杂志美术风格为基准，避免盗用未授权品牌素材。'),
  '【执行准则】先制作内容事实表（主张｜对应出处｜是否已查证｜不确定性），再建立统一视觉母版及术语表，再按媒体逐项制作。必须给出每项作品的可用文件或明确说明无法实际生成的原因。不得把规划稿写成已渲染成品，不得夸大事实。',
@@ -107,5 +105,5 @@ export function generateExternalTask(raw={}){
   其他:'先识别实际可用工具与模态，再执行对应部分；对于不支持的素材类型输出可移交制作指令，绝不伪造已交付的文件。'
  };
  const prompt=[...intro,'【'+target+' 专属执行补充】'+targetAdvice[target],video,poster,article,final].filter(Boolean).join('\n\n');
- return {ok:true,version:EXTERNAL_TASK_VERSION,target,kind,style,duration,imageCount,articleLength,prompt,storyboard:desired?steps:[],source:{title:topic,provider:sourceName,url,reviewStatus:'source-review-pending'},filePrefix:'KNOWA_'+kind.toUpperCase(),files:{video:desired,poster:wantImages,article:wantArticle}};
+ return {ok:true,version:EXTERNAL_TASK_VERSION,target,kind,style,duration,imageCount,articleLength,prompt,storyboard:desired?steps:[],source:{title:topic,provider:sourceName||'待检索',url:url||null,reviewStatus:'source-review-pending'},filePrefix:'KNOWA_'+kind.toUpperCase(),files:{video:desired,poster:wantImages,article:wantArticle}};
 }
