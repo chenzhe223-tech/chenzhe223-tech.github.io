@@ -74,6 +74,14 @@ def normalize(item: dict[str, Any], source: str, now: datetime | None = None) ->
     if not title or not published:
         return None
     abstract = tidy(item.get("abstract") or "", 380)
+    # Crossref journal-article may include news, editorials, corrections and retractions.
+    # These are research *candidates*, not completed scientific fact-checks.
+    if re.match(r"^(author correction|publisher correction|correction|retraction|editorial|in science journals)\b", title, re.I):
+        return None
+    if source == "nature" and not doi.startswith("10.1038/s41586-"):
+        return None
+    if source == "science" and (not doi.startswith("10.1126/science.") or len(abstract) < 280):
+        return None
     authors = "、".join(
         tidy(" ".join(filter(None, (author.get("given"), author.get("family")))), 80)
         for author in (item.get("author") or [])[:3]
