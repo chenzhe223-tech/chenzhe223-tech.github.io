@@ -78,3 +78,24 @@ test('narrow natural-language questions to entity subject for better source retr
   assert.equal(searchTerm('爱因斯坦出生于哪个城市？'),'爱因斯坦');
   assert.equal(searchTerm('霍尔木兹海峡位于哪里？'),'霍尔木兹海峡');
 });
+
+
+test('Chinese longest natural river gives short sourced answer without any AI quota',async()=>{
+  for(const question of ['中国最长的河流','我国第一长河是哪条？','中国最长的河流有多长？']){
+    const r=await handleAsk(request(question),{AI_ENABLED:'true',DAILY_AI_LIMIT:'5'});
+    assert.equal(r.status,200);
+    const d=await r.json();
+    assert.equal(d.ai,false);
+    assert.equal(d.verified,'editorial-curated');
+    assert.match(d.answer,/长江/);
+    assert.match(d.answer,/6,300/);
+    assert.ok(d.sources.some(s=>s.provider.includes('中国科学院')));
+    assert.ok(d.answer.length<90);
+  }
+});
+test('longest canal and world river questions cannot be mislabeled as China longest river',async()=>{
+ const {curatedAnswer}=await import('../src/curated.js');
+ assert.equal(curatedAnswer('中国最长的运河是什么？'),null);
+ assert.equal(curatedAnswer('世界最长的河流是哪一条？'),null);
+ assert.equal(curatedAnswer('中国最长的人工河是什么？'),null);
+});

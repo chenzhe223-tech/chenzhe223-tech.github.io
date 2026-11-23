@@ -158,7 +158,26 @@ const facts = [
     sources:[{provider:'NobelPrize.org',title:'1945 年诺贝尔生理学或医学奖官方资料',url:'https://www.nobelprize.org/prizes/medicine/1945/summary/'}]
   }
 ];
+// A directly sourced answer for the frequently asked "China's longest river" fact.
+// Apply only when this is about natural rivers, never canals or worldwide rankings.
+const chinaLongestRiver = question => {
+  const q=String(question).replace(/\s+/g,'');
+  return /中国|我国|国内/.test(q) &&
+    /最长|第一长|长度.{0,5}第一/.test(q) &&
+    /河流|江河|河|江/.test(q) &&
+    !/运河|人工河|航道|世界|全球|支流|河段/.test(q);
+};
+const chinaRiverAnswer = {
+  answer:'中国最长的河流是长江，全长约 6,300 公里。长江发源于青藏高原唐古拉山脉，最终注入东海。',
+  sources:[
+    {provider:'中国科学院地理科学与资源研究所',title:'中国第一大河——长江',url:'https://igsnrr.cas.cn/cbkx/kpyd/dlzs/land/202009/t20200910_5692534.html'},
+    {provider:'国家发展和改革委员会',title:'长江经济带：经济社会发展概况',url:'https://cjjjd.ndrc.gov.cn/zoujinchangjiang/jingjishehuifazhan/201907/t20190713_941469.htm'}
+  ],
+  verified:'editorial-curated',
+  note:'依据中国科学院与国家发展改革委的长江资料；长度使用约 6,300 公里的常见统计口径，未混入人工运河。'
+};
 const curatedAnswer = question => {
+  if (chinaLongestRiver(question)) return {...chinaRiverAnswer};
   const match = facts.find(f=>f.pattern.test(question));
   if (!match) return null;
   return {answer:match.answer, sources:match.sources, verified:'editorial-curated', note:'此条为经过来源人工校对的固定常识条目，非实时检索；若知识发生变化，请以来源网站最新内容为准。'};
