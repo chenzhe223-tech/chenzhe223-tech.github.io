@@ -48,4 +48,16 @@
 - Cloudflare `davylab-news-api` 作为唯一部署目标，生产前保存旧版本 ID，**只替换 Worker 代码、不改账号绑定、路由、其他平台和每日生产定时任务**。
 - 如果新 Worker 有不可恢复问题，按 Cloudflare 保存的版本回退，已上线的 V1 下游消费者不需更改配置。
 
-状态：本文件描述 P2 设计及验收标准；正式上线以 GitHub Actions 最新日志和 Cloudflare 实际 Worker 版本、HTTPS 响应为准。
+## 最终正式上线验收｜2026-11-23
+
+五级状态：**Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed = PASS（全部）**。
+
+- [P2 开发 PR #170](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/170)，正式历史检索与五维评分、接口文档和自动 CI 已合并。
+- [历史兼容修复 PR #172](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/172) 修复 30 期全窗线上验收发现的老版归档可选字段缺失（此前仅 11/30 期通过）；引入真实 2026-11-12 归档回归测试。对核心栏目缺失、日期不匹配、原始来源不安全、质量门禁不通过的记录仍拒绝。
+- [P2 最终真实 HTTPS 生产 CI #45142668999](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45142668999)：`p2-offline`、`real-archive-provenance`、`deployed-p2-online` 全部 **SUCCESS**。
+- 线上批量实测：`GET /api/v2/news?days=30&limit=50&sort=score` → `attempted_issues=30`，**`scanned_issues=30`，`missing_issues=[]`，`partial=false`，`deduplicated_records=852`**。实测为 2026-11-23 当期历史目录快照，不保证未来30期数据质量均通过；若旧期失效将明确标记 `partial`。
+- 同一 GitHub Runner 实测 `/api/v2/history`、`/api/v2/news`、`/api/v2/search`、`/api/v2/topics`、V2 OpenAPI、历史日期筛选、分类及原始出处、无自动发表与 V1 `/api/v1/news`、`/api/v1/health` 兼容均 PASS。
+- Cloudflare 唯一部署：`davylab-news-api` Worker，当前代码版本 `0604a43c-7a7e-4342-b343-f2c0b4e43f65`，deployment `8762c563-e01c-40b0-a210-5c9ec4743b95`；旧版本 `0a686a16-31e1-4da8-8b62-6658cde38890`（仅含尚未兼容所有老期次的 V2）；**更早的纯 V1 回退版本 `78a71c3b-9282-482c-a0e1-9ea4a119ad1b`**。升级前后 Worker bindings 均为空，compatibility date 2026-11-01 不变，没有触发任何付费推理。
+- [正式 GitHub Pages 构建 #45142667851](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45142667851) SUCCESS。原 AI Radar 日报和 News Engine Preview 生产链路未修改。
+
+**验收边界：** P2 API 可以跨正式30期归档检索和提供规则选题评分；并不代表实时抓取全网、科学文献事实核验、真实社交热度、历史全量永久仓库或三个下游 UI 已改为 V2。WorldToon、KNOWA、公众号平台继续走已验收的 V1 API，下一步可通过自愿升级逐一接入 V2 历史筛选功能。
