@@ -127,8 +127,25 @@
    story.loaded=true;story.when=String(obj.searched_at||'').replace('T',' ').slice(0,16);
    story.sourceAge=fromCache?'15 分钟内缓存':'实时检索 / 带日期精选快照';
   }catch(err){
-   story.error='检索未完成：'+String(err.message||err).slice(0,240);
-   story.items=[];story.loaded=true;
+   // Preserve previously confirmed metadata during transient provider outages.
+   // Stale results are clearly labeled; never present them as a fresh search.
+   let stale=null;
+   try{
+    const old=JSON.parse(localStorage.getItem(key)||'null');
+    if(old&&Date.now()-old.savedAt<7*86400000&&Array.isArray(old.doc?.items)&&old.doc.items.length>0)stale=old;
+   }catch{}
+   if(stale){
+    story.items=stale.doc.items.slice(0,35);
+    story.warnings=['实时来源检索失败，展示已缓存的历史书目结果；请重新核对作品来源与权利。',
+      ...((stale.doc.warnings||[]).slice(0,2))];
+    story.error='';
+    story.when=new Date(stale.savedAt).toISOString().replace('T',' ').slice(0,16);
+    story.sourceAge='历史缓存 · 非实时';
+   }else{
+    story.error='检索未完成：'+String(err.message||err).slice(0,240);
+    story.items=[];
+   }
+   story.loaded=true;
   }finally{story.busy=false; if(ui.route==='live')render()}
  }
  function choose(i){
