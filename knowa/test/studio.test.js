@@ -27,7 +27,7 @@ test('new Studio does not expose anonymous write API and previous pages survive'
  const post=await worker.fetch(new Request('https://knowa.test/api/studio',{method:'POST',body:'{}'}),{});
  assert.equal(post.status,404);
  const status=await(await worker.fetch(new Request('https://knowa.test/api/health'),{AI_ENABLED:'false',DAILY_AI_LIMIT:'0'})).json();
- assert.equal(status.version,'2.0.0-p2');assert.equal(status.studioMode,'local-drafts+content-factory');assert.equal(status.aiConfigured,false);
+ assert.equal(status.version,'2.0.0-p3');assert.equal(status.studioMode,'dual-track-production');assert.equal(status.aiConfigured,false);
  assert.equal((await worker.fetch(new Request('https://knowa.test/api/knowledge/k01'),{})).status,200);
  const article=await(await worker.fetch(new Request('https://knowa.test/knowledge/k01'),{})).text();
  assert.match(article,/studio\?seed=k01/);

@@ -39,5 +39,5 @@ test('old homepage, free discovery and paid gate are preserved',async()=>{
  const h=await(await worker.fetch(new Request('https://knowa.test/'),{})).text();
  assert.match(h,/href="\/knowledge"/);assert.match(h,/orbit-scene/);assert.match(h,/api\/discover/);assert.match(h,/id="form"/);
  const info=await(await worker.fetch(new Request('https://knowa.test/api/health'),{})).json();
- assert.equal(info.version,'2.0.0-p2');assert.equal(info.knowledgeAssets,36);assert.equal(info.aiConfigured,false);
+ assert.equal(info.version,'2.0.0-p3');assert.equal(info.knowledgeAssets,36);assert.equal(info.aiConfigured,false);
 });

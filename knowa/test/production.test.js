@@ -32,8 +32,8 @@ test('production output is local only; legacy knowledge and AI spend safety inta
  assert.match(studio,/\/studio\/production\?draft=/);
  assert.equal((await worker.fetch(new Request('https://knowa.test/api/knowledge/k06'),{})).status,200);
  const health=await(await worker.fetch(new Request('https://knowa.test/api/health'),{AI_ENABLED:'false',DAILY_AI_LIMIT:'0'})).json();
- assert.equal(health.version,'2.0.0-p2');
- assert.equal(health.studioMode,'local-drafts+content-factory');
+ assert.equal(health.version,'2.0.0-p3');
+ assert.equal(health.studioMode,'dual-track-production');
  assert.equal(health.aiConfigured,false);
  const post=await worker.fetch(new Request('https://knowa.test/api/production',{method:'POST',body:'{}'}),{});
  assert.equal(post.status,404);
