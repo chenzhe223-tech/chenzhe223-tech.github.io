@@ -1,0 +1,278 @@
+/* DAVYLAB AI Radar · magazine analysis feature, approved 2026-11-23.
+   Overrides only the reader-facing XNews heading and editorialCore card.
+   Does not change any source fetches, core news grids, or publishing gates. */
+
+.secondary-editorial-grid #xnewsVoicesSection .section-head,
+.secondary-editorial-grid #chinaAI .section-head {
+  min-height: 66px;
+  margin: 0 0 14px !important;
+  padding: 0 0 12px;
+  border-bottom: 1px solid var(--rule);
+}
+.secondary-editorial-grid #xnewsVoicesSection .section-head > h2 {
+  margin: 0 !important;
+}
+.secondary-editorial-grid #xnewsVoicesSection #xnewsVoices,
+.secondary-editorial-grid #chinaAI #chinaAINewsList {
+  margin-top: 0 !important;
+}
+
+body #editorialCore.editorial-analysis:not([hidden]) {
+  display: block !important;
+  position: relative;
+  box-sizing: border-box;
+  grid-column: auto !important;
+  grid-row: auto !important;
+  order: initial !important;
+  margin: clamp(20px,2.4vw,36px) 0 clamp(30px,3.2vw,48px) !important;
+  padding: clamp(20px,2.7vw,38px) !important;
+  border: 1px solid #d8d6d2 !important;
+  border-radius: 14px !important;
+  background: #faf9f7 !important;
+  color: var(--ink) !important;
+  box-shadow: none !important;
+  overflow: hidden;
+}
+body #editorialCore[hidden] { display: none !important; }
+
+#editorialCore .editorial-analysis-heading {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: clamp(17px,1.6vw,23px);
+  border-bottom: 1px solid #e7e4e0;
+}
+#editorialCore .editorial-analysis-heading .editorial-analysis-monogram {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 11px;
+  background: #86553a;
+  color: #fff !important;
+  font: 700 12px/1.2 Georgia,serif !important;
+  letter-spacing: .06em;
+  border-radius: 3px;
+}
+body #editorialCore .editorial-analysis-heading strong {
+  display: inline !important;
+  margin: 0 !important;
+  color: #70452e !important;
+  font: 650 clamp(15px,1.8vw,21px)/1.35 Georgia,"Songti SC","Noto Serif SC",serif !important;
+  letter-spacing: -.01em !important;
+  text-transform: none !important;
+}
+#editorialCore .editorial-analysis-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.38fr) minmax(250px, .95fr);
+  gap: clamp(22px,3vw,44px);
+  align-items: stretch;
+  padding-top: clamp(21px,2vw,30px);
+}
+#editorialCore .editorial-analysis-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+body #editorialCore .editorial-analysis-title {
+  margin: 0 0 clamp(18px,1.8vw,25px);
+  font: 650 clamp(22px,2.1vw,29px)/1.5 Georgia,"Songti SC","Noto Serif SC",serif !important;
+  letter-spacing: -.024em;
+  color: #232723 !important;
+  overflow-wrap: anywhere;
+  text-wrap: pretty;
+}
+#editorialCore .editorial-analysis-takeaway {
+  display: grid;
+  grid-template-columns: max-content minmax(0,1fr);
+  gap: 13px;
+  align-items: start;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+  background: #f1efec;
+  border-left: 3px solid #996343;
+  border-radius: 4px;
+}
+body #editorialCore .editorial-analysis-takeaway > b {
+  color: #895334 !important;
+  font: 700 13px/1.75 var(--sans) !important;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+body #editorialCore .editorial-analysis-takeaway > p {
+  margin: 0 !important;
+  color: #383e39 !important;
+  font: 14px/1.75 var(--sans) !important;
+  font-weight: 400 !important;
+  overflow-wrap: anywhere;
+}
+#editorialCore .editorial-analysis-sources {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 7px 12px;
+  margin-top: auto;
+  padding: 1px 0 13px;
+  border-bottom: 1px solid #e7e3df;
+}
+#editorialCore .editorial-analysis-source-label {
+  color: #6d594d;
+  font: 650 12px/1.5 var(--sans);
+  white-space: nowrap;
+}
+#editorialCore .editorial-analysis-source-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  align-items: baseline;
+  min-width: 0;
+}
+body #editorialCore .editorial-analysis-source-links a,
+body #editorialCore .editorial-analysis-evidence-list a {
+  color: #855239 !important;
+  font: 12px/1.7 var(--sans) !important;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+#editorialCore .editorial-source-dot {
+  color: #a69b90;
+  padding: 0 2px;
+}
+#editorialCore .editorial-analysis-details {
+  margin-top: 17px;
+  min-width: 0;
+}
+#editorialCore .editorial-analysis-details > summary {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid #86553a;
+  background: #86553a;
+  color: #fff !important;
+  border-radius: 7px;
+  padding: 9px 16px;
+  font: 650 13px/1.5 var(--sans);
+  list-style: none;
+  outline-offset: 3px;
+}
+#editorialCore .editorial-analysis-details > summary::after {
+  content: "↗";
+  font-size: 17px;
+  line-height: 1;
+}
+#editorialCore .editorial-analysis-details > summary::-webkit-details-marker { display:none; }
+#editorialCore .editorial-analysis-details[open] > summary::after { content: "−"; }
+#editorialCore .editorial-analysis-more {
+  padding: 18px 0 2px;
+}
+body #editorialCore .editorial-analysis-more > p {
+  margin: 0 0 11px !important;
+  color: #525650 !important;
+  font: 13px/1.75 var(--sans) !important;
+}
+body #editorialCore .editorial-analysis-next b { color: #895334 !important; }
+body #editorialCore .editorial-analysis-scope {
+  color: #77746f !important;
+  font-size: 12px !important;
+}
+#editorialCore .editorial-analysis-evidence-list {
+  list-style: none;
+  padding: 8px 0 0;
+  margin: 8px 0 0;
+  border-top: 1px solid #e7e3df;
+}
+#editorialCore .editorial-analysis-evidence-list > li {
+  display: grid;
+  grid-template-columns: minmax(75px,100px) minmax(0,1fr);
+  gap: 12px;
+  margin: 7px 0;
+  color: #5c605a;
+  font: 12px/1.6 var(--sans);
+}
+#editorialCore .editorial-analysis-evidence-list > li > span {
+  overflow-wrap: anywhere;
+}
+body #editorialCore .editorial-analysis-media {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+  min-width: 0;
+  margin: 0 !important;
+}
+#editorialCore .editorial-analysis-media > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: 470px;
+  min-height: 250px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 9px;
+  background: #283237;
+}
+#editorialCore .editorial-analysis-media > figcaption,
+#editorialCore .editorial-analysis-media > figcaption a {
+  color: #73736e !important;
+  font: 11px/1.6 var(--sans) !important;
+  text-align: right;
+}
+#editorialCore .editorial-analysis-grid:has(.editorial-analysis-media[hidden]) {
+  grid-template-columns: minmax(0,1fr);
+}
+
+/* iPad: one editorial column, image has meaningful visibility on first screen. */
+@media (max-width: 920px) {
+  #editorialCore .editorial-analysis-grid {
+    grid-template-columns: minmax(0,1fr);
+    gap: 20px;
+  }
+  body #editorialCore .editorial-analysis-title { font-size: clamp(22px,3.8vw,28px) !important; }
+  #editorialCore .editorial-analysis-media > img {
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-height: 0;
+    max-height: 400px;
+    object-fit: cover;
+  }
+}
+@media (max-width: 760px) {
+  body #editorialCore.editorial-analysis:not([hidden]) {
+    padding: 17px 16px 19px !important;
+    margin-top: 20px !important;
+    border-radius: 10px !important;
+  }
+  #editorialCore .editorial-analysis-heading { gap: 9px; padding-bottom: 13px; flex-wrap: wrap; }
+  #editorialCore .editorial-analysis-heading .editorial-analysis-monogram {
+    min-height: 26px;
+    padding: 5px 9px;
+    font-size: 10px !important;
+  }
+  body #editorialCore .editorial-analysis-heading strong { font-size: 16px !important; }
+  #editorialCore .editorial-analysis-grid { padding-top: 16px; gap: 17px; }
+  #editorialCore .editorial-analysis-content { grid-row: 2; }
+  #editorialCore .editorial-analysis-media { grid-row: 1; }
+  #editorialCore .editorial-analysis-media > img {
+    aspect-ratio: 16 / 10;
+    max-height: 250px;
+    min-height: 0;
+  }
+  #editorialCore .editorial-analysis-media > figcaption { font-size: 10px !important; }
+  body #editorialCore .editorial-analysis-title {
+    margin-bottom: 14px !important;
+    font-size: clamp(19px,5.25vw,24px) !important;
+    line-height: 1.55 !important;
+  }
+  #editorialCore .editorial-analysis-takeaway {
+    grid-template-columns: minmax(0,1fr);
+    gap: 6px;
+    padding: 13px 14px;
+    margin-bottom: 14px;
+  }
+  body #editorialCore .editorial-analysis-takeaway > p { font-size: 13px !important; }
+  #editorialCore .editorial-analysis-details > summary { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #editorialCore .editorial-analysis-details > summary { transition: none; }
+}
