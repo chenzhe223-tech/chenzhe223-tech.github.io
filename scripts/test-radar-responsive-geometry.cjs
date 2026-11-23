@@ -48,6 +48,7 @@ async function testWidth(browser,width){
   }else assert.ok(g.china.top>=g.overseas.bottom+12,width+" secondary modules overlap");
   const overseasCols=g.style.overseasCols.trim().split(/\s+/).length;
   const chinaCols=g.style.chinaCols.trim().split(/\s+/).length;
+  if(width===768) console.log("TABLET-NAV-DIAG "+JSON.stringify(await page.evaluate(()=>{ const t=document.querySelector(".tabs");const z=getComputedStyle(t);return {display:z.display,visibility:z.visibility,opacity:z.opacity,height:t.getBoundingClientRect().height,parentDisplay:getComputedStyle(t.parentElement).display,inlineStyle:t.getAttribute("style")}})));
   if(width>760&&width<=1024){
    assert.equal(g.style.primaryNav,"none",width+" tablet desktop nav should not collide");
    assert.equal(g.style.editorialTabs,"flex",width+" tablet needs visible editorial navigation");
