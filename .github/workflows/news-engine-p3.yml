@@ -1,0 +1,110 @@
+name: News Engine P3 Three Consumer Integration CI
+
+on:
+  pull_request:
+    paths:
+      - 'comic-studio/briefing.js'
+      - 'comic-studio/index.html'
+      - 'comic-studio/news-history-p3.js'
+      - 'topic-studio/xnews-discovery.js'
+      - 'topic-studio/index.html'
+      - 'topic-studio/news-history-p3.js'
+      - 'news-engine/p3-widget.js'
+      - 'news-engine/p3-knowa-bridge.js'
+      - 'news-engine/test_p3_browser.cjs'
+      - 'news-engine/test_p3_online.cjs'
+      - '.github/workflows/news-engine-p3.yml'
+      - '.github/workflows/news-engine-p0.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'comic-studio/briefing.js'
+      - 'comic-studio/index.html'
+      - 'comic-studio/news-history-p3.js'
+      - 'topic-studio/xnews-discovery.js'
+      - 'topic-studio/index.html'
+      - 'topic-studio/news-history-p3.js'
+      - 'news-engine/p3-widget.js'
+      - 'news-engine/p3-knowa-bridge.js'
+      - 'news-engine/test_p3_online.cjs'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  p3-contract:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax, canonical shared component and original P1 functionality
+        run: |
+          node --check news-engine/p3-widget.js
+          node --check news-engine/p3-knowa-bridge.js
+          node --check news-engine/test_p3_browser.cjs
+          node --check comic-studio/news-history-p3.js
+          node --check topic-studio/news-history-p3.js
+          node --check comic-studio/briefing.js
+          node --check topic-studio/xnews-discovery.js
+          cmp news-engine/p3-widget.js comic-studio/news-history-p3.js
+          cmp news-engine/p3-widget.js topic-studio/news-history-p3.js
+          node news-engine/test_p1_consumers.cjs
+      - name: Real P2 30-day historical API available (read-only)
+        run: |
+          node --input-type=module - <<'JS'
+          const u='https://davylab-news-api.chenzhe223.workers.dev/api/v2/news?days=7&limit=5&sort=score';
+          const r=await fetch(u,{signal:AbortSignal.timeout(30000)});
+          if(!r.ok)throw Error('P2 history HTTP '+r.status);
+          const p=await r.json();
+          if(p.schema_version!=='2.0.0'||p.publishable!==false||!Array.isArray(p.data)||p.data.length<3||
+             p.data.some(x=>x.publishable!==false||!x.source_url?.startsWith('https://')||
+              !x.editorial_score?.parts))throw Error('P2 provenance/score contract not met');
+          console.log(JSON.stringify({PASS:true,scanned:p.scanned_issues,records:p.deduplicated_records,rights:'read-only'}));
+          JS
+
+  p3-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium and CJK fonts for real responsive test
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+      - name: Verify original page layouts, V2 filters and source-to-creation handoff at 390/1440
+        run: |
+          python3 -m http.server 8877 --bind 127.0.0.1 >/tmp/news-p3.log 2>&1 &
+          for i in $(seq 1 25); do curl -fsS http://127.0.0.1:8877/topic-studio/ >/dev/null && break; sleep 1; done
+          node news-engine/test_p3_browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: news-engine-p3-mobile-desktop-qa
+          path: test-results/news-engine-p3
+          if-no-files-found: ignore
+          retention-days: 7
+
+  production-p3:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    needs: [p3-contract,p3-browser]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+      - name: Real HTTPS published WorldToon, KNOWA and Topic Studio P3 acceptance
+        run: node news-engine/test_p3_online.cjs
