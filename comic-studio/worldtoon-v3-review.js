@@ -218,11 +218,14 @@
    if(i===3){
      const queued=!!p.handoff?.repoQueuedAt,tid=p.handoff?.taskId||'';
      const direct=s.agent!=='WorkBuddy',localExported=!!p.handoff?.directTaskExportedAt;
-     const route=direct?'SOP A · 锁定角色分镜 → '+html(s.agent)+' 手动接收 ZIP → 制作完整漫画 → 独立审核':
-       'SOP B · GitHub 工单验收 → WorkBuddy 创作 → GitHub 成品验收 → WorkBuddy 发表 → 回执归档';
-     const action=direct?'<button class="button dark" data-wf="task">下载 '+html(s.agent)+' 制作任务 ZIP</button><button class="button" data-wf="copy">复制制作指令</button>':
-       queued?'<button class="button dark" data-archive="refresh">同步 WorkBuddy 创作进度</button>':
-       '<button class="button dark" data-wf="task">生成 WorkBuddy 正式工单 →</button>';
+     const isHub=['ChatGPT','WorkBuddy'].includes(s.agent);
+     const route=isHub?'P0 · 创意锁定 → AI Task Hub 入仓 → '+html(s.agent)+' 按任务编号领取 → 全量制作与验收':
+       '手动制作 · 导出 ZIP 和启动指令 → 交给 '+html(s.agent)+' 制作并回传';
+     const action=isHub?
+       (queued&&p.handoff?.hubVerified?
+        '<a class="button" href="https://github.com/chenzhe223-tech/ai-task-sync/tree/main/tasks/'+encodeURIComponent(tid)+'" target="_blank" rel="noopener noreferrer">查看 Hub 任务 ↗</a>':
+        '<button class="button dark" data-wf="task">派发到 AI Task Hub →</button>'):
+       '<button class="button dark" data-wf="task">下载 '+html(s.agent)+' 制作任务 ZIP</button><button class="button" data-wf="copy">复制开工指令</button>';
      return '<section class="box wt4-stage-card"><h2>生产交接</h2>'+
        '<p>'+route+'</p><label class="wf-producer-label">选择 AI 制作平台 <select id="wf-producer" '+(p.handoff?.repoQueuedAt||p.handoff?.directTaskExportedAt?'disabled':'')+'>'+wfProducerOptions(p)+'</select></label><div class="wt4-status-lines"><p>任务编号：'+html(tid||'尚未创建')+'</p>'+
        '<p>生产同步：'+(['ChatGPT','WorkBuddy'].includes(s.agent)?'AI Task Hub · '+(p.handoff?.hubVerified?'已核验入仓':'尚未核验入仓'):'手动任务包，不入 Hub')+'</p>'+
