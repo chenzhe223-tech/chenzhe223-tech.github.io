@@ -222,7 +222,8 @@
 /* On iPad the five-link desktop nav is hidden to avoid collisions:
    show the existing editorial tabs instead of leaving users without navigation. */
 @media (min-width: 761px) and (max-width: 1024px) {
-  .tabs {
+  /* Match the original editorial.css high-specificity header:has() hide rule. */
+  header:has(.hero-panel) .tabs {
     display: flex !important;
     flex-wrap: nowrap !important;
     align-items: center;
