@@ -6,11 +6,29 @@ async function knowaTopicRadarWithNewsEngine(base){
  const result={...base,items:Array.isArray(base?.items)?base.items.slice():[],sources:Array.isArray(base?.sources)?base.sources.slice():[]};
  const endpoint='https://davylab-news-api.chenzhe223.workers.dev/api/v1/topics?limit=12';
  try{
-  const r=await fetch(endpoint,{headers:{accept:'application/json'},signal:AbortSignal.timeout(8500)});
-  if(!r.ok)throw Error('News Engine HTTP '+r.status);
-  const j=await r.json();
-  if(!j||!Array.isArray(j.data)||!/^\d{4}-\d{2}-\d{2}$/.test(String(j.issue_date||''))||j.data.length>30)
-   throw Error('News Engine schema invalid');
+  let j,sourceMode='public_api';
+  try{
+   const r=await fetch(endpoint,{headers:{accept:'application/json'},signal:AbortSignal.timeout(8500)});
+   if(!r.ok)throw Error('News Engine HTTP '+r.status);
+   j=await r.json();
+   if(!j||!Array.isArray(j.data)||!/^\d{4}-\d{2}-\d{2}$/.test(String(j.issue_date||''))||j.data.length>30)
+    throw Error('News Engine schema invalid');
+  }catch(apiError){
+   // Workers.dev to Workers.dev may be denied (Cloudflare 1042); use the SAME
+   // already-published News Engine rows from the quality-gated Radar source.
+   // This is not live internet search and does not invoke AI inference.
+   const fallback='https://chenzhe223-tech.github.io/radar/data/latest.json';
+   const res=await fetch(fallback,{headers:{accept:'application/json'},signal:AbortSignal.timeout(8000)});
+   if(!res.ok)throw Error('News Engine + Radar both unavailable');
+   const d=await res.json();
+   if(d?.quality_gate?.status!=='PASS'||!/^\d{4}-\d{2}-\d{2}$/.test(d.report_date||'')||
+      !Array.isArray(d.xnews_voices))throw Error('Radar official issue not approved');
+   j={issue_date:d.report_date,is_today:false,data:d.xnews_voices.filter(x=>x?.source_kind==='news_engine_rss_discovery').slice(0,12).map(x=>({
+    title:x.title_zh||x.title,source:x.source,source_url:x.source_url||x.url,
+    selection_score:x.research_score||0,publishable:false
+   }))};
+   sourceMode='published_radar_fallback';
+  }
   const originalCount=result.items.length;
   const seen=new Set(result.items.map(x=>String(x.sourceUrl||'').trim()));
   for(const x of j.data){
@@ -37,7 +55,7 @@ async function knowaTopicRadarWithNewsEngine(base){
    });
   }
   result.sources.push({name:'DAVYLAB News Engine',status:'ok',count:result.items.length-originalCount,issueDate:j.issue_date});
-  result.newsEngine={status:'ok',issueDate:j.issue_date,isToday:j.is_today===true,added:result.items.length-originalCount};
+  result.newsEngine={status:'ok',issueDate:j.issue_date,isToday:j.is_today===true,added:result.items.length-originalCount,sourceMode};
  }catch(err){
   result.sources.push({name:'DAVYLAB News Engine',status:'unavailable',count:0});
   result.newsEngine={status:'unavailable',added:0};
