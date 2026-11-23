@@ -1,26 +1,32 @@
 name: DAVYLAB Science Discovery — Nature & Science
+
 on:
+  pull_request:
+    paths:
+      - 'topic-studio/science-discovery.js'
+      - 'topic-studio/science-discovery.css'
+      - 'topic-studio/editorial-workspace-v4.js'
+      - 'topic-studio/scripts/**'
+      - '.github/workflows/science-discovery.yml'
   schedule:
     # 08:15 Asia/Shanghai (UTC+8). GitHub schedules may be delayed or skipped.
     - cron: '15 0 * * *'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: science-discovery-snapshot
+  group: science-discovery-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  refresh:
+  test:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - name: Checkout existing content studio
         uses: actions/checkout@v4
-        with:
-          persist-credentials: true
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -31,11 +37,29 @@ jobs:
         run: |
           node --check topic-studio/science-discovery.js
           node --check topic-studio/editorial-workspace-v4.js
+      - name: Validate metadata snapshot
+        run: python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
+
+  refresh:
+    if: github.event_name != 'pull_request'
+    needs: test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout existing content studio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
       - name: Update public metadata snapshot
         run: python3 topic-studio/scripts/fetch_science.py
-      - name: Validate snapshot JSON
-        run: |
-          python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
+      - name: Validate updated snapshot JSON
+        run: python3 -m json.tool topic-studio/data/science-discovery.json >/dev/null
       - name: Commit metadata-only snapshot if changed
         run: |
           if git diff --quiet -- topic-studio/data/science-discovery.json; then
