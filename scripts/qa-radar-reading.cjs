@@ -19,6 +19,7 @@ function check(value, name, detail) {
       const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
       await page.waitForFunction(() => typeof reportData !== 'undefined' && reportData && Array.isArray(reportData.xnews_voices));
       const hasXnews = await page.evaluate(() => reportData.xnews_voices.length > 0);
+      const hasTextOnlyNewsEngine = await page.evaluate(() => reportData.xnews_voices.length > 0 && reportData.xnews_voices.every(x => x.source_kind === 'news_engine_rss_discovery'));
       if (!hasXnews) {
         const status = await page.evaluate(() => reportData.xnews_status);
         check(['unavailable','invalid_xml','oversized_feed','doctype_rejected','no_recent','incompatible_feed','incompatible_schema','disabled'].includes(status), `${width}: optional X News failure is explicit and does not block reading QA`, status);
@@ -75,7 +76,16 @@ function check(value, name, detail) {
         for (const [id,label] of [['xnewsVoicesSection','xnews'],['dailySkill','skill'],['news','news']]) await page.locator('#'+id).screenshot({ path: path.join(out,`${width}-${label}.png`) });
         if ([390,1440].includes(width)) await page.screenshot({ path: path.join(out,`${width}-full.png`), fullPage: true });
       }
-      if ([390,1440].includes(width)) {
+      if (hasTextOnlyNewsEngine) {
+        const sourceOnly = await page.evaluate(() => ({
+          cards: document.querySelectorAll('#xnewsVoices .item').length,
+          copiedImages: document.querySelectorAll('#xnewsVoices .voice-cover').length,
+          provenance: reportData.xnews_voices.every(x => x.url?.startsWith('https://') && x.publishable === false && x.verification_status === 'source_not_independently_verified'),
+          originalLinks: document.querySelectorAll('#xnewsVoices a[target="_blank"]').length
+        }));
+        check(sourceOnly.cards > 0 && sourceOnly.copiedImages === 0 && sourceOnly.provenance && sourceOnly.originalLinks >= sourceOnly.cards, `${width}: News Engine shows source-only cards without unlicensed imagery`,sourceOnly);
+      }
+      if (!hasTextOnlyNewsEngine && [390,1440].includes(width)) {
         await page.locator('#xnewsVoices .voice-cover').first().click();
         const dialog = page.locator('#readingImageDialog');
         await dialog.locator('img').evaluate(img => img.decode());
@@ -104,11 +114,17 @@ function check(value, name, detail) {
       await page.evaluate(() => renderXnewsVoices(reportData.xnews_voices));
       if ([390,1440].includes(width)) {
         await page.locator('#xnewsVoices h3 a').first().click();
-        await page.locator('.story .cover').evaluate(img=>img.decode());
+        if (!hasTextOnlyNewsEngine) {
+          await page.locator('.story .cover').evaluate(img=>img.decode());
+        }
         check(page.url().includes('type=xnews')&&page.url().includes(audit.date),`${width}: actual deep read keeps the issue and source`);
-        await page.locator('.story .cover').focus(); await page.keyboard.press('Enter');
-        check(await page.locator('#readingImageDialog').isVisible(),`${width}: keyboard opens the deep-reader image`);
-        await page.keyboard.press('Escape');
+        if (hasTextOnlyNewsEngine) {
+          check(await page.locator('.rail-links .primary').count()===1 && (await page.locator('.rail-links .primary').getAttribute('href')).startsWith('https://'),`${width}: source-only deep read links to original publisher`);
+        } else {
+          await page.locator('.story .cover').focus(); await page.keyboard.press('Enter');
+          check(await page.locator('#readingImageDialog').isVisible(),`${width}: keyboard opens the deep-reader image`);
+          await page.keyboard.press('Escape');
+        }
         check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1),`${width}: deep reader has no horizontal overflow`);
       }
       check(errors.length===0,`${width}: no page script errors`,errors);
