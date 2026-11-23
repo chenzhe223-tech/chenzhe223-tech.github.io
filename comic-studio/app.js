@@ -102,11 +102,12 @@ function wfLiterarySelection(p){
 }
 function wfLiteraryReviewGuide(p){
  if(!wfLiteraryReview(p))return '';
+ const n=p.panels.length,a=Math.ceil(n/3),b=Math.ceil(2*n/3),range=(x,y)=>String(x).padStart(2,'0')+'–'+String(y).padStart(2,'0');
  return [
   '【三维文学导读模式｜诺奖／世界文学原创评论】这不是原著剧情重绘，禁止未经授权以任何方式逐幕搬演原著独特场景、人物造型、经典对白或使用原作插画。介绍内容只限经独立可靠资料核对的简要书目与核心主题，不大段翻译或复述原文。',
-  '画格01–03：作品讲了什么——核实作品作者与书目背景、主题/核心矛盾，概述少量必要情节事实以服务评论，不写成完整剧情摘要；先核实作家获诺奖和该书出版的关系，不能把作品误写为单独获诺奖。',
-  '画格04–06：揭示什么人生哲学——作者的文本观点与漫画编辑的独立解读分开标注；通过原创抽象隐喻讨论人性、尊严、自由、关系或选择，不伪造作者原话。',
-  '画格07–09：对普通人有什么意义——原创当代普通人物与日常困境，用新设计的场景和行动呈现现实启发，结尾留下一个有传播价值的问题；不复用原著角色或典型剧情。',
+  '画格'+range(1,a)+'：作品讲了什么——核实作品作者与书目背景、主题/核心矛盾，概述少量必要情节事实以服务评论，不写成完整剧情摘要；先核实作家获诺奖和该书出版的关系，不能把作品误写为单独获诺奖。',
+  '画格'+range(a+1,b)+'：揭示什么人生哲学——作者的文本观点与漫画编辑的独立解读分开标注；通过原创抽象隐喻讨论人性、尊严、自由、关系或选择，不伪造作者原话。',
+  '画格'+range(b+1,n)+'：对普通人有什么意义——原创当代普通人物与日常困境，用新设计的场景和行动呈现现实启发，结尾留下一个有传播价值的问题；不复用原著角色或典型剧情。',
   '作品完整形态：1张独立封面＋'+p.panels.length+'张竖版独立漫画，适合手机阅读，中文字通过独立文字层准确排版，封面展示真实作品名、作者及“文学导读·原创评论”，不能暗示原作者或版权方授权。',
   '【来源与版权门禁】先核实作品名/作家/出版信息/可信介绍和原作主题；只有搜索结果或封底简介时不得脑补完整情节。保留来源链接、书目版本、事实与编辑观点区分；评介模式可能降低改编风险但不是法定免责，引用及视觉素材仍按发布地区独立检查。'
  ].join('\n');
@@ -131,7 +132,7 @@ function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {sch
  includes_private_source:false,
  private_source_file:null,
  research_required:true
- }:null,title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+(wfLiteraryReview(p)?'格原创文学导读':'格原创漫画'),source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:wfLiterarySelection(p),literary_review: wfLiteraryReview(p)?{schema:'davylab.worldtoon.literary-review.v1',mode:'editorial_criticism_not_plot_adaptation',dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],panel_ranges:[[1,3],[4,6],[7,9]],research_required:true,no_plot_reenactment:true,rights_risk_pending_review:true,guide:wfLiteraryReviewGuide(p)}:null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
+ }:null,title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+(wfLiteraryReview(p)?'格原创文学导读':'格原创漫画'),source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:wfLiterarySelection(p),literary_review: wfLiteraryReview(p)?{schema:'davylab.worldtoon.literary-review.v1',mode:'editorial_criticism_not_plot_adaptation',dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],panel_ranges:[[1,Math.ceil(p.panels.length/3)],[Math.ceil(p.panels.length/3)+1,Math.ceil(p.panels.length*2/3)],[Math.ceil(p.panels.length*2/3)+1,p.panels.length]],research_required:true,no_plot_reenactment:true,rights_risk_pending_review:true,guide:wfLiteraryReviewGuide(p)}:null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
 // The approved director storyboard is the only image-generation source of truth.
 // Summary, legacy characters and per-panel custom prompts remain audit input only.
 function wfProductionBible(p,task){
@@ -235,7 +236,7 @@ function wfDirectPrompt(p,o){
  'WORLD/TOON · By DAVYLAB | DIRECT_MULTI_AI_LOCAL_V1 | 完整漫画制作指令',
  '任务编号：'+o.task_id+'；标题：《'+p.title+'》；生产者：'+o.producer+'；篇幅：'+p.panels.length+' 格。',
  '【生产方式】作者通过平台手动下载任务 ZIP 并交给 '+o.producer+'，绝不宣称该任务已入 GitHub。生产环节暂停 GitHub 同步、远端领单、远端样稿审批、GitHub Token、WorkBuddy 轮询及远端 SHA 验证；不得以未入仓为由停止创作。此豁免仅限本地全量素材制作，不等于正式发表授权。',
- '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、全部分镜全文、所有 jobs、封面加九格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
+ '【强制分图生产 SINGLE_IMAGE_PER_CALL_V2】全量交付只是任务最终目标，不是一次生图指令。先看 render_jobs.json，它是一组独立的图片任务。每次仅把 jobs[i].prompt 和实际批准的角色/首格参考送入图像生成工具；调用一次只生 1 张 PNG、1 个画面、1 个镜头、1 个时刻。绝不把本总任务、全部分镜全文、所有 jobs、封面加全套画格要求，一次性提交给生图模型。禁止一张图里出现九宫格、拼版、多镜头、画中画、条漫、多画框、分隔线或故事总结图。按顺序先定妆再首格；批准首格后其原图直接作为 01.png，顺次制作后续画格，封面单独最后生成。若出拼图或错画格，判 INVALID_COMPOSITE，仅重绘该 job，不裁切拼版充数。',
  '【单图验收与失败恢复】每次生图后核对目标路径、原生分辨率、单场景连续画布、无分割/无嵌套小图、人物脸型服装与母版一致、中文排版预留区；明确在 QA 中记录 single_scene_verified、no_contact_sheet、target_story_match。检测失败不得登记为已完成帧，必须同一个 job 单独重绘；如当轮上限触发，保存已通过的实际文件和断点，禁止反复重画已合格画格。',
  '【交付目标】真正绘制 1 张独立封面及 '+p.panels.length+' 张独立正式漫画 PNG，全部采用适合手机的竖版 3:4、原生至少 1080×1440；附 caption.md、sources.md、manifest.json、QA_STATUS.md、production_state.json，并形成一个可下载 ZIP。严禁仅输出提示词、脚本、九宫格拼图裁切、SVG/CSS 线框或占位图片。',
  '【唯一定妆关口】开始时建立角色圣经、视觉圣经及首格正式样稿。若附件已有真实定妆图及首格样稿且作者已明确批准，则直接沿用，无需再次确认；否则只针对实际定妆图和首格请作者确认一次。作者明确确认后，直接连续绘制剩余画格、独立封面、排版、文案与完整 ZIP；不要另设 GitHub、Pilot 云端审批或例行阶段确认节点。',
@@ -527,7 +528,7 @@ function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',t
     source_title:topic.title||'',source_url:topic.source||'',source_status:'pending_research',
     dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
     panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
-   p.description='针对已核实的作品进行原创文学导读：01–03格简要介绍作品讲了什么；04–06格独立解释其人生哲学；07–09格通过原创当代生活场景解释对普通人的意义。不得逐幕复刻原著情节、照搬人物形象或对白；先核实作者与诺奖关系。';
+   p.description='针对已核实的作品进行原创文学导读：前1/3篇幅介绍作品讲了什么；中1/3篇幅独立解读人生哲学；后1/3篇幅通过原创生活场景解释对普通人的意义。不得逐幕复刻原著情节、照搬人物形象或对白；先核实作者与诺奖关系。';
    p.fiction='文学评论和原创读者视角，不是小说剧情改编；文学事实须有可靠来源，哲学观点属于编辑解读。';
    p.disclosure='原创文学导读与评论漫画，非原著漫画改编；未取得授权不复刻原著具体场景、插画、台词或大量文字。';
   }

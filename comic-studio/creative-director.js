@@ -66,7 +66,7 @@ function ensure(p){
  p.creativeDirection=c;persist();return c;
 }
 function shotOf(i){return SHOTS[i]||'中景人物'}
-function localStoryboard(p){
+function localStoryboardCore(p){
  const c=ensure(p),subject=clean(p.sourceTitle||p.title).replace(/：漫画改编$/,'').slice(0,95);
  if(p.storySourceSelection?.adaptation==='literary_review'){
   if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
@@ -185,6 +185,28 @@ function localStoryboard(p){
  return expanded.map((row,i)=>({title:(c.arcId==='twist'?beats[Math.min(8,Math.floor(i*9/p.panels.length))]:row[0]).slice(0,100),
   scene:'【'+shotOf(i)+'】'+row[1]+' 固定'+a+'、'+b+'的服装、脸型与识别道具。题材背景：'+conflict+'。',
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
+}
+function localStoryboard(p){
+ const rows=localStoryboardCore(p),seen=new Map(),followups=[
+ ['重新核查前一格提出的证据','先把这件事确认清楚'],
+ ['注意到行动中尚未解释的细节','这个细节还没有答案'],
+ ['试着通过新的行动进行验证','我们先用行动来检验'],
+ ['面对与预想不符的实际结果','这和我们刚才的预想不同'],
+ ['重新评估之前形成的判断','现在需要调整想法'],
+ ['共同处理选择造成的后果','接下来由我们承担责任'],
+ ['将本格发现与前文线索联系起来','这终于解释了之前的疑问'],
+ ['推动场景转向下一阶段的核心矛盾','新的问题还在前面']
+ ];
+ return rows.map((row,i)=>{
+  const key=String(row.dialogue||'')+'|'+String(row.caption||'');
+  const k=seen.get(key)||0;seen.set(key,k+1);
+  if(!k)return row;
+  const beat=followups[(k-1)%followups.length];
+  return {...row,title:row.title+' · '+(k+1),
+   scene:row.scene+' 本镜独立呈现人物'+beat[0]+'，与上一镜构成因果连贯且具有不同可见动作。',
+   caption:row.caption+' 随着新证据出现，故事进一步推进。',
+   dialogue:beat[1]+'。'};
+ });
 }
 function applyStoryboard(p,panels,meta,replace=false){
  if(p.handoff?.repoQueuedAt)throw Error('该版本已正式派单，不能修改既有故事');
@@ -514,10 +536,10 @@ async function action(type,p){
  if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
  if(type==='adopt'){
   if(p.handoff?.repoQueuedAt)throw Error('本版任务已经派单，不可重签原稿');
-  if(!Array.isArray(p.panels)||(p.panels.length<4||p.panels.length>60)||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐九格场景与旁白/对白');
+  if(!Array.isArray(p.panels)||(p.panels.length<4||p.panels.length>60)||p.panels.some(x=>clean(x.scene).length<30||!clean(x.caption)&&!clean(x.dialogue)))throw Error('保留现有分镜前，请补齐'+p.panels.length+'格场景与旁白/对白');
   const c=ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
   if(!c.storyboardProvenance)c.storyboardProvenance={method:'manual_unverified',provider:'manual',model:null,at:new Date().toISOString(),authorEdited:true};
-  setChange(p,'保留并提交已有九格分镜供作者审稿');render();notify('九格脚本已保留，没有覆盖已有画面或对白');return
+  setChange(p,'保留并提交已有'+p.panels.length+'格分镜供作者审稿');render();notify(''+p.panels.length+'格脚本已保留，没有覆盖已有画面或对白');return
  }
  if(type==='approve'){approve(p);return}
 }
@@ -549,7 +571,7 @@ document.addEventListener('change',ev=>{
  try{
   if(p.handoff?.repoQueuedAt)throw Error('已正式派单。本版创作方向不能直接覆盖，请另建修订作品');
   const c=ensure(p);
-  if(el.dataset.directorReviewed){c.reviewed=el.checked;c.approval=null;setChange(p,'更新九格分镜审阅状态');render();return}
+  if(el.dataset.directorReviewed){c.reviewed=el.checked;c.approval=null;setChange(p,'更新'+p.panels.length+'格分镜审阅状态');render();return}
   if(el.dataset.directorField){c[el.dataset.directorField]=el.value.slice(0,1600)}
   if(el.dataset.directorCast){const i=Number(el.dataset.characterIndex);if(!c.cast[i])return;syncCastFieldIntoPanels(p,c,i,el.dataset.directorCast,el.value);p.characters=castText(c);if(c.storyboardProvenance)c.storyboardProvenance.authorEdited=true}
   if(el.dataset.directorPanel){const i=Number(el.dataset.panelIndex);if(!p.panels[i])return;p.panels[i][el.dataset.directorPanel]=el.value.slice(0,1700);c.drafted=true;if(c.storyboardProvenance)c.storyboardProvenance.authorEdited=true}
