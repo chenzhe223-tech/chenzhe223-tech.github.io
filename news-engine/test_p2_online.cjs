@@ -28,6 +28,14 @@ async function get(path,method="GET"){
  r=await get("/api/v2/search?days=2&q="+encodeURIComponent("AI")+"&limit=5");
  assert.equal(r.status,200);
  assert.ok(r.body.total>=1,"Search should find recent published AI articles");
+ r=await get("/api/v2/news?days=30&limit=50&sort=score");
+ assert.equal(r.status,200,"30-issue history query must remain available over HTTPS");
+ assert.equal(r.body.attempted_issues,30,"Full published history inventory should be inspected");
+ assert.ok(r.body.scanned_issues>=20,"At least 20 published quality-approved issues should be readable");
+ assert.equal(r.body.scanned_issues+r.body.missing_issues.length,30,"No silent skipped issues");
+ assert.ok(r.body.deduplicated_records>=r.body.scanned_issues*8);
+ console.log(JSON.stringify({result:"P2_30_ISSUE_CHECK",requested:30,scanned:r.body.scanned_issues,
+  missing:r.body.missing_issues,deduplicated:r.body.deduplicated_records,partial:r.body.partial}));
  r=await get("/api/v2/topics?days=2&limit=5");
  assert.equal(r.status,200);
  assert.equal(r.body.data.length,5);
