@@ -78,14 +78,17 @@ function wtBriefing(){
  return banner+header+cover+'<div class="brief-statusbar"><span class="brief-chip">ISSUE · '+e(day)+'</span><span>原始收录：观察 '+briefIssue.top5.length+' · 全球 '+briefIssue.global.length+' · 中国 '+briefIssue.china.length+' · Skill '+briefIssue.skills.length+'</span></div>'+warning+tabs+(briefView==='skills'||briefView==='note'?'':briefRankControls())+body+'<div class="brief-bottom-note">简报仍由 <a target="_blank" rel="noopener noreferrer" href="'+BRIEF_SOURCE+'">DAVYLAB AI Radar</a> 独立发布。收录漫画选题不代表新闻已经核验，不会自动对外发布。</div>'
 }
 async function briefFetch(force=false){if(briefBusy)return;briefBusy=true;briefAttempted=true;briefError='';render();try{const p=new URLSearchParams({date:briefDate});if(force)p.set('_',String(Date.now()));const r=await fetch('/api/ai-briefing?'+p,{cache:'no-store'});const j=await r.json().catch(()=>({error:'响应无法解析'}));if(!r.ok)throw Error(j.error||'简报服务 HTTP '+r.status);if(!Array.isArray(j.top5)||!j.date)throw Error('简报数据格式异常');briefIssue=j;
- // Independent P1 enrichment: never overrides the original Radar issue or blocks existing browsing.
+ // Do not delay the original Radar issue when News Engine is temporarily slow.
+ const currentIssue=briefIssue;
+ currentIssue.engine=[];
+ currentIssue.newsEngineWarning="News Engine 正在读取独立新闻线索…";
  if(briefDate==="latest"){
-  try{
+  (async()=>{try{
    const er=await fetch(BRIEF_NEWS_API,{cache:"no-store",signal:AbortSignal.timeout(7500)});
    if(!er.ok)throw Error("HTTP "+er.status);
    const payload=await er.json();
    if(!Array.isArray(payload.data)||!/^\d{4}-\d{2}-\d{2}$/.test(String(payload.issue_date||"")))throw Error("News API schema invalid");
-   briefIssue.engine=payload.data.filter(v=>v&&v.stream==="overseas"&&v.publishable===false&&/^https:\/\//.test(v.source_url||"")).map(x=>({
+   currentIssue.engine=payload.data.filter(v=>v&&v.stream==="overseas"&&v.publishable===false&&/^https:\/\//.test(v.source_url||"")).map(x=>({
      title:String(x.title||x.title_original||"").slice(0,200),
      summary:String(x.summary||"").slice(0,450),url:x.source_url,
      source:String(x.source||"News Engine").slice(0,100),published:x.published_at||"",
@@ -93,12 +96,14 @@ async function briefFetch(force=false){if(briefBusy)return;briefBusy=true;briefA
      image:"",imageStatus:"source_only",verificationStatus:x.verification_status||"requires_independent_fact_check",
      newsEngineIssue:payload.issue_date
    }));
-   briefIssue.newsEngineWarning=(payload.is_today===false?"最新可用日报为 "+payload.issue_date+"，非今日实时抓取；":"")+"所有条目均须人工核验，未经确认不得自动出版。";
+   currentIssue.newsEngineWarning=(payload.is_today===false?"最新可用日报为 "+payload.issue_date+"，非今日实时抓取；":"")+"所有条目均须人工核验，未经确认不得自动出版。";
   }catch(err){
-   briefIssue.engine=[];
-   briefIssue.newsEngineWarning="News Engine 暂时不可用，原 AI Radar 简报仍可正常使用。";
-  }
- }else{briefIssue.engine=[];briefIssue.newsEngineWarning="历史期刊请在原 AI Radar 中查看。"}
+   currentIssue.engine=[];
+   currentIssue.newsEngineWarning="News Engine 暂时不可用，原 AI Radar 简报仍可正常使用。";
+  }finally{
+    if(briefIssue===currentIssue&&ui.route==='ai-briefing')render();
+  }})();
+ }else{currentIssue.newsEngineWarning="历史期刊请在原 AI Radar 中查看。"}
  if(!briefHistoryLoaded){briefHistoryLoaded=true;fetch('/api/ai-briefing/history').then(r=>r.ok?r.json():null).then(x=>{if(x&&Array.isArray(x.days)){briefHistory=x.days;if(ui.route==='ai-briefing')render()}}).catch(()=>{})}}catch(err){briefError=err.message||String(err);briefIssue=null}finally{briefBusy=false;if(ui.route==='ai-briefing')render()}}
 function briefCollect(kind,index,makeDraft){const a=briefIssue?.[kind],item=Array.isArray(a)?a[Number(index)]:null;if(!item||!briefUrl(item.url)){notify('缺少有效来源，无法收录');return}let t=data.topics.find(t=>t.source===item.url);if(!t){t={id:uid(),title:item.title,category:'AI 科技',summary:[item.summary,item.why].filter(Boolean).join('\n\n').slice(0,1400),source:item.url,sourceName:item.source||'AI Radar',newsImage:briefUrl(item.image),publishedAt:item.published||'',eventDate:/^\d{4}-\d{2}-\d{2}$/.test(String(item.eventDate||item.published||'').slice(0,10))?String(item.eventDate||item.published).slice(0,10):'',eventDateBasis:item.eventDate?'source_event':'published_candidate',reportDate:briefIssue.date,heat:Math.max(1,Math.round(wtEditorialRank.evaluate({...item,category:'AI 科技'}).heat/20)),impact:Math.max(1,Math.round(wtEditorialRank.evaluate({...item,category:'AI 科技'}).impact/20)),story:Math.max(1,Math.round(wtEditorialRank.evaluate({...item,category:'AI 科技'}).drawability/20)),ranking:wtEditorialRank.evaluate({...item,category:'AI 科技'}),stage:'待核验',verified:false,isSample:false,createdAt:now(),from:'DAVYLAB AI Radar'};data.topics.unshift(t);persist()}else if(!t.eventDate){t.eventDate=/^\d{4}-\d{2}-\d{2}$/.test(String(item.eventDate||item.published||'').slice(0,10))?String(item.eventDate||item.published).slice(0,10):'';t.eventDateBasis=item.eventDate?'source_event':'published_candidate';persist()}if(makeDraft){const p=emptyProject(t);p.sourceTitle=item.title;p.sourceURLs=item.url;p.factNotes='来源：'+(item.source||'')+'；简报日期：'+briefIssue.date+'。事实待人工独立核验。';p.description=(item.summary||'').slice(0,800);p.fiction='请使用原创角色；不得借虚构影射真实人物的未经证实指控。';p.category='AI 科技';data.projects.unshift(p);ui.selected=p.id;ui.stage=0;persist();notify('漫画草稿已创建');nav('studio')}else notify('已加入选题池（待核验）')}
 document.addEventListener('click',ev=>{const b=ev.target.closest('[data-brief]');if(!b)return;ev.preventDefault();ev.stopImmediatePropagation();const a=b.dataset.brief;if(a==='view'){briefView=b.dataset.value;render()}else if(a==='refresh')briefFetch(true);else if(a==='save'||a==='draft')briefCollect(b.dataset.kind,b.dataset.index,a==='draft')},true);
