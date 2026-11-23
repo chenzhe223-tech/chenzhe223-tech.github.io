@@ -76,7 +76,7 @@
 /* Two continuous editorial modules with precisely matching outer boundaries. */
 .secondary-editorial-grid {
   display: grid !important;
-  grid-template-columns: minmax(0,8fr) minmax(320px,4fr) !important;
+  grid-template-columns: minmax(0,7fr) minmax(0,4fr) !important;
   align-items: stretch !important;
   column-gap: var(--radar-module-gap) !important;
   margin: 0 0 var(--radar-module-gap) !important;
@@ -291,4 +291,131 @@
   #ai > #leadStory > a { min-height: 250px !important; height: auto !important; }
   #xnewsVoicesSection #xnewsVoices .item,
   #chinaAI .china-ai-card { overflow-wrap: anywhere; }
+}
+
+
+/* Four cross-module contracts · 2026-11-23.
+ * Top story/overseas and top-five/China use the SAME 7:4 tracks and the same gap.
+ * Their section borders are deliberately part of the tracks (border-box).
+ * News and Skill inner card footers anchor to a shared line, without fixed heights
+ * that would clip longer translations, titles, or responsive content.
+ */
+#newsList,
+#skillList {
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  grid-auto-rows: auto;
+  align-items: stretch !important;
+  gap: clamp(14px,1.5vw,20px) !important;
+  min-width: 0;
+}
+#newsList > article.item,
+#skillList > article.item {
+  min-width: 0;
+  height: 100% !important;
+  box-sizing: border-box;
+  align-self: stretch !important;
+}
+#newsList > article.item {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0,1fr) !important;
+  grid-template-rows: minmax(0,1fr);
+  align-items: stretch !important;
+}
+#newsList > article.item > .num {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+}
+#newsList > article.item > div:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+#newsList > article.item .explain {
+  flex: none;
+}
+#newsList > article.item .why {
+  margin-top: auto !important;
+  flex: none;
+}
+#newsList > article.item .meta {
+  margin-top: 12px !important;
+  padding-top: 0;
+  flex: none;
+}
+#newsList > article.item:not(:has(.why)) .meta {
+  margin-top: auto !important;
+  padding-top: 12px;
+}
+#skillList > article.item.skill {
+  display: grid !important;
+  grid-template-columns: 34px minmax(0,1fr) !important;
+  grid-template-rows: minmax(0,1fr) auto !important;
+  align-items: stretch !important;
+  column-gap: 14px !important;
+  row-gap: 12px !important;
+}
+#skillList > article.item.skill > .num {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: start;
+}
+#skillList > article.item.skill > div:nth-child(2) {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  min-width: 0;
+}
+#skillList > article.item.skill .explain {
+  flex: none;
+}
+#skillList > article.item.skill .meta {
+  margin-top: auto !important;
+  padding-top: 12px;
+  flex: none;
+}
+#skillList > article.item.skill .skill-actions {
+  display: flex;
+  align-items: center;
+  flex: none;
+  margin-top: 10px !important;
+  min-height: 44px;
+  gap: 8px;
+}
+#skillList > article.item.skill > .stars {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  align-self: end !important;
+  justify-self: stretch !important;
+  box-sizing: border-box;
+  min-width: 0;
+  width: 100%;
+  margin: 0 !important;
+  white-space: normal !important;
+}
+#newsList > details,
+#skillList > details {
+  grid-column: 1 / -1 !important;
+  min-width: 0;
+}
+/* Small screens: each story/tool has its own natural height, never a forced pair. */
+@media (max-width:760px) {
+  #newsList,
+  #skillList {
+    grid-template-columns: minmax(0,1fr) !important;
+    grid-auto-rows: auto !important;
+    row-gap: 12px !important;
+  }
+  #newsList > article.item,
+  #skillList > article.item {
+    height: auto !important;
+  }
+  #newsList > article.item { grid-template-columns: 27px minmax(0,1fr) !important; }
+  #skillList > article.item.skill { grid-template-columns: 27px minmax(0,1fr) !important; }
 }
