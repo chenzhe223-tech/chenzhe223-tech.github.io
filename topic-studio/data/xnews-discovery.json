@@ -3,9 +3,26 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-22T08:08:29+00:00",
-  "count": 50,
+  "synced_at": "2026-11-23T06:03:05+00:00",
+  "count": 51,
   "articles": [
+    {
+      "id": "openai-perplexity-intelligence",
+      "date": "2026-11-22",
+      "title": "内部模型对数困惑度到了0.732，他建议在0.68到0.7之前设共同上限",
+      "summary": "OpenAI首席科学家Jakub Pachocki公布了内部代码库上的预训练曲线，并主张用困惑度等指标建立可验证的行业上限。",
+      "original_url": "https://openai.com/index/perplexity-and-intelligence/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-perplexity-intelligence",
+      "tags": [
+        "OpenAI",
+        "perplexity",
+        "safety",
+        "pretraining",
+        "evaluation"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-medchembench",
       "date": "2026-11-20",
