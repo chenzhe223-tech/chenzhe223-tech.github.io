@@ -1,0 +1,64 @@
+name: DAVYLAB analysis reader-facing redesign QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'radar/daily/index.html'
+      - 'radar/assets/analysis-editorial.css'
+      - 'scripts/test-radar-editorial-analysis.cjs'
+      - '.github/workflows/radar-analysis-editorial.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  editorial-browser:
+    name: Content provenance, image load, responsive magazine layout
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify safe source-backed editorial contract
+        run: |
+          node --check scripts/test-radar-editorial-analysis.cjs
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          html=Path('radar/daily/index.html').read_text(encoding='utf-8')
+          data=json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          assert data.get('editorial',{}).get('core_zh'), 'No source-backed actual editorial judgment'
+          assert len(data['editorial'].get('source_basis',[]))>=4, 'Not enough credited evidence'
+          assert 'id="radar-analysis-design"' in html
+          assert '五源发现 · 原文可追溯 · 人工待核验</p>' not in html
+          assert '来自 OpenAI、Google AI、Hugging Face、Simon Willison 与 TechCrunch 的公开 RSS/Atom 新闻线索。' not in html
+          assert '聚焦中国 AI 企业、研究机构与产业落地，只展示带有原文链接' not in html
+          assert 'function editorialPhotoFor(data)' in html
+          assert 'source_not_independently_verified' in html, 'News Engine source QA must remain'
+          assert '#editorialCore' in Path('radar/assets/analysis-editorial.css').read_text(encoding='utf-8')
+          for path in ('radar/daily/index.html',):
+              script=html.split('<script>',1)[1].split('</script>',1)[0]
+              Path('/tmp/radar-editorial.js').write_text(script,encoding='utf-8')
+          print('PASS: no backend hints, original citation-backed editorial, licensed visual allow-list')
+          PY
+          node --check /tmp/radar-editorial.js
+      - name: Install real Chromium and CJK fonts
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+      - name: Test image, sourcing and precise reading at ten screen widths
+        run: |
+          python3 -m http.server 8877 --bind 127.0.0.1 >/tmp/radar-analysis-http.log 2>&1 &
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8877/radar/daily/ >/dev/null && break; sleep 1; done
+          node scripts/test-radar-editorial-analysis.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: davylab-editorial-analysis-responsive
+          path: test-results/radar-analysis-editorial/
+          if-no-files-found: warn
+          retention-days: 14
