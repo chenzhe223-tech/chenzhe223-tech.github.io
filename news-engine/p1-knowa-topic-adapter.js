@@ -58,7 +58,7 @@ async function knowaTopicRadarWithNewsEngine(base){
   result.newsEngine={status:'ok',issueDate:j.issue_date,isToday:j.is_today===true,added:result.items.length-originalCount,sourceMode};
  }catch(err){
   result.sources.push({name:'DAVYLAB News Engine',status:'unavailable',count:0});
-  result.newsEngine={status:'unavailable',added:0};
+  result.newsEngine={status:'unavailable',added:0,reason:String(err?.message||'upstream unavailable').slice(0,100)};
  }
  return result;
 }
