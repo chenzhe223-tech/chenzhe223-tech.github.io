@@ -31,7 +31,7 @@ async function run(){
    await page.route("**/radar/data/latest.json*",r=>r.fulfill({status:200,contentType:"application/json",body:JSON.stringify(original)}));
    const response=await page.goto(origin+"/radar/daily/",{waitUntil:"domcontentloaded",timeout:25000});
    assert.equal(response.status(),200);
-   await page.waitForFunction(()=>window.reportData && window.reportData.xnews_voices?.length===6,{timeout:20000});
+   await page.waitForFunction(()=>typeof reportData!=="undefined" && reportData && reportData.xnews_voices?.length===6,null,{timeout:20000});
    await page.locator("#xnewsVoices .item").first().waitFor();
    assert.equal(await page.locator("#xnewsVoices .item").count(),6);
    assert.equal(await page.locator("#xnewsVoices .voice-cover").count(),0);
