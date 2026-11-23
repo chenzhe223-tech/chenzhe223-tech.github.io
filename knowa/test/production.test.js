@@ -22,7 +22,7 @@ test('production client JavaScript is syntactically valid and exports actual med
  assert.doesNotThrow(()=>new vm.Script(code,{filename:'knowa-content-factory-client.js'}));
  for(const marker of ['canvas.captureStream','MediaRecorder','toBlob','JSON.parse','createObjectURL','decodeAudioData','articleMd','articleHtml','drawPoster','drawVideo','来源待复核'])assert.ok(code.includes(marker),marker);
  for(const style of ['深海蓝','科学白','矿物绿','石墨黑','海洋蓝','赭石红'])assert.ok(code.includes(style),style);
- assert.match(code,/canvas\.width|width="1080"/);
+ assert.match(factoryHtml,/width="1080" height="1440"/);
 });
 test('production output is local only; legacy knowledge and AI spend safety intact',async()=>{
  const home=await(await worker.fetch(new Request('https://knowa.test/'),{})).text();
