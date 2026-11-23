@@ -17,7 +17,7 @@ if(financeNode&&!page.querySelector("#scienceDiscovery")){
  const hub=document.createElement("section");
  hub.className="science-hub";hub.id="scienceDiscovery";hub.setAttribute("aria-labelledby","scienceTitle");
  financeNode.after(hub);
- const style=document.createElement("link");style.rel="stylesheet";style.href="./science-discovery.css?v=20261123-p0";document.head.append(style);
+ const style=document.createElement("link");style.rel="stylesheet";style.href="./science-discovery.css?v=20261123-search-v2";document.head.append(style);
 }
 const sourceNodes={radar:page.querySelector(".opportunity-hub"),xnews:page.querySelector(".xnews-hub"),finance:financeNode,science:page.querySelector(".science-hub")};
 const links=[...nav.querySelectorAll("[data-discover-target]")];
@@ -79,8 +79,16 @@ window.addEventListener("hashchange",()=>{
  if(type)setSource(type,false);
  else openDetail(id);
 });
-window.DAVYLABEditorialWorkspace={version:"4.1.0-science",setSource,getActiveSource:()=>page.dataset.activeSource};
+window.DAVYLABEditorialWorkspace={version:"4.2.0-science-search",setSource,getActiveSource:()=>page.dataset.activeSource};
 if(sourceNodes.science){
- const module=document.createElement("script");module.src="./science-discovery.js?v=20261123-research-filter-v2";module.defer=true;document.body.append(module);
+ const helper=document.createElement("script");
+ helper.src="./science-search-utils.js?v=20261123-search-v2";
+ helper.onload=()=>{
+  const module=document.createElement("script");
+  module.src="./science-discovery.js?v=20261123-fuzzy-online-v2";
+  document.body.append(module);
+ };
+ helper.onerror=()=>console.error("DAVYLAB Science search utilities failed to load");
+ document.body.append(helper);
 }
 })();
