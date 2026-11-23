@@ -205,7 +205,7 @@ function localStoryboard(p){
   return {...row,title:row.title+' · '+(k+1),
    scene:row.scene+' 本镜独立呈现人物'+beat[0]+'，与上一镜构成因果连贯且具有不同可见动作。',
    caption:row.caption+' 随着新证据出现，故事进一步推进。',
-   dialogue:beat[1]+'。'};
+   dialogue:String(row.dialogue||'').replace(/[。！？!?]$/,'')+'，'+beat[1]+'。'};
  });
 }
 function applyStoryboard(p,panels,meta,replace=false){
