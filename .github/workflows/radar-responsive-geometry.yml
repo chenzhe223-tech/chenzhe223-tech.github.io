@@ -1,0 +1,55 @@
+name: Radar editorial geometric alignment (PC Pad Mobile)
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "radar/daily/index.html"
+      - "radar/assets/geometry-grid.css"
+      - "scripts/test-radar-responsive-geometry.cjs"
+      - ".github/workflows/radar-responsive-geometry.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  real-responsive-chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Chromium and consistent CJK fonts
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.1
+          npx playwright install --with-deps chromium
+          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+      - name: Validate source files and current source-backed report
+        run: |
+          node --check scripts/test-radar-responsive-geometry.cjs
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          html=Path('radar/daily/index.html').read_text(encoding='utf-8')
+          assert 'id="radar-geometry-contract"' in html
+          assert html.index('id="radar-v2-layout-refinement"') < html.index('id="radar-geometry-contract"')
+          css=Path('radar/assets/geometry-grid.css').read_text(encoding='utf-8')
+          assert '#ai > #top5List' in css and '#xnewsVoicesSection #xnewsVoices' in css
+          report=json.loads(Path('radar/data/latest.json').read_text(encoding='utf-8'))
+          assert len(report.get('top5',[]))==5 and len(report.get('xnews_voices',[]))==6
+          assert len(report.get('china_ai_news',[]))>=6
+          PY
+      - name: Run actual browser geometry and overflow tests at 12 widths
+        run: |
+          python3 -m http.server 8877 --bind 127.0.0.1 > /tmp/radar-geometry-http.log 2>&1 &
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:8877/radar/daily/ > /dev/null && break; sleep 1; done
+          node scripts/test-radar-responsive-geometry.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: radar-responsive-geometric-qa
+          path: test-results/radar-geometry/
+          if-no-files-found: warn
+          retention-days: 14

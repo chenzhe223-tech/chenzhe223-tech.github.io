@@ -1,0 +1,294 @@
+/* DAVYLAB AI Radar · geometric responsive layout contract, 2026-11-23
+ * Single authoritative layout layer after the approved editorial styles.
+ * No content, source, design palette, poster or publishing logic changes.
+ * Desktop >1180: shared rows and equal module boundaries.
+ * Tablet 761..1180 and phone <=760: natural document flow, no artificial empty rows.
+ */
+:root {
+  --radar-module-gap: clamp(16px, 2.2vw, 30px);
+  --radar-panel-padding: clamp(16px, 1.65vw, 24px);
+}
+#ai,
+.secondary-editorial-grid,
+#leadStory,
+#top5List,
+#xnewsVoicesSection,
+#chinaAI { min-width: 0; box-sizing: border-box; }
+
+/* Lead and daily five: the same single grid row, not a ghost second row. */
+#ai {
+  display: grid !important;
+  grid-template-columns: minmax(0,7fr) minmax(0,4fr) !important;
+  grid-template-rows: minmax(0,auto) !important;
+  column-gap: var(--radar-module-gap) !important;
+  align-items: stretch !important;
+  margin: 0 0 var(--radar-module-gap) !important;
+}
+#ai > #editorialCore[hidden] { display: none !important; }
+#ai > #leadStory {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  min-height: clamp(390px,33vw,525px);
+  height: auto;
+  border-radius: 9px;
+}
+#ai > #leadStory > a {
+  display: block;
+  flex: 1 0 auto;
+  min-height: 200px !important;
+  height: auto !important;
+}
+#ai > #top5List {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  grid-template-columns: minmax(0,1fr) !important;
+  grid-template-rows: auto repeat(5,minmax(min-content,1fr)) !important;
+  align-self: stretch !important;
+  height: 100% !important;
+  min-height: 0;
+  padding-bottom: 0 !important; /* remove legacy empty 14px tail after item 05 */
+  margin: 0 !important;
+  gap: 0 !important;
+  border: 0 !important;
+}
+#ai > #top5List::before {
+  grid-column: 1 / -1;
+  align-self: start;
+  margin: 0;
+}
+#ai > #top5List > .top5-card {
+  grid-column: 1 !important;
+  min-height: 0;
+  height: 100%;
+  align-items: center !important;
+  padding: clamp(9px,0.95vw,14px) 0 !important;
+  box-sizing: border-box;
+}
+#ai > #top5List > .top5-card .top5-content {
+  min-width: 0;
+  align-self: center;
+}
+
+/* Two continuous editorial modules with precisely matching outer boundaries. */
+.secondary-editorial-grid {
+  display: grid !important;
+  grid-template-columns: minmax(0,8fr) minmax(320px,4fr) !important;
+  align-items: stretch !important;
+  column-gap: var(--radar-module-gap) !important;
+  margin: 0 0 var(--radar-module-gap) !important;
+}
+.secondary-editorial-grid > #xnewsVoicesSection,
+.secondary-editorial-grid > #chinaAI {
+  grid-column: auto !important;
+  align-self: stretch !important;
+  margin: 0 !important;
+  height: 100%;
+  min-height: 0;
+  padding: var(--radar-panel-padding);
+  background: rgba(255,254,251,.46);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  flex-direction: column;
+}
+.secondary-editorial-grid > #xnewsVoicesSection { display: flex; }
+/* Initial HTML has inline display:none; it must remain hidden until JS paints. */
+.secondary-editorial-grid > #chinaAI { display: flex; }
+.secondary-editorial-grid > section .section-head {
+  flex: none;
+  min-height: 66px;
+  margin: 0 0 12px !important;
+}
+.secondary-editorial-grid > section .section-intro {
+  flex: none;
+  min-height: 67px;
+  max-width: none;
+  margin: 0 0 16px !important;
+  overflow-wrap: anywhere;
+}
+#xnewsVoicesSection #xnewsVoices {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid !important;
+  grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+  grid-auto-rows: minmax(min-content,1fr);
+  gap: 14px !important;
+}
+#xnewsVoicesSection #xnewsVoices .item {
+  display: flex !important;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow-wrap: anywhere;
+  box-sizing: border-box;
+}
+#xnewsVoicesSection #xnewsVoices .item > div:last-child {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  flex-direction: column;
+}
+#xnewsVoicesSection #xnewsVoices .item .meta {
+  margin-top: auto !important;
+  padding-top: 12px !important;
+  overflow-wrap: anywhere;
+}
+#chinaAI #chinaAINewsList {
+  flex: 1 1 auto;
+  min-height: 0;
+  margin-top: 0 !important; /* legacy China grid had a 12px extra top offset */
+}
+#chinaAI > .rail-poster {
+  flex: none;
+  margin-top: 18px !important;
+}
+#xnewsVoicesSection .section-head h2,
+#chinaAI .section-head h2,
+#xnewsVoices .item h3,
+#chinaAI .top5-card h3 {
+  overflow-wrap: anywhere;
+}
+
+/* Pad landscape/portrait: use full-width sequential modules, two news cards. */
+@media (max-width: 1180px) {
+  .secondary-editorial-grid {
+    grid-template-columns: minmax(0,1fr) !important;
+    row-gap: 22px !important;
+  }
+  .secondary-editorial-grid > #xnewsVoicesSection,
+  .secondary-editorial-grid > #chinaAI {
+    grid-column: 1 !important;
+    height: auto;
+  }
+  .secondary-editorial-grid > section .section-head,
+  .secondary-editorial-grid > section .section-intro {
+    min-height: 0;
+  }
+  #xnewsVoicesSection #xnewsVoices {
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    grid-auto-rows: auto;
+  }
+  #chinaAI #chinaAINewsList {
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    align-items: start;
+    gap: 14px !important;
+  }
+  #chinaAI .china-ai-more { grid-column: 1 / -1; }
+  #chinaAI > .rail-poster { margin-top: 16px !important; }
+}
+
+/* Pad with narrow view: lead first, then five clearly separated headlines. */
+@media (max-width: 1024px) {
+  /* The desktop five-link nav collides with search and language at iPad width. */
+  .primary-nav { display: none !important; }
+  .nav-right { margin-left: auto !important; gap: 8px !important; }
+  #ai {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 22px !important;
+  }
+  #ai > #leadStory {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    align-self: auto !important;
+  }
+  #ai > #leadStory > a {
+    min-height: 200px !important;
+    height: auto !important;
+  }
+  #ai > #top5List {
+    width: 100%;
+    height: auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    grid-template-rows: auto !important;
+    column-gap: 22px !important;
+    align-self: auto !important;
+  }
+  #ai > #top5List::before { grid-column: 1 / -1; }
+  #ai > #top5List > .top5-card {
+    grid-column: auto !important;
+    padding: 16px 0 !important;
+  }
+  #ai > #top5List > .top5-card:last-child { grid-column: 1 / -1 !important; }
+}
+
+/* On iPad the five-link desktop nav is hidden to avoid collisions:
+   show the existing editorial tabs instead of leaving users without navigation. */
+@media (min-width: 761px) and (max-width: 1024px) {
+  /* Match the original editorial.css high-specificity header:has() hide rule. */
+  header:has(.hero-panel) .tabs {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: clamp(14px,2.8vw,26px) !important;
+    overflow-x: auto !important;
+    padding: 0 0 7px !important;
+    margin: 13px 0 18px !important;
+    border-bottom: 1px solid var(--rule) !important;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs > .tab { display: inline-flex !important; flex: 0 0 auto; min-height: 40px !important; }
+}
+
+/* Phones: no empty tracks, horizontal scroll or tiny multi-column cards. */
+@media (max-width: 760px) {
+  #ai {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  #ai > #leadStory {
+    width: 100%;
+    min-height: 0;
+    height: auto;
+  }
+  #ai > #leadStory > a { min-height: 235px !important; height: auto !important; }
+  #ai > #top5List {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    gap: 0 !important;
+  }
+  #ai > #top5List > .top5-card,
+  #ai > #top5List > .top5-card:last-child {
+    grid-column: 1 !important;
+    padding: 14px 0 !important;
+  }
+  .secondary-editorial-grid {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) !important;
+    row-gap: 16px !important;
+  }
+  .secondary-editorial-grid > #xnewsVoicesSection,
+  .secondary-editorial-grid > #chinaAI {
+    padding: clamp(12px,3.5vw,18px);
+    margin: 0 !important;
+  }
+  #xnewsVoicesSection #xnewsVoices,
+  #chinaAI #chinaAINewsList {
+    grid-template-columns: minmax(0,1fr) !important;
+    grid-auto-rows: auto !important;
+    gap: 12px !important;
+  }
+  #chinaAI .china-ai-more { grid-column: 1 !important; }
+  #xnewsVoicesSection #xnewsVoices .item { min-height: 0; }
+  #xnewsVoicesSection .section-head,
+  #chinaAI .section-head { display: block; }
+  #xnewsVoicesSection .section-head p,
+  #chinaAI .section-head p { display: block; margin-top: 4px; }
+}
+@media (max-width: 390px) {
+  .secondary-editorial-grid > #xnewsVoicesSection,
+  .secondary-editorial-grid > #chinaAI { padding: 12px; }
+  #ai > #leadStory { min-height: 0; }
+  #ai > #leadStory > a { min-height: 250px !important; height: auto !important; }
+  #xnewsVoicesSection #xnewsVoices .item,
+  #chinaAI .china-ai-card { overflow-wrap: anywhere; }
+}
