@@ -111,7 +111,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Validate and contract-test isolated online Worker (offline)
         run: |
-          node --check news-engine/preview-worker.js
+          python3 news-engine/build_preview_worker.py --out /tmp/davylab-news-preview.js
+          node --check /tmp/davylab-news-preview.js
           node news-engine/test_preview_worker.cjs
       - name: Test actual desktop and mobile review workflow in Chromium (offline)
         env:
