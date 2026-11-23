@@ -42,3 +42,22 @@
 ## 发布规则
 
 只有独立 P1 CI 的浏览器、离线、KNOWA 生产和原有公众号/News Engine 相关测试通过，才允许合并。合并后再确认实际网站已加载新脚本版本以及真实 News API 新闻候选。P1 完成不意味着 KNOWN/KNO WA 全网实时新闻研究或 WorldToon 自动生产已完成。
+
+## 2026-11-23 正式生产交付验收
+
+**P1 范围内：Code Completed / Build Passed / Runtime Verified / Functional Tested / Production Deployed 全部 PASS。**
+
+- [P1 功能合并 PR #168](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/168)，合并 SHA `610f7311795aa5d9cc264542c52d804fa291881a`。
+- [WorldToon CSP 修复 PR #169](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/pull/169)，合并 SHA `1848c36d2e786acc8101ac2f35a8f7bae9d91258`。问题根因：WorldToon Worker 的 HTTP `Content-Security-Policy` 中 `connect-src` 仅允许本站和 Supabase，阻止浏览器访问新增的 `davylab-news-api.chenzhe223.workers.dev`。修复仅将该单一受控域名加入许可清单，保留所有原有安全限制、脚本、密钥和漫画业务。Cloudflare 内容单独更新，实际新增48字节，7项绑定前后一致；线上 Worker 新版本 `8a89382b-8051-4ca0-90af-4792a8187d6c`（可回退原版本 `10a72952-a167-4482-9ff5-1e9eb1c422f1`）。
+- [最终 P1 生产 CI #45137657528](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45137657528)：四个 job **全部 SUCCESS**（`consumer-contract`、`consumer-chromium`、`knowa-production-readonly-smoke`、`deployed-production-qa`）。真实 HTTPS 浏览器日志明确为 `P1 PRODUCTION VERIFIED 390 WorldToon + Topic Studio` 和 `P1 PRODUCTION VERIFIED 1440 WorldToon + Topic Studio`。
+- [P1 更新后 GitHub Pages 构建 #45137656265](https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/actions/runs/45137656265)：build、status、deploy **SUCCESS**。
+- KNOWA 独立生产 `/api/topics` 检验：保留36个知识资产，当前65个候选中新增6条 `DAVYLAB News Engine` 来源新闻。Cloudflare 同账户 Worker 之间直连受限，KNOWA 使用官方质量验收通过的 AI 日报 JSON 作为回退，不宣称这些是额外全网搜索结果；各条均未核验，`publishable=false`。
+- WorldToon 仍有与此次升级无关的旧 CI 失败（旧脚本版本期待、无定义的旧 `localStoryboardCore` 等），在本次开发前 main 上已可复现。上述 P1 独立集成测试和**真实线上浏览器访问**均通过；不能混称全平台既有测试均通过。
+- **边界：** News API 仍是最新一期已发布日报的只读新闻/选题服务，不是实时全网搜索；三个平台均不因接入而自动完成新闻事实核验、受版权保护正文复制、漫画图片生成、文章/视频制作或公众号发文。
+
+### 已验收用户入口
+
+- WorldToon（AI 简报内 News Engine 标签）：https://worldtoon.chenzhe223.workers.dev/#/ai-briefing
+- KNOWA（科普选题）：https://davylab-knowa-p0.chenzhe223.workers.dev/studio
+- 公众号 Topic Studio（海外精选选题）：https://chenzhe223-tech.github.io/topic-studio/
+- 共用 News API：https://davylab-news-api.chenzhe223.workers.dev/api/v1/health
