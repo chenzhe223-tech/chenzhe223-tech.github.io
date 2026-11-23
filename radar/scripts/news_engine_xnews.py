@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import datetime as dt
 import importlib.util
+import json
 import ipaddress
 import os
 from pathlib import Path
@@ -19,6 +20,28 @@ MIN_HEALTHY_SOURCES = 3
 MAX_STORIES = 48
 MAX_PER_SOURCE = 12
 ACCEPT = "application/rss+xml,application/atom+xml,application/xml"
+
+CONFIG_PATH = ROOT / "radar" / "config" / "news-engine-xnews.json"
+
+
+def _config():
+    """Fail closed on invalid flags; no path can authorize inference/publication."""
+    try:
+        data = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+        if (data.get("schema_version") != 1 or data.get("provider") not in
+                {"news_engine", "legacy", "disabled"} or
+                data.get("read_only") is not True or
+                data.get("allow_ai_inference") is not False or
+                data.get("allow_auto_publish") is not False or
+                data.get("require_human_fact_check") is not True):
+            raise ValueError("unsafe switch config")
+        return data
+    except (OSError, ValueError, TypeError):
+        return {"provider": "legacy", "legacy_fallback_on_failure": True}
+
+
+def _provider():
+    return os.environ.get("RADAR_XNEWS_PROVIDER") or _config()["provider"]
 
 
 def _module(name: str):
@@ -51,7 +74,10 @@ def _public_https(value: str) -> bool:
 def _legacy(http_get, now):
     """Only the pre-existing failure path; never a normal publication dependency."""
     from radar.scripts.xnews_sources import collect_xnews_articles
-    if os.environ.get("RADAR_NEWS_ENGINE_LEGACY_FALLBACK", "1") != "1":
+    fallback = os.environ.get("RADAR_NEWS_ENGINE_LEGACY_FALLBACK")
+    if fallback is None:
+        fallback = "1" if _config().get("legacy_fallback_on_failure", True) else "0"
+    if fallback != "1":
         return [], "unavailable"
     try:
         return collect_xnews_articles(http_get, now=now)
@@ -67,9 +93,10 @@ def collect_news_engine_articles(http_get, *, now: dt.datetime):
     """
     if now.tzinfo is None:
         raise ValueError("now must have timezone")
-    if os.environ.get("RADAR_XNEWS_PROVIDER", "news_engine") == "legacy":
+    mode = _provider()
+    if mode == "legacy":
         return _legacy(http_get, now)
-    if os.environ.get("RADAR_XNEWS_PROVIDER", "news_engine") != "news_engine":
+    if mode != "news_engine":
         return [], "disabled"
     try:
         collector = _module("collector")
