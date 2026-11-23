@@ -78,7 +78,7 @@ function ingest(data,cached){
 }
 function toFeed(x){
  return {
-   type:"news",origin:x.source_kind==="news_engine_public_api"?"news_engine":"xnews",title:x.title,summary:x.summary,source:x.source_kind==="independent_original"?x.sourceLabel:"XNews · 向阳乔木（海外精选）",originSource:x.source_kind,
+   type:"news",origin:x.source_kind==="news_engine_public_api"?"news_engine":"xnews",title:x.title,summary:x.summary,source:x.source_kind==="independent_original"||x.source_kind==="news_engine_public_api"?x.sourceLabel:"XNews · 向阳乔木（海外精选）",originSource:x.source_kind,
    url:x.original_url,sourcePageUrl:x.xnews_url,published:x.date,
    category:categoryOf(x),angle:x.angle,why:"编辑辅助线索；以原文核验为准。",
    xnewsUrl:x.xnews_url,imageUrl:"",imageFallbackUrl:"",imageCredit:"",imageAlt:""
