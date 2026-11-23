@@ -234,10 +234,10 @@ root.innerHTML=
 $("scienceSource").addEventListener("change",e=>{st.filter=e.target.value;st.visible=8;render()});
 $("scienceDomain").addEventListener("change",e=>{st.domain=e.target.value;st.visible=8;render()});
 $("scienceSort").addEventListener("change",e=>{st.sort=e.target.value;render()});
-$("scienceSearch").addEventListener("input",e=>{st.query=e.target.value.trim();st.visible=8;if(st.onlineQuery!==st.query){st.scope="local";$("scienceScope").value="local";}render()});
+$("scienceSearch").addEventListener("input",e=>{const next=e.target.value.trim();if(next!==st.query){st.searchSerial++;st.onlineLoading=false;$("scienceOnline").disabled=false;}st.query=next;st.visible=8;if(st.onlineQuery!==st.query){st.scope="local";st.onlineItems=[];st.onlineQuery="";$("scienceScope").value="local";}render()});
 $("scienceSearchForm").addEventListener("submit",e=>{e.preventDefault();searchOnline()});
 $("scienceScope").addEventListener("change",e=>{st.scope=e.target.value;st.visible=8;render()});
-$("scienceClear").addEventListener("click",()=>{st.searchSerial++;st.query="";st.onlineQuery="";st.onlineItems=[];st.scope="local";st.visible=8;$("scienceSearch").value="";$("scienceScope").value="local";render();status("已清空搜索条件，显示采集论文。")});
+$("scienceClear").addEventListener("click",()=>{st.searchSerial++;st.onlineLoading=false;$("scienceOnline").disabled=false;st.query="";st.onlineQuery="";st.onlineItems=[];st.scope="local";st.visible=8;$("scienceSearch").value="";$("scienceScope").value="local";render();status("已清空搜索条件，显示采集论文。")});
 $("scienceMore").addEventListener("click",()=>{st.visible+=8;render()});
 $("scienceRefresh").addEventListener("click",refresh);
 root.addEventListener("click",e=>{const button=e.target.closest?.("button[data-science-doi]");if(button)addToPool(button.dataset.scienceDoi)});
