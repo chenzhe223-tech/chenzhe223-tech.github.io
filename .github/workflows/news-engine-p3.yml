@@ -84,8 +84,13 @@ jobs:
       - name: Install Chromium and CJK fonts for real responsive test
         run: |
           npm install --no-save --no-package-lock playwright@1.55.1
-          npx playwright install --with-deps chromium
-          sudo apt-get install -y --no-install-recommends fonts-noto-cjk
+          if command -v google-chrome >/dev/null; then
+            google-chrome --version
+            echo "P3_BROWSER_CHANNEL=chrome" >> "$GITHUB_ENV"
+          else
+            npx playwright install --with-deps chromium
+            echo "P3_BROWSER_CHANNEL=chromium" >> "$GITHUB_ENV"
+          fi
       - name: Verify original page layouts, V2 filters and source-to-creation handoff at 390/1440
         run: |
           python3 -m http.server 8877 --bind 127.0.0.1 >/tmp/news-p3.log 2>&1 &
@@ -109,9 +114,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Install Chromium
+      - name: Use installed Chrome or provision headless Chromium
         run: |
           npm install --no-save --no-package-lock playwright@1.55.1
-          npx playwright install --with-deps chromium
+          if command -v google-chrome >/dev/null; then
+            google-chrome --version
+            echo "P3_BROWSER_CHANNEL=chrome" >> "$GITHUB_ENV"
+          else
+            npx playwright install --with-deps chromium
+            echo "P3_BROWSER_CHANNEL=chromium" >> "$GITHUB_ENV"
+          fi
       - name: Real HTTPS published WorldToon, KNOWA and Topic Studio P3 acceptance
         run: node news-engine/test_p3_online.cjs
