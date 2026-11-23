@@ -21,6 +21,15 @@ async function testWidth(browser,width){
    return {
     full:document.documentElement.scrollWidth,
     wrap:rect(".wrap"),lead:rect("#leadStory"),hot:rect("#top5List"),last:rect("#top5List>.top5-card:last-child"),
+    newsCards:[...document.querySelectorAll("#newsList > article.item")].slice(0,4).map(e=>({
+      box:{top:e.getBoundingClientRect().top,bottom:e.getBoundingClientRect().bottom,left:e.getBoundingClientRect().left,right:e.getBoundingClientRect().right},
+      meta:{top:e.querySelector(".meta").getBoundingClientRect().top,bottom:e.querySelector(".meta").getBoundingClientRect().bottom}
+    })),
+    skillCards:[...document.querySelectorAll("#skillList > article.item.skill")].slice(0,4).map(e=>({
+      box:{top:e.getBoundingClientRect().top,bottom:e.getBoundingClientRect().bottom,left:e.getBoundingClientRect().left,right:e.getBoundingClientRect().right},
+      stars:{top:e.querySelector(".stars").getBoundingClientRect().top,bottom:e.querySelector(".stars").getBoundingClientRect().bottom},
+      action:{top:e.querySelector(".skill-actions").getBoundingClientRect().top,bottom:e.querySelector(".skill-actions").getBoundingClientRect().bottom}
+    })),
     overseas:rect("#xnewsVoicesSection"),china:rect("#chinaAI"),overseasList:rect("#xnewsVoices"),chinaList:rect("#chinaAINewsList"),
     style:{alignment:css(".secondary-editorial-grid").alignItems,overseasDisplay:css("#xnewsVoicesSection").display,
       primaryNav:css(".primary-nav").display,editorialTabs:css(".tabs").display,
@@ -44,8 +53,34 @@ async function testWidth(browser,width){
    assert.ok(g.overseas.right<g.china.left,width+" secondary columns overlap");
    assert.ok(near(g.overseas.top,g.china.top),width+" secondary top misalignment");
    assert.ok(near(g.overseas.bottom,g.china.bottom),width+" secondary bottom misalignment: "+JSON.stringify([g.overseas.bottom,g.china.bottom]));
+   // Contract across both independent grids, not just inside each row.
+   assert.ok(near(g.lead.left,g.overseas.left),width+" lead/overseas left boundaries must be identical");
+   assert.ok(near(g.lead.right,g.overseas.right),width+" lead/overseas right boundaries must be identical");
+   assert.ok(near(g.hot.left,g.china.left),width+" top-five/China left boundaries must be identical");
+   assert.ok(near(g.hot.right,g.china.right),width+" top-five/China right boundaries must be identical");
    assert.ok(near(g.overseasList.top,g.chinaList.top,8),width+" content start rows misaligned: "+JSON.stringify([g.overseasList.top,g.chinaList.top]));
   }else assert.ok(g.china.top>=g.overseas.bottom+12,width+" secondary modules overlap");
+  assert.equal(g.newsCards.length,4,width+" preview needs four actual source-backed news cards");
+  assert.equal(g.skillCards.length,4,width+" preview needs four actual Skill cards");
+  if(width>760){
+    for(const [name,cards] of [["AI news",g.newsCards],["Skill",g.skillCards]]){
+      for(let index=0;index+1<cards.length;index+=2){
+        const a=cards[index],b=cards[index+1];
+        assert.ok(near(a.box.top,b.box.top),width+" "+name+" row "+index+" top edges differ");
+        assert.ok(near(a.box.bottom,b.box.bottom),width+" "+name+" row "+index+" bottom edges differ");
+      }
+    }
+    for(let index=0;index+1<4;index+=2){
+      const n1=g.newsCards[index],n2=g.newsCards[index+1];
+      assert.ok(near(n1.meta.bottom,n2.meta.bottom,3),width+" AI news metadata footers must align");
+      const k1=g.skillCards[index],k2=g.skillCards[index+1];
+      assert.ok(near(k1.stars.bottom,k2.stars.bottom,3),width+" Skill popularity footers must align");
+      assert.ok(near(k1.action.bottom,k2.action.bottom,3),width+" Skill CTA footers must align");
+    }
+  }else{
+    for(const cards of [g.newsCards,g.skillCards])for(let i=0;i+1<cards.length;i++)
+      assert.ok(cards[i+1].box.top>=cards[i].box.bottom+9,width+" single-column cards must not overlap");
+  }
   const overseasCols=g.style.overseasCols.trim().split(/\s+/).length;
   const chinaCols=g.style.chinaCols.trim().split(/\s+/).length;
   if(width===768) console.log("TABLET-NAV-DIAG "+JSON.stringify(await page.evaluate(()=>{ const t=document.querySelector(".tabs");const z=getComputedStyle(t);return {display:z.display,visibility:z.visibility,opacity:z.opacity,height:t.getBoundingClientRect().height,parentDisplay:getComputedStyle(t.parentElement).display,inlineStyle:t.getAttribute("style")}})));
@@ -60,6 +95,7 @@ async function testWidth(browser,width){
   assert.deepEqual(errors,[],width+" JS errors");
   if(CAPTURES.has(width)) await page.screenshot({path:path.join(OUT,"radar-"+width+".png"),fullPage:true,animations:"disabled",timeout:30000});
   const result={width,status:"PASS",primaryBottomDifference:Math.round((g.lead.bottom-g.hot.bottom)*100)/100,secondaryBottomDifference:Math.round((g.overseas.bottom-g.china.bottom)*100)/100,scrollWidth:g.full,overseasCols};
+  if(width===1440||width===820||width===390)console.log("CARD-FOOTER-DIAGNOSTIC "+width+" "+JSON.stringify({news:g.newsCards,skills:g.skillCards}));
   console.log("GEOMETRY "+JSON.stringify(result));return result;
  }catch(e){
   try{await page.screenshot({path:path.join(OUT,"failed-"+width+".png"),fullPage:true,timeout:10000})}catch(_){}
