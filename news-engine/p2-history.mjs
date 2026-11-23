@@ -4,7 +4,7 @@
  * NO user URLs, external crawler, billing, persistence, generated news or writes.
  */
 export const P2_VERSION="2.0.0";
-export const P2_ROUTES=Object.freeze(["/api/v2/history","/api/v2/news","/api/v2/search","/api/v2/topics"]);
+export const P2_ROUTES=Object.freeze(["/api/v2/history","/api/v2/news","/api/v2/search","/api/v2/topics","/api/v2/openapi.json"]);
 export const P2_CATEGORIES=Object.freeze(["agents","models","research","products","business","safety","creative","other"]);
 const ORIGINS=Object.freeze([
  "https://chenzhe223-tech.github.io/radar/data/",
@@ -24,6 +24,7 @@ export const P2_OPENAPI={
  openapi:"3.0.3",info:{title:"DAVYLAB News Engine P2 Historical Read-only API",version:P2_VERSION,
  description:"Quality-approved already-published AI Radar archives, up to 30 indexed issues; not live internet search, independently verified research or social popularity."},
  paths:{
+  "/api/v2/openapi.json":{get:{summary:"Machine-readable P2 contract."}},
   "/api/v2/history":{get:{summary:"List indexed published issue dates; listing does not validate every archive."}},
   "/api/v2/news":{get:{summary:"Cross-issue classified source-linked news; days(1-30), from,to,stream,region,category,source,q,sort,limit,offset."}},
   "/api/v2/search":{get:{summary:"Search up to 30 published issues; requires q with at least 2 characters; same filters as news."}},
@@ -163,7 +164,6 @@ async function loadScope(url,latest,normalizeRecords){
  for(let i=0;i<reports.length;i++){
   const d=reports[i];if(!d)continue;
   for(const row of normalizeRecords(d)){
-   if(!row?.source_url||!row?.publishable===false){} // below explicit assertion determines allowed rows
    if(!row||row.publishable!==false||!row.source_url.startsWith("https://"))continue;
    const key=canonical(row.source_url);
    if(!key)continue;
@@ -181,12 +181,12 @@ async function loadScope(url,latest,normalizeRecords){
   topic_category:category(x),editorial_score:score(x,"",latest.report_date)}));
  return {rows,scope,index,scanned,missing,selected:days};
 }
-function filters(url,rows,latestDate,search){
+function filters(url,rows,latestDate,search,topicMode=false){
  const streams=["all","top5","china","overseas","more"];
  const stream=param(url,"stream","all",18),region=param(url,"region","all",10),
   categoryParam=param(url,"category","all",20),
   source=param(url,"source","",95).toLowerCase(),q=param(url,"q","",100).trim().toLowerCase(),
-  sort=param(url,"sort",search?"relevance":"latest",12);
+  sort=param(url,"sort",topicMode?"score":search?"relevance":"latest",12);
  if(!streams.includes(stream)||!["all","china","global"].includes(region)||
     !["all",...P2_CATEGORIES].includes(categoryParam)||!["latest","score","relevance"].includes(sort))
   throw Error("unsupported stream / region / category / sort");
@@ -206,7 +206,7 @@ function filters(url,rows,latestDate,search){
   filters:{stream,region,category:categoryParam,source,q,sort}};
 }
 function topics(url,rows,latestDate){
- const selection=filters(url,rows,latestDate,false);
+ const selection=filters(url,rows,latestDate,false,true);
  const cards=selection.data.map(x=>({
   id:x.id,title:x.title,source:x.source,source_url:x.source_url,
   first_seen:x.first_seen,latest_seen:x.latest_seen,issue_dates:x.issue_dates,
@@ -222,6 +222,7 @@ function topics(url,rows,latestDate){
 export async function handleP2(request,{loadLatest,normalizeRecords}){
  const method=request.method,url=new URL(request.url);
  if(!P2_ROUTES.includes(url.pathname))return bad("not_found","Unknown API endpoint",method,404);
+ if(url.pathname==="/api/v2/openapi.json"&&(method==="GET"||method==="HEAD"))return send(P2_OPENAPI,200,method);
  if(method!=="GET"&&method!=="HEAD")return bad("method_not_allowed","Only GET / HEAD / OPTIONS",method,405);
  let latest,scope;
  try{
