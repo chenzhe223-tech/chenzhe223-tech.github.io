@@ -60,7 +60,7 @@ async function one(browser,width,which){
  }finally{await page.close()}
 }
 (async()=>{
- const browser=await chromium.launch({headless:true});
+ const browser=await chromium.launch({headless:true,channel:process.env.P3_BROWSER_CHANNEL==="chrome"?"chrome":undefined});
  try{
   for(const width of [390,1440]){
    for(const which of ["worldtoon","topic","knowa"]){
