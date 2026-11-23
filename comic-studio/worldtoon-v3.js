@@ -282,7 +282,7 @@
        genre:p.plotGenre||'general',drama_subtype:p.dramaSubtype||'',drama_intensity:Number(p.dramaIntensity||4),
        panel_count:p.panels.length,series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
      if(response.method!=='verified_model_response')throw Error('没有收到可验证的真实模型响应，拒绝用模板内容冒充结果');
-     const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length<4||x.panels.length>60)throw Error('DeepSeek 未返回完整的分镜结构');
+     const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length!==p.panels.length)throw Error('DeepSeek 未返回完整的分镜结构');
      if(p.handoff?.repoQueuedAt)throw Error('该作品已经派单，拒绝覆盖');
      p.title=String(x.title||p.title).slice(0,180);p.subtitle=String(x.subtitle||'').slice(0,240);
      p.description=String(x.summary||p.description).slice(0,4000);
@@ -320,7 +320,12 @@
     const p=selected();if(!p||p.handoff?.repoQueuedAt){notify('已派单任务不可改写本版剧情设定');return}
     const seed=document.querySelector('#wt3-seed');if(seed)p.ideaSeed=seed.value.slice(0,1800);
     if(ev.target.id==='wt3-plot-genre'){
-      p.plotGenre=ev.target.value==='viral-melodrama'?'viral-melodrama':'general';
+      const next=ev.target.value==='viral-melodrama'?'viral-melodrama':'general';
+      if(next!==p.plotGenre&&p.panels.some(x=>x.scene||x.caption||x.dialogue)){
+       if(p.panels.some(x=>x.image)||p.cover){notify('已有正式图像，切换剧情需建立修订版');render();return}
+       if(!confirm('切换剧情类型将同步重建'+p.panels.length+'格分镜及对白，当前文字会被替换；是否继续？')){render();return}
+      }
+      p.plotGenre=next;
       if(p.plotGenre==='viral-melodrama'){
         p.dramaSubtype=p.dramaSubtype||'rebirth-bank-rich';p.dramaIntensity=p.dramaIntensity||4;
         if(!p.topicId&&!p.sourceURLs){p.handoff={...p.handoff,mode:'original'};
@@ -328,6 +333,7 @@
       }
       if(p.creativeDirection){p.creativeDirection.arcId=p.plotGenre==='viral-melodrama'?'viral-melodrama':'twist';
         p.creativeDirection.reviewed=false;p.creativeDirection.approval=null;}
+      if(typeof wtDirector!=='undefined'&&p.panels.some(x=>x.scene||x.caption||x.dialogue))wtDirector.applyStoryboard(p,wtDirector.localStoryboard(p),{method:'local_structure_rules',provider:'local',analysis:'剧情类型切换后同步重编分镜与对白'},'genre-switch');
     }else if(ev.target.id==='wt3-drama-subtype'){
       p.dramaSubtype=melodramaSubtypes.some(x=>x.id===ev.target.value)?ev.target.value:'rebirth-bank-rich';
     }else{p.dramaIntensity=Math.max(1,Math.min(5,Number(ev.target.value)||4))}

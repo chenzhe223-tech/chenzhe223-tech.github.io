@@ -469,8 +469,8 @@ async function wt3ArchiveV3(request,env,url){
   const idea=String(a?.idea||'').trim(),n=Number(a?.panel_count||9);
   if(idea.length<8||idea.length>1800||!Number.isInteger(n)||n<4||n>60)return wtJson({error:'创意必须是8–1800字，篇幅4–60格'},400);
   const bible=a?.series_bible&&typeof a.series_bible==='object'?JSON.stringify(a.series_bible).slice(0,8000):'无';
-  const prompt='请将下列构思改编为原创中文连续漫画剧本。仅输出一个完整 JSON 对象，不要 markdown。字段：title,subtitle,summary,world,theme,fictionalization,reasoning,characters数组(至少2位，含role,name,look,clothes,symbol,nature),panels数组(每格title,scene至少30汉字,caption,dialogue,visual_prompt)。请分析剧情复杂度，并推荐4–60格：不能为凑字数重复镜头。保持章节角色与画风圣经一致。不要无证据造谣真实人物。作者将逐格修改、审阅与签署；此响应不是生图也不是新闻事实核验。' +
-    '\n初始篇幅建议:'+n+'格\n故事构思:'+idea+
+  const prompt='请将下列构思改编为原创中文连续漫画剧本。仅输出一个完整 JSON 对象，不要 markdown。字段：title,subtitle,summary,world,theme,fictionalization,reasoning,characters数组(至少2位，含role,name,look,clothes,symbol,nature),panels数组(每格title,scene至少30汉字,caption,dialogue,visual_prompt)。必须严格按用户指定漫画篇幅生成恰好'+n+'格，不得自行改变格数；不能为凑字数重复镜头。保持章节角色与画风圣经一致。不要无证据造谣真实人物。作者将逐格修改、审阅与签署；此响应不是生图也不是新闻事实核验。' +
+    '\n用户已确定且锁定篇幅:'+n+'格\n故事构思:'+idea+
     '\n题材:'+String(a.category||'原创').slice(0,80)+
     '\n系列设定:'+bible+'\n前情摘要:'+String(a.previous_summary||'').slice(0,2000);
   let upstream;
@@ -484,7 +484,7 @@ async function wt3ArchiveV3(request,env,url){
   if(!upstream.ok)return wtJson({error:'DeepSeek API 未完成请求（HTTP '+upstream.status+'）。请检查额度及配置。'},upstream.status===402?402:503);
   const result=await upstream.json();
   let story;try{story=JSON.parse(result.choices?.[0]?.message?.content||'')}catch{return wtJson({error:'DeepSeek 未返回有效的 JSON 漫画剧本'},502)}
-  if(!story||!Array.isArray(story.panels)||story.panels.length<4||story.panels.length>60||
+  if(!story||!Array.isArray(story.panels)||story.panels.length!==n||
      !Array.isArray(story.characters)||story.characters.length<2)
     return wtJson({error:'DeepSeek 生成内容未达到分镜与角色结构要求，可重新调整创意后重试'},422);
   return wtJson({method:'verified_model_response',model:result.model||'deepseek-flash',

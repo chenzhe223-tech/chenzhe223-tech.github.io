@@ -128,7 +128,60 @@ function localStoryboard(p){
       caption:row[2],dialogue:row[3],prompt:'高品质都市3D漫画；'+style(c.styleId).material+'；'+style(c.styleId).lighting+'；反差戏剧性与电影构图'};
   });
  }
- const expanded=Array.from({length:p.panels.length},(_,i)=>stages[Math.min(8,Math.floor(i*9/p.panels.length))]);
+ const plotLines={
+ journey:[
+ ['在起点发现自己真正想要的东西','从渴望开始改变','这一次我想为自己试试'],
+ ['主动迈出第一步并向搭档说出决定','勇气来自迈出的第一步','你确定要走下去吗？'],
+ ['第一次行动遇到真实的现实阻力','愿望并不等于结果','事情比我想的难'],
+ ['与搭档因为选择产生争执后尝试倾听','成长不是独自硬撑','我以前没认真听你说'],
+ ['尝试新的方法并留下明确的过程证据','方法可以变，初心不变','我们换一种做法'],
+ ['面对挫折承担由自己造成的后果','代价让选择变得真实','这次责任在我'],
+ ['与伙伴修复关系并共同解决新障碍','理解来自共同面对','我们一起试一次'],
+ ['在两个选项间作出成熟而艰难的决定','真正的改变在选择里','我知道自己该怎么做'],
+ ['回到与开场呼应的地点，用行动证明改变','旅程不会结束于答案','下一程，我会走得更坚定']
+ ],
+ mystery:[
+ ['在普通场景里发现第一件异常物证','一件细节打破了平静','这不该出现在这里'],
+ ['比对现场发现证词与物证存在矛盾','疑点并非凭空产生','谁忽略了这道痕迹？'],
+ ['沿线索追查到新的地点和见证者','调查需要证据','先确认它从哪里来'],
+ ['新证据推翻了最初的调查方向','线索也可能误导','刚才的推断不成立'],
+ ['两名调查者围绕证据意义发生分歧','不同观点需要同样的检验','我们遗漏了什么？'],
+ ['重现关键时间线并排除不可能的解释','顺序决定了真相','时间对不上'],
+ ['在开场道具上发现隐藏的物理细节','答案藏在被忽略处','我知道它为什么异常了'],
+ ['以可检查的证据重构事件经过','谜底必须经得起推敲','原来是这样的因果'],
+ ['公开仍有疑问的部分，谨慎收束调查','没有证据就保留未知','这一点还需要核实']
+ ],
+ explain:[
+ ['提出一个可清楚回答的具体问题','先知道真正的问题','为什么会这样？'],
+ ['展示关键概念与日常可见的具体事物','抽象概念从现实开始','先定义它'],
+ ['用两个角色和可见道具演示基本机制','机制决定结果','看这个步骤'],
+ ['让人物犯下典型认知错误并观察失败','错误也是理解入口','原来我理解反了'],
+ ['逐步拆开原因与作用关系','把复杂拆成简单','原因在这里'],
+ ['在生活场景中使用同一机制验证','验证比猜想重要','我们实际试试看'],
+ ['并列比较两种方案的利弊及边界','没有万能答案','各有什么代价？'],
+ ['按限制条件选择适合的做法','先判断条件','哪种情况该用它？'],
+ ['回到最初的问题，给出准确结论与局限','把知识带回生活','这次我能解释清楚了']
+ ],
+ chronicle:[
+ ['建立明确的历史时代、地域及资料背景','先确认时代与地点','这段史实从哪里开始？'],
+ ['表现当时普通人的处境与社会关系','人物处在时代之中','我们当时面临什么？'],
+ ['呈现有来源支撑的重要事件发生','事件推动了时间线','事情发生在这一年'],
+ ['并置不同立场人物面对同一事件的行动','同一事件，不同选择','我们看到的并不一样'],
+ ['用器物与文献解释当时的制度条件','理解决策必须理解环境','当时为什么只能如此？'],
+ ['让关键人物面临具有史料根据的抉择','抉择会影响后来','他们最终怎样决定？'],
+ ['展现决策后可以核查的历史转变','后果逐步显现','结果有什么证据？'],
+ ['通过下一时期的具体变化承接因果','时代变化并非一瞬','后来发生了什么？'],
+ ['回到今日的研究者与史料，明确不确定处','史料之外应当保持克制','还有哪些细节仍未知？']
+ ]};
+ const selectedLines=plotLines[c.arcId];
+ if(selectedLines){
+  return Array.from({length:p.panels.length},(_,i)=>{
+   const index=Math.min(8,Math.floor(i*9/p.panels.length)),r=selectedLines[index];
+   return {title:(BEATS[c.arcId]||BEATS.twist)[index],scene:'【'+shotOf(i)+'】'+a+'与'+b+'围绕「'+subject+'」展开：'+r[0]+'。场景处于'+c.world+'，道具与人物服饰按同一视觉圣经保持连续，动作与前后镜头有明确因果关系。',
+    caption:r[1],dialogue:r[2],prompt:'单张原创漫画，叙事类型：'+arc(c.arcId).name+'，'+shotOf(i)+'，'+style(c.styleId).material+'，'+style(c.styleId).lighting};
+  });
+ }
+  const expanded=Array.from({length:p.panels.length},(_,i)=>stages[Math.min(8,Math.floor(i*9/p.panels.length))]);
  return expanded.map((row,i)=>({title:(c.arcId==='twist'?beats[Math.min(8,Math.floor(i*9/p.panels.length))]:row[0]).slice(0,100),
   scene:'【'+shotOf(i)+'】'+row[1]+' 固定'+a+'、'+b+'的服装、脸型与识别道具。题材背景：'+conflict+'。',
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
@@ -411,11 +464,11 @@ function draw(){
  (step===0?'<section class="box director-section"><h2>选择一套贯穿整部漫画的视觉语言</h2><p class="minor">先从当前推荐中快速选择；需要更多选项时展开完整图鉴。画风描述与参考图不是正式生图结果。</p>'+styleCards(c)+'<details class="wt-v3-selected-detail"><summary>查看当前画风的材质、光影、构图与样张状态</summary>'+stylePreview(c)+'</details>'+ 
  '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 人物设定 →</button></div></section>':'')+
  (step===1?'<section class="box director-section"><h2>锁住人物的一致性</h2><p class="minor">每个角色固定容貌、身形、服装和标志道具。不能每格随机改造人物，也不能借更名影射真实个人。</p>'+castEditor(c)+
- '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · 九格故事 →</button></div></section>':'')+
+ '<div class="director-actions"><button type="button" class="button dark" data-director-action="next">下一步 · '+p.panels.length+'格故事 →</button></div></section>':'')+
  (step===2?'<section class="box director-section"><h2>先审剧情，再生成画面</h2><p class="minor">选择叙事结构和主题，生成可修改的分镜草稿；每格场景、镜头与对白都可以独立修改。</p>'+narrative(p,c)+
  storyControls(p,c)+
  (typeof window.WTNovelStudio?.panel==='function'?window.WTNovelStudio.panel(p):'')+
- '<div class="director-actions"><button type="button" class="button" data-director-action="adopt">保留已编辑九格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
+ '<div class="director-actions"><button type="button" class="button" data-director-action="adopt">保留已编辑'+p.panels.length+'格脚本</button><button type="button" class="button dark" data-director-action="next">审阅整体故事 →</button></div>'+
  framePreview(p,c)+'</section>':'')+
  (step===3?review(p,c):'')+
  (step===2?(scheduleAutoStoryboard(p),''):'')+
@@ -487,7 +540,7 @@ document.addEventListener('click',ev=>{
  try{
   if(el.dataset.directorStep!=null){step=Number(el.dataset.directorStep);render();return}
   if(el.dataset.directorStyle!=null){if(p.handoff?.repoQueuedAt)throw Error('任务已入仓，本版本画风不可变更');ensure(p).styleId=el.dataset.directorStyle;commitEdit(p,'更新画风套装');render();return}
-  if(el.dataset.directorArc!=null){if(p.handoff?.repoQueuedAt)throw Error('任务已入仓，本版本剧情结构不可变更');ensure(p).arcId=el.dataset.directorArc;commitEdit(p,'选择叙事结构（现有九格可按需重建）');render();return}
+  if(el.dataset.directorArc!=null){if(p.handoff?.repoQueuedAt)throw Error('任务已入仓，本版本剧情结构不可变更');const c=ensure(p),next=el.dataset.directorArc;if(c.arcId===next)return;const hasStory=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));if(p.panels.some(x=>x.image)||p.cover)throw Error('已产生画格图像，改剧情需要建立修订作品以保持画面一致');if(hasStory&&!confirm('切换剧情类型将重建本作品全部'+p.panels.length+'格剧情及对白，旧文本会被替换。继续吗？'))return;c.arcId=next;applyStoryboard(p,localStoryboard(p),{method:'local_structure_rules',provider:'local',analysis:'按'+arc(next).name+'重新编写的可编辑分镜及对白'},'genre-switch');notify('已同步更新'+p.panels.length+'格分镜与对白；如需 AI 创作，请使用智能编剧并明确授权模型调用');return}
   action(el.dataset.directorAction,p);
  }catch(err){notify(String(err.message||err))}
 },true);
