@@ -8,20 +8,28 @@ from market import route
 from sec_provider import SEC
 
 class FinanceAPI:
-    def __init__(self,token,market_providers=(),search_providers=(),sec=None):
+    def __init__(self,token,market_providers=(),search_providers=(),sec=None,quota=None):
         if not isinstance(token,str) or len(token)<24: raise ValueError("strong internal token required")
         self.token=token
         self.market_providers=tuple(market_providers)
         self.search_providers=tuple(search_providers)
         self.sec=sec
+        self.quota=quota
     def __call__(self,environ,start_response):
-        def reply(code,data):
+        def reply(code,data,extra=()):
             body=json.dumps(data,ensure_ascii=False,allow_nan=False).encode()
-            start_response(code,[("Content-Type","application/json; charset=utf-8"),("Cache-Control","no-store"),("X-Content-Type-Options","nosniff"),("Content-Length",str(len(body)))])
+            start_response(code,[("Content-Type","application/json; charset=utf-8"),("Cache-Control","no-store"),("X-Content-Type-Options","nosniff"),("Content-Length",str(len(body))),*extra])
             return [body]
         if environ.get("REQUEST_METHOD")!="GET": return reply("405 Method Not Allowed",{"error":"read_only"})
         auth=environ.get("HTTP_AUTHORIZATION","")
         if not hmac.compare_digest(auth.encode(),("Bearer "+self.token).encode()): return reply("401 Unauthorized",{"error":"unauthorized"})
+        if self.quota is not None:
+            try:
+                allowed,retry=self.quota.allow(self.token)
+            except Exception:
+                return reply("503 Service Unavailable",{"error":"quota_unavailable"})
+            if not allowed:
+                return reply("429 Too Many Requests",{"error":"quota_exceeded"},[("Retry-After",str(retry))])
         path=environ.get("PATH_INFO","")
         try:
             query=parse_qs(environ.get("QUERY_STRING",""),max_num_fields=12)
