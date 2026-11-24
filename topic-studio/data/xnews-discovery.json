@@ -3,9 +3,44 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-23T10:04:49+00:00",
-  "count": 51,
+  "synced_at": "2026-11-24T06:05:56+00:00",
+  "count": 53,
   "articles": [
+    {
+      "id": "deepmind-quantum-algorithms",
+      "date": "2026-11-23",
+      "title": "聚变模拟的计算成本降了11.8倍，纠错量子比特从5650个降到4338个",
+      "summary": "Google DeepMind和Google Quantum AI用Gemini 4智能体团队改进量子线路，每项结果都用Lean做形式核验。arcsin例程加快了290倍。作者写明，这些算法要真正跑起来，所需资源仍高于第一代纠错量子计算机大概能提供的水平。",
+      "original_url": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepmind-quantum-algorithms",
+      "tags": [
+        "Google DeepMind",
+        "Google Quantum AI",
+        "Gemini 4",
+        "Lean",
+        "quantum algorithms",
+        "formal verification"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-working-with-ai",
+      "date": "2026-11-23",
+      "title": "66次访谈里，只有两家公司因为AI自动化取消岗位并有人失业，约三分之二减少了招聘",
+      "summary": "Anthropic对58家企业客户做了面对面访谈。受访者谈到的AI应用里，增加产出占55%，削减成本占19%。作者写明，这不是随机或系统代表性样本，价值判断也主要是定性描述。",
+      "original_url": "https://www.anthropic.com/research/working-with-ai",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-working-with-ai",
+      "tags": [
+        "Anthropic",
+        "enterprise AI",
+        "labor",
+        "organizations",
+        "interviews"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-perplexity-intelligence",
       "date": "2026-11-22",
