@@ -1926,4 +1926,39 @@ root.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=
 document.getElementById('mobileVisualSettings')?.addEventListener('click',()=>{close();document.getElementById('openVisualSettings')?.click()});
 document.addEventListener('click',e=>{if(!root.contains(e.target))close()});
 const title=document.getElementById('crumbTitle');if(title){const observer=new MutationObserver(()=>{const key=Array.from(document.querySelectorAll('#appNavigation .nav.active[data-section]'))[0]?.dataset.section;root.querySelectorAll('[data-go]').forEach(x=>x.classList.toggle('active',x.dataset.go===key))});observer.observe(title,{childList:true,characterData:true,subtree:true})}
-})();</script><script src="./opportunity-engine.js?v=20261113-collection-fix"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script><script src="./xnews-discovery.js?v=20261123-news-engine-p1"></script><script src="./news-history-p3.js?v=20261123-p3"></script><script src="./discover-layout-v3.js?v=20261113-a"></script><script src="./editorial-workspace-v4.js?v=20261123-science-fuzzy-online-v2"></script><script src="./topic-pool-reliability.js?v=20261113-fix1"></script><script src="./productivity-desk-v1.js?v=20261113-p1b"></script><script src="./hotspot-ranker.js?v=20261113-h1"></script><script src="./hotspot-recommender.js?v=20261113-h1"></script><script src="./mobile-growth-date-ui.js?v=20261115-m2"></script><script src="./cloudbase/sync-core.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-model.js?v=20261115-p2a"></script><script src="./cloudbase/pg-sync-adapter.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-engine.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-ui.js?v=20261115-p2a"></script><script src="./ai-production-prompt.js?v=20261120-finance"></script><script src="./finance-discovery.js?v=20261120-rank-cn"></script></body></html>
+})();</script><script src="./opportunity-engine.js?v=20261113-collection-fix"></script><script src="./smart-schedule.js?v=20261109-utc8"></script><script src="./visual-direction-studio.js?v=1"></script><script src="./xnews-discovery.js?v=20261123-news-engine-p1"></script><script src="./news-history-p3.js?v=20261123-p3"></script><script src="./discover-layout-v3.js?v=20261113-a"></script><script src="./editorial-workspace-v4.js?v=20261123-science-fuzzy-online-v2"></script><script src="./topic-pool-reliability.js?v=20261113-fix1"></script><script src="./productivity-desk-v1.js?v=20261113-p1b"></script><script src="./hotspot-ranker.js?v=20261113-h1"></script><script src="./hotspot-recommender.js?v=20261113-h1"></script><script src="./mobile-growth-date-ui.js?v=20261115-m2"></script><script src="./cloudbase/sync-core.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-model.js?v=20261115-p2a"></script><script src="./cloudbase/pg-sync-adapter.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-engine.js?v=20261115-p2a"></script><script src="./cloudbase/auto-sync-ui.js?v=20261115-p2a"></script><script src="./ai-production-prompt.js?v=20261120-finance"></script><script src="./finance-discovery.js?v=20261120-rank-cn"></script><script id="knowa-annual-report-import-v1">(()=>{
+"use strict";
+const origin="https://davylab-knowa-p0.chenzhe223.workers.dev";
+const m=location.hash.match(/^#knowa-import=([a-f0-9]{32})$/);
+if(!m||!window.opener)return;
+const nonce=m[1], sender=window.opener;
+let complete=false;
+const reply=(status,message)=>sender.postMessage({type:"knowa-annual-result-v1",nonce,status,message},origin);
+const bounded=(v,n)=>typeof v==="string"?v.trim().slice(0,n):"";
+function validSource(v){
+ try{const u=new URL(v);return u.protocol==="https:"&&u.hostname==="www.sec.gov"&&!u.username&&!u.password&&!u.port&&/^\/Archives\/edgar\/data\/\d+\/\d{18}\/[a-zA-Z0-9_.-]+$/.test(u.pathname)?u.href:null}catch{return null}
+}
+function receive(e){
+ if(complete||e.origin!==origin||e.source!==sender||e.data?.type!=="knowa-annual-topic-v1"||e.data.nonce!==nonce)return;
+ complete=true;window.removeEventListener("message",receive);
+ try{
+  const v=e.data.topic;if(!v||typeof v!=="object")throw Error("invalid");
+  const title=bounded(v.title,180),angle=bounded(v.angle,600),summary=bounded(v.summary,3500),sourceTitle=bounded(v.sourceTitle,180),sourceUrl=validSource(v.sourceUrl);
+  if(!title||!angle||!summary||!sourceUrl)throw Error("invalid");
+  if(!Array.isArray(topics))throw Error("store unavailable");
+  const existing=topics.find(t=>String(t.title||"").trim()===title&&t.sourceUrl===sourceUrl);
+  if(existing){reply("duplicate","该年报选题已存在，未覆盖原记录");changeSection("library");toast("该年报选题已在选题池");}
+  else{
+   const topic={id:uid(),title,angle,summary,sourceTitle,sourceUrl,sourceName:"SEC EDGAR",column:"财经资讯",format:v.format==="贴图"?"贴图":"文章",status:"inbox",plannedDate:"",scores:{reader:4,timely:3,practical:4,distinct:4,brand:4},createdAt:new Date().toISOString(),origin:"knowa-annual-report"};
+   topics.unshift(topic);try{saveTopics()}catch(err){topics=topics.filter(t=>t.id!==topic.id);throw err}
+   if(!loadTopics().some(t=>t.id===topic.id))throw Error("save not verified");
+   reply("saved","已加入公众号选题池");changeSection("library");toast("上市公司年报选题已加入选题池");
+  }
+ }catch{reply("error","导入失败：请核对来源及浏览器存储");toast("年报选题导入失败，未确认保存")}
+ try{history.replaceState(history.state,"",location.pathname+location.search)}catch{}
+ try{window.opener=null}catch{}
+}
+window.addEventListener("message",receive);
+sender.postMessage({type:"knowa-annual-ready-v1",nonce},origin);
+setTimeout(()=>{if(!complete){window.removeEventListener("message",receive);toast("KNOWA 交接超时，请返回研究中心重试")}},20000);
+})();</script></body></html>
