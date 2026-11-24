@@ -138,7 +138,10 @@
    p.handoff={...(p.handoff||{}),mode:'hotspot'};
    // Build a genuine editable nine-slot research storyboard from source anchors.
    // These slots are editorial scaffolding, NOT a semantic model interpretation.
-   if(typeof wtDirector?.ensure==='function'){
+   if(p.literaryWorkflowVersion===2&&WTLiterature.active(p)){
+    WTLiterature.initialize(p);delete p.literaryDraft;delete p.literaryReports;
+    if(p.creativeDirection){p.creativeDirection.approval=null;p.creativeDirection.reviewed=false}
+   }else if(typeof wtDirector?.ensure==='function'){
     const c=wtDirector.ensure(p);
     const entries=skill.chapter_index,theme=skill.themes;
     const proposed=rightsMode==='literary_review'?wtDirector.localStoryboard(p):
@@ -166,7 +169,7 @@
    setChange(p,'应用本地小说结构蒸馏索引（语义与版权仍待审核）');
    local.delete(id(p));
    if(typeof render==='function')render();
-   notify('已生成带源文锚点的九格可编辑资料分镜；请先用 ChatGPT 深读原文并审核内容，不能直接把资料卡当成正式漫画');
+   notify(p.literaryWorkflowVersion===2?'章节索引已保存，请在导演台完成文学研究稿。':'已生成带源文锚点的九格可编辑资料分镜；请先用 ChatGPT 深读原文并审核内容，不能直接把资料卡当成正式漫画');
   }catch(err){
    Object.assign(p,previous);
    if(keep)try{await delMedia(fileKey)}catch{}
