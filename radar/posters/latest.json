@@ -1,28 +1,28 @@
 {
-  "report_date": "2026-11-24",
-  "poster": "radar/posters/2026-11-24.png",
+  "report_date": "2026-11-25",
+  "poster": "radar/posters/2026-11-25.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://www.oschina.net/news/503756",
-    "https://www.marktechpost.com/2026/11/23/anthropic-claude-ship-pull-request-agents/",
-    "https://chenqiyuan.cn/article/intel-f1608e552566d5c5c8193db4",
-    "https://www.ithome.com/1/031/258.htm",
-    "https://techcrunch.com/2026/11/23/google-searchs-ai-mode-can-now-tap-into-drive-and-wallet-for-more-personalized-responses/"
+    "https://chenqiyuan.cn/article/intel-66a1823fca6d7af790c7564b",
+    "https://techcrunch.com/2026/11/24/even-the-best-ai-agents-struggle-with-everyday-life/",
+    "https://www.theverge.com/entertainment/1041362/tidal-ai-music-ban",
+    "https://techcrunch.com/2026/11/24/walmart-teams-up-with-meta-to-bring-black-friday-deals-to-ai-agent-muse/",
+    "https://www.marktechpost.com/2026/11/24/meta-facebook-your-algorithm-llm-recommendations/"
   ],
   "news_titles": [
-    "智谱官宣 GLM-5.4：采用 Loop Transformer 架构、开启“泛 Coding”能力",
-    "Anthropic 推出 Claude Ship，用于 GitHub 拉取请求审查与修复",
-    "UC Berkeley、UIUC 与 Anthropic 论文：0.1% 预训练投毒可让智能体绕过干净后训练执行攻击者代码",
-    "三星拟扩大西安工厂先进 NAND 产能、升级 V9 闪存产线，扩大面向 AI 数据中心的 eSSD 供应",
-    "谷歌搜索 AI 模式现可接入 Drive 和 Wallet，提供更个性化回答"
+    "北大与Microsoft论文：37%编码智能体工作报告含不实声称，推出FaithDetector",
+    "新基准显示：最好的 AI 智能体也难以应对日常生活",
+    "Tidal 将于下月起禁止 AI 生成音乐",
+    "沃尔玛联手 Meta，将黑五优惠接入 AI 智能体 Muse",
+    "认识 Facebook 的 Your Algorithm：Meta 如何将自然语言偏好转化为排序"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://www.oschina.net/news/503756",
+      "story_url": "https://chenqiyuan.cn/article/intel-66a1823fca6d7af790c7564b",
       "image_source": "Unsplash topic illustration",
       "image_match_status": "thematic_fallback",
-      "image_sha256": "56da391ef1650078a9318adc4f915eecf850f3e43bba359d489a8a53ccb53209",
+      "image_sha256": "017ba2c00e2838b4ddd1a5a60cd514640e9c8992436c686eb7a1055666f54317",
       "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
       "rendered_visual_type": "info_card",
       "label_required": true,
@@ -30,51 +30,51 @@
       "label": "主题配图 · 非新闻现场"
     },
     {
-      "story_url": "https://www.marktechpost.com/2026/11/23/anthropic-claude-ship-pull-request-agents/",
-      "image_source": "MarkTechPost",
-      "image_match_status": "article_image",
-      "image_sha256": "8975934ad5f9a5b67bca97f54add6cc92b93821822e53ed1dacaeab1664c0869",
-      "rendered_image_sha256": "8975934ad5f9a5b67bca97f54add6cc92b93821822e53ed1dacaeab1664c0869",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://chenqiyuan.cn/article/intel-f1608e552566d5c5c8193db4",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "341f22733aa67c8abcc492f0aa139e24d37f7eebf9f682d541073319d996b802",
-      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
-      "rendered_visual_type": "info_card",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
-    },
-    {
-      "story_url": "https://www.ithome.com/1/031/258.htm",
-      "image_source": "IT之家",
-      "image_match_status": "feed_image",
-      "image_sha256": "b4645180e2489c0efd65b271c02bd721a0cd1b45df4253c2c8a339d2159a0d0e",
-      "rendered_image_sha256": "b4645180e2489c0efd65b271c02bd721a0cd1b45df4253c2c8a339d2159a0d0e",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://techcrunch.com/2026/11/23/google-searchs-ai-mode-can-now-tap-into-drive-and-wallet-for-more-personalized-responses/",
+      "story_url": "https://techcrunch.com/2026/11/24/even-the-best-ai-agents-struggle-with-everyday-life/",
       "image_source": "TechCrunch AI",
       "image_match_status": "article_image",
-      "image_sha256": "97e7a759f8b453d94d7ae530a51bc5bd40e036473e502c58aa03b7a3d166f28c",
-      "rendered_image_sha256": "97e7a759f8b453d94d7ae530a51bc5bd40e036473e502c58aa03b7a3d166f28c",
+      "image_sha256": "e9bfb77e3ec1510452440a30ec1c5a5f8bc0522bfc7f2d400fb725d08090852a",
+      "rendered_image_sha256": "e9bfb77e3ec1510452440a30ec1c5a5f8bc0522bfc7f2d400fb725d08090852a",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.theverge.com/entertainment/1041362/tidal-ai-music-ban",
+      "image_source": "The Verge AI",
+      "image_match_status": "article_image",
+      "image_sha256": "793d724064bb74395937e958190e087be6764f172564ea003db36a276a054c92",
+      "rendered_image_sha256": "793d724064bb74395937e958190e087be6764f172564ea003db36a276a054c92",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://techcrunch.com/2026/11/24/walmart-teams-up-with-meta-to-bring-black-friday-deals-to-ai-agent-muse/",
+      "image_source": "TechCrunch AI",
+      "image_match_status": "article_image",
+      "image_sha256": "8524008749a913322f5c0d8bda015d31e7f90732e7f2e532f6deb2321c4a4232",
+      "rendered_image_sha256": "8524008749a913322f5c0d8bda015d31e7f90732e7f2e532f6deb2321c4a4232",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/24/meta-facebook-your-algorithm-llm-recommendations/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "f7b158beedeb86fad588b011b6989527a9e27dd539edf98df4176ae4106382f8",
+      "rendered_image_sha256": "f7b158beedeb86fad588b011b6989527a9e27dd539edf98df4176ae4106382f8",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "Leonxlnx/taste-skill",
+  "skill": "sickn33/agentic-awesome-skills",
   "design": "mountain-editorial",
   "format": "PNG",
   "canvas": [
@@ -143,7 +143,7 @@
       "y": 651,
       "width": 1090,
       "height": 22,
-      "actual_width": 684.0,
+      "actual_width": 651.5,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -154,7 +154,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 204.0,
+      "actual_width": 195.1,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -164,9 +164,9 @@
       "x": 48,
       "y": 889,
       "width": 206,
-      "height": 72,
-      "actual_width": 204.7,
-      "line_count": 4,
+      "height": 36,
+      "actual_width": 196.0,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -176,7 +176,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 197.6,
+      "actual_width": 204.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -187,7 +187,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 205.1,
+      "actual_width": 198.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -198,7 +198,7 @@
       "y": 889,
       "width": 206,
       "height": 72,
-      "actual_width": 201.9,
+      "actual_width": 204.0,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -209,7 +209,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 200.9,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -219,9 +219,9 @@
       "x": 494,
       "y": 817,
       "width": 206,
-      "height": 66,
-      "actual_width": 203.2,
-      "line_count": 3,
+      "height": 44,
+      "actual_width": 194.7,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -230,9 +230,9 @@
       "x": 494,
       "y": 889,
       "width": 206,
-      "height": 54,
-      "actual_width": 204.9,
-      "line_count": 3,
+      "height": 36,
+      "actual_width": 199.5,
+      "line_count": 2,
       "truncated": false,
       "overflow": false
     },
@@ -242,7 +242,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 195.0,
+      "actual_width": 200.9,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -253,7 +253,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 205.0,
+      "actual_width": 201.1,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -263,9 +263,9 @@
       "x": 717,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 196.0,
-      "line_count": 2,
+      "height": 54,
+      "actual_width": 205.9,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -274,9 +274,9 @@
       "x": 717,
       "y": 968,
       "width": 206,
-      "height": 34,
-      "actual_width": 197.6,
-      "line_count": 2,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -286,7 +286,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 196.8,
+      "actual_width": 202.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -296,9 +296,9 @@
       "x": 940,
       "y": 889,
       "width": 206,
-      "height": 72,
-      "actual_width": 198.3,
-      "line_count": 4,
+      "height": 18,
+      "actual_width": 154.0,
+      "line_count": 1,
       "truncated": false,
       "overflow": false
     },
@@ -319,7 +319,7 @@
       "y": 1305,
       "width": 650,
       "height": 46,
-      "actual_width": 646.0,
+      "actual_width": 649.7,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -330,7 +330,7 @@
       "y": 1362,
       "width": 780,
       "height": 17,
-      "actual_width": 448.0,
+      "actual_width": 462.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -341,7 +341,7 @@
       "y": 1490,
       "width": 555,
       "height": 30,
-      "actual_width": 216.3,
+      "actual_width": 351.4,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -351,9 +351,9 @@
       "x": 80,
       "y": 1554,
       "width": 565,
-      "height": 38,
-      "actual_width": 555.0,
-      "line_count": 2,
+      "height": 57,
+      "actual_width": 564.2,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -363,7 +363,7 @@
       "y": 1628,
       "width": 565,
       "height": 14,
-      "actual_width": 309.8,
+      "actual_width": 339.7,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -372,9 +372,9 @@
   "design_variant": "mountain-editorial",
   "iso_year": 2026,
   "iso_week": 48,
-  "iso_weekday": 2,
+  "iso_weekday": 3,
   "style_cycle_index": 47,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-24T09:09:00.375484+08:00"
+  "generated_at": "2026-11-25T07:36:43.399261+08:00"
 }
