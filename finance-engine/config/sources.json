@@ -1,0 +1,39 @@
+{
+  "sources": [
+    {
+      "name": "Federal Reserve",
+      "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+      "region": "US",
+      "enabled": true,
+      "category": "finance",
+      "profile": "finance-news"
+    },
+    {
+      "name": "ECB",
+      "url": "https://www.ecb.europa.eu/rss/press.html",
+      "region": "EU",
+      "enabled": true,
+      "category": "finance",
+      "profile": "finance-news"
+    },
+    {
+      "name": "SEC",
+      "url": "https://www.sec.gov/news/pressreleases.rss",
+      "region": "US",
+      "enabled": true,
+      "category": "finance",
+      "profile": "finance-news"
+    },
+    {
+      "name": "HKEX",
+      "url": "https://www.hkex.com.hk/News/News-Release?sc_lang=en",
+      "region": "HK",
+      "enabled": false,
+      "category": "finance",
+      "profile": "finance-news"
+    }
+  ],
+  "window_days": 7,
+  "history_days": 90,
+  "rights_policy": "metadata and links only; confirm feed terms before public redistribution"
+}
