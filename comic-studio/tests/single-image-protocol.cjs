@@ -8,7 +8,7 @@ const read=n=>fs.readFileSync(path.join(root,n),'utf8');
 const app=read('app.js');
 const a=app.indexOf('function wfProductionBible('),b=app.indexOf('function wfDirectPrompt(',a);
 assert.ok(a>=0&&b>a,'Scoped image generator must exist');
-const ctx={};vm.runInNewContext(app.slice(a,b)+'\nthis.jobs=wfSingleImageJobs;this.bible=wfProductionBible;this.preflight=wfProductionPreflight;',ctx);
+const ctx={};vm.runInNewContext(app.slice(a,b)+'\nthis.jobs=wfSingleImageJobs;this.isolated=wfIsolatedRenderText;this.bible=wfProductionBible;this.preflight=wfProductionPreflight;',ctx);
 const scenes=Array.from({length:9},(_,i)=>'UNIQUE_SCENE_'+i);
 const project={title:'独立画格测试',panels:scenes.map((scene,i)=>({scene,title:'Panel '+i,prompt:'WATERCOLOR_LEGACY_STYLE_'+i,caption:'Caption '+i,dialogue:'Dialogue '+i}))};
 const task={task_id:'WT-1234567890abcdef1234',creative_direction:{style_id:'cinematic-3d-character',visual_rules:{palette:['#123456']},characters:[{id:'hero',name:'虚构主角',look:'固定角色设定',clothes:'黑衣',symbol:'手表'}],storyboard:scenes.map((scene,i)=>({scene,shot:'camera_'+i,caption:'CAP_'+i,dialogue:'DLG_'+i,custom_prompt:'水彩圆润线稿旧提示'})),approval:{author_approved:true,lock_hash:'locked123'},cover_brief:'孤独的主角与灯塔'}};
@@ -63,6 +63,16 @@ for(let i=0;i<9;i++){
  for(let j=0;j<9;j++)if(j!==i)assert.ok(!result.jobs[i].prompt.includes(scenes[j]),'no adjacent scene leakage '+i+'/'+j);
 }
 assert.ok(!result.jobs[9].prompt.includes('UNIQUE_SCENE_'),'cover isolated from all panel scenes');
+for(let i=0;i<9;i++){
+ const isolated=ctx.isolated(result.jobs[i],bible);
+ assert.ok(isolated.includes(scenes[i])&&isolated.includes('camera_'+i));
+ assert.ok(isolated.includes('3:4')&&isolated.includes('1080×1440'));
+ assert.ok(!isolated.includes(project.title)&&!isolated.includes('CAP_')&&!isolated.includes('DLG_')&&!isolated.includes('storyboard'));
+ for(let j=0;j<9;j++)if(i!==j)assert.ok(!isolated.includes(scenes[j]));
+}
+assert.ok(!ctx.isolated(result.jobs[9],bible).includes('UNIQUE_SCENE_'));
+assert.ok(app.includes("'render_requests/'+job.job_id+'.txt'")&&app.includes("name:'RENDER_ISOLATION.md'"));
+
 assert.ok(result.jobs.every(j=>!j.prompt.includes('水彩圆润线稿')&&!j.prompt.includes('WATERCOLOR_LEGACY_STYLE')),'legacy style pollution excluded');
 assert.ok(result.jobs[6].prompt.includes('camera_6'),'approved camera retained');
 assert.equal(result.jobs[0].reference_assets.includes('pilot-01.png'),false,'pilot does not reference itself');
