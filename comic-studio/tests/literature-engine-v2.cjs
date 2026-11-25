@@ -32,8 +32,8 @@ const hash=scope.digest(topic);
 topic.panels[0].caption+='修改';assert.ok(scope.errors(topic).length);assert.notEqual(scope.digest(topic),hash);
 topic.panels[0].caption=r.panels[0].caption;assert.equal(scope.errors(topic).length,0);
 topic.literaryEvidence+='\n新资料';assert.ok(scope.errors(topic).length);
-assert.ok(html.includes('creative-director.js?v=5.7.0-literature-sources'));
-assert.ok(sw.includes('davylab-comic-press-v5.7.0-literature-sources'));
+assert.ok(html.includes('creative-director.js?v=5.7.1-literature-repair'));
+assert.ok(sw.includes('davylab-comic-press-v5.7.1-literature-repair'));
 assert.ok(app.includes("if(wfLiteraryResearchRequired(p)){const {input_signature,...research}"));
 assert.ok(worker.includes("a.mode==='literary_review'?await wtLiteraryAuth(request,env):await wtArchiveAuth(request,env)"));
 console.log('LITERATURE V2 PASS: 57 counts, 9 rejected cases, scoped entry, evidence/receipt drift, cache and direct-mode guards');
@@ -41,7 +41,7 @@ console.log('LITERATURE V2 PASS: 57 counts, 9 rejected cases, scoped entry, evid
 const staticRule=worker.split('\n').find(l=>l.includes("path.includes('..')"));
 const allow=new RegExp(staticRule.slice(staticRule.indexOf('/^')+1,staticRule.indexOf('/.test(path)')));
 for(const match of html.matchAll(/(?:src|href)="([^"]+\.(?:js|css|webmanifest|svg))(?:\?[^"]*)?"/g))assert.ok(allow.test(match[1]),'Worker must serve '+match[1]);
-let modelCalls=0,authCalls=0,deny=false,modelResponse=fixture(9);
+let modelCalls=0,authCalls=0,deny=false,modelResponse=fixture(9),repairResponse=null;
 modelResponse.characters=[{name:'测试甲'},{name:'测试乙'}];
 const routeCtx={URL,URLSearchParams,AbortSignal,Response,
  authenticate:async()=>{authCalls++;return deny?null:{id:'fixture-owner'}},
@@ -49,7 +49,7 @@ const routeCtx={URL,URLSearchParams,AbortSignal,Response,
  wtJson:(body,status=200)=>Response.json(body,{status}),
  fetch:async(url,opts)=>{
   const u=new URL(url);if(u.hostname.endsWith('wikipedia.org')||u.hostname==='openlibrary.org')assert.equal(opts.redirect,'manual','Cloudflare compatible redirect mode');
-  if(u.hostname==='api.deepseek.com'){modelCalls++;assert.equal(opts.method,'POST');const body=JSON.parse(opts.body);assert.equal(body.model,'deepseek-flash');return Response.json({model:'synthetic-model',choices:[{message:{content:JSON.stringify(modelResponse)}}]});}
+  if(u.hostname==='api.deepseek.com'){modelCalls++;assert.equal(opts.method,'POST');const body=JSON.parse(opts.body);assert.equal(body.model,'deepseek-flash');return Response.json({model:'synthetic-model',choices:[{message:{content:JSON.stringify(repairResponse&&body.messages[1].content.includes('【专项修复】')?repairResponse:modelResponse)}}]});}
   if(u.hostname==='zh.wikipedia.org'||u.hostname==='en.wikipedia.org')return Response.json({query:{pages:[{title:'测试作品',extract:'这是一部用于自动回归测试的文学小说，内容均为合成示例，并非真实书目。',fullurl:u.origin+'/wiki/Fixture'},{title:'Unsafe',extract:'wrong host',fullurl:'https://evil.example/wiki/Fixture'}]}});
   throw Error('unexpected mock URL '+url);
  }
@@ -69,6 +69,17 @@ const req=(path,body)=>{const url=new URL('https://fixture.example/api/archive/'
  modelResponse={characters:[{name:'测试甲'},{name:'测试乙'}],panels:fixture(9).panels.map(x=>({title:x.title,scene:x.scene,caption:x.caption}))};
  assert.equal((await req('deepseek-expand',basic)).status,200,'ordinary DeepSeek does not require literary fields');
  assert.equal(modelCalls,3,'only valid synthetic requests call mocked model');assert.ok(authCalls>=4);
+ const repairInput={...basic,mode:'literary_review',source_urls:urls,research_evidence:reqEvidence,allow_repair:true};
+ const good=fixture(9);good.characters=[{name:'测试甲'},{name:'测试乙'}];
+ modelResponse=JSON.parse(JSON.stringify(good));modelResponse.panels[1].caption='太短';modelResponse.panels[1].scene='太短';modelResponse.panels[1].dimension='philosophy';
+ repairResponse={repairs:[{index:2,panel:good.panels[1]}]};
+ let before=modelCalls;
+ const fixed=await req('deepseek-expand',repairInput);assert.equal(fixed.status,200);const repaired=await fixed.json();assert.equal(modelCalls-before,2);assert.equal(repaired.story.research.evaluation.repair_attempted,true);assert.deepEqual(repaired.story.research.evaluation.repair_indices,[2]);assert.deepEqual(repaired.story.panels,good.panels,'valid panels unchanged');
+ repairResponse={repairs:[{index:3,panel:good.panels[2]}]};before=modelCalls;const blockedRepair=await req('deepseek-expand',repairInput);assert.equal(blockedRepair.status,422);const blockedBody=await blockedRepair.json();assert.equal(modelCalls-before,2);assert.equal(blockedBody.code,'LITERARY_QA_BLOCKED');assert.ok(blockedBody.draft);assert.ok(blockedBody.evaluation.errors.some(x=>x.includes('第2格旁白')));
+ before=modelCalls;const noConsent=await req('deepseek-expand',{...repairInput,allow_repair:false});assert.equal(noConsent.status,422);assert.equal(modelCalls-before,1);
+ modelResponse=JSON.parse(JSON.stringify(good));modelResponse.panels[1].dimension='故事主线';modelResponse.panels[1].claim_refs=['1'];before=modelCalls;const normalized=await req('deepseek-expand',repairInput);assert.equal(normalized.status,200);assert.equal(modelCalls-before,1);
+ modelResponse=JSON.parse(JSON.stringify(good));modelResponse.research.status='insufficient_evidence';before=modelCalls;const insufficient=await req('deepseek-expand',repairInput);assert.equal(insufficient.status,422);assert.equal(modelCalls-before,1);
+ console.log('LITERATURE REPAIR PASS: targeted repair, preserve good panels, explicit consent, bounded requests, failure draft, safe normalization, insufficient evidence block');
  let redirectCalls=0;
  const collector=vm.runInNewContext(region(worker,'async function wtLiterarySourceCandidates(','async function wt3ArchiveV3(')+'\nwtLiterarySourceCandidates;', {URL,URLSearchParams,AbortSignal,Date});
  const blocked=await collector('测试作品','',async(url,opts)=>{redirectCalls++;assert.equal(opts.redirect,'manual');return new Response(null,{status:302,headers:{Location:'https://unsafe.invalid'}})});
