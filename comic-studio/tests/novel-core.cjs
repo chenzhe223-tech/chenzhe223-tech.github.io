@@ -5,7 +5,7 @@ if(!globalThis.crypto)globalThis.crypto=crypto.webcrypto;
 const core=require('../novel-core.js');
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const source=fs.readFileSync(path.resolve(__dirname,'../creative-director.js'),'utf8');
-const start=source.indexOf('function digest('),end=source.indexOf('function checks(',start);
+const start=source.indexOf('function isLiteraryProject('),end=source.indexOf('function checks(',start);
 assert.ok(start>0&&end>start,'creative director lock must remain auditable');
 const cx={clean:x=>String(x||'').trim(),payload:p=>p.payload||{}};
 vm.runInNewContext(source.slice(start,end)+'\nthis.hashNovel=digest;',cx);
