@@ -24,7 +24,7 @@ jobs:
           import {createHash} from 'node:crypto';
           const base='https://worldtoon.chenzhe223.workers.dev';
           const hash=b=>createHash('sha256').update(b).digest('hex');
-          const files=['index.html','app.js','creative-director.js','extension.js','sw.js','novel-core.js','novel-studio.js','character-continuity.js'];
+          const files=['index.html','app.js','creative-director.js','creative-director.css','extension.js','sw.js','novel-core.js','novel-studio.js','character-continuity.js'];
           const delay=ms=>new Promise(r=>setTimeout(r,ms));
           async function get(path,opts={}){
             return fetch(base+path,{...opts,cache:'no-store',signal:AbortSignal.timeout(20000)});
@@ -39,14 +39,14 @@ jobs:
               assert.equal(health.features.literatureResearchV2,true);
               const results=await Promise.all(files.map(async file=>{
                 const path=file==='index.html'?'/':'/'+file;
-                const r=await get(path+'?release=5.6.0-literature-v2');
+                const r=await get(path+'?release=5.6.1-literature-fix');
                 assert.equal(r.status,200,file);
                 const bytes=Buffer.from(await r.arrayBuffer());
                 assert.equal(hash(bytes),hash(readFileSync('comic-studio/'+file)),file+' deployed source mismatch');
                 return {file,status:r.status,sha256:hash(bytes)};
               }));
               const index=readFileSync('comic-studio/index.html','utf8');
-              assert.ok(index.includes('5.6.0-literature-v2'));
+              assert.ok(index.includes('5.6.1-literature-fix'));
               const unauthorized=await get('/api/archive/literary-sources',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({title:'synthetic release test'})});
               assert.equal(unauthorized.status,401);
               assert.match(unauthorized.headers.get('cache-control')||'',/no-store/);
