@@ -53,6 +53,16 @@ jobs:
               const model=await get('/api/archive/deepseek-expand',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'literary_review',idea:'synthetic release test',panel_count:9})});
               assert.equal(model.status,401,'auth gate must block all upstream model calls');
               console.log(JSON.stringify({result:'PASS',site:base,health:{ok:health.ok,literatureResearchV2:health.features.literatureResearchV2},assets:results,authBoundary:401,paidModelCalls:0},null,2));
+              // Exercise the exact collector against the real public upstream, without owner credentials or paid AI.
+              const worker=readFileSync('comic-studio/worker.js','utf8');
+              const start=worker.indexOf('async function wtLiterarySourceCandidates(');
+              const end=worker.indexOf('async function wt3ArchiveV3(',start);
+              assert.ok(start>=0&&end>start);
+              const collect=new Function(worker.slice(start,end)+';return wtLiterarySourceCandidates;')();
+              const candidate=await collect('长日将尽 | The Remains of the Day','https://www.nobelprize.org/prizes/literature/2017/ishiguro/lecture/');
+              console.log(JSON.stringify({public_upstream:candidate.items.map(x=>({title:x.title,source:x.source,url:x.url})),warnings:candidate.warnings}));
+              assert.ok(candidate.items.length>0,'Real public-source collection returned no candidates');
+              assert.ok(candidate.items.every(x=>x.verification_status==='candidate_unverified'));
               process.exit(0);
             }catch(e){last=e;console.log('release verification attempt '+attempt+': '+e.message);if(attempt<8)await delay(8000)}
           }
