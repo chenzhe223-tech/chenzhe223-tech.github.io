@@ -51,6 +51,13 @@ jobs:
         run: node comic-studio/tests/task-flow.cjs
       - name: Test six-dimension editorial scoring and filtering
         run: node comic-studio/tests/rankings.cjs
+      - name: Exercise scoped Literature Engine V2 quality gates
+        run: |
+          node comic-studio/tests/literature-engine-v2.cjs
+          node comic-studio/tests/literary-review.cjs
+          node comic-studio/tests/worldtoon-deepseek-smoke.cjs
+          node comic-studio/tests/service-worker-cache.cjs
+          node comic-studio/tests/novel-core.cjs
       - name: Check Worker module syntax
         run: node --check --input-type=module < comic-studio/worker.js
       - name: Check dual-track invariants
