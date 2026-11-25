@@ -519,8 +519,10 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch,options={})
  const nameEn=parts.find(x=>/^[A-Za-z]/.test(x))||'';
  const aliases=[...new Set(parts.map(norm))];
  const authors=clean(options.author,180).split(/[|｜;/；]/).filter(Boolean).map(norm);
- const human=aliases.includes('humanacts')||aliases.includes('少年来了');
- if(human)authors.push('hankang','韩江','韓江');
+ const human=aliases.length>0&&aliases.every(x=>['humanacts','少年来了'].includes(x));
+ const authorGroups=[['Han Kang','韩江','韓江'],['Kazuo Ishiguro','石黑一雄'],['Jon Fosse','约恩·福瑟','約恩·福瑟'],['José Saramago','若泽·萨拉马戈','若澤·薩拉馬戈'],['László Krasznahorkai','克拉斯诺霍尔卡伊·拉斯洛','卡萨斯·拉斯洛'],['Anne Carson','安妮·卡森']].map(g=>g.map(norm));
+ for(const group of authorGroups)if(group.some(a=>authors.includes(a)))authors.push(...group);
+ if(human&&!authors.length)authors.push('hankang','韩江','韓江');
  const authorMatch=t=>!authors.length||authors.some(a=>a.length>=2&&norm(t).includes(a));
  const sameTitle=t=>aliases.includes(norm(String(t).replace(/\s*[（(](?:novel|book|小说|小說|长篇小说|長篇小說|literary work)[)）]\s*$/i,'')));
  const safeTitle=nameZh||'当前文学作品';
@@ -550,13 +552,28 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch,options={})
  let workId='';
  try{const u=new URL(source);if(u.protocol==='https:'&&u.hostname==='openlibrary.org'&&!u.username&&!u.password)workId=(u.pathname.match(/^\/works\/(OL\d+W)(?:\/|$)/)||[])[1]||''}catch{}
  if(workId)searches.push({lang:'openlibrary',url:'https://openlibrary.org/works/'+workId+'.json'});
+ else if(nameEn&&authors.length&&!human){
+  const u=new URL('https://openlibrary.org/search.json');u.search=new URLSearchParams({title:nameEn,author:clean(options.author,180),fields:'key,title,author_name,subject',limit:'5'});
+  searches.push({lang:'openlibrary-search',url:u.toString()});
+ }
  await Promise.all(searches.map(async task=>{
   try{
    const resp=await fetcher(task.url,{redirect:'manual',headers:{accept:'application/json','user-agent':'WORLD-TOON/3.0 (https://worldtoon.chenzhe223.workers.dev/) literature research'},signal:AbortSignal.timeout(10000)});
    if(resp.status>=300&&resp.status<400)throw Error('来源重定向，已安全拦截');
    if(!resp.ok)throw Error('HTTP '+resp.status);
    const payload=await resp.json();
-   if(task.lang==='openlibrary'){
+   if(task.lang==='openlibrary-search'){
+    // Only follow an exact work ID on the fixed Open Library host, with confirmed title and author.
+    const match=(payload.docs||[]).find(row=>sameTitle(row.title)&&authorMatch((row.author_name||[]).join(' '))&&/^\/works\/OL\d+W$/.test(String(row.key))&&(row.subject||[]).some(x=>/fiction|novel|literature/i.test(x)));
+    if(match){
+     const link='https://openlibrary.org'+match.key;
+     const detail=await fetcher(link+'.json',{redirect:'manual',headers:{accept:'application/json','user-agent':'WORLD-TOON/3.0 literature research'},signal:AbortSignal.timeout(7000)});
+     if(detail.ok){
+      const book=await detail.json(),desc=typeof book.description==='string'?book.description:book.description?.value;
+      if(desc&&sameTitle(book.title))candidate({heading:book.title,text:'作品书目信息：'+(match.author_name||[]).join('、')+'；文学小说。 '+desc,url:link,lang:'英文',provider:'开放图书馆',kind:'书目与作品介绍',score:92});
+     }
+    }
+   }else if(task.lang==='openlibrary'){
     const desc=typeof payload.description==='string'?payload.description:payload.description?.value;
     candidate({heading:payload.title,text:desc,url:'https://openlibrary.org/works/'+workId,lang:'英文',provider:'开放图书馆',kind:'书目资料',score:92});
    }else for(const row of payload?.query?.pages||[]){
@@ -565,7 +582,7 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch,options={})
     if(link.protocol!=='https:'||link.hostname!==task.lang+'.wikipedia.org'||!link.pathname.startsWith('/wiki/'))continue;
     candidate({heading:row.title,text:row.extract,url:link.href,lang:task.lang==='zh'?'中文':'英文',provider:task.lang==='zh'?'中文维基百科':'英文维基百科',score:85,rights:'署名及相同方式共享许可；使用前核对'});
    }
-  }catch(err){warnings.push(({zh:'中文百科',en:'英文百科',openlibrary:'开放图书馆'}[task.lang]||'资料来源')+'暂不可用：'+(String(err.message).includes('重定向')?'来源重定向已拦截':'网络请求失败'))}
+  }catch(err){warnings.push(({zh:'中文百科',en:'英文百科',openlibrary:'开放图书馆','openlibrary-search':'开放图书馆'}[task.lang]||'资料来源')+'暂不可用：'+(String(err.message).includes('重定向')?'来源重定向已拦截':'网络请求失败'))}
  }));
  // Paid translation is opt-in; never expose untranslated candidate paragraphs.
  if(foreign.length&&options.translate===true&&options.key){
