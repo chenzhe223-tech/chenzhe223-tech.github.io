@@ -69,5 +69,11 @@ const req=(path,body)=>{const url=new URL('https://fixture.example/api/archive/'
  modelResponse={characters:[{name:'测试甲'},{name:'测试乙'}],panels:fixture(9).panels.map(x=>({title:x.title,scene:x.scene,caption:x.caption}))};
  assert.equal((await req('deepseek-expand',basic)).status,200,'ordinary DeepSeek does not require literary fields');
  assert.equal(modelCalls,3,'only valid synthetic requests call mocked model');assert.ok(authCalls>=4);
+ let redirectCalls=0;
+ const collector=vm.runInNewContext(region(worker,'async function wtLiterarySourceCandidates(','async function wt3ArchiveV3(')+'\nwtLiterarySourceCandidates;', {URL,URLSearchParams,AbortSignal,Date});
+ const blocked=await collector('测试作品','',async(url,opts)=>{redirectCalls++;assert.equal(opts.redirect,'manual');return new Response(null,{status:302,headers:{Location:'https://unsafe.invalid'}})});
+ assert.equal(redirectCalls,2,'redirects cannot trigger additional outbound requests');
+ assert.equal(blocked.items.length,0);
+ assert.ok(blocked.warnings.every(x=>x.includes('重定向')));
  console.log('LITERATURE V2 WORKER ROUTE PASS: candidate sources, auth, input gate, grounded response, ordinary DeepSeek, static module allowlist (mocked upstream)');
 })().catch(e=>{console.error(e);process.exitCode=1});
