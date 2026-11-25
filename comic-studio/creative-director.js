@@ -243,10 +243,11 @@ function aiStoryPayload(p,provider){
 }
 async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
- if(p.storySourceSelection?.adaptation==='literary_review'){
-  const updated=draft(p,replace);
-  if(updated)notify('文学导读已建立待研究提纲（九格4+3+2）；请通过可靠资料或外部研究完成具体故事、思想和现实意义，逐格替换占位后才能定稿');
-  return;
+ const literary=p.storySourceSelection?.adaptation==='literary_review';
+ if(literary){
+  if(auto){draft(p,false);return;}
+  provider='deepseek';
+  if(String(p.factNotes||'').trim().length<100||!(typeof validSources==='function'&&validSources(p).length)){notify('请先在项目事实笔记填写至少100字已查阅的作品资料摘记，并添加来源链接；DeepSeek 不会仅凭书名冒充研究。');return;}
  }
  const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));
  if(auto&&!empty)return;
@@ -254,8 +255,8 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   draft(p,false);return;
  }
  if(provider==='deepseek'){
-  if(!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
-  if(!auto&&!confirm('将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
+  if(!literary&&!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
+  if(!auto&&!confirm(literary?'使用平台已配置 DeepSeek 研究作品并生成分镜，可能产生模型费用。确认本次调用？':'将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
  }else if(provider!=='native'){
   if(!storyApiKey.trim()){notify('请输入'+({openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'模型服务商')+' API Key，仅用于本次请求');return}
   if(!auto&&!confirm('将使用你提供的第三方模型 API，供应商可能按用量收费。确认本次调用？'))return;
@@ -271,17 +272,17 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
     if(typeof wtArchiveApi!=='function')throw Error('安全 DeepSeek 网关尚未加载');
     const genre=p.plotGenre==='viral-melodrama'?'狗血网红爽剧':'通用故事';
     const theme=p.dramaSubtype||'rebirth-bank-rich',intensity=Number(p.dramaIntensity||4);
-    const idea=(p.ideaSeed||p.description||ensure(p).thesis||'').slice(0,1100)+
+    const idea=(literary?('深度文学解读：'+(p.sourceTitle||p.title)):(p.ideaSeed||p.description||ensure(p).thesis||'')).slice(0,1100)+
       (genre==='狗血网红爽剧'?'\\n【作者创作要求】原创成年人的都市重生逆袭、富婆/金融职场、网红热搜与合约男明星的情感纠葛。狗血反转强度 '+intensity+'/5；具体题材'+theme+'；每2–3格有反转，开场强悬念，结尾强钩子。全为架空虚构人物，不捏造真人丑闻。':'');
     if(idea.trim().length<8||idea.length>1800)throw Error('请先完善8–1800字的故事核心构思');
     const response=await wtArchiveApi('deepseek-expand',{method:'POST',
-      body:JSON.stringify({idea,title:p.title,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
+      body:JSON.stringify({idea,title:literary?(p.sourceTitle||p.title):p.title,mode:literary?'literary_review':undefined,research_evidence:literary?p.factNotes:undefined,source_urls:literary?validSources(p):undefined,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
         genre:p.plotGenre||'general',drama_subtype:theme,drama_intensity:intensity,
         series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
     if(response?.method!=='verified_model_response'||!response.story?.panels)
       throw Error('未收到真实 DeepSeek 结构化剧本');
     result={method:'verified_model_response',provider:'deepseek',model:response.model||'deepseek-flash',
-      analysis:response.story.reasoning||'',panels:response.story.panels.map(x=>({
+      analysis:response.story.reasoning||'',research:literary?response.story.research:null,panels:response.story.panels.map(x=>({
         title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,prompt:x.visual_prompt}))};
   }else{
     if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
@@ -293,6 +294,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
   if(result.panels.length!==p.panels.length)throw Error('AI 返回'+result.panels.length+'格，与作者选择的'+p.panels.length+'格不一致；拒绝覆盖，请按所选篇幅重新生成');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
+  if(wrote&&literary){p.literaryResearch={...result.research,model:result.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString()};persist();}
   if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
