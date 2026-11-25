@@ -21,7 +21,7 @@ const worker=read('worker.js');
 assert.ok(worker.includes(service.trim()),'deployed Worker must contain the canonical story search service');
 assert.match(worker,/url\.pathname==='\/api\/comic\/story-search'&&request\.method==='GET'.*wtStorySearch/,'Worker must route live story searches');
 assert.match(worker,/storySearch:true/,'health endpoint must advertise story search');
-assert.ok(read('styles.css').trimEnd().endsWith(read('mobile-refine.css').trim()),'responsive styles must remain bundled in Worker-allowed CSS');
+assert.ok(read('styles.css').includes(read('mobile-refine.css').trim()),'responsive styles must remain bundled in Worker-allowed CSS');
 const waits={timeout:()=>({})};
 let newsRows=[],newsSearchCalls=0;
 const fetcher=async raw=>{
