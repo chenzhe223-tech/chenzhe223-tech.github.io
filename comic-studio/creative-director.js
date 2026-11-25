@@ -470,26 +470,29 @@ function framePreview(p,c){
  return '<div class="director-board-info"><strong>'+e(arc(c.arcId).name)+' · '+p.panels.length+'格镜头表</strong><span>仅为镜头/文字预演，不是 AI 生成的最终图片</span></div>'+
  '<div class="director-board">'+rows+'</div>';
 }
-async function collectLiterarySources(p){
+async function collectLiterarySources(p,translate=false){
  if(!isLiteraryProject(p)||storyBusy||p.handoff?.repoQueuedAt)return;
  if(typeof wtArchiveApi!=='function')throw Error('资料采集接口尚未加载');
  const title=String(p.sourceTitle||p.title||'').trim(),source=p.storySourceSelection?.source||'';
  if(title.length<2)throw Error('请先确认作品名称');
- storyBusy=true;render();
+ if(translate&&!confirm('使用已配置的 DeepSeek 将筛选后的外文公开资料整理成中文，可能产生少量模型费用。是否确认本次调用？'))return;
+ const author=p.storySourceSelection?.author||p.literaryAuthor||'';
+ storyBusy=true;p.literarySourceCandidates=null;render();
  try{
-  const response=await wtArchiveApi('literary-sources',{method:'POST',body:JSON.stringify({title,source})});
+  const response=await wtArchiveApi('literary-sources',{method:'POST',body:JSON.stringify({title,source,author,translate})});
   if(selected()?.id!==p.id||p.handoff?.repoQueuedAt||String(p.sourceTitle||p.title||'').trim()!==title)throw Error('作品已切换或更改，未覆盖资料');
-  p.literarySourceCandidates={title,items:Array.isArray(response.items)?response.items:[],warnings:response.warnings||[],retrieved_at:response.retrieved_at};persist();
+  if(response.schema!=='literary_sources_v3')throw Error('资料服务版本尚未更新，请刷新后重试');
+  p.literarySourceCandidates={schema:response.schema,title,items:(Array.isArray(response.items)?response.items:[]).filter(x=>/[\u3400-\u9fff]{2}/.test(x.title)&&/[\u3400-\u9fff]{2}/.test(x.excerpt)&&x.relevance_score>=70),warnings:response.warnings||[],retrieved_at:response.retrieved_at,work:response.work};persist();
   notify(p.literarySourceCandidates.items.length?'已取得候选资料，请打开原文核对作者与版本，选择后纳入研究。':'暂未找到候选资料，请补充可靠来源与实际内容摘记。');
  }catch(err){notify('文学资料采集失败：'+String(err?.message||err).slice(0,150))}
  finally{storyBusy=false;render()}
 }
 function addLiterarySource(p,index){
  const collection=p.literarySourceCandidates;
- if(!isLiteraryProject(p)||p.handoff?.repoQueuedAt||collection?.title!==String(p.sourceTitle||p.title||'').trim())throw Error('候选资料与当前作品不匹配');
+ if(!isLiteraryProject(p)||p.handoff?.repoQueuedAt||collection?.schema!=='literary_sources_v3'||collection?.title!==String(p.sourceTitle||p.title||'').trim())throw Error('候选资料与当前作品不匹配');
  const item=collection.items?.[Number(index)];if(!item?.url||!item?.excerpt)throw Error('候选资料不存在');
  if(!confirm('确认该候选资料对应当前作品的作者、书名及版本？加入仅供研究，不代表来源已核验或取得改编权。'))return;
- const section='【候选资料｜'+item.source+'｜'+item.title+'】\n来源：'+item.url+'\n摘记：'+item.excerpt;
+ const section='【候选资料｜'+item.source+'｜'+item.title+'｜'+(item.summary_type||'来源摘记')+'】\n来源：'+item.url+'\n中文资料摘记（待核对原文）：'+item.excerpt;
  const prior=literaryEvidenceText(p);
  if(prior.includes(section)){notify('此资料已加入');return}
  const next=[prior,section].filter(Boolean).join('\n\n');
@@ -501,13 +504,13 @@ function addLiterarySource(p,index){
 function storyControls(p,c){
  if(isLiteraryProject(p)){
   const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p)&&Array.isArray(r.claims);
-  const collection=p.literarySourceCandidates?.title===String(p.sourceTitle||p.title||'').trim()?p.literarySourceCandidates:null;
+  const collection=p.literarySourceCandidates?.schema==='literary_sources_v3'&&p.literarySourceCandidates.title===String(p.sourceTitle||p.title||'').trim()?p.literarySourceCandidates:null;
   const sources=collection?.items||[];
-  const candidateCards=sources.map((x,i)=>'<article class="box"><b>'+e(x.title)+'</b> <small>'+e(x.source)+'</small><p>'+e(x.excerpt)+'</p><a href="'+e(x.url)+'" target="_blank" rel="noopener noreferrer">查看原文 ↗</a> <button class="button" data-director-action="literary-add-source" data-source-index="'+i+'">核对后加入研究</button></article>').join('');
+  const candidateCards=sources.map((x,i)=>'<article class="box"><b>'+e(x.title)+'</b> <small>'+e(x.source)+' · '+e(x.source_language||'中文')+'原文 · 相关性 '+e(x.relevance_score)+'分</small><p><small>'+e(x.summary_type||'来源摘记')+' · 待核对</small></p><p>'+e(x.excerpt)+'</p><a href="'+e(x.url)+'" target="_blank" rel="noopener noreferrer">查看原文 ↗</a> <button class="button" data-director-action="literary-add-source" data-source-index="'+i+'">核对后加入研究</button></article>').join('');
   const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容'],['evaluation','结构检查与模型自评（非独立验收）'],['panel_evidence','逐格证据锚点']];
   const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
   return '<section class="director-ai-workflow director-literary-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2。使用已配置的 DeepSeek，无需输入密钥。先采集资料，核对作品后加入研究，再生成研究报告与专属分镜。</p>'+
-   '<p>自动采集为免费公开资料候选。核对书名、作者与版本后，点击“核对后加入研究”，系统自动填写摘记和链接；也可手动补充出版社、合法原著和可信评论。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集候选资料</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
+   '<p>仅采集当前作品的高相关资料，所有候选以中文呈现。免费采集不调用模型；如需整理外文资料，可单独授权 DeepSeek。核对后加入研究即可自动填写中文摘记和链接。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集中文资料</button><button class="button" data-director-action="literary-translate" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>补充外文资料（中文整理）</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
    (valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
  }
  const info=c.storyboardProvenance;
@@ -607,6 +610,7 @@ async function action(type,p){
  if(type==='portrait-pack'){await exportPortraitReferencePack(p);return}
  if(type==='draft'){if(p.handoff?.repoQueuedAt)throw Error('该任务已正式入仓，不能覆盖分镜');draft(p);return}
  if(type==='literary-collect'){await collectLiterarySources(p);return}
+ if(type==='literary-translate'){await collectLiterarySources(p,true);return}
  if(type==='ai'){await generateStory(p,{provider:storyProvider,replace:true});return}
  if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
  if(type==='adopt'){
