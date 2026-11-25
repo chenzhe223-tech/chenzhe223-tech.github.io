@@ -285,7 +285,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
     if(response?.method!=='verified_model_response'||!response.story?.panels)
       throw Error('未收到真实 DeepSeek 结构化剧本');
     result={method:'verified_model_response',provider:'deepseek',model:response.model||'deepseek-flash',
-      analysis:response.story.reasoning||'',research:literary?response.story.research:null,panels:response.story.panels.map(x=>({
+      analysis:response.story.reasoning||'',research:literary?{...response.story.research,panel_evidence:response.story.panels.map((x,i)=>({index:i+1,dimension:x.dimension,claim_refs:x.claim_refs}))}:null,panels:response.story.panels.map(x=>({
         title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,prompt:x.visual_prompt}))};
   }else{
     if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
@@ -334,7 +334,7 @@ function literaryReviewSnapshot(p){
 function literaryReviewErrors(p){
  if(p.storySourceSelection?.adaptation!=='literary_review')return [];
  const r=p.literaryResearch,errors=[];
- if(!r||r.status!=='draft'||r.input_signature!==literaryInputSignature(p)||!Array.isArray(r.claims)||!r.claims.length)errors.push('请先完成与当前资料一致的 DeepSeek 文学研究');
+ if(!r||r.status!=='draft'||r.input_signature!==literaryInputSignature(p)||!Array.isArray(r.claims)||!r.claims.length||r.evaluation?.structural_pass!==true||r.panel_evidence?.length!==p.panels.length)errors.push('请先完成与当前资料一致的 DeepSeek 文学研究');
  if(!p.literaryReviewReceipt||p.literaryReviewReceipt.snapshot!==literaryReviewSnapshot(p))errors.push('请核对文学研究与分镜，完成专项内容审核');
  return errors;
 }
@@ -447,7 +447,7 @@ function framePreview(p,c){
 function storyControls(p,c){
  if(p.storySourceSelection?.adaptation==='literary_review'){
   const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p);
-  const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容']];
+  const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容'],['evaluation','结构检查与模型自评（非独立验收）'],['panel_evidence','逐格证据锚点']];
   const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
   return '<section class="director-ai-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2；使用服务端现有配置，无需输入密钥。先补充真实资料摘记及来源，再生成研究和专属分镜。</p>'+
    '<a class="button" href="#/studio/'+e(p.id)+'">编辑事实笔记与来源</a> <button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'研究中…':'研究作品并生成分镜')+'</button>'+
@@ -560,7 +560,7 @@ async function action(type,p){
  }
  if(type==='literary-review'){
   if(p.handoff?.repoQueuedAt)throw Error('已派单，不得覆盖审核');
-  if(!p.literaryResearch||p.literaryResearch.input_signature!==literaryInputSignature(p)||p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))throw Error('先完成真实研究与具体分镜');
+  if(!p.literaryResearch||p.literaryResearch.evaluation?.structural_pass!==true||p.literaryResearch.input_signature!==literaryInputSignature(p)||p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))throw Error('先完成真实研究与具体分镜');
   if(!confirm('请确认已逐项核查来源、人物及故事主线、哲学证据、现实意义与版权边界；陌生读者能从分镜读懂作品。该操作是作者内容审阅，不代表独立事实核验或出版授权。'))return;
   p.literaryReviewReceipt={snapshot:literaryReviewSnapshot(p),author_content_reviewed:true,reviewed_at:new Date().toISOString()};ensure(p).approval=null;setChange(p,'作者完成文学专项内容审核');render();return;
  }
