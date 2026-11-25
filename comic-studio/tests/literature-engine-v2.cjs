@@ -74,7 +74,7 @@ const req=(path,body)=>{const url=new URL('https://fixture.example/api/archive/'
  const blocked=await collector('测试作品','',async(url,opts)=>{redirectCalls++;assert.equal(opts.redirect,'manual');return new Response(null,{status:302,headers:{Location:'https://unsafe.invalid'}})});
  assert.equal(redirectCalls,2,'redirects cannot trigger additional outbound requests');
  assert.equal(blocked.items.length,0);
- assert.ok(blocked.warnings.every(x=>x.includes('重定向')));
+ assert.equal(blocked.warnings.filter(x=>x.includes('重定向')).length,2);assert.ok(blocked.warnings.some(x=>x.includes('未找到')));
  const sample=await collector('少年來了 | Human Acts','',async(url,opts)=>{
   const u=new URL(url);assert.ok(u.searchParams.has('titles'));assert.equal(u.searchParams.has('generator'),false);
   return Response.json({query:{pages:[{title:'偶像来了',extract:'中国电视综艺节目，和小说无关',fullurl:u.origin+'/wiki/Idol'},{title:'Han Kang',extract:'韩江是小说作家，但是这是作者介绍而不是作品介绍。',fullurl:u.origin+'/wiki/Author'},{title:'Human Acts',extract:'Human Acts is a novel by Han Kang, a work of fiction published in Korea.',fullurl:u.origin+'/wiki/Human_Acts'}]}});
