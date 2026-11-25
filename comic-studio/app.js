@@ -263,7 +263,7 @@ function wfStartupCommand(p,task){
   '作品：《'+(o.title||p.title)+'》；创作类型：'+(review?'三维文学导读（独立评论，不是原著剧情重绘）':o.mode==='original'?'原创漫画':'新闻／主题漫画')+'；预计交付：'+o.panel_count+' 张独立竖版漫画 PNG＋1 张独立封面 PNG＋文案、事实及版权说明、QA 与完整可下载 ZIP。',
   '首先解压附件并按顺序阅读：00_START_HERE.md → task.json → '+o.producer+'_制作指令.md → production-bible.json → render_jobs.json → production_state.json。以 task_id 与作者已锁定的分镜和视觉圣经为准，禁止自行更换人物、画风和具体镜头。',
   ...(p.novelSkill?['本任务另含 novel-skill.json 与 NOVEL_DISTILLATION.md。必须先完成真实语义深读和版权核查：'+(p.novelSkill.export_source_approved?'原文由用户显式授权作为 ZIP 附件，须按文件摘要检验并逐章核对。':'未提供可转发原文，只有本地章节索引；不得编造完整故事或作者观点，必要时从可信公开资料核实，无法核实时标 blocked。')]:[]),
-  review?'本作须先核实书名、作者、出版背景、作家获诺奖与本书的关系及可信评论；按任务 literary_review.panel_ranges（九格默认4+3+2）依次讲清作品故事、人生哲学、普通人的现实意义制作原创编辑漫画。不得逐幕复刻原著情节、经典对白或原著插画，不得把编辑解读伪装为作者原话。':'新闻事实先核实可信来源；现实争议、具体人物或版权材料须按照任务内规则保护，虚构内容应明确标注。',
+  review?'本作须先核实书名、作者、出版背景、作家获诺奖与本书的关系及可信评论；按任务 literary_review.panel_ranges（九格默认4+3+2）依次讲清作品故事、人生哲学、普通人的现实意义制作原创编辑漫画。实际画格范围：'+(o.adaptation?.literary_review?.panel_ranges||[]).map(([a,b])=>String(a).padStart(2,'0')+'–'+String(b).padStart(2,'0')).join(' / ')+'。'+(wfLiteraryResearchRequired(p)?'先读取 literary-research.json 并独立核实每段事实及证据。':'')+'不得逐幕复刻原著情节、经典对白或原著插画，不得把编辑解读伪装为作者原话。':'新闻事实先核实可信来源；现实争议、具体人物或版权材料须按照任务内规则保护，虚构内容应明确标注。',
   '请直接开始研究与创意核对，并实际推进角色定妆图和第01格样稿。只有在必须由作者确认真实定妆／首格时请请求一次批准；确认后继续逐张独立生成、排版和验收。不得用一张拼版图代替实际'+o.panel_count+'张独立图片，也不得仅提供分镜、文字提示词或计划作为完成交付。',
   '每次生图严格只执行 render_jobs.json 中一个 job 的 prompt；不要将整个故事和全部分镜一次送给生图模型。真实原图不低于1080×1440（竖版3:4），中文另行准确排版。保留已有通过QA的画格，失败只重绘当前格。',
   '本任务的制作交付临时不依赖 GitHub 入仓。不得要求我重新解释附件任务，亦不得擅自代替作者同意发表。若附件读取失败或工具能力确实受限，请指出具体文件／阻碍和已实际完成成果，不虚构图片、SHA或下载链接。',
