@@ -176,7 +176,8 @@ function localStoryboardCore(p){
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
 }
 function localStoryboard(p){
- const rows=localStoryboardCore(p),seen=new Map(),followups=[
+ const rows=localStoryboardCore(p);if(p.storySourceSelection?.adaptation==='literary_review')return rows;
+ const seen=new Map(),followups=[
  ['重新核查前一格提出的证据','先把这件事确认清楚'],
  ['注意到行动中尚未解释的细节','这个细节还没有答案'],
  ['试着通过新的行动进行验证','我们先用行动来检验'],
@@ -209,10 +210,11 @@ function applyStoryboard(p,panels,meta,replace=false){
    const cur=p.panels[i][field];
    if(!replace&&clean(cur)&&!(field==='title'&&/^第 ?[1-9] 格$/.test(cur)))continue;
    const value=clean(panels[i]?.[field]).slice(0,field==='title'?100:field==='scene'?1700:field==='prompt'?1200:550);
-   if(value){p.panels[i][field]=value;updated++}
+   if(value||(replace&&p.storySourceSelection?.adaptation==='literary_review')){p.panels[i][field]=value;updated++}
   }
  }
  const c=ensure(p);
+ if(p.storySourceSelection?.adaptation==='literary_review'){delete p.literaryResearch;delete p.literaryReviewReceipt;}
  c.drafted=true;c.reviewed=false;c.approval=null;
  c.storyboardProvenance={method:meta.method||'local_structure_rules',provider:meta.provider||'local',
   model:meta.model||null,at:new Date().toISOString(),analysis:clean(meta.analysis||'').slice(0,600),
@@ -246,7 +248,8 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  const literary=p.storySourceSelection?.adaptation==='literary_review';
  if(literary){
   if(auto){draft(p,false);return;}
-  provider='deepseek';
+  provider='deepseek';replace=true;
+  if(p.panels.some(x=>x.image)||p.cover){notify('已有成品图片，请创建修订版后重新研究。');return;}
   if(String(p.factNotes||'').trim().length<100||!(typeof validSources==='function'&&validSources(p).length)){notify('请先在项目事实笔记填写至少100字已查阅的作品资料摘记，并添加来源链接；DeepSeek 不会仅凭书名冒充研究。');return;}
  }
  const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));
@@ -294,7 +297,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
   if(result.panels.length!==p.panels.length)throw Error('AI 返回'+result.panels.length+'格，与作者选择的'+p.panels.length+'格不一致；拒绝覆盖，请按所选篇幅重新生成');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
-  if(wrote&&literary){p.literaryResearch={...result.research,model:result.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString()};persist();}
+  if(wrote&&literary){p.literaryResearch={...result.research,model:result.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString(),input_signature:literaryInputSignature(p)};persist();render();}
   if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
@@ -322,9 +325,22 @@ function payload(p){
   visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,license_evidence_url:x.license_evidence_url||'',rights_verified:x.rights_verified===true,rights_status:x.rightsStatus||'legacy_review_required',asset_type:x.assetType||'legacy_unclassified',asset_type_label:x.assetTypeLabel||'',applies_to:x.appliesTo||{scope:'project',targetId:'project'},role:'visual_reference_only'}))
  };
 }
+function literaryInputSignature(p){
+ return JSON.stringify([p.sourceTitle||p.title,p.factNotes||'',typeof validSources==='function'?validSources(p):[],p.novelSkill?.provenance?.sha256||null]);
+}
+function literaryReviewSnapshot(p){
+ return JSON.stringify([literaryInputSignature(p),p.literaryResearch||null,(p.panels||[]).map(x=>[x.title,x.scene,x.caption,x.dialogue,x.prompt])]);
+}
+function literaryReviewErrors(p){
+ if(p.storySourceSelection?.adaptation!=='literary_review')return [];
+ const r=p.literaryResearch,errors=[];
+ if(!r||r.status!=='draft'||r.input_signature!==literaryInputSignature(p)||!Array.isArray(r.claims)||!r.claims.length)errors.push('请先完成与当前资料一致的 DeepSeek 文学研究');
+ if(!p.literaryReviewReceipt||p.literaryReviewReceipt.snapshot!==literaryReviewSnapshot(p))errors.push('请核对文学研究与分镜，完成专项内容审核');
+ return errors;
+}
 function digest(p){
  // FNV-1a change indicator; not a signature. GitHub commit provides the immutable official task record.
- let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),...(p.novelSkill?{novel_source_sha256:p.novelSkill.provenance?.sha256||null,novel_rights_mode:p.novelSkill.rights?.mode||null}:{}),data:payload(p)}),h=2166136261;
+ let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),...(p.novelSkill?{novel_source_sha256:p.novelSkill.provenance?.sha256||null,novel_rights_mode:p.novelSkill.rights?.mode||null}:{}),...(p.storySourceSelection?.adaptation==='literary_review'?{literary_snapshot:literaryReviewSnapshot(p),literary_receipt:p.literaryReviewReceipt||null}:{}),data:payload(p)}),h=2166136261;
  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
  return (h>>>0).toString(16).padStart(8,'0');
 }
@@ -345,6 +361,7 @@ function checks(p){
  if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
  if(p.storySourceSelection?.adaptation==='literary_review'&&p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))errs.push('文学导读尚有待研究画格：先核实作品资料，填写具体故事与思想内容，再定稿；不得将研究占位直接制作。');
+ errs.push(...literaryReviewErrors(p));
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
  return errs;
@@ -428,6 +445,14 @@ function framePreview(p,c){
  '<div class="director-board">'+rows+'</div>';
 }
 function storyControls(p,c){
+ if(p.storySourceSelection?.adaptation==='literary_review'){
+  const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p);
+  const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容']];
+  const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
+  return '<section class="director-ai-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2；使用服务端现有配置，无需输入密钥。先补充真实资料摘记及来源，再生成研究和专属分镜。</p>'+
+   '<a class="button" href="#/studio/'+e(p.id)+'">编辑事实笔记与来源</a> <button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'研究中…':'研究作品并生成分镜')+'</button>'+
+   (valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
+ }
  const info=c.storyboardProvenance;
  const providerNames={native:'平台内置模型',deepseek:'DeepSeek API',openai:'OpenAI API',claude:'Claude API',gemini:'Gemini API',kimi:'Kimi API',qwen:'通义千问 API'};
  const origin=info?.method==='verified_model_response'?'AI生成 · '+(providerNames[info.provider]||'第三方模型')+(info.model?' · '+info.model:''):
@@ -532,6 +557,12 @@ async function action(type,p){
   const c=ensure(p);c.drafted=true;c.reviewed=false;c.approval=null;
   if(!c.storyboardProvenance)c.storyboardProvenance={method:'manual_unverified',provider:'manual',model:null,at:new Date().toISOString(),authorEdited:true};
   setChange(p,'保留并提交已有'+p.panels.length+'格分镜供作者审稿');render();notify(''+p.panels.length+'格脚本已保留，没有覆盖已有画面或对白');return
+ }
+ if(type==='literary-review'){
+  if(p.handoff?.repoQueuedAt)throw Error('已派单，不得覆盖审核');
+  if(!p.literaryResearch||p.literaryResearch.input_signature!==literaryInputSignature(p)||p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))throw Error('先完成真实研究与具体分镜');
+  if(!confirm('请确认已逐项核查来源、人物及故事主线、哲学证据、现实意义与版权边界；陌生读者能从分镜读懂作品。该操作是作者内容审阅，不代表独立事实核验或出版授权。'))return;
+  p.literaryReviewReceipt={snapshot:literaryReviewSnapshot(p),author_content_reviewed:true,reviewed_at:new Date().toISOString()};ensure(p).approval=null;setChange(p,'作者完成文学专项内容审核');render();return;
  }
  if(type==='approve'){approve(p);return}
 }
