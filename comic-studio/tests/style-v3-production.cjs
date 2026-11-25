@@ -17,8 +17,8 @@ const scope={
 };
 vm.runInNewContext(script,scope,{filename:'style-v3.js'});
 const lib=scope.window.WTStyleV3;
-assert.equal(lib.CATALOG.length,25);
-assert.equal(new Set(lib.CATALOG.map(x=>x.style_id)).size,25);
+assert.equal(lib.CATALOG.length,26);
+assert.equal(new Set(lib.CATALOG.map(x=>x.style_id)).size,26);
 assert.ok(lib.CATALOG.every(x=>x.reference.status==='not_licensed'&&x.sample.status==='not_generated'));
 assert.ok(lib.CATALOG.every(x=>!lib.isReference(x.reference)&&!lib.isSample(x.sample)));
 assert.ok(lib.CATALOG.every(x=>!Object.values(x.quality_capability).some(Boolean)));
@@ -32,12 +32,18 @@ for(const [i,style] of lib.CATALOG.entries()){
   :path.join(base,'assets',`style-${String(i+1).padStart(2,'0')}.webp`);
  const bytes=fs.readFileSync(imagePath);
  assert.ok(bytes.byteLength>10000,`missing valid reference image: ${imagePath}`);
- assert.equal(bytes.toString('ascii',0,4),'RIFF');
- assert.equal(bytes.toString('ascii',8,12),'WEBP');
+ if(imagePath.endsWith('.png')){
+  assert.equal(bytes.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+  assert.equal(bytes.readUInt32BE(16),style.guide.width);
+  assert.equal(bytes.readUInt32BE(20),style.guide.height);
+ }else{
+  assert.equal(bytes.toString('ascii',0,4),'RIFF');
+  assert.equal(bytes.toString('ascii',8,12),'WEBP');
+ }
  assert.equal(crypto.createHash('sha256').update(bytes).digest('hex'),style.guide.sha256);
  assetHashes.add(style.guide.sha256);
 }
-assert.equal(assetHashes.size,25,'style references must be 25 different images');
+assert.equal(assetHashes.size,26,'style references must be 26 different images');
 
 const newStyle=lib.CATALOG.find(s=>s.style_id==='japanese-pastoral-wonder');
 assert.ok(newStyle&&newStyle.number===21,'new pastoral fantasy must be a distinct selectable style');
@@ -46,12 +52,14 @@ assert.notEqual(newStyle.style_id,'japanese-hand-painted');
 assert.match(lib.detail({styleId:newStyle.style_id,quality:'Premium'}),/style-21\.webp/);
 assert.match(lib.detail({styleId:newStyle.style_id,quality:'Premium'}),/未通过真实生图能力验证/);
 const cards=lib.cards({styleId:'chinese-historical-epic'});
-assert.equal((cards.match(/data-director-style=/g)||[]).length,29);
-assert.match(cards,/<details class="wt-v3-allstyles"/,'the full 25-style directory should be collapsible');
+assert.equal((cards.match(/data-director-style=/g)||[]).length,30);
+assert.match(cards,/<details class="wt-v3-allstyles"/,'the full 26-style directory should be collapsible');
 assert.match(cards,/wt-v3-quick-grid/,'style choice should begin with a compact recommendation row');
 assert.match(cards,/data-wt-v3-query/);
-assert.equal((cards.match(/原创效果示意 · 非正式成品/g)||[]).length,29);
+assert.equal((cards.match(/原创效果示意 · 非正式成品/g)||[]).length,30);
 assert.equal((cards.match(/\.webp/g)||[]).length,29);
+assert.equal((cards.match(/\.png/g)||[]).length,1);
+assert.match(cards,/wt-s21-modern-life-anime-preview\.png/);
 const detail=lib.detail({styleId:'chinese-historical-epic',quality:'Premium'});
 assert.match(detail,/真实生成样张/);
 assert.match(detail,/原创画风参考/);
@@ -73,4 +81,4 @@ assert.match(worker,/webp:'image\/webp'/);
 assert.match(worker,/png\|webp/);
 assert.ok(page.indexOf('style-v3.js')<page.indexOf('creative-director.js'));
 assert.match(css,/max-width:650px/);
-console.log('V3 regression: 25 verified original WebP images, truthful sample badges, compact selector, route and layout PASS');
+console.log('V3 regression: 26 original PNG/WebP images with verified byte hashes, truthful sample badges, compact selector, route and layout PASS');
