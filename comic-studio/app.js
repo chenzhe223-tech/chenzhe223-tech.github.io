@@ -113,7 +113,7 @@ function wfLiteraryReviewGuide(p){
   '【来源与版权门禁】'+(wfLiteraryResearchRequired(p)?'任务附 literary-research.json，先独立核对报告的来源及具体主线，作者内容审阅不代表独立事实核验。若研究或分镜有误，须修订并重新锁定；不得直接绘制错误内容。':'')+'先核实作品名/作家/出版信息/可信介绍、故事主线与原作主题；每个故事事实和思想解释须提供来源依据；未核实则不得生图；陌生读者须能从成品回答人物、主线、核心冲突、思想与现实意义；只有搜索结果或封底简介时不得脑补完整情节。保留来源链接、书目版本、事实与编辑观点区分；评介模式可能降低改编风险但不是法定免责，引用及视觉素材仍按发布地区独立检查。'
  ].join('\n');
 }
-function wfCanTask(p){const missing=[];if(!p?.title?.trim())missing.push('作品名称');const ss=wfLiterarySelection(p);
+function wfCanTask(p){const missing=[];if(wfLiteraryResearchRequired(p)&&(!p.literaryResearch||p.literaryResearch.evaluation?.structural_pass!==true||p.literaryReviewReceipt?.author_content_reviewed!==true))missing.push('文学专项研究与内容审核');if(!p?.title?.trim())missing.push('作品名称');const ss=wfLiterarySelection(p);
  const localNovel=!!(/^[a-f0-9]{64}$/.test(String(p?.novelSkill?.provenance?.sha256||''))&&p.novelSkill?.provenance?.chapter_count>0);
  if(ss?.adaptation==='literary_review'&&(!(validSources(p).length||localNovel)||p.panels?.length<4||p.panels?.length>60))
   missing.push('文学导读要求可核查的书目链接或本机小说全文SHA256索引，以及动态4–60格的三维结构');
@@ -133,7 +133,7 @@ function wfTaskObject(p){const h=wfGet(p),policy=wfResearchPolicy(p);return {sch
  includes_private_source:false,
  private_source_file:null,
  research_required:true
- }:null,title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+(wfLiteraryReview(p)?'格原创文学导读':'格原创漫画'),source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:wfLiterarySelection(p),literary_review: wfLiteraryReview(p)?{schema:'davylab.worldtoon.literary-review.v1',mode:'editorial_criticism_not_plot_adaptation',dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],panel_ranges:[[1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))],[Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+1,Math.min(p.panels.length-1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+Math.max(1,Math.round(p.panels.length*3/9)))],[Math.min(p.panels.length-1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+Math.max(1,Math.round(p.panels.length*3/9)))+1,p.panels.length]],research_required:true,no_plot_reenactment:true,rights_risk_pending_review:true,guide:wfLiteraryReviewGuide(p)}:null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
+ }:null,title:p.title,subtitle:p.subtitle,category:p.category,mode:wfMode(p),creative_revision:p.creativeRevision||undefined,creative_tone:p.tone||'克制讽刺',format:p.panels.length+(wfLiteraryReview(p)?'格原创文学导读':'格原创漫画'),source:{headline:p.sourceTitle,urls:validSources(p),date:p.eventDate,verification_status:policy.verification_status,candidate_summary:p.description||'',fact_notes:p.factNotes||'待 ChatGPT 核验',verified_facts:policy.research_required?'':(p.factNotes||'原创虚构故事')},adaptation:{strategy:p.fiction,characters:p.characters,disclaimer:p.disclosure,source_selection:wfLiterarySelection(p),literary_review: wfLiteraryReview(p)?{schema:'davylab.worldtoon.literary-review.v1',mode:'editorial_criticism_not_plot_adaptation',dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],panel_ranges:[[1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))],[Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+1,Math.min(p.panels.length-1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+Math.max(1,Math.round(p.panels.length*3/9)))],[Math.min(p.panels.length-1,Math.min(p.panels.length-2,Math.max(2,Math.round(p.panels.length*4/9)))+Math.max(1,Math.round(p.panels.length*3/9)))+1,p.panels.length]],research_required:true,no_plot_reenactment:true,rights_risk_pending_review:true,guide:wfLiteraryReviewGuide(p),...(wfLiteraryResearchRequired(p)?{research_file:'literary-research.json',author_content_reviewed:p.literaryReviewReceipt?.author_content_reviewed===true,independent_verification_required:true}:{})}:null,rights_verification_required:!!p.storySourceSelection},story:p.description,creative_direction:wtDirector.exportBrief(p),panels:p.panels.map((x,i)=>({index:i+1,title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,visual_notes:x.prompt})),requirements:{panel_count:p.panels.length,independent_images:true,cover_required:true,language:'zh-CN',visual_style:'必须遵守 creative_direction.visual_rules 的锁定画风、色板、材质、镜头与禁用项，不得擅自改风格',art:'按剧情篇幅的独立竖版 PNG 漫画图 + 独立封面，文字准确可读；如生图文字难以保证则以独立文本图层排版',delivery_zip:'chatgpt-delivery.zip',paths:['delivery.json','cover.png','panels/01.png ... panels/'+String(p.panels.length).padStart(2,'0')+'.png','comic.pdf (可选)','weixin-caption.txt (可选)'],public_claims:'未经证实的指控、婚恋隐私、违法或交易传闻不得描绘成真实事实；人物不可仅换名仍可被识别'}}}
 // The approved director storyboard is the only image-generation source of truth.
 // Summary, legacy characters and per-panel custom prompts remain audit input only.
 function wfProductionBible(p,task){
@@ -273,15 +273,15 @@ function wfStartupCommand(p,task){
 function wfStartHere(p,task,launch){
  if(task.production_mode==='ai_task_hub_v2')return [
   '# WORLD/TOON · By DAVYLAB｜AI Task Hub 自动中转工单',
-  '本 ZIP 已由 WorldToon 上传到私有 AI Task Hub（只有服务端 SHA256 回读确认并写入 queued 后才算正式入仓）。',
+  '本 ZIP 是待派发或已派发的 AI Task Hub 任务包；只有服务端 SHA256 回读确认并写入 queued 后才算正式入仓。本地备用包不代表已入仓或已开工。',
   '任务编号：'+task.task_id+'；目标制作方：'+task.producer,
   '领取目录：chenzhe223-tech/ai-task-sync/tasks/'+task.task_id+'/',
   '生产执行者必须按 task_id 和 target 查找、下载本 ZIP、验证 SHA256、在 GitHub 原子写入 claimed 并确认后制作。GitHub 存储并不自动触发 ChatGPT 或 WorkBuddy；没有运行中的执行器要如实报告未开工。',
-  '本包可读取：task.json、production-bible.json、render_jobs.json、render_jobs.md、'+task.producer+'_制作指令.md、production_state.json。',
+  '本包可读取：task.json、production-bible.json、render_jobs.json、render_jobs.md、'+task.producer+'_制作指令.md、production_state.json。'+(wfLiteraryResearchRequired(p)?' 文学选题还须读取 literary-research.json，独立核实后按锁定的三段结构生产。':''),
   '所有图片独立生成，角色定妆和首格经作者确认后完成全部漫画与独立封面；不可拼图充数；最终需真实 PNG、QA、文案、来源与完整 ZIP。',
   task.producer==='ChatGPT'?'ChatGPT 输出真实完整 ZIP 交给作者，之后由作者交给 WorkBuddy 执行公众号上传；本制作任务不自动发表。':'WorkBuddy 可制作与上传公众号，但实际发表前必须取得作者独立出版授权、版权和视觉 QA 通过，发表后回写真实公众号后台回执。',
   '不得编造领取回执、文件、SHA256、公众号发表结果。'
- ].join('\\n\\n')+'\\n';
+ ].join('\n\n')+'\n';
 
  return '# WORLD/TOON · By DAVYLAB｜'+task.producer+' 直达任务启动说明\n\n'+
   '本 ZIP 是正式创作任务数据包，而不是漫画成品。仅上传 ZIP 文件不保证对话模型将其识别为“立即执行”；请同时发送明确的开工命令。\n\n'+
@@ -331,6 +331,7 @@ function wfHubProductionPrompt(p,task){
  '【失败与复核】图像必须经过原生尺寸检查和与图片 SHA256 绑定的独立单场景、角色一致性、画面内容审查。两次失败停止相同后端，只有已批准的独立备用后端可继续；否则回写 blocked。单次生图与作者许可不得自动扩展成收费 API 额度或公众号发表授权。',
  '【定妆与首格】先形成真实 character-sheet.png 和 pilot-01.png，在作品要求的有效作者审批完成后才继续批量生成。作者审核不是由制作平台自行签发；未经批准不能把样稿标记为已完成全套。',
  '【文件与验收】必须真实生成 cover.png、panels/01.png 至 panels/'+end+'.png、caption.md、sources.md、QA_STATUS.md、manifest.json、production_state.json，并形成单个可下载正式 ZIP。按该任务实际 panel_count 检验文件数量、图像尺寸、哈希、视觉一致性、中文、来源和版权；任何缺失均记为 blocked 或 pending，不能虚报完成。',
+ ...(wfLiteraryResearchRequired(p)?['【文学专项生产门禁】'+wfLiteraryReviewGuide(p)+'\n必须读取 literary-research.json，核对研究报告与作者锁定分镜；有证据不匹配或事实错误则标 blocked，修正并重新锁定后再生产。']:[]),
  '【事实与版权】研究型题材先核验来源及日期；未经证实的真人指控不得作为新闻事实绘制。无授权不得复制受保护的文学作品独特桥段、对白或人物形象。原创故事不得伪造原始资料。',
  task.producer==='ChatGPT'
  ?'【交付终点】ChatGPT 只需制作并交付真实完整 ZIP 给作者，由作者决定是否交给 WorkBuddy 上传公众号；不得自动发表。'
@@ -346,6 +347,7 @@ function wfHubStartup(p,task){
  'WORLD/TOON · AI TASK HUB · V2｜唯一任务 '+task.task_id,
  '在私有仓 chenzhe223-tech/ai-task-sync 中查找 tasks/'+task.task_id+'/task.json，严格匹配 target='+(task.producer==='ChatGPT'?'chatgpt':'workbuddy')+'、schema_version=2、project=worldtoon、status=queued。',
  '下载同目录 package.zip；计算 SHA256 并与 task.json.package_sha256 核对一致。必须原子写入 claimed 并回读确认后开工，不可擅自领取别人的任务。',
+ ...(wfLiteraryResearchRequired(p)?['文学选题任务须读取 literary-research.json 并独立核实来源与具体故事；严格依照 task.json 的动态4+3+2比例分段，事实、评论与原创场景分开。未核实或需修订时不得开始生图。']:[]),
  '打开附件里的 task.json、制作指令、render_jobs.json、production-bible.json。角色定妆和首格经作者批准后，逐张独立生图（3:4，原生至少 1080×1440），完成封面、'+task.panel_count+'张画格、文案与 QA，形成完整 ZIP。',
  task.producer==='ChatGPT'?'ChatGPT 的交付为完整可下载 ZIP；交给作者，再由作者交给 WorkBuddy 上传公众号。严禁自动发表。':'WorkBuddy 可负责制作和公众号上传，但实际发表必须经过作者独立授权、版权核验与图片 QA，回写真实发表回执。',
  '如果没有实际的扫描器、GitHub 访问权限或模型工具，明确报告 blocked；任务入仓不代表已经自动领取或开始制作。'
@@ -461,7 +463,7 @@ async function wfMakeTask(p){
  task.attachment_alone_starts_production=false;
  const files=[{name:'00_START_HERE.md',bytes:enc.encode(wfStartHere(p,task,launch))},
  {name:task.producer+'_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
- {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(wfIsHub(p)?launch+'\n\n'+prompt:prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
+ {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(wfIsHub(p)?launch+'\n\n'+prompt:prompt)},{name:'交接说明.txt',bytes:enc.encode((wfIsHub(p)?'本 ZIP 属于 AI Task Hub 路线；仅在远端真实校验入仓和原子领取后开始制作。若为 Hub 未入仓本地备用包，不得声称已经派单或开始制作。'+(task.producer==='ChatGPT'?'ChatGPT 只交付完整 ZIP，不自动发表。':'WorkBuddy 须取得独立出版授权。'):task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
  if(wfLiteraryResearchRequired(p)){const {input_signature,...research}=p.literaryResearch;files.push({name:'literary-research.json',bytes:enc.encode(JSON.stringify({schema:'davylab.worldtoon.literary-research.v2',task_id:task.task_id,creative_lock_hash:bible.creative_lock_hash,research,author_content_reviewed:true,author_reviewed_at:p.literaryReviewReceipt.reviewed_at,independent_verification_required:true},null,2))});}
  const taskZip=packZip(files);
  if(wfIsHub(p)){
