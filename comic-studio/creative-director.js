@@ -489,13 +489,13 @@ function addLiterarySource(p,index){
  if(!isLiteraryProject(p)||p.handoff?.repoQueuedAt||collection?.title!==String(p.sourceTitle||p.title||'').trim())throw Error('候选资料与当前作品不匹配');
  const item=collection.items?.[Number(index)];if(!item?.url||!item?.excerpt)throw Error('候选资料不存在');
  if(!confirm('确认该候选资料对应当前作品的作者、书名及版本？加入仅供研究，不代表来源已核验或取得改编权。'))return;
- const section='【候选资料｜'+item.source+'｜'+item.title+'】\\n来源：'+item.url+'\\n摘记：'+item.excerpt;
+ const section='【候选资料｜'+item.source+'｜'+item.title+'】\n来源：'+item.url+'\n摘记：'+item.excerpt;
  const prior=literaryEvidenceText(p);
  if(prior.includes(section)){notify('此资料已加入');return}
- const next=[prior,section].filter(Boolean).join('\\n\\n');
+ const next=[prior,section].filter(Boolean).join('\n\n');
  if(next.length>18000)throw Error('资料摘记已达到18000字，请整理后再添加');
  p.literaryEvidence=next;
- p.sourceURLs=[...new Set([...(typeof validSources==='function'?validSources(p):[]),item.url])].join('\\n');
+ p.sourceURLs=[...new Set([...(typeof validSources==='function'?validSources(p):[]),item.url])].join('\n');
  ensure(p).approval=null;setChange(p,'添加文学候选研究资料（待独立核验）');render();
 }
 function storyControls(p,c){
