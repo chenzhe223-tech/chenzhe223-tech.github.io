@@ -10,14 +10,16 @@ async function wtArchiveApi(path,options={}){
   const headers=new Headers(options.headers||{});const access=wtArchiveAuth();
   if(access)headers.set('authorization','Bearer '+access);
   if(options.body&&!headers.has('content-type'))headers.set('content-type','application/json');
-  const waitMs=String(path).startsWith('deepseek-expand')?75000:String(path).startsWith('assets?')?45000:15000;
+  const repair=String(path).startsWith('deepseek-expand')&&options.literaryRepair===true;
+  const {literaryRepair,...fetchOptions}=options;
+  const waitMs=repair?130000:String(path).startsWith('deepseek-expand')?75000:String(path).startsWith('assets?')?45000:15000;
   const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),waitMs);
   // Cache-bust GETs until existing clients upgrade their older, API-caching Service Worker.
   const method=String(options.method||'GET').toUpperCase();
   const endpoint='/api/archive/'+path+(method==='GET'?'?rev='+WT_ARCHIVE_CLIENT_REV+'&_='+Date.now():'');
-  try{const res=await fetch(endpoint,{...options,headers,signal:controller.signal,cache:'no-store'});
-    const body=await res.json().catch(()=>({error:'服务响应异常：请检查连接后重试'}));if(!res.ok)throw Error(body.error||('HTTP '+res.status));return body;
-  }catch(error){if(controller.signal.aborted)throw Error(String(path).startsWith('deepseek-expand')?'DeepSeek 响应超时（超过75秒），未自动重复扣费请求；请检查模型额度或稍后重试':'连接超时，请重试');throw error;}finally{clearTimeout(timeout)}
+  try{const res=await fetch(endpoint,{...fetchOptions,headers,signal:controller.signal,cache:'no-store'});
+    const body=await res.json().catch(()=>({error:'服务响应异常：请检查连接后重试'}));if(!res.ok){const err=Error(body.error||('HTTP '+res.status));err.status=res.status;err.body=body;throw err;}return body;
+  }catch(error){if(controller.signal.aborted)throw Error(String(path).startsWith('deepseek-expand')?(repair?'文学研究与一次专项修复超过130秒，已停止等待，请稍后检查或重试':'DeepSeek 响应超时（超过75秒），未自动重复扣费请求；请检查模型额度或稍后重试'):'连接超时，请重试');throw error;}finally{clearTimeout(timeout)}
 }
 function wtArchiveStateLabel(row){const owner=row?.producer==='WorkBuddy'?'WorkBuddy':'ChatGPT';const names={queued:'等待 '+owner+' 领取',claimed:owner+' 制作中',workbuddy_received:'WorkBuddy 已领取',draft_uploaded:'公众号草稿已核验',failed:'发布执行失败',blocked:'质量审查未通过',cancelled:'已取消',ready_for_workbuddy:'待 WorkBuddy 发表',publishing:'公众号发表中',published:'已发表并入档'};return names[row.status]||'未确认状态';}
 function wtArchiveDate(d){try{return d?new Date(d).toLocaleDateString('zh-CN'):'—'}catch{return '—'}}
