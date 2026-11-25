@@ -553,7 +553,7 @@ function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',t
    p.literaryResearchScope='topic_literature_v2';
    p.title='读懂｜'+String(topic.title||'待核验文学作品')+'：故事·哲学·人生';
    p.handoff={mode:'hotspot'};
-   p.storySourceSelection={source_id:topic.sourceId||'nobel_literature',title:topic.title||'',source:topic.source||'',type:'nobel_literature',
+   p.storySourceSelection={source_id:topic.sourceId||'nobel_literature',title:topic.title||'',author:topic.author||'',source:topic.source||'',type:'nobel_literature',
     rights:topic.rightsStatus||'unknown',adaptation:'literary_review',license_attested:false,selected_beats:[],
     requires_independent_author_review:true,bibliography_verified:false,
     review_dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers']};
