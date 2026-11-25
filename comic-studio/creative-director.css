@@ -180,3 +180,17 @@
 .director-portrait-handoff p{font-size:11px;color:#776b5e;line-height:1.65;margin:0;flex:1 1 300px}
 .director-portrait-handoff .button{min-height:41px;flex-shrink:0}
 @media(max-width:620px){.director-portrait-handoff .button{width:100%}}
+
+/* Literature research: aligned full-width fields, scoped to this module. */
+.director-literary-workflow{display:grid;gap:12px;align-items:start;overflow-wrap:anywhere}
+.director-literary-workflow>h3,.director-literary-workflow>p{margin:0;line-height:1.65}
+.director-literary-workflow>.button{justify-self:start}
+.director-literary-workflow>label{display:grid;grid-template-columns:minmax(0,1fr);gap:7px;min-width:0;width:100%;font-size:13px;font-weight:600;line-height:1.55}
+.director-literary-workflow textarea[data-literary-input]{display:block;box-sizing:border-box;width:100%;max-width:100%;min-width:0;resize:vertical;padding:11px 12px;border:1px solid #d1d5ce;border-radius:8px;background:#fff;color:#28352e;font:400 14px/1.65 system-ui,sans-serif}
+.director-literary-workflow textarea[data-literary-input="evidence"]{min-height:160px}
+.director-literary-workflow textarea[data-literary-input="sources"]{min-height:80px}
+.director-literary-workflow>article{min-width:0;margin:0;padding:12px 14px;background:#fff;overflow-wrap:anywhere}
+.director-literary-workflow>article p{margin:8px 0;line-height:1.65}
+.director-literary-workflow>article .button{margin-top:7px}
+.director-literary-workflow>details{min-width:0;overflow-wrap:anywhere}
+@media(max-width:650px){.director-literary-workflow{gap:10px}.director-literary-workflow>.button{width:100%;justify-self:stretch}}
