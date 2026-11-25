@@ -525,7 +525,9 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch){
  if(workId)searches.push({lang:'openlibrary',url:'https://openlibrary.org/works/'+workId+'.json',kind:'bibliography_candidate'});
  await Promise.all(searches.map(async task=>{
   try{
-   const resp=await fetcher(task.url,{redirect:'error',headers:{accept:'application/json','user-agent':'WORLD-TOON/2.0 literature research'},signal:AbortSignal.timeout(8000)});
+   const resp=await fetcher(task.url,{redirect:'manual',headers:{accept:'application/json','user-agent':'WORLD-TOON/2.0 (https://worldtoon.chenzhe223.workers.dev/) literature research'},signal:AbortSignal.timeout(10000)});
+   // Workers supports manual/follow, not error. Never follow an untrusted redirect.
+   if(resp.status>=300&&resp.status<400)throw Error('来源重定向，已安全拦截');
    if(!resp.ok)throw Error('HTTP '+resp.status);
    const payload=await resp.json();
    if(task.lang==='openlibrary'){
@@ -539,7 +541,7 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch){
      results.push({title,url:link.href,excerpt,kind:task.kind,source:'Wikipedia ('+task.lang+')',rights:'CC BY-SA; source attribution required',verification_status:'candidate_unverified'});
     }
    }
-  }catch(err){warnings.push(task.lang+' 候选资料暂不可用：'+String(err.message||err).slice(0,80))}
+  }catch(err){warnings.push(({zh:'中文百科',en:'英文百科',openlibrary:'Open Library'}[task.lang]||'资料来源')+' 暂不可用：'+(/HTTP \d{3}/.test(String(err.message))?String(err.message).match(/HTTP \d{3}/)[0]:String(err.message).includes('重定向')?'来源重定向已拦截':'网络请求失败，请重试或手动补充来源'))}
  }));
  return {items:results.sort((a,b)=>a.url.localeCompare(b.url)).slice(0,7),warnings,verification_status:'candidate_unverified',retrieved_at:new Date().toISOString(),note:'公开目录及百科仅为候选资料。须确认作品版本、作者、实际故事和出版来源，不得将搜索匹配当成事实核验。'};
 }
