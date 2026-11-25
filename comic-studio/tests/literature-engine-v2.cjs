@@ -82,6 +82,20 @@ const req=(path,body)=>{const url=new URL('https://fixture.example/api/archive/'
  assert.equal(sample.schema,'literary_sources_v3');assert.ok(sample.items.length>=3);assert.ok(sample.items.every(x=>!x.title.includes('偶像')&&!x.url.endsWith('/Author')&&!x.url.endsWith('/Human_Acts')&&x.relevance_score>=70&&/[一-龥]{2}/.test(x.excerpt)));
  const nothing=await collector('不存在的作品｜Imaginary title','',async(url)=>Response.json({query:{pages:[{title:'偶像来了',extract:'这是与选题无关的电视综艺节目',fullurl:new URL(url).origin+'/wiki/Idol'}]}}));
  assert.equal(nothing.items.length,0);
+ let paid=0,bookDetail=0;
+ const fetchBook=async(url,opts)=>{
+  const u=new URL(url);
+  if(u.hostname==='api.deepseek.com'){paid++;return Response.json({choices:[{message:{content:JSON.stringify({items:[{index:0,summary_zh:'测试小说围绕两个人物的生活抉择展开，考察家庭关系、责任和个人自由的冲突；这是一条合成的中文资料整理结果，不能作为真实作品资料。'}]})}}]});}
+  if(u.pathname==='/search.json')return Response.json({docs:[{title:'Other Book',author_name:['Fixture Author'],subject:['Fiction'],key:'/works/OL1W'},{title:'Fixture Book',author_name:['Wrong Author'],subject:['Fiction'],key:'/works/OL2W'},{title:'Fixture Book',author_name:['Fixture Author'],subject:['Fiction'],key:'/works/OL3W'}]});
+  if(u.pathname==='/works/OL3W.json'){bookDetail++;return Response.json({title:'Fixture Book',description:'This synthetic fictional novel follows two characters and their choices in a family, exploring the tensions between responsibility and freedom. It is solely an invented software test.'});}
+  return Response.json({query:{pages:[]}});
+ };
+ const free=await collector('测试小说｜Fixture Book','',fetchBook,{author:'Fixture Author'});
+ assert.equal(free.items.length,0);assert.equal(paid,0);
+ const translated=await collector('测试小说｜Fixture Book','',fetchBook,{author:'Fixture Author',translate:true,key:'synthetic-test-only'});
+ assert.equal(paid,1);assert.equal(bookDetail,2);assert.equal(translated.items.length,1);assert.ok(translated.items[0].url.endsWith('/OL3W'));assert.ok(translated.items[0].summary_type.includes('中文整理'));
+ const badAuthor=await collector('少年来了｜Human Acts','',async()=>Response.json({query:{pages:[]}}),{author:'Wrong Author'});
+ assert.equal(badAuthor.items.length,0);
  console.log('LITERATURE V3 PASS: exact work, wrong-title and author-page rejection, Chinese-only, free collection');
  console.log('LITERATURE V2 WORKER ROUTE PASS: candidate sources, auth, input gate, grounded response, ordinary DeepSeek, static module allowlist (mocked upstream)');
 })().catch(e=>{console.error(e);process.exitCode=1});
