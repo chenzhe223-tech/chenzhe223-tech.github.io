@@ -93,6 +93,7 @@ function wfLiteraryReview(p){
  return p?.literaryReviewGuide?.schema==='davylab.worldtoon.literary-review.v1'&&
   /文学导读/.test(String(p?.category||''));
 }
+function wfLiteraryResearchRequired(p){return wfLiteraryReview(p)&&p?.literaryResearchScope==='topic_literature_v2';}
 function wfLiterarySelection(p){
  const source=p?.storySourceSelection||null;
  if(!wfLiteraryReview(p))return source;
@@ -109,7 +110,7 @@ function wfLiteraryReviewGuide(p){
   '画格'+range(a+1,b)+'：揭示什么人生哲学——作者的文本观点与漫画编辑的独立解读分开标注；通过原创抽象隐喻讨论人性、尊严、自由、关系或选择，不伪造作者原话。',
   '画格'+range(b+1,n)+'：对普通人有什么意义——原创当代普通人物与日常困境，用新设计的场景和行动呈现现实启发，结尾留下一个有传播价值的问题；不复用原著角色或典型剧情。',
   '作品完整形态：1张独立封面＋'+p.panels.length+'张竖版独立漫画，适合手机阅读，中文字通过独立文字层准确排版，封面展示真实作品名、作者及“文学导读·原创评论”，不能暗示原作者或版权方授权。',
-  '【来源与版权门禁】任务附 literary-research.json，先独立核对报告的来源及具体主线，作者内容审阅不代表独立事实核验。若研究或分镜有误，须修订并重新锁定；不得直接绘制错误内容。先核实作品名/作家/出版信息/可信介绍、故事主线与原作主题；每个故事事实和思想解释须提供来源依据；未核实则不得生图；陌生读者须能从成品回答人物、主线、核心冲突、思想与现实意义；只有搜索结果或封底简介时不得脑补完整情节。保留来源链接、书目版本、事实与编辑观点区分；评介模式可能降低改编风险但不是法定免责，引用及视觉素材仍按发布地区独立检查。'
+  '【来源与版权门禁】'+(wfLiteraryResearchRequired(p)?'任务附 literary-research.json，先独立核对报告的来源及具体主线，作者内容审阅不代表独立事实核验。若研究或分镜有误，须修订并重新锁定；不得直接绘制错误内容。':'')+'先核实作品名/作家/出版信息/可信介绍、故事主线与原作主题；每个故事事实和思想解释须提供来源依据；未核实则不得生图；陌生读者须能从成品回答人物、主线、核心冲突、思想与现实意义；只有搜索结果或封底简介时不得脑补完整情节。保留来源链接、书目版本、事实与编辑观点区分；评介模式可能降低改编风险但不是法定免责，引用及视觉素材仍按发布地区独立检查。'
  ].join('\n');
 }
 function wfCanTask(p){const missing=[];if(!p?.title?.trim())missing.push('作品名称');const ss=wfLiterarySelection(p);
@@ -400,7 +401,7 @@ async function wfMakeTask(p){
  wfInitTask(p);
  if(typeof wtArchiveKey==='function'){const key=await wtArchiveKey(p);p.handoff.taskId='WT-'+key.slice(0,20)}
  const task=wfTaskObject(p);
- if(wfLiteraryReview(p)){const research=p.literaryResearch;if(!research||!p.literaryReviewReceipt?.author_content_reviewed)throw Error('文学研究与专项审核缺失');task.adaptation.literary_review.research_file='literary-research.json';task.adaptation.literary_review.author_content_reviewed=true;task.adaptation.literary_review.independent_verification_required=true;}
+ if(wfLiteraryResearchRequired(p)){const research=p.literaryResearch;if(!research||!p.literaryReviewReceipt?.author_content_reviewed)throw Error('文学研究与专项审核缺失');task.adaptation.literary_review.research_file='literary-research.json';task.adaptation.literary_review.author_content_reviewed=true;task.adaptation.literary_review.independent_verification_required=true;}
  const prompt=wfIsHub(p)?wfHubProductionPrompt(p,task):wfPrompt(p);
  const bible=wfProductionBible(p,task);
  const blockers=bible.conflicts.filter(x=>/REVIEW_REQUIRED|REVISION_REQUIRED/.test(x.code));
@@ -461,7 +462,7 @@ async function wfMakeTask(p){
  const files=[{name:'00_START_HERE.md',bytes:enc.encode(wfStartHere(p,task,launch))},
  {name:task.producer+'_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
  {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(wfIsHub(p)?launch+'\n\n'+prompt:prompt)},{name:'交接说明.txt',bytes:enc.encode((task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
- if(wfLiteraryReview(p)){const {input_signature,...research}=p.literaryResearch;files.push({name:'literary-research.json',bytes:enc.encode(JSON.stringify({schema:'davylab.worldtoon.literary-research.v2',task_id:task.task_id,creative_lock_hash:bible.creative_lock_hash,research,author_content_reviewed:true,author_reviewed_at:p.literaryReviewReceipt.reviewed_at,independent_verification_required:true},null,2))});}
+ if(wfLiteraryResearchRequired(p)){const {input_signature,...research}=p.literaryResearch;files.push({name:'literary-research.json',bytes:enc.encode(JSON.stringify({schema:'davylab.worldtoon.literary-research.v2',task_id:task.task_id,creative_lock_hash:bible.creative_lock_hash,research,author_content_reviewed:true,author_reviewed_at:p.literaryReviewReceipt.reviewed_at,independent_verification_required:true},null,2))});}
  const taskZip=packZip(files);
  if(wfIsHub(p)){
   try{
@@ -544,9 +545,10 @@ const prompts=[
 function makePanel(i,seed=false){let p=prompts[i];return {id:uid(),title:seed?p[0]:`第 ${i+1} 格`,scene:seed?p[1]:'',caption:seed?p[2]:'',dialogue:seed?p[3]:'',prompt:'',image:seed?`assets/${assetNames[i]}`:''}}
 function sampleProject(){let t=now();return {id:'sample-ba-zong-001',title:'霸总的小爱情',subtitle:'爱情与权力的九格寓言',description:'虚构的芯片霸总与神秘女友，卷入由舆论、政治与商业交织而成的风暴。',category:'商业财经',tone:'黑色幽默',format:'九格短篇',status:'示例',archived:false,deleted:false,createdAt:t,updatedAt:t,sourceTitle:'跨国科技与政治风波（虚构主题）',sourceURLs:'',eventDate:'',factNotes:'这是原创虚构演示故事，不代表对某一真实案件的核验或报道。',fiction:'人物、国家符号、人物间交易、关系及情节均为虚构；避免推断到真实个人。',characters:'芯片霸总／神秘女友／虚构政客／虚构执法人员／鹰兔象征',disclosure:'本故事纯属虚构，不应据此推断任何现实人物违法、私人关系或政治交易。',panels:prompts.map((_,i)=>makePanel(i,true)),checks:Array(6).fill(false),activity:[{at:t,detail:'内置示例作品已建立'}],reviewedAt:null,publishedAt:null,cover:'assets/cover.png'};}
 function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',title:topic?.title?`${topic.title}：漫画改编`:'未命名新作',subtitle:'',description:topic?.summary||'',category:topic?.category||'AI 科技',tone:'黑色幽默',format:'九格短篇',status:'草稿',archived:false,deleted:false,createdAt:t,updatedAt:t,sourceTitle:topic?.title||'',sourceURLs:topic?.source||'',eventDate:topic?.eventDate||'',eventDateBasis:topic?.eventDateBasis||'',newsPublishedAt:topic?.publishedAt||'',factNotes:'',fiction:'',characters:'',disclosure:'本作品是基于公共议题创作的虚构漫画，不构成对真实人物的指控。',panels:Array.from({length:9},(_,i)=>makePanel(i)),checks:Array(6).fill(false),activity:[{at:t,detail:'创建草稿'}],reviewedAt:null,publishedAt:null,cover:''};
- if(topic?.category==='诺奖文学'||topic?.sourceId==='nobel_literature'){
+ if(topic&&(/^(诺奖文学|世界文学|文学导读|世界文学导读|诺奖文学导读)$/.test(topic.category||'')||['nobel_literature','literary_series','classics'].includes(topic.sourceId))){
   if(!['licensed_adaptation','public_domain_verified_region'].includes(topic?.rightsStatus)){
-   p.category='诺奖文学导读';
+   p.category=topic.category==='诺奖文学'||topic.sourceId==='nobel_literature'?'诺奖文学导读':'世界文学导读';
+   p.literaryResearchScope='topic_literature_v2';
    p.title='读懂｜'+String(topic.title||'待核验文学作品')+'：故事·哲学·人生';
    p.handoff={mode:'hotspot'};
    p.storySourceSelection={source_id:topic.sourceId||'nobel_literature',title:topic.title||'',source:topic.source||'',type:'nobel_literature',
@@ -556,8 +558,8 @@ function emptyProject(topic){let t=now();let p={id:uid(),topicId:topic?.id||'',t
    p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
     source_title:topic.title||'',source_url:topic.source||'',source_status:'pending_research',
     dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
-    panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
-   p.description='针对已核实的作品进行原创文学导读：前1/3篇幅介绍作品讲了什么；中1/3篇幅独立解读人生哲学；后1/3篇幅通过原创生活场景解释对普通人的意义。不得逐幕复刻原著情节、照搬人物形象或对白；先核实作者与诺奖关系。';
+    panel_ranges:[[1,4],[5,7],[8,9]],protect_original_expression:true};
+   p.description='针对已核实的作品进行原创文学导读：九格默认前4格讲清故事、人物、冲突与转折；中3格独立解读人生哲学；后2格通过原创生活场景解释对普通人的意义。不得逐幕复刻原著情节、照搬人物形象或对白；先核实作者与诺奖关系。';
    p.fiction='文学评论和原创读者视角，不是小说剧情改编；文学事实须有可靠来源，哲学观点属于编辑解读。';
    p.disclosure='原创文学导读与评论漫画，非原著漫画改编；未取得授权不复刻原著具体场景、插画、台词或大量文字。';
   }
