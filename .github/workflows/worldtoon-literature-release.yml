@@ -62,6 +62,8 @@ jobs:
               const candidate=await collect('少年来了 | Human Acts','https://www.nobelprize.org/prizes/literature/2024/han/interview/',fetch,{author:'Han Kang'});
               console.log(JSON.stringify({public_upstream:candidate.items.map(x=>({title:x.title,source:x.source,url:x.url})),warnings:candidate.warnings}));
               assert.ok(candidate.items.length>=3,'Human Acts must have multiple work-specific Chinese candidates');
+              assert.equal(candidate.schema,'literary_sources_v3');
+              assert.ok(candidate.items.some(x=>x.source.includes('韩国文学翻译院')));
               assert.ok(candidate.items.every(x=>x.relevance_score>=70&&/[一-龥]{2}/.test(x.excerpt)&&!x.title.includes('偶像来了')));
               const authoritative=candidate.items.find(x=>x.url.includes('library.ltikorea.or.kr'));assert.ok(authoritative);
               const original=await fetch(authoritative.url,{signal:AbortSignal.timeout(20000)});assert.ok(original.ok,'Official Korean literature source reachable');
