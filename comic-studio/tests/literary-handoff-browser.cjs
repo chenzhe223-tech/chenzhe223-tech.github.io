@@ -112,7 +112,7 @@ function zipStoreEntries(buffer){
    window.__literaryMockCalls=[];
    wtArchiveApi=async (route,opts)=>{
     window.__literaryMockCalls.push({route,body:JSON.parse(opts.body)});
-    if(route==='literary-sources')return {items:[{title:'合成文学测试作品',url:'https://example.org/book',excerpt:fixture,source:'Synthetic fixture'}],warnings:[]};
+    if(route==='literary-sources')return {schema:'literary_sources_v3',items:[{title:'合成文学测试作品',url:'https://example.org/book',excerpt:fixture,source:'测试资料',source_language:'中文',relevance_score:95}],warnings:[]};
     if(route!=='deepseek-expand')throw Error('Unexpected synthetic route');
     const dims=['story','philosophy','relevance'];
     return {method:'verified_model_response',model:'synthetic-browser-fixture',story:{research:{status:'draft',plot_summary:'测试主线',claims:[{id:'C1',claim:'合成测试事实',source_url:'https://example.org/book',evidence_note:'读者观察主人公面对两难选择'}],evaluation:{structural_pass:true}},panels:Array.from({length:9},(_,i)=>({title:'测试画格'+(i+1),scene:'原创读者坐在明亮的图书馆，透过抽象纸片分析日常选择与责任，逐格展示不同的原创视觉隐喻。',caption:'测试旁白'+(i+1),dialogue:'',visual_prompt:'原创评论漫画，不复刻原著',dimension:dims[i<4?0:i<7?1:2],claim_refs:[1]}))}};
