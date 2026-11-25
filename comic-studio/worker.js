@@ -537,9 +537,9 @@ async function wtLiterarySourceCandidates(title,source,fetcher=fetch,options={})
  }
  // Work-specific editorial leads, checked against actual source pages. Not live crawl or independent fact verification.
  if(human){
-  candidate({heading:'Human Acts',text:'韩江的长篇小说《少年来了》以1980年韩国光州民主化运动为背景。作品借少年及其他人物的视角，追问历史暴力如何影响个体生命，叙事跨越事件发生的年代与后来的人生。韩国文学翻译院数字图书馆提供作品与创作背景介绍。',url:'https://library.ltikorea.or.kr/originalworks/101593',lang:'英文及韩文',provider:'韩国文学翻译院数字图书馆',kind:'作品介绍',score:98,reviewed:true});
+  candidate({heading:'Human Acts',text:'韩江的长篇小说《少年来了》以1980年韩国光州民主化运动为背景，以少年东浩的死亡串起不同人物的命运。全书由六章与尾声构成，叙述从东浩及其朋友正戴，转向幸存者恩淑、振秀、善珠和东浩的母亲，最后由作家本人在尾声回望历史。作品关注幸存者多年后仍无法摆脱的创伤、负疚与记忆，讨论人在暴力面前的尊严和相互承担的责任。',url:'https://library.ltikorea.or.kr/originalworks/101593',lang:'英文及韩文',provider:'韩国文学翻译院数字图书馆',kind:'故事主线与人物命运',score:98,reviewed:true});
   candidate({heading:'少年來了',text:'韩江小说《少年来了》的中文译本资料由韩国文学翻译院旗下韩国文学平台收录，中文简介来自漫游者出版社。简介写到少年面对母亲与身边人的劝告，仍选择留下；这是理解人物选择、责任与后续命运的重要故事线索，具体细节应回看原文。',url:'https://klwave.or.kr/klw/books/26158/translatedView.do',lang:'中文',provider:'韩国文学翻译院·中文译本资料',kind:'人物与故事线索',score:97,reviewed:true});
-  candidate({heading:'Human Acts',text:'韩江的小说《少年来了》由韩国昌批出版社出版，英国格兰塔出版社发行英文版。英国版出版页面提供作品介绍及作者相关资料，可用于核对该书的出版身份和文学主题。',url:'https://granta.com/products/human-acts/',lang:'英文',provider:'英国格兰塔出版社',kind:'出版与作品资料',score:95,reviewed:true});
+  candidate({heading:'Human Acts',text:'英国格兰塔出版社的韩江小说《少年来了》英文版介绍，将少年的寻友经历与其他人物的生命遭遇联系起来。相互关联的章节呈现幸存者及家属如何面对失去、审查、否认以及宽恕的难题；过去的创伤并未随时间消失。英文版译者为黛博拉·史密斯。该资料可补充作品主线与主题分析，不应将出版社评价误作作者原话。',url:'https://granta.com/products/human-acts/',lang:'英文',provider:'英国格兰塔出版社',kind:'出版与作品资料',score:95,reviewed:true});
   candidate({heading:'Human Acts',text:'韩江的小说《少年来了》以历史创伤为重要主题。中国出版传媒商报的作者访谈谈到作者童年离开光州的经历，以及她在创作这部长篇小说时对暴力问题的持续思考。这条资料适合用于理解创作背景，不应替代小说情节。',url:'https://www.cbbr.com.cn/contents/533/94689.html',lang:'中文',provider:'中国出版传媒商报',kind:'作者访谈与创作背景',score:92,reviewed:true});
  }
  const searches=['zh','en'].map(lang=>{
