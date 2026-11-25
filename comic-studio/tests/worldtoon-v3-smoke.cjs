@@ -48,7 +48,9 @@ const qaContext={
    contains:()=>true
  }
 };
-vm.runInNewContext(review,qaContext,{filename:'worldtoon-v3-review.js'});
+const qaModule=review.split('/* WORLD/TOON V4 runtime, embedded in an allowed first-party asset */')[0];
+assert.ok(qaModule.length<review.length,'isolate original QA module from later workspace registrations');
+vm.runInNewContext(qaModule,qaContext,{filename:'worldtoon-v3-review.js'});
 const qaHtml=qaContext.publish();
 assert.equal((qaHtml.match(/class="wt3-qa-item/g)||[]).length,8,'8 separate review cards');
 assert.equal((qaHtml.match(/data-wt3-qa-action=/g)||[]).length,1,'only clearing is bulk; no one-click quality approval');
