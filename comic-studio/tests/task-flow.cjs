@@ -94,8 +94,8 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  const literaryStartup=new TextDecoder().decode(literary.captures.files.find(x=>x.name==='ChatGPT_复制粘贴开工指令.txt').bytes);
  assert.match(literaryStartup,/撒旦探戈/);
  assert.match(literaryStartup,/三维文学导读/);
- assert.match(literaryStartup,/01–03/);
- assert.match(literaryStartup,/不得逐幕复刻原著情节/);
+ assert.match(literaryStartup,/01–04/);
+ assert.match(literaryStartup,/不(?:得|能)逐幕(?:复刻|重绘)|禁止未经授权以任何方式逐幕搬演/);
  assert.ok(!literaryStartup.includes('全球热点虚构改编'));
  assert.equal(literary.task.adaptation.source_selection.adaptation,'literary_review');
  assert.equal(literary.task.research_required,true,'literary review requires verifiable sources');
