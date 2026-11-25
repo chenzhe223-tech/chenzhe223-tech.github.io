@@ -8,9 +8,10 @@ const api=fs.readFileSync(path.join(__dirname,'../archive.js'),'utf8');
 const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 const css=fs.readFileSync(path.join(__dirname,'../worldtoon-v3.css'),'utf8');
 
+assert.match(api,/repair\?130000/,'only authorized literary repair extends timeout');
 assert.match(api,/deepseek-expand'\)\?75000/,'DeepSeek must have a dedicated 75s timeout, not the generic 15s');
 assert.match(html,/worldtoon-v3\.js\?v=5\.6\.0-literature-v2/,'updated story engine must bust stale service worker cache');
-assert.match(html,/archive\.js\?v=4\.6\.3-single-frame/,'API client timeout fix must load');
+assert.match(html,/archive\.js\?v=5\.7\.1-literature-repair/,'API client timeout fix must load');
 assert.match(css,/\.wt3-expand-feedback\[data-state="error"\]/,'errors must stay visible in the story editor');
 
 function setup(apiBehavior){
