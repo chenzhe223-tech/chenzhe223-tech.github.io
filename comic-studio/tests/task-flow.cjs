@@ -90,7 +90,7 @@ async function simulate({mode='hotspot',source='',topicSource='',facts='',fictio
  assert.ok(noSource.prompt.includes('verified_sources'));
  assert.ok(!noSource.captures.messages.some(x=>x.includes('请先补齐')));
  assert.equal(noSource.project.handoff.repoQueuedAt==null,true,'Local ZIP is not GitHub delivery');
- const conflicting=await simulate({characters:'单亲妈妈林晓、AI小算',expectRejected:true});
+ const conflicting=await simulate({characters:'单亲妈妈：林晓、AI：小算',expectRejected:true});
  assert.equal(conflicting.captures.saved.length,0,'preflight failure must not create a ZIP');
  assert.equal(conflicting.project.handoff.taskId,undefined,'failed preflight must not leave a fake task ID');
  assert.equal(conflicting.project.handoff.phase,undefined,'failed preflight must not mark task as ready');
