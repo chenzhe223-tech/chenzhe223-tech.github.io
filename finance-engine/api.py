@@ -8,13 +8,14 @@ from market import route
 from sec_provider import SEC
 
 class FinanceAPI:
-    def __init__(self,token,market_providers=(),search_providers=(),sec=None,quota=None):
+    def __init__(self,token,market_providers=(),search_providers=(),sec=None,quota=None,news=None):
         if not isinstance(token,str) or len(token)<24: raise ValueError("strong internal token required")
         self.token=token
         self.market_providers=tuple(market_providers)
         self.search_providers=tuple(search_providers)
         self.sec=sec
         self.quota=quota
+        self.news=news
     def __call__(self,environ,start_response):
         def reply(code,data,extra=()):
             body=json.dumps(data,ensure_ascii=False,allow_nan=False).encode()
@@ -39,6 +40,28 @@ class FinanceAPI:
                 return v[0]
             if path=="/api/v1/health":
                 return reply("200 OK",{"service":"finance-engine","market_providers":[p.name for p in self.market_providers],"search_providers":[p.name for p in self.search_providers],"sec_configured":self.sec is not None,"live_status":"not_checked"})
+            if path=="/api/v1/news":
+                q=arg("q").strip().casefold()
+                limit=int(arg("limit","20"))
+                if not 1<=limit<=100: raise ValueError("invalid limit")
+                if self.news is None:
+                    return reply("503 Service Unavailable",{"status":"unavailable","reason":"news provider not configured"})
+                doc=self.news()
+                if doc.get("status") not in ("ok","partial"):
+                    return reply("503 Service Unavailable",{"status":"unavailable"})
+                from datetime import datetime, timezone, timedelta
+                now=datetime.now(timezone.utc)
+                generated=datetime.fromisoformat(doc["generated_at"].replace("Z","+00:00"))
+                if not now-timedelta(hours=24)<=generated<=now+timedelta(minutes=5):
+                    return reply("503 Service Unavailable",{"status":"unavailable","reason":"stale news snapshot"})
+                rows=[]
+                for row in doc["stories"]:
+                    stamp=datetime.fromisoformat(row["published_at"].replace("Z","+00:00"))
+                    if not now-timedelta(days=7)<=stamp<=now+timedelta(minutes=5): continue
+                    if q and q not in (row["title"]+" "+row["source"]).casefold(): continue
+                    rows.append(row)
+                rows.sort(key=lambda row:datetime.fromisoformat(row["published_at"].replace("Z","+00:00")),reverse=True)
+                return reply("200 OK",{"status":doc["status"],"generated_at":doc["generated_at"],"stories":rows[:limit],"horizon_status":doc.get("horizon_status","unknown")})
             if path=="/api/v1/history":
                 result=route(self.market_providers,arg("symbol"),arg("exchange"),int(arg("days","90")))
                 return reply("200 OK" if result["status"]=="ok" else "503 Service Unavailable",result)
