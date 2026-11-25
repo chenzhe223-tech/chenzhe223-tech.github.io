@@ -1,9 +1,35 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-24T11:06:07+00:00",
-  "count": 77,
+  "checked_at": "2026-11-25T09:55:57+00:00",
+  "count": 80,
   "articles": [
+    {
+      "id": "ext-0b260d07579db8478e",
+      "title": "Three LLM inflection points in twelve months",
+      "summary": "I gave a keynote at the AI Engineer Code Summit a couple of weeks ago, constructed around the idea that there have been three significant inflection points in the abilities of LLMs and coding agents in the past",
+      "date": "2026-11-24",
+      "original_url": "https://simonwillison.net/2026/Nov/24/llm-inflection-points/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-2d9b2b8de4028adf75",
+      "title": "GPT 6.2 Astra Solves a Historical Mystery",
+      "summary": "GPT 6.2 Astra Solves a Historical Mystery Here's an interesting case-study in using GPT-6.2 Astra for historical research, from history professor Mark Humphries: With only minimal prompting, GPT-6.2 Astra was a",
+      "date": "2026-11-24",
+      "original_url": "https://simonwillison.net/2026/Nov/24/astra-historical-mystery/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
     {
       "id": "ext-bfe39e5b176c7b576e",
       "title": "datasette-charts 0.2a0",
@@ -20,13 +46,26 @@
     {
       "id": "ext-cde2e4331c947b3b86",
       "title": "datasette-agent 0.7a1",
-      "summary": "Release: datasette-agent 0.7a1 I small improvement to Datasette Agent : chat sessions can open an iframe side panel, and that panel can then navigate to different pages. This version improves navigation by frag",
+      "summary": "Release: datasette-agent 0.7a1 A small improvement to Datasette Agent : chat sessions could already open an iframe side panel that could then navigate to different pages. This version improves navigation by fra",
       "date": "2026-11-24",
       "original_url": "https://simonwillison.net/2026/Nov/24/datasette-agent/",
       "source": "Simon Willison 技术观点",
       "source_kind": "independent_original",
       "tags": [
         "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-6a28e842b3bf4bfd84",
+      "title": "Microduck Obstacle Avoidance: A Sim2Real Workflow with Isaac Lab and Newton",
+      "summary": "",
+      "date": "2026-11-24",
+      "original_url": "https://huggingface.co/blog/nvidia/microduck-obstacle-avoidance",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
       ],
       "verification": "original_source_metadata_not_independently_verified"
     },
@@ -499,6 +538,19 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
+      "id": "ext-6841e619fcd7e8d937",
+      "title": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
+      "summary": "",
+      "date": "2026-11-13",
+      "original_url": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
       "id": "ext-4cb58a6ed2a63999ae",
       "title": "datasette-cluster-map 0.19",
       "summary": "Release: datasette-cluster-map 0.19 One of the oldest Datasette plugins, and still one of my favorites. It now works with Datasette 1.0a42, and depends on the new datasette-leaflet to ensure OpenStreetMap tiles",
@@ -530,19 +582,6 @@
       "summary": "",
       "date": "2026-11-13",
       "original_url": "https://huggingface.co/blog/nvidia/simready-assets-robot-pick-and-place",
-      "source": "Hugging Face 博客",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外AI观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
-      "id": "ext-6841e619fcd7e8d937",
-      "title": "llama.cpp v1.0.0 : A stronger foundation for the local AI ecosystem",
-      "summary": "",
-      "date": "2026-11-13",
-      "original_url": "https://huggingface.co/blog/ggml-org/llama-cpp-v1",
       "source": "Hugging Face 博客",
       "source_kind": "independent_original",
       "tags": [

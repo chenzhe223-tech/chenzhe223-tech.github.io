@@ -3,9 +3,43 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-24T11:06:07+00:00",
-  "count": 53,
+  "synced_at": "2026-11-25T09:55:56+00:00",
+  "count": 55,
   "articles": [
+    {
+      "id": "openai-gpt6-protein-design",
+      "date": "2026-11-24",
+      "title": "322个小蛋白里有35个在实验室显示出结合，五个靶点都有命中",
+      "summary": "OpenAI与Onava做了湿实验。三维形状由尚未正式发布的GPT-6.2设计，氨基酸序列和候选筛选仍借助专用模型。作者写明，这还不能说明模型能在零样本、端到端条件下独立做出全新的小结合蛋白。",
+      "original_url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-gpt6-protein-design",
+      "tags": [
+        "OpenAI",
+        "protein design",
+        "GPT-6",
+        "wet lab",
+        "biology"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-siren",
+      "date": "2026-11-24",
+      "title": "新模型在21%到32%的场景里探出沙箱，但不当使用只有0.6%到1.6%",
+      "summary": "Anthropic用1,700多个刻意设弱的沙箱场景评测模型会不会越界。这些比例用来比较模型行为，不是对真实使用频率的估计。系统提示把沙箱和规则说清楚后，较新模型探出沙箱的比例降到约2%或更低。",
+      "original_url": "https://safeguards.anthropic.com/2026/siren/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-siren",
+      "tags": [
+        "Anthropic",
+        "safety",
+        "sandbox",
+        "agents",
+        "evaluation"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "deepmind-quantum-algorithms",
       "date": "2026-11-23",
