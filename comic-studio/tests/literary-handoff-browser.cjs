@@ -73,7 +73,7 @@ function zipStoreEntries(buffer){
   assert.match(startup,/与 ZIP 一起发送|同时附有 WORLD_TOON 任务 ZIP/);
   assert.match(entries.get('00_START_HERE.md').toString('utf8'),/同一条用户消息中上传整个 ZIP/);
   assert.equal(await page.locator('[data-wf="copy"]').count(),1,'startup-copy action remains visible beside ZIP download');
-  assert.match(await page.locator('.wf-launch-guide').innerText(),/同一条消息/,'UI warns against attachment-only submission');
+  assert.match(await page.locator('.wf-launch-guide').innerText(),/不能仅上传 ZIP|同一条消息/,'UI warns against attachment-only submission');
   await page.evaluate(()=>{window.__wtCopiedCommand='';copyText=async value=>{window.__wtCopiedCommand=String(value)};});
   await page.locator('[data-wf="copy"]').click();
   await page.waitForFunction(()=>!!window.__wtCopiedCommand,{timeout:10000});
@@ -114,11 +114,20 @@ function zipStoreEntries(buffer){
     window.__literaryMockCalls.push({route,body:JSON.parse(opts.body)});
     if(route==='literary-sources')return {items:[{title:'合成文学测试作品',url:'https://example.org/book',excerpt:fixture,source:'Synthetic fixture'}],warnings:[]};
     if(route!=='deepseek-expand')throw Error('Unexpected synthetic route');
-    const dims=['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'];
-    return {method:'verified_model_response',model:'synthetic-browser-fixture',story:{research:{status:'draft',plot_summary:'测试主线',claims:[{id:'C1',claim:'合成测试事实',source_url:'https://example.org/book',evidence_note:'读者观察主人公面对两难选择'}],evaluation:{structural_pass:true}},panels:Array.from({length:9},(_,i)=>({title:'测试画格'+(i+1),scene:'原创读者坐在明亮的图书馆，透过抽象纸片分析日常选择与责任，逐格展示不同的原创视觉隐喻。',caption:'测试旁白'+(i+1),dialogue:'',visual_prompt:'原创评论漫画，不复刻原著',dimension:dims[i<4?0:i<7?1:2],claim_refs:['C1']}))}};
+    const dims=['story','philosophy','relevance'];
+    return {method:'verified_model_response',model:'synthetic-browser-fixture',story:{research:{status:'draft',plot_summary:'测试主线',claims:[{id:'C1',claim:'合成测试事实',source_url:'https://example.org/book',evidence_note:'读者观察主人公面对两难选择'}],evaluation:{structural_pass:true}},panels:Array.from({length:9},(_,i)=>({title:'测试画格'+(i+1),scene:'原创读者坐在明亮的图书馆，透过抽象纸片分析日常选择与责任，逐格展示不同的原创视觉隐喻。',caption:'测试旁白'+(i+1),dialogue:'',visual_prompt:'原创评论漫画，不复刻原著',dimension:dims[i<4?0:i<7?1:2],claim_refs:[1]}))}};
    };
   });
   await page.locator('[data-director-step="2"]').click();
+  for(const width of [1180,390]){
+   await page.setViewportSize({width,height:844});
+   const metrics=await page.locator('.director-literary-workflow').evaluate(el=>{
+    const fields=[...el.querySelectorAll('textarea[data-literary-input]')].map(t=>t.getBoundingClientRect());
+    return {aligned:Math.abs(fields[0].left-fields[1].left)<2&&Math.abs(fields[0].width-fields[1].width)<2,stacked:fields[1].top>=fields[0].bottom,fullWidth:fields[0].width>el.clientWidth-45};
+   });
+   assert.ok(metrics.aligned&&metrics.stacked&&metrics.fullWidth,'literary research fields must align at '+width+'px: '+JSON.stringify(metrics));
+  }
+  await page.setViewportSize({width:1180,height:800});
   await page.locator('[data-director-action="literary-collect"]').click();
   await page.locator('[data-director-action="literary-add-source"]').first().click();
   assert.match(await page.locator('[data-literary-input="evidence"]').inputValue(),/来源：https:\/\/example\.org\/book/);
