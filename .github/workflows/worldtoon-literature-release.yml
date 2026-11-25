@@ -41,6 +41,7 @@ jobs:
                 const path=file==='index.html'?'/':'/'+file;
                 const r=await get(path+'?release=5.7.0-literature-sources');
                 assert.equal(r.status,200,file);
+                assert.equal(r.headers.get('x-worldtoon-version'),'5.7.0-literature-sources',file+' release header');
                 const bytes=Buffer.from(await r.arrayBuffer());
                 assert.equal(hash(bytes),hash(readFileSync('comic-studio/'+file)),file+' deployed source mismatch');
                 return {file,status:r.status,sha256:hash(bytes)};
@@ -65,7 +66,7 @@ jobs:
               assert.equal(candidate.schema,'literary_sources_v3');
               assert.ok(candidate.items.some(x=>x.source.includes('韩国文学翻译院')));
               assert.ok(candidate.items.every(x=>x.relevance_score>=70&&/[一-龥]{2}/.test(x.excerpt)&&!x.title.includes('偶像来了')));
-              const authoritative=candidate.items.find(x=>x.url.includes('library.ltikorea.or.kr'));assert.ok(authoritative);
+              const authoritative=candidate.items.find(x=>x.url.includes('library.ltikorea.or.kr'));assert.ok(authoritative);assert.ok(authoritative.excerpt.includes('东浩')&&authoritative.excerpt.includes('恩淑'),'Chinese source notes must actually explain the characters and narrative');
               const original=await fetch(authoritative.url,{signal:AbortSignal.timeout(20000)});assert.ok(original.ok,'Official Korean literature source reachable');
               assert.ok(candidate.items.every(x=>x.verification_status==='candidate_unverified'));
               process.exit(0);
