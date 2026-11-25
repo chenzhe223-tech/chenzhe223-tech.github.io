@@ -54,9 +54,10 @@ jobs:
               assert.match(unauthorized.headers.get('cache-control')||'',/no-store/);
               const model=await get('/api/archive/deepseek-expand',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({mode:'literary_review',idea:'synthetic release test',panel_count:9})});
               assert.equal(model.status,401,'auth gate must block all upstream model calls');
-              console.log(JSON.stringify({result:'PASS',site:base,health:{ok:health.ok,literatureResearchV2:health.features.literatureResearchV2},assets:results,authBoundary:401,paidModelCalls:0},null,2));
+              console.log(JSON.stringify({result:'PRODUCTION_RUNTIME_PASS',site:base,health:{ok:health.ok,literatureResearchV2:health.features.literatureResearchV2,literatureRepairV1:health.features.literatureRepairV1},assets:results,authBoundary:401,paidModelCalls:0},null,2));
               // Exercise the exact collector against the real public upstream, without owner credentials or paid AI.
               const worker=readFileSync('comic-studio/worker.js','utf8');
+              assert.ok(worker.includes('wtLiteraryRepairTarget')&&worker.includes('a.allow_repair===true'));
               const start=worker.indexOf('async function wtLiterarySourceCandidates(');
               const end=worker.indexOf('async function wt3ArchiveV3(',start);
               assert.ok(start>=0&&end>start);
