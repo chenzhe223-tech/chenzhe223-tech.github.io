@@ -81,6 +81,31 @@ function localStoryboardCore(p){
   });
  }
 
+ // Non-topic literary reviews retain their existing editable commentary workflow.
+ if(p.storySourceSelection?.adaptation==='literary_review'){
+  if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
+  const readers=c.cast?.map(x=>clean(x.name)).filter(Boolean);
+  const lead=readers[0]||'原创读者',other=readers[1]||'原创编辑';
+  const notes=[
+   ['为什么值得读',lead+'在原创城市图书馆前观察一本无复制原著封面图案的素面书，桌上有作品书目核验卡与空白笔记，画面克制。','一部作品，首先要读懂它提出的问题。','先核对书目与作者。'],
+   ['作品的世界与主题',other+'把书本放在桌上，用独立设计的时间线示意图与抽象象征物探讨创作背景，避免绘制原作人物和具体故事桥段。','出版背景、人物关系与核心主题须依据可靠来源核对。','我们理解的是作品本身吗？'],
+   ['核心问题不是复述剧情',lead+'与'+other+'在书店阅读区域面对一面三元素抽象墙，分别象征核心主题、冲突与疑问；无原作场景的演绎。','用少量经核验的事实，介绍作品想讨论什么。','读懂问题，比讲完故事更重要。'],
+   ['人物的关键转折',lead+'走到一条由原创几何拱门构成的分岔路，两边光影对照，人物身上没有任何原著角色标识。','本格补充经核实的关键选择、转折与命运走向。','什么才算真正的自由？'],
+   ['我们怎样理解他人',other+'在完全原创的城市公共长椅旁，与不同年龄的普通人相互聆听，背景采用形象化的距离与连接线。','同情、尊严和误解，是可供讨论的文学问题。','我们愿意听完另一个人的故事吗？'],
+   ['哲学没有标准答案',lead+'与'+other+'共同望向由窗外光束照亮的空白笔记纸，笔记只用形状和留白，不描绘原著正文或句子。','这是对作品可能意义的独立阅读，不是作者原话。','读完之后，你会改变哪一种判断？'],
+   ['思想与现实的联系',lead+'在真实感的原创城市地铁站面对一项日常选择，周围人群自然有序，用视线和手势表现犹豫，人物与原作无关。','把阅读带进生活：思考选择如何影响自己。','如果是你，会怎么做？'],
+   ['与亲近的人重新对话',other+'在当代家中与家人交流，桌边的书只用素面道具呈现，人物衣服发型与前格一致，没有原作经典桥段。','阅读也许不能直接解决问题，却能帮助理解他人。','我可以先认真听你说。'],
+   ['读完仍有一个问题',lead+'与'+other+'在清晨城市书店外合上一本素面书，远处一条宽阔人行道通向新的一天，留出标题及结尾提问的独立排版区。','故事会结束，思考仍在继续。','这部作品让你想起了谁？']
+  ];
+  return Array.from({length:p.panels.length},(_,i)=>{const n=p.panels.length,a=Math.min(n-2,Math.max(2,Math.round(n*4/9))),b=Math.min(n-1,a+Math.max(1,Math.round(n*3/9)));const dimension=i<a?0:i<b?1:2;const row=notes[Math.min(8,Math.floor(i*9/n))];return ({
+   title:row[0],scene:'【'+shotOf(i)+'】'+row[1]+' 本图是三维文学导读的原创编辑插画，不得重绘《'+subject+'》的受保护具体情节或独特人物，人物脸型、服饰、材质与上格连续。',
+   caption:row[2],dialogue:row[3],
+   prompt:'高品质国际文化杂志导读插画，原创现实隐喻，单画面无文字无对白气泡；'+
+    (dimension===0?'第一维度：作品讲了什么（事实待研究核验）':dimension===1?'第二维度：揭示什么人生哲学（独立评论）':'第三维度：对普通人的意义（原创当代人物）')+
+    '；'+shotOf(i)+'；'+style(c.styleId).material+'；'+style(c.styleId).lighting
+  })});
+ }
+
  const a=clean(c.cast?.[0]?.name)||'主人公',b=clean(c.cast?.[1]?.name)||'搭档';
  const time=/时间机器|time machine|时空|穿越/i.test(subject);
  const object=time?'一台刻有同心圆刻度的铜制时间机器':/经典|文学|历史/.test(p.category||'')?'泛黄的手稿与一张重要的旧地图':'一份记录着矛盾证词的公开档案';
@@ -176,7 +201,7 @@ function localStoryboardCore(p){
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
 }
 function localStoryboard(p){
- const rows=localStoryboardCore(p);if(isLiteraryProject(p))return rows;
+ const rows=localStoryboardCore(p);if(p.storySourceSelection?.adaptation==='literary_review')return rows;
  const seen=new Map(),followups=[
  ['重新核查前一格提出的证据','先把这件事确认清楚'],
  ['注意到行动中尚未解释的细节','这个细节还没有答案'],
@@ -214,7 +239,7 @@ function applyStoryboard(p,panels,meta,replace=false){
   }
  }
  const c=ensure(p);
- if(isLiteraryProject(p)){delete p.literaryResearch;delete p.literaryReviewReceipt;}
+ if(isLiteraryProject(p)){delete p.literaryResearch;delete p.literaryReviewReceipt;if(meta.research){p.literaryResearch={...meta.research,model:meta.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString(),input_signature:literaryInputSignature(p)};}}
  c.drafted=true;c.reviewed=false;c.approval=null;
  c.storyboardProvenance={method:meta.method||'local_structure_rules',provider:meta.provider||'local',
   model:meta.model||null,at:new Date().toISOString(),analysis:clean(meta.analysis||'').slice(0,600),
@@ -297,7 +322,6 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
   if(result.panels.length!==p.panels.length)throw Error('AI 返回'+result.panels.length+'格，与作者选择的'+p.panels.length+'格不一致；拒绝覆盖，请按所选篇幅重新生成');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
-  if(wrote&&literary){p.literaryResearch={...result.research,model:result.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString(),input_signature:literaryInputSignature(p)};persist();render();}
   if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
  }catch(err){
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
@@ -337,7 +361,7 @@ function literaryReviewErrors(p){
  if(!isLiteraryProject(p))return [];
  const r=p.literaryResearch,errors=[];
  if(!r||r.status!=='draft'||r.input_signature!==literaryInputSignature(p)||!Array.isArray(r.claims)||!r.claims.length||r.evaluation?.structural_pass!==true||r.panel_evidence?.length!==p.panels.length)errors.push('请先完成与当前资料一致的 DeepSeek 文学研究');
- if(!p.literaryReviewReceipt||p.literaryReviewReceipt.snapshot!==literaryReviewSnapshot(p))errors.push('请核对文学研究与分镜，完成专项内容审核');
+ if(p.literaryReviewReceipt?.author_content_reviewed!==true||p.literaryReviewReceipt.snapshot!==literaryReviewSnapshot(p))errors.push('请核对文学研究与分镜，完成专项内容审核');
  return errors;
 }
 function digest(p){
@@ -476,7 +500,7 @@ function addLiterarySource(p,index){
 }
 function storyControls(p,c){
  if(isLiteraryProject(p)){
-  const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p);
+  const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p)&&Array.isArray(r.claims);
   const collection=p.literarySourceCandidates?.title===String(p.sourceTitle||p.title||'').trim()?p.literarySourceCandidates:null;
   const sources=collection?.items||[];
   const candidateCards=sources.map((x,i)=>'<article class="box"><b>'+e(x.title)+'</b> <small>'+e(x.source)+'</small><p>'+e(x.excerpt)+'</p><a href="'+e(x.url)+'" target="_blank" rel="noopener noreferrer">查看原文 ↗</a> <button class="button" data-director-action="literary-add-source" data-source-index="'+i+'">核对后加入研究</button></article>').join('');
