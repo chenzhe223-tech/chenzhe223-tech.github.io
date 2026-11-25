@@ -231,6 +231,13 @@ function wfSingleImageJobs(p,task,bible){
   protocol:'Execute exactly ONE jobs[i].prompt in each separate image-generation call. NEVER send this full JSON, task.json, the complete storyboard or all prompts in one image tool request. Physically attach approved character-sheet and pilot reference files and log their SHA256. Reuse approved pilot-01.png as panels/01.png byte-for-byte without rerendering. Draw remaining panels in order; draw cover in its own last call. Reject contact sheets and rerender only the faulty target. Never crop a mosaic into panels. No model-generated Chinese text.',
   jobs};
 }
+// Renderer-only prompt: no job list, work title, review report, captions or other frames.
+function wfIsolatedRenderText(job,bible){
+ const v=bible.visual_lock||{};
+ const cast=bible.characters.map(x=>[x.name,x.look,x.clothes,x.symbol].filter(Boolean).join('，')).join('；');
+ const scene=job.target_type==='cover'?bible.cover_brief:job.scene_only;
+ return ['绘制一幅完整的独立竖版插画，3:4，原生至少1080×1440。画面贯穿整个画布，保持单一连续场景，无任何文字。','沿用随请求实际附带的角色参考原图，保持外貌、服饰与道具。'+cast,'视觉：'+[v.material,v.lighting,v.layout,(v.palette||[]).join('、')].filter(Boolean).join('；')+'。','镜头：'+(job.camera||'完整构图')+'。','画面：'+String(scene||'')+'。','保留适当空白卡片及后期排版空间。输出仅一张PNG。'].join('\n');
+}
 function wfDirectPrompt(p,o){
  const shots=p.panels.map((a,i)=>'#'+String(i+1).padStart(2,'0')+' '+(a.title||'第'+(i+1)+'格')+'\n场景与构图：'+(a.scene||'待完善')+'\n旁白：'+(a.caption||'')+'\n对白：'+(a.dialogue||'')+'\n视觉要求：'+(a.prompt||'')).join('\n\n');
  return [
@@ -276,7 +283,7 @@ function wfStartHere(p,task,launch){
   '本 ZIP 是待派发或已派发的 AI Task Hub 任务包；只有服务端 SHA256 回读确认并写入 queued 后才算正式入仓。本地备用包不代表已入仓或已开工。',
   '任务编号：'+task.task_id+'；目标制作方：'+task.producer,
   '领取目录：chenzhe223-tech/ai-task-sync/tasks/'+task.task_id+'/',
-  '生产执行者必须按 task_id 和 target 查找、下载本 ZIP、验证 SHA256、在 GitHub 原子写入 claimed 并确认后制作。GitHub 存储并不自动触发 ChatGPT 或 WorkBuddy；没有运行中的执行器要如实报告未开工。',
+  '生图执行器应使用 render_requests/ 中单个文本与实际参考图，不能把调度上下文传给生图工具。无法隔离时先保留断点。生产执行者必须按 task_id 和 target 查找、下载本 ZIP、验证 SHA256、在 GitHub 原子写入 claimed 并确认后制作。GitHub 存储并不自动触发 ChatGPT 或 WorkBuddy；没有运行中的执行器要如实报告未开工。',
   '本包可读取：task.json、production-bible.json、render_jobs.json、render_jobs.md、'+task.producer+'_制作指令.md、production_state.json。'+(wfLiteraryResearchRequired(p)?' 文学选题还须读取 literary-research.json，独立核实后按锁定的三段结构生产。':''),
   '所有图片独立生成，角色定妆和首格经作者确认后完成全部漫画与独立封面；不可拼图充数；最终需真实 PNG、QA、文案、来源与完整 ZIP。',
   task.producer==='ChatGPT'?'ChatGPT 输出真实完整 ZIP 交给作者，之后由作者交给 WorkBuddy 执行公众号上传；本制作任务不自动发表。':'WorkBuddy 可制作与上传公众号，但实际发表前必须取得作者独立出版授权、版权和视觉 QA 通过，发表后回写真实公众号后台回执。',
@@ -465,6 +472,9 @@ async function wfMakeTask(p){
  {name:task.producer+'_复制粘贴开工指令.txt',bytes:enc.encode(launch)},
  {name:'production_state.json',bytes:enc.encode(JSON.stringify(productionState,null,2))},{name:'production-bible.json',bytes:enc.encode(JSON.stringify(bible,null,2))},{name:'render_jobs.json',bytes:enc.encode(JSON.stringify(renderJobs,null,2))},{name:'render_jobs.md',bytes:enc.encode(renderJobs.jobs.map(j=>'## '+j.job_id+' → '+j.target+'\n'+j.prompt).join('\n\n'))},{name:'task.json',bytes:enc.encode(JSON.stringify(task,null,2))},{name:task.producer+'_制作指令.md',bytes:enc.encode(wfIsHub(p)?launch+'\n\n'+prompt:prompt)},{name:'交接说明.txt',bytes:enc.encode((wfIsHub(p)?'本 ZIP 属于 AI Task Hub 路线；仅在远端真实校验入仓和原子领取后开始制作。若为 Hub 未入仓本地备用包，不得声称已经派单或开始制作。'+(task.producer==='ChatGPT'?'ChatGPT 只交付完整 ZIP，不自动发表。':'WorkBuddy 须取得独立出版授权。'):task.producer!=='WorkBuddy'?'本 ZIP 是直接交给 '+task.producer+' 的独立制作任务；请按该平台支持的附件格式发送 ZIP 和同名开工指令，不能仅上传文件就视为开工。完整启动步骤见 00_START_HERE.md。生产不依赖 GitHub 入仓、Token 或远端 Pilot 回执。确认真实角色定妆后直接制作全套独立漫画 PNG、封面、文案及可下载 ZIP，并进行本地 QA；正式微信公众号发表仍需作者独立授权。':'WorkBuddy 正式生产任务必须按原有私有 GitHub 工单、样稿审批和成品验收流程执行。不得以 ChatGPT 直达模式绕过作者审批或发表门槛。')+'references/ 文件仅供经作者授权的创作者进行真人照片拟人化角色参考，禁止将原人像公开到书架、成品或未授权外部服务；请在私有通道传递含照片的 ZIP，并在生成角色定妆图后由作者确认相似度。')},...portraitFiles,...novelFiles];
  if(wfLiteraryResearchRequired(p)){const {input_signature,...research}=p.literaryResearch;files.push({name:'literary-research.json',bytes:enc.encode(JSON.stringify({schema:'davylab.worldtoon.literary-research.v2',task_id:task.task_id,creative_lock_hash:bible.creative_lock_hash,research,author_content_reviewed:true,author_reviewed_at:p.literaryReviewReceipt.reviewed_at,independent_verification_required:true},null,2))});}
+ // A clean renderer can read one text file and actual reference images, not the orchestration ZIP.
+ for(const job of renderJobs.jobs)files.push({name:'render_requests/'+job.job_id+'.txt',bytes:enc.encode(wfIsolatedRenderText(job,bible))});
+ files.push({name:'RENDER_ISOLATION.md',bytes:enc.encode('生图执行器须能显式提交当前单图提示词与实际参考图，并隔离对话历史。render_requests/ 每次只读取一个文件；不要向图像模型发送整个 ZIP、任务标题、分镜目录或修复报告。若当前工具不能控制独立上下文，请使用新的独立生图会话，仅传当前文本与参考原图；无法证明隔离则停止，保留断点。原作者创意锁、首格审批及逐格验收不变。')});
  const taskZip=packZip(files);
  if(wfIsHub(p)){
   try{
