@@ -1,24 +1,24 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-24T11:40:10+00:00",
-  "generated_at": "2026-11-24T11:40:16.543Z",
+  "source_synced_at": "2026-11-25T10:32:33+00:00",
+  "generated_at": "2026-11-25T10:32:37.258Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
   "available_sources": 185,
   "recommendations": [
     {
       "rank": 1,
-      "id": "coding",
-      "name": "AI 编程与真实应用交付",
-      "score": 85,
+      "id": "memory",
+      "name": "Agent 记忆、检索和知识管理",
+      "score": 93,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 5,
+        "channelCoverage": 20,
+        "observableDiscussion": 14,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 44,
+      "evidenceCount": 6,
       "channels": [
         "Hacker News",
         "AI Radar",
@@ -26,36 +26,198 @@
       ],
       "exampleSources": [
         {
-          "title": "Show HN: Harny – AI coding agent for VSCodium/VS Code tuned for small/local LLMs",
-          "url": "https://harny.dev",
+          "title": "Show HN: Mason – A lightweight Postgres read-replica, built on columnar storage",
+          "url": "https://masondata.ai",
           "source": "Hacker News",
-          "published": "2026-11-24T08:26:49.000Z"
+          "published": "2026-11-24T16:11:52.000Z"
         },
         {
-          "title": "Keeping AI Coding Agent Memory Relevant as Code Changes",
-          "url": "https://enola.tech/blog/agent-memory-needs-a-code-reference",
-          "source": "Hacker News",
-          "published": "2026-11-20T18:18:13.000Z"
+          "title": "GetStream/Agents",
+          "url": "https://github.com/GetStream/Agents",
+          "source": "GitHub Skills",
+          "published": "2026-11-24T23:31:40.000Z"
         }
       ]
     },
     {
       "rank": 2,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
+      "id": "skills",
+      "name": "Skill 与 AI 工具技能化",
+      "score": 92,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
+        "observableDiscussion": 15,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 15,
+      "channels": [
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "mentionskill/mentionskill",
+          "url": "https://github.com/mentionskill/mentionskill",
+          "source": "GitHub Skills",
+          "published": "2026-11-24T05:33:42.000Z"
+        },
+        {
+          "title": "sickn33/agentic-awesome-skills",
+          "url": "https://github.com/sickn33/agentic-awesome-skills",
+          "source": "GitHub Skills",
+          "published": "2026-11-24T22:53:21.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 3,
+      "id": "safety",
+      "name": "AI 安全、隐私与可靠性",
+      "score": 90,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 11,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 16,
+      "channels": [
+        "XNews",
+        "AI Radar",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "提取受保护推理的成功率，从54.0%降到了0.2%",
+          "url": "https://openai.com/index/combatting-adversarial-distillation",
+          "source": "XNews",
+          "published": "2026-11-20T00:00:00.000Z"
+        },
+        {
+          "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
+          "url": "https://alignment.openai.com/fuzzy-robustness",
+          "source": "XNews",
+          "published": "2026-11-12T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 4,
+      "id": "research",
+      "name": "AI 科研与可验证发现",
+      "score": 89,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 13,
+        "readerFit": 15,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 13,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "GPT-6 models demonstrate intrinsic protein-design capabilities",
+          "url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+          "source": "OpenAI",
+          "published": "2026-11-24T13:00:00.000Z"
+        },
+        {
+          "title": "受访科学家估计，同样质量的工作，没有AI要花1.9倍时间",
+          "url": "https://openai.com/index/science-at-the-frontier",
+          "source": "XNews",
+          "published": "2026-11-16T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 5,
+      "id": "verification",
+      "name": "AI 可验证工程与质量验收",
+      "score": 88,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
+        "observableDiscussion": 11,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 13,
+      "channels": [
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
+          "url": "https://alpo.ge/remark.pdf",
+          "source": "XNews",
+          "published": "2026-11-20T00:00:00.000Z"
+        },
+        {
+          "title": "聚变模拟的计算成本降了11.8倍，纠错量子比特从5650个降到4338个",
+          "url": "https://deepmind.google/blog/finding-faster-quantum-algorithms-with-agents-and-formal-verification",
+          "source": "XNews",
+          "published": "2026-11-23T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 6,
+      "id": "coding",
+      "name": "AI 编程与真实应用交付",
       "score": 84,
       "editorial_breakdown": {
-        "freshness": 28,
+        "freshness": 30,
         "channelCoverage": 21,
+        "observableDiscussion": 4,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 48,
+      "channels": [
+        "Hacker News",
+        "AI Radar",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "Show HN: Production Grammar-Guided Decoding in vLLM with Xgrammar Benchmarks",
+          "url": "https://github.com/grfdsasdvef/vllm-constrained-decoding-cookbook",
+          "source": "Hacker News",
+          "published": "2026-11-25T08:16:39.000Z"
+        },
+        {
+          "title": "Koi: Evidence-Guided, Self-Calibrating Planning for Multi-Cloud LLM Inference",
+          "url": "https://gangmuk.github.io/koi",
+          "source": "Hacker News",
+          "published": "2026-11-25T00:11:16.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
+      "score": 83,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 18,
         "observableDiscussion": 6,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 65,
+      "evidenceCount": 73,
       "channels": [
         "XNews",
-        "Hacker News",
-        "AI Radar"
+        "Hacker News"
       ],
       "exampleSources": [
         {
@@ -73,18 +235,51 @@
       ]
     },
     {
-      "rank": 3,
+      "rank": 8,
+      "id": "content",
+      "name": "AI 创作、内容和视觉表达",
+      "score": 82,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 3,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 13,
+      "channels": [
+        "AI Radar",
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "GPT-6 models demonstrate intrinsic protein-design capabilities",
+          "url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+          "source": "OpenAI",
+          "published": "2026-11-24T13:00:00.000Z"
+        },
+        {
+          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
+          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
+          "source": "XNews",
+          "published": "2026-11-18T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 9,
       "id": "open-source",
       "name": "开源 AI 项目深度实测",
-      "score": 83,
+      "score": 81,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 18,
-        "observableDiscussion": 6,
+        "observableDiscussion": 4,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 35,
+      "evidenceCount": 32,
       "channels": [
         "Hacker News",
         "AI Radar"
@@ -97,238 +292,43 @@
           "published": "2026-11-22T21:18:43.000Z"
         },
         {
-          "title": "Anthropic 推出 Claude Ship，用于 GitHub 拉取请求审查与修复",
-          "url": "https://www.marktechpost.com/2026/11/23/anthropic-claude-ship-pull-request-agents",
+          "title": "OpenAI and Cisco Releases Shirudo: An Open-Source Linux Runtime Allowing Agents to Defend Systems Without Downtime",
+          "url": "https://www.marktechpost.com/2026/11/24/openai-cisco-shirudo-ebpf-linux-runtime",
           "source": "MarkTechPost",
-          "published": "2026-11-24T00:02:39.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 4,
-      "id": "infrastructure",
-      "name": "AI 算力、芯片与使用成本",
-      "score": 81,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
-        "observableDiscussion": 2,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 16,
-      "channels": [
-        "XNews",
-        "AI Radar",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
-          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
-          "source": "XNews",
-          "published": "2026-11-18T00:00:00.000Z"
-        },
-        {
-          "title": "Meta TLX Brings Warp-Group GPU Control to Triton on Hopper, Blackwell, AMD",
-          "url": "https://www.marktechpost.com/2026/11/23/meta-tlx-triton-low-level-extensions",
-          "source": "MarkTechPost",
-          "published": "2026-11-23T08:24:57.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 5,
-      "id": "skills",
-      "name": "Skill 与 AI 工具技能化",
-      "score": 80,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 3,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 16,
-      "channels": [
-        "AI Radar",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "kesslernity/awesome-copilot-agent-skills",
-          "url": "https://github.com/kesslernity/awesome-copilot-agent-skills",
-          "source": "GitHub Skills",
-          "published": "2026-11-23T12:26:25.000Z"
-        },
-        {
-          "title": "Leonxlnx/taste-skill",
-          "url": "https://github.com/Leonxlnx/taste-skill",
-          "source": "GitHub Skills",
-          "published": "2026-11-24T00:57:52.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 6,
-      "id": "content",
-      "name": "AI 创作、内容和视觉表达",
-      "score": 80,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 21,
-        "observableDiscussion": 3,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 8,
-      "channels": [
-        "AI Radar",
-        "XNews",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "Architect Labs Unveils Frostbite, an Interaction Net CPU Designed by AI",
-          "url": "https://www.marktechpost.com/2026/11/23/architect-labs-frostbite-ai-designed-cpu-interaction-nets",
-          "source": "MarkTechPost",
-          "published": "2026-11-23T10:05:47.000Z"
-        },
-        {
-          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
-          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
-          "source": "XNews",
-          "published": "2026-11-18T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 7,
-      "id": "memory",
-      "name": "Agent 记忆、检索和知识管理",
-      "score": 78,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 19,
-        "observableDiscussion": 2,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 5,
-      "channels": [
-        "Hacker News",
-        "AI Radar",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "Show HN: AI Agent Infrastructure and Memory Compaction Specifications",
-          "url": "https://github.com/grfdsasdvef/awesome-ai-agent-infrastructure",
-          "source": "Hacker News",
-          "published": "2026-11-24T08:16:42.000Z"
-        },
-        {
-          "title": "Keeping AI Coding Agent Memory Relevant as Code Changes",
-          "url": "https://enola.tech/blog/agent-memory-needs-a-code-reference",
-          "source": "Hacker News",
-          "published": "2026-11-20T18:18:13.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 8,
-      "id": "verification",
-      "name": "AI 可验证工程与质量验收",
-      "score": 77,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 18,
-        "observableDiscussion": 0,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 9,
-      "channels": [
-        "XNews",
-        "AI Radar"
-      ],
-      "exampleSources": [
-        {
-          "title": "175,187 个模块通过核验，Lean 社区认证了这段黎曼猜想证明",
-          "url": "https://alpo.ge/remark.pdf",
-          "source": "XNews",
-          "published": "2026-11-20T00:00:00.000Z"
-        },
-        {
-          "title": "四周里写出超过600万行Lean，DeepMind把验证做到了Signal的设备代码",
-          "url": "https://deepmind.google/blog/introducing-alphaproof-code",
-          "source": "XNews",
-          "published": "2026-11-10T00:00:00.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 9,
-      "id": "safety",
-      "name": "AI 安全、隐私与可靠性",
-      "score": 76,
-      "editorial_breakdown": {
-        "freshness": 26,
-        "channelCoverage": 21,
-        "observableDiscussion": 1,
-        "readerFit": 18,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 21,
-      "channels": [
-        "AI Radar",
-        "XNews",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "27 Cybersecurity Terms to Prepare You for the Age of AI",
-          "url": "https://www.marktechpost.com/2026/11/23/27-ai-cybersecurity-terms",
-          "source": "MarkTechPost",
-          "published": "2026-11-23T10:40:16.000Z"
-        },
-        {
-          "title": "提取受保护推理的成功率，从54.0%降到了0.2%",
-          "url": "https://openai.com/index/combatting-adversarial-distillation",
-          "source": "XNews",
-          "published": "2026-11-20T00:00:00.000Z"
+          "published": "2026-11-24T14:16:53.000Z"
         }
       ]
     },
     {
       "rank": 10,
-      "id": "enterprise",
-      "name": "AI 进入传统企业与专业行业",
-      "score": 74,
+      "id": "infrastructure",
+      "name": "AI 算力、芯片与使用成本",
+      "score": 80,
       "editorial_breakdown": {
         "freshness": 30,
-        "channelCoverage": 15,
-        "observableDiscussion": 0,
-        "readerFit": 19,
+        "channelCoverage": 21,
+        "observableDiscussion": 1,
+        "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 4,
+      "evidenceCount": 9,
       "channels": [
+        "AI Radar",
         "XNews",
-        "AI Radar"
+        "Hacker News"
       ],
       "exampleSources": [
         {
-          "title": "66次访谈里，只有两家公司因为AI自动化取消岗位并有人失业，约三分之二减少了招聘",
-          "url": "https://www.anthropic.com/research/working-with-ai",
-          "source": "XNews",
-          "published": "2026-11-23T00:00:00.000Z"
+          "title": "黄仁勋归期悬而未决，买 GPU 的人已经不敢下单",
+          "url": "https://www.leiphone.com/category/chips/WHSLCH74nrSJW6OE.html",
+          "source": "雷峰网·芯片",
+          "published": "2026-11-18T09:45:00.000Z"
         },
         {
-          "title": "Anthropic 推出 Claude Ship，用于 GitHub 拉取请求审查与修复",
-          "url": "https://www.marktechpost.com/2026/11/23/anthropic-claude-ship-pull-request-agents",
-          "source": "MarkTechPost",
-          "published": "2026-11-24T00:02:39.000Z"
+          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
+          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
+          "source": "XNews",
+          "published": "2026-11-18T00:00:00.000Z"
         }
       ]
     }
