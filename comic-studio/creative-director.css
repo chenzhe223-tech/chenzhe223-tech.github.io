@@ -196,3 +196,7 @@
 @media(max-width:650px){.director-literary-workflow{gap:10px}.director-literary-workflow>.button{width:100%;justify-self:stretch}}
 
 .director-literary-workflow input[data-literary-input="author"]{box-sizing:border-box;width:100%;min-width:0;height:40px;padding:8px 12px;border:1px solid #d1d5ce;border-radius:8px;background:#fff;color:#28352e;font:400 14px system-ui,sans-serif}
+
+/* Persistent, readable literary QA diagnostics (not a production approval). */
+.director-literary-workflow .literary-blocked{min-width:0;padding:14px 16px;border:1px solid #d9b78c;border-radius:8px;background:#fff9ee;color:#5e4328;line-height:1.65;overflow-wrap:anywhere}
+.director-literary-workflow .literary-blocked strong{font-size:14px}.director-literary-workflow .literary-blocked p{margin:6px 0}.director-literary-workflow .literary-blocked ul{padding-left:20px;margin:8px 0}.director-literary-workflow .literary-blocked details{margin:10px 0}
