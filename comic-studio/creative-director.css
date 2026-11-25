@@ -194,3 +194,5 @@
 .director-literary-workflow>article .button{margin-top:7px}
 .director-literary-workflow>details{min-width:0;overflow-wrap:anywhere}
 @media(max-width:650px){.director-literary-workflow{gap:10px}.director-literary-workflow>.button{width:100%;justify-self:stretch}}
+
+.director-literary-workflow input[data-literary-input="author"]{box-sizing:border-box;width:100%;min-width:0;height:40px;padding:8px 12px;border:1px solid #d1d5ce;border-radius:8px;background:#fff;color:#28352e;font:400 14px system-ui,sans-serif}
