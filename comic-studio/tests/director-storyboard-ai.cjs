@@ -90,7 +90,7 @@ const change=el=>handlers.change.forEach(fn=>fn({target:el,stopImmediatePropagat
  };
  vm.runInNewContext(worker.replace('export default {async fetch(','const workerImpl={async fetch(')+'\nglobalThis.storyTest=wtStoryboardAI;',sandbox,{filename:'worker.js'});
  const env={DB:{prepare(){return {bind(){return this},async first(){return {uses:1}}}}},AI:{async run(){return {response:JSON.stringify({analysis:'科研的代价',panels})}}}};
- const good={title:'时间机器',summary:'虚构研究员在新的世界面对实验伦理抉择',cast:[{name:'黎舟',look:'眼镜',clothes:'浅色研究服'},{name:'星点',look:'圆头',clothes:'橙色机体'}]};
+ const good={title:'时间机器',panel_count:9,summary:'虚构研究员在新的世界面对实验伦理抉择',cast:[{name:'黎舟',look:'眼镜',clothes:'浅色研究服'},{name:'星点',look:'圆头',clothes:'橙色机体'}]};
  const req=(body,auth=true)=>new Request('https://worldtoon.chenzhe223.workers.dev/api/ai/storyboard',{method:'POST',headers:{'Content-Type':'application/json',...(auth?{Authorization:'Bearer demo'}:{})},body:JSON.stringify(body)});
  const anon=await sandbox.storyTest(req({...good,provider:'native'},false),env);
  assert.equal(anon.status,401);

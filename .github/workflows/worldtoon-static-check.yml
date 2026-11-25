@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: '22'
       - name: Check editorial scoring and production module syntax
+        if: ${{ !cancelled() }}
         run: |
           node --check comic-studio/ranking.js
           node --check comic-studio/comic-engine.js
@@ -31,6 +32,7 @@ jobs:
           node --check comic-studio/creative-director.js
           node --check comic-studio/creative-pilot.js
       - name: Check browser scripts
+        if: ${{ !cancelled() }}
         run: |
           node --check comic-studio/app.js
           node --check comic-studio/archive.js
@@ -38,22 +40,39 @@ jobs:
           node --check comic-studio/briefing.js
           node --check comic-studio/personalize.js
       - name: Verify four-Skill live integration
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/comic-engine.cjs
       - name: Verify evergreen sources and CC0 public-domain gate
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/heritage.cjs
       - name: Verify D1 materialized discovery and instant category switching
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/discovery-cache.cjs
       - name: Verify creative director human signoff and GitHub contract
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/creative-director.cjs
       - name: Verify visual pilot signed author approval
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/creative-pilot.cjs
       - name: Exercise one-click research-first task generation
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/task-flow.cjs
       - name: Test six-dimension editorial scoring and filtering
+        if: ${{ !cancelled() }}
         run: node comic-studio/tests/rankings.cjs
+      - name: Exercise scoped Literature Engine V2 quality gates
+        if: ${{ !cancelled() }}
+        run: |
+          node comic-studio/tests/literature-engine-v2.cjs
+          node comic-studio/tests/literary-review.cjs
+          node comic-studio/tests/worldtoon-deepseek-smoke.cjs
+          node comic-studio/tests/service-worker-cache.cjs
+          node comic-studio/tests/novel-core.cjs
       - name: Check Worker module syntax
+        if: ${{ !cancelled() }}
         run: node --check --input-type=module < comic-studio/worker.js
       - name: Check dual-track invariants
+        if: ${{ !cancelled() }}
         shell: python
         run: |
           from pathlib import Path

@@ -12,7 +12,7 @@ for(const name of ['style-v3.js','creative-director.js','worldtoon-v3.js','app.j
 const styleCtx={window:{},document:{addEventListener(){}}};
 vm.runInNewContext(read('style-v3.js'),styleCtx,{filename:'style-v3.js'});
 const atlas=styleCtx.window.WTStyleV3;
-assert.equal(atlas.CATALOG.length,25,'four new visual directions added to original 21');
+assert.equal(atlas.CATALOG.length,26,'original 21, four 3D guides and modern-life-anime retained');
 const styleIds=['cinematic-3d-character','stylized-3d-toon','editorial-3d-graphic','dramatic-3d-vertical'];
 for(const id of styleIds){
  const entry=atlas.CATALOG.find(s=>s.style_id===id);

@@ -9,7 +9,7 @@ const html=fs.readFileSync(path.join(__dirname,'../index.html'),'utf8');
 const css=fs.readFileSync(path.join(__dirname,'../worldtoon-v3.css'),'utf8');
 
 assert.match(api,/deepseek-expand'\)\?75000/,'DeepSeek must have a dedicated 75s timeout, not the generic 15s');
-assert.match(html,/worldtoon-v3\.js\?v=4\.8\.0-novel-distiller/,'updated story engine must bust stale service worker cache');
+assert.match(html,/worldtoon-v3\.js\?v=5\.6\.0-literature-v2/,'updated story engine must bust stale service worker cache');
 assert.match(html,/archive\.js\?v=4\.6\.3-single-frame/,'API client timeout fix must load');
 assert.match(css,/\.wt3-expand-feedback\[data-state="error"\]/,'errors must stay visible in the story editor');
 
@@ -52,7 +52,7 @@ function setup(apiBehavior){
 const story={method:'verified_model_response',model:'deepseek-flash',story:{
   title:'穿越县令',summary:'原创故事',fictionalization:'架空',characters:[
     {role:'县令',name:'甲'},{role:'朋友',name:'乙'}],
-  panels:Array.from({length:4},(_,i)=>({title:'第'+(i+1)+'格',scene:'场景'+i,
+  panels:Array.from({length:9},(_,i)=>({title:'第'+(i+1)+'格',scene:'场景'+i,
     caption:'旁白',dialogue:'对白',visual_prompt:'分镜视觉要求'}))
 }};
 (async()=>{
@@ -68,10 +68,15 @@ const story={method:'verified_model_response',model:'deepseek-flash',story:{
  await good.click(good.action);
  await good.click(good.accept);
  assert.equal(good.calls(),1,'exactly one paid request after explicit confirmation');
- assert.equal(good.project.panels.length,4,'real response adjusts panel count');
+ assert.equal(good.project.panels.length,9,'real response preserves selected panel count');
  assert.equal(good.route(),'director/test-1','success continues to director');
  assert.equal(good.feedback.dataset.state,'success','success is shown');
  assert.equal(good.action.disabled,false,'button recovers');
+ const mismatch=setup(async()=>({...story,story:{...story.story,panels:story.story.panels.slice(0,4)}}));
+ await mismatch.click(mismatch.action);await mismatch.click(mismatch.accept);
+ assert.equal(mismatch.project.panels.length,9,'mismatched model output must not overwrite selected count');
+ assert.equal(mismatch.feedback.dataset.state,'error');
+ assert.match(mismatch.feedback.textContent,/未返回完整的分镜结构/);
  const failed=setup(async()=>{throw Error('DeepSeek 额度不足或登录失效')});
  await failed.click(failed.action);
  await failed.click(failed.accept);

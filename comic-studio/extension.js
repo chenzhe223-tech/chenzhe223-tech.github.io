@@ -150,8 +150,10 @@ async function wtDraftFromNews(i){
  const p=emptyProject(t);
  p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻、文学或研究线索；请先核对原文、活动日期、史实及版权。'+(Array.isArray(x.series_episodes)&&x.series_episodes.length?' 原创连载建议：'+x.series_episodes.join(' / '):'');
  const nobel=x.category==='诺奖文学'||x.source_id==='nobel_literature';
- if(nobel){
-  p.category='诺奖文学导读';
+ const literary=nobel||['literary_series','classics'].includes(x.source_id)||/^(世界文学|文学导读|世界文学导读)$/.test(x.category||'');
+ if(literary){
+  p.literaryResearchScope='topic_literature_v2';
+  p.category=nobel?'诺奖文学导读':'世界文学导读';
   p.title='读懂｜'+x.title+'：故事、哲学与人生';
   p.storySourceSelection={source_id:x.source_id||'nobel_literature',title:x.title,
    type:'nobel_literature',source:x.url,source_name:x.source||'待核验来源',
@@ -162,10 +164,10 @@ async function wtDraftFromNews(i){
   p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
    source_title:x.title,source_url:x.url,source_status:'source_lead_pending_research',
    dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
-   panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
-  p.description='围绕《'+x.title+'》进行独立文学导读（先核实作品名、作者、诺奖关系及具体内容）：第1–3格介绍作品讲了什么（只提供经证实的简要背景、人物关系与主题，不重演原作情节）；第4–6格独立评析作品蕴含的人生哲学；第7–9格用全新原创当代普通人故事讨论现实意义。';
+   panel_ranges:[[1,4],[5,7],[8,9]],protect_original_expression:true};
+  p.description='围绕《'+x.title+'》进行独立文学导读（先核实作品名、作者、诺奖关系及具体内容）：第1–4格介绍作品讲了什么（只提供经证实的简要背景、人物关系与主题，不重演原作情节）；第5–7格独立评析作品蕴含的人生哲学；第8–9格用全新原创当代普通人故事讨论现实意义。';
   p.ideaSeed='诺奖文学三维导读；以作品准确介绍、编辑性文学评论、原创生活比喻为原则，绝不直接重绘原著具体场景，不复制原著独特角色形象、对白、插画或大量原文。查证不足则保持待研究，不编造哲学论述为作者原话。';
-  p.fiction='版权未知或未经授权时只制作原创文学导读和评论。03格概述应精炼，04–06格观点是编辑解读，07–09格人物和场景均须原创；具体引用及使用权须按地区审核。';
+  p.fiction='版权未知或未经授权时只制作原创文学导读和评论。01–04格故事概述应具体精炼，05–07格观点是编辑解读，08–09格人物和场景均须原创；具体引用及使用权须按地区审核。';
   p.disclosure='本作品为独立文学导读和评论漫画，不是原著剧情漫画化；文学观点属于编辑分析，未获授权不使用原作插画、人物形象或受保护的长篇文本。';
   p.factNotes='【待核验：诺奖文学资料】来源：'+(x.source||'待核实')+'\n原始网址：'+x.url+
    '\n必须核对：书名/作家/获奖年度/作品主题与内容（不能将作家获诺奖误说成此书单独获奖）。\n'+
@@ -191,7 +193,7 @@ async function wtDownloadMedia(key){if(!wtSession)return null;try{let r=await wt
 async function wtPull(){if(wtCloudBusy)return;wtCloudBusy=true;wtCloudError='';wtStatus='正在拉取';render();try{await wtEnsureToken();let list=await wtJson(await wtCloudRequest('/rest/v1/worldtoon_workspaces?select=payload,updated_at,revision&user_id=eq.'+encodeURIComponent(wtSession.user.id),{headers:{Accept:'application/json'}}));if(!list?.length){wtStatus='云端为空；可上传本机资料';return}let remote=list[0].payload;if(!Array.isArray(remote.projects)||!Array.isArray(remote.topics))throw Error('云端数据格式不正确');let localHasEdits=JSON.stringify(remote)!==JSON.stringify(data);if(localHasEdits&&!confirm('云端资料将覆盖当前本机工作区。请先导出完整 ZIP 备份。确认拉取吗？')){wtStatus='已取消拉取';return;}data={...remote,characters:remote.characters||[]};wtRemoteRev=list[0].revision;persist();ui.selected=data.projects[0]?.id||'';wtSyncedAt=new Date().toLocaleString('zh-CN');wtStatus='已拉取';notify('云端工作区已恢复');}catch(err){wtCloudError=err.message;wtStatus='拉取失败'}finally{wtCloudBusy=false;render();}}
 function wtScheduleSync(){if(!wtSession||wtCloudBusy)return;clearTimeout(wtSyncTimer);wtSyncTimer=setTimeout(()=>wtPush(),3500)}
 async function wtCallAI(path,payload){await wtEnsureToken();let resp=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+wtSession.access_token},body:JSON.stringify(payload)});return wtJson(resp);}
-async function wtScript(){if(wtAiBusy)return;let p=selected();if(!p)return;if(p.storySourceSelection?.adaptation==='literary_review'){notify('文学导读请先在创意导演台生成三维九格结构，再导出 ChatGPT 任务核查具体作品内容。当前平台内置 AI 编剧没有独立核验原著能力，不会用它编造作品情节。');nav('director/'+p.id);return;}if(!p.sourceURLs?.trim()||!p.factNotes?.trim()){notify('请先补充来源及核验事实，避免凭空编造新闻细节');nav('studio/'+p.id+'/0');return;}if(p.panels.some(v=>v.scene?.trim())&&!confirm('AI 编剧将替换现有九格分镜文字（不删除图片），继续吗？'))return;wtAiBusy=true;render();try{let out=await wtCallAI('/api/ai/script',{title:p.title,description:p.description,sourceTitle:p.sourceTitle,sourceURLs:p.sourceURLs,factNotes:p.factNotes,fiction:p.fiction,tone:p.tone,characters:wtCharBible()+'\n'+p.characters});if(!Array.isArray(out.panels)||out.panels.length!==9)throw Error('模型没有返回完整九格，请稍后重试');p.panels.forEach((v,i)=>{let next=out.panels[i];v.title=String(next.title||v.title).slice(0,120);v.scene=String(next.scene||'').slice(0,2000);v.caption=String(next.caption||'').slice(0,800);v.dialogue=String(next.dialogue||'').slice(0,800);v.prompt=String(next.prompt||'').slice(0,1600)});p.fiction=out.fiction||p.fiction;p.status='草稿';p.checks=Array(6).fill(false);p.reviewedAt=null;p.publishedAt=null;setChange(p,'AI 生成九格初稿（尚未人工核验）');ui.stage=2;notify('九格脚本已生成，逐格复核后再发布');}catch(err){notify('AI 编剧未完成：'+err.message)}finally{wtAiBusy=false;render();}}
+async function wtScript(){if(wtAiBusy)return;let p=selected();if(!p)return;if(p.storySourceSelection?.adaptation==='literary_review'){notify('文学导读请进入创意导演台；文学选题使用专项研究，其他入口按原有创作规则。');nav('director/'+p.id);return;}if(!p.sourceURLs?.trim()||!p.factNotes?.trim()){notify('请先补充来源及核验事实，避免凭空编造新闻细节');nav('studio/'+p.id+'/0');return;}if(p.panels.some(v=>v.scene?.trim())&&!confirm('AI 编剧将替换现有九格分镜文字（不删除图片），继续吗？'))return;wtAiBusy=true;render();try{let out=await wtCallAI('/api/ai/script',{title:p.title,description:p.description,sourceTitle:p.sourceTitle,sourceURLs:p.sourceURLs,factNotes:p.factNotes,fiction:p.fiction,tone:p.tone,characters:wtCharBible()+'\n'+p.characters});if(!Array.isArray(out.panels)||out.panels.length!==9)throw Error('模型没有返回完整九格，请稍后重试');p.panels.forEach((v,i)=>{let next=out.panels[i];v.title=String(next.title||v.title).slice(0,120);v.scene=String(next.scene||'').slice(0,2000);v.caption=String(next.caption||'').slice(0,800);v.dialogue=String(next.dialogue||'').slice(0,800);v.prompt=String(next.prompt||'').slice(0,1600)});p.fiction=out.fiction||p.fiction;p.status='草稿';p.checks=Array(6).fill(false);p.reviewedAt=null;p.publishedAt=null;setChange(p,'AI 生成九格初稿（尚未人工核验）');ui.stage=2;notify('九格脚本已生成，逐格复核后再发布');}catch(err){notify('AI 编剧未完成：'+err.message)}finally{wtAiBusy=false;render();}}
 async function wtImage(useReference=false){if(wtAiBusy)return;const p=selected();if(!p)return;const currentFrame=ui.panel;const panel=p.panels[currentFrame];if(!panel?.scene?.trim()){notify('请先填写当前分镜画面描述');return;}if(!confirm('将调用单张 AI 图像生成模型，可能消耗免费额度或产生费用。确认执行？'))return;wtAiBusy=true;render();try{let sources=(data.characters||[]).filter(c=>c.portrait).sort((a,b)=>(Number(panel.scene.includes(b.name||'不存在'))-Number(panel.scene.includes(a.name||'不存在')))).slice(0,3).map(c=>({source:c.portrait,label:c.name}));if(useReference&&p.panels[0].image)sources.unshift({source:p.panels[0].image,label:'第一格画风'});sources=sources.slice(0,4);const references=[];for(const entry of sources){let blob;try{blob=await getImageBlob(entry.source)}catch{continue}const bmp=await createImageBitmap(blob);const ratio=Math.min(1,480/bmp.width,480/bmp.height);let canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bmp.width*ratio));canvas.height=Math.max(1,Math.round(bmp.height*ratio));canvas.getContext('2d').drawImage(bmp,0,0,canvas.width,canvas.height);const jpeg=await new Promise(r=>canvas.toBlob(r,'image/jpeg',.58));if(!jpeg||jpeg.size>175000)continue;let bytes=new Uint8Array(await jpeg.arrayBuffer());let parts=[];for(let i=0;i<bytes.length;i+=8192)parts.push(String.fromCharCode(...bytes.subarray(i,i+8192)));references.push({data:btoa(parts.join('')),type:'image/jpeg',label:entry.label});}const out=await wtCallAI('/api/ai/image',{title:p.title,target_type:'single_panel',target_index:currentFrame+1,expected_image_count:1,scene:panel.scene,visualNotes:'SINGLE CONTINUOUS FRAME ONLY. No montage, no nine-grid, no split-screen. '+(panel.prompt||''),characters:wtCharBible()+'\n'+p.characters,references});if(!out.image)throw Error('模型没有返回有效图片');const bin=atob(out.image),bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);const key=uid();await putMedia(key,new Blob([bytes],{type:'image/png'}));panel.image='media:'+key;markDirty(p);setChange(p,'生成第 '+(currentFrame+1)+' 格画面（引用 '+references.length+' 张定妆/风格图）');notify('画面已生成并保存为草稿，请审校角色一致性');}catch(err){notify('AI 生图未完成：'+err.message)}finally{wtAiBusy=false;render();}}
 document.addEventListener('change',async ev=>{const input=ev.target;if(!input?.matches?.('[data-wt-character-image]'))return;const c=(data.characters||[]).find(x=>x.id===input.dataset.wtCharacterImage);const file=input.files?.[0];if(!c||!file)return;if(!['image/png','image/jpeg','image/webp'].includes(file.type)||file.size>8*1024*1024){notify('定妆照需为 JPG、PNG 或 WebP，文件小于 8 MB');return;}try{const key=uid();await putMedia(key,file);c.portrait='media:'+key;persist();render();notify('角色定妆照已保存；登录后可同步至私有云端');}catch(err){notify('定妆照保存失败：'+err.message);}},true);
 // Intercept only extension controls; keep v1 editor event handling intact.
@@ -216,9 +218,9 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
  const isLiterary=x=>x?.type!=='drama';
  const isNobel=x=>isLiterary(x)&&(/诺贝尔|诺奖|nobel/i.test([x?.category,x?.source_id,x?.author_award,x?.genre,x?.award].filter(Boolean).join(' '))||x?.nobel_literature===true);
  const reviewDimensions=[
-  {id:'overview',title:'01–03 · 这部作品讲了什么',description:'核实作者、出版背景、故事核心问题与主题，只做简短原创概述，不逐章或逐场景重演'},
-  {id:'philosophy',title:'04–06 · 它揭示什么人生哲学',description:'从可信书评与原作可核对信息出发，提出独立的关于人性、选择、孤独、自由或尊严的分析，不把观点冒充作者原话'},
-  {id:'reader',title:'07–09 · 对普通人意味着什么',description:'使用完全原创的当代生活人物和具体选择，让读者带走可思考的问题；不冒用原著人物或复制经典情节'}
+  {id:'overview',title:'01–04 · 这部作品讲了什么',description:'核实作者、出版背景、故事核心问题与主题，以原创概述讲清人物、事件、冲突、转折与结局，不逐章或逐场景重演'},
+  {id:'philosophy',title:'05–07 · 它揭示什么人生哲学',description:'从可信书评与原作可核对信息出发，提出独立的关于人性、选择、孤独、自由或尊严的分析，不把观点冒充作者原话'},
+  {id:'reader',title:'08–09 · 对普通人意味着什么',description:'使用完全原创的当代生活人物和具体选择，让读者带走可思考的问题；不冒用原著人物或复制经典情节'}
  ];
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
  const flowCard=x=>window.WTDiscoveryFlow?.card(x)||{identityLabel:'作品身份待核对',heatLabel:'未核实热度',heatEvidenceDate:'',publishedDate:String(x?.published||'').slice(0,10),sourceName:x?.source_name||'公开资料',rightsLabel:x?.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实'};
@@ -389,13 +391,13 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   p.handoff={mode:review?'hotspot':faithful?'hotspot':'original'};
   if(review){
    p.description='文学作品《'+srcTitle+'》的原创导读。第一维度：作品讲了什么——简明准确介绍主题、背景及核心问题，不复刻完整情节；第二维度：揭示了什么人生哲学——独立分析人性、价值与选择；第三维度：普通人的意义——用原创当代生活场景呈现阅读启发。先核对原著书目信息与可信评论，不得杜撰具体事件或作者原话。';
-   p.ideaSeed='以文学评论而非故事重演制作九格：01–03事实准确的作品概述，04–06原创哲学评论，07–09普通人的现代生活启发。先完成来源核验，原文无授权不得长段引用、逐幕复现、复制人物独特形象、经典对白或原著插画。';
+   p.ideaSeed='以文学评论而非故事重演制作九格：01–04事实准确的作品概述，05–07原创哲学评论，08–09普通人的现代生活启发。先完成来源核验，原文无授权不得长段引用、逐幕复现、复制人物独特形象、经典对白或原著插画。';
    p.fiction='文学导读为评论与教育性原创表达：可简要介绍已核实的作品主题，不复刻故事场景；哲理部分标注为编辑分析，现实生活图采用完全原创人物、道具、空间与视觉隐喻。版权风险仍须按出版地区独立评估。';
    p.disclosure='本作品为原创文学导读与评论漫画，不是原著漫画改编；关于人生哲学的解释属于编辑观点。未获许可不使用原著正文、插画或大段对白。';
    p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
     source_title:srcTitle,source_url:limitedSource(x),source_status:'bibliographic_lead_pending_research',
     dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
-    panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
+    panel_ranges:[[1,4],[5,7],[8,9]],protect_original_expression:true};
   }else{
    p.description=faithful?summary:'本作仅借鉴公开题材的抽象主题（'+abstract+'），请创造不同人物、地点、关系、关键事件和结局，不照搬《'+srcTitle+'》的原剧情及对白。';
    p.ideaSeed=faithful?('根据已核对的原著剧情片段创作分镜：'+summary):

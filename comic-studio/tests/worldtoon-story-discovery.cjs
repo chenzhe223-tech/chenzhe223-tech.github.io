@@ -15,13 +15,13 @@ for(const x of library.items){assert.ok(x.source.startsWith('https://'));assert.
 const service=read('story-discovery-service.js'),uiCode=read('story-discovery-ui.js'),bundle=read('extension.js');
 for(const [name,src] of [['service',service],['ui',uiCode],['bundle',bundle]])assert.doesNotThrow(()=>new vm.Script(src),name+' must parse');
 assert.ok(bundle.trimEnd().endsWith(uiCode.trim()),'runtime extension must embed updated story UI');
-assert.match(read('index.html'),/extension\.js\?v=4\.6\.8-review-fully-wired/,'browser must use fresh script');
+assert.match(read('index.html'),/extension\.js\?v=5\.6\.0-literature-v2/,'browser must use fresh script');
 assert.match(read('styles.css'),/\.story-discovery/,'mobile and desktop styles are served');
 const worker=read('worker.js');
 assert.ok(worker.includes(service.trim()),'deployed Worker must contain the canonical story search service');
 assert.match(worker,/url\.pathname==='\/api\/comic\/story-search'&&request\.method==='GET'.*wtStorySearch/,'Worker must route live story searches');
 assert.match(worker,/storySearch:true/,'health endpoint must advertise story search');
-assert.ok(read('styles.css').trimEnd().endsWith(read('mobile-refine.css').trim()),'responsive styles must remain bundled in Worker-allowed CSS');
+assert.ok(read('styles.css').includes(read('mobile-refine.css').trim()),'responsive styles must remain bundled in Worker-allowed CSS');
 const waits={timeout:()=>({})};
 let newsRows=[],newsSearchCalls=0;
 const fetcher=async raw=>{

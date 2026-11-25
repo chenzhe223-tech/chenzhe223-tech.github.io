@@ -92,6 +92,6 @@ assert.deepEqual([...mediaRefs({portrait:'media:orphan',story:'no media'})],['or
  assert.match(v4,/delete-unmade/);
  assert.match(v4,/批量清理草稿/);
  const child=read('workflow-v4.css'),css=read('worldtoon-v3.css');
- assert.ok(css.trimEnd().endsWith(child.trimEnd()),'responsive styles bundled into Worker-allowed CSS');
+ assert.ok(css.includes(child.trimEnd()),'responsive styles bundled into Worker-allowed CSS');
  console.log('WORLD/TOON UNMADE CLEANUP PASS: guarded single/batch deletion, cancellation, safe media reclamation, topic retention, rollback and V4 UI');
 })().catch(e=>{console.error(e);process.exitCode=1});

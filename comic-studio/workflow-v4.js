@@ -211,7 +211,8 @@
  }
  window.wt4Production=production;
  const originalDashboard=dashboard;
- dashboard=function(){return overview()+originalDashboard()};
+ // V4 overview is owned by worldtoon-v3-review.js; never register a second homepage wrapper.
+ dashboard=function(){return originalDashboard()};
  document.addEventListener('click',ev=>{
    const b=ev.target.closest('[data-wt4-step]');if(!b)return;
    ev.preventDefault();ev.stopImmediatePropagation();

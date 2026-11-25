@@ -68,6 +68,20 @@ function ensure(p){
 function shotOf(i){return SHOTS[i]||'中景人物'}
 function localStoryboardCore(p){
  const c=ensure(p),subject=clean(p.sourceTitle||p.title).replace(/：漫画改编$/,'').slice(0,95);
+ if(isLiteraryProject(p)){
+  if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
+  const readers=c.cast?.map(x=>clean(x.name)).filter(Boolean);
+  const lead=readers[0]||'原创读者',other=readers[1]||'原创编辑';
+  const n=p.panels.length,a=Math.min(n-2,Math.max(2,Math.round(n*4/9))),b=Math.min(n-1,a+Math.max(1,Math.round(n*3/9)));
+  const topics=['作品背景与主人公','人物关系与处境','核心事件与冲突','转折与命运走向','人物选择与心理','核心哲学命题','文学意象与社会背景','普通人的现实困境','人生启示与开放问题'];
+  return Array.from({length:n},(_,i)=>{
+   const k=i<a?Math.min(3,Math.floor(i*4/a)):i<b?4+Math.min(2,Math.floor((i-a)*3/(b-a))):7+Math.min(1,Math.floor((i-b)*2/(n-b)));
+   return {title:topics[k],scene:'【待文学研究】《'+subject+'》：'+topics[k]+'。先查阅可靠原著资料，填写本格具体作品事实或有依据的独立解释及原创视觉构图，不得使用通用哲理模板。',
+     caption:'【待文学研究】填写可核实的原创概述或评论。',dialogue:'',prompt:'单幅原创编辑插画；事实核验和内容定稿前禁止生图。'};
+  });
+ }
+
+ // Non-topic literary reviews retain their existing editable commentary workflow.
  if(p.storySourceSelection?.adaptation==='literary_review'){
   if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
   const readers=c.cast?.map(x=>clean(x.name)).filter(Boolean);
@@ -76,14 +90,14 @@ function localStoryboardCore(p){
    ['为什么值得读',lead+'在原创城市图书馆前观察一本无复制原著封面图案的素面书，桌上有作品书目核验卡与空白笔记，画面克制。','一部作品，首先要读懂它提出的问题。','先核对书目与作者。'],
    ['作品的世界与主题',other+'把书本放在桌上，用独立设计的时间线示意图与抽象象征物探讨创作背景，避免绘制原作人物和具体故事桥段。','出版背景、人物关系与核心主题须依据可靠来源核对。','我们理解的是作品本身吗？'],
    ['核心问题不是复述剧情',lead+'与'+other+'在书店阅读区域面对一面三元素抽象墙，分别象征核心主题、冲突与疑问；无原作场景的演绎。','用少量经核验的事实，介绍作品想讨论什么。','读懂问题，比讲完故事更重要。'],
-   ['人究竟怎样选择',lead+'走到一条由原创几何拱门构成的分岔路，两边光影对照，人物身上没有任何原著角色标识。','文学可以让我们讨论选择，但观点须注明属于编辑解读。','什么才算真正的自由？'],
+   ['人物的关键转折',lead+'走到一条由原创几何拱门构成的分岔路，两边光影对照，人物身上没有任何原著角色标识。','本格补充经核实的关键选择、转折与命运走向。','什么才算真正的自由？'],
    ['我们怎样理解他人',other+'在完全原创的城市公共长椅旁，与不同年龄的普通人相互聆听，背景采用形象化的距离与连接线。','同情、尊严和误解，是可供讨论的文学问题。','我们愿意听完另一个人的故事吗？'],
    ['哲学没有标准答案',lead+'与'+other+'共同望向由窗外光束照亮的空白笔记纸，笔记只用形状和留白，不描绘原著正文或句子。','这是对作品可能意义的独立阅读，不是作者原话。','读完之后，你会改变哪一种判断？'],
-   ['普通人的一次决定',lead+'在真实感的原创城市地铁站面对一项日常选择，周围人群自然有序，用视线和手势表现犹豫，人物与原作无关。','把阅读带进生活：思考选择如何影响自己。','如果是你，会怎么做？'],
+   ['思想与现实的联系',lead+'在真实感的原创城市地铁站面对一项日常选择，周围人群自然有序，用视线和手势表现犹豫，人物与原作无关。','把阅读带进生活：思考选择如何影响自己。','如果是你，会怎么做？'],
    ['与亲近的人重新对话',other+'在当代家中与家人交流，桌边的书只用素面道具呈现，人物衣服发型与前格一致，没有原作经典桥段。','阅读也许不能直接解决问题，却能帮助理解他人。','我可以先认真听你说。'],
    ['读完仍有一个问题',lead+'与'+other+'在清晨城市书店外合上一本素面书，远处一条宽阔人行道通向新的一天，留出标题及结尾提问的独立排版区。','故事会结束，思考仍在继续。','这部作品让你想起了谁？']
   ];
-  return Array.from({length:p.panels.length},(_,i)=>{const row=notes[Math.min(8,Math.floor(i*9/p.panels.length))];const dimension=i<Math.ceil(p.panels.length/3)?0:i<Math.ceil(p.panels.length*2/3)?1:2;return ({
+  return Array.from({length:p.panels.length},(_,i)=>{const n=p.panels.length,a=Math.min(n-2,Math.max(2,Math.round(n*4/9))),b=Math.min(n-1,a+Math.max(1,Math.round(n*3/9)));const dimension=i<a?0:i<b?1:2;const row=notes[Math.min(8,Math.floor(i*9/n))];return ({
    title:row[0],scene:'【'+shotOf(i)+'】'+row[1]+' 本图是三维文学导读的原创编辑插画，不得重绘《'+subject+'》的受保护具体情节或独特人物，人物脸型、服饰、材质与上格连续。',
    caption:row[2],dialogue:row[3],
    prompt:'高品质国际文化杂志导读插画，原创现实隐喻，单画面无文字无对白气泡；'+
@@ -187,7 +201,8 @@ function localStoryboardCore(p){
   caption:row[2],dialogue:row[3],prompt:'专业完成级漫画分镜，人物外貌连续、空间轴线明确；'+shotOf(i)+'；'+style(c.styleId).material+'，'+style(c.styleId).lighting}));
 }
 function localStoryboard(p){
- const rows=localStoryboardCore(p),seen=new Map(),followups=[
+ const rows=localStoryboardCore(p);if(p.storySourceSelection?.adaptation==='literary_review')return rows;
+ const seen=new Map(),followups=[
  ['重新核查前一格提出的证据','先把这件事确认清楚'],
  ['注意到行动中尚未解释的细节','这个细节还没有答案'],
  ['试着通过新的行动进行验证','我们先用行动来检验'],
@@ -220,10 +235,11 @@ function applyStoryboard(p,panels,meta,replace=false){
    const cur=p.panels[i][field];
    if(!replace&&clean(cur)&&!(field==='title'&&/^第 ?[1-9] 格$/.test(cur)))continue;
    const value=clean(panels[i]?.[field]).slice(0,field==='title'?100:field==='scene'?1700:field==='prompt'?1200:550);
-   if(value){p.panels[i][field]=value;updated++}
+   if(value||(replace&&isLiteraryProject(p))){p.panels[i][field]=value;updated++}
   }
  }
  const c=ensure(p);
+ if(isLiteraryProject(p)){delete p.literaryResearch;delete p.literaryReviewReceipt;if(meta.research){p.literaryResearch={...meta.research,model:meta.model,verification_status:'pending_independent_review',source_urls:validSources(p),generated_at:new Date().toISOString(),input_signature:literaryInputSignature(p)};}}
  c.drafted=true;c.reviewed=false;c.approval=null;
  c.storyboardProvenance={method:meta.method||'local_structure_rules',provider:meta.provider||'local',
   model:meta.model||null,at:new Date().toISOString(),analysis:clean(meta.analysis||'').slice(0,600),
@@ -254,10 +270,12 @@ function aiStoryPayload(p,provider){
 }
 async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
- if(p.storySourceSelection?.adaptation==='literary_review'){
-  const updated=draft(p,replace);
-  if(updated)notify('文学导读采用动态篇幅的三维原创评论分镜；请通过 ChatGPT 研究和核实作品内容，未核实的介绍不得直接发表');
-  return;
+ const literary=isLiteraryProject(p);
+ if(literary){
+  if(auto){draft(p,false);return;}
+  provider='deepseek';replace=true;
+  if(p.panels.some(x=>x.image)||p.cover){notify('已有成品图片，请创建修订版后重新研究。');return;}
+  if(literaryEvidenceText(p).length<100||!(typeof validSources==='function'&&validSources(p).length)){notify('请先添加或手工填写至少100字实际作品资料摘记及来源链接；DeepSeek 不会仅凭书名冒充研究。');return;}
  }
  const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));
  if(auto&&!empty)return;
@@ -265,8 +283,8 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   draft(p,false);return;
  }
  if(provider==='deepseek'){
-  if(!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
-  if(!auto&&!confirm('将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
+  if(!literary&&!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
+  if(!auto&&!confirm(literary?'使用平台已配置 DeepSeek 研究作品并生成分镜，可能产生模型费用。确认本次调用？':'将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
  }else if(provider!=='native'){
   if(!storyApiKey.trim()){notify('请输入'+({openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'模型服务商')+' API Key，仅用于本次请求');return}
   if(!auto&&!confirm('将使用你提供的第三方模型 API，供应商可能按用量收费。确认本次调用？'))return;
@@ -282,17 +300,17 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
     if(typeof wtArchiveApi!=='function')throw Error('安全 DeepSeek 网关尚未加载');
     const genre=p.plotGenre==='viral-melodrama'?'狗血网红爽剧':'通用故事';
     const theme=p.dramaSubtype||'rebirth-bank-rich',intensity=Number(p.dramaIntensity||4);
-    const idea=(p.ideaSeed||p.description||ensure(p).thesis||'').slice(0,1100)+
+    const idea=(literary?('深度文学解读：'+(p.sourceTitle||p.title)):(p.ideaSeed||p.description||ensure(p).thesis||'')).slice(0,1100)+
       (genre==='狗血网红爽剧'?'\\n【作者创作要求】原创成年人的都市重生逆袭、富婆/金融职场、网红热搜与合约男明星的情感纠葛。狗血反转强度 '+intensity+'/5；具体题材'+theme+'；每2–3格有反转，开场强悬念，结尾强钩子。全为架空虚构人物，不捏造真人丑闻。':'');
     if(idea.trim().length<8||idea.length>1800)throw Error('请先完善8–1800字的故事核心构思');
     const response=await wtArchiveApi('deepseek-expand',{method:'POST',
-      body:JSON.stringify({idea,title:p.title,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
+      body:JSON.stringify({idea,title:literary?(p.sourceTitle||p.title):p.title,mode:literary?'literary_review':undefined,research_evidence:literary?literaryEvidenceText(p):undefined,source_urls:literary?validSources(p):undefined,cast:literary?ensure(p).cast.map(({name,role,look,clothes,symbol,nature})=>({name,role,look,clothes,symbol,nature})):undefined,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
         genre:p.plotGenre||'general',drama_subtype:theme,drama_intensity:intensity,
         series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
     if(response?.method!=='verified_model_response'||!response.story?.panels)
       throw Error('未收到真实 DeepSeek 结构化剧本');
     result={method:'verified_model_response',provider:'deepseek',model:response.model||'deepseek-flash',
-      analysis:response.story.reasoning||'',panels:response.story.panels.map(x=>({
+      analysis:response.story.reasoning||'',research:literary?{...response.story.research,panel_evidence:response.story.panels.map((x,i)=>({index:i+1,dimension:x.dimension,claim_refs:x.claim_refs}))}:null,panels:response.story.panels.map(x=>({
         title:x.title,scene:x.scene,caption:x.caption,dialogue:x.dialogue,prompt:x.visual_prompt}))};
   }else{
     if(typeof wtCallAI!=='function')throw Error('模型请求组件未载入');
@@ -331,9 +349,24 @@ function payload(p){
   visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,license_evidence_url:x.license_evidence_url||'',rights_verified:x.rights_verified===true,rights_status:x.rightsStatus||'legacy_review_required',asset_type:x.assetType||'legacy_unclassified',asset_type_label:x.assetTypeLabel||'',applies_to:x.appliesTo||{scope:'project',targetId:'project'},role:'visual_reference_only'}))
  };
 }
+function isLiteraryProject(p){return typeof wfLiteraryResearchRequired==='function'?wfLiteraryResearchRequired(p):p?.literaryResearchScope==='topic_literature_v2'&&p?.storySourceSelection?.adaptation==='literary_review';}
+function literaryEvidenceText(p){return String(p.literaryEvidence||'').trim();}
+function literaryInputSignature(p){
+ return JSON.stringify([p.sourceTitle||p.title,literaryEvidenceText(p),typeof validSources==='function'?validSources(p):[],p.novelSkill?.provenance?.sha256||null]);
+}
+function literaryReviewSnapshot(p){
+ return JSON.stringify([literaryInputSignature(p),p.literaryResearch||null,(p.panels||[]).map(x=>[x.title,x.scene,x.caption,x.dialogue,x.prompt])]);
+}
+function literaryReviewErrors(p){
+ if(!isLiteraryProject(p))return [];
+ const r=p.literaryResearch,errors=[];
+ if(!r||r.status!=='draft'||r.input_signature!==literaryInputSignature(p)||!Array.isArray(r.claims)||!r.claims.length||r.evaluation?.structural_pass!==true||r.panel_evidence?.length!==p.panels.length)errors.push('请先完成与当前资料一致的 DeepSeek 文学研究');
+ if(p.literaryReviewReceipt?.author_content_reviewed!==true||p.literaryReviewReceipt.snapshot!==literaryReviewSnapshot(p))errors.push('请核对文学研究与分镜，完成专项内容审核');
+ return errors;
+}
 function digest(p){
  // FNV-1a change indicator; not a signature. GitHub commit provides the immutable official task record.
- let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),...(p.novelSkill?{novel_source_sha256:p.novelSkill.provenance?.sha256||null,novel_rights_mode:p.novelSkill.rights?.mode||null}:{}),data:payload(p)}),h=2166136261;
+ let str=JSON.stringify({title:clean(p.title),subject:clean(p.sourceTitle),...(p.novelSkill?{novel_source_sha256:p.novelSkill.provenance?.sha256||null,novel_rights_mode:p.novelSkill.rights?.mode||null}:{}),...(isLiteraryProject(p)?{literary_snapshot:literaryReviewSnapshot(p),literary_receipt:p.literaryReviewReceipt||null}:{}),data:payload(p)}),h=2166136261;
  for(let i=0;i<str.length;i++){h^=str.charCodeAt(i);h=Math.imul(h,16777619)}
  return (h>>>0).toString(16).padStart(8,'0');
 }
@@ -353,6 +386,8 @@ function checks(p){
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
+ if(isLiteraryProject(p)&&p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))errs.push('文学导读尚有待研究画格：先核实作品资料，填写具体故事与思想内容，再定稿；不得将研究占位直接制作。');
+ errs.push(...literaryReviewErrors(p));
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
  return errs;
@@ -435,7 +470,46 @@ function framePreview(p,c){
  return '<div class="director-board-info"><strong>'+e(arc(c.arcId).name)+' · '+p.panels.length+'格镜头表</strong><span>仅为镜头/文字预演，不是 AI 生成的最终图片</span></div>'+
  '<div class="director-board">'+rows+'</div>';
 }
+async function collectLiterarySources(p){
+ if(!isLiteraryProject(p)||storyBusy||p.handoff?.repoQueuedAt)return;
+ if(typeof wtArchiveApi!=='function')throw Error('资料采集接口尚未加载');
+ const title=String(p.sourceTitle||p.title||'').trim(),source=p.storySourceSelection?.source||'';
+ if(title.length<2)throw Error('请先确认作品名称');
+ storyBusy=true;render();
+ try{
+  const response=await wtArchiveApi('literary-sources',{method:'POST',body:JSON.stringify({title,source})});
+  if(selected()?.id!==p.id||p.handoff?.repoQueuedAt||String(p.sourceTitle||p.title||'').trim()!==title)throw Error('作品已切换或更改，未覆盖资料');
+  p.literarySourceCandidates={title,items:Array.isArray(response.items)?response.items:[],warnings:response.warnings||[],retrieved_at:response.retrieved_at};persist();
+  notify(p.literarySourceCandidates.items.length?'已取得候选资料，请打开原文核对作者与版本，选择后纳入研究。':'暂未找到候选资料，请补充可靠来源与实际内容摘记。');
+ }catch(err){notify('文学资料采集失败：'+String(err?.message||err).slice(0,150))}
+ finally{storyBusy=false;render()}
+}
+function addLiterarySource(p,index){
+ const collection=p.literarySourceCandidates;
+ if(!isLiteraryProject(p)||p.handoff?.repoQueuedAt||collection?.title!==String(p.sourceTitle||p.title||'').trim())throw Error('候选资料与当前作品不匹配');
+ const item=collection.items?.[Number(index)];if(!item?.url||!item?.excerpt)throw Error('候选资料不存在');
+ if(!confirm('确认该候选资料对应当前作品的作者、书名及版本？加入仅供研究，不代表来源已核验或取得改编权。'))return;
+ const section='【候选资料｜'+item.source+'｜'+item.title+'】\n来源：'+item.url+'\n摘记：'+item.excerpt;
+ const prior=literaryEvidenceText(p);
+ if(prior.includes(section)){notify('此资料已加入');return}
+ const next=[prior,section].filter(Boolean).join('\n\n');
+ if(next.length>18000)throw Error('资料摘记已达到18000字，请整理后再添加');
+ p.literaryEvidence=next;
+ p.sourceURLs=[...new Set([...(typeof validSources==='function'?validSources(p):[]),item.url])].join('\n');
+ ensure(p).approval=null;setChange(p,'添加文学候选研究资料（待独立核验）');render();
+}
 function storyControls(p,c){
+ if(isLiteraryProject(p)){
+  const r=p.literaryResearch,valid=r&&r.input_signature===literaryInputSignature(p)&&Array.isArray(r.claims);
+  const collection=p.literarySourceCandidates?.title===String(p.sourceTitle||p.title||'').trim()?p.literarySourceCandidates:null;
+  const sources=collection?.items||[];
+  const candidateCards=sources.map((x,i)=>'<article class="box"><b>'+e(x.title)+'</b> <small>'+e(x.source)+'</small><p>'+e(x.excerpt)+'</p><a href="'+e(x.url)+'" target="_blank" rel="noopener noreferrer">查看原文 ↗</a> <button class="button" data-director-action="literary-add-source" data-source-index="'+i+'">核对后加入研究</button></article>').join('');
+  const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容'],['evaluation','结构检查与模型自评（非独立验收）'],['panel_evidence','逐格证据锚点']];
+  const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
+  return '<section class="director-ai-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2；使用服务端现有配置，无需输入密钥。先补充真实资料摘记及来源，再生成研究和专属分镜。</p>'+
+   '<p>资料采集只使用公开书目与百科候选，不调用收费模型。手动核对作品身份，优先补充出版社、原著合法版本和可信文学评论。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集候选资料</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
+   (valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
+ }
  const info=c.storyboardProvenance;
  const providerNames={native:'平台内置模型',deepseek:'DeepSeek API',openai:'OpenAI API',claude:'Claude API',gemini:'Gemini API',kimi:'Kimi API',qwen:'通义千问 API'};
  const origin=info?.method==='verified_model_response'?'AI生成 · '+(providerNames[info.provider]||'第三方模型')+(info.model?' · '+info.model:''):
@@ -532,6 +606,7 @@ async function action(type,p){
  if(type==='next'){step=Math.min(3,step+1);render();return}
  if(type==='portrait-pack'){await exportPortraitReferencePack(p);return}
  if(type==='draft'){if(p.handoff?.repoQueuedAt)throw Error('该任务已正式入仓，不能覆盖分镜');draft(p);return}
+ if(type==='literary-collect'){await collectLiterarySources(p);return}
  if(type==='ai'){await generateStory(p,{provider:storyProvider,replace:true});return}
  if(type==='fill'){await generateStory(p,{provider:storyProvider,replace:false});return}
  if(type==='adopt'){
@@ -541,15 +616,28 @@ async function action(type,p){
   if(!c.storyboardProvenance)c.storyboardProvenance={method:'manual_unverified',provider:'manual',model:null,at:new Date().toISOString(),authorEdited:true};
   setChange(p,'保留并提交已有'+p.panels.length+'格分镜供作者审稿');render();notify(''+p.panels.length+'格脚本已保留，没有覆盖已有画面或对白');return
  }
+ if(type==='literary-review'){
+  if(p.handoff?.repoQueuedAt)throw Error('已派单，不得覆盖审核');
+  if(!p.literaryResearch||p.literaryResearch.evaluation?.structural_pass!==true||p.literaryResearch.input_signature!==literaryInputSignature(p)||p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))throw Error('先完成真实研究与具体分镜');
+  if(!confirm('请确认已逐项核查来源、人物及故事主线、哲学证据、现实意义与版权边界；陌生读者能从分镜读懂作品。该操作是作者内容审阅，不代表独立事实核验或出版授权。'))return;
+  p.literaryReviewReceipt={snapshot:literaryReviewSnapshot(p),author_content_reviewed:true,reviewed_at:new Date().toISOString()};ensure(p).approval=null;setChange(p,'作者完成文学专项内容审核');render();return;
+ }
  if(type==='approve'){approve(p);return}
 }
 document.addEventListener('input',ev=>{
  const el=ev.target;
+ if(el?.matches?.('[data-literary-input]')){
+  const p=selected();if(!p||!isLiteraryProject(p)||p.handoff?.repoQueuedAt)return;
+  if(el.dataset.literaryInput==='evidence')p.literaryEvidence=String(el.value||'').slice(0,18000);
+  if(el.dataset.literaryInput==='sources')p.sourceURLs=String(el.value||'').slice(0,10000);
+  ensure(p).approval=null;return;
+ }
  if(el?.matches?.('[data-director-api-key]'))storyApiKey=String(el.value||'').slice(0,320);
  if(el?.matches?.('[data-director-model]'))storyModel=String(el.value||'').slice(0,100);
 },true);
 document.addEventListener('change',ev=>{
  const el=ev.target;
+ if(el?.matches?.('[data-literary-input]')){const p=selected();if(p&&isLiteraryProject(p)&&!p.handoff?.repoQueuedAt)setChange(p,'更新文学研究资料（旧审核自动失效）');return;}
  if(!el?.matches?.('[data-director-provider]'))return;
  ev.stopImmediatePropagation();
  storyProvider=['native','deepseek',...byoProviders].includes(el.value)?el.value:'native';
@@ -563,7 +651,8 @@ document.addEventListener('click',ev=>{
   if(el.dataset.directorStep!=null){step=Number(el.dataset.directorStep);render();return}
   if(el.dataset.directorStyle!=null){if(p.handoff?.repoQueuedAt)throw Error('任务已入仓，本版本画风不可变更');ensure(p).styleId=el.dataset.directorStyle;commitEdit(p,'更新画风套装');render();return}
   if(el.dataset.directorArc!=null){if(p.handoff?.repoQueuedAt)throw Error('任务已入仓，本版本剧情结构不可变更');const c=ensure(p),next=el.dataset.directorArc;if(c.arcId===next)return;const hasStory=p.panels.some(x=>clean(x.scene)||clean(x.caption)||clean(x.dialogue));if(p.panels.some(x=>x.image)||p.cover)throw Error('已产生画格图像，改剧情需要建立修订作品以保持画面一致');if(hasStory&&!confirm('切换剧情类型将重建本作品全部'+p.panels.length+'格剧情及对白，旧文本会被替换。继续吗？'))return;c.arcId=next;applyStoryboard(p,localStoryboard(p),{method:'local_structure_rules',provider:'local',analysis:'按'+arc(next).name+'重新编写的可编辑分镜及对白'},'genre-switch');notify('已同步更新'+p.panels.length+'格分镜与对白；如需 AI 创作，请使用智能编剧并明确授权模型调用');return}
-  action(el.dataset.directorAction,p);
+  if(el.dataset.directorAction==='literary-add-source'){addLiterarySource(p,el.dataset.sourceIndex);return}
+  action(el.dataset.directorAction,p).catch(err=>notify(String(err.message||err)));
  }catch(err){notify(String(err.message||err))}
 },true);
 document.addEventListener('change',ev=>{

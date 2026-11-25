@@ -10,9 +10,9 @@
  const isLiterary=x=>x?.type!=='drama';
  const isNobel=x=>isLiterary(x)&&(/诺贝尔|诺奖|nobel/i.test([x?.category,x?.source_id,x?.author_award,x?.genre,x?.award].filter(Boolean).join(' '))||x?.nobel_literature===true);
  const reviewDimensions=[
-  {id:'overview',title:'01–03 · 这部作品讲了什么',description:'核实作者、出版背景、故事核心问题与主题，只做简短原创概述，不逐章或逐场景重演'},
-  {id:'philosophy',title:'04–06 · 它揭示什么人生哲学',description:'从可信书评与原作可核对信息出发，提出独立的关于人性、选择、孤独、自由或尊严的分析，不把观点冒充作者原话'},
-  {id:'reader',title:'07–09 · 对普通人意味着什么',description:'使用完全原创的当代生活人物和具体选择，让读者带走可思考的问题；不冒用原著人物或复制经典情节'}
+  {id:'overview',title:'01–04 · 这部作品讲了什么',description:'核实作者、出版背景、故事核心问题与主题，以原创概述讲清人物、事件、冲突、转折与结局，不逐章或逐场景重演'},
+  {id:'philosophy',title:'05–07 · 它揭示什么人生哲学',description:'从可信书评与原作可核对信息出发，提出独立的关于人性、选择、孤独、自由或尊严的分析，不把观点冒充作者原话'},
+  {id:'reader',title:'08–09 · 对普通人意味着什么',description:'使用完全原创的当代生活人物和具体选择，让读者带走可思考的问题；不冒用原著人物或复制经典情节'}
  ];
  const limitedSource=x=>/^(https:\/\/)[\w.-]+\//.test(String(x?.source||''))?x.source:'';
  const flowCard=x=>window.WTDiscoveryFlow?.card(x)||{identityLabel:'作品身份待核对',heatLabel:'未核实热度',heatEvidenceDate:'',publishedDate:String(x?.published||'').slice(0,10),sourceName:x?.source_name||'公开资料',rightsLabel:x?.rights==='public_domain_us'?'公版候选（按地区核对）':'版权待核实'};
@@ -183,13 +183,13 @@
   p.handoff={mode:review?'hotspot':faithful?'hotspot':'original'};
   if(review){
    p.description='文学作品《'+srcTitle+'》的原创导读。第一维度：作品讲了什么——简明准确介绍主题、背景及核心问题，不复刻完整情节；第二维度：揭示了什么人生哲学——独立分析人性、价值与选择；第三维度：普通人的意义——用原创当代生活场景呈现阅读启发。先核对原著书目信息与可信评论，不得杜撰具体事件或作者原话。';
-   p.ideaSeed='以文学评论而非故事重演制作九格：01–03事实准确的作品概述，04–06原创哲学评论，07–09普通人的现代生活启发。先完成来源核验，原文无授权不得长段引用、逐幕复现、复制人物独特形象、经典对白或原著插画。';
+   p.ideaSeed='以文学评论而非故事重演制作九格：01–04事实准确的作品概述，05–07原创哲学评论，08–09普通人的现代生活启发。先完成来源核验，原文无授权不得长段引用、逐幕复现、复制人物独特形象、经典对白或原著插画。';
    p.fiction='文学导读为评论与教育性原创表达：可简要介绍已核实的作品主题，不复刻故事场景；哲理部分标注为编辑分析，现实生活图采用完全原创人物、道具、空间与视觉隐喻。版权风险仍须按出版地区独立评估。';
    p.disclosure='本作品为原创文学导读与评论漫画，不是原著漫画改编；关于人生哲学的解释属于编辑观点。未获许可不使用原著正文、插画或大段对白。';
    p.literaryReviewGuide={schema:'davylab.worldtoon.literary-review.v1',
     source_title:srcTitle,source_url:limitedSource(x),source_status:'bibliographic_lead_pending_research',
     dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
-    panel_ranges:[[1,3],[4,6],[7,9]],protect_original_expression:true};
+    panel_ranges:[[1,4],[5,7],[8,9]],protect_original_expression:true};
   }else{
    p.description=faithful?summary:'本作仅借鉴公开题材的抽象主题（'+abstract+'），请创造不同人物、地点、关系、关键事件和结局，不照搬《'+srcTitle+'》的原剧情及对白。';
    p.ideaSeed=faithful?('根据已核对的原著剧情片段创作分镜：'+summary):

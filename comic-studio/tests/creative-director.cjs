@@ -10,7 +10,7 @@ const visualV3=fs.readFileSync(path.join(root,'style-v3.js'),'utf8');
 const worker=fs.readFileSync(path.join(root,'worker.js'),'utf8');
 const archive=fs.readFileSync(path.join(root,'archive.js'),'utf8');
 const html=fs.readFileSync(path.join(root,'index.html'),'utf8');
-assert.match(html,/creative-director\.js\?v=4\.8\.0-novel-distiller/,'cast-to-storyboard synchronization and provider options must bypass stale cached director script');
+assert.match(html,/creative-director\.js\?v=5\.6\.0-literature-v2/,'cast-to-storyboard synchronization and provider options must bypass stale cached director script');
 const source={id:'p1',title:'海洋机器人：漫画改编',sourceTitle:'机器人如何探索海洋深处',category:'机器人',description:'在虚构海底研究站，两个原创角色用亲身经历解释科研技术的边界。',
  sourceURLs:'https://example.org/research',factNotes:'【待核验】请审查原文',fiction:'原创虚构海底城市，不影射真实公众人物。',
  disclosure:'这是虚构的科普故事，不代表真实新闻报道。',tone:'科学讽刺',characters:'',
@@ -27,8 +27,10 @@ vm.runInNewContext(visualV3,ctx);
 vm.runInNewContext(creative,ctx);
 const director=ctx.window.wtDirector;
 assert.ok(director,'Director API registered');
-assert.equal(ctx.window.WTStyleV3.CATALOG.length,25,'Twenty-five catalog styles including four new 3D render references');
-assert.equal(director.STYLES.length,31,'25 catalog styles and 6 backward-compatible production styles');
+assert.equal(ctx.window.WTStyleV3.CATALOG.length,26,'26 catalog styles including modern-life-anime and four 3D references');
+assert.equal(director.STYLES.length,32,'26 catalog styles and 6 backward-compatible production styles');
+assert.ok(director.STYLES.some(x=>x.id==='modern-life-anime'),'new approved style remains available');
+assert.equal(new Set(director.STYLES.map(x=>x.id)).size,32,'style IDs unique');
 assert.equal(director.ARCS.length,6,'Six narrative structures including viral short drama');
 let initial=director.readiness(source);
 assert.ok(initial.length>0,'Unreviewed project cannot be queued');
@@ -43,7 +45,7 @@ assert.ok(director.checks(source).includes('请勾选“已逐格审阅并确认
 seed.cast[0].name='苏见微';seed.cast[0].look='黑长发，眉眼清晰';
 source.panels[0].scene='苏见微走进公寓，黑长发，眉眼清晰；暴雨仍在窗外，远处城市灯火映在玻璃上，房间里只剩钟声。';
 source.panels[0].dialogue='苏见微：我会自己作出选择。';
-const changeCast=(key,index,value)=>listeners.change[1]({target:{matches:()=>true,dataset:{directorCast:key,characterIndex:String(index)},value},preventDefault(){}});
+const changeCast=(key,index,value)=>listeners.change[1]({target:{matches:s=>s.includes('[data-director-cast]'),dataset:{directorCast:key,characterIndex:String(index)},value},preventDefault(){}});
 changeCast('name',0,'贺庭洲');
 assert.match(source.panels[0].scene,/贺庭洲走进公寓/,'renaming a character updates scene text');
 assert.match(source.panels[0].dialogue,/贺庭洲：/,'renaming a character updates dialogue');
@@ -78,7 +80,7 @@ assert.equal(director.approved(source),false,'Style changes invalidate lock');
 source.creativeDirection.styleId=payload.style_id;
 assert.equal(director.digest(source),before);
 source.handoff.repoQueuedAt=new Date().toISOString();
-listeners.change[1]({target:{matches:()=>true,dataset:{directorField:'world'},value:'不同世界'},preventDefault:()=>{}});
+listeners.change[1]({target:{matches:s=>s.includes('[data-director-field]'),dataset:{directorField:'world'},value:'不同世界'},preventDefault:()=>{}});
 assert.notEqual(source.creativeDirection.world,'不同世界','Already queued task cannot change under same version');
 assert.ok(lastMessage.includes('不能直接覆盖'));
 assert.ok(app.includes("missing.push(...wtDirector.readiness(p))"),'App gates task readiness');
@@ -98,4 +100,4 @@ assert.ok(creative.includes('WTStyleV3.cards(c)'),'Director now reads the V3 sty
 assert.ok(creative.includes('WTStyleV3.detail(c)'),'Director renders actual reference/sample provenance states');
 assert.ok(html.includes('style-v3.js')&&html.includes('style-v3.css'),'App must load V3 assets');
 assert.ok(worker.includes('style-v3\\.js')&&worker.includes('style-v3\\.css'),'Worker must allow V3 asset URLs');
-console.log('WORLD/TOON creative director: 25 catalog styles + 6 legacy styles, six narrative arcs, approved storyboard and GitHub gates PASS');
+console.log('WORLD/TOON creative director: 26 catalog styles + 6 legacy styles, six narrative arcs, approved storyboard and GitHub gates PASS');
