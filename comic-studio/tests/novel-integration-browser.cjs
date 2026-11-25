@@ -32,7 +32,7 @@ function unzipStored(bytes){
   }
   assert.equal(loaded,true,'novel parser and studio must load from deployed Worker: '+JSON.stringify(diagnostics));
   const initial=await page.evaluate(()=>{
-   const p=emptyProject();p.id='qa-book-to-comic-local-20261121';
+   const p=emptyProject();p.id='qa-book-to-comic-local-20261121';p.productionAgent='Gemini';
    p.title='世界文学·章节研究测试';p.sourceTitle='编辑原创测试小说';
    p.category='世界文学导读';p.handoff={mode:'hotspot',phase:'not_started'};
    data.projects.unshift(p);ui.selected=p.id;persist();nav('director/'+p.id);
@@ -108,12 +108,12 @@ function unzipStored(bytes){
   assert.equal(task.mode,'literary_review');
   assert.ok(!('private_source_ref' in skill),'exported metadata never exposes local IndexedDB identifiers');
   assert.match(zip.get('NOVEL_DISTILLATION.md').toString('utf8'),/AI 深度语义蒸馏/);
-  assert.match(zip.get('ChatGPT_复制粘贴开工指令.txt').toString('utf8'),/novel-skill\.json/);
+  assert.match(zip.get('Gemini_复制粘贴开工指令.txt').toString('utf8'),/novel-skill\.json/);
   assert.equal(task.expected_image_count,10);
   // Second task verifies the default privacy boundary: index can travel, manuscript cannot.
   const separate=await page.evaluate(id=>{
    const original=data.projects.find(p=>p.id===id),copy=emptyProject();
-   copy.id='qa-no-novel-share';copy.title='原创导读·不共享原文';copy.sourceTitle=original.sourceTitle;
+   copy.id='qa-no-novel-share';copy.productionAgent='Gemini';copy.title='原创导读·不共享原文';copy.sourceTitle=original.sourceTitle;
    copy.category=original.category;copy.panels=structuredClone(original.panels);
    copy.novelSkill=structuredClone(original.novelSkill);copy.novelSkill.export_source_approved=false;
    copy.novelSkill.rights.external_file_transfer_approved=false;
