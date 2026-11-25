@@ -284,7 +284,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  }
  if(provider==='deepseek'){
   if(!literary&&!storyApiKey.trim()){notify('请输入 DeepSeek API Key，仅用于本次请求');return}
-  if(!auto&&!confirm(literary?'使用平台已配置 DeepSeek 研究作品并生成分镜，可能产生模型费用。确认本次调用？':'将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
+  if(!auto&&!confirm(literary?'使用平台已配置 DeepSeek 研究作品并生成分镜。若结构验收失败，最多追加一次专项修复（合计最多两次模型请求，可能产生费用）。确认本次生成与必要修复？':'将使用你提供的 DeepSeek API Key 生成剧本，供应商可能按用量收费。确认本次调用？'))return;
  }else if(provider!=='native'){
   if(!storyApiKey.trim()){notify('请输入'+({openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'模型服务商')+' API Key，仅用于本次请求');return}
   if(!auto&&!confirm('将使用你提供的第三方模型 API，供应商可能按用量收费。确认本次调用？'))return;
@@ -292,6 +292,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(!auto&&replace&&p.panels.some(x=>clean(x.scene))){
   if(!confirm('将用新剧本替换当前文字与分镜；不会删除已有的漫画图片。确定继续？'))return;
  }
+ const literaryBasis=literary?literaryInputSignature(p):null;
  storyBusy=true;render();
  try{
   const basis=digest(p);
@@ -303,8 +304,8 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
     const idea=(literary?('深度文学解读：'+(p.sourceTitle||p.title)):(p.ideaSeed||p.description||ensure(p).thesis||'')).slice(0,1100)+
       (genre==='狗血网红爽剧'?'\\n【作者创作要求】原创成年人的都市重生逆袭、富婆/金融职场、网红热搜与合约男明星的情感纠葛。狗血反转强度 '+intensity+'/5；具体题材'+theme+'；每2–3格有反转，开场强悬念，结尾强钩子。全为架空虚构人物，不捏造真人丑闻。':'');
     if(idea.trim().length<8||idea.length>1800)throw Error('请先完善8–1800字的故事核心构思');
-    const response=await wtArchiveApi('deepseek-expand',{method:'POST',
-      body:JSON.stringify({idea,title:literary?(p.sourceTitle||p.title):p.title,mode:literary?'literary_review':undefined,research_evidence:literary?literaryEvidenceText(p):undefined,source_urls:literary?validSources(p):undefined,cast:literary?ensure(p).cast.map(({name,role,look,clothes,symbol,nature})=>({name,role,look,clothes,symbol,nature})):undefined,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
+    const response=await wtArchiveApi('deepseek-expand',{method:'POST',literaryRepair:literary,
+      body:JSON.stringify({idea,allow_repair:literary?true:undefined,title:literary?(p.sourceTitle||p.title):p.title,mode:literary?'literary_review':undefined,research_evidence:literary?literaryEvidenceText(p):undefined,source_urls:literary?validSources(p):undefined,cast:literary?ensure(p).cast.map(({name,role,look,clothes,symbol,nature})=>({name,role,look,clothes,symbol,nature})):undefined,category:genre,arc:arc(ensure(p).arcId).name,panel_count:p.panels.length,
         genre:p.plotGenre||'general',drama_subtype:theme,drama_intensity:intensity,
         series_bible:p.seriesBible||null,previous_summary:p.seriesEpisode>1?p.description:''})});
     if(response?.method!=='verified_model_response'||!response.story?.panels)
@@ -322,8 +323,12 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
   if(digest(p)!==basis)throw Error('生成期间作品内容有改动，AI结果未覆盖你的修改');
   if(result.panels.length!==p.panels.length)throw Error('AI 返回'+result.panels.length+'格，与作者选择的'+p.panels.length+'格不一致；拒绝覆盖，请按所选篇幅重新生成');
   const wrote=applyStoryboard(p,result.panels,result,replace?'approved':false);
-  if(wrote)notify('已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
+  if(wrote&&literary){delete p.literaryBlockedDraft;persist();render();}
+  if(wrote)notify((literary&&result.research?.evaluation?.repair_attempted?'已完成专项修复；':'')+'已使用 '+({native:'平台内置AI',deepseek:'DeepSeek',openai:'OpenAI',claude:'Claude',gemini:'Gemini',kimi:'Kimi',qwen:'通义千问'}[provider]||'AI模型')+' 生成可编辑'+p.panels.length+'格草稿，请人工确认');
  }catch(err){
+  if(literary&&err.body?.code==='LITERARY_QA_BLOCKED'&&selected()?.id===p.id&&!p.handoff?.repoQueuedAt&&literaryInputSignature(p)===literaryBasis){
+   p.literaryBlockedDraft={input_signature:literaryBasis,evaluation:err.body.evaluation,repair_attempted:err.body.repair_attempted,repair_failed:err.body.repair_failed,repair_indices:err.body.repair_indices,draft:err.body.draft||null,at:new Date().toISOString()};persist();
+  }
   if(auto&&selected()?.id===p.id&&!p.panels.some(x=>clean(x.scene))){
    draft(p,false);notify('内置模型暂不可用，已退回本地规则草稿（非AI模型输出）');
   }else notify('AI剧本生成失败：'+String(err?.message||err).slice(0,110));
@@ -509,9 +514,11 @@ function storyControls(p,c){
   const candidateCards=sources.map((x,i)=>'<article class="box"><b>'+e(x.title)+'</b> <small>'+e(x.source)+' · '+e(x.source_language||'中文')+'原文 · 相关性 '+e(x.relevance_score)+'分</small><p><small>'+e(x.summary_type||'来源摘记')+' · 待核对</small></p><p>'+e(x.excerpt)+'</p><a href="'+e(x.url)+'" target="_blank" rel="noopener noreferrer">查看原文 ↗</a> <button class="button" data-director-action="literary-add-source" data-source-index="'+i+'">核对后加入研究</button></article>').join('');
   const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容'],['evaluation','结构检查与模型自评（非独立验收）'],['panel_evidence','逐格证据锚点']];
   const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
+  const blocked=p.literaryBlockedDraft?.input_signature===literaryInputSignature(p)?p.literaryBlockedDraft:null;
+  const blockedHtml=blocked?'<section class="literary-blocked" role="status"><strong>本次研究尚未通过验收 · 不可派单</strong><p>'+e(blocked.repair_attempted?'已尝试一次专项修复；保留未通过的草稿和原因。':'已保留未通过的草稿和原因。')+'</p><ul>'+((blocked.evaluation?.errors||[]).map(x=>'<li>'+e(x)+'</li>').join(''))+'</ul>'+(blocked.repair_failed?'<p>'+e(blocked.repair_failed)+'</p>':'')+(blocked.draft?.research?'<details><summary>查看保留的研究草稿（待修订）</summary>'+fields.filter(([k])=>typeof blocked.draft.research[k]==='string').map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(blocked.draft.research[k])+'</p>').join('')+'</details>':'')+'<p>请根据具体问题补充可信资料或重新生成，旧草稿不会被误作通过的研究报告。</p></section>':'';
   return '<section class="director-ai-workflow director-literary-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2。使用已配置的 DeepSeek，无需输入密钥。先采集资料，核对作品后加入研究，再生成研究报告与专属分镜。</p>'+
    '<label>作品作者（选题自动继承，必要时补充）<input type="text" data-literary-input="author" maxlength="180" value="'+e(p.literaryAuthor||p.storySourceSelection?.author||collection?.work?.author||'')+'" placeholder="填写中文或原文作者姓名" '+(p.handoff?.repoQueuedAt?'disabled':'')+'></label><p>仅采集当前作品的高相关资料，所有候选以中文呈现。免费采集不调用模型；如需整理外文资料，可单独授权 DeepSeek。核对后加入研究即可自动填写中文摘记和链接。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集中文资料</button><button class="button" data-director-action="literary-translate" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>补充外文资料（中文整理）</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
-   (valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
+   blockedHtml+(valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
  }
  const info=c.storyboardProvenance;
  const providerNames={native:'平台内置模型',deepseek:'DeepSeek API',openai:'OpenAI API',claude:'Claude API',gemini:'Gemini API',kimi:'Kimi API',qwen:'通义千问 API'};
