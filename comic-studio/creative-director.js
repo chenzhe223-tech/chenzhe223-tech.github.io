@@ -325,7 +325,7 @@ function payload(p){
   visual_references:(p.visualReferences||[]).slice(0,24).map(x=>({id:x.id,title:x.title,source:x.source,source_url:x.source_url,license:x.license,license_evidence_url:x.license_evidence_url||'',rights_verified:x.rights_verified===true,rights_status:x.rightsStatus||'legacy_review_required',asset_type:x.assetType||'legacy_unclassified',asset_type_label:x.assetTypeLabel||'',applies_to:x.appliesTo||{scope:'project',targetId:'project'},role:'visual_reference_only'}))
  };
 }
-function isLiteraryProject(p){return typeof wfLiteraryReview==='function'?wfLiteraryReview(p):p?.storySourceSelection?.adaptation==='literary_review';}
+function isLiteraryProject(p){return typeof wfLiteraryResearchRequired==='function'?wfLiteraryResearchRequired(p):p?.literaryResearchScope==='topic_literature_v2'&&p?.storySourceSelection?.adaptation==='literary_review';}
 function literaryEvidenceText(p){return String(p.literaryEvidence||'').trim();}
 function literaryInputSignature(p){
  return JSON.stringify([p.sourceTitle||p.title,literaryEvidenceText(p),typeof validSources==='function'?validSources(p):[],p.novelSkill?.provenance?.sha256||null]);
