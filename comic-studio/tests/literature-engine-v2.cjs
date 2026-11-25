@@ -32,8 +32,8 @@ const hash=scope.digest(topic);
 topic.panels[0].caption+='修改';assert.ok(scope.errors(topic).length);assert.notEqual(scope.digest(topic),hash);
 topic.panels[0].caption=r.panels[0].caption;assert.equal(scope.errors(topic).length,0);
 topic.literaryEvidence+='\n新资料';assert.ok(scope.errors(topic).length);
-assert.ok(html.includes('creative-director.js?v=5.6.1-literature-fix'));
-assert.ok(sw.includes('davylab-comic-press-v5.6.1-literature-fix'));
+assert.ok(html.includes('creative-director.js?v=5.7.0-literature-sources'));
+assert.ok(sw.includes('davylab-comic-press-v5.7.0-literature-sources'));
 assert.ok(app.includes("if(wfLiteraryResearchRequired(p)){const {input_signature,...research}"));
 assert.ok(worker.includes("a.mode==='literary_review'?await wtLiteraryAuth(request,env):await wtArchiveAuth(request,env)"));
 console.log('LITERATURE V2 PASS: 57 counts, 9 rejected cases, scoped entry, evidence/receipt drift, cache and direct-mode guards');
@@ -50,7 +50,7 @@ const routeCtx={URL,URLSearchParams,AbortSignal,Response,
  fetch:async(url,opts)=>{
   const u=new URL(url);if(u.hostname.endsWith('wikipedia.org')||u.hostname==='openlibrary.org')assert.equal(opts.redirect,'manual','Cloudflare compatible redirect mode');
   if(u.hostname==='api.deepseek.com'){modelCalls++;assert.equal(opts.method,'POST');const body=JSON.parse(opts.body);assert.equal(body.model,'deepseek-flash');return Response.json({model:'synthetic-model',choices:[{message:{content:JSON.stringify(modelResponse)}}]});}
-  if(u.hostname==='zh.wikipedia.org'||u.hostname==='en.wikipedia.org')return Response.json({query:{pages:[{title:'Fixture',extract:'Synthetic source note for testing only',fullurl:u.origin+'/wiki/Fixture'},{title:'Unsafe',extract:'wrong host',fullurl:'https://evil.example/wiki/Fixture'}]}});
+  if(u.hostname==='zh.wikipedia.org'||u.hostname==='en.wikipedia.org')return Response.json({query:{pages:[{title:'测试作品',extract:'这是一部用于自动回归测试的文学小说，内容均为合成示例，并非真实书目。',fullurl:u.origin+'/wiki/Fixture'},{title:'Unsafe',extract:'wrong host',fullurl:'https://evil.example/wiki/Fixture'}]}});
   throw Error('unexpected mock URL '+url);
  }
 };
@@ -75,5 +75,13 @@ const req=(path,body)=>{const url=new URL('https://fixture.example/api/archive/'
  assert.equal(redirectCalls,2,'redirects cannot trigger additional outbound requests');
  assert.equal(blocked.items.length,0);
  assert.ok(blocked.warnings.every(x=>x.includes('重定向')));
+ const sample=await collector('少年來了 | Human Acts','',async(url,opts)=>{
+  const u=new URL(url);assert.ok(u.searchParams.has('titles'));assert.equal(u.searchParams.has('generator'),false);
+  return Response.json({query:{pages:[{title:'偶像来了',extract:'中国电视综艺节目，和小说无关',fullurl:u.origin+'/wiki/Idol'},{title:'Han Kang',extract:'韩江是小说作家，但是这是作者介绍而不是作品介绍。',fullurl:u.origin+'/wiki/Author'},{title:'Human Acts',extract:'Human Acts is a novel by Han Kang, a work of fiction published in Korea.',fullurl:u.origin+'/wiki/Human_Acts'}]}});
+ },{author:'Han Kang'});
+ assert.equal(sample.schema,'literary_sources_v3');assert.ok(sample.items.length>=3);assert.ok(sample.items.every(x=>!x.title.includes('偶像')&&!x.url.endsWith('/Author')&&!x.url.endsWith('/Human_Acts')&&x.relevance_score>=70&&/[一-龥]{2}/.test(x.excerpt)));
+ const nothing=await collector('不存在的作品｜Imaginary title','',async(url)=>Response.json({query:{pages:[{title:'偶像来了',extract:'这是与选题无关的电视综艺节目',fullurl:new URL(url).origin+'/wiki/Idol'}]}}));
+ assert.equal(nothing.items.length,0);
+ console.log('LITERATURE V3 PASS: exact work, wrong-title and author-page rejection, Chinese-only, free collection');
  console.log('LITERATURE V2 WORKER ROUTE PASS: candidate sources, auth, input gate, grounded response, ordinary DeepSeek, static module allowlist (mocked upstream)');
 })().catch(e=>{console.error(e);process.exitCode=1});
