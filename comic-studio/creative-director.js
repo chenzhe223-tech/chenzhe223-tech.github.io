@@ -352,7 +352,7 @@ function payload(p){
 function isLiteraryProject(p){return typeof wfLiteraryResearchRequired==='function'?wfLiteraryResearchRequired(p):p?.literaryResearchScope==='topic_literature_v2'&&p?.storySourceSelection?.adaptation==='literary_review';}
 function literaryEvidenceText(p){return String(p.literaryEvidence||'').trim();}
 function literaryInputSignature(p){
- return JSON.stringify([p.sourceTitle||p.title,literaryEvidenceText(p),typeof validSources==='function'?validSources(p):[],p.novelSkill?.provenance?.sha256||null]);
+ return JSON.stringify([p.sourceTitle||p.title,p.literaryAuthor||p.storySourceSelection?.author||'',literaryEvidenceText(p),typeof validSources==='function'?validSources(p):[],p.novelSkill?.provenance?.sha256||null]);
 }
 function literaryReviewSnapshot(p){
  return JSON.stringify([literaryInputSignature(p),p.literaryResearch||null,(p.panels||[]).map(x=>[x.title,x.scene,x.caption,x.dialogue,x.prompt])]);
@@ -476,11 +476,11 @@ async function collectLiterarySources(p,translate=false){
  const title=String(p.sourceTitle||p.title||'').trim(),source=p.storySourceSelection?.source||'';
  if(title.length<2)throw Error('请先确认作品名称');
  if(translate&&!confirm('使用已配置的 DeepSeek 将筛选后的外文公开资料整理成中文，可能产生少量模型费用。是否确认本次调用？'))return;
- const author=p.storySourceSelection?.author||p.literaryAuthor||'';
+ const author=p.literaryAuthor||p.storySourceSelection?.author||'';
  storyBusy=true;p.literarySourceCandidates=null;render();
  try{
   const response=await wtArchiveApi('literary-sources',{method:'POST',body:JSON.stringify({title,source,author,translate})});
-  if(selected()?.id!==p.id||p.handoff?.repoQueuedAt||String(p.sourceTitle||p.title||'').trim()!==title)throw Error('作品已切换或更改，未覆盖资料');
+  if(selected()?.id!==p.id||p.handoff?.repoQueuedAt||String(p.sourceTitle||p.title||'').trim()!==title||(p.literaryAuthor||p.storySourceSelection?.author||'')!==author)throw Error('作品已切换或更改，未覆盖资料');
   if(response.schema!=='literary_sources_v3')throw Error('资料服务版本尚未更新，请刷新后重试');
   p.literarySourceCandidates={schema:response.schema,title,items:(Array.isArray(response.items)?response.items:[]).filter(x=>/[\u3400-\u9fff]{2}/.test(x.title)&&/[\u3400-\u9fff]{2}/.test(x.excerpt)&&x.relevance_score>=70),warnings:response.warnings||[],retrieved_at:response.retrieved_at,work:response.work};persist();
   notify(p.literarySourceCandidates.items.length?'已取得候选资料，请打开原文核对作者与版本，选择后纳入研究。':'暂未找到候选资料，请补充可靠来源与实际内容摘记。');
@@ -510,7 +510,7 @@ function storyControls(p,c){
   const fields=[['plot_summary','故事主线'],['characters','人物关系'],['conflict','核心冲突'],['turning_points','关键转折'],['ending','命运走向（剧透）'],['philosophy','哲学思想'],['real_life_meaning','现实意义'],['unknowns','待核实内容'],['evaluation','结构检查与模型自评（非独立验收）'],['panel_evidence','逐格证据锚点']];
   const display=v=>typeof v==='string'?v:JSON.stringify(v??'');
   return '<section class="director-ai-workflow director-literary-workflow"><h3>深度文学解读 · DeepSeek</h3><p>九格默认4+3+2。使用已配置的 DeepSeek，无需输入密钥。先采集资料，核对作品后加入研究，再生成研究报告与专属分镜。</p>'+
-   '<p>仅采集当前作品的高相关资料，所有候选以中文呈现。免费采集不调用模型；如需整理外文资料，可单独授权 DeepSeek。核对后加入研究即可自动填写中文摘记和链接。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集中文资料</button><button class="button" data-director-action="literary-translate" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>补充外文资料（中文整理）</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
+   '<label>作品作者（选题自动继承，必要时补充）<input type="text" data-literary-input="author" maxlength="180" value="'+e(p.literaryAuthor||p.storySourceSelection?.author||collection?.work?.author||'')+'" placeholder="填写中文或原文作者姓名" '+(p.handoff?.repoQueuedAt?'disabled':'')+'></label><p>仅采集当前作品的高相关资料，所有候选以中文呈现。免费采集不调用模型；如需整理外文资料，可单独授权 DeepSeek。核对后加入研究即可自动填写中文摘记和链接。</p><button class="button" data-director-action="literary-collect" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>自动采集中文资料</button><button class="button" data-director-action="literary-translate" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>补充外文资料（中文整理）</button>'+candidateCards+(collection?.warnings?.length?'<p>'+e(collection.warnings.join('；'))+'</p>':'')+'<label>研究资料摘记（每个来源单独一段，首行写“来源：https://…”，下方填写内容；至少100字，不上传整部书）<textarea data-literary-input="evidence" rows="7" maxlength="18000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.literaryEvidence||'')+'</textarea></label><label>对应资料链接（每行一个）<textarea data-literary-input="sources" rows="3" maxlength="10000" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>'+e(p.sourceURLs||'')+'</textarea></label><button class="button dark" data-director-action="ai" '+(storyBusy||p.handoff?.repoQueuedAt?'disabled':'')+'>'+(storyBusy?'处理中…':'DeepSeek 研究并生成分镜')+'</button>'+
    (valid?'<details open><summary>文学研究报告 · '+e(r.model||'DeepSeek')+' · 待人工核验</summary>'+fields.map(([k,label])=>'<p><b>'+e(label)+'</b> '+e(display(r[k]))+'</p>').join('')+'<h4>事实依据</h4>'+r.claims.map(x=>'<p>'+e(x.claim)+' · '+e(x.evidence_note)+' · '+e(x.source_url)+'</p>').join('')+'</details><button class="button" data-director-action="literary-review" '+(p.handoff?.repoQueuedAt?'disabled':'')+'>确认文学内容专项审核</button><p>'+e(literaryReviewErrors(p).join('；')||'作者已确认当前研究与分镜；不等于独立事实或出版验收')+'</p>':'<p>尚无与当前资料匹配的研究报告。</p>')+'</section>';
  }
  const info=c.storyboardProvenance;
@@ -632,6 +632,7 @@ document.addEventListener('input',ev=>{
  const el=ev.target;
  if(el?.matches?.('[data-literary-input]')){
   const p=selected();if(!p||!isLiteraryProject(p)||p.handoff?.repoQueuedAt)return;
+  if(el.dataset.literaryInput==='author'){p.literaryAuthor=String(el.value||'').slice(0,180);p.literarySourceCandidates=null;}
   if(el.dataset.literaryInput==='evidence')p.literaryEvidence=String(el.value||'').slice(0,18000);
   if(el.dataset.literaryInput==='sources')p.sourceURLs=String(el.value||'').slice(0,10000);
   ensure(p).approval=null;return;
@@ -641,7 +642,7 @@ document.addEventListener('input',ev=>{
 },true);
 document.addEventListener('change',ev=>{
  const el=ev.target;
- if(el?.matches?.('[data-literary-input]')){const p=selected();if(p&&isLiteraryProject(p)&&!p.handoff?.repoQueuedAt)setChange(p,'更新文学研究资料（旧审核自动失效）');return;}
+ if(el?.matches?.('[data-literary-input]')){const p=selected();if(p&&isLiteraryProject(p)&&!p.handoff?.repoQueuedAt){setChange(p,'更新文学研究资料（旧审核自动失效）');if(el.dataset.literaryInput==='author')render();}return;}
  if(!el?.matches?.('[data-director-provider]'))return;
  ev.stopImmediatePropagation();
  storyProvider=['native','deepseek',...byoProviders].includes(el.value)?el.value:'native';
