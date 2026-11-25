@@ -72,24 +72,13 @@ function localStoryboardCore(p){
   if(p.panels.length<4||p.panels.length>60)throw Error('文学导读必须选择4–60格');
   const readers=c.cast?.map(x=>clean(x.name)).filter(Boolean);
   const lead=readers[0]||'原创读者',other=readers[1]||'原创编辑';
-  const notes=[
-   ['为什么值得读',lead+'在原创城市图书馆前观察一本无复制原著封面图案的素面书，桌上有作品书目核验卡与空白笔记，画面克制。','一部作品，首先要读懂它提出的问题。','先核对书目与作者。'],
-   ['作品的世界与主题',other+'把书本放在桌上，用独立设计的时间线示意图与抽象象征物探讨创作背景，避免绘制原作人物和具体故事桥段。','出版背景、人物关系与核心主题须依据可靠来源核对。','我们理解的是作品本身吗？'],
-   ['核心问题不是复述剧情',lead+'与'+other+'在书店阅读区域面对一面三元素抽象墙，分别象征核心主题、冲突与疑问；无原作场景的演绎。','用少量经核验的事实，介绍作品想讨论什么。','读懂问题，比讲完故事更重要。'],
-   ['人究竟怎样选择',lead+'走到一条由原创几何拱门构成的分岔路，两边光影对照，人物身上没有任何原著角色标识。','文学可以让我们讨论选择，但观点须注明属于编辑解读。','什么才算真正的自由？'],
-   ['我们怎样理解他人',other+'在完全原创的城市公共长椅旁，与不同年龄的普通人相互聆听，背景采用形象化的距离与连接线。','同情、尊严和误解，是可供讨论的文学问题。','我们愿意听完另一个人的故事吗？'],
-   ['哲学没有标准答案',lead+'与'+other+'共同望向由窗外光束照亮的空白笔记纸，笔记只用形状和留白，不描绘原著正文或句子。','这是对作品可能意义的独立阅读，不是作者原话。','读完之后，你会改变哪一种判断？'],
-   ['普通人的一次决定',lead+'在真实感的原创城市地铁站面对一项日常选择，周围人群自然有序，用视线和手势表现犹豫，人物与原作无关。','把阅读带进生活：思考选择如何影响自己。','如果是你，会怎么做？'],
-   ['与亲近的人重新对话',other+'在当代家中与家人交流，桌边的书只用素面道具呈现，人物衣服发型与前格一致，没有原作经典桥段。','阅读也许不能直接解决问题，却能帮助理解他人。','我可以先认真听你说。'],
-   ['读完仍有一个问题',lead+'与'+other+'在清晨城市书店外合上一本素面书，远处一条宽阔人行道通向新的一天，留出标题及结尾提问的独立排版区。','故事会结束，思考仍在继续。','这部作品让你想起了谁？']
-  ];
-  return Array.from({length:p.panels.length},(_,i)=>{const row=notes[Math.min(8,Math.floor(i*9/p.panels.length))];const dimension=i<Math.ceil(p.panels.length/3)?0:i<Math.ceil(p.panels.length*2/3)?1:2;return ({
-   title:row[0],scene:'【'+shotOf(i)+'】'+row[1]+' 本图是三维文学导读的原创编辑插画，不得重绘《'+subject+'》的受保护具体情节或独特人物，人物脸型、服饰、材质与上格连续。',
-   caption:row[2],dialogue:row[3],
-   prompt:'高品质国际文化杂志导读插画，原创现实隐喻，单画面无文字无对白气泡；'+
-    (dimension===0?'第一维度：作品讲了什么（事实待研究核验）':dimension===1?'第二维度：揭示什么人生哲学（独立评论）':'第三维度：对普通人的意义（原创当代人物）')+
-    '；'+shotOf(i)+'；'+style(c.styleId).material+'；'+style(c.styleId).lighting
-  })});
+  const n=p.panels.length,a=Math.min(n-2,Math.max(2,Math.round(n*4/9))),b=Math.min(n-1,a+Math.max(1,Math.round(n*3/9)));
+  const topics=['作品背景与主人公','人物关系与处境','核心事件与冲突','转折与命运走向','人物选择与心理','核心哲学命题','文学意象与社会背景','普通人的现实困境','人生启示与开放问题'];
+  return Array.from({length:n},(_,i)=>{
+   const k=i<a?Math.min(3,Math.floor(i*4/a)):i<b?4+Math.min(2,Math.floor((i-a)*3/(b-a))):7+Math.min(1,Math.floor((i-b)*2/(n-b)));
+   return {title:topics[k],scene:'【待文学研究】《'+subject+'》：'+topics[k]+'。先查阅可靠原著资料，填写本格具体作品事实或有依据的独立解释及原创视觉构图，不得使用通用哲理模板。',
+     caption:'【待文学研究】填写可核实的原创概述或评论。',dialogue:'',prompt:'单幅原创编辑插画；事实核验和内容定稿前禁止生图。'};
+  });
  }
 
  const a=clean(c.cast?.[0]?.name)||'主人公',b=clean(c.cast?.[1]?.name)||'搭档';
@@ -256,7 +245,7 @@ async function generateStory(p,{provider='native',auto=false,replace=false}={}){
  if(storyBusy||p.handoff?.repoQueuedAt)return;
  if(p.storySourceSelection?.adaptation==='literary_review'){
   const updated=draft(p,replace);
-  if(updated)notify('文学导读采用动态篇幅的三维原创评论分镜；请通过 ChatGPT 研究和核实作品内容，未核实的介绍不得直接发表');
+  if(updated)notify('文学导读已建立待研究提纲（九格4+3+2）；请通过可靠资料或外部研究完成具体故事、思想和现实意义，逐格替换占位后才能定稿');
   return;
  }
  const empty=p.panels.every(x=>!clean(x.scene)&&!clean(x.caption)&&!clean(x.dialogue));
@@ -353,6 +342,7 @@ function checks(p){
  else for(let i=0;i<p.panels.length;i++){const x=p.panels[i];if(clean(x.scene).length<30||clean(x.title).length<2||(!clean(x.caption)&&!clean(x.dialogue)))errs.push('第'+(i+1)+'格缺少完整场景、标题或文字')}
  if((p.visualReferences||[]).some(x=>!(x.license==='CC0'&&(x.rightsStatus==='verified_cc0'||!x.rightsStatus))&&!(x.rightsStatus==='author_self_owned'&&x.rights_verified===true)&&!(x.rightsStatus==='author_authorized'&&/^https:\/\/[\w.-]+\//.test(String(x.license_evidence_url||'')))))errs.push('视觉参考缺少 CC0、自有确认或授权凭证');
  if(c.cast?.some(x=>x.portraitMedia&&!x.portraitConsent))errs.push('肖像照片必须获得肖像使用授权；否则移除照片');
+ if(p.storySourceSelection?.adaptation==='literary_review'&&p.panels.some(x=>/【待文学研究】/.test([x.scene,x.caption,x.dialogue].join(' '))))errs.push('文学导读尚有待研究画格：先核实作品资料，填写具体故事与思想内容，再定稿；不得将研究占位直接制作。');
  if(!c.drafted)errs.push('先生成并逐格审阅分镜');
  if(!c.reviewed)errs.push('请勾选“已逐格审阅并确认创意方向”');
  return errs;
