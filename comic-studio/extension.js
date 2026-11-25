@@ -156,7 +156,7 @@ async function wtDraftFromNews(i){
   p.category=nobel?'诺奖文学导读':'世界文学导读';
   p.title='读懂｜'+x.title+'：故事、哲学与人生';
   p.storySourceSelection={source_id:x.source_id||'nobel_literature',title:x.title,
-   type:'nobel_literature',source:x.url,source_name:x.source||'待核验来源',
+   type:'nobel_literature',author:x.author||'',source:x.url,source_name:x.source||'待核验来源',
    rights:x.rights_status||'unknown',adaptation:'literary_review',license_attested:false,
    selected_beats:[],requires_independent_author_review:true,
    review_dimensions:['what_the_book_is_about','life_philosophy','meaning_for_everyday_readers'],
