@@ -32,8 +32,8 @@ const hash=scope.digest(topic);
 topic.panels[0].caption+='修改';assert.ok(scope.errors(topic).length);assert.notEqual(scope.digest(topic),hash);
 topic.panels[0].caption=r.panels[0].caption;assert.equal(scope.errors(topic).length,0);
 topic.literaryEvidence+='\n新资料';assert.ok(scope.errors(topic).length);
-assert.ok(html.includes('creative-director.js?v=5.6.0-literature-v2'));
-assert.ok(sw.includes('davylab-comic-press-v5.6.0-literature-v2'));
+assert.ok(html.includes('creative-director.js?v=5.6.1-literature-fix'));
+assert.ok(sw.includes('davylab-comic-press-v5.6.1-literature-fix'));
 assert.ok(app.includes("if(wfLiteraryResearchRequired(p)){const {input_signature,...research}"));
 assert.ok(worker.includes("a.mode==='literary_review'?await wtLiteraryAuth(request,env):await wtArchiveAuth(request,env)"));
 console.log('LITERATURE V2 PASS: 57 counts, 9 rejected cases, scoped entry, evidence/receipt drift, cache and direct-mode guards');
@@ -48,7 +48,7 @@ const routeCtx={URL,URLSearchParams,AbortSignal,Response,
  wtArchiveAuth:async()=>({user:{id:'fixture-owner'}}),
  wtJson:(body,status=200)=>Response.json(body,{status}),
  fetch:async(url,opts)=>{
-  const u=new URL(url);
+  const u=new URL(url);if(u.hostname.endsWith('wikipedia.org')||u.hostname==='openlibrary.org')assert.equal(opts.redirect,'manual','Cloudflare compatible redirect mode');
   if(u.hostname==='api.deepseek.com'){modelCalls++;assert.equal(opts.method,'POST');const body=JSON.parse(opts.body);assert.equal(body.model,'deepseek-flash');return Response.json({model:'synthetic-model',choices:[{message:{content:JSON.stringify(modelResponse)}}]});}
   if(u.hostname==='zh.wikipedia.org'||u.hostname==='en.wikipedia.org')return Response.json({query:{pages:[{title:'Fixture',extract:'Synthetic source note for testing only',fullurl:u.origin+'/wiki/Fixture'},{title:'Unsafe',extract:'wrong host',fullurl:'https://evil.example/wiki/Fixture'}]}});
   throw Error('unexpected mock URL '+url);
