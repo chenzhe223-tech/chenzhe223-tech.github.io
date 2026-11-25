@@ -24,7 +24,7 @@ function zipStoreEntries(buffer){
   await page.waitForFunction(()=>typeof window.wtDirector==='object'&&typeof wfMode==='function'&&typeof wfProductionPreflight==='function',{timeout:45000});
   const setup=await page.evaluate(()=>{
    const p=emptyProject();
-   p.id='qa-literary-review-satantango';
+   p.id='qa-literary-review-satantango';p.productionAgent='Gemini';
    p.title='读懂｜撒旦探戈｜Satantango：故事、哲学与人生';
    p.sourceTitle='撒旦探戈 | Satantango';
    p.category='诺奖文学导读';
@@ -67,8 +67,8 @@ function zipStoreEntries(buffer){
   assert.ok(entries.has('render_jobs.json'),'actual ZIP must contain 10 isolated render jobs');
   assert.ok(entries.has('production_state.json'),'real job status must be clearly not generated');
   assert.ok(entries.has('00_START_HERE.md'),'complete exported ZIP must explain the user-visible startup step');
-  assert.ok(entries.has('ChatGPT_复制粘贴开工指令.txt'),'complete exported ZIP must include an explicit start-now message');
-  const startup=entries.get('ChatGPT_复制粘贴开工指令.txt').toString('utf8');
+  assert.ok(entries.has('Gemini_复制粘贴开工指令.txt'),'complete exported ZIP must include an explicit start-now message');
+  const startup=entries.get('Gemini_复制粘贴开工指令.txt').toString('utf8');
   assert.match(startup,/请立即执行/,'start command must explicitly authorize execution');
   assert.match(startup,/与 ZIP 一起发送|同时附有 WORLD_TOON 任务 ZIP/);
   assert.match(entries.get('00_START_HERE.md').toString('utf8'),/同一条用户消息中上传整个 ZIP/);
@@ -81,13 +81,15 @@ function zipStoreEntries(buffer){
   const task=JSON.parse(entries.get('task.json').toString('utf8'));
   const bible=JSON.parse(entries.get('production-bible.json').toString('utf8'));
   const jobs=JSON.parse(entries.get('render_jobs.json').toString('utf8'));
-  assert.equal(task.startup_command_file,'ChatGPT_复制粘贴开工指令.txt');
+  assert.equal(task.startup_command_file,'Gemini_复制粘贴开工指令.txt');
   assert.equal(task.requires_explicit_user_message,true);
   assert.equal(task.attachment_alone_starts_production,false);
   assert.ok(startup.includes(task.task_id),'startup command must mention exact task id');
   assert.equal(task.mode,'literary_review');
   assert.equal(task.adaptation.source_selection.adaptation,'literary_review');
   assert.equal(task.adaptation.literary_review.no_plot_reenactment,true);
+  assert.deepEqual(task.adaptation.literary_review.panel_ranges,[[1,4],[5,7],[8,9]]);
+  assert.equal(entries.has('literary-research.json'),false,'unscoped legacy literature must not be subject to the new research gate');
   assert.equal(task.research_required,true);
   assert.equal(task.expected_image_count,10);
   assert.equal(jobs.jobs.length,10);
