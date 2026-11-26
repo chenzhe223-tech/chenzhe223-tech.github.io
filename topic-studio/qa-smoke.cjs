@@ -72,6 +72,7 @@ async function main() {
     assert.equal(await page.locator('[data-theme="science"]').getAttribute("aria-pressed"),"true");
     await page.locator("#atBgHex").fill("#F4F7FA");
     await page.locator("#atAccentHex").fill("#245AC4");
+    await page.locator("#atSpecificBlocks summary").click();
     await page.locator("#atBlock").selectOption({index:1});
     await page.locator("#atLocalHex").fill("#EAF1F8");
     await page.locator("#atApplyLocal").click();
@@ -160,6 +161,37 @@ async function main() {
     await page.locator("#atTopic").selectOption("");
     assert.equal(await page.locator("#atBody").inputValue(),"","free draft remains separate");
     assert.equal(await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1")),originalTopicStore,"layout never mutates source topics or approval state");
+    // Save an article layout before production and verify actual external AI prompts.
+    await page.locator("#atTopic").selectOption(topicRecords[0].id);
+    await page.locator('[data-theme="literature"]').click();
+    await page.locator("#atBgHex").fill("#FAFAF9");
+    await page.locator("#atRole").selectOption("intro");
+    await page.locator("#atRoleHex").fill("#EAF1F8");
+    await page.locator("#atApplyRole").click();
+    await page.locator("#atExtra").fill("正文采用杂志留白，不要大面积色块");
+    await page.locator("#atSavePlan").click();
+    assert.ok((await page.locator("#atPlanStatus").innerText()).includes("已保存"));
+    const planCheck=await page.evaluate(id=>{const t=topics.find(x=>String(x.id)===id);return {plan:t.articleLayoutPlan,title:t.title,source:t.angle||t.summary||""}},topicRecords[0].id);
+    assert.equal(planCheck.plan.theme,"literature");
+    assert.equal(planCheck.plan.roles.intro,"#EAF1F8");
+    assert.equal(planCheck.title,topicRecords[0].title);
+    assert.equal(planCheck.source,topicRecords[0].source);
+    await page.locator("#atGeneratePlan").click();
+    await page.locator("#section-library.active").waitFor();
+    assert.equal(await page.locator("#promptMode").inputValue(),"production");
+    const layoutPrompt=await page.locator("#promptBox").inputValue();
+    assert.ok(layoutPrompt.includes("已保存的文章主题与排版方案")&&layoutPrompt.includes("文学杂志")&&layoutPrompt.includes("全文背景色：#FAFAF9")&&layoutPrompt.includes("开头导语：#EAF1F8")&&layoutPrompt.includes("正文采用杂志留白")&&layoutPrompt.includes("ZIP 真正存在"),"full production prompt inherits saved layout and keeps delivery contract");
+    await page.locator("#promptMode").selectOption("planning");
+    assert.ok((await page.locator("#promptBox").inputValue()).includes("已保存的文章主题与排版方案"),"planning inherits layout requirements");
+    await page.locator("#promptMode").selectOption("production");
+    await page.locator('[data-section="article-theme"]').click();
+    await page.locator("#atTopic").selectOption(topicRecords[1].id);
+    assert.ok(!(await page.locator("#atPlanStatus").innerText()).includes("已保存 ·"),"second topic has independent layout configuration");
+    await page.locator("#atTopic").selectOption("");
+    await page.evaluate(id=>{const t=topics.find(x=>String(x.id)===id);delete t.articleLayoutPlan;saveTopics()},topicRecords[0].id);
+    await page.locator('[data-section="library"]').click();
+    await page.evaluate(()=>{promptTopicId="";activePromptKey="";promptDrafts.clear();promptSourceVersions.clear();document.getElementById("promptBox").value="";updatePromptStatus(false)});
+
     await page.locator('[data-section="library"]').click();
     await page.locator("#section-library.active").waitFor();
 
