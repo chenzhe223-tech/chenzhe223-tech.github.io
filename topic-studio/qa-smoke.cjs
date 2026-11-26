@@ -330,7 +330,11 @@ async function main() {
     assert.equal(await page.locator("#promptMode").inputValue(),"production","full production is the default mode");
     const fullPrompt=await page.locator("#promptBox").inputValue();
     assert.ok(fullPrompt.includes("实际生图")&&fullPrompt.includes("images/00_封面.jpg")&&fullPrompt.includes("ZIP 真正存在"),"default prompt demands actual generated images and verified ZIP");
+    assert.equal(await page.locator("#promptDeliverables").getAttribute("open"),null,"deliverable manifest defaults to collapsed");
+    await page.locator("#promptDeliverables summary").click();
+    await page.locator("#promptManifestPreview").waitFor({state:"visible"});
     assert.ok((await page.locator("#promptManifestPreview").innerText()).includes("04_事实核查与来源.md"),"deliverable preview lists the source audit");
+    await page.locator("#promptDeliverables summary").click();
     await page.locator("#promptPlatform").selectOption("claude");
     assert.ok((await page.locator("#promptBox").inputValue()).includes("【目标执行平台】Claude"),"switching target AI rebuilds prompt");
     await page.locator("#promptMode").selectOption("planning");
@@ -360,7 +364,11 @@ async function main() {
     const planningInstruction=await page.locator("#promptBox").inputValue();
     assert.ok(planningInstruction.includes("Vibe Coding 爆火")&&planningInstruction.includes("极简产品风")&&planningInstruction.includes("#264769"),"B includes current saved topic and visual style");
     assert.ok(planningInstruction.includes("文章大纲")&&planningInstruction.includes("编辑建议")&&!planningInstruction.includes("images/00_封面.jpg"),"B produces independent planning contract without real JPG requirements");
+    assert.equal(await page.locator("#promptDeliverables").getAttribute("open"),null,"deliverable manifest defaults to collapsed");
+    await page.locator("#promptDeliverables summary").click();
+    await page.locator("#promptManifestPreview").waitFor({state:"visible"});
     assert.ok((await page.locator("#promptManifestPreview").innerText()).includes("风险提示"),"B switches deliverable preview");
+    await page.locator("#promptDeliverables summary").click();
     await page.locator("#promptBox").fill("B 独立手动修订的策划指令");
     await page.locator('[data-prompt-mode="production"]').click();
     assert.equal(await page.locator("#promptBox").inputValue(),"A 独立手动修订的生产指令","A draft survives mode switch");
