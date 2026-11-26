@@ -8,7 +8,7 @@
   if(root)root.DAVYLABProductionPrompt=api;
 })(typeof window!=="undefined"?window:null,function(){
 "use strict";
-const VERSION="1.1.0-finance";
+const VERSION="1.2.0-article-layout";
 const PLATFORMS=Object.freeze({
  chatgpt:{label:"ChatGPT",note:"根据本对话实际提供的搜索、图像生成、文件写入与压缩工具逐一验证；Chat 模式和 Work 模式能力可能不同。",link:"https://chatgpt.com/"},
  claude:{label:"Claude",note:"检查当前 Claude 会话是否实际具备网页研究、图像生成与文件/ZIP 输出工具；不要把文字描述的图片当作生成成功。",link:"https://claude.ai/"},
@@ -54,6 +54,28 @@ function visual(t){
  return ["【已保存的配图视觉方案｜必须遵守】","以下配置来源于该选题已保存的 visualPlan，禁止默默替换风格、色值或特殊限制。",...props.flatMap(([name,key])=>linesOf(a[key],name)), "视觉方案状态："+v(a.reviewStatus||"draft")+"；图片状态："+v(a.assetStatus||"not_generated")+"（此为输入状态，不能视为图片交付）。"];
 }
 
+const layoutThemes=Object.freeze({technology:"科技杂志",science:"科学杂志",finance:"财经杂志",literature:"文学杂志",culture:"人文杂志",minimal:"极简杂志"});
+const layoutRoles=Object.freeze({intro:"开头导语",heading:"各级小标题",quote:"引用与重点引文",conclusion:"结尾总结"});
+function articleLayout(t){
+ const a=t?.articleLayoutPlan;
+ if(!a||a.version!==1||!Object.hasOwn(layoutThemes,a.theme))return ["【文章排版】当前选题未保存专属排版方案；采用清晰克制、手机优先的公众号图文布局，不得声称作者已确认特定版式。"];
+ const color=x=>/^#[0-9a-f]{6}$/i.test(String(x||""))?String(x).toUpperCase():"";
+ const colors=[["全文背景色",a.background],["正文文字色",a.text],["标题与强调色",a.accent],["默认引用背景色",a.quoteBackground]].filter(x=>color(x[1])).map(([k,x])=>k+"："+color(x));
+ const roles=Object.entries(layoutRoles).filter(([k])=>color(a.roles?.[k])).map(([k,label])=>label+"："+color(a.roles[k]));
+ const heading={bar:"左侧细竖线",rule:"底部细分隔线",center:"居中小标题",plain:"无装饰标题"}[a.heading]||"清晰分级标题";
+ const blocks=(Array.isArray(a.blocks)?a.blocks:[]).slice(0,40).filter(b=>b&&color(b.background)&&typeof b.text==="string"&&b.text.trim()).map(b=>"原文定位「"+v(b.text,500)+"」（第"+Math.max(1,Math.floor(Number(b.occurrence)||1))+"次出现）→ "+color(b.background)+"；仅匹配实际存在的对应内容，不强行新增原文。");
+ return ["【已保存的文章主题与排版方案｜必须遵守】",
+ "以下是该选题作者保存的正文排版配置 articleLayoutPlan，与图片视觉方案独立；不得用配图风格覆盖正文版式。生产模式必须在实际 HTML 中落实，而非仅输出设计描述。",
+ "杂志主题："+layoutThemes[a.theme]+"；"+colors.join("；")+"。",
+ "正文字体："+v(a.font||"系统无衬线字体",160)+"；正文字号："+(Number(a.fontSize)||16)+"px；正文行高："+(Number(a.lineHeight)||1.85)+"；文章标题约25px，小标题17–20px；小标题形式："+heading+"。",
+ "手机优先：内容宽度100%，合理留白，图片宽度自适应，按段落、标题、引用、列表与图注组织，禁止横向溢出；优先采用 section/p/h1/h2/strong 等常规标签及行内 CSS，不依赖外部样式表、脚本、Web 字体或复杂布局。",
+ ...(roles.length?["局部背景（按文章语义匹配）："+roles.join("；")+"。只对真实存在的对应区域应用。"]:[]),
+ ...(blocks.length?["局部背景（指定原文段落，优先于语义规则）：",...blocks]:[]),
+ ...linesOf(a.extra,"作者额外排版要求"),
+ "完整生产：Markdown 保留标题层级与图片相对路径；02_公众号排版预览.html 使用上述真实色号、字体、字号、行高、局部背景和行内样式。微信后台可能过滤样式，须注明实际粘贴核验边界，不得声称已在微信后台验证。",
+ "QA：对照此方案逐项检查实际 HTML 的全文和局部背景、标题层级、正文排版、375px 移动阅读宽度、图片路径与兼容性；将结果写入03_使用说明.txt。策划模式仅输出落实此配置的排版规范和后续 HTML 验收要求，不声称已生成 HTML。"
+ ];
+}
 const financeStyles=Object.freeze([
  {id:"business-editorial",name:"国际商业杂志",background:"#10223B",primary:"#F4F5F4",accent:"#BE9B62",direction:"深海军蓝与暖白，大幅社论式标题、克制金色细线、清晰主图；国际商业周刊封面感"},
  {id:"investment-research",name:"机构财经研报",background:"#F7F9FC",primary:"#192C48",accent:"#9F8054",direction:"暖白纸感、深蓝精确网格，数据重点突出，有出处的图表后期精确绘制；机构研究报告感"},
@@ -134,7 +156,7 @@ function build(topic,options={}){
  "【执行前能力门禁】先根据当前实际可调用工具逐项确认："+needs.join("；")+"。",
  "平台能力提示（非实时检测）："+p.note,
  "不能仅凭所属平台声称已具备以上能力。工具缺失时说明缺口并明确标记 BLOCKED；不得虚报研究完成、已产图片、HTML、ZIP、下载链接或素材验收。",
- "【任务输入】",...metadata,...visual(topic),
+ "【任务输入】",...metadata,...visual(topic),...articleLayout(topic),
  "【品牌与审批边界】署名统一 DAVYLAB；只写经证实的事实，作者未提供的经历标为待确认；使用 AI 辅助说明；未经作者批准不得视为 approved 或向公众号发表；图片来源和版权需核验。",
  "如内容涉及协助写作 AI 的开发商，披露相关关系；财经内容标注不构成投资建议。"
  ];
@@ -150,11 +172,11 @@ function build(topic,options={}){
  "1. 事实研究：优先找一手资料，保留每项关键主张的原始 URL、发布时间、核对结论。区分已核实／作者判断／未核实；不得伪造来源。无法联网则标记研究能力缺口。",
  "2. 完整文章：产出可直接编辑发布的正文而非提纲，包含≤30字的3个候选标题、推荐标题与理由、署名 DAVYLAB、开头钩子、通俗概念解释、正文、≤5条行动清单、术语词典、来源与 AI 协助声明。另给≤120字摘要、2–3版朋友圈文案、互动问题及下一篇预告。没有证据的经历不要编造。",
  "3. 实际生图：必须生成一张真实 900×383 封面 JPG 和至少三张独立、真实的正文 JPG（建议宽 1080px），逐张落实指定风格与精确色值，不得用占位图、重复图、文字提示词或空白画布代替。文字后期可控排版并检查错字；不制造虚假产品截图。若选题视觉方案指定不同规格，除交付基础 JPG 外另附加对应格式。",
- "4. 图文排版：将四张 JPG 嵌入正文合理位置；编写独立可打开的 HTML，使用 images/ 的相对路径、宽度自适应（max-width:100%）与清晰图注。Markdown 也要引用真实图片路径；确保断网打开 HTML 时本地资源可加载。",
+ "4. 图文排版：严格落实上方已保存的文章排版方案，将四张 JPG 嵌入正文合理位置；编写独立可打开的 HTML，使用 images/ 的相对路径、行内 CSS、宽度自适应（max-width:100%）与清晰图注。Markdown 也要引用真实图片路径；确保断网打开 HTML 时本地资源可加载。",
  "5. 素材打包：在实际文件系统创建以下目录及文件（根目录名用安全的文章主题替换）：",
  ...manifest.map(x=>"  "+x),
  "03_使用说明.txt 记录图片尺寸、相对路径、公众号粘贴方法、已完成/待确认项和版权注意；04_事实核查与来源.md 逐条列出核对结果、证据链接与未核实事项。不得把图片提示词或文件清单当作实际文件。",
- "6. 质量验收必须由真实文件检查而非口头自评：Markdown 文章完整；观点与标题一致；来源可追溯；4 张不同的真实图片可解码且尺寸满足要求；文字与保存风格符合；HTML 本地打开无资源 404；ZIP 真正存在、可解压并包含全部要求文件、无空文件。",
+ "6. 质量验收必须由真实文件检查而非口头自评：Markdown 文章完整；观点与标题一致；来源可追溯；4 张不同的真实图片可解码且尺寸满足要求；文字与保存风格符合；HTML 本地打开无资源 404，已保存文章排版配置在实际 HTML 内落实并逐项核验；ZIP 真正存在、可解压并包含全部要求文件、无空文件。",
  "7. 实际压缩上述根目录为 DAVYLAB_文章主题_公众号素材包.zip，解压复核后返回当前环境可点击的真实下载链接。绝不捏造 sandbox 路径、平台下载链接或上传成功状态。",
  "【验收状态】只有所有核心项 PASS 且 ZIP 已验证可下载，才能标注 COMPLETE；缺工具或某环节失败标记 BLOCKED / INCOMPLETE，准确列出缺口和已产生的文件，不能将任务转为仅策划并冒称完成。",
  "【执行顺序】优先直接制作和验收；按当前会话实际能力选择合法工具。若研究、生图、创建文件或压缩能力缺失，应说明缺哪一项、不能交付完整素材包，并仅交付真实已经完成的部分。"
