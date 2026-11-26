@@ -133,6 +133,36 @@ async function main() {
     await page.locator('[data-section="library"]').evaluate(el => el.click());
     await page.locator("#section-library.active").waitFor();
     assert.equal(await page.locator("#topicList .topiccard").count(), 2, "series ideas are integrated into the existing topic pool");
+
+    // Each selected topic has its own article draft; source notes are never silently promoted to article text.
+    const topicRecords=await page.evaluate(()=>topics.map(t=>({id:String(t.id),title:t.title,source:t.angle||t.summary||""})));
+    const originalTopicStore=await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1"));
+    await page.locator('#topicList button[data-a="article-theme"]').first().click();
+    await page.locator("#section-article-theme.active").waitFor();
+    assert.equal(await page.locator("#atTopic").inputValue(),topicRecords[0].id);
+    assert.equal(await page.locator("#atTitle").inputValue(),topicRecords[0].title);
+    assert.equal(await page.locator("#atBody").inputValue(),"","source notes are not a finished article");
+    assert.equal(await page.locator("#atTopic option").count(),3,"both topics are selectable");
+    await page.locator("#atBody").fill("第一篇独立排版正文");
+    await page.locator("#atBgHex").fill("#EAF1F8");
+    await page.locator("#atTopic").selectOption(topicRecords[1].id);
+    assert.equal(await page.locator("#atTitle").inputValue(),topicRecords[1].title);
+    assert.equal(await page.locator("#atBody").inputValue(),"","second article starts independently");
+    if(topicRecords[1].source){
+      await page.locator("#atTopicNotes summary").click();
+      await page.locator("#atImportSource").click();
+      assert.equal(await page.locator("#atBody").inputValue(),topicRecords[1].source);
+    }
+    await page.locator("#atBody").fill("第二篇独立排版正文");
+    await page.locator("#atTopic").selectOption(topicRecords[0].id);
+    assert.equal(await page.locator("#atBody").inputValue(),"第一篇独立排版正文");
+    assert.equal(await page.locator("#atBgHex").inputValue(),"#EAF1F8");
+    await page.locator("#atTopic").selectOption("");
+    assert.equal(await page.locator("#atBody").inputValue(),"","free draft remains separate");
+    assert.equal(await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1")),originalTopicStore,"layout never mutates source topics or approval state");
+    await page.locator('[data-section="library"]').click();
+    await page.locator("#section-library.active").waitFor();
+
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]").length), 2, "series ideas persist in the existing topic store");
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
