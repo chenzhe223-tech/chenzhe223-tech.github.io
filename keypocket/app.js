@@ -1380,37 +1380,51 @@ async function renderGithubCenter(){
  if(el)el.innerHTML='<strong>尚未连接 KeyPocket GitHub App</strong><p>应用内 GitHub 授权服务尚未开放，因此当前不能绑定账号或创建私有备份仓库。</p><p>Cloudflare 中已有 Worker 占位脚本，但 workers.dev 公网子域名尚未启用，且没有绑定 GitHub App / OAuth Secrets。完成 GitHub App 注册、最小权限配置和服务端密钥部署后，才可以开放连接。</p><p>ChatGPT 的 GitHub 连接器只用于仓库开发，不会自动授权 KeyPocket 应用。</p><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/blob/main/keypocket/docs/github-app.md" target="_blank" rel="noopener noreferrer">查看 GitHub App 配置与安全要求 ↗</a>';
  if(button){button.disabled=true;button.textContent='授权服务待配置';button.title='GitHub App 与 OAuth Worker 尚未完成配置。';}
 }
+let radarRows=[], radarDate='', radarRequest=0;
+function selectedRadarItems(){
+ return Array.from(document.querySelectorAll('#radarCards input:checked'),input=>{
+  const rank=Number(input.value)+1, row=radarRows[rank-1];
+  return {rank,name:row.fullName,metric:row.starGrowth==null?'★ '+row.stars:'+'+row.starGrowth+' ★'};
+ });
+}
+function updatePosterActions(){
+ const count=selectedRadarItems().length;
+ $('#posterPNG').disabled=$('#posterMotion').disabled=!count;
+ $('#posterPNG').textContent=count?'生成 PNG · '+count+' 项':'生成 PNG';
+}
+$('#radarCards').addEventListener('change',updatePosterActions);
+function posterDraft(){
+ return {items:selectedRadarItems(),date:radarDate,weekly:document.querySelector('[data-radar-period].active').dataset.radarPeriod==='week',format:$('#posterFormat').selectedIndex,style:$('#posterStyle').selectedIndex,color:$('#posterColor').selectedIndex};
+}
+$('#posterPNG').onclick=()=>SkillPoster.png(posterDraft()).catch(e=>showToast(e.message));
+$('#posterMotion').onclick=()=>window.open('../motion-lab/skill-poster.html#'+encodeURIComponent(JSON.stringify(posterDraft())),'_blank','noopener');
 async function renderSkillRadar(){
- const host=$('#radarCards'),meta=$('#radarMeta');if(!host)return;
- const period=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month';
- const periodLabels={month:'近 30 天',quarter:'近 90 天',year:'近 365 天',all:'当前 Stars'};
+ const request=++radarRequest,host=$('#radarCards'),meta=$('#radarMeta');
+ const week=document.querySelector('[data-radar-period].active')?.dataset.radarPeriod!=='all';
+ host.replaceChildren();radarRows=[];updatePosterActions();
  try{
   const res=await fetch('./api/skill-radar.json',{cache:'no-store'});
-  if(!res.ok)throw Error('历史采集服务暂不可用（HTTP '+res.status+'）。');
-  const data=await res.json(),xs=(data.boards?.[period]||[]).slice(0,10),status=data.periodStatus?.[period]|| (xs.length?'available':'collecting_history');
-  meta.textContent='数据更新：'+new Date(data.updatedAt).toLocaleString()+' · 历史起始：'+data.historyStartedAt+' · 已采集 '+Number(data.snapshotCount||0)+' 天 · '+periodLabels[period]+' · 来源：GitHub API';
-  if(!xs.length){
-   const title=status==='collecting_history'?'历史样本积累中':'暂无可用榜单数据';
-   const detail=period==='all'?'首次 GitHub 采集完成后会生成当前 Stars 排名。':'周期榜需要足够长的真实历史快照：'+periodLabels[period]+' 的起点样本尚未建立，当前不会把累计 Stars 误报为周期增长。';
-   host.innerHTML='<div class="empty"><h3>'+title+'</h3><p>'+esc(detail)+'</p></div>';
-   return;
-  }
-  host.innerHTML=xs.map((x,i)=>{
-   const growth=period==='all'?'当前 Stars 排名':'近 '+Number(x.growthWindowDays||0)+' 天增长 '+(Number(x.starGrowth)>0?'+':'')+Number(x.starGrowth||0)+' Stars';
-   const forks=period==='all'?'Fork '+Number(x.forks||0).toLocaleString():'Fork 增长 '+(Number(x.forkGrowth)>0?'+':'')+Number(x.forkGrowth||0);
-   const files=(x.skillFiles||[]).slice(0,2).map(file=>'<span class="tag">'+esc(file)+'</span>').join('');
-   return '<article class="card"><div class="cardtop"><div class="provider-icon">#'+(i+1)+'</div><div class="cardtitle"><h3>'+esc(x.fullName)+'</h3><p>'+esc(x.owner)+' · 当前 ★ '+Number(x.stars||0).toLocaleString()+' · '+esc(growth)+' · '+esc(forks)+'</p></div></div><p class="project-note">'+esc(x.description||'该仓库已通过公开 Git Tree 中 SKILL.md 路径验证。')+'</p><div class="tags">'+files+'</div><div class="cardactions"><a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">查看仓库 ↗</a><button class="btn primary" data-radar-save="'+i+'">收录 Skill</button></div></article>';
-  }).join('');
- }catch(err){
-  meta.textContent='榜单暂不可用：'+err.message;
-  host.innerHTML='<div class="empty"><h3>等待真实数据源</h3><p>采集失败不会覆盖上一份有效榜单，也不会展示模拟热度。</p></div>';
- }
+  if(!res.ok)throw Error('HTTP '+res.status);
+  const data=await res.json();if(request!==radarRequest)return;
+  radarDate=data.repositories?.[0]?.history?.at(-1)?.date||data.updatedAt.slice(0,10);
+  const baseline=new Date(Date.parse(radarDate)-7*86400000).toISOString().slice(0,10);
+  radarRows=week?(data.boards.week??data.repositories.flatMap(x=>{
+   const prior=x.history.find(h=>h.date===baseline),current=x.history.find(h=>h.date===radarDate);
+   return prior&&current&&current.stars>prior.stars?[{...x,starGrowth:current.stars-prior.stars}]:[];
+  }).sort((a,b)=>b.starGrowth-a.starGrowth||b.stars-a.stars||a.fullName.localeCompare(b.fullName))):data.boards.all;
+  radarRows=radarRows.slice(0,10);
+  meta.textContent='数据更新：'+radarDate+' · '+(week?baseline+' 至 '+radarDate+' · 已采集仓库七天净增 Stars':'累计 Stars')+' · GitHub';
+  host.innerHTML=radarRows.map((x,i)=>{
+   const paths=x.skillFiles||[],tags=x.topics||[];
+   return '<article class="card"><details><summary style="cursor:pointer;overflow-wrap:anywhere"><b>#'+(i+1)+'　'+esc(x.fullName)+'</b>　'+(week?'+'+x.starGrowth:'★ '+x.stars)+'</summary><p><b>特点</b>　'+esc(x.description||'已验证仓库中包含 SKILL.md')+'</p><p><b>应用范围</b>　'+esc(tags.slice(0,5).join(' · ')||'具体适用场景见仓库说明')+'</p><p><b>开发建议</b>　先阅读 '+esc(paths[0]||'SKILL.md')+'，按其输入与输出约定验证一个最小示例。</p><div class="cardactions"><a class="btn" href="'+esc(x.url)+'" target="_blank" rel="noopener">查看仓库</a><button class="btn" data-radar-save="'+i+'">收录 Skill</button></div></details><label style="display:block;margin-top:12px"><input type="checkbox" value="'+i+'"> 加入推荐海报</label></article>';
+  }).join('')||'<p>本期暂无符合条件的项目。周榜仅纳入两个采集日均有记录且净增为正的仓库。</p>';
+ }catch(e){if(request===radarRequest)meta.textContent='榜单暂不可用：'+e.message;}
 }
 document.querySelectorAll('[data-radar-period]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-radar-period]').forEach(x=>x.classList.toggle('active',x===b));renderSkillRadar();}));
 $('#refreshRadarBtn')?.addEventListener('click',renderSkillRadar);
 $('#radarCards')?.addEventListener('click',async e=>{
  const b=e.target.closest('[data-radar-save]');if(!b)return;
- try{const data=await (await fetch('./api/skill-radar.json',{cache:'no-store'})).json(),p=(data.boards?.[document.querySelector('[data-radar-period].active')?.dataset.radarPeriod||'month']||[])[Number(b.dataset.radarSave)];if(!p)return;
+ try{const p=radarRows[Number(b.dataset.radarSave)];if(!p)return;
   if(projects.some(x=>canonicalSkillRepoUrl(x.repoUrl)===canonicalSkillRepoUrl(p.url))){showToast('该 Skill 已收录');return;}
   const item=normalizeProject({id:crypto.randomUUID(),name:p.fullName+' · Skill',repoUrl:p.url,appUrl:'',category:'AI 工具',stack:p.language||'',notes:'Skill Radar 收录；周期增长基于首次历史快照。',tags:'Skill, Skill Radar, GitHub',favorite:true,createdAt:kpNow(),updatedAt:kpNow()});
   await persistProject(item);projects.push(item);showToast('Skill 已收录');

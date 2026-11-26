@@ -166,18 +166,18 @@ function buildRepositoryIndex(snapshots) {
 }
 function buildBoards(snapshots, date) {
   const index = buildRepositoryIndex(snapshots);
-  const periods = { month: 30, quarter: 90, year: 365 };
+  const periods = { week: 7 };
   const boards = {};
   const periodStatus = {};
   for (const [period, days] of Object.entries(periods)) {
     const cutoff = dateOffset(date, days);
     const rows = [];
     for (const repo of index) {
-      const baseline = repo.history.filter(point => point.date <= cutoff).slice(-1)[0];
+      const baseline = repo.history.find(point => point.date === cutoff);
       if (!baseline) continue;
       const current = repo.history[repo.history.length - 1];
       const spanDays = Math.round((Date.parse(current.date) - Date.parse(baseline.date)) / 86400000);
-      if (spanDays < days - 7) continue;
+      if (spanDays !== days || current.stars <= baseline.stars) continue;
       rows.push({
         ...repo,
         starGrowth: current.stars - baseline.stars,
@@ -201,13 +201,13 @@ function buildBoards(snapshots, date) {
 }
 function selfTest() {
   const snapshots = [
-    { date: '2026-01-01', repos: [{ fullName: 'a/a', stars: 100, forks: 10 }] },
+    { date: '2026-01-24', repos: [{ fullName: 'a/a', stars: 100, forks: 10 }] },
     { date: '2026-01-31', repos: [{ fullName: 'a/a', stars: 150, forks: 15 }] }
   ];
   const result = buildBoards(snapshots, '2026-01-31');
-  assert.equal(result.boards.month.length, 1);
-  assert.equal(result.boards.month[0].starGrowth, 50);
-  assert.equal(result.boards.quarter.length, 0);
+  assert.equal(result.boards.week.length, 1);
+  assert.equal(result.boards.week[0].starGrowth, 50);
+  assert.equal(buildBoards(snapshots, "2026-02-01").boards.week.length, 0);
   assert.equal(result.boards.all[0].stars, 150);
   assert.equal(validSkillPath('.claude/skills/reviewer/SKILL.md'), true);
   assert.equal(validSkillPath('docs/tutorial/SKILL.md'), false);
