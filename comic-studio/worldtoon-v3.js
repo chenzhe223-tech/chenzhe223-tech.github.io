@@ -284,7 +284,7 @@
      if(response.method!=='verified_model_response')throw Error('没有收到可验证的真实模型响应，拒绝用模板内容冒充结果');
      const x=response.story;if(!x||!Array.isArray(x.panels)||x.panels.length!==p.panels.length)throw Error('DeepSeek 未返回完整的分镜结构');
      if(p.handoff?.repoQueuedAt)throw Error('该作品已经派单，拒绝覆盖');
-     p.title=String(x.title||p.title).slice(0,180);p.subtitle=String(x.subtitle||'').slice(0,240);
+     if(p.titleUserDefined){p.aiSuggestedTitle=String(x.title||'').slice(0,180)}else p.title=String(x.title||p.title).slice(0,180);p.subtitle=String(x.subtitle||'').slice(0,240);
      p.description=String(x.summary||p.description).slice(0,4000);
      p.fiction=String(x.fictionalization||'原创架空故事，情节和对白均属虚构').slice(0,1600);
      p.panels=x.panels.map((a,i)=>({id:uid(),title:String(a.title||'第'+(i+1)+'格').slice(0,100),

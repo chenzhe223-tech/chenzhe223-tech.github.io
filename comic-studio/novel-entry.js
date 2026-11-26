@@ -10,8 +10,8 @@
       '<p>选择一种创作方式，随后进入统一的作品制作流程。</p>'+
       '<div class="wt-entry-grid">'+
         '<a class="wt-entry-card" href="#/live"><span class="wt-entry-symbol">◉</span><strong>热点改编</strong><small>从新闻和全球热点选题</small><span class="wt-entry-arrow">→</span></a>'+
-        '<button type="button" class="wt-entry-card" data-action="new"><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>快速新建，AI 辅助扩写</small><span class="wt-entry-arrow">→</span></button>'+
-        '<button type="button" class="wt-entry-card wt-entry-novel" data-wt-novel-start><span class="wt-entry-symbol">▤</span><strong>小说蒸馏</strong><small>上传小说，提炼章节与人物线索</small><span class="wt-entry-arrow">→</span></button>'+
+        '<a class="wt-entry-card" href="#/idea"><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>输入灵感，AI 辅助扩写</small><span class="wt-entry-arrow">→</span></a>'+
+        '<a class="wt-entry-card wt-entry-novel" href="#/novel"><span class="wt-entry-symbol">▤</span><strong>小说蒸馏</strong><small>上传小说，提炼章节与人物线索</small><span class="wt-entry-arrow">→</span></a>'+
         '<a class="wt-entry-card" href="#/workspace"><span class="wt-entry-symbol">▧</span><strong>自主创作</strong><small>自行定义故事与人物</small><span class="wt-entry-arrow">→</span></a>'+
       '</div></section>';
   }
@@ -30,16 +30,7 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     // A novel is a new work by default, never overwrite or unlock a previous project.
-    newProject();
-    const p=selected();
-    if(p){
-      p.creationSource='novel';
-      p.title='未命名小说导读';
-      ui.wt4Step=1;
-      persist();
-      nav('workspace/'+p.id+'/1');
-      requestAnimationFrame(showNovelPanel);
-    }
+    newProject(null,{source:'novel'});
   },true);
   if(location.hash==='#/dashboard')queueMicrotask(()=>render());
 })();

@@ -145,7 +145,7 @@ async function wtDraftFromNews(i){
  const x=wtNews[Number(i)];if(!x)return;
  await wtSaveNews(i);
  const t=data.topics.find(z=>z.source===x.url);if(!t)throw Error('选题尚未保存');
- const existing=data.projects.find(z=>!z.deleted&&z.topicId===t.id);
+ const existing=data.projects.find(z=>!z.deleted&&!z.archived&&z.topicId===t.id);
  if(existing){ui.selected=existing.id;nav('studio/'+existing.id+'/0');notify('已打开这条选题的现有漫画草稿');return}
  const p=emptyProject(t);
  p.factNotes='【待核验】来自 '+(x.source||'未知来源')+' 的新闻、文学或研究线索；请先核对原文、活动日期、史实及版权。'+(Array.isArray(x.series_episodes)&&x.series_episodes.length?' 原创连载建议：'+x.series_episodes.join(' / '):'');
@@ -374,6 +374,10 @@ window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#/live')&
   if(review&&!limitedSource(x))throw Error('文学导读必须有可追溯的作品书目或介绍来源，不能编造原著内容');
   const srcTitle=x.title,summary=beats.map(b=>b.summary).join('；').slice(0,1000);
   const abstract=beats.map(b=>(Array.isArray(b.tags)&&b.tags.length?b.tags.join('、'):b.title)).join('；').slice(0,650);
+  const adaptation=review?'literary_review':faithful?'faithful':'original';
+  const beatIds=JSON.stringify(beats.map(b=>String(b.id)).sort());
+  const existing=data.projects.find(v=>{const prior=v.storySourceSelection;return !v.deleted&&!v.archived&&prior&&prior.adaptation===adaptation&&((x.id&&prior.source_id===x.id)||(x.source&&prior.source===x.source&&prior.title===srcTitle))&&JSON.stringify((prior.selected_beats||[]).map(b=>String(b.id)).sort())===beatIds});
+  if(existing){ui.selected=existing.id;ui.wt4LastId=existing.id;nav('workspace/'+existing.id+'/1');notify('已打开该作品与创作方式的现有草稿');return existing}
   const p=emptyProject();
   p.title=review?'读懂《'+srcTitle+'》｜故事·哲学·人生':faithful?'《'+srcTitle+'》：'+beats[0].title+'（漫画改编）':'原创漫画 · '+(x.genre||'成长与关系')+'新篇';
   p.category=review?(isNobel(x)?'诺奖文学导读':'世界文学导读'):x.type==='drama'?'娱乐':'文化';

@@ -375,8 +375,8 @@
       '<p>选择一种创作方式，随后进入统一的作品制作流程。</p>'+
       '<div class="wt-entry-grid">'+
         '<a class="wt-entry-card" href="#/live"><span class="wt-entry-symbol">◉</span><strong>热点改编</strong><small>从新闻和全球热点选题</small><span class="wt-entry-arrow">→</span></a>'+
-        '<button type="button" class="wt-entry-card" data-wt-idea-start><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>输入灵感，AI 扩写完整剧情</small><span class="wt-entry-arrow">→</span></button>'+
-        '<button type="button" class="wt-entry-card wt-entry-novel" data-wt-novel-start><span class="wt-entry-symbol">▤</span><strong>文学漫绘</strong><small>世界文学导读与原创漫画表达</small><span class="wt-entry-arrow">→</span></button>'+
+        '<a class="wt-entry-card" href="#/idea"><span class="wt-entry-symbol">✦</span><strong>一句话创作</strong><small>输入灵感，AI 扩写完整剧情</small><span class="wt-entry-arrow">→</span></a>'+
+        '<a class="wt-entry-card wt-entry-novel" href="#/novel"><span class="wt-entry-symbol">▤</span><strong>文学漫绘</strong><small>世界文学导读与原创漫画表达</small><span class="wt-entry-arrow">→</span></a>'+
         '<a class="wt-entry-card" href="#/workspace"><span class="wt-entry-symbol">▧</span><strong>自主创作</strong><small>自行定义故事与人物</small><span class="wt-entry-arrow">→</span></a>'+
       '</div></section>';
   }
@@ -388,13 +388,7 @@
     if(!button)return;
     event.preventDefault();
     event.stopImmediatePropagation();
-    newProject();
-    const p=selected();
-    if(!p)return;
-    p.creationSource='novel';
-    p.title='未命名小说导读';
-    persist();
-    nav('novel');
+    newProject(null,{source:'novel'});
   },true);
   if(location.hash==='#/dashboard')queueMicrotask(()=>render());
 })();
@@ -435,11 +429,12 @@
     '</div>';
  }
  function importStep(p){
-   const title=p.title==='未命名小说导读'?'':p.title;
+   const title=p.sourceTitle||'';
    const panel=window.WTNovelStudio?.panel?.(p)||'<p>解析模块尚未加载，请刷新页面。</p>';
    return '<section class="wt-novel-focus"><div class="wt-novel-kicker">STEP 01 · IMPORT</div>'+
     '<h2>选择一本想要解读的作品</h2><p>填写书名并上传合法持有的文本。平台不会仅凭书名生成未经核实的小说剧情。</p>'+
-    '<label class="wt-novel-title-label">小说名称<input data-novel-title maxlength="180" placeholder="例如：简爱、素食者、百年孤独" value="'+esc(title)+'"></label>'+
+    '<label class="wt-novel-title-label">作品名称<input data-novel-project-title maxlength="180" '+(wtTitleLocked(p)?'disabled':'')+' value="'+esc(p.title)+'" placeholder="输入自定义作品名称"></label>'+
+    '<label class="wt-novel-title-label">原著名称<input data-novel-title maxlength="180" '+(wtTitleLocked(p)?'disabled':'')+' placeholder="例如：简爱、素食者、百年孤独" value="'+esc(title)+'"></label>'+
     '<div class="wt-novel-import-panel">'+panel.replace('<details class="wt-novel-studio"','<details open class="wt-novel-studio"')+'</div>'+
     '<div class="wt-novel-hint">🔒 本地处理原稿。是否附带原稿交给外部 AI，由你另行明确授权。</div>'+
     (p.novelSkill?'<div class="wt-novel-main-action"><button class="button dark" data-novel-step="1">查看作品结构 →</button></div>':'')+
@@ -491,14 +486,11 @@
  document.addEventListener('change',ev=>{
    const node=ev.target;
    if(node.matches('[data-novel-project]')){
-     if(findProject(node.value)){ui.selected=node.value;step=0;render();}
+     if(findProject(node.value)){ui.selected=node.value;step=0;nav('novel/'+node.value);}
    }
    if(node.matches('[data-wt-novel-count]')){const p=project();if(!p||p.handoff?.repoQueuedAt)return;const n=Number(node.value);if(!Number.isInteger(n)||n<4||n>60){render();return}if(window.WT3?.resize)window.WT3.resize(p,n);return;}
-   if(node.matches('[data-novel-title]')){
-     const p=project();if(!p)return;
-     p.title=node.value.trim()||'未命名小说导读';p.sourceTitle=p.title;
-     setChange(p,'更新小说作品名称');render();
-   }
+   if(node.matches('[data-novel-project-title]')){const p=project();if(p){wtRenameDraft(p,node.value);render()}return;}
+   if(node.matches('[data-novel-title]')){const p=project();if(!p||wtTitleLocked(p))return;const title=wtNormalizeProjectTitle(node.value);if(!title){notify('请输入有效原著名称');render();return}p.sourceTitle=title;setChange(p,'更新原著名称');render();}
  },true);
 })();
 
@@ -527,6 +519,7 @@
      '<section class="wt-idea-editor">'+
       '<div class="wt-idea-eyebrow">YOUR IDEA / 灵感输入</div>'+
       '<h2>你想讲一个什么故事？</h2>'+
+      '<label class="wt-idea-label" for="wt-idea-title">作品名称</label><input id="wt-idea-title" data-wt-idea-title maxlength="180" placeholder="输入自定义作品名称" '+(locked||wtTitleLocked(p)?'disabled':'')+' value="'+esc(p.title)+'">'+
       '<label for="wt3-seed" class="wt-idea-label">一句话创意</label>'+
       '<textarea id="wt3-seed" rows="4" maxlength="1800" '+(locked?'disabled':'')+' placeholder="例如：一个古代县令穿越到 AI 时代，发现机器人更会断案">'+esc(p.ideaSeed||'')+'</textarea>'+
       '<p class="wt-idea-guide">建议包含一个主人公、一个冲突或一个意外转折。至少输入 8 个字。</p>'+
@@ -553,14 +546,11 @@
  document.addEventListener('click',ev=>{
   const b=ev.target.closest('[data-wt-idea-start]');if(!b)return;
   ev.preventDefault();ev.stopImmediatePropagation();
-  newProject();const p=ideap();if(!p)return;
-  p.creationSource='one-line';p.title='未命名灵感作品';p.handoff={...p.handoff,mode:'original'};
-  p.plotGenre='general';persist();nav('idea');
+  newProject(null,{source:'one-line'});
  },true);
  document.addEventListener('change',ev=>{
-  if(ev.target.matches('[data-wt-idea-project]')){
-   const p=findProject(ev.target.value);if(p&&isIdea(p)){ui.selected=p.id;render();}
-  }
+  if(ev.target.matches('[data-wt-idea-project]')){const p=findProject(ev.target.value);if(p&&isIdea(p)){ui.selected=p.id;nav('idea/'+p.id);}}
+  if(ev.target.matches('[data-wt-idea-title]')){const p=ideap();if(isIdea(p)){wtRenameDraft(p,ev.target.value);render()}return;}
   if(ev.target?.id==='wt3-count'){
    const p=ideap();if(!isIdea(p)||p.panels?.some(x=>x.image)||p.handoff?.repoQueuedAt)return;
    const n=Number(ev.target.value);if(![6,9,12,18].includes(n))return;
