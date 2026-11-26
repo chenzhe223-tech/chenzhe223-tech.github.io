@@ -290,3 +290,6 @@ P2：
 - 修改 app.js、index.html、新增 skill-prompt.js，并在 scripts/qa-smoke.cjs 加入三平台与复制交互断言。静态检查通过；线上浏览器验收查看本次提交的 Actions。iPhone Safari/微信复制行为待真机验证。
 
 - 实际验收：功能提交 `566fb30`，Pages `43788873631` 和 Handoff `43788874852` 成功，正式 HTML 和两个 JS 与提交逐字节相符。Browser QA `43788874847` 三个平台指令断言均 PASS，复制操作完成；整站唯一失败为公众号选题工作台超时。iPhone 真机待测。
+
+## 2026-11-26 网页品牌标识
+采用用户选定的钛灰橙折角原稿，主页与隐私页声明独立 favicon 和 iOS 图标，解锁页与主导航显示原稿横标。
