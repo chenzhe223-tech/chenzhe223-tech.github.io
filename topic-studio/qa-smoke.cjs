@@ -62,6 +62,53 @@ async function main() {
     assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
 
 
+    // Article theme: real editor, six presets, localized color, responsive preview and export.
+    await page.locator('#appNavigation [data-section="article-theme"]').click();
+    await page.locator("#section-article-theme.active").waitFor();
+    assert.equal(await page.locator("#atPresets .at-preset").count(),6,"six magazine layouts");
+    await page.locator("#atTitle").fill("排版验收文章");
+    await page.locator("#atBody").fill("## 科学小标题\n\n第一段 **加粗文字**\n\n> 引用测试\n\n第二段完整内容");
+    await page.locator('[data-theme="science"]').click();
+    assert.equal(await page.locator('[data-theme="science"]').getAttribute("aria-pressed"),"true");
+    await page.locator("#atBgHex").fill("#F4F7FA");
+    await page.locator("#atAccentHex").fill("#245AC4");
+    await page.locator("#atBlock").selectOption({index:1});
+    await page.locator("#atLocalHex").fill("#EAF1F8");
+    await page.locator("#atApplyLocal").click();
+    assert.equal(await page.locator("#atPreview > section").evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(244, 247, 250)");
+    assert.equal(await page.locator("#atPreview p").filter({hasText:"第一段"}).evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(234, 241, 248)");
+    assert.equal(await page.locator("#atPreview strong").textContent(),"加粗文字");
+    await page.locator("#atCheck").click();
+    assert.ok((await page.locator("#atChecks").innerText()).includes("对比度"),"compatibility preflight exists");
+    await page.context().grantPermissions(["clipboard-read","clipboard-write"],{origin:new URL(page.url()).origin});
+    await page.locator("#atCopy").click();
+    await page.waitForFunction(()=>document.getElementById("atNotice").textContent.includes("富文本已复制"));
+    const rich=await page.evaluate(async()=>{const items=await navigator.clipboard.read();const item=items.find(i=>i.types.includes("text/html"));return item?(await item.getType("text/html")).text():""});
+    assert.ok(rich.includes("加粗文字")&&rich.includes("background-color"),"actual clipboard includes HTML and inline style");
+    const articleDownloadPromise=page.waitForEvent("download");
+    await page.locator("#atExport").click();
+    const articleDownload=await articleDownloadPromise;
+    assert.ok(articleDownload.suggestedFilename().endsWith(".html"));
+    const exportedArticle=fs.readFileSync(await articleDownload.path(),"utf8");
+    assert.ok(exportedArticle.includes("<!doctype html>")&&exportedArticle.includes("第二段完整内容")&&exportedArticle.includes("#EAF1F8"),"downloaded HTML is complete");
+    await page.screenshot({path:path.join(screenshotDir,"topic-studio-article-theme-desktop.png"),fullPage:false});
+    await page.setViewportSize({width:390,height:844});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=3),"article theme mobile has no horizontal overflow");
+    assert.ok(await page.locator(".at-device").evaluate(el=>el.getBoundingClientRect().width<=390),"mobile preview fits viewport");
+    await page.screenshot({path:path.join(screenshotDir,"topic-studio-article-theme-mobile.png"),fullPage:false});
+    await page.locator("#mobileMoreToggle").click();
+    await page.locator('#mobileMorePanel [data-go="article-theme"]').click();
+    await page.locator("#section-article-theme.active").waitFor();
+    await page.setViewportSize({width:1440,height:1000});
+    await page.reload({waitUntil:"domcontentloaded"});
+    await page.locator('#appNavigation [data-section="article-theme"]').click();
+    assert.equal(await page.locator("#atTitle").inputValue(),"排版验收文章","article draft persists locally");
+    assert.equal(await page.locator("#atBgHex").inputValue(),"#F4F7FA","custom color persists");
+    page.once("dialog",d=>d.accept());
+    await page.locator("#atClear").click();
+    assert.equal(await page.locator("#atBody").inputValue(),"","article draft clears without touching topic pool");
+    await page.locator('#appNavigation [data-section="discover"]').click();
+
     // Editorial research: prompt generation, benchmark local persistence, series parsing and topic-pool integration.
     await page.locator('[data-section="research"]').evaluate(el => el.click());
     await page.locator("#section-research.active").waitFor();
