@@ -830,13 +830,51 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 @media(max-width:1080px){#section-library .library-workspace{grid-template-columns:minmax(0,1fr)!important}}
 @media(max-width:620px){#section-library .library-workspace>.panel{padding:13px!important}#section-library .topic-visual:has(>.topic-cover){grid-template-columns:64px minmax(0,1fr)!important}#section-library .topic-visual>.topic-cover{width:64px;height:64px}#section-library .topicactions{justify-content:flex-start}#section-library .prompt-mode-card{padding:8px 4px!important}#section-library .prompt-controls{grid-template-columns:repeat(2,minmax(0,1fr))}#section-library .prompt-controls select{min-width:0;width:100%}#section-library .prompt-actions .btn{min-height:40px}}
 @media(max-width:360px){#section-library .prompt-controls{grid-template-columns:1fr}#section-library .library-topics-panel .formrow{grid-template-columns:1fr}}
+</style>
+<style id="article-theme-css">
+#section-article-theme .at-heading{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:0 0 16px;flex-wrap:wrap}
+#section-article-theme .at-heading h2{font-size:25px;line-height:1.3;color:#203850;margin:0 0 5px}
+#section-article-theme .at-heading p{font-size:13px;line-height:1.6;color:#64788a;margin:0}
+#section-article-theme .at-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:16px}
+#section-article-theme .at-workspace>.panel{min-width:0!important;margin:0!important;padding:18px!important;background:#fff!important;border:1px solid #dce5ee!important;border-radius:14px!important;box-shadow:none!important}
+#section-article-theme .at-panel-title{font-size:16px;font-weight:750;color:#213a56;margin:0 0 12px}
+#section-article-theme .at-field{display:grid;gap:5px;min-width:0;margin-bottom:12px}
+#section-article-theme .at-field label{font-size:12px;font-weight:700;color:#344c64}
+#section-article-theme .at-field input,#section-article-theme .at-field select,#section-article-theme .at-field textarea{width:100%;min-width:0;box-sizing:border-box;padding:9px 10px;border:1px solid #dce5ee;border-radius:8px;background:#fff;color:#213a56}
+#section-article-theme #atBody{min-height:255px;resize:vertical;line-height:1.65;font-size:14px}
+#section-article-theme .at-presets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 14px}
+#section-article-theme .at-preset{display:grid;gap:6px;text-align:left;min-width:0;padding:9px!important;background:#fff;border:1px solid #dce5ee;border-radius:9px;color:#233c56;cursor:pointer}
+#section-article-theme .at-preset[aria-pressed=true]{border-color:#3869d7;box-shadow:inset 0 0 0 1px #3869d7}
+#section-article-theme .at-preset strong{font-size:12px;line-height:1.3}
+#section-article-theme .at-sample{display:grid;gap:4px;height:42px;padding:8px;border-radius:5px;border:1px solid #dce5ee}
+#section-article-theme .at-sample i{display:block;height:3px;border-radius:1px}
+#section-article-theme .at-color-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+#section-article-theme .at-color-input{display:grid;grid-template-columns:36px minmax(0,1fr);gap:6px}
+#section-article-theme .at-color-input input[type=color]{height:36px;padding:3px;border:1px solid #dce5ee;background:white;border-radius:7px}
+#section-article-theme .at-actions{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+#section-article-theme .at-actions .btn{min-height:38px}
+#section-article-theme .at-help{font-size:12px;color:#64788a;line-height:1.65;margin:7px 0 10px;overflow-wrap:anywhere}
+#section-article-theme .at-local{border-top:1px solid #e3eaf1;padding-top:12px}
+#section-article-theme .at-preview-shell{background:#eef2f6;border:1px solid #dce5ee;border-radius:12px;padding:12px;display:flex;justify-content:center;min-width:0}
+#section-article-theme .at-device{width:375px;max-width:100%;background:white;border:1px solid #d4dce6;border-radius:10px;overflow:hidden}
+#section-article-theme .at-device-bar{padding:8px 12px;border-bottom:1px solid #e4eaf1;color:#64788a;font-size:11px;background:white}
+#section-article-theme #atPreview{width:100%;min-width:0;min-height:200px;overflow-wrap:anywhere}
+#section-article-theme #atPreview *{box-sizing:border-box;max-width:100%}
+#section-article-theme #atChecks{padding:0;margin:8px 0;list-style:none;display:grid;gap:6px}
+#section-article-theme #atChecks li{font-size:12px;line-height:1.55;padding:8px 10px;border-radius:7px;background:#f2f6fa;overflow-wrap:anywhere}
+#section-article-theme #atChecks li[data-level=warn]{background:#fff6e5;color:#775111}
+#section-article-theme #atChecks li[data-level=pass]{color:#276644}
+#section-article-theme #atNotice{font-size:12px;line-height:1.6;min-height:18px;color:#305b86}
+#section-article-theme .at-preview-panel{position:sticky;top:76px}
+@media(max-width:1080px){#section-article-theme .at-workspace{grid-template-columns:minmax(0,1fr)}#section-article-theme .at-preview-panel{position:static}}
+@media(max-width:620px){#section-article-theme .at-workspace>.panel{padding:13px!important}#section-article-theme .at-presets{grid-template-columns:repeat(2,minmax(0,1fr))}#section-article-theme .at-preview-shell{padding:5px}#section-article-theme .at-color-grid{grid-template-columns:1fr}#section-article-theme .at-heading h2{font-size:21px}}
 </style></head>
-<body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="visual"><span>◈</span>配图</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"<span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><button id="mobileSyncOpen" type="button"><span>⇄</span>账号与自动同步</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
+<body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="visual"><span>◈</span>配图</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"<span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="article-theme"><span>▤</span>文章主题与排版</button><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><button id="mobileSyncOpen" type="button"><span>⇄</span>账号与自动同步</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
  <div class="brand"><img class="brand-symbol" src="./brand/davylab-studio-mark.svg" alt="" width="44" height="44"><div class="brand-lockup"><b>DAVYLAB</b><small>CONTENT STUDIO</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
-  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="visual"><span class="ico">◈</span>配图策划</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button>
+  <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="visual"><span class="ico">◈</span>配图策划</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="article-theme"><span class="ico">▤</span>文章主题与排版</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button>
  </div></div>
  <div class="desktop-tools-section"><button class="nav desktop-more-toggle" id="desktopMoreToggle" type="button" aria-controls="desktopSources" aria-expanded="false"><span class="ico">☰</span><span class="desktop-more-title">更多工具</span><span class="desktop-more-chevron" aria-hidden="true">⌄</span></button><div id="desktopSources" class="desktop-source-links" hidden><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="./cloudbase/sync-center.html"><span class="ico">⇄</span><span class="source-nav__label">多端同步中心 · 安全准备</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div></div>
  <div class="sidefoot">本机数据正常保存 · 云端同步待验证<br><a href="./cloudbase/sync-center.html">备份与两端比较 →</a><br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
@@ -1108,6 +1146,35 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
     </div>
     <p class="vd-preview-caption">正文参考尺寸：1080px 宽。实际插图需按文章内容逐张创作，并检查高清导出、文字与事实。</p>
    </div>
+  </div>
+ </div>
+</section>
+
+<section class="section" id="section-article-theme" aria-labelledby="atHeading">
+ <div class="at-heading"><div><h2 id="atHeading">文章主题与排版</h2><p>从原稿到公众号图文：主题配色、杂志版式、实时预览与富文本交付。</p></div><button class="btn small" type="button" id="atClear">清空当前稿件</button></div>
+ <div class="at-workspace">
+  <div class="panel at-editor-panel">
+   <h3 class="at-panel-title">01 / 文章编辑与主题</h3>
+   <div class="at-field"><label for="atTitle">文章标题</label><input id="atTitle" type="text" placeholder="输入文章标题"></div>
+   <div class="at-field"><label for="atAuthor">作者署名</label><input id="atAuthor" type="text" value="DAVYLAB"></div>
+   <div class="at-field"><label for="atBody">正文（文本或 Markdown）</label><textarea id="atBody" placeholder="粘贴完整文章。支持段落、# 标题、> 引用、- 列表、**加粗**、链接和 Markdown 图片。"></textarea></div>
+   <p class="at-help">原稿保留在编辑区。空行分段；# / ## / ### 生成小标题。支持基础 Markdown，不直接执行粘贴的 HTML。</p>
+   <h3 class="at-panel-title">02 / 六种杂志主题</h3>
+   <div id="atPresets" class="at-presets" role="group" aria-label="文章排版风格"></div>
+   <div class="at-color-grid">
+    <div class="at-field"><label for="atBgHex">全文背景色</label><div class="at-color-input"><input id="atBgPick" type="color" aria-label="全文背景色选择器"><input id="atBgHex" type="text" maxlength="7" placeholder="#FFFFFF"></div></div>
+    <div class="at-field"><label for="atAccentHex">标题与强调色</label><div class="at-color-input"><input id="atAccentPick" type="color" aria-label="强调色选择器"><input id="atAccentHex" type="text" maxlength="7" placeholder="#2457A6"></div></div>
+   </div>
+   <div class="at-local"><h3 class="at-panel-title">03 / 局部背景</h3><div class="at-field"><label for="atBlock">选择正文段落或标题</label><select id="atBlock"><option value="">先输入正文</option></select></div><div class="at-field"><label for="atLocalHex">局部背景色</label><div class="at-color-input"><input id="atLocalPick" type="color" value="#EAF1F8" aria-label="局部背景色选择器"><input id="atLocalHex" type="text" value="#EAF1F8" maxlength="7"></div></div><div class="at-actions"><button type="button" class="btn" id="atApplyLocal">应用到选中段落</button><button type="button" class="btn" id="atRemoveLocal">取消局部背景</button></div><p class="at-help">局部颜色绑定对应原文块；修改该块文字后需重新确认局部颜色。主题切换保留局部设置。</p></div>
+   <p class="at-help">本模块草稿仅保存到当前浏览器，不修改选题池、审批状态或公众号后台。</p>
+  </div>
+  <div class="panel at-preview-panel">
+   <h3 class="at-panel-title">04 / 手机实时预览</h3>
+   <div class="at-preview-shell"><div class="at-device"><div class="at-device-bar">移动端阅读模拟 · 375px</div><div id="atPreview" aria-label="实时排版预览"></div></div></div>
+   <div class="at-actions"><button type="button" class="btn primary" id="atCopy">复制公众号富文本</button><button type="button" class="btn" id="atExport">导出 HTML</button><button type="button" class="btn" id="atCheck">兼容性检查</button></div>
+   <div id="atNotice" role="status" aria-live="polite"></div>
+   <details open><summary>样式兼容性检查（静态预检）</summary><ul id="atChecks" aria-live="polite"></ul></details>
+   <p class="at-help">微信后台可能过滤背景、字体、链接或图片等样式。复制后须在公众号编辑器中预览；本地检查不等于微信实际渲染通过。</p>
   </div>
  </div>
 </section>
@@ -1384,7 +1451,7 @@ function safe(v=""){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<"
 function safeUrl(v=""){try{const u=new URL(String(v),location.href);return ["http:","https:"].includes(u.protocol)?u.href:"#"}catch{return"#"}}
 function toast(s){const e=$("toast");e.textContent=s;e.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>e.classList.remove("show"),2200)}
 function saveTopics(){localStorage.setItem(STORE_KEY,JSON.stringify(topics));renderStats();renderTopics();renderCalendar()}
-function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池",calendar:"内容排期",published:"公众号内容库",workflow:"创作流程",growth:"增长实验室",research:"赛道研究"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();if(n==="published")renderPublishedArticles();if(n==="research")renderBenchmarks();window.scrollTo({top:0,behavior:"smooth"})}
+function changeSection(n){document.querySelectorAll(".section").forEach(e=>e.classList.toggle("active",e.id==="section-"+n));document.querySelectorAll(".nav[data-section]").forEach(e=>e.classList.toggle("active",e.dataset.section===n));$("crumbTitle").textContent=({discover:"选题发现",library:"我的选题池","article-theme":"文章主题与排版",calendar:"内容排期",published:"公众号内容库",workflow:"创作流程",growth:"增长实验室",research:"赛道研究"})[n]||"选题发现";if(n==="library")renderTopics();if(n==="calendar")renderCalendar();if(n==="published")renderPublishedArticles();if(n==="research")renderBenchmarks();window.scrollTo({top:0,behavior:"smooth"})}
 document.querySelectorAll(".nav[data-section]").forEach(e=>e.addEventListener("click",()=>changeSection(e.dataset.section)));
 
 const RESEARCH_KEY="davylab-topic-research-v1";
@@ -2021,4 +2088,91 @@ function receive(e){
 window.addEventListener("message",receive);
 sender.postMessage({type:"knowa-annual-ready-v1",nonce},origin);
 setTimeout(()=>{if(!complete){window.removeEventListener("message",receive);toast("KNOWA 交接超时，请返回研究中心重试")}},20000);
-})();</script></body></html>
+})();</script>
+<script id="article-theme-js">
+(()=>{
+"use strict";
+const $=id=>document.getElementById(id), KEY="davylab-article-theme-v1";
+const themes=[
+{id:"technology",name:"科技杂志",bg:"#F5F8FC",ink:"#192C46",accent:"#245AC4",soft:"#E4EDF9",font:"-apple-system,BlinkMacSystemFont,Arial,sans-serif",size:16,leading:1.85,heading:"bar"},
+{id:"science",name:"科学杂志",bg:"#FFFFFF",ink:"#24362F",accent:"#246D62",soft:"#E7F3EF",font:"-apple-system,BlinkMacSystemFont,Arial,sans-serif",size:16,leading:1.9,heading:"rule"},
+{id:"finance",name:"财经杂志",bg:"#FFFFFF",ink:"#203249",accent:"#254A73",soft:"#EAF0F6",font:"-apple-system,BlinkMacSystemFont,Arial,sans-serif",size:16,leading:1.8,heading:"rule"},
+{id:"literature",name:"文学杂志",bg:"#FAFAF9",ink:"#302E2B",accent:"#79534A",soft:"#F0EBE8",font:"Georgia,Songti SC,SimSun,serif",size:17,leading:2,heading:"center"},
+{id:"culture",name:"人文杂志",bg:"#FFFFFF",ink:"#303A38",accent:"#49645D",soft:"#E9F0EC",font:"Georgia,Songti SC,SimSun,serif",size:17,leading:1.95,heading:"bar"},
+{id:"minimal",name:"极简杂志",bg:"#FFFFFF",ink:"#202124",accent:"#333B49",soft:"#F0F2F4",font:"-apple-system,BlinkMacSystemFont,Arial,sans-serif",size:16,leading:1.9,heading:"plain"}
+];
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hex=v=>/^#[0-9a-f]{6}$/i.test(String(v||""))?String(v).toUpperCase():"";
+const url=v=>/^https?:\/\/[^\s<>"']+$/i.test(String(v||""))?esc(v):"";
+function inline(s,accent){
+ let out="",last=0;const rx=/\*\*([^*\n]+)\*\*|\*([^*\n]+)\*|\[([^\]\n]+)\]\(([^)\s]+)\)/g;
+ for(const m of String(s).matchAll(rx)){out+=esc(s.slice(last,m.index));if(m[1])out+='<strong style="font-weight:700">'+esc(m[1])+'</strong>';else if(m[2])out+='<em>'+esc(m[2])+'</em>';else{const u=url(m[4]);out+=u?'<a href="'+u+'" style="color:'+accent+';text-decoration:underline">'+esc(m[3])+'</a>':esc(m[0])}last=m.index+m[0].length}
+ return (out+esc(s.slice(last))).replace(/\n/g,"<br>");
+}
+function parse(body){
+ const blocks=[];let buffer=[];const flush=()=>{if(buffer.length){blocks.push({type:"p",text:buffer.join("\n")});buffer=[]}};
+ for(const line of String(body||"").replace(/\r\n?/g,"\n").split("\n")){
+  if(!line.trim()){flush();continue}
+  const h=line.match(/^(#{1,3})\s+(.+)$/),q=line.match(/^>\s?(.*)$/),li=line.match(/^([-*]|\d+\.)\s+(.+)$/),im=line.match(/^!\[([^\]]*)\]\(([^)\s]+)\)$/);
+  if(h||q||li||im||/^\s*---+\s*$/.test(line)){flush();if(h)blocks.push({type:"h"+h[1].length,text:h[2]});else if(q)blocks.push({type:"quote",text:q[1]});else if(li)blocks.push({type:"list",text:li[2],mark:li[1]});else if(im)blocks.push({type:"image",text:im[1],src:im[2]});else blocks.push({type:"rule",text:""});}
+  else buffer.push(line)
+ }flush();
+ const seen=new Map();return blocks.map(b=>{const base=JSON.stringify([b.type,b.text,b.src||"",b.mark||""]);const n=(seen.get(base)||0)+1;seen.set(base,n);return {...b,key:base+"#"+n}})
+}
+function luminance(c){const a=c.slice(1).match(/../g).map(x=>parseInt(x,16)/255).map(x=>x<=.04045?x/12.92:Math.pow((x+.055)/1.055,2.4));return .2126*a[0]+.7152*a[1]+.0722*a[2]}
+function ratio(a,b){const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+function article(d){
+ const t=themes.find(x=>x.id===d.theme)||themes[0],bg=hex(d.bg)||t.bg,accent=hex(d.accent)||t.accent,blocks=parse(d.body),local=d.local||{};
+ let h='<section style="background-color:'+bg+';color:'+t.ink+';padding:20px 16px;font-family:'+t.font+';font-size:'+t.size+'px;line-height:'+t.leading+';word-break:break-word;overflow-wrap:anywhere">';
+ if(d.title)h+='<h1 style="margin:0 0 12px;font-size:25px;line-height:1.4;font-weight:700;color:'+t.ink+'">'+esc(d.title)+'</h1>';
+ if(d.author)h+='<p style="font-size:13px;color:'+t.ink+';margin:0 0 22px">By '+esc(d.author.replace(/^By\s+/i,""))+'</p>';
+ for(const b of blocks){
+  const c=hex(Object.prototype.hasOwnProperty.call(local,b.key)?local[b.key]:""), wrapper=c?'background-color:'+c+';padding:10px 12px;':'',p='margin:0 0 16px;'+wrapper+'color:'+t.ink+';font-size:'+t.size+'px;line-height:'+t.leading+';';
+  const content=inline(b.text,accent);
+  if(/^h[123]$/.test(b.type)){let decor=t.heading==="bar"?'border-left:4px solid '+accent+';padding-left:10px;':t.heading==="rule"?'border-bottom:1px solid '+accent+';padding-bottom:7px;':t.heading==="center"?'text-align:center;':'';h+='<h2 style="margin:24px 0 12px;font-size:'+(b.type==="h3"?17:20)+'px;line-height:1.5;font-weight:700;color:'+accent+';'+wrapper+decor+'">'+content+'</h2>'}
+  else if(b.type==="quote")h+='<blockquote style="margin:0 0 16px;padding:12px 14px;background-color:'+(c||t.soft)+';border-left:3px solid '+accent+';color:'+t.ink+';line-height:'+t.leading+'">'+content+'</blockquote>';
+  else if(b.type==="list")h+='<p style="'+p+'padding-left:12px">'+esc(/^\d/.test(b.mark)?b.mark:"•")+' '+content+'</p>';
+  else if(b.type==="image"){const u=url(b.src);h+=u?'<section style="'+p+'"><img src="'+u+'" alt="'+esc(b.text)+'" style="display:block;width:100%;max-width:100%;height:auto"><p style="font-size:12px;text-align:center;margin:5px 0 0">'+esc(b.text)+'</p></section>':'<p style="'+p+'">'+esc("图片地址无效："+b.src)+'</p>'}
+  else if(b.type==="rule")h+='<section style="margin:20px 0;border-top:1px solid '+accent+'"></section>';
+  else h+='<p style="'+p+'">'+content+'</p>';
+ }
+ return h+'</section>';
+}
+function checks(d){const t=themes.find(x=>x.id===d.theme)||themes[0],bg=hex(d.bg)||t.bg,accent=hex(d.accent)||t.accent,blocks=parse(d.body),out=[];
+ out.push({level:d.body.trim()?"pass":"warn",text:d.body.trim()?"正文已生成独立 HTML，采用行内样式与常规标签。":"尚未输入正文。"});
+ out.push({level:ratio(t.ink,bg)>=4.5?"pass":"warn",text:"正文与全文背景对比度 "+ratio(t.ink,bg).toFixed(2)+":1（建议 ≥4.5:1）"});
+ out.push({level:ratio(accent,bg)>=4.5?"pass":"warn",text:"强调色与全文背景对比度 "+ratio(accent,bg).toFixed(2)+":1（建议 ≥4.5:1）"});
+ const low=blocks.filter(b=>{const c=hex(d.local?.[b.key])||(b.type==="quote"?t.soft:"");if(!c)return false;return ratio(/^h[123]$/.test(b.type)?accent:t.ink,c)<4.5});
+ if(low.length)out.push({level:"warn",text:low.length+" 个局部背景或引用区的文字对比度偏低，请调整配色。"});
+ if(blocks.some(b=>b.type==="image"))out.push({level:"warn",text:"图片使用外部 URL：离线 HTML 可能无法显示，微信可能要求重新上传；无效或非 HTTP(S) 地址不会生成图片。"});
+ if(/\[[^\]]+\]\([^)]+\)/.test(d.body))out.push({level:"warn",text:"链接及图片地址可能被微信后台过滤，请在编辑器中复核。"});
+ if(/<\s*\/?[a-z][^>]*>/i.test(d.body))out.push({level:"warn",text:"原稿中的 HTML 按普通文本显示，不执行或保留其富文本样式。"});
+ out.push({level:"warn",text:"全文背景仅覆盖文章内容容器；微信可能重写样式。静态预检不能替代公众号后台实测。"});return out
+}
+const initial=()=>({title:"",author:"DAVYLAB",body:"",theme:"technology",bg:themes[0].bg,accent:themes[0].accent,local:{}});
+let d=initial();try{const v=JSON.parse(localStorage.getItem(KEY)||"null");if(v&&typeof v==="object"){d={...d,...v};if(!themes.some(t=>t.id===d.theme))d.theme="technology";for(const k of ["title","author","body"])d[k]=typeof d[k]==="string"?d[k]:"";if(!d.local||typeof d.local!=="object"||Array.isArray(d.local))d.local={};const t=themes.find(x=>x.id===d.theme);d.bg=hex(d.bg)||t.bg;d.accent=hex(d.accent)||t.accent}}catch{}
+function notice(s){$("atNotice").textContent=s}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(d))}catch{notice("本地存储不可用，当前稿件未保存，请及时导出。")}}
+function drawChecks(){const root=$("atChecks");root.replaceChildren(...checks(d).map(c=>{const el=document.createElement("li");el.dataset.level=c.level;el.textContent=(c.level==="pass"?"通过 · ":"注意 · ")+c.text;return el}))}
+function palette(){for(const [k,p,h] of [["bg","atBgPick","atBgHex"],["accent","atAccentPick","atAccentHex"]]){$(p).value=d[k];$(h).value=d[k];$(h).removeAttribute("aria-invalid")}}
+function updateBlocks(){const select=$("atBlock"),prev=select.value,bs=parse(d.body);select.replaceChildren();if(!bs.length)select.add(new Option("先输入正文",""));else bs.forEach((b,i)=>select.add(new Option((i+1)+" · "+(b.text||"分隔线").slice(0,32),b.key)));if(bs.some(b=>b.key===prev))select.value=prev;syncLocal()}
+function syncLocal(){const c=hex(d.local[$("atBlock").value])||"#EAF1F8";$("atLocalPick").value=c;$("atLocalHex").value=c;$("atLocalHex").removeAttribute("aria-invalid")}
+function render(){const root=$("atPreview");root.innerHTML=d.title||d.body.trim()?article(d):'<p style="padding:40px 18px;color:#64788a;text-align:center;font-size:14px">在左侧输入文章，实时查看手机版式。</p>';drawChecks();persist()}
+function preset(){for(const el of $("atPresets").children)el.setAttribute("aria-pressed",String(el.dataset.theme===d.theme))}
+for(const t of themes){const b=document.createElement("button");b.type="button";b.className="at-preset";b.dataset.theme=t.id;b.innerHTML='<span class="at-sample" style="background:'+t.bg+'"><i style="background:'+t.accent+';width:64%"></i><i style="background:'+t.ink+';width:92%;opacity:.55"></i><i style="background:'+t.ink+';width:76%;opacity:.35"></i></span><strong>'+t.name+'</strong>';b.addEventListener("click",()=>{d.theme=t.id;d.bg=t.bg;d.accent=t.accent;palette();preset();render()});$("atPresets").append(b)}
+for(const [k,id] of [["title","atTitle"],["author","atAuthor"],["body","atBody"]]){$(id).value=d[k];$(id).addEventListener("input",()=>{d[k]=$(id).value;if(k==="body")updateBlocks();render()})}
+for(const [k,p,h] of [["bg","atBgPick","atBgHex"],["accent","atAccentPick","atAccentHex"]]){$(p).addEventListener("input",()=>{d[k]=hex($(p).value);$(h).value=d[k];$(h).removeAttribute("aria-invalid");render()});$(h).addEventListener("input",()=>{const c=hex($(h).value);$(h).setAttribute("aria-invalid",String(!c));if(c){d[k]=c;$(p).value=c;render()}})}
+$("atLocalPick").addEventListener("input",()=>{$("atLocalHex").value=$("atLocalPick").value.toUpperCase();$("atLocalHex").removeAttribute("aria-invalid")});
+$("atLocalHex").addEventListener("input",()=>{const c=hex($("atLocalHex").value);$("atLocalHex").setAttribute("aria-invalid",String(!c));if(c)$("atLocalPick").value=c});
+$("atBlock").addEventListener("change",syncLocal);
+$("atApplyLocal").addEventListener("click",()=>{const k=$("atBlock").value,c=hex($("atLocalHex").value);if(!k||!c){notice("请选择正文块并输入有效的 #RRGGBB 色号。");return}d.local[k]=c;render();notice("已应用局部背景。")});
+$("atRemoveLocal").addEventListener("click",()=>{delete d.local[$("atBlock").value];syncLocal();render();notice("已取消选中段落的局部背景。")});
+$("atCheck").addEventListener("click",()=>{drawChecks();notice("静态样式检查已刷新，请查看下方提醒。")});
+$("atClear").addEventListener("click",()=>{if(!confirm("清空排版模块当前稿件？不会删除选题池数据。"))return;d=initial();$("atTitle").value=d.title;$("atAuthor").value=d.author;$("atBody").value=d.body;palette();preset();updateBlocks();render();notice("当前稿件已清空。")});
+function copyFallback(markup){const node=document.createElement("div");node.contentEditable="true";node.style.cssText="position:fixed;left:-9999px;top:0;width:375px";node.innerHTML=markup;document.body.appendChild(node);const sel=window.getSelection(),range=document.createRange();range.selectNodeContents(node);sel.removeAllRanges();sel.addRange(range);let ok=false;try{ok=document.execCommand("copy")}catch{}sel.removeAllRanges();node.remove();return ok}
+$("atCopy").addEventListener("click",async()=>{if(!d.body.trim()){notice("请先输入正文。");return}const markup=article(d);try{if(!navigator.clipboard?.write||typeof ClipboardItem==="undefined")throw Error("clipboard unsupported");await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([markup],{type:"text/html"}),"text/plain":new Blob([[d.title,d.author,d.body].filter(Boolean).join("\n\n")],{type:"text/plain"})})]);notice("富文本已复制，请粘贴到公众号编辑器并预览。")}catch{try{notice(copyFallback(markup)?"富文本已复制（浏览器兼容模式），请在公众号中核对。":"浏览器拒绝富文本复制，请使用 HTML 导出。")}catch{notice("富文本复制不可用，请使用 HTML 导出。")}}});
+$("atExport").addEventListener("click",()=>{if(!d.body.trim()){notice("请先输入正文。");return}const markup='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(d.title||"DAVYLAB 文章")+'</title></head><body style="margin:0">'+article(d)+'</body></html>';const a=document.createElement("a"),u=URL.createObjectURL(new Blob([markup],{type:"text/html;charset=utf-8"}));a.href=u;a.download=(d.title||"DAVYLAB-article").replace(/[\\/:*?"<>|]/g,"_").slice(0,100)+".html";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);notice("已请求下载 HTML 文件；如含外部图片，离线显示取决于图片来源。")});
+palette();preset();updateBlocks();render();
+window.DAVYLABArticleTheme={themes,parse,article,checks,hex,ratio};
+})();
+</script></body></html>
