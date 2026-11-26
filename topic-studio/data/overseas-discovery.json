@@ -1,9 +1,113 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-25T09:55:57+00:00",
-  "count": 80,
+  "checked_at": "2026-11-26T09:39:41+00:00",
+  "count": 89,
   "articles": [
+    {
+      "id": "ext-7de39f044da3622e09",
+      "title": "sqlite3_rsync: Database Remote-Copy Tool For SQLite",
+      "summary": "sqlite3_rsync: Database Remote-Copy Tool For SQLite This additional SQLite tool has been around for a while now - it was added as \"experimental\" in SQLite 3.47.0 in October 2024 and enhanced in SQLite 3.50.0 in",
+      "date": "2026-11-26",
+      "original_url": "https://simonwillison.net/2026/Nov/26/sqlite3-rsync/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-3d2697b636d74b834f",
+      "title": "Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
+      "summary": "",
+      "date": "2026-11-26",
+      "original_url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-2ada6bc927bcede3f5",
+      "title": "Quoting Scott Aaronson",
+      "summary": "It’s now obvious that we’ll be getting, not one-off solutions to this or that complexity question, but a whole new continent of mathematical truth, one that we’d previously only glimpsed through fog. Picture va",
+      "date": "2026-11-25",
+      "original_url": "https://simonwillison.net/2026/Nov/25/scott-aaronson/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-e0577f40419a647d93",
+      "title": "datasette-charts 0.3a0",
+      "summary": "Release: datasette-charts 0.3a0 I added chart annotations to datasette-charts ! You can now render a chart and then annotate it with lines, shaded areas, labels, or a combination of the three. A chart with anno",
+      "date": "2026-11-25",
+      "original_url": "https://simonwillison.net/2026/Nov/25/datasette-charts/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-7d5c43e3274406d0b1",
+      "title": "How to choose the next safe step in application modernization",
+      "summary": "Learn how to assess a legacy application, choose a bounded modernization step, and reuse the method with a GitHub Copilot agent skill. The post How to choose the next safe step in application modernization appe",
+      "date": "2026-11-25",
+      "original_url": "https://github.blog/ai-and-ml/github-copilot/how-to-choose-the-next-safe-step-in-application-modernization/",
+      "source": "GitHub AI 官方博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-88bd06d7e0e9b82f43",
+      "title": "Where scientists draw the line on AI agents",
+      "summary": "",
+      "date": "2026-11-25",
+      "original_url": "https://huggingface.co/blog/allenai/where-scientists-draw-the-line-on-ai-agents",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-0077e07924e43bf73f",
+      "title": "An Indic Voice Agent with CUGA",
+      "summary": "",
+      "date": "2026-11-25",
+      "original_url": "https://huggingface.co/blog/ibm-research/an-indic-voice-agent-with-cuga",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-df3be113c8aed13fba",
+      "title": "Hill-climbing Inkling 2 Mini inference on one RTX PRO 6000",
+      "summary": "",
+      "date": "2026-11-25",
+      "original_url": "https://huggingface.co/blog/inkling-2-mini-inference-hillclimb",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
     {
       "id": "ext-0b260d07579db8478e",
       "title": "Three LLM inflection points in twelve months",
@@ -23,6 +127,19 @@
       "summary": "GPT 6.2 Astra Solves a Historical Mystery Here's an interesting case-study in using GPT-6.2 Astra for historical research, from history professor Mark Humphries: With only minimal prompting, GPT-6.2 Astra was a",
       "date": "2026-11-24",
       "original_url": "https://simonwillison.net/2026/Nov/24/astra-historical-mystery/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-4915fa3466d2d3bdc6",
+      "title": "datasette-charts 0.2a1",
+      "summary": "Release: datasette-charts 0.2a1 Minor UI improvements: Collapsing the suggested charts section now leaves the chart visible. Following a link to a chart opens it with the suggestions collapsed for that visit. O",
+      "date": "2026-11-24",
+      "original_url": "https://simonwillison.net/2026/Nov/24/datasette-charts-2/",
       "source": "Simon Willison 技术观点",
       "source_kind": "independent_original",
       "tags": [
@@ -109,11 +226,11 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
-      "id": "ext-eb2701ff66febea272",
-      "title": "RoboTrack: Point tracking for real-world robotic manipulation",
+      "id": "ext-00d52199bef25f9eda",
+      "title": "How to build and maintain an agentic evaluation",
       "summary": "",
       "date": "2026-11-23",
-      "original_url": "https://huggingface.co/blog/allenai/robotrack",
+      "original_url": "https://huggingface.co/blog/agentic-evals",
       "source": "Hugging Face 博客",
       "source_kind": "independent_original",
       "tags": [
@@ -122,11 +239,11 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
-      "id": "ext-00d52199bef25f9eda",
-      "title": "How to build and maintain an agentic evaluation",
+      "id": "ext-eb2701ff66febea272",
+      "title": "RoboTrack: Point tracking for real-world robotic manipulation",
       "summary": "",
       "date": "2026-11-23",
-      "original_url": "https://huggingface.co/blog/agentic-evals",
+      "original_url": "https://huggingface.co/blog/allenai/robotrack",
       "source": "Hugging Face 博客",
       "source_kind": "independent_original",
       "tags": [
@@ -330,19 +447,6 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
-      "id": "ext-aef632472a5e3af7f9",
-      "title": "Time-Series Models in the Streamhouse: A New Frontier and Use Cases",
-      "summary": "",
-      "date": "2026-11-18",
-      "original_url": "https://huggingface.co/blog/ibm-research/time-series-powered-streamhouse",
-      "source": "Hugging Face 博客",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外AI观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
       "id": "ext-ec56b5eff9affb1c33",
       "title": "180B Parameters, 32GB of RAM: Pushing MoE Inference to the Limit with Transformers",
       "summary": "",
@@ -361,6 +465,19 @@
       "summary": "",
       "date": "2026-11-18",
       "original_url": "https://huggingface.co/blog/rumble-2-flash",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-aef632472a5e3af7f9",
+      "title": "Time-Series Models in the Streamhouse: A New Frontier and Use Cases",
+      "summary": "",
+      "date": "2026-11-18",
+      "original_url": "https://huggingface.co/blog/ibm-research/time-series-powered-streamhouse",
       "source": "Hugging Face 博客",
       "source_kind": "independent_original",
       "tags": [
@@ -1054,12 +1171,12 @@
     {
       "source": "GitHub AI 官方博客",
       "status": "ok",
-      "count": 2
+      "count": 3
     },
     {
       "source": "Hugging Face 博客",
       "status": "ok",
-      "count": 30
+      "count": 31
     }
   ],
   "note": "Original public metadata only; NOT XNews translated articles."

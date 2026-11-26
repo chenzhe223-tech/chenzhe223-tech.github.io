@@ -3,9 +3,60 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-25T09:55:56+00:00",
-  "count": 55,
+  "synced_at": "2026-11-26T09:39:41+00:00",
+  "count": 58,
   "articles": [
+    {
+      "id": "deepmind-mass-spec-skills",
+      "date": "2026-11-25",
+      "title": "只给模型峰列表，准确率不到4%；加上质谱技能后，大约97%能对上已知分子",
+      "summary": "DeepMind为Google Antigravity提供一套质谱技能，把Gemini的化学推理接到已有开源工具和公共数据库上。在100张已有库谱的测试里，轻量模型也能跟上前沿模型的准确率，生成的token还更少。超时一小时的尝试记为失败。",
+      "original_url": "https://deepmind.google/blog/interpreting-mass-spectra-with-google-antigravity/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/deepmind-mass-spec-skills",
+      "tags": [
+        "DeepMind",
+        "chemistry",
+        "Antigravity",
+        "mass spectrometry",
+        "agents"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-messages-api-rust",
+      "date": "2026-11-25",
+      "title": "测试通过率约98%时，生产流量里对上的输入一开始只有大约四分之一",
+      "summary": "Anthropic把Messages API从Python迁到Rust，用线上旧服务当校验器，让Claude智能体按差异指纹修bug。迁完后，单请求CPU大约少了70%，内存大约少了80%以上，Claude Code请求的中位首次出词时间大约少了20%。",
+      "original_url": "https://www.anthropic.com/research/migrating-api-to-rust",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-messages-api-rust",
+      "tags": [
+        "Anthropic",
+        "engineering",
+        "agents",
+        "Rust",
+        "API"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "openai-searching-distant-planets",
+      "date": "2026-11-24",
+      "title": "天琴座一颗恒星每13.8天暗一次，如果是行星，直径大约是地球的2.4倍",
+      "summary": "OpenAI工程师Kevin Bond用Codex在约10万颗开普勒恒星里搜寻，创业者Ethan Byrd用Astra在约1900万颗恒星的TESS数据里搜寻。两人独立找出候选信号，其中两个已得到SETI研究院天文学家的独立复核。文章写明，确认原因可能还要几个月到几年。",
+      "original_url": "https://openai.com/index/searching-for-distant-planets-with-astra/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/openai-searching-distant-planets",
+      "tags": [
+        "OpenAI",
+        "astronomy",
+        "Astra",
+        "Codex",
+        "exoplanets"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "openai-gpt6-protein-design",
       "date": "2026-11-24",
