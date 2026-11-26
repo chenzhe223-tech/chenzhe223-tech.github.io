@@ -436,6 +436,31 @@ async function main() {
     await page.evaluate(()=>{topics=topics.filter(t=>!String(t.id).startsWith("qa_layout_"));saveTopics()});
     assert.equal(await page.locator("#topicList .topiccard").count(),3,"test-only topic records cleaned up");
 
+    // Long source text stays complete, while the default list and prompt remain compact.
+    const longSource="这是用于验收折叠交互的完整原文。".repeat(80);
+    await page.evaluate(longSource=>{
+      topics.unshift({id:"qa_compact_workspace",title:"无封面的超长选题",angle:longSource,format:"文章",status:"inbox",column:"测试",createdAt:new Date().toISOString()});
+      saveTopics();
+    },longSource);
+    const compact=page.locator('#topicList [data-topic-id="qa_compact_workspace"]');
+    assert.equal(await compact.locator(".topic-cover").count(),0,"no title-letter cover for topics without real cover");
+    assert.equal(await compact.locator(".topic-description").getAttribute("open"),null,"long topic collapsed by default");
+    const collapsedHeight=await compact.evaluate(e=>e.getBoundingClientRect().height);
+    await compact.locator(".topic-description summary").click();
+    assert.equal(await compact.locator(".topic-description p").textContent(),longSource,"expanded original text remains exact");
+    assert.ok(await compact.evaluate(e=>e.getBoundingClientRect().height)>collapsedHeight,"expand reveals full source");
+    await compact.locator(".topic-description summary").click();
+    assert.equal(await compact.locator(".topic-description").getAttribute("open"),null,"source can collapse again");
+    assert.equal(await page.locator("#promptDeliverables").getAttribute("open"),null,"manifest initially collapsed");
+    const previousPrompt=await page.locator("#promptBox").inputValue();
+    await page.locator("#expandPrompt").click();
+    assert.equal(await page.locator("#expandPrompt").getAttribute("aria-expanded"),"true");
+    assert.equal(await page.locator("#promptBox").inputValue(),previousPrompt,"expansion preserves the entire prompt");
+    await page.locator("#expandPrompt").click();
+    assert.equal(await page.locator("#expandPrompt").getAttribute("aria-expanded"),"false");
+    await page.evaluate(()=>{topics=topics.filter(t=>t.id!=="qa_compact_workspace");saveTopics()});
+    assert.equal(await page.locator("#topicList .topiccard").count(),3,"compact layout test data cleaned up");
+
     // Published content library: shared archive loading, create/preview/local persistence and cleanup.
     await page.locator('button[data-section="published"]').click();
     await page.locator("#publishedCount").waitFor();
