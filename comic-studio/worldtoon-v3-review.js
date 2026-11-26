@@ -403,7 +403,7 @@
  function page(){
    const projects=activeProjects().filter(p=>p.creationSource==='novel'||p.novelSkill).filter(p=>!p.deleted);
    let p=project();
-   if(!p||p.id==='sample-ba-zong-001'||!(p.creationSource==='novel'||p.novelSkill)){
+   if(!p||p.deleted||p.archived||p.id==='sample-ba-zong-001'||!(p.creationSource==='novel'||p.novelSkill)){
       p=projects[0]||null;
    }
    if(p&&p.id!==ui.selected)ui.selected=p.id;
@@ -500,7 +500,7 @@
  'use strict';
  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  const ideap=()=>typeof selected==='function'?selected():null;
- const isIdea=p=>!!p&&p.creationSource==='one-line'&&!p.deleted;
+ const isIdea=p=>!!p&&p.creationSource==='one-line'&&!p.deleted&&!p.archived;
  const hasResult=p=>!!p?.creativeDirection?.storyboardProvenance?.method&&p.creativeDirection.storyboardProvenance.method==='verified_model_response'&&Array.isArray(p.panels)&&p.panels.some(x=>String(x.scene||'').length>30);
  function page(){
   const all=activeProjects().filter(isIdea).sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));

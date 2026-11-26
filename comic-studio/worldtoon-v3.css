@@ -577,3 +577,8 @@
 .wt4-home-collapsed .wt4-home-head{padding-top:15px}
 .wt4-home-collapsed .wt4-home-list{margin-top:12px}
 @media(max-width:650px){.wt4-home-summary{padding:13px 14px}.wt4-home-summary-text{align-items:flex-start;gap:5px;flex-direction:column}.wt4-home-content{padding:0 13px 15px}}
+
+/* 20261126: named idea field, aligned with the existing editor controls. */
+.wt-idea-editor #wt-idea-title{display:block;width:100%;box-sizing:border-box;font:inherit;padding:12px 14px;margin:0 0 20px;border:1px solid #cad5da;border-radius:10px;background:#fcfdfd;color:#223845;min-height:44px}
+.wt-idea-editor #wt-idea-title:focus{outline:2px solid #aac6d0;outline-offset:1px}
+.wt-idea-editor #wt-idea-title:disabled{opacity:.65;cursor:not-allowed}
