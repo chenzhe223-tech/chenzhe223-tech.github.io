@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "source": "DAVYLAB official public feeds and openly available media RSS",
-  "checked_at": "2026-11-26T10:07:53+00:00",
+  "checked_at": "2026-11-26T10:48:48+00:00",
   "count": 150,
-  "latest_published_at": "2026-11-26T10:02:44+00:00",
+  "latest_published_at": "2026-11-26T10:29:25+00:00",
   "china_count": 105,
   "rank_method": "finance-priority-v1",
   "rank_weights": {
@@ -14,7 +14,7 @@
     "appeal": 15
   },
   "rank_disclaimer": "Five editorial relevance scores are heuristic estimates. Heat is topic relevance, NOT real traffic, views, shares, or verified popularity.",
-  "fresh_within_72h": 116,
+  "fresh_within_72h": 115,
   "status": "ok",
   "sources": [
     {
@@ -106,6 +106,36 @@
       "priority_rank": 1
     },
     {
+      "id": "fin-490053c714cbfce16f",
+      "title": "福建力争到2031年地区生产总值突破8万亿元",
+      "summary": "中新网福州11月26日电 (记者 闫旭)“经济增长保持在合理区间，力争到2031年地区生产总值突破8万亿元，人均地区生产总值突破19万元。”中国共产党福建省第十二次代表大会26日开幕，提出了未来五年福建经济增长的目标。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738267.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T10:29:25+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 81,
+        "appeal": 90,
+        "total": 88,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 2
+    },
+    {
       "id": "fin-5d7919a354f5381cc6",
       "title": "商务部：坚决反对美对中国等经济体加征301关税",
       "summary": "新华社北京11月26日电(记者谢希瑶、黄韬铭)针对美国贸易代表办公室日前宣布“产能过剩”301调查结果，发布拟议措施，提出对包括中国在内的14个经济体加征301关税，商务部新闻发言人何亚东在26日举行的例行新闻发布会上表示，美方301调查是典型的单边主义行为，严重破坏国际经济秩序，严重违反世贸组织规则，中方对此坚决反对。中方敦促美方纠正错误做法，回到通过对话协商解决问题的正确轨道上来。中方将密切关注事态进展，保留采取",
@@ -133,7 +163,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 2
+      "priority_rank": 3
     },
     {
       "id": "fin-d670fb534384642f2a",
@@ -163,7 +193,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 3
+      "priority_rank": 4
     },
     {
       "id": "fin-a34694cafff6d0e7ea",
@@ -193,7 +223,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 4
+      "priority_rank": 5
     },
     {
       "id": "fin-03a71947c20797323c",
@@ -223,7 +253,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 5
+      "priority_rank": 6
     },
     {
       "id": "fin-a2123becd6d91e9cf1",
@@ -253,7 +283,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 6
+      "priority_rank": 7
     },
     {
       "id": "fin-b0420149da17ae3705",
@@ -283,7 +313,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 7
+      "priority_rank": 8
+    },
+    {
+      "id": "fin-8532488467a72e8bc9",
+      "title": "今年以来广州市共有39家上市公司新增披露股份回购计划",
+      "summary": "中新网广州11月26日电 (记者 许青青)据广州市委金融办26日介绍，据统计，2026年以来，广州市共有39家上市公司新增披露47单40.71亿元股份回购计划，35家上市公司实施回购17.22亿元；9家上市公司新增披露16单主要股东、董事高管增持计划，合计拟增持金额5.33亿元；17家上市公司获得股票回购增持贷款25.98亿元。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738254.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T10:22:53+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 55,
+        "appeal": 90,
+        "total": 83,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 9
     },
     {
       "id": "fin-a8dd1a4916c7bc4000",
@@ -313,37 +373,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 8
-    },
-    {
-      "id": "fin-2ef593cba2f5820d38",
-      "title": "Tech rout deepens globally; Softbank falls 15%, Nvidia down 4.5% premarket",
-      "summary": "Tech stocks tumbled Wednesday, as renewed concerns over the artificial intelligence trade rattled investors.",
-      "url": "https://www.cnbc.com/2026/11/25/tech-stocks-softbank-group-advantest-sk-hynix-samsung.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-25T10:29:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 83,
-        "heat": 74,
-        "appeal": 71,
-        "total": 81,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 9
+      "priority_rank": 10
     },
     {
       "id": "fin-88aee817fe53570276",
@@ -373,7 +403,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 10
+      "priority_rank": 11
     },
     {
       "id": "fin-7a3eee6f8b7f95e85b",
@@ -403,7 +433,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 11
+      "priority_rank": 12
     },
     {
       "id": "fin-d75b39167125563314",
@@ -433,7 +463,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 12
+      "priority_rank": 13
     },
     {
       "id": "fin-1873dc325b6fe4eeea",
@@ -463,7 +493,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 13
+      "priority_rank": 14
     },
     {
       "id": "fin-0f9eb605697a24dd97",
@@ -493,7 +523,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 14
+      "priority_rank": 15
     },
     {
       "id": "fin-4277ab8b356914d426",
@@ -523,7 +553,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 15
+      "priority_rank": 16
     },
     {
       "id": "fin-6830aad901d1c5d7f5",
@@ -553,7 +583,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 16
+      "priority_rank": 17
     },
     {
       "id": "fin-b8a98f9f39ed35f92d",
@@ -583,7 +613,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 17
+      "priority_rank": 18
     },
     {
       "id": "fin-24fe78a8784ebe4a86",
@@ -613,7 +643,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 18
+      "priority_rank": 19
     },
     {
       "id": "fin-65a7bfd46e33d54b02",
@@ -643,7 +673,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 19
+      "priority_rank": 20
     },
     {
       "id": "fin-9f44998fea290908de",
@@ -673,7 +703,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 20
+      "priority_rank": 21
     },
     {
       "id": "fin-ccf242c65e5aaa42c9",
@@ -703,7 +733,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 21
+      "priority_rank": 22
     },
     {
       "id": "fin-81db16a0c48c8d5851",
@@ -733,7 +763,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 22
+      "priority_rank": 23
     },
     {
       "id": "fin-639a6361a62e6fb1dc",
@@ -761,36 +791,6 @@
           "历史线索，请核对时效",
           "涉及财经政策或经营指标",
           "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 23
-    },
-    {
-      "id": "fin-b06feb7b947b01b92a",
-      "title": "How Trump’s latest tariff moves hand India an edge over rival Asian exporters",
-      "summary": "Proposed tariffs of 18% on Bangladesh, Cambodia, Thailand, and 20% on China and Vietnam, subject to their respective trade deals, offer India a competitive advantage.",
-      "url": "https://www.cnbc.com/2026/11/26/trump-us-tariff-india-trade.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-26T04:12:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "headline_or_abstract_keyword",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 100,
-        "readability": 84,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
-        "total": 76,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
       "priority_rank": 24
@@ -1126,6 +1126,36 @@
       "priority_rank": 35
     },
     {
+      "id": "fin-2ef593cba2f5820d38",
+      "title": "Tech rout deepens globally; Softbank falls 15%, Nvidia down 4.5% premarket",
+      "summary": "Tech stocks tumbled Wednesday, as renewed concerns over the artificial intelligence trade rattled investors.",
+      "url": "https://www.cnbc.com/2026/11/25/tech-stocks-softbank-group-advantest-sk-hynix-samsung.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-25T10:29:18+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 84,
+        "value": 83,
+        "heat": 64,
+        "appeal": 71,
+        "total": 76,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 36
+    },
+    {
       "id": "fin-74c6edaa865ada8f77",
       "title": "A股收评：超3600只个股飘绿，沪指、创业板指收涨，深指收跌",
       "summary": "A股收评：超3600只个股飘绿，沪指、创业板指收涨，深指收跌；贵金属、通信设备、煤炭、银行上涨；教育、汽车下跌，疫苗、物理AI走低",
@@ -1153,7 +1183,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 36
+      "priority_rank": 37
     },
     {
       "id": "fin-8ee006b8a3aa546cad",
@@ -1183,7 +1213,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 37
+      "priority_rank": 38
+    },
+    {
+      "id": "fin-b06feb7b947b01b92a",
+      "title": "How Trump’s latest tariff moves hand India an edge over rival Asian exporters",
+      "summary": "Proposed tariffs of 18% on Bangladesh, Cambodia, Thailand, and 20% on China and Vietnam, subject to their respective trade deals, offer India a competitive advantage.",
+      "url": "https://www.cnbc.com/2026/11/26/trump-us-tariff-india-trade.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-26T04:12:18+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "headline_or_abstract_keyword",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 94,
+        "readability": 84,
+        "value": 67,
+        "heat": 74,
+        "appeal": 49,
+        "total": 75,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 39
     },
     {
       "id": "fin-f0a6a9f9eb49a9fbc2",
@@ -1213,7 +1273,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 38
+      "priority_rank": 40
+    },
+    {
+      "id": "fin-a2b2572e30b109b512",
+      "title": "世界首台承载能力最大380吨高速动平衡试验系统成功交付",
+      "summary": "中新网哈尔滨11月26日电 (王琳 王少东)11月25日，由哈电集团汽轮机公司建设的世界首台承载能力最大380吨高速动平衡试验系统在哈尔滨成功交付、正式投用，标志着中国在超大型核电汽轮机试验验证领域实现重大突破。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738257.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T10:21:53+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 60,
+        "appeal": 64,
+        "total": 74,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 41
     },
     {
       "id": "fin-c7bd9248faa70c8552",
@@ -1243,7 +1333,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 39
+      "priority_rank": 42
     },
     {
       "id": "fin-9ad82ed5f0daab1534",
@@ -1273,7 +1363,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 40
+      "priority_rank": 43
     },
     {
       "id": "fin-e6f50467729d803d20",
@@ -1303,7 +1393,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 41
+      "priority_rank": 44
     },
     {
       "id": "fin-a82d7759b619009982",
@@ -1333,7 +1423,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 42
+      "priority_rank": 45
     },
     {
       "id": "fin-ee53adbaa022cb629b",
@@ -1363,7 +1453,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 43
+      "priority_rank": 46
     },
     {
       "id": "fin-39be6315b47460ca77",
@@ -1393,37 +1483,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 44
-    },
-    {
-      "id": "fin-1e97aa167d51cd37a9",
-      "title": "广东河源蔬菜类农产品首次销往国际市场",
-      "summary": "中新网河源11月24日电 (张璐 邓俏俏)11月24日，经广州海关所属河源海关(以下简称“河源海关”)检验检疫合格，一批冬瓜、南瓜、甘薯从广东一家农业公司(以下简称“公司”)包装厂装车启运，发往加拿大。这是河源蔬菜类农产品首次走出国门，也是河源特色农产品出口品类上的又一次突破。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737110.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-24T10:28:46+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 76,
-        "readability": 84,
-        "value": 67,
-        "heat": 71,
-        "appeal": 68,
-        "total": 73,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 45
+      "priority_rank": 47
     },
     {
       "id": "fin-7b92222b7a2895e51c",
@@ -1453,7 +1513,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 46
+      "priority_rank": 48
     },
     {
       "id": "fin-67c682c62af407a839",
@@ -1483,7 +1543,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 47
+      "priority_rank": 49
     },
     {
       "id": "fin-4a2e5bb7d6ae2fe57e",
@@ -1513,7 +1573,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 48
+      "priority_rank": 50
     },
     {
       "id": "fin-5a16ccb699f68d72c5",
@@ -1543,7 +1603,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 49
+      "priority_rank": 51
     },
     {
       "id": "fin-99f778cafcc8d68bb0",
@@ -1573,7 +1633,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 50
+      "priority_rank": 52
     },
     {
       "id": "fin-3aa3cf73f561d2c58c",
@@ -1603,37 +1663,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 51
-    },
-    {
-      "id": "fin-91ee08a3ba24991ca4",
-      "title": "Hedge funds are no longer just for the rich. They’re wooing everyday investors",
-      "summary": "Hedge funds are increasingly courting retail investors as the industry seeks new avenues for growth.",
-      "url": "https://www.cnbc.com/2026/11/26/hedge-funds-retail-investors.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-26T04:20:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 100,
-        "readability": 84,
-        "value": 67,
-        "heat": 48,
-        "appeal": 49,
-        "total": 71,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 52
+      "priority_rank": 53
     },
     {
       "id": "fin-2b0b0a5b4953571a12",
@@ -1663,7 +1693,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 53
+      "priority_rank": 54
     },
     {
       "id": "fin-ffba5e4978528a04c6",
@@ -1693,7 +1723,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 54
+      "priority_rank": 55
     },
     {
       "id": "fin-992e39c481e99801f8",
@@ -1723,7 +1753,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 55
+      "priority_rank": 56
     },
     {
       "id": "fin-66ddfecb140e011b07",
@@ -1753,7 +1783,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 56
+      "priority_rank": 57
     },
     {
       "id": "fin-81a84ecbee309e0c2e",
@@ -1783,7 +1813,37 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 57
+      "priority_rank": 58
+    },
+    {
+      "id": "fin-91ee08a3ba24991ca4",
+      "title": "Hedge funds are no longer just for the rich. They’re wooing everyday investors",
+      "summary": "Hedge funds are increasingly courting retail investors as the industry seeks new avenues for growth.",
+      "url": "https://www.cnbc.com/2026/11/26/hedge-funds-retail-investors.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-26T04:20:18+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 94,
+        "readability": 84,
+        "value": 67,
+        "heat": 48,
+        "appeal": 49,
+        "total": 70,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 59
     },
     {
       "id": "fin-80802e4592c7eb73d1",
@@ -1813,7 +1873,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 58
+      "priority_rank": 60
     },
     {
       "id": "fin-621c593a4f1e472ff6",
@@ -1843,7 +1903,37 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 59
+      "priority_rank": 61
+    },
+    {
+      "id": "fin-1e97aa167d51cd37a9",
+      "title": "广东河源蔬菜类农产品首次销往国际市场",
+      "summary": "中新网河源11月24日电 (张璐 邓俏俏)11月24日，经广州海关所属河源海关(以下简称“河源海关”)检验检疫合格，一批冬瓜、南瓜、甘薯从广东一家农业公司(以下简称“公司”)包装厂装车启运，发往加拿大。这是河源蔬菜类农产品首次走出国门，也是河源特色农产品出口品类上的又一次突破。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737110.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-24T10:28:46+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 65,
+        "readability": 84,
+        "value": 67,
+        "heat": 71,
+        "appeal": 68,
+        "total": 70,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 62
     },
     {
       "id": "fin-d8f5bea53c9ba097e0",
@@ -1873,7 +1963,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 60
+      "priority_rank": 63
     },
     {
       "id": "fin-5349d39f9c678b4dd9",
@@ -1903,7 +1993,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 61
+      "priority_rank": 64
     },
     {
       "id": "fin-e341fc6e265b4b9af7",
@@ -1933,7 +2023,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 62
+      "priority_rank": 65
     },
     {
       "id": "fin-3822f7e9fe3adb61e9",
@@ -1963,7 +2053,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 63
+      "priority_rank": 66
     },
     {
       "id": "fin-fc310f539bd2c146c3",
@@ -1993,7 +2083,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 64
+      "priority_rank": 67
     },
     {
       "id": "fin-c25d2e83149d7230d9",
@@ -2023,37 +2113,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 65
-    },
-    {
-      "id": "fin-dd68660c5357fa6912",
-      "title": "国家能源局：2026年1-10月份全社会用电量同比增长3.7%",
-      "summary": "中新网11月23日电 据“国家能源局”微信公众号消息，10月份，全社会用电量8709亿千瓦时，同比增长1.6%，较9月份回升0.4个百分点。考虑去年10月存在高增长基数的特殊性(10.4%，2025年月度最高)，如以2024年10月为测算基准，2026年10月的复合年均增长率为6.1%。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-23/10736529.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-23T10:25:55+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 92,
-        "value": 83,
-        "heat": 38,
-        "appeal": 71,
-        "total": 69,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 66
+      "priority_rank": 68
     },
     {
       "id": "fin-327b87ff2b3de1158f",
@@ -2083,7 +2143,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 67
+      "priority_rank": 69
     },
     {
       "id": "fin-744dd27d045f89c07e",
@@ -2113,7 +2173,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 68
+      "priority_rank": 70
     },
     {
       "id": "fin-2c846073e18a061983",
@@ -2143,7 +2203,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 69
+      "priority_rank": 71
     },
     {
       "id": "fin-a8ece15de4a66efd0d",
@@ -2173,7 +2233,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 70
+      "priority_rank": 72
     },
     {
       "id": "fin-6719b5ec738e78fdc6",
@@ -2203,7 +2263,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 71
+      "priority_rank": 73
     },
     {
       "id": "fin-a6b9ed5501529af29e",
@@ -2233,7 +2293,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 72
+      "priority_rank": 74
     },
     {
       "id": "fin-7c162fb0d4d7473a6f",
@@ -2263,7 +2323,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 73
+      "priority_rank": 75
     },
     {
       "id": "fin-a7c1c3d4760d492e03",
@@ -2293,7 +2353,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 74
+      "priority_rank": 76
     },
     {
       "id": "fin-8dc2559219bcf8f978",
@@ -2323,7 +2383,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 75
+      "priority_rank": 77
     },
     {
       "id": "fin-982a0d750c5d979782",
@@ -2353,7 +2413,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 76
+      "priority_rank": 78
     },
     {
       "id": "fin-2e5ff2cff1533f6f89",
@@ -2383,7 +2443,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 77
+      "priority_rank": 79
     },
     {
       "id": "fin-6b9a193bbb38041da9",
@@ -2413,7 +2473,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 78
+      "priority_rank": 80
     },
     {
       "id": "fin-c8809d5a9ae497de87",
@@ -2443,7 +2503,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 79
+      "priority_rank": 81
     },
     {
       "id": "fin-9bc500761b768865cd",
@@ -2473,7 +2533,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 80
+      "priority_rank": 82
     },
     {
       "id": "fin-a938de032c8960a367",
@@ -2503,7 +2563,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 81
+      "priority_rank": 83
     },
     {
       "id": "fin-18af4f2569ca028b76",
@@ -2533,7 +2593,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 82
+      "priority_rank": 84
     },
     {
       "id": "fin-e7b248e2a411f3b3fd",
@@ -2563,7 +2623,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 83
+      "priority_rank": 85
     },
     {
       "id": "fin-4662460755177d2fa5",
@@ -2593,7 +2653,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 84
+      "priority_rank": 86
     },
     {
       "id": "fin-f95fc8b6b6fbe4f5b3",
@@ -2623,7 +2683,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 85
+      "priority_rank": 87
     },
     {
       "id": "fin-cdc9ce7aea80b9a8bf",
@@ -2653,7 +2713,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 86
+      "priority_rank": 88
     },
     {
       "id": "fin-3de6a34528338ca449",
@@ -2683,7 +2743,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 87
+      "priority_rank": 89
     },
     {
       "id": "fin-b9c36614969a0dc346",
@@ -2713,7 +2773,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 88
+      "priority_rank": 90
     },
     {
       "id": "fin-9a0d630bdb6c58c9f2",
@@ -2743,7 +2803,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 89
+      "priority_rank": 91
     },
     {
       "id": "fin-5fb25586a85bc57f8d",
@@ -2773,7 +2833,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 90
+      "priority_rank": 92
     },
     {
       "id": "fin-e8b1b6cdb3f587c316",
@@ -2803,7 +2863,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 91
+      "priority_rank": 93
     },
     {
       "id": "fin-447746542593407f64",
@@ -2833,7 +2893,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 92
+      "priority_rank": 94
     },
     {
       "id": "fin-1253e1732cbf56000a",
@@ -2863,7 +2923,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 93
+      "priority_rank": 95
     },
     {
       "id": "fin-8fe2a85c7ca8735a45",
@@ -2893,7 +2953,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 94
+      "priority_rank": 96
     },
     {
       "id": "fin-545b4bd64eb291dcff",
@@ -2923,7 +2983,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 95
+      "priority_rank": 97
     },
     {
       "id": "fin-7e4963d263c505182d",
@@ -2953,7 +3013,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 96
+      "priority_rank": 98
     },
     {
       "id": "fin-43a4b4f74dad4430f1",
@@ -2983,7 +3043,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 97
+      "priority_rank": 99
     },
     {
       "id": "fin-43723b5241357253c3",
@@ -3013,7 +3073,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 98
+      "priority_rank": 100
     },
     {
       "id": "fin-55a46c451e9c6d7661",
@@ -3043,7 +3103,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 99
+      "priority_rank": 101
     },
     {
       "id": "fin-01a7ca3d219e5b0076",
@@ -3073,7 +3133,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 100
+      "priority_rank": 102
     },
     {
       "id": "fin-dbb8ee331f337dddd4",
@@ -3103,7 +3163,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 101
+      "priority_rank": 103
     },
     {
       "id": "fin-7c89c123e44923d714",
@@ -3133,7 +3193,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 102
+      "priority_rank": 104
     },
     {
       "id": "fin-03c8d23343a154b910",
@@ -3163,7 +3223,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 103
+      "priority_rank": 105
     },
     {
       "id": "fin-cb89afc0f58c48843d",
@@ -3193,7 +3253,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 104
+      "priority_rank": 106
     },
     {
       "id": "fin-ca46c60680df7fc6e2",
@@ -3223,7 +3283,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 105
+      "priority_rank": 107
     },
     {
       "id": "fin-76ab3c9d7ee64818d3",
@@ -3253,7 +3313,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 106
+      "priority_rank": 108
     },
     {
       "id": "fin-4717385a4b2e450c01",
@@ -3283,7 +3343,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 107
+      "priority_rank": 109
     },
     {
       "id": "fin-083161afdcc3c32e80",
@@ -3313,7 +3373,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 108
+      "priority_rank": 110
     },
     {
       "id": "fin-c2f836051e32ffb57e",
@@ -3343,7 +3403,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 109
+      "priority_rank": 111
     },
     {
       "id": "fin-826a1cc0b6599ed8ad",
@@ -3373,7 +3433,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 110
+      "priority_rank": 112
     },
     {
       "id": "fin-a8d6c7fd7aa327ef0b",
@@ -3403,37 +3463,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 111
-    },
-    {
-      "id": "fin-912b8c6ea6b2568695",
-      "title": "专家：高空风能产业化前景可期",
-      "summary": "中新网北京11月25日电 (记者 阮煜琳)“近年来我国绿色转型成效显著，一大批低碳绿色产业快速崛起。”中国环境与发展国际合作委员会中方首席顾问、国务院发展研究中心原副主任刘世锦24日表示。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737699.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-25T10:46:16+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 92,
-        "value": 44,
-        "heat": 60,
-        "appeal": 42,
-        "total": 65,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 112
+      "priority_rank": 113
     },
     {
       "id": "fin-2102247483a92b70d1",
@@ -3463,7 +3493,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 113
+      "priority_rank": 114
     },
     {
       "id": "fin-1ca8440be6a138e3bd",
@@ -3493,7 +3523,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 114
+      "priority_rank": 115
     },
     {
       "id": "fin-4070e55f82af0deda2",
@@ -3523,7 +3553,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 115
+      "priority_rank": 116
     },
     {
       "id": "fin-f27dcfea090881fe4a",
@@ -3553,7 +3583,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 116
+      "priority_rank": 117
+    },
+    {
+      "id": "fin-dd68660c5357fa6912",
+      "title": "国家能源局：2026年1-10月份全社会用电量同比增长3.7%",
+      "summary": "中新网11月23日电 据“国家能源局”微信公众号消息，10月份，全社会用电量8709亿千瓦时，同比增长1.6%，较9月份回升0.4个百分点。考虑去年10月存在高增长基数的特殊性(10.4%，2025年月度最高)，如以2024年10月为测算基准，2026年10月的复合年均增长率为6.1%。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-23/10736529.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-23T10:25:55+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 47,
+        "readability": 92,
+        "value": 83,
+        "heat": 38,
+        "appeal": 71,
+        "total": 65,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 118
     },
     {
       "id": "fin-eb559064ac16f0fac2",
@@ -3573,66 +3633,6 @@
         "timeliness": 100,
         "readability": 79,
         "value": 34,
-        "heat": 60,
-        "appeal": 42,
-        "total": 64,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 117
-    },
-    {
-      "id": "fin-3f4d85a4ed5d0376b9",
-      "title": "第八届志交会青年志愿服务项目成果展在渝启幕",
-      "summary": "中新网重庆11月25日电 (梁钦卿)25日，第八届中国青年志愿服务项目大赛暨青年志愿服务交流会(下称“第八届志交会”)核心展示板块——青年志愿服务项目成果展在重庆启幕。全国各地及相关行业系统的优质青年志愿服务项目集中亮相，全方位展现新时代中国青年志愿者的青春担当。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737683.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-25T10:39:01+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 44,
-        "heat": 60,
-        "appeal": 42,
-        "total": 64,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 118
-    },
-    {
-      "id": "fin-46d0a1134d395f9c05",
-      "title": "厦门聚焦科技创新产业升级推进服务业扩能提质",
-      "summary": "中新网厦门11月25日电 (吴冠标)11月25日，厦门市“推进服务业扩能提质增强经济发展新动能”新闻发布会举办。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737702.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-25T10:47:34+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 44,
         "heat": 60,
         "appeal": 42,
         "total": 64,
