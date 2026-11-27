@@ -693,3 +693,40 @@ html[data-inkora-theme="inkora"] .inkora-masthead{display:flex}
 html[data-inkora-theme="inkora"] body:not(:has(#section-discover.active)) .inkora-masthead{display:none}
 .inkora-swatch{background:linear-gradient(90deg,#F3EDE4 0 50%,#202121 50% 76%,#D2AC76 76%)!important}
 @media(max-width:760px){html[data-inkora-theme="inkora"] .inkora-masthead{display:none!important}html[data-inkora-theme="inkora"] body .mobile-bottom-nav .more-panel{max-height:min(65vh,480px);overflow-y:auto}}
+
+/* Editorial identity v2: product under DAVYLAB, readable at every entry point. */
+#appNavigation .brand .inkora-parent-brand{display:block;font-size:11px;font-weight:800;letter-spacing:1.8px;line-height:1.25;color:#896235;margin-bottom:3px}
+#appNavigation .brand-lockup{gap:2px;min-width:0;overflow:visible}
+#appNavigation .brand b{line-height:1.15!important}
+#appNavigation .brand small{white-space:normal!important;line-height:1.45!important}
+.topbar .crumb-brand-name{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.crumb-parent-brand{font-weight:850;letter-spacing:.65px}
+.crumb-brand-slash{font-weight:400;opacity:.55}
+.inkora-footer-parent{font-size:10px;font-weight:700;white-space:nowrap}
+html[data-inkora-theme="inkora"] #appNavigation .brand .inkora-parent-brand{color:#D2AC76!important}
+html[data-inkora-theme="inkora"] #appNavigation .brand{padding-block:9px 16px!important}
+html[data-inkora-theme="inkora"] #appNavigation .brand b{font-size:21px!important;letter-spacing:2px!important}
+html[data-inkora-theme="inkora"] #appNavigation .brand small{color:#C8C2B6!important;font-size:10px!important}
+html[data-inkora-theme="inkora"] .inkora-masthead{min-height:154px;background:#F8F6F1;border-color:#DDD8CF;padding:24px 30px}
+html[data-inkora-theme="inkora"] .inkora-masthead::after{inset:0 0 0 45%;background-image:url("./brand/inkora-paper-brush.svg?v=2");background-size:contain;background-position:right center}
+html[data-inkora-theme="inkora"] .inkora-masthead .inkora-kicker{display:flex;align-items:center;gap:9px;letter-spacing:1.8px;margin-bottom:12px}
+html[data-inkora-theme="inkora"] .inkora-masthead .inkora-kicker strong{font-size:12px;color:#886031}
+html[data-inkora-theme="inkora"] .inkora-masthead .inkora-wordmark{font-family:"Songti SC","Noto Serif SC","SimSun",serif;font-weight:700;letter-spacing:5px}
+html[data-inkora-theme="inkora"] .inkora-masthead p{margin-top:9px}
+html[data-inkora-theme="inkora"] .mobile-app-cover{background-image:url("./brand/inkora-paper-brush.svg?v=2")!important;background-position:right -38px center!important;background-size:auto 100%!important}
+html[data-inkora-theme="inkora"] .mobile-cover-head strong{color:#72512C!important}
+html[data-inkora-theme="inkora"] .mobile-cover-title{font-family:"Songti SC","Noto Serif SC","SimSun",serif;letter-spacing:3px}
+html[data-inkora-theme="inkora"] .mobile-cover-bottom span{max-width:64%;font-size:10px;line-height:1.5}
+@media(min-width:761px){
+ body[data-navigation="left"][data-nav-collapsed="true"] #appNavigation .brand-lockup,body[data-navigation="right"][data-nav-collapsed="true"] #appNavigation .brand-lockup{display:none!important}
+}
+@media(max-width:760px){
+ #appNavigation .brand .inkora-parent-brand{font-size:9px;letter-spacing:1px;margin-bottom:0}
+ html[data-inkora-theme="inkora"] #appNavigation .brand b{font-size:16px!important}
+ html[data-inkora-theme="inkora"] #appNavigation .brand small{font-size:9px!important}
+ html[data-inkora-theme="inkora"] #appNavigation .brand{padding-block:2px!important}
+ .topbar .crumb-brand-name{font-size:9px!important;gap:3px;letter-spacing:.1px!important}
+ .crumb-parent-brand{letter-spacing:.2px}
+ .topbar .crumb .crumb-separator{height:12px}
+}
+@media(max-width:360px){.topbar .crumb-brand-name{font-size:8px!important}.topbar .crumb{gap:4px!important}}
