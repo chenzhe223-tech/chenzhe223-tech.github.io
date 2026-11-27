@@ -8,7 +8,7 @@
   if(root)root.DAVYLABProductionPrompt=api;
 })(typeof window!=="undefined"?window:null,function(){
 "use strict";
-const VERSION="1.3.0-continuity";
+const VERSION="1.4.0-inkora-publication";
 const PLATFORMS=Object.freeze({
  chatgpt:{label:"ChatGPT",note:"根据本对话实际提供的搜索、图像生成、文件写入与压缩工具逐一验证；Chat 模式和 Work 模式能力可能不同。",link:"https://chatgpt.com/"},
  claude:{label:"Claude",note:"检查当前 Claude 会话是否实际具备网页研究、图像生成与文件/ZIP 输出工具；不要把文字描述的图片当作生成成功。",link:"https://claude.ai/"},
@@ -36,6 +36,8 @@ const manifest=[
  "DAVYLAB_文章主题_公众号素材包/02_公众号排版预览.html",
  "DAVYLAB_文章主题_公众号素材包/03_使用说明.txt",
  "DAVYLAB_文章主题_公众号素材包/04_事实核查与来源.md",
+ "DAVYLAB_文章主题_公众号素材包/05_公众号内联同步版.html",
+ "DAVYLAB_文章主题_公众号素材包/_sync_payload.json",
  "DAVYLAB_文章主题_公众号素材包/images/00_封面.jpg",
  "DAVYLAB_文章主题_公众号素材包/images/01_正文配图.jpg",
  "DAVYLAB_文章主题_公众号素材包/images/02_正文配图.jpg",
@@ -54,13 +56,13 @@ function visual(t){
  return ["【已保存的配图视觉方案｜必须遵守】","以下配置来源于该选题已保存的 visualPlan，禁止默默替换风格、色值或特殊限制。",...props.flatMap(([name,key])=>linesOf(a[key],name)), "视觉方案状态："+v(a.reviewStatus||"draft")+"；图片状态："+v(a.assetStatus||"not_generated")+"（此为输入状态，不能视为图片交付）。"];
 }
 
-const layoutThemes=Object.freeze({technology:"科技杂志",science:"科学杂志",finance:"财经杂志",literature:"文学杂志",culture:"人文杂志",minimal:"极简杂志"});
+const layoutThemes=Object.freeze({alabaster:"白瓷黑金",vermilion:"冷墨赤朱",sage:"松石青岩",technology:"科技杂志",science:"科学杂志",finance:"财经杂志",literature:"文学杂志",culture:"人文杂志",minimal:"极简杂志"});
 const layoutRoles=Object.freeze({intro:"开头导语",heading:"各级小标题",quote:"引用与重点引文",conclusion:"结尾总结"});
 function articleLayout(t){
  const a=t?.articleLayoutPlan;
- if(!a||a.version!==1||!Object.hasOwn(layoutThemes,a.theme))return ["【文章排版】当前选题未保存专属排版方案；采用清晰克制、手机优先的公众号图文布局，不得声称作者已确认特定版式。"];
+ if(!a||a.version!==1||!Object.hasOwn(layoutThemes,a.theme))return ["【文章排版】当前选题未保存专属排版方案；推荐默认白瓷黑金（纸面 #FFFFFF、正文与标题 #111110、香槟金点缀 #B68D40、引用 #F7F6F3、代码 #F2F0EC），15.5px、1.85行高、手机优先；不得声称作者已确认特定版式。"];
  const color=x=>/^#[0-9a-f]{6}$/i.test(String(x||""))?String(x).toUpperCase():"";
- const colors=[["全文背景色",a.background],["正文文字色",a.text],["标题与强调色",a.accent],["默认引用背景色",a.quoteBackground]].filter(x=>color(x[1])).map(([k,x])=>k+"："+color(x));
+ const colors=[["全文背景色",a.background],["正文文字色",a.text],["标题与强调色",a.accent],["标题主结构色",a.headingColor],["默认引用背景色",a.quoteBackground],["代码块背景色",a.codeBackground]].filter(x=>color(x[1])).map(([k,x])=>k+"："+color(x));
  const roles=Object.entries(layoutRoles).filter(([k])=>color(a.roles?.[k])).map(([k,label])=>label+"："+color(a.roles[k]));
  const heading={bar:"左侧细竖线",rule:"底部细分隔线",center:"居中小标题",plain:"无装饰标题"}[a.heading]||"清晰分级标题";
  const blocks=(Array.isArray(a.blocks)?a.blocks:[]).slice(0,40).filter(b=>b&&color(b.background)&&typeof b.text==="string"&&b.text.trim()).map(b=>"原文定位「"+v(b.text,500)+"」（第"+Math.max(1,Math.floor(Number(b.occurrence)||1))+"次出现）→ "+color(b.background)+"；仅匹配实际存在的对应内容，不强行新增原文。");
@@ -206,8 +208,8 @@ function build(topic,options={}){
  "4. 图文排版：严格落实上方已保存的文章排版方案，将四张 JPG 嵌入正文合理位置；编写独立可打开的 HTML，使用 images/ 的相对路径、行内 CSS、宽度自适应（max-width:100%）与清晰图注。Markdown 也要引用真实图片路径；确保断网打开 HTML 时本地资源可加载。",
  "5. 素材打包：在实际文件系统创建以下目录及文件（根目录名用安全的文章主题替换）：",
  ...manifest.map(x=>"  "+x),
- "03_使用说明.txt 记录图片尺寸、相对路径、公众号粘贴方法、已完成/待确认项和版权注意；04_事实核查与来源.md 逐条列出核对结果、证据链接与未核实事项。不得把图片提示词或文件清单当作实际文件。",
- "6. 质量验收必须由真实文件检查而非口头自评：Markdown 文章完整；观点与标题一致；来源可追溯；4 张不同的真实图片可解码且尺寸满足要求；文字与保存风格符合；HTML 本地打开无资源 404，已保存文章排版配置在实际 HTML 内落实并逐项核验；ZIP 真正存在、可解压并包含全部要求文件、无空文件。",
+ "03_使用说明.txt 记录图片尺寸、相对路径、公众号粘贴方法、已完成/待确认项和版权注意；04_事实核查与来源.md 逐条列出核对结果、证据链接与未核实事项。05_公众号内联同步版.html 必须是与实际成稿一致的可粘贴 HTML 片段，样式全部写入行内 style，禁止 class、外部 CSS、脚本和浮层；图片真实引用本地素材并由 WorkBuddy 上传后替换微信可用地址。_sync_payload.json 必须为有效 JSON，含 schema=inkora.wechat.handoff/v1、product=INKORA、brand=DAVYLAB、title、author、contentHtml（与05正文逐字一致）、action=prepare_wechat_draft_only、approvalStatus=draft、requiresAuthorApproval=true、wechatDraftVerified=false、published=false；不能把私有草稿公开或伪造同步回执。不得把图片提示词或文件清单当作实际文件。",
+ "6. 质量验收必须由真实文件检查而非口头自评：Markdown 文章完整；观点与标题一致；来源可追溯；4 张不同的真实图片可解码且尺寸满足要求；文字与保存风格符合；HTML 本地打开无资源 404，已保存文章排版配置在实际 HTML 内落实并逐项核验；05 内联 HTML 和 JSON 内容一致且无外部样式或脚本；ZIP 真正存在、可解压并包含全部要求文件、无空文件。",
  "7. 实际压缩上述根目录为 DAVYLAB_文章主题_公众号素材包.zip，解压复核后返回当前环境可点击的真实下载链接。绝不捏造 sandbox 路径、平台下载链接或上传成功状态。",
  "【验收状态】只有所有核心项 PASS 且 ZIP 已验证可下载，才能标注 COMPLETE；缺工具或某环节失败标记 BLOCKED / INCOMPLETE，准确列出缺口和已产生的文件，不能将任务转为仅策划并冒称完成。",
  "【执行顺序】优先直接制作和验收；按当前会话实际能力选择合法工具。若研究、生图、创建文件或压缩能力缺失，应说明缺哪一项、不能交付完整素材包，并仅交付真实已经完成的部分。"
