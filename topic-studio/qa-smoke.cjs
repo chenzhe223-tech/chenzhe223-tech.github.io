@@ -61,7 +61,11 @@ async function main() {
     await page.addInitScript(()=>{window.showDirectoryPicker=async()=>{const root=await navigator.storage.getDirectory();return root.getDirectoryHandle("QA-My-Drive",{create:true})}});
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
-    assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
+    assert.equal(await page.title(), "INKORA · 墨界 · AI 创作平台");
+    assert.equal(await page.locator("html").getAttribute("data-inkora-theme"),"inkora");
+    assert.equal(await page.locator("body").evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(244, 243, 240)","paper-first workspace");
+    assert.equal(await page.locator("#appNavigation .brand b").textContent(),"INKORA");
+    assert.ok(await page.locator(".inkora-masthead").evaluate(el=>getComputedStyle(el,"::after").backgroundImage.includes("inkora-paper-brush.svg")));
 
 
     // Article theme: real editor, six presets, localized color, responsive preview and export.
