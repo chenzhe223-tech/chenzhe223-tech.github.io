@@ -151,3 +151,19 @@ assert(html.includes('promptQaStatus").textContent="素材验收未通过"'),"Ge
  mismatch=true;await assert.rejects(()=>client.sync(base),/回读核验未通过/);
  console.log("Drive archive mock regression passed: create, update, history, classification, isolation, readback failure.");
 })().catch(e=>{console.error(e);process.exitCode=1});
+
+
+/* Local folder writer contract: in-memory handles, no actual Google Drive account. */
+(async()=>{
+ const local=require("../local-drive-sync.js"),drive=require("../google-drive-sync.js");
+ const hashKey=async s=>require("node:crypto").createHash("sha256").update(s).digest("hex").slice(0,20);
+ function directory(name){const children=new Map();return {name,kind:"directory",async *entries(){yield* children.entries()},async getDirectoryHandle(n){if(!children.has(n))children.set(n,directory(n));return children.get(n)},async getFileHandle(n){if(!children.has(n)){let body="";children.set(n,{name:n,kind:"file",async createWritable(){let pending="";return {async write(v){pending=v},async close(){body=pending},async abort(){}}},async getFile(){return {text:async()=>body}}})}return children.get(n)}}}
+ const root=directory("My Drive");let seq=0;const write=local.makeWriter({plan:drive.plan,hashKey,now:()=>new Date("2026-11-27T00:00:00Z"),nonce:()=>String(++seq)});
+ const base={topic:{id:"local-test",title:"初始标题",continuity:{mode:"series",seriesId:"s1",seriesName:"测试系列",order:2}},mode:"production",platform:"gemini",text:"完整中文指令\n排版与上下文",strategy:"update"};
+ const a=await write(root,base);assert.equal(a.action,"created");assert(a.path.includes("My Drive / DAVYLAB 公众号工作台 / 系列连载 / 测试系列"));const b=await write(root,{...base,topic:{...base.topic,title:"修改标题"},text:"更新正文"});assert.equal(b.action,"updated");assert.equal(a.path,b.path);
+ const c=await write(root,{...base,strategy:"version"}),d=await write(root,{...base,strategy:"version"});assert.notEqual(c.path,d.path);assert.notEqual(c.path,a.path);
+ const e=await write(root,base);assert.equal(e.path,a.path);assert.equal(e.action,"updated");
+ const f=await write(root,{...base,platform:"claude"});assert.notEqual(f.path,a.path);
+ await assert.rejects(()=>write(root,{...base,text:""}),/有效指令/);
+ console.log("Local Drive folder mock regression passed: classification, stable updates, history, platform isolation, readback.");
+})().catch(e=>{console.error(e);process.exitCode=1});
