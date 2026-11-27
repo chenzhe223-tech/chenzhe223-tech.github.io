@@ -43,8 +43,8 @@ const cloudbase={init:({env})=>{
 }};
 export default cloudbase;
 """
-ACTIVATION = {"schema":1,"environmentId":ENV,"enabled":True,
- "permissionsVerified":True,"productionApproved":True,"pollSeconds":30,
+ACTIVATION = {"schema":1,"requiredSchemaVersion":2,"environmentId":ENV,"enabled":True,
+ "permissionsVerified":True,"productionApproved":True,"tombstonesVerified":True,"pollSeconds":25,
  "note":"This file is only a QA request interception, NOT production activation"}
 
 
@@ -59,6 +59,16 @@ def serve_pg(req):
         CALLS.append(name)
         if name=="davylab_ts_v1_is_allowed":
             return {"data":True,"error":None}
+        if name=="davylab_ts_v1_sync_capabilities":
+            return {"data":{"schema":2,"owner_allowed":True,"revision_cas":True,"tombstones":True},"error":None}
+        if name=="davylab_ts_v1_delete":
+            args=req["args"];ident=args["p_type"]+"::"+args["p_id"]
+            with LOCK:
+                prior=CLOUD.get(ident)
+                if not prior or prior["revision"]!=args["p_expected_revision"]:
+                    return {"error":{"message":"DAVYLAB_REVISION_CONFLICT"}}
+                stamp=datetime.now(timezone.utc).isoformat();prior.update(revision=prior["revision"]+1,deleted_at=stamp,updated_at=stamp)
+                return {"data":{"doc_type":prior["doc_type"],"doc_id":prior["doc_id"],"revision":prior["revision"],"deleted_at":stamp},"error":None}
         if name!="davylab_ts_v1_put":
             return {"error":{"message":"Unsupported QA RPC"}}
         args=req["args"];ident=args["p_type"]+"::"+args["p_id"]
@@ -167,6 +177,17 @@ def test():
                 b.wait_for_function("""() => JSON.parse(localStorage.getItem('davylab-topic-studio-v1'))[0].title==='电脑再次编辑'""",
                     timeout=25000)
                 record["results"].append("Desktop to iPhone automatic return-trip worked")
+                a.evaluate("""() => {const t=topics.find(x=>x.id==='qa-two-device-topic');showPrompt(t,true);const box=document.getElementById('promptBox');box.value+='\\nQA private manual edit';box.dispatchEvent(new Event('input',{bubbles:true}));window.DAVYLABArticleTheme.openTopic(t.id);const body=document.getElementById('atBody');body.value='合成稿件：跨端恢复正文';body.dispatchEvent(new Event('input',{bubbles:true}));}""")
+                a.wait_for_timeout(1600)
+                b.evaluate("window.dispatchEvent(new Event('focus'))")
+                b.wait_for_function("""() => Object.values(JSON.parse(localStorage.getItem('inkora-private-prompt-drafts-v1')||'{}')).some(x=>x.text.includes('QA private manual edit')) && JSON.parse(localStorage.getItem('davylab-article-theme-topics-v2')||'{}').drafts?.['topic:qa-two-device-topic']?.body==='合成稿件：跨端恢复正文'""",timeout=25000)
+                record["results"].append("Per-topic article body and manually edited AI prompt arrived on other device")
+                a.evaluate("""() => {if(!recordSyncDeletion('topic','qa-two-device-topic'))throw Error('delete intent failed');topics=topics.filter(t=>t.id!=='qa-two-device-topic');saveTopics()}""")
+                a.wait_for_timeout(1600)
+                check(bool(CLOUD["topic::qa-two-device-topic"]["deleted_at"]),"CAS tombstone not recorded")
+                b.evaluate("window.dispatchEvent(new Event('focus'))")
+                b.wait_for_function("""() => !JSON.parse(localStorage.getItem('davylab-topic-studio-v1')||'[]').some(x=>x.id==='qa-two-device-topic')""",timeout=25000)
+                record["results"].append("Explicit delete propagated without old-device resurrection")
                 check(not errors_a and not errors_b,
                       "JavaScript runtime exception(s): "+str(errors_a[:2]+errors_b[:2]))
                 record["results"].append("No uncaught JavaScript exception on either viewport")
