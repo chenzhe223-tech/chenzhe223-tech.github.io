@@ -7,7 +7,7 @@
 -- No other app tables are touched, no production synchronization is enabled by this SQL.
 BEGIN;
 DO $install_gate$
-DECLARE chosen_uid text := '<REPLACE_WITH_PRIVATE_AUTH_UID>';
+DECLARE chosen_uid text := '<2119760628944150529>';
 BEGIN
  IF left(chosen_uid,1) = '<' OR btrim(chosen_uid) <> chosen_uid OR length(chosen_uid) NOT BETWEEN 1 AND 128
  THEN RAISE EXCEPTION 'INKORA_OWNER_AUTH_UID_REQUIRED'; END IF;
