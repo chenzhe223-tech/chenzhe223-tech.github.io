@@ -110,3 +110,44 @@ assert(html.includes('promptQaStatus").textContent="素材验收未通过"'),"Ge
  assert(engine.resolveContinuity(second,[long,second],pubs).items[0].body.includes("中间省略，非全文"));
  console.log("Continuity synthetic regression passed");
 }
+
+
+/* Drive contract tests use an in-memory API double, never a user's Google account. */
+(async()=>{
+ const drive=require("../google-drive-sync.js");
+ assert.equal(drive.SCOPE,"https://www.googleapis.com/auth/drive.file");
+ const files=new Map();let seq=0,mismatch=false;
+ const hash=async s=>require("node:crypto").createHash("sha256").update(s).digest("hex");
+ const request=async(raw,opt={})=>{
+  const u=new URL(raw),id=u.pathname.split("/").pop(),method=opt.method||"GET";
+  if(method==="GET"&&u.searchParams.has("q")){
+   const q=u.searchParams.get("q");let arr=[...files.values()];
+   for(const m of q.matchAll(/appProperties has \{ key='([^']+)' and value='([^']+)' \}/g))arr=arr.filter(f=>f.appProperties?.[m[1]]===m[2]);
+   const parent=q.match(/'([^']+)' in parents/);if(parent)arr=arr.filter(f=>f.parents?.includes(parent[1]));
+   if(q.includes("mimeType = 'application/vnd.google-apps.folder'"))arr=arr.filter(f=>f.mimeType==="application/vnd.google-apps.folder");
+   return {files:arr};
+  }
+  if(method==="POST"||method==="PATCH"){
+   const meta=opt.json||opt.multipart.metadata;
+   const f={...(method==="PATCH"?files.get(id):{}),...meta,id:method==="PATCH"?id:"mock"+(++seq),modifiedTime:"2026-11-27T00:00:00Z"};
+   if(opt.multipart)f.body=opt.multipart.text;
+   files.set(f.id,f);return {...f};
+  }
+  const f=files.get(id);if(!f)throw Error("mock missing id");
+  if(opt.asText)return mismatch?"incorrect bytes":f.body;
+  return {...f,webViewLink:"https://drive.google.com/open?id="+id};
+ };
+ const client=drive.makeClient({request,hash,now:()=>new Date("2026-11-27T00:00:00Z")});
+ const base={topic:{id:"synthetic-drive",title:"测试 / 选题",continuity:{mode:"series",seriesId:"s1",seriesName:"测试系列",order:2}},mode:"production",platform:"gemini",text:"完整指令\n包含中文与排版信息",strategy:"update"};
+ const a=await client.sync(base);
+ assert.equal(a.action,"created");assert(a.path.includes("系列连载 / 测试系列 / 02_"));assert.equal(files.get(a.id).body,base.text);
+ const b=await client.sync({...base,text:"手动编辑后的完整指令"});
+ assert.equal(a.id,b.id);assert.equal(b.action,"updated");assert.equal(files.get(a.id).body,"手动编辑后的完整指令");
+ const c=await client.sync({...base,strategy:"version"});assert.notEqual(c.id,a.id);assert(c.name.includes("2026-11-27"));assert.equal(files.get(a.id).body,"手动编辑后的完整指令");
+ const d=await client.sync({...base,platform:"claude"});assert.notEqual(d.id,a.id);
+ const e=await client.sync({...base,mode:"finance",variant:"style:2"});assert(e.path.includes("财经资讯"));
+ assert.equal(drive.plan({...base.topic,continuity:{mode:"followup"}},"production","chatgpt").category,"热门文章续写");
+ assert.equal(drive.plan({id:"free",title:"普通选题"},"planning","chatgpt").category,"独立文章");
+ mismatch=true;await assert.rejects(()=>client.sync(base),/回读核验未通过/);
+ console.log("Drive archive mock regression passed: create, update, history, classification, isolation, readback failure.");
+})().catch(e=>{console.error(e);process.exitCode=1});
