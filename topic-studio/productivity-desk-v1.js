@@ -213,7 +213,7 @@ function renderSavedBriefs(){
  }));
  box.querySelectorAll("[data-pd-remove]").forEach(button=>button.addEventListener("click",()=>{
   const id=button.dataset.pdRemove;
-  if(!confirm("确认从当前浏览器删除这份研究简报？请先确认已备份。"))return;
+  if(!confirm("确认删除这份研究简报？已同步记录会在其他设备同步移除。")||!recordSyncDeletion("research","brief:"+id))return;
   const next=storedBriefs().filter(x=>x.id!==id);
   try{localStorage.setItem(BRIEF_STORE,JSON.stringify(next))}catch{el("pdBriefStatus").textContent="删除失败：本机存储不可写";return}
   if(el("pdResearchBrief").dataset.briefId===id)delete el("pdResearchBrief").dataset.briefId;
@@ -278,5 +278,5 @@ const oldOpportunityRender=window.renderOpportunityRadar;
 if(typeof oldOpportunityRender==="function"){
  window.renderOpportunityRadar=function(){oldOpportunityRender();if(el("pdSourceList"))renderSources()};
 }
-window.DAVYLABProductivity={version:"1.0.0",renderSources,renderSprint,briefText,growthCard,createExperiment};
+window.DAVYLABProductivity={version:"1.0.0",renderSources,renderSprint,briefText,growthCard,createExperiment,renderSavedBriefs,canApplyRemote(){const field=el("pdResearchBrief"),id=field?.dataset.briefId;if(!id)return true;const saved=storedBriefs().find(x=>x.id===id);return !saved||field.value===saved.body&&el("pdResearchQuery").value===saved.topic},refreshFromStorage(){const field=el("pdResearchBrief"),id=field?.dataset.briefId;if(id){const saved=storedBriefs().find(x=>x.id===id);if(saved){field.value=saved.body||"";el("pdResearchQuery").value=saved.topic||""}else{delete field.dataset.briefId;el("pdBriefStatus").textContent="其他设备已删除该档案；当前编辑框内容保留为未保存草稿。"}}renderSavedBriefs()}};
 })();
