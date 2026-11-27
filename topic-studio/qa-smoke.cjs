@@ -216,6 +216,19 @@ async function main() {
     await page.locator("#ctGenerate").click();
     await page.locator("#section-library.active").waitFor();
     const ctPrompt=await page.locator("#promptBox").inputValue();
+
+    // Drive UI checks do not authorize or send data to a real Google account.
+    await page.locator("#driveSyncPrompt").click();
+    assert.ok((await page.locator("#driveSyncStatus").innerText()).includes("客户端 ID"),"missing configuration blocks transfer");
+    assert.equal(await page.locator("#driveSettings").getAttribute("open"),"");
+    assert.equal(await page.locator("#driveSyncLink").isVisible(),false,"no unverified Drive link");
+    const driveDownloadPromise=page.waitForEvent("download");
+    await page.locator("#downloadPromptMarkdown").click();
+    const driveDownload=await driveDownloadPromise;
+    assert.ok(driveDownload.suggestedFilename().endsWith(".md"));
+    assert.equal(fs.readFileSync(await driveDownload.path(),"utf8"),ctPrompt,"Markdown preserves full current instruction");
+    await page.locator("#driveSettings summary").click();
+
     assert.ok(ctPrompt.includes("连续创作上下文")&&ctPrompt.includes("测试前文：工具调用已经解释")&&ctPrompt.includes("如何恢复执行错误")&&ctPrompt.includes("连续性 QA")&&ctPrompt.includes("ZIP 真正存在"),"generated production prompt inherits real archived fixture and retains delivery requirements");
     await page.locator("#promptMode").selectOption("planning");
     assert.ok((await page.locator("#promptBox").inputValue()).includes("连续创作上下文"));
