@@ -5,6 +5,8 @@
 (function(){
 "use strict";
 const ENV="excess-tiglon-d6gjc77qr6fa193f2";
+const PUBLIC_KEY_STORAGE="inkora-cloudbase-publishable-key-v1";
+function readPublicKey(){try{return localStorage.getItem(PUBLIC_KEY_STORAGE)||""}catch{return ""}}
 const $=id=>document.getElementById(id);
 const button=$("davylabSyncButton");
 if(!button)return;
@@ -20,6 +22,8 @@ dialog.innerHTML=[
  '<p class="sync-intro">同一账号在电脑和手机登录，选题、稿件、AI 指令、排期、研究、配图与增长记录自动对齐。</p>',
  '<p id="syncMessage" role="status" aria-live="polite" class="sync-message">正在检查云端状态…</p>',
  '<div id="syncLoginSection">',
+ '<details id="syncConnectionSettings"><summary>CloudBase 连接配置</summary><p>仅填写此环境的 Publishable Key（客户端公开密钥），禁止填写服务端 API Key、SecretId 或 SecretKey。仅保存本设备，不进入稿件同步。</p><label for="syncPublicKey">Publishable Key</label><input id="syncPublicKey" type="password" autocomplete="off" spellcheck="false"><button id="syncSavePublicKey" type="button">保存连接配置并重新载入</button><p id="syncConnectionStatus" role="status"></p></details>',
+
  '<label for="syncEmail">邮箱地址</label><input id="syncEmail" type="email" autocomplete="username" maxlength="160" placeholder="CloudBase 身份认证邮箱">',
  '<div class="sync-tabs"><button id="syncPasswordTab" type="button" aria-pressed="true">邮箱密码</button>',
  '<button id="syncOtpTab" type="button" aria-pressed="false">邮箱验证码</button></div>',
@@ -39,6 +43,7 @@ dialog.innerHTML=[
  '<a href="./cloudbase/sync-center.html">查看本机私有备份与冲突记录</a>'
 ].join("");
 document.body.appendChild(dialog);
+$("syncConnectionStatus").textContent=readPublicKey()?"本设备已配置客户端公开密钥。":"未配置客户端公开密钥；请先核对 CloudBase 跨域设置。";
 const label=$("davylabSyncButtonLabel");
 function display(message,type="neutral"){
  $("syncMessage").textContent=String(message||"").slice(0,230);
@@ -53,7 +58,13 @@ function openDialog(){if(!dialog.open)dialog.showModal()}
 function closeDialog(){if(dialog.open)dialog.close()}
 function safeError(error){
  const msg=String(error?.message||error||"未知错误");
- if(/Failed to fetch|NetworkError|timeout/i.test(msg))return"网络未连接 CloudBase；本地编辑不受影响，恢复网络后可重试。";
+ const code=String(error?.code||error?.category||"");const status=Number(error?.status||error?.statusCode)||0;
+ const tag=/^[a-zA-Z0-9_-]{1,60}$/.test(code)?"（"+code+(status?" / HTTP "+status:"")+"）":status?"（HTTP "+status+"）":"";
+ if(/cors|illegal.origin|permission_denied|security.domain/i.test(msg+" "+code))return"CloudBase 来源或权限被拒绝；检查 excess-tiglon 的 HTTP 网关 → 跨域设置，允许 chenzhe223-tech.github.io。"+tag;
+ if(/missing.credentials|invalid.api.key|missing.api.key|invalid.apikey|publishable.key|unauthorized_client/i.test(msg+" "+code))return"客户端鉴权配置未通过；检查连接配置中的 Publishable Key 及身份认证登录方式。"+tag;
+ if(/Failed to fetch|NetworkError|NETWORK_ERROR|timeout|unreachable/i.test(msg+" "+code))return"CloudBase 请求未获得可读取的响应（可能是跨域、网络或网关）。先检查跨域设置和 Publishable Key，不代表本机断网。"+tag;
+ if(/login_type_disabled|provider_not_enabled/i.test(msg+" "+code))return"该登录方式未启用，请在身份认证 → 登录方式中开启。"+tag;
+ if(/invalid_credentials|invalid login credentials|invalid_grant|user_not_found/i.test(msg+" "+code))return"登录账号或密码未通过认证，请核对 CloudBase 业务用户。"+tag;
  if(/BOUND_TO_DIFFERENT_ACCOUNT/.test(msg))return"当前浏览器绑定另一账号；为保护稿件，请先备份，禁止自动混合账号数据。";
  if(/OWNER_NOT_ALLOWED|NOT_ALLOWLISTED|PG_IDENTITY_GATE|RLS|42501/.test(msg))return"CloudBase 当前账号尚未完成本人权限授权，自动同步保持关闭。";
  if(/CONFLICT|40001|23505/.test(msg))return"检测到其他设备同时修改；已保留冲突，未覆盖。";
@@ -88,7 +99,7 @@ async function initializeSDK(){
   sdk=imported.default;
   if(!sdk||typeof sdk.init!=="function")throw Error("CloudBase SDK 包尚未完成部署");
  }
- if(!app){app=sdk.init({env:ENV,region:"ap-shanghai"});auth=app.auth()}
+ if(!app){const accessKey=readPublicKey();app=sdk.init({env:ENV,region:"ap-shanghai",...(accessKey?{accessKey}:{})});auth=app.auth()}
  return auth;
 }
 function stop(){accountGeneration++;
@@ -152,6 +163,12 @@ function email(){
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)||value.length>160)throw Error("请输入有效的登录邮箱");
  return value;
 }
+$("syncSavePublicKey").addEventListener("click",()=>{
+ const key=$("syncPublicKey").value.trim();
+ if(key.length<12||key.length>4096||/\s/.test(key)){display("请填写控制台生成的完整 Publishable Key。","warning");return}
+ if(!confirm("确认这是客户端 Publishable Key，而不是服务端 API Key 或 SecretKey？将仅保存在当前浏览器。"))return;
+ try{localStorage.setItem(PUBLIC_KEY_STORAGE,key);$("syncPublicKey").value="";location.reload()}catch{display("本机无法保存连接配置。","warning")}
+});
 $("syncPasswordTab").addEventListener("click",()=>{
  $("syncPasswordSection").hidden=false;$("syncOtpSection").hidden=true;
  $("syncPasswordTab").setAttribute("aria-pressed","true");
@@ -165,8 +182,8 @@ $("syncOtpTab").addEventListener("click",()=>{
 $("syncPasswordLogin").addEventListener("click",()=>guard(async()=>{
  const password=$("syncPassword").value,client=await initializeSDK();
  if(!password)throw Error("请输入密码");
- const {data,error}=await client.signInWithPassword({email:email(),password});
- $("syncPassword").value="";
+ let response;try{response=await client.signInWithPassword({email:email(),password})}finally{$("syncPassword").value=""}
+ const {data,error}=response;
  if(error)throw error;
  if(!data?.session)throw Error("登录没有返回有效会话");
  await resume(data.session)
