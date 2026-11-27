@@ -196,6 +196,50 @@ async function main() {
     await page.locator("#section-library.active").waitFor();
 
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem("davylab-topic-studio-v1")||"[]").length), 2, "series ideas persist in the existing topic store");
+
+    // A three-article synthetic fixture exercises the real browser continuity workflow.
+    const ctFixture=await page.evaluate(()=>{
+      const series=topics.slice().sort((a,b)=>a.continuity.order-b.continuity.order);
+      return {first:String(series[0].id),second:String(series[1].id),seriesId:series[0].continuity.seriesId};
+    });
+    await page.locator('[data-section="continuity"]').click();
+    await page.locator("#ctTopic").selectOption(ctFixture.second);
+    assert.equal(await page.locator("#ctMode").inputValue(),"series","batch import preserves series relation");
+    await page.locator("#ctMemoryTarget").selectOption("t:"+ctFixture.first);
+    await page.locator("#ctMemoryState").selectOption("final");
+    await page.locator("#ctBody").fill("测试前文：工具调用已经解释，尚未讨论执行错误恢复。");
+    await page.locator("#ctMemoryPanel details summary").click();
+    await page.locator("#ctMem_covered").fill("工具调用原理");
+    await page.locator("#ctMem_questions").fill("如何恢复执行错误？");
+    await page.locator("#ctMemorySave").click();
+    await page.locator("#ctNew").fill("解释错误恢复机制，不重复工具调用原理");
+    await page.locator("#ctGenerate").click();
+    await page.locator("#section-library.active").waitFor();
+    const ctPrompt=await page.locator("#promptBox").inputValue();
+    assert.ok(ctPrompt.includes("连续创作上下文")&&ctPrompt.includes("测试前文：工具调用已经解释")&&ctPrompt.includes("如何恢复执行错误")&&ctPrompt.includes("连续性 QA")&&ctPrompt.includes("ZIP 真正存在"),"generated production prompt inherits real archived fixture and retains delivery requirements");
+    await page.locator("#promptMode").selectOption("planning");
+    assert.ok((await page.locator("#promptBox").inputValue()).includes("连续创作上下文"));
+    await page.locator("#promptMode").selectOption("production");
+    await page.evaluate(f=>{
+      topics.push({id:"qa_continuity_third",title:"第三篇：质量评价",angle:"评价恢复质量",format:"文章",status:"inbox",continuity:{version:1,mode:"series",seriesId:f.seriesId,seriesName:topics.find(t=>String(t.id)===f.first).continuity.seriesName,order:3,refs:["t:"+f.first],newValue:"评价恢复质量"}});
+      saveTopics();
+    },ctFixture);
+    await page.locator('[data-section="continuity"]').click();
+    await page.locator("#ctTopic").selectOption("qa_continuity_third");
+    const third=await page.evaluate(()=>window.DAVYLABContinuity.context(topics.find(t=>t.id==="qa_continuity_third")));
+    assert.equal(third.items.length,2,"third article resolves predecessor and auxiliary article");
+    assert.equal(third.items[0].evidence,"仅有摘要/选题资料，未取得原文","unarchived source is not represented as full text");
+    await page.setViewportSize({width:390,height:844});
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=3),"continuity workspace mobile does not overflow");
+    await page.screenshot({path:path.join(screenshotDir,"topic-studio-continuity-mobile.png"),fullPage:false});
+    await page.setViewportSize({width:1440,height:1000});
+    await page.screenshot({path:path.join(screenshotDir,"topic-studio-continuity-desktop.png"),fullPage:false});
+    await page.evaluate(f=>{
+      topics=topics.filter(t=>t.id!=="qa_continuity_third");delete topics.find(t=>String(t.id)===f.first).continuityMemory;saveTopics();
+      promptTopicId="";activePromptKey="";promptDrafts.clear();promptSourceVersions.clear();document.getElementById("promptBox").value="";updatePromptStatus(false);
+    },ctFixture);
+    await page.locator('[data-section="library"]').click();
+
     await page.screenshot({ path: path.join(screenshotDir, "topic-studio-research-desktop.png"), fullPage: true });
     await page.setViewportSize({ width: 390, height: 844 });
     await page.locator('[data-section="research"]').evaluate(el => el.click());
