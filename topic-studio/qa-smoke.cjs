@@ -65,6 +65,15 @@ async function main() {
     assert.equal(await page.locator("html").getAttribute("data-inkora-theme"),"inkora");
     assert.equal(await page.locator("body").evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(244, 243, 240)","paper-first workspace");
     assert.equal(await page.locator("#appNavigation .brand b").textContent(),"INKORA");
+    assert.equal(await page.locator("#appNavigation .inkora-parent-brand").textContent(),"DAVYLAB");
+    assert.equal(await page.locator(".topbar .crumb-parent-brand").textContent(),"DAVYLAB");
+    assert.ok(await page.locator(".topbar .crumb-parent-brand").isVisible(),"parent brand visible on desktop");
+    await page.screenshot({path:path.join(screenshotDir,"inkora-editorial-brand-desktop.png"),fullPage:false});
+    await page.setViewportSize({width:390,height:844});
+    assert.ok(await page.locator(".topbar .crumb-parent-brand").isVisible(),"parent brand visible on mobile");
+    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=3),"mobile co-brand does not overflow");
+    await page.screenshot({path:path.join(screenshotDir,"inkora-editorial-brand-mobile.png"),fullPage:false});
+    await page.setViewportSize({width:1440,height:1000});
     assert.ok(await page.locator(".inkora-masthead").evaluate(el=>getComputedStyle(el,"::after").backgroundImage.includes("inkora-paper-brush.svg")));
 
 
