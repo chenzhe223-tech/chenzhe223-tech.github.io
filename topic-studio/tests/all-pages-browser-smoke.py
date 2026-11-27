@@ -140,7 +140,7 @@ def scenario(page, label):
     }""")
     check(brand["logoLoaded"] and brand["crumbLoaded"],label+": brand SVG assets not rendered")
     check(brand["wordmark"]=="INKORA",label+": incorrect brand name")
-    check(brand["brandColor"]=="#202121" and brand["accentColor"]=="#D2AC76",label+": brand tokens not loaded")
+    check(brand["brandColor"]=="#111110" and brand["accentColor"]=="#B68D40",label+": brand tokens not loaded")
     check(brand["sidebarOverflow"]<=2 and brand["documentOverflow"]<=3,label+": brand mark caused overflow")
     check(brand["logoSize"]>=30,label+": logo became unreadably small")
     check(len(get_local(page, "davylab-topic-studio-v1"))>=1, label+": seed missing")
