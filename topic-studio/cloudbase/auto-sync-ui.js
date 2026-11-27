@@ -11,7 +11,7 @@ const $=id=>document.getElementById(id);
 const button=$("davylabSyncButton");
 if(!button)return;
 let sdk=null,app=null,auth=null,engine=null,unsubscribe=null,sessionUid=null;
-let activation=null,ready=false,busy=false,otpIssued=false;let accountGeneration=0;
+let activation=null,ready=false,busy=false,otpIssued=false;let verifyNativeOtp=null,otpEmail="";let accountGeneration=0;
 const allowed=new Set(window.DAVYLABSyncCore?.SOURCES?.map(x=>x.key)||[]);
 const dialog=document.createElement("dialog");
 dialog.className="davylab-sync-dialog";dialog.id="davylabSyncDialog";
@@ -62,7 +62,8 @@ function safeError(error){
  const tag=/^[a-zA-Z0-9_-]{1,60}$/.test(code)?"（"+code+(status?" / HTTP "+status:"")+"）":status?"（HTTP "+status+"）":"";
  if(/cors|illegal.origin|permission_denied|security.domain/i.test(msg+" "+code))return"CloudBase 来源或权限被拒绝；检查 excess-tiglon 的 HTTP 网关 → 跨域设置，允许 chenzhe223-tech.github.io。"+tag;
  if(/missing.credentials|invalid.api.key|missing.api.key|invalid.apikey|publishable.key|unauthorized_client/i.test(msg+" "+code))return"客户端鉴权配置未通过；检查连接配置中的 Publishable Key 及身份认证登录方式。"+tag;
- if(/Failed to fetch|NetworkError|NETWORK_ERROR|timeout|unreachable/i.test(msg+" "+code))return"CloudBase 请求未获得可读取的响应（可能是跨域、网络或网关）。先检查跨域设置和 Publishable Key，不代表本机断网。"+tag;
+ if(/CLOUDBASE_NATIVE_AUTH_UNAVAILABLE|CLOUDBASE_NATIVE_OTP_CALLBACK_MISSING/.test(msg))return"CloudBase 原生认证 SDK 不兼容当前版本，请联系维护者升级 SDK。";
+ if(/Failed to fetch|NetworkError|NETWORK_ERROR|timeout|unreachable/i.test(msg+" "+code))return"CloudBase 原生认证请求未获得可读取的响应；请检查控制台错误及请求 URL。"+tag;
  if(/login_type_disabled|provider_not_enabled/i.test(msg+" "+code))return"该登录方式未启用，请在身份认证 → 登录方式中开启。"+tag;
  if(/invalid_credentials|invalid login credentials|invalid_grant|user_not_found/i.test(msg+" "+code))return"登录账号或密码未通过认证，请核对 CloudBase 业务用户。"+tag;
  if(/BOUND_TO_DIFFERENT_ACCOUNT/.test(msg))return"当前浏览器绑定另一账号；为保护稿件，请先备份，禁止自动混合账号数据。";
@@ -99,7 +100,7 @@ async function initializeSDK(){
   sdk=imported.default;
   if(!sdk||typeof sdk.init!=="function")throw Error("CloudBase SDK 包尚未完成部署");
  }
- if(!app){const accessKey=readPublicKey();app=sdk.init({env:ENV,region:"ap-shanghai",...(accessKey?{accessKey}:{})});auth=app.auth()}
+ if(!app){const accessKey=readPublicKey();app=sdk.init({env:ENV,region:"ap-shanghai",authMode:"cloudbase",...(accessKey?{accessKey}:{})});auth=typeof app.auth==="function"?app.auth():app.auth;if(!auth||typeof auth.signInWithOtp!=="function")throw Error("CLOUDBASE_NATIVE_AUTH_UNAVAILABLE")}
  return auth;
 }
 function stop(){accountGeneration++;
@@ -190,19 +191,21 @@ $("syncPasswordLogin").addEventListener("click",()=>guard(async()=>{
 }));
 $("syncSendOtp").addEventListener("click",()=>guard(async()=>{
  const client=await initializeSDK();
- const {error}=await client.signInWithOtp({email:email(),options:{shouldCreateUser:false}});
+ otpIssued=false;verifyNativeOtp=null;otpEmail="";const address=email();
+ const {data,error}=await client.signInWithOtp({email:address,options:{shouldCreateUser:false}});
  if(error)throw error;
- otpIssued=true;display("验证码已发送。请确认使用已在 CloudBase 身份认证建立的账号。")
+ if(typeof data?.verifyOtp!=="function")throw Error("CLOUDBASE_NATIVE_OTP_CALLBACK_MISSING");
+ verifyNativeOtp=token=>data.verifyOtp({token});otpEmail=address;otpIssued=true;display("验证码已发送。请确认使用已在 CloudBase 身份认证建立的账号。")
 }));
 $("syncVerifyOtp").addEventListener("click",()=>guard(async()=>{
  if(!otpIssued)throw Error("请先发送验证码");
- const token=$("syncOtp").value.trim(),client=await initializeSDK();
+ const token=$("syncOtp").value.trim();if(email()!==otpEmail||!verifyNativeOtp)throw Error("邮箱已变更，请重新发送验证码");
  if(!/^[A-Za-z0-9]{4,12}$/.test(token))throw Error("验证码格式不正确");
- const {data,error}=await client.verifyOtp({email:email(),token,type:"email"});
+ const {data,error}=await verifyNativeOtp(token);
  $("syncOtp").value="";
  if(error)throw error;
  if(!data?.session)throw Error("验证码未返回有效登录会话");
- await resume(data.session)
+ otpIssued=false;verifyNativeOtp=null;otpEmail="";await resume(data.session)
 }));
 $("syncRetry").addEventListener("click",()=>guard(async()=>{
  await loadConfig();await checkSession();
