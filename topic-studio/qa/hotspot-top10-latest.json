@@ -1,123 +1,57 @@
 {
   "status": "pass",
   "method": "Deterministic Node.js ranker over committed public AI Radar/XNews/HN/GitHub metadata",
-  "source_synced_at": "2026-11-26T10:04:18+00:00",
-  "generated_at": "2026-11-26T10:04:22.551Z",
+  "source_synced_at": "2026-11-27T10:10:11+00:00",
+  "generated_at": "2026-11-27T10:10:15.936Z",
   "scope": "Editorial heuristic only; source headlines/metrics not independently verified article-by-article",
-  "available_sources": 222,
+  "available_sources": 201,
   "recommendations": [
     {
       "rank": 1,
       "id": "skills",
       "name": "Skill 与 AI 工具技能化",
-      "score": 94,
+      "score": 100,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 14,
+        "observableDiscussion": 20,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 20,
+      "evidenceCount": 14,
       "channels": [
+        "Hacker News",
         "AI Radar",
-        "GitHub Search",
-        "Hacker News"
+        "GitHub Search"
       ],
       "exampleSources": [
         {
-          "title": "fsodano/writing-skills",
-          "url": "https://github.com/fsodano/writing-skills",
-          "source": "GitHub Skills",
-          "published": "2026-11-25T20:44:11.000Z"
+          "title": "Show HN: Lockward – a lockfile for skills and MCP servers your AI agent loads",
+          "url": "https://github.com/Breaktroughf1/lockward",
+          "source": "Hacker News",
+          "published": "2026-11-26T15:01:29.000Z"
         },
         {
-          "title": "Timonwa/content-writing-skills",
-          "url": "https://github.com/Timonwa/content-writing-skills",
+          "title": "greensock/gsap-skills",
+          "url": "https://github.com/greensock/gsap-skills",
           "source": "GitHub Skills",
-          "published": "2026-11-25T22:31:22.000Z"
+          "published": "2026-11-26T21:30:33.000Z"
         }
       ]
     },
     {
       "rank": 2,
-      "id": "memory",
-      "name": "Agent 记忆、检索和知识管理",
-      "score": 90,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 19,
-        "observableDiscussion": 14,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 5,
-      "channels": [
-        "Hacker News",
-        "AI Radar",
-        "XNews"
-      ],
-      "exampleSources": [
-        {
-          "title": "Show HN: Mason – A lightweight Postgres read-replica, built on columnar storage",
-          "url": "https://masondata.ai",
-          "source": "Hacker News",
-          "published": "2026-11-24T16:11:52.000Z"
-        },
-        {
-          "title": "OthmanAdi/planning-with-files",
-          "url": "https://github.com/OthmanAdi/planning-with-files",
-          "source": "GitHub Skills",
-          "published": "2026-11-25T22:26:54.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 3,
-      "id": "robotics",
-      "name": "具身智能与机器人走向现实",
-      "score": 88,
-      "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 19,
-        "observableDiscussion": 14,
-        "readerFit": 15,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 5,
-      "channels": [
-        "GitHub Search",
-        "AI Radar",
-        "Hacker News"
-      ],
-      "exampleSources": [
-        {
-          "title": "google-deepmind/robotics-antigravity-plugin",
-          "url": "https://github.com/google-deepmind/robotics-antigravity-plugin",
-          "source": "GitHub public repositories",
-          "published": "2026-11-16T18:50:28.000Z"
-        },
-        {
-          "title": "逐际动力与商汤大装置达成合作，以高质量算力全面支撑机器人仿真训练与测试",
-          "url": "https://www.qbitai.com/2026/11/512683.html",
-          "source": "量子位",
-          "published": "2026-11-25T14:20:24.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 4,
       "id": "infrastructure",
       "name": "AI 算力、芯片与使用成本",
-      "score": 85,
+      "score": 92,
       "editorial_breakdown": {
         "freshness": 30,
         "channelCoverage": 21,
-        "observableDiscussion": 6,
+        "observableDiscussion": 13,
         "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 15,
+      "evidenceCount": 11,
       "channels": [
         "AI Radar",
         "XNews",
@@ -125,21 +59,21 @@
       ],
       "exampleSources": [
         {
-          "title": "DeepSeek V4.1 Pro被指12月发布：摆脱NVIDIA、拥抱国产AI芯片倒计时",
-          "url": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1VSHhETmdVZ2VFU0xSYVhCQ2RBSUZQUHNMTFg3b0V2d2FkNDk3bHp2XzZKUFdYTFFlVkgxdXFVWFZoeV9JUExUb2hIdXV2eXcwc1N0TkVkUXU?oc=5",
-          "source": "Google News China AI",
-          "published": "2026-11-25T14:06:00.000Z"
+          "title": "英伟达暂停向东南亚出货芯片",
+          "url": "https://techcrunch.com/2026/11/26/nvidia-hits-pause-on-chip-shipments-to-southeast-asia",
+          "source": "TechCrunch AI",
+          "published": "2026-11-26T20:03:54.000Z"
         },
         {
-          "title": "中国算力采购信心指数启动，九章云极核心共建算力市场先行指标",
-          "url": "https://www.leiphone.com/category/chips/G3lWNUyVJphxOTU2.html",
-          "source": "雷峰网·芯片",
-          "published": "2026-11-25T14:01:00.000Z"
+          "title": "在已优化多年的旗舰GPU IP上，OpenAI的模型又找出最多14%的PPA改进",
+          "url": "https://openai.com/index/advancing-chip-design-with-our-models",
+          "source": "XNews",
+          "published": "2026-11-18T00:00:00.000Z"
         }
       ]
     },
     {
-      "rank": 5,
+      "rank": 3,
       "id": "coding",
       "name": "AI 编程与真实应用交付",
       "score": 84,
@@ -150,7 +84,7 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 53,
+      "evidenceCount": 38,
       "channels": [
         "Hacker News",
         "AI Radar",
@@ -172,7 +106,7 @@
       ]
     },
     {
-      "rank": 6,
+      "rank": 4,
       "id": "open-source",
       "name": "开源 AI 项目深度实测",
       "score": 83,
@@ -183,7 +117,7 @@
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 42,
+      "evidenceCount": 30,
       "channels": [
         "Hacker News",
         "GitHub Search"
@@ -204,7 +138,7 @@
       ]
     },
     {
-      "rank": 7,
+      "rank": 5,
       "id": "content",
       "name": "AI 创作、内容和视觉表达",
       "score": 83,
@@ -215,11 +149,11 @@
         "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 11,
+      "evidenceCount": 9,
       "channels": [
         "XNews",
-        "AI Radar",
-        "Hacker News"
+        "Hacker News",
+        "AI Radar"
       ],
       "exampleSources": [
         {
@@ -229,30 +163,63 @@
           "published": "2026-11-18T00:00:00.000Z"
         },
         {
-          "title": "谷歌为定制AI视频流申请专利，描绘娱乐业黯淡未来",
-          "url": "https://www.theverge.com/entertainment/1042221/google-my-channel-ai-video-patent",
-          "source": "The Verge AI",
-          "published": "2026-11-25T21:51:26.000Z"
+          "title": "322个小蛋白里有35个在实验室显示出结合，五个靶点都有命中",
+          "url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+          "source": "XNews",
+          "published": "2026-11-24T00:00:00.000Z"
         }
       ]
     },
     {
-      "rank": 8,
-      "id": "verification",
-      "name": "AI 可验证工程与质量验收",
-      "score": 83,
+      "rank": 6,
+      "id": "agent-workflows",
+      "name": "智能体进入真实工作流",
+      "score": 82,
       "editorial_breakdown": {
-        "freshness": 30,
+        "freshness": 28,
         "channelCoverage": 21,
-        "observableDiscussion": 3,
+        "observableDiscussion": 4,
         "readerFit": 19,
         "sourceTrace": 10
       },
-      "evidenceCount": 8,
+      "evidenceCount": 75,
+      "channels": [
+        "Hacker News",
+        "XNews",
+        "AI Radar"
+      ],
+      "exampleSources": [
+        {
+          "title": "Muxlio: Durable workflow orchestration for AI agents and tools",
+          "url": "https://muxlio.github.io/muxlio",
+          "source": "Hacker News",
+          "published": "2026-11-27T09:31:53.000Z"
+        },
+        {
+          "title": "ChatGPT Wallet先向美国Pro用户开放，智能体付钱时拿不到真实卡号",
+          "url": "https://openai.com/index/introducing-chatgpt-wallet",
+          "source": "XNews",
+          "published": "2026-11-13T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 7,
+      "id": "verification",
+      "name": "AI 可验证工程与质量验收",
+      "score": 82,
+      "editorial_breakdown": {
+        "freshness": 30,
+        "channelCoverage": 21,
+        "observableDiscussion": 2,
+        "readerFit": 19,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 12,
       "channels": [
         "XNews",
-        "AI Radar",
-        "Hacker News"
+        "Hacker News",
+        "AI Radar"
       ],
       "exampleSources": [
         {
@@ -270,54 +237,20 @@
       ]
     },
     {
-      "rank": 9,
-      "id": "agent-workflows",
-      "name": "智能体进入真实工作流",
-      "score": 80,
-      "editorial_breakdown": {
-        "freshness": 28,
-        "channelCoverage": 21,
-        "observableDiscussion": 2,
-        "readerFit": 19,
-        "sourceTrace": 10
-      },
-      "evidenceCount": 86,
-      "channels": [
-        "XNews",
-        "Hacker News",
-        "AI Radar"
-      ],
-      "exampleSources": [
-        {
-          "title": "ChatGPT Wallet先向美国Pro用户开放，智能体付钱时拿不到真实卡号",
-          "url": "https://openai.com/index/introducing-chatgpt-wallet",
-          "source": "XNews",
-          "published": "2026-11-13T00:00:00.000Z"
-        },
-        {
-          "title": "Show HN: AgentKey, open source, agents log in without seeing passwords",
-          "url": "https://github.com/edan-ais/agentkey",
-          "source": "Hacker News",
-          "published": "2026-11-25T02:43:07.000Z"
-        }
-      ]
-    },
-    {
-      "rank": 10,
+      "rank": 8,
       "id": "safety",
       "name": "AI 安全、隐私与可靠性",
-      "score": 80,
+      "score": 75,
       "editorial_breakdown": {
-        "freshness": 30,
-        "channelCoverage": 21,
+        "freshness": 28,
+        "channelCoverage": 18,
         "observableDiscussion": 1,
         "readerFit": 18,
         "sourceTrace": 10
       },
-      "evidenceCount": 17,
+      "evidenceCount": 10,
       "channels": [
         "XNews",
-        "AI Radar",
         "Hacker News"
       ],
       "exampleSources": [
@@ -328,10 +261,74 @@
           "published": "2026-11-20T00:00:00.000Z"
         },
         {
-          "title": "固定越狱集上，Astra在网络安全里有91.5%的回答被判安全，Sol是59%",
-          "url": "https://alignment.openai.com/fuzzy-robustness",
+          "title": "Fable 5.1在多轮安全评估上，API和claude.ai最多差了34个百分点",
+          "url": "https://www.anthropic.com/research/building-strong-safety-evaluations",
           "source": "XNews",
-          "published": "2026-11-12T00:00:00.000Z"
+          "published": "2026-11-13T00:00:00.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 9,
+      "id": "business",
+      "name": "AI 创业与商业模式验证",
+      "score": 75,
+      "editorial_breakdown": {
+        "freshness": 28,
+        "channelCoverage": 14,
+        "observableDiscussion": 5,
+        "readerFit": 18,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 3,
+      "channels": [
+        "Hacker News",
+        "XNews"
+      ],
+      "exampleSources": [
+        {
+          "title": "Show HN: BenchSaaS – 30 LLM configs across 8,850 live ERP/CRM runs",
+          "url": "https://www.nocoly.com/landing/benchsaas",
+          "source": "Hacker News",
+          "published": "2026-11-26T17:05:53.000Z"
+        },
+        {
+          "title": "Show HN: We replaced our time tracking SaaS with a Git repository",
+          "url": "https://github.com/clockoli/clockoli",
+          "source": "Hacker News",
+          "published": "2026-11-24T12:06:33.000Z"
+        }
+      ]
+    },
+    {
+      "rank": 10,
+      "id": "research",
+      "name": "AI 科研与可验证发现",
+      "score": 74,
+      "editorial_breakdown": {
+        "freshness": 28,
+        "channelCoverage": 18,
+        "observableDiscussion": 3,
+        "readerFit": 15,
+        "sourceTrace": 10
+      },
+      "evidenceCount": 10,
+      "channels": [
+        "XNews",
+        "Hacker News"
+      ],
+      "exampleSources": [
+        {
+          "title": "受访科学家估计，同样质量的工作，没有AI要花1.9倍时间",
+          "url": "https://openai.com/index/science-at-the-frontier",
+          "source": "XNews",
+          "published": "2026-11-16T00:00:00.000Z"
+        },
+        {
+          "title": "322个小蛋白里有35个在实验室显示出结合，五个靶点都有命中",
+          "url": "https://openai.com/index/gpt-6-models-demonstrate-intrinsic-protein-design-capabilities",
+          "source": "XNews",
+          "published": "2026-11-24T00:00:00.000Z"
         }
       ]
     }
