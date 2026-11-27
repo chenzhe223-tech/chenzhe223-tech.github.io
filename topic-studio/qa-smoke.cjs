@@ -228,7 +228,8 @@ async function main() {
     await page.locator("#ctTopic").selectOption("qa_continuity_third");
     const third=await page.evaluate(()=>window.DAVYLABContinuity.context(topics.find(t=>t.id==="qa_continuity_third")));
     assert.equal(third.items.length,2,"third article resolves predecessor and auxiliary article");
-    assert.equal(third.items[0].evidence,"仅有摘要/选题资料，未取得原文","unarchived source is not represented as full text");
+    assert.ok(third.items[0].body.includes("测试前文"),"explicit primary reference is first");
+    assert.equal(third.items[1].evidence,"仅有摘要/选题资料，未取得原文","unarchived predecessor is not represented as full text");
     await page.setViewportSize({width:390,height:844});
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=3),"continuity workspace mobile does not overflow");
     await page.screenshot({path:path.join(screenshotDir,"topic-studio-continuity-mobile.png"),fullPage:false});
