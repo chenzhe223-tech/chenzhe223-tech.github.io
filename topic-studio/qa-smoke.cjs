@@ -63,7 +63,7 @@ async function main() {
     await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
     assert.equal(await page.title(), "INKORA · 墨界 · AI 创作平台");
     assert.equal(await page.locator("html").getAttribute("data-inkora-theme"),"inkora");
-    assert.equal(await page.locator("body").evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(244, 243, 240)","paper-first workspace");
+    assert.equal(await page.locator("body").evaluate(el=>getComputedStyle(el).backgroundColor),"rgb(249, 249, 247)","paper-first workspace");
     assert.equal(await page.locator("#appNavigation .brand b").textContent(),"INKORA");
     assert.equal(await page.locator("#appNavigation .inkora-parent-brand").textContent(),"DAVYLAB");
     assert.equal(await page.locator(".topbar .crumb-parent-brand").textContent(),"DAVYLAB");
@@ -77,10 +77,19 @@ async function main() {
     assert.ok(await page.locator(".inkora-masthead").evaluate(el=>getComputedStyle(el,"::after").backgroundImage.includes("inkora-paper-brush.svg")));
 
 
-    // Article theme: real editor, six presets, localized color, responsive preview and export.
+    // V3 command palette and five-stage navigation use real sections.
+    await page.keyboard.press("Control+k");
+    await page.locator("#inkoraCommandDialog[open]").waitFor();
+    await page.locator("#inkoraCommandQuery").fill("装帧编译");
+    await page.locator("#inkoraCommandResults button").first().click();
+    await page.locator("#section-article-theme.active").waitFor();
+    assert.equal(await page.locator(".inkora-step[aria-current=step]").getAttribute("data-inkora-section"),"article-theme");
+    // Article theme: real editor, three new and six compatible presets.
     await page.locator('#appNavigation [data-section="article-theme"]').click();
     await page.locator("#section-article-theme.active").waitFor();
-    assert.equal(await page.locator("#atPresets .at-preset").count(),6,"six magazine layouts");
+    assert.equal(await page.locator("#atPresets .at-preset").count(),3,"three v3 publication layouts");
+    assert.equal(await page.locator("#atLegacyPresets .at-preset").count(),6,"six compatible layouts preserved");
+    await page.locator("#atLegacyPresets").locator("..").evaluate(el=>el.open=true);
     await page.locator("#atTitle").fill("排版验收文章");
     await page.locator("#atBody").fill("## 科学小标题\n\n第一段 **加粗文字**\n\n> 引用测试\n\n第二段完整内容");
     await page.locator('[data-theme="science"]').click();
@@ -178,6 +187,7 @@ async function main() {
     assert.equal(await page.evaluate(()=>localStorage.getItem("davylab-topic-studio-v1")),originalTopicStore,"layout never mutates source topics or approval state");
     // Save an article layout before production and verify actual external AI prompts.
     await page.locator("#atTopic").selectOption(topicRecords[0].id);
+    await page.locator("#atLegacyPresets").locator("..").evaluate(el=>el.open=true);
     await page.locator('[data-theme="literature"]').click();
     await page.locator("#atBgHex").fill("#FAFAF9");
     await page.locator("#atRole").selectOption("intro");
