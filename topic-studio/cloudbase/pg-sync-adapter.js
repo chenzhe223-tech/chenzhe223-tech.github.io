@@ -44,6 +44,23 @@
    principalVerified=true;
    return true;
   }
+  async function verifyCapabilities(){
+   await verifyPrincipal();
+   const result=await db.rpc("davylab_ts_v1_sync_capabilities",{});
+   const data=Array.isArray(result?.data)?result.data[0]:result?.data;
+   if(result?.error||data?.schema!==2||data.owner_allowed!==true||data.revision_cas!==true||data.tombstones!==true)throw Error("INKORA_V2_SCHEMA_NOT_VERIFIED");
+   return data;
+  }
+  async function productionDelete(document,expectedRevision){
+   if(!verified||options.productionEnabled!==true||options.permissionsVerified!==true||options.tombstonesEnabled!==true)throw Error("PRODUCTION_DELETE_ACTIVATION_REQUIRED");
+   await verifyCapabilities();
+   if(!document||typeof document.doc_id!=="string"||!document.doc_id||!Number.isInteger(expectedRevision)||expectedRevision<1)throw Error("INVALID_DELETE_DOCUMENT");
+   const result=await db.rpc("davylab_ts_v1_delete",{p_type:document.doc_type,p_id:document.doc_id,p_expected_revision:expectedRevision});
+   if(result?.error){const msg=String(result.error.message||result.error.code||"unknown");if(/CONFLICT|40001|23505/i.test(msg))throw Error("SYNC_REVISION_CONFLICT");throw Error("PG_DELETE_REJECTED: "+msg.slice(0,160))}
+   const ack=Array.isArray(result?.data)?result.data[0]:result?.data;
+   if(!ack||ack.doc_id!==document.doc_id||ack.doc_type!==document.doc_type||!Number.isInteger(ack.revision)||ack.revision<=expectedRevision||typeof ack.deleted_at!=="string"||!Number.isFinite(Date.parse(ack.deleted_at)))throw Error("PG_DELETE_ACK_INVALID");
+   return {...ack};
+  }
   async function list(){
    // Query relies on CloudBase PG table GRANT+RLS, not a caller-provided owner ID.
    // We deliberately do not send owner_uid (or any secret) from the browser.
@@ -115,7 +132,7 @@
     inserted:payload.inserted===true,unchanged:payload.unchanged===true};
   }
   return Object.freeze({environmentId:ENVIRONMENT_ID,table:TABLE,version:"1.0-p1",
-   verifyPrincipal,list,preview,syntheticPut,productionPut,
+   verifyPrincipal,verifyCapabilities,list,preview,syntheticPut,productionPut,productionDelete,
    mode:options.productionEnabled===true&&options.permissionsVerified===true?"authorized-production":"manual-synthetic-test-only",
    productionWritesEnabled:options.productionEnabled===true&&options.permissionsVerified===true,
    automaticDownloadsEnabled:options.downloadsEnabled===true&&options.permissionsVerified===true});
