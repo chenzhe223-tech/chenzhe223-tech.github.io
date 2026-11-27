@@ -4,7 +4,9 @@
   "enabled": false,
   "permissionsVerified": false,
   "productionApproved": false,
-  "pollSeconds": 45,
-  "reason": "Enable ONLY after live CloudBase owner authentication, RLS cross-account denial, CAS, rollback, Windows/iPhone bidirectional tests",
-  "verifiedAt": null
+  "pollSeconds": 25,
+  "reason": "Enable ONLY after actual owner authentication, CloudBase V2 migration, anonymous/cross-account denial, CAS/tombstones, Windows/iPhone bidirectional and offline tests; no synthetic-only activation.",
+  "verifiedAt": null,
+  "requiredSchemaVersion": 2,
+  "tombstonesVerified": false
 }
