@@ -3,9 +3,26 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-26T10:16:47+00:00",
-  "count": 58,
+  "synced_at": "2026-11-27T03:21:50+00:00",
+  "count": 60,
   "articles": [
+    {
+      "id": "karpathy-usaciv",
+      "date": "2026-11-26",
+      "title": "7小时、4.5万行代码后，他把美国做成了一张25公里一格的文明地图",
+      "summary": "Karpathy用Claude Opus 5.5把31份公共数据铺进一张可浏览的策略地图：圣何塞每4名就业者里有1人是工程师、程序员或科学家，全国是1/14。",
+      "original_url": "https://x.com/karpathy/status/2125779541952246039",
+      "xnews_url": "https://xnews.qiaomu.ai/a/karpathy-usaciv",
+      "tags": [
+        "Karpathy",
+        "Claude",
+        "visualization",
+        "public data",
+        "agents"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
     {
       "id": "deepmind-mass-spec-skills",
       "date": "2026-11-25",
@@ -70,6 +87,23 @@
         "GPT-6",
         "wet lab",
         "biology"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "metr-pretraining-loss-acceleration",
+      "date": "2026-11-24",
+      "title": "按现在的速度，GPT-3.5到GPT-4.1三年的损失降幅，大约六个半月就能走完",
+      "summary": "METR讨论OpenAI新公布的基座对数困惑度：2026年初以来下降速度大约快了7倍，但基准分数没有同类加速，机构内部也没有统一解释。",
+      "original_url": "https://metr.org/blog/2026-11-24-interpreting-a-recent-acceleration-in-pretraining-loss/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/metr-pretraining-loss-acceleration",
+      "tags": [
+        "METR",
+        "pretraining",
+        "scaling",
+        "OpenAI",
+        "evaluations"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"

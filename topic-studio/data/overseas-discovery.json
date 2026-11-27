@@ -1,9 +1,22 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-26T10:16:47+00:00",
-  "count": 89,
+  "checked_at": "2026-11-27T03:21:50+00:00",
+  "count": 93,
   "articles": [
+    {
+      "id": "ext-fcbb41954277a0a1d4",
+      "title": "Quoting Jack Despain Zhou",
+      "summary": "Among the many already existing effects of AI has been a great de-individualization. I open a YouTube video, and I hear Claude. I sit in a conference presentation, and I hear Claude. I open my email inbox, and ",
+      "date": "2026-11-26",
+      "original_url": "https://simonwillison.net/2026/Nov/26/jack-despain-zhou/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
     {
       "id": "ext-7de39f044da3622e09",
       "title": "sqlite3_rsync: Database Remote-Copy Tool For SQLite",
@@ -18,11 +31,50 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
+      "id": "ext-e7f1c23cf7eb372557",
+      "title": "The New York Times warns photographers not to update Photoshop over AI features",
+      "summary": "My comment on The New York Times warns photographers not to update Photoshop over AI features — Hacker News. I had a NYT photographer take my picture at my home earlier this year (for a story about Moltbook, od",
+      "date": "2026-11-26",
+      "original_url": "https://simonwillison.net/2026/Nov/26/hn-50651685/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-a734da9d3a1d876054",
+      "title": "Introducing the llama.cpp benchmark dashboard for AMD Ryzen and Radeon",
+      "summary": "",
+      "date": "2026-11-26",
+      "original_url": "https://huggingface.co/blog/ggml-org/llamacpp-amd-bench",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
       "id": "ext-3d2697b636d74b834f",
       "title": "Building on Nemotron 3.5 Parse: Open Data, Fine-Tuning, and Faster Inference",
       "summary": "",
       "date": "2026-11-26",
       "original_url": "https://huggingface.co/blog/nvidia/building-on-nemotron-35-parse-open-data-fine-tunin",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-819f2bb8e324e5e7f3",
+      "title": "Swarms, Flocks, Gangs: How to build, train, and evaluate multi-agent systems",
+      "summary": "",
+      "date": "2026-11-26",
+      "original_url": "https://huggingface.co/blog/training-swarms",
       "source": "Hugging Face 博客",
       "source_kind": "independent_original",
       "tags": [
