@@ -149,6 +149,6 @@ document.getElementById("smartScheduleWindow")?.addEventListener("change",e=>{co
 document.getElementById("smartAutoAssign")?.addEventListener("change",e=>{config.autoAssign=e.target.checked;persistConfig();renderSmartSchedule()});
 document.getElementById("smartScheduleFilter")?.addEventListener("change",e=>{config.onlyMissing=e.target.value==="missing";persistConfig();renderSmartSchedule()});
 document.getElementById("smartScheduleResetHint")?.addEventListener("click",()=>toast("已排期日期不会随节奏设置改变；需调整时请编辑对应选题。"));
-window.DAVYLABSmartSchedule={version:"1.0.0",generateSlots,eligible,typeOf,dayNumber,pickColumn,fillPlan,render:renderSmartSchedule};
+window.DAVYLABSmartSchedule={version:"1.0.0",generateSlots,eligible,typeOf,dayNumber,pickColumn,fillPlan,render:renderSmartSchedule,refreshFromStorage(){config=readConfig();renderSmartSchedule()}};
 renderSmartSchedule();
 })();
