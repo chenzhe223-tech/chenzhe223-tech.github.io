@@ -83,3 +83,30 @@ assert(html.includes('let promptTopicId=')&&html.includes('promptDrafts=new Map(
 assert(html.includes('promptSourceVersions'),"Saved topic visual changes must invalidate stale prompts");
 assert(html.includes('promptAssetStatus").textContent="素材生产未确认"'),"Generation must not claim external assets complete");
 assert(html.includes('promptQaStatus").textContent="素材验收未通过"'),"Generation must not claim external QA success");
+
+
+/* Continuity: synthetic sources only; no private article data in the repository. */
+{
+ const series={seriesId:"qa-s",seriesName:"智能体测试系列",mode:"series",version:1};
+ const first={id:"qa-1",title:"工具调用",status:"published",publishedArticleUrl:"https://example.com/qa-article",continuity:{...series,order:1},continuityMemory:{state:"published",body:"已讲解工具调用原理。",covered:"工具调用",examples:"预约示例",questions:"执行失败怎么办"}};
+ const second={id:"qa-2",title:"执行恢复",status:"ready",continuity:{...series,order:2,newValue:"恢复策略"},continuityMemory:{state:"final",body:"解释重试和检查点。"}};
+ const third={id:"qa-3",title:"质量评估",status:"inbox",continuity:{...series,order:3,refs:["t:qa-1"],newValue:"评估机制",avoid:"不重复预约示例"}};
+ const topics=[first,second,third],pubs=[{id:"qa-p",title:first.title,url:first.publishedArticleUrl,linkedTopicId:first.id,publishedAt:"2026-11-01",summary:"测试摘要"}],reviews=[{url:first.publishedArticleUrl,checkpoint:7,reads:100,shares:2,follows:0,reviewDate:"2026-11-08"}];
+ const ctx=engine.resolveContinuity(third,topics,pubs,reviews);
+ assert.equal(ctx.items.length,2);assert.equal(ctx.items[0].body,"已讲解工具调用原理。");assert.equal(ctx.items[0].reviewMetrics[0].reads,100);assert.equal(ctx.items[1].status,"ready");
+ const p=engine.build(third,{continuityContext:ctx}).text;
+ for(const x of ["连续创作上下文","评估机制","预约示例","独立可读","连续性 QA","ZIP 真正存在"])assert(p.includes(x),x);
+ assert(!engine.build(third,{mode:"finance",continuityContext:ctx}).text.includes("连续创作上下文"));
+ assert(engine.build(third,{mode:"planning",continuityContext:ctx}).text.includes("连续性 QA"));
+ assert(!engine.build({...third,continuity:{mode:"independent"}},{continuityContext:engine.resolveContinuity({...third,continuity:{mode:"independent"}},topics,pubs)}).text.includes("连续创作上下文"));
+ const cyclic={...first,continuity:{...first.continuity,refs:["t:qa-3"]}};
+ assert(engine.validateContinuity(cyclic,[cyclic,second,third]).some(x=>x.includes("循环")));
+ const dup={...third,continuity:{...third.continuity,order:2}};
+ assert(engine.validateContinuity(dup,[first,second,dup]).some(x=>x.includes("重复")));
+ const missing={id:"qa-4",title:"缺失",continuity:{mode:"followup",refs:["t:missing"],newValue:"新增价值"}};
+ assert.equal(engine.resolveContinuity(missing,topics,pubs).missing.length,1);
+ const summaryOnly={...second,continuityMemory:undefined};assert.equal(engine.resolveContinuity({...third,continuity:{...third.continuity,refs:[]}},[first,summaryOnly,third],pubs).items[0].evidence,"仅有摘要/选题资料，未取得原文");
+ const long={...first,continuityMemory:{state:"published",body:"头".repeat(3000)+"尾".repeat(3000)}};
+ assert(engine.resolveContinuity(second,[long,second],pubs).items[0].body.includes("中间省略，非全文"));
+ console.log("Continuity synthetic regression passed");
+}
