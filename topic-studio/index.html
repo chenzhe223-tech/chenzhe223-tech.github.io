@@ -1589,11 +1589,14 @@ function visualPlanPromptLines(t){
 }
 let promptTopicId="";
 let activePromptKey="";
-const promptDrafts=new Map(); // Session-only; never overwrites saved topics or author records.
-const promptSourceVersions=new Map();
+const PROMPT_DRAFT_KEY="inkora-private-prompt-drafts-v1";
+const promptDrafts=new Map(),promptSourceVersions=new Map();
+function loadPrivatePrompts(){const raw=JSON.parse(localStorage.getItem(PROMPT_DRAFT_KEY)||"{}");if(!raw||typeof raw!=="object"||Array.isArray(raw))throw Error("AI 指令本地数据格式异常");promptDrafts.clear();promptSourceVersions.clear();for(const [key,p] of Object.entries(raw)){if(typeof p?.text==="string"&&typeof p?.sourceVersion==="string"){promptDrafts.set(key,p.text);promptSourceVersions.set(key,p.sourceVersion)}}}
+try{loadPrivatePrompts()}catch(e){console.warn("Private prompt cache could not be read")}
+function persistPrivatePrompt(key,text,sourceVersion){if(!key||typeof sourceVersion!=="string")return;try{const raw=JSON.parse(localStorage.getItem(PROMPT_DRAFT_KEY)||"{}");if(!raw||typeof raw!=="object"||Array.isArray(raw))throw Error("invalid storage");const old=raw[key];if(old?.text===text&&old?.sourceVersion===sourceVersion)return;Object.defineProperty(raw,key,{value:{text,sourceVersion},writable:true,enumerable:true,configurable:true});localStorage.setItem(PROMPT_DRAFT_KEY,JSON.stringify(raw))}catch{toast("AI 指令本地保存失败，请立即下载 Markdown")}}
 function promptKey(t){return [t.id||"", $("promptMode").value, $("promptPlatform").value, $("promptMode").value==="finance"?$("financePosterStyle").value:"", $("promptMode").value==="finance"?$("financePosterCount").value:""].join("::")}
 function saveCurrentPrompt(){
- if(activePromptKey)promptDrafts.set(activePromptKey,$("promptBox").value);
+ if(activePromptKey){const value=$("promptBox").value;promptDrafts.set(activePromptKey,value);persistPrivatePrompt(activePromptKey,value,promptSourceVersions.get(activePromptKey))}
 }
 function updatePromptStatus(hasText){
  $("promptInstructionStatus").textContent=hasText?"指令已生成":"指令未生成";
@@ -1632,7 +1635,7 @@ function renderPromptPreview(){
  manifest.replaceChildren(ul);
 }
 function continuityContext(t){return window.DAVYLABProductionPrompt?.resolveContinuity?.(t,topics,allPublishedArticles(),growth.reviews||[])||{mode:"independent"}}
-function promptSourceVersion(t){return JSON.stringify([t,continuityContext(t)])}
+function promptSourceVersion(t){const canonical=v=>v===null||typeof v!=="object"?JSON.stringify(v):Array.isArray(v)?"["+v.map(canonical).join(",")+"]":"{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canonical(v[k])).join(",")+"}";const raw=canonical([window.DAVYLABProductionPrompt?.VERSION||"",t,continuityContext(t)]);let h=14695981039346656037n;for(let i=0;i<raw.length;i++){h=BigInt.asUintN(64,(h^BigInt(raw.charCodeAt(i)))*1099511628211n)}return "v2:"+raw.length+":"+h.toString(16)}
 function showPrompt(t,force=false){
  if(!t)return;
  if(t.productionMode==="finance"&&promptTopicId!==(t.id||""))$("promptMode").value="finance";
@@ -1649,12 +1652,13 @@ function showPrompt(t,force=false){
   return;
  }
  const sourceVersion=promptSourceVersion(t);
- const draft=!force&&promptSourceVersions.get(key)===sourceVersion?promptDrafts.get(key):undefined;
+ const draft=!force?promptDrafts.get(key):undefined;
+ const stale=typeof draft==="string"&&promptSourceVersions.get(key)!==sourceVersion;
  const result=typeof draft==="string"?{text:draft}:window.DAVYLABProductionPrompt.build(t,{continuityContext:continuityContext(t),mode:$("promptMode").value,platform:$("promptPlatform").value,style:$("financePosterStyle").value,posterCount:Number($("financePosterCount").value)});
  $("promptBox").value=result.text;
  promptDrafts.set(key,result.text);
- promptSourceVersions.set(key,sourceVersion);
- updatePromptStatus(Boolean(result.text.trim()));
+ if(!stale){promptSourceVersions.set(key,sourceVersion);persistPrivatePrompt(key,result.text,sourceVersion)}
+ updatePromptStatus(Boolean(result.text.trim()));if(stale)toast("已保留旧指令，选题或资料有变化，重新生成前请先备份手动编辑内容")
 }
 function regeneratePrompt(){
  const selected=topics.find(t=>t.id===promptTopicId);
@@ -1667,6 +1671,7 @@ function regeneratePrompt(){
  promptDrafts.set(key,result.text);
  promptSourceVersions.set(key,promptSourceVersion(selected));
  $("promptBox").value=result.text;
+ persistPrivatePrompt(key,result.text,promptSourceVersions.get(key));
  updatePromptStatus(Boolean(result.text.trim()));
  renderPromptPreview();
  toast("指令已生成；此操作没有生成文章素材或 ZIP");
@@ -1716,7 +1721,7 @@ root.innerHTML=arr.map(a=>{const linkedTopic=a.linkedTopicId?topics.find(t=>t.id
 root.querySelectorAll("[data-published-action]").forEach(btn=>btn.addEventListener("click",()=>{const action=btn.dataset.publishedAction,id=btn.dataset.id;if(action==="continuity-memory"){window.DAVYLABContinuity?.openMemory("p:"+id)}else if(action==="continuity-follow"){window.DAVYLABContinuity?.openFollow("p:"+id)}else if(action==="edit"){const a=publishedArticles.find(x=>x.id===id);if(a)showPublishedForm(a)}else if(action==="remove"){if(!confirm("仅从当前浏览器移除这条本地记录，不会删除公众号文章。继续？"))return;publishedArticles=publishedArticles.filter(x=>x.id!==id);savePublishedArticles();toast("已移除本地记录")}else if(action==="link"){const a=allPublishedArticles().find(x=>x.id===id);if(a){showPublishedForm(a);$("publishedTopicLink").focus()}}else if(action==="topic"){changeSection("library");const t=topics.find(x=>x.id===id);if(t){$("searchTopics").value=t.title;renderTopics()}}}));
 }
 function savePublishedForm(e){e.preventDefault();const title=$("publishedTitle").value.trim(),url=$("publishedUrl").value.trim();if(!title||!/^https?:\/\//i.test(url)){toast("请填写标题和有效的文章链接");return}let a=publishedArticles.find(x=>x.id===$("publishedId").value);const existing=a,linkedTopicId=$("publishedTopicLink").value;const value={id:a?.id||uid(),title,url,publishedAt:$("publishedDate").value||"",column:$("publishedColumn").value,format:$("publishedFormat").value,summary:$("publishedSummary").value.trim(),coverUrl:$("publishedCover").value.trim(),linkedTopicId,source:a?.source||"manual",addedAt:a?.addedAt||new Date().toISOString(),storageSource:"local",...((a||allPublishedArticles().find(x=>x.url===url))?.continuityMemory?{continuityMemory:(a||allPublishedArticles().find(x=>x.url===url)).continuityMemory}:{})};if(existing)publishedArticles=publishedArticles.map(x=>x.id===existing.id?value:x);else {publishedArticles=publishedArticles.filter(x=>x.url!==url);publishedArticles.unshift(value)}if(linkedTopicId){const topic=topics.find(t=>t.id===linkedTopicId);if(topic){topic.status="published";topic.publishedArticleUrl=url;topic.publishedAt=value.publishedAt;topic.publishedArticleTitle=title;saveTopics()}}savePublishedArticles();hidePublishedForm();toast(existing?"文章记录已更新":"文章记录已保存")}
-function exportPublishedJson(){const data={product:"DAVYLAB Topic Studio Published Content",version:1,exported_at:new Date().toISOString(),last_synced_at:null,articles:allPublishedArticles().map(({storageSource,...a})=>a)};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"davylab-published-articles-"+new Date().toISOString().slice(0,10)+".json");toast("已导出公众号内容 JSON")}
+function exportPublishedJson(){const data={product:"DAVYLAB Topic Studio Published Content",version:1,exported_at:new Date().toISOString(),last_synced_at:null,articles:allPublishedArticles().map(({storageSource,continuityMemory,...a})=>a)};downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:"application/json"}),"davylab-published-articles-"+new Date().toISOString().slice(0,10)+".json");toast("已导出公众号内容 JSON")}
 function importPublishedJson(file){const reader=new FileReader();reader.onload=()=>{try{const data=JSON.parse(reader.result);const list=Array.isArray(data)?data:(Array.isArray(data.articles)?data.articles:Array.isArray(data.published_articles)?data.published_articles:null);if(!list)throw Error("JSON 中没有 articles 数组");if(!confirm("即将导入 "+list.length+" 条文章记录。相同链接的记录会去重，是否继续？"))return;const byUrl=new Map(allPublishedArticles().map(a=>[a.url,a]));let count=0;for(const raw of list){const a=normalizePublishedArticle(raw);if(!a)continue;a.storageSource="local";if(!a.continuityMemory&&byUrl.get(a.url)?.continuityMemory)a.continuityMemory=byUrl.get(a.url).continuityMemory;byUrl.set(a.url,a);count++}publishedArticles=[...byUrl.values()].filter(a=>a.storageSource==="local");savePublishedArticles();toast("已导入/合并 "+count+" 条文章记录")}catch(e){toast("导入失败："+e.message)}};reader.readAsText(file)}
 function mergePublishedTopics(){let changed=false;for(const article of allPublishedArticles()){const topic=topics.find(t=>t.publishedArticleUrl===article.url)||topics.find(t=>t.title.trim()===article.title.trim());if(topic&&topic.status!=="published"){topic.status="published";topic.publishedArticleUrl=article.url;topic.publishedAt=article.publishedAt;topic.publishedArticleTitle=article.title;changed=true}}if(changed)saveTopics()}
 
@@ -2059,6 +2064,9 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
    if(changed.has(GROWTH_KEY)){growth=loadGrowth();renderGrowth()}
    if(changed.has("davylab-topic-visual-dna-v1"))window.DAVYLABRefreshVisualSettings?.();
    if(changed.has("davylab-visual-direction-v1"))window.DAVYLABVisualDirection?.refreshFromStorage?.();
+   if(changed.has("davylab-article-theme-topics-v2"))window.DAVYLABArticleTheme?.refreshFromStorage?.();
+   if(changed.has(PROMPT_DRAFT_KEY)){loadPrivatePrompts();if(activePromptKey&&promptDrafts.has(activePromptKey)){$("promptBox").value=promptDrafts.get(activePromptKey);updatePromptStatus(Boolean($("promptBox").value.trim()))}}
+   if(changed.has(STORE_KEY)||changed.has(PUBLISHED_STORAGE_KEY)||changed.has(GROWTH_KEY)){window.DAVYLABContinuity?.refresh();renderPromptPreview();}
    const stat=document.querySelector("#statTopics + .statfoot");
    if(stat)stat.textContent="已从其他设备自动同步";
   }catch(e){
@@ -2195,16 +2203,16 @@ try{const stored=JSON.parse(localStorage.getItem(DRAFTS_KEY)||"null");if(stored?
 if(activeTopic&&!findTopic(activeTopic)&&!drafts[draftKey(activeTopic)])activeTopic="";
 d=normalizeDraft(drafts[draftKey(activeTopic)]||seedTopic(activeTopic));
 function refreshTopics(){const select=$("atTopic"),rows=topicRows();select.replaceChildren(new Option("自由排版（不关联选题）",""));for(const t of rows)select.add(new Option(t.title+" · "+(t.format||"文章"),String(t.id)));if(activeTopic&&!findTopic(activeTopic))select.add(new Option("原选题已移除 · 保留排版草稿",activeTopic));select.value=activeTopic;const t=findTopic(activeTopic);$("atTopicContext").hidden=!activeTopic;$("atTopicMeta").textContent=t?(t.column||"未分类")+" · "+(t.format||"文章")+" · "+(STATUS[t.status]||"未分类状态"):"原选题已移除，排版草稿仍可编辑和导出";const source=t?String(t.angle||t.summary||""):"";$("atTopicSource").textContent=source||"暂无原始素材。";$("atImportSource").disabled=!source;$("atTopicNotes").hidden=!t}
-function hydrate(){for(const [k,id] of [["title","atTitle"],["author","atAuthor"],["body","atBody"],["extra","atExtra"]])$(id).value=d[k];palette();preset();updateBlocks();refreshTopics();syncRole();render()}
+function hydrate(){for(const [k,id] of [["title","atTitle"],["author","atAuthor"],["body","atBody"],["extra","atExtra"]])$(id).value=d[k];palette();preset();updateBlocks();refreshTopics();syncRole();render(false)}
 function openTopic(id){id=String(id||"");if(id===activeTopic){refreshTopics();return true}if(id&&!findTopic(id)&&!drafts[draftKey(id)])return false;persist();activeTopic=id;d=normalizeDraft(drafts[draftKey(id)]||seedTopic(id));$("atTopicNotes").open=false;hydrate();notice(id?"已打开该选题独立排版草稿。":"已打开自由排版草稿。");return true}
 
 function notice(s){$("atNotice").textContent=s}
-function persist(){try{drafts[draftKey(activeTopic)]=normalizeDraft(d);localStorage.setItem(DRAFTS_KEY,JSON.stringify({version:2,activeTopic,drafts}))}catch{notice("本地存储不可用，当前稿件未保存，请及时导出。")}}
+function persist(){try{const k=draftKey(activeTopic),value=normalizeDraft(d);if(!drafts[k]&&JSON.stringify(value)===JSON.stringify(seedTopic(activeTopic)))return;const raw=JSON.parse(localStorage.getItem(DRAFTS_KEY)||"null");const latest=raw?.drafts&&typeof raw.drafts==="object"?raw.drafts:{};drafts={...latest,[k]:value};const next=JSON.stringify({version:2,activeTopic,drafts});if(localStorage.getItem(DRAFTS_KEY)!==next)localStorage.setItem(DRAFTS_KEY,next)}catch{notice("本地存储不可用，当前稿件未保存，请及时导出。")}}
 function drawChecks(){const root=$("atChecks");root.replaceChildren(...checks(d).map(c=>{const el=document.createElement("li");el.dataset.level=c.level;el.textContent=(c.level==="pass"?"通过 · ":"注意 · ")+c.text;return el}))}
 function palette(){for(const [k,p,h] of [["bg","atBgPick","atBgHex"],["accent","atAccentPick","atAccentHex"]]){$(p).value=d[k];$(h).value=d[k];$(h).removeAttribute("aria-invalid")}}
 function updateBlocks(){const select=$("atBlock"),prev=select.value,bs=parse(d.body);select.replaceChildren();if(!bs.length)select.add(new Option("先输入正文",""));else bs.forEach((b,i)=>select.add(new Option((i+1)+" · "+(b.text||"分隔线").slice(0,32),b.key)));if(bs.some(b=>b.key===prev))select.value=prev;syncLocal()}
 function syncLocal(){const c=hex(d.local[$("atBlock").value])||"#EAF1F8";$("atLocalPick").value=c;$("atLocalHex").value=c;$("atLocalHex").removeAttribute("aria-invalid")}
-function render(){const root=$("atPreview"),sample=!d.body.trim();if($("inkoraSeal"))$("inkoraSeal").hidden=true;$("atPreviewLabel").textContent=sample?"版式示例 · 非正式成稿 · 375px":"移动端阅读模拟 · 375px";root.innerHTML=article(sample?{...d,title:d.title||"文章标题示例",body:"这里是开头导语，用于预览主题色与阅读节奏。\n\n## 01 / 正文小标题\n\n这里是普通正文段落，展示文字大小、行高和留白。\n\n> 这里是引用或重点内容。\n\n## 02 / 结尾\n\n这里是结尾总结示例。",local:{}}:d);drawChecks();persist();updatePlanStatus()}
+function render(save=true){const root=$("atPreview"),sample=!d.body.trim();if($("inkoraSeal"))$("inkoraSeal").hidden=true;$("atPreviewLabel").textContent=sample?"版式示例 · 非正式成稿 · 375px":"移动端阅读模拟 · 375px";root.innerHTML=article(sample?{...d,title:d.title||"文章标题示例",body:"这里是开头导语，用于预览主题色与阅读节奏。\n\n## 01 / 正文小标题\n\n这里是普通正文段落，展示文字大小、行高和留白。\n\n> 这里是引用或重点内容。\n\n## 02 / 结尾\n\n这里是结尾总结示例。",local:{}}:d);drawChecks();if(save)persist();updatePlanStatus()}
 function roleLabel(k){return {intro:"开头导语",heading:"各级小标题",quote:"引用与重点引文",conclusion:"结尾总结"}[k]||k}
 function syncRole(){const c=hex(d.roles[$("atRole").value])||"#EAF1F8";$("atRolePick").value=c;$("atRoleHex").value=c;$("atRoleHex").removeAttribute("aria-invalid");$("atRolesSummary").textContent=Object.entries(d.roles).map(([k,v])=>roleLabel(k)+" "+v).join(" · ")||"尚未设置额外区域背景；使用主题默认样式。"}
 function makePlan(){const t=themes.find(x=>x.id===d.theme)||themes[0];const counts=new Map();const blocks=[];for(const b of parse(d.body)){const count=(counts.get(b.text)||0)+1;counts.set(b.text,count);const c=hex(d.local[b.key]);if(c&&b.text.trim())blocks.push({type:b.type,text:b.text.slice(0,500),occurrence:count,background:c})}return {version:1,theme:t.id,background:d.bg,text:t.ink,accent:d.accent,headingColor:t.headingInk||d.accent,quoteBackground:t.soft,codeBackground:t.code||t.soft,font:t.font,fontSize:t.size,lineHeight:t.leading,heading:t.heading,roles:{...d.roles},blocks:blocks.slice(0,40),extra:d.extra.trim(),reviewStatus:"draft"}}
@@ -2235,6 +2243,6 @@ function copyFallback(markup){const node=document.createElement("div");node.cont
 $("atCopy").addEventListener("click",async()=>{if(!d.body.trim()){notice("请先输入正文。");return}const markup=article(d);try{if(!navigator.clipboard?.write||typeof ClipboardItem==="undefined")throw Error("clipboard unsupported");await navigator.clipboard.write([new ClipboardItem({"text/html":new Blob([markup],{type:"text/html"}),"text/plain":new Blob([[d.title,d.author,d.body].filter(Boolean).join("\n\n")],{type:"text/plain"})})]);notice("富文本已复制，请粘贴到公众号编辑器并预览。")}catch{try{notice(copyFallback(markup)?"富文本已复制（浏览器兼容模式），请在公众号中核对。":"浏览器拒绝富文本复制，请使用 HTML 导出。")}catch{notice("富文本复制不可用，请使用 HTML 导出。")}}});
 $("atExport").addEventListener("click",()=>{if(!d.body.trim()){notice("请先输入正文。");return}const markup='<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(d.title||"DAVYLAB 文章")+'</title></head><body style="margin:0">'+article(d)+'</body></html>';const a=document.createElement("a"),u=URL.createObjectURL(new Blob([markup],{type:"text/html;charset=utf-8"}));a.href=u;a.download=(d.title||"DAVYLAB-article").replace(/[\\/:*?"<>|]/g,"_").slice(0,100)+".html";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1000);notice("已请求下载 HTML 文件；如含外部图片，离线显示取决于图片来源。")});
 hydrate();
-window.DAVYLABArticleTheme={themes,parse,article,checks,hex,ratio,openTopic,refreshTopics,getDraft:()=>({title:d.title,author:d.author,body:d.body,theme:d.theme,topicId:activeTopic,html:article(d),layout:makePlan(),checks:checks(d),status:findTopic(activeTopic)?.status||"draft"})};
+window.DAVYLABArticleTheme={themes,parse,article,checks,hex,ratio,openTopic,refreshTopics,refreshFromStorage:()=>{const stored=JSON.parse(localStorage.getItem(DRAFTS_KEY)||"null");if(!stored?.drafts)return;drafts=Object.fromEntries(Object.entries(stored.drafts).filter(([k])=>k==="free"||k.startsWith("topic:")).map(([k,v])=>[k,normalizeDraft(v)]));d=normalizeDraft(drafts[draftKey(activeTopic)]||seedTopic(activeTopic));hydrate()},getDraft:()=>({title:d.title,author:d.author,body:d.body,theme:d.theme,topicId:activeTopic,html:article(d),layout:makePlan(),checks:checks(d),status:findTopic(activeTopic)?.status||"draft"})};
 })();
 </script><button type="button" id="inkoraCommandOpen" aria-label="打开灵犀命令条"><span class="inkora-spark">✦</span>灵犀<kbd>⌘ / Ctrl K</kbd></button><dialog id="inkoraCommandDialog" aria-labelledby="inkoraCommandTitle"><div class="inkora-command-body"><div class="inkora-command-head"><strong id="inkoraCommandTitle">灵犀 · 快捷指令</strong><button type="button" class="btn small" id="inkoraCommandClose">关闭</button></div><input type="search" id="inkoraCommandQuery" placeholder="搜索功能或选题…" aria-label="搜索功能或选题"><div id="inkoraCommandResults" role="list"></div></div></dialog><script src="./content-continuity.js?v=20261127-continuity"></script><script src="./google-drive-sync.js?v=20261127-v1"></script><script src="./local-drive-sync.js?v=20261127-v1"></script><script src="./inkora-workspace-v3.js?v=20261127"></script></body></html>
