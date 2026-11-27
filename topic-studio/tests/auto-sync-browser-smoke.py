@@ -24,7 +24,7 @@ const auth={
  async getSession(){return{data:{session:{user:owner}},error:null}},
  onAuthStateChange(){return{data:{subscription:{unsubscribe(){}}}}},
  async signInWithPassword(){return{data:{session:{user:owner}},error:null}},
- async signInWithOtp(){return{data:{session:null},error:null}},
+ async signInWithOtp(){return{data:{verifyOtp:async({token})=>({data:{session:{user:owner}},error:null})},error:null}},
  async verifyOtp(){return{data:{session:{user:owner}},error:null}},
  async signOut(){return{error:null}}
 };
@@ -37,7 +37,8 @@ const rdb={
   })
  })
 };
-const cloudbase={init:({env})=>{
+const cloudbase={init:({env,authMode})=>{
+ if(authMode!=="cloudbase")throw Error("NATIVE_AUTH_MODE_REQUIRED");
  if(env!=="excess-tiglon-d6gjc77qr6fa193f2")throw Error("WRONG_ENV");
  return{auth:()=>auth,rdb:()=>rdb};
 }};
