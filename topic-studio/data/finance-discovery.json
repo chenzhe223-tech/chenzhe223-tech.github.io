@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "source": "DAVYLAB official public feeds and openly available media RSS",
-  "checked_at": "2026-11-27T08:26:25+00:00",
+  "checked_at": "2026-11-27T10:41:34+00:00",
   "count": 150,
-  "latest_published_at": "2026-11-27T08:15:34+00:00",
+  "latest_published_at": "2026-11-27T10:20:39+00:00",
   "china_count": 109,
   "rank_method": "finance-priority-v1",
   "rank_weights": {
@@ -14,7 +14,7 @@
     "appeal": 15
   },
   "rank_disclaimer": "Five editorial relevance scores are heuristic estimates. Heat is topic relevance, NOT real traffic, views, shares, or verified popularity.",
-  "fresh_within_72h": 119,
+  "fresh_within_72h": 127,
   "status": "ok",
   "sources": [
     {
@@ -166,66 +166,6 @@
       "priority_rank": 3
     },
     {
-      "id": "fin-e2cf3a8c1d84f659aa",
-      "title": "“十五五”时期宁夏新能源装机将突破1亿千瓦",
-      "summary": "中新网银川11月26日电 (杨迪 李琪梁)记者26日从“开局起步‘十五五’建设美丽新宁夏”系列主题新闻发布会(第四场)获悉，《宁夏新型能源体系建设“十五五”规划》(下称《规划》)日前印发，明确“十五五”时期宁夏新能源装机将突破1亿千瓦，较“十四五”末增长1倍，占电力总装机比重达到70%，推动非化石能源由“装机主体”转向“电量主体”，新增用电需求将主要依靠清洁能源供给。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738228.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T09:40:13+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 83,
-        "heat": 81,
-        "appeal": 90,
-        "total": 85,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 4
-    },
-    {
-      "id": "fin-490053c714cbfce16f",
-      "title": "福建力争到2031年地区生产总值突破8万亿元",
-      "summary": "中新网福州11月26日电 (记者 闫旭)“经济增长保持在合理区间，力争到2031年地区生产总值突破8万亿元，人均地区生产总值突破19万元。”中国共产党福建省第十二次代表大会26日开幕，提出了未来五年福建经济增长的目标。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738267.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T10:29:25+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 83,
-        "heat": 81,
-        "appeal": 90,
-        "total": 85,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 5
-    },
-    {
       "id": "fin-25c139802c50ff95db",
       "title": "10月中国规上工业企业利润同比增速加快至20.1%",
       "summary": "中新社北京11月27日电 (记者 王恩博)中国国家统计局27日公布，10月份，全国规模以上工业企业利润同比增长20.1%，较9月份加快5.7个百分点。1—10月份累计，全国规上工业企业利润同比增长16%。",
@@ -253,7 +193,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 6
+      "priority_rank": 4
     },
     {
       "id": "fin-3bbdb2361f6fecf428",
@@ -283,7 +223,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 7
+      "priority_rank": 5
     },
     {
       "id": "fin-e173814518f76256df",
@@ -293,6 +233,66 @@
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
       "published_at": "2026-11-27T07:48:51+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 74,
+        "appeal": 71,
+        "total": 84,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 6
+    },
+    {
+      "id": "fin-6db3a5c4e8ff806e40",
+      "title": "10月中国发行新增地方政府债券3484亿元",
+      "summary": "中新社北京11月27日电 (记者 赵建华)中国财政部27日公布的地方政府债券发行和债务余额数据显示，今年10月，全国发行新增地方政府债券3484亿元(人民币，下同)，其中一般债券204亿元、专项债券3280亿元。全国发行再融资债券3154亿元，发行地方政府债券合计6638亿元。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738893.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:00:24+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 74,
+        "appeal": 71,
+        "total": 84,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 7
+    },
+    {
+      "id": "fin-0335f94276f58628f7",
+      "title": "中国官方集中约谈15家电动自行车企业",
+      "summary": "中新社北京11月27日电 (记者 刘亮)中国国家市场监管总局27日对雅迪、台铃、爱玛、新日、小刀、绿源、金箭、九号、小牛、绿佳、绿驹、立马、极跃、赛鸽、极核等15家电动自行车企业进行集中约谈。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738896.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:01:04+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -346,13 +346,13 @@
       "priority_rank": 9
     },
     {
-      "id": "fin-8532488467a72e8bc9",
-      "title": "今年以来广州市共有39家上市公司新增披露股份回购计划",
-      "summary": "中新网广州11月26日电 (记者 许青青)据广州市委金融办26日介绍，据统计，2026年以来，广州市共有39家上市公司新增披露47单40.71亿元股份回购计划，35家上市公司实施回购17.22亿元；9家上市公司新增披露16单主要股东、董事高管增持计划，合计拟增持金额5.33亿元；17家上市公司获得股票回购增持贷款25.98亿元。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738254.shtml",
+      "id": "fin-e2cf3a8c1d84f659aa",
+      "title": "“十五五”时期宁夏新能源装机将突破1亿千瓦",
+      "summary": "中新网银川11月26日电 (杨迪 李琪梁)记者26日从“开局起步‘十五五’建设美丽新宁夏”系列主题新闻发布会(第四场)获悉，《宁夏新型能源体系建设“十五五”规划》(下称《规划》)日前印发，明确“十五五”时期宁夏新能源装机将突破1亿千瓦，较“十四五”末增长1倍，占电力总装机比重达到70%，推动非化石能源由“装机主体”转向“电量主体”，新增用电需求将主要依靠清洁能源供给。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738228.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-26T10:22:53+00:00",
+      "published_at": "2026-11-26T09:40:13+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -360,20 +360,50 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
+        "timeliness": 76,
         "readability": 84,
         "value": 83,
-        "heat": 55,
+        "heat": 71,
         "appeal": 90,
         "total": 80,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "近24小时新线索",
+          "历史线索，请核对时效",
           "涉及财经政策或经营指标",
           "标题出现数字，需核实口径"
         ]
       },
       "priority_rank": 10
+    },
+    {
+      "id": "fin-490053c714cbfce16f",
+      "title": "福建力争到2031年地区生产总值突破8万亿元",
+      "summary": "中新网福州11月26日电 (记者 闫旭)“经济增长保持在合理区间，力争到2031年地区生产总值突破8万亿元，人均地区生产总值突破19万元。”中国共产党福建省第十二次代表大会26日开幕，提出了未来五年福建经济增长的目标。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738267.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T10:29:25+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 84,
+        "value": 83,
+        "heat": 71,
+        "appeal": 90,
+        "total": 80,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 11
     },
     {
       "id": "fin-4ce77ec94311a482d2",
@@ -403,7 +433,67 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 11
+      "priority_rank": 12
+    },
+    {
+      "id": "fin-644e5d21a87f4b7e1c",
+      "title": "市场监管总局集中约谈15家电动自行车企业",
+      "summary": "中新网11月27日电 据“市说新语”微信公众号消息，11月27日，市场监管总局对雅迪、台铃、爱玛、新日、小刀、绿源、金箭、九号、小牛、绿佳、绿驹、立马、极跃、赛鸽、极核等15家电动自行车企业进行集中约谈。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738819.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T08:51:44+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 48,
+        "appeal": 71,
+        "total": 79,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 13
+    },
+    {
+      "id": "fin-8972a69d5a99415ae9",
+      "title": "市场监管总局约谈15家电动自行车企业",
+      "summary": "中新网北京11月27日电 11月27日，市场监管总局对雅迪、台铃、爱玛、新日、小刀、绿源、金箭、九号、小牛、绿佳、绿驹、立马、极跃、赛鸽、极核等15家电动自行车企业进行集中约谈。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738874.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:39:23+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 83,
+        "heat": 48,
+        "appeal": 71,
+        "total": 79,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 14
     },
     {
       "id": "fin-1a1c384e05daba65cf",
@@ -433,7 +523,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 12
+      "priority_rank": 15
     },
     {
       "id": "fin-5d7919a354f5381cc6",
@@ -463,7 +553,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 13
+      "priority_rank": 16
     },
     {
       "id": "fin-d670fb534384642f2a",
@@ -493,37 +583,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 14
-    },
-    {
-      "id": "fin-639a6361a62e6fb1dc",
-      "title": "China approves 2-month suspension extension for select US export restrictions",
-      "summary": "China has extended the suspension of some export restrictions to the United States by two months, maintaining a temporary easing of curbs on the shipment of critical minerals and other materials amid a broader ",
-      "url": "https://www.scmp.com/economy/global-economy/article/3375609/china-approves-2-month-extension-select-us-export-restrictions",
-      "source": "南华早报 · 中国经济",
-      "category": "中国经济",
-      "published_at": "2026-11-24T09:01:45+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 84,
-        "value": 83,
-        "heat": 71,
-        "appeal": 90,
-        "total": 77,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 15
+      "priority_rank": 17
     },
     {
       "id": "fin-698d70aafc89d410e5",
@@ -553,7 +613,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 16
+      "priority_rank": 18
     },
     {
       "id": "fin-6b91ecd492b115174b",
@@ -583,16 +643,16 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 17
+      "priority_rank": 19
     },
     {
-      "id": "fin-f07e5bbfc779ccad74",
-      "title": "前十月锂电池出口大增137% 常州对非洲贸易增三成",
-      "summary": "中新网常州11月25日电(记者 唐娟)25日，据常州海关统计数据显示，2026年前10个月，常州市外贸进出口总值3325.6亿元人民币，同比增长8.9%，规模、增速均居江苏省第五位。其中，锂电池出口93.9亿元，同比增长137.2%；对非洲进出口146.2亿元，增长30.8%，新能源产品出口与新兴市场开拓成为常州外贸最突出的增长点。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737655.shtml",
+      "id": "fin-d5ea1daed2ca4f514e",
+      "title": "中国工商界呼吁美方撤回拟议加税措施",
+      "summary": "中新网11月27日电 据中国贸促微信公众号消息，中国贸促会新闻发言人就美方公布所谓“结构性产能过剩”301调查结果并拟加征关税发表谈话。美国当地时间11月25日，美国贸易代表办公室公布制造业所谓“结构性产能过剩”301调查结果，拟对包括中国在内的14个经济体加征301关税。中国工商界对此表示坚决反对。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738814.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-25T09:50:33+00:00",
+      "published_at": "2026-11-27T08:34:11+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -600,50 +660,80 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 76,
+        "timeliness": 100,
         "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
+        "value": 67,
+        "heat": 74,
+        "appeal": 49,
         "total": 76,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "历史线索，请核对时效",
+          "近24小时新线索",
           "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
+          "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 18
+      "priority_rank": 20
     },
     {
-      "id": "fin-2ef593cba2f5820d38",
-      "title": "Tech rout deepens globally; Softbank falls 15%, Nvidia down 4.5% premarket",
-      "summary": "Tech stocks tumbled Wednesday, as renewed concerns over the artificial intelligence trade rattled investors.",
-      "url": "https://www.cnbc.com/2026/11/25/tech-stocks-softbank-group-advantest-sk-hynix-samsung.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-25T10:29:18+00:00",
+      "id": "fin-a08d0597c9676d783b",
+      "title": "China assails US tariff, Shanghai chief falls, Nvidia’s Huang testifies",
+      "summary": "China fired a warning shot after the United States proposed raising tariffs on its exports to 20 per cent, and possibly 40 per cent, as President Donald Trump revives a global trade war. The country “reserves t",
+      "url": "https://www.scmp.com/plus/economy/china-economy/article/3376038/china-assails-us-tariff-shanghai-chief-falls-nvidias-huang-testifies",
+      "source": "南华早报 · 中国经济",
+      "category": "中国经济",
+      "published_at": "2026-11-27T09:00:41+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 76,
+        "timeliness": 100,
         "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
+        "value": 67,
+        "heat": 74,
+        "appeal": 49,
         "total": 76,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "历史线索，请核对时效",
+          "近24小时新线索",
           "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
+          "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 19
+      "priority_rank": 21
+    },
+    {
+      "id": "fin-c85a15f78f7e2cfe5b",
+      "title": "中国工商界呼吁美方撤回拟议加税措施",
+      "summary": "中新社北京11月27日电 (记者 尹倩芸)中国贸促会新闻发言人27日就美国公布所谓“结构性产能过剩”301调查结果并拟加征关税发表谈话时称，中国工商界对此表示坚决反对，呼吁美方撤回拟议加税措施。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738906.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:14:35+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 67,
+        "heat": 74,
+        "appeal": 49,
+        "total": 76,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 22
     },
     {
       "id": "fin-88aee817fe53570276",
@@ -673,7 +763,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 20
+      "priority_rank": 23
     },
     {
       "id": "fin-7a3eee6f8b7f95e85b",
@@ -703,7 +793,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 21
+      "priority_rank": 24
     },
     {
       "id": "fin-a34694cafff6d0e7ea",
@@ -733,7 +823,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 22
+      "priority_rank": 25
     },
     {
       "id": "fin-03a71947c20797323c",
@@ -763,7 +853,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 23
+      "priority_rank": 26
     },
     {
       "id": "fin-a2123becd6d91e9cf1",
@@ -793,7 +883,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 24
+      "priority_rank": 27
     },
     {
       "id": "fin-b0420149da17ae3705",
@@ -823,7 +913,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 25
+      "priority_rank": 28
     },
     {
       "id": "fin-71cf27a100fb4da131",
@@ -853,7 +943,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 26
+      "priority_rank": 29
     },
     {
       "id": "fin-88a0d2e31466e84589",
@@ -883,16 +973,16 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 27
+      "priority_rank": 30
     },
     {
-      "id": "fin-65a7bfd46e33d54b02",
-      "title": "商务部：望美中推动对等降税安排尽快落地实施",
-      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，有记者提问，中美去年在吉隆坡达成的贸易共识延迟到27年一月。请问上周中美是否讨论再延迟此贸易共识，或是计划在下个月有相关讨论？一月份前预计是否会增加关税或是加强稀土出口管制？何时落实300亿降关税？",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738193.shtml",
+      "id": "fin-8532488467a72e8bc9",
+      "title": "今年以来广州市共有39家上市公司新增披露股份回购计划",
+      "summary": "中新网广州11月26日电 (记者 许青青)据广州市委金融办26日介绍，据统计，2026年以来，广州市共有39家上市公司新增披露47单40.71亿元股份回购计划，35家上市公司实施回购17.22亿元；9家上市公司新增披露16单主要股东、董事高管增持计划，合计拟增持金额5.33亿元；17家上市公司获得股票回购增持贷款25.98亿元。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738254.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-26T08:51:06+00:00",
+      "published_at": "2026-11-26T10:22:53+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -900,50 +990,20 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
-        "readability": 92,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
+        "timeliness": 76,
+        "readability": 84,
+        "value": 83,
+        "heat": 45,
+        "appeal": 90,
         "total": 75,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "近24小时新线索",
+          "历史线索，请核对时效",
           "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
+          "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 28
-    },
-    {
-      "id": "fin-9f44998fea290908de",
-      "title": "商务部：中国和墨西哥将成立工作组 围绕降低关税问题开展对话",
-      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，商务部新闻发言人何亚东表示，11月23日，中国—墨西哥高层工作组第十一次会议在北京举行，双方同意成立相关工作组，围绕降低关税问题开展对话。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738197.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T09:00:46+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 92,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
-        "total": 75,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 29
+      "priority_rank": 31
     },
     {
       "id": "fin-c21e4a41cb6cd2f4d4",
@@ -973,7 +1033,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 30
+      "priority_rank": 32
     },
     {
       "id": "fin-e3f59d273c0bc851a1",
@@ -1003,7 +1063,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 31
+      "priority_rank": 33
     },
     {
       "id": "fin-5646360bbe71e5a3f7",
@@ -1033,7 +1093,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 32
+      "priority_rank": 34
     },
     {
       "id": "fin-4a4d3c7cecf0d1dd06",
@@ -1063,67 +1123,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 33
-    },
-    {
-      "id": "fin-8f5b9790b290200b29",
-      "title": "Latin America has the copper and energy the AI build-out needs. Infrastructure is the test",
-      "summary": "Latin America’s copper, oil, gas and rare earths could benefit from rising AI energy demand, if infrastructure and fiscal policy attract investment.",
-      "url": "https://www.cnbc.com/2026/11/26/latin-america-copper-energy-ai-investment.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-26T08:59:11+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
-        "total": 74,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 34
-    },
-    {
-      "id": "fin-0c7d068454da3a3a78",
-      "title": "Global stocks rally as investors shrug off U.S. tariffs and AI jitters to 'fish for bargains'",
-      "summary": "Investors appeared to have shrugged off a fresh set of tariffs unveiled by the White House on Wednesday, targeting more than a dozen major trading partners.",
-      "url": "https://www.cnbc.com/2026/11/26/stock-markets-today-.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-26T09:51:40+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
-        "total": 74,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
       "priority_rank": 35
+    },
+    {
+      "id": "fin-45730cb14adbe199d9",
+      "title": "A股周五放量大涨 创业板指涨逾11％",
+      "summary": "中新社北京11月27日电 (记者 陈康亮)中国A股27日(周五)放量大涨，主要股指悉数飘红；其中，创业板指收盘涨逾11%。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738905.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:13:39+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 60,
+        "appeal": 64,
+        "total": 74,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 36
     },
     {
       "id": "fin-c2cf0074819c3f240c",
@@ -1153,7 +1183,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 36
+      "priority_rank": 37
     },
     {
       "id": "fin-001f0b65173363a23e",
@@ -1183,7 +1213,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 37
+      "priority_rank": 38
     },
     {
       "id": "fin-eb7fcc6a71409cefe8",
@@ -1213,7 +1243,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 38
+      "priority_rank": 39
     },
     {
       "id": "fin-4277ab8b356914d426",
@@ -1243,7 +1273,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 39
+      "priority_rank": 40
     },
     {
       "id": "fin-6830aad901d1c5d7f5",
@@ -1273,67 +1303,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 40
-    },
-    {
-      "id": "fin-39be6315b47460ca77",
-      "title": "商务部：继续调整实施商务部公告2024年第46号的决定",
-      "summary": "中新网11月24日电 据商务部网站消息，经批准，自2026年11月28日起至2027年1月27日，商务部公告2024年第46号(《关于加强相关两用物项对美国出口管制的公告》)第二款暂停实施。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737053.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-24T08:53:35+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 92,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 74,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
       "priority_rank": 41
-    },
-    {
-      "id": "fin-7b92222b7a2895e51c",
-      "title": "US-China trade war stuck in limbo as Trump nears new tariffs",
-      "summary": "The United States is reportedly readying new tariffs on China and 15 other trading partners following a months-long inquiry into state support and excess industrial capacity. Results from the US Trade Represent",
-      "url": "https://www.scmp.com/plus/economy/china-economy/article/3375755/us-china-trade-war-stuck-limbo-trump-nears-new-tariffs",
-      "source": "南华早报 · 中国经济",
-      "category": "中国经济",
-      "published_at": "2026-11-25T09:33:59+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 76,
-        "readability": 84,
-        "value": 67,
-        "heat": 71,
-        "appeal": 68,
-        "total": 73,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 42
     },
     {
       "id": "fin-0f9eb605697a24dd97",
@@ -1363,7 +1333,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 43
+      "priority_rank": 42
     },
     {
       "id": "fin-a8dd1a4916c7bc4000",
@@ -1393,37 +1363,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 44
-    },
-    {
-      "id": "fin-67c682c62af407a839",
-      "title": "China’s carmakers overtake Japanese rivals in 6 markets this year amid high EV demand",
-      "summary": "Chinese carmakers now hold a larger market share than their Japanese rivals in 26 markets, amid surging electric vehicle (EV) exports as the Middle East conflict drives up global energy prices and reshapes vehi",
-      "url": "https://www.scmp.com/economy/global-economy/article/3375618/chinas-carmakers-overtake-japanese-rivals-6-markets-year-amid-high-ev-demand",
-      "source": "南华早报 · 中国经济",
-      "category": "中国经济",
-      "published_at": "2026-11-24T10:00:25+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 73,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 45
+      "priority_rank": 43
     },
     {
       "id": "fin-44841a3391a7e9411d",
@@ -1453,7 +1393,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 46
+      "priority_rank": 44
     },
     {
       "id": "fin-9ac94552ea2b1477c5",
@@ -1483,7 +1423,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 47
+      "priority_rank": 45
     },
     {
       "id": "fin-c393083937a4ffacc7",
@@ -1493,6 +1433,66 @@
       "source": "CNBC · 全球新闻分析",
       "category": "全球市场",
       "published_at": "2026-11-24T22:07:45+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 65,
+        "readability": 84,
+        "value": 83,
+        "heat": 64,
+        "appeal": 71,
+        "total": 73,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 46
+    },
+    {
+      "id": "fin-f07e5bbfc779ccad74",
+      "title": "前十月锂电池出口大增137% 常州对非洲贸易增三成",
+      "summary": "中新网常州11月25日电(记者 唐娟)25日，据常州海关统计数据显示，2026年前10个月，常州市外贸进出口总值3325.6亿元人民币，同比增长8.9%，规模、增速均居江苏省第五位。其中，锂电池出口93.9亿元，同比增长137.2%；对非洲进出口146.2亿元，增长30.8%，新能源产品出口与新兴市场开拓成为常州外贸最突出的增长点。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737655.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-25T09:50:33+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 65,
+        "readability": 84,
+        "value": 83,
+        "heat": 64,
+        "appeal": 71,
+        "total": 73,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 47
+    },
+    {
+      "id": "fin-2ef593cba2f5820d38",
+      "title": "Tech rout deepens globally; Softbank falls 15%, Nvidia down 4.5% premarket",
+      "summary": "Tech stocks tumbled Wednesday, as renewed concerns over the artificial intelligence trade rattled investors.",
+      "url": "https://www.cnbc.com/2026/11/25/tech-stocks-softbank-group-advantest-sk-hynix-samsung.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-25T10:29:18+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "全球",
@@ -1576,13 +1576,13 @@
       "priority_rank": 50
     },
     {
-      "id": "fin-8ee006b8a3aa546cad",
-      "title": "国际科技创新中心指数2026：北京排名升至全球第二",
-      "summary": "中新社北京11月26日电 (记者 陈杭)2026科技创新中心与科研城市论坛26日在北京举行。论坛上发布的《国际科技创新中心指数2026》(简称GIHI2026)显示，旧金山-圣何塞连续七年领跑全球科技创新中心，其综合创新能力在AI产业发展的带动下进一步提升。北京综合排名首次超越纽约，位列全球第二。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738219.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T09:27:00+00:00",
+      "id": "fin-639a6361a62e6fb1dc",
+      "title": "China approves 2-month suspension extension for select US export restrictions",
+      "summary": "China has extended the suspension of some export restrictions to the United States by two months, maintaining a temporary easing of curbs on the shipment of critical minerals and other materials amid a broader ",
+      "url": "https://www.scmp.com/economy/global-economy/article/3375609/china-approves-2-month-extension-select-us-export-restrictions",
+      "source": "南华早报 · 中国经济",
+      "category": "中国经济",
+      "published_at": "2026-11-24T09:01:45+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -1590,16 +1590,16 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
-        "readability": 92,
-        "value": 60,
-        "heat": 60,
-        "appeal": 64,
-        "total": 72,
+        "timeliness": 47,
+        "readability": 84,
+        "value": 83,
+        "heat": 71,
+        "appeal": 90,
+        "total": 73,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
           "标题出现数字，需核实口径"
         ]
       },
@@ -1696,13 +1696,13 @@
       "priority_rank": 54
     },
     {
-      "id": "fin-a2b2572e30b109b512",
-      "title": "世界首台承载能力最大380吨高速动平衡试验系统成功交付",
-      "summary": "中新网哈尔滨11月26日电 (王琳 王少东)11月25日，由哈电集团汽轮机公司建设的世界首台承载能力最大380吨高速动平衡试验系统在哈尔滨成功交付、正式投用，标志着中国在超大型核电汽轮机试验验证领域实现重大突破。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738257.shtml",
+      "id": "fin-76471973d2c3ba9406",
+      "title": "8.9万亿千瓦时，照亮中国经济的“新底色”",
+      "summary": "好评中国|8.9万亿千瓦时，照亮中国经济的“新底色”",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738818.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-26T10:21:53+00:00",
+      "published_at": "2026-11-27T08:37:33+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -1710,9 +1710,9 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 60,
+        "timeliness": 100,
+        "readability": 79,
+        "value": 50,
         "heat": 60,
         "appeal": 64,
         "total": 71,
@@ -1724,6 +1724,36 @@
         ]
       },
       "priority_rank": 55
+    },
+    {
+      "id": "fin-a35805c967d033c7a9",
+      "title": "第四届“一带一路”能源部长会议系列成果公布",
+      "summary": "中新社山东青岛11月27日电 (记者 王梦瑶 胡耀杰)第四届“一带一路”能源部长会议11月25日至27日在山东青岛举行。中国国家能源局27日对外公布多项会议成果。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738861.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:29:00+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 44,
+        "heat": 67,
+        "appeal": 61,
+        "total": 71,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 56
     },
     {
       "id": "fin-1873dc325b6fe4eeea",
@@ -1753,7 +1783,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 56
+      "priority_rank": 57
     },
     {
       "id": "fin-ee53adbaa022cb629b",
@@ -1783,7 +1813,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 57
+      "priority_rank": 58
     },
     {
       "id": "fin-04341119ce3287b01e",
@@ -1813,7 +1843,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 58
+      "priority_rank": 59
     },
     {
       "id": "fin-c8bd2e4fcdbf7a3b4f",
@@ -1843,37 +1873,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 59
+      "priority_rank": 60
     },
     {
-      "id": "fin-d5f73ba4b22ba402ec",
-      "title": "Trump demands probe into ‘record setting error’ after third-quarter GDP data gets massive revision higher",
-      "summary": "President Donald Trump on Thursday deemed the latest gross domestic product revision a mistake, claiming that it should be \"immediately investigated.\"",
-      "url": "https://www.cnbc.com/2026/11/26/trump-gdp-revision-investigation.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-26T21:13:17+00:00",
+      "id": "fin-f96debdbda40fea049",
+      "title": "赔了485起还敢公开，广汽丰田车展把“长期主义”摆上桌",
+      "summary": "第二十四届广州车展上，广汽丰田以“时间给你的新答案”为主题举行发布会，信息密度不低：行业首次公开厂家担责赔付数据；行业首次在用户未发现的前提下，主动追着用户赔付，并取消电池衰减的年度里程限制；宣布将打造全新技术品牌“丰田要件”；宣布全新第五代汉兰达定名“汉兰达9X”并将于明年一季度全球亮相，同时升级营销模式，与经销商积极联动、让用户参与共创产品。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738790.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T08:18:10+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 94,
-        "readability": 70,
-        "value": 67,
-        "heat": 55,
-        "appeal": 54,
+        "timeliness": 100,
+        "readability": 92,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
         "total": 70,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
           "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 60
+      "priority_rank": 61
     },
     {
       "id": "fin-b87c0a26f497913fc9",
@@ -1903,7 +1933,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 61
+      "priority_rank": 62
     },
     {
       "id": "fin-b8a98f9f39ed35f92d",
@@ -1933,7 +1963,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 62
+      "priority_rank": 63
     },
     {
       "id": "fin-24fe78a8784ebe4a86",
@@ -1963,16 +1993,76 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 63
+      "priority_rank": 64
     },
     {
-      "id": "fin-1e97aa167d51cd37a9",
-      "title": "广东河源蔬菜类农产品首次销往国际市场",
-      "summary": "中新网河源11月24日电 (张璐 邓俏俏)11月24日，经广州海关所属河源海关(以下简称“河源海关”)检验检疫合格，一批冬瓜、南瓜、甘薯从广东一家农业公司(以下简称“公司”)包装厂装车启运，发往加拿大。这是河源蔬菜类农产品首次走出国门，也是河源特色农产品出口品类上的又一次突破。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737110.shtml",
+      "id": "fin-65a7bfd46e33d54b02",
+      "title": "商务部：望美中推动对等降税安排尽快落地实施",
+      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，有记者提问，中美去年在吉隆坡达成的贸易共识延迟到27年一月。请问上周中美是否讨论再延迟此贸易共识，或是计划在下个月有相关讨论？一月份前预计是否会增加关税或是加强稀土出口管制？何时落实300亿降关税？",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738193.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-24T10:28:46+00:00",
+      "published_at": "2026-11-26T08:51:06+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 92,
+        "value": 67,
+        "heat": 64,
+        "appeal": 49,
+        "total": 70,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 65
+    },
+    {
+      "id": "fin-9f44998fea290908de",
+      "title": "商务部：中国和墨西哥将成立工作组 围绕降低关税问题开展对话",
+      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，商务部新闻发言人何亚东表示，11月23日，中国—墨西哥高层工作组第十一次会议在北京举行，双方同意成立相关工作组，围绕降低关税问题开展对话。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738197.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T09:00:46+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 92,
+        "value": 67,
+        "heat": 64,
+        "appeal": 49,
+        "total": 70,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 66
+    },
+    {
+      "id": "fin-7b92222b7a2895e51c",
+      "title": "US-China trade war stuck in limbo as Trump nears new tariffs",
+      "summary": "The United States is reportedly readying new tariffs on China and 15 other trading partners following a months-long inquiry into state support and excess industrial capacity. Results from the US Trade Represent",
+      "url": "https://www.scmp.com/plus/economy/china-economy/article/3375755/us-china-trade-war-stuck-limbo-trump-nears-new-tariffs",
+      "source": "南华早报 · 中国经济",
+      "category": "中国经济",
+      "published_at": "2026-11-25T09:33:59+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -1993,16 +2083,16 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 64
+      "priority_rank": 67
     },
     {
-      "id": "fin-c05fa83654e46edfb6",
-      "title": "陕西谋划“十五五”县域发展 2030年培育30个县域特色产业集群",
-      "summary": "中新网西安11月27日电 (记者 杨英琦)记者27日从陕西省发展改革委获悉，“十五五”时期，陕西将持续延链补链强链，到2030年形成苹果种植及深加工、整车及零部件制造、文化旅游等30个左右县域特色产业集群，支撑县域地区生产总值突破2.2万亿元(人民币，下同)。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738633.shtml",
+      "id": "fin-39be6315b47460ca77",
+      "title": "商务部：继续调整实施商务部公告2024年第46号的决定",
+      "summary": "中新网11月24日电 据商务部网站消息，经批准，自2026年11月28日起至2027年1月27日，商务部公告2024年第46号(《关于加强相关两用物项对美国出口管制的公告》)第二款暂停实施。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737053.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-27T03:49:44+00:00",
+      "published_at": "2026-11-24T08:53:35+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -2010,20 +2100,20 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 100,
-        "readability": 84,
-        "value": 60,
-        "heat": 34,
-        "appeal": 64,
-        "total": 69,
+        "timeliness": 47,
+        "readability": 92,
+        "value": 83,
+        "heat": 64,
+        "appeal": 71,
+        "total": 70,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 65
+      "priority_rank": 68
     },
     {
       "id": "fin-e088d09ab6c745b925",
@@ -2053,7 +2143,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 66
+      "priority_rank": 69
     },
     {
       "id": "fin-79dfa439b30e112610",
@@ -2083,7 +2173,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 67
+      "priority_rank": 70
     },
     {
       "id": "fin-e3a8200d2577210a90",
@@ -2113,7 +2203,127 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 68
+      "priority_rank": 71
+    },
+    {
+      "id": "fin-6a2d61e9cdc80baf56",
+      "title": "向新而立 广汽昊铂焕新亮相2026广州车展",
+      "summary": "2026广州国际车展启幕，广汽昊铂正式发布品牌焕新。围绕“向新而立，昊铂进阶”的主题，广汽昊铂持续深化“智享生活”理念，以向上进阶为支撑，把焕新落到产品定义、用户体验和价值兑现上。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738810.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T08:42:32+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 72
+    },
+    {
+      "id": "fin-efd254ab18ecd0ee8d",
+      "title": "2026火炬论坛在安徽芜湖开幕",
+      "summary": "中新网芜湖11月27日电 (游蕾)2026火炬论坛开幕式暨全体大会27日在安徽省芜湖市举行。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738891.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:43:33+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 73
+    },
+    {
+      "id": "fin-0ffa6001234ea84691",
+      "title": "2026汽车行业数智创新与发展论坛在北京举办",
+      "summary": "中新网北京11月27日电 (陈昊星)11月26日至27日，2026汽车行业数智创新与发展论坛在北京举办。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738899.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:05:10+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 74
+    },
+    {
+      "id": "fin-fb1df87992db7f2868",
+      "title": "SpaceX shares jump 4% amid tech rally and after Musk says he will expand on Trump Account share donations",
+      "summary": "SpaceX shares jumped in premarket trading after Elon Musk said on X that he would donate shares to American children every year.",
+      "url": "https://www.cnbc.com/2026/11/27/spacex-shares-musk-donations.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-27T10:20:39+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 70,
+        "value": 60,
+        "heat": 41,
+        "appeal": 69,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 75
     },
     {
       "id": "fin-38ca9838de96ca28d4",
@@ -2143,7 +2353,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 69
+      "priority_rank": 76
     },
     {
       "id": "fin-3aa3cf73f561d2c58c",
@@ -2173,127 +2383,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 70
-    },
-    {
-      "id": "fin-2c846073e18a061983",
-      "title": "中国LPR连续18个月保持不变",
-      "summary": "中新社北京11月20日电 (记者 庞无忌)中国人民银行授权全国银行间同业拆借中心20日公布最新一期贷款市场报价利率(LPR)：1年期LPR为3.0%，5年期以上LPR为3.5%。两个期限品种的LPR已连续18个月保持不变。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735325.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T08:57:53+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 69,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 71
-    },
-    {
-      "id": "fin-a8ece15de4a66efd0d",
-      "title": "前三季度数字产业收入超32万亿元 同比增长14.8%",
-      "summary": "前三季度，我国数字产业整体延续向优向好发展态势，收入增速加快，盈利水平持续提升，电子产品对外出口延续强劲增势，人工智能创新迭代提速，智能终端产品密集发布，产业新动能加速积蓄，为稳定经济增长、培育发展新质生产力、赋能千行百业数智转型提供有力支撑。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735341.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T09:12:54+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 69,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 72
-    },
-    {
-      "id": "fin-6719b5ec738e78fdc6",
-      "title": "今年前10个月北京地区进出口总值创历史同期新高",
-      "summary": "中新社北京11月20日电 (记者 徐婧)北京海关20日发布统计数据显示，今年前10个月，北京地区(含中央在京单位，下同)货物贸易进出口3.14万亿元(人民币，下同)，同比(下同)增长17.4%，进出口总值创历史同期新高。其中，出口5846.4亿元，增长13.7%；进口2.55万亿元，增长18.3%。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735339.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T09:43:20+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 69,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 73
-    },
-    {
-      "id": "fin-a6b9ed5501529af29e",
-      "title": "央行定于11月27日发行2027中国丁未（羊）年贵金属纪念币一套",
-      "summary": "中新网11月20日电 据中国人民银行微信公众号消息，中国人民银行定于2026年11月27日发行2027中国丁未(羊)年贵金属纪念币一套。该套贵金属纪念币共11枚，其中金质纪念币6枚，银质纪念币4枚，铂质纪念币1枚，均为中华人民共和国法定货币。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735364.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T09:50:14+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 69,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 74
+      "priority_rank": 77
     },
     {
       "id": "fin-7c162fb0d4d7473a6f",
@@ -2323,7 +2413,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 75
+      "priority_rank": 78
     },
     {
       "id": "fin-a7c1c3d4760d492e03",
@@ -2353,7 +2443,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 76
+      "priority_rank": 79
     },
     {
       "id": "fin-8dc2559219bcf8f978",
@@ -2383,7 +2473,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 77
+      "priority_rank": 80
     },
     {
       "id": "fin-982a0d750c5d979782",
@@ -2413,7 +2503,37 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 78
+      "priority_rank": 81
+    },
+    {
+      "id": "fin-67c682c62af407a839",
+      "title": "China’s carmakers overtake Japanese rivals in 6 markets this year amid high EV demand",
+      "summary": "Chinese carmakers now hold a larger market share than their Japanese rivals in 26 markets, amid surging electric vehicle (EV) exports as the Middle East conflict drives up global energy prices and reshapes vehi",
+      "url": "https://www.scmp.com/economy/global-economy/article/3375618/chinas-carmakers-overtake-japanese-rivals-6-markets-year-amid-high-ev-demand",
+      "source": "南华早报 · 中国经济",
+      "category": "中国经济",
+      "published_at": "2026-11-24T10:00:25+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 47,
+        "readability": 84,
+        "value": 83,
+        "heat": 64,
+        "appeal": 71,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 82
     },
     {
       "id": "fin-7cfc904a976275c490",
@@ -2443,7 +2563,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 79
+      "priority_rank": 83
     },
     {
       "id": "fin-e6a01d99e7d83cd33d",
@@ -2473,16 +2593,16 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 80
+      "priority_rank": 84
     },
     {
-      "id": "fin-ffba5e4978528a04c6",
-      "title": "辽宁深化数智赋能 建成经营者集中主体数据库",
-      "summary": "中新网沈阳11月26日电 (记者 韩宏)辽宁省市场监督管理局26日发布消息称，辽宁深化数智赋能，做实风险前置预警防控。建成辽宁省经营者集中主体数据库，整合上市公司、市场监管多源数据，构建“一单四表”数据架构，归集5000余条市场主体信息，实行ABCD分级分类管理，精准锁定并购高风险市场主体。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738225.shtml",
+      "id": "fin-9e5deeeb64a0e6ff02",
+      "title": "海南陵水：高标准描绘“两个城市”新蓝图",
+      "summary": "中新网海南陵水11月27日电 (记者 王子谦)长期以来，外界提起海南陵水黎族自治县，印象多停留在旅游和房地产。如今，这里正在发生深刻转变。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738799.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-26T09:34:22+00:00",
+      "published_at": "2026-11-27T08:26:11+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -2490,9 +2610,69 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 67,
+        "timeliness": 100,
+        "readability": 92,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 68,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 85
+    },
+    {
+      "id": "fin-d6212e95b0dd941af3",
+      "title": "国常会通稿首提“国家队”，A股迎稳市强信号",
+      "summary": "11月27日午间，一则重磅消息落地A股盘面。国务院常务会议研究持续深化资本市场投融资综合改革工作。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738834.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T08:56:14+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 92,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 68,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 86
+    },
+    {
+      "id": "fin-937496af0f3b1450ac",
+      "title": "市场监管总局新规征意见：给买榜捆绑刷量造假算法黑箱划红线",
+      "summary": "市场监管总局就榜单发布使用监管新规公开征求意见",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738839.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:00:15+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 79,
+        "value": 57,
         "heat": 48,
         "appeal": 49,
         "total": 68,
@@ -2503,7 +2683,67 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 81
+      "priority_rank": 87
+    },
+    {
+      "id": "fin-c05fa83654e46edfb6",
+      "title": "陕西谋划“十五五”县域发展 2030年培育30个县域特色产业集群",
+      "summary": "中新网西安11月27日电 (记者 杨英琦)记者27日从陕西省发展改革委获悉，“十五五”时期，陕西将持续延链补链强链，到2030年形成苹果种植及深加工、整车及零部件制造、文化旅游等30个左右县域特色产业集群，支撑县域地区生产总值突破2.2万亿元(人民币，下同)。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738633.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T03:49:44+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 94,
+        "readability": 84,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
+        "total": 68,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 88
+    },
+    {
+      "id": "fin-d5f73ba4b22ba402ec",
+      "title": "Trump demands probe into ‘record setting error’ after third-quarter GDP data gets massive revision higher",
+      "summary": "President Donald Trump on Thursday deemed the latest gross domestic product revision a mistake, claiming that it should be \"immediately investigated.\"",
+      "url": "https://www.cnbc.com/2026/11/26/trump-gdp-revision-investigation.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-26T21:13:17+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 88,
+        "readability": 70,
+        "value": 67,
+        "heat": 55,
+        "appeal": 54,
+        "total": 68,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 89
     },
     {
       "id": "fin-9ad82ed5f0daab1534",
@@ -2533,7 +2773,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 82
+      "priority_rank": 90
     },
     {
       "id": "fin-e6f50467729d803d20",
@@ -2563,7 +2803,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 83
+      "priority_rank": 91
     },
     {
       "id": "fin-a82d7759b619009982",
@@ -2593,7 +2833,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 84
+      "priority_rank": 92
     },
     {
       "id": "fin-c7bd9248faa70c8552",
@@ -2623,7 +2863,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 85
+      "priority_rank": 93
     },
     {
       "id": "fin-b06feb7b947b01b92a",
@@ -2653,7 +2893,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 86
+      "priority_rank": 94
     },
     {
       "id": "fin-8b213291892cdabe0d",
@@ -2683,7 +2923,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 87
+      "priority_rank": 95
     },
     {
       "id": "fin-5451bbd1c3f10dfb59",
@@ -2713,7 +2953,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 88
+      "priority_rank": 96
     },
     {
       "id": "fin-75bafb5b8da29c669f",
@@ -2743,7 +2983,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 89
+      "priority_rank": 97
     },
     {
       "id": "fin-a16b82e4811df6c17c",
@@ -2773,37 +3013,67 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 90
+      "priority_rank": 98
     },
     {
-      "id": "fin-b9c36614969a0dc346",
-      "title": "两部门联合公布4起编造传播资本市场虚假信息典型案例",
-      "summary": "中新网11月20日电 据“证监会发布”微信公众号消息，今年以来，证券监管部门联合公安机关查办多个编造传播资本市场虚假信息的违法违规行为，依法处罚有关责任人员，有力打击不法分子，推动营造清朗资本市场网络空间。今天，两部门联合公布4起编造传播资本市场虚假信息典型案例。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735326.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T08:50:57+00:00",
+      "id": "fin-8f5b9790b290200b29",
+      "title": "Latin America has the copper and energy the AI build-out needs. Infrastructure is the test",
+      "summary": "Latin America’s copper, oil, gas and rare earths could benefit from rising AI energy demand, if infrastructure and fiscal policy attract investment.",
+      "url": "https://www.cnbc.com/2026/11/26/latin-america-copper-energy-ai-investment.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-26T08:59:11+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 47,
+        "timeliness": 76,
         "readability": 84,
-        "value": 83,
-        "heat": 45,
-        "appeal": 90,
+        "value": 67,
+        "heat": 64,
+        "appeal": 49,
         "total": 68,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
           "历史线索，请核对时效",
           "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
+          "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 91
+      "priority_rank": 99
+    },
+    {
+      "id": "fin-0c7d068454da3a3a78",
+      "title": "Global stocks rally as investors shrug off U.S. tariffs and AI jitters to 'fish for bargains'",
+      "summary": "Investors appeared to have shrugged off a fresh set of tariffs unveiled by the White House on Wednesday, targeting more than a dozen major trading partners.",
+      "url": "https://www.cnbc.com/2026/11/26/stock-markets-today-.html",
+      "source": "CNBC · 全球新闻分析",
+      "category": "全球市场",
+      "published_at": "2026-11-26T09:51:40+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 84,
+        "value": 67,
+        "heat": 64,
+        "appeal": 49,
+        "total": 68,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 100
     },
     {
       "id": "fin-9a0d630bdb6c58c9f2",
@@ -2833,16 +3103,16 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 92
+      "priority_rank": 101
     },
     {
-      "id": "fin-18a22e9ba495a8e6a2",
-      "title": "Why southern China’s Huaqiangbei electronics hub is attracting more foreign visitors",
-      "summary": "Phillip, a French tourist who recently visited the sprawling Huaqiangbei electronics market in the southern Chinese tech hub of Shenzhen, said videos of the area posted on YouTube had piqued his curiosity about",
-      "url": "https://www.scmp.com/economy/china-economy/article/3375918/why-southern-chinas-huaqiangbei-electronics-hub-attracting-more-foreign-visitors",
-      "source": "南华早报 · 中国经济",
-      "category": "中国经济",
-      "published_at": "2026-11-27T03:30:10+00:00",
+      "id": "fin-46299b4789adf5a243",
+      "title": "（经济观察）国务院常务会议“把脉”资本市场 释放三大关键信号",
+      "summary": "中新社北京11月27日电 (记者 陈康亮)27日召开的中国国务院常务会议，研究持续深化资本市场投融资综合改革工作，释放三大关键信号。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738857.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:08:35+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -2863,7 +3133,97 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 93
+      "priority_rank": 102
+    },
+    {
+      "id": "fin-86ebbbef5610ed03f9",
+      "title": "中国证监会同意瓦楞原纸期货和期权注册",
+      "summary": "中新网11月27日电 据证监会网站消息，近日，中国证监会同意上海期货交易所瓦楞原纸期货和期权注册。中国证监会将督促上海期货交易所做好各项准备工作，确保瓦楞原纸期货和期权的平稳推出和稳健运行。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738884.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:29:02+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 67,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 103
+    },
+    {
+      "id": "fin-70525431adcb14b22d",
+      "title": "北京市未来产业先导区揭牌 “释能半岛”打造大科学装置成果转化示范样板",
+      "summary": "中新网北京11月27日电 北京怀柔综合性国家科学中心科技成果转化暨重点项目推进大会27日在北京雁栖湖生态发展示范区举行。大会通过政策发布、平台揭牌、项目签约、成果展示等环节，立体呈现怀柔科学城“科产融合、链通转化”的新生态与新机遇。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738867.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T09:35:55+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 67,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 104
+    },
+    {
+      "id": "fin-5a6eda981d6699ba83",
+      "title": "上海“架桥”推动生物医药创新 呼吁更多耐心资本",
+      "summary": "中新网上海11月27日电 (郑莹莹 娄瀚锟)人工智能正重塑生物医药创新范式，带来新的发展机会。27日在上海举办的“上海科学院—陆家嘴金融城生物医药领域项目路演与投融资对接会”上，“脑卒中AI预警筛查”“基于多组学的泛癌种AI早筛诊断平台”等多个项目的团队展开路演。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738904.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T10:11:33+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 67,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 105
     },
     {
       "id": "fin-74c6edaa865ada8f77",
@@ -2893,16 +3253,16 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 94
+      "priority_rank": 106
     },
     {
-      "id": "fin-7e4963d263c505182d",
-      "title": "封关一年看海南：台商台企纷至沓来",
-      "summary": "中新网海南东方11月24日电 (记者 符宇群)海南自贸港全岛封关运作近一年来，持续吸引台商台企纷至沓来。记者从23日海南省东方市举办的2026“十五五·同心聚力自贸港”八期沙龙上了解到，今年前8个月，海南新增台企88家；台商投资赛道逐渐从传统农渔业，拓展到生物科技、医疗健康、跨境电商、文创等新兴领域。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10736966.shtml",
+      "id": "fin-8ee006b8a3aa546cad",
+      "title": "国际科技创新中心指数2026：北京排名升至全球第二",
+      "summary": "中新社北京11月26日电 (记者 陈杭)2026科技创新中心与科研城市论坛26日在北京举行。论坛上发布的《国际科技创新中心指数2026》(简称GIHI2026)显示，旧金山-圣何塞连续七年领跑全球科技创新中心，其综合创新能力在AI产业发展的带动下进一步提升。北京综合排名首次超越纽约，位列全球第二。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738219.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-24T08:33:54+00:00",
+      "published_at": "2026-11-26T09:27:00+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -2910,20 +3270,20 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 65,
+        "timeliness": 76,
         "readability": 92,
-        "value": 67,
-        "heat": 64,
-        "appeal": 49,
+        "value": 60,
+        "heat": 50,
+        "appeal": 64,
         "total": 67,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
           "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 95
+      "priority_rank": 107
     },
     {
       "id": "fin-80802e4592c7eb73d1",
@@ -2953,7 +3313,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 96
+      "priority_rank": 108
     },
     {
       "id": "fin-621c593a4f1e472ff6",
@@ -2983,7 +3343,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 97
+      "priority_rank": 109
     },
     {
       "id": "fin-43723b5241357253c3",
@@ -3013,7 +3373,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 98
+      "priority_rank": 110
     },
     {
       "id": "fin-992e39c481e99801f8",
@@ -3043,7 +3403,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 99
+      "priority_rank": 111
     },
     {
       "id": "fin-55a46c451e9c6d7661",
@@ -3073,7 +3433,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 100
+      "priority_rank": 112
     },
     {
       "id": "fin-4a2e5bb7d6ae2fe57e",
@@ -3103,7 +3463,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 101
+      "priority_rank": 113
     },
     {
       "id": "fin-5a16ccb699f68d72c5",
@@ -3133,7 +3493,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 102
+      "priority_rank": 114
     },
     {
       "id": "fin-28ca4b2f9b069875ff",
@@ -3163,26 +3523,26 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 103
+      "priority_rank": 115
     },
     {
-      "id": "fin-3822f7e9fe3adb61e9",
-      "title": "从大促冲量到品牌沉淀 国货美妆借双11开启高质量转型",
-      "summary": "在商务部部署品质电商“五优”行动、引导电商行业由规模扩张转向质量提升，国民消费持续从满足数量需求转向追求品质价值的大背景下，双11成为洞察美妆产业变迁的重要窗口。消费理性化成为主流趋势，美妆行业逐步告别粗放的流量竞争，竞争重心转向产品力、用户复购与长期品牌价值，消费者愈发看重护肤功效、科研实力以及产品与自身肤质的适配度。今年双11美妆市场呈现“大盘平稳、结构分化”的特征，国际品牌、国货头部、新锐细分品牌走出差异化发展",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738200.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T09:05:39+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
+      "id": "fin-6a89018ebd552bf520",
+      "title": "ECB Consumer Expectations Survey results – October 2026",
+      "summary": "",
+      "url": "https://www.ecb.europa.eu//press/pr/date/2026/html/ecb.pr261127~2e53af695e.en.html",
+      "source": "欧洲央行 · ECB",
+      "category": "宏观政策",
+      "published_at": "2026-11-27T09:00:00+00:00",
+      "verification": "official_source_metadata_not_independently_fact_checked",
+      "source_type": "official_primary",
+      "region": "全球",
+      "region_basis": "source_or_topic_not_china",
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 60,
+        "timeliness": 100,
+        "readability": 64,
+        "value": 62,
         "heat": 34,
         "appeal": 64,
         "total": 66,
@@ -3193,7 +3553,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 104
+      "priority_rank": 116
     },
     {
       "id": "fin-f0a6a9f9eb49a9fbc2",
@@ -3223,16 +3583,16 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 105
+      "priority_rank": 117
     },
     {
-      "id": "fin-76ab3c9d7ee64818d3",
-      "title": "黑龙江推出多项改革举措 持续优化营商环境吸引投资",
-      "summary": "中新网哈尔滨11月24日电 (韩雪)24日，由中共黑龙江省委宣传部、黑龙江省人民政府新闻办公室主办的“开局起步‘十五五’——奋力谱写中国式现代化黑龙江新篇章”系列主题新闻发布会举行第11场，本场发布会聚焦优化营商环境，介绍黑龙江为经营主体改善发展条件的相关举措。黑龙江省营商环境局党组书记、局长王淑滨在会上通报相关进展。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737089.shtml",
+      "id": "fin-a2b2572e30b109b512",
+      "title": "世界首台承载能力最大380吨高速动平衡试验系统成功交付",
+      "summary": "中新网哈尔滨11月26日电 (王琳 王少东)11月25日，由哈电集团汽轮机公司建设的世界首台承载能力最大380吨高速动平衡试验系统在哈尔滨成功交付、正式投用，标志着中国在超大型核电汽轮机试验验证领域实现重大突破。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738257.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-24T09:51:24+00:00",
+      "published_at": "2026-11-26T10:21:53+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -3240,20 +3600,20 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 65,
+        "timeliness": 76,
         "readability": 84,
-        "value": 67,
-        "heat": 64,
-        "appeal": 49,
+        "value": 60,
+        "heat": 50,
+        "appeal": 64,
         "total": 66,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
           "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 106
+      "priority_rank": 118
     },
     {
       "id": "fin-a938de032c8960a367",
@@ -3283,7 +3643,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 107
+      "priority_rank": 119
     },
     {
       "id": "fin-18af4f2569ca028b76",
@@ -3313,7 +3673,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 108
+      "priority_rank": 120
     },
     {
       "id": "fin-e7b248e2a411f3b3fd",
@@ -3343,7 +3703,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 109
+      "priority_rank": 121
     },
     {
       "id": "fin-4662460755177d2fa5",
@@ -3373,7 +3733,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 110
+      "priority_rank": 122
     },
     {
       "id": "fin-f95fc8b6b6fbe4f5b3",
@@ -3403,7 +3763,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 111
+      "priority_rank": 123
     },
     {
       "id": "fin-cdc9ce7aea80b9a8bf",
@@ -3433,7 +3793,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 112
+      "priority_rank": 124
     },
     {
       "id": "fin-3de6a34528338ca449",
@@ -3463,7 +3823,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 113
+      "priority_rank": 125
     },
     {
       "id": "fin-c2f836051e32ffb57e",
@@ -3493,7 +3853,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 114
+      "priority_rank": 126
     },
     {
       "id": "fin-826a1cc0b6599ed8ad",
@@ -3523,7 +3883,67 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 115
+      "priority_rank": 127
+    },
+    {
+      "id": "fin-1e97aa167d51cd37a9",
+      "title": "广东河源蔬菜类农产品首次销往国际市场",
+      "summary": "中新网河源11月24日电 (张璐 邓俏俏)11月24日，经广州海关所属河源海关(以下简称“河源海关”)检验检疫合格，一批冬瓜、南瓜、甘薯从广东一家农业公司(以下简称“公司”)包装厂装车启运，发往加拿大。这是河源蔬菜类农产品首次走出国门，也是河源特色农产品出口品类上的又一次突破。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737110.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-24T10:28:46+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 47,
+        "readability": 84,
+        "value": 67,
+        "heat": 71,
+        "appeal": 68,
+        "total": 66,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 128
+    },
+    {
+      "id": "fin-18a22e9ba495a8e6a2",
+      "title": "Why southern China’s Huaqiangbei electronics hub is attracting more foreign visitors",
+      "summary": "Phillip, a French tourist who recently visited the sprawling Huaqiangbei electronics market in the southern Chinese tech hub of Shenzhen, said videos of the area posted on YouTube had piqued his curiosity about",
+      "url": "https://www.scmp.com/economy/china-economy/article/3375918/why-southern-chinas-huaqiangbei-electronics-hub-attracting-more-foreign-visitors",
+      "source": "南华早报 · 中国经济",
+      "category": "中国经济",
+      "published_at": "2026-11-27T03:30:10+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 94,
+        "readability": 84,
+        "value": 44,
+        "heat": 60,
+        "appeal": 42,
+        "total": 65,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 129
     },
     {
       "id": "fin-545b4bd64eb291dcff",
@@ -3553,37 +3973,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 116
-    },
-    {
-      "id": "fin-1ca8440be6a138e3bd",
-      "title": "财政部：今年1—10月全国一般公共预算收入195671亿元",
-      "summary": "中新网11月20日电 据财政部网站消息，财政部公布2026年1-10月财政收支情况。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735377.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T09:54:22+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 92,
-        "value": 83,
-        "heat": 38,
-        "appeal": 71,
-        "total": 65,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 117
+      "priority_rank": 130
     },
     {
       "id": "fin-4070e55f82af0deda2",
@@ -3613,7 +4003,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 118
+      "priority_rank": 131
     },
     {
       "id": "fin-f27dcfea090881fe4a",
@@ -3643,7 +4033,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 119
+      "priority_rank": 132
     },
     {
       "id": "fin-dd68660c5357fa6912",
@@ -3673,67 +4063,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 120
-    },
-    {
-      "id": "fin-1253e1732cbf56000a",
-      "title": "你买的进口褪黑素 可能是剂量超标产品",
-      "summary": "别买！假的！又一网红产品翻车",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738179.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T08:35:53+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 71,
-        "value": 57,
-        "heat": 48,
-        "appeal": 49,
-        "total": 64,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 121
-    },
-    {
-      "id": "fin-8fe2a85c7ca8735a45",
-      "title": "钙钛矿光伏技术有望面向空天应用 中国科研团队刷新电池效率",
-      "summary": "中新网海口11月26日电 (王晓斌 王一钦)太阳能飞行器要实现长航时飞行，核心在于太阳能电池能否做到既高效又轻便。记者26日从海南大学获悉，该校科研团队针对全钙钛矿叠层电池在光照下容易性能衰减的难题取得突破，相关研究成果当天在国际学术期刊《自然》上在线发表。这一突破为未来开发超轻质、高性能、高可靠性的新型空天光伏技术提供了关键底层支撑。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738224.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T09:33:22+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 84,
-        "value": 44,
-        "heat": 60,
-        "appeal": 42,
-        "total": 64,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 122
+      "priority_rank": 133
     },
     {
       "id": "fin-00009a421e4e16476c",
@@ -3763,7 +4093,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 123
+      "priority_rank": 134
     },
     {
       "id": "fin-fc310f539bd2c146c3",
@@ -3793,7 +4123,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 124
+      "priority_rank": 135
     },
     {
       "id": "fin-c25d2e83149d7230d9",
@@ -3823,7 +4153,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 125
+      "priority_rank": 136
     },
     {
       "id": "fin-7c89c123e44923d714",
@@ -3853,37 +4183,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 126
-    },
-    {
-      "id": "fin-3c39990e30bb28d85f",
-      "title": "黑龙江哈尔滨：寒地算力蓄势腾飞 东北智算新引擎",
-      "summary": "中新网哈尔滨11月27日电 (记者 田德雨)11月25日，黑龙江省“给力！新引擎”数字经济篇主题采访活动走进哈尔滨算力中心。展示厅内，智慧农业、智慧工业、智慧教育、算力中心等沙盘模型，直观呈现算力赋能各行业数字化应用图景。不远处的机房内，一组组机柜整齐排列，服务器稳定运转。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738635.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-27T03:55:08+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 100,
-        "readability": 92,
-        "value": 44,
-        "heat": 34,
-        "appeal": 42,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "一般财经或行业信息",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 127
+      "priority_rank": 137
     },
     {
       "id": "fin-ef0dc7c82683da2fdd",
@@ -3913,7 +4213,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 128
+      "priority_rank": 138
     },
     {
       "id": "fin-c8b80aca524992f119",
@@ -3943,67 +4243,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 129
-    },
-    {
-      "id": "fin-d2fe738470b996403f",
-      "title": "广西构建梯次试点体系 因地制宜深化农村综合改革",
-      "summary": "中新网南宁11月25日电 (韦佳秀)广西壮族自治区财政厅近日发布消息称，2026年，广西累计下达农村综合改革转移支付资金25.94亿元(人民币，下同)，柳州市鱼峰区入选国家试点并获中央财政奖补1.5亿元，19个自治区示范试点扎实推进，多地形成可复制、可推广的农村综合改革新模式，为助推乡村全面振兴注入新动力。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737598.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-25T08:33:32+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 76,
-        "readability": 84,
-        "value": 67,
-        "heat": 38,
-        "appeal": 49,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 130
-    },
-    {
-      "id": "fin-d43e2b1aadf7bc21f0",
-      "title": "汽车之家出席高德地图车生态盛典 解码购车转化新路径",
-      "summary": "11月25日，高德地图车生态盛典于广州举办。作为高德生态重要战略合作伙伴，汽车之家受邀参会，公司高级副总裁黄炜元发表“打通出行场景与购车决策，共创汽车营销新增量”主题演讲，展望双方战略合作方向，提出以高德出行场景激发用户“心动”，以汽车之家专业能力促成用户购车“行动”，构建从场景种草到购车决策的完整闭环，探索汽车营销全新增长路径。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-25/10737662.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-25T09:52:11+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 76,
-        "readability": 84,
-        "value": 67,
-        "heat": 38,
-        "appeal": 49,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 131
+      "priority_rank": 139
     },
     {
       "id": "fin-c8809d5a9ae497de87",
@@ -4033,7 +4273,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 132
+      "priority_rank": 140
     },
     {
       "id": "fin-9bc500761b768865cd",
@@ -4063,7 +4303,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 133
+      "priority_rank": 141
     },
     {
       "id": "fin-81a84ecbee309e0c2e",
@@ -4093,7 +4333,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 134
+      "priority_rank": 142
     },
     {
       "id": "fin-91ee08a3ba24991ca4",
@@ -4123,7 +4363,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 135
+      "priority_rank": 143
     },
     {
       "id": "fin-2b0b0a5b4953571a12",
@@ -4153,16 +4393,16 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 136
+      "priority_rank": 144
     },
     {
-      "id": "fin-f4edb25db5dd5c77d5",
-      "title": "第四届世界材料大会2027年1月在海南举办 共商材料科技发展大计",
-      "summary": "中新网北京11月24日电 (记者 孙自法)中国材料研究学会11月24日在北京举行专题新闻吹风会宣布，第四届世界材料大会定于2027年1月24日至27日在海南举办。大会以全球材料发展问题为核心主线，汇聚全球顶尖科学家与产业创新力量，共商材料科技未来发展大计。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737007.shtml",
+      "id": "fin-ffba5e4978528a04c6",
+      "title": "辽宁深化数智赋能 建成经营者集中主体数据库",
+      "summary": "中新网沈阳11月26日电 (记者 韩宏)辽宁省市场监督管理局26日发布消息称，辽宁深化数智赋能，做实风险前置预警防控。建成辽宁省经营者集中主体数据库，整合上市公司、市场监管多源数据，构建“一单四表”数据架构，归集5000余条市场主体信息，实行ABCD分级分类管理，精准锁定并购高风险市场主体。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738225.shtml",
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
-      "published_at": "2026-11-24T08:34:50+00:00",
+      "published_at": "2026-11-26T09:34:22+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -4170,80 +4410,20 @@
       "language": "source_original",
       "content_type": "finance",
       "score": {
-        "timeliness": 65,
+        "timeliness": 76,
         "readability": 84,
-        "value": 60,
-        "heat": 50,
-        "appeal": 64,
+        "value": 67,
+        "heat": 38,
+        "appeal": 49,
         "total": 63,
         "basis": "editorial_heuristic_not_audience_metrics",
         "reasons": [
           "历史线索，请核对时效",
-          "一般财经或行业信息",
-          "标题出现数字，需核实口径"
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 137
-    },
-    {
-      "id": "fin-a9e7f112afd92809b9",
-      "title": "察尔汗盐湖钾肥产出20余年稳居中国首位",
-      "summary": "中新网西宁11月24日电(李隽)24日，记者从青海盐湖工业股份有限公司获悉，从2004年起，察尔汗盐湖钾肥年产能稳居中国首位，2015年至今，钾肥年产能稳定在500万吨左右，察尔汗盐湖钾肥产出20余年稳居中国首位。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737014.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-24T08:36:24+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 84,
-        "value": 60,
-        "heat": 50,
-        "appeal": 64,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "一般财经或行业信息",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 138
-    },
-    {
-      "id": "fin-0b73262e19a96dc6a6",
-      "title": "聚焦自主创“芯”和智能制造 2026国家工业软件大会举办",
-      "summary": "中新网北京11月24日电 (记者 孙自法)由中国自动化学会主办的2026国家工业软件大会(NISC2026)近日举办，以“自主创‘芯’·定义制造新纪元”为主题，立足新型工业化战略背景，围绕工业软件自主创新、产学研协同攻关、人才培育与产业生态共建等议题交流研讨，夯实智能制造软件根基，共商工业软件创新发展。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-24/10737088.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-24T09:51:22+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 65,
-        "readability": 84,
-        "value": 60,
-        "heat": 50,
-        "appeal": 64,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "一般财经或行业信息",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 139
+      "priority_rank": 145
     },
     {
       "id": "fin-dbb8ee331f337dddd4",
@@ -4273,7 +4453,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 140
+      "priority_rank": 146
     },
     {
       "id": "fin-03c8d23343a154b910",
@@ -4303,7 +4483,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 141
+      "priority_rank": 147
     },
     {
       "id": "fin-cb89afc0f58c48843d",
@@ -4333,37 +4513,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 142
-    },
-    {
-      "id": "fin-5cfe408cffb863657c",
-      "title": "Anthropic shares fall nearly 6% in premarket amid AI selloff as Nvidia, AMD shares drop",
-      "summary": "Anthropic soared 17% in its first day of trading on Thursday.",
-      "url": "https://www.cnbc.com/2026/11/20/anthropic-stock-ai-amd-nvidia.html",
-      "source": "CNBC · 全球新闻分析",
-      "category": "全球市场",
-      "published_at": "2026-11-20T09:28:57+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 60,
-        "heat": 57,
-        "appeal": 83,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "一般财经或行业信息",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 143
+      "priority_rank": 148
     },
     {
       "id": "fin-6ecad1c1cccdb78e9c",
@@ -4393,7 +4543,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 144
+      "priority_rank": 149
     },
     {
       "id": "fin-8d6ee7bdf7ac592c08",
@@ -4414,156 +4564,6 @@
         "readability": 84,
         "value": 83,
         "heat": 38,
-        "appeal": 71,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 145
-    },
-    {
-      "id": "fin-259abd49f853e3eb4c",
-      "title": "重庆发布86项低空产业发展机会清单 总投资约289亿元",
-      "summary": "中新网重庆11月21日电 (张旭)11月21日下午，重庆国际人才交流大会·超大城市低空综合治理产业人才发展大会在重庆举行。大会发布低空产业发展机会清单86项，预计总投资约289亿元。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-21/10735787.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-21T09:29:24+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 38,
-        "appeal": 71,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 146
-    },
-    {
-      "id": "fin-ae90ffdcec5514e3a4",
-      "title": "南航C919首次执飞广州至天津航线",
-      "summary": "中新网广州11月22日电 (记者 郭军)中国南方航空C919国产大飞机21日首次执飞广州至天津航线，标志着南航国产大飞机正式打通粤港澳大湾区至华北地区的空中通道，进一步完善国产大飞机的全国航线网络布局。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-22/10735979.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-22T02:39:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 60,
-        "heat": 57,
-        "appeal": 83,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "一般财经或行业信息",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 147
-    },
-    {
-      "id": "fin-832dfa7a6c556bfd6d",
-      "title": "北京计划到2030年城市更新年度投资达3000亿元",
-      "summary": "中新社北京11月23日电 (记者 陈杭)北京市政府23日发布的《北京市“十五五”时期城市更新规划》(简称规划)提出，北京计划到2030年，城市更新年度投资达到3000亿元(人民币，下同)，着力推进重点领域投资不低于1000亿元，推动城市更新投资占固定资产投资比例持续提高。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-23/10736523.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-23T09:10:33+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 47,
-        "readability": 84,
-        "value": 83,
-        "heat": 38,
-        "appeal": 71,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 148
-    },
-    {
-      "id": "fin-b35422a86ce092a8af",
-      "title": "U.S. crude oil declines to $85 a barrel on recovering Middle East exports",
-      "summary": "Oil prices are falling as forecasts project a surplus in oil in the fourth quarter",
-      "url": "https://www.cnbc.com/2026/11/16/us-crude-oil-declines-to-87-a-barrel-on-recovering-middle-east-exports.html",
-      "source": "CNBC · 全球财经报道",
-      "category": "企业与市场",
-      "published_at": "2026-11-16T22:19:02+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "全球",
-      "region_basis": "source_or_topic_not_china",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 24,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 149
-    },
-    {
-      "id": "fin-327b87ff2b3de1158f",
-      "title": "中国电动汽车充电枪总数超2500万个",
-      "summary": "中新社北京11月20日电 (记者 王梦瑶)中国国家能源局20日发布的数据显示，截至2026年10月底，中国电动汽车充电基础设施(枪)总数达到2539.1万个，同比增长36.2%。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735224.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T06:47:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 24,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
         "appeal": 71,
         "total": 63,
         "basis": "editorial_heuristic_not_audience_metrics",
