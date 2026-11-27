@@ -65,6 +65,11 @@
  }
  function patchedValue(key,current,doc){
   const p=clone(doc.payload),id=doc.doc_id;
+  if(doc.deleted_at){
+   if(key==="davylab-topic-studio-v1"||key==="davylab-published-articles-v1"||key==="davylab-topic-research-briefs-v1"){if(!Array.isArray(current))throw Error("SYNC_LOCAL_INVALID_ARRAY");const target=key==="davylab-topic-research-briefs-v1"?id.slice(6):id;return current.filter(x=>x?.id!==target)}
+   if(key==="davylab-growth-lab-v1"){const at=id.indexOf(":"),group=id.slice(0,at),recordId=id.slice(at+1);if(!isObj(current)||!["experiments","posters","metrics","reviews"].includes(group))throw Error("SYNC_TOMBSTONE_UNSUPPORTED");current[group]=(Array.isArray(current[group])?current[group]:[]).filter(x=>(group==="reviews"?x?.key:x?.id)!==recordId);return current}
+   throw Error("SYNC_TOMBSTONE_UNSUPPORTED");
+  }
   if(key==="davylab-topic-studio-v1"||key==="davylab-published-articles-v1"){
    if(p.id!==id)throw Error("SYNC_ID_MISMATCH");
    return arrayUpsert(current,p,id,x=>x?.id);
