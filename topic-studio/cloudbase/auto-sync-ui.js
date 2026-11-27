@@ -98,9 +98,9 @@ function stop(){accountGeneration++;
  engine=null;sessionUid=null;
 }
 function onRemoteApplied(keys){window.DAVYLABSyncRefresh?.(keys)}
-function canApplyRemote(){const active=document.activeElement;return !(active&&active.closest(".app")&&(/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)||active.isContentEditable))&&!document.querySelector("dialog[open]:not(#davylabSyncDialog)")}
+function canApplyRemote(){const active=document.activeElement;return !(active&&active.closest(".app")&&(/^(INPUT|TEXTAREA|SELECT)$/.test(active.tagName)||active.isContentEditable))&&!document.querySelector("dialog[open]:not(#davylabSyncDialog)")&&window.DAVYLABProductivity?.canApplyRemote?.()!==false}
 function ownerBound(){try{return localStorage.getItem(window.DAVYLABAutoSyncEngine.boundOwnerKey())}catch{return null}}
-function lockWorkspace(locked){const appRoot=document.querySelector(".app");if(appRoot){appRoot.inert=locked;appRoot.hidden=locked}let lock=$("inkoraPrivateLock");if(!lock){lock=document.createElement("div");lock.id="inkoraPrivateLock";lock.style.cssText="position:fixed;inset:0;z-index:1000;background:#F9F9F7;display:grid;place-content:center;text-align:center;padding:24px";lock.innerHTML='<strong style="font-size:24px">INKORA · BY DAVYLAB</strong><p>此浏览器保存了已绑定账号的私有稿件。请登录原账号继续。</p><button type="button" class="btn primary" id="inkoraUnlock">登录同步</button>';document.body.append(lock);$("inkoraUnlock").addEventListener("click",openDialog)}lock.hidden=!locked;lock.style.display=locked?"grid":"none";if(locked)for(const d of document.querySelectorAll("dialog[open]:not(#davylabSyncDialog)"))d.close();$("syncExportConflicts").hidden=true}
+function lockWorkspace(locked){const appRoot=document.querySelector(".app");if(appRoot){appRoot.inert=locked;appRoot.hidden=locked;appRoot.style.display=locked?"none":""}let lock=$("inkoraPrivateLock");if(!lock){lock=document.createElement("div");lock.id="inkoraPrivateLock";lock.style.cssText="position:fixed;inset:0;z-index:1000;background:#F9F9F7;display:grid;place-content:center;text-align:center;padding:24px";lock.innerHTML='<strong style="font-size:24px">INKORA · BY DAVYLAB</strong><p>此浏览器保存了已绑定账号的私有稿件。请登录原账号继续。</p><button type="button" class="btn primary" id="inkoraUnlock">登录同步</button>';document.body.append(lock);$("inkoraUnlock").addEventListener("click",openDialog)}lock.hidden=!locked;lock.style.display=locked?"grid":"none";if(locked)for(const d of document.querySelectorAll("dialog[open]:not(#davylabSyncDialog)"))d.close();$("syncExportConflicts").hidden=true}
 async function resume(session){
  if(!session?.user?.id)return;
  const uid=session.user.id;const bound=ownerBound();lockWorkspace(Boolean(bound&&bound!==uid));
@@ -219,7 +219,7 @@ window.DAVYLABAutoSync={
    lastSync:engine?.state().lastSync||null,conflicts:engine?.state().conflicts.length||0}),
  recordDeletion:(type,id)=>window.DAVYLABAutoSyncEngine.recordDeletion(localStorage,type,id),open:openDialog
 };
-document.addEventListener("focusout",()=>{if(engine)setTimeout(()=>{if(canApplyRemote())void engine?.sync("editor-blur").catch(()=>{})},1000)});
+document.addEventListener("focusout",()=>{if(engine?.state().phase==="editing")setTimeout(()=>{if(canApplyRemote())void engine?.sync("editor-blur").catch(()=>{})},1000)});
 lockWorkspace(Boolean(ownerBound()));
 (async()=>{
  try{
