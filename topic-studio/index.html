@@ -1,8 +1,8 @@
 <!doctype html>
-<html lang="zh-CN"><head>
+<html lang="zh-CN" data-inkora-theme="inkora"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#F7F9FB"><link rel="icon" type="image/svg+xml" href="./brand/davylab-studio-mark.svg"><meta name="description" content="DAVYLAB 公众号选题工作台：把 AI 热点、产品实践和灵感，变成值得写的内容。">
-<title>DAVYLAB Content Studio · 公众号选题工作台</title>
+<meta name="theme-color" content="#F4F3F0"><link rel="icon" type="image/svg+xml" href="./brand/inkora-mark.svg"><meta name="description" content="INKORA · 墨界 · AI 创作平台｜纸墨如金，By DAVYLAB。">
+<title>INKORA · 墨界 · AI 创作平台</title>
 <style>
 /* Compact two-column editorial workspace: equal top edges and symmetric panels. */
 #section-library .library-workspace{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;gap:18px;width:100%}
@@ -887,10 +887,10 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 #section-library #driveSyncLink{font-size:13px;overflow-wrap:anywhere}
 #section-library #driveSyncLink[hidden]{display:none!important}
 @media(max-width:360px){#section-library .drive-connect-actions{grid-template-columns:1fr}}
-</style></head>
+</style><link rel="stylesheet" href="./inkora-theme.css?v=20261127-paper"></head>
 <body><nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="移动端主导航"><button data-go="discover" class="active"><span>◉</span>发现</button><button data-go="visual"><span>◈</span>配图</button><button data-go="library"><span>▤</span>选题池</button><button data-go="calendar"<span>▦</span>排期</button><button data-go="published"><span>▣</span>内容库</button><button id="mobileMoreToggle" aria-expanded="false"><span>☰</span>更多</button><div class="more-panel" id="mobileMorePanel"><button data-go="article-theme"><span>▤</span>文章主题与排版</button><button data-go="continuity"><span>↳</span>系列管理</button><button data-go="growth"><span>↗</span>增长实验室</button><button data-go="workflow"><span>⇧</span>创作流程</button><button data-go="research"><span>⌕</span>赛道研究</button><button id="mobileVisualSettings"><span>◈</span>外观设置</button><button id="mobileSyncOpen" type="button"><span>⇄</span>账号与自动同步</button><a href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener" style="padding:12px;color:#1765b3;text-decoration:none;font-size:13px">AI 新闻雷达 ↗</a></div></nav><div class="app">
 <aside id="appNavigation">
- <div class="brand"><img class="brand-symbol" src="./brand/davylab-studio-mark.svg" alt="" width="44" height="44"><div class="brand-lockup"><b>DAVYLAB</b><small>CONTENT STUDIO</small></div></div>
+ <div class="brand"><img class="brand-symbol" src="./brand/inkora-mark.svg" alt="" width="44" height="44"><div class="brand-lockup"><b>INKORA</b><small>墨界 · AI 创作平台</small></div></div>
  <div class="sideintro"><strong>公众号选题工作台</strong>把今天看到的热点、做产品的体会和一闪而过的灵感，整理成下一篇值得写的内容。</div>
  <div><div class="navlabel">CONTENT STUDIO</div><div class="navwrap">
   <button class="nav active" data-section="discover"><span class="ico">◉</span>选题发现</button><button class="nav" data-section="visual"><span class="ico">◈</span>配图策划</button><button class="nav" data-section="library"><span class="ico">▤</span>我的选题池</button><button class="nav" data-section="article-theme"><span class="ico">▤</span>文章主题与排版</button><button class="nav" data-section="continuity"><span class="ico">↳</span>系列管理</button><button class="nav" data-section="calendar"><span class="ico">▦</span>内容排期</button><button class="nav" data-section="published"><span class="ico">▣</span>已发内容</button><button class="nav" data-section="workflow"><span class="ico">↗</span>创作流程</button><button class="nav" data-section="growth"><span class="ico">↗</span>增长实验室</button><button class="nav" data-section="research"><span class="ico">⌕</span>赛道研究</button>
@@ -898,9 +898,9 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  <div class="desktop-tools-section"><button class="nav desktop-more-toggle" id="desktopMoreToggle" type="button" aria-controls="desktopSources" aria-expanded="false"><span class="ico">☰</span><span class="desktop-more-title">更多工具</span><span class="desktop-more-chevron" aria-hidden="true">⌄</span></button><div id="desktopSources" class="desktop-source-links" hidden><div class="navlabel">DAVYLAB SOURCES</div><a class="nav source-nav" href="./cloudbase/sync-center.html"><span class="ico">⇄</span><span class="source-nav__label">多端同步中心 · 安全准备</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://chenzhe223-tech.github.io/radar/daily/" target="_blank" rel="noopener"><span class="ico">◈</span><span class="source-nav__label">AI 创造机会雷达</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="./content-pipeline/" target="_blank" rel="noopener"><span class="ico">⇧</span><span class="source-nav__label">内容生产流水线</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://ds.dashboard-studio-1dp.pages.dev/" target="_blank" rel="noopener"><span class="ico">▦</span><span class="source-nav__label">Dashboard Studio</span><span class="source-nav__external" aria-hidden="true">↗</span></a><a class="nav source-nav" href="https://github.com/chenzhe223-tech/workbuddy-workspace/tree/main/skills/ai-instruction-standard" target="_blank" rel="noopener"><span class="ico">✦</span><span class="source-nav__label">AI 指令与完整交付 Skill</span><span class="source-nav__external" aria-hidden="true">↗</span></a></div></div>
  <div class="sidefoot">本机数据正常保存 · 云端同步待验证<br><a href="./cloudbase/sync-center.html">备份与两端比较 →</a><br><a href="https://github.com/chenzhe223-tech/chenzhe223-tech.github.io/tree/main/topic-studio" target="_blank" rel="noopener">查看项目文件 ↗</a></div>
 </aside>
-<main><header class="topbar"><div class="crumb"><img class="crumb-brand-mark" src="./brand/davylab-studio-symbol.svg" alt="" width="21" height="21"><span class="crumb-brand-name">DAVYLAB</span><span class="crumb-separator" aria-hidden="true"></span><strong id="crumbTitle">选题发现</strong></div><div class="actions"><button class="btn small" id="openVisualSettings" type="button" aria-haspopup="dialog">✧ 视觉与动效</button><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small" id="davylabSyncButton" type="button" aria-haspopup="dialog" aria-label="多端同步：登录同步">☁ <span id="davylabSyncButtonLabel">登录同步</span></button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
+<main><header class="topbar"><div class="crumb"><img class="crumb-brand-mark" src="./brand/inkora-mark.svg" alt="" width="21" height="21"><span class="crumb-brand-name">INKORA</span><span class="crumb-separator" aria-hidden="true"></span><strong id="crumbTitle">选题发现</strong></div><div class="actions"><button class="btn small" id="openVisualSettings" type="button" aria-haspopup="dialog">✧ 视觉与动效</button><span class="local">● 本地保存</span><button class="btn small" id="exportTop">导出选题</button><button class="btn small" id="davylabSyncButton" type="button" aria-haspopup="dialog" aria-label="多端同步：登录同步">☁ <span id="davylabSyncButtonLabel">登录同步</span></button><button class="btn small primary" id="newTop">＋ 新建选题</button></div></header>
 <div class="content">
-<div class="mobile-app-cover" id="mobileAppCover"><div class="mobile-cover-head"><span>DAVYLAB / CONTENT STUDIO</span><strong>01 — EDITORIAL</strong></div><div class="mobile-cover-title">从灵感<br>到好文章<span class="mobile-cover-dot">.</span></div><div class="mobile-cover-bottom"><span>发现热点 · 收集选题 · 管理发布</span><span>BY DAVYLAB</span></div></div>
+<div class="mobile-app-cover" id="mobileAppCover"><div class="mobile-cover-head"><span>INKORA / 墨界</span><strong>BY DAVYLAB</strong></div><div class="mobile-cover-title">纸墨如金<span class="mobile-cover-dot">.</span></div><div class="mobile-cover-bottom"><span>让每一个想法成为有价值的作品</span></div></div><section class="inkora-masthead" aria-label="INKORA 品牌封面"><div><div class="inkora-kicker">INKORA · BY DAVYLAB</div><div class="inkora-wordmark">纸墨如金</div><p>让每一个想法成为有价值的作品。</p></div></section>
 <section class="hero"><div><div class="eyebrow">DAVYLAB / CONTENT STUDIO</div><h1>别让好选题，<br>只停留在脑子里。</h1><p>从 AI 热点和开源项目里找灵感，也把你每天做产品、遇到问题、学到的新方法收进来。先选一个值得讲的角度，再慢慢把它做成内容。</p></div><div class="heroactions"><button class="btn primary" id="newHero">＋ 记下一个念头</button><button class="btn" id="refreshRadar">↻ 刷新今日素材</button></div></section>
 
 <div class="stats">
@@ -913,7 +913,7 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
 
 <section class="section active" id="section-discover">
  <div class="discover-index" aria-label="选题发现工作区导航">
-  <div class="discover-index-copy"><div class="discover-index-kicker">DAVYLAB / EDITORIAL DESK</div><h2>选题发现，先找到值得写的。</h2><p>从全球 AI、财经动态与真实科学研究中挑选优质线索，核实原始来源，再转成 DAVYLAB 的原创内容。</p></div>
+  <div class="discover-index-copy"><div class="discover-index-kicker">INKORA / EDITORIAL DESK</div><h2>选题发现，先找到值得写的。</h2><p>从全球 AI、财经动态与真实科学研究中挑选优质线索，核实原始来源，再转成 DAVYLAB 的原创内容。</p></div>
   <div class="discover-index-meta"><span>多来源选题发现</span><span>内容需核实后创作</span></div>
   <nav class="discover-quicknav" aria-label="快速定位选题模块">
    <a href="#opportunityTitle" data-discover-target="opportunityTitle"><span class="discover-nav-no">01</span><span class="discover-nav-copy"><strong>编辑精选</strong><small>AI Radar · 机会判断</small></span></a>
@@ -1388,15 +1388,16 @@ body[data-layout-preset="editorial"] #section-discover>.ai-studio,body[data-layo
  </div>
 </section>
 
-<footer style="font-size:11px;color:#8591a2;padding:8px 2px 30px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><span class="footer-brand"><img src="./brand/davylab-studio-mark.svg" alt="" width="22" height="22">DAVYLAB · 把想法，做成能用的工具。</span><span>素材需核实 · 选题需判断 · 正式发布由作者确认</span></footer>
+<footer style="font-size:11px;color:#8591a2;padding:8px 2px 30px;display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap"><span class="footer-brand"><img src="./brand/inkora-mark.svg" alt="" width="22" height="22">INKORA · 墨界 · By DAVYLAB</span><span>素材需核实 · 选题需判断 · 正式发布由作者确认</span></footer>
 </div></main></div>
 <dialog id="visualSettingsDialog" class="visual-settings-dialog" aria-labelledby="visualSettingsTitle">
- <div class="modalhead"><div><h2 id="visualSettingsTitle">DAVYLAB · 视觉与动效设置</h2><p class="visual-dialog-sub">主题、排版与动效独立配置，实时预览并保存在本机</p></div><button class="close" type="button" id="closeVisualSettings" aria-label="关闭">×</button></div>
+ <div class="modalhead"><div><h2 id="visualSettingsTitle">INKORA · 视觉与动效设置</h2><p class="visual-dialog-sub">主题、排版与动效独立配置，实时预览并保存在本机</p></div><button class="close" type="button" id="closeVisualSettings" aria-label="关闭">×</button></div>
  <div class="visual-tabs" role="tablist" aria-label="视觉设置分类"><button type="button" class="visual-tab active" data-visual-tab="theme" role="tab" aria-selected="true">视觉主题</button><button type="button" class="visual-tab" data-visual-tab="motion" role="tab" aria-selected="false">动态效果</button><button type="button" class="visual-tab" data-visual-tab="layout" role="tab" aria-selected="false">页面布局</button></div>
  <div class="modalbody visual-settings-body">
   <section class="visual-pane active" data-visual-pane="theme">
    <div class="visual-setting-block"><div class="visual-setting-heading"><strong>主题基调</strong><span>选择预设后仍可继续自定义</span></div><div class="visual-theme-grid">
-    <button class="visual-theme-choice active" type="button" data-visual-theme="qore"><span class="visual-swatch qore-swatch"></span><strong>QORE 冰雾玻璃</strong><small>冰蓝 · 雾白 · 轻玻璃</small></button>
+    <button class="visual-theme-choice active" type="button" data-visual-theme="inkora"><span class="visual-swatch inkora-swatch"></span><strong>INKORA 纸墨如金</strong><small>纸白 · 墨黑 · 哑金</small></button>
+    <button class="visual-theme-choice" type="button" data-visual-theme="qore"><span class="visual-swatch qore-swatch"></span><strong>QORE 冰雾玻璃</strong><small>冰蓝 · 雾白 · 轻玻璃</small></button>
     <button class="visual-theme-choice" type="button" data-visual-theme="editorial"><span class="visual-swatch editorial-swatch"></span><strong>Editorial 纸感</strong><small>暖白 · 石墨 · 克制蓝</small></button>
     <button class="visual-theme-choice" type="button" data-visual-theme="ocean"><span class="visual-swatch ocean-swatch"></span><strong>Ocean Mist 海雾</strong><small>浅青 · 深海蓝 · 清透</small></button>
    </div></div>
@@ -1956,7 +1957,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
 /* DAVYLAB Visual DNA · Theme, customization and Motion Lab adaptation */
 (function initDavyVisualDNA(){
  const KEY="davylab-topic-visual-dna-v1";
- const defaults={theme:"qore",colors:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},density:"comfortable",radius:"20",font:"system",navMode:"side",layout:{...DavyLayoutConfig.defaults.layout},navigation:{...DavyLayoutConfig.defaults.navigation},motion:{enabled:true,effect:"fade-up",duration:1200,intensity:70,distance:24,direction:"up",reduce:false}};
+ const defaults={theme:"inkora",brandVersion:1,colors:{bg:"#F4F3F0",card:"#FFFFFF",accent:"#886031",ink:"#202121",line:"#DFDCD5",nav:"#202121"},density:"comfortable",radius:"20",font:"system",navMode:"side",layout:{...DavyLayoutConfig.defaults.layout},navigation:{...DavyLayoutConfig.defaults.navigation},motion:{enabled:true,effect:"fade-up",duration:1200,intensity:70,distance:24,direction:"up",reduce:false}};
  const effects={
   "fade-up":{name:"淡入上移",description:"以轻微上移和透明度变化建立进入感，适合内容卡片与页面模块。",frames:(d,i)=>[{opacity:0,transform:"translateY("+d*i+"px)"},{opacity:1,transform:"translateY(0)"}]},
   spring:{name:"弹性聚焦",description:"先轻微放大再回到稳定尺寸，适合重点卡片与轻量状态反馈。",frames:(d,i)=>[{opacity:0,transform:"scale("+(1-.12*i)+")"},{opacity:1,transform:"scale(1)"}]},
@@ -1968,11 +1969,11 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  let settings=read();
  const $v=id=>document.getElementById(id);
  const dialog=$v("visualSettingsDialog");
- function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");const legacyMode=x?.navigation?.mode||(x?.navMode==="top"?"top":"left");const merged={...defaults,...(x&&typeof x==="object"?x:{}),colors:{...defaults.colors,...(x?.colors||{})},motion:{...defaults.motion,...(x?.motion||{})}};merged.navigation={...defaults.navigation,...(x?.navigation||{}),mode:legacyMode};return {...merged,...DavyLayoutConfig.normalize(merged)}}catch{return {...JSON.parse(JSON.stringify(defaults)),...DavyLayoutConfig.normalize(defaults)}}}
+ function read(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");const legacyMode=x?.navigation?.mode||(x?.navMode==="top"?"top":"left");const legacy=x&&x.brandVersion!==1;const merged={...defaults,...(x&&typeof x==="object"?x:{}),theme:legacy?"inkora":(x?.theme||defaults.theme),brandVersion:1,colors:{...defaults.colors,...(legacy?{}:(x?.colors||{}))},motion:{...defaults.motion,...(x?.motion||{})}};merged.navigation={...defaults.navigation,...(x?.navigation||{}),mode:legacyMode};return {...merged,...DavyLayoutConfig.normalize(merged)}}catch{return {...JSON.parse(JSON.stringify(defaults)),...DavyLayoutConfig.normalize(defaults)}}}
  function persist(){try{localStorage.setItem(KEY,JSON.stringify(settings));return true}catch{return false}}
  function setVar(k,v){document.documentElement.style.setProperty(k,v)}
  function apply(){
-  const c=settings.colors;document.body.style.background="radial-gradient(ellipse at 8% 2%,"+c.bg+" 0,transparent 38%),radial-gradient(ellipse at 88% 4%,#f1dafa88 0,transparent 28%),linear-gradient(135deg,"+c.bg+",#f4f8ff 55%,#f8f3fb)";setVar("--paper",c.bg);setVar("--card",c.card);setVar("--blue",c.accent);setVar("--ink",c.ink);setVar("--line",c.line);setVar("--nav",c.nav);setVar("--blue-soft",c.accent+"18");setVar("--r",settings.radius+"px");
+  const c=settings.colors;document.documentElement.dataset.inkoraTheme=settings.theme==="inkora"?"inkora":"custom";document.body.style.background=settings.theme==="inkora"?c.bg:"radial-gradient(ellipse at 8% 2%,"+c.bg+" 0,transparent 38%),radial-gradient(ellipse at 88% 4%,#f1dafa88 0,transparent 28%),linear-gradient(135deg,"+c.bg+",#f4f8ff 55%,#f8f3fb)";setVar("--paper",c.bg);setVar("--card",c.card);setVar("--blue",c.accent);setVar("--ink",c.ink);setVar("--line",c.line);setVar("--nav",c.nav);setVar("--blue-soft",c.accent+"18");setVar("--r",settings.radius+"px");
   document.documentElement.style.setProperty("--vd-font",settings.font==="serif"?' "Noto Serif SC", "Songti SC", serif':settings.font==="sans"?' "Noto Sans SC", "PingFang SC", sans-serif':"");
   document.body.style.fontFamily=settings.font==="serif"?' "Noto Serif SC","Songti SC",serif':settings.font==="sans"?' "Noto Sans SC","PingFang SC",sans-serif':'-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif';
   document.body.classList.toggle("visual-density-compact",settings.density==="compact");
@@ -1996,7 +1997,7 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
   if($v("visualContrastNote"))$v("visualContrastNote").textContent="主文字 / 页面背景对比度："+ratio.toFixed(2)+":1。"+(ratio>=4.5?"符合普通文字 WCAG AA 对比度参考。":"对比度偏低，建议加深文字或提高背景亮度。");
  }
  function setTheme(name){
-  const themes={qore:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},editorial:{bg:"#f4f1eb",card:"#fffefa",accent:"#3567a8",ink:"#202b38",line:"#e4dfd6",nav:"#f2eee7"},ocean:{bg:"#e8f5f4",card:"#f7fcfb",accent:"#168a91",ink:"#17333d",line:"#d2e8e5",nav:"#e1f1ef"}};
+  const themes={inkora:{...defaults.colors},qore:{bg:"#eaf3ff",card:"#f7fbff",accent:"#168cf0",ink:"#15243a",line:"#d8e5f4",nav:"#e9f3ff"},editorial:{bg:"#f4f1eb",card:"#fffefa",accent:"#3567a8",ink:"#202b38",line:"#e4dfd6",nav:"#f2eee7"},ocean:{bg:"#e8f5f4",card:"#f7fcfb",accent:"#168a91",ink:"#17333d",line:"#d2e8e5",nav:"#e1f1ef"}};
   settings.theme=name;settings.colors={...themes[name]};apply();persist();
  }
  function reduced(){return settings.motion.reduce||window.matchMedia("(prefers-reduced-motion: reduce)").matches}
@@ -2037,11 +2038,11 @@ renderStats();renderTopics();renderCalendar();loadRadar();mergePublishedTopics()
  $v("saveVisualSettings").addEventListener("click",()=>{const ok=persist();toast(ok?"视觉主题设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("saveVisualMotion").addEventListener("click",()=>{const ok=persist();toast(ok?"动效设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  $v("exportVisualMotion").addEventListener("click",exportConfig);
- $v("resetVisualTheme").addEventListener("click",()=>{setTheme("qore");toast("主题颜色已恢复默认，布局、字体与动效设置未更改")});$v("resetVisualLayout").addEventListener("click",()=>{settings={...settings,density:defaults.density,radius:defaults.radius,font:defaults.font,...DavyLayoutConfig.resetLayout(settings)};apply();persist();toast("布局、导航与界面细节已恢复默认，主题颜色与动效设置未更改")});$v("saveVisualLayout").addEventListener("click",()=>{const ok=persist();toast(ok?"布局与导航设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
+ $v("resetVisualTheme").addEventListener("click",()=>{setTheme("inkora");toast("主题颜色已恢复默认，布局、字体与动效设置未更改")});$v("resetVisualLayout").addEventListener("click",()=>{settings={...settings,density:defaults.density,radius:defaults.radius,font:defaults.font,...DavyLayoutConfig.resetLayout(settings)};apply();persist();toast("布局、导航与界面细节已恢复默认，主题颜色与动效设置未更改")});$v("saveVisualLayout").addEventListener("click",()=>{const ok=persist();toast(ok?"布局与导航设置已保存":"浏览器存储不可用，当前设置仅在本次页面有效")});
  document.querySelectorAll(".nav[data-section]").forEach(b=>b.addEventListener("click",()=>window.setTimeout(animateElements,60)));
  document.querySelectorAll("#appNavigation a.nav, #appNavigation button.nav").forEach(a=>a.addEventListener("click",()=>{if(["hidden","floating"].includes(settings.navigation.mode)){settings.navigation.drawerOpen=false;document.body.classList.remove("nav-open");$v("visualNavRecovery").setAttribute("aria-expanded","false")}}));
  window.DAVYLABRefreshVisualSettings=function(){settings=read();apply()};
- apply();setTab("theme");window.setTimeout(animateElements,120);
+ apply();persist();setTab("theme");window.setTimeout(animateElements,120);
 })();
 
 </script><script>(function(){
