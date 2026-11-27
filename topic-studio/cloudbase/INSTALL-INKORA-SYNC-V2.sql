@@ -9,7 +9,7 @@ BEGIN;
 DO $install_gate$
 DECLARE chosen_uid text := '<REPLACE_WITH_PRIVATE_AUTH_UID>';
 BEGIN
- IF chosen_uid = '<REPLACE_WITH_PRIVATE_AUTH_UID>' OR length(chosen_uid) NOT BETWEEN 1 AND 128
+ IF left(chosen_uid,1) = '<' OR btrim(chosen_uid) <> chosen_uid OR length(chosen_uid) NOT BETWEEN 1 AND 128
  THEN RAISE EXCEPTION 'INKORA_OWNER_AUTH_UID_REQUIRED'; END IF;
  PERFORM set_config('inkora.install_owner',chosen_uid,true);
 END $install_gate$;
