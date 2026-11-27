@@ -57,6 +57,8 @@ async function main() {
     page.on("pageerror", error => errors.push(error.message));
     page.on("response", response => { if (response.status() === 404) errors.push("HTTP 404 @ " + response.url()); });
     page.on("console", message => { if (message.type() === "error" && !/status of 429/i.test(message.text())) errors.push(message.text() + " @ " + (message.location()?.url || "unknown")); });
+    // Synthetic picker uses actual browser private filesystem, not the user's computer.
+    await page.addInitScript(()=>{window.showDirectoryPicker=async()=>{const root=await navigator.storage.getDirectory();return root.getDirectoryHandle("QA-My-Drive",{create:true})}});
     await page.goto(`http://127.0.0.1:${address.port}/topic-studio/index.html`, { waitUntil: "domcontentloaded" });
     await page.getByRole("heading", { name: /选题发现，先找到值得写的/ }).waitFor();
     assert.equal(await page.title(), "DAVYLAB Content Studio · 公众号选题工作台");
@@ -217,7 +219,16 @@ async function main() {
     await page.locator("#section-library.active").waitFor();
     const ctPrompt=await page.locator("#promptBox").inputValue();
 
-    // Drive UI checks do not authorize or send data to a real Google account.
+    // Local mode is default; actual browser filesystem bytes must match the prompt.
+    assert.equal(await page.locator("#driveSettings").getAttribute("open"),null);
+    await page.locator("#driveLocalSync").click();
+    await page.waitForFunction(()=>document.getElementById("driveLocalStatus").textContent.includes("本地保存并回读成功"));
+    assert.ok((await page.locator("#driveLocalStatus").innerText()).includes("云端上传状态待"));
+    const localDriveText=await page.evaluate(async()=>{const path=document.getElementById("driveLocalPath").textContent.split(" / ");let dir=await navigator.storage.getDirectory();for(const name of path.slice(0,-1))dir=await dir.getDirectoryHandle(name);return (await (await dir.getFileHandle(path.at(-1))).getFile()).text()});
+    assert.equal(localDriveText,ctPrompt,"local directory contains exact full instruction");
+    await page.locator("#driveLocalForget").click();
+    await page.locator("#driveSettings summary").click();
+    // Backup API configuration gate does not send any data.
     await page.locator("#driveSyncPrompt").click();
     assert.ok((await page.locator("#driveSyncStatus").innerText()).includes("客户端 ID"),"missing configuration blocks transfer");
     assert.equal(await page.locator("#driveSettings").getAttribute("open"),"");
