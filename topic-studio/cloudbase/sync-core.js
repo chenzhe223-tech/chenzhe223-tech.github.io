@@ -154,6 +154,34 @@
    identical:result.identical.length,unchanged:result.unchanged.length,conflicts:result.conflicts.length};
   return result;
  }
+ // Deletion-aware plan: only a recorded explicit intent with matching server revision may delete.
+ function compareV2(localDocs,remoteDocs,baseDocs=[],intents={}){
+  const L=mapDocs(localDocs),R=mapDocs(remoteDocs),B=mapDocs(baseDocs),plan=compare(localDocs.filter(d=>!R.get(key(d))?.deleted_at),remoteDocs.filter(d=>!d.deleted_at),baseDocs.filter(d=>!d.deleted_at));
+  const special=new Set([...R].filter(([,d])=>d.deleted_at).map(([k])=>k));
+  for(const k of Object.keys(intents))special.add(k);
+  for(const [k,b] of B)if(b.deleted_at)special.add(k);
+  for(const field of ["upload","download","conflicts"])plan[field]=plan[field].filter(x=>!special.has(x.key));
+  for(const field of ["identical","unchanged"])plan[field]=plan[field].filter(k=>!special.has(k));
+  plan.deletes=[];plan.completedIntents=[];
+  for(const k of special){
+   const l=L.get(k),r=R.get(k),b=B.get(k),intent=intents[k];
+   if(r?.deleted_at){
+    if(!l){plan.identical.push(k);if(intent)plan.completedIntents.push(k)}
+    else if(same(l.payload,r.payload)&&!b?.deleted_at){plan.download.push({key:k,document:r,reason:"REMOTE_EXPLICIT_DELETION"});if(intent)plan.completedIntents.push(k)}
+    else plan.conflicts.push({key:k,reason:"DELETED_REMOTE_LOCAL_EDIT_PRESERVED"});
+    continue;
+   }
+   if(b?.deleted_at){plan.conflicts.push({key:k,reason:"SERVER_TOMBSTONE_MISSING_OR_RECREATED"});continue}
+   if(!intent)continue;
+   if(l){plan.conflicts.push({key:k,reason:"LOCAL_RECORD_RESTORED_AFTER_DELETE_INTENT"});continue}
+   if(!r&&!b){plan.completedIntents.push(k);continue}
+   if(r&&b&&Number.isInteger(intent.expectedRevision)&&r.revision===intent.expectedRevision&&r.revision===b.revision&&same(r.payload,b.payload)){
+    plan.deletes.push({key:k,document:r,reason:"EXPLICIT_LOCAL_DELETE"});
+   }else plan.conflicts.push({key:k,reason:"DELETE_CONCURRENT_OR_UNKNOWN_VERSION"});
+  }
+  plan.summary={upload:plan.upload.length,download:plan.download.length,identical:plan.identical.length,unchanged:plan.unchanged.length,conflicts:plan.conflicts.length,deletes:plan.deletes.length};
+  return plan;
+ }
  function backup(storage,now=new Date()){
   const captured=read(storage);
   const createdAt=now instanceof Date?now.toISOString():new Date(now).toISOString();
@@ -177,5 +205,5 @@
   const b=parseBackup(value);
   return toDocuments({raw:b.raw,warnings:[]});
  }
- return{VERSION,SOURCES,MAX_BACKUP_BYTES,read,toDocuments,compare,backup,parseBackup,fromBackup,stable};
+ return{VERSION,SOURCES,MAX_BACKUP_BYTES,read,toDocuments,compare,compareV2,backup,parseBackup,fromBackup,stable};
 });
