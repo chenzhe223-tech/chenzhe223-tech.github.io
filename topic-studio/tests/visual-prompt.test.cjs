@@ -167,3 +167,22 @@ assert(html.includes('promptQaStatus").textContent="素材验收未通过"'),"Ge
  await assert.rejects(()=>write(root,{...base,text:""}),/有效指令/);
  console.log("Local Drive folder mock regression passed: classification, stable updates, history, platform isolation, readback.");
 })().catch(e=>{console.error(e);process.exitCode=1});
+
+
+/* INKORA v3 draft handoff: no publication status mutation and actual ZIP bytes. */
+{
+ const inkora=require("../inkora-workspace-v3.js");
+ const fixture={title:"测试稿",author:"DAVYLAB",body:"真实测试正文",theme:"alabaster",status:"inbox",html:'<section style="background-color:#FFFFFF;color:#111110"><p style="font-size:15.5px">真实测试正文</p></section>',layout:{theme:"alabaster"},checks:[]};
+ const h=inkora.handoff(fixture);
+ assert.equal(h.payload.contentHtml,h.files["05_公众号内联同步版.html"]);
+ assert.equal(h.payload.approvalStatus,"draft");assert.equal(h.payload.wechatDraftVerified,false);assert.equal(h.payload.published,false);
+ assert.equal(JSON.parse(h.files["_sync_payload.json"]).contentHtml,fixture.html);
+ assert.throws(()=>inkora.handoff({...fixture,html:"<script>alert(1)</script>"}),/安全检查/);
+ assert.throws(()=>inkora.handoff({...fixture,body:""}),/完整正文/);
+ const bytes=inkora.zip(h.files),buf=Buffer.from(bytes);
+ assert.equal(buf.readUInt32LE(0),0x04034b50);assert.equal(buf.readUInt32LE(buf.length-22),0x06054b50);assert.equal(buf.readUInt16LE(buf.length-12),3);
+ let offset=0,count=0;
+ while(buf.readUInt32LE(offset)===0x04034b50){const length=buf.readUInt32LE(offset+18),nameLength=buf.readUInt16LE(offset+26),start=offset+30+nameLength+buf.readUInt16LE(offset+28),name=buf.subarray(offset+30,offset+30+nameLength).toString("utf8"),value=buf.subarray(start,start+length);assert.equal(value.toString("utf8"),h.files[name]);assert.equal(inkora.crc32(value),buf.readUInt32LE(offset+14));offset=start+length;count++}
+ assert.equal(count,3);
+ console.log("INKORA v3 inline handoff and ZIP byte-level regression passed");
+}
