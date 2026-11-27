@@ -40,7 +40,7 @@ console.log("PASS DAVYLAB Editorial brand vectors, favicon, navigation/masthead,
 const inkora=fs.readFileSync(path.join(root,"inkora-theme.css"),"utf8");
 assert(html.includes("<title>INKORA · 墨界 · AI 创作平台</title>"));
 assert(html.includes('data-inkora-theme="inkora"')&&html.includes('data-visual-theme="inkora"'));
-assert(inkora.includes("--paper:#F4F3F0")&&inkora.includes("--card:#FFFFFF")&&inkora.includes("--nav:#202121"));
+assert(inkora.includes("--inkora-canvas:#F9F9F7")&&inkora.includes("--inkora-obsidian:#111110")&&inkora.includes("--inkora-brass:#B68D40")&&inkora.includes("--inkora-vermilion:#C94A29"));
 assert(inkora.includes("inkora-paper-brush.svg")&&inkora.includes(":not(#atPreview *)"));
 const illustration=fs.readFileSync(path.join(root,"brand/inkora-paper-brush.svg"),"utf8");
 assert(illustration.includes("<svg")&&illustration.includes("纸张、毛笔与墨迹"));
