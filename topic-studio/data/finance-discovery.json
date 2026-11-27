@@ -1,9 +1,9 @@
 {
   "schema_version": 2,
   "source": "DAVYLAB official public feeds and openly available media RSS",
-  "checked_at": "2026-11-27T08:22:17+00:00",
+  "checked_at": "2026-11-27T08:26:25+00:00",
   "count": 150,
-  "latest_published_at": "2026-11-27T08:06:10+00:00",
+  "latest_published_at": "2026-11-27T08:15:34+00:00",
   "china_count": 109,
   "rank_method": "finance-priority-v1",
   "rank_weights": {
@@ -14,7 +14,7 @@
     "appeal": 15
   },
   "rank_disclaimer": "Five editorial relevance scores are heuristic estimates. Heat is topic relevance, NOT real traffic, views, shares, or verified popularity.",
-  "fresh_within_72h": 118,
+  "fresh_within_72h": 119,
   "status": "ok",
   "sources": [
     {
@@ -886,36 +886,6 @@
       "priority_rank": 27
     },
     {
-      "id": "fin-24fe78a8784ebe4a86",
-      "title": "商务部：中方将密切关注欧方混动汽车保障措施后续调查进展",
-      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，有记者提问，11月24日，欧盟委员会发布混动汽车全球保障措施初步裁定，拟于12月1日起采取为期200天的临时保障措施，在此期间中国对欧出口混动车份额约为19.2万辆。请问中方对此有何评论？",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738144.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-26T08:24:16+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 88,
-        "readability": 92,
-        "value": 67,
-        "heat": 74,
-        "appeal": 49,
-        "total": 75,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "近24小时新线索",
-          "涉及财经政策或经营指标",
-          "缺少标题数字，不等于缺乏新闻价值"
-        ]
-      },
-      "priority_rank": 28
-    },
-    {
       "id": "fin-65a7bfd46e33d54b02",
       "title": "商务部：望美中推动对等降税安排尽快落地实施",
       "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，有记者提问，中美去年在吉隆坡达成的贸易共识延迟到27年一月。请问上周中美是否讨论再延迟此贸易共识，或是计划在下个月有相关讨论？一月份前预计是否会增加关税或是加强稀土出口管制？何时落实300亿降关税？",
@@ -943,7 +913,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 29
+      "priority_rank": 28
     },
     {
       "id": "fin-9f44998fea290908de",
@@ -973,7 +943,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 30
+      "priority_rank": 29
     },
     {
       "id": "fin-c21e4a41cb6cd2f4d4",
@@ -1003,7 +973,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 31
+      "priority_rank": 30
     },
     {
       "id": "fin-e3f59d273c0bc851a1",
@@ -1033,7 +1003,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 32
+      "priority_rank": 31
     },
     {
       "id": "fin-5646360bbe71e5a3f7",
@@ -1063,7 +1033,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 33
+      "priority_rank": 32
     },
     {
       "id": "fin-4a4d3c7cecf0d1dd06",
@@ -1093,7 +1063,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 34
+      "priority_rank": 33
     },
     {
       "id": "fin-8f5b9790b290200b29",
@@ -1123,7 +1093,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 35
+      "priority_rank": 34
     },
     {
       "id": "fin-0c7d068454da3a3a78",
@@ -1153,7 +1123,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 36
+      "priority_rank": 35
     },
     {
       "id": "fin-c2cf0074819c3f240c",
@@ -1183,7 +1153,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 37
+      "priority_rank": 36
     },
     {
       "id": "fin-001f0b65173363a23e",
@@ -1213,7 +1183,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 38
+      "priority_rank": 37
     },
     {
       "id": "fin-eb7fcc6a71409cefe8",
@@ -1243,7 +1213,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 39
+      "priority_rank": 38
     },
     {
       "id": "fin-4277ab8b356914d426",
@@ -1273,7 +1243,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 40
+      "priority_rank": 39
     },
     {
       "id": "fin-6830aad901d1c5d7f5",
@@ -1303,7 +1273,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 41
+      "priority_rank": 40
     },
     {
       "id": "fin-39be6315b47460ca77",
@@ -1333,7 +1303,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 42
+      "priority_rank": 41
     },
     {
       "id": "fin-7b92222b7a2895e51c",
@@ -1363,7 +1333,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 43
+      "priority_rank": 42
     },
     {
       "id": "fin-0f9eb605697a24dd97",
@@ -1393,7 +1363,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 44
+      "priority_rank": 43
     },
     {
       "id": "fin-a8dd1a4916c7bc4000",
@@ -1423,7 +1393,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 45
+      "priority_rank": 44
     },
     {
       "id": "fin-67c682c62af407a839",
@@ -1453,7 +1423,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 46
+      "priority_rank": 45
     },
     {
       "id": "fin-44841a3391a7e9411d",
@@ -1483,7 +1453,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 47
+      "priority_rank": 46
     },
     {
       "id": "fin-9ac94552ea2b1477c5",
@@ -1513,7 +1483,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 48
+      "priority_rank": 47
     },
     {
       "id": "fin-c393083937a4ffacc7",
@@ -1543,7 +1513,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 49
+      "priority_rank": 48
     },
     {
       "id": "fin-99f778cafcc8d68bb0",
@@ -1573,7 +1543,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 50
+      "priority_rank": 49
     },
     {
       "id": "fin-81db16a0c48c8d5851",
@@ -1603,7 +1573,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 51
+      "priority_rank": 50
     },
     {
       "id": "fin-8ee006b8a3aa546cad",
@@ -1633,7 +1603,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 52
+      "priority_rank": 51
     },
     {
       "id": "fin-ccf242c65e5aaa42c9",
@@ -1663,7 +1633,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 53
+      "priority_rank": 52
     },
     {
       "id": "fin-d75b39167125563314",
@@ -1693,7 +1663,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 54
+      "priority_rank": 53
     },
     {
       "id": "fin-8023f9bc101c2336cd",
@@ -1723,7 +1693,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 55
+      "priority_rank": 54
     },
     {
       "id": "fin-a2b2572e30b109b512",
@@ -1753,7 +1723,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 56
+      "priority_rank": 55
     },
     {
       "id": "fin-1873dc325b6fe4eeea",
@@ -1783,7 +1753,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 57
+      "priority_rank": 56
     },
     {
       "id": "fin-ee53adbaa022cb629b",
@@ -1813,7 +1783,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 58
+      "priority_rank": 57
     },
     {
       "id": "fin-04341119ce3287b01e",
@@ -1843,7 +1813,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 59
+      "priority_rank": 58
     },
     {
       "id": "fin-c8bd2e4fcdbf7a3b4f",
@@ -1873,7 +1843,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 60
+      "priority_rank": 59
     },
     {
       "id": "fin-d5f73ba4b22ba402ec",
@@ -1903,7 +1873,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 61
+      "priority_rank": 60
     },
     {
       "id": "fin-b87c0a26f497913fc9",
@@ -1933,7 +1903,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 62
+      "priority_rank": 61
     },
     {
       "id": "fin-b8a98f9f39ed35f92d",
@@ -1943,6 +1913,36 @@
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
       "published_at": "2026-11-26T07:43:44+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 76,
+        "readability": 92,
+        "value": 67,
+        "heat": 64,
+        "appeal": 49,
+        "total": 70,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "历史线索，请核对时效",
+          "涉及财经政策或经营指标",
+          "缺少标题数字，不等于缺乏新闻价值"
+        ]
+      },
+      "priority_rank": 62
+    },
+    {
+      "id": "fin-24fe78a8784ebe4a86",
+      "title": "商务部：中方将密切关注欧方混动汽车保障措施后续调查进展",
+      "summary": "中新网11月26日电 11月26日，商务部召开11月第4次例行新闻发布会。会上，有记者提问，11月24日，欧盟委员会发布混动汽车全球保障措施初步裁定，拟于12月1日起采取为期200天的临时保障措施，在此期间中国对欧出口混动车份额约为19.2万辆。请问中方对此有何评论？",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-26/10738144.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-26T08:24:16+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
@@ -2086,6 +2086,36 @@
       "priority_rank": 67
     },
     {
+      "id": "fin-e3a8200d2577210a90",
+      "title": "去年以来央企开展整合项目1100余个 涉及资产规模约6.8万亿元",
+      "summary": "今天，国务院国资委对外通报了央企专业化整合工作新进展，并为下一步中央企业专业化整合工作做出部署。",
+      "url": "https://www.chinanews.com.cn/cj/2026/11-27/10738791.shtml",
+      "source": "中国新闻网 · 财经新闻",
+      "category": "中国财经",
+      "published_at": "2026-11-27T08:15:34+00:00",
+      "verification": "media_report_metadata_not_independently_verified",
+      "source_type": "media_report",
+      "region": "中国",
+      "region_basis": "china_scope_feed",
+      "language": "source_original",
+      "content_type": "finance",
+      "score": {
+        "timeliness": 100,
+        "readability": 84,
+        "value": 60,
+        "heat": 34,
+        "appeal": 64,
+        "total": 69,
+        "basis": "editorial_heuristic_not_audience_metrics",
+        "reasons": [
+          "近24小时新线索",
+          "一般财经或行业信息",
+          "标题出现数字，需核实口径"
+        ]
+      },
+      "priority_rank": 68
+    },
+    {
       "id": "fin-38ca9838de96ca28d4",
       "title": "Switzerland’s biggest bank set for showdown with lawmakers as capital fight intensifies amid crisis planning",
       "summary": "Swiss regulator FINMA said UBS can execute its preferred crisis-resolution strategy, even as the bank faces a separate parliamentary fight over tougher capital requirements.",
@@ -2113,7 +2143,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 68
+      "priority_rank": 69
     },
     {
       "id": "fin-3aa3cf73f561d2c58c",
@@ -2143,7 +2173,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 69
+      "priority_rank": 70
     },
     {
       "id": "fin-2c846073e18a061983",
@@ -2173,7 +2203,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 70
+      "priority_rank": 71
     },
     {
       "id": "fin-a8ece15de4a66efd0d",
@@ -2203,7 +2233,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 71
+      "priority_rank": 72
     },
     {
       "id": "fin-6719b5ec738e78fdc6",
@@ -2233,7 +2263,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 72
+      "priority_rank": 73
     },
     {
       "id": "fin-a6b9ed5501529af29e",
@@ -2263,7 +2293,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 73
+      "priority_rank": 74
     },
     {
       "id": "fin-7c162fb0d4d7473a6f",
@@ -2293,7 +2323,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 74
+      "priority_rank": 75
     },
     {
       "id": "fin-a7c1c3d4760d492e03",
@@ -2323,7 +2353,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 75
+      "priority_rank": 76
     },
     {
       "id": "fin-8dc2559219bcf8f978",
@@ -2353,7 +2383,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 76
+      "priority_rank": 77
     },
     {
       "id": "fin-982a0d750c5d979782",
@@ -2383,7 +2413,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 77
+      "priority_rank": 78
     },
     {
       "id": "fin-7cfc904a976275c490",
@@ -2413,7 +2443,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 78
+      "priority_rank": 79
     },
     {
       "id": "fin-e6a01d99e7d83cd33d",
@@ -2443,7 +2473,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 79
+      "priority_rank": 80
     },
     {
       "id": "fin-ffba5e4978528a04c6",
@@ -2473,7 +2503,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 80
+      "priority_rank": 81
     },
     {
       "id": "fin-9ad82ed5f0daab1534",
@@ -2503,7 +2533,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 81
+      "priority_rank": 82
     },
     {
       "id": "fin-e6f50467729d803d20",
@@ -2533,7 +2563,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 82
+      "priority_rank": 83
     },
     {
       "id": "fin-a82d7759b619009982",
@@ -2563,7 +2593,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 83
+      "priority_rank": 84
     },
     {
       "id": "fin-c7bd9248faa70c8552",
@@ -2593,7 +2623,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 84
+      "priority_rank": 85
     },
     {
       "id": "fin-b06feb7b947b01b92a",
@@ -2623,7 +2653,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 85
+      "priority_rank": 86
     },
     {
       "id": "fin-8b213291892cdabe0d",
@@ -2653,7 +2683,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 86
+      "priority_rank": 87
     },
     {
       "id": "fin-5451bbd1c3f10dfb59",
@@ -2683,7 +2713,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 87
+      "priority_rank": 88
     },
     {
       "id": "fin-75bafb5b8da29c669f",
@@ -2713,7 +2743,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 88
+      "priority_rank": 89
     },
     {
       "id": "fin-a16b82e4811df6c17c",
@@ -2743,7 +2773,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 89
+      "priority_rank": 90
     },
     {
       "id": "fin-b9c36614969a0dc346",
@@ -2773,7 +2803,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 90
+      "priority_rank": 91
     },
     {
       "id": "fin-9a0d630bdb6c58c9f2",
@@ -2803,7 +2833,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 91
+      "priority_rank": 92
     },
     {
       "id": "fin-18a22e9ba495a8e6a2",
@@ -2833,7 +2863,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 92
+      "priority_rank": 93
     },
     {
       "id": "fin-74c6edaa865ada8f77",
@@ -2863,7 +2893,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 93
+      "priority_rank": 94
     },
     {
       "id": "fin-7e4963d263c505182d",
@@ -2893,7 +2923,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 94
+      "priority_rank": 95
     },
     {
       "id": "fin-80802e4592c7eb73d1",
@@ -2923,7 +2953,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 95
+      "priority_rank": 96
     },
     {
       "id": "fin-621c593a4f1e472ff6",
@@ -2953,7 +2983,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 96
+      "priority_rank": 97
     },
     {
       "id": "fin-43723b5241357253c3",
@@ -2983,7 +3013,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 97
+      "priority_rank": 98
     },
     {
       "id": "fin-992e39c481e99801f8",
@@ -3013,7 +3043,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 98
+      "priority_rank": 99
     },
     {
       "id": "fin-55a46c451e9c6d7661",
@@ -3043,7 +3073,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 99
+      "priority_rank": 100
     },
     {
       "id": "fin-4a2e5bb7d6ae2fe57e",
@@ -3073,7 +3103,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 100
+      "priority_rank": 101
     },
     {
       "id": "fin-5a16ccb699f68d72c5",
@@ -3103,7 +3133,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 101
+      "priority_rank": 102
     },
     {
       "id": "fin-28ca4b2f9b069875ff",
@@ -3133,7 +3163,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 102
+      "priority_rank": 103
     },
     {
       "id": "fin-3822f7e9fe3adb61e9",
@@ -3163,7 +3193,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 103
+      "priority_rank": 104
     },
     {
       "id": "fin-f0a6a9f9eb49a9fbc2",
@@ -3193,7 +3223,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 104
+      "priority_rank": 105
     },
     {
       "id": "fin-76ab3c9d7ee64818d3",
@@ -3223,7 +3253,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 105
+      "priority_rank": 106
     },
     {
       "id": "fin-a938de032c8960a367",
@@ -3253,7 +3283,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 106
+      "priority_rank": 107
     },
     {
       "id": "fin-18af4f2569ca028b76",
@@ -3283,7 +3313,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 107
+      "priority_rank": 108
     },
     {
       "id": "fin-e7b248e2a411f3b3fd",
@@ -3313,7 +3343,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 108
+      "priority_rank": 109
     },
     {
       "id": "fin-4662460755177d2fa5",
@@ -3343,7 +3373,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 109
+      "priority_rank": 110
     },
     {
       "id": "fin-f95fc8b6b6fbe4f5b3",
@@ -3373,7 +3403,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 110
+      "priority_rank": 111
     },
     {
       "id": "fin-cdc9ce7aea80b9a8bf",
@@ -3403,7 +3433,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 111
+      "priority_rank": 112
     },
     {
       "id": "fin-3de6a34528338ca449",
@@ -3433,7 +3463,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 112
+      "priority_rank": 113
     },
     {
       "id": "fin-c2f836051e32ffb57e",
@@ -3463,7 +3493,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 113
+      "priority_rank": 114
     },
     {
       "id": "fin-826a1cc0b6599ed8ad",
@@ -3493,7 +3523,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 114
+      "priority_rank": 115
     },
     {
       "id": "fin-545b4bd64eb291dcff",
@@ -3523,7 +3553,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 115
+      "priority_rank": 116
     },
     {
       "id": "fin-1ca8440be6a138e3bd",
@@ -3553,7 +3583,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 116
+      "priority_rank": 117
     },
     {
       "id": "fin-4070e55f82af0deda2",
@@ -3583,7 +3613,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 117
+      "priority_rank": 118
     },
     {
       "id": "fin-f27dcfea090881fe4a",
@@ -3613,7 +3643,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 118
+      "priority_rank": 119
     },
     {
       "id": "fin-dd68660c5357fa6912",
@@ -3643,7 +3673,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 119
+      "priority_rank": 120
     },
     {
       "id": "fin-1253e1732cbf56000a",
@@ -3673,7 +3703,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 120
+      "priority_rank": 121
     },
     {
       "id": "fin-8fe2a85c7ca8735a45",
@@ -3703,7 +3733,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 121
+      "priority_rank": 122
     },
     {
       "id": "fin-00009a421e4e16476c",
@@ -3733,7 +3763,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 122
+      "priority_rank": 123
     },
     {
       "id": "fin-fc310f539bd2c146c3",
@@ -3763,7 +3793,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 123
+      "priority_rank": 124
     },
     {
       "id": "fin-c25d2e83149d7230d9",
@@ -3793,7 +3823,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 124
+      "priority_rank": 125
     },
     {
       "id": "fin-7c89c123e44923d714",
@@ -3823,7 +3853,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 125
+      "priority_rank": 126
     },
     {
       "id": "fin-3c39990e30bb28d85f",
@@ -3853,7 +3883,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 126
+      "priority_rank": 127
     },
     {
       "id": "fin-ef0dc7c82683da2fdd",
@@ -3883,7 +3913,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 127
+      "priority_rank": 128
     },
     {
       "id": "fin-c8b80aca524992f119",
@@ -3913,7 +3943,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 128
+      "priority_rank": 129
     },
     {
       "id": "fin-d2fe738470b996403f",
@@ -3943,7 +3973,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 129
+      "priority_rank": 130
     },
     {
       "id": "fin-d43e2b1aadf7bc21f0",
@@ -3973,7 +4003,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 130
+      "priority_rank": 131
     },
     {
       "id": "fin-c8809d5a9ae497de87",
@@ -4003,7 +4033,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 131
+      "priority_rank": 132
     },
     {
       "id": "fin-9bc500761b768865cd",
@@ -4033,7 +4063,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 132
+      "priority_rank": 133
     },
     {
       "id": "fin-81a84ecbee309e0c2e",
@@ -4063,7 +4093,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 133
+      "priority_rank": 134
     },
     {
       "id": "fin-91ee08a3ba24991ca4",
@@ -4093,7 +4123,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 134
+      "priority_rank": 135
     },
     {
       "id": "fin-2b0b0a5b4953571a12",
@@ -4123,7 +4153,7 @@
           "缺少标题数字，不等于缺乏新闻价值"
         ]
       },
-      "priority_rank": 135
+      "priority_rank": 136
     },
     {
       "id": "fin-f4edb25db5dd5c77d5",
@@ -4153,7 +4183,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 136
+      "priority_rank": 137
     },
     {
       "id": "fin-a9e7f112afd92809b9",
@@ -4183,7 +4213,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 137
+      "priority_rank": 138
     },
     {
       "id": "fin-0b73262e19a96dc6a6",
@@ -4213,7 +4243,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 138
+      "priority_rank": 139
     },
     {
       "id": "fin-dbb8ee331f337dddd4",
@@ -4243,7 +4273,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 139
+      "priority_rank": 140
     },
     {
       "id": "fin-03c8d23343a154b910",
@@ -4273,7 +4303,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 140
+      "priority_rank": 141
     },
     {
       "id": "fin-cb89afc0f58c48843d",
@@ -4303,7 +4333,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 141
+      "priority_rank": 142
     },
     {
       "id": "fin-5cfe408cffb863657c",
@@ -4333,7 +4363,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 142
+      "priority_rank": 143
     },
     {
       "id": "fin-6ecad1c1cccdb78e9c",
@@ -4363,7 +4393,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 143
+      "priority_rank": 144
     },
     {
       "id": "fin-8d6ee7bdf7ac592c08",
@@ -4393,7 +4423,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 144
+      "priority_rank": 145
     },
     {
       "id": "fin-259abd49f853e3eb4c",
@@ -4423,7 +4453,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 145
+      "priority_rank": 146
     },
     {
       "id": "fin-ae90ffdcec5514e3a4",
@@ -4453,7 +4483,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 146
+      "priority_rank": 147
     },
     {
       "id": "fin-832dfa7a6c556bfd6d",
@@ -4483,7 +4513,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 147
+      "priority_rank": 148
     },
     {
       "id": "fin-b35422a86ce092a8af",
@@ -4513,7 +4543,7 @@
           "标题出现数字，需核实口径"
         ]
       },
-      "priority_rank": 148
+      "priority_rank": 149
     },
     {
       "id": "fin-327b87ff2b3de1158f",
@@ -4523,36 +4553,6 @@
       "source": "中国新闻网 · 财经新闻",
       "category": "中国财经",
       "published_at": "2026-11-20T06:47:18+00:00",
-      "verification": "media_report_metadata_not_independently_verified",
-      "source_type": "media_report",
-      "region": "中国",
-      "region_basis": "china_scope_feed",
-      "language": "source_original",
-      "content_type": "finance",
-      "score": {
-        "timeliness": 24,
-        "readability": 84,
-        "value": 83,
-        "heat": 64,
-        "appeal": 71,
-        "total": 63,
-        "basis": "editorial_heuristic_not_audience_metrics",
-        "reasons": [
-          "历史线索，请核对时效",
-          "涉及财经政策或经营指标",
-          "标题出现数字，需核实口径"
-        ]
-      },
-      "priority_rank": 149
-    },
-    {
-      "id": "fin-744dd27d045f89c07e",
-      "title": "前10月中国快递收入增速“跑赢”业务量",
-      "summary": "中新社北京11月20日电 (记者 王梦瑶)据中国国家邮政局20日消息，今年前10个月，中国快递业务收入累计完成12981.5亿元人民币，同比增长6.6%；同期快递业务量累计完成1688.2亿件，同比增长3.8%。快递业务收入增速“跑赢”业务量增速。",
-      "url": "https://www.chinanews.com.cn/cj/2026/11-20/10735226.shtml",
-      "source": "中国新闻网 · 财经新闻",
-      "category": "中国财经",
-      "published_at": "2026-11-20T06:48:16+00:00",
       "verification": "media_report_metadata_not_independently_verified",
       "source_type": "media_report",
       "region": "中国",
