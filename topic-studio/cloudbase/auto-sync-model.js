@@ -10,7 +10,7 @@
 })(typeof window!=="undefined"?window:null,function(core){
  "use strict";
  if(!core)throw Error("DAVYLAB_SYNC_CORE_REQUIRED");
- const VERSION="0.1.0-model",BENCHMARK_KEY="davylab-topic-research-v1";
+ const VERSION="0.2.0-model",BENCHMARK_KEY="davylab-topic-research-v1",DRAFT_KEY="davylab-article-theme-topics-v2",PROMPT_KEY="inkora-private-prompt-drafts-v1";
  const recoveryKey=uid=>"davylab-sync-recovery-"+String(uid||"anonymous");
  const arrayKey={
   topic:"davylab-topic-studio-v1",
@@ -45,11 +45,14 @@
   if(doc.doc_type==="research"&&doc.doc_id.startsWith("brief:"))return "davylab-topic-research-briefs-v1";
   if(doc.doc_type==="growth"&&(
     ["target","tasks"].includes(doc.doc_id)||/^(experiments|posters|metrics|reviews):[^:]+/.test(doc.doc_id)))return "davylab-growth-lab-v1";
+  if(doc.doc_type==="settings"&&doc.doc_id.startsWith("article-draft:"))return DRAFT_KEY;
+  if(doc.doc_type==="settings"&&doc.doc_id.startsWith("prompt-draft:"))return PROMPT_KEY;
   if(doc.doc_type==="settings"&&settingKey[doc.doc_id])return settingKey[doc.doc_id];
   throw Error("SYNC_REMOTE_UNSUPPORTED_RECORD: "+doc.doc_type+":"+doc.doc_id.slice(0,50));
  }
  function defaultFor(key){
-  if(["davylab-growth-lab-v1"].includes(key))return{};
+  if(key===DRAFT_KEY)return{version:2,activeTopic:"",drafts:{}};
+  if(key===PROMPT_KEY||key==="davylab-growth-lab-v1")return{};
   if(Object.values(settingKey).includes(key))return{};
   return[];
  }
@@ -87,6 +90,8 @@
    current[group]=arrayUpsert(current[group],p,recordId,x=>group==="reviews"?x?.key:x?.id);
    return current;
   }
+  if(key===DRAFT_KEY){const draftId=id.slice("article-draft:".length);if(!isObj(current)||!isObj(current.drafts)||!(draftId==="free"||draftId.startsWith("topic:"))||typeof p.body!=="string"||typeof p.title!=="string")throw Error("SYNC_INVALID_ARTICLE_DRAFT");Object.defineProperty(current.drafts,draftId,{value:p,writable:true,enumerable:true,configurable:true});return current}
+  if(key===PROMPT_KEY){const promptId=id.slice("prompt-draft:".length);if(!isObj(current)||!promptId||typeof p.text!=="string"||typeof p.sourceVersion!=="string")throw Error("SYNC_INVALID_PROMPT_DRAFT");Object.defineProperty(current,promptId,{value:p,writable:true,enumerable:true,configurable:true});return current}
   if(Object.values(settingKey).includes(key))return p;
   throw Error("SYNC_UNKNOWN_SOURCE");
  }
