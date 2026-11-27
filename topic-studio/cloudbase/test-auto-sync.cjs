@@ -107,3 +107,35 @@ assert.throws(()=>engineLib.build({storage:new MockLocalStorage(),adapter:fakeSe
  await assert.rejects(server.productionPut({doc_type:"topic",doc_id:"topic-1",payload:{title:"bad"}},0),/REVISION_CONFLICT/);
  console.log("PASS two-device automatic pull/push, account boundary, visual/growth/research, offline, CAS conflict and activation gate");
 })().catch(error=>{console.error(error);process.exit(1)});
+
+
+/* V2 regression: complete authored records, explicit tombstones and conflict recovery. */
+(async()=>{
+ const A=new MockLocalStorage({
+  "davylab-topic-studio-v1":JSON.stringify([{id:"qa-v2-a",title:"原始选题"},{id:"qa-v2-b",title:"第二篇"}]),
+  "davylab-article-theme-topics-v2":JSON.stringify({version:2,activeTopic:"qa-v2-a",drafts:{"topic:qa-v2-a":{title:"标题",body:"完整稿件",theme:"alabaster"},"topic:qa-v2-b":{title:"另一个标题",body:"第二稿"}}}),
+  "inkora-private-prompt-drafts-v1":JSON.stringify({"qa-v2-a::production::chatgpt::::":{text:"手动编辑的完整指令",sourceVersion:"v2:qa"}})
+ }),B=new MockLocalStorage(),server=fakeServer();
+ server.productionDelete=async(d,revision)=>{const key=d.doc_type+"::"+d.doc_id,old=server.records.get(key);if(old?.revision!==revision)throw Error("SYNC_REVISION_CONFLICT");const row={...copy(old),revision:revision+1,deleted_at:"2026-11-27T00:00:00Z"};server.records.set(key,row);return{doc_type:row.doc_type,doc_id:row.doc_id,revision:row.revision,deleted_at:row.deleted_at}};
+ const setup=(storage,allow=()=>true)=>engineLib.build({storage,adapter:server,uid:"qa-v2-owner",productionEnabled:true,permissionsVerified:true,tombstonesEnabled:true,canApplyRemote:allow,disableTimers:true});
+ const a=setup(A),b=setup(B);
+ assert.equal((await a.sync()).upload,5);assert.equal((await b.sync()).download,5);
+ const drafts=()=>JSON.parse(B.getItem("davylab-article-theme-topics-v2")).drafts;
+ assert.equal(drafts()["topic:qa-v2-a"].body,"完整稿件");assert.equal(drafts()["topic:qa-v2-b"].body,"第二稿");
+ assert.equal(JSON.parse(B.getItem("inkora-private-prompt-drafts-v1"))["qa-v2-a::production::chatgpt::::"].text,"手动编辑的完整指令");
+ const d=JSON.parse(B.getItem("davylab-article-theme-topics-v2"));d.drafts["topic:qa-v2-a"].body="手机修改";B.setItem("davylab-article-theme-topics-v2",JSON.stringify(d));
+ assert.equal((await b.sync()).upload,1);assert.equal((await a.sync()).download,1);assert.equal(JSON.parse(A.getItem("davylab-article-theme-topics-v2")).drafts["topic:qa-v2-a"].body,"手机修改");
+ // Deliberate delete recorded against baseline revision; no resurrection after old device returns.
+ assert.equal(engineLib.recordDeletion(A,"topic","qa-v2-a"),true);
+ A.setItem("davylab-topic-studio-v1",JSON.stringify(JSON.parse(A.getItem("davylab-topic-studio-v1")).filter(x=>x.id!=="qa-v2-a")));
+ assert.equal((await a.sync()).upload,1);assert.ok(server.records.get("topic::qa-v2-a").deleted_at);
+ assert.equal((await b.sync()).download,1);assert.equal(JSON.parse(B.getItem("davylab-topic-studio-v1")).some(x=>x.id==="qa-v2-a"),false);
+ assert.equal((await b.sync()).conflicts,0);assert.equal((await a.sync()).conflicts,0);
+ const C=new MockLocalStorage({"davylab-topic-studio-v1":JSON.stringify([{id:"qa-v2-a",title:"原始选题"}])});const c=setup(C);await c.sync();assert.equal(JSON.parse(C.getItem("davylab-topic-studio-v1")).some(x=>x.id==="qa-v2-a"),false);
+ // Unexpected cache loss or simultaneous edit must not masquerade as a delete.
+ B.setItem("davylab-topic-studio-v1","[]");assert.equal((await b.sync()).conflicts,1);assert.equal(server.records.get("topic::qa-v2-b").deleted_at,null);
+ const conflict=b.conflictCopies().find(x=>x.key==="topic::qa-v2-b");assert.equal(conflict.cloud.payload.title,"第二篇");assert.equal(conflict.local,null);
+ const fresh=new MockLocalStorage(),paused=setup(fresh,()=>false);const result=await paused.sync();assert.ok(result.deferred>0);assert.equal(fresh.getItem("davylab-topic-studio-v1"),null);assert.equal(paused.state().phase,"editing");
+ assert.equal(JSON.parse(A.getItem(engineLib.deleteJournalKey("qa-v2-owner")))["topic::qa-v2-a"],undefined);
+ console.log("PASS INKORA V2 per-draft and prompt sync, explicit deletion, stale-device prevention, missing-cache protection, conflict backup and editing deferral");
+})().catch(error=>{console.error(error);process.exitCode=1});
