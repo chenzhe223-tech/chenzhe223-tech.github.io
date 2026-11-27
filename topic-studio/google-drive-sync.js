@@ -86,10 +86,10 @@ function attach(){
   if(!validClient(clientId()))throw Error("请先设置有效的 Web OAuth 客户端 ID");
   if(!window.google?.accounts?.oauth2)throw Error("授权组件尚未就绪，请重试");
   return new Promise((resolve,reject)=>{
-   const timer=setTimeout(()=>reject(Error("授权未完成，请重新连接")),120000);
-   const fail=()=>{clearTimeout(timer);reject(Error("Google 授权取消、拒绝或弹窗未打开"))};
+   let settled=false;const timer=setTimeout(()=>{settled=true;reject(Error("授权未完成，请重新连接"))},120000);
+   const fail=()=>{if(settled)return;settled=true;clearTimeout(timer);reject(Error("Google 授权取消、拒绝或弹窗未打开"))};
    const c=google.accounts.oauth2.initTokenClient({client_id:clientId(),scope:SCOPE,include_granted_scopes:false,callback:r=>{
-    clearTimeout(timer);
+    if(settled)return;settled=true;clearTimeout(timer);
     if(r.error||!r.access_token||!google.accounts.oauth2.hasGrantedAllScopes(r,SCOPE)){clearToken();reject(Error("未取得 Google Drive 文件授权"));return}
     access=r.access_token;expires=Date.now()+Math.max(0,Number(r.expires_in)||0)*1000;
     if(!validToken()){clearToken();reject(Error("授权令牌已失效，请重新连接"));return}resolve();
@@ -114,7 +114,7 @@ function attach(){
  function capture(){
   const t=topics.find(t=>t.id===promptTopicId),text=$("promptBox").value;
   if(!t||!text.trim())throw Error("先从选题池生成一份完整指令");
-  if(!activePromptKey||promptSourceVersions.get(activePromptKey)!==promptSourceVersion(t))throw Error("选题或关联资料已更新，请重新生成指令后同步");
+  if(!activePromptKey||activePromptKey!==promptKey(t)||promptSourceVersions.get(activePromptKey)!==promptSourceVersion(t))throw Error("选题或关联资料已更新，请重新生成指令后同步");
   return {topic:JSON.parse(JSON.stringify(t)),text,mode:$("promptMode").value,platform:$("promptPlatform").value,variant:[$("financePosterStyle").value,$("financePosterCount").value].join(":"),strategy:$("driveSyncStrategy").value};
  }
  function config(){
@@ -136,7 +136,7 @@ function attach(){
    status("正在归档当前指令，并从 Drive 回读核验…");
    const result=await makeClient({request}).sync(input);
    $("driveSyncLink").href=result.url;$("driveSyncLink").hidden=false;$("driveSyncPath").textContent=result.path;
-   status("同步成功 · "+(result.action==="updated"?"已更新当前版本":"已创建文件")+" · "+new Date(result.modifiedTime||Date.now()).toLocaleString("zh-CN")+" · 正文回读一致");
+   status("最近一次同步成功 · "+(result.action==="updated"?"已更新当前版本":"已创建文件")+" · "+new Date(result.modifiedTime||Date.now()).toLocaleString("zh-CN")+" · 正文回读一致");
   }catch(e){status(e.message||"同步未完成")}finally{controls(false)}
  }
  $("driveSaveConfig").addEventListener("click",()=>{if(!validClient(clientId())){status("客户端 ID 格式不正确；应以 .apps.googleusercontent.com 结尾");return}clearToken();resetLink();status(set(CLIENT_KEY,clientId())?"客户端 ID 已保存，请连接 Google Drive。":"本地保存不可用，当前页面仍可授权。");loadGIS().catch(e=>status(e.message))});
