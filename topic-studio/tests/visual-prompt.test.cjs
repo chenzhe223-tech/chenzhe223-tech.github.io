@@ -30,7 +30,7 @@ for(const platform of ["chatgpt","claude","gemini","other"]){
  const full=engine.build(topic,{platform});
  assert.equal(full.mode,"production");
  assert.equal(full.platform,platform);
- assert.equal(full.manifest.length,8);
+ assert.equal(full.manifest.length,10);assert.ok(full.manifest.some(x=>x.endsWith("05_公众号内联同步版.html")));assert.ok(full.manifest.some(x=>x.endsWith("_sync_payload.json")));
  for(const fragment of [
   "Vibe Coding 爆火","2200字","没有编程基础的 AI 学习者","第一人称学习者","选题最后更新",
   "极简产品风","#F6F8FB","#264769","#55A7C4","#17212C",
