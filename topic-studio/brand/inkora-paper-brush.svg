@@ -1,1 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 240" role="img" aria-label="纸张、毛笔与墨迹"><path d="M55 175Q126 99 242 135L492 85 593 180 340 230 90 218Z" fill="#E2D9C9" opacity=".52"/><path d="M36 170Q92 111 168 128L451 73 559 171 294 222Q143 186 36 170Z" fill="#FCFBF7" stroke="#D7C9B5" stroke-width="1.3"/><path d="M36 170Q88 125 133 149Q155 160 168 128" fill="none" stroke="#CDBA9D" stroke-width="1.6"/><path d="M185 153Q237 128 305 138Q354 148 329 166Q298 186 232 166Q214 158 239 151" fill="none" stroke="#303031" stroke-width="8" stroke-linecap="round" opacity=".84"/><path d="M195 153Q241 130 301 140" fill="none" stroke="#81796B" stroke-width="1.8" stroke-linecap="round"/><g transform="translate(355 155) rotate(-38)"><path d="M0 0Q25-12 65-9L65 9Q25 12 0 0Z" fill="#242323"/><path d="M58-9H93V9H58Z" fill="#D2AC76" stroke="#A57A43" stroke-width="1.2"/><path d="M93-7L276-5Q288 0 276 5L93 7Z" fill="#383432"/><path d="M108-2H269" stroke="#726554" stroke-width="1.5"/><path d="M9 0Q29-3 55-3" stroke="#6D6252" stroke-width="1.2" fill="none"/></g><rect x="474" y="114" width="37" height="37" rx="3" fill="none" stroke="#B88B50" stroke-width="1.5"/><path d="M482 127H503M492.5 121V143M482 139H503" stroke="#B88B50" stroke-width="1.5" fill="none"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 260" role="img" aria-labelledby="title desc">
+<title id="title">纸墨如金</title><desc id="desc">纸张、毛笔与墨迹：现代东方编辑部的静物构成</desc>
+<defs>
+ <pattern id="paper" width="19" height="17" patternUnits="userSpaceOnUse"><path d="M2 4l3-.4m9 8l2 .3M7 16l1-.3" fill="none" stroke="#A49B8D" stroke-width=".45" opacity=".28"/></pattern>
+ <clipPath id="sheet"><path d="M154 25H507V230H154Z"/></clipPath>
+</defs>
+<!-- gallery-style tabletop, generous negative space on the left -->
+<g transform="rotate(-7 337 135)">
+ <path d="M140 42H517V237H140Z" fill="#DCD7CE" opacity=".5"/>
+ <path d="M143 35H514V233H143Z" fill="#E5DFD4" stroke="#D1C6B4" stroke-width=".65"/>
+ <path d="M148 30H510V230H148Z" fill="#F3EFE7" stroke="#D7CCBB" stroke-width=".7"/>
+ <path d="M154 25H507V230H154Z" fill="#FCFBF7" stroke="#D5CABC" stroke-width=".9"/>
+ <path d="M154 25H507V230H154Z" fill="url(#paper)" opacity=".7"/>
+ <path d="M172 43H489V212H172Z" fill="none" stroke="#C8A878" stroke-width=".8"/>
+ <g clip-path="url(#sheet)">
+  <!-- One expressive ink gesture: irregular pressure, dry edges, no decorative swirls. -->
+  <path d="M191 157C222 126 257 103 305 94C346 86 386 92 419 106L413 113C367 100 331 104 298 116C264 128 239 149 222 166C213 174 204 175 194 170L185 164Z" fill="#292827"/>
+  <path d="M196 154C231 123 261 107 301 99M205 170C242 135 270 120 300 113M317 98C353 93 391 98 414 106" stroke="#69635B" fill="none" stroke-width="1.1" stroke-linecap="round" opacity=".7"/>
+  <path d="M195 173C236 150 265 122 310 115M190 154C221 127 255 110 277 105M330 105C364 103 393 105 418 113" stroke="#383432" fill="none" stroke-width=".65" stroke-linecap="round" opacity=".58"/>
+  <path d="M224 174C258 152 285 145 312 142" stroke="#B89660" fill="none" stroke-width="1.15" stroke-linecap="round"/>
+ </g>
+ <path d="M458 194h20v20h-20Z" fill="none" stroke="#A9844F" stroke-width="1"/>
+ <path d="M463 199h10v10h-10m0-5h10m-5-5v10" fill="none" stroke="#A9844F" stroke-width=".75"/>
+</g>
+<!-- Realistic proportioned calligraphy brush: tapered tip, ferrule, lacquered handle. -->
+<g transform="translate(381 158) rotate(-29)">
+ <path d="M0 3C9-7 19-11 38-11H54V11H38C20 11 10 7 0 3Z" fill="#242322"/>
+ <path d="M3 3C19-3 35-7 52-7M6 4C23 7 39 7 52 6M12 0C28-4 43-3 53-3" fill="none" stroke="#71685D" stroke-width=".8" stroke-linecap="round"/>
+ <path d="M51-11H77V11H51Z" fill="#B8955B"/><path d="M54-8H73M54 8H73" stroke="#E8D2AA" stroke-width="1.1"/>
+ <path d="M77-8L287-5Q296 0 287 5L77 8Z" fill="#34312F"/>
+ <path d="M83-4L282-2" stroke="#77706A" stroke-width="1" stroke-linecap="round"/>
+ <path d="M283-5L289-4Q296 0 289 4L283 5Z" fill="#C5A16A"/>
+</g>
+</svg>
