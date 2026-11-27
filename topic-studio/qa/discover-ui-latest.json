@@ -1,6 +1,6 @@
 {
   "status": "fail",
-  "tested_at": "2026-11-27T08:07:35+00:00",
+  "tested_at": "2026-11-27T08:22:39+00:00",
   "scope": "Local Chromium QA only; not a production verification",
-  "error": "AssertionError: ultrawide: expected six XNews cards, got 0"
+  "error": "AssertionError: desktop: expected six XNews cards, got 0"
 }
