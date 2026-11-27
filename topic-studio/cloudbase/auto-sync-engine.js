@@ -12,7 +12,7 @@
 })(typeof window!=="undefined"?window:null,function(core,model){
  "use strict";
  if(!core||!model)throw Error("DAVYLAB_SYNC_DEPENDENCIES_MISSING");
- const VERSION="0.1.0-auto-two-way";
+ const VERSION="0.2.0-inkora-sync";
  const namespace="davylab-auto-sync";
  const allowedKeys=new Set(core.SOURCES.map(x=>x.key));
  const same=(a,b)=>core.stable(a)===core.stable(b);
@@ -35,6 +35,15 @@
   }
   return parsed;
  }
+ function deleteJournalKey(uid){return namespace+":delete-intents:"+uid}
+ function loadIntents(storage,uid){const data=JSON.parse(storage.getItem(deleteJournalKey(uid))||"{}");if(!isObject(data))throw Error("SYNC_DELETE_JOURNAL_CORRUPT");return data}
+ function recordDeletion(storage,docType,docId){
+  const uid=storage.getItem(boundOwnerKey());if(!uid)return false;
+  if(typeof docId!=="string"||!docId||docId.length>512||!(["topic","published_record"].includes(docType)||docType==="research"&&docId.startsWith("brief:")||docType==="growth"&&/^(experiments|posters|metrics|reviews):.+$/.test(docId)))throw Error("SYNC_DELETE_INTENT_INVALID");
+  const key=docType+"::"+docId,base=loadBaseline(storage,uid).find(d=>k(d)===key),intents=loadIntents(storage,uid);
+  intents[key]={expectedRevision:base&&!base.deleted_at?base.revision:null,at:new Date().toISOString()};
+  storage.setItem(deleteJournalKey(uid),JSON.stringify(intents));return true;
+ }
  function build(options){
   const storage=options?.storage,adapter=options?.adapter,uid=options?.uid;
   if(!storage||typeof storage.getItem!=="function"||typeof storage.setItem!=="function"
@@ -45,7 +54,8 @@
    throw Error("SYNC_LIVE_SECURITY_GATE_REQUIRED");
   const emit=typeof options.onStatus==="function"?options.onStatus:()=>{};
   const refresh=typeof options.onApplied==="function"?options.onApplied:()=>{};
-  const pollMs=Math.max(30000,Number(options.pollMs)||45000);
+  const pollMs=Math.max(15000,Number(options.pollMs)||25000);
+  const tombstones=options.tombstonesEnabled===true&&typeof adapter.productionDelete==="function";let conflictCopies=[];
   const epoch=typeof options.now==="function"?options.now:()=>Date.now();
   let busy=false,again=false,stopped=false,pendingLocal=false,timer=null,debounce=null,failures=0,lastSync=0;
   const win=options.win||null;
@@ -77,7 +87,7 @@
   function schedule(ms){
    if(stopped||options.disableTimers)return;
    if(timer)clearTimeout(timer);
-   timer=setTimeout(()=>{timer=null;void sync("poll")},ms);
+   timer=setTimeout(()=>{timer=null;void sync("poll").catch(()=>{})},ms);
   }
   function debounceLocal(){
    if(stopped)return;
@@ -85,7 +95,7 @@
    status({pending:1});
    if(options.disableTimers)return;
    if(debounce)clearTimeout(debounce);
-   debounce=setTimeout(()=>{debounce=null;void sync("local-change")},850);
+   debounce=setTimeout(()=>{debounce=null;void sync("local-change").catch(()=>{})},850);
   }
   async function sync(reason="auto"){
    if(stopped)return{skipped:"stopped"};
@@ -107,9 +117,10 @@
     const remote=await adapter.list();
     if(stopped)return{skipped:"stopped-during-read"};
     if(!Array.isArray(remote))throw Error("SYNC_REMOTE_INVALID_RESULT");
-    if(remote.some(x=>x.deleted_at))throw Error("SYNC_REMOTE_TOMBSTONE_REQUIRES_REVIEW");
+    if(!tombstones&&remote.some(x=>x.deleted_at))throw Error("SYNC_REMOTE_TOMBSTONE_REQUIRES_REVIEW");
     const localDocs=local.documents;
-    const plan=core.compare(localDocs,remote,base);
+    const intents=tombstones?loadIntents(storage,uid):{};
+    const plan=tombstones?core.compareV2(localDocs,remote,base,intents):core.compare(localDocs,remote,base);
     const index=new Map(base.map(x=>[k(x),clone(x)]));
     const remoteMap=new Map(remote.map(x=>[k(x),x]));
     const conflicts=plan.conflicts.map(c=>({key:c.key,reason:c.reason}));
@@ -119,7 +130,7 @@
     }
     // Apply remote-only or remote-changed records, preserving unrelated local
     // records. Recheck live storage before applying to reject in-flight edits.
-    if(!stopped&&plan.download.length){
+    if(!stopped&&plan.download.length&&options.canApplyRemote?.()!==false){
      const candidate=plan.download.map(x=>x.document);
      const localAtRead=new Map(localDocs.map(x=>[k(x),x.payload]));
      const patch=model.planLocalPatch(storage,candidate,{expected:localAtRead});
@@ -127,7 +138,7 @@
      for(const row of candidate)index.set(k(row),clone(row));
      summary.download=candidate.length;
      if(keys.length)refresh(keys);
-    }
+    }else if(plan.download.length){summary.deferred=plan.download.length;}
     // Upload only records that are proved safe by a three-way comparison.
     // Stale server revision causes a hard stop for that one record. No retry
     // with revised expectedRevision or silent overwrite.
@@ -156,13 +167,30 @@
       throw e;
      }
     }
+    // Delete only a captured, explicit user action with the same revision observed on the server.
+    const finished=[];
+    if(tombstones){
+     for(const token of plan.completedIntents||[]){if(!summary.deferred||!plan.download.some(x=>x.key===token))finished.push(token)}
+     for(const candidate of plan.deletes||[]){
+      if(stopped)break;
+      const token=candidate.key,doc=candidate.document,current=model.capture(storage).documents.find(x=>k(x)===token),liveIntent=loadIntents(storage,uid)[token];
+      if(current||!same(liveIntent,intents[token])){conflicts.push({key:token,reason:"LOCAL_CHANGED_DURING_DELETE"});continue}
+      try{
+       const ack=await adapter.productionDelete(doc,doc.revision);
+       if(ack.doc_type!==doc.doc_type||ack.doc_id!==doc.doc_id||!Number.isInteger(ack.revision)||ack.revision<=doc.revision||!ack.deleted_at)throw Error("SYNC_DELETE_ACK_INVALID");
+       index.set(token,{...clone(doc),revision:ack.revision,deleted_at:ack.deleted_at});summary.upload++;finished.push(token);
+      }catch(e){if(/CONFLICT|23505|40001/.test(String(e?.message||e))){conflicts.push({key:token,reason:"DELETE_REVISION_CONFLICT"});continue}throw e}
+     }
+    }
     // Each successfully merged/confirmed document forms the new baseline.
     // Conflicting records keep their previous baseline for manual resolution.
     if(stopped)return{skipped:"stopped-before-baseline"};
     saveBaseline([...index.values()]);
+    if(tombstones&&finished.length){const current=loadIntents(storage,uid);for(const token of finished)if(same(current[token],intents[token]))delete current[token];storage.setItem(deleteJournalKey(uid),JSON.stringify(current))}
+    const localMap=new Map(model.capture(storage).documents.map(d=>[k(d),d]));const baseMap=new Map(base.map(d=>[k(d),d]));conflictCopies=conflicts.map(c=>({...c,local:clone(localMap.get(c.key)||null),cloud:clone(remoteMap.get(c.key)||null),baseline:clone(baseMap.get(c.key)||null),deleteIntent:intents[c.key]||null}));
     summary.conflicts=conflicts.length;
     failures=0;pendingLocal=conflicts.length>0;lastSync=epoch();
-    status({phase:conflicts.length?"conflict":"synced",conflicts,pending:conflicts.length,
+    status({phase:conflicts.length?"conflict":summary.deferred?"editing":"synced",conflicts,pending:conflicts.length+(summary.deferred||0),
      upload:summary.upload,download:summary.download,lastSync:new Date(lastSync).toISOString(),error:null});
     return summary;
    }catch(error){
@@ -212,7 +240,7 @@
    status({phase:"stopped"});
   }
   return Object.freeze({VERSION,uid,sync,notifyLocalStorageKey,start,stop,
-   state:()=>({...state,conflicts:state.conflicts.slice()}),baselineKey:baselineKey(uid)});
+   state:()=>({...state,conflicts:state.conflicts.slice()}),conflictCopies:()=>clone(conflictCopies),baselineKey:baselineKey(uid)});
  }
- return Object.freeze({VERSION,build,baselineKey,initialBackupKey,boundOwnerKey});
+ return Object.freeze({VERSION,build,baselineKey,initialBackupKey,boundOwnerKey,deleteJournalKey,recordDeletion});
 });
