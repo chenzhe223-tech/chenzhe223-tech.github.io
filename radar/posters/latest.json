@@ -1,80 +1,80 @@
 {
-  "report_date": "2026-11-27",
-  "poster": "radar/posters/2026-11-27.png",
+  "report_date": "2026-11-28",
+  "poster": "radar/posters/2026-11-28.png",
   "qr_url": "https://chenzhe223-tech.github.io/radar/daily/",
   "news_count": 5,
   "news_urls": [
-    "https://chenqiyuan.cn/article/intel-a2f4b52529bf8a773838003e",
-    "https://chenqiyuan.cn/article/intel-7be1ede1384420b2740452ef",
-    "https://www.theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats",
-    "https://www.leiphone.com/category/ai/0DEts3fxmZTZ7ojp.html",
-    "https://www.ithome.com/1/033/124.htm"
+    "https://www.marktechpost.com/2026/11/28/ant-group-lingsante-3-1-flash-open-source-medical-ai/",
+    "https://www.ithome.com/1/033/980.htm",
+    "https://www.marktechpost.com/2026/11/26/sakana-ai-namazu-small-30b-nemotron-3-nano/",
+    "https://www.oschina.net/news/503871",
+    "https://www.marktechpost.com/2026/11/26/nexos-ai-ai-gateway-200-models-governance/"
   ],
   "news_titles": [
-    "蚂蚁集团旗下Robbyant开源具身导航模型LingBot-Navi",
-    "Nvidia暂停向东南亚四国出货服务器芯片",
-    "42州总检察长试图阻止Character.AI出售用户聊天记录",
-    "生数科技发布Motubrain 2.0并宣布将开源",
-    "华为发布星驰辅助驾驶系统，与乾崑智驾技术同源"
+    "蚂蚁集团开源 LingSante-3.1-flash：560B 总参数、每 token 激活 25B 的医疗 MoE 模型",
+    "开源鸿蒙社区发布具身智能操作系统 RoboOH 2.0 Release",
+    "Sakana AI 发布 Namazu Small：基于 Nemotron 3 Nano 的 30B-A3B 推理模型",
+    "微信开源 WeMM-Ecom：面向真实电商需求的多模态基础模型家族",
+    "nexos.ai 推出 AI 采用平台：单一网关接入 200+ 模型，内置预算限制与治理"
   ],
   "news_image_evidence": [
     {
-      "story_url": "https://chenqiyuan.cn/article/intel-a2f4b52529bf8a773838003e",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "075349a3938afacd080cab2d1f3fad70047a18adc7434cce550fc76e0813a471",
-      "rendered_image_sha256": "9b8fa476cf27d0d907770d3145db74279b2a1fdad05d5f5fb3c7f0a351a88bc8",
-      "rendered_visual_type": "info_card",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
-    },
-    {
-      "story_url": "https://chenqiyuan.cn/article/intel-7be1ede1384420b2740452ef",
-      "image_source": "Unsplash topic illustration",
-      "image_match_status": "thematic_fallback",
-      "image_sha256": "75911aac5ca554021db23e3529005a2e7b12c83bb4c167e949b475735f86da08",
-      "rendered_image_sha256": "c35cc05e5215f9cf09c59344d1283356ace8fb4c9933eb2f54d69d2be62c0eb5",
-      "rendered_visual_type": "info_card",
-      "label_required": true,
-      "label_applied": true,
-      "label": "主题配图 · 非新闻现场"
-    },
-    {
-      "story_url": "https://www.theverge.com/policy/1042620/character-ai-sale-state-ags-block-selling-users-chats",
-      "image_source": "The Verge AI",
-      "image_match_status": "article_image",
-      "image_sha256": "88cdd0813aa3ef7358ed4141b6bc2316cf0ade43ef506618c99338379adaf6ed",
-      "rendered_image_sha256": "88cdd0813aa3ef7358ed4141b6bc2316cf0ade43ef506618c99338379adaf6ed",
-      "rendered_visual_type": "verified_photo",
-      "label_required": false,
-      "label_applied": false,
-      "label": null
-    },
-    {
-      "story_url": "https://www.leiphone.com/category/ai/0DEts3fxmZTZ7ojp.html",
-      "image_source": "雷峰网·人工智能",
+      "story_url": "https://www.marktechpost.com/2026/11/28/ant-group-lingsante-3-1-flash-open-source-medical-ai/",
+      "image_source": "MarkTechPost",
       "image_match_status": "feed_image",
-      "image_sha256": "c5dc4c54686b43081405811cb831d10e08e072331888ee2af468a2c4e8a443e4",
-      "rendered_image_sha256": "c5dc4c54686b43081405811cb831d10e08e072331888ee2af468a2c4e8a443e4",
-      "rendered_visual_type": "verified_photo",
+      "image_sha256": "1502e8daa8359ca6f47594e94f67098a2cb35e24714f4d73be9da04a97844fc3",
+      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
+      "rendered_visual_type": "info_card",
       "label_required": false,
-      "label_applied": false,
+      "label_applied": true,
       "label": null
     },
     {
-      "story_url": "https://www.ithome.com/1/033/124.htm",
+      "story_url": "https://www.ithome.com/1/033/980.htm",
       "image_source": "IT之家",
       "image_match_status": "feed_image",
-      "image_sha256": "fe36b13f95a0ffac3fc128d666cf24f74500112b97a35c1af53354ae1d653f29",
-      "rendered_image_sha256": "fe36b13f95a0ffac3fc128d666cf24f74500112b97a35c1af53354ae1d653f29",
+      "image_sha256": "e7c4d8c6f0dbbdf25a686df7ec237c2d7f233fe915465e45b6c5e8fac4b32e6a",
+      "rendered_image_sha256": "e7c4d8c6f0dbbdf25a686df7ec237c2d7f233fe915465e45b6c5e8fac4b32e6a",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/26/sakana-ai-namazu-small-30b-nemotron-3-nano/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "b4cd66ad7d7ae5f724a525050c529230de357d46e7517d212689d087dc05d401",
+      "rendered_image_sha256": "b4cd66ad7d7ae5f724a525050c529230de357d46e7517d212689d087dc05d401",
+      "rendered_visual_type": "verified_photo",
+      "label_required": false,
+      "label_applied": false,
+      "label": null
+    },
+    {
+      "story_url": "https://www.oschina.net/news/503871",
+      "image_source": "Unsplash topic illustration",
+      "image_match_status": "thematic_fallback",
+      "image_sha256": "0991ce5fc9ed8d40947e4b4b6c9f32c1bc2619da79c2956ccce56c805d166a1c",
+      "rendered_image_sha256": "979ef838e203b794a2f314bbf1b3f114a7efb9e9fd8dcb1e93c869cef78e191c",
+      "rendered_visual_type": "info_card",
+      "label_required": true,
+      "label_applied": true,
+      "label": "主题配图 · 非新闻现场"
+    },
+    {
+      "story_url": "https://www.marktechpost.com/2026/11/26/nexos-ai-ai-gateway-200-models-governance/",
+      "image_source": "MarkTechPost",
+      "image_match_status": "article_image",
+      "image_sha256": "cf29352b1204c4ab12e63b1e4974aad3b6bd194193fabf2ddc4f27f429800aca",
+      "rendered_image_sha256": "cf29352b1204c4ab12e63b1e4974aad3b6bd194193fabf2ddc4f27f429800aca",
       "rendered_visual_type": "verified_photo",
       "label_required": false,
       "label_applied": false,
       "label": null
     }
   ],
-  "skill": "Donchitos/Claude-Code-Game-Studios",
+  "skill": "NVIDIA/SkillSpector",
   "design": "mountain-editorial",
   "format": "PNG",
   "canvas": [
@@ -143,7 +143,7 @@
       "y": 651,
       "width": 1090,
       "height": 22,
-      "actual_width": 646.9,
+      "actual_width": 738.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -154,7 +154,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 203.1,
+      "actual_width": 202.2,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -164,9 +164,9 @@
       "x": 48,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 195.1,
-      "line_count": 2,
+      "height": 54,
+      "actual_width": 200.8,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -175,9 +175,9 @@
       "x": 48,
       "y": 968,
       "width": 206,
-      "height": 17,
-      "actual_width": 117.0,
-      "line_count": 1,
+      "height": 51,
+      "actual_width": 200.9,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -186,9 +186,9 @@
       "x": 271,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 195.2,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 198.0,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -197,9 +197,9 @@
       "x": 271,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 196.0,
-      "line_count": 2,
+      "height": 54,
+      "actual_width": 205.4,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -209,7 +209,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 204.0,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -220,7 +220,7 @@
       "y": 817,
       "width": 206,
       "height": 66,
-      "actual_width": 205.2,
+      "actual_width": 205.5,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -231,7 +231,7 @@
       "y": 889,
       "width": 206,
       "height": 18,
-      "actual_width": 154.0,
+      "actual_width": 180.4,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -242,7 +242,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 204.0,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -252,9 +252,9 @@
       "x": 717,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 197.9,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 201.3,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -263,9 +263,9 @@
       "x": 717,
       "y": 889,
       "width": 206,
-      "height": 36,
-      "actual_width": 202.3,
-      "line_count": 2,
+      "height": 72,
+      "actual_width": 198.6,
+      "line_count": 4,
       "truncated": false,
       "overflow": false
     },
@@ -275,7 +275,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 206.0,
+      "actual_width": 195.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -285,9 +285,9 @@
       "x": 940,
       "y": 817,
       "width": 206,
-      "height": 44,
-      "actual_width": 198.0,
-      "line_count": 2,
+      "height": 66,
+      "actual_width": 205.7,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -297,7 +297,7 @@
       "y": 889,
       "width": 206,
       "height": 72,
-      "actual_width": 202.1,
+      "actual_width": 203.2,
       "line_count": 4,
       "truncated": false,
       "overflow": false
@@ -308,7 +308,7 @@
       "y": 968,
       "width": 206,
       "height": 51,
-      "actual_width": 195.0,
+      "actual_width": 204.0,
       "line_count": 3,
       "truncated": false,
       "overflow": false
@@ -319,7 +319,7 @@
       "y": 1305,
       "width": 650,
       "height": 46,
-      "actual_width": 644.8,
+      "actual_width": 646.0,
       "line_count": 2,
       "truncated": false,
       "overflow": false
@@ -330,7 +330,7 @@
       "y": 1362,
       "width": 780,
       "height": 17,
-      "actual_width": 546.0,
+      "actual_width": 532.0,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -341,7 +341,7 @@
       "y": 1490,
       "width": 555,
       "height": 30,
-      "actual_width": 431.0,
+      "actual_width": 220.7,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -351,9 +351,9 @@
       "x": 80,
       "y": 1554,
       "width": 565,
-      "height": 38,
-      "actual_width": 552.1,
-      "line_count": 2,
+      "height": 57,
+      "actual_width": 555.1,
+      "line_count": 3,
       "truncated": false,
       "overflow": false
     },
@@ -363,7 +363,7 @@
       "y": 1628,
       "width": 565,
       "height": 14,
-      "actual_width": 356.3,
+      "actual_width": 332.4,
       "line_count": 1,
       "truncated": false,
       "overflow": false
@@ -372,9 +372,9 @@
   "design_variant": "mountain-editorial",
   "iso_year": 2026,
   "iso_week": 48,
-  "iso_weekday": 5,
+  "iso_weekday": 6,
   "style_cycle_index": 47,
   "style_cycle": "ISO-WEEK-ALTERNATING-V1",
   "template_version": "2.4.0",
-  "generated_at": "2026-11-27T06:31:02.948497+08:00"
+  "generated_at": "2026-11-28T18:56:58.830881+08:00"
 }
