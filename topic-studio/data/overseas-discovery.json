@@ -1,9 +1,48 @@
 {
   "schema_version": 1,
   "source": "independent_public_overseas_original_sources",
-  "checked_at": "2026-11-27T10:18:29+00:00",
-  "count": 93,
+  "checked_at": "2026-11-28T08:57:45+00:00",
+  "count": 96,
   "articles": [
+    {
+      "id": "ext-bedee2e9acb0a56aa2",
+      "title": "datasette-charts 0.4a0",
+      "summary": "Release: datasette-charts 0.4a0 The new datasette-charts plugin has its own plugin hook to allow other plugins to define new chart types, but I hadn't actually used it for anything yet. I had Claude Opus 5.5 bu",
+      "date": "2026-11-27",
+      "original_url": "https://simonwillison.net/2026/Nov/27/datasette-charts/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-cb9c58904170486c8d",
+      "title": "datasette-mcp 0.4",
+      "summary": "Release: datasette-mcp 0.4 Fixed for compatibility with Datasette 1.0a44 . Tags: model-context-protocol , datasette",
+      "date": "2026-11-27",
+      "original_url": "https://simonwillison.net/2026/Nov/27/datasette-mcp/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-c2bd7953104652e48b",
+      "title": "Taking Trainium3 to the Track: Generating Videos with LTX-2.5",
+      "summary": "",
+      "date": "2026-11-27",
+      "original_url": "https://huggingface.co/blog/video-trainium3",
+      "source": "Hugging Face 博客",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
     {
       "id": "ext-fcbb41954277a0a1d4",
       "title": "Quoting Jack Despain Zhou",
@@ -590,19 +629,6 @@
       "verification": "original_source_metadata_not_independently_verified"
     },
     {
-      "id": "ext-a50437ccc021c62371",
-      "title": "llm 0.37.3",
-      "summary": "Release: llm 0.37.3 A bug fix release for LLM , mainly to cover a problem with the most recent Homebrew package of the software. Homebrew now ships the latest SQLite, 3.54.1 , which includes a fix that broke LL",
-      "date": "2026-11-16",
-      "original_url": "https://simonwillison.net/2026/Nov/16/llm/",
-      "source": "Simon Willison 技术观点",
-      "source_kind": "independent_original",
-      "tags": [
-        "海外技术观点"
-      ],
-      "verification": "original_source_metadata_not_independently_verified"
-    },
-    {
       "id": "ext-8ec21efa2c62273428",
       "title": "Hugging Face and OpenRouter join forces to make open-weight models easy to run",
       "summary": "",
@@ -612,6 +638,19 @@
       "source_kind": "independent_original",
       "tags": [
         "海外AI观点"
+      ],
+      "verification": "original_source_metadata_not_independently_verified"
+    },
+    {
+      "id": "ext-a50437ccc021c62371",
+      "title": "llm 0.37.3",
+      "summary": "Release: llm 0.37.3 A bug fix release for LLM , mainly to cover a problem with the most recent Homebrew package of the software. Homebrew now ships the latest SQLite, 3.54.1 , which includes a fix that broke LL",
+      "date": "2026-11-16",
+      "original_url": "https://simonwillison.net/2026/Nov/16/llm/",
+      "source": "Simon Willison 技术观点",
+      "source_kind": "independent_original",
+      "tags": [
+        "海外技术观点"
       ],
       "verification": "original_source_metadata_not_independently_verified"
     },
@@ -1228,7 +1267,7 @@
     {
       "source": "Hugging Face 博客",
       "status": "ok",
-      "count": 31
+      "count": 29
     }
   ],
   "note": "Original public metadata only; NOT XNews translated articles."

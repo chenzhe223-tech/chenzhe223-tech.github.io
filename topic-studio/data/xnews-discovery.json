@@ -3,8 +3,8 @@
   "source": "XNews (joeseesun/xnews)",
   "source_index": "https://xnews.qiaomu.ai/articles.json",
   "license_note": "MIT source code; editorial content is attributed and only short metadata excerpts are displayed",
-  "synced_at": "2026-11-27T10:18:28+00:00",
-  "count": 60,
+  "synced_at": "2026-11-28T08:57:45+00:00",
+  "count": 62,
   "articles": [
     {
       "id": "karpathy-usaciv",
@@ -156,6 +156,40 @@
         "labor",
         "organizations",
         "interviews"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-neuron-basis-theory",
+      "date": "2026-11-23",
+      "title": "一次激活同时写入两个无关概念的情况，大约只占1%或更少",
+      "summary": "Anthropic Fellows在四个开源权重模型里复查神经元，发现它们很少一次加入两个无关概念，输出方向在大部分层里含义大致固定，事实虽由许多神经元分担，但仍可读。",
+      "original_url": "https://alignment.anthropic.com/2026/neuron-basis-theory/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-neuron-basis-theory",
+      "tags": [
+        "Anthropic",
+        "interpretability",
+        "neurons",
+        "alignment",
+        "Fellows"
+      ],
+      "source": "XNews · 向阳乔木",
+      "verification": "upstream_metadata_not_independently_verified"
+    },
+    {
+      "id": "anthropic-neuron-basis-applications",
+      "date": "2026-11-23",
+      "title": "23个遗忘检查点里，有14个仍把正确答案排在第一",
+      "summary": "同一组Anthropic Fellows把神经元用到检测、引导和审计上。没有标注时，检测总体好过文本搜索；在58个藏了行为的微调上，带读出的审计正确率是75%，只看输出是40%。",
+      "original_url": "https://alignment.anthropic.com/2026/neuron-basis-applications/",
+      "xnews_url": "https://xnews.qiaomu.ai/a/anthropic-neuron-basis-applications",
+      "tags": [
+        "Anthropic",
+        "interpretability",
+        "unlearning",
+        "safety",
+        "Fellows"
       ],
       "source": "XNews · 向阳乔木",
       "verification": "upstream_metadata_not_independently_verified"
